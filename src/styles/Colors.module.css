@@ -1,0 +1,31 @@
+.primary {
+  color: var(--color-primary);
+}
+
+.secondary {
+  color: var(--color-secondary);
+}
+
+.success {
+  color: var(--color-success);
+}
+
+.gray-light {
+  color: var(--color-gray-light);
+}
+
+.gray {
+  color: var(--color-gray);
+}
+
+.gray-dark {
+  color: var(--color-gray-dark);
+}
+
+.white {
+  color: var(--color-white);
+}
+
+.black {
+  color: var(--color-black);
+}

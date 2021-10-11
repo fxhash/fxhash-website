@@ -1,0 +1,21 @@
+/**
+ * The scale based on `$font-size` being 16.
+ *
+ * Decrease: 12, 8, 4
+ * Increase: 24, 32, 40, 48, 56, 72, 96
+ */
+$spacing: 16px !default;
+
+// Decrease
+$spacing-small: floor($spacing - 4) !default;
+$spacing-x-small: floor($spacing / 2) !default;
+$spacing-2x-small: floor($spacing / 4) !default;
+
+// Increase
+$spacing-large: ceil($spacing / 2 * 3) !default;
+$spacing-x-large: ceil($spacing / 2 * 4) !default;
+$spacing-2x-large: ceil($spacing / 2 * 5) !default;
+$spacing-3x-large: ceil($spacing / 2 * 6) !default;
+$spacing-4x-large: ceil($spacing / 2 * 7) !default;
+$spacing-5x-large: ceil($spacing / 2 * 9) !default;
+$spacing-6x-large: ceil($spacing / 2 * 12) !default;

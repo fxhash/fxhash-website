@@ -1,0 +1,19 @@
+.nav {
+  display: flex;
+  align-items: center;
+
+  a {
+    font-weight: bold;
+    color: var(--color-gray);
+    transition: color 0.3s ease-out;
+    padding: 15px;
+
+    &:hover, &.active {
+      color: var(--color-black);
+    }
+  }
+
+  :global(.btn-sync) {
+    margin-left: 15px;
+  }
+}

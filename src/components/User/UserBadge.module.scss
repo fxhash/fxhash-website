@@ -1,0 +1,27 @@
+.container {
+  display: flex;
+  align-items: center;
+  color: var(--color-primary);
+  font-weight: bold;
+
+  &:hover {
+    .avatar {
+      transform: scale(1.05);
+    }
+  }
+}
+
+.avatar {
+  margin-right: 8px;
+  transition: all 0.3s ease-out;
+}
+
+.avatar-regular {
+  width: 37px;
+  height: 37px;
+}
+
+.avatar-big {
+  width: 50px;
+  height: 50px;
+}

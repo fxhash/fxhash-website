@@ -1,0 +1,28 @@
+.container {
+  width: 100%;
+}
+
+.infos {
+  &.minted {
+    color: var(--color-secondary);
+    font-weight: bold;
+  }
+  i {
+    margin-left: 8px;
+  }
+}
+
+.progress {
+  background: var(--color-gray-light);
+  width: 100%;
+  height: 5px;
+  position: relative;
+}
+
+.bar {
+  background-color: var(--color-secondary);
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+}

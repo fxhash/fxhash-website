@@ -1,0 +1,35 @@
+.presentation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  h1 {
+    max-width: 800px;
+    text-align: center;
+  }
+}
+
+.random-artwork {
+  display: flex;
+  align-items: center;
+  gap: var(--layout-gap-big-lg);
+  justify-content: space-between;
+
+  .artwork-container {
+    width: 40vw;
+    height: 40vw;
+    min-width: 40vw;
+    min-height: 40vw;
+  }
+
+  .section-subtitle {
+    margin-left: -50px;
+  }
+
+  .artwork-details {
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

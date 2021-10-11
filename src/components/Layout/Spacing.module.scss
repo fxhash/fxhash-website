@@ -1,0 +1,51 @@
+@import '../../styles/Variables.scss';
+
+.spacing {
+  height: 0;
+  border: none;
+  opacity: 0;
+}
+
+.spacing-regular {
+  margin-top: $spacing;
+}
+
+.spacing-small {
+  margin-top: $spacing-small;
+}
+
+.spacing-x-small {
+  margin-top: $spacing-x-small;
+}
+
+.spacing-2x-small {
+  margin-top: $spacing-2x-small;
+}
+
+.spacing-large {
+  margin-top: $spacing-large;
+}
+
+.spacing-x-large {
+  margin-top: $spacing-x-large;
+}
+
+.spacing-2x-large {
+  margin-top: $spacing-2x-large;
+}
+
+.spacing-3x-large {
+  margin-top: $spacing-3x-large;
+}
+
+.spacing-4x-large {
+  margin-top: $spacing-4x-large;
+}
+
+.spacing-5x-large {
+  margin-top: $spacing-5x-large;
+}
+
+.spacing-6x-large {
+  margin-top: $spacing-6x-large;
+}
