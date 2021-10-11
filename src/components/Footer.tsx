@@ -11,7 +11,7 @@ interface SocialProps {
 function FooterSocial({ icon, url }: SocialProps) {
   return (
     <Link href={url}>
-      <a><i className={`fab fa-${icon}`}/></a>
+      <a><i aria-hidden className={`fab fa-${icon}`}/></a>
     </Link>
   )
 }

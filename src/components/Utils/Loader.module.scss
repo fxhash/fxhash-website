@@ -1,0 +1,20 @@
+@keyframes turn {
+  0% {
+    transform: rotate(0deg);
+    border-radius: 0;
+  }
+  85% {
+    transform: rotate(400deg);
+    border-radius: 15px;
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loader {
+  width: 40px;
+  height: 40px;
+  background-color: var(--color-black);
+  animation: turn 1.5s ease-in-out 0s infinite forwards;
+}

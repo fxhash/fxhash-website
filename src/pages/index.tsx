@@ -33,7 +33,6 @@ const Home: NextPage<Props> = ({
   generativeTokens,
   offers
 }) => {
-  console.log(offers)
   return (
     <>
       <Spacing size="3x-large" />
