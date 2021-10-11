@@ -21,9 +21,15 @@ body {
 
   --layout-margin-big-lg: 80px;
   --layout-margin-small-lg: 30px;
+  --layout-margin-big-md: 50px;
+  --layout-margin-small-md: 20px;
+  --layout-margin-big-sm: 20px;
+  --layout-margin-small-sm: 10px;
 
   --layout-gap-big-lg: 50px;
   --layout-gap-big-md: 30px;
+  --layout-gap-small-lg: 30px;
+  --layout-gap-small-md: 15px;
 
   --font-size-regular: 1rem;
   --font-size-h1: 1rem;

@@ -34,7 +34,7 @@ const Explore: NextPage = () => {
           <h2>— explore artists' work</h2>
         </SectionHeader>
 
-        <Spacing size="3x-large"/>
+        <Spacing size="x-large"/>
 
         <main className={cs(layout['padding-big'])}>
           <ClientOnly>

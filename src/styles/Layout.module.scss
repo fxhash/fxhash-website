@@ -1,3 +1,5 @@
+@import './Variables.scss';
+
 .padding-small {
   padding-left: var(--layout-margin-small-lg);
   padding-right: var(--layout-margin-small-lg);
@@ -6,4 +8,35 @@
 .padding-big {
   padding-left: var(--layout-margin-big-lg);
   padding-right: var(--layout-margin-big-lg);
+
+  @media (max-width: $breakpoint-lg) {
+    padding-left: var(--layout-margin-big-md);
+    padding-right: var(--layout-margin-big-md);
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    padding-left: var(--layout-margin-big-sm);
+    padding-right: var(--layout-margin-big-sm);
+  }
+}
+
+.search-container {
+  display: flex;
+  gap: var(--layout-gap-small-lg);
+}
+
+.search-bar {
+  width: calc(60% - var(--layout-gap-big-md) / 2);
+
+  @media (max-width: $breakpoint-vlg) {
+    width: calc(50% - var(--layout-gap-big-md) / 2);
+  }
+
+  @media (max-width: $breakpoint-lg) {
+    width: calc(67.3% - var(--layout-gap-big-md) / 2);
+  }
+
+  @media (max-width: $breakpoint-md) {
+    width: 100%;
+  }
 }

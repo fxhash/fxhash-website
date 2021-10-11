@@ -4,7 +4,7 @@
   width: 100%;
   display: grid; 
   grid-template-columns: repeat(5, 1fr);
-  gap: var(--layout-gap-big-md);
+  gap: var(--layout-gap-small-lg);
 
   @media (max-width: $breakpoint-vlg) {
     grid-template-columns: repeat(4, 1fr);
