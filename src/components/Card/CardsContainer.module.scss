@@ -21,4 +21,8 @@
   @media (max-width: $breakpoint-sm) {
     grid-template-columns: repeat(1, 1fr);
   }
+
+  & > a {
+    text-decoration: none !important;
+  }
 }

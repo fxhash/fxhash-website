@@ -1,5 +1,6 @@
 import Head from "next/head"
 import { PropsWithChildren } from "react"
+import { Footer } from "./Footer"
 import { Header } from "./Header"
 
 export function Layout({ children }: PropsWithChildren<{}>) {
@@ -9,11 +10,13 @@ export function Layout({ children }: PropsWithChildren<{}>) {
         <title>Example App</title>
       </Head>
 
-      <Header></Header>
+      <Header />
 
       <main>
         {children}
       </main>
+      
+      <Footer />
     </>
   )
 }

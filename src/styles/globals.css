@@ -35,8 +35,13 @@ body {
 }
 
 a {
-  color: inherit;
+  color: var(--color-secondary);
+  font-weight: bold;
   text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
 }
 
 * {

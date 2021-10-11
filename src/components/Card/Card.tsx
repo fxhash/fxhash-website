@@ -5,7 +5,7 @@ import { ipfsDisplayUrl } from "../../services/Ipfs"
 
 
 interface Props {
-  thumbnailUri: string|null
+  thumbnailUri: string|null|undefined
 }
 
 export function Card({

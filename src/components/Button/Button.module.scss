@@ -10,6 +10,7 @@
   box-shadow: 0px 2px 14px -4px rgba(0, 0, 0, 0.67);
   transition: all 0.3s ease-out;
   border: 1px solid transparent;
+  text-decoration: none !important;
 
   &:hover {
     box-shadow: 0px 2px 24px -4px rgba(0, 0, 0, 0.67);

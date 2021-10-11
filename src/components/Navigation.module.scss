@@ -7,6 +7,7 @@
     color: var(--color-gray);
     transition: color 0.3s ease-out;
     padding: 15px;
+    text-decoration: none !important;
 
     &:hover, &.active {
       color: var(--color-black);

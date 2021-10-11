@@ -19,6 +19,7 @@ import { SectionHeader } from '../components/Layout/SectionHeader'
 import { CardsContainer } from '../components/Card/CardsContainer'
 import { GenerativeTokenCard } from '../components/Card/GenerativeTokenCard'
 import { Offer } from '../types/entities/Offer'
+import { ObjktCard } from '../components/Card/ObjktCard'
 
 
 interface Props {
@@ -110,6 +111,37 @@ const Home: NextPage<Props> = ({
 
       <Spacing size="6x-large" />
       <Spacing size="6x-large" />
+
+      <section>
+        <SectionHeader>
+          <div>
+            <small>late to the party ?</small>
+            <h2>— marketplace</h2>
+          </div>
+          <Link href="/marketplace" passHref>
+            <Button
+              isLink={true}
+              iconComp={<i aria-hidden className="fas fa-arrow-right"/>}
+              iconSide="right"
+            >
+              marketplace
+            </Button>
+          </Link>
+        </SectionHeader>
+
+        <Spacing size="3x-large"/>
+
+        <main className={cs(layout['padding-big'])}>
+          <CardsContainer className={cs(styles['row-responsive-limiter'])}>
+            {offers.map(offer => (
+              <ObjktCard key={offer.objkt.id} objkt={offer.objkt}/>
+            ))}
+          </CardsContainer>
+        </main>
+      </section>
+
+      <Spacing size="6x-large" />
+      <Spacing size="6x-large" />
       <Spacing size="6x-large" />
     </>
   )
@@ -158,15 +190,25 @@ export async function getServerSideProps() {
         offers(skip: $skip, take: $take) {
           price
           id
+          id
           objkt {
             id
+            name
+            metadata
+            offer {
+              id
+              price
+              issuer {
+                id
+                name
+                avatarUri
+              }
+            }
             owner {
               id
               name
               avatarUri
             }
-            name
-            metadata
           }
         }
       }
