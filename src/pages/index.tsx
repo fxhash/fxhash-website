@@ -16,15 +16,23 @@ import { Spacing } from '../components/Layout/Spacing'
 import { MintProgress } from '../components/Artwork/MintProgress'
 import { UserBadge } from '../components/User/UserBadge'
 import { SectionHeader } from '../components/Layout/SectionHeader'
+import { CardsContainer } from '../components/Card/CardsContainer'
+import { GenerativeTokenCard } from '../components/Card/GenerativeTokenCard'
+import { Offer } from '../types/entities/Offer'
 
-interface HomePageProps {
+
+interface Props {
   randomGenerativeToken: GenerativeToken
+  generativeTokens: GenerativeToken[]
+  offers: Offer[]
 }
 
-const Home: NextPage<HomePageProps> = ({ 
-  randomGenerativeToken 
+const Home: NextPage<Props> = ({ 
+  randomGenerativeToken,
+  generativeTokens,
+  offers
 }) => {
-  console.log(randomGenerativeToken)
+  console.log(offers)
   return (
     <>
       <Spacing size="3x-large" />
@@ -89,10 +97,14 @@ const Home: NextPage<HomePageProps> = ({
           </Link>
         </SectionHeader>
 
-        <Spacing size="large"/>
+        <Spacing size="3x-large"/>
 
         <main className={cs(layout['padding-big'])}>
-          here go artworks
+          <CardsContainer className={cs(styles['row-responsive-limiter'])}>
+            {generativeTokens.map(token => (
+              <GenerativeTokenCard key={token.id} token={token}/>
+            ))}
+          </CardsContainer>
         </main>
       </section>
 
@@ -106,7 +118,7 @@ const Home: NextPage<HomePageProps> = ({
 export async function getServerSideProps() {
   const { data } = await client.query({
     query: gql`
-      query Query {
+      query Query ($skip: Int, $take: Int) {
         randomGenerativeToken {
           id
           name
@@ -126,14 +138,51 @@ export async function getServerSideProps() {
             description
           }
         }
+        generativeTokens(skip: $skip, take: $take) {
+          id
+          name
+          metadata
+          price
+          supply
+          balance
+          enabled
+          royalties
+          createdAt
+          updatedAt
+          author {
+            id
+            name
+            avatarUri
+          }
+        }
+        offers(skip: $skip, take: $take) {
+          price
+          id
+          objkt {
+            id
+            owner {
+              id
+              name
+              avatarUri
+            }
+            name
+            metadata
+          }
+        }
       }
     `,
-    fetchPolicy: "network-only"
+    fetchPolicy: "network-only",
+    variables: {
+      skip: 0,
+      take: 5,
+    }
   })
 
   return {
     props: {
       randomGenerativeToken: data.randomGenerativeToken,
+      generativeTokens: data.generativeTokens,
+      offers: data.offers
     },
   }
 }

@@ -12,6 +12,7 @@ body {
   --color-primary: #FF005C;
   --color-secondary: #7000FF;
   --color-success: #00FFC2;
+  --color-error: #FF0000;
   --color-gray-light: #C4C4C4;
   --color-gray: #727272;
   --color-gray-dark: #484848;
@@ -22,6 +23,7 @@ body {
   --layout-margin-small-lg: 30px;
 
   --layout-gap-big-lg: 50px;
+  --layout-gap-big-md: 30px;
 
   --font-size-regular: 1rem;
   --font-size-h1: 1rem;

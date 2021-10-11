@@ -3,11 +3,11 @@
   align-items: center;
   color: var(--color-primary);
   font-weight: bold;
+}
 
-  &:hover {
-    .avatar {
-      transform: scale(1.05);
-    }
+a.container:hover {
+  .avatar {
+    transform: scale(1.05);
   }
 }
 

@@ -9,18 +9,27 @@ import { Avatar } from "./Avatar"
 interface Props {
   user: User
   size?: "regular" | "big"
+  hasLink?: boolean
 }
 
 export function UserBadge({
   user,
-  size = "regular"
+  size = "regular",
+  hasLink = true
 }: Props) {
   return (
-    <Link href={getUserProfileLink(user)}>
-      <a className={cs(style.container)}>
+    hasLink ? (
+      <Link href={getUserProfileLink(user)}>
+        <a className={cs(style.container)}>
+          <Avatar uri={user.avatarUri} className={cs(style.avatar, style[`avatar-${size}`])} />
+          {getUserName(user, 15)}
+        </a>
+      </Link>
+    ):(
+      <div className={cs(style.container)}>
         <Avatar uri={user.avatarUri} className={cs(style.avatar, style[`avatar-${size}`])} />
         {getUserName(user, 15)}
-      </a>
-    </Link>
+      </div>
+    )
   )
 }

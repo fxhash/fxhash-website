@@ -1,0 +1,24 @@
+@import '../../styles/Variables.scss';
+
+.container {
+  width: 100%;
+  display: grid; 
+  grid-template-columns: repeat(5, 1fr);
+  gap: var(--layout-gap-big-md);
+
+  @media (max-width: $breakpoint-vlg) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  @media (max-width: $breakpoint-lg) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media (max-width: $breakpoint-md) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}

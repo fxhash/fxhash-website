@@ -1,3 +1,5 @@
+@import './Variables.scss';
+
 .presentation {
   display: flex;
   align-items: center;
@@ -31,5 +33,39 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+  }
+}
+
+.row-responsive-limiter {
+  & > * {
+    display: none;
+  }
+
+  & > *:nth-child(1) {
+    display: block;
+  }
+
+  @media (min-width: $breakpoint-vlg + 1px) {
+    & > *:nth-child(5) {
+      display: block;
+    }
+  }
+
+  @media (min-width: $breakpoint-lg + 1px) {
+    & > *:nth-child(4) {
+      display: block;
+    }
+  }
+
+  @media (min-width: $breakpoint-md + 1px) {
+    & > *:nth-child(3) {
+      display: block;
+    }
+  }
+
+  @media (min-width: $breakpoint-sm + 1px) {
+    & > *:nth-child(2) {
+      display: block;
+    }
   }
 }
