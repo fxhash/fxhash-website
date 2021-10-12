@@ -10,6 +10,10 @@
   color: var(--color-success);
 }
 
+.error {
+  color: var(--color-error);
+}
+
 .gray-light {
   color: var(--color-gray-light);
 }

@@ -1,7 +1,7 @@
 .presentation {
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: 1fr 1fr;
   grid-template-rows: repeat(2, 1fr);
   grid-column-gap: var(--layout-gap-small-lg);
   grid-row-gap: 0px;
@@ -9,10 +9,36 @@
   header {
     margin-left: -20px;
   }
+
+  &.presentation-small {
+    grid-template-columns: 3fr 1fr;
+  }
 }
 
 .presentation-details {
   grid-area: 1 / 1 / 3 / 2;
+
+  .presentation-title {
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+
+  &.inline {
+    header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: var(--layout-gap-small-lg);
+    }
+
+    .artwork-details {
+      width: 300px;
+      min-width: 300px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+    }
+  }
 }
 
 .presentation-artwork {

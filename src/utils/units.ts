@@ -6,3 +6,7 @@ export function displayMutez(mutez: number, decimals: number = 2) {
   const dec = tez - (tez|0)
   return ((dec * (10**decimals))|0) > 0 ? tez.toFixed(decimals) : (tez|0)
 }
+
+export function displayRoyalties(royalties: number): string {
+  return (royalties/10).toFixed(1) + '%'
+}

@@ -17,9 +17,10 @@ export function ObjktCard({
   objkt
 }: Props) {
   const owner = objkt.offer ? objkt.offer.issuer : objkt.owner!
+  const url = `/objkt/${objkt.id}`
 
   return (
-    <Link href="/test" passHref>
+    <Link href={url} passHref>
       <AnchorForward style={{ height: '100%' }}>
         <Card thumbnailUri={objkt.metadata?.displayUri}>
           <div>

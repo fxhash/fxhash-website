@@ -1,0 +1,43 @@
+.container {
+  display: flex;
+  align-items: center;
+
+  i {
+    margin: 0 15px;
+  }
+}
+
+.pages {
+  display: flex;
+  align-items: center;
+  width: 600px;
+  justify-content: center;
+}
+
+.page {
+  width: 45px;
+  height: 45px;
+  color: var(--color-black);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  transition: all 0.15s ease-out;
+
+  &:hover:not(.active) {
+    background-color: var(--color-gray-vlight);
+  }
+}
+
+.disabled {
+  opacity: 0.2;
+  pointer-events: none;
+}
+
+.active {
+  background-color: var(--color-black);
+  color: var(--color-white);
+  font-weight: bold;
+}

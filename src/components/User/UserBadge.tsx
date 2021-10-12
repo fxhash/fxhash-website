@@ -9,11 +9,13 @@ import { Avatar } from "./Avatar"
 interface Props {
   user: User
   size?: "regular" | "big"
+  prependText?: string
   hasLink?: boolean
 }
 
 export function UserBadge({
   user,
+  prependText,
   size = "regular",
   hasLink = true
 }: Props) {
@@ -22,13 +24,13 @@ export function UserBadge({
       <Link href={getUserProfileLink(user)}>
         <a className={cs(style.container)}>
           <Avatar uri={user.avatarUri} className={cs(style.avatar, style[`avatar-${size}`])} />
-          {getUserName(user, 15)}
+          <span><span className={cs(style.prepend)}>{prependText}</span> {getUserName(user, 15)}</span>
         </a>
       </Link>
     ):(
       <div className={cs(style.container)}>
         <Avatar uri={user.avatarUri} className={cs(style.avatar, style[`avatar-${size}`])} />
-        {getUserName(user, 15)}
+        <span><span className={cs(style.prepend)}>{prependText}</span> {getUserName(user, 15)}</span>
       </div>
     )
   )

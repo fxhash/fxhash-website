@@ -2,7 +2,7 @@ import { ipfsDisplayUrl } from '../../services/Ipfs'
 import style from './Artwork.module.scss'
 
 interface Props {
-  ipfsUri: string
+  ipfsUri?: string
   alt?: string
 }
 
