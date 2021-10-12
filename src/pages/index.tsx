@@ -212,7 +212,7 @@ export async function getServerSideProps() {
         }
       }
     `,
-    fetchPolicy: "network-only",
+    fetchPolicy: "no-cache",
     variables: {
       skip: 0,
       take: 5,

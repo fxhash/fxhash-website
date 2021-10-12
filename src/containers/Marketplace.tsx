@@ -1,8 +1,7 @@
 import { gql, useLazyQuery, useQuery } from '@apollo/client'
 import layout from '../styles/Layout.module.scss'
-import { GenerativeToken } from '../types/entities/GenerativeToken'
 import { CardsContainer } from '../components/Card/CardsContainer'
-import { GenerativeTokenCard } from '../components/Card/GenerativeTokenCard'
+import { ObjktCard } from '../components/Card/ObjktCard'
 import { LoaderBlock } from '../components/Layout/LoaderBlock'
 import { InfiniteScrollTrigger } from '../components/Utils/InfiniteScrollTrigger'
 import { SearchInput } from '../components/Input/SearchInput'
@@ -10,49 +9,64 @@ import { useState } from 'react'
 import cs from "classnames"
 import { Spacing } from '../components/Layout/Spacing'
 import { SearchTerm } from '../components/Utils/SearchTerm'
+import { Offer } from '../types/entities/Offer'
 
 
 const ITEMS_PER_PAGE = 10
 
-const Qu_genTokens = gql`
+const Qu_offers = gql`
   query Query ($skip: Int, $take: Int) {
-    generativeTokens(skip: $skip, take: $take) {
-      id
-      name
-      metadata
+    offers(skip: $skip, take: $take) {
       price
-      supply
-      balance
-      enabled
-      royalties
-      createdAt
-      updatedAt
-      author {
+      id
+      id
+      objkt {
         id
         name
-        avatarUri
+        metadata
+        offer {
+          id
+          price
+          issuer {
+            id
+            name
+            avatarUri
+          }
+        }
+        owner {
+          id
+          name
+          avatarUri
+        }
       }
     }
   }
 `
 
-const Qu_searchTokens = gql`
+const Qu_searchOffers = gql`
   query Query($search: String!) {
-    searchGenerativeTokens(search: $search) {
-      id
-      name
-      metadata
+    searchOffers(search: $search) {
       price
-      supply
-      balance
-      enabled
-      royalties
-      createdAt
-      updatedAt
-      author {
+      id
+      id
+      objkt {
         id
         name
-        avatarUri
+        metadata
+        offer {
+          id
+          price
+          issuer {
+            id
+            name
+            avatarUri
+          }
+        }
+        owner {
+          id
+          name
+          avatarUri
+        }
       }
     }
   }
@@ -61,25 +75,25 @@ const Qu_searchTokens = gql`
 interface Props {
 }
 
-export const ExploreGenerativeTokens = ({}: Props) => {
+export const Marketplace = ({}: Props) => {
   const [searchString, setSearchString] = useState<string>("")
   const [searchStringActive, setSearchStringActive] = useState<string|null>(null)
 
-  const { data, loading, fetchMore } = useQuery(Qu_genTokens, {
+  const { data, loading, fetchMore } = useQuery(Qu_offers, {
     variables: {
       skip: 0,
       take: ITEMS_PER_PAGE
     }
   })
 
-  const [ querySearch, { data: dataSearch, loading: loadingSearch }] = useLazyQuery(Qu_searchTokens, {
+  const [ querySearch, { data: dataSearch, loading: loadingSearch }] = useLazyQuery(Qu_searchOffers, {
     fetchPolicy: "no-cache"
   })
 
   const infiniteScrollFetch = () => {
     fetchMore({
       variables: {
-        skip: data.generativeTokens.length,
+        skip: data.offers.length,
         take: ITEMS_PER_PAGE
       }
     })
@@ -99,9 +113,9 @@ export const ExploreGenerativeTokens = ({}: Props) => {
     }
   }
 
-  const generativeTokens: GenerativeToken[] = searchStringActive 
-    ? dataSearch?.searchGenerativeTokens
-    : data?.generativeTokens
+  const offers: Offer[] = searchStringActive 
+    ? dataSearch?.searchOffers
+    : data?.offers
 
   const isLoading = searchStringActive ? loadingSearch : loading
 
@@ -125,11 +139,11 @@ export const ExploreGenerativeTokens = ({}: Props) => {
       {isLoading ? (
         <LoaderBlock height="30vh">loading</LoaderBlock>
       ):(
-        (generativeTokens?.length > 0) ? (
+        (offers?.length > 0) ? (
           <InfiniteScrollTrigger onTrigger={infiniteScrollFetch}>
             <CardsContainer>
-              {generativeTokens.map(token => (
-                <GenerativeTokenCard key={token.id} token={token}/>
+              {offers.map(offer => (
+                <ObjktCard key={offer.objkt.id} objkt={offer.objkt}/>
               ))}
             </CardsContainer>
           </InfiniteScrollTrigger>

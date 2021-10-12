@@ -5,24 +5,25 @@ import { Spacing } from '../components/Layout/Spacing'
 import { SectionHeader } from '../components/Layout/SectionHeader'
 import ClientOnly from '../components/Utils/ClientOnly'
 import { ExploreGenerativeTokens } from '../containers/ExploreGenerativeTokens'
+import { Marketplace } from '../containers/Marketplace'
 
 
 
-const Explore: NextPage = () => {
+const MarketplacePage: NextPage = () => {
   return (
     <>
       <Spacing size="6x-large" />
 
       <section>
         <SectionHeader>
-          <h2>— explore artists' work</h2>
+          <h2>— marketplace</h2>
         </SectionHeader>
 
         <Spacing size="x-large"/>
 
         <main className={cs(layout['padding-big'])}>
           <ClientOnly>
-            <ExploreGenerativeTokens />
+            <Marketplace />
           </ClientOnly>
         </main>
       </section>
@@ -34,4 +35,4 @@ const Explore: NextPage = () => {
   )
 }
 
-export default Explore
+export default MarketplacePage
