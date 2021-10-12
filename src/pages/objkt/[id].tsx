@@ -28,8 +28,6 @@ interface Props {
 }
 
 const ObjktDetails: NextPage<Props> = ({ objkt }) => {
-  console.log(objkt)
-
   const owner: User = (objkt.offer ? objkt.offer.issuer : objkt.owner)!
   const creator: User = objkt.issuer.author
 

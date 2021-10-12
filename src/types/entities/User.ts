@@ -1,7 +1,14 @@
-import { Action } from "./Action";
+import { Action } from "./Action"
 import { GenerativeToken } from "./GenerativeToken"
-import { Objkt } from "./Objkt";
-import { Offer } from "./Offer";
+import { Objkt } from "./Objkt"
+import { Offer } from "./Offer"
+
+export interface UserItems {
+  generativeTokens?: GenerativeToken[]
+  objkts?: Objkt[]
+  offers?: Offer[]
+  actions?: Action[]
+}
 
 export interface User {
   id: string
@@ -17,4 +24,6 @@ export interface User {
   offers: Offer[]
   createdAt: Date
   updatedAt: Date
+  // can be populated to merge the actions, however not returned by api
+  actions?: Action[]
 }

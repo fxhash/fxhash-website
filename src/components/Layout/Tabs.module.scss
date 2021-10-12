@@ -1,0 +1,37 @@
+.container {
+  nav {
+    display: flex;
+    border-bottom: 3px solid var(--color-gray-light);
+  }
+}
+
+.tab {
+  padding-top: 15px;
+  padding-bottom: 15px;
+  color: var(--color-gray);
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s ease-out;
+  margin-bottom: -3px;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: none;
+
+  &.active {
+    color: var(--color-black);
+    border-bottom-color: var(--color-black);
+  }
+
+  &:hover {
+    color: var(--color-black);
+    text-decoration: none;
+  }
+}
+
+.tab-fixed-size {
+  padding-left: 80px;
+  padding-right: 80px;
+}
+
+.tab-full-width {
+  flex: 1 1 0px;
+}

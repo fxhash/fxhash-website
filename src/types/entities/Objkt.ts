@@ -14,6 +14,6 @@ export interface Objkt {
   royalties: number
   offer?: Offer
   actions: Action[]
-  createdAt: Date
-  updatedAt: Date
+  createdAt: string
+  updatedAt: string
 }

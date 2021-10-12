@@ -38,16 +38,17 @@ function sortActions(actions: ActionType[]): ActionType[] {
 interface Props {
   actions: ActionType[]
   className?: string
+  verbose?: boolean
 }
 
-export function Activity({ actions, className }: Props) {
+export function Activity({ actions, className, verbose = false }: Props) {
   const sortedActions = useMemo(() => sortActions(actions), [actions])
 
   return (
     <section className={cs(style.container, className)}>
       {sortedActions?.length > 0 ? (
         sortedActions.map(action => (
-          <Action key={action.id} action={action} />
+          <Action key={action.id} action={action} verbose={verbose} />
         ))
       ):(
         <em>No activity yet</em>

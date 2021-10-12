@@ -1,0 +1,11 @@
+.container {
+  display: flex;
+  gap: var(--layout-gap-small-lg);
+}
+
+.avatar {
+  width: 200px;
+  height: 200px;
+  border: 3px solid var(--color-black);
+  flex-shrink: 0;
+}

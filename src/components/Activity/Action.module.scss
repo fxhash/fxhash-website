@@ -18,3 +18,13 @@
   color: var(--color-secondary);
   font-weight: bold;
 }
+
+.link {
+  font-weight: normal;
+  color: var(--color-black);
+
+  &:hover {
+    text-decoration: none;
+    border: 3px solid var(--color-secondary);
+  }
+}

@@ -26,8 +26,6 @@ interface Props {
 }
 
 const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
-  console.log(token)
-
   const hasCollection = token.objkts?.length > 0
   const collectionUrl = `/generative/${token.id}/collection`
 
