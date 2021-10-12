@@ -24,5 +24,5 @@ export interface Action {
   token?: GenerativeToken
   objkt?: Objkt
   metadata: HistoryMetadata
-  createdAt: Date
+  createdAt: string
 }

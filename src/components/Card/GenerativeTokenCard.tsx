@@ -16,7 +16,7 @@ export function GenerativeTokenCard({
   token
 }: Props) {
   return (
-    <Link href="/test" passHref>
+    <Link href={`/generative/${token.id}`} passHref>
       <AnchorForward style={{ height: '100%' }}>
         <Card thumbnailUri={token.metadata?.displayUri}>
           <div>

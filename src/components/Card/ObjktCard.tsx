@@ -7,6 +7,7 @@ import { UserBadge } from "../User/UserBadge"
 import style from "./Card.module.scss"
 import { Spacing } from "../Layout/Spacing"
 import { Objkt } from "../../types/entities/Objkt"
+import { displayMutez } from "../../utils/units"
 
 interface Props {
   objkt: Objkt
@@ -26,10 +27,12 @@ export function ObjktCard({
             <Spacing size="2x-small" />
             <UserBadge user={owner} size="regular" hasLink={false} />
           </div>
-          <div>
-            <Spacing size="small" />
-            <div className={cs(style.price)}>120 tez</div>
-          </div>
+          {objkt.offer && (
+            <div>
+              <Spacing size="small" />
+              <div className={cs(style.price)}>{displayMutez(objkt.offer.price)} tez</div>
+            </div>
+          )}
         </Card>
       </AnchorForward>
     </Link>

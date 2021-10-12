@@ -1,0 +1,50 @@
+.presentation {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  grid-column-gap: var(--layout-gap-small-lg);
+  grid-row-gap: 0px;
+
+  header {
+    margin-left: -20px;
+  }
+}
+
+.presentation-details {
+  grid-area: 1 / 1 / 3 / 2;
+}
+
+.presentation-artwork {
+  grid-area: 1 / 2 / 3 / 3;
+  align-self: flex-start;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.preview-container {
+  width: 100%;
+  padding-top: 100%;
+}
+
+.artwork-details {
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.view-collection-container {
+  display: flex;
+  justify-content: center;
+}
+
+.activity-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.activity {
+  width: 1000px;
+}

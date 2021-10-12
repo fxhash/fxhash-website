@@ -30,6 +30,12 @@
   font-size: 1.25rem;
 }
 
+.size-small {
+  height: 44px;
+  padding-left: 14px;
+  padding-right: 14px;
+}
+
 .size-regular {
   height: 46px;
   padding: 28px;
@@ -55,4 +61,16 @@
 
 .icon-right i {
   margin-left: 15px;
+}
+
+.color-black {
+  background-color: var(--color-black);
+}
+
+.color-primary {
+  background-color: var(--color-primary);
+}
+
+.color-secondary {
+  background-color: var(--color-secondary);
 }

@@ -63,7 +63,7 @@ const Home: NextPage<Props> = ({
                 supply={randomGenerativeToken.supply}
               />
               <Spacing size="2x-large"/>
-              <Link href="/test" passHref>
+              <Link href={`/generative/${randomGenerativeToken.id}`} passHref>
                 <Button 
                   isLink={true}
                   iconComp={<i aria-hidden className="fas fa-eye"/>}
