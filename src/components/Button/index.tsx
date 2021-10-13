@@ -5,10 +5,9 @@ import { ButtonOrLink } from "./ButtonOrLink"
 import React from "react"
 
 
-interface ButtonProps extends HTMLAttributes<HTMLButtonElement & HTMLAnchorElement> {
+export interface ButtonProps extends HTMLAttributes<HTMLButtonElement & HTMLAnchorElement> {
   iconComp?: React.ReactNode
   state?: "default" | "loading"
-  fontSize?: "regular" | "medium" | "large"
   size?: "regular" | "medium" | "large" | "small"
   color?: "black" | "primary" | "secondary"
   className?: string
@@ -21,7 +20,6 @@ export const Button = React.forwardRef<HTMLButtonElement & HTMLAnchorElement, Pr
   iconComp, 
   state = "default",
   iconSide = "left",
-  fontSize = "medium",
   size = "medium",
   color = "black",
   isLink = false,
@@ -36,7 +34,6 @@ export const Button = React.forwardRef<HTMLButtonElement & HTMLAnchorElement, Pr
       isLink={isLink}
       className={cs(
         style.button, 
-        style[`font-${fontSize}`],
         style[`size-${size}`],
         style[`icon-${iconSide}`],
         style[`color-${color}`],

@@ -1,0 +1,14 @@
+.input {
+  border: 3px solid var(--color-black);
+  padding: 0 15px;
+  font-family: inherit;
+  outline: none;
+
+  &:focus {
+    border-color: var(--color-secondary);
+  }
+}
+
+.text {
+  height: 50px;
+}

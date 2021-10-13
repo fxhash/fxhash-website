@@ -4,6 +4,7 @@
   font-weight: bold;
   display: flex;
   align-items: center;
+  justify-content: center;
   border: none;
   cursor: pointer;
   font-family: inherit;
@@ -26,21 +27,14 @@
 }
 
 .font-regular {
-  font-size: 1rem;
-}
-
-.font-medium {
-  font-size: 1.125rem;
-}
-
-.font-large {
-  font-size: 1.25rem;
+  
 }
 
 .size-small {
   height: 44px;
   padding-left: 14px;
   padding-right: 14px;
+  font-size: var(--font-size-small);
 
   &.state-loading {
     margin-top: (44px - 30px)  / 2;
@@ -50,6 +44,7 @@
 .size-regular {
   height: 46px;
   padding: 28px;
+  font-size: var(--font-size-regular);
 
   &.state-loading {
     margin-top: (46px - 30px) / 2;
@@ -59,6 +54,7 @@
 .size-medium {
   height: 56px;
   padding: 0 35px;
+  font-size: var(--font-size-regular);
 
   &.state-loading {
     margin-top: (56px - 30px) / 2;
@@ -68,6 +64,7 @@
 .size-large {
   height: 62px;
   padding: 0 45px;
+  font-size: var(--font-size-regular);
 
   &.state-loading {
     margin-top: (62px - 30px) / 2;

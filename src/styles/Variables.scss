@@ -10,6 +10,7 @@ $spacing: 16px !default;
 $spacing-small: floor($spacing - 4) !default;
 $spacing-x-small: floor($spacing / 2) !default;
 $spacing-2x-small: floor($spacing / 4) !default;
+$spacing-3x-small: floor($spacing / 8) !default;
 
 // Increase
 $spacing-large: ceil($spacing / 2 * 3) !default;

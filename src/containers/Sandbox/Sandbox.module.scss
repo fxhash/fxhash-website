@@ -37,3 +37,41 @@
   flex-direction: column;
   width: 100%;
 }
+
+.files-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.error {
+  color: var(--color-error);
+  display: flex;
+  align-items: center;
+
+  p {
+    margin: 0;
+  }
+
+  i {
+    font-size: 40px;
+    margin-right: 10px;
+  }
+}
+
+.testing {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.artwork {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-end;
+}
+
+.artwork-view {
+  align-items: flex-start;
+}

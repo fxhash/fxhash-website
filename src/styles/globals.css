@@ -32,6 +32,7 @@ body {
   --layout-gap-small-lg: 30px;
   --layout-gap-small-md: 15px;
 
+  --font-size-small: 0.875rem;
   --font-size-regular: 1rem;
   --font-size-h1: 1rem;
   --font-size-h2: 1.25rem;
