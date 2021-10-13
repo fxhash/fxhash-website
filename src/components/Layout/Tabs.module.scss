@@ -1,3 +1,5 @@
+@import "../../styles/Variables.scss";
+
 .container {
   nav {
     display: flex;
@@ -30,6 +32,14 @@
 .tab-fixed-size {
   padding-left: 80px;
   padding-right: 80px;
+
+  @media (max-width: $breakpoint-lg) {
+    padding-left: 0;
+    padding-right: 0;
+    flex: 1 1 0px;  
+    display: flex;
+    justify-content: center;
+  }
 }
 
 .tab-full-width {

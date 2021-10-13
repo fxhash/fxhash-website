@@ -11,24 +11,26 @@ interface Props {
   size?: "regular" | "big"
   prependText?: string
   hasLink?: boolean
+  className?: string
 }
 
 export function UserBadge({
   user,
   prependText,
   size = "regular",
-  hasLink = true
+  hasLink = true,
+  className
 }: Props) {
   return (
     hasLink ? (
       <Link href={getUserProfileLink(user)}>
-        <a className={cs(style.container)}>
+        <a className={cs(style.container, className)}>
           <Avatar uri={user.avatarUri} className={cs(style.avatar, style[`avatar-${size}`])} />
           <span><span className={cs(style.prepend)}>{prependText}</span> {getUserName(user, 15)}</span>
         </a>
       </Link>
     ):(
-      <div className={cs(style.container)}>
+      <div className={cs(style.container, className)}>
         <Avatar uri={user.avatarUri} className={cs(style.avatar, style[`avatar-${size}`])} />
         <span><span className={cs(style.prepend)}>{prependText}</span> {getUserName(user, 15)}</span>
       </div>
