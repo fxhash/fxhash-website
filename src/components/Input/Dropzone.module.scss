@@ -1,0 +1,43 @@
+@keyframes drag {
+  from {
+    background-color: var(--color-success);
+  }
+  to {
+    background-color: var(--color-black);
+  }
+}
+
+.container {
+  background-color: var(--color-black);
+  color: var(--color-white);
+  font-weight: bold;
+  box-shadow: 0 0 0px 3px var(--color-white),
+              0 0 0px 6px var(--color-black);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease-out;
+  overflow-wrap: break-word;
+  word-break: break-word;
+
+  &:hover {
+    box-shadow: 0 0 0px 3px var(--color-white),
+                0 0 0px 6px var(--color-secondary);
+  }
+}
+
+.drag {
+  animation: drag 1s ease-in-out 0s infinite alternate-reverse;
+  box-shadow: 0 0 0px 6px var(--color-white),
+                0 0 0px 16px var(--color-black);
+}
+
+.error {
+  background-color: var(--color-error);
+}
+
+.error {
+  box-shadow: 0 0 0px 3px var(--color-white),
+                0 0 0px 6px var(--color-success);
+}

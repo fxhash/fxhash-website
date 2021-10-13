@@ -10,3 +10,16 @@ export function displayMutez(mutez: number, decimals: number = 2) {
 export function displayRoyalties(royalties: number): string {
   return (royalties/10).toFixed(1) + '%'
 }
+
+export function prettyPrintBytes(size: number): string {
+  const units = [ "B", "KB", "MB" ]
+  let s = size
+  let ret
+  for (const unit of units) {
+    if (s < 1000) {
+      return s.toFixed(0) + unit
+    }
+    s/= 1024
+  }
+  return s.toFixed(0) + "GB"
+}

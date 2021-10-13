@@ -16,6 +16,13 @@
     box-shadow: 0px 2px 24px -4px rgba(0, 0, 0, 0.67);
     border: 1px solid var(--color-white);
   }
+
+  &:disabled {
+    pointer-events: none;
+    background-color: var(--color-gray);
+    opacity: 0.7;
+    box-shadow: 0px 2px 14px -4px rgba(0, 0, 0, 0.2);
+  }
 }
 
 .font-regular {
@@ -34,21 +41,37 @@
   height: 44px;
   padding-left: 14px;
   padding-right: 14px;
+
+  &.state-loading {
+    margin-top: (44px - 30px)  / 2;
+  }
 }
 
 .size-regular {
   height: 46px;
   padding: 28px;
+
+  &.state-loading {
+    margin-top: (46px - 30px) / 2;
+  }
 }
 
 .size-medium {
   height: 56px;
   padding: 0 35px;
+
+  &.state-loading {
+    margin-top: (56px - 30px) / 2;
+  }
 }
 
 .size-large {
   height: 62px;
   padding: 0 45px;
+
+  &.state-loading {
+    margin-top: (62px - 30px) / 2;
+  }
 }
 
 .icon-left i {
@@ -73,4 +96,28 @@
 
 .color-secondary {
   background-color: var(--color-secondary);
+}
+
+.state-default {}
+
+@keyframes turn {
+  0% {
+    transform: rotate(0deg);
+  }
+  85% {
+    transform: rotate(400deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.state-loading {
+  width: 30px;
+  height: 30px;
+  pointer-events: none;
+  overflow: hidden;
+  padding: 0;
+  color: transparent;
+  animation: turn 1.5s ease-in-out 0.5s infinite forwards;
 }
