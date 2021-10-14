@@ -3,9 +3,10 @@ import style from './Button.module.scss'
 import cs from 'classnames'
 import { ButtonOrLink } from "./ButtonOrLink"
 import React from "react"
+import { ButtonHTMLAttributes } from "react"
 
 
-export interface ButtonProps extends HTMLAttributes<HTMLButtonElement & HTMLAnchorElement> {
+export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   iconComp?: React.ReactNode
   state?: "default" | "loading"
   size?: "regular" | "medium" | "large" | "small"

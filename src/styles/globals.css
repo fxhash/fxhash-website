@@ -34,12 +34,12 @@ body {
 
   --font-size-small: 0.875rem;
   --font-size-regular: 1rem;
-  --font-size-h1: 1rem;
-  --font-size-h2: 1.25rem;
-  --font-size-h3: 1.5625rem;
-  --font-size-h4: 2rem;
-  --font-size-h5: 2.4375rem;
-  --font-size-h6: 3rem;
+  --font-size-h6: 1rem;
+  --font-size-h5: 1.25rem;
+  --font-size-h4: 1.5625rem;
+  --font-size-h3: 2rem;
+  --font-size-h2: 2.4375rem;
+  --font-size-h1: 3rem;
 }
 
 a {

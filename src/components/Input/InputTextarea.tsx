@@ -1,26 +1,23 @@
 import style from "./Input.module.scss"
 import cs from "classnames"
 import { InputHTMLAttributes } from "react"
+import { TextareaHTMLAttributes } from "react"
 
 
-interface Props extends InputHTMLAttributes<HTMLInputElement> {
-  readOnly?: boolean
+interface Props extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   error?: boolean
 }
 
-export function InputText({
-  readOnly,
+export function InputTextarea({
   error,
   ...props
 }: Props) {
   return (
-    <input
-      type="text"
+    <textarea
       {...props}
-      className={cs(style.input, style.text, props.className, {
+      className={cs(style.input, style.texarea, style.text, props.className, {
         [style.error]: !!error
       })}
-      readOnly={readOnly}
     />
   )
 }

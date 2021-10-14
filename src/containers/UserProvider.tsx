@@ -7,6 +7,7 @@ import { useClientAsyncEffect, useClientEffect } from "../utils/hookts"
 
 
 interface UserContextType {
+  autoConnectChecked: boolean
   user: ConnectedUser|null
   walletManager: WalletManager|null
   connect: () => void
@@ -14,6 +15,7 @@ interface UserContextType {
 }
 
 const defaultCtx: UserContextType = {
+  autoConnectChecked: false,
   user: null,
   walletManager: null,
   connect: () => {},
@@ -101,6 +103,8 @@ export function UserProvider({ children }: PropsWithChildren<{}>) {
         }
       })
     }
+
+    initCtx.autoConnectChecked = true
 
     // move data to context
     setContext(initCtx)

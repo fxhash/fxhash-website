@@ -114,7 +114,7 @@
   height: 30px;
   pointer-events: none;
   overflow: hidden;
-  padding: 0;
-  color: transparent;
+  padding: 0 !important;
+  color: transparent !important;
   animation: turn 1.5s ease-in-out 0.5s infinite forwards;
 }
