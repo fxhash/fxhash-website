@@ -1,0 +1,38 @@
+.container {
+  position: relative;
+}
+
+.menu {
+  border: 3px solid var(--color-black);
+  padding: 5px;
+  background-color: var(--color-white);
+  display: flex;
+  flex-direction: column;
+  width: max-content;
+  position: absolute;
+  right: 0;
+  text-align: right;
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: all 0.2s ease-out;
+  pointer-events: none;
+
+  & > a {
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
+  }
+}
+
+.button {
+  font-family: inherit;
+  border: none;
+  background: none;
+  font-size: inherit;
+  cursor: pointer;
+}
+
+.menu-opened {
+  opacity: 1;
+  transform: translateY(0px);
+  pointer-events: all;
+}

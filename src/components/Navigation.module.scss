@@ -2,7 +2,7 @@
   display: flex;
   align-items: center;
 
-  a {
+  a, button {
     font-weight: bold;
     color: var(--color-gray);
     transition: color 0.3s ease-out;
@@ -16,5 +16,16 @@
 
   :global(.btn-sync) {
     margin-left: 15px;
+  }
+}
+
+.avatar {
+  width: 64px;
+  height: 64px;
+  border: 3px solid var(--color-black);
+  transition: all .15s ease-out;
+
+  &:hover {
+    border-color: var(--color-secondary);
   }
 }

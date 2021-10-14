@@ -27,7 +27,9 @@ export function UserProvider({ children }: PropsWithChildren<{}>) {
   // keep a reference to the context to be used in functions
   const ctxRef = useRef<UserContextType>(context)
 
-  const [getUser, { data: userData }] = useLazyQuery(Qu_user)
+  const [getUser, { data: userData }] = useLazyQuery(Qu_user, {
+    fetchPolicy: "no-cache"
+  })
 
   // keep ctxRef in-sync with the context state
   useClientEffect(() => {
@@ -52,18 +54,29 @@ export function UserProvider({ children }: PropsWithChildren<{}>) {
       const pkh = await ctx.walletManager.connect()
       if (pkh) {
         // user is connected, we can update context and request gql api for user data
-        const ctx = { ...context }
-        ctx.user = {
+        const nCtx = { ...ctx }
+        nCtx.user = {
           id: pkh
         }
-        setContext(ctx)
-        // todo call gql api
+        setContext(nCtx)
+        getUser({
+          variables: {
+            id: pkh
+          }
+        })
       }
     }
   }
   
   // asks the manager for a disconnect & clears the context
-  const disconnect = () => {}
+  const disconnect = async () => {
+    console.log("disconnect")
+    const ctx = ctxRef.current
+    if (ctx.walletManager) {
+      await ctx.walletManager.disconnect()
+      setContext({ ...ctx, user: null })
+    }
+  }
 
   useClientAsyncEffect(async (isMounted) => {
     const initCtx: UserContextType = { 
@@ -82,7 +95,6 @@ export function UserProvider({ children }: PropsWithChildren<{}>) {
       initCtx.user = {
         id: pkh
       }
-      // todo: call gql API to get extra data from the user
       getUser({
         variables: {
           id: pkh

@@ -1,6 +1,6 @@
 .button {
   background: var(--color-black);
-  color: var(--color-white);
+  color: var(--color-white) !important;
   font-weight: bold;
   display: flex;
   align-items: center;
@@ -9,7 +9,7 @@
   cursor: pointer;
   font-family: inherit;
   box-shadow: 0px 2px 14px -4px rgba(0, 0, 0, 0.67);
-  transition: all 0.3s ease-out;
+  transition: all 0.3s ease-out !important;
   border: 1px solid transparent;
   text-decoration: none !important;
 
@@ -32,8 +32,8 @@
 
 .size-small {
   height: 44px;
-  padding-left: 14px;
-  padding-right: 14px;
+  padding-left: 14px !important;
+  padding-right: 14px !important;
   font-size: var(--font-size-small);
 
   &.state-loading {
@@ -43,7 +43,7 @@
 
 .size-regular {
   height: 46px;
-  padding: 28px;
+  padding: 28px !important;
   font-size: var(--font-size-regular);
 
   &.state-loading {
@@ -53,7 +53,7 @@
 
 .size-medium {
   height: 56px;
-  padding: 0 35px;
+  padding: 0 35px !important;
   font-size: var(--font-size-regular);
 
   &.state-loading {
@@ -63,7 +63,7 @@
 
 .size-large {
   height: 62px;
-  padding: 0 45px;
+  padding: 0 45px !important;
   font-size: var(--font-size-regular);
 
   &.state-loading {

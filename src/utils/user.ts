@@ -1,14 +1,14 @@
-import { User, UserItems } from "../types/entities/User"
+import { ConnectedUser, User, UserItems } from "../types/entities/User"
 import { truncateMiddle } from "./strings"
 
-export function userHasName(user: User): boolean {
+export function userHasName(user: ConnectedUser): boolean {
   return !!(user.name && user.name.length>0)
 }
 
 /**
  * if user has a name, then url uses its name, otherwise it uses its tkh
  */
-export function getUserProfileLink(user: User): string {
+export function getUserProfileLink(user: ConnectedUser): string {
   return userHasName(user) 
     ? `/u/${encodeURIComponent(user.name!)}`
     : `/pkh/${user.id}`
