@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@apollo/client": "^3.4.16",
+    "@taquito/beacon-wallet": "^10.2.0",
+    "@taquito/taquito": "^10.2.0",
     "classnames": "^2.3.1",
     "date-fns": "^2.25.0",
     "graphql": "^15.6.1",

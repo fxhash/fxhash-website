@@ -27,3 +27,7 @@ export interface User {
   // can be populated to merge the actions, however not returned by api
   actions?: Action[]
 }
+
+export interface ConnectedUser extends Partial<User> {
+  id: string
+}

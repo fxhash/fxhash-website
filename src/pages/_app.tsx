@@ -3,14 +3,17 @@ import type { AppProps } from 'next/app'
 import { Layout } from '../components/Layout'
 import Client from '../services/ApolloClient'
 import { ApolloProvider } from '@apollo/client'
+import { UserProvider } from '../containers/UserProvider'
 
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ApolloProvider client={Client}>
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
+      <UserProvider>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </UserProvider>
     </ApolloProvider>
   )
 }

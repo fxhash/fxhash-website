@@ -48,8 +48,6 @@ export function Dropzone({
     maxSize: parseInt(process.env.NEXT_PUBLIC_MAX_FILESIZE!) * 1024 * 1024
   })
 
-  console.log(error)
-
   return (
     <div {...getRootProps()} className={cs(style.container, className, {
       [style.drag]: isDragActive,
