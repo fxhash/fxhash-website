@@ -1,24 +1,9 @@
 import { BeaconWallet } from '@taquito/beacon-wallet'
 import { ContractAbstraction, ContractProvider, TezosToolkit, Wallet } from '@taquito/taquito'
 import { ProfileUpdateCallData } from '../types/ContractCalls'
+import { ContractInteractionMethod, ContractOperationStatus, FxhashContract } from '../types/Contracts'
 import { stringToByteString } from '../utils/convert'
 
-
-export enum ContractOperationStatus {
-  NONE                    = "NONE",
-  CALLING                 = "CALLING",
-  WAITING_CONFIRMATION    = "WAITING_CONFIRMATION",
-  INJECTED                = "INJECTED"
-}
-
-export type ContractOperationCallback = (status: ContractOperationStatus) => any
-
-export enum FxhashContract {
-  ISSUER        = "ISSUER",
-  MARKETPLACE   = "MARKETPLACE",
-  OBJKT         = "OBJKT",
-  REGISTER      = "REGISTER"
-}
 
 // short
 const addresses: Record<FxhashContract, string> = {
@@ -136,16 +121,22 @@ export class WalletManager {
   /**
    * Updates the profile 
    */
-  async updateProfile(profileData: ProfileUpdateCallData, operationStatusCallback?: ContractOperationCallback) {
+  updateProfile: ContractInteractionMethod<ProfileUpdateCallData> = async (profileData, operationStatusCallback) => {
+    // get/create the contract interface
     const userContract = await this.getContract(FxhashContract.REGISTER)
+
+    // call the contract (open wallet)
     operationStatusCallback && operationStatusCallback(ContractOperationStatus.CALLING)
     const opSend = await userContract.methodsObject.update_profile({
       metadata: stringToByteString(profileData.metadata),
       name: profileData.name
     }).send()
+
+    // wait for confirmation
     operationStatusCallback && operationStatusCallback(ContractOperationStatus.WAITING_CONFIRMATION)
     const opConf = await opSend.confirmation(2)
+
+    // OK, injected
     operationStatusCallback && operationStatusCallback(ContractOperationStatus.INJECTED)
-    return opConf
   }
 }

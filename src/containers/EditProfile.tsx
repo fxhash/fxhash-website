@@ -15,6 +15,9 @@ import { Spacing } from "../components/Layout/Spacing"
 import { CachePolicies, useFetch } from "use-http"
 import { ProfileUploadError, ProfileUploadResponse } from "../types/Responses"
 import useAsyncEffect from "use-async-effect"
+import { useContractCall } from "../utils/hookts"
+import { ProfileUpdateCallData } from "../types/ContractCalls"
+import { ContractFeedback } from "../components/Feedback/ContractFeedback"
 
 
 const Schema = Yup.object().shape({
@@ -33,24 +36,26 @@ export function EditProfile() {
   // hack Formik
   const userName = useRef<string>(user.name || "")
 
-  const { post, loading, error, data: fetchData } = 
+  const { post, loading: fileLoading, error, data: fetchData } = 
     useFetch<ProfileUploadResponse|ProfileUploadError>(`${process.env.NEXT_PUBLIC_API_FILE_ROOT}/profile`, {
       cachePolicy: CachePolicies.NO_CACHE
     })
   
   // this variable ensures that we can safely access its data regardless of the state of the queries
-  const safeData: ProfileUploadResponse|false|undefined = !error && !loading && (fetchData as ProfileUploadResponse)
+  const safeData: ProfileUploadResponse|false|undefined = !error && !fileLoading && (fetchData as ProfileUploadResponse)
 
   // comment je voudrais l'utiliser ?
-  
+  const { state, loading: contractLoading, success, call, clear } = 
+    useContractCall<ProfileUpdateCallData>(userCtx.walletManager!.updateProfile)
 
-  useAsyncEffect(async () => {
+  console.log({ state, contractLoading, success})
+
+  useEffect(() => {
     if (safeData && userCtx.walletManager) {
-      userCtx.walletManager.updateProfile({
+      clear()
+      call({
         name: userName.current,
         metadata: safeData.metadataUri
-      }, (status) => {
-        console.log(status)
       })
     }
   }, [safeData])
@@ -68,6 +73,9 @@ export function EditProfile() {
     })
     userName.current = user.name || ""
   }, [user])
+
+  // derived from props, to take account for both side-effects interactions
+  const loading = fileLoading || contractLoading
 
   return (
     <>
@@ -126,6 +134,13 @@ export function EditProfile() {
             </div>
 
             <Spacing size="3x-large"/>
+
+            <ContractFeedback
+              state={state}
+              loading={contractLoading}
+              success={success}
+              successMessage="Your profile update is now on the blockchain !"
+            />
 
             <Button 
               type="submit"
