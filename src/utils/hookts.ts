@@ -39,13 +39,16 @@ export function useContractCall<T>(contractMethod: ContractInteractionMethod<T>)
   const isMounted = useIsMounted()
 
   const clear = () => {
-    setLoading(true)
+    setLoading(false)
     setSuccess(false)
     setState(ContractOperationStatus.NONE)
   }
 
   const call = (data: T) => {
-    clear()
+    setLoading(true)
+    setSuccess(false)
+    setState(ContractOperationStatus.NONE)
+    
     // assign the ID to this call and increment it to prevent overlaps
     counter.current++
     const id = counter.current
@@ -54,6 +57,7 @@ export function useContractCall<T>(contractMethod: ContractInteractionMethod<T>)
         setState(opState)
         if (opState === ContractOperationStatus.INJECTED) {
           setSuccess(true)
+          setLoading(false)
         }
       }
     })
