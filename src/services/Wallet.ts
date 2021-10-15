@@ -1,14 +1,47 @@
 import { BeaconWallet } from '@taquito/beacon-wallet'
-import { TezosToolkit } from '@taquito/taquito'
+import { ContractAbstraction, ContractProvider, TezosToolkit, Wallet } from '@taquito/taquito'
+import { ProfileUpdateCallData } from '../types/ContractCalls'
+import { stringToByteString } from '../utils/convert'
 
+
+export enum ContractOperationStatus {
+  NONE                    = "NONE",
+  CALLING                 = "CALLING",
+  WAITING_CONFIRMATION    = "WAITING_CONFIRMATION",
+  INJECTED                = "INJECTED"
+}
+
+export type ContractOperationCallback = (status: ContractOperationStatus) => any
+
+export enum FxhashContract {
+  ISSUER        = "ISSUER",
+  MARKETPLACE   = "MARKETPLACE",
+  OBJKT         = "OBJKT",
+  REGISTER      = "REGISTER"
+}
+
+// short
+const addresses: Record<FxhashContract, string> = {
+  ISSUER: process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_ISSUER!,
+  MARKETPLACE: process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_MARKETPLACE!,
+  OBJKT: process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_OBJKT!,
+  REGISTER: process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_USERREGISTER!,
+}
 
 /**
  * The Wallet Manager class can be used to interract with Taquito API, by providing a level of abstration
  * so that the rest of the app is simpler to write
+ * It is responsible for handlinf interactions with the contracts as well
  */
 export class WalletManager {
   beaconWallet: BeaconWallet|null = null
   tezosToolkit: TezosToolkit
+  contracts: Record<FxhashContract, ContractAbstraction<Wallet>|null> = {
+    ISSUER: null,
+    MARKETPLACE: null,
+    OBJKT: null,
+    REGISTER: null,
+  }
 
   constructor() {
     this.tezosToolkit = new TezosToolkit(process.env.NEXT_PUBLIC_RPC_NODE!)
@@ -37,7 +70,14 @@ export class WalletManager {
    */
   async connectFromStorage(): Promise<string|false> {
     try {
-      return await this.getBeaconWallet().getPKH()
+      const pkh = await this.getBeaconWallet().getPKH()
+      if (pkh) {
+        this.tezosToolkit.setWalletProvider(this.getBeaconWallet())
+        return pkh
+      }
+      else {
+        return false
+      }
     }
     catch (err) {
       return false
@@ -48,6 +88,12 @@ export class WalletManager {
     await this.getBeaconWallet().disconnect()
     this.tezosToolkit.setWalletProvider(undefined)
     this.beaconWallet = null
+    this.contracts = {
+      ISSUER: null,
+      MARKETPLACE: null,
+      OBJKT: null,
+      REGISTER: null,
+    }
   }
 
   async connect(): Promise<string|false> {
@@ -70,5 +116,36 @@ export class WalletManager {
     catch (err) {
       return false
     }
+  }
+
+  //---------------------
+  //---CONTRACTS STUFF---
+  //---------------------
+
+  /**
+   * Search for the contract in the in-memory record of the class, creates it if it doesn't exist,
+   * and then returns it.
+   */
+  async getContract(contract: FxhashContract): Promise<ContractAbstraction<Wallet>> {
+    if (!this.contracts[contract]) {
+      this.contracts[contract] = await this.tezosToolkit.wallet.at(addresses[contract])
+    }
+    return this.contracts[contract]!
+  }
+
+  /**
+   * Updates the profile 
+   */
+  async updateProfile(profileData: ProfileUpdateCallData, operationStatusCallback?: ContractOperationCallback) {
+    const userContract = await this.getContract(FxhashContract.REGISTER)
+    operationStatusCallback && operationStatusCallback(ContractOperationStatus.CALLING)
+    const opSend = await userContract.methodsObject.update_profile({
+      metadata: stringToByteString(profileData.metadata),
+      name: profileData.name
+    }).send()
+    operationStatusCallback && operationStatusCallback(ContractOperationStatus.WAITING_CONFIRMATION)
+    const opConf = await opSend.confirmation(2)
+    operationStatusCallback && operationStatusCallback(ContractOperationStatus.INJECTED)
+    return opConf
   }
 }
