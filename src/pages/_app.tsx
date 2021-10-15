@@ -4,6 +4,7 @@ import { Layout } from '../components/Layout'
 import Client from '../services/ApolloClient'
 import { ApolloProvider } from '@apollo/client'
 import { UserProvider } from '../containers/UserProvider'
+import { useEffect } from 'react'
 
 
 function MyApp({ Component, pageProps }: AppProps) {

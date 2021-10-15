@@ -13,46 +13,52 @@ import { ButtonFile } from "../../components/Button/ButtonFile"
 import { getFileUploadError } from "../../utils/errors"
 import { FileUploadError } from "../../types/errors"
 import { HashTest } from "../../components/Testing/HashTest"
+import { unzipFile } from "../../utils/files"
+import { processZipSandbox } from "../../utils/sandbox"
+import { SandboxPreview } from "../../components/Artwork/SandboxPreview"
+import { SandboxFiles } from "../../types/Sandbox"
+import { generateFxHash } from "../../utils/hash"
 
 
 export function Sandbox() {
   const artworkIframeRef = useRef<ArtworkIframeRef>(null)
   const [file, setFile] = useState<File|null>(null)
-  const [hash, setHash] = useState<string|null>(null)
+  const [hash, setHash] = useState<string>(generateFxHash())
+  const [filesRecord, setFilesRecord] = useState<SandboxFiles|null>(null)
+  const [error, setError] = useState<string|null>(null)
+  const [url, setUrl] = useState<string|null>(null)
 
-  const { post, loading, error, data } = useFetch<FileSandboxResponse|FileUploadError>(`${process.env.NEXT_PUBLIC_API_FILE_ROOT}/upload-sandbox`, {
-    cachePolicy: CachePolicies.NO_CACHE
-  })
-  
-  // this variable ensures that we can safely access its data regardless of the state of the queries
-  const safeData: FileSandboxResponse|false|undefined = !error && !loading && (data as FileSandboxResponse)
+  const fileList = useMemo<string[]|null>(() => (
+    filesRecord ? Object.keys(filesRecord) : null
+  ), [filesRecord])
 
-  // create the url to which the <iframe> needs to point
-  const url = useMemo(() => {
-    if (!safeData) return ""
-    return `${safeData.url}?fxhash=${hash}`
-  }, [hash])
+  const processFile = async (file: File) => {
+    try {
+      const record = await processZipSandbox(file)
+      setFilesRecord(record)
+    }
+    catch (err) {
+      // todo: process error
+      console.error(err)
+    }
+  }
 
   const uploadFile = async () => {
     if (file) {
-      const form = new FormData()
-      form.append("file", file)
-      await post(form)
+      processFile(file)
     }
   }
 
   const updateFile = async (file: File|null) => {
     if (file) {
       setFile(file)
-      const form = new FormData()
-      form.append("file", file)
-      await post(form)
+      processFile(file)
     }
   }
 
   return (
     <section className={cs(style.container, {
-      [style['artwork-view']]: !!safeData
+      [style['artwork-view']]: !!filesRecord
     })}>
       <div>
         {error && (
@@ -61,24 +67,24 @@ export function Sandbox() {
               <i aria-hidden className="fas fa-exclamation-triangle"/>
               <span>
                 <strong>An error occurred when uploading your project</strong>
-                <p>{getFileUploadError(data as FileUploadError)}</p>
+                <p>{error}</p>
               </span>
             </div>
             <Spacing size="regular"/>
           </>
         )}
 
-        {safeData ? (
+        {filesRecord ? (
           <div className={cs(style.testing)}>
             <div className={cs(style['files-header'])}>
               <h5>Files</h5>
-              <span><i aria-hidden className="fas fa-file-archive"/> { safeData.filename }</span>
+              <span><i aria-hidden className="fas fa-file-archive"/> { file?.name }</span>
             </div>
             <Spacing size="3x-small"/>
-            <FileList files={safeData.contents} />
+            <FileList files={fileList} />
             <Spacing size="2x-small"/>
             <ButtonFile 
-              state={loading ? "loading" : "default"}
+              state={"default"}
               accepted={[ "application/zip", "application/x-zip-compressed" ]}
               onFile={updateFile}
               size="small"
@@ -100,6 +106,7 @@ export function Sandbox() {
               </ul>
 
               <HashTest
+                autoGenerate={false}
                 value={hash}
                 onHashUpdate={hash => setHash(hash)}
                 onRetry={() => {
@@ -121,7 +128,7 @@ export function Sandbox() {
             />
             <Button
               color="secondary"
-              state={loading ? "loading" : "default"}
+              state={"default"}
               disabled={!file}
               onClick={() => uploadFile()}
             >
@@ -134,10 +141,12 @@ export function Sandbox() {
       <div className={cs(style.artwork)}>
         <div className={cs(style['iframe-container'])}>
           <div className={cs(style['iframe-wrapper'])}>
-            <ArtworkIframe 
+            <SandboxPreview 
+              hash={hash}
               ref={artworkIframeRef}
-              url={url}
+              record={filesRecord || undefined}
               textWaiting="Waiting for content to be reachable"
+              onUrlUpdate={setUrl}
             />
           </div>
         </div>
@@ -146,7 +155,8 @@ export function Sandbox() {
           <Button
             isLink
             // @ts-ignore
-            href={url} target="_blank"
+            href={url} 
+            target="_blank"
             size="small"
             iconComp={<i aria-hidden className="fas fa-external-link-alt"/>}
             iconSide="right"

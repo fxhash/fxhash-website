@@ -8,7 +8,7 @@ interface FileStructure {
 }
 
 interface Props {
-  files: string[]
+  files: string[] | null
 }
 
 function StructureRenderer({ structure }: { structure: FileStructure }) {
@@ -36,23 +36,23 @@ export function FileList({ files }: Props) {
   // parse the files to turn them into a dir structure
   const structure = useMemo<FileStructure>(() => {
     const S: FileStructure = {}
-    for (const F of files) {
-      let dirs = F.split('/')
-      let pos = S
-      // build directories
-      for (let i = 0; i < dirs.length-1; i++) {
-        if (typeof pos[dirs[i]] === "undefined") {
-          pos[dirs[i]] = {}
+    if (files) {
+      for (const F of files) {
+        let dirs = F.split('/')
+        let pos = S
+        // build directories
+        for (let i = 0; i < dirs.length-1; i++) {
+          if (typeof pos[dirs[i]] === "undefined") {
+            pos[dirs[i]] = {}
+          }
+          pos = pos[dirs[i]] as FileStructure
         }
-        pos = pos[dirs[i]] as FileStructure
+        // add file
+        pos[dirs[dirs.length-1]] = false
       }
-      // add file
-      pos[dirs[dirs.length-1]] = false
     }
     return S
   }, [files])
-
-  console.log(structure)
 
   return (
     <ul className={cs(style.container)}>
