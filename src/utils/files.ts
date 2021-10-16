@@ -3,7 +3,7 @@ import FileType from "file-type/browser"
 
 
 export const ZIP_MIMES = [
-  "application/zip", "application/octet-stream", "application/x-zip-compressed", "multipart/x-zip"
+  "application/zip", "application/x-zip-compressed", "multipart/x-zip"
 ]
 
 const naiveMimes: Record<string, string> = {

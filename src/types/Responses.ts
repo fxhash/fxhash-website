@@ -7,3 +7,8 @@ export enum ProfileUploadError {
 export interface ProfileUploadResponse {
   metadataUri: string
 }
+
+export interface MintGenUploadProjectResponse {
+  cidParams: string,
+  authenticationHash: string
+}

@@ -14,13 +14,20 @@ export const fetchRetry = async (
   url: string, 
   maxRetries: number = 5, 
   delay: number = 200, 
-  shouldStop: StopConditionType = () => false
+  shouldStop: StopConditionType = () => false,
+  timeout: number|false = false
 ): Promise<Response> => {
   let error: any
   for (let i = 0; i < maxRetries; i++) {
     if (shouldStop(i)) break
     try {
-      const data = await fetch(url)
+      const controller = new AbortController()
+      if (timeout !== false) {
+        setTimeout(() => controller.abort(), timeout)
+      }
+      const data = await fetch(url, {
+        signal: controller.signal
+      })
       if (data.status === 404) throw "404"
       return data
     } 

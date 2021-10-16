@@ -71,6 +71,16 @@
   }
 }
 
+.size-very-large {
+  height: auto;
+  padding: 30px 45px !important;
+  font-size: var(--font-size-regular);
+  
+  i {
+    font-size: 26px;
+  }
+}
+
 .icon-left i {
   margin-right: 15px;
 }

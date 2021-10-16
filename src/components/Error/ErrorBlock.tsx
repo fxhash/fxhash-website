@@ -1,4 +1,4 @@
-import style from "./ErrorBlock.module.scss"
+import style from "./Error.module.scss"
 import cs from "classnames"
 import { PropsWithChildren } from "react"
 

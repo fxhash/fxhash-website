@@ -1,0 +1,21 @@
+.presentation {
+  max-width: calc(min(100%, 570px));
+
+  i {
+    font-size: 20px;
+  }
+}
+
+.button-cont {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button {
+  text-align: left;
+
+  i {
+    margin-left: 20px;
+  }
+}

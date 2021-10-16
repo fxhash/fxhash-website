@@ -4,7 +4,7 @@ import { PropsWithChildren } from "react"
 import { FunctionComponent, HTMLAttributes } from "react-router/node_modules/@types/react"
 
 
-type TabDefinition = {
+export type TabDefinition = {
   name: string,
   props?: any
 }

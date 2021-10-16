@@ -15,16 +15,13 @@ export interface TokenFormat {
 }
 
 export interface GenerativeTokenMetadata {
-  name: string,
-  description: string,
-  tags: string[],
-  symbol: string,
-  artifactUri: string,
-  displayUri: string,
-  thumbnailUri: string,
-  creators: string[],
-  formats: TokenFormat[],
-  decimals: number,
+  name: string
+  description: string
+  tags: string[]
+  artifactUri: string
+  displayUri: string
+  thumbnailUri: string
+  generativeUri: string
 }
 
 export interface ObjktMetadata extends GenerativeTokenMetadata {}

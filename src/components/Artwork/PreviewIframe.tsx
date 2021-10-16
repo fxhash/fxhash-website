@@ -4,6 +4,7 @@ import cs from "classnames"
 import useAsyncEffect from "use-async-effect"
 import { fetchRetry } from '../../utils/network'
 import { LoaderBlock } from '../Layout/LoaderBlock'
+import { Error } from '../Error/Error'
 
 interface Props {
   url?: string
@@ -15,15 +16,19 @@ export interface ArtworkIframeRef {
 }
 
 export const ArtworkIframe = forwardRef<ArtworkIframeRef, Props>(({ url, textWaiting }, ref) => {
-  const [urlReady, setUrlReady] = useState<string|null>(null)
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<boolean>(false)
-  // to know when to cancel a fetch, keeps track of the index of the current fetch
-  const fetchIndex = useRef<number>(0)
   const iframeRef = useRef<HTMLIFrameElement>(null)
+
+  useEffect(() => {
+    setLoading(true)
+    setError(false)
+  }, [])
 
   const reloadIframe = () => {
     if (iframeRef.current) {
+      setLoading(true)
+      setError(false)
       iframeRef.current.src = iframeRef.current.src
     }
   }
@@ -32,49 +37,24 @@ export const ArtworkIframe = forwardRef<ArtworkIframeRef, Props>(({ url, textWai
     reloadIframe
   }))
 
-  // to avoid displaying 404 errors, the component does some periodic fetches until it can reach the URL
-  // it can be usefull if Git for instance is not up-to-date
-  useAsyncEffect(async (isMounted) => {
-    if (url) {
-      const index = ++fetchIndex.current
-      const fUrl = url
-
-      if (isMounted()) {
-        setUrlReady(null)
-        setLoading(true)
-        setError(false)
-      }
-
-      try {
-        await fetchRetry(fUrl, 20, 5000, () => !isMounted() || fetchIndex.current !== index)
-        if (isMounted() && fetchIndex.current === index) {
-          setLoading(false)
-          setUrlReady(fUrl)
-          setError(false)
-        }
-      }
-      catch(e) {
-        if (isMounted()) {
-          setError(true)
-          setLoading(false)
-        }
-      }
-    }
-  }, [url])
-
   return (
     <div className={style.container}>
       <div className={cs(style['iframe-container'])}>
-        {urlReady && (
-          <iframe 
-            ref={iframeRef}
-            src={urlReady}
-            sandbox="allow-scripts allow-same-origin"
-            className={cs(style.iframe)}
-          />
+        <iframe 
+          ref={iframeRef}
+          src={url}
+          sandbox="allow-scripts allow-same-origin"
+          className={cs(style.iframe)}
+          onLoad={() => setLoading(false)}
+          onError={() => setError(true)}
+        />
+        {(loading && !error) &&(
+          <LoaderBlock height="100%" className={cs(style.loader)}>{textWaiting}</LoaderBlock>
         )}
-        {loading &&(
-          <LoaderBlock height="100%">{textWaiting}</LoaderBlock>
+        {error && (
+          <Error className={cs(style.error)}>
+            Could not load the project
+          </Error>
         )}
       </div>
     </div>

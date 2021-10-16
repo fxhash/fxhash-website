@@ -9,7 +9,7 @@ import { ButtonHTMLAttributes } from "react"
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   iconComp?: React.ReactNode
   state?: "default" | "loading"
-  size?: "regular" | "medium" | "large" | "small"
+  size?: "regular" | "medium" | "large" | "small" | "very-large"
   color?: "black" | "primary" | "secondary"
   className?: string
   iconSide?: "left" | "right"
