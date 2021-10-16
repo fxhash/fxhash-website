@@ -6,6 +6,7 @@ import { MintGenerativeTabs } from "./Tabs"
 import { StepUploadIpfs } from "./StepUploadIpfs"
 import { Step } from "../../types/Steps"
 import { StepCheckFiles } from "./StepCheckFiles"
+import { StepConfigureCapture } from "./StepConfigureCapture"
 
 
 /**
@@ -45,7 +46,7 @@ const STEPS: Step[] = [
   },
   {
     path: "/capture-settings",
-    component: StepHome,
+    component: StepConfigureCapture,
     title: "3. Configure capture",
     validateIn: (data) => !!(data.cidUrlParams && data.authHash1 && data.cidFixedHash && data.authHash2),
     clearDataDown: (data) => ({

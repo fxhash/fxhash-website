@@ -3,12 +3,16 @@ import cs from "classnames"
 import { StepComponent } from "../../types/Steps"
 import { Spacing } from "../../components/Layout/Spacing"
 import { ArtworkIframe, ArtworkIframeRef } from "../../components/Artwork/PreviewIframe"
-import { useMemo, useState, useRef } from "react"
+import { useMemo, useState, useRef, useEffect } from "react"
 import { generateFxHash } from "../../utils/hash"
 import { getIpfsIoUrl } from "../../utils/ipfs"
 import { HashTest } from "../../components/Testing/HashTest"
 import { Checkbox } from "../../components/Input/Checkbox"
 import { Button } from "../../components/Button"
+import useFetch, { CachePolicies } from "use-http"
+import { StaticGenError, StaticGenResponse } from "../../types/Responses"
+import { Error } from "../../components/Error/Error"
+import { getStaticGenError } from "../../utils/errors"
 
 
 export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
@@ -17,9 +21,33 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
   const [check2, setCheck2] = useState<boolean>(false)
   const artworkIframeRef = useRef<ArtworkIframeRef>(null)
 
+  const { data, loading, error, post } = 
+    useFetch<StaticGenResponse|StaticGenError>(`${process.env.NEXT_PUBLIC_API_FILE_ROOT}/generate-static`,
+    { cachePolicy: CachePolicies.NO_CACHE })
+
+  // this variable ensures that we can safely access its data regardless of the state of the queries
+  const safeData: StaticGenResponse|false|undefined = !error && !loading && (data as StaticGenResponse)
+
   const url = useMemo<string>(() => {
     return `${getIpfsIoUrl(state.cidUrlParams!)}?fxhash=${hash}`
   }, [hash])
+
+  const sendData = () => {
+    const F = new FormData()
+    F.append("cidParams", state.cidUrlParams!)
+    F.append("authHash", state.authHash1!)
+    F.append("hash", hash)
+    post(F)
+  }
+
+  useEffect(() => {
+    if (safeData) {
+      onNext({
+        cidFixedHash: safeData.cidStatic,
+        authHash2: safeData.authenticationHash
+      })
+    }
+  }, [safeData])
 
   return (
     <>
@@ -80,12 +108,21 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
           </Checkbox>
         </div>
         <Spacing size="large"/>
+
+        {error && (
+          <Error>
+            { getStaticGenError(data as StaticGenError) }
+          </Error>
+        )}
+
         <Button
           color="secondary"
           iconComp={<i aria-hidden className="fas fa-arrow-right"/>}
           iconSide="right"
           size="large"
           disabled={!check1 || !check2}
+          state={loading ? "loading" : "default"}
+          onClick={sendData}
         >
           Next step
         </Button>

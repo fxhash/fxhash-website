@@ -3,16 +3,19 @@ import style from './Artwork.module.scss'
 
 interface Props {
   ipfsUri?: string
+  url?: string
   alt?: string
 }
 
 export function ArtworkPreview({
   ipfsUri,
+  url,
   alt = "Generative Token preview"
 }: Props) {
+  const U = url || (ipfsUri && ipfsDisplayUrl(ipfsUri)) || null
   return (
     <div className={style.container}>
-      <img src={ipfsDisplayUrl(ipfsUri)} alt={alt} />
+      {U && <img src={U} alt={alt} />}
     </div>
   )
 }
