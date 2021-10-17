@@ -54,6 +54,7 @@ export enum PreviewError {
 
 export interface PreviewResponse {
   cidPreview: string
+  cidThumbnail: string
   authenticationHash: string
   resX: number,
   resY: number,

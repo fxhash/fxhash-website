@@ -25,6 +25,8 @@ export interface MintGenerativeData {
   authHash2?: string
   // the ipfs uri to the preview
   cidPreview?: string
+  // the ipfs uri to the thumbnail
+  cidThumbnail?: string
   // a hash to verify the 3 ipfs uri
   authHash3?: string
   // capture settings

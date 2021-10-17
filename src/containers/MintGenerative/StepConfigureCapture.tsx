@@ -72,6 +72,7 @@ export const StepConfigureCapture: StepComponent = ({ onNext, state }) => {
           delay: safeDataPreview.delay,
         },
         cidPreview: safeDataPreview.cidPreview,
+        cidThumbnail: safeDataPreview.cidThumbnail,
         authHash3: safeDataPreview.authenticationHash
       })
     }
@@ -114,7 +115,7 @@ export const StepConfigureCapture: StepComponent = ({ onNext, state }) => {
 
           {error && (
             <Error>
-              { getCaptureError((data as CaptureErrorResponse).error) }
+              { getCaptureError((data as CaptureErrorResponse)?.error || CaptureErrorEnum.UNKNOWN) }
             </Error>
           )}
 
