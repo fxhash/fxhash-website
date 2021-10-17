@@ -56,7 +56,7 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
         Sometimes, the IPFS network can be <strong>slow</strong> 🐢. Please be patient.
       </p>
       <p>
-        On the next step, you will configure how previews will be generated each time your token is collected.
+        On the next step, you will configure how previews will be generated each time your token is collected.<br/>
         <strong>Use this step to find a hash you want to use for the thumbnail of the project on the plateform.</strong>
       </p>
 

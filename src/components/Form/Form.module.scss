@@ -7,17 +7,56 @@
   display: flex;
 	flex-direction: column;
 	position: relative;
+  width: 100%;
 
-  & + .field {
+  & + .field, & + .fieldset {
     margin-top: var(--layout-margin-big-md);
   }
 
 	& > label {
-		display: block;
+		display: flex;
+    flex-direction: column;
+    gap: 5px;
 		margin-bottom: 10px;
     font-weight: bold;
     font-size: var(--font-size-h5);
+
+    small {
+      font-weight: normal;
+      font-size: 0.7em;
+    }
 	}
+}
+
+.fieldset {
+  width: 100%;
+  border: none;
+  padding: 15px 0;
+  position: relative;
+
+  .field {
+    & + .field, & + .fieldset {
+      margin-top: var(--layout-margin-small-lg);
+    }
+  }
+
+  &::before {
+    content: "";
+    display: block;
+    height: 100%;
+    width: 3px;
+    background-color: var(--color-black);
+    position: absolute;
+    left: -20px;
+    top: 0;
+  }
+
+  & > small {
+    font-size: 1rem;
+    color: var(--color-gray);
+    margin-top: var(--layout-margin-small-md);
+    display: block;
+  }
 }
 
 .error {

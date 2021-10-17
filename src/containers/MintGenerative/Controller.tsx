@@ -7,6 +7,8 @@ import { StepUploadIpfs } from "./StepUploadIpfs"
 import { Step } from "../../types/Steps"
 import { StepCheckFiles } from "./StepCheckFiles"
 import { StepConfigureCapture } from "./StepConfigureCapture"
+import { StepVerification } from "./StepVerification"
+import { StepInformations } from "./StepInformations"
 
 
 /**
@@ -58,7 +60,7 @@ const STEPS: Step[] = [
   },
   {
     path: "/verifications",
-    component: StepHome,
+    component: StepVerification,
     title: "4. Verifications",
     validateIn: (data) => 
       !!(data.cidUrlParams && data.authHash1 && data.cidFixedHash && data.authHash2
@@ -75,7 +77,7 @@ const STEPS: Step[] = [
   },
   {
     path: "/informations",
-    component: StepHome,
+    component: StepInformations,
     title: "5. Mint",
     validateIn: (data) => 
       !!(data.cidUrlParams && data.authHash1 && data.cidFixedHash && data.authHash2

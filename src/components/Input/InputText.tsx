@@ -3,7 +3,7 @@ import cs from "classnames"
 import { InputHTMLAttributes } from "react"
 
 
-interface Props extends InputHTMLAttributes<HTMLInputElement> {
+export interface Props extends InputHTMLAttributes<HTMLInputElement> {
   readOnly?: boolean
   error?: boolean
 }

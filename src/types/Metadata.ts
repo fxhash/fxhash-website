@@ -17,6 +17,7 @@ export interface TokenFormat {
 export interface GenerativeTokenMetadata {
   name: string
   description: string
+  childrenDescription: string
   tags: string[]
   artifactUri: string
   displayUri: string

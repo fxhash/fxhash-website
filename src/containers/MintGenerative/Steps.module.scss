@@ -1,0 +1,18 @@
+.artwork-link-cont {
+  display: flex;
+  flex-direction: column;
+
+  a {
+    align-self: flex-end;
+  }
+
+  a.center {
+    align-self: center;
+  }
+}
+
+.bottom {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}

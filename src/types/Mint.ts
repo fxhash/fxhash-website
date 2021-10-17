@@ -32,3 +32,14 @@ export interface MintGenerativeData {
   // general informations about the token
   informations?: GenerativeTokenInformations
 }
+
+export interface GenTokenInformationsForm {
+  name: string,
+  description: string
+  childrenDescription: string
+  tags: string[]
+  editions: number
+  enabled: boolean
+  price: number
+  royalties: number
+}
