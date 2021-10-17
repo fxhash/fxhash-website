@@ -8,6 +8,12 @@ export interface GenerativeTokenInformations {
   royaties?: number
 }
 
+export interface CaptureSettings {
+  delay: number,
+  resX: number,
+  resY: number
+}
+
 export interface MintGenerativeData {
   // the ipfs uri pointing to the project with URL params
   cidUrlParams?: string
@@ -21,6 +27,8 @@ export interface MintGenerativeData {
   cidPreview?: string
   // a hash to verify the 3 ipfs uri
   authHash3?: string
+  // capture settings
+  captureSettings?: CaptureSettings
   // general informations about the token
   informations?: GenerativeTokenInformations
 }

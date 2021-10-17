@@ -42,3 +42,20 @@ export interface CaptureErrorResponse {
 export interface CaptureResponse {
   capture: string
 }
+
+export enum PreviewError {
+  UNKNOWN               = "UNKNOWN",
+  MISSING_PARAMETERS    = "MISSING_PARAMETERS",
+  AUTH_FAILED           = "AUTH_FAILED", 
+  INCORRECT_PARAMETERS  = "INCORRECT_PARAMETERS", 
+  PREVIEW_ERROR         = "PREVIEW_ERROR",
+  IPFS_ERROR            = "IPFS_ERROR", 
+}
+
+export interface PreviewResponse {
+  cidPreview: string
+  authenticationHash: string
+  resX: number,
+  resY: number,
+  delay: number
+}

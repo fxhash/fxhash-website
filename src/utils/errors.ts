@@ -1,6 +1,6 @@
 import { string } from "yup/lib/locale"
 import { FileUploadError } from "../types/errors"
-import { CaptureErrorEnum, StaticGenError } from "../types/Responses"
+import { CaptureErrorEnum, PreviewError, StaticGenError } from "../types/Responses"
 
 
 const fileUploadErrors: Record<FileUploadError, string> = {
@@ -40,4 +40,17 @@ const captureErrors: Record<CaptureErrorEnum, string> = {
 
 export function getCaptureError(error: CaptureErrorEnum) {
   return captureErrors[error] || captureErrors[StaticGenError.UNKNOWN]
+}
+
+const previewErrors: Record<PreviewError, string> = {
+  UNKNOWN: "Unkown error. Please try again.",
+  MISSING_PARAMETERS: "Parameters are missing from the request",
+  AUTH_FAILED: "Server could not authenticate your project. Try again, but you may have to start over... sorry", 
+  INCORRECT_PARAMETERS: "Capture parameters are incorrect", 
+  PREVIEW_ERROR: "The server was not able to generate the preview.",
+  IPFS_ERROR: "Error when trying to upload your preview on IPFS. Please try again.", 
+}
+
+export function getPreviewError(error: PreviewError) {
+  return previewErrors[error] || previewErrors[PreviewError.UNKNOWN]
 }

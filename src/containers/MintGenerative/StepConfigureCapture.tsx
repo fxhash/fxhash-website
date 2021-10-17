@@ -10,10 +10,10 @@ import { SliderWithText } from "../../components/Input/SliderWithText"
 import { Vec2 } from "../../types/Math"
 import { InputResolution } from "../../components/Input/Resolution"
 import useFetch, { CachePolicies } from "use-http"
-import { CaptureErrorEnum, CaptureErrorResponse, CaptureResponse } from "../../types/Responses"
+import { CaptureErrorEnum, CaptureErrorResponse, CaptureResponse, PreviewError, PreviewResponse } from "../../types/Responses"
 import { getIpfsIoUrl } from "../../utils/ipfs"
 import { Error } from "../../components/Error/Error"
-import { getCaptureError } from "../../utils/errors"
+import { getCaptureError, getPreviewError } from "../../utils/errors"
 
 export const StepConfigureCapture: StepComponent = ({ onNext, state }) => {
   const [time, setTime] = useState<number>(2)
@@ -24,10 +24,18 @@ export const StepConfigureCapture: StepComponent = ({ onNext, state }) => {
     useFetch<CaptureErrorResponse|CaptureResponse>(process.env.NEXT_PUBLIC_API_CAPTURE,
     { cachePolicy: CachePolicies.NO_CACHE })
 
-  console.log({ data, loading, error })
-
   // this variable ensures that we can safely access its data regardless of the state of the queries
   const safeData: CaptureResponse|false|undefined = !error && !loading && (data as CaptureResponse)
+
+  const { data: previewData, loading: previewLoading, error: previewError, post: previewPost } = 
+    useFetch<PreviewResponse|PreviewError>(`${process.env.NEXT_PUBLIC_API_FILE_ROOT}/preview`,
+    { cachePolicy: CachePolicies.NO_CACHE })
+
+  // this variable ensures that we can safely access its data regardless of the state of the queries
+  const safeDataPreview: PreviewResponse|false|undefined = !previewError && !previewLoading && (previewData as PreviewResponse)
+
+  console.log({ previewData, previewError, previewLoading })
+  console.log({ safeDataPreview })
 
   const captureTest = () => {
     post({
@@ -37,12 +45,37 @@ export const StepConfigureCapture: StepComponent = ({ onNext, state }) => {
       delay: time * 1000
     })
   }
+
+  const sendCapture = () => {
+    const F = new FormData()
+    F.append("resX", ""+res.x)
+    F.append("resY", ""+res.y)
+    F.append("delay", ""+(time*1000))
+    F.append("cidParams", state.cidUrlParams!)
+    F.append("cidStatic", state.cidFixedHash!)
+    F.append("authHash", state.authHash2!)
+    previewPost(F)
+  }
   
   useEffect(() => {
     if (safeData) {
       setPreviewUrl(safeData.capture)
     }
   }, [safeData])
+
+  useEffect(() => {
+    if (safeDataPreview) {
+      onNext({
+        captureSettings: {
+          resX: safeDataPreview.resX,
+          resY: safeDataPreview.resY,
+          delay: safeDataPreview.delay,
+        },
+        cidPreview: safeDataPreview.cidPreview,
+        authHash3: safeDataPreview.authenticationHash
+      })
+    }
+  }, [safeDataPreview])
 
   return (
     <>
@@ -111,20 +144,10 @@ export const StepConfigureCapture: StepComponent = ({ onNext, state }) => {
 
       <Spacing size="6x-large"/>
 
-      {/* <div className={cs(style.checkboxes)}>
-        <div>
-          <Checkbox value={check1} onChange={setCheck1}>
-            I want to keep this hash for the preview of my project
-          </Checkbox>
-          <Checkbox value={check2} onChange={setCheck2}>
-            My Generative Token works properly
-          </Checkbox>
-        </div>
-        <Spacing size="large"/>
-
-        {error && (
+      <div className={cs(style.bottom)}>
+        {previewError && (
           <Error>
-            { getStaticGenError(data as StaticGenError) }
+            { getPreviewError(previewData as PreviewError) }
           </Error>
         )}
 
@@ -133,13 +156,12 @@ export const StepConfigureCapture: StepComponent = ({ onNext, state }) => {
           iconComp={<i aria-hidden className="fas fa-arrow-right"/>}
           iconSide="right"
           size="large"
-          disabled={!check1 || !check2}
-          state={loading ? "loading" : "default"}
-          onClick={sendData}
+          state={previewLoading ? "loading" : "default"}
+          onClick={sendCapture}
         >
           Next step
         </Button>
-      </div> */}
+      </div>
 
       <Spacing size="3x-large"/>
       <Spacing size="3x-large"/>

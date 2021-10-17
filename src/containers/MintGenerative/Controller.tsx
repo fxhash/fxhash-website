@@ -62,14 +62,15 @@ const STEPS: Step[] = [
     title: "4. Verifications",
     validateIn: (data) => 
       !!(data.cidUrlParams && data.authHash1 && data.cidFixedHash && data.authHash2
-        && data.cidPreview && data.authHash3),
+        && data.cidPreview && data.authHash3 && data.captureSettings),
     clearDataDown: (data) => ({
       cidUrlParams: data.cidUrlParams,
       authHash1: data.authHash1,
       cidFixedHash: data.cidFixedHash,
       authHash2: data.authHash2,
       cidPreview: data.cidPreview,
-      authHash3: data.authHash3
+      authHash3: data.authHash3,
+      captureSettings: data.captureSettings
     })
   },
   {
@@ -78,14 +79,15 @@ const STEPS: Step[] = [
     title: "5. Mint",
     validateIn: (data) => 
       !!(data.cidUrlParams && data.authHash1 && data.cidFixedHash && data.authHash2
-        && data.cidPreview && data.authHash3),
+        && data.cidPreview && data.authHash3 && data.captureSettings),
     clearDataDown: (data) => ({
       cidUrlParams: data.cidUrlParams,
       authHash1: data.authHash1,
       cidFixedHash: data.cidFixedHash,
       authHash2: data.authHash2,
       cidPreview: data.cidPreview,
-      authHash3: data.authHash3
+      authHash3: data.authHash3,
+      captureSettings: data.captureSettings
     })
   },
   {
@@ -94,7 +96,7 @@ const STEPS: Step[] = [
     hideTabs: true,
     validateIn: (data) => 
       !!(data.cidUrlParams && data.authHash1 && data.cidFixedHash && data.authHash2
-        && data.cidPreview && data.authHash3 && data.informations),
+        && data.cidPreview && data.authHash3 && data.informations && data.captureSettings),
     clearDataDown: (data) => data
   }
 ]
