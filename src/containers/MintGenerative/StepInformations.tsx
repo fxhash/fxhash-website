@@ -252,7 +252,7 @@ export const StepInformations: StepComponent = ({ state, onNext }) => {
                   type="number"
                   name="price"
                   min={0}
-                  value={values.price}
+                  value={values.price||""}
                   onChange={handleChange}
                   onBlur={handleBlur}
                   error={!!errors.price}
@@ -269,7 +269,7 @@ export const StepInformations: StepComponent = ({ state, onNext }) => {
                   type="number"
                   name="royalties"
                   min={0}
-                  value={values.royalties}
+                  value={values.royalties||""}
                   onChange={handleChange}
                   onBlur={handleBlur}
                   error={!!errors.royalties}
