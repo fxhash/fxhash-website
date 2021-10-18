@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react"
+import { useState, useEffect, useMemo, RefObject } from "react"
 import { MintGenerativeData } from "../../types/Mint"
 import { Switch, Route, Link, LinkProps, useRouteMatch, useHistory, useLocation } from "react-router-dom"
 import { StepHome } from "./StepHome"
@@ -115,14 +115,16 @@ const STEPS: Step[] = [
   }
 ]
 
-export function MintGenerativeController() {
+interface Props {
+  anchor?: RefObject<HTMLElement>
+}
+
+export function MintGenerativeController({ anchor }: Props) {
   const [state, setState] = useState<MintGenerativeData>({
     minted: false
   })
   const history = useHistory()
   const location = useLocation()
-
-  console.log(state)
 
   // derive index of the step from the location
   const stepIndex = useMemo<number>(() => {
@@ -143,6 +145,15 @@ export function MintGenerativeController() {
   // when the step changes, needs to validate the data and clear the data down
   // if validation fails, forces the history to previous step path
   useEffect(() => {
+    // move user back to top of the page
+    if (stepIndex !== 0 && anchor?.current) {
+      window.scrollTo({
+        top: anchor.current.offsetTop - 30,
+        left: 0,
+        behavior: "smooth"
+      })
+    }
+
     const step = STEPS[stepIndex]
     if (step.validateIn(state)) {
       // clear the data down the state

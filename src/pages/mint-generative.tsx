@@ -7,13 +7,16 @@ import ClientOnly from "../components/Utils/ClientOnly"
 import { UserGuard } from "../components/Guards/UserGuard"
 import { MintGenerativeController } from "../containers/MintGenerative/Controller"
 import { BrowserRouter as Router } from "react-router-dom"
+import { useRef } from "react"
 
 const MintGenerative: NextPage = () => {
+  const anchorRef = useRef<HTMLElement>(null)
+
   return (
     <>
       <Spacing size="6x-large"/>
 
-      <section>
+      <section ref={anchorRef}>
         <SectionHeader>
           <h2>— mint a Generative Token</h2>
         </SectionHeader>
@@ -24,7 +27,7 @@ const MintGenerative: NextPage = () => {
           <ClientOnly>
             <UserGuard>
               <Router basename="/mint-generative">
-                <MintGenerativeController />
+                <MintGenerativeController anchor={anchorRef} />
               </Router>
             </UserGuard>
           </ClientOnly>
