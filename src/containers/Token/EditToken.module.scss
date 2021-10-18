@@ -1,0 +1,25 @@
+.container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.form {
+  width: min(100%, 500px);
+
+  button {
+    align-self: center;
+  }
+}
+
+.checkbox {
+  label {
+    flex-direction: row-reverse !important;
+    justify-content: flex-end;
+    padding-left: 0;
+
+    span {
+      margin-left: 20px;
+    }
+  }
+}

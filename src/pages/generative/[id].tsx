@@ -19,6 +19,9 @@ import { SectionHeader } from '../../components/Layout/SectionHeader'
 import { CardsContainer } from '../../components/Card/CardsContainer'
 import { ObjktCard } from '../../components/Card/ObjktCard'
 import { Activity } from '../../components/Activity/Activity'
+import ClientOnly from '../../components/Utils/ClientOnly'
+import { EditTokenSnippet } from '../../containers/Token/EditTokenSnippet'
+import { UserGuard } from '../../components/Guards/UserGuard'
 
 
 interface Props {
@@ -42,6 +45,11 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
               user={token.author}
               size="big"
             />
+            <ClientOnly>
+              <UserGuard>
+                <EditTokenSnippet token={token} />
+              </UserGuard>
+            </ClientOnly>
           </header>
 
           <Spacing size="large"/>

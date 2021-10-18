@@ -61,8 +61,16 @@
 
 .error {
   position: absolute;
-  top: 3px; 
-  right: 0;
   color: var(--color-error);
   font-weight: bold;
+}
+
+.error-top-right {
+  top: 3px; 
+  right: 0;
+}
+
+.error-bottom-left {
+  bottom: -25px;
+  left: 0;
 }

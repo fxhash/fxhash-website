@@ -24,3 +24,10 @@ export interface MintGenerativeRawCall {
   royalties: number,
   token_name: string
 }
+
+export interface UpdateGenerativeCallData {
+  enabled: boolean,
+  price: number,
+  royalties: number,
+  issuer_id: number
+}
