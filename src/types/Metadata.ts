@@ -36,6 +36,8 @@ export interface GenerativeTokenMetadata {
   generativeUri: string
   authenticityHash: string
   capture: CaptureSettings
+  decimals: number,
+  symbol: string
 }
 
 export interface ObjktMetadata extends GenerativeTokenMetadata {}

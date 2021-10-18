@@ -23,6 +23,7 @@ import { UserContext } from "../UserProvider"
 import { useContractCall } from "../../utils/hookts"
 import { MintGenerativeCallData } from "../../types/ContractCalls"
 import { ContractFeedback } from "../../components/Feedback/ContractFeedback"
+import { getMutezDecimalsNb } from "../../utils/math"
 
 
 const initialForm: Partial<GenTokenInformationsForm> = {
@@ -105,7 +106,9 @@ export const StepInformations: StepComponent = ({ state, onNext }) => {
           y: state.captureSettings!.resY
         },
         delay: state.captureSettings!.delay
-      }
+      },
+      symbol: "GENTK",
+      decimals: getMutezDecimalsNb(Math.floor(formInformations.price*1000000))
     }
     setSavedInfos({
       name: formInformations.name,
