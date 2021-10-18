@@ -64,11 +64,18 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
               supply={token.supply}
             />
             <Spacing size="large"/>
-            <Button
-              color="secondary"
-            >
-              Mint unique token - {displayMutez(token.price)} tez
-            </Button>
+            
+            {token.balance > 0 && (
+              <>
+                {!token.enabled && <small>token is currently <strong>disabled</strong></small>}
+                <Button
+                  color="secondary"
+                  disabled={!token.enabled}
+                >
+                  Mint unique token - {displayMutez(token.price)} tez
+                </Button>
+              </>
+            )}
           </div>
         </div>
 
