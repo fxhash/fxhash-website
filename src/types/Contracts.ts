@@ -3,7 +3,8 @@ export enum ContractOperationStatus {
   NONE                    = "NONE",
   CALLING                 = "CALLING",
   WAITING_CONFIRMATION    = "WAITING_CONFIRMATION",
-  INJECTED                = "INJECTED"
+  INJECTED                = "INJECTED",
+  ERROR                   = "ERROR"
 }
 
 // generic method to handle updates made on a call to a contract
@@ -23,6 +24,7 @@ export type ContractCallHookReturn<T> = {
   state: ContractOperationStatus,
   loading: boolean,
   success: boolean,
+  error: boolean,
   call: (data: T) => void,
   clear: () => void
 }

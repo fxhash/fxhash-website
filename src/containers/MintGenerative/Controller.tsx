@@ -9,6 +9,7 @@ import { StepCheckFiles } from "./StepCheckFiles"
 import { StepConfigureCapture } from "./StepConfigureCapture"
 import { StepVerification } from "./StepVerification"
 import { StepInformations } from "./StepInformations"
+import { StepSuccess } from "./StepSuccess"
 
 
 /**
@@ -27,14 +28,18 @@ const STEPS: Step[] = [
     component: StepHome,
     hideTabs: true,
     validateIn: () => true,
-    clearDataDown: (data) => ({})
+    clearDataDown: (data) => ({
+      minted: data.minted
+    })
   },
   {
     path: "/upload-ipfs",
     component: StepUploadIpfs,
     title: "1. Upload to IPFS",
     validateIn: () => true,
-    clearDataDown: (data) => ({})
+    clearDataDown: (data) => ({
+      minted: data.minted
+    })
   },
   {
     path: "/check-files",
@@ -43,7 +48,8 @@ const STEPS: Step[] = [
     validateIn: (data) => !!(data.cidUrlParams && data.authHash1),
     clearDataDown: (data) => ({
       cidUrlParams: data.cidUrlParams,
-      authHash1: data.authHash1
+      authHash1: data.authHash1,
+      minted: data.minted
     })
   },
   {
@@ -55,7 +61,8 @@ const STEPS: Step[] = [
       cidUrlParams: data.cidUrlParams,
       authHash1: data.authHash1,
       cidFixedHash: data.cidFixedHash,
-      authHash2: data.authHash2
+      authHash2: data.authHash2,
+      minted: data.minted
     })
   },
   {
@@ -73,7 +80,8 @@ const STEPS: Step[] = [
       cidPreview: data.cidPreview,
       authHash3: data.authHash3,
       captureSettings: data.captureSettings,
-      cidThumbnail: data.cidThumbnail
+      cidThumbnail: data.cidThumbnail,
+      minted: data.minted
     })
   },
   {
@@ -91,12 +99,13 @@ const STEPS: Step[] = [
       cidPreview: data.cidPreview,
       authHash3: data.authHash3,
       captureSettings: data.captureSettings,
-      cidThumbnail: data.cidThumbnail
+      cidThumbnail: data.cidThumbnail,
+      minted: data.minted
     })
   },
   {
     path: "/success",
-    component: StepHome,
+    component: StepSuccess,
     hideTabs: true,
     validateIn: (data) => 
       !!(data.cidUrlParams && data.authHash1 && data.cidFixedHash && data.authHash2
@@ -107,7 +116,9 @@ const STEPS: Step[] = [
 ]
 
 export function MintGenerativeController() {
-  const [state, setState] = useState<MintGenerativeData>({})
+  const [state, setState] = useState<MintGenerativeData>({
+    minted: false
+  })
   const history = useHistory()
   const location = useLocation()
 
@@ -143,6 +154,13 @@ export function MintGenerativeController() {
       history.replace(previous.path)
     }
   }, [stepIndex])
+
+  // safe guard to prevent going back if token is minted
+  useEffect(() => {
+    if (state.minted && location.pathname !== "/success") {
+      history.replace(STEPS[STEPS.length-1].path)
+    }
+  }, [state])
 
   return (
     <>

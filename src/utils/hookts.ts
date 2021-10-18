@@ -35,18 +35,21 @@ export function useContractCall<T>(contractMethod: ContractInteractionMethod<T>)
   const [state, setState] = useState<ContractOperationStatus>(ContractOperationStatus.NONE)
   const [loading, setLoading] = useState<boolean>(false)
   const [success, setSuccess] = useState<boolean>(false)
+  const [error, setError] = useState<boolean>(false)
   const counter = useRef<number>(0)
   const isMounted = useIsMounted()
 
   const clear = () => {
     setLoading(false)
     setSuccess(false)
+    setError(false)
     setState(ContractOperationStatus.NONE)
   }
 
   const call = (data: T) => {
     setLoading(true)
     setSuccess(false)
+    setError(false)
     setState(ContractOperationStatus.NONE)
     
     // assign the ID to this call and increment it to prevent overlaps
@@ -59,6 +62,10 @@ export function useContractCall<T>(contractMethod: ContractInteractionMethod<T>)
           setSuccess(true)
           setLoading(false)
         }
+        else if (opState === ContractOperationStatus.ERROR) {
+          setLoading(false)
+          setError(true)
+        }
       }
     })
   }
@@ -68,6 +75,7 @@ export function useContractCall<T>(contractMethod: ContractInteractionMethod<T>)
     loading,
     success,
     call,
-    clear
+    clear,
+    error
   }
 }

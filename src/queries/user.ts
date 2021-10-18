@@ -20,6 +20,7 @@ export const Qu_user = gql`
           id
           name
           metadataUri
+          avatarUri
         }
       }
       objkts {

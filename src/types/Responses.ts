@@ -60,3 +60,12 @@ export interface PreviewResponse {
   resY: number,
   delay: number
 }
+
+export enum MetadataError {
+  UNKNOWN               = "UNKNOWN",
+  IPFS_ERROR            = "IPFS_ERROR",
+}
+
+export interface MetadataResponse {
+  cid: string
+}

@@ -45,10 +45,8 @@ export function EditProfile() {
   const safeData: ProfileUploadResponse|false|undefined = !error && !fileLoading && (fetchData as ProfileUploadResponse)
 
   // comment je voudrais l'utiliser ?
-  const { state, loading: contractLoading, success, call, clear } = 
+  const { state, loading: contractLoading, error: contractError, success, call, clear } = 
     useContractCall<ProfileUpdateCallData>(userCtx.walletManager!.updateProfile)
-
-  console.log({ state, contractLoading, success})
 
   useEffect(() => {
     if (safeData && userCtx.walletManager) {
@@ -139,6 +137,7 @@ export function EditProfile() {
               state={state}
               loading={contractLoading}
               success={success}
+              error={contractError}
               successMessage="Your profile update is now on the blockchain !"
             />
 

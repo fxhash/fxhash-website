@@ -34,9 +34,6 @@ export const StepConfigureCapture: StepComponent = ({ onNext, state }) => {
   // this variable ensures that we can safely access its data regardless of the state of the queries
   const safeDataPreview: PreviewResponse|false|undefined = !previewError && !previewLoading && (previewData as PreviewResponse)
 
-  console.log({ previewData, previewError, previewLoading })
-  console.log({ safeDataPreview })
-
   const captureTest = () => {
     post({
       url: getIpfsIoUrl(state.cidFixedHash!),

@@ -7,8 +7,10 @@ import { Spacing } from "../Layout/Spacing"
 interface Props {
   state: ContractOperationStatus
   success: boolean
+  error: boolean
   loading: boolean
   successMessage?: string
+  errorMessage?: string
 }
 
 function messageFromState(state: ContractOperationStatus): string {
@@ -25,18 +27,24 @@ function messageFromState(state: ContractOperationStatus): string {
 export function ContractFeedback({
   state,
   success,
+  error,
   loading,
-  successMessage = "The operation was successfully injected into the blockchain"
+  successMessage = "The operation was successfully injected into the blockchain",
+  errorMessage = "There was an error when injecting into the blockchain"
 }: Props) {
   return (
     <>
-      {(loading || success) && (
+      {(loading || success || error) && (
         <div className={cs(style.container)}>
-          {success ? (
-            <span className={cs(style.success)}>{ successMessage }</span>
+          {error ? (
+            <span className={cs(style.error)}>{ errorMessage }</span>
           ):(
-            loading && (
-              <span className={cs(style.loading)}>{ messageFromState(state) }</span>
+            success ? (
+              <span className={cs(style.success)}>{ successMessage }</span>
+            ):(
+              loading && (
+                <span className={cs(style.loading)}>{ messageFromState(state) }</span>
+              )
             )
           )}
           <Spacing size="x-small"/>

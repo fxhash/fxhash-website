@@ -201,6 +201,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
                   id
                   name
                 }
+                token {
+                  id
+                  name
+                }
               }
               author {
                 id

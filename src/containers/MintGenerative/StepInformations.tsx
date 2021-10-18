@@ -2,10 +2,13 @@ import style from "./StepInformations.module.scss"
 import layout from "../../styles/Layout.module.scss"
 import cs from "classnames"
 import { StepComponent } from "../../types/Steps"
+import { useContext, useEffect, useState } from "react"
 import { Formik } from "formik"
+import * as Yup from "yup"
+import useFetch, { CachePolicies } from "use-http"
+import { MetadataError, MetadataResponse } from "../../types/Responses"
 import { GenerativeTokenMetadata } from "../../types/Metadata"
 import { GenTokenInformationsForm } from "../../types/Mint"
-import * as Yup from "yup"
 import { Form } from "../../components/Form/Form"
 import { Field } from "../../components/Form/Field"
 import { InputText } from "../../components/Input/InputText"
@@ -15,14 +18,19 @@ import { Fieldset } from "../../components/Form/Fieldset"
 import { Checkbox } from "../../components/Input/Checkbox"
 import { Button } from "../../components/Button"
 import { InputTextUnit } from "../../components/Input/InputTextUnit"
+import { getIpfsSlash } from "../../utils/ipfs"
+import { UserContext } from "../UserProvider"
+import { useContractCall } from "../../utils/hookts"
+import { MintGenerativeCallData } from "../../types/ContractCalls"
+import { ContractFeedback } from "../../components/Feedback/ContractFeedback"
 
 
 const initialForm: Partial<GenTokenInformationsForm> = {
   name: "",
   description: "",
   childrenDescription: "",
-  tags: [ "" ],
-  editions: undefined,
+  tags: "",
+  editions: 1,
   enabled: false,
   price: undefined,
   royalties: undefined
@@ -63,6 +71,82 @@ const validation = Yup.object().shape({
 })
 
 export const StepInformations: StepComponent = ({ state, onNext }) => {
+  const userCtx = useContext(UserContext)
+  const user = userCtx.user!
+
+  const [savedInfos, setSavedInfos] = useState<Partial<GenTokenInformationsForm>>()
+  
+  // hook to interact with file API metadata
+  const { data: metaData, loading: metaLoading, error: metaError, post: metaPost } = 
+    useFetch<MetadataResponse|MetadataError>(`${process.env.NEXT_PUBLIC_API_FILE_ROOT}/metadata`,
+    { cachePolicy: CachePolicies.NO_CACHE })
+
+  // this variable ensures that we can safely access its data regardless of the state of the queries
+  const safeMetaData: MetadataResponse|false|undefined = !metaError && !metaLoading && (metaData as MetadataResponse)
+
+  // hook to interact with the contract
+  const { state: callState, loading: contractLoading, success, call, error: contractError } = 
+    useContractCall<MintGenerativeCallData>(userCtx.walletManager!.mintGenerative)
+
+  const uploadInformations = (formInformations: GenTokenInformationsForm) => {
+    const metadata: GenerativeTokenMetadata = {
+      name: formInformations.name,
+      description: formInformations.description,
+      childrenDescription: formInformations.childrenDescription || formInformations.description,
+      tags: formInformations.tags,
+      artifactUri: getIpfsSlash(state.cidFixedHash!),
+      displayUri: getIpfsSlash(state.cidPreview!),
+      thumbnailUri: getIpfsSlash(state.cidThumbnail!),
+      generativeUri: getIpfsSlash(state.cidUrlParams!),
+      authenticityHash: state.authHash3!,
+      capture: {
+        resolution: {
+          x: state.captureSettings!.resX,
+          y: state.captureSettings!.resY
+        },
+        delay: state.captureSettings!.delay
+      }
+    }
+    setSavedInfos({
+      name: formInformations.name,
+      editions: formInformations.editions,
+      enabled: formInformations.enabled,
+      price: formInformations.price,
+      royalties: formInformations.royalties
+    })
+    metaPost(metadata)
+  }
+
+  // when we receive metadata CID, we can initiate the call to contract
+  useEffect(() => {
+    if (safeMetaData && savedInfos) {
+      const metadataCid = safeMetaData.cid
+      // call the contract
+      call({
+        amount: savedInfos.editions!,
+        enabled: savedInfos.enabled!,
+        metadata: {
+          "": getIpfsSlash(metadataCid)
+        },
+        price: Math.floor(savedInfos.price! * 1000000),
+        royalties: Math.floor(savedInfos.royalties! * 10),
+        token_name: savedInfos.name!
+      })
+    }
+  }, [safeMetaData])
+
+  // if contract lands success, go to the success screen
+  useEffect(() => {
+    if (success) {
+      onNext({
+        minted: true
+      })
+    }
+  }, [success])
+
+  // derived from state, to take account for both side-effects interactions
+  const loading = metaLoading || contractLoading
+
   return (
     <div className={cs(style.container)}>
       <h5>Almost done 😮‍💨</h5>
@@ -71,11 +155,9 @@ export const StepInformations: StepComponent = ({ state, onNext }) => {
 
       <Formik
         initialValues={initialForm}
-        enableReinitialize
         validationSchema={validation}
         onSubmit={(values) => {
-          // todo
-          console.log(values)
+          uploadInformations(values as GenTokenInformationsForm)
         }}
       >
         {({ values, handleChange, handleBlur, handleSubmit, errors }) => (
@@ -128,7 +210,7 @@ export const StepInformations: StepComponent = ({ state, onNext }) => {
               </label>
               <InputText
                 name="tags"
-                value={values.tags?.join(", ")}
+                value={values.tags}
                 onChange={handleChange}
                 onBlur={handleBlur}
                 error={!!errors.tags}
@@ -199,15 +281,20 @@ export const StepInformations: StepComponent = ({ state, onNext }) => {
 
             <Spacing size="3x-large"/>
 
+            <ContractFeedback
+              state={callState}
+              loading={contractLoading}
+              success={success}
+              error={contractError}
+              successMessage="Success !"
+            />
+
             <Button
               type="submit"
               color="secondary"
-              // iconComp={<i aria-hidden className="fas fa-arrow-right"/>}
-              // iconSide="right"
               size="large"
               disabled={Object.keys(errors).length > 0}
-              // state={loading ? "loading" : "default"}
-              // onClick={sendData}
+              state={loading ? "loading" : "default"}
             >
               Mint Token
             </Button>

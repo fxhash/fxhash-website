@@ -13,8 +13,6 @@ interface Props {
 }
 
 const UserPage: NextPage<Props> = ({ user }) => {
-  console.log(user)
-
   return (
     <>
       <Spacing size="6x-large" />
@@ -39,7 +37,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       user = data.user
       // process the user items
       const items = processUserItems(user)
-      console.log(items)
       user = { ...user, ...items }
     }
   }

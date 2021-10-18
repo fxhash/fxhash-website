@@ -1,6 +1,6 @@
 import { BeaconWallet } from '@taquito/beacon-wallet'
-import { ContractAbstraction, ContractProvider, TezosToolkit, Wallet } from '@taquito/taquito'
-import { ProfileUpdateCallData } from '../types/ContractCalls'
+import { ContractAbstraction, ContractProvider, MichelsonMap, TezosToolkit, Wallet } from '@taquito/taquito'
+import { MintGenerativeCallData, MintGenerativeRawCall, ProfileUpdateCallData } from '../types/ContractCalls'
 import { ContractInteractionMethod, ContractOperationStatus, FxhashContract } from '../types/Contracts'
 import { stringToByteString } from '../utils/convert'
 
@@ -121,22 +121,63 @@ export class WalletManager {
   /**
    * Updates the profile 
    */
-  updateProfile: ContractInteractionMethod<ProfileUpdateCallData> = async (profileData, operationStatusCallback) => {
-    // get/create the contract interface
-    const userContract = await this.getContract(FxhashContract.REGISTER)
+  updateProfile: ContractInteractionMethod<ProfileUpdateCallData> = async (profileData, statusCallback) => {
+    try {
+      // get/create the contract interface
+      const userContract = await this.getContract(FxhashContract.REGISTER)
+  
+      // call the contract (open wallet)
+      statusCallback && statusCallback(ContractOperationStatus.CALLING)
+      const opSend = await userContract.methodsObject.update_profile({
+        metadata: stringToByteString(profileData.metadata),
+        name: profileData.name
+      }).send()
+  
+      // wait for confirmation
+      statusCallback && statusCallback(ContractOperationStatus.WAITING_CONFIRMATION)
+      await opSend.confirmation(2)
+  
+      // OK, injected
+      statusCallback && statusCallback(ContractOperationStatus.INJECTED)
+    }
+    catch(err) {
+      // any error
+      statusCallback && statusCallback(ContractOperationStatus.ERROR)
+    }
+  }
 
-    // call the contract (open wallet)
-    operationStatusCallback && operationStatusCallback(ContractOperationStatus.CALLING)
-    const opSend = await userContract.methodsObject.update_profile({
-      metadata: stringToByteString(profileData.metadata),
-      name: profileData.name
-    }).send()
-
-    // wait for confirmation
-    operationStatusCallback && operationStatusCallback(ContractOperationStatus.WAITING_CONFIRMATION)
-    const opConf = await opSend.confirmation(2)
-
-    // OK, injected
-    operationStatusCallback && operationStatusCallback(ContractOperationStatus.INJECTED)
+  /**
+   * Mint a Generative Token
+   */
+  mintGenerative: ContractInteractionMethod<MintGenerativeCallData> = async (tokenData, statusCallback) => {
+    try {
+      // get/create the contract interface
+      const issuerContract = await this.getContract(FxhashContract.ISSUER)
+  
+      // the Metadata needs to be turned into a Michelson map
+      const metaMap = new MichelsonMap<string, string>()
+      metaMap.set("", stringToByteString(tokenData.metadata[""]))
+  
+      // build the raw data to send
+      const rawData: MintGenerativeRawCall = {
+        ...tokenData,
+        metadata: metaMap
+      }
+  
+      // call the contract (open wallet)
+      statusCallback && statusCallback(ContractOperationStatus.CALLING)
+      const opSend = await issuerContract.methodsObject.mint_issuer(rawData).send()
+  
+      // wait for confirmation
+      statusCallback && statusCallback(ContractOperationStatus.WAITING_CONFIRMATION)
+      await opSend.confirmation(2)
+  
+      // OK, injected
+      statusCallback && statusCallback(ContractOperationStatus.INJECTED)
+    }
+    catch(err) {
+      // any error
+      statusCallback && statusCallback(ContractOperationStatus.ERROR)
+    }
   }
 }

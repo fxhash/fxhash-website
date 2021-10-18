@@ -1,0 +1,14 @@
+.container {
+  text-align: center;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+
+  h3 {
+    color: var(--color-success);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+  }
+}

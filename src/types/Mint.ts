@@ -33,13 +33,15 @@ export interface MintGenerativeData {
   captureSettings?: CaptureSettings
   // general informations about the token
   informations?: GenerativeTokenInformations
+  // minted successful
+  minted: boolean
 }
 
 export interface GenTokenInformationsForm {
   name: string,
   description: string
   childrenDescription: string
-  tags: string[]
+  tags: string
   editions: number
   enabled: boolean
   price: number
