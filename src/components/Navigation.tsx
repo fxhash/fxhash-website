@@ -21,6 +21,8 @@ export function Navigation() {
     setOpened(false)
   }, [router.pathname])
 
+  console.log(router.pathname)
+
   return (
     <nav className={cs(style.nav, text.h6, { [style.opened]: opened })}>
       <button className={cs(style.hamburger)} onClick={() => setOpened(!opened)}>
@@ -29,13 +31,13 @@ export function Navigation() {
 
       <div className={cs(style.content)}>
         <Link href="/explore">
-          <a>explore</a>
+          <a className={cs({ [style.active]: router.pathname === "/explore" })}>explore</a>
         </Link>
         <Link href="/marketplace">
-          <a>marketplace</a>
+          <a className={cs({ [style.active]: router.pathname === "/marketplace" })}>marketplace</a>
         </Link>
         <Link href="/sandbox">
-          <a>sandbox</a>
+          <a className={cs({ [style.active]: router.pathname === "/sandbox" })}>sandbox</a>
         </Link>
 
         <Dropdown

@@ -15,6 +15,31 @@
       &:hover, &.active {
         color: var(--color-black);
       }
+
+      &.active {
+        position: relative;
+  
+        &:after {
+          content: "";
+          display: block;
+          width: 4px;
+          height: 4px;
+          background-color: var(--color-black);
+          position: absolute;
+          bottom: 0;
+          left: 50%;
+          transform: rotate(45deg) translateX(-2px);
+        }
+
+        @media (max-width: $breakpoint-md) {
+          &:after {
+            left: auto;
+            right: 0;
+            bottom: auto;
+            top: 50%;
+          }
+        }
+      }
     }
 
     :global(.btn-sync) {
