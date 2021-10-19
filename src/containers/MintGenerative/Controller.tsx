@@ -169,11 +169,11 @@ export function MintGenerativeController({ anchor }: Props) {
   }, [stepIndex])
 
   // safe guard to prevent going back if token is minted
-  useEffect(() => {
-    if (state.minted && location.pathname !== "/success") {
-      history.replace(STEPS[STEPS.length-1].path)
-    }
-  }, [state])
+  // useEffect(() => {
+  //   if (state.minted && location.pathname !== "/success") {
+  //     history.replace(STEPS[STEPS.length-1].path)
+  //   }
+  // }, [state])
 
   return (
     <>

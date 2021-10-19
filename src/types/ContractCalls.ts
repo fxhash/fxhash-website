@@ -31,3 +31,10 @@ export interface UpdateGenerativeCallData {
   royalties: number,
   issuer_id: number
 }
+
+export interface MintCall {
+  issuer_address: string,
+  issuer_id: number,
+  token_infos: string,
+  price: number
+}

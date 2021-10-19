@@ -119,7 +119,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   if (idStr) {
     const id = parseInt(idStr as string)
-    if (id) {
+    if (id === 0 || id) {
       const { data, error } = await client.query({
         query: gql`
           query Query($id: Float!) {

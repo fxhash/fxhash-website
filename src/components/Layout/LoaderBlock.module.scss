@@ -6,4 +6,8 @@
   flex-direction: column;
   gap: 20px;
   font-weight: bold;
+
+  &.bottom {
+    flex-direction: column-reverse;
+  }
 }

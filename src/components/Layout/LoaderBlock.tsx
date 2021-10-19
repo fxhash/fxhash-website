@@ -6,15 +6,17 @@ import { PropsWithChildren } from "react"
 interface Props {
   height?: string
   className?: string
+  textPos?: "top" | "bottom"
 }
 
 export function LoaderBlock({
   height,
   className,
+  textPos = "top",
   children
 }: PropsWithChildren<Props>) {
   return (
-    <div className={cs(style.container, className)} style={{ height }}>
+    <div className={cs(style.container, style[textPos], className)} style={{ height }}>
       {children}
       <Loader />
     </div>

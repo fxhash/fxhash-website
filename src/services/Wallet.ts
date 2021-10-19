@@ -1,6 +1,6 @@
 import { BeaconWallet } from '@taquito/beacon-wallet'
-import { ContractAbstraction, ContractProvider, MichelsonMap, TezosToolkit, Wallet } from '@taquito/taquito'
-import { MintGenerativeCallData, MintGenerativeRawCall, ProfileUpdateCallData, UpdateGenerativeCallData } from '../types/ContractCalls'
+import { ContractAbstraction, ContractProvider, DefaultLambdaAddresses, MichelsonMap, TezosToolkit, Wallet } from '@taquito/taquito'
+import { MintCall, MintGenerativeCallData, MintGenerativeRawCall, ProfileUpdateCallData, UpdateGenerativeCallData } from '../types/ContractCalls'
 import { ContractInteractionMethod, ContractOperationStatus, FxhashContract } from '../types/Contracts'
 import { stringToByteString } from '../utils/convert'
 
@@ -167,6 +167,41 @@ export class WalletManager {
       // call the contract (open wallet)
       statusCallback && statusCallback(ContractOperationStatus.CALLING)
       const opSend = await issuerContract.methodsObject.mint_issuer(rawData).send()
+  
+      // wait for confirmation
+      statusCallback && statusCallback(ContractOperationStatus.WAITING_CONFIRMATION)
+      await opSend.confirmation(2)
+  
+      // OK, injected
+      statusCallback && statusCallback(ContractOperationStatus.INJECTED)
+    }
+    catch(err) {
+      // any error
+      statusCallback && statusCallback(ContractOperationStatus.ERROR)
+    }
+  }
+
+  /**
+   * Mint a Token from generative token
+   */
+   mintToken: ContractInteractionMethod<MintCall> = async (tokenData, statusCallback) => {
+    try {
+      // get/create the contract interface
+      const issuerContract = await this.getContract(FxhashContract.ISSUER)
+      
+      // don't send everyting
+      const sendData: Partial<MintCall> = {
+        issuer_address: tokenData.issuer_address,
+        issuer_id: tokenData.issuer_id,
+        token_infos: tokenData.token_infos
+      }
+  
+      // call the contract (open wallet)
+      statusCallback && statusCallback(ContractOperationStatus.CALLING)
+      const opSend = await issuerContract.methodsObject.mint(sendData).send({
+        amount: tokenData.price,
+        mutez: true
+      })
   
       // wait for confirmation
       statusCallback && statusCallback(ContractOperationStatus.WAITING_CONFIRMATION)

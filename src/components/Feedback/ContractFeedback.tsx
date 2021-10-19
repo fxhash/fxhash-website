@@ -13,7 +13,7 @@ interface Props {
   errorMessage?: string
 }
 
-function messageFromState(state: ContractOperationStatus): string {
+export function messageFromState(state: ContractOperationStatus): string {
   switch (state) {
     case ContractOperationStatus.CALLING:
       return "Contract call initiated"

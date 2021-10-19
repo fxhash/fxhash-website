@@ -68,12 +68,15 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
             {token.balance > 0 && (
               <>
                 {!token.enabled && <small>token is currently <strong>disabled</strong></small>}
-                <Button
-                  color="secondary"
-                  disabled={!token.enabled}
-                >
-                  Mint unique token - {displayMutez(token.price)} tez
-                </Button>
+                <Link href={`/mint/${token.id}`} passHref>
+                  <Button
+                    isLink
+                    color="secondary"
+                    disabled={!token.enabled}
+                  >
+                    Mint unique token - {displayMutez(token.price)} tez
+                  </Button>
+                </Link>
               </>
             )}
           </div>
@@ -163,7 +166,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   if (idStr) {
     const id = parseInt(idStr as string)
-    if (id) {
+    if (id === 0 || id) {
       const { data, error } = await client.query({
         query: gql`
           query Query($id: Float!) {

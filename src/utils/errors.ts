@@ -1,6 +1,6 @@
 import { string } from "yup/lib/locale"
 import { FileUploadError } from "../types/errors"
-import { CaptureErrorEnum, PreviewError, StaticGenError } from "../types/Responses"
+import { CaptureErrorEnum, MintError, PreviewError, StaticGenError } from "../types/Responses"
 
 
 const fileUploadErrors: Record<FileUploadError, string> = {
@@ -53,4 +53,22 @@ const previewErrors: Record<PreviewError, string> = {
 
 export function getPreviewError(error: PreviewError) {
   return previewErrors[error] || previewErrors[PreviewError.UNKNOWN]
+}
+
+const mintErrors: Record<MintError, string> = {
+  UNKNOWN: "Unkown error. Sorry for the lack of informations, but something unexpected happened 😟",
+  BAD_REQUEST: "Bad request",
+  TOKEN_NOT_EXISTS: "The Generative Token does not exists",
+  TOKEN_UNAVAILABLE: "The Generative Token is not available for minting",
+  FAIL_GET_METADATA: "Could not process the Generative Token metadata",
+  WRONG_TOKEN_METADATA: "The Generative Token metadata is not correct",
+  FAIL_AUTHENTICATE: "Could not authenticate the Generative Token",
+  FAIL_GET_TOKEN: "Could not get the Generative Token data, please try again later",
+  INVALID_TOKEN: "The generative Token is invalid",
+  FAIL_ADD_IPFS: "Could not add to the IPFS network",
+  FAIL_PREVIEW: "Could not generate an image from the Generative Token",
+}
+
+export function getMintError(error: MintError) {
+  return mintErrors[error] || mintErrors[MintError.UNKNOWN]
 }
