@@ -1,0 +1,116 @@
+import { NextPage } from "next"
+import { useRouter } from "next/router"
+import { SectionHeader } from "../components/Layout/SectionHeader"
+import { Spacing } from "../components/Layout/Spacing"
+import style from "../styles/PreviewMint.module.scss"
+import layout from "../styles/Layout.module.scss"
+import cs from "classnames"
+import { useMemo, useRef } from "react"
+import { getIpfsIoUrl } from "../utils/ipfs"
+import { ArtworkIframe, ArtworkIframeRef } from "../components/Artwork/PreviewIframe"
+import { Button } from "../components/Button"
+import { ArtworkPreview } from "../components/Artwork/Preview"
+
+
+const PreviewMintPage: NextPage = () => {
+  const router = useRouter()
+  const iframeRef = useRef<ArtworkIframeRef>(null)
+
+  const urlLive = useMemo<string|null>(() => {
+    return getIpfsIoUrl(router.query.cidLive as string) || null
+  }, [router.query])
+
+  const urlPreview = useMemo<string|null>(() => {
+    return getIpfsIoUrl(router.query.cidPreview as string) || null
+  }, [router.query])
+
+  const reload = () => {
+    if (iframeRef.current) {
+      iframeRef.current.reloadIframe()
+    }
+  }
+
+  return (
+    <>
+      <Spacing size="6x-large" />
+
+      <section>
+        <SectionHeader>
+          <h2>— preview of your token</h2>
+        </SectionHeader>
+
+        <Spacing size="x-large"/>
+
+        <main className={cs(layout['padding-big'], layout.cols2)}>
+          {urlLive && (
+            <div className={cs(style.artwork)}>
+              <h6>Live</h6>
+              <div className={cs(style['iframe-container'])}>
+                <div className={cs(style['iframe-wrapper'])}>
+                  <ArtworkIframe 
+                    ref={iframeRef}
+                    url={urlLive}
+                    textWaiting="Waiting for content to be reachable"
+                  />
+                </div>
+              </div>
+
+              <div className={cs(style.buttons)}>
+                <Button
+                  size="small"
+                  iconComp={<i aria-hidden className="fas fa-redo"/>}
+                  iconSide="right"
+                  onClick={reload}
+                >
+                  reload
+                </Button>
+                <Button
+                  isLink
+                  // @ts-ignore
+                  href={urlLive} 
+                  target="_blank"
+                  size="small"
+                  iconComp={<i aria-hidden className="fas fa-external-link-alt"/>}
+                  iconSide="right"
+                >
+                  open in new tab
+                </Button>
+              </div>
+            </div>
+          )}
+
+          {urlPreview && (
+            <div className={cs(style.artwork)}>
+              <h6>Image</h6>
+              <div className={cs(style['iframe-container'])}>
+                <div className={cs(style['iframe-wrapper'])}>
+                  <ArtworkPreview
+                    url={urlPreview}
+                  />
+                </div>
+              </div>
+
+              <Button
+                isLink
+                // @ts-ignore
+                href={urlPreview} 
+                target="_blank"
+                size="small"
+                iconComp={<i aria-hidden className="fas fa-external-link-alt"/>}
+                iconSide="right"
+              >
+                open in new tab
+              </Button>
+            </div>
+          )}
+        </main>
+      </section>
+
+      <Spacing size="6x-large" />
+      <Spacing size="6x-large" />
+      <Spacing size="6x-large" />
+    </>
+  )
+}
+
+export default PreviewMintPage

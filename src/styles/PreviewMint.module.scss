@@ -1,0 +1,26 @@
+.artwork {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-end;
+  width: 100%;
+}
+
+.iframe-container {
+  width: 100%;
+  padding-top: 100%;
+  position: relative;
+}
+
+.iframe-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.buttons {
+  display: flex;
+  gap: 8px;
+}

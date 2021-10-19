@@ -46,3 +46,18 @@
   max-width: 1000px;
   margin: auto;
 }
+
+.cols2 {
+  display: flex;
+  flex-direction: row;
+  gap: var(--layout-gap-big-lg);
+  width: 100%;
+
+  & > * {
+    flex: 1 0 0;
+  }
+
+  @media (max-width: $breakpoint-md) {
+    flex-direction: column;
+  }
+}
