@@ -9,73 +9,79 @@ import { UserContext } from '../containers/UserProvider'
 import { Dropdown } from './Navigation/Dropdown'
 import { Avatar } from './User/Avatar'
 import { getUserProfileLink } from '../utils/user'
+import { useState } from 'react'
 
 export function Navigation() {
   const userCtx = useContext(UserContext)
-
-  console.log(userCtx)
+  const [opened, setOpened] = useState(false)
 
   return (
-    <nav className={cs(style.nav, text.h6)}>
-      <Link href="/explore">
-        <a>explore</a>
-      </Link>
-      <Link href="/marketplace">
-        <a>marketplace</a>
-      </Link>
-      <Link href="/sandbox">
-        <a>sandbox</a>
-      </Link>
+    <nav className={cs(style.nav, text.h6, { [style.opened]: opened })}>
+      <button className={cs(style.hamburger)} onClick={() => setOpened(!opened)}>
+        <div/><div/><div/>
+      </button>
 
-      <Dropdown
-        itemComp={<span>about</span>}
-      >
-        <Link href="/about">
-          <a>about fxhash</a>
+      <div className={cs(style.content)}>
+        <Link href="/explore">
+          <a>explore</a>
         </Link>
-        <Link href="/guide">
-          <a>guide to mint Generative Token</a>
+        <Link href="/marketplace">
+          <a>marketplace</a>
         </Link>
-      </Dropdown>
+        <Link href="/sandbox">
+          <a>sandbox</a>
+        </Link>
 
-      {userCtx.user ? (
         <Dropdown
-          itemComp={<Avatar uri={userCtx.user.avatarUri} className={cs(style.avatar, effects['drop-shadow-big'])} />}
+          itemComp={<span>about</span>}
         >
-          <Link href="/mint-generative">
-            <a>mint generative token</a>
+          <Link href="/about">
+            <a>about fxhash</a>
           </Link>
-          <Link href={`${getUserProfileLink(userCtx.user)}`}>
-            <a>creations</a>
+          <Link href="/guide">
+            <a>guide to mint Generative Token</a>
           </Link>
-          <Link href={`${getUserProfileLink(userCtx.user)}/collection`}>
-            <a>collection</a>
-          </Link>
-          <Link href="/edit-profile">
-            <a>edit profile</a>
-          </Link>
-          <Button 
-            size="small" 
-            color="primary" 
-            onClick={() => userCtx.disconnect()}
-            style={{
-              marginTop: "5px"
+        </Dropdown>
+
+        {userCtx.user ? (
+          <Dropdown
+            itemComp={<Avatar uri={userCtx.user.avatarUri} className={cs(style.avatar, effects['drop-shadow-big'])} />}
+          >
+            <Link href="/mint-generative">
+              <a>mint generative token</a>
+            </Link>
+            <Link href={`${getUserProfileLink(userCtx.user)}`}>
+              <a>creations</a>
+            </Link>
+            <Link href={`${getUserProfileLink(userCtx.user)}/collection`}>
+              <a>collection</a>
+            </Link>
+            <Link href="/edit-profile">
+              <a>edit profile</a>
+            </Link>
+            <Button 
+              size="small" 
+              color="primary" 
+              onClick={() => userCtx.disconnect()}
+              style={{
+                marginTop: "5px"
+              }}
+            >
+              unsync
+            </Button>
+          </Dropdown>
+        ):(
+          <Button
+            className="btn-sync"
+            iconComp={<i aria-hidden className="fas fa-wallet"/>}
+            onClick={() => {
+              userCtx.connect()
             }}
           >
-            unsync
+            sync
           </Button>
-        </Dropdown>
-      ):(
-        <Button
-          className="btn-sync"
-          iconComp={<i aria-hidden className="fas fa-wallet"/>}
-          onClick={() => {
-            userCtx.connect()
-          }}
-        >
-          sync
-        </Button>
-      )}
+        )}
+      </div>
     </nav>
   )
 }

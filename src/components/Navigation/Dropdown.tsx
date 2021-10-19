@@ -40,7 +40,7 @@ export function Dropdown({
     })}>
       <button 
         onClick={toggle}
-        className={cs(style.button)}
+        className={cs(style.button, { [style.opened]: opened })}
       >
         { itemComp }
       </button>

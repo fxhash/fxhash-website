@@ -1,3 +1,5 @@
+@import "../../styles/Variables.scss";
+
 .container {
   position: relative;
 }
@@ -29,10 +31,46 @@
   background: none;
   font-size: inherit;
   cursor: pointer;
+  transition: all 0.2s ease-out;
+
+  &.opened {
+    color: var(--color-white) !important;
+    background-color: var(--color-black) !important;
+  }
 }
 
 .menu-opened {
   opacity: 1;
   transform: translateY(0px);
   pointer-events: all;
+}
+
+@media (max-width: $breakpoint-md) {
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+
+  .menu {
+    align-items: flex-end;
+    position: static;
+    opacity: 1;
+    height: 0;
+    overflow: hidden;
+    box-shadow: none;
+    box-sizing: border-box;
+    padding: 0;
+    border: none;
+
+    button {
+      margin-right: 15px;
+    }
+  }
+
+  .menu-opened {
+    height: auto;
+    border-right: 3px solid black;
+    border-top: 3px solid black;
+  }
 }

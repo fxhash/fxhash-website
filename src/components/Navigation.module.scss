@@ -1,21 +1,121 @@
+@import "../styles/Variables.scss";
+
 .nav {
-  display: flex;
-  align-items: center;
+  .content {
+    display: flex;
+    align-items: center;
 
-  a, button {
-    font-weight: bold;
-    color: var(--color-gray);
-    transition: color 0.3s ease-out;
-    padding: 15px;
-    text-decoration: none !important;
+    a, button {
+      font-weight: bold;
+      color: var(--color-gray);
+      transition: color 0.3s ease-out;
+      padding: 15px;
+      text-decoration: none !important;
 
-    &:hover, &.active {
-      color: var(--color-black);
+      &:hover, &.active {
+        color: var(--color-black);
+      }
+    }
+
+    :global(.btn-sync) {
+      margin-left: 15px;
     }
   }
 
-  :global(.btn-sync) {
-    margin-left: 15px;
+  .hamburger {
+    width: 50px;
+    height: 50px;
+    background-color: transparent;
+    border: none;
+    // padding: 10px;
+    padding: 0;
+    box-sizing: content-box;
+    position: relative;
+    cursor: pointer;
+    display: none;
+  
+    div {
+      width: 100%;
+      height: 3px;
+      background-color: var(--color-black);
+      position: absolute;
+      transition: all 0.2s ease-out;
+  
+      &:nth-child(1) {
+        transform: scaleX(0.9) translateY(-15px);
+      }
+      &:nth-child(2) {
+        transform: scaleX(0.9);
+      }
+      &:nth-child(3) {
+        transform: scaleX(0.9) translateY(15px);
+      }
+
+      &:hover {
+        div {
+          &:nth-child(1) {
+            transform: scaleX(1) translateY(-12px);
+          }
+          &:nth-child(2) {
+            transform: scaleX(1);
+          }
+          &:nth-child(3) {
+            transform: scaleX(1) translateY(12px);
+          }
+        }
+      }
+    }
+  }
+
+  &.opened {
+    .hamburger {
+      div {
+        &:nth-child(1) {
+          transform: scaleX(1) translateY(0);
+        }
+        &:nth-child(2) {
+          transform: scaleX(1);
+        }
+        &:nth-child(3) {
+          transform: scaleX(1) translateY(0);
+        }
+      }
+    }
+  }
+
+  @media (max-width: $breakpoint-md) {
+    background-color: var(--color-white);
+
+    .hamburger {
+      display: block;
+    }
+
+    .content {
+      width: 100%;
+      height: 100%;
+      padding-top: 20px;
+      padding-right: 15px;
+      background-color: var(--color-white);
+      position: fixed;
+      flex-direction: column;
+      align-items: flex-end;
+      right: -100%;
+      z-index: 1000;
+      transition: all 0.3s ease-out;
+      pointer-events: none;
+
+      a, button { 
+        padding-top: 8px;
+        padding-bottom: 8px;
+      }
+    }
+
+    &.opened {
+      .content {
+        right: 0;
+        position: all;
+      }
+    }
   }
 }
 
