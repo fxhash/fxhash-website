@@ -1,7 +1,7 @@
 import style from "./Pagination.module.scss"
 import text from "../../styles/Text.module.css"
 import cs from "classnames"
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useState, Fragment } from "react"
 
 
 interface Props<T> {
@@ -54,20 +54,22 @@ export function Pagination({
       
       <div className={cs(style.pages)}>
         {pages.map(page => (
-          page < 0 
-            ? <span>...</span>
-            : (
-              <button
-                className={cs(style.page, text.h4, { 
-                  [style.active]: page ===  activePage 
-                })}
-                onClick={() => {
-                  setActivePage(page)
-                }}
-              >
-                {page+1}
-              </button>
-            )
+          <Fragment key={page}>
+            {page < 0 
+              ? <span>...</span>
+              : (
+                <button
+                  className={cs(style.page, text.h4, { 
+                    [style.active]: page ===  activePage 
+                  })}
+                  onClick={() => {
+                    setActivePage(page)
+                  }}
+                >
+                  {page+1}
+                </button>
+              )}
+          </Fragment>
         ))}
       </div>
 

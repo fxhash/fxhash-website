@@ -1,3 +1,5 @@
+@import '../styles/Variables.scss';
+
 .footer {
   height: 20vw;
   background-color: var(--color-black);
@@ -44,4 +46,26 @@
   position: absolute;
   right: 12px;
   bottom: 8px;
+}
+
+@media (max-width: $breakpoint-md) {
+  .footer {
+    height: auto;
+    text-align: center;
+    padding: 50px 0 70px;
+  }
+
+  .details {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .socials {
+    & > *+* {
+      margin-left: 15px;
+    }
+    a {
+      font-size: 32px;
+    }
+  }
 }

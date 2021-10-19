@@ -59,5 +59,9 @@
 
   @media (max-width: $breakpoint-md) {
     flex-direction: column;
+
+    &.responsive-reverse {
+      flex-direction: column-reverse;
+    }
   }
 }

@@ -35,7 +35,7 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
     <>
       <Spacing size="6x-large" />
 
-      <section className={cs(style.presentation, layout['padding-big'])}>
+      <section className={cs(layout.cols2, layout['responsive-reverse'], layout['padding-big'])}>
         <div className={cs(style['presentation-details'])}>
           <header>
             <h3>{ objkt.name }</h3>

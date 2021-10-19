@@ -1,3 +1,5 @@
+@import '../../styles/Variables.scss';
+
 .container {
   display: flex;
   gap: var(--layout-gap-small-lg);
@@ -8,4 +10,16 @@
   height: 200px;
   border: 3px solid var(--color-black);
   flex-shrink: 0;
+}
+
+@media (max-width: $breakpoint-md) {
+  .container {
+    flex-direction: column;
+    align-items: center;
+
+    h1 {
+      font-size: var(--font-size-h4);
+      text-align: center;
+    }
+  }
 }

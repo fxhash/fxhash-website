@@ -20,6 +20,7 @@ import { CardsContainer } from '../components/Card/CardsContainer'
 import { GenerativeTokenCard } from '../components/Card/GenerativeTokenCard'
 import { Offer } from '../types/entities/Offer'
 import { ObjktCard } from '../components/Card/ObjktCard'
+import nl2br from 'react-nl2br'
 
 
 interface Props {
@@ -36,7 +37,7 @@ const Home: NextPage<Props> = ({
   return (
     <>
       <Spacing size="3x-large" />
-      <section className={cs(styles.presentation)}>
+      <section className={cs(styles.presentation, layout['padding-small'])}>
         <h1 className={cs(Text.h3)}>
           fxhash is a plateform to <span className={cs(Colors.primary)}>create</span> and <span className={cs(Colors.secondary)}>collect</span> generative NFTs on the tezos blockchain
         </h1>
@@ -45,9 +46,9 @@ const Home: NextPage<Props> = ({
       <Spacing size="6x-large" />
 
       <section className={cs(styles['random-artwork'], layout['padding-big'])}>
-        <div>
+        <div className={cs(styles['artwork-infos'])}>
           <span className={cs(styles['section-subtitle'], Colors.gray)}>— a random artwork</span>
-          <Spacing size="4x-large"/>
+          <Spacing size="4x-large" />
           <div>
             <h3>{ randomGenerativeToken.name }</h3>
             <Spacing size="x-small"/>
@@ -55,20 +56,26 @@ const Home: NextPage<Props> = ({
               user={randomGenerativeToken.author}
               size="big"
             />
-            <Spacing size="large"/>
+            <Spacing size="x-small"/>
 
             <div className={cs(styles['artwork-details'])}>
               <MintProgress
                 balance={randomGenerativeToken.balance}
                 supply={randomGenerativeToken.supply}
               />
-              <Spacing size="2x-large"/>
+
+              <Spacing size="large"/>
+
+              <p>{nl2br(randomGenerativeToken.metadata.description)}</p>
+
+              <Spacing size="large"/>
+
               <Link href={`/generative/${randomGenerativeToken.id}`} passHref>
                 <Button 
                   isLink={true}
                   iconComp={<i aria-hidden className="fas fa-eye"/>}
                 >
-                  see token
+                  open Generative Token
                 </Button>
               </Link>
             </div>

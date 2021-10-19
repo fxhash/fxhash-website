@@ -1,6 +1,8 @@
 .container {
   display: flex;
   align-items: center;
+  justify-content: center;
+  width: min(100%, 600px);
 
   i {
     margin: 0 15px;
@@ -10,8 +12,8 @@
 .pages {
   display: flex;
   align-items: center;
-  width: 600px;
   justify-content: center;
+  width: 100%;
 }
 
 .page {

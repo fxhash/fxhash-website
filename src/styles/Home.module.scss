@@ -34,6 +34,23 @@
     flex-direction: column;
     align-items: flex-start;
   }
+
+  @media (max-width: $breakpoint-md) {
+    flex-direction: column-reverse;
+
+    .artwork-container {
+      width: 100%;
+      height: 100%;
+    }
+
+    .artwork-infos, .artwork-details {
+      width: 100%;
+    }
+
+    .hide-sm {
+      display: none;
+    }
+  }
 }
 
 .row-responsive-limiter {

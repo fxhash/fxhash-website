@@ -66,7 +66,12 @@ const GenerativeTokenCollection: NextPage<Props> = ({ token }) => {
           <p>{ nl2br(token.metadata?.description) }</p>
         </div>
 
-        <div className={cs(style['presentation-artwork'])}>
+        <div 
+          className={cs(style['presentation-artwork'])}
+          style={{
+            width: "auto"
+          }}
+        >
           <ArtworkPreview ipfsUri={token.metadata?.displayUri} />
         </div>
       </section>

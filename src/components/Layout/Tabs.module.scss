@@ -47,3 +47,27 @@
   display: flex;
   justify-content: center;
 }
+
+@media (max-width: $breakpoint-sm) {
+  .container nav {
+    flex-direction: column;
+    align-items: flex-start;
+    border: none;
+    border-left: 3px solid var(--color-gray-light);
+    padding: 3px 0;
+  }
+  
+  .tab {
+    padding-left: var(--layout-margin-big-sm);
+    position: relative;
+    left: -3px;
+    border: none;
+    width: 100%;
+    justify-content: flex-start;
+
+    &.active {
+      border: none;
+      border-left: 3px solid var(--color-black);
+    }
+  }
+}

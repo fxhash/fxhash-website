@@ -9,11 +9,17 @@ import { UserContext } from '../containers/UserProvider'
 import { Dropdown } from './Navigation/Dropdown'
 import { Avatar } from './User/Avatar'
 import { getUserProfileLink } from '../utils/user'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/router'
 
 export function Navigation() {
   const userCtx = useContext(UserContext)
+  const router = useRouter()
   const [opened, setOpened] = useState(false)
+
+  useEffect(() => {
+    setOpened(false)
+  }, [router.pathname])
 
   return (
     <nav className={cs(style.nav, text.h6, { [style.opened]: opened })}>

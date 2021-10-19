@@ -36,7 +36,7 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
     <>
       <Spacing size="6x-large" />
 
-      <section className={cs(style.presentation, layout['padding-big'])}>
+      <section className={cs(style.presentation, layout.cols2, layout['responsive-reverse'], layout['padding-big'])}>
         <div className={cs(style['presentation-details'])}>
           <header>
             <h3>{ token.name }</h3>
