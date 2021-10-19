@@ -259,6 +259,7 @@ export const StepInformations: StepComponent = ({ state, onNext }) => {
                   onChange={handleChange}
                   onBlur={handleBlur}
                   error={!!errors.price}
+                  step={0.0000001}
                 />
               </Field>
 
@@ -276,6 +277,7 @@ export const StepInformations: StepComponent = ({ state, onNext }) => {
                   onChange={handleChange}
                   onBlur={handleBlur}
                   error={!!errors.royalties}
+                  step={0.1}
                 />
               </Field>
 
