@@ -107,8 +107,8 @@ export const StepInformations: StepComponent = ({ state, onNext }) => {
         },
         delay: state.captureSettings!.delay
       },
-      symbol: "GENTK",
-      decimals: getMutezDecimalsNb(Math.floor(formInformations.price*1000000))
+      symbol: "FXGEN",
+      decimals: 0
     }
     setSavedInfos({
       name: formInformations.name,

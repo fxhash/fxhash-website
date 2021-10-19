@@ -38,3 +38,20 @@ export interface MintCall {
   token_infos: string,
   price: number
 }
+
+export interface PlaceOfferCall {
+  ownerAddress: string
+  tokenId: number
+  price: number
+  creatorAddress: string
+  royalties: number
+}
+
+export interface CancelOfferCall {
+  offerId: number
+}
+
+export interface CollectCall {
+  offerId: number
+  price: number
+}

@@ -1,6 +1,6 @@
 import { BeaconWallet } from '@taquito/beacon-wallet'
 import { ContractAbstraction, ContractProvider, DefaultLambdaAddresses, MichelsonMap, TezosToolkit, Wallet } from '@taquito/taquito'
-import { MintCall, MintGenerativeCallData, MintGenerativeRawCall, ProfileUpdateCallData, UpdateGenerativeCallData } from '../types/ContractCalls'
+import { CancelOfferCall, CollectCall, MintCall, MintGenerativeCallData, MintGenerativeRawCall, PlaceOfferCall, ProfileUpdateCallData, UpdateGenerativeCallData } from '../types/ContractCalls'
 import { ContractInteractionMethod, ContractOperationStatus, FxhashContract } from '../types/Contracts'
 import { stringToByteString } from '../utils/convert'
 
@@ -227,6 +227,108 @@ export class WalletManager {
       // call the contract (open wallet)
       statusCallback && statusCallback(ContractOperationStatus.CALLING)
       const opSend = await issuerContract.methodsObject.update_issuer(genData).send()
+  
+      // wait for confirmation
+      statusCallback && statusCallback(ContractOperationStatus.WAITING_CONFIRMATION)
+      await opSend.confirmation(2)
+  
+      // OK, injected
+      statusCallback && statusCallback(ContractOperationStatus.INJECTED)
+    }
+    catch(err) {
+      // any error
+      statusCallback && statusCallback(ContractOperationStatus.ERROR)
+    }
+  }
+
+  /**
+   * Place an offer on an Objkt
+   */
+  placeOffer: ContractInteractionMethod<PlaceOfferCall> = async (data, statusCallback) => {
+    try {
+      // get/create the contract interface
+      const objktContract = await this.getContract(FxhashContract.OBJKT)
+      const marketContract = await this.getContract(FxhashContract.MARKETPLACE)
+  
+      // call the contract (open wallet)
+      statusCallback && statusCallback(ContractOperationStatus.CALLING)
+      // const opSend = await objktContract.methodsObject.update_operators().getSignature()
+      const batchOp = await this.tezosToolkit.wallet.batch() 
+        .withContractCall(
+          objktContract.methodsObject.update_operators([
+            {
+              add_operator: {
+                owner: data.ownerAddress,
+                operator: addresses.MARKETPLACE,
+                token_id: data.tokenId
+              }
+            }
+          ])
+        )
+        .withContractCall(
+          marketContract.methodsObject.offer({
+            price: data.price,
+            objkt_id: data.tokenId,
+            creator: data.creatorAddress, 
+            royalties: data.royalties
+          })
+        )
+        .send()
+  
+      // wait for confirmation
+      statusCallback && statusCallback(ContractOperationStatus.WAITING_CONFIRMATION)
+      await batchOp.confirmation(2)
+  
+      // OK, injected
+      statusCallback && statusCallback(ContractOperationStatus.INJECTED)
+    }
+    catch(err) {
+      // any error
+      statusCallback && statusCallback(ContractOperationStatus.ERROR)
+    }
+  }
+
+  /**
+   * Cancel the offer on an objky
+   */
+   cancelOffer: ContractInteractionMethod<CancelOfferCall> = async (data, statusCallback) => {
+    try {
+      // get/create the contract interface
+      const marketContract = await this.getContract(FxhashContract.MARKETPLACE)
+  
+      // call the contract (open wallet)
+      statusCallback && statusCallback(ContractOperationStatus.CALLING)
+      const opSend = await marketContract.methodsObject.cancel_offer(data.offerId).send()
+  
+      // wait for confirmation
+      statusCallback && statusCallback(ContractOperationStatus.WAITING_CONFIRMATION)
+      await opSend.confirmation(2)
+  
+      // OK, injected
+      statusCallback && statusCallback(ContractOperationStatus.INJECTED)
+    }
+    catch(err) {
+      // any error
+      statusCallback && statusCallback(ContractOperationStatus.ERROR)
+    }
+  }
+
+  /**
+   * Cancel the offer on an objky
+   */
+  collect: ContractInteractionMethod<CollectCall> = async (data, statusCallback) => {
+    try {
+      // get/create the contract interface
+      const marketContract = await this.getContract(FxhashContract.MARKETPLACE)
+
+      console.log(await marketContract.methodsObject.collect().getSignature())
+  
+      // call the contract (open wallet)
+      statusCallback && statusCallback(ContractOperationStatus.CALLING)
+      const opSend = await marketContract.methodsObject.collect(data.offerId).send({
+        mutez: true,
+        amount: data.price
+      })
   
       // wait for confirmation
       statusCallback && statusCallback(ContractOperationStatus.WAITING_CONFIRMATION)

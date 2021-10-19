@@ -13,3 +13,17 @@ export default function ClientOnly({ children, ...delegated }: PropsWithChildren
 
   return <div {...delegated}>{children}</div>
 }
+
+export function ClientOnlyEmpty({ children }: PropsWithChildren<{}>) {
+  const [hasMounted, setHasMounted] = useState(false);
+
+  useEffect(() => {
+    setHasMounted(true);
+  }, [])
+
+  if (!hasMounted) {
+    return null
+  }
+
+  return <>{children}</>
+}

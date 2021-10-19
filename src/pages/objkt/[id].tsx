@@ -21,6 +21,9 @@ import { ObjktCard } from '../../components/Card/ObjktCard'
 import { Activity } from '../../components/Activity/Activity'
 import { Objkt } from '../../types/entities/Objkt'
 import { User } from '../../types/entities/User'
+import ClientOnly, { ClientOnlyEmpty } from '../../components/Utils/ClientOnly'
+import { UserGuard } from '../../components/Guards/UserGuard'
+import { OfferControl } from '../../containers/Objkt/OfferControl'
 
 
 interface Props {
@@ -59,24 +62,23 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
 
           <Spacing size="2x-large"/>
 
-          <div className={cs(style['artwork-details'])}>
-            {objkt.offer && (
-              <>
+          <div className={cs(style['artwork-details'])} style={{ width: "100%" }}>
+            <div className={cs(style.buttons)}>
+              {/* @ts-ignore */}
+              <ClientOnlyEmpty style={{ width: "100%" }}>
+                <UserGuard>
+                  <OfferControl objkt={objkt}/>
+                </UserGuard>
+              </ClientOnlyEmpty>
+
+              <Link href={`/generative/${objkt.issuer.id}`} passHref>
                 <Button
-                  color="secondary"
+                  isLink={true}
                 >
-                  collect token - {displayMutez(objkt.offer.price)} tez
+                  see generative token
                 </Button>
-                <Spacing size="small"/>
-              </>
-            )}
-            <Link href={`/generative/${objkt.issuer.id}`} passHref>
-              <Button
-                isLink={true}
-              >
-                see generative token
-              </Button>
-            </Link>
+              </Link>
+            </div>
           </div>
         </div>
 
@@ -132,6 +134,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
           query Query($id: Float!) {
             objkt(id: $id) {
               id
+              royalties
               owner {
                 id
                 name

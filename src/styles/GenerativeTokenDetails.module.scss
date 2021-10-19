@@ -94,3 +94,11 @@
     }
   }
 }
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+  gap: var(--layout-margin-small-sm);
+  align-items: flex-start;
+  width: 100%;
+}
