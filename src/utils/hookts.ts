@@ -32,7 +32,7 @@ export const useClientAsyncEffect = (effect: (isMounted: () => boolean) => unkno
 /**
  * Designed to interract with generic contract methods residing in the Wallet service.
  */
-export function useContractCall<T>(contractMethod: ContractInteractionMethod<T>): ContractCallHookReturn<T> {
+export function useContractCall<T>(contractMethod?: ContractInteractionMethod<T>): ContractCallHookReturn<T> {
   const [state, setState] = useState<ContractOperationStatus>(ContractOperationStatus.NONE)
   const [loading, setLoading] = useState<boolean>(false)
   const [success, setSuccess] = useState<boolean>(false)
@@ -56,7 +56,7 @@ export function useContractCall<T>(contractMethod: ContractInteractionMethod<T>)
     // assign the ID to this call and increment it to prevent overlaps
     counter.current++
     const id = counter.current
-    contractMethod(data, (opState) => {
+    contractMethod && contractMethod(data, (opState) => {
       if (counter.current === id && isMounted()) {
         setState(opState)
         if (opState === ContractOperationStatus.INJECTED) {

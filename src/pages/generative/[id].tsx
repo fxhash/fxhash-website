@@ -46,7 +46,7 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
               size="big"
             />
             <ClientOnly>
-              <UserGuard>
+              <UserGuard forceRedirect={false}>
                 <EditTokenSnippet token={token} />
               </UserGuard>
             </ClientOnly>

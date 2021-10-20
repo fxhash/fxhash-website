@@ -10,6 +10,7 @@ import { CancelOfferCall, CollectCall, PlaceOfferCall } from "../../types/Contra
 import { ContractFeedback } from "../../components/Feedback/ContractFeedback"
 import { Offer } from "../../types/entities/Offer"
 import { displayMutez } from "../../utils/units"
+import { useRouter } from "next/router"
 
 interface Props {
   offer: Offer
@@ -17,15 +18,21 @@ interface Props {
 
 export function Collect({ offer }: Props) {
   const userCtx = useContext(UserContext)
+  const router = useRouter()
 
   const { state, loading: contractLoading, error: contractError, success, call, clear } = 
-    useContractCall<CollectCall>(userCtx.walletManager!.collect)
+    useContractCall<CollectCall>(userCtx.walletManager?.collect)
 
   const callContract = () => {
-    call({
-      offerId: offer.id,
-      price: offer.price
-    })
+    if (!userCtx.user) {
+      router.push(`/sync-redirect?target=${encodeURIComponent(router.asPath)}`)
+    }
+    else {
+      call({
+        offerId: offer.id,
+        price: offer.price
+      })
+    }
   }
 
   return (

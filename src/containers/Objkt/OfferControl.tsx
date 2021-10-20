@@ -30,9 +30,6 @@ export function OfferControl({ objkt }: Props) {
 
   return (
     <>
-      {objkt.offer && (
-        <Collect offer={objkt.offer} />
-      )}
       {owner.id === user.id ? (
         objkt.offer ? (
           <CancelOffer offer={objkt.offer} />

@@ -21,8 +21,6 @@ export function Navigation() {
     setOpened(false)
   }, [router.pathname])
 
-  console.log(router.pathname)
-
   return (
     <nav className={cs(style.nav, text.h6, { [style.opened]: opened })}>
       <button className={cs(style.hamburger)} onClick={() => setOpened(!opened)}>

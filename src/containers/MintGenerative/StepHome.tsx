@@ -4,6 +4,7 @@ import Link from "next/link"
 import { Button } from "../../components/Button"
 import { Spacing } from "../../components/Layout/Spacing"
 import { StepComponent } from "../../types/Steps"
+import { LinkGuide } from "../../components/Link/LinkGuide"
 
 
 
@@ -12,11 +13,7 @@ export const StepHome:StepComponent = ({ onNext }) => {
     <>
       <p className={cs(style.presentation)}>
         <span>Before minting a generative token on the blockchain, please read our </span>
-        <Link href="/guide">
-          <a>
-            <i aria-hidden className="fas fa-book"/> Guide to build a Generative Token 
-          </a>
-        </Link>
+        <LinkGuide href="/articles/guide-mint-generative-token">Guide to build a Generative Token</LinkGuide>
         <span> and test your zip file in the </span>
         <Link href="/sandbox"><a>sandbox</a></Link><span>.</span>
       </p>

@@ -24,6 +24,7 @@ import { User } from '../../types/entities/User'
 import ClientOnly, { ClientOnlyEmpty } from '../../components/Utils/ClientOnly'
 import { UserGuard } from '../../components/Guards/UserGuard'
 import { OfferControl } from '../../containers/Objkt/OfferControl'
+import { Collect } from '../../containers/Objkt/Collect'
 
 
 interface Props {
@@ -64,9 +65,12 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
 
           <div className={cs(style['artwork-details'])} style={{ width: "100%" }}>
             <div className={cs(style.buttons)}>
+              {objkt.offer && (
+                <Collect offer={objkt.offer} />
+              )}
               {/* @ts-ignore */}
               <ClientOnlyEmpty style={{ width: "100%" }}>
-                <UserGuard>
+                <UserGuard forceRedirect={false}>
                   <OfferControl objkt={objkt}/>
                 </UserGuard>
               </ClientOnlyEmpty>

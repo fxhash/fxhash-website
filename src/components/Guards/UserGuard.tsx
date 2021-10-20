@@ -4,19 +4,19 @@ import { UserContext } from "../../containers/UserProvider"
 
 
 interface Props {
-  redirect?: string
+  forceRedirect?: boolean
 }
 
 export function UserGuard({
-  redirect = "/",
+  forceRedirect = true,
   children
 }: PropsWithChildren<Props>) {
   const userCtx = useContext(UserContext)
   const router = useRouter()
 
   useEffect(() => {
-    if (userCtx.autoConnectChecked && !userCtx.user) {
-      router.push(redirect)
+    if (forceRedirect && userCtx.autoConnectChecked && !userCtx.user) {
+      router.push(`/sync-redirect?target=${encodeURIComponent(router.asPath)}`)
     }
   }, [userCtx])
 
