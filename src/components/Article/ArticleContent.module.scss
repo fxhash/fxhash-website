@@ -1,0 +1,51 @@
+.article {
+  width: min(100%, 700px);
+  margin: auto;
+  margin-top: 50px;
+  line-height: 180%;
+
+  h1 {
+    font-size: var(--font-size-h3);
+    margin-top: 2.2em;
+    margin-left: -40px;
+
+    &::before {
+      content: "— ";
+    }
+  }
+  h2 {
+    font-size: var(--font-size-h4);
+    margin-top: 2em;
+  }
+  h3 {
+    font-size: var(--font-size-h5);
+  }
+
+  p, ul {
+    margin-top: 2em;
+  }
+
+  img {
+    max-width: 100%;
+    margin: auto;
+  }
+
+  pre, code {
+    font-family: inherit;
+  }
+
+  pre code {
+    box-shadow: 0px 2px 14px -4px rgba(0, 0, 0, 0.67);
+    padding: 15px;
+    font-size: 0.8em;
+    line-height: 150%;
+  }
+
+  p, ul {
+    code {
+      background: #e3e3e3;
+      padding: 2px 5px;
+      border-radius: 4px;
+    }
+  } 
+}

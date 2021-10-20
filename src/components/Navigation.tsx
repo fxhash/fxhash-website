@@ -46,7 +46,7 @@ export function Navigation() {
           <Link href="/about">
             <a>about fxhash</a>
           </Link>
-          <Link href="/guide">
+          <Link href="/articles/guide-mint-generative-token">
             <a>guide to mint Generative Token</a>
           </Link>
         </Dropdown>
