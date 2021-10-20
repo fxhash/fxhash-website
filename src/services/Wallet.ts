@@ -130,7 +130,7 @@ export class WalletManager {
       statusCallback && statusCallback(ContractOperationStatus.CALLING)
       const opSend = await userContract.methodsObject.update_profile({
         metadata: stringToByteString(profileData.metadata),
-        name: profileData.name
+        name: stringToByteString(profileData.name)
       }).send()
   
       // wait for confirmation
@@ -320,8 +320,6 @@ export class WalletManager {
     try {
       // get/create the contract interface
       const marketContract = await this.getContract(FxhashContract.MARKETPLACE)
-
-      console.log(await marketContract.methodsObject.collect().getSignature())
   
       // call the contract (open wallet)
       statusCallback && statusCallback(ContractOperationStatus.CALLING)
