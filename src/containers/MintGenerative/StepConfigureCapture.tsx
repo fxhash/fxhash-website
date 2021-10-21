@@ -21,11 +21,13 @@ export const StepConfigureCapture: StepComponent = ({ onNext, state }) => {
   const [previewUrl, setPreviewUrl] = useState<string|null>(null)
 
   const { data, loading, error, post } = 
-    useFetch<CaptureErrorResponse|CaptureResponse>(process.env.NEXT_PUBLIC_API_CAPTURE,
-    { cachePolicy: CachePolicies.NO_CACHE })
+    useFetch<CaptureErrorResponse|ArrayBuffer>(process.env.NEXT_PUBLIC_API_CAPTURE, { 
+      cachePolicy: CachePolicies.NO_CACHE,
+      responseType: "arrayBuffer"
+    })
 
   // this variable ensures that we can safely access its data regardless of the state of the queries
-  const safeData: CaptureResponse|false|undefined = !error && !loading && (data as CaptureResponse)
+  const safeData: ArrayBuffer|false|undefined = !error && !loading && (data as ArrayBuffer)
 
   const { data: previewData, loading: previewLoading, error: previewError, post: previewPost } = 
     useFetch<PreviewResponse|PreviewError>(`${process.env.NEXT_PUBLIC_API_FILE_ROOT}/preview`,
@@ -56,7 +58,13 @@ export const StepConfigureCapture: StepComponent = ({ onNext, state }) => {
   
   useEffect(() => {
     if (safeData) {
-      setPreviewUrl(safeData.capture)
+      // release previous URL
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl)
+      }
+      const blob = new Blob([safeData], { type: "image/png" })
+      const url = URL.createObjectURL(blob)
+      setPreviewUrl(url)
     }
   }, [safeData])
 

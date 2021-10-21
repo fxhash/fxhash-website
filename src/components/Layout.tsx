@@ -7,10 +7,6 @@ import { Header } from "./Header"
 export function Layout({ children }: PropsWithChildren<{}>) {
   return (
     <>
-      <Head>
-        <title>Example App</title>
-      </Head>
-
       <Header />
 
       <main className={style.main}>

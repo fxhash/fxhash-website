@@ -90,7 +90,7 @@ const STEPS: Step[] = [
     title: "5. Mint",
     validateIn: (data) => 
       !!(data.cidUrlParams && data.authHash1 && data.cidFixedHash && data.authHash2
-        && data.cidPreview && data.authHash3 && data.captureSettings, data.cidThumbnail),
+        && data.cidPreview && data.authHash3 && data.captureSettings && data.cidThumbnail),
     clearDataDown: (data) => ({
       cidUrlParams: data.cidUrlParams,
       authHash1: data.authHash1,
@@ -109,7 +109,7 @@ const STEPS: Step[] = [
     hideTabs: true,
     validateIn: (data) => 
       !!(data.cidUrlParams && data.authHash1 && data.cidFixedHash && data.authHash2
-        && data.cidPreview && data.authHash3 && data.informations && data.captureSettings
+        && data.cidPreview && data.authHash3 && data.captureSettings
         && data.cidThumbnail),
     clearDataDown: (data) => data
   }
@@ -157,6 +157,8 @@ export function MintGenerativeController({ anchor }: Props) {
     }
 
     const step = STEPS[stepIndex]
+    console.log(step)
+    console.log(step.validateIn(state))
     if (step.validateIn(state)) {
       // clear the data down the state
       setState(step.clearDataDown(state))
@@ -169,11 +171,11 @@ export function MintGenerativeController({ anchor }: Props) {
   }, [stepIndex])
 
   // safe guard to prevent going back if token is minted
-  // useEffect(() => {
-  //   if (state.minted && location.pathname !== "/success") {
-  //     history.replace(STEPS[STEPS.length-1].path)
-  //   }
-  // }, [state])
+  useEffect(() => {
+    if (state.minted && location.pathname !== "/success") {
+      history.replace(STEPS[STEPS.length-1].path)
+    }
+  }, [state])
 
   return (
     <>

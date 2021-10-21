@@ -36,6 +36,10 @@ const Home: NextPage<Props> = ({
 }) => {
   return (
     <>
+      <Head>
+        <title>fxhash — home</title>
+      </Head>
+
       <Spacing size="3x-large" />
       <section className={cs(styles.presentation, layout['padding-small'])}>
         <h1 className={cs(Text.h3)}>

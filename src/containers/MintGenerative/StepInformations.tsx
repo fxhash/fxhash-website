@@ -141,6 +141,7 @@ export const StepInformations: StepComponent = ({ state, onNext }) => {
   // if contract lands success, go to the success screen
   useEffect(() => {
     if (success) {
+      console.log("call on next minted true")
       onNext({
         minted: true
       })
