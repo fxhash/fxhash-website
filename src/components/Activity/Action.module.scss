@@ -45,3 +45,13 @@
 .user {
   flex-shrink: 0;
 }
+
+.icon {
+  font-size: 40px;
+}
+
+.align {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}

@@ -123,14 +123,27 @@ const ActionUpdateState: FunctionComponent<Props> = ({ action }) => {
   )
 }
 
+const ActionCompleted: FunctionComponent<Props> = ({ action }) => (
+  <>
+    <span className={cs(style.align)}>
+      <strong className={cs(colors.success, style.align)}>
+        <i aria-hidden className={cs(style.icon, "fas", "fa-check-circle")}/> completed
+      </strong> 
+      — Generative Token fully minted
+    </span>
+    <DateDistance timestamptz={action.createdAt} append/>
+  </>
+)
+
 const ActionMapComponent: Record<string, FunctionComponent<Props>> = {
-  MINTED:         ActionMinted,
-  MINTED_FROM:    ActionMintedFrom,
-  TRANSFERED:     ActionTransfered,
-  OFFER:          ActionOffer,
-  OFFER_ACCEPTED: ActionOfferAccepted,
-  OFFER_CANCELLED: ActionOfferCancelled,
-  UPDATE_STATE:   ActionUpdateState,
+  MINTED:           ActionMinted,
+  MINTED_FROM:      ActionMintedFrom,
+  TRANSFERED:       ActionTransfered,
+  OFFER:            ActionOffer,
+  OFFER_ACCEPTED:   ActionOfferAccepted,
+  OFFER_CANCELLED:  ActionOfferCancelled,
+  UPDATE_STATE:     ActionUpdateState,
+  COMPLETED:        ActionCompleted
 }
 
 const actionMapLink: Record<string, (action: ActionType) => string|null> = {
@@ -141,6 +154,7 @@ const actionMapLink: Record<string, (action: ActionType) => string|null> = {
   OFFER_ACCEPTED: (action: ActionType) => `/objkt/${action.objkt?.id}`,
   OFFER_CANCELLED: (action: ActionType) => `/objkt/${action.objkt?.id}`,
   UPDATE_STATE: (action: ActionType) => `/objkt/${action.objkt?.id}`,
+  COMPLETED: (action: ActionType) => `/generative/${action.token?.id}`,
 }
 
 // some actions may have a link to a page - which requires some tricky logic
