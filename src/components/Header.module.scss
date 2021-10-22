@@ -1,9 +1,15 @@
+@import "../styles/Variables.scss";
+
 .header {
   height: 140px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0px var(--main-padding-sm);
+
+  @media (max-width: $breakpoint-md) {
+    padding-left: 0;
+  }
 }
 
 .logo {
