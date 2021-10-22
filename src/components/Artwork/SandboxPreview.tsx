@@ -31,13 +31,13 @@ export const SandboxPreview = forwardRef<ArtworkIframeRef, Props>(({
   // register service workers
   useEffect(() => {
     if ("serviceWorker" in navigator) {
-      window.addEventListener("load", () => {
-        navigator.serviceWorker.register("./sandbox/worker.js")
-          .then(reg => {
-            workerReg.current = reg
-          })
-          .catch(err => console.log(err))
+      navigator.serviceWorker.register("./sandbox/worker.js", {
+        scope: "/sandbox"
       })
+        .then(reg => {
+          workerReg.current = reg
+        })
+        .catch(err => console.log(err))
     }
   }, [])
 

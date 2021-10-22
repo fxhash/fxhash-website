@@ -13,9 +13,7 @@ export default class MyDocument extends Document {
           <link 
             href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap"
             rel="stylesheet"
-          />
-          <title>fxhash</title>
-          
+          />          
           <script src="https://kit.fontawesome.com/0aadf73f47.js" crossOrigin="anonymous"></script>
         </Head>
 
