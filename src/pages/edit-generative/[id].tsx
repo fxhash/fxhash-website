@@ -1,28 +1,13 @@
 import { gql } from '@apollo/client'
-import Link from 'next/link'
+import Head from 'next/head'
 import { GetServerSideProps, NextPage } from "next"
-import layout from "../../styles/Layout.module.scss"
-import style from "../../styles/GenerativeTokenDetails.module.scss"
-import homeStyle from "../../styles/Home.module.scss"
-import cs from "classnames"
 import client from "../../services/ApolloClient"
 import { GenerativeToken } from "../../types/entities/GenerativeToken"
-import { ArtworkPreview } from '../../components/Artwork/Preview'
 import { Spacing } from '../../components/Layout/Spacing'
-import { UserBadge } from '../../components/User/UserBadge'
-import { MintProgress } from '../../components/Artwork/MintProgress'
-import { Button } from '../../components/Button'
-import nl2br from 'react-nl2br'
-import { displayMutez } from '../../utils/units'
-import { ipfsDisplayUrl } from '../../services/Ipfs'
-import { SectionHeader } from '../../components/Layout/SectionHeader'
-import { CardsContainer } from '../../components/Card/CardsContainer'
-import { ObjktCard } from '../../components/Card/ObjktCard'
-import { Activity } from '../../components/Activity/Activity'
 import ClientOnly from '../../components/Utils/ClientOnly'
-import { EditTokenSnippet } from '../../containers/Token/EditTokenSnippet'
 import { EditToken } from '../../containers/Token/EditToken'
 import { UserGuard } from '../../components/Guards/UserGuard'
+import { truncateEnd } from '../../utils/strings'
 
 
 interface Props {
@@ -32,6 +17,11 @@ interface Props {
 const EditGenerative: NextPage<Props> = ({ token }) => {
   return (
     <>
+      <Head>
+        <title>fxhash — edit {token.name}</title>
+        <meta key="description" property="description" content={truncateEnd(token.metadata?.description || "", 200, "")}/>
+      </Head>
+
       <Spacing size="6x-large" />
 
       <ClientOnly>

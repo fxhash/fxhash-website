@@ -10,6 +10,7 @@ import { getIpfsIoUrl } from "../utils/ipfs"
 import { ArtworkIframe, ArtworkIframeRef } from "../components/Artwork/PreviewIframe"
 import { Button } from "../components/Button"
 import { ArtworkPreview } from "../components/Artwork/Preview"
+import Head from "next/head"
 
 
 const PreviewMintPage: NextPage = () => {
@@ -32,6 +33,13 @@ const PreviewMintPage: NextPage = () => {
 
   return (
     <>
+      <Head>
+        <title>fxhash — discover your token</title>
+        <meta key="og:title" property="og:title" content="fxhash — discover your token"/> 
+        <meta key="description" property="description" content="Token recently minted on fxhash"/>
+        <meta key="og:description" property="og:description" content="Token recently minted on fxhash"/>
+      </Head>
+
       <Spacing size="6x-large" />
 
       <section>

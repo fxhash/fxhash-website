@@ -1,4 +1,5 @@
 import { NextPage } from "next"
+import Head from "next/head"
 import { SectionHeader } from "../../components/Layout/SectionHeader"
 import { Spacing } from "../../components/Layout/Spacing"
 import cs from "classnames"
@@ -11,6 +12,12 @@ import { BrowserRouter as Router } from "react-router-dom"
 const MintGenerative: NextPage = () => {
   return (
     <>
+      <Head>
+        <title>fxhash — mint Generative Token</title>
+        <meta key="og:title" property="og:title" content="fxhash — mint Generative Token"/> 
+        <meta key="description" property="description" content="Mint a Generative Token"/>
+      </Head>
+
       <Spacing size="6x-large"/>
 
       <section>

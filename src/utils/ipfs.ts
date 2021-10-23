@@ -5,3 +5,13 @@ export function getIpfsIoUrl(cid: string) {
 export function getIpfsSlash(cid: string): string {
   return `ipfs://${cid}`
 }
+
+/**
+ * given an URL of the form `ipfs://frghrtjtyjtyj`
+ * outputs the CID in the rightmost section
+ */
+export function ipfsUrlToCid(url: string): string {
+  return url
+    ? url.substr(8)
+    : ""
+}

@@ -209,7 +209,7 @@ export class LogoEffect {
 
   drawWalkers() {
     for (const W of this.walkers) {
-      this.ctx.fillStyle = `rgba(${W.col[0]}, ${W.col[1]}, ${W.col[2]}, ${cfg.deposit})`
+      this.ctx.fillStyle = `rgba(${W.col[0]}, ${W.col[1]}, ${W.col[2]}, ${cfg.deposit * .7})`
       this.ctx.fillRect(W.x, W.y, 1, 1)
     }
   }

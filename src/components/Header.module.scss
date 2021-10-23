@@ -6,6 +6,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 0px var(--main-padding-sm);
+  padding-left: 10px;
 
   @media (max-width: $breakpoint-md) {
     padding-left: 0;

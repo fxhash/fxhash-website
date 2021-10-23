@@ -1,5 +1,6 @@
 import { gql } from '@apollo/client'
 import Link from 'next/link'
+import Head from 'next/head'
 import { GetServerSideProps, NextPage } from "next"
 import layout from "../../styles/Layout.module.scss"
 import style from "../../styles/GenerativeTokenDetails.module.scss"
@@ -22,6 +23,7 @@ import { Activity } from '../../components/Activity/Activity'
 import ClientOnly from '../../components/Utils/ClientOnly'
 import { EditTokenSnippet } from '../../containers/Token/EditTokenSnippet'
 import { UserGuard } from '../../components/Guards/UserGuard'
+import { truncateEnd } from '../../utils/strings'
 
 
 interface Props {
@@ -32,8 +34,20 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
   const hasCollection = token.objkts?.length > 0
   const collectionUrl = `/generative/${token.id}/collection`
 
+  // get the display url for og:image
+  const displayUrl = token.metadata?.displayUri && ipfsDisplayUrl(token.metadata?.displayUri)
+
   return (
     <>
+      <Head>
+        <title>fxhash — {token.name}</title>
+        <meta key="og:title" property="og:title" content={`fxhash — ${token.name}`}/> 
+        <meta key="description" property="description" content={truncateEnd(token.metadata?.description || "", 200, "")}/>
+        <meta key="og:description" property="og:description" content={truncateEnd(token.metadata?.description || "", 200, "")}/>
+        <meta key="og:type" property="og:type" content="website"/>
+        <meta key="og:image" property="og:image" content={displayUrl || "/images/og/og1.jpg"}/>
+      </Head>
+
       <Spacing size="6x-large" />
 
       <section className={cs(style.presentation, layout.cols2, layout['responsive-reverse'], layout['padding-big'])}>

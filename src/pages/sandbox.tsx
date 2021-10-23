@@ -4,14 +4,21 @@ import cs from 'classnames'
 import { Spacing } from '../components/Layout/Spacing'
 import { SectionHeader } from '../components/Layout/SectionHeader'
 import ClientOnly from '../components/Utils/ClientOnly'
-import { ExploreGenerativeTokens } from '../containers/ExploreGenerativeTokens'
 import { Sandbox } from '../containers/Sandbox/Sandbox'
+import Head from 'next/head'
 
 
 
 const SandboxPage: NextPage = () => {
   return (
     <>
+      <Head>
+        <title>fxhash — sandbox</title>
+        <meta key="og:title" property="og:title" content="fxhash — sandbox"/> 
+        <meta key="description" property="description" content="Experiment and test your Generative Tokens in the Sandbox environment"/>
+        <meta key="og:description" property="og:description" content="Experiment and test your Generative Tokens in the Sandbox environment"/>
+      </Head>
+
       <Spacing size="6x-large" />
 
       <section>

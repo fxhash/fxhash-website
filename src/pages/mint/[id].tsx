@@ -1,4 +1,5 @@
 import { GetServerSideProps, NextPage } from "next"
+import Head from "next/head"
 import { Spacing } from "../../components/Layout/Spacing"
 import layout from "../../styles/Layout.module.scss"
 import cs from "classnames"
@@ -9,6 +10,8 @@ import { GenerativeToken } from "../../types/entities/GenerativeToken"
 import client from "../../services/ApolloClient"
 import { gql } from "@apollo/client"
 import { Mint } from "../../containers/Mint/Mint"
+import { truncateEnd } from "../../utils/strings"
+import { ipfsDisplayUrl } from "../../services/Ipfs"
 
 
 interface Props {
@@ -16,10 +19,20 @@ interface Props {
 }
 
 const MintPage: NextPage<Props> = ({ token }) => {
-  console.log(token)
+  // get the display url for og:image
+  const displayUrl = token.metadata?.displayUri && ipfsDisplayUrl(token.metadata?.displayUri)
 
   return (
     <>
+      <Head>
+        <title>fxhash — mint from {token.name}</title>
+        <meta key="og:title" property="og:title" content={`fxhash — mint from ${token.name}`}/> 
+        <meta key="description" property="description" content={truncateEnd(token.metadata?.description || "", 200, "")}/>
+        <meta key="og:description" property="og:description" content={truncateEnd(token.metadata?.description || "", 200, "")}/>
+        <meta key="og:type" property="og:type" content="website"/>
+        <meta key="og:image" property="og:image" content={displayUrl || "/images/og/og1.jpg"}/>
+      </Head>
+
       <Spacing size="6x-large"/>
 
       <section>

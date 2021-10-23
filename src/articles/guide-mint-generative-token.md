@@ -1,6 +1,7 @@
 ---
 title: 'Guide to mint a Generative Token'
 date: '2021-10-20'
+description: 'Learn how to create and mint a Generative Token on fxhash'
 ---
 
 This document will walk you through all the concepts you need to know to understand how you can build and mint a **Generative Token** (GT) on **fxhash**.

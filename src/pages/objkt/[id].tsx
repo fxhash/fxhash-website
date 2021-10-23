@@ -1,30 +1,26 @@
 import { gql } from '@apollo/client'
 import Link from 'next/link'
+import Head from 'next/head'
 import { GetServerSideProps, NextPage } from "next"
 import layout from "../../styles/Layout.module.scss"
 import style from "../../styles/GenerativeTokenDetails.module.scss"
-import homeStyle from "../../styles/Home.module.scss"
 import cs from "classnames"
 import client from "../../services/ApolloClient"
-import { GenerativeToken } from "../../types/entities/GenerativeToken"
 import { ArtworkPreview } from '../../components/Artwork/Preview'
 import { Spacing } from '../../components/Layout/Spacing'
 import { UserBadge } from '../../components/User/UserBadge'
-import { MintProgress } from '../../components/Artwork/MintProgress'
 import { Button } from '../../components/Button'
 import nl2br from 'react-nl2br'
-import { displayMutez } from '../../utils/units'
 import { ipfsDisplayUrl } from '../../services/Ipfs'
 import { SectionHeader } from '../../components/Layout/SectionHeader'
-import { CardsContainer } from '../../components/Card/CardsContainer'
-import { ObjktCard } from '../../components/Card/ObjktCard'
 import { Activity } from '../../components/Activity/Activity'
 import { Objkt } from '../../types/entities/Objkt'
 import { User } from '../../types/entities/User'
-import ClientOnly, { ClientOnlyEmpty } from '../../components/Utils/ClientOnly'
+import { ClientOnlyEmpty } from '../../components/Utils/ClientOnly'
 import { UserGuard } from '../../components/Guards/UserGuard'
 import { OfferControl } from '../../containers/Objkt/OfferControl'
 import { Collect } from '../../containers/Objkt/Collect'
+import { truncateEnd } from '../../utils/strings'
 
 
 interface Props {
@@ -34,9 +30,20 @@ interface Props {
 const ObjktDetails: NextPage<Props> = ({ objkt }) => {
   const owner: User = (objkt.offer ? objkt.offer.issuer : objkt.owner)!
   const creator: User = objkt.issuer.author
+  // get the display url for og:image
+  const displayUrl = objkt.metadata?.displayUri && ipfsDisplayUrl(objkt.metadata?.displayUri)
 
   return (
     <>
+      <Head>
+        <title>fxhash — {objkt.name}</title>
+        <meta key="og:title" property="og:title" content={`fxhash — ${objkt.name}`}/> 
+        <meta key="description" property="description" content={truncateEnd(objkt.metadata?.description || "", 200, "")}/>
+        <meta key="og:description" property="og:description" content={truncateEnd(objkt.metadata?.description || "", 200, "")}/>
+        <meta key="og:type" property="og:type" content="website"/>
+        <meta key="og:image" property="og:image" content={displayUrl || "/images/og/og1.jpg"}/>
+      </Head>
+
       <Spacing size="6x-large" />
 
       <section className={cs(layout.cols2, layout['responsive-reverse'], layout['padding-big'])}>

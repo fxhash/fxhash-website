@@ -1,9 +1,9 @@
 import { gql } from '@apollo/client'
 import Link from 'next/link'
+import Head from 'next/head'
 import { GetServerSideProps, NextPage } from "next"
 import layout from "../../../styles/Layout.module.scss"
 import style from "../../../styles/GenerativeTokenDetails.module.scss"
-import homeStyle from "../../../styles/Home.module.scss"
 import cs from "classnames"
 import client from "../../../services/ApolloClient"
 import { GenerativeToken } from "../../../types/entities/GenerativeToken"
@@ -13,15 +13,14 @@ import { UserBadge } from '../../../components/User/UserBadge'
 import { MintProgress } from '../../../components/Artwork/MintProgress'
 import { Button } from '../../../components/Button'
 import nl2br from 'react-nl2br'
-import { displayMutez } from '../../../utils/units'
 import { ipfsDisplayUrl } from '../../../services/Ipfs'
 import { SectionHeader } from '../../../components/Layout/SectionHeader'
 import { CardsContainer } from '../../../components/Card/CardsContainer'
 import { ObjktCard } from '../../../components/Card/ObjktCard'
-import { Activity } from '../../../components/Activity/Activity'
 import { Pagination } from '../../../components/Pagination/Pagination'
 import { useState } from 'react'
 import { Objkt } from '../../../types/entities/Objkt'
+import { truncateEnd } from '../../../utils/strings'
 
 
 interface Props {
@@ -32,8 +31,20 @@ const GenerativeTokenCollection: NextPage<Props> = ({ token }) => {
   const [visibleObjkts, setVisibleObjkts] = useState<Objkt[]>([])
   const hasCollection = token.objkts?.length > 0
 
+  // get the display url for og:image
+  const displayUrl = token.metadata?.displayUri && ipfsDisplayUrl(token.metadata?.displayUri)
+
   return (
     <>
+      <Head>
+        <title>fxhash — collection of {token.name}</title>
+        <meta key="og:title" property="og:title" content={`fxhash — collection of ${token.name}`}/> 
+        <meta key="description" property="description" content={truncateEnd(token.metadata?.description || "", 200, "")}/>
+        <meta key="og:description" property="og:description" content={truncateEnd(token.metadata?.description || "", 200, "")}/>
+        <meta key="og:type" property="og:type" content="website"/>
+        <meta key="og:image" property="og:image" content={displayUrl || "/images/og/og1.jpg"}/>
+      </Head>
+
       <Spacing size="6x-large" />
 
       <section className={cs(style.presentation, style['presentation-small'], layout['padding-big'])}>

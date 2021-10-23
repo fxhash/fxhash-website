@@ -9,5 +9,5 @@ export function ipfsDisplayUrl(ipfsUrl: string|null|undefined) {
   if (!ipfsUrl || ipfsUrl.length < 15) return ""
   const cid = ipfsUrlToID(ipfsUrl)
   if (!cid) return ""
-  return `https://cloudflare-ipfs.com/ipfs/${cid}`
+  return `https://ipfs.io/ipfs/${cid}`
 }

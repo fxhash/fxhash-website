@@ -38,6 +38,11 @@ const Home: NextPage<Props> = ({
     <>
       <Head>
         <title>fxhash — home</title>
+        <meta key="og:title" property="og:title" content="fxhash — Generative Art on the Blockchain"/> 
+        <meta key="description" property="description" content="fxhash is a platform to mint and collect Generative Tokens on the Tezos blockchain"/>
+        <meta key="og:description" property="og:description" content="fxhash is a platform to mint and collect Generative Tokens on the Tezos blockchain"/>
+        <meta key="og:type" property="og:type" content="website"/>
+        <meta key="og:image" property="og:image" content="/images/og/og1.jpg"/>
       </Head>
 
       <Spacing size="3x-large" />

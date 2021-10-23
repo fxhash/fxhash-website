@@ -6,11 +6,17 @@ import { EditProfile } from "../containers/EditProfile"
 import layout from "../styles/Layout.module.scss"
 import cs from "classnames"
 import { UserGuard } from "../components/Guards/UserGuard"
+import Head from "next/head"
 
 
 const EditProfilePage: NextPage = () => {
   return (
     <>
+      <Head>
+        <title>fxhash — edit your profile</title>
+        <meta key="description" property="description" content="edit your profile"/>
+      </Head>
+
       <Spacing size="6x-large"/>
 
       <section>

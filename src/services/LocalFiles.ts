@@ -30,7 +30,6 @@ export function getArticles() {
     const contents = fs.readFileSync(path.join(articlesDir, name), "utf-8")
     // use gray-matter to parse the metadata
     const metadata = matter(contents)
-    console.log(metadata)
     // return id & data
     return {
       id,
@@ -58,15 +57,6 @@ export async function getArticleData(id: string) {
   const fileContents = fs.readFileSync(fullPath, 'utf8')
   // Use gray-matter to parse the post metadata section
   const matterResult = matter(fileContents)
-  // use remark to convert markdown into html
-  // const processed = await remark()
-  //   .use(remarkToc, {
-  //     maxDepth: 1,
-  //     prefix: "user-content-"
-  //   })
-  //   .use(html)
-  //   .use(remarkSlug)
-  //   .process(matterResult.content)
   const processed = await unified()
     .use(remarkParse)
     .use(remarkToc, {

@@ -7,6 +7,7 @@ import { Article } from "../../types/Article"
 import cs from "classnames"
 import { ArticleContent } from "../../components/Article/ArticleContent"
 import Head from "next/head"
+import { truncateEnd } from "../../utils/strings"
 
 
 interface Props {
@@ -17,6 +18,12 @@ const ArticlePage: NextPage<Props> = ({ article }) => {
   return (
     <>
       <Head>
+        <title>fxhash — {article.title}</title>
+        <meta key="og:title" property="og:title" content={`fxhash — ${article.title}`}/> 
+        <meta key="description" property="description" content={truncateEnd(article.description || "", 200, "")}/>
+        <meta key="og:description" property="og:description" content={truncateEnd(article.description || "", 200, "")}/>
+        <meta key="og:type" property="og:type" content="article"/>
+        <meta key="og:image" property="og:image" content="/images/og/og1.jpg"/>
         <link rel="stylesheet" href="/highlight/dracula.css"/>
       </Head>
 

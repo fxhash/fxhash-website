@@ -5,17 +5,28 @@ import Client from '../services/ApolloClient'
 import { ApolloProvider } from '@apollo/client'
 import { UserProvider } from '../containers/UserProvider'
 import { useEffect } from 'react'
+import Head from "next/head"
 
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <ApolloProvider client={Client}>
-      <UserProvider>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
-      </UserProvider>
-    </ApolloProvider>
+    <>
+      <Head>
+        <meta key="og:title" property="og:title" content="fxhash — blockchain generative art"/> 
+        <meta key="description" property="description" content="fxhash is a platform to mint Generative Tokens on the Tezos blockchain"/>
+        <meta key="og:description" property="og:description" content="fxhash is a platform to mint Generative Tokens on the Tezos blockchain"/>
+        <meta key="og:type" property="og:type" content="website"/>
+        <meta key="og:image" property="og:image" content="/images/og/og1.jpg"/>
+      </Head>
+      
+      <ApolloProvider client={Client}>
+        <UserProvider>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </UserProvider>
+      </ApolloProvider>
+    </>
   )
 }
 export default MyApp
