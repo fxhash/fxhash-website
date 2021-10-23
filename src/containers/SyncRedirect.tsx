@@ -45,7 +45,7 @@ export function SyncRedirect({ target }: Props) {
       </Button>
       <p>
         <span>If you don't have a wallet, you can read our </span>
-        <LinkGuide href="/articles/mint-collect">
+        <LinkGuide href="/articles/collect-mint-tokens">
           Guide to collect/mint tokens on fxhash
         </LinkGuide>
       </p>

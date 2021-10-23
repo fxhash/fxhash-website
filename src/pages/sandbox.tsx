@@ -6,6 +6,7 @@ import { SectionHeader } from '../components/Layout/SectionHeader'
 import ClientOnly from '../components/Utils/ClientOnly'
 import { Sandbox } from '../containers/Sandbox/Sandbox'
 import Head from 'next/head'
+import { LinkGuide } from '../components/Link/LinkGuide'
 
 
 
@@ -32,7 +33,10 @@ const SandboxPage: NextPage = () => {
           <p>
             The sandbox is a space in which you can drop a .zip of your project and see how it would behave when it will be minted on ixart. 
             If your artwork does not behave properly in the sandbox, it will not work after being minted. <br/>
-            If you are new to the platform please read our Guide to build a Generative Token.
+            <span>If you are new to the platform please read our </span>
+            <LinkGuide href="/articles/guide-mint-generative-token">
+              Guide to build a Generative Token.
+            </LinkGuide>
           </p>
 
           <Spacing size="3x-large"/>

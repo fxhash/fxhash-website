@@ -41,7 +41,7 @@ export function Navigation() {
         <Dropdown
           itemComp={<span>about</span>}
         >
-          <Link href="/about">
+          <Link href="/articles/about-fxhash">
             <a>about fxhash</a>
           </Link>
           <Link href="/articles/guide-mint-generative-token">
