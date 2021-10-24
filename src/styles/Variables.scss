@@ -1,3 +1,5 @@
+@use "sass:math";
+
 /**
  * The scale based on `$font-size` being 16.
  *
@@ -8,18 +10,18 @@ $spacing: 16px !default;
 
 // Decrease
 $spacing-small: floor($spacing - 4) !default;
-$spacing-x-small: floor($spacing / 2) !default;
-$spacing-2x-small: floor($spacing / 4) !default;
-$spacing-3x-small: floor($spacing / 8) !default;
+$spacing-x-small: floor(math.div($spacing, 2)) !default;
+$spacing-2x-small: floor(math.div($spacing, 4)) !default;
+$spacing-3x-small: floor(math.div($spacing, 8)) !default;
 
 // Increase
-$spacing-large: ceil($spacing / 2 * 3) !default;
-$spacing-x-large: ceil($spacing / 2 * 4) !default;
-$spacing-2x-large: ceil($spacing / 2 * 5) !default;
-$spacing-3x-large: ceil($spacing / 2 * 6) !default;
-$spacing-4x-large: ceil($spacing / 2 * 7) !default;
-$spacing-5x-large: ceil($spacing / 2 * 9) !default;
-$spacing-6x-large: ceil($spacing / 2 * 12) !default;
+$spacing-large: ceil(math.div($spacing, 2) * 3) !default;
+$spacing-x-large: ceil(math.div($spacing, 2) * 4) !default;
+$spacing-2x-large: ceil(math.div($spacing, 2) * 5) !default;
+$spacing-3x-large: ceil(math.div($spacing, 2) * 6) !default;
+$spacing-4x-large: ceil(math.div($spacing, 2) * 7) !default;
+$spacing-5x-large: ceil(math.div($spacing, 2) * 9) !default;
+$spacing-6x-large: ceil(math.div($spacing, 2) * 12) !default;
 
 // breakpoints
 $breakpoint-vlg: 1600px;

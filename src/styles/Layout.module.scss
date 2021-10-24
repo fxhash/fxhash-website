@@ -3,6 +3,16 @@
 .padding-small {
   padding-left: var(--layout-margin-small-lg);
   padding-right: var(--layout-margin-small-lg);
+
+  @media (max-width: $breakpoint-lg) {
+    padding-left: var(--layout-margin-small-md);
+    padding-right: var(--layout-margin-small-md);
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    padding-left: var(--layout-margin-small-sm);
+    padding-right: var(--layout-margin-small-sm);
+  }
 }
 
 .padding-big {

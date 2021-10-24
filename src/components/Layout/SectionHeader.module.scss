@@ -16,4 +16,16 @@
       font-size: var(--font-size-h4);
     }
   }
+
+  @media (max-width: $breakpoint-sm) {
+    h2 {
+      font-size: var(--font-size-h4);
+    }
+
+    a {
+      padding-left: 15px !important;
+      padding-right: 15px !important;
+      height: 48px;
+    }
+  }
 }
