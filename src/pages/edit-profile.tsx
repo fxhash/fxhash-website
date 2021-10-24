@@ -14,7 +14,7 @@ const EditProfilePage: NextPage = () => {
     <>
       <Head>
         <title>fxhash — edit your profile</title>
-        <meta key="description" property="description" content="edit your profile"/>
+        <meta key="description" name="description" content="edit your profile"/>
       </Head>
 
       <Spacing size="6x-large"/>

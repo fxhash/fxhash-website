@@ -36,7 +36,7 @@ const PreviewMintPage: NextPage = () => {
       <Head>
         <title>fxhash — discover your token</title>
         <meta key="og:title" property="og:title" content="fxhash — discover your token"/> 
-        <meta key="description" property="description" content="Token recently minted on fxhash"/>
+        <meta key="description" name="description" content="Token recently minted on fxhash"/>
         <meta key="og:description" property="og:description" content="Token recently minted on fxhash"/>
       </Head>
 

@@ -26,7 +26,13 @@ export function SearchInput({
 
   return (
     <form className={cs(style.search, effects['drop-shadow-small'], className)} onSubmit={submit}>
-      <button type="submit" className={cs(style['search-icon'])}><i aria-hidden className="fas fa-search"/></button>
+      <button 
+        type="submit" 
+        className={cs(style['search-icon'])}
+        aria-label="search"
+      >
+          <i aria-hidden className="fas fa-search"/>
+        </button>
       <input 
         type="text" 
         value={value}

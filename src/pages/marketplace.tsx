@@ -16,7 +16,7 @@ const MarketplacePage: NextPage = () => {
       <Head>
         <title>fxhash — marketplace</title>
         <meta key="og:title" property="og:title" content="fxhash — marketplace"/> 
-        <meta key="description" property="description" content="Collect and trade your NFTs generated on fxhash"/>
+        <meta key="description" name="description" content="Collect and trade your NFTs generated on fxhash"/>
         <meta key="og:description" property="og:description" content="Collect and trade your NFTs generated on fxhash"/>
         <meta key="og:type" property="og:type" content="website"/>
         <meta key="og:image" property="og:image" content="/images/og/og1.jpg"/>

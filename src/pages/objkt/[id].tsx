@@ -38,7 +38,7 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
       <Head>
         <title>fxhash — {objkt.name}</title>
         <meta key="og:title" property="og:title" content={`fxhash — ${objkt.name}`}/> 
-        <meta key="description" property="description" content={truncateEnd(objkt.metadata?.description || "", 200, "")}/>
+        <meta key="description" name="description" content={truncateEnd(objkt.metadata?.description || "", 200, "")}/>
         <meta key="og:description" property="og:description" content={truncateEnd(objkt.metadata?.description || "", 200, "")}/>
         <meta key="og:type" property="og:type" content="website"/>
         <meta key="og:image" property="og:image" content={displayUrl || "/images/og/og1.jpg"}/>

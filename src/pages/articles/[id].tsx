@@ -20,7 +20,7 @@ const ArticlePage: NextPage<Props> = ({ article }) => {
       <Head>
         <title>fxhash — {article.title}</title>
         <meta key="og:title" property="og:title" content={`fxhash — ${article.title}`}/> 
-        <meta key="description" property="description" content={truncateEnd(article.description || "", 200, "")}/>
+        <meta key="description" name="description" content={truncateEnd(article.description || "", 200, "")}/>
         <meta key="og:description" property="og:description" content={truncateEnd(article.description || "", 200, "")}/>
         <meta key="og:type" property="og:type" content="article"/>
         <meta key="og:image" property="og:image" content="/images/og/og1.jpg"/>

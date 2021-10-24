@@ -15,7 +15,7 @@ const Explore: NextPage = () => {
       <Head>
         <title>fxhash — explore</title>
         <meta key="og:title" property="og:title" content="fxhash — explore"/> 
-        <meta key="description" property="description" content="Explore the work made by artists on fxhash"/>
+        <meta key="description" name="description" content="Explore the work made by artists on fxhash"/>
         <meta key="og:description" property="og:description" content="Explore the work made by artists on fxhash"/>
         <meta key="og:type" property="og:type" content="website"/>
         <meta key="og:image" property="og:image" content="/images/og/og1.jpg"/>

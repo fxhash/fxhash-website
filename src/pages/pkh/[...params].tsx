@@ -34,7 +34,7 @@ const UserPage: NextPage<Props> = ({ user }) => {
       <Head>
         <title>fxhash — {getUserName(user)} profile</title>
         <meta key="og:title" property="og:title" content={`fxhash — ${getUserName(user)} profile`}/> 
-        <meta key="description" property="description" content={truncateEnd(user.metadata?.description || "", 200, "")}/>
+        <meta key="description" name="description" content={truncateEnd(user.metadata?.description || "", 200, "")}/>
         <meta key="og:description" property="og:description" content={truncateEnd(user.metadata?.description || "", 200, "")}/>
         <meta key="og:type" property="og:type" content="website"/>
         <meta key="og:image" property="og:image" content={ogImageUrl || "/images/og/og1.jpg"}/>

@@ -16,7 +16,7 @@ const SandboxPage: NextPage = () => {
       <Head>
         <title>fxhash — sandbox</title>
         <meta key="og:title" property="og:title" content="fxhash — sandbox"/> 
-        <meta key="description" property="description" content="Experiment and test your Generative Tokens in the Sandbox environment"/>
+        <meta key="description" name="description" content="Experiment and test your Generative Tokens in the Sandbox environment"/>
         <meta key="og:description" property="og:description" content="Experiment and test your Generative Tokens in the Sandbox environment"/>
       </Head>
 

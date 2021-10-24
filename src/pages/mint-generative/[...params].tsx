@@ -15,7 +15,7 @@ const MintGenerative: NextPage = () => {
       <Head>
         <title>fxhash — mint Generative Token</title>
         <meta key="og:title" property="og:title" content="fxhash — mint Generative Token"/> 
-        <meta key="description" property="description" content="Mint a Generative Token"/>
+        <meta key="description" name="description" content="Mint a Generative Token"/>
       </Head>
 
       <Spacing size="6x-large"/>

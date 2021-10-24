@@ -27,7 +27,7 @@ const MintPage: NextPage<Props> = ({ token }) => {
       <Head>
         <title>fxhash — mint from {token.name}</title>
         <meta key="og:title" property="og:title" content={`fxhash — mint from ${token.name}`}/> 
-        <meta key="description" property="description" content={truncateEnd(token.metadata?.description || "", 200, "")}/>
+        <meta key="description" name="description" content={truncateEnd(token.metadata?.description || "", 200, "")}/>
         <meta key="og:description" property="og:description" content={truncateEnd(token.metadata?.description || "", 200, "")}/>
         <meta key="og:type" property="og:type" content="website"/>
         <meta key="og:image" property="og:image" content={displayUrl || "/images/og/og1.jpg"}/>

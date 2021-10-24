@@ -17,7 +17,6 @@ interface Props {
  * (create page How to create a Wallet)
  */
 const SyncRedirectPage: NextPage<Props> = ({ target }) => {
-  console.log(target)
   return (
     <ClientOnlyEmpty>
       <SyncRedirect target={target}/>

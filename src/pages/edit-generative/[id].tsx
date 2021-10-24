@@ -19,7 +19,7 @@ const EditGenerative: NextPage<Props> = ({ token }) => {
     <>
       <Head>
         <title>fxhash — edit {token.name}</title>
-        <meta key="description" property="description" content={truncateEnd(token.metadata?.description || "", 200, "")}/>
+        <meta key="description" name="description" content={truncateEnd(token.metadata?.description || "", 200, "")}/>
       </Head>
 
       <Spacing size="6x-large" />
