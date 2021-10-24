@@ -12,6 +12,7 @@ import { gql } from "@apollo/client"
 import { Mint } from "../../containers/Mint/Mint"
 import { truncateEnd } from "../../utils/strings"
 import { ipfsDisplayUrl } from "../../services/Ipfs"
+import { TitleHyphen } from "../../components/Layout/TitleHyphen"
 
 
 interface Props {
@@ -37,7 +38,7 @@ const MintPage: NextPage<Props> = ({ token }) => {
 
       <section>
         <SectionHeader>
-          <h2>— mint from <em>{token.name}</em></h2>
+          <TitleHyphen>mint from <em>{token.name}</em></TitleHyphen>
         </SectionHeader>
 
         <Spacing size="x-large"/>

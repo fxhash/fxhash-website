@@ -21,6 +21,7 @@ import { GenerativeTokenCard } from '../components/Card/GenerativeTokenCard'
 import { Offer } from '../types/entities/Offer'
 import { ObjktCard } from '../components/Card/ObjktCard'
 import nl2br from 'react-nl2br'
+import { TitleHyphen } from '../components/Layout/TitleHyphen'
 
 
 interface Props {
@@ -101,7 +102,7 @@ const Home: NextPage<Props> = ({
 
       <section>
         <SectionHeader>
-          <h2>— recent works</h2>
+          <TitleHyphen>recent works</TitleHyphen>
           <Link href="/explore" passHref>
             <Button
               isLink={true}
@@ -131,7 +132,7 @@ const Home: NextPage<Props> = ({
         <SectionHeader>
           <div>
             <small>late to the party ?</small>
-            <h2>— marketplace</h2>
+            <TitleHyphen>marketplace</TitleHyphen>
           </div>
           <Link href="/marketplace" passHref>
             <Button

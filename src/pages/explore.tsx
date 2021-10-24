@@ -6,6 +6,7 @@ import { SectionHeader } from '../components/Layout/SectionHeader'
 import ClientOnly from '../components/Utils/ClientOnly'
 import { ExploreGenerativeTokens } from '../containers/ExploreGenerativeTokens'
 import Head from 'next/head'
+import { TitleHyphen } from '../components/Layout/TitleHyphen'
 
 
 
@@ -24,7 +25,7 @@ const Explore: NextPage = () => {
 
       <section>
         <SectionHeader>
-          <h2>— explore artists' work</h2>
+          <TitleHyphen>explore artists' work</TitleHyphen>
         </SectionHeader>
 
         <Spacing size="x-large"/>

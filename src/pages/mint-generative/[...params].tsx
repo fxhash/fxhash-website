@@ -8,6 +8,7 @@ import ClientOnly from "../../components/Utils/ClientOnly"
 import { UserGuard } from "../../components/Guards/UserGuard"
 import { MintGenerativeController } from "../../containers/MintGenerative/Controller"
 import { BrowserRouter as Router } from "react-router-dom"
+import { TitleHyphen } from "../../components/Layout/TitleHyphen"
 
 const MintGenerative: NextPage = () => {
   return (
@@ -22,7 +23,7 @@ const MintGenerative: NextPage = () => {
 
       <section>
         <SectionHeader>
-          <h2>— mint a Generative Token</h2>
+          <TitleHyphen>mint a Generative Token</TitleHyphen>
         </SectionHeader>
 
         <Spacing size="x-large"/>

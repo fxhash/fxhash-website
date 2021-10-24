@@ -7,6 +7,7 @@ import ClientOnly from '../components/Utils/ClientOnly'
 import { ExploreGenerativeTokens } from '../containers/ExploreGenerativeTokens'
 import { Marketplace } from '../containers/Marketplace'
 import Head from 'next/head'
+import { TitleHyphen } from '../components/Layout/TitleHyphen'
 
 
 
@@ -26,7 +27,7 @@ const MarketplacePage: NextPage = () => {
 
       <section>
         <SectionHeader>
-          <h2>— marketplace</h2>
+          <TitleHyphen>marketplace</TitleHyphen>
         </SectionHeader>
 
         <Spacing size="x-large"/>

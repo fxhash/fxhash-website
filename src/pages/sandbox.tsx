@@ -7,6 +7,7 @@ import ClientOnly from '../components/Utils/ClientOnly'
 import { Sandbox } from '../containers/Sandbox/Sandbox'
 import Head from 'next/head'
 import { LinkGuide } from '../components/Link/LinkGuide'
+import { TitleHyphen } from '../components/Layout/TitleHyphen'
 
 
 
@@ -24,7 +25,7 @@ const SandboxPage: NextPage = () => {
 
       <section>
         <SectionHeader>
-          <h2>— sandbox</h2>
+          <TitleHyphen>sandbox</TitleHyphen>
         </SectionHeader>
 
         <Spacing size="x-large"/>

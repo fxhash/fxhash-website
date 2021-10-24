@@ -21,6 +21,7 @@ import { UserGuard } from '../../components/Guards/UserGuard'
 import { OfferControl } from '../../containers/Objkt/OfferControl'
 import { Collect } from '../../containers/Objkt/Collect'
 import { truncateEnd } from '../../utils/strings'
+import { TitleHyphen } from '../../components/Layout/TitleHyphen'
 
 
 interface Props {
@@ -115,7 +116,7 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
 
       <section>
         <SectionHeader>
-          <h2>— activity ⚡</h2>
+          <TitleHyphen>activity ⚡</TitleHyphen>
         </SectionHeader>
 
         <Spacing size="3x-large"/>

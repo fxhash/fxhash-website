@@ -17,6 +17,7 @@ import { ContractFeedback } from "../../components/Feedback/ContractFeedback"
 import { Button } from "../../components/Button"
 import { useContractCall } from "../../utils/hookts"
 import { UpdateGenerativeCallData } from "../../types/ContractCalls"
+import { TitleHyphen } from "../../components/Layout/TitleHyphen"
 
 
 interface Props {
@@ -71,7 +72,7 @@ export function EditToken({ token }: Props) {
     <>
       <section className={cs(layout['padding-small'])}>
         <SectionHeader>
-          <h2>— Edit token <em>{token.name}</em></h2>
+          <TitleHyphen>edit token <em>{token.name}</em></TitleHyphen>
         </SectionHeader>
 
         <Spacing size="6x-large"/>

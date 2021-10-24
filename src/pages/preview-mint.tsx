@@ -11,6 +11,7 @@ import { ArtworkIframe, ArtworkIframeRef } from "../components/Artwork/PreviewIf
 import { Button } from "../components/Button"
 import { ArtworkPreview } from "../components/Artwork/Preview"
 import Head from "next/head"
+import { TitleHyphen } from "../components/Layout/TitleHyphen"
 
 
 const PreviewMintPage: NextPage = () => {
@@ -44,7 +45,7 @@ const PreviewMintPage: NextPage = () => {
 
       <section>
         <SectionHeader>
-          <h2>— preview of your token</h2>
+          <TitleHyphen>preview of your token</TitleHyphen>
         </SectionHeader>
 
         <Spacing size="x-large"/>

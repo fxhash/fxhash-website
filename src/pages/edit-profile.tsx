@@ -7,6 +7,7 @@ import layout from "../styles/Layout.module.scss"
 import cs from "classnames"
 import { UserGuard } from "../components/Guards/UserGuard"
 import Head from "next/head"
+import { TitleHyphen } from "../components/Layout/TitleHyphen"
 
 
 const EditProfilePage: NextPage = () => {
@@ -21,7 +22,7 @@ const EditProfilePage: NextPage = () => {
 
       <section>
         <SectionHeader>
-          <h2>— edit profile</h2>
+          <TitleHyphen>edit profile</TitleHyphen>
         </SectionHeader>
 
         <Spacing size="x-large"/>

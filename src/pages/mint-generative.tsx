@@ -9,6 +9,7 @@ import { MintGenerativeController } from "../containers/MintGenerative/Controlle
 import { BrowserRouter as Router } from "react-router-dom"
 import { useRef } from "react"
 import Head from "next/head"
+import { TitleHyphen } from "../components/Layout/TitleHyphen"
 
 const MintGenerative: NextPage = () => {
   const anchorRef = useRef<HTMLElement>(null)
@@ -25,7 +26,7 @@ const MintGenerative: NextPage = () => {
 
       <section ref={anchorRef}>
         <SectionHeader>
-          <h2>— mint a Generative Token</h2>
+          <TitleHyphen>mint a Generative Token</TitleHyphen>
         </SectionHeader>
 
         <Spacing size="x-large"/>
