@@ -1,3 +1,5 @@
+@import "../../styles/Variables.scss";
+
 .article {
   width: min(100%, 700px);
   margin: auto;
@@ -8,9 +10,18 @@
     font-size: var(--font-size-h3);
     margin-top: 2.2em;
     margin-left: -40px;
+    line-height: 110%;
 
     &::before {
       content: "— ";
+    }
+    
+    @media (max-width: $breakpoint-sm) { 
+      margin-left: 0;
+  
+      &::before {
+        content: "";
+      }
     }
   }
   h2 {

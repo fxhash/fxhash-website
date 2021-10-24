@@ -20,6 +20,7 @@
   transition: all 0.2s ease-out;
   overflow-wrap: break-word;
   word-break: break-word;
+  padding: 0 15px;
 
   &:hover {
     box-shadow: 0 0 0px 3px var(--color-white),

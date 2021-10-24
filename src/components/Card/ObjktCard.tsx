@@ -22,7 +22,7 @@ export function ObjktCard({
   return (
     <Link href={url} passHref>
       <AnchorForward style={{ height: '100%' }}>
-        <Card thumbnailUri={objkt.metadata?.displayUri}>
+        <Card thumbnailUri={objkt.metadata?.thumbnailUri}>
           <div>
             <h5>{ objkt.name }</h5>
             <Spacing size="2x-small" />

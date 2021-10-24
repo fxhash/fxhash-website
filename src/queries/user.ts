@@ -30,6 +30,13 @@ export const Qu_user = gql`
           name
           avatarUri
         }
+        issuer {
+          author {
+            id
+            name
+            avatarUri
+          }
+        }
         name
         metadata
         createdAt
@@ -53,6 +60,13 @@ export const Qu_user = gql`
           name
           metadata
           createdAt
+          issuer {
+            author {
+              id
+              name
+              avatarUri
+            }
+          }
           offer {
             price
             issuer {

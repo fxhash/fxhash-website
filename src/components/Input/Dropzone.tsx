@@ -25,7 +25,6 @@ export function Dropzone({
   const [error, setError] = useState<string|null>(null)
 
   const onDrop = useCallback(acceptedFiles => {
-    console.log(acceptedFiles)
     if (acceptedFiles.length > 0) {
       // send file upwards
       onChange(acceptedFiles)
@@ -40,7 +39,6 @@ export function Dropzone({
   const { getRootProps, getInputProps, isDragActive, acceptedFiles } = useDropzone({
     onDrop,
     onDragEnter: (event) => {
-      console.log(event)
     },
     accept: accepted,
     maxFiles: 1,

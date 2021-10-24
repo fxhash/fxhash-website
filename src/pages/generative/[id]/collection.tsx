@@ -79,11 +79,8 @@ const GenerativeTokenCollection: NextPage<Props> = ({ token }) => {
 
         <div 
           className={cs(style['presentation-artwork'])}
-          style={{
-            width: "auto"
-          }}
         >
-          <ArtworkPreview ipfsUri={token.metadata?.displayUri} />
+          <ArtworkPreview ipfsUri={token.metadata?.thumbnailUri} />
         </div>
       </section>
 
@@ -155,6 +152,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
                   id
                   name
                   avatarUri
+                }
+                issuer {
+                  author {
+                    id
+                    name
+                    avatarUri
+                  }
                 }
                 name
                 metadata
