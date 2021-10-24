@@ -12,6 +12,7 @@ interface Props {
   prependText?: string
   hasLink?: boolean
   className?: string
+  avatarSide?: "left" | "right"
 }
 
 export function UserBadge({
@@ -19,18 +20,19 @@ export function UserBadge({
   prependText,
   size = "regular",
   hasLink = true,
+  avatarSide = "left",
   className
 }: Props) {
   return (
     hasLink ? (
       <Link href={getUserProfileLink(user)}>
-        <a className={cs(style.container, className)}>
+        <a className={cs(style.container, style[`side-${avatarSide}`], className)}>
           <Avatar uri={user.avatarUri} className={cs(style.avatar, style[`avatar-${size}`])} />
           <span><span className={cs(style.prepend)}>{prependText}</span> {getUserName(user, 15)}</span>
         </a>
       </Link>
     ):(
-      <div className={cs(style.container, className)}>
+      <div className={cs(style.container, style[`side-${avatarSide}`], className)}>
         <Avatar uri={user.avatarUri} className={cs(style.avatar, style[`avatar-${size}`])} />
         <span><span className={cs(style.prepend)}>{prependText}</span> {getUserName(user, 15)}</span>
       </div>

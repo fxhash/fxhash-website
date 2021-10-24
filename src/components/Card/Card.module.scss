@@ -60,3 +60,17 @@
   font-weight: bold;
   text-align: right;
 }
+
+.bottom {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+
+  .badge {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    font-size: 0.8em;
+    gap: 4px;
+  }
+}

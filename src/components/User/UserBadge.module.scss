@@ -3,6 +3,19 @@
   align-items: center;
   color: var(--color-primary);
   font-weight: bold;
+
+  &.side-left {
+    flex-direction: row;
+  }
+
+  &.side-right {
+    flex-direction: row-reverse;
+
+    .avatar {
+      margin-right: 0;
+      margin-left: 8px;
+    }
+  }
 }
 
 a.container:hover {

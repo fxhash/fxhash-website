@@ -24,6 +24,8 @@
   }
 
   &.inline {
+    flex-grow: 2;
+    
     header {
       display: flex;
       align-items: flex-start;
@@ -65,7 +67,7 @@
 }
 
 .artwork-details {
-  width: 400px;
+  width: min(400px, 100%);
   display: flex;
   flex-direction: column;
   align-items: flex-start;

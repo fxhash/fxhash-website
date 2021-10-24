@@ -211,6 +211,13 @@ export async function getServerSideProps() {
             id
             name
             metadata
+            issuer {
+              author {
+                id
+                name
+                avatarUri
+              }
+            }
             offer {
               id
               price

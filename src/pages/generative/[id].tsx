@@ -24,6 +24,7 @@ import ClientOnly from '../../components/Utils/ClientOnly'
 import { EditTokenSnippet } from '../../containers/Token/EditTokenSnippet'
 import { UserGuard } from '../../components/Guards/UserGuard'
 import { truncateEnd } from '../../utils/strings'
+import { TitleHyphen } from '../../components/Layout/TitleHyphen'
 
 
 interface Props {
@@ -118,7 +119,7 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
 
       <section>
         <SectionHeader>
-          <h2>— Latest tokens minted</h2>
+          <TitleHyphen>latest tokens minted</TitleHyphen>
           {hasCollection && (
             <Link href={collectionUrl}>
               <a>view entire collection &gt;</a>
@@ -210,6 +211,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
                     avatarUri
                   }
                   price
+                }
+                issuer {
+                  author {
+                    id
+                    name
+                    avatarUri
+                  }
                 }
               }
               createdAt

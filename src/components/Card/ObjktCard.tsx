@@ -28,12 +28,20 @@ export function ObjktCard({
             <Spacing size="2x-small" />
             <UserBadge user={owner} size="regular" hasLink={false} />
           </div>
-          {objkt.offer && (
-            <div>
-              <Spacing size="small" />
-              <div className={cs(style.price)}>{displayMutez(objkt.offer.price)} tez</div>
+
+          <Spacing size="small" />
+
+          <div className={cs(style.bottom)}>
+            <div className={cs(style.price)}>
+              {objkt.offer && (
+                <>{displayMutez(objkt.offer.price)} tez</>
+              )}
             </div>
-          )}
+            <div className={cs(style.badge)}>
+              created by 
+              <UserBadge user={objkt.issuer.author} size="regular" hasLink={false} avatarSide="right" />
+            </div>
+          </div>
         </Card>
       </AnchorForward>
     </Link>

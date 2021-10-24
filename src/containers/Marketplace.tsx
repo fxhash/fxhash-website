@@ -38,6 +38,13 @@ const Qu_offers = gql`
           name
           avatarUri
         }
+        issuer {
+          author {
+            id
+            name
+            avatarUri
+          }
+        }
       }
     }
   }
