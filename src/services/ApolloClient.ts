@@ -2,6 +2,13 @@ import { ApolloClient, InMemoryCache } from "@apollo/client";
 
 const client = new ApolloClient({
   uri: process.env.NEXT_PUBLIC_API_INDEXER_ROOT,
+  cache: new InMemoryCache(),
+  ssrMode: true,
+  ssrForceFetchDelay: 1000
+})
+
+export const clientSideClient = new ApolloClient({
+  uri: process.env.NEXT_PUBLIC_API_INDEXER_ROOT,
   cache: new InMemoryCache({
     typePolicies: {
       Query: {

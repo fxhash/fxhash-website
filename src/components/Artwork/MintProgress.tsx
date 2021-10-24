@@ -21,7 +21,7 @@ export function MintProgress({
         [style.minted]: complete,
       })}>
         <strong className={cs(colors.secondary)}>{minted}</strong>/{supply} minted 
-        {complete && <i className="fas fa-check-circle"/>}
+        {complete && <i aria-hidden className="fas fa-check-circle"/>}
       </span>
       <div className={cs(style.progress)}>
         <div 

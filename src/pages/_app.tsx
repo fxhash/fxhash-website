@@ -1,7 +1,7 @@
 import '../styles/globals.scss'
 import type { AppProps } from 'next/app'
 import { Layout } from '../components/Layout'
-import Client from '../services/ApolloClient'
+import { clientSideClient } from '../services/ApolloClient'
 import { ApolloProvider } from '@apollo/client'
 import { UserProvider } from '../containers/UserProvider'
 import { useEffect } from 'react'
@@ -19,7 +19,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <meta key="og:image" property="og:image" content="/images/og/og1.jpg"/>
       </Head>
 
-      <ApolloProvider client={Client}>
+      <ApolloProvider client={clientSideClient}>
         <UserProvider>
           <Layout>
             <Component {...pageProps} />
