@@ -19,7 +19,7 @@ export function Navigation() {
 
   useEffect(() => {
     setOpened(false)
-  }, [router.pathname])
+  }, [router.asPath])
 
   return (
     <nav className={cs(style.nav, text.h6, { [style.opened]: opened })}>
