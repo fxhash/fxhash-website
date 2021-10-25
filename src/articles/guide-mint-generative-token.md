@@ -85,16 +85,15 @@ fxhash requires you to insert the following code snippet in the `<head>` section
 
 This snippet serves 2 purposes: 
 
-- it will be replaced by fxhash to generate unique tokens from your GT
+- some parts of it will be replaced by fxhash to generate unique tokens from your GT (a static hash will be inserted instead of the random generation)
 - during the development stages, it emulates eventual hashes your program could get as an input. Every time you refresh the page, it generates a random hash. This way, you can really build your GT properly before deploying it.
 
-The code snippet exposes 3 variables:
+The code snippet exposes 2 variables:
 
 - `fxhash`: a random 64 characters hexadecimal string. This particular variable will be hardcoded with a static hash when someone mints a token from your GT
-- `fxhashValues`: an array of 16 pseudo-random values derived from the random hash
-- `fxhashValues2`: an array of 8 pseudo-random values derived from the random hash (with more precision than `fxhashValues`)
+- `fxrand()`: a PRNG function that generates deterministic PRN between 0 and 1. **Simply use it instead of Math.random()**.
 
-**Those 3 variables will be globally accessible by your program, and must be used to drive any random process your piece requires**.
+**Those 2 variable/function will be globally accessible by your program, and must be used to drive any random process your piece requires**.
 
 ## Zip, test & mint
 
@@ -119,7 +118,7 @@ Your web page must be responsive (ie adapt itself to any screen size). Moreover,
 
 ## Random numbers generation
 
-If your program needs more random numbers that those provided by fxhash, you must ensure that those numbers will always be the same every time your program executes with the same hash string as input. To achieve that, you can for instance use some Pseudorandom Number Generators (PRNG) where a seed can be provided. You can learn more about it in this [stackoverflow thread](https://stackoverflow.com/questions/521295/seeding-the-random-number-generator-in-javascript) for instance.
+Your program must use pseudorandom number generation with a seed, where the seed is the `fxhash` variable. You can use the `fxrand()` function for that matter. It implements the *Small Fast Counter* algorithm, which is part of the PracRand PRNG test suite. It passes PractRand, as well as Crush/BigCrush (TestU01). It's fast, and its usage is recommended. You can however use your own PRNG function as long as you give it the `fxhash` seed.
 
 ## Other
 
