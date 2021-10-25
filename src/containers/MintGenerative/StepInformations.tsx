@@ -24,6 +24,7 @@ import { useContractCall } from "../../utils/hookts"
 import { MintGenerativeCallData } from "../../types/ContractCalls"
 import { ContractFeedback } from "../../components/Feedback/ContractFeedback"
 import { getMutezDecimalsNb } from "../../utils/math"
+import { tagsFromString } from "../../utils/strings"
 
 
 const initialForm: Partial<GenTokenInformationsForm> = {
@@ -94,7 +95,7 @@ export const StepInformations: StepComponent = ({ state, onNext }) => {
       name: formInformations.name,
       description: formInformations.description,
       childrenDescription: formInformations.childrenDescription || formInformations.description,
-      tags: formInformations.tags,
+      tags: tagsFromString(formInformations.tags),
       artifactUri: getIpfsSlash(state.cidFixedHash!),
       displayUri: getIpfsSlash(state.cidPreview!),
       thumbnailUri: getIpfsSlash(state.cidThumbnail!),
@@ -114,8 +115,8 @@ export const StepInformations: StepComponent = ({ state, onNext }) => {
       name: formInformations.name,
       editions: formInformations.editions,
       enabled: formInformations.enabled,
-      price: formInformations.price,
-      royalties: formInformations.royalties
+      price: formInformations.price || 0,
+      royalties: formInformations.royalties || 10
     })
     metaPost(metadata)
   }

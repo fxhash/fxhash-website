@@ -176,6 +176,7 @@ export class WalletManager {
       statusCallback && statusCallback(ContractOperationStatus.INJECTED)
     }
     catch(err) {
+      console.log(err)
       // any error
       statusCallback && statusCallback(ContractOperationStatus.ERROR)
     }

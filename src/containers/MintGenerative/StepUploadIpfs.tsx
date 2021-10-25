@@ -49,7 +49,7 @@ export const StepUploadIpfs: StepComponent = ({ onNext }) => {
 
       <section className={cs(style['btn-cont'])}>
         <Dropzone
-          textDefault="Drop your .zip file here rege"
+          textDefault="Drop your .zip file here (on click to browse)"
           accepted={ZIP_MIMES}
           files={file && [file]}
           onChange={(files) => files && files.length>0 && setFile(files[0])}

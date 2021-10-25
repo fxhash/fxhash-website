@@ -21,6 +21,7 @@
   overflow-wrap: break-word;
   word-break: break-word;
   padding: 0 15px;
+  min-height: 200px;
 
   &:hover {
     box-shadow: 0 0 0px 3px var(--color-white),

@@ -25,7 +25,7 @@ export interface GenerativeTokenMetadata {
   name: string
   description: string
   childrenDescription: string
-  tags: string
+  tags: string[]
   // link to the fixed hash project
   artifactUri: string
   // link to the HQ preview image

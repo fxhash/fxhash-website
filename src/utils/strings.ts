@@ -22,3 +22,7 @@ export function truncateEnd(str: string, maxLength: number, append: string = "..
   }
   return str
 }
+
+export function tagsFromString(str: string): string[] {
+  return str.split(",").map(tag => tag.trim()).filter(tag => tag.length > 0)
+}
