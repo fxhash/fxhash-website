@@ -1,0 +1,22 @@
+.container {
+  width: 100%;
+  background-color: var(--color-warning);
+  height: 40px;
+  display: flex;
+  align-items: center;
+  color: black;
+  font-weight: normal;
+
+  &:hover {
+    font-weight: bold;
+  }
+
+  i {
+    font-size: 28px;
+    margin-right: 10px;
+  }
+
+  span {
+    font-size: 0.8rem;
+  }
+}
