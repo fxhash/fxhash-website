@@ -18,7 +18,7 @@
     border: 1px solid var(--color-white);
   }
 
-  &:disabled {
+  &:disabled, &.disabled {
     pointer-events: none;
     background-color: var(--color-gray);
     opacity: 0.7;

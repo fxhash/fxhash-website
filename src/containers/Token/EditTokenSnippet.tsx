@@ -16,6 +16,8 @@ export function EditTokenSnippet({ token }: Props) {
   const userCtx = useContext(UserContext)
   const user = userCtx.user!
 
+  if (!user || !token) return null
+
   return user.id === token.author.id ? (
     <div className={cs(style.container)}>
       <Link href={`/edit-generative/${token.id}`} passHref>

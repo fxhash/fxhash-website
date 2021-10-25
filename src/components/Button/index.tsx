@@ -39,7 +39,10 @@ export const Button = React.forwardRef<HTMLButtonElement & HTMLAnchorElement, Pr
         style[`icon-${iconSide}`],
         style[`color-${color}`],
         style[`state-${state}`],
-        className
+        className,
+        {
+          [style.disabled]: disabled
+        }
       )}
       // @ts-ignore
       disabled={disabled}
