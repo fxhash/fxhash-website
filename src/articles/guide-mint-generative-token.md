@@ -142,7 +142,7 @@ All the instructions are in the README in the [Github repository](https://github
 
 ## Using our simplest boilerplate
 
-We also provide a simpler boilerplate, with a single html and javascript file. The snippet is already injected, but that's it.
+We also provide a [simpler boilerplate](https://github.com/fxhash/fxhash-simple-boilerplate), with a single html and javascript file. The snippet is already injected, but that's it.
 
 ## Starting from scratch
 
