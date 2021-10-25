@@ -82,7 +82,6 @@ export class WalletManager {
   }
 
   async connect(): Promise<string|false> {
-    console.log("connect")
     try {
       await this.getBeaconWallet().requestPermissions({
         network: {
@@ -93,8 +92,6 @@ export class WalletManager {
   
       const userAddress = await this.getBeaconWallet().getPKH()
       this.tezosToolkit.setWalletProvider(this.getBeaconWallet())
-
-      console.log("enter here")
 
       return userAddress
     }
@@ -212,6 +209,7 @@ export class WalletManager {
       statusCallback && statusCallback(ContractOperationStatus.INJECTED)
     }
     catch(err) {
+      console.log(err)
       // any error
       statusCallback && statusCallback(ContractOperationStatus.ERROR)
     }

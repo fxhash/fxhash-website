@@ -32,7 +32,7 @@ export function EditTokenSnippet({ token }: Props) {
         {token.enabled ? "enabled" : "disabled"}
       </strong>
       <span>
-        <strong>price:</strong> {displayMutez(token.price, 3)}tez
+        <strong>price:</strong> {displayMutez(token.price)}tez
       </span>
       <span>
         <strong>royalties:</strong> {displayRoyalties(token.royalties)}
