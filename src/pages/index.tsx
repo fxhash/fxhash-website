@@ -25,7 +25,7 @@ import { TitleHyphen } from '../components/Layout/TitleHyphen'
 
 
 interface Props {
-  randomGenerativeToken: GenerativeToken
+  randomGenerativeToken: GenerativeToken | null
   generativeTokens: GenerativeToken[]
   offers: Offer[]
 }
@@ -55,50 +55,54 @@ const Home: NextPage<Props> = ({
 
       <Spacing size="6x-large" />
 
-      <section className={cs(styles['random-artwork'], layout['padding-big'])}>
-        <div className={cs(styles['artwork-infos'])}>
-          <span className={cs(styles['section-subtitle'], Colors.gray)}>— a random artwork</span>
-          <Spacing size="4x-large" />
-          <div>
-            <h3>{ randomGenerativeToken.name }</h3>
-            <Spacing size="x-small"/>
-            <UserBadge 
-              user={randomGenerativeToken.author}
-              size="big"
-            />
-            <Spacing size="x-small"/>
+      {randomGenerativeToken && (
+        <>
+          <section className={cs(styles['random-artwork'], layout['padding-big'])}>
+            <div className={cs(styles['artwork-infos'])}>
+              <span className={cs(styles['section-subtitle'], Colors.gray)}>— a random artwork</span>
+              <Spacing size="4x-large" />
+              <div>
+                <h3>{ randomGenerativeToken.name }</h3>
+                <Spacing size="x-small"/>
+                <UserBadge 
+                  user={randomGenerativeToken.author}
+                  size="big"
+                />
+                <Spacing size="x-small"/>
 
-            <div className={cs(styles['artwork-details'])}>
-              <MintProgress
-                balance={randomGenerativeToken.balance}
-                supply={randomGenerativeToken.supply}
-              />
+                <div className={cs(styles['artwork-details'])}>
+                  <MintProgress
+                    balance={randomGenerativeToken.balance}
+                    supply={randomGenerativeToken.supply}
+                  />
 
-              <Spacing size="large"/>
+                  <Spacing size="large"/>
 
-              <p>{nl2br(randomGenerativeToken.metadata.description)}</p>
+                  <p>{nl2br(randomGenerativeToken.metadata.description)}</p>
 
-              <Spacing size="large"/>
+                  <Spacing size="large"/>
 
-              <Link href={`/generative/${randomGenerativeToken.id}`} passHref>
-                <Button 
-                  isLink={true}
-                  iconComp={<i aria-hidden className="fas fa-eye"/>}
-                >
-                  open Generative Token
-                </Button>
-              </Link>
+                  <Link href={`/generative/${randomGenerativeToken.id}`} passHref>
+                    <Button 
+                      isLink={true}
+                      iconComp={<i aria-hidden className="fas fa-eye"/>}
+                    >
+                      open Generative Token
+                    </Button>
+                  </Link>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
 
-        <div className={cs(styles['artwork-container'])}>
-          <ArtworkPreview ipfsUri={randomGenerativeToken.metadata?.displayUri} /> 
-        </div>
-      </section>
+            <div className={cs(styles['artwork-container'])}>
+              <ArtworkPreview ipfsUri={randomGenerativeToken.metadata?.displayUri} /> 
+            </div>
+          </section>
 
-      <Spacing size="6x-large" />
-      <Spacing size="6x-large" />
+          <Spacing size="6x-large" />
+          <Spacing size="6x-large" />
+        </>
+      )}
 
       <section>
         <SectionHeader>
