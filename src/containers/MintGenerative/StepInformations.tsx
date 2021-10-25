@@ -23,7 +23,7 @@ import { UserContext } from "../UserProvider"
 import { useContractCall } from "../../utils/hookts"
 import { MintGenerativeCallData } from "../../types/ContractCalls"
 import { ContractFeedback } from "../../components/Feedback/ContractFeedback"
-import { getMutezDecimalsNb } from "../../utils/math"
+import { getMutezDecimalsNb, isPositive } from "../../utils/math"
 import { tagsFromString } from "../../utils/strings"
 
 
@@ -53,20 +53,34 @@ const validation = Yup.object().shape({
     .max(2500, "2500 editions max.")
     .required("Required"),
   price: Yup.number()
-    .positive()
     .when("enabled", {
       is: true,
-      then: Yup.number().required("Price is required if token is enabled"),
-      otherwise: Yup.number().positive()
+      then: Yup.number()
+        .typeError("Valid number plz")
+        .required("Price is required if token is enabled")
+        .test(
+          "positive",
+          "Price must be >= 0",
+          isPositive
+        ),
+      otherwise: Yup.number()
+        .typeError("Valid number plz")
+        .test(
+          "positive",
+          "Price must be >= 0",
+          isPositive
+        )
     }),
   royalties: Yup.number()
     .when("enabled", {
       is: true,
       then: Yup.number()
+        .typeError("Valid number plz")
         .required("Royalties are required if token is enabled")
         .min(10, "Min 10%")
         .max(25, "Max 25%"),
-      otherwise: Yup.number().positive()
+      otherwise: Yup.number()
+        .typeError("Valid number plz")
         .min(10, "Min 10%")
         .max(25, "Max 25%")
     })
@@ -254,14 +268,12 @@ export const StepInformations: StepComponent = ({ state, onNext }) => {
                 </label>
                 <InputTextUnit
                   unit="tez"
-                  type="number"
+                  type="text"
                   name="price"
-                  min={0}
                   value={values.price||""}
                   onChange={handleChange}
                   onBlur={handleBlur}
                   error={!!errors.price}
-                  step={0.0000001}
                 />
               </Field>
 
@@ -272,14 +284,12 @@ export const StepInformations: StepComponent = ({ state, onNext }) => {
                 </label>
                 <InputTextUnit
                   unit="%"
-                  type="number"
+                  type="text"
                   name="royalties"
-                  min={0}
                   value={values.royalties||""}
                   onChange={handleChange}
                   onBlur={handleBlur}
                   error={!!errors.royalties}
-                  step={0.1}
                 />
               </Field>
 

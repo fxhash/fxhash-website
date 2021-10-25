@@ -6,3 +6,7 @@ export function getMutezDecimalsNb(x: number): number {
   const st = (mu/1000000).toString()
   return st.split(".").pop()?.length || 0
 }
+
+export function isPositive(value: number|undefined): boolean {
+  return typeof(value) !== "undefined" ? value >= 0 : true
+}

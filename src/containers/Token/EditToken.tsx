@@ -18,6 +18,7 @@ import { Button } from "../../components/Button"
 import { useContractCall } from "../../utils/hookts"
 import { UpdateGenerativeCallData } from "../../types/ContractCalls"
 import { TitleHyphen } from "../../components/Layout/TitleHyphen"
+import { isPositive } from "../../utils/math"
 
 
 interface Props {
@@ -26,20 +27,34 @@ interface Props {
 
 const validation = Yup.object().shape({
   price: Yup.number()
-    .positive()
     .when("enabled", {
       is: true,
-      then: Yup.number().required("Price is required if token is enabled"),
-      otherwise: Yup.number().positive()
+      then: Yup.number()
+        .typeError("Valid number plz")
+        .required("Price is required if token is enabled")
+        .test(
+          "positive",
+          "Price must be >= 0",
+          isPositive
+        ),
+      otherwise: Yup.number()
+        .typeError("Valid number plz")
+        .test(
+          "positive",
+          "Price must be >= 0",
+          isPositive
+        )
     }),
   royalties: Yup.number()
     .when("enabled", {
       is: true,
       then: Yup.number()
+        .typeError("Valid number plz")
         .required("Royalties are required if token is enabled")
         .min(10, "Min 10%")
         .max(25, "Max 25%"),
       otherwise: Yup.number().positive()
+        .typeError("Valid number plz")
         .min(10, "Min 10%")
         .max(25, "Max 25%")
     })
@@ -107,9 +122,8 @@ export function EditToken({ token }: Props) {
                   </label>
                   <InputTextUnit
                     unit="tez"
-                    type="number"
+                    type="text"
                     name="price"
-                    min={0}
                     value={values.price||""}
                     onChange={handleChange}
                     onBlur={handleBlur}
@@ -124,9 +138,8 @@ export function EditToken({ token }: Props) {
                   </label>
                   <InputTextUnit
                     unit="%"
-                    type="number"
+                    type="text"
                     name="royalties"
-                    min={0}
                     value={values.royalties||""}
                     onChange={handleChange}
                     onBlur={handleBlur}
