@@ -38,7 +38,7 @@ export class WalletManager {
       name: "fxhash",
       iconUrl: 'https://tezostaquito.io/img/favicon.png',
       // @ts-ignore
-      preferredNetwork: "florencenet",
+      preferredNetwork: process.env.NEXT_PUBLIC_TZ_NET,
     })
   }
 
@@ -87,7 +87,7 @@ export class WalletManager {
       await this.getBeaconWallet().requestPermissions({
         network: {
           // @ts-ignore
-          type: "florencenet"
+          type: process.env.NEXT_PUBLIC_TZ_NET
         }
       })
   
