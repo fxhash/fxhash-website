@@ -2,8 +2,6 @@ import { forwardRef, useEffect, useState, useRef, useImperativeHandle } from 're
 import style from './Artwork.module.scss'
 import cs from "classnames"
 import useAsyncEffect from "use-async-effect"
-import { fetchRetry } from '../../utils/network'
-import { LoaderBlock } from '../Layout/LoaderBlock'
 import { SandboxFiles } from '../../types/Sandbox'
 
 
@@ -52,8 +50,8 @@ export const SandboxPreview = forwardRef<ArtworkIframeRef, Props>(({
         data: {
           id: id,
           referrer: {
-            base: "http://localhost:3000/sandbox/preview.html",
-            root: "http://localhost:3000/sandbox/"
+            base: `${location.origin}/sandbox/preview.html`,
+            root: `${location.origin}/sandbox/`
           }
         }
       })
@@ -74,7 +72,7 @@ export const SandboxPreview = forwardRef<ArtworkIframeRef, Props>(({
   // the URL of the iframe gets updated whenever ID / hash changes
   useEffect(() => {
     if (iframeRef.current && id !== "0") {
-      const previewUrl = `http://localhost:3000/sandbox/preview.html?id=${id}&fxhash=${hash}`
+      const previewUrl = `${location.origin}/sandbox/preview.html?id=${id}&fxhash=${hash}`
       // load the sandbox preview into the iframe, then service workers do the job
       iframeRef.current.src = previewUrl
       onUrlUpdate && onUrlUpdate(previewUrl)
