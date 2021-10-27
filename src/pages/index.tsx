@@ -40,7 +40,7 @@ const Home: NextPage<Props> = ({
       <Head>
         <title>fxhash — home</title>
         <meta key="og:title" property="og:title" content="fxhash — Generative Art on the Blockchain"/> 
-        <meta key="description" name="description" content="fxhash is a platform to mint and collect Generative Tokens on the Tezos blockchain"/>
+        <meta key="description" name="description" content="fxhash is an open platform to mint and collect Generative Tokens on the Tezos blockchain"/>
         <meta key="og:description" property="og:description" content="fxhash is a platform to mint and collect Generative Tokens on the Tezos blockchain"/>
         <meta key="og:type" property="og:type" content="website"/>
         <meta key="og:image" property="og:image" content="https://www.fxhash.xyz/images/og/og1.jpg"/>
@@ -49,7 +49,7 @@ const Home: NextPage<Props> = ({
       <Spacing size="3x-large" />
       <section className={cs(styles.presentation, layout['padding-small'])}>
         <h1 className={cs(Text.h3)}>
-          fxhash is a plateform to <span className={cs(Colors.primary)}>create</span> and <span className={cs(Colors.secondary)}>collect</span> generative NFTs on the tezos blockchain
+          fxhash is an open platform to <span className={cs(Colors.primary)}>create</span> and <span className={cs(Colors.secondary)}>collect</span> generative NFTs on the tezos blockchain
         </h1>
       </section>
 

@@ -6,7 +6,7 @@ description: 'About the beta mode'
 
 
 Hey, this is [@ciphrd](https://twitter.com/ciphrd) the author of fxhash. fxhash is currently in beta mode. These are a few notes to inform you about:
- - how to help in improving the plateform (bug reports, feature requests, suggestions)
+ - how to help in improving the platform (bug reports, feature requests, suggestions)
  - the risks of using the platform in its current state
 
 

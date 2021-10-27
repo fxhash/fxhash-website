@@ -57,7 +57,7 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
       </p>
       <p>
         On the next step, you will configure how previews will be generated each time your token is collected.<br/>
-        <strong>Use this step to find a hash you want to use for the thumbnail of the project on the plateform.</strong>
+        <strong>Use this step to find a hash you want to use for the thumbnail of the project on the platform.</strong>
       </p>
 
       <Spacing size="5x-large"/>
