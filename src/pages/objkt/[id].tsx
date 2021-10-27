@@ -22,6 +22,9 @@ import { OfferControl } from '../../containers/Objkt/OfferControl'
 import { Collect } from '../../containers/Objkt/Collect'
 import { truncateEnd } from '../../utils/strings'
 import { TitleHyphen } from '../../components/Layout/TitleHyphen'
+import { ArtworkIframe, ArtworkIframeRef } from '../../components/Artwork/PreviewIframe'
+import { getPinataUrlFromCid, ipfsUrlToCid } from '../../utils/ipfs'
+import { useRef } from 'react'
 
 
 interface Props {
@@ -33,6 +36,13 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
   const creator: User = objkt.issuer.author
   // get the display url for og:image
   const displayUrl = objkt.metadata?.displayUri && ipfsDisplayUrl(objkt.metadata?.displayUri)
+
+  const iframeRef = useRef<ArtworkIframeRef>(null)
+  const reload = () => {
+    if (iframeRef.current) {
+      iframeRef.current.reloadIframe()
+    }
+  }
 
   return (
     <>
@@ -95,19 +105,38 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
         </div>
 
         <div className={cs(style['presentation-artwork'])}>
-          <ArtworkPreview ipfsUri={objkt.metadata?.displayUri} />
-          <Spacing size="x-small"/>
-          <Link href={ipfsDisplayUrl(objkt.metadata?.artifactUri)} passHref>
+        <div className={cs(style['preview-container-auto'])}>
+            <div className={cs(style['preview-wrapper'])}>
+              <ArtworkIframe 
+                ref={iframeRef}
+                url={getPinataUrlFromCid(ipfsUrlToCid(objkt.metadata?.artifactUri || ""))}
+              />
+            </div>
+          </div>
+
+          <Spacing size="8px"/>
+
+          <div className={cs(layout['x-inline'])}>
             <Button
-              isLink={true}
               size="small"
-              iconComp={<i aria-hidden className="fas fa-external-link-alt"></i>}
-              // @ts-ignore
-              target="_blank"
+              iconComp={<i aria-hidden className="fas fa-redo"/>}
+              iconSide="right"
+              onClick={reload}
             >
-              open live
+              reload
             </Button>
-          </Link>
+            <Link href={ipfsDisplayUrl(objkt.metadata?.artifactUri)} passHref>
+              <Button
+                isLink={true}
+                size="small"
+                iconComp={<i aria-hidden className="fas fa-external-link-alt"></i>}
+                // @ts-ignore
+                target="_blank"
+              >
+                open live
+              </Button>
+            </Link>
+          </div>
         </div>
       </section>
 

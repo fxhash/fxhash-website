@@ -2,6 +2,10 @@ export function getIpfsIoUrl(cid: string) {
   return `https://ipfs.io/ipfs/${cid}`
 }
 
+export function getPinataUrlFromCid(cid: string): string {
+  return `https://gateway.pinata.cloud/ipfs/${cid}`
+}
+
 export function getIpfsSlash(cid: string): string {
   return `ipfs://${cid}`
 }
@@ -12,6 +16,6 @@ export function getIpfsSlash(cid: string): string {
  */
 export function ipfsUrlToCid(url: string): string {
   return url
-    ? url.substr(8)
+    ? url.substr(7)
     : ""
 }

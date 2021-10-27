@@ -25,6 +25,9 @@ import { EditTokenSnippet } from '../../containers/Token/EditTokenSnippet'
 import { UserGuard } from '../../components/Guards/UserGuard'
 import { truncateEnd } from '../../utils/strings'
 import { TitleHyphen } from '../../components/Layout/TitleHyphen'
+import { ArtworkIframe, ArtworkIframeRef } from '../../components/Artwork/PreviewIframe'
+import { getIpfsIoUrl, getPinataUrlFromCid, ipfsUrlToCid } from '../../utils/ipfs'
+import { useRef } from 'react'
 
 
 interface Props {
@@ -34,6 +37,13 @@ interface Props {
 const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
   const hasCollection = token.objkts?.length > 0
   const collectionUrl = `/generative/${token.id}/collection`
+  const iframeRef = useRef<ArtworkIframeRef>(null)
+
+  const reload = () => {
+    if (iframeRef.current) {
+      iframeRef.current.reloadIframe()
+    }
+  }
 
   // get the display url for og:image
   const displayUrl = token.metadata?.displayUri && ipfsDisplayUrl(token.metadata?.displayUri)
@@ -98,19 +108,39 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
         </div>
 
         <div className={cs(style['presentation-artwork'])}>
-          <ArtworkPreview ipfsUri={token.metadata?.displayUri} />
-          <Spacing size="x-small"/>
-          <Link href={ipfsDisplayUrl(token.metadata?.artifactUri)} passHref>
+          {/* <ArtworkPreview ipfsUri={token.metadata?.displayUri} /> */}
+          <div className={cs(style['preview-container-auto'])}>
+            <div className={cs(style['preview-wrapper'])}>
+              <ArtworkIframe 
+                ref={iframeRef}
+                url={getPinataUrlFromCid(ipfsUrlToCid(token.metadata.artifactUri))}
+              />
+            </div>
+          </div>
+
+          <Spacing size="8px"/>
+
+          <div className={cs(layout['x-inline'])}>
             <Button
-              isLink={true}
               size="small"
-              iconComp={<i aria-hidden className="fas fa-external-link-alt"></i>}
-              // @ts-ignore
-              target="_blank"
+              iconComp={<i aria-hidden className="fas fa-redo"/>}
+              iconSide="right"
+              onClick={reload}
             >
-              open live
+              reload
             </Button>
-          </Link>
+            <Link href={ipfsDisplayUrl(token.metadata?.artifactUri)} passHref>
+              <Button
+                isLink={true}
+                size="small"
+                iconComp={<i aria-hidden className="fas fa-external-link-alt"></i>}
+                // @ts-ignore
+                target="_blank"
+              >
+                open live
+              </Button>
+            </Link>
+          </div>
         </div>
       </section>
 

@@ -67,6 +67,20 @@
   padding-top: 100%;
 }
 
+.preview-container-auto {
+  width: 100%;
+  padding-top: 100%;
+  position: relative;
+
+  .preview-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+}
+
 .artwork-details {
   width: min(400px, 100%);
   display: flex;
