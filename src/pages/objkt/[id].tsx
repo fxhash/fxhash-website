@@ -42,7 +42,7 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
         <meta key="description" name="description" content={truncateEnd(objkt.metadata?.description || "", 200, "")}/>
         <meta key="og:description" property="og:description" content={truncateEnd(objkt.metadata?.description || "", 200, "")}/>
         <meta key="og:type" property="og:type" content="website"/>
-        <meta key="og:image" property="og:image" content={displayUrl || "/images/og/og1.jpg"}/>
+        <meta key="og:image" property="og:image" content={displayUrl || "https://www.fxhash.xyz/images/og/og1.jpg"}/>
       </Head>
 
       <Spacing size="6x-large" />

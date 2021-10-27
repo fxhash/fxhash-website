@@ -43,7 +43,7 @@ const Home: NextPage<Props> = ({
         <meta key="description" name="description" content="fxhash is a platform to mint and collect Generative Tokens on the Tezos blockchain"/>
         <meta key="og:description" property="og:description" content="fxhash is a platform to mint and collect Generative Tokens on the Tezos blockchain"/>
         <meta key="og:type" property="og:type" content="website"/>
-        <meta key="og:image" property="og:image" content="/images/og/og1.jpg"/>
+        <meta key="og:image" property="og:image" content="https://www.fxhash.xyz/images/og/og1.jpg"/>
       </Head>
 
       <Spacing size="3x-large" />

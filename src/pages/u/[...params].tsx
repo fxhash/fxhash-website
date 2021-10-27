@@ -38,7 +38,7 @@ const UserPage: NextPage<Props> = ({ user }) => {
         <meta key="description" property="description" content={truncateEnd(user.metadata?.description || "", 200, "")}/>
         <meta key="og:description" property="og:description" content={truncateEnd(user.metadata?.description || "", 200, "")}/>
         <meta key="og:type" property="og:type" content="website"/>
-        <meta key="og:image" property="og:image" content={ogImageUrl || "/images/og/og1.jpg"}/>
+        <meta key="og:image" property="og:image" content={ogImageUrl || "https://www.fxhash.xyz/images/og/og1.jpg"}/>
       </Head>
 
       <Spacing size="6x-large" />

@@ -46,7 +46,7 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
         <meta key="description" name="description" content={truncateEnd(token.metadata?.description || "", 200, "")}/>
         <meta key="og:description" property="og:description" content={truncateEnd(token.metadata?.description || "", 200, "")}/>
         <meta key="og:type" property="og:type" content="website"/>
-        <meta key="og:image" property="og:image" content={displayUrl || "/images/og/og1.jpg"}/>
+        <meta key="og:image" property="og:image" content={displayUrl || "https://www.fxhash.xyz/images/og/og1.jpg"}/>
       </Head>
 
       <Spacing size="6x-large" />

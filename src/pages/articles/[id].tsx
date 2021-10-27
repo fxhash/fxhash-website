@@ -24,7 +24,7 @@ const ArticlePage: NextPage<Props> = ({ article }) => {
         <meta key="description" name="description" content={truncateEnd(article.description || "", 200, "")}/>
         <meta key="og:description" property="og:description" content={truncateEnd(article.description || "", 200, "")}/>
         <meta key="og:type" property="og:type" content="article"/>
-        <meta key="og:image" property="og:image" content="/images/og/og1.jpg"/>
+        <meta key="og:image" property="og:image" content="https://www.fxhash.xyz/images/og/og1.jpg"/>
         <link rel="stylesheet" href="/highlight/dracula.css"/>
       </Head>
 

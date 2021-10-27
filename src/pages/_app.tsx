@@ -16,7 +16,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <meta key="description" name="description" content="fxhash is a platform to mint Generative Tokens on the Tezos blockchain"/>
         <meta key="og:description" property="og:description" content="fxhash is a platform to mint Generative Tokens on the Tezos blockchain"/>
         <meta key="og:type" property="og:type" content="website"/>
-        <meta key="og:image" property="og:image" content="/images/og/og1.jpg"/>
+        <meta key="og:image" property="og:image" content="https://www.fxhash.xyz/images/og/og1.jpg"/>
 
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/>
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"/>
