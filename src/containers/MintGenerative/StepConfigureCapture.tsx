@@ -14,8 +14,18 @@ import { CaptureErrorEnum, CaptureErrorResponse, CaptureResponse, PreviewError, 
 import { getIpfsIoUrl } from "../../utils/ipfs"
 import { Error } from "../../components/Error/Error"
 import { getCaptureError, getPreviewError } from "../../utils/errors"
+import { CaptureSettings } from "../../types/Mint"
+import { InputCaptureSettings } from "../../components/Input/CaptureSettngs"
+import { validateCaptureSettings } from "../../utils/validations"
 
 export const StepConfigureCapture: StepComponent = ({ onNext, state }) => {
+  const [settings, setSettings] = useState<CaptureSettings>({
+    mode: null,
+    delay: 2,
+    resX: 800,
+    resY: 800
+  })
+
   const [time, setTime] = useState<number>(2)
   const [res, setRes] = useState<Vec2>({ x: 1024, y: 1024 })
   const [previewUrl, setPreviewUrl] = useState<string|null>(null)
@@ -39,9 +49,11 @@ export const StepConfigureCapture: StepComponent = ({ onNext, state }) => {
   const captureTest = () => {
     post({
       url: getIpfsIoUrl(state.cidFixedHash!),
-      resX: res.x,
-      resY: res.y,
-      delay: time * 1000
+      mode: settings.mode,
+      canvasSelector: settings.canvasSelector,
+      resX: settings.resX,
+      resY: settings.resY,
+      delay: settings.delay * 1000,
     })
   }
 
@@ -86,34 +98,17 @@ export const StepConfigureCapture: StepComponent = ({ onNext, state }) => {
   return (
     <>
       <p>
-        When collectors will <strong>mint a token from your Generative Token</strong>, fxhash will generate a thumbnail to go with their Token. <br/>
-        You need to configure how much time after your page is loaded fxhash will wait before taking the capture.
+        When collectors will <strong>mint a token from your Generative Token</strong>, fxhash will generate a preview image to go with their Token. <br/>
+        You need to configure how this preview will be taken by fxhash capture module.
       </p>
 
       <Spacing size="5x-large"/>
 
       <div className={cs(styleC.container)}>
         <div className={cs(style.inputs)}>
-          <h5>Time before capture is taken</h5>
-          <p>Keep in mind that collectors will have to wait for the capture before their token is minted.</p>
-          <SliderWithText
-            min={0.1}
-            max={40}
-            step={0.1}
-            value={time}
-            onChange={setTime}
-          />
-
-          <Spacing size="3x-large"/>
-
-          <h5>Capture resolution</h5>
-          <p>A browser with this resolution will be spawned to take a fullscreen capture. [256; 2048]</p>
-          <InputResolution
-            value={res}
-            onChange={setRes}
-            min={256}
-            max={2048}
-            className={cs(style.resolution)}
+          <InputCaptureSettings 
+            settings={settings}
+            onChange={setSettings}
           />
 
           <Spacing size="3x-large"/>
@@ -131,6 +126,7 @@ export const StepConfigureCapture: StepComponent = ({ onNext, state }) => {
             style={{
               alignSelf: "center"
             }}
+            disabled={!validateCaptureSettings(settings)}
           >
             test capture
           </Button>

@@ -8,10 +8,18 @@ export interface GenerativeTokenInformations {
   royaties?: number
 }
 
+export enum CaptureMode {
+  CANVAS          = "CANVAS",
+  CUSTOM          = "CUSTOM",
+  VIEWPORT        = "VIEWPORT",
+}
+
 export interface CaptureSettings {
+  mode: CaptureMode | null,
+  canvasSelector?: string,
   delay: number,
-  resX: number,
-  resY: number
+  resX?: number,
+  resY?: number
 }
 
 export interface MintGenerativeData {

@@ -104,6 +104,15 @@ Once you have your ZIP file, you can check that it behaves properly by uploading
 Once you have properly tested your project, you can [mint](/mint-generative) it by following the instructions on the page.
 
 
+# How to publish (mint) a GT
+
+## Sync your wallet
+
+First of all, you will need...
+
+## Configure capture settings
+
+
 # Guidelines
 
 *Some guidelines must be followed to ensure your GT works properly*.
