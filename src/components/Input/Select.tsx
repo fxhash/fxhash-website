@@ -6,6 +6,7 @@ import { InputHTMLAttributes } from "react"
 interface IOptions {
   label: string
   value: any
+  disabled?: boolean
 }
 
 interface Props extends InputHTMLAttributes<HTMLSelectElement> {
@@ -28,7 +29,7 @@ export function Select({
       <select value={value} onChange={(evt) => onChange(evt.target.value)} {...props}>
         {placeholder && <option value="" disabled selected>{ placeholder }</option>}
         {options.map(opt => (
-          <option key={opt.value} value={opt.value}>
+          <option key={opt.value} value={opt.value} disabled={!!opt.disabled}>
             { opt.label }
           </option>
         ))}

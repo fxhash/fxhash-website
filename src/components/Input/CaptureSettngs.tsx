@@ -16,12 +16,13 @@ const modeOptions = [
     label: "From <canvas>"
   },
   {
-    value: CaptureMode.CUSTOM,
-    label: "Custom export function"
-  },
-  {
     value: CaptureMode.VIEWPORT,
     label: "Viewport capture"
+  },
+  {
+    value: CaptureMode.CUSTOM,
+    label: "Custom export function",
+    disabled: true
   },
 ]
 
