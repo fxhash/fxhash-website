@@ -1,3 +1,5 @@
+import { CaptureMode } from "./Mint";
+
 export enum ProfileUploadError {
   UNKNOWN =             "UNKNOWN",
   WRONG_FORMAT =        "WRONG_FORMAT",
@@ -56,9 +58,11 @@ export interface PreviewResponse {
   cidPreview: string
   cidThumbnail: string
   authenticationHash: string
+  mode: CaptureMode,
   resX: number,
   resY: number,
-  delay: number
+  delay: number,
+  canvasSelector: string
 }
 
 export enum MetadataError {

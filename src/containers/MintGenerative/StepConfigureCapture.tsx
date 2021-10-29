@@ -25,9 +25,6 @@ export const StepConfigureCapture: StepComponent = ({ onNext, state }) => {
     resX: 800,
     resY: 800
   })
-
-  const [time, setTime] = useState<number>(2)
-  const [res, setRes] = useState<Vec2>({ x: 1024, y: 1024 })
   const [previewUrl, setPreviewUrl] = useState<string|null>(null)
 
   const { data, loading, error, post } = 
@@ -58,14 +55,18 @@ export const StepConfigureCapture: StepComponent = ({ onNext, state }) => {
   }
 
   const sendCapture = () => {
-    const F = new FormData()
-    F.append("resX", ""+res.x)
-    F.append("resY", ""+res.y)
-    F.append("delay", ""+(time*1000))
-    F.append("cidParams", state.cidUrlParams!)
-    F.append("cidStatic", state.cidFixedHash!)
-    F.append("authHash", state.authHash2!)
-    previewPost(F)
+    if (validateCaptureSettings(settings)) {
+      previewPost({
+        mode: settings.mode,
+        resX: settings.resX,
+        resY: settings.resY,
+        delay: settings.delay*1000,
+        canvasSelector: settings.canvasSelector,
+        cidParams: state.cidUrlParams,
+        cidStatic: state.cidFixedHash,
+        authHash: state.authHash2
+      })
+    }
   }
   
   useEffect(() => {
@@ -84,9 +85,11 @@ export const StepConfigureCapture: StepComponent = ({ onNext, state }) => {
     if (safeDataPreview) {
       onNext({
         captureSettings: {
+          mode: safeDataPreview.mode,
           resX: safeDataPreview.resX,
           resY: safeDataPreview.resY,
           delay: safeDataPreview.delay,
+          canvasSelector: safeDataPreview.canvasSelector
         },
         cidPreview: safeDataPreview.cidPreview,
         cidThumbnail: safeDataPreview.cidThumbnail,
