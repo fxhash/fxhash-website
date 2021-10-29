@@ -15,7 +15,7 @@ export function ArtworkPreview({
   const U = url || (ipfsUri && ipfsDisplayUrl(ipfsUri)) || null
   return (
     <div className={style.container}>
-      {U && <img src={U} alt={alt} />}
+      {U && <img src={U} alt={alt} loading="lazy" />}
     </div>
   )
 }
