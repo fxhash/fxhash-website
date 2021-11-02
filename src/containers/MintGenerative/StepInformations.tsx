@@ -60,14 +60,14 @@ const validation = Yup.object().shape({
         .required("Price is required if token is enabled")
         .test(
           "positive",
-          "Price must be >= 0",
+          "Price must be >= 0.1",
           isPositive
         ),
       otherwise: Yup.number()
         .typeError("Valid number plz")
         .test(
           "positive",
-          "Price must be >= 0",
+          "Price must be >= 0.1",
           isPositive
         )
     }),

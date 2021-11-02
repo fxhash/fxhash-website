@@ -1,9 +1,10 @@
 import { FunctionComponent, HTMLAttributes } from "react"
 import style from "./Form.module.scss"
 import cs from "classnames"
+import { FormHTMLAttributes } from "react-router/node_modules/@types/react"
 
 
-type FormProps = HTMLAttributes<HTMLFormElement> 
+type FormProps = FormHTMLAttributes<HTMLFormElement> 
 
 /**
  * A generic component to encapsulate form fields
