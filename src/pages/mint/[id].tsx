@@ -38,7 +38,7 @@ const MintPage: NextPage<Props> = ({ token }) => {
 
       <section>
         <SectionHeader>
-          <TitleHyphen>mint from <em>{token.name}</em></TitleHyphen>
+          <TitleHyphen>mint unique <em>{token.name}</em></TitleHyphen>
         </SectionHeader>
 
         <Spacing size="x-large"/>

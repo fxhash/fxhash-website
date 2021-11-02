@@ -12,9 +12,39 @@
   }
 }
 
+@keyframes turn-tiny {
+  0% {
+    transform: rotate(0deg);
+    border-radius: 0;
+  }
+  85% {
+    transform: rotate(400deg);
+    border-radius: 6px;
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 .loader {
-  width: 40px;
-  height: 40px;
   background-color: var(--color-black);
   animation: turn 1.5s ease-in-out 0s infinite forwards;
+
+  &.size_regular {
+    width: 40px;
+    height: 40px;
+  }
+  &.size_tiny {
+    width: 16px;
+    height: 16px;
+    animation-name: turn-tiny;
+  }
+  &.size_small {
+    width: 22px;
+    height: 22px;
+  }
+  &.size_large {
+    width: 60px;
+    height: 60px;
+  }
 }

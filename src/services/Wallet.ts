@@ -190,8 +190,7 @@ export class WalletManager {
       // don't send everyting
       const sendData: Partial<MintCall> = {
         issuer_address: tokenData.issuer_address,
-        issuer_id: tokenData.issuer_id,
-        token_infos: tokenData.token_infos
+        issuer_id: tokenData.issuer_id
       }
   
       // call the contract (open wallet)
@@ -203,10 +202,10 @@ export class WalletManager {
   
       // wait for confirmation
       statusCallback && statusCallback(ContractOperationStatus.WAITING_CONFIRMATION)
-      await opSend.confirmation(2)
+      await opSend.confirmation(1)
   
       // OK, injected
-      statusCallback && statusCallback(ContractOperationStatus.INJECTED)
+      statusCallback && statusCallback(ContractOperationStatus.INJECTED, opSend.opHash)
     }
     catch(err) {
       console.log(err)

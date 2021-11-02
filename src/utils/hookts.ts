@@ -37,6 +37,7 @@ export function useContractCall<T>(contractMethod?: ContractInteractionMethod<T>
   const [loading, setLoading] = useState<boolean>(false)
   const [success, setSuccess] = useState<boolean>(false)
   const [error, setError] = useState<boolean>(false)
+  const [transactionHash, setTransactionHash] = useState<string|null>(null)
   const counter = useRef<number>(0)
   const isMounted = useIsMounted()
 
@@ -44,6 +45,7 @@ export function useContractCall<T>(contractMethod?: ContractInteractionMethod<T>
     setLoading(false)
     setSuccess(false)
     setError(false)
+    setTransactionHash(null)
     setState(ContractOperationStatus.NONE)
   }
 
@@ -51,17 +53,21 @@ export function useContractCall<T>(contractMethod?: ContractInteractionMethod<T>
     setLoading(true)
     setSuccess(false)
     setError(false)
+    setTransactionHash(null)
     setState(ContractOperationStatus.NONE)
     
     // assign the ID to this call and increment it to prevent overlaps
     counter.current++
     const id = counter.current
-    contractMethod && contractMethod(data, (opState) => {
+    contractMethod && contractMethod(data, (opState, opData) => {
       if (counter.current === id && isMounted()) {
         setState(opState)
         if (opState === ContractOperationStatus.INJECTED) {
           setSuccess(true)
           setLoading(false)
+          if (opData) {
+            setTransactionHash(opData)
+          }
         }
         else if (opState === ContractOperationStatus.ERROR) {
           setLoading(false)
@@ -73,6 +79,7 @@ export function useContractCall<T>(contractMethod?: ContractInteractionMethod<T>
 
   return {
     state,
+    transactionHash,
     loading,
     success,
     call,
@@ -141,6 +148,99 @@ export function useMint(id: number): HookMintReturn {
       source.addEventListener("mint-success", successHandler)
       // @ts-ignore
       source.addEventListener("mint-error", errorHandler)
+      
+      return () => {
+        // @ts-ignore
+        source.removeEventListener("progress", progressHandler)
+        // @ts-ignore
+        source.removeEventListener("mint-success", successHandler)
+        // @ts-ignore
+        source.removeEventListener("mint-error", errorHandler)
+        source.close()
+      }
+    }
+  }, [counter])
+
+  return {
+    progress,
+    error,
+    success,
+    loading,
+    data,
+    start
+  }
+}
+
+
+type EventSourceState = "progress" | "error" | "success"
+interface HookEventSourceReturn<T, P, E> {
+  progress: P|null
+  error: E|null
+  success: boolean
+  loading: boolean
+  data: T|null
+  start: () => void
+}
+
+/**
+ * Hook that connects to a Server-Sent Event implementation once the start() method is
+ * called. Listens to "progress", "success" and "error" event types and populate the
+ * variables returned according to the state returned by the SSE.
+ * @param url target URL of the event source (server implementing Server-Sent Events)
+ */
+export function useEventSource<T, P = string, E = string>(
+  url: string, 
+  dataTransform: ((data: string) => any) = (data) => data
+): HookEventSourceReturn<T, P, E> {
+  // the counter is used to keep track of the calls made, prevent overlap
+  const [counter, setCounter] = useState(-1)
+  const [progress, setProgress] = useState<P|null>(null)
+  const [error, setError] = useState<E|null>(null)
+  const [success, setSuccess] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(false)
+  const [data, setData] = useState<T|null>(null)
+
+  const start = () => {
+    setCounter(counter+1)
+  }
+
+  const reset = () => {
+    setProgress(null)
+    setError(null)
+    setSuccess(false)
+    setLoading(false)
+    setData(null)
+  }
+
+  // when counter changes, initiate a new call to the server
+  useEffect(() => {
+    if (counter >= 0) {
+      // clear and start the event source
+      reset()
+      setLoading(true)
+      const source = new EventSource(url)
+
+      const progressHandler = (message: MessageEvent) => {
+        setProgress(dataTransform(message.data))
+      }
+      const errorHandler = (message: MessageEvent) => {
+        setError(message.data)
+        setLoading(false)
+        source.close()
+      }
+      const successHandler = (message: MessageEvent<any>) => {
+        setSuccess(true)
+        setData(JSON.parse(message.data))
+        setLoading(false)
+        source.close()
+      }
+
+      // @ts-ignore
+      source.addEventListener("progress", progressHandler)
+      // @ts-ignore
+      source.addEventListener("success", successHandler)
+      // @ts-ignore
+      source.addEventListener("error", errorHandler)
       
       return () => {
         // @ts-ignore

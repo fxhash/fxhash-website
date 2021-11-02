@@ -99,7 +99,7 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
                     color="secondary"
                     disabled={!token.enabled}
                   >
-                    Mint unique token - {displayMutez(token.price)} tez
+                    Mint unique token — {displayMutez(token.price)} tez
                   </Button>
                 </Link>
               </>

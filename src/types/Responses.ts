@@ -110,3 +110,22 @@ export interface MintResponse {
   cidGenerative: string
   cidPreview: string
 }
+
+export enum SigningState {
+  NONE =                  "NONE",
+  NOT_FOUND =             "NOT_FOUND",
+  QUEUED =                "QUEUED",
+  GENERATING_METADATA =   "GENERATING_METADATA",
+  CALLING_CONTRACT =      "CALLING_CONTRACT",
+  SIGNED =                "SIGNED",
+}
+
+export interface SigningProgress {
+  state: SigningState,
+  extra?: any
+}
+
+export interface SigningData {
+  cidGenerative?: string
+  cidPreview?: string
+}

@@ -7,8 +7,8 @@ import { Formik } from "formik"
 import * as Yup from "yup"
 import useFetch, { CachePolicies } from "use-http"
 import { MetadataError, MetadataResponse } from "../../types/Responses"
-import { GenerativeTokenMetadata } from "../../types/Metadata"
-import { GenTokenInformationsForm } from "../../types/Mint"
+import { CaptureSettings, GenerativeTokenMetadata } from "../../types/Metadata"
+import { CaptureMode, GenTokenInformationsForm } from "../../types/Mint"
 import { Form } from "../../components/Form/Form"
 import { Field } from "../../components/Form/Field"
 import { InputText } from "../../components/Input/InputText"
@@ -105,6 +105,21 @@ export const StepInformations: StepComponent = ({ state, onNext }) => {
     useContractCall<MintGenerativeCallData>(userCtx.walletManager!.mintGenerative)
 
   const uploadInformations = (formInformations: GenTokenInformationsForm) => {
+    const capture: CaptureSettings = {
+      mode: state.captureSettings!.mode!
+    }
+    if (state.captureSettings!.mode === CaptureMode.VIEWPORT) {
+      capture.resolution = {
+        x: state.captureSettings!.resX!,
+        y: state.captureSettings!.resY!,
+      }
+      capture.delay = state.captureSettings!.delay
+    }
+    else if (state.captureSettings!.mode === CaptureMode.CANVAS) {
+      capture.delay = state.captureSettings!.delay
+      capture.canvasSelector = state.captureSettings!.canvasSelector
+    }
+
     const metadata: GenerativeTokenMetadata = {
       name: formInformations.name,
       description: formInformations.description,
@@ -115,13 +130,7 @@ export const StepInformations: StepComponent = ({ state, onNext }) => {
       thumbnailUri: getIpfsSlash(state.cidThumbnail!),
       generativeUri: getIpfsSlash(state.cidUrlParams!),
       authenticityHash: state.authHash3!,
-      capture: {
-        resolution: {
-          x: state.captureSettings!.resX,
-          y: state.captureSettings!.resY
-        },
-        delay: state.captureSettings!.delay
-      },
+      capture,
       symbol: "FXGEN",
       decimals: 0
     }

@@ -8,6 +8,9 @@ export interface Objkt {
   id: number
   issuer: GenerativeToken
   owner?: User|null
+  assigned?: boolean
+  generationHash?: string
+  iteration?: number
   name?: string
   metadata?: ObjktMetadata
   metadataUri: string

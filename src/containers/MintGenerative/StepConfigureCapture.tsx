@@ -163,6 +163,7 @@ export const StepConfigureCapture: StepComponent = ({ onNext, state }) => {
           size="large"
           state={previewLoading ? "loading" : "default"}
           onClick={sendCapture}
+          disabled={!validateCaptureSettings(settings)}
         >
           Next step
         </Button>

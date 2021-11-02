@@ -35,7 +35,6 @@ export interface UpdateGenerativeCallData {
 export interface MintCall {
   issuer_address: string,
   issuer_id: number,
-  token_infos: string,
   price: number
 }
 
