@@ -20,9 +20,9 @@ GT on fxhash can only be written in **html/css/javascript**. Ultimately, GT are 
 
 ## 1. Upload and mint a GT
 
-First, you upload your project and mint it as a Generative Token. This project is a tiny website which sole purpose is to generate some visuals based on 64 characters hexadecimal string. The project needs to be designed in a way that, when the same string is given to it, it **always produces the same output**. However, a different string should produce a **different output**.
+First, you upload your project and mint it as a Generative Token. This project is a tiny website which sole purpose is to generate some visuals based on a 51-characters [base 58](https://en.bitcoinwiki.org/wiki/Base58) encoded number (Tezos transaction hashes have the same signature). The project needs to be designed in a way that, when the same string is given to it, it **always produces the same output**. However, a different string should produce a **different output**.
 
-![Generative Token overview](/images/articles/overview.png)
+![Generative Token overview](/images/articles/overview.jpg)
 
 ## 2. Your project is stored
 
@@ -30,9 +30,9 @@ Your project will be stored on the [IPFS](https://ipfs.io/) network, and then st
 
 ## 3. People mint a unique token from your GT
 
-When a GT is successfully minted on the platform, anyone will be able to mint a unique token from it. When such an event arises, a random 64 characters hexadecimal string is generated and is injected into a new instance of your project. Then, this new *website* is uploaded to IPFS, to finally be minted on the blockchain. This process ensures that each token minted from your GT will be independent, self-contained and immutable. Anyone will get a unique link to a website stored on IPFS.
+When a GT is successfully minted on the platform, anyone will be able to mint a unique token from it. When such an event arises, the hash of the transaction is injected into a new instance of your project. Then, this new *website* is uploaded to IPFS, and is assigned to the metadata of the new Token. This process ensures that each token minted from your GT will be independent, self-contained and immutable. Anyone will get a unique link to a website stored on IPFS.
 
-![Mint overview](/images/articles/mint-desc.png)
+![Mint overview](/images/articles/mint-desc.jpg)
 
 ## 4. Image preview
 
@@ -63,9 +63,12 @@ fxhash requires you to insert the following code snippet in the `<head>` section
 ```html
 <script id="fxhash-snippet">
   //---- do not edit the following code (you can indent as you wish)
-  let charSet='abcdef0123456789'
-  var fxhash=Array(64).fill(0).map(_=>charSet[(Math.random()*charSet.length)|0]).join('')
-  let hashes = fxhash.match(/.{16}/g).map(h => parseInt(h, 16))
+  let alphabet = "123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ"
+  var fxhash = "oo" + Array(49).fill(0).map(_=>alphabet[(Math.random()*alphabet.length)|0]).join('')
+  let b58dec = (str) => str.split('').reduce((p,c,i) => p + alphabet.indexOf(c) * (Math.pow(alphabet.length, str.length-i-1)), 0)
+  let fxhashTrunc = fxhash.slice(2)
+  let regex = new RegExp(".{" + ((fxhashTrunc.length/4)|0) + "}", 'g')
+  let hashes = fxhashTrunc.match(regex).map(h => b58dec(h))
   let sfc32 = (a, b, c, d) => {
     return () => {
       a |= 0; b |= 0; c |= 0; d |= 0
@@ -90,10 +93,10 @@ This snippet serves 2 purposes:
 
 The code snippet exposes 2 variables:
 
-- `fxhash`: a random 64 characters hexadecimal string. This particular variable will be hardcoded with a static hash when someone mints a token from your GT
+- `fxhash`: a random 51 characters base 58 encoded string (designed to have the same signature has a Tezos transaction hash). When someone mints a unique Token from a Generative Token, the transaction hash is hardcoded in place of the code that generates a random one.
 - `fxrand()`: a PRNG function that generates deterministic PRN between 0 and 1. **Simply use it instead of Math.random()**.
 
-**Those 2 variable/function will be globally accessible by your program, and must be used to drive any random process your piece requires**.
+**Those 2 variable/function will be globally accessible by your program, and must be used to drive any random process required by your piece**.
 
 ## Zip, test & mint
 
