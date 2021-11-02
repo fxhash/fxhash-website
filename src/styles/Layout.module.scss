@@ -80,3 +80,7 @@
   display: flex;
   gap: 8px;
 }
+
+.full_body_height {
+  height: calc(100vh - 140px - 50px)
+}

@@ -70,40 +70,44 @@ export function RevealProgress({ hash, onRevealed }: Props) {
   }
 
   return (
-    <div className={cs(style.container)}>
-      <h1 className={cs(colors.success)}>
-        <span>Token is minted </span>
-        <i aria-hidden className="fas fa-glass-cheers"/>
-      </h1>
+    <>
+      <Spacing size="6x-large"/>
+      
+      <div className={cs(style.container)}>
+        <h1 className={cs(colors.success)}>
+          <span>Token is minted </span>
+          <i aria-hidden className="fas fa-glass-cheers"/>
+        </h1>
 
-      <p>fxhash is currently assigning the metadata of your token, please wait a little</p>
+        <p>fxhash is currently assigning the metadata of your token, please wait a little</p>
 
-      <Spacing size="3x-large"/>
+        <Spacing size="3x-large"/>
 
-      <ProgressModule
-        entries={[
-          "contacting signing server",
-          `token will be added to the queue`,
-          `token is in the queue ${progress?.state === SigningState.QUEUED ? `(position: ${progress?.extra?.position || "unknown"})` : ""}`,
-          "server is generating your token metadata",
-          "signing operation is being sent to the blockchain",
-          "token metadata has been signed"
-        ]}
-        position={success ? 100 : getProgressPosition(progress)}
-      />
+        <ProgressModule
+          entries={[
+            "contacting signing server",
+            `token will be added to the queue`,
+            `token is in the queue ${progress?.state === SigningState.QUEUED ? `(position: ${progress?.extra?.position || "unknown"})` : ""}`,
+            "server is generating your token metadata",
+            "signing operation is being sent to the blockchain",
+            "token metadata has been signed"
+          ]}
+          position={success ? 100 : getProgressPosition(progress)}
+        />
 
-      <Spacing size="3x-large"/>
+        <Spacing size="3x-large"/>
 
-      <Button
-        iconComp={<i aria-hidden className="fas fa-arrow-right"/>}
-        iconSide="right"
-        color="secondary"
-        size="large"
-        disabled={!success}
-        onClick={reveal}
-      >
-        reveal your token
-      </Button>
-    </div>
+        <Button
+          iconComp={<i aria-hidden className="fas fa-arrow-right"/>}
+          iconSide="right"
+          color="secondary"
+          size="large"
+          disabled={!success}
+          onClick={reveal}
+        >
+          reveal your token
+        </Button>
+      </div>
+    </>
   )
 }

@@ -41,8 +41,6 @@ const RevealPage: NextPage<Props> = ({ hash, token }) => {
         <meta key="og:image" property="og:image" content="https://www.fxhash.xyz/images/og/og1.jpg"/>
       </Head>
 
-      <Spacing size="6x-large"/>
-
       <section>
         <main className={cs(layout['padding-big'])}>
           {generativeUri && previewUri ? (
