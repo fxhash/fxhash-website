@@ -163,4 +163,4 @@ You can also start from scratch, just remember to inject the snippet in the `<he
 
 # Have fun
 
-We hope this guide will cover most of what you need to know to build tokens on fxhash. If you have any issues, feel free to join our Discord server: [https://discord.gg/nrPXd3Cn](https://discord.gg/nrPXd3Cn)
+We hope this guide will cover most of what you need to know to build tokens on fxhash. If you have any issues, feel free to join our Discord server: [https://discord.gg/nrPXd3Cn](https://discord.com/invite/wzqxfdCKCC)
