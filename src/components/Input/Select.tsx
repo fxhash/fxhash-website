@@ -27,7 +27,7 @@ export function Select({
       [style.placeholder]: value === ""
     })}>
       <select value={value} onChange={(evt) => onChange(evt.target.value)} {...props}>
-        {placeholder && <option value="" disabled selected>{ placeholder }</option>}
+        {placeholder && <option value="" disabled>{ placeholder }</option>}
         {options.map(opt => (
           <option key={opt.value} value={opt.value} disabled={!!opt.disabled}>
             { opt.label }
