@@ -113,7 +113,7 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
             <div className={cs(style['preview-wrapper'])}>
               <ArtworkIframe 
                 ref={iframeRef}
-                url={getIpfsIoUrl(ipfsUrlToCid(token.metadata.artifactUri))}
+                url={getPinataUrlFromCid(ipfsUrlToCid(token.metadata.artifactUri))}
               />
             </div>
           </div>

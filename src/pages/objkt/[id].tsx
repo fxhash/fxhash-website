@@ -109,7 +109,7 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
             <div className={cs(style['preview-wrapper'])}>
               <ArtworkIframe 
                 ref={iframeRef}
-                url={getIpfsIoUrl(ipfsUrlToCid(objkt.metadata?.artifactUri || ""))}
+                url={getPinataUrlFromCid(ipfsUrlToCid(objkt.metadata?.artifactUri || ""))}
               />
             </div>
           </div>
