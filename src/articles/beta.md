@@ -24,5 +24,3 @@ I opened a discord for you to report bugs. I think discord will work best in thi
 ## The risks
 
 The platform was released very recently and so I do not guarantee that every feature will work as intended. The project is not fully stable yet, and so there might be a point where some updates require the contracts to be updated and the data to be fully erased. I'm hoping that contracts won't need to be updated, and it could very well be the case. However I think you need to know about this eventual issue. I think it could be great to keep the prices low so that people can experiment and test your tokens. 
-
-**During the Beta, I will keep all the contracts fees to 0%**. To be transparent, the fees will then be 5% (when unique tokens are generated) and 2.5% (for the marketplace).
