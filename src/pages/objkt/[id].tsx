@@ -23,7 +23,7 @@ import { Collect } from '../../containers/Objkt/Collect'
 import { truncateEnd } from '../../utils/strings'
 import { TitleHyphen } from '../../components/Layout/TitleHyphen'
 import { ArtworkIframe, ArtworkIframeRef } from '../../components/Artwork/PreviewIframe'
-import { getPinataUrlFromCid, ipfsUrlToCid } from '../../utils/ipfs'
+import { getIpfsIoUrl, getPinataUrlFromCid, ipfsUrlToCid } from '../../utils/ipfs'
 import { useRef } from 'react'
 
 
@@ -109,7 +109,7 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
             <div className={cs(style['preview-wrapper'])}>
               <ArtworkIframe 
                 ref={iframeRef}
-                url={getPinataUrlFromCid(ipfsUrlToCid(objkt.metadata?.artifactUri || ""))}
+                url={getIpfsIoUrl(ipfsUrlToCid(objkt.metadata?.artifactUri || ""))}
               />
             </div>
           </div>
