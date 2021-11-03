@@ -240,6 +240,31 @@ export class WalletManager {
   }
 
   /**
+   * Burn a Token
+   */
+  burnGenerativeToken: ContractInteractionMethod<number> = async (tokenID, statusCallback) => {
+    try {
+      // get/create the contract interface
+      const issuerContract = await this.getContract(FxhashContract.ISSUER)
+  
+      // call the contract (open wallet)
+      statusCallback && statusCallback(ContractOperationStatus.CALLING)
+      const opSend = await issuerContract.methodsObject.burn(tokenID).send()
+  
+      // wait for confirmation
+      statusCallback && statusCallback(ContractOperationStatus.WAITING_CONFIRMATION)
+      await opSend.confirmation(2)
+  
+      // OK, injected
+      statusCallback && statusCallback(ContractOperationStatus.INJECTED)
+    }
+    catch(err) {
+      // any error
+      statusCallback && statusCallback(ContractOperationStatus.ERROR)
+    }
+  }
+
+  /**
    * Place an offer on an Objkt
    */
   placeOffer: ContractInteractionMethod<PlaceOfferCall> = async (data, statusCallback) => {

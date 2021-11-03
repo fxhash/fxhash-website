@@ -6,6 +6,7 @@ import Link from "next/link"
 import { Button } from "../../components/Button"
 import { useContext } from "react"
 import { UserContext } from "../UserProvider"
+import { BurnToken } from "./BurnToken"
 
 
 interface Props {
@@ -19,24 +20,28 @@ export function EditTokenSnippet({ token }: Props) {
   if (!user || !token) return null
 
   return user.id === token.author.id ? (
-    <div className={cs(style.container)}>
-      <Link href={`/edit-generative/${token.id}`} passHref>
-        <Button
-          isLink
-          size="small"
-        >
-          edit
-        </Button>
-      </Link>
-      <strong className={cs({ [style.enabled]: token.enabled, [style.disabled]: !token.enabled })}>
-        {token.enabled ? "enabled" : "disabled"}
-      </strong>
-      <span>
-        <strong>price:</strong> {displayMutez(token.price)}tez
-      </span>
-      <span>
-        <strong>royalties:</strong> {displayRoyalties(token.royalties)}
-      </span>
-    </div>
+    <>
+      <div className={cs(style.container)}>
+        <Link href={`/edit-generative/${token.id}`} passHref>
+          <Button
+            isLink
+            size="small"
+          >
+            edit
+          </Button>
+        </Link>
+        <strong className={cs({ [style.enabled]: token.enabled, [style.disabled]: !token.enabled })}>
+          {token.enabled ? "enabled" : "disabled"}
+        </strong>
+        <span>
+          <strong>price:</strong> {displayMutez(token.price)}tez
+        </span>
+        <span>
+          <strong>royalties:</strong> {displayRoyalties(token.royalties)}
+        </span>
+      </div>
+
+      <BurnToken token={token} />
+    </>
   ):null
 }
