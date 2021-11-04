@@ -1,5 +1,5 @@
 import '../styles/globals.scss'
-import type { AppProps } from 'next/app'
+import type { AppProps, NextWebVitalsMetric } from 'next/app'
 import { Layout } from '../components/Layout'
 import { clientSideClient } from '../services/ApolloClient'
 import { ApolloProvider } from '@apollo/client'
@@ -37,4 +37,9 @@ function MyApp({ Component, pageProps }: AppProps) {
     </>
   )
 }
+
+export function reportWebVitals(metric: NextWebVitalsMetric) {
+  console.log(metric)
+}
+
 export default MyApp
