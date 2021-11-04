@@ -60,14 +60,14 @@ const validation = Yup.object().shape({
         .required("Price is required if token is enabled")
         .test(
           "positive",
-          "Price must be >= 0.1",
+          `Price must be >= ${parseFloat(process.env.NEXT_PUBLIC_GT_MIN_PRICE!)}`,
           isPositive
         ),
       otherwise: Yup.number()
         .typeError("Valid number plz")
         .test(
           "positive",
-          "Price must be >= 0.1",
+          `Price must be >= ${parseFloat(process.env.NEXT_PUBLIC_GT_MIN_PRICE!)}`,
           isPositive
         )
     }),

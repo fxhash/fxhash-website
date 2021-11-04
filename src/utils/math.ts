@@ -8,5 +8,5 @@ export function getMutezDecimalsNb(x: number): number {
 }
 
 export function isPositive(value: number|undefined): boolean {
-  return typeof(value) !== "undefined" ? value >= 0.1 : true
+  return typeof(value) !== "undefined" ? value >= parseFloat(process.env.NEXT_PUBLIC_GT_MIN_PRICE!) : true
 }
