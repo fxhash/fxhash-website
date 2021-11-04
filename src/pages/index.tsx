@@ -22,6 +22,7 @@ import { Offer } from '../types/entities/Offer'
 import { ObjktCard } from '../components/Card/ObjktCard'
 import nl2br from 'react-nl2br'
 import { TitleHyphen } from '../components/Layout/TitleHyphen'
+import { PerformanceTimings } from '../utils/performance'
 
 
 interface Props {
@@ -168,6 +169,8 @@ const Home: NextPage<Props> = ({
 }
 
 export async function getServerSideProps() {
+  const perfId = PerformanceTimings.start("index data call")
+
   const { data } = await client.query({
     query: gql`
       query Query ($skip: Int, $take: Int) {
@@ -246,6 +249,8 @@ export async function getServerSideProps() {
       take: 5,
     }
   })
+
+  PerformanceTimings.end(perfId)
 
   return {
     props: {
