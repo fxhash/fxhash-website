@@ -169,8 +169,6 @@ const Home: NextPage<Props> = ({
 }
 
 export async function getServerSideProps() {
-  const perfId = PerformanceTimings.start("index data call")
-
   const { data } = await client.query({
     query: gql`
       query Query ($skip: Int, $take: Int) {
@@ -249,8 +247,6 @@ export async function getServerSideProps() {
       take: 5,
     }
   })
-
-  PerformanceTimings.end(perfId)
 
   return {
     props: {
