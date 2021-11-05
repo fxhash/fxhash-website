@@ -1,6 +1,6 @@
 import style from "./Input.module.scss"
 import cs from "classnames"
-import { InputHTMLAttributes } from "react"
+import { InputHTMLAttributes, forwardRef } from "react"
 
 
 export interface Props extends InputHTMLAttributes<HTMLInputElement> {
@@ -8,13 +8,14 @@ export interface Props extends InputHTMLAttributes<HTMLInputElement> {
   error?: boolean
 }
 
-export function InputText({
+export const InputText = forwardRef<HTMLInputElement, Props>(({
   readOnly,
   error,
   ...props
-}: Props) {
+}, ref) => {
   return (
     <input
+      ref={ref}
       type="text"
       {...props}
       className={cs(style.input, style.text, props.className, {
@@ -23,4 +24,4 @@ export function InputText({
       readOnly={readOnly}
     />
   )
-}
+})
