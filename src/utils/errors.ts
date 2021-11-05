@@ -1,5 +1,6 @@
 import { string } from "yup/lib/locale"
 import { FileUploadError } from "../types/errors"
+import { ProcessRawTokenFeatureErrorType } from "../types/Metadata"
 import { CaptureErrorEnum, MintError, PreviewError, StaticGenError } from "../types/Responses"
 
 
@@ -71,4 +72,14 @@ const mintErrors: Record<MintError, string> = {
 
 export function getMintError(error: MintError) {
   return mintErrors[error] || mintErrors[MintError.UNKNOWN]
+}
+
+const processRawFeaturesErrors: Record<ProcessRawTokenFeatureErrorType, string> = {
+  UNKNOWN: "Unknown error, please verify if your implementation follows the specs in our guide, and if the error persist you can reach out in the Discord server",
+  INVALID_FEATURES_SIGNATURE: "The type of the features object your token returned is invalid, please verify if your implementation follows the specs in our guide",
+  INVALID_PROPERTY_TYPE: "The type of one of the properties is invalid:"
+}
+
+export function getProcessRawFeaturesError(type: ProcessRawTokenFeatureErrorType) {
+  return processRawFeaturesErrors[type] || processRawFeaturesErrors[ProcessRawTokenFeatureErrorType.UNKNOWN]
 }

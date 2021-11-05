@@ -7,6 +7,10 @@ export function getMutezDecimalsNb(x: number): number {
   return st.split(".").pop()?.length || 0
 }
 
+export function getDecimalsNumber(x: number): number {
+  return x.toString().split(".").pop()?.length || 0
+}
+
 export function isPositive(value: number|undefined): boolean {
   return typeof(value) !== "undefined" ? value >= parseFloat(process.env.NEXT_PUBLIC_GT_MIN_PRICE!) : true
 }

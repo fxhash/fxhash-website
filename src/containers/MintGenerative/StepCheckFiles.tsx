@@ -13,6 +13,8 @@ import useFetch, { CachePolicies } from "use-http"
 import { StaticGenError, StaticGenResponse } from "../../types/Responses"
 import { Error } from "../../components/Error/Error"
 import { getStaticGenError } from "../../utils/errors"
+import { RawTokenFeatures } from "../../types/Metadata"
+import { RawFeatures } from "../../components/Features/RawFeatures"
 
 
 export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
@@ -20,6 +22,7 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
   const [check1, setCheck1] = useState<boolean>(false)
   const [check2, setCheck2] = useState<boolean>(false)
   const artworkIframeRef = useRef<ArtworkIframeRef>(null)
+  const [features, setFeatures] = useState<RawTokenFeatures | null>(null)
 
   const { data, loading, error, post } = 
     useFetch<StaticGenResponse|StaticGenError>(`${process.env.NEXT_PUBLIC_API_FILE_ROOT}/generate-static`,
@@ -48,6 +51,36 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
       })
     }
   }, [safeData])
+
+  // attach event to window to get messages from 
+  useEffect(() => {
+    const listener = (e: any) => {
+      if (e.data && e.data.id === "fxhash_getFeatures") {
+        if (e.data.data) {
+          setFeatures(e.data.data)
+        }
+        else {
+          setFeatures(null)
+        }
+      }
+    }
+    // Listen to message from child window
+    window.addEventListener("message", listener, false)
+
+    // remove listener when component unmounts
+    return () => {
+      window.removeEventListener("message", listener, false)
+    }
+  }, [])
+
+  const iframeLoaded = () => {
+    if (artworkIframeRef.current) {
+      const iframe = artworkIframeRef.current.getHtmlIframe()
+      if (iframe) {
+        iframe.contentWindow?.postMessage("fxhash_getFeatures", "*")
+      }
+    }
+  }
 
   return (
     <>
@@ -81,6 +114,14 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
               artworkIframeRef.current?.reloadIframe()
             }}
           />
+
+          <Spacing size="2x-large"/>
+
+          <div>
+            <h5>Features</h5>
+            <Spacing size="small"/>
+            <RawFeatures rawFeatures={features} />
+          </div>
         </div>
 
         <div className={cs(style.artwork)}>
@@ -90,6 +131,7 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
                 ref={artworkIframeRef}
                 url={url}
                 textWaiting="looking for content on IPFS"
+                onLoaded={iframeLoaded}
               />
             </div>
           </div>

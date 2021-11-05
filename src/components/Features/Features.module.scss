@@ -1,0 +1,29 @@
+.feature {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid var(--color-black);
+
+  .details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .rarity {}
+
+  .details, .rarity {
+    padding: 10px;
+  }
+}
+
+.features {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.no_features {
+  color: var(--color-gray);
+}

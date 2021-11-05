@@ -9,17 +9,20 @@ interface Props {
   record?: SandboxFiles
   textWaiting?: string
   hash?: string
+  onLoaded?: () => void
   onUrlUpdate?: (url: string) => void
 }
 
 export interface ArtworkIframeRef {
   reloadIframe: () => void
+  getHtmlIframe: () => HTMLIFrameElement | null
 }
 
 export const SandboxPreview = forwardRef<ArtworkIframeRef, Props>(({ 
   record, 
   hash, 
   onUrlUpdate,
+  onLoaded,
   textWaiting 
 }, ref) => {
   const iframeRef = useRef<HTMLIFrameElement>(null)
@@ -85,8 +88,13 @@ export const SandboxPreview = forwardRef<ArtworkIframeRef, Props>(({
     }
   }
 
+  const getHtmlIframe = (): HTMLIFrameElement|null => {
+    return iframeRef.current
+  }
+
   useImperativeHandle(ref, () => ({
-    reloadIframe
+    reloadIframe,
+    getHtmlIframe
   }))
 
   return (
@@ -96,6 +104,7 @@ export const SandboxPreview = forwardRef<ArtworkIframeRef, Props>(({
           ref={iframeRef}
           sandbox="allow-scripts allow-same-origin"
           className={cs(style.iframe)}
+          onLoad={onLoaded}
         />
         {/* {loading &&(
           <LoaderBlock height="100%">{textWaiting}</LoaderBlock>

@@ -10,7 +10,7 @@ import { FileSandboxResponse } from "../../types/Files"
 import { Spacing } from "../../components/Layout/Spacing"
 import { FileList } from "./FileList"
 import { ButtonFile } from "../../components/Button/ButtonFile"
-import { getFileUploadError } from "../../utils/errors"
+import { getFileUploadError, getProcessRawFeaturesError } from "../../utils/errors"
 import { FileUploadError } from "../../types/errors"
 import { HashTest } from "../../components/Testing/HashTest"
 import { unzipFile } from "../../utils/files"
@@ -18,6 +18,10 @@ import { processZipSandbox } from "../../utils/sandbox"
 import { SandboxPreview } from "../../components/Artwork/SandboxPreview"
 import { SandboxFiles } from "../../types/Sandbox"
 import { generateFxHash } from "../../utils/hash"
+import { RawTokenFeatures } from "../../types/Metadata"
+import { Features } from "../../components/Features/Features"
+import { ErrorBlock } from "../../components/Error/ErrorBlock"
+import { RawFeatures } from "../../components/Features/RawFeatures"
 
 
 export function Sandbox() {
@@ -27,6 +31,7 @@ export function Sandbox() {
   const [filesRecord, setFilesRecord] = useState<SandboxFiles|null>(null)
   const [error, setError] = useState<string|null>(null)
   const [url, setUrl] = useState<string|null>(null)
+  const [features, setFeatures] = useState<RawTokenFeatures | null>(null)
 
   const fileList = useMemo<string[]|null>(() => (
     filesRecord ? Object.keys(filesRecord) : null
@@ -53,6 +58,23 @@ export function Sandbox() {
     if (file) {
       setFile(file)
       processFile(file)
+    }
+  }
+
+  const iframeLoaded = () => {
+    if (artworkIframeRef.current) {
+      const iframe = artworkIframeRef.current.getHtmlIframe()
+      if (iframe) {
+        // @ts-ignore
+        if (iframe.contentWindow?.$fxhashFeatures) {
+          // @ts-ignore
+          // process the raw features
+          setFeatures(iframe.contentWindow?.$fxhashFeatures)
+        }
+        else {
+          setFeatures(null)
+        }
+      }
     }
   }
 
@@ -114,6 +136,14 @@ export function Sandbox() {
                 }}
               />
             </div>
+
+            <Spacing size="2x-large"/>
+
+            <div>
+              <h5>Features</h5>
+              <Spacing size="small"/>
+              <RawFeatures rawFeatures={features} />
+            </div>
           </div>
         ):(
           <div className={cs(style['drag-container'])}>
@@ -147,6 +177,7 @@ export function Sandbox() {
               record={filesRecord || undefined}
               textWaiting="Waiting for content to be reachable"
               onUrlUpdate={setUrl}
+              onLoaded={iframeLoaded}
             />
           </div>
         </div>

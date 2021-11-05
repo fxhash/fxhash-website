@@ -9,13 +9,15 @@ import { Error } from '../Error/Error'
 interface Props {
   url?: string
   textWaiting?: string
+  onLoaded?: () => void
 }
 
 export interface ArtworkIframeRef {
   reloadIframe: () => void
+  getHtmlIframe: () => HTMLIFrameElement | null
 }
 
-export const ArtworkIframe = forwardRef<ArtworkIframeRef, Props>(({ url, textWaiting }, ref) => {
+export const ArtworkIframe = forwardRef<ArtworkIframeRef, Props>(({ url, textWaiting, onLoaded }, ref) => {
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<boolean>(false)
   const iframeRef = useRef<HTMLIFrameElement>(null)
@@ -33,8 +35,13 @@ export const ArtworkIframe = forwardRef<ArtworkIframeRef, Props>(({ url, textWai
     }
   }
 
+  const getHtmlIframe = (): HTMLIFrameElement|null => {
+    return iframeRef.current
+  }
+
   useImperativeHandle(ref, () => ({
-    reloadIframe
+    reloadIframe,
+    getHtmlIframe
   }))
 
   return (
@@ -45,7 +52,10 @@ export const ArtworkIframe = forwardRef<ArtworkIframeRef, Props>(({ url, textWai
           src={url}
           sandbox="allow-scripts allow-same-origin"
           className={cs(style.iframe)}
-          onLoad={() => setLoading(false)}
+          onLoad={() => {
+            onLoaded && onLoaded()
+            setLoading(false)
+          }}
           onError={() => setError(true)}
         />
         {(loading && !error) &&(
