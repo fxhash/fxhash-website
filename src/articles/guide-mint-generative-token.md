@@ -121,6 +121,8 @@ setTimeout(() => {
 
 Each propery of the `$fxhashFeatures` object will define one feature of the Tokens.
 
+Features should also be derived from the `fxhash` string and from the `fxhash` string only. They should match the visual characteristics of the Token (ie reflect the settings behinf the generative process of the token).
+
 The type of a feature value can **only** be `string`, `number` or `boolean`. Any other type will be discarded.
 
 For instance, this object will define 3 features:
