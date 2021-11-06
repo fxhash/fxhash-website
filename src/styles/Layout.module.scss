@@ -84,3 +84,8 @@
 .full_body_height {
   height: calc(100vh - 140px - 50px)
 }
+
+.break_words {
+  overflow-wrap: break-word;
+  word-break: break-word;
+}

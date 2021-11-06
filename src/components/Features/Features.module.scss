@@ -11,16 +11,27 @@
     align-items: center;
   }
 
-  .rarity {}
+  .rarity {
+    color: var(--color-gray);
+  }
 
   .details, .rarity {
     padding: 10px;
+  }
+
+  &.has_rarity {
+    justify-content: flex-start;
+
+    .details {
+      flex-grow: 1;
+      align-items: flex-start;
+    }
   }
 }
 
 .features {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
   gap: 8px;
 }
 

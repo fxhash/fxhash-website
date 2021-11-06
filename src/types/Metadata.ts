@@ -30,6 +30,11 @@ export type RawTokenFeatures = Record<string, any>
 // only types allowed for token features
 export type TokenFeatureValueType = string|number|boolean
 
+export interface TokenMetadataFeature {
+  name: string
+  value: TokenFeatureValueType
+}
+
 export interface TokenFeature {
   name: string
   value: TokenFeatureValueType
@@ -69,4 +74,6 @@ export interface GenerativeTokenMetadata {
   symbol: string
 }
 
-export interface ObjktMetadata extends GenerativeTokenMetadata {}
+export interface ObjktMetadata extends GenerativeTokenMetadata {
+  features?: TokenMetadataFeature[] | null
+}

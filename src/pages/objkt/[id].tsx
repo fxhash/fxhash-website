@@ -25,6 +25,9 @@ import { TitleHyphen } from '../../components/Layout/TitleHyphen'
 import { ArtworkIframe, ArtworkIframeRef } from '../../components/Artwork/PreviewIframe'
 import { getIpfsIoUrl, getPinataUrlFromCid, ipfsUrlToCid } from '../../utils/ipfs'
 import { useRef } from 'react'
+import { Features } from '../../components/Features/Features'
+import { format } from 'date-fns'
+import { displayPercentage, displayRoyalties } from '../../utils/units'
 
 
 interface Props {
@@ -32,6 +35,7 @@ interface Props {
 }
 
 const ObjktDetails: NextPage<Props> = ({ objkt }) => {
+  console.log(objkt)
   const owner: User = (objkt.offer ? objkt.offer.issuer : objkt.owner)!
   const creator: User = objkt.issuer.author
   // get the display url for og:image
@@ -141,6 +145,37 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
       </section>
 
       <Spacing size="6x-large" />
+
+      <section>
+        <SectionHeader>
+          <TitleHyphen>gentk details</TitleHyphen>
+        </SectionHeader>
+        
+        <main className={cs(layout['padding-big'], layout.break_words)}>
+          <Spacing size="small" />
+          <div className={cs(style.buttons)}>
+            <span><strong>Minted the:</strong> { format(new Date(objkt.createdAt), "dd/MM/yyyy' at 'HH:mm") }</span>
+            <span><strong>Royalties:</strong> { displayRoyalties(objkt.royalties) }</span>
+            <span><strong>Metadata assigned:</strong> { objkt.assigned ? "yes" : "no" }</span>
+            <span><strong>Transaction hash:</strong> { objkt.generationHash }</span>
+            <span><strong>Iteration number:</strong> { objkt.iteration }</span>
+            {objkt.features && objkt.features.length > 0 && objkt.rarity && (
+              <span><strong>Rarity:</strong> { displayPercentage(objkt.rarity) }% (lower is rarer)</span>
+            )}
+          </div>
+
+          {objkt.features && objkt.features.length > 0 && (
+            <>
+              <Spacing size="x-large" />
+              <h4>Features</h4>
+              <Spacing size="small" />
+              <Features features={objkt.features} />
+            </>
+          )}
+        </main>
+      </section>
+
+      <Spacing size="6x-large" />
       <Spacing size="6x-large" />
 
       <section>
@@ -193,6 +228,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
                 }
               }
               metadata
+              features
+              rarity
+              assigned
+              iteration
+              generationHash
+              createdAt
               offer {
                 id
                 price

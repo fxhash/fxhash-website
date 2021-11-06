@@ -1,4 +1,4 @@
-import { ObjktMetadata } from "../Metadata"
+import { ObjktMetadata, TokenFeature } from "../Metadata"
 import { Action } from "./Action"
 import { GenerativeToken } from "./GenerativeToken"
 import { Offer } from "./Offer"
@@ -11,8 +11,11 @@ export interface Objkt {
   assigned?: boolean
   generationHash?: string
   iteration?: number
+  tags: string[]
   name?: string
   metadata?: ObjktMetadata
+  features?: TokenFeature[] | null
+  rarity?: number
   metadataUri: string
   royalties: number
   offer?: Offer
