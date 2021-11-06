@@ -14,7 +14,7 @@ export function Features({
   layout = "responsive"
 }: Props) {
   return features && features.length > 0 ? (
-    <div className={cs(style.features)}>
+    <div className={cs(style.features, style[layout])}>
       {features.map((feature, idx) => (
         <Feature key={idx} feature={feature} />
       ))}
