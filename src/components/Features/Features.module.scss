@@ -31,8 +31,15 @@
 
 .features {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
   gap: 8px;
+
+  &.responsive {
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  }
+
+  &.cols_2 {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 .no_features {

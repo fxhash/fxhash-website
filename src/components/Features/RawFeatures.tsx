@@ -44,7 +44,7 @@ export function RawFeatures({ rawFeatures }: Props) {
         {featuresError.extra}
       </ErrorBlock>
     ):(
-      <Features features={features} />
+      <Features features={features} layout="cols_2" />
     )
   )
 }

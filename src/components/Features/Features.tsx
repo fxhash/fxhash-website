@@ -6,10 +6,12 @@ import { Feature } from "./Feature"
 
 interface Props {
   features?: TokenFeature[] | null
+  layout?: "cols_2" | "responsive"
 }
 
 export function Features({
-  features
+  features,
+  layout = "responsive"
 }: Props) {
   return features && features.length > 0 ? (
     <div className={cs(style.features)}>
