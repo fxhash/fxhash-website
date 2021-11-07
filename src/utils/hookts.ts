@@ -263,3 +263,21 @@ export function useEventSource<T, P = string, E = string>(
     start
   }
 }
+
+/**
+ * Lazy loads an image 
+ */
+export function useLazyImage(url: string | null): boolean {
+  const [loaded, setLoaded] = useState<boolean>(false)
+  useEffect(() => {
+    if (loaded) setLoaded(false)
+    if (url) {
+      const img = new Image()
+      img.onload = () => {
+        setLoaded(true)
+      }
+      img.src = url
+    }
+  }, [url])
+  return loaded
+}
