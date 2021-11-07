@@ -9,11 +9,12 @@ import { Button } from "../../components/Button"
 import { Spacing } from "../../components/Layout/Spacing"
 import { useRouter } from "next/router"
 import { getIpfsSlash } from "../../utils/ipfs"
+import { TokenFeature } from "../../types/Metadata"
 
 
 interface Props {
   hash: string
-  onRevealed: (generativeUri: string, previewUri: string) => void
+  onRevealed: (generativeUri: string, previewUri: string, features: TokenFeature[]) => void
 }
 
 function getProgressPosition(progress: SigningProgress|null): number {
@@ -63,7 +64,7 @@ export function RevealProgress({ hash, onRevealed }: Props) {
       }
       else {
         // trigger the reveal of the token 
-        onRevealed(getIpfsSlash(data.cidGenerative), getIpfsSlash(data.cidPreview))
+        onRevealed(getIpfsSlash(data.cidGenerative), getIpfsSlash(data.cidPreview), data.features || [])
       }
     }
   }

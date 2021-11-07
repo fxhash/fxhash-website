@@ -1,3 +1,4 @@
+import { TokenFeature } from "./Metadata";
 import { CaptureMode } from "./Mint";
 
 export enum ProfileUploadError {
@@ -128,4 +129,5 @@ export interface SigningProgress {
 export interface SigningData {
   cidGenerative?: string
   cidPreview?: string
+  features?: TokenFeature[]
 }

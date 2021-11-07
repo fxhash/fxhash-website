@@ -9,6 +9,7 @@ import { Objkt } from "../../types/entities/Objkt"
 import { useState } from "react"
 import { Reveal } from "../../containers/Reveal/Reveal"
 import { RevealProgress } from "../../containers/Reveal/RevealProgress"
+import { TokenFeature } from "../../types/Metadata"
 
 
 interface Props {
@@ -20,6 +21,7 @@ const RevealPage: NextPage<Props> = ({ hash, token }) => {
   // these are the URIs to the content to be revealed to the user
   const [generativeUri, setGenerativeUri] = useState<string|null>(token && (token.assigned ? token.metadata!.artifactUri : null))
   const [previewUri, setPreviewUri] = useState<string|null>(token && (token.assigned ? token.metadata!.displayUri : null))
+  const [features, setFeatures] = useState<TokenFeature[]|null|undefined>(token && (token.assigned ? token.features : null))
 
   return (
     <>
@@ -38,13 +40,15 @@ const RevealPage: NextPage<Props> = ({ hash, token }) => {
             <Reveal
               generativeUri={generativeUri}
               previeweUri={previewUri}
+              features={features}
             />
           ):(
             <RevealProgress 
               hash={hash}
-              onRevealed={(genUri, prevUri) => {
+              onRevealed={(genUri, prevUri, features) => {
                 setGenerativeUri(genUri)
                 setPreviewUri(prevUri)
+                setFeatures(features)
               }}
             />
           )}
@@ -72,6 +76,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
             assigned
             generationHash
             iteration
+            features
             owner {
               id
               name
