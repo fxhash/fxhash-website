@@ -4,7 +4,7 @@ import { Layout } from '../components/Layout'
 import { clientSideClient } from '../services/ApolloClient'
 import { ApolloProvider } from '@apollo/client'
 import { UserProvider } from '../containers/UserProvider'
-import { useEffect } from 'react'
+import NextNprogress from 'nextjs-progressbar'
 import Head from "next/head"
 
 
@@ -26,6 +26,8 @@ function MyApp({ Component, pageProps }: AppProps) {
         <meta name="msapplication-TileColor" content="#ffffff"/>
         <meta name="theme-color" content="#ffffff"></meta>
       </Head>
+
+      <NextNprogress color="#7000FF" />
 
       <ApolloProvider client={clientSideClient}>
         <UserProvider>
