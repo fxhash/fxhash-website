@@ -8,7 +8,6 @@ import { ProgressModule } from "../../components/Utils/ProgressModule/ProgressMo
 import { Button } from "../../components/Button"
 import { Spacing } from "../../components/Layout/Spacing"
 import { useRouter } from "next/router"
-import { ipfsDisplayUrl } from "../../services/Ipfs"
 import { getIpfsSlash } from "../../utils/ipfs"
 
 

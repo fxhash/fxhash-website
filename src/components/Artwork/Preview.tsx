@@ -1,4 +1,4 @@
-import { ipfsDisplayUrl } from '../../services/Ipfs'
+import { ipfsGatewayUrl } from '../../services/Ipfs'
 import { useLazyImage } from '../../utils/hookts'
 import style from './Artwork.module.scss'
 
@@ -13,7 +13,7 @@ export function ArtworkPreview({
   url,
   alt = "Generative Token preview"
 }: Props) {
-  const U = url || (ipfsUri && ipfsDisplayUrl(ipfsUri)) || null
+  const U = url || (ipfsUri && ipfsGatewayUrl(ipfsUri)) || null
   const loaded = useLazyImage(U)
 
   return (

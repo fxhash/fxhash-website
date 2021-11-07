@@ -6,6 +6,10 @@ export function getPinataUrlFromCid(cid: string): string {
   return `https://gateway.pinata.cloud/ipfs/${cid}`
 }
 
+export function getPinataFxhashGateway(cid: string): string {
+  return `https://gateway.fxhash.xyz/ipfs/${cid}`
+}
+
 export function getIpfsSlash(cid: string): string {
   return `ipfs://${cid}`
 }

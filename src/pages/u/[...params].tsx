@@ -8,7 +8,7 @@ import { UserProfile } from "../../containers/User/UserProfile"
 import { getUserName, processUserItems } from "../../utils/user"
 import Head from "next/head"
 import { useMemo } from "react"
-import { ipfsDisplayUrl } from "../../services/Ipfs"
+import { ipfsGatewayUrl } from "../../services/Ipfs"
 import { truncateEnd } from "../../utils/strings"
 
 
@@ -26,7 +26,7 @@ const UserPage: NextPage<Props> = ({ user }) => {
     if(!url && user.objkts && user.objkts.length > 0) {
       url = user.objkts[0].metadata?.displayUri
     }
-    return (url && ipfsDisplayUrl(url)) || null
+    return (url && ipfsGatewayUrl(url)) || null
   }, [])
 
 

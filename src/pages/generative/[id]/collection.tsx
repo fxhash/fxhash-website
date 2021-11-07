@@ -13,7 +13,7 @@ import { UserBadge } from '../../../components/User/UserBadge'
 import { MintProgress } from '../../../components/Artwork/MintProgress'
 import { Button } from '../../../components/Button'
 import nl2br from 'react-nl2br'
-import { ipfsDisplayUrl } from '../../../services/Ipfs'
+import { ipfsGatewayUrl } from '../../../services/Ipfs'
 import { SectionHeader } from '../../../components/Layout/SectionHeader'
 import { CardsContainer } from '../../../components/Card/CardsContainer'
 import { ObjktCard } from '../../../components/Card/ObjktCard'
@@ -32,7 +32,7 @@ const GenerativeTokenCollection: NextPage<Props> = ({ token }) => {
   const hasCollection = token.objkts?.length > 0
 
   // get the display url for og:image
-  const displayUrl = token.metadata?.displayUri && ipfsDisplayUrl(token.metadata?.displayUri)
+  const displayUrl = token.metadata?.displayUri && ipfsGatewayUrl(token.metadata?.displayUri)
 
   return (
     <>

@@ -4,7 +4,7 @@ import effects from "../../styles/Effects.module.scss"
 import cs from "classnames"
 import Link from "next/link"
 import { useMemo, useState, useRef } from "react"
-import { ipfsDisplayUrl } from "../../services/Ipfs"
+import { ipfsGatewayUrl } from "../../services/Ipfs"
 import { Button } from "../../components/Button"
 import { LoaderBlock } from "../../components/Layout/LoaderBlock"
 import { ClientOnlyEmpty } from "../../components/Utils/ClientOnly"
@@ -24,7 +24,7 @@ interface Props {
 export function Reveal({ generativeUri, previeweUri }: Props) {
   const iframeRef = useRef<HTMLIFrameElement>(null)
   const [loaded, setLoaded] = useState(false)
-  const viewUrl = useMemo<string>(() => ipfsDisplayUrl(generativeUri), [generativeUri])
+  const viewUrl = useMemo<string>(() => ipfsGatewayUrl(generativeUri), [generativeUri])
 
   const isLoaded = () => {
     setTimeout(() => {

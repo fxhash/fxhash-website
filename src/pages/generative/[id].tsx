@@ -15,7 +15,7 @@ import { MintProgress } from '../../components/Artwork/MintProgress'
 import { Button } from '../../components/Button'
 import nl2br from 'react-nl2br'
 import { displayMutez } from '../../utils/units'
-import { ipfsDisplayUrl } from '../../services/Ipfs'
+import { ipfsGatewayUrl } from '../../services/Ipfs'
 import { SectionHeader } from '../../components/Layout/SectionHeader'
 import { CardsContainer } from '../../components/Card/CardsContainer'
 import { ObjktCard } from '../../components/Card/ObjktCard'
@@ -26,7 +26,6 @@ import { UserGuard } from '../../components/Guards/UserGuard'
 import { truncateEnd } from '../../utils/strings'
 import { TitleHyphen } from '../../components/Layout/TitleHyphen'
 import { ArtworkIframe, ArtworkIframeRef } from '../../components/Artwork/PreviewIframe'
-import { getIpfsIoUrl, getPinataUrlFromCid, ipfsUrlToCid } from '../../utils/ipfs'
 import { useRef } from 'react'
 
 
@@ -46,7 +45,7 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
   }
 
   // get the display url for og:image
-  const displayUrl = token.metadata?.displayUri && ipfsDisplayUrl(token.metadata?.displayUri)
+  const displayUrl = token.metadata?.displayUri && ipfsGatewayUrl(token.metadata?.displayUri)
 
   return (
     <>
@@ -113,7 +112,7 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
             <div className={cs(style['preview-wrapper'])}>
               <ArtworkIframe 
                 ref={iframeRef}
-                url={getPinataUrlFromCid(ipfsUrlToCid(token.metadata.artifactUri))}
+                url={ipfsGatewayUrl(token.metadata.artifactUri)}
               />
             </div>
           </div>
@@ -129,7 +128,7 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
             >
               reload
             </Button>
-            <Link href={ipfsDisplayUrl(token.metadata?.artifactUri)} passHref>
+            <Link href={ipfsGatewayUrl(token.metadata?.artifactUri)} passHref>
               <Button
                 isLink={true}
                 size="small"

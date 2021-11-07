@@ -1,7 +1,7 @@
 import style from "./Card.module.scss"
 import cs from "classnames"
 import { PropsWithChildren, useMemo, useState } from "react"
-import { ipfsDisplayUrl } from "../../services/Ipfs"
+import { ipfsGatewayUrl } from "../../services/Ipfs"
 import { useClientAsyncEffect } from "../../utils/hookts"
 import { Loader } from "../Utils/Loader"
 import { useInView } from "react-intersection-observer"
@@ -16,7 +16,7 @@ export function Card({
   children
 }: PropsWithChildren<Props>) {
   const [loaded, setLoaded] = useState<string|null>(null)
-  const url = useMemo(() => ipfsDisplayUrl(thumbnailUri), [])
+  const url = useMemo(() => ipfsGatewayUrl(thumbnailUri), [])
   const { ref, inView } = useInView()
 
   // lazy load the image

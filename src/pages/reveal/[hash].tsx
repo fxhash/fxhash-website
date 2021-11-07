@@ -3,15 +3,8 @@ import Head from "next/head"
 import { Spacing } from "../../components/Layout/Spacing"
 import layout from "../../styles/Layout.module.scss"
 import cs from "classnames"
-import { SectionHeader } from "../../components/Layout/SectionHeader"
-import ClientOnly from "../../components/Utils/ClientOnly"
-import { UserGuard } from "../../components/Guards/UserGuard"
 import client from "../../services/ApolloClient"
 import { gql } from "@apollo/client"
-import { Mint } from "../../containers/Mint/Mint"
-import { truncateEnd } from "../../utils/strings"
-import { ipfsDisplayUrl } from "../../services/Ipfs"
-import { TitleHyphen } from "../../components/Layout/TitleHyphen"
 import { Objkt } from "../../types/entities/Objkt"
 import { useState } from "react"
 import { Reveal } from "../../containers/Reveal/Reveal"
@@ -24,8 +17,6 @@ interface Props {
 }
 
 const RevealPage: NextPage<Props> = ({ hash, token }) => {
-  console.log(token)
-
   // these are the URIs to the content to be revealed to the user
   const [generativeUri, setGenerativeUri] = useState<string|null>(token && (token.assigned ? token.metadata!.artifactUri : null))
   const [previewUri, setPreviewUri] = useState<string|null>(token && (token.assigned ? token.metadata!.displayUri : null))

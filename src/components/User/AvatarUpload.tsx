@@ -1,7 +1,7 @@
 import effect from "../../styles/Effects.module.scss"
 import style from "./Avatar.module.scss"
 import cs from "classnames"
-import { ipfsDisplayUrl } from "../../services/Ipfs"
+import { ipfsGatewayUrl } from "../../services/Ipfs"
 import { MouseEventHandler, useMemo, useRef } from "react"
 
 
@@ -27,7 +27,7 @@ export function AvatarUpload({
   const url = useMemo<string|null>(() => (
     file 
       ? URL.createObjectURL(file)
-      : ipfsDisplayUrl(currentIpfs)
+      : ipfsGatewayUrl(currentIpfs)
   ), [currentIpfs, file])
 
   const onFileChange = () => {

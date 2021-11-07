@@ -11,7 +11,7 @@ import { Spacing } from '../../components/Layout/Spacing'
 import { UserBadge } from '../../components/User/UserBadge'
 import { Button } from '../../components/Button'
 import nl2br from 'react-nl2br'
-import { ipfsDisplayUrl } from '../../services/Ipfs'
+import { ipfsGatewayUrl } from '../../services/Ipfs'
 import { SectionHeader } from '../../components/Layout/SectionHeader'
 import { Activity } from '../../components/Activity/Activity'
 import { Objkt } from '../../types/entities/Objkt'
@@ -23,7 +23,6 @@ import { Collect } from '../../containers/Objkt/Collect'
 import { truncateEnd } from '../../utils/strings'
 import { TitleHyphen } from '../../components/Layout/TitleHyphen'
 import { ArtworkIframe, ArtworkIframeRef } from '../../components/Artwork/PreviewIframe'
-import { getIpfsIoUrl, getPinataUrlFromCid, ipfsUrlToCid } from '../../utils/ipfs'
 import { useRef } from 'react'
 import { Features } from '../../components/Features/Features'
 import { format } from 'date-fns'
@@ -39,7 +38,7 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
   const owner: User = (objkt.offer ? objkt.offer.issuer : objkt.owner)!
   const creator: User = objkt.issuer.author
   // get the display url for og:image
-  const displayUrl = objkt.metadata?.displayUri && ipfsDisplayUrl(objkt.metadata?.displayUri)
+  const displayUrl = objkt.metadata?.displayUri && ipfsGatewayUrl(objkt.metadata?.displayUri)
 
   const iframeRef = useRef<ArtworkIframeRef>(null)
   const reload = () => {
@@ -113,7 +112,7 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
             <div className={cs(style['preview-wrapper'])}>
               <ArtworkIframe 
                 ref={iframeRef}
-                url={getPinataUrlFromCid(ipfsUrlToCid(objkt.metadata?.artifactUri || ""))}
+                url={ipfsGatewayUrl(objkt.metadata?.artifactUri)}
               />
             </div>
           </div>
@@ -129,7 +128,7 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
             >
               reload
             </Button>
-            <Link href={ipfsDisplayUrl(objkt.metadata?.artifactUri)} passHref>
+            <Link href={ipfsGatewayUrl(objkt.metadata?.artifactUri)} passHref>
               <Button
                 isLink={true}
                 size="small"

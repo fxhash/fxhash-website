@@ -11,7 +11,7 @@ import client from "../../services/ApolloClient"
 import { gql } from "@apollo/client"
 import { Mint } from "../../containers/Mint/Mint"
 import { truncateEnd } from "../../utils/strings"
-import { ipfsDisplayUrl } from "../../services/Ipfs"
+import { ipfsGatewayUrl } from "../../services/Ipfs"
 import { TitleHyphen } from "../../components/Layout/TitleHyphen"
 
 
@@ -21,7 +21,7 @@ interface Props {
 
 const MintPage: NextPage<Props> = ({ token }) => {
   // get the display url for og:image
-  const displayUrl = token.metadata?.displayUri && ipfsDisplayUrl(token.metadata?.displayUri)
+  const displayUrl = token.metadata?.displayUri && ipfsGatewayUrl(token.metadata?.displayUri)
 
   return (
     <>
