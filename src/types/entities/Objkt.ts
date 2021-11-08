@@ -13,6 +13,7 @@ export interface Objkt {
   iteration?: number
   tags: string[]
   name?: string
+  slug?: string
   metadata?: ObjktMetadata
   features?: TokenFeature[] | null
   rarity?: number

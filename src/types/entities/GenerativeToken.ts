@@ -7,6 +7,7 @@ export interface GenerativeToken {
   id: number
   author: User
   name: string
+  slug?: string
   metadata: GenerativeTokenMetadata
   metadataUri?: string
   price: number

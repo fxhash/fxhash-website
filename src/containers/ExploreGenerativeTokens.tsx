@@ -19,6 +19,7 @@ const Qu_genTokens = gql`
     generativeTokens(skip: $skip, take: $take) {
       id
       name
+      slug
       metadata
       price
       supply
@@ -41,6 +42,7 @@ const Qu_searchTokens = gql`
     searchGenerativeTokens(search: $search) {
       id
       name
+      slug
       metadata
       price
       supply

@@ -8,6 +8,7 @@ import style from "./Card.module.scss"
 import { Spacing } from "../Layout/Spacing"
 import { Objkt } from "../../types/entities/Objkt"
 import { displayMutez } from "../../utils/units"
+import { getObjktUrl } from "../../utils/objkt"
 
 interface Props {
   objkt: Objkt
@@ -17,7 +18,7 @@ export function ObjktCard({
   objkt
 }: Props) {
   const owner = objkt.offer ? objkt.offer.issuer : objkt.owner!
-  const url = `/objkt/${objkt.id}`
+  const url = getObjktUrl(objkt)
 
   return (
     <Link href={url} passHref>

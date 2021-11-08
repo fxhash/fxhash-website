@@ -27,6 +27,7 @@ import { truncateEnd } from '../../utils/strings'
 import { TitleHyphen } from '../../components/Layout/TitleHyphen'
 import { ArtworkIframe, ArtworkIframeRef } from '../../components/Artwork/PreviewIframe'
 import { useRef } from 'react'
+import { Qu_genToken } from '../../queries/generative-token'
 
 
 interface Props {
@@ -205,90 +206,40 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const idStr = context.params?.id
+  let idStr,
+      slug
+  
+  if (context.params?.params && context.params.params[0]) {
+    if (context.params.params[0] === "slug" && context.params.params[1]) {
+      slug = context.params.params[1]
+    }
+    else if (context.params.params[0]) {
+      idStr = context.params.params[0]
+    }
+  }
   let token = null
 
   if (idStr) {
     const id = parseInt(idStr as string)
     if (id === 0 || id) {
-      const { data, error } = await client.query({
-        query: gql`
-          query Query($id: Float!) {
-            generativeToken(id: $id) {
-              id
-              name
-              metadata
-              metadataUri
-              price
-              supply
-              balance
-              enabled
-              royalties
-              objkts {
-                id
-                owner {
-                  id
-                  name
-                  avatarUri
-                }
-                name
-                metadata
-                offer {
-                  issuer {
-                    id
-                    name
-                    avatarUri
-                  }
-                  price
-                }
-                issuer {
-                  author {
-                    id
-                    name
-                    avatarUri
-                  }
-                }
-              }
-              createdAt
-              updatedAt
-              actions {
-                id
-                type
-                metadata
-                createdAt
-                issuer {
-                  id
-                  name
-                  avatarUri
-                }
-                target {
-                  id
-                  name
-                  avatarUri
-                }
-                objkt {
-                  id
-                  name
-                }
-                token {
-                  id
-                  name
-                }
-              }
-              author {
-                id
-                name
-                avatarUri
-              }
-            }
-          }
-        `,
+      const { data } = await client.query({
+        query: Qu_genToken,
         fetchPolicy: "no-cache",
         variables: { id }
       })
       if (data) {
         token = data.generativeToken
       }
+    }
+  }
+  else if (slug) {
+    const { data } = await client.query({
+      query: Qu_genToken,
+      fetchPolicy: "no-cache",
+      variables: { slug }
+    })
+    if (data) {
+      token = data.generativeToken
     }
   }
 

@@ -27,6 +27,8 @@ import { useRef } from 'react'
 import { Features } from '../../components/Features/Features'
 import { format } from 'date-fns'
 import { displayPercentage, displayRoyalties } from '../../utils/units'
+import { Qu_objkt } from '../../queries/objkt'
+import { getGenerativeTokenUrl } from '../../utils/generative-token'
 
 
 interface Props {
@@ -34,7 +36,6 @@ interface Props {
 }
 
 const ObjktDetails: NextPage<Props> = ({ objkt }) => {
-  console.log(objkt)
   const owner: User = (objkt.offer ? objkt.offer.issuer : objkt.owner)!
   const creator: User = objkt.issuer.author
   // get the display url for og:image
@@ -96,7 +97,7 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
                 </UserGuard>
               </ClientOnlyEmpty>
 
-              <Link href={`/generative/${objkt.issuer.id}`} passHref>
+              <Link href={getGenerativeTokenUrl(objkt.issuer)} passHref>
                 <Button
                   isLink={true}
                 >
@@ -198,79 +199,40 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const idStr = context.params?.id
+  let idStr,
+      slug
+  
+  if (context.params?.params && context.params.params[0]) {
+    if (context.params.params[0] === "slug" && context.params.params[1]) {
+      slug = context.params.params[1]
+    }
+    else if (context.params.params[0]) {
+      idStr = context.params.params[0]
+    }
+  }
   let token = null
 
   if (idStr) {
     const id = parseInt(idStr as string)
     if (id === 0 || id) {
-      const { data, error } = await client.query({
-        query: gql`
-          query Query($id: Float!) {
-            objkt(id: $id) {
-              id
-              royalties
-              owner {
-                id
-                name
-                avatarUri
-              }
-              name
-              issuer {
-                id
-                name
-                metadata
-                author {
-                  id
-                  name
-                  avatarUri
-                }
-              }
-              metadata
-              features
-              rarity
-              assigned
-              iteration
-              generationHash
-              createdAt
-              offer {
-                id
-                price
-                issuer {
-                  id
-                  name
-                  avatarUri
-                }
-              }
-              actions {
-                id
-                type
-                metadata
-                createdAt
-                issuer {
-                  id
-                  name
-                  avatarUri
-                }
-                target {
-                  id
-                  name
-                  avatarUri
-                }
-                objkt {
-                  name
-                  id
-                }
-              }
-            }
-          }
-        `,
+      const { data } = await client.query({
+        query: Qu_objkt,
         fetchPolicy: "no-cache",
         variables: { id }
       })
       if (data) {
         token = data.objkt
       }
+    }
+  }
+  else if (slug) {
+    const { data } = await client.query({
+      query: Qu_objkt,
+      fetchPolicy: "no-cache",
+      variables: { slug }
+    })
+    if (data) {
+      token = data.objkt
     }
   }
 

@@ -23,6 +23,7 @@ import { ObjktCard } from '../components/Card/ObjktCard'
 import nl2br from 'react-nl2br'
 import { TitleHyphen } from '../components/Layout/TitleHyphen'
 import { PerformanceTimings } from '../utils/performance'
+import { getGenerativeTokenUrl } from '../utils/generative-token'
 
 
 interface Props {
@@ -83,7 +84,7 @@ const Home: NextPage<Props> = ({
 
                   <Spacing size="large"/>
 
-                  <Link href={`/generative/${randomGenerativeToken.id}`} passHref>
+                  <Link href={getGenerativeTokenUrl(randomGenerativeToken)} passHref>
                     <Button 
                       isLink={true}
                       iconComp={<i aria-hidden className="fas fa-eye"/>}
@@ -175,6 +176,7 @@ export async function getServerSideProps() {
         randomGenerativeToken {
           id
           name
+          slug
           metadata
           metadataUri
           price
@@ -194,6 +196,7 @@ export async function getServerSideProps() {
         generativeTokens(skip: $skip, take: $take) {
           id
           name
+          slug
           metadata
           price
           supply
@@ -215,6 +218,7 @@ export async function getServerSideProps() {
           objkt {
             id
             name
+            slug
             metadata
             issuer {
               author {

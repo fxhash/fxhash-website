@@ -23,6 +23,7 @@ const Qu_offers = gql`
       objkt {
         id
         name
+        slug
         metadata
         offer {
           id
@@ -59,6 +60,7 @@ const Qu_searchOffers = gql`
       objkt {
         id
         name
+        slug
         metadata
         offer {
           id

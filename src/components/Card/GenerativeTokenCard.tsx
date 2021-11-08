@@ -7,6 +7,7 @@ import { Card } from "./Card"
 import { UserBadge } from "../User/UserBadge"
 import { MintProgress } from "../Artwork/MintProgress"
 import { Spacing } from "../Layout/Spacing"
+import { getGenerativeTokenUrl } from "../../utils/generative-token"
 
 interface Props {
   token: GenerativeToken
@@ -15,8 +16,10 @@ interface Props {
 export function GenerativeTokenCard({
   token
 }: Props) {
+  const url = getGenerativeTokenUrl(token)
+
   return (
-    <Link href={`/generative/${token.id}`} passHref>
+    <Link href={url} passHref>
       <AnchorForward style={{ height: '100%' }}>
         <Card thumbnailUri={token.metadata?.thumbnailUri}>
           <div>

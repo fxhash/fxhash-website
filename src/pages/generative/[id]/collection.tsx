@@ -21,6 +21,7 @@ import { Pagination } from '../../../components/Pagination/Pagination'
 import { useState } from 'react'
 import { Objkt } from '../../../types/entities/Objkt'
 import { truncateEnd } from '../../../utils/strings'
+import { getGenerativeTokenUrl } from '../../../utils/generative-token'
 
 
 interface Props {
@@ -64,7 +65,7 @@ const GenerativeTokenCollection: NextPage<Props> = ({ token }) => {
                 supply={token.supply}
               />
               <Spacing size="large"/>
-              <Link href={`/generative/${token.id}`}>
+              <Link href={getGenerativeTokenUrl(token)}>
                 <Button isLink={true} size="small">
                   See Generative Token
                 </Button>
