@@ -1,7 +1,20 @@
 import { BeaconWallet } from '@taquito/beacon-wallet'
-import { ContractAbstraction, ContractProvider, DefaultLambdaAddresses, MichelsonMap, TezosToolkit, Wallet } from '@taquito/taquito'
-import { CancelOfferCall, CollectCall, MintCall, MintGenerativeCallData, MintGenerativeRawCall, PlaceOfferCall, ProfileUpdateCallData, UpdateGenerativeCallData } from '../types/ContractCalls'
-import { ContractInteractionMethod, ContractOperationStatus, FxhashContract } from '../types/Contracts'
+import { ContractAbstraction, MichelsonMap, TezosToolkit, Wallet } from '@taquito/taquito'
+import { 
+  CancelOfferCall,
+  CollectCall,
+  MintCall,
+  MintGenerativeCallData,
+  MintGenerativeRawCall,
+  PlaceOfferCall,
+  ProfileUpdateCallData,
+  UpdateGenerativeCallData 
+} from '../types/ContractCalls'
+import { 
+  ContractInteractionMethod,
+  ContractOperationStatus, 
+  FxhashContract
+} from '../types/Contracts'
 import { stringToByteString } from '../utils/convert'
 
 

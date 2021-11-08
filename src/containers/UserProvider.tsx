@@ -1,7 +1,7 @@
 import { useLazyQuery } from "@apollo/client"
 import React, { PropsWithChildren, useState, useRef } from "react"
 import { Qu_user } from "../queries/user"
-import { WalletManager } from "../services/Wallet"
+import type { WalletManager } from "../services/Wallet"
 import { ConnectedUser } from "../types/entities/User"
 import { useClientAsyncEffect, useClientEffect } from "../utils/hookts"
 
@@ -86,6 +86,9 @@ export function UserProvider({ children }: PropsWithChildren<{}>) {
       connect,
       disconnect,
     }
+
+    // lazy import of the Wallet manager here
+    const { WalletManager } = await import("../services/Wallet")
 
     // instanciate the manager
     const manager = new WalletManager()
