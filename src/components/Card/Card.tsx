@@ -25,8 +25,12 @@ export function Card({
       const img = new Image()
       img.onload = () => {
         if (isMounted()) {
-          setLoaded(url)
+          setLoaded(img.src)
         }
+      }
+      img.onerror = () => {
+        // we fallback to the IPFS gateway
+        img.src = ipfsGatewayUrl(thumbnailUri, "ipfsio")
       }
       img.src = url
     }
