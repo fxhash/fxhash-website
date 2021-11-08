@@ -7,10 +7,12 @@ import { useClientEffect } from "../../utils/hookts"
 
 interface Props {
   itemComp: React.ReactNode
+  ariaLabel?: string
 }
 
 export function Dropdown({
   itemComp,
+  ariaLabel,
   children
 }: PropsWithChildren<Props>) {
   const [opened, setOpened] = useState<boolean>(false)
@@ -39,6 +41,7 @@ export function Dropdown({
       "avoid-close-event": opened
     })}>
       <button 
+        aria-label={ariaLabel}
         onClick={toggle}
         className={cs(style.button, { [style.opened]: opened })}
       >

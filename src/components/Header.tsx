@@ -10,6 +10,7 @@ export function Header() {
       <Link href="/">
         <a className={style.logo}>
           <Logo />
+          <span>FXHASH</span>
         </a>
       </Link>
       

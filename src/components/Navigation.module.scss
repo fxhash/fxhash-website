@@ -144,6 +144,16 @@
   }
 }
 
+.avatar_btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  i {
+    color: var(--color-black);
+  }
+}
+
 .avatar {
   width: 64px;
   height: 64px;

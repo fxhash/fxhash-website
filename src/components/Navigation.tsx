@@ -57,7 +57,13 @@ export function Navigation() {
 
         {userCtx.user ? (
           <Dropdown
-            itemComp={<Avatar uri={userCtx.user.avatarUri} className={cs(style.avatar, effects['drop-shadow-big'])} />}
+            ariaLabel="Open user actions"
+            itemComp={(
+              <div className={cs(style.avatar_btn)}>
+                <Avatar uri={userCtx.user.avatarUri} className={cs(style.avatar, effects['drop-shadow-big'])} />
+                <i aria-hidden className="fas fa-caret-down"/>
+              </div>
+            )}
           >
             <Link href="/mint-generative">
               <a>mint generative token</a>

@@ -17,11 +17,9 @@
   display: flex;
   align-items: center;
   color: var(--color-black);
-
-  h1 {
-    font-size: 24px;
-    margin: 0;
-    margin-left: 8px;
-    margin-top: 9px;
+  font-size: 24px;
+  
+  span {
+    display: none;
   }
 }
