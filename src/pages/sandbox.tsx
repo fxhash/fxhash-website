@@ -42,7 +42,7 @@ const SandboxPage: NextPage = () => {
 
           <Spacing size="3x-large"/>
 
-          <ClientOnly>
+            <ClientOnly>
             <Sandbox />
           </ClientOnly>
         </main>
