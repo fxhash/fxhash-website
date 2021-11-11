@@ -6,9 +6,11 @@ import { ApolloProvider } from '@apollo/client'
 import { UserProvider } from '../containers/UserProvider'
 import NextNprogress from 'nextjs-progressbar'
 import Head from "next/head"
+import { Maintenance } from '../containers/Maintenance'
 
 
 function MyApp({ Component, pageProps }: AppProps) {
+  console.log(process.env.MAINTENANCE_MODE === "1")
   return (
     <>
       <Head>
@@ -29,13 +31,19 @@ function MyApp({ Component, pageProps }: AppProps) {
 
       <NextNprogress color="#7000FF" />
 
-      <ApolloProvider client={clientSideClient}>
-        <UserProvider>
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
-        </UserProvider>
-      </ApolloProvider>
+      {process.env.NEXT_PUBLIC_MAINTENANCE_MODE === "1" ? (
+        <Layout>
+          <Maintenance />
+        </Layout>
+      ):(
+        <ApolloProvider client={clientSideClient}>
+          <UserProvider>
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </UserProvider>
+        </ApolloProvider>
+      )}
     </>
   )
 }
