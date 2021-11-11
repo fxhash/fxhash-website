@@ -24,3 +24,22 @@ I opened a discord for you to report bugs. I think discord will work best in thi
 ## The risks
 
 The platform was released very recently and so I do not guarantee that every feature will work as intended. The project is not fully stable yet, and so there might be a point where some updates require the contracts to be updated and the data to be fully erased. I'm hoping that contracts won't need to be updated, and it could very well be the case. However I think you need to know about this eventual issue. I think it could be great to keep the prices low so that people can experiment and test your tokens. 
+
+
+## Update 11/11/2021 (so many 1 it's almost binary)
+
+I'm adding this section to clarify a few things about the beta which, I must agree, wasn't clear at all.
+
+When the platform will be launching, the contracts will be replaced with new contracts (adding a few needed features to them). There is currently a debate about what will happen with the tokens from the old contract. There are a few options:
+
+* nothing (seems like nobody is interested by this one)
+* a "graveyard" -> tokens will remain visible on an other front-end, as a reminder to what used to be there
+* transfer the data to the new contracts (will create some duplicates and cost a lot of XTZ for the storage)
+* include those within the platform, with a little "badge" on them. They could be traded in the marketplace.
+
+We are currently discussing about it on the Discord.
+
+
+### What are the high minting costs ? Are these platform fees ?
+
+These cost are only related to storage fees to store the token data on the blockchain. Storage fees are very high on blockchains, so that's why. Each byte has a cost. It's about the same cost as minting a token on H=N to give you a comparaison scale. **Platform fees for minting are currently at 0%, and so for the whole duration of the beta**.
