@@ -117,6 +117,7 @@ export enum SigningState {
   NOT_FOUND =             "NOT_FOUND",
   QUEUED =                "QUEUED",
   GENERATING_METADATA =   "GENERATING_METADATA",
+  METADATA_GENERATED =    "METADATA_GENERATED",
   CALLING_CONTRACT =      "CALLING_CONTRACT",
   SIGNED =                "SIGNED",
 }
