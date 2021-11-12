@@ -10,7 +10,7 @@ export function Layout({ children }: PropsWithChildren<{}>) {
     <>
       {process.env.NEXT_PUBLIC_BETA_MODE === "on" && (
         <Warning>
-          <span><strong>Warning</strong>: fx hash is in BETA mode. More about it by clicking this banner</span>
+          <span><strong>Warning</strong>: fx hash is in BETA mode. More about it by clicking this banner</span><strong> CONTRACTS TEMPORARILY DISABLED UNTIL SERVER UPGRADE</strong>
         </Warning>
       )}
 
