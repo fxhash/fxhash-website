@@ -16,8 +16,6 @@ interface Props {
 export function PlaceOffer({ objkt }: Props) {
   const userCtx = useContext(UserContext)
   const user = userCtx.user!
-
-  console.log(objkt)
   
   const [opened, setOpened] = useState<boolean>(false)
   const [price, setPrice] = useState<string>("")
@@ -48,7 +46,7 @@ export function PlaceOffer({ objkt }: Props) {
         loading={contractLoading}
         success={success}
         error={contractError}
-        successMessage="Your offer has been placed"
+        successMessage="Your Gentk has been listed"
       />
 
       {opened ? (
@@ -68,7 +66,7 @@ export function PlaceOffer({ objkt }: Props) {
             size="small"
             onClick={callContract}
           >
-            place offer
+            list for trade
           </Button>
         </div>
       ):(
