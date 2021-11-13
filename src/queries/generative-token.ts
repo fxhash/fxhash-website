@@ -13,7 +13,7 @@ export const Qu_genToken = gql`
       balance
       enabled
       royalties
-      objkts {
+      latestObjkts {
         id
         owner {
           id
