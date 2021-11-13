@@ -51,8 +51,6 @@ export function RevealProgress({ hash, onRevealed }: Props) {
       data => JSON.parse(data)
     )
 
-  console.log({ progress, error, success, loading, data, start })
-
   useEffect(() => {
     start()
   }, [])
