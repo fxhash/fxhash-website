@@ -71,7 +71,8 @@ const FixGentkPage: NextPage = () => {
 
         <main className={cs(layout['padding-big'])}>
           <p>The indexer may have missed your Gentk when it was buggy. You can use this page to try and fix it.</p>
-          <p><strong>NOTE:</strong> <span className={cs(colors.gray)}>only try once, the data you receive is what is currentky stored on-chain. So if your token doesn't appear to be signed, that's because it hasn't been signed yet.</span></p>
+          <p>This tool forces a synchronization between the Gentk and the blockchain</p>
+          <p><strong>NOTE:</strong> <span className={cs(colors.gray)}>only try it once, the data you receive is what is currentky stored on-chain. So if your token doesn't appear to be signed, that's because it hasn't been signed yet.</span></p>
 
           <Spacing size="3x-large" />
 
