@@ -16,6 +16,7 @@ import { ErrorBlock } from "../components/Error/ErrorBlock"
 import { Error } from "../components/Error/Error"
 import ClientOnly, { ClientOnlyEmpty } from "../components/Utils/ClientOnly"
 import { JsonViewer } from "../components/Utils/JsonViewer"
+import Head from "next/head"
 
 const FixGentkPage: NextPage = () => {
   const [id, setId] = useState<string>("")
@@ -24,8 +25,6 @@ const FixGentkPage: NextPage = () => {
     useFetch<Objkt|string>(`${process.env.NEXT_PUBLIC_API_INDEXER}fix-gentk/${id}`, {
       cachePolicy: CachePolicies.NO_CACHE
     })
-
-  console.log({ loading, error, data })
 
   const send = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault()
@@ -60,6 +59,15 @@ const FixGentkPage: NextPage = () => {
 
   return (
     <>
+      <Head>
+        <title>fxhash — FIX gentk</title>
+        <meta key="og:title" property="og:title" content="fxhash — FIX a Gentk"/> 
+        <meta key="description" name="description" content="Manually fix Gentks missed by the indexer"/>
+        <meta key="og:description" property="og:description" content="Manually fix Gentks missed by the indexer"/>
+        <meta key="og:type" property="og:type" content="website"/>
+        <meta key="og:image" property="og:image" content="https://www.fxhash.xyz/images/og/og1.jpg"/>
+      </Head>
+
       <Spacing size="6x-large" />
 
       <section>
