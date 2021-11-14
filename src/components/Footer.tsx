@@ -31,7 +31,8 @@ export function Footer() {
         </div>
       </div>
       <div className={cs(style.powered)}>
-        powered by <a href="https://tzkt.io/">TzTK API</a> &amp; <a href="https://smartpy.io/">SmartPy</a>
+        <span><Link href="/fix-gentk"><a>🚑 FIX Gentk 🚑</a></Link></span>
+        <span>powered by <a href="https://tzkt.io/">TzTK API</a> &amp; <a href="https://smartpy.io/">SmartPy</a></span>
       </div>
     </footer>
   )
