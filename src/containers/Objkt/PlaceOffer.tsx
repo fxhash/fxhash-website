@@ -66,7 +66,7 @@ export function PlaceOffer({ objkt }: Props) {
             size="small"
             onClick={callContract}
           >
-            list for trade
+            list
           </Button>
         </div>
       ):(
@@ -74,7 +74,7 @@ export function PlaceOffer({ objkt }: Props) {
           color={opened ? "primary" : "secondary"}
           onClick={() => setOpened(!opened)}
         >
-          place an offer
+          list for trade
         </Button>
       )}
     </>
