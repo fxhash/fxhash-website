@@ -6,10 +6,12 @@ import { useInView } from "react-intersection-observer"
 
 interface Props {
   onTrigger: () => void
+  className?: string
 }
 
 export function InfiniteScrollTrigger({
   onTrigger,
+  className,
   children
 }: PropsWithChildren<Props>) {
   const { ref, inView, entry } = useInView()
@@ -21,7 +23,7 @@ export function InfiniteScrollTrigger({
   }, [inView])
 
   return (
-    <div className={cs(style.container)}>
+    <div className={cs(style.container, className)}>
       {children}
       <div className={cs(style.trigger)} ref={ref} />
     </div>

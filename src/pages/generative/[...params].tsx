@@ -28,6 +28,7 @@ import { TitleHyphen } from '../../components/Layout/TitleHyphen'
 import { ArtworkIframe, ArtworkIframeRef } from '../../components/Artwork/PreviewIframe'
 import { useRef } from 'react'
 import { Qu_genToken } from '../../queries/generative-token'
+import { GenerativeActions } from '../../containers/Generative/Actions'
 
 
 interface Props {
@@ -187,15 +188,17 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
 
       <section>
         <SectionHeader>
-          <h2>— Recent activity ⚡</h2>
+          <h2>— activity ⚡</h2>
         </SectionHeader>
 
         <Spacing size="3x-large"/>
 
         <main className={cs(layout['padding-big'])}>
-          <div className={cs(style['activity-wrapper'])}>
-            <Activity actions={token.actions} className={style.activity} />
-          </div>
+          <GenerativeActions
+            token={token}
+            initialActions={token.actions}
+            className={style.activity}
+          /> 
         </main>
       </section>
 

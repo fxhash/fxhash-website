@@ -6,7 +6,7 @@ import { GenerativeTokenCard } from '../components/Card/GenerativeTokenCard'
 import { LoaderBlock } from '../components/Layout/LoaderBlock'
 import { InfiniteScrollTrigger } from '../components/Utils/InfiniteScrollTrigger'
 import { SearchInput } from '../components/Input/SearchInput'
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import cs from "classnames"
 import { Spacing } from '../components/Layout/Spacing'
 import { SearchTerm } from '../components/Utils/SearchTerm'
@@ -67,24 +67,42 @@ export const ExploreGenerativeTokens = ({}: Props) => {
   const [searchString, setSearchString] = useState<string>("")
   const [searchStringActive, setSearchStringActive] = useState<string|null>(null)
 
+  // use to know when to stop loading
+  const currentLength = useRef<number>(0)
+  const ended = useRef<boolean>(false)
+
   const { data, loading, fetchMore } = useQuery(Qu_genTokens, {
+    notifyOnNetworkStatusChange: true,
     variables: {
       skip: 0,
       take: ITEMS_PER_PAGE
     }
   })
 
+  useEffect(() => {
+    if (!loading) {
+      if (currentLength.current === data.generativeTokens.length) {
+        ended.current = true
+      }
+      else {
+        currentLength.current = data.generativeTokens.length
+      }
+    }
+  }, [data, loading])
+
   const [ querySearch, { data: dataSearch, loading: loadingSearch }] = useLazyQuery(Qu_searchTokens, {
     fetchPolicy: "no-cache"
   })
 
   const infiniteScrollFetch = () => {
-    fetchMore({
-      variables: {
-        skip: data.generativeTokens.length,
-        take: ITEMS_PER_PAGE
-      }
-    })
+    if (!ended.current) {
+      fetchMore({
+        variables: {
+          skip: data.generativeTokens.length,
+          take: ITEMS_PER_PAGE
+        }
+      })
+    }
   }
 
   const triggerSearch = (str: string) => {
@@ -124,10 +142,18 @@ export const ExploreGenerativeTokens = ({}: Props) => {
 
       <Spacing size="large" />
 
-      {isLoading ? (
-        <LoaderBlock height="30vh">loading</LoaderBlock>
+      {searchStringActive ? (
+        generativeTokens.length > 0 ? (
+          <CardsContainer>
+            {generativeTokens.map(token => (
+              <GenerativeTokenCard key={token.id} token={token}/>
+            ))}
+          </CardsContainer>
+        ):(
+          <p>Your query did not yield any results.<br/> We are working on improving our search engine, sorry if you expected to find something 😟</p>
+        )
       ):(
-        (generativeTokens?.length > 0) ? (
+        generativeTokens?.length > 0 && (
           <InfiniteScrollTrigger onTrigger={infiniteScrollFetch}>
             <CardsContainer>
               {generativeTokens.map(token => (
@@ -135,10 +161,10 @@ export const ExploreGenerativeTokens = ({}: Props) => {
               ))}
             </CardsContainer>
           </InfiniteScrollTrigger>
-        ):(
-          <p>Your query did not yield any results.<br/> We are working on improving our search engine, sorry if you expected to find something 😟</p>
         )
       )}
+
+      {isLoading && <LoaderBlock height="30vh">loading</LoaderBlock>}
     </>
   )
 }

@@ -41,7 +41,7 @@ export const Qu_genToken = gql`
       }
       createdAt
       updatedAt
-      actions {
+      actions: latestActions {
         id
         type
         metadata
