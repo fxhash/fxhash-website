@@ -1,7 +1,9 @@
-import { DependencyList, EffectCallback, useCallback, useEffect, useRef, useState } from 'react'
+import { DependencyList, EffectCallback, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import useAsyncEffect from 'use-async-effect'
+import useFetch, { CachePolicies } from 'use-http'
 import { ContractCallHookReturn, ContractInteractionMethod, ContractOperationStatus } from '../types/Contracts'
 import { MintError, MintProgressMessage, MintResponse } from '../types/Responses'
+import { processTzProfile } from './user'
 
 export function useIsMounted() {
   const isMounted = useRef(false)
@@ -280,4 +282,18 @@ export function useLazyImage(url: string | null): boolean {
     }
   }, [url])
   return loaded
+}
+
+/**
+ * Verify a use via tz profile
+ */
+export function useTzProfileVerification(address: string) {
+  const { data, loading } = useFetch(`https://api.tzprofiles.com/${address}`, {
+    cachePolicy: CachePolicies.NO_CACHE
+  }, [])
+  const tzProfileData = useMemo(() => (!!data && processTzProfile(data)) || null, [data])
+
+  return {
+    loading, tzProfileData
+  }
 }

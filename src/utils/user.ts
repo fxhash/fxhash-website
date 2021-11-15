@@ -57,3 +57,37 @@ export function processUserItems(user: User): UserItems {
 
   return items
 }
+
+export interface TzProfile {
+  twitter?: {
+    handle: string|undefined|null,
+    url: string|undefined|null,
+  } | null,
+  website?: string
+}
+
+export function processTzProfile(data: any): TzProfile|null {
+  try {
+    let pData: TzProfile = {}
+    for (const verif of data) {
+      const verifData = JSON.parse(verif[1])
+      if (verifData?.type?.includes("VerifiableCredential")) {
+        // is it twitter ?
+        if (verifData?.type?.includes("TwitterVerification")) {
+          pData.twitter = {
+            handle: verifData?.evidence?.handle,
+            url: verifData?.credentialSubject?.sameAs
+          }
+        }
+        // is it website ?
+        if (verifData?.type?.includes("BasicProfile")) {
+          pData.website = verifData?.credentialSubject?.website
+        }
+      }
+    }
+    return pData.twitter || pData.website ? pData : null
+  }
+  catch {
+    return null
+  }
+}

@@ -1,0 +1,46 @@
+@import "../../styles/Variables.scss";
+
+.container {
+  display: flex;
+  align-items: center;
+
+  & > *+* {
+    margin-left: 20px;
+  }
+  
+  @media (max-width: $breakpoint-sm) {
+    flex-direction: column;
+
+    & > *+* {
+      margin-left: 0px;
+      margin-top: 5px;
+    }
+  }
+}
+
+.badge {
+  display: flex;
+  align-items: center;
+  text-decoration: none !important;
+
+  & > *+* {
+    margin-left: 8px;
+  }
+
+  i {
+    font-size: 22px;
+  }
+
+  &:hover {
+    span {
+      text-decoration: underline;
+    }
+  }
+}
+
+.loading {
+  color: var(--color-gray);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
