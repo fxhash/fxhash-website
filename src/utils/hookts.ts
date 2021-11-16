@@ -295,7 +295,7 @@ export function useTzProfileVerification(address: string) {
   
   useEffect(() => {
     post({
-      query: `query MyQuery { tzprofiles_by_pk(account: \"${"tz1PoDdN2oyRyF6DA73zTWAWYhNL4UGr3Egj"}\") { valid_claims } }`,
+      query: `query MyQuery { tzprofiles_by_pk(account: \"${address}\") { valid_claims } }`,
       variables: null,
       operationName: 'MyQuery',
     })

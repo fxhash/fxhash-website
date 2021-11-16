@@ -13,7 +13,6 @@ export function UserVerification({
   profile,
   loading
 }: Props) {
-  console.log(profile)
   return (
     loading ? (
       <div className={cs(style.loading)}>
