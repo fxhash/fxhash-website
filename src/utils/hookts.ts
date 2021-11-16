@@ -1,6 +1,7 @@
 import { DependencyList, EffectCallback, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import useAsyncEffect from 'use-async-effect'
 import useFetch, { CachePolicies } from 'use-http'
+import { API_BLOCKCHAIN_CONTRACT_STORAGE } from '../services/Blockchain'
 import { ContractCallHookReturn, ContractInteractionMethod, ContractOperationStatus } from '../types/Contracts'
 import { MintError, MintProgressMessage, MintResponse } from '../types/Responses'
 import { processTzProfile } from './user'
@@ -295,5 +296,19 @@ export function useTzProfileVerification(address: string) {
 
   return {
     loading, tzProfileData
+  }
+}
+
+
+/**
+ * Get contract storage
+ */
+ export function useContractStorage(address: string) {
+  const { data, loading } = useFetch(API_BLOCKCHAIN_CONTRACT_STORAGE(address), {
+    cachePolicy: CachePolicies.NO_CACHE
+  }, [])
+ 
+  return {
+    data, loading
   }
 }

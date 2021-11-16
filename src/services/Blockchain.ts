@@ -1,0 +1,1 @@
+export const API_BLOCKCHAIN_CONTRACT_STORAGE = (address: string) => `${process.env.NEXT_PUBLIC_TZKT_API}contracts/${address}/storage`

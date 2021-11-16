@@ -10,6 +10,13 @@ Hey, this is [@ciphrd](https://twitter.com/ciphrd) the author of fxhash. fxhash 
  - the risks of using the platform in its current state
 
 
+## OPENING / CLOSING
+
+During the beta, the platform minting contract will only be opened 50% of the time. This gives the servers some breathing room to process the mints and release some stress. Currently, fxhash opens everyday at 11am CET and closes at 11pm CET. This schedule may slightly change, I post status update on Twitter/Discord. When contracts are closed, you will not be able to add a Generative Token neither will you be able to mint unique Gentk. The indicator at the top-right reflects the contracts state, if red: closed, if green: opened. **The Marketplace, on the other hand, will remain opened 24h/24h**.
+
+Note that this behaviour may still be there when the platform will officially be released. Not for technical reasons but because the community and I seem to be enjoying this concept, and I like how it reflects the story of fxhash. If that's the case, we'll find some way to have a better schedule that cycles for the people all around the world !
+
+
 ## Help fxhash
 
 If you are interested in helping me to build this project, first of all **thank you for your interest, it truly means a lot**. Since I am still new in writing application for/with blockchains, there will certainly be at least a few iterations over this current version before it reaches a stable state. From my numerous tests, I didn't find any problematic bug, but I am certainly missing some edge cases which you can help identify.
@@ -40,6 +47,6 @@ When the platform will be launching, the contracts will be replaced with new con
 We are currently discussing about it on the Discord.
 
 
-### What are the high minting costs ? Are these platform fees ?
+### What are the high minting costs ? Are there platform fees ?
 
-These cost are only related to storage fees to store the token data on the blockchain. Storage fees are very high on blockchains, so that's why. Each byte has a cost. It's about the same cost as minting a token on H=N to give you a comparaison scale. **Platform fees for minting are currently at 0%, and so for the whole duration of the beta**.
+These cost are only related to storage fees to store the token data on the blockchain. Storage fees are very high on blockchains, so that's why. Each byte has a cost. It's about the same cost as minting a token on H=N to give you a comparaison scale. **Platform fees for minting are currently at 2.5%, and so for the whole duration of the beta**.

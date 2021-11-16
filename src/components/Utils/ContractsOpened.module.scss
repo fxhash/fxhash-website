@@ -1,0 +1,24 @@
+.state {
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+
+  & > *+* {
+    margin-left: 8px;
+  }
+
+  div {
+    width: 26px;
+    height: 26px;
+    background-color: var(--color-success);
+    border-radius: 50%;
+    border: 3px solid black;
+    flex-shrink: 0;
+  }
+  
+  &.state_closed {
+    div {
+      background-color: var(--color-error);
+    }
+  }
+}
