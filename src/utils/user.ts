@@ -63,10 +63,29 @@ export interface TzProfile {
     handle: string|undefined|null,
     url: string|undefined|null,
   } | null,
-  website?: string
+  website?: {
+    handle?: string,
+    url?: string
+  }
+}
+
+export function processUrl(url: string): { handle?: string, url?: string } {
+  if (new RegExp("^(http|https)://").test(url)) {
+    return {
+      handle: url.replace(/(^\w+:|^)\/\//, ''),
+      url
+    }
+  }
+  else {
+    return {
+      handle: url,
+      url: `https://${url}`
+    }
+  }
 }
 
 export function processTzProfile(data: any): TzProfile|null {
+  console.log(data)
   try {
     let pData: TzProfile = {}
     for (const verif of data) {
@@ -81,7 +100,7 @@ export function processTzProfile(data: any): TzProfile|null {
         }
         // is it website ?
         if (verifData?.type?.includes("BasicProfile")) {
-          pData.website = verifData?.credentialSubject?.website
+          pData.website = (verifData?.credentialSubject?.website && processUrl(verifData.credentialSubject.website)) || undefined
         }
       }
     }

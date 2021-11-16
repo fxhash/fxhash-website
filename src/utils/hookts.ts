@@ -289,10 +289,20 @@ export function useLazyImage(url: string | null): boolean {
  * Verify a use via tz profile
  */
 export function useTzProfileVerification(address: string) {
-  const { data, loading } = useFetch(`https://api.tzprofiles.com/${address}`, {
+  const { data: data, post, loading } = useFetch('https://indexer.tzprofiles.com/v1/graphql', {
     cachePolicy: CachePolicies.NO_CACHE
+  })
+  
+  useEffect(() => {
+    post({
+      query: `query MyQuery { tzprofiles_by_pk(account: \"${"tz1PoDdN2oyRyF6DA73zTWAWYhNL4UGr3Egj"}\") { valid_claims } }`,
+      variables: null,
+      operationName: 'MyQuery',
+    })
   }, [])
-  const tzProfileData = useMemo(() => (!!data && processTzProfile(data)) || null, [data])
+
+  const tzProfileData = useMemo(() => (!!data?.data?.tzprofiles_by_pk?.valid_claims 
+    && processTzProfile(data?.data?.tzprofiles_by_pk?.valid_claims)) || null, [data])
 
   return {
     loading, tzProfileData
@@ -307,7 +317,7 @@ export function useTzProfileVerification(address: string) {
   const { data, loading } = useFetch(API_BLOCKCHAIN_CONTRACT_STORAGE(address), {
     cachePolicy: CachePolicies.NO_CACHE
   }, [])
- 
+
   return {
     data, loading
   }

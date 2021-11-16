@@ -29,9 +29,9 @@ export function UserVerification({
           </a>
         )}
         {profile?.website && (
-          <a href={profile.website} className={cs(style.badge)} target="_blank" referrerPolicy="no-referrer">
+          <a href={profile.website.url} className={cs(style.badge)} target="_blank" referrerPolicy="no-referrer">
             <i className="fas fa-globe"/>
-            <span>{ profile.website }</span>
+            <span>{ profile.website.handle }</span>
           </a>
         )}
       </div>
