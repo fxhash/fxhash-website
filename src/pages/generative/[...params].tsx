@@ -1,14 +1,13 @@
-import { gql } from '@apollo/client'
 import Link from 'next/link'
 import Head from 'next/head'
 import { GetServerSideProps, NextPage } from "next"
 import layout from "../../styles/Layout.module.scss"
 import style from "../../styles/GenerativeTokenDetails.module.scss"
+import colors from "../../styles/Colors.module.css"
 import homeStyle from "../../styles/Home.module.scss"
 import cs from "classnames"
 import client from "../../services/ApolloClient"
 import { GenerativeToken } from "../../types/entities/GenerativeToken"
-import { ArtworkPreview } from '../../components/Artwork/Preview'
 import { Spacing } from '../../components/Layout/Spacing'
 import { UserBadge } from '../../components/User/UserBadge'
 import { MintProgress } from '../../components/Artwork/MintProgress'
@@ -19,7 +18,6 @@ import { ipfsGatewayUrl } from '../../services/Ipfs'
 import { SectionHeader } from '../../components/Layout/SectionHeader'
 import { CardsContainer } from '../../components/Card/CardsContainer'
 import { ObjktCard } from '../../components/Card/ObjktCard'
-import { Activity } from '../../components/Activity/Activity'
 import ClientOnly from '../../components/Utils/ClientOnly'
 import { EditTokenSnippet } from '../../containers/Token/EditTokenSnippet'
 import { UserGuard } from '../../components/Guards/UserGuard'
@@ -65,6 +63,7 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
       <section className={cs(style.presentation, layout.cols2, layout['responsive-reverse'], layout['padding-big'])}>
         <div className={cs(style['presentation-details'])}>
           <header>
+            <small className={cs(colors.gray)}>#{ token.id }</small>
             <h3>{ token.name }</h3>
             <Spacing size="x-small"/>
             <UserBadge 

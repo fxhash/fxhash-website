@@ -1,12 +1,11 @@
-import { gql } from '@apollo/client'
 import Link from 'next/link'
 import Head from 'next/head'
 import { GetServerSideProps, NextPage } from "next"
 import layout from "../../styles/Layout.module.scss"
 import style from "../../styles/GenerativeTokenDetails.module.scss"
+import colors from "../../styles/Colors.module.css"
 import cs from "classnames"
 import client from "../../services/ApolloClient"
-import { ArtworkPreview } from '../../components/Artwork/Preview'
 import { Spacing } from '../../components/Layout/Spacing'
 import { UserBadge } from '../../components/User/UserBadge'
 import { Button } from '../../components/Button'
@@ -64,6 +63,7 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
       <section className={cs(layout.cols2, layout['responsive-reverse'], layout['padding-big'])}>
         <div className={cs(style['presentation-details'])}>
           <header>
+            <small className={cs(colors.gray)}>GENTK#{ objkt.id }</small>
             <h3>{ objkt.name }</h3>
             <Spacing size="x-small"/>
             <UserBadge 
