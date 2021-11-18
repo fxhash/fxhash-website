@@ -1,5 +1,6 @@
 import style from "./UserHeader.module.scss"
 import layout from "../../styles/Layout.module.scss"
+import colors from "../../styles/Colors.module.css"
 import effects from "../../styles/Effects.module.scss"
 import cs from "classnames"
 import { User } from "../../types/entities/User"
@@ -29,6 +30,7 @@ export function UserHeader({ user }: Props) {
     <header className={cs(style.container, layout['padding-small'])}>
       <Avatar uri={user.avatarUri} className={cs(style.avatar, effects['drop-shadow-big'])} />
       <div>
+        {user.name && <small className={cs(colors['gray-light'])}>{ user.id }</small>}
         <h1>{ getUserName(user) }</h1>
         {(tzProfileData||loading) && (
           <>
