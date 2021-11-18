@@ -1,4 +1,60 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# fxhash front-end
+
+This project is the front-end of [fxhash](https://fxhash.xyz/).
+The front-end uses [Nextjs](https://nextjs.org/), a React framework.
+If you want to contribute, being familiar with React might be required. However, Nextjs is pretty easy to pick-up knowing React ! Just get familiar with the basic concepts in their doc and you're good to go.
+
+
+## Installation
+
+```bash
+git clone https://github.com/fxhash/fxhash-website
+```
+
+Go to the project directory, and create a `.env.local` file with the following content:
+
+```
+NEXT_PUBLIC_API_ROOT = https://api.fxhash.xyz/graphql
+NEXT_PUBLIC_API_INDEXER = https://indexer.fxhash.xyz:4001/
+NEXT_PUBLIC_API_FILE_ROOT = https://file-api.fxhash.xyz:4004
+NEXT_PUBLIC_TZKT_API = https://api.tzkt.io/v1/
+NEXT_PUBLIC_API_CAPTURE = https://europe-west1-centering-helix-329717.cloudfunctions.net/dev-local-fxhash-web-capture
+
+NODE_TLS_REJECT_UNAUTHORIZED = 0
+
+NEXT_PUBLIC_URL_DISCORD = https://discord.gg
+NEXT_PUBLIC_URL_TWITTER = https://twitter.com
+NEXT_PUBLIC_URL_INSTAGRAM = https://instagram.com
+
+NEXT_PUBLIC_MAX_FILESIZE = 15
+
+NEXT_PUBLIC_RPC_NODES = https://mainnet.api.tez.ie,https://mainnet.smartpy.io,https://rpc.tzbeta.net,https://teznode.letzbake.com
+NEXT_PUBLIC_TZ_NET = mainnet
+
+NEXT_PUBLIC_TZ_CT_ADDRESS_ISSUER = KT1AEVuykWeuuFX7QkEAMNtffzwhe1Z98hJS
+NEXT_PUBLIC_TZ_CT_ADDRESS_MARKETPLACE = KT1Xo5B7PNBAeynZPmca4bRh6LQow4og1Zb9
+NEXT_PUBLIC_TZ_CT_ADDRESS_OBJKT = KT1KEa8z6vWXDJrVqtMrAeDVzsvxat3kHaCE
+NEXT_PUBLIC_TZ_CT_ADDRESS_USERREGISTER = KT1Ezht4PDKZri7aVppVGT4Jkw39sesaFnww
+
+NEXT_PUBLIC_BETA_MODE = on
+NEXT_PUBLIC_GT_MIN_PRICE = 0
+
+NEXT_PUBLIC_ALGOLIA_APP_ID = 6N9LMRLY02
+NEXT_PUBLIC_ALGOLIA_SEARCH_KEY = e6c2e443d04ecb3ce097de0f1648cb57
+NEXT_PUBLIC_ALGOLIA_INDEX_GENERATIVE = fxhash-generative-tokens
+NEXT_PUBLIC_ALGOLIA_INDEX_MARKETPLACE = fxhash-offers
+
+ANALYZE = false
+
+NEXT_PUBLIC_BANNER_MESSAGE = <span><strong>Warning</strong>: fxhash is in BETA mode. More by clicking this banner</span>
+NEXT_PUBLIC_MAINTENANCE_MESSAGE = Deploying new backend architecture
+NEXT_PUBLIC_MAINTENANCE_MODE = 0
+```
+
+This will set the front-end to run against the main fxhash API and the contracts on the **mainnet** so **BE CAREFUL**. If you buy a token using this front-end running on your local machine using your wallet, it will be **as if you ran the same operation on the official website**.
+
+> Currently this project runs against the mainnet, but at some point I will set up some backend on the testnet for a better dev experience.
+
 
 ## Getting Started
 
@@ -12,23 +68,32 @@ yarn dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+## How to contribute
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+* create a branch to implement a feature or fix a bug
+* when done, push the branch to the git repository
+* create a pull request
+* I will review it and merge it eventually.
 
-## Learn More
+If you find a bug with the front end, you can create an issue.
 
-To learn more about Next.js, take a look at the following resources:
+### Stack used
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+* [nextjs](https://nextjs.org/) / [react](https://reactjs.org/)
+* [typescript](https://www.typescriptlang.org/)
+* [css modules](https://github.com/css-modules/css-modules) (with sass)
+* [taquito](https://tezostaquito.io/) to interact with the blockchain
+* [ApolloClient](https://www.apollographql.com/docs/react/) to run graohQL queries (both durring SSR and on the client-side), and handle the store (client-side)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+### Project structure
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+* `/articles`: markdown files, generated in html at build time, they populate the `about` tab of the website
+* `/components`: reusable components used multiple times in the app
+* `/containers`: bigger *building block* components. They often use multiple components and have some more complexe logic
+* `/pages`: the different pages of the website (see nextjs doc)
+* `/queries`: graphQL queries (not all of them are in there, to be done)
+* `/services`: modules to interact with external services
+* `/styles`: the generic styles of the app
+* `/types`: type definitions
+* `/utils`: general-purpose utility functions
