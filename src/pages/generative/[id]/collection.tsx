@@ -4,6 +4,7 @@ import Head from 'next/head'
 import { GetServerSideProps, NextPage } from "next"
 import layout from "../../../styles/Layout.module.scss"
 import style from "../../../styles/GenerativeTokenDetails.module.scss"
+import colors from "../../../styles/Colors.module.css"
 import cs from "classnames"
 import client from "../../../services/ApolloClient"
 import { GenerativeToken } from "../../../types/entities/GenerativeToken"
@@ -52,6 +53,7 @@ const GenerativeTokenCollection: NextPage<Props> = ({ token }) => {
         <div className={cs(style['presentation-details'], style.inline)}>
           <header>
             <div className={cs(style['presentation-title'])}>
+              <small className={cs(colors.gray)}>#{ token.id }</small>
               <h3>{ token.name }</h3>
               <Spacing size="x-small"/>
               <UserBadge 

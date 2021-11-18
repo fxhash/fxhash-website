@@ -29,13 +29,17 @@ function MyApp({ Component, pageProps }: AppProps) {
 
       <NextNprogress color="#7000FF" />
 
-      <ApolloProvider client={clientSideClient}>
-        <UserProvider>
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
-        </UserProvider>
-      </ApolloProvider>
+      {process.env.NEXT_PUBLIC_MAINTENANCE_MODE === "1" ? (
+        <Component {...pageProps} />
+      ):(
+        <ApolloProvider client={clientSideClient}>
+          <UserProvider>
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </UserProvider>
+        </ApolloProvider>
+      )}
     </>
   )
 }

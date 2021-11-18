@@ -35,4 +35,4 @@ A random hash is generated, and injected into the project provided by the artist
 
 Thanks to [tztk](https://tzkt.io/) for providing a **free API** to query the tezos blockchain !
 
-Thanks to the team behind [SmartPy](https://smartpy.io/) for their awesome tool to write contracts in meta-Python, as well as providing some **unvaluable help** when facing issues while using their tools. A lot of love ❤️ towards their efforts.
+Thanks to the team behind [SmartPy](https://smartpy.io/) for their awesome tool to write contracts in meta-Python, as well as providing some **invaluable help** when facing issues while using their tools. A lot of love ❤️ towards their efforts.

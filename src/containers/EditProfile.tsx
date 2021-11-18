@@ -15,9 +15,10 @@ import { Spacing } from "../components/Layout/Spacing"
 import { CachePolicies, useFetch } from "use-http"
 import { ProfileUploadError, ProfileUploadResponse } from "../types/Responses"
 import useAsyncEffect from "use-async-effect"
-import { useContractCall } from "../utils/hookts"
+import { useContractCall, useTzProfileVerification } from "../utils/hookts"
 import { ProfileUpdateCallData } from "../types/ContractCalls"
 import { ContractFeedback } from "../components/Feedback/ContractFeedback"
+import { UserVerification } from "./User/UserVerification"
 
 
 const Schema = Yup.object().shape({
@@ -35,6 +36,8 @@ export function EditProfile() {
 
   // hack Formik
   const userName = useRef<string>(user.name || "")
+
+  const { tzProfileData, loading: loadingTz } = useTzProfileVerification(user.id)
 
   const { post, loading: fileLoading, error, data: fetchData } = 
     useFetch<ProfileUploadResponse|ProfileUploadError>(`${process.env.NEXT_PUBLIC_API_FILE_ROOT}/profile`, {
@@ -148,9 +151,30 @@ export function EditProfile() {
             >
               Submit
             </Button>
+
+            <Spacing size="6x-large"/>
+      
+            <div>
+              <span>
+                <span>You can verify your social media platforms using </span>
+                <a href="https://tzprofiles.com" target="_blank" referrerPolicy="no-referrer">tzprofiles</a>
+                <Spacing size="x-small"/>
+                <div>
+                  {(tzProfileData||loadingTz) && (
+                    <>
+                      <UserVerification profile={tzProfileData} loading={loadingTz} />
+                    </>
+                  )}
+                  {(!loadingTz && !tzProfileData) && (
+                    <em>No profile on tzprofile</em>
+                  )}
+                </div>
+              </span>
+            </div>
           </Form>
         )}
       </Formik>
+
 
       <Spacing size="3x-large"/>
       <Spacing size="3x-large"/>

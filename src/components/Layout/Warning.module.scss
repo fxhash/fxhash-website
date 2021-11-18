@@ -6,6 +6,14 @@
   align-items: center;
   color: black;
   font-weight: normal;
+  font-size: 0.8rem;
+  justify-content: space-between;
+  border-bottom: 3px solid var(--color-black);
+
+  .message {
+    display: flex;
+    align-items: center;
+  }
 
   &:hover {
     font-weight: bold;
@@ -14,9 +22,5 @@
   i {
     font-size: 28px;
     margin-right: 10px;
-  }
-
-  span {
-    font-size: 0.8rem;
   }
 }

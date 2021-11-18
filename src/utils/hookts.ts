@@ -1,7 +1,10 @@
-import { DependencyList, EffectCallback, useCallback, useEffect, useRef, useState } from 'react'
+import { DependencyList, EffectCallback, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import useAsyncEffect from 'use-async-effect'
+import useFetch, { CachePolicies } from 'use-http'
+import { API_BLOCKCHAIN_CONTRACT_STORAGE } from '../services/Blockchain'
 import { ContractCallHookReturn, ContractInteractionMethod, ContractOperationStatus } from '../types/Contracts'
 import { MintError, MintProgressMessage, MintResponse } from '../types/Responses'
+import { processTzProfile } from './user'
 
 export function useIsMounted() {
   const isMounted = useRef(false)
@@ -280,4 +283,42 @@ export function useLazyImage(url: string | null): boolean {
     }
   }, [url])
   return loaded
+}
+
+/**
+ * Verify a use via tz profile
+ */
+export function useTzProfileVerification(address: string) {
+  const { data: data, post, loading } = useFetch('https://indexer.tzprofiles.com/v1/graphql', {
+    cachePolicy: CachePolicies.NO_CACHE
+  })
+  
+  useEffect(() => {
+    post({
+      query: `query MyQuery { tzprofiles_by_pk(account: \"${address}\") { valid_claims } }`,
+      variables: null,
+      operationName: 'MyQuery',
+    })
+  }, [])
+
+  const tzProfileData = useMemo(() => (!!data?.data?.tzprofiles_by_pk?.valid_claims 
+    && processTzProfile(data?.data?.tzprofiles_by_pk?.valid_claims)) || null, [data])
+
+  return {
+    loading, tzProfileData
+  }
+}
+
+
+/**
+ * Get contract storage
+ */
+ export function useContractStorage(address: string) {
+  const { data, loading } = useFetch(API_BLOCKCHAIN_CONTRACT_STORAGE(address), {
+    cachePolicy: CachePolicies.NO_CACHE
+  }, [])
+
+  return {
+    data, loading
+  }
 }

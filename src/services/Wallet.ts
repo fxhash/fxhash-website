@@ -40,9 +40,11 @@ export class WalletManager {
     OBJKT: null,
     REGISTER: null,
   }
+  rpcNodes: string[]
 
   constructor() {
-    this.tezosToolkit = new TezosToolkit(process.env.NEXT_PUBLIC_RPC_NODE!)
+    this.rpcNodes = (process.env.NEXT_PUBLIC_RPC_NODES!).split(',')
+    this.tezosToolkit = new TezosToolkit(this.rpcNodes[0])
     this.instanciateBeaconWallet()
   }
 
@@ -113,6 +115,14 @@ export class WalletManager {
     }
   }
 
+  cycleRpcNode() {
+    // re-arrange the RPC nodes array
+    const out = this.rpcNodes.shift()!
+    this.rpcNodes.push(out)
+    console.log(`update RPC provider: ${this.rpcNodes[0]}`)
+    this.tezosToolkit.setRpcProvider(this.rpcNodes[0])
+  }
+
   //---------------------
   //---CONTRACTS STUFF---
   //---------------------
@@ -131,7 +141,7 @@ export class WalletManager {
   /**
    * Updates the profile 
    */
-  updateProfile: ContractInteractionMethod<ProfileUpdateCallData> = async (profileData, statusCallback) => {
+  updateProfile: ContractInteractionMethod<ProfileUpdateCallData> = async (profileData, statusCallback, currentTry = 1) => {
     try {
       // get/create the contract interface
       const userContract = await this.getContract(FxhashContract.REGISTER)
@@ -150,16 +160,25 @@ export class WalletManager {
       // OK, injected
       statusCallback && statusCallback(ContractOperationStatus.INJECTED)
     }
-    catch(err) {
-      // any error
-      statusCallback && statusCallback(ContractOperationStatus.ERROR)
+    catch(err: any) {
+      console.log(err)
+      
+      // if network error, and the nodes have not been all tried
+      if (err && err.name === "HttpRequestFailed" && currentTry < this.rpcNodes.length) {
+        this.cycleRpcNode()
+        await this.updateProfile(profileData, statusCallback, currentTry++)
+      }
+      else {
+        // any error
+        statusCallback && statusCallback(ContractOperationStatus.ERROR)
+      }
     }
   }
 
   /**
    * Mint a Generative Token
    */
-  mintGenerative: ContractInteractionMethod<MintGenerativeCallData> = async (tokenData, statusCallback) => {
+  mintGenerative: ContractInteractionMethod<MintGenerativeCallData> = async (tokenData, statusCallback, currentTry = 1) => {
     try {
       // get/create the contract interface
       const issuerContract = await this.getContract(FxhashContract.ISSUER)
@@ -185,17 +204,25 @@ export class WalletManager {
       // OK, injected
       statusCallback && statusCallback(ContractOperationStatus.INJECTED)
     }
-    catch(err) {
+    catch(err: any) {
       console.log(err)
-      // any error
-      statusCallback && statusCallback(ContractOperationStatus.ERROR)
+      
+      // if network error, and the nodes have not been all tried
+      if (err && err.name === "HttpRequestFailed" && currentTry < this.rpcNodes.length) {
+        this.cycleRpcNode()
+        await this.mintGenerative(tokenData, statusCallback, currentTry++)
+      }
+      else {
+        // any error
+        statusCallback && statusCallback(ContractOperationStatus.ERROR)
+      }
     }
   }
 
   /**
    * Mint a Token from generative token
    */
-   mintToken: ContractInteractionMethod<MintCall> = async (tokenData, statusCallback) => {
+   mintToken: ContractInteractionMethod<MintCall> = async (tokenData, statusCallback, currentTry = 1) => {
     try {
       // get/create the contract interface
       const issuerContract = await this.getContract(FxhashContract.ISSUER)
@@ -220,17 +247,25 @@ export class WalletManager {
       // OK, injected
       statusCallback && statusCallback(ContractOperationStatus.INJECTED, opSend.opHash)
     }
-    catch(err) {
+    catch(err: any) {
       console.log(err)
-      // any error
-      statusCallback && statusCallback(ContractOperationStatus.ERROR)
+      
+      // if network error, and the nodes have not been all tried
+      if (err && err.name === "HttpRequestFailed" && currentTry < this.rpcNodes.length) {
+        this.cycleRpcNode()
+        await this.mintToken(tokenData, statusCallback, currentTry++)
+      }
+      else {
+        // any error
+        statusCallback && statusCallback(ContractOperationStatus.ERROR)
+      }
     }
   }
 
   /**
    * Updates the profile 
    */
-  updateGenerativeToken: ContractInteractionMethod<UpdateGenerativeCallData> = async (genData, statusCallback) => {
+  updateGenerativeToken: ContractInteractionMethod<UpdateGenerativeCallData> = async (genData, statusCallback, currentTry = 1) => {
     try {
       // get/create the contract interface
       const issuerContract = await this.getContract(FxhashContract.ISSUER)
@@ -246,16 +281,25 @@ export class WalletManager {
       // OK, injected
       statusCallback && statusCallback(ContractOperationStatus.INJECTED)
     }
-    catch(err) {
-      // any error
-      statusCallback && statusCallback(ContractOperationStatus.ERROR)
+    catch(err: any) {
+      console.log(err)
+      
+      // if network error, and the nodes have not been all tried
+      if (err && err.name === "HttpRequestFailed" && currentTry < this.rpcNodes.length) {
+        this.cycleRpcNode()
+        await this.updateGenerativeToken(genData, statusCallback, currentTry++)
+      }
+      else {
+        // any error
+        statusCallback && statusCallback(ContractOperationStatus.ERROR)
+      }
     }
   }
 
   /**
    * Burn a Token
    */
-  burnGenerativeToken: ContractInteractionMethod<number> = async (tokenID, statusCallback) => {
+  burnGenerativeToken: ContractInteractionMethod<number> = async (tokenID, statusCallback, currentTry = 1) => {
     try {
       // get/create the contract interface
       const issuerContract = await this.getContract(FxhashContract.ISSUER)
@@ -271,16 +315,25 @@ export class WalletManager {
       // OK, injected
       statusCallback && statusCallback(ContractOperationStatus.INJECTED)
     }
-    catch(err) {
-      // any error
-      statusCallback && statusCallback(ContractOperationStatus.ERROR)
+    catch(err: any) {
+      console.log(err)
+      
+      // if network error, and the nodes have not been all tried
+      if (err && err.name === "HttpRequestFailed" && currentTry < this.rpcNodes.length) {
+        this.cycleRpcNode()
+        await this.burnGenerativeToken(tokenID, statusCallback, currentTry++)
+      }
+      else {
+        // any error
+        statusCallback && statusCallback(ContractOperationStatus.ERROR)
+      }
     }
   }
 
   /**
    * Place an offer on an Objkt
    */
-  placeOffer: ContractInteractionMethod<PlaceOfferCall> = async (data, statusCallback) => {
+  placeOffer: ContractInteractionMethod<PlaceOfferCall> = async (data, statusCallback, currentTry = 1) => {
     try {
       // get/create the contract interface
       const objktContract = await this.getContract(FxhashContract.OBJKT)
@@ -318,16 +371,25 @@ export class WalletManager {
       // OK, injected
       statusCallback && statusCallback(ContractOperationStatus.INJECTED)
     }
-    catch(err) {
-      // any error
-      statusCallback && statusCallback(ContractOperationStatus.ERROR)
+    catch(err: any) {
+      console.log(err)
+      
+      // if network error, and the nodes have not been all tried
+      if (err && err.name === "HttpRequestFailed" && currentTry < this.rpcNodes.length) {
+        this.cycleRpcNode()
+        await this.placeOffer(data, statusCallback, currentTry++)
+      }
+      else {
+        // any error
+        statusCallback && statusCallback(ContractOperationStatus.ERROR)
+      }
     }
   }
 
   /**
    * Cancel the offer on an objky
    */
-   cancelOffer: ContractInteractionMethod<CancelOfferCall> = async (data, statusCallback) => {
+   cancelOffer: ContractInteractionMethod<CancelOfferCall> = async (data, statusCallback, currentTry = 1) => {
     try {
       // get/create the contract interface
       const marketContract = await this.getContract(FxhashContract.MARKETPLACE)
@@ -343,16 +405,25 @@ export class WalletManager {
       // OK, injected
       statusCallback && statusCallback(ContractOperationStatus.INJECTED)
     }
-    catch(err) {
-      // any error
-      statusCallback && statusCallback(ContractOperationStatus.ERROR)
+    catch(err: any) {
+      console.log(err)
+      
+      // if network error, and the nodes have not been all tried
+      if (err && err.name === "HttpRequestFailed" && currentTry < this.rpcNodes.length) {
+        this.cycleRpcNode()
+        await this.cancelOffer(data, statusCallback, currentTry++)
+      }
+      else {
+        // any error
+        statusCallback && statusCallback(ContractOperationStatus.ERROR)
+      }
     }
   }
 
   /**
    * Cancel the offer on an objky
    */
-  collect: ContractInteractionMethod<CollectCall> = async (data, statusCallback) => {
+  collect: ContractInteractionMethod<CollectCall> = async (data, statusCallback, currentTry = 1) => {
     try {
       // get/create the contract interface
       const marketContract = await this.getContract(FxhashContract.MARKETPLACE)
@@ -371,9 +442,18 @@ export class WalletManager {
       // OK, injected
       statusCallback && statusCallback(ContractOperationStatus.INJECTED)
     }
-    catch(err) {
-      // any error
-      statusCallback && statusCallback(ContractOperationStatus.ERROR)
+    catch(err: any) {
+      console.log(err)
+      
+      // if network error, and the nodes have not been all tried
+      if (err && err.name === "HttpRequestFailed" && currentTry < this.rpcNodes.length) {
+        this.cycleRpcNode()
+        await this.collect(data, statusCallback, currentTry++)
+      }
+      else {
+        // any error
+        statusCallback && statusCallback(ContractOperationStatus.ERROR)
+      }
     }
   }
 }

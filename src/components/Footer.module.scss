@@ -46,6 +46,9 @@
   position: absolute;
   right: 12px;
   bottom: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
 }
 
 @media (max-width: $breakpoint-md) {

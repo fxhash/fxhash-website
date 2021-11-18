@@ -1,33 +1,40 @@
 import { ApolloClient, InMemoryCache } from "@apollo/client";
 
 const client = new ApolloClient({
-  uri: process.env.NEXT_PUBLIC_API_INDEXER_ROOT,
+  uri: process.env.NEXT_PUBLIC_API_ROOT,
   cache: new InMemoryCache(),
   ssrMode: true,
   ssrForceFetchDelay: 1000
 })
 
 export const clientSideClient = new ApolloClient({
-  uri: process.env.NEXT_PUBLIC_API_INDEXER_ROOT,
+  uri: process.env.NEXT_PUBLIC_API_ROOT,
   cache: new InMemoryCache({
     typePolicies: {
+      GenerativeToken: {
+        fields: {
+          actions: {
+            keyArgs: false,
+            // @ts-ignore
+            merge(existing, incoming, { args: { skip = 0 }}) {
+              const merged = existing ? existing.slice(0) : []
+              // filter incoming for duplicates
+              const singles = incoming.filter((a: any) => merged.find((b: any) => a.__ref === b.__ref) !== -1)
+              for (let i = 0; i < singles.length; ++i) {
+                merged[skip + i] = singles[i]
+              }
+              return merged
+            },
+          },
+        }
+      },
       Query: {
         fields: {
           generativeTokens: {
-            // Don't cache separate results based on
-            // any of this field's arguments.
             keyArgs: false,
-            // Concatenate the incoming list items with
-            // the existing list items.
             // @ts-ignore
             merge(existing, incoming, { args: { skip = 0 }}) {
-              // Slicing is necessary because the existing data is
-              // immutable, and frozen in development.
               const merged = existing ? existing.slice(0) : []
-              // prevent items with the same ID from being inserted
-              // const ids = merged.map((item: any) => item.id)
-              // const filtered = incoming.filter((item: any) => !ids.includes(item.id))
-              // console.log({ ids, filtered })
               for (let i = 0; i < incoming.length; ++i) {
                 merged[skip + i] = incoming[i]
               }

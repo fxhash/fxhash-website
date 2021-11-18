@@ -27,10 +27,12 @@ function getProgressPosition(progress: SigningProgress|null): number {
       return 2
     case SigningState.GENERATING_METADATA:
       return 3
-    case SigningState.CALLING_CONTRACT:
+    case SigningState.METADATA_GENERATED:
       return 4
+    case SigningState.CALLING_CONTRACT:
+      return 5
     case SigningState.SIGNED:
-      return 6
+      return 7
     case SigningState.NONE:
     default:
       return 0
@@ -48,8 +50,6 @@ export function RevealProgress({ hash, onRevealed }: Props) {
       `${process.env.NEXT_PUBLIC_API_INDEXER}mint-feedback/${hash}`, 
       data => JSON.parse(data)
     )
-
-  console.log({ progress, error, success, loading, data, start })
 
   useEffect(() => {
     start()
@@ -89,6 +89,7 @@ export function RevealProgress({ hash, onRevealed }: Props) {
             `token will be added to the queue`,
             `token is in the queue ${progress?.state === SigningState.QUEUED ? `(position: ${progress?.extra?.position || "unknown"})` : ""}`,
             "server is generating your token metadata",
+            `metadata generated ${progress?.state === SigningState.METADATA_GENERATED ? `(waiting to be signed, position: ${progress?.extra?.position || "unknown"})` : ""}`,
             "signing operation is being sent to the blockchain",
             "token metadata has been signed"
           ]}

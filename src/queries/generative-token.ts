@@ -13,7 +13,7 @@ export const Qu_genToken = gql`
       balance
       enabled
       royalties
-      objkts {
+      objkts: latestObjkts {
         id
         owner {
           id
@@ -41,7 +41,7 @@ export const Qu_genToken = gql`
       }
       createdAt
       updatedAt
-      actions {
+      actions: latestActions {
         id
         type
         metadata

@@ -41,7 +41,7 @@ export function CancelOffer({ offer }: Props) {
         color="primary"
         onClick={callContract}
       >
-        cancel offer
+        cancel trade
       </Button>
     </>
   )
