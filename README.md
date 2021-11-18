@@ -77,10 +77,11 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## How to contribute
 
+* fork this repo
 * create a branch to implement a feature or fix a bug
-* when done, push the branch to the git repository
+* when done, push the branch to your git repository fork
 * create a pull request
-* I will review it and merge it eventually.
+* I will review it and merge it eventually
 
 If you find a bug with the front end, you can create an issue.
 
