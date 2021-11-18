@@ -161,6 +161,8 @@ export class WalletManager {
       statusCallback && statusCallback(ContractOperationStatus.INJECTED)
     }
     catch(err: any) {
+      console.log(err)
+      
       // if network error, and the nodes have not been all tried
       if (err && err.name === "HttpRequestFailed" && currentTry < this.rpcNodes.length) {
         this.cycleRpcNode()
@@ -203,6 +205,8 @@ export class WalletManager {
       statusCallback && statusCallback(ContractOperationStatus.INJECTED)
     }
     catch(err: any) {
+      console.log(err)
+      
       // if network error, and the nodes have not been all tried
       if (err && err.name === "HttpRequestFailed" && currentTry < this.rpcNodes.length) {
         this.cycleRpcNode()
@@ -244,6 +248,8 @@ export class WalletManager {
       statusCallback && statusCallback(ContractOperationStatus.INJECTED, opSend.opHash)
     }
     catch(err: any) {
+      console.log(err)
+      
       // if network error, and the nodes have not been all tried
       if (err && err.name === "HttpRequestFailed" && currentTry < this.rpcNodes.length) {
         this.cycleRpcNode()
@@ -276,6 +282,8 @@ export class WalletManager {
       statusCallback && statusCallback(ContractOperationStatus.INJECTED)
     }
     catch(err: any) {
+      console.log(err)
+      
       // if network error, and the nodes have not been all tried
       if (err && err.name === "HttpRequestFailed" && currentTry < this.rpcNodes.length) {
         this.cycleRpcNode()
@@ -308,6 +316,8 @@ export class WalletManager {
       statusCallback && statusCallback(ContractOperationStatus.INJECTED)
     }
     catch(err: any) {
+      console.log(err)
+      
       // if network error, and the nodes have not been all tried
       if (err && err.name === "HttpRequestFailed" && currentTry < this.rpcNodes.length) {
         this.cycleRpcNode()
@@ -362,6 +372,8 @@ export class WalletManager {
       statusCallback && statusCallback(ContractOperationStatus.INJECTED)
     }
     catch(err: any) {
+      console.log(err)
+      
       // if network error, and the nodes have not been all tried
       if (err && err.name === "HttpRequestFailed" && currentTry < this.rpcNodes.length) {
         this.cycleRpcNode()
@@ -394,6 +406,8 @@ export class WalletManager {
       statusCallback && statusCallback(ContractOperationStatus.INJECTED)
     }
     catch(err: any) {
+      console.log(err)
+      
       // if network error, and the nodes have not been all tried
       if (err && err.name === "HttpRequestFailed" && currentTry < this.rpcNodes.length) {
         this.cycleRpcNode()
@@ -429,6 +443,8 @@ export class WalletManager {
       statusCallback && statusCallback(ContractOperationStatus.INJECTED)
     }
     catch(err: any) {
+      console.log(err)
+      
       // if network error, and the nodes have not been all tried
       if (err && err.name === "HttpRequestFailed" && currentTry < this.rpcNodes.length) {
         this.cycleRpcNode()
