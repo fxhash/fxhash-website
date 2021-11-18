@@ -11,7 +11,15 @@ If you want to contribute, being familiar with React might be required. However,
 git clone https://github.com/fxhash/fxhash-website
 ```
 
-Go to the project directory, and create a `.env.local` file with the following content:
+Go to the project directory
+
+```bash
+npm install
+# or
+yarn install
+```
+
+Create a `.env.local` file with the following content:
 
 ```
 NEXT_PUBLIC_API_ROOT = https://api.fxhash.xyz/graphql
@@ -19,8 +27,6 @@ NEXT_PUBLIC_API_INDEXER = https://indexer.fxhash.xyz:4001/
 NEXT_PUBLIC_API_FILE_ROOT = https://file-api.fxhash.xyz:4004
 NEXT_PUBLIC_TZKT_API = https://api.tzkt.io/v1/
 NEXT_PUBLIC_API_CAPTURE = https://europe-west1-centering-helix-329717.cloudfunctions.net/dev-local-fxhash-web-capture
-
-NODE_TLS_REJECT_UNAUTHORIZED = 0
 
 NEXT_PUBLIC_URL_DISCORD = https://discord.gg
 NEXT_PUBLIC_URL_TWITTER = https://twitter.com
