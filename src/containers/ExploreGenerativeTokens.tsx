@@ -10,6 +10,8 @@ import { useState, useRef, useEffect } from 'react'
 import cs from "classnames"
 import { Spacing } from '../components/Layout/Spacing'
 import { SearchTerm } from '../components/Utils/SearchTerm'
+import { searchIndexGenerative } from '../services/Algolia'
+import { AlgoliaSearch } from '../components/Search/AlgoliaSearch'
 
 
 const ITEMS_PER_PAGE = 10
@@ -37,9 +39,9 @@ const Qu_genTokens = gql`
   }
 `
 
-const Qu_searchTokens = gql`
-  query Query($search: String!) {
-    searchGenerativeTokens(search: $search) {
+const Qu_tokensById = gql`
+  query Query($ids: [Float!]!) {
+    generativeTokensByIds(ids: $ids) {
       id
       name
       slug
@@ -64,8 +66,8 @@ interface Props {
 }
 
 export const ExploreGenerativeTokens = ({}: Props) => {
-  const [searchString, setSearchString] = useState<string>("")
-  const [searchStringActive, setSearchStringActive] = useState<string|null>(null)
+  const [searchResults, setSearchResults] = useState<GenerativeToken[]|null>(null)
+  const [searchLoading, setSearchLoading] = useState<boolean>(false)
 
   // use to know when to stop loading
   const currentLength = useRef<number>(0)
@@ -90,10 +92,6 @@ export const ExploreGenerativeTokens = ({}: Props) => {
     }
   }, [data, loading])
 
-  const [ querySearch, { data: dataSearch, loading: loadingSearch }] = useLazyQuery(Qu_searchTokens, {
-    fetchPolicy: "no-cache"
-  })
-
   const infiniteScrollFetch = () => {
     if (!ended.current) {
       fetchMore({
@@ -105,52 +103,28 @@ export const ExploreGenerativeTokens = ({}: Props) => {
     }
   }
 
-  const triggerSearch = (str: string) => {
-    if (str.length > 0) {
-      querySearch({
-        variables: {
-          search: str
-        }
-      })
-      setSearchStringActive(str)
-    }
-    else {
-      setSearchStringActive(null)
-    }
-  }
-
-  const generativeTokens: GenerativeToken[] = searchStringActive 
-    ? dataSearch?.searchGenerativeTokens
-    : data?.generativeTokens
-
-  const isLoading = searchStringActive ? loadingSearch : loading
+  const generativeTokens: GenerativeToken[] = data?.generativeTokens
 
   return (
     <>
-      <div className={cs(layout['search-container'])}>
-        <SearchInput 
-          value={searchString}
-          onChange={setSearchString}
-          placeholder="search by artist name, tags, title..."
-          onSearch={triggerSearch}
-          className={cs(layout['search-bar'])}
-        />
-        {searchStringActive && (
-          <SearchTerm term={searchStringActive} onClear={() => setSearchStringActive(null)} />
-        )}
-      </div>
+      <AlgoliaSearch 
+        searchIndex={searchIndexGenerative}
+        gqlMapQuery={Qu_tokensById}
+        onResults={setSearchResults}
+        onLoading={setSearchLoading}
+      />
 
       <Spacing size="large" />
 
-      {searchStringActive ? (
-        generativeTokens.length > 0 ? (
+      {searchResults ? (
+        searchResults.length > 0 ? (
           <CardsContainer>
-            {generativeTokens.map(token => (
+            {searchResults.map(token => (
               <GenerativeTokenCard key={token.id} token={token}/>
             ))}
           </CardsContainer>
         ):(
-          <p>Your query did not yield any results.<br/> We are working on improving our search engine, sorry if you expected to find something 😟</p>
+          <p>Your query did not yield any results. 😟</p>
         )
       ):(
         generativeTokens?.length > 0 && (
@@ -164,7 +138,7 @@ export const ExploreGenerativeTokens = ({}: Props) => {
         )
       )}
 
-      {isLoading && <LoaderBlock height="30vh">loading</LoaderBlock>}
+      {loading && <LoaderBlock height="30vh">loading</LoaderBlock>}
     </>
   )
 }
