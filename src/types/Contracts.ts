@@ -11,7 +11,7 @@ export enum ContractOperationStatus {
 export type ContractOperationCallback = (status: ContractOperationStatus, data?: string) => any
 
 // generic signature for any contract-interraction method
-export type ContractInteractionMethod<T> = (data: T, operationCallback?: ContractOperationCallback) => any
+export type ContractInteractionMethod<T> = (data: T, operationCallback?: ContractOperationCallback, currentTry?: number) => any
 
 export enum FxhashContract {
   ISSUER        = "ISSUER",
