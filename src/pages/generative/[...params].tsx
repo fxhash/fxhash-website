@@ -89,6 +89,9 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
               supply={token.supply}
             />
             <Spacing size="large"/>
+
+            <strong>Please check from who you are collecting if there is any doubt.</strong>
+            <Spacing size="2x-small"/>
             
             {token.balance > 0 && (
               <>
