@@ -51,7 +51,6 @@ export function MintGenerativeTabs({ steps }: Props) {
       <Tabs
         tabDefinitions={tabs}
         activeIdx={tabIndex}
-        onChangeRequest={() => {}}
         tabsLayout="full-width"
         tabsClassName={cs(style.tab)}
       />

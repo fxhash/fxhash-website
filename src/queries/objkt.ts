@@ -62,3 +62,47 @@ export const Qu_objkt = gql`
     }
   }
 `
+
+export const Qu_objktsFeed = gql`
+  query Query($filters: ObjktFilter, $take: Int) {
+    objkts(filters: $filters, take: $take) {
+      id
+      royalties
+      owner {
+        id
+        name
+        avatarUri
+      }
+      name
+      slug
+      issuer {
+        id
+        name
+        slug
+        metadata
+        author {
+          id
+          name
+          avatarUri
+        }
+      }
+      metadata
+      features
+      rarity
+      assigned
+      iteration
+      generationHash
+      createdAt
+      assignedAt
+      offer {
+        id
+        price
+        issuer {
+          id
+          name
+          avatarUri
+        }
+      }
+    }
+  }
+`

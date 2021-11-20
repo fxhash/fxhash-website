@@ -32,6 +32,20 @@ export const useClientAsyncEffect = (effect: (isMounted: () => boolean) => unkno
   }
 }
 
+export const useInterval = (callback: () => void, intervalMs: number) => {
+  const isMounted = useIsMounted()
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (isMounted()) callback()
+    }, intervalMs)
+    
+    return () => {
+      clearInterval(interval)
+    }
+  }, [])
+}
+
 /**
  * Designed to interract with generic contract methods residing in the Wallet service.
  */

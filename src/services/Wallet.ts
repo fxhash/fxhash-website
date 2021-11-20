@@ -123,6 +123,11 @@ export class WalletManager {
     this.tezosToolkit.setRpcProvider(this.rpcNodes[0])
   }
 
+  // given an error, returns true if request can be cycled to another RPC node
+  canErrorBeCycled(err: any): boolean {
+    return err && (err.name === "HttpRequestFailed" || err.status === 500 || err.status === 408)
+  }
+
   //---------------------
   //---CONTRACTS STUFF---
   //---------------------
@@ -164,7 +169,7 @@ export class WalletManager {
       console.log({err})
       
       // if network error, and the nodes have not been all tried
-      if (err && err.name === "HttpRequestFailed" && currentTry < this.rpcNodes.length) {
+      if (this.canErrorBeCycled(err) && currentTry < this.rpcNodes.length) {
         this.cycleRpcNode()
         await this.updateProfile(profileData, statusCallback, currentTry++)
       }
@@ -208,7 +213,7 @@ export class WalletManager {
       console.log({err})
       
       // if network error, and the nodes have not been all tried
-      if (err && err.name === "HttpRequestFailed" && currentTry < this.rpcNodes.length) {
+      if (this.canErrorBeCycled(err) && currentTry < this.rpcNodes.length) {
         this.cycleRpcNode()
         await this.mintGenerative(tokenData, statusCallback, currentTry++)
       }
@@ -251,7 +256,7 @@ export class WalletManager {
       console.log({err})
       
       // if network error, and the nodes have not been all tried
-      if (err && err.name === "HttpRequestFailed" && currentTry < this.rpcNodes.length) {
+      if (this.canErrorBeCycled(err) && currentTry < this.rpcNodes.length) {
         this.cycleRpcNode()
         await this.mintToken(tokenData, statusCallback, currentTry++)
       }
@@ -285,7 +290,7 @@ export class WalletManager {
       console.log({err})
       
       // if network error, and the nodes have not been all tried
-      if (err && err.name === "HttpRequestFailed" && currentTry < this.rpcNodes.length) {
+      if (this.canErrorBeCycled(err) && currentTry < this.rpcNodes.length) {
         this.cycleRpcNode()
         await this.updateGenerativeToken(genData, statusCallback, currentTry++)
       }
@@ -319,7 +324,7 @@ export class WalletManager {
       console.log({err})
       
       // if network error, and the nodes have not been all tried
-      if (err && err.name === "HttpRequestFailed" && currentTry < this.rpcNodes.length) {
+      if (this.canErrorBeCycled(err) && currentTry < this.rpcNodes.length) {
         this.cycleRpcNode()
         await this.burnGenerativeToken(tokenID, statusCallback, currentTry++)
       }
@@ -375,7 +380,7 @@ export class WalletManager {
       console.log({err})
       
       // if network error, and the nodes have not been all tried
-      if (err && err.name === "HttpRequestFailed" && currentTry < this.rpcNodes.length) {
+      if (this.canErrorBeCycled(err) && currentTry < this.rpcNodes.length) {
         this.cycleRpcNode()
         await this.placeOffer(data, statusCallback, currentTry++)
       }
@@ -409,7 +414,7 @@ export class WalletManager {
       console.log({err})
       
       // if network error, and the nodes have not been all tried
-      if (err && err.name === "HttpRequestFailed" && currentTry < this.rpcNodes.length) {
+      if (this.canErrorBeCycled(err) && currentTry < this.rpcNodes.length) {
         this.cycleRpcNode()
         await this.cancelOffer(data, statusCallback, currentTry++)
       }
@@ -446,7 +451,7 @@ export class WalletManager {
       console.log({err})
       
       // if network error, and the nodes have not been all tried
-      if (err && err.name === "HttpRequestFailed" && currentTry < this.rpcNodes.length) {
+      if (this.canErrorBeCycled(err) && currentTry < this.rpcNodes.length) {
         this.cycleRpcNode()
         await this.collect(data, statusCallback, currentTry++)
       }

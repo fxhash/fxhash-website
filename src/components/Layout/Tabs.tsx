@@ -40,7 +40,6 @@ interface Props {
   tabsLayout?: TabsLayout
   tabDefinitions: TabDefinition[]
   activeIdx: number
-  onChangeRequest: (index: number) => void
   tabsClassName?: string
   contentClassName?: string
   tabWrapperComponent?: React.ReactNode
@@ -55,7 +54,6 @@ export function Tabs({
   tabDefinitions,
   tabsLayout = "full-width",
   activeIdx,
-  onChangeRequest,
   tabsClassName,
   contentClassName,
   tabWrapperComponent,

@@ -7,6 +7,8 @@ import ClientOnly from '../components/Utils/ClientOnly'
 import { ExploreGenerativeTokens } from '../containers/ExploreGenerativeTokens'
 import Head from 'next/head'
 import { TitleHyphen } from '../components/Layout/TitleHyphen'
+import { Tabs } from '../components/Layout/Tabs'
+import { ExploreTabs } from '../containers/Explore/ExploreTabs'
 
 
 
@@ -25,8 +27,12 @@ const Explore: NextPage = () => {
 
       <section>
         <SectionHeader>
-          <TitleHyphen>explore artists' work</TitleHyphen>
+          <TitleHyphen>explore / artists' work</TitleHyphen>
         </SectionHeader>
+
+        <Spacing size="x-large" />
+
+        <ExploreTabs active={0} />
 
         <Spacing size="x-large"/>
 

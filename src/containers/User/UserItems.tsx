@@ -68,7 +68,6 @@ export function UserItems({ user }: Props) {
       <Tabs
         tabDefinitions={TABS}
         activeIdx={tabIndex}
-        onChangeRequest={() => {}}
         tabsLayout="fixed-size"
         tabsClassName={cs(layout['padding-big'])}
         tabWrapperComponent={TabWrapper}

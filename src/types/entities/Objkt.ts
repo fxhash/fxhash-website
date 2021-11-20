@@ -23,4 +23,5 @@ export interface Objkt {
   actions: Action[]
   createdAt: string
   updatedAt: string
+  assignedAt: string|null
 }
