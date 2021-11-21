@@ -55,7 +55,7 @@ const ActionMintedFrom: FunctionComponent<Props> = ({ action, verbose }) => (
 
 const ActionTransfered: FunctionComponent<Props> = ({ action, verbose }) => (
   <>
-    ⬅️ <UserBadge className={cs(style.user)} hasLink={true} user={(action.issuer||action.target)!} size="regular" />
+    ⬅️<UserBadge className={cs(style.user)} hasLink={true} user={(action.issuer||action.target)!} size="regular" />
     <span>
        received 
       {verbose ? (
@@ -96,7 +96,7 @@ const ActionOfferAccepted: FunctionComponent<Props> = ({ action }) => (
 
 const ActionOfferCancelled: FunctionComponent<Props> = ({ action }) => (
   <>
-    <UserBadge className={cs(style.user)} hasLink={true} user={(action.issuer||action.target)!} size="regular" />
+    ⛔<UserBadge className={cs(style.user)} hasLink={true} user={(action.issuer||action.target)!} size="regular" />
     <span><strong className={cs(colors.error)}>cancelled</strong> its offer on <strong>token {getTokenIdx(action.objkt?.name!)}</strong></span>
     <DateDistance timestamptz={action.createdAt} append/>
   </>
