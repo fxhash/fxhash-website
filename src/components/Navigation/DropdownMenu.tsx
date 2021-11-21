@@ -6,11 +6,12 @@ import cs from "classnames"
 
 interface Props {
   opened: boolean
+  className?: string
 }
 
-export function DropdownMenu({ opened, children }: PropsWithChildren<Props>) {
+export function DropdownMenu({ opened, className, children }: PropsWithChildren<Props>) {
   return (
-    <div className={cs(style.menu, effects['drop-shadow-big'], {
+    <div className={cs(style.menu, className, effects['drop-shadow-big'], {
       [style['menu-opened']]: opened
     })}>
       { children }

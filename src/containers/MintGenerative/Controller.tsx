@@ -126,8 +126,6 @@ export function MintGenerativeController({ anchor }: Props) {
   const history = useHistory()
   const location = useLocation()
 
-  console.log(state)
-
   // derive index of the step from the location
   const stepIndex = useMemo<number>(() => {
     const S = STEPS.find(step => step.path === location.pathname)
@@ -157,8 +155,6 @@ export function MintGenerativeController({ anchor }: Props) {
     }
 
     const step = STEPS[stepIndex]
-    console.log(step)
-    console.log(step.validateIn(state))
     if (step.validateIn(state)) {
       // clear the data down the state
       setState(step.clearDataDown(state))

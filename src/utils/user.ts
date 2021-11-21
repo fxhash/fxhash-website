@@ -85,7 +85,6 @@ export function processUrl(url: string): { handle?: string, url?: string } {
 }
 
 export function processTzProfile(data: any): TzProfile|null {
-  console.log(data)
   try {
     let pData: TzProfile = {}
     for (const verif of data) {
