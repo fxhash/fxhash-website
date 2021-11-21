@@ -1,0 +1,13 @@
+.container {
+  display: flex;
+  flex-direction: column;
+
+  em {
+    color: var(--color-gray);
+    margin-top: 8px;
+  }
+}
+
+.resolution {
+  width: calc(min(100%, 500px));
+}

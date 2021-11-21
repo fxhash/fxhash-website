@@ -1,0 +1,57 @@
+@import "../../styles/Variables.scss";
+
+.container {
+  width: 100%;
+  border: 3px solid var(--color-black);
+  padding: 0 20px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  overflow-wrap: break-word;
+  word-break: break-word;
+
+  @media (max-width: $breakpoint-sm) {
+    height: auto;
+    padding: 10px;
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+.date {
+  color: var(--color-gray);
+  flex-shrink: 0;
+  font-size: 0.7rem;
+}
+
+.price {
+  justify-self: flex-end;
+  color: var(--color-secondary);
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.link {
+  font-weight: normal;
+  color: var(--color-black);
+
+  &:hover {
+    text-decoration: none;
+    border: 3px solid var(--color-secondary);
+  }
+}
+
+.user {
+  flex-shrink: 0;
+}
+
+.icon {
+  font-size: 40px;
+}
+
+.align {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}

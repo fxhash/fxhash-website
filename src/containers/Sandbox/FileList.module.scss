@@ -1,0 +1,24 @@
+.container {
+  width: 100%;
+  padding: 15px;
+  background-color: #F2F2F2;
+  border: 3px solid var(--color-black);
+  margin: 0;
+  font-weight: bold;
+  max-height: 200px;
+  overflow: auto;
+
+  li {
+    list-style: none;
+  }
+
+  & > *+*, ul > *+* {
+    margin-top: 8px;
+  }
+
+  ul {
+    padding-inline-start: 15px;
+    margin-left: 5px;
+    border-left: 3px solid black;
+  }
+}
