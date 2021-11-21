@@ -72,7 +72,7 @@ const ActionOffer: FunctionComponent<Props> = ({ action, verbose }) => (
   <>
     <UserBadge className={cs(style.user)} hasLink={false} user={(action.issuer||action.target)!} size="regular" />
     <span>
-      🟢 placed an offer for 
+      🟢 listed for sale
       {verbose ? (
         <> <strong>{action.objkt?.name}</strong></>
       ):(
@@ -87,7 +87,7 @@ const ActionOffer: FunctionComponent<Props> = ({ action, verbose }) => (
 const ActionOfferAccepted: FunctionComponent<Props> = ({ action }) => (
   <>
     <UserBadge className={cs(style.user)} hasLink={false} user={(action.issuer||action.target)!} size="regular" />
-    <span>🔄 traded its <strong>token {getTokenIdx(action.objkt?.name!)}</strong></span>
+    <span>🔄 <strong>token {getTokenIdx(action.objkt?.name!)} purchased</strong></span>
     <DateDistance timestamptz={action.createdAt} append/>
     <span className={cs(style.price)}>{displayMutez(action.metadata.price)} tez</span>
   </>
