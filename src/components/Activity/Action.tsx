@@ -78,14 +78,10 @@ const ActionOffer: FunctionComponent<Props> = ({ action, verbose }) => (
       ):(
         <strong> token {getTokenIdx(action.objkt?.name!)} </strong> 
       )}
-
       for sale for 
       <span className={cs(style.price)}> {displayMutez(action.metadata.price)} tez</span>
     </span>
-
-     
     <DateDistance timestamptz={action.createdAt} append/>
-   
   </>
 )
 
@@ -180,7 +176,6 @@ export function Action({ action, verbose }: Props) {
   const ActionComponent = ActionMapComponent[action.type]
 
   return (
-    //<LinkWrapper action={action}>
     <ActionWrapper action={action}>
       <ActionComponent action={action} verbose={verbose} />
     </ActionWrapper>
