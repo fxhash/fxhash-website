@@ -56,6 +56,10 @@ Finally, a warning will appear at the top of all the Generative Tokens flagged. 
 
 ![Flag banner](/images/articles/mod/flag-banner.jpg)
 
+On the marketplace (and anywhere a Gentk Card is displayed), a warning will inform that a Gentk comes from an undesirable Generative Token.
+
+![Marketplace](/images/articles/mod/undesirable.jpg)
+
 
 # Why this system
 
