@@ -97,7 +97,7 @@ const ActionOfferAccepted: FunctionComponent<Props> = ({ action }) => (
 const ActionOfferCancelled: FunctionComponent<Props> = ({ action }) => (
   <>
     ⛔<UserBadge className={cs(style.user)} hasLink={true} user={(action.issuer||action.target)!} size="regular" />
-    <span><strong className={cs(colors.error)}>cancelled</strong> its offer on <strong>token {getTokenIdx(action.objkt?.name!)}</strong></span>
+    <span><strong className={cs(colors.error)}>cancelled</strong> their offer on <strong>token {getTokenIdx(action.objkt?.name!)}</strong></span>
     <DateDistance timestamptz={action.createdAt} append/>
   </>
 )
@@ -110,7 +110,7 @@ const ActionUpdateState: FunctionComponent<Props> = ({ action }) => {
       <span>
         updated generative:
         {changes.enabled !== undefined && (
-          <><strong className={cs(changes.enabled ? colors.success : colors.error)}> { changes.enabled ? "enabled" : "disabled" }</strong>, </>
+          <><strong className={cs(changes.enabled ? colors.success : colors.error)}> { changes.enabled ? "enabled" : "disabled" }</strong></>
         )}
         {changes.price !== undefined && (
           <><strong className={cs(style.price)}>{displayMutez(changes.price)} tez</strong>, </>
