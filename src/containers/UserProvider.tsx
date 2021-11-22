@@ -72,7 +72,6 @@ export function UserProvider({ children }: PropsWithChildren<{}>) {
   
   // asks the manager for a disconnect & clears the context
   const disconnect = async () => {
-    console.log("disconnect")
     const ctx = ctxRef.current
     if (ctx.walletManager) {
       await ctx.walletManager.disconnect()

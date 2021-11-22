@@ -15,6 +15,7 @@ export const Qu_objkt = gql`
       issuer {
         id
         name
+        flag
         slug
         metadata
         author {

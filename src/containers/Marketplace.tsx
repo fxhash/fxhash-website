@@ -42,6 +42,7 @@ const Qu_offers = gql`
           avatarUri
         }
         issuer {
+          flag
           author {
             id
             name

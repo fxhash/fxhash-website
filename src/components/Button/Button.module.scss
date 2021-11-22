@@ -107,6 +107,16 @@
   background-color: var(--color-secondary);
 }
 
+.color-transparent {
+  background-color: transparent;
+  color: var(--color-gray) !important;
+  box-shadow: none;
+  
+  &:hover {
+    color: var(--color-black) !important;
+  }
+}
+
 .state-default {}
 
 @keyframes turn {

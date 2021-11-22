@@ -37,6 +37,10 @@
   &.opened {
     color: var(--color-white) !important;
     background-color: var(--color-black) !important;
+
+    i {
+      color: var(--color-white);
+    }
   }
 }
 

@@ -53,8 +53,6 @@ export const InputCaptureSettings: FunctionComponent<Props> = ({
     })
   }
 
-  console.log(settings)
-
   return (
     <div className={cs(style.container)}>
       

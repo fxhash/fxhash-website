@@ -28,6 +28,7 @@ import { format } from 'date-fns'
 import { displayPercentage, displayRoyalties } from '../../utils/units'
 import { Qu_objkt } from '../../queries/objkt'
 import { getGenerativeTokenUrl } from '../../utils/generative-token'
+import { FlagBanner } from '../../containers/Generative/FlagBanner'
 
 
 interface Props {
@@ -57,6 +58,8 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
         <meta key="og:type" property="og:type" content="website"/>
         <meta key="og:image" property="og:image" content={displayUrl || "https://www.fxhash.xyz/images/og/og1.jpg"}/>
       </Head>
+
+      <FlagBanner token={objkt.issuer} />
 
       <Spacing size="6x-large" />
 
@@ -88,7 +91,7 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
           <div className={cs(style['artwork-details'])} style={{ width: "100%" }}>
             <div className={cs(style.buttons)}>
               {objkt.offer && (
-                <Collect offer={objkt.offer} />
+                <Collect offer={objkt.offer} objkt={objkt} />
               )}
               {/* @ts-ignore */}
               <ClientOnlyEmpty style={{ width: "100%" }}>

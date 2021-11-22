@@ -54,3 +54,12 @@ export interface CollectCall {
   offerId: number
   price: number
 }
+
+export interface ReportCall {
+  tokenId: number
+}
+
+export interface ModerateCall {
+  tokenId: number
+  state: number
+}

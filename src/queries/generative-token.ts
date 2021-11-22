@@ -5,6 +5,7 @@ export const Qu_genToken = gql`
     generativeToken(id: $id, slug: $slug) {
       id
       name
+      flag
       slug
       metadata
       metadataUri
@@ -32,6 +33,7 @@ export const Qu_genToken = gql`
           price
         }
         issuer {
+          flag
           author {
             id
             name

@@ -1,0 +1,17 @@
+.banner {
+  border: 3px solid var(--color-error);
+  padding: 20px;
+  display: flex;
+  flex-direction: row;
+  background-color: #ffe7e7;
+
+  i {
+    color: var(--color-error);
+    font-size: 42px;
+    margin-right: 20px;
+  }
+  
+  h4 {
+    color: var(--color-error);
+  }
+}
