@@ -106,7 +106,7 @@ const ActionUpdateState: FunctionComponent<Props> = ({ action }) => {
   const changes = action.metadata.changes
   return (
     <>
-      <UserBadge className={cs(style.user)} hasLink={true} user={(action.issuer||action.target)!} size="regular" />
+       🔵<UserBadge className={cs(style.user)} hasLink={true} user={(action.issuer||action.target)!} size="regular" />
       <span>
         updated generative:
         {changes.enabled !== undefined && (
