@@ -160,7 +160,7 @@ const actionMapLink: Record<string, (action: ActionType) => string|null> = {
 
 // some actions may have a link to a page - which requires some tricky logic
 
-function ActionWrapper({ action, children }: PropsWithChildren<{ action: ActionType }>) {
+function LinkWrapper({ action, children }: PropsWithChildren<{ action: ActionType }>) {
   const link = actionMapLink[action.type] && actionMapLink[action.type](action)
   return link 
     ? (<Link href={link}><a className={cs(style.container, effects['drop-shadow-big'], style.link)}>{ children }</a></Link>)
@@ -171,8 +171,8 @@ export function Action({ action, verbose }: Props) {
   const ActionComponent = ActionMapComponent[action.type]
 
   return (
-    <ActionWrapper action={action}>
+    <LinkWrapper action={action}>
       <ActionComponent action={action} verbose={verbose} />
-    </ActionWrapper>
+    </LinkWrapper>
   )
 }
