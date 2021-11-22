@@ -27,7 +27,6 @@ export async function processZipSandbox(file: File): Promise<SandboxFiles> {
   // parse the contents of the HTML using DOMParser API
   const indexContents = await files['index.html'].text()
   const parser = new DOMParser()
-  console.log(indexContents)
   const doc = parser.parseFromString(indexContents, "text/html")
 
   // assert there is the snippet + replace it

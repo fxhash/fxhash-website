@@ -10,9 +10,16 @@ export interface UserItems {
   actions?: Action[]
 }
 
+export enum UserRole {
+  USER              = "USER",
+  MODERATOR         = "MODERATOR",
+  ADMIN             = "ADMIN",
+}
+
 export interface User {
   id: string
   name?: string
+  role: UserRole
   metadata?: Record<string, any>
   metadataUri?: string
   description?: string

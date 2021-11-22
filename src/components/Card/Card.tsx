@@ -9,10 +9,12 @@ import { useInView } from "react-intersection-observer"
 
 interface Props {
   thumbnailUri: string|null|undefined
+  undesirable?: boolean
 }
 
 export function Card({
   thumbnailUri,
+  undesirable = false,
   children
 }: PropsWithChildren<Props>) {
   const [loaded, setLoaded] = useState<string|null>(null)
@@ -39,7 +41,7 @@ export function Card({
   return (
     <div className={cs(style.container)} ref={ref}>
       <div 
-        className={cs(style['thumbnail-container'])}
+        className={cs(style['thumbnail-container'], { [style.undesirable]: undesirable })}
         style={{
           backgroundImage: loaded ? `url(${loaded})` : "none"
         }}
@@ -53,6 +55,12 @@ export function Card({
           <div className={cs(style.error)}>
             <i aria-hidden className="fas fa-exclamation-circle"/>
             <span>could not load image</span>
+          </div>
+        )}
+        {undesirable && (
+          <div className={cs(style.flag)}>
+            <i aria-hidden className="fas fa-exclamation-triangle"/>
+            <span>undesirable content</span>
           </div>
         )}
       </div>

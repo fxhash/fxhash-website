@@ -18,7 +18,6 @@ export function ButtonFile({
   const inputRef = useRef<HTMLInputElement>(null)
 
   const clicked = () => {
-    console.log("clicked")
     if (inputRef.current) {
       inputRef.current.click()
     }

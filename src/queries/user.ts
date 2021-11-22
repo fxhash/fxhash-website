@@ -6,6 +6,7 @@ export const Qu_user = gql`
       id
       name
       metadata
+      role
       description
       avatarUri
       createdAt
@@ -31,6 +32,7 @@ export const Qu_user = gql`
           avatarUri
         }
         issuer {
+          flag
           author {
             id
             name
@@ -61,6 +63,7 @@ export const Qu_user = gql`
           metadata
           createdAt
           issuer {
+            flag
             author {
               id
               name

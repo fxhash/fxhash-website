@@ -31,6 +31,15 @@ export function Navigation() {
         <Link href="/explore">
           <a className={cs({ [style.active]: router.pathname === "/explore" })}>explore</a>
         </Link>
+
+        <Dropdown
+          itemComp={<span>community</span>}
+        >
+          <Link href="/community/reports">
+            <a>tokens reported</a>
+          </Link>
+        </Dropdown>
+
         <Link href="/marketplace">
           <a className={cs({ [style.active]: router.pathname === "/marketplace" })}>marketplace</a>
         </Link>
@@ -49,6 +58,9 @@ export function Navigation() {
           </Link>
           <Link href="/articles/collect-mint-tokens">
             <a>guide to collect</a>
+          </Link>
+          <Link href="/articles/moderation-system">
+            <a>moderation system</a>
           </Link>
           <Link href="/articles/about-fxhash">
             <a>about fxhash</a>

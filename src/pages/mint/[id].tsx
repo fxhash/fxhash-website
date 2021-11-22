@@ -6,13 +6,14 @@ import cs from "classnames"
 import { SectionHeader } from "../../components/Layout/SectionHeader"
 import ClientOnly from "../../components/Utils/ClientOnly"
 import { UserGuard } from "../../components/Guards/UserGuard"
-import { GenerativeToken } from "../../types/entities/GenerativeToken"
+import { GenerativeToken, GenTokFlag } from "../../types/entities/GenerativeToken"
 import client from "../../services/ApolloClient"
 import { gql } from "@apollo/client"
 import { Mint } from "../../containers/Mint/Mint"
 import { truncateEnd } from "../../utils/strings"
 import { ipfsGatewayUrl } from "../../services/Ipfs"
 import { TitleHyphen } from "../../components/Layout/TitleHyphen"
+import { FlagBanner } from "../../containers/Generative/FlagBanner"
 
 
 interface Props {
@@ -34,23 +35,29 @@ const MintPage: NextPage<Props> = ({ token }) => {
         <meta key="og:image" property="og:image" content={displayUrl || "https://www.fxhash.xyz/images/og/og1.jpg"}/>
       </Head>
 
-      <Spacing size="6x-large"/>
+      <FlagBanner token={token} />
 
-      <section>
-        <SectionHeader>
-          <TitleHyphen>mint unique <em>{token.name}</em></TitleHyphen>
-        </SectionHeader>
+      {token.flag !== GenTokFlag.MALICIOUS && (
+        <>
+          <Spacing size="6x-large"/>
 
-        <Spacing size="x-large"/>
+          <section>
+            <SectionHeader>
+              <TitleHyphen>mint unique <em>{token.name}</em></TitleHyphen>
+            </SectionHeader>
 
-        <main className={cs(layout['padding-big'])}>
-          <ClientOnly>
-            <UserGuard>
-              <Mint token={token} />
-            </UserGuard>
-          </ClientOnly>
-        </main>
-      </section>
+            <Spacing size="x-large"/>
+
+            <main className={cs(layout['padding-big'])}>
+              <ClientOnly>
+                <UserGuard>
+                  <Mint token={token} />
+                </UserGuard>
+              </ClientOnly>
+            </main>
+          </section>
+        </>
+      )}
 
       <Spacing size="6x-large" />
       <Spacing size="6x-large" />
@@ -72,6 +79,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
             generativeToken(id: $id) {
               id
               name
+              flag
               metadata
               metadataUri
               price

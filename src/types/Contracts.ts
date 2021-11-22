@@ -17,7 +17,8 @@ export enum FxhashContract {
   ISSUER        = "ISSUER",
   MARKETPLACE   = "MARKETPLACE",
   OBJKT         = "OBJKT",
-  REGISTER      = "REGISTER"
+  REGISTER      = "REGISTER",
+  MODERATION    = "MODERATION",
 }
 
 export type ContractCallHookReturn<T> = {

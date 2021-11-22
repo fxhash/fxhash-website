@@ -9,6 +9,7 @@ import { Spacing } from "../Layout/Spacing"
 import { Objkt } from "../../types/entities/Objkt"
 import { displayMutez } from "../../utils/units"
 import { getObjktUrl } from "../../utils/objkt"
+import { GenTokFlag } from "../../types/entities/GenerativeToken"
 
 interface Props {
   objkt: Objkt
@@ -17,13 +18,14 @@ interface Props {
 export function ObjktCard({
   objkt
 }: Props) {
+  console.log(objkt)
   const owner = objkt.offer ? objkt.offer.issuer : objkt.owner!
   const url = getObjktUrl(objkt)
 
   return (
     <Link href={url} passHref>
       <AnchorForward style={{ height: '100%' }}>
-        <Card thumbnailUri={objkt.metadata?.thumbnailUri}>
+        <Card thumbnailUri={objkt.metadata?.thumbnailUri} undesirable={objkt.issuer.flag === GenTokFlag.MALICIOUS}>
           <div>
             <h5>{ objkt.name }</h5>
             <Spacing size="2x-small" />

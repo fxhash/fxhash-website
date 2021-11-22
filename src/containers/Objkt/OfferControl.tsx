@@ -22,11 +22,7 @@ interface Props {
 export function OfferControl({ objkt }: Props) {
   const userCtx = useContext(UserContext)
   const user = userCtx.user!
-
-  console.log(objkt)
-  
   const owner: User = (objkt.offer ? objkt.offer.issuer : objkt.owner)!
-  console.log(owner)
 
   return (
     <>

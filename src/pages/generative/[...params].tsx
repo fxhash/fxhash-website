@@ -7,7 +7,7 @@ import colors from "../../styles/Colors.module.css"
 import homeStyle from "../../styles/Home.module.scss"
 import cs from "classnames"
 import client from "../../services/ApolloClient"
-import { GenerativeToken } from "../../types/entities/GenerativeToken"
+import { GenerativeToken, GenTokFlag } from "../../types/entities/GenerativeToken"
 import { Spacing } from '../../components/Layout/Spacing'
 import { UserBadge } from '../../components/User/UserBadge'
 import { MintProgress } from '../../components/Artwork/MintProgress'
@@ -24,9 +24,12 @@ import { UserGuard } from '../../components/Guards/UserGuard'
 import { truncateEnd } from '../../utils/strings'
 import { TitleHyphen } from '../../components/Layout/TitleHyphen'
 import { ArtworkIframe, ArtworkIframeRef } from '../../components/Artwork/PreviewIframe'
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { Qu_genToken } from '../../queries/generative-token'
 import { GenerativeActions } from '../../containers/Generative/Actions'
+import { GenerativeExtraActions } from '../../containers/Generative/ExtraActions'
+import { FlagBanner } from '../../containers/Generative/FlagBanner'
+import { Unlock } from '../../components/Utils/Unlock'
 
 
 interface Props {
@@ -37,6 +40,10 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
   const hasCollection = token.objkts?.length > 0
   const collectionUrl = `/generative/${token.id}/collection`
   const iframeRef = useRef<ArtworkIframeRef>(null)
+
+  const [mintLocked, setMintLocked] = useState<boolean>(
+    token.flag === GenTokFlag.CLEAN ? false : Date.now() - (new Date(token.createdAt)).getTime() < 1*3600*1000
+  )
 
   const reload = () => {
     if (iframeRef.current) {
@@ -58,11 +65,13 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
         <meta key="og:image" property="og:image" content={displayUrl || "https://www.fxhash.xyz/images/og/og1.jpg"}/>
       </Head>
 
+      <FlagBanner token={token}/>
+
       <Spacing size="6x-large" />
 
       <section className={cs(style.presentation, layout.cols2, layout['responsive-reverse'], layout['padding-big'])}>
         <div className={cs(style['presentation-details'])}>
-          <header>
+          <header style={{ position: "relative" }}>
             <small className={cs(colors.gray)}>#{ token.id }</small>
             <h3>{ token.name }</h3>
             <Spacing size="x-small"/>
@@ -73,6 +82,12 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
             <ClientOnly>
               <UserGuard forceRedirect={false}>
                 <EditTokenSnippet token={token} />
+              </UserGuard>
+            </ClientOnly>
+
+            <ClientOnly>
+              <UserGuard forceRedirect={false}>
+                <GenerativeExtraActions token={token} />
               </UserGuard>
             </ClientOnly>
           </header>
@@ -89,19 +104,33 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
               supply={token.supply}
             />
             <Spacing size="large"/>
+
+            {mintLocked && (
+              <strong>Token mint is locked because the token was posted less than an hour ago. If you still want to mint, please verify if the author is legit.</strong>
+            )}
+            <Spacing size="2x-small"/>
             
-            {token.balance > 0 && (
+            {token.flag !== GenTokFlag.MALICIOUS && token.balance > 0 && (
               <>
-                {!token.enabled && <small>token is currently <strong>disabled</strong></small>}
-                <Link href={`/mint/${token.id}`} passHref>
-                  <Button
-                    isLink
-                    color="secondary"
-                    disabled={!token.enabled}
-                  >
-                    Mint unique token — {displayMutez(token.price)} tez
-                  </Button>
-                </Link>
+                {!token.enabled && <small>token is currently <strong>disabled</strong> by author</small>}
+                <div className={cs(style.lock_container)}>
+                  <Link href={`/mint/${token.id}`} passHref>
+                    <Button
+                      isLink
+                      color="secondary"
+                      disabled={!token.enabled || mintLocked}
+                    >
+                      Mint unique token — {displayMutez(token.price)} tez
+                    </Button>
+                  </Link>
+
+                  {mintLocked && (
+                    <Unlock
+                      locked={true}
+                      onClick={() => setMintLocked(false)}
+                    />
+                  )}
+                </div>
               </>
             )}
           </div>

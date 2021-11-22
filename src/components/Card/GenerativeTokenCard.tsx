@@ -11,16 +11,18 @@ import { getGenerativeTokenUrl } from "../../utils/generative-token"
 
 interface Props {
   token: GenerativeToken
+  className?: string
 }
 
 export function GenerativeTokenCard({
-  token
+  token,
+  className,
 }: Props) {
   const url = getGenerativeTokenUrl(token)
 
   return (
     <Link href={url} passHref>
-      <AnchorForward style={{ height: '100%' }}>
+      <AnchorForward style={{ height: '100%' }} className={className}>
         <Card thumbnailUri={token.metadata?.thumbnailUri}>
           <div>
             <h5>{ token.name }</h5>

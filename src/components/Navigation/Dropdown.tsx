@@ -8,11 +8,15 @@ import { useClientEffect } from "../../utils/hookts"
 interface Props {
   itemComp: React.ReactNode
   ariaLabel?: string
+  className?: string
+  btnClassName?: string
 }
 
 export function Dropdown({
   itemComp,
   ariaLabel,
+  className,
+  btnClassName,
   children
 }: PropsWithChildren<Props>) {
   const [opened, setOpened] = useState<boolean>(false)
@@ -43,11 +47,11 @@ export function Dropdown({
       <button 
         aria-label={ariaLabel}
         onClick={toggle}
-        className={cs(style.button, { [style.opened]: opened })}
+        className={cs(style.button, btnClassName, { [style.opened]: opened })}
       >
         { itemComp }
       </button>
-      <DropdownMenu opened={opened}>
+      <DropdownMenu opened={opened} className={className}>
         { children }
       </DropdownMenu>
     </div>
