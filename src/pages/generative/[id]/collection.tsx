@@ -69,7 +69,7 @@ const GenerativeTokenCollection: NextPage<Props> = ({ token }) => {
               <Spacing size="large"/>
               <Link href={getGenerativeTokenUrl(token)}>
                 <Button isLink={true} size="small">
-                  See collection
+                  See Generative Token 
                 </Button>
               </Link>
             </div>
