@@ -1,18 +1,16 @@
 import style from "./Reveal.module.scss"
 import layout from "../../styles/Layout.module.scss"
-import effects from "../../styles/Effects.module.scss"
 import cs from "classnames"
 import Link from "next/link"
 import { useMemo, useState, useRef } from "react"
 import { ipfsGatewayUrl } from "../../services/Ipfs"
 import { Button } from "../../components/Button"
-import { LoaderBlock } from "../../components/Layout/LoaderBlock"
-import { ClientOnlyEmpty } from "../../components/Utils/ClientOnly"
 import { TokenFeature } from "../../types/Metadata"
 import { Features } from "../../components/Features/Features"
 import { SectionHeader } from "../../components/Layout/SectionHeader"
 import { TitleHyphen } from "../../components/Layout/TitleHyphen"
 import { Spacing } from "../../components/Layout/Spacing"
+import { RevealIframe } from "../../components/Reveal/RevealIframe"
 
 
 interface Props {
@@ -30,14 +28,7 @@ interface Props {
  */
 export function Reveal({ generativeUri, previeweUri, features }: Props) {
   const iframeRef = useRef<HTMLIFrameElement>(null)
-  const [loaded, setLoaded] = useState(false)
   const viewUrl = useMemo<string>(() => ipfsGatewayUrl(generativeUri, "ipfsio"), [generativeUri])
-
-  const isLoaded = () => {
-    setTimeout(() => {
-      setLoaded(true)
-    }, 500)
-  }
 
   const reloadIframe = () => {
     if (iframeRef.current) {
@@ -48,24 +39,10 @@ export function Reveal({ generativeUri, previeweUri, features }: Props) {
   return (
     <>
       <div className={cs(layout.full_body_height, style.container)}>
-        <div className={cs(style.iframe_container, effects['drop-shadow-big'], { [style.loaded]: loaded })}>
-          <ClientOnlyEmpty>
-            <iframe
-              ref={iframeRef}
-              onLoad={() => isLoaded()}
-              // onReset
-              src={viewUrl}
-            />
-          </ClientOnlyEmpty>
-          <LoaderBlock
-            height="100%"
-            className={cs(style.loader)}
-            color="white"
-          >
-            .loading token.
-          </LoaderBlock>
-        </div>
-
+        <RevealIframe
+          ref={iframeRef}
+          url={viewUrl}
+        />
         <div className={cs(layout['x-inline'])}>
           <Button
             size="small"

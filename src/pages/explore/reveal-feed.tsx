@@ -11,7 +11,7 @@ import { LiveFeed } from '../../containers/Explore/LiveFeed'
 
 
 
-const ExploreFeed: NextPage = () => {
+const ExploreRevealFeed: NextPage = () => {
   return (
     <>
       <Head>
@@ -26,7 +26,7 @@ const ExploreFeed: NextPage = () => {
 
       <section>
         <SectionHeader>
-          <TitleHyphen>explore / live feed</TitleHyphen>
+          <TitleHyphen>explore / reveal feed</TitleHyphen>
         </SectionHeader>
 
         <Spacing size="x-large" />
@@ -49,4 +49,4 @@ const ExploreFeed: NextPage = () => {
   )
 }
 
-export default ExploreFeed
+export default ExploreRevealFeed

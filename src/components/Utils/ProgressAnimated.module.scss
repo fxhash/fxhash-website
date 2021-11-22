@@ -1,0 +1,24 @@
+.container {
+  background-color: var(--color-gray-light);
+  height: 4px;
+  position: relative;
+  z-index: 0;
+
+  div {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 100%;
+    background: var(--color-black);
+  }
+  
+  &.loading {
+    div {
+      transition-property: right;
+      transition-timing-function: linear;
+      transition-duration: 13s;
+      right: 0;
+    }
+  }
+}

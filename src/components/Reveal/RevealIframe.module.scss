@@ -1,0 +1,47 @@
+.container {
+  perspective: 1000px;
+  z-index: 10;
+}
+
+.iframe_container {
+  width: min(calc(100vh - 140px - 50px - 48px), 100vw);
+  height: min(calc(100vh - 140px - 50px - 48px), 100vw);
+  border: 10px solid var(--color-black);
+  background: var(--color-black);
+  position: relative;
+  transform: rotateY(180deg);
+  z-index: 10;
+
+  iframe {
+    border: none;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+  }
+
+  &.loaded {
+    transform: rotateY(0deg);
+    transition: all 3s ease-in-out;
+
+    .loader {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    iframe {
+      opacity: 1;
+      transition-property: opacity;
+      transition-duration: 0s;
+      transition-delay: 1.5s;
+    }
+  }
+}
+
+.loader {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 1;
+  transition: all 0.2s ease-out;
+  transform: rotateY(180deg);
+}

@@ -32,10 +32,12 @@ export const useClientAsyncEffect = (effect: (isMounted: () => boolean) => unkno
   }
 }
 
-export const useInterval = (callback: () => void, intervalMs: number) => {
+export const useInterval = (callback: () => void, intervalMs: number, triggerStart: boolean = false) => {
   const isMounted = useIsMounted()
 
   useEffect(() => {
+    if (triggerStart) callback()
+    
     const interval = setInterval(() => {
       if (isMounted()) callback()
     }, intervalMs)

@@ -18,7 +18,6 @@ interface Props {
 export function ObjktCard({
   objkt
 }: Props) {
-  console.log(objkt)
   const owner = objkt.offer ? objkt.offer.issuer : objkt.owner!
   const url = getObjktUrl(objkt)
 
