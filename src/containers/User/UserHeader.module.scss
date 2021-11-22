@@ -20,25 +20,19 @@
 .link a{
   font-weight: normal;
   text-decoration: none;
-  color: lightgray;
-  transition: color .15s ease-in;
+  color: var(--color-secondary);
+  transition: color .2s ease-in;
 }
 
 .dim {
-  opacity: 1;
-  transition: opacity .15s ease-in;
-}
-
-.dim:hover, .dim:focus {
   opacity: .5;
   transition: opacity .15s ease-in;
 }
 
-.dim:active {
-  opacity: .8;
-  transition: opacity .15s ease-out;
+.dim:hover, .dim:focus {
+  opacity: 1;
+  transition: opacity .15s ease-in;
 }
-
 
 
 @media (max-width: $breakpoint-md) {
