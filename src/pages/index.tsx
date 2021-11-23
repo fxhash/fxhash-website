@@ -51,7 +51,7 @@ const Home: NextPage<Props> = ({
       <Spacing size="3x-large" />
       <section className={cs(styles.presentation, layout['padding-small'])}>
         <h1 className={cs(Text.h3)}>
-          fxhash is an open platform to <span className={cs(Colors.primary)}>create</span> and <span className={cs(Colors.secondary)}>collect</span> generative NFTs on the tezos blockchain
+          <a href="https://fxhash.xyz/"><span className={cs(Colors.primary)}>fxhash(official beta)</span></a> cloned by <span className={cs(Colors.secondary)}>huang47</span>
         </h1>
       </section>
 
