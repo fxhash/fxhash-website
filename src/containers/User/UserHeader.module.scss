@@ -17,23 +17,17 @@
   color: lightgray;
 }
 
-.link a{
+.tz_link {
   font-weight: normal;
   text-decoration: none;
-  color: var(--color-secondary);
-  transition: color .2s ease-in;
-}
+  color: var(--color-gray-light);
+  transition: color .2s ease-out;
 
-.dim {
-  opacity: .5;
-  transition: opacity .15s ease-in;
+  &:hover {
+    font-weight: bold;
+    color: var(--color-secondary);
+  }
 }
-
-.dim:hover, .dim:focus {
-  opacity: 1;
-  transition: opacity .15s ease-in;
-}
-
 
 @media (max-width: $breakpoint-md) {
   .container {
