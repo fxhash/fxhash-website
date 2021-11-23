@@ -163,8 +163,16 @@ const actionMapLink: Record<string, (action: ActionType) => string|null> = {
 function LinkWrapper({ action, children }: PropsWithChildren<{ action: ActionType }>) {
   const link = actionMapLink[action.type] && actionMapLink[action.type](action)
   return link 
-    ? (<Link href={link}><a className={cs(style.container, effects['drop-shadow-big'], style.link)}>{ children }</a></Link>)
-    : (<article className={cs(style.container, effects['drop-shadow-big'])}>{ children }</article>)
+    ? (
+      <article className={cs(style.container, style.is_link, effects['drop-shadow-big'])}>
+        <Link href={link}>
+          <a className={cs(style.link_wrapper)}/>
+        </Link>
+        { children }
+      </article>
+    ):(
+      <article className={cs(style.container, effects['drop-shadow-big'])}>{ children }</article>
+    )
 }
 
 export function Action({ action, verbose }: Props) {
