@@ -18,7 +18,10 @@ export const StepHome:StepComponent = ({ onNext }) => {
         <Link href="/sandbox"><a>sandbox</a></Link><span>.</span>
       </p>
 
-      <Spacing size="3x-large"/>
+      <p className={cs(style.presentation)}>
+        Please also take a look at fxhash <LinkGuide href="/articles/code-of-conduct">Code of Conduct</LinkGuide>. If your token does not follow the code, it may get moderated by our team
+      </p>
+
       <Spacing size="3x-large"/>
       <Spacing size="3x-large"/>
 

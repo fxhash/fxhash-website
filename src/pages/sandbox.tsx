@@ -39,6 +39,9 @@ const SandboxPage: NextPage = () => {
               Guide to build a Generative Token.
             </LinkGuide>
           </p>
+          <p>
+            Please make sure that your project follows the fxhash <LinkGuide href="/articles/code-of-conduct">Code of Conduct</LinkGuide>.
+          </p>
 
           <Spacing size="3x-large"/>
 
