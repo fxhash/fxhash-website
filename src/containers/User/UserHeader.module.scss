@@ -12,6 +12,29 @@
   flex-shrink: 0;
 }
 
+.a{
+  text-decoration: none;
+  color: lightgray;
+}
+
+.link a{
+  font-weight: normal;
+  text-decoration: none;
+  color: var(--color-secondary);
+  transition: color .2s ease-in;
+}
+
+.dim {
+  opacity: .5;
+  transition: opacity .15s ease-in;
+}
+
+.dim:hover, .dim:focus {
+  opacity: 1;
+  transition: opacity .15s ease-in;
+}
+
+
 @media (max-width: $breakpoint-md) {
   .container {
     flex-direction: column;
@@ -23,3 +46,4 @@
     }
   }
 }
+

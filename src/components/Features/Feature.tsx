@@ -31,7 +31,7 @@ export function Feature({ feature }: Props) {
       </div>
       {feature.rarity && (
         <div className={cs(style.rarity)}>
-          { displayPercentage(feature.rarity) }%
+          { displayPercentage(feature.rarity)}%
         </div>
       )}
     </article>

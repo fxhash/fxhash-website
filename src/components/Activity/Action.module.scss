@@ -7,7 +7,7 @@
   height: 80px;
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 10px;
   overflow-wrap: break-word;
   word-break: break-word;
 
@@ -19,10 +19,12 @@
   }
 }
 
+
 .date {
   color: var(--color-gray);
   flex-shrink: 0;
   font-size: 0.7rem;
+  margin-left: auto;
 }
 
 .price {

@@ -104,7 +104,7 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
                 <Button
                   isLink={true}
                 >
-                  see generative token
+                  See Generative Token
                 </Button>
               </Link>
             </div>

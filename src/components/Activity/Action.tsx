@@ -20,18 +20,18 @@ const getTokenIdx = (name: string) => '#' + name.split("#").pop()
 
 const DateDistance = ({ timestamptz, append = false }: { timestamptz: string, append?: boolean }) => {
   const dist = useMemo(() => formatDistance(new Date(timestamptz), new Date(), { addSuffix: true }), [])
-  return <span className={cs(style.date)}> — { dist }{ append && ' —'}</span>
+  return <span className={cs(style.date)}>{ dist }</span>
 }
 
 const ActionMinted: FunctionComponent<Props> = ({ action, verbose }) => (
   <>
-    <UserBadge className={cs(style.user)} hasLink={false} user={(action.issuer||action.target)!} size="regular" />
+    🤖<UserBadge className={cs(style.user)} hasLink={true} user={(action.issuer||action.target)!} size="regular" />
     <span>
-     🤖 created
+      created  
       {verbose ? (
         <> generative <strong>{action.token?.name}</strong></>
       ):(
-        <strong> generative token 🤖</strong>
+        <strong> generative token</strong>
       )}
     </span>
     <DateDistance timestamptz={action.createdAt}/>
@@ -40,9 +40,9 @@ const ActionMinted: FunctionComponent<Props> = ({ action, verbose }) => (
 
 const ActionMintedFrom: FunctionComponent<Props> = ({ action, verbose }) => (
   <>
-    <UserBadge className={cs(style.user)} hasLink={false} user={(action.issuer||action.target)!} size="regular" />
+    ✨<UserBadge className={cs(style.user)} hasLink={true} user={(action.issuer||action.target)!} size="regular" />
     <span>
-     ✨ minted 
+     minted 
       {verbose ? (
         <> token <strong>{action.objkt?.name}</strong></>
       ):(
@@ -55,9 +55,9 @@ const ActionMintedFrom: FunctionComponent<Props> = ({ action, verbose }) => (
 
 const ActionTransfered: FunctionComponent<Props> = ({ action, verbose }) => (
   <>
-    <UserBadge className={cs(style.user)} hasLink={false} user={(action.issuer||action.target)!} size="regular" />
+    ⬅️<UserBadge className={cs(style.user)} hasLink={true} user={(action.issuer||action.target)!} size="regular" />
     <span>
-      ⬅️ received 
+       received 
       {verbose ? (
         <> token <strong>{action.objkt?.name}</strong></>
       ):(
@@ -70,33 +70,34 @@ const ActionTransfered: FunctionComponent<Props> = ({ action, verbose }) => (
 
 const ActionOffer: FunctionComponent<Props> = ({ action, verbose }) => (
   <>
-    <UserBadge className={cs(style.user)} hasLink={false} user={(action.issuer||action.target)!} size="regular" />
+    🟢<UserBadge className={cs(style.user)} hasLink={true} user={(action.issuer||action.target)!} size="regular" />
     <span>
-      🟢 placed an offer for 
+      listed 
       {verbose ? (
-        <> <strong>{action.objkt?.name}</strong></>
+        <> <strong> {action.objkt?.name}</strong></>
       ):(
-        <strong> {getTokenIdx(action.objkt?.name!)}</strong> 
+        <strong> token {getTokenIdx(action.objkt?.name!)} </strong> 
       )}
+      for sale for 
+      <span className={cs(style.price)}> {displayMutez(action.metadata.price)} tez</span>
     </span>
     <DateDistance timestamptz={action.createdAt} append/>
-    <span className={cs(style.price)}>{displayMutez(action.metadata.price)} tez</span>
   </>
 )
 
 const ActionOfferAccepted: FunctionComponent<Props> = ({ action }) => (
   <>
-    <UserBadge className={cs(style.user)} hasLink={false} user={(action.issuer||action.target)!} size="regular" />
-    <span>🔄 traded its <strong>token {getTokenIdx(action.objkt?.name!)}</strong></span>
+    🔄<UserBadge className={cs(style.user)} hasLink={true} user={(action.issuer||action.target)!} size="regular" />
+    <span>sold <strong>token {getTokenIdx(action.objkt?.name!)}</strong> for <span className={cs(style.price)}>{displayMutez(action.metadata.price)} tez</span>
+    </span>
     <DateDistance timestamptz={action.createdAt} append/>
-    <span className={cs(style.price)}>{displayMutez(action.metadata.price)} tez</span>
   </>
 )
 
 const ActionOfferCancelled: FunctionComponent<Props> = ({ action }) => (
   <>
-    <UserBadge className={cs(style.user)} hasLink={false} user={(action.issuer||action.target)!} size="regular" />
-    <span>⛔ <strong className={cs(colors.error)}>cancelled</strong> its offer on <strong>token {getTokenIdx(action.objkt?.name!)}</strong></span>
+    ⛔<UserBadge className={cs(style.user)} hasLink={true} user={(action.issuer||action.target)!} size="regular" />
+    <span><strong className={cs(colors.error)}>cancelled</strong> their offer on <strong>token {getTokenIdx(action.objkt?.name!)}</strong></span>
     <DateDistance timestamptz={action.createdAt} append/>
   </>
 )
@@ -105,11 +106,11 @@ const ActionUpdateState: FunctionComponent<Props> = ({ action }) => {
   const changes = action.metadata.changes
   return (
     <>
-      <UserBadge className={cs(style.user)} hasLink={false} user={(action.issuer||action.target)!} size="regular" />
+       🔵<UserBadge className={cs(style.user)} hasLink={true} user={(action.issuer||action.target)!} size="regular" />
       <span>
         updated generative:
         {changes.enabled !== undefined && (
-          <><strong className={cs(changes.enabled ? colors.success : colors.error)}> { changes.enabled ? "enabled" : "disabled" }</strong>, </>
+          <><strong className={cs(changes.enabled ? colors.success : colors.error)}> { changes.enabled ? "enabled" : "disabled" }</strong></>
         )}
         {changes.price !== undefined && (
           <><strong className={cs(style.price)}>{displayMutez(changes.price)} tez</strong>, </>
@@ -158,6 +159,7 @@ const actionMapLink: Record<string, (action: ActionType) => string|null> = {
 }
 
 // some actions may have a link to a page - which requires some tricky logic
+
 function LinkWrapper({ action, children }: PropsWithChildren<{ action: ActionType }>) {
   const link = actionMapLink[action.type] && actionMapLink[action.type](action)
   return link 

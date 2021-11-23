@@ -23,7 +23,7 @@ export function displayPercentage(x: number): string {
   // if x100 < precision, return like it
   if (x100 < 0.0001) return "< 0.0001"
 
-  let fixed = x100.toFixed(4)
+  let fixed = x100.toFixed(1)
   // check if right part is made of 0's only
   let right = fixed.split(".").pop()
   if (right && parseInt(right) === 0) {

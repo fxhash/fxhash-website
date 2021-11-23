@@ -30,7 +30,9 @@ export function UserHeader({ user }: Props) {
     <header className={cs(style.container, layout['padding-small'])}>
       <Avatar uri={user.avatarUri} className={cs(style.avatar, effects['drop-shadow-big'])} />
       <div>
-        {user.name && <small className={cs(colors['gray-light'])}>{ user.id }</small>}
+        {user.name && <small className={cs(colors['gray-light'])}>
+        <span className={cs(style.link,style.dim)}> <Link  href={ 'https://tzkt.io/'+ user.id }>{ user.id }</Link> </span>
+        </small>}
         <h1>{ getUserName(user) }</h1>
         {(tzProfileData||loading) && (
           <>
