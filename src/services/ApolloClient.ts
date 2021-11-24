@@ -28,6 +28,54 @@ export const clientSideClient = new ApolloClient({
           },
         }
       },
+      User: {
+        fields: {
+          generativeTokens: {
+            keyArgs: false,
+            // @ts-ignore
+            merge(existing, incoming, { args: { skip = 0 }}) {
+              const merged = existing ? existing.slice(0) : []
+              for (let i = 0; i < incoming.length; ++i) {
+                merged[skip + i] = incoming[i]
+              }
+              return merged
+            },
+          },
+          objkts: {
+            keyArgs: false,
+            // @ts-ignore
+            merge(existing, incoming, { args: { skip = 0 }}) {
+              const merged = existing ? existing.slice(0) : []
+              for (let i = 0; i < incoming.length; ++i) {
+                merged[skip + i] = incoming[i]
+              }
+              return merged
+            },
+          },
+          offers: {
+            keyArgs: false,
+            // @ts-ignore
+            merge(existing, incoming, { args: { skip = 0 }}) {
+              const merged = existing ? existing.slice(0) : []
+              for (let i = 0; i < incoming.length; ++i) {
+                merged[skip + i] = incoming[i]
+              }
+              return merged
+            },
+          },
+          actions: {
+            keyArgs: false,
+            // @ts-ignore
+            merge(existing, incoming, { args: { skip = 0 }}) {
+              const merged = existing ? existing.slice(0) : []
+              for (let i = 0; i < incoming.length; ++i) {
+                merged[skip + i] = incoming[i]
+              }
+              return merged
+            },
+          },
+        }
+      },
       Query: {
         fields: {
           generativeTokens: {

@@ -10,6 +10,10 @@ import { CardsContainer } from "../../components/Card/CardsContainer"
 import { GenerativeTokenCard } from "../../components/Card/GenerativeTokenCard"
 import { ObjktCard } from "../../components/Card/ObjktCard"
 import { Activity } from "../../components/Activity/Activity"
+import { UserGenerativeTokens } from "./UserGenerativeTokens"
+import { UserCollection } from "./UserCollection"
+import { UserOffers } from "./UserOffers"
+import { UserActions } from "./UserActions"
 
 
 interface Props {
@@ -78,42 +82,21 @@ export function UserItems({ user }: Props) {
       <section className={cs(layout['padding-big'])}>
         <Switch>
           <Route path="/collection">
-            <CardsContainer>
-              {user.objkts?.map(objkt => (
-                <ObjktCard
-                  key={objkt.id}
-                  objkt={objkt}
-                />
-              ))}
-            </CardsContainer>
+            <UserCollection user={user} />
           </Route>
 
           <Route path="/sales">
-            <CardsContainer>
-              {user.offers?.map(offer => (
-                <ObjktCard
-                  key={offer.objkt.id}
-                  objkt={offer.objkt}
-                />
-              ))}
-            </CardsContainer>
+            <UserOffers user={user} />
           </Route>
 
           <Route path="/activity">
-            {user.actions && (
-              <Activity actions={user.actions} className={cs(style.activity)} verbose={true} />
-            )}
+            <UserActions user={user} />
           </Route>
 
           <Route path="/">
-            <CardsContainer>
-              {user.generativeTokens?.map(token => (
-                <GenerativeTokenCard
-                  key={token.id}
-                  token={token}
-                />
-              ))}
-            </CardsContainer>
+            <UserGenerativeTokens
+              user={user}
+            />
           </Route>
         </Switch>
       </section>

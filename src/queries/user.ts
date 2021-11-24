@@ -11,7 +11,15 @@ export const Qu_user = gql`
       avatarUri
       createdAt
       updatedAt
-      generativeTokens {
+    }
+  }
+`
+
+export const Qu_userGenTokens = gql`
+  query Query($id: String!, $take: Int, $skip: Int) {
+    user(id: $id) {
+      id
+      generativeTokens(take: $take, skip: $skip) {
         id
         supply
         balance
@@ -24,7 +32,15 @@ export const Qu_user = gql`
           avatarUri
         }
       }
-      objkts {
+    }
+  }
+`
+
+export const Qu_userObjkts = gql`
+  query Query($id: String!, $take: Int, $skip: Int) {
+    user(id: $id) {
+      id
+      objkts(take: $take, skip: $skip) {
         id
         owner {
           id
@@ -53,7 +69,15 @@ export const Qu_user = gql`
           }
         }
       }
-      offers {
+    }
+  }
+`
+
+export const Qu_userOffers = gql`
+  query Query($id: String!, $take: Int, $skip: Int) {
+    user(id: $id) {
+      id
+      offers(take: $take, skip: $skip) {
         id
         price
         royalties
@@ -86,31 +110,15 @@ export const Qu_user = gql`
           avatarUri
         }
       }
-      actionsAsIssuer {
-        id
-        type
-        metadata
-        createdAt
-        issuer {
-          id
-          name
-          avatarUri
-        }
-        target {
-          id
-          name
-          avatarUri
-        }
-        token {
-          id
-          name
-        }
-        objkt {
-          id
-          name
-        }
-      }
-      actionsAsTarget {
+    }
+  }
+`
+
+export const Qu_userActions = gql`
+  query Query($id: String!, $take: Int, $skip: Int) {
+    user(id: $id) {
+      id
+      actions(take: $take, skip: $skip) {
         id
         type
         metadata

@@ -6,7 +6,7 @@ import { User } from '../../types/entities/User'
 import { Spacing } from '../../components/Layout/Spacing'
 import { Qu_user } from '../../queries/user'
 import { UserProfile } from "../../containers/User/UserProfile"
-import { getUserName, processUserItems } from "../../utils/user"
+import { getUserName } from "../../utils/user"
 import { useMemo } from "react"
 import { ipfsGatewayUrl } from "../../services/Ipfs"
 import { truncateEnd } from "../../utils/strings"
@@ -60,9 +60,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     })
     if (data) {
       user = data.user
-      // process the user items
-      const items = processUserItems(user)
-      user = { ...user, ...items }
     }
   }
   return {
