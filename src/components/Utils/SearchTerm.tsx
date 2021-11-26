@@ -12,9 +12,7 @@ export function SearchTerm({
 }: Props) {
   return (
     <div className={cs(style.container)}>
-      <span>
-        <span>Results for:</span> <strong>{ term }</strong>
-      </span>
+      <strong>{ term }</strong>
       <i aria-hidden className="fas fa-times" onClick={onClear} />
     </div>
   )

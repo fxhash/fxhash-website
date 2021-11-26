@@ -3,7 +3,7 @@ import cs from "classnames"
 import { InputHTMLAttributes } from "react"
 
 
-interface IOptions {
+export interface IOptions {
   label: string
   value: any
   disabled?: boolean

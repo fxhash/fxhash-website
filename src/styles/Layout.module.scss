@@ -30,9 +30,16 @@
   }
 }
 
+.explore_header {
+  display: flex;
+  gap: var(--layout-gap-small-lg);
+  justify-content: space-between;
+}
+
 .search-container {
   display: flex;
   gap: var(--layout-gap-small-lg);
+  align-items: center;
 }
 
 .search-bar {

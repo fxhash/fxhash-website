@@ -1,24 +1,21 @@
 import { gql, useLazyQuery, useQuery } from '@apollo/client'
-import layout from '../styles/Layout.module.scss'
 import { CardsContainer } from '../components/Card/CardsContainer'
 import { ObjktCard } from '../components/Card/ObjktCard'
 import { LoaderBlock } from '../components/Layout/LoaderBlock'
 import { InfiniteScrollTrigger } from '../components/Utils/InfiniteScrollTrigger'
-import { SearchInput } from '../components/Input/SearchInput'
-import { useState } from 'react'
-import cs from "classnames"
+import { useState, useEffect, useMemo } from 'react'
 import { Spacing } from '../components/Layout/Spacing'
-import { SearchTerm } from '../components/Utils/SearchTerm'
 import { Offer } from '../types/entities/Offer'
 import { AlgoliaSearch } from '../components/Search/AlgoliaSearch'
 import { searchIndexMarketplace } from '../services/Algolia'
+import { IOptions, Select } from '../components/Input/Select'
 
 
-const ITEMS_PER_PAGE = 10
+const ITEMS_PER_PAGE = 5
 
 const Qu_offers = gql`
-  query Query ($skip: Int, $take: Int) {
-    offers(skip: $skip, take: $take) {
+  query Query ($skip: Int, $take: Int, $price: String, $createdAt: String) {
+    offers(skip: $skip, take: $take, price: $price, createdAt: $createdAt) {
       price
       id
       id
@@ -55,8 +52,8 @@ const Qu_offers = gql`
 `
 
 const Qu_offersByIds = gql`
-  query Query ($ids: [Float!]!) {
-    offersByIds(ids: $ids) {
+  query Query ($ids: [Float!]!, $createdAt: String, $price: String) {
+    offersByIds(ids: $ids, createdAt: $createdAt, price: $price) {
       price
       id
       id
@@ -121,6 +118,37 @@ const Qu_searchOffers = gql`
   }
 `
 
+const sortOptions: IOptions[] = [
+  {
+    label: "recently listed",
+    value: "createdAt-desc"
+  },
+  // {
+  //   label: "recently created",
+  //   value: ""
+  // }
+  {
+    label: "price (high to low)",
+    value: "price-desc",
+  },
+  {
+    label: "price (low to high)",
+    value: "price-asc",
+  },
+  {
+    label: "oldest listed",
+    value: "createdAt-asc",
+  },
+]
+
+function sortValueToSortVariable(val: string) {
+  if (val === "pertinence") return {}
+  const split = val.split("-")
+  return {
+    [split[0]]: split[1].toUpperCase()
+  }
+}
+
 interface Props {
 }
 
@@ -128,23 +156,35 @@ export const Marketplace = ({}: Props) => {
   const [searchResults, setSearchResults] = useState<Offer[]|null>(null)
   const [searchLoading, setSearchLoading] = useState<boolean>(false)
 
-  const { data, loading, fetchMore } = useQuery(Qu_offers, {
+  const [sortValue, setSortValue] = useState<string>("createdAt-desc")
+  const sortVariables = useMemo<Record<string, any>>(() => sortValueToSortVariable(sortValue), [sortValue])
+
+  const { data, loading, fetchMore, refetch } = useQuery(Qu_offers, {
     variables: {
       skip: 0,
-      take: ITEMS_PER_PAGE
+      take: ITEMS_PER_PAGE,
+      ...sortVariables
     }
   })
 
   const infiniteScrollFetch = () => {
-    fetchMore({
+    fetchMore?.({
       variables: {
         skip: data.offers.length,
-        take: ITEMS_PER_PAGE
-      }
+        take: ITEMS_PER_PAGE,
+      },
     })
   }
 
   const offers: Offer[] = data?.offers
+
+  useEffect(() => {
+    refetch?.({
+      skip: 0,
+      take: ITEMS_PER_PAGE,
+      ...sortVariables
+    })
+  }, [sortVariables])
 
   return (
     <>
@@ -153,12 +193,19 @@ export const Marketplace = ({}: Props) => {
         gqlMapQuery={Qu_offersByIds}
         onResults={setSearchResults}
         onLoading={setSearchLoading}
-      />
+        variables={sortVariables}
+      >
+        <Select
+          value={sortValue}
+          options={sortOptions}
+          onChange={setSortValue}
+        />
+      </AlgoliaSearch>
 
       <Spacing size="large" />
 
       {searchLoading && (
-        <LoaderBlock height="80px">searching</LoaderBlock>
+        <LoaderBlock height="100px">searching</LoaderBlock>
       )}
 
       {searchResults ? (
@@ -173,7 +220,7 @@ export const Marketplace = ({}: Props) => {
         )
       ):(
         loading ? (
-          <LoaderBlock height="30vh">loading</LoaderBlock>
+          <LoaderBlock height="100px">loading</LoaderBlock>
         ):(
           (offers?.length > 0) ? (
             <InfiniteScrollTrigger onTrigger={infiniteScrollFetch}>
