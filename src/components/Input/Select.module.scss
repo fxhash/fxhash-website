@@ -1,57 +1,84 @@
-.select {
-  width: 100%;
-  line-height: 1.1;
-  background-color: var(--color-white);
-  border: 3px solid var(--color-black);
-  display: flex;
-  align-items: center;
+.root {
   position: relative;
+}
 
-  select {
-    appearance: none;
-    cursor: pointer;
-    background-color: transparent;
-    margin: 0;
-    width: 100%;
-    border:none;
-    font-family: inherit;
-    font-size: inherit;
-    line-height: inherit;
+.select {
+  height: 50px;
+  font-family: inherit;
+  background: transparent;
+  border: 3px solid var(--color-black);
+  font-size: inherit;
+  padding: 0 35px 0 15px;
+  cursor: pointer;
+  position: relative;
+  line-height: 0;
+  text-align: left;
+
+  .sizer {
+    color: transparent;
+    user-select: none;
+  }
+  
+  &:focus {
+    border-color: var(--color-secondary);
     outline: none;
-    height: 44px;
-    padding: 0 15px;
   }
 
-  &.placeholder select {
-    color: var(--color-gray);
-  }
-
-  option:not(:disabled) {
-    color: var(--color-black);
-  }
-
-  &:after {
+  &::after {
     content: "";
     display: block;
-    width: 0.8em;
-    height: 0.5em;
-    background-color: var(--color-black);
-    clip-path: polygon(100% 0%, 0 0%, 50% 100%);
-    justify-self: flex-end;
-    margin-right: 12px;
-    margin-top: 2px;
-  }
-
-  select, &:after {
-    grid-area: select;
-  }
-
-  select:focus ~ .focus {
     position: absolute;
-    top: -3px;
-    right: -3px;
-    bottom: -3px;
-    left: -3px;
-    border: 3px solid var(--color-secondary);
+    right: 10px;
+    top: 50%;
+    width: 0; 
+    height: 0; 
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;  
+    border-top: 6px solid var(--color-black);
+    transform: translateY(-1px);
   }
+
+  &.opened {
+    &::after {
+      transform: rotate(180deg) translateY(3px);
+    }
+  }
+}
+
+.options {
+  border: 3px solid var(--color-black);
+  border-top: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 100;
+  background: var(--color-white);
+  width: 100%;
+
+  .option {
+    border: none;
+    background: transparent;
+    padding: 8px 15px;
+    cursor: pointer;
+    text-align: left;
+    width: 100%;
+
+    &:hover, &:focus {
+      background-color: var(--color-black);
+      color: var(--color-white);
+    }
+
+    &:focus {
+      outline: none;  
+    }
+
+    &:disabled {
+      pointer-events: none;
+    }
+  }
+}
+
+.placeholder {
+  font-style: italic;
+  color: var(--color-gray);
 }

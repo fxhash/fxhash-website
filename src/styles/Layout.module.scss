@@ -40,6 +40,11 @@
   display: flex;
   gap: var(--layout-gap-small-lg);
   align-items: center;
+  flex-wrap: wrap;
+
+  @media (max-width: $breakpoint-md) {
+    gap: var(--layout-gap-small-md);
+  }
 }
 
 .search-bar {

@@ -194,6 +194,7 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
       </section>
 
       <Spacing size="6x-large" />
+      <Spacing size="6x-large" />
 
       <section>
         <SectionHeader>

@@ -1,6 +1,7 @@
 import style from "./Select.module.scss"
 import cs from "classnames"
-import { InputHTMLAttributes } from "react"
+import { InputHTMLAttributes, useMemo, useState } from "react"
+import { Cover } from "../Utils/Cover"
 
 
 export interface IOptions {
@@ -13,6 +14,7 @@ interface Props extends InputHTMLAttributes<HTMLSelectElement> {
   options: IOptions[]
   value: any
   onChange: (value: any) => void
+  className?: string
 }
 
 export function Select({
@@ -20,21 +22,62 @@ export function Select({
   value,
   onChange,
   placeholder,
+  className,
   ...props
 }: Props) {
+  const [opened, setOpened] = useState<boolean>(false)
+
+  const selectedOption = useMemo<IOptions>(() => {
+    return options.find(opt => opt.value === value) || options[0]
+  }, [value])
+
+  const updateValue = (val: any) => {
+    onChange(val)
+    setOpened(false)
+  }
+
   return (
-    <div className={cs(style.select, {
-      [style.placeholder]: value === ""
-    })}>
-      <select value={value} onChange={(evt) => onChange(evt.target.value)} {...props}>
-        {placeholder && <option value="" disabled>{ placeholder }</option>}
-        {options.map(opt => (
-          <option key={opt.value} value={opt.value} disabled={!!opt.disabled}>
-            { opt.label }
-          </option>
-        ))}
-      </select>
-      <div className={cs(style.focus)}/>
-    </div>
+    <>
+      <div className={cs(style.root)}>
+        <button 
+          className={cs(style.select, className, { [style.opened]: opened })} 
+          onClick={() => setOpened(!opened)}
+        >
+          {placeholder && value === "" ? (
+            <>
+              <div className={cs(style.placeholder)}>{placeholder}</div>
+              <div aria-hidden="true" className={cs(style.sizer)}>{placeholder}</div>
+            </>
+          ):(
+            <div>{selectedOption.label}</div>
+          )}
+          {options.map((opt, idx) => (
+            <div key={idx} aria-hidden="true" className={cs(style.sizer)}>{opt.label}</div>
+          ))}
+        </button>
+
+        {opened && (
+          <div className={cs(style.options)}>
+            {options.map((option, idx) => (
+              <button
+                key={idx}
+                className={cs(style.option)}
+                onClick={() => updateValue(option.value)}
+                disabled={option.disabled}
+              >
+                {option.label}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+      {opened && (
+        <Cover
+          onClick={() => setOpened(false)}
+          opacity={0}
+          index={10}
+        />
+      )}
+    </>
   )
 }

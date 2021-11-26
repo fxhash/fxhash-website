@@ -11,7 +11,7 @@ import { searchIndexMarketplace } from '../services/Algolia'
 import { IOptions, Select } from '../components/Input/Select'
 
 
-const ITEMS_PER_PAGE = 5
+const ITEMS_PER_PAGE = 20
 
 const Qu_offers = gql`
   query Query ($skip: Int, $take: Int, $price: String, $createdAt: String) {
