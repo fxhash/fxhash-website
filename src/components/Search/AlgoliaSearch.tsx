@@ -19,12 +19,14 @@ interface Props {
   variables?: Record<string, any>
 }
 
+const defaultVariables = {}
+
 export function AlgoliaSearch({
   searchIndex,
   gqlMapQuery,
   onResults,
   onLoading,
-  variables = {},
+  variables = defaultVariables,
   children,
 }: PropsWithChildren<Props>) {
   const [searchLoading, setSearchLoading] = useState<boolean>(false)
