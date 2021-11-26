@@ -42,6 +42,7 @@ export function Select({
         <button 
           className={cs(style.select, className, { [style.opened]: opened })} 
           onClick={() => setOpened(!opened)}
+          type="button"
         >
           {placeholder && value === "" ? (
             <>
@@ -64,6 +65,7 @@ export function Select({
                 className={cs(style.option)}
                 onClick={() => updateValue(option.value)}
                 disabled={option.disabled}
+                type="button"
               >
                 {option.label}
               </button>
