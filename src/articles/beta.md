@@ -12,7 +12,7 @@ Hey, this is [@ciphrd](https://twitter.com/ciphrd) the author of fxhash. fxhash 
 
 ## OPENING / CLOSING
 
-During the beta, the platform minting contract will only be opened 50% of the time. This gives the servers some breathing room to process the mints and release some stress. Currently, fxhash opens everyday at 11am CET and closes at 11pm CET. This schedule may slightly change, I post status update on Twitter/Discord. When contracts are closed, you will not be able to add a Generative Token neither will you be able to mint unique Gentk. The indicator at the top-right reflects the contracts state, if red: closed, if green: opened. **The Marketplace, on the other hand, will remain opened 24h/24h**.
+The platform follows an OPENING/CLOSING cycle of respectively 12h and 11h. Each day, the cycle shifts of 1 hour, so that people all around the world can experience the platform the same way. This also gives the servers some breathing room to process the mints and release some stress. You can get the opening schedule on the [opening schedule](/community/opening-schedule) page (under the community tab). The indicator at the top-right reflects the contracts state, if red: closed, if green: opened. **The Marketplace, on the other hand, will remain opened 24h/24h**.
 
 Note that this behaviour may still be there when the platform will officially be released. Not for technical reasons but because the community and I seem to be enjoying this concept, and I like how it reflects the story of fxhash. If that's the case, we'll find some way to have a better schedule that cycles for the people all around the world !
 
