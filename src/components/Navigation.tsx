@@ -35,6 +35,9 @@ export function Navigation() {
         <Dropdown
           itemComp={<span>community</span>}
         >
+          <Link href="/community/opening-schedule">
+            <a>opening schedule</a>
+          </Link>
           <Link href="/community/reports">
             <a>tokens reported</a>
           </Link>
