@@ -21,6 +21,7 @@ export interface GenerativeToken {
   slug?: string
   metadata: GenerativeTokenMetadata
   metadataUri?: string
+  tags?: string[]
   price: number
   supply: number
   balance: number

@@ -7,6 +7,7 @@ export const Qu_genToken = gql`
       name
       flag
       slug
+      tags
       metadata
       metadataUri
       price

@@ -13,7 +13,7 @@ import { UserBadge } from '../../components/User/UserBadge'
 import { MintProgress } from '../../components/Artwork/MintProgress'
 import { Button } from '../../components/Button'
 import nl2br from 'react-nl2br'
-import { displayMutez } from '../../utils/units'
+import { displayMutez, displayRoyalties } from '../../utils/units'
 import { ipfsGatewayUrl } from '../../services/Ipfs'
 import { SectionHeader } from '../../components/Layout/SectionHeader'
 import { CardsContainer } from '../../components/Card/CardsContainer'
@@ -30,6 +30,7 @@ import { GenerativeActions } from '../../containers/Generative/Actions'
 import { GenerativeExtraActions } from '../../containers/Generative/ExtraActions'
 import { FlagBanner } from '../../containers/Generative/FlagBanner'
 import { Unlock } from '../../components/Utils/Unlock'
+import { format } from 'date-fns'
 
 
 interface Props {
@@ -174,6 +175,24 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
       </section>
 
       <Spacing size="6x-large" />
+
+      <section>
+        <SectionHeader>
+          <TitleHyphen>details</TitleHyphen>
+        </SectionHeader>
+        
+        <main className={cs(layout['padding-big'], layout.break_words)}>
+          <Spacing size="small" />
+          <div className={cs(style.buttons)}>
+            <span><strong>Minted the:</strong> { format(new Date(token.createdAt), "dd/MM/yyyy' at 'HH:mm") }</span>
+            <span><strong>Price:</strong> { displayMutez(token.price) } tez</span>
+            <span><strong>Royalties:</strong> { displayRoyalties(token.royalties) }</span>
+            <span><strong>Tags:</strong> { token.tags?.join(", ") || "/" }</span>
+            <span><strong>Metadata:</strong> <a href={ipfsGatewayUrl(token.metadataUri)} target="_blank" referrerPolicy="no-referrer">{token.metadataUri}</a></span>
+          </div>
+        </main>
+      </section>
+
       <Spacing size="6x-large" />
 
       <section>
