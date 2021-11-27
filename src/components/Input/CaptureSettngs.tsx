@@ -69,8 +69,8 @@ export const InputCaptureSettings: FunctionComponent<Props> = ({
         value={!settings.mode ? "" : settings.mode}
         options={modeOptions}
         onChange={value => update("mode", value)}
-        />
         className={cs(style.select)}
+      />
       {settings.mode && <em>{ getModeDescription(settings.mode) }</em>}
 
       {settings.mode === CaptureMode.VIEWPORT && (
