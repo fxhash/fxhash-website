@@ -47,13 +47,32 @@
 
 .options {
   border: 3px solid var(--color-black);
-  border-top: none;
   position: absolute;
-  top: 100%;
   left: 0;
   z-index: 100;
   background: var(--color-white);
   width: 100%;
+
+  .options_wrapper {
+    max-height: 350px;
+    overflow: auto;
+    overscroll-behavior: contain;
+  }
+
+  &.has_search {
+    padding-top: 65px;
+
+    .options_wrapper {
+      max-height: 350px - 70px;
+    }
+  }
+
+  .search {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    width: calc(100% - 16px);
+  }
 
   .option {
     border: none;
@@ -81,4 +100,18 @@
 .placeholder {
   font-style: italic;
   color: var(--color-gray);
+}
+
+.opening_bottom {
+  .options {
+    top: 100%;
+    margin-top: -3px;
+  }
+}
+
+.opening_top {
+  .options {
+    bottom: 100%;
+    margin-bottom: -3px;
+  }
 }
