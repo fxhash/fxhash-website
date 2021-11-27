@@ -23,19 +23,6 @@ const optionsTimezones: IOptions[] = timezones.map(timezone => ({
 }))
 
 const SchedulePage: NextPage = () => {
-  // compute the next contract opening
-  const nextOpening = useMemo<Date>(() => {
-    const reference = new Date(process.env.NEXT_PUBLIC_REFERENCE_OPENING!)
-    const next = addHours(reference, 23)
-    return next
-  }, [])
-
-  const nextClosing = useMemo<Date>(() => {
-    const reference = new Date(process.env.NEXT_PUBLIC_REFERENCE_OPENING!)
-    const next = addHours(reference, 23+12)
-    return next
-  }, [])
-
   const [timezone, setTimezone] = useState<Timezone>(getLocalTimezone())
   const updateTimezone = (value: string) => setTimezone(timezones.find(tz => tz.value === value)!)
 
@@ -72,14 +59,6 @@ const SchedulePage: NextPage = () => {
             <ContractsOpened/>
           </ClientOnlyEmpty>
 
-          <Spacing size="3x-large" />
-
-          <h4>Next cycle</h4>
-          <Spacing size="small"/>
-          <ul>
-            <li><strong>Opening:</strong> {formatRFC7231(nextOpening)}</li>
-            <li><strong>Closing:</strong> {formatRFC7231(nextClosing)}</li>
-          </ul>
           <Spacing size="3x-large" />
 
           <h4>Planning</h4>
