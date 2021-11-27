@@ -77,41 +77,12 @@ const Qu_offersByIds = gql`
           avatarUri
         }
         issuer {
+          flag
           author {
             id
             name
             avatarUri
           }
-        }
-      }
-    }
-  }
-`
-
-const Qu_searchOffers = gql`
-  query Query($search: String!) {
-    searchOffers(search: $search) {
-      price
-      id
-      id
-      objkt {
-        id
-        name
-        slug
-        metadata
-        offer {
-          id
-          price
-          issuer {
-            id
-            name
-            avatarUri
-          }
-        }
-        owner {
-          id
-          name
-          avatarUri
         }
       }
     }
