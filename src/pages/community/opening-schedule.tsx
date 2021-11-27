@@ -7,11 +7,20 @@ import { SectionHeader } from "../../components/Layout/SectionHeader"
 import { TitleHyphen } from "../../components/Layout/TitleHyphen"
 import { Spacing } from "../../components/Layout/Spacing"
 import Head from "next/head"
-import { useMemo } from "react"
+import { useMemo, useState } from "react"
 import { ClientOnlyEmpty } from "../../components/Utils/ClientOnly"
 import { ContractsOpened } from "../../components/Utils/ContractsOpened"
 import { addHours, formatRFC7231 } from "date-fns"
+import { Schedule } from "../../containers/Community/Schedule"
+import { getLocalTimezone, Timezone, timezones, timezoneSearchKeys } from "../../utils/timzones"
+import { IOptions, Select } from "../../components/Input/Select"
+import { Field } from "../../components/Form/Field"
 
+
+const optionsTimezones: IOptions[] = timezones.map(timezone => ({
+  label: timezone.text,
+  value: timezone.value
+}))
 
 const SchedulePage: NextPage = () => {
   // compute the next contract opening
@@ -26,6 +35,9 @@ const SchedulePage: NextPage = () => {
     const next = addHours(reference, 23+12)
     return next
   }, [])
+
+  const [timezone, setTimezone] = useState<Timezone>(getLocalTimezone())
+  const updateTimezone = (value: string) => setTimezone(timezones.find(tz => tz.value === value)!)
 
   return (
     <>
@@ -68,6 +80,28 @@ const SchedulePage: NextPage = () => {
             <li><strong>Opening:</strong> {formatRFC7231(nextOpening)}</li>
             <li><strong>Closing:</strong> {formatRFC7231(nextClosing)}</li>
           </ul>
+          <Spacing size="3x-large" />
+
+          <h4>Planning</h4>
+          <Spacing size="small"/>
+          <Field>
+            <label>Timezone</label>
+            <Select
+              value={timezone.value}
+              options={optionsTimezones}
+              onChange={updateTimezone}
+              search={true}
+              searchKeys={timezoneSearchKeys}
+              searchDictionnary={timezones}
+              searchValue="value"
+            />
+          </Field>
+          <Spacing size="large"/>
+          <ClientOnlyEmpty>
+            <Schedule
+              timezone={timezone}
+            />
+          </ClientOnlyEmpty>
 
           <Spacing size="6x-large" />
         </main>

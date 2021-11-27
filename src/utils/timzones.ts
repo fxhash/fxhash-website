@@ -1,4 +1,13 @@
-export const timezones = [
+export interface Timezone {
+  value: string
+  abbr: string
+  offset: number
+  isdst: boolean
+  text: string
+  utc: string[]
+}
+
+export const timezones: Timezone[] = [
   {
     "value": "Dateline Standard Time",
     "abbr": "DST",
@@ -1409,3 +1418,30 @@ export const timezones = [
     ]
   }
 ]
+
+export const timezoneSearchKeys = [
+  "value",
+  "utc",
+  "text"
+]
+
+/**
+ * Returns the local timezone from the timezone array, using Intl API first, and then
+ * with a fallback using the timezone offset
+ */
+export function getLocalTimezone(): Timezone {
+  try {
+    const utc = Intl.DateTimeFormat().resolvedOptions().timeZone
+    const found = timezones.find(timezone => timezone.utc.includes(utc))
+    if (found) return found
+  }
+  catch {}
+
+  // if we could not identify with the timezone string indicator, use shift
+  const offsetHr = -((new Date().getTimezoneOffset()) / 60) | 0
+  const found = timezones.find(timezone => timezone.offset === offsetHr)
+  if (found) return found
+
+  // otherwise simply return UTC
+  return timezones.find(tz => tz.value === "UTC")!
+}
