@@ -14,7 +14,7 @@
   }
 
   td:not(:last-child) {
-    border-right: 1px solid var(--color-gray-light);
+    border-right: 1px solid var(--color-gray-dark);
   }
 
   thead {
@@ -34,22 +34,22 @@
 
   tbody {
     td {
-      border-bottom: 1px solid var(--color-gray-light);
+      border-bottom: 1px solid var(--color-gray-dark);
       padding: 0;
     }
     
     .square {
-      border-top: 1px solid var(--color-gray-light);
+      border-top: 1px solid var(--color-gray-dark);
       height: 50px;
       margin-top: 5px;
     }
 
     tr.today {
       td {
-        border-bottom: 2px solid var(--color-error);
+        border-bottom: 3px solid var(--color-error);
         
         .square {
-          border-top: 2px solid var(--color-error);
+          border-top: 3px solid var(--color-error);
         }
       }
     }
