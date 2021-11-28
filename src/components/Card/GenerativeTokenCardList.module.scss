@@ -1,0 +1,54 @@
+@import '../../styles/Variables.scss';
+
+.progress_container {
+  width: 140px;
+  text-align: right;
+  color: var(--color-gray);
+  flex-grow: 0;
+}
+
+.metric {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+
+  & > span {
+    color: var(--color-gray);
+    font-size: var(--font-size-small);
+  }
+
+  strong {
+    color: var(--color-secondary);
+    font-size: 1.1rem;
+  }
+
+  &.progress {
+    .supply {
+      color: var(--color-gray);
+      font-weight: normal;
+      
+      &.minted_done {
+        color: var(--color-secondary);
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+.details {
+  display: flex;
+  flex-direction: row;
+  width: 50%;
+
+  & > * {
+    flex: 1 1 0;
+  }
+}
+
+
+
+@media (max-width: $breakpoint-sm) {
+  .details {
+    width: 100%;
+  }
+}

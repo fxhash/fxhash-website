@@ -8,7 +8,7 @@ import { Avatar } from "./Avatar"
 
 interface Props {
   user: User
-  size?: "regular" | "big"
+  size?: "regular" | "big" | "small"
   prependText?: string
   hasLink?: boolean
   className?: string

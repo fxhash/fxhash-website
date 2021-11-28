@@ -3,11 +3,12 @@ import layout from '../styles/Layout.module.scss'
 import cs from 'classnames'
 import { Spacing } from '../components/Layout/Spacing'
 import { SectionHeader } from '../components/Layout/SectionHeader'
-import ClientOnly from '../components/Utils/ClientOnly'
+import ClientOnly, { ClientOnlyEmpty } from '../components/Utils/ClientOnly'
 import { ExploreGenerativeTokens } from '../containers/ExploreGenerativeTokens'
 import { Marketplace } from '../containers/Marketplace'
 import Head from 'next/head'
 import { TitleHyphen } from '../components/Layout/TitleHyphen'
+import { MarketplaceTabs } from '../containers/Marketplace/Tabs'
 
 
 
@@ -27,15 +28,19 @@ const MarketplacePage: NextPage = () => {
 
       <section>
         <SectionHeader>
-          <TitleHyphen>marketplace</TitleHyphen>
+          <TitleHyphen>marketplace / explore</TitleHyphen>
         </SectionHeader>
+
+        <Spacing size="x-large" />
+
+        <MarketplaceTabs active={0} />
 
         <Spacing size="x-large"/>
 
         <main className={cs(layout['padding-big'])}>
-          <ClientOnly>
+          <ClientOnlyEmpty>
             <Marketplace />
-          </ClientOnly>
+          </ClientOnlyEmpty>
         </main>
       </section>
 

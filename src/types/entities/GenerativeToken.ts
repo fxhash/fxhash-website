@@ -12,6 +12,19 @@ export enum GenTokFlag {
   MALICIOUS         = "MALICIOUS",
 }
 
+export interface GenerativeTokenMarketStats {
+  floor: number|null
+  median: number|null
+  totalListing: number|null
+  highestSold: number|null
+  lowestSold: number|null
+  primTotal: number|null
+	secVolumeTz: number|null
+	secVolumeNb: number|null
+	secVolumeTz24: number|null
+	secVolumeNb24: number|null
+}
+
 export interface GenerativeToken {
   id: number
   author: User
@@ -31,4 +44,5 @@ export interface GenerativeToken {
   actions: Action[]
   createdAt: Date
   updatedAt: Date
+  marketStats?: GenerativeTokenMarketStats
 }
