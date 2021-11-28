@@ -1,0 +1,31 @@
+.search {
+  display: flex;
+  position: relative;
+
+  button {
+    border: none;
+    background: transparent;
+  }
+
+  input {
+    border: 3px solid var(--color-black);
+    height: 50px;
+    font-family: inherit;
+    padding-left: 48px;
+    outline: none;
+    width: 100%;
+
+    &:focus {
+      border-color: var(--color-secondary);
+    }
+  }
+}
+
+.search-icon {
+  position: absolute;
+  font-size: 25px;
+  pointer-events: none;
+  top: 50%;
+  left: 5px;
+  transform: translateY(-50%);
+}

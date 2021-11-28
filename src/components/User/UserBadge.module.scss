@@ -1,0 +1,52 @@
+.container {
+  display: flex;
+  align-items: center;
+  color: var(--color-primary);
+  font-weight: bold;
+
+  &.side-left {
+    flex-direction: row;
+  }
+
+  &.side-right {
+    flex-direction: row-reverse;
+
+    .avatar {
+      margin-right: 0;
+      margin-left: 8px;
+    }
+  }
+}
+
+a.container:hover {
+  .avatar {
+    transform: scale(1.05);
+  }
+  .append {
+    text-decoration: none !important;
+  }
+}
+
+.avatar {
+  margin-right: 8px;
+  transition: all 0.3s ease-out;
+}
+
+.avatar-small {
+  width: 26px;
+  height: 26px;
+}
+
+.avatar-regular {
+  width: 37px;
+  height: 37px;
+}
+
+.avatar-big {
+  width: 50px;
+  height: 50px;
+}
+
+.prepend {
+  color: var(--color-black);
+}
