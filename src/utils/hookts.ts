@@ -1,4 +1,5 @@
 import { DependencyList, EffectCallback, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import Web3 from 'web3';
 import useAsyncEffect from 'use-async-effect'
 import useFetch, { CachePolicies } from 'use-http'
 import { API_BLOCKCHAIN_CONTRACT_STORAGE } from '../services/Blockchain'
@@ -337,4 +338,25 @@ export function useTzProfileVerification(address: string) {
   return {
     data, loading
   }
+}
+
+export function useWeb3() {
+  const [accounts, setAccounts] = useState(null)
+  const [web3, setWeb3] = useState(null)
+  useEffect(() => {
+    (async () => {
+    if (!window || !window.ethereum) {
+      return null;
+    }
+    try {
+      const accounts = await window.ethereum.request({ method: "eth_requestAccounts" })
+      setAccounts(accounts);
+      setWeb3(new Web3(window.ethereum))
+    } catch (err) {
+      setWeb3(null)
+    }
+    return () => { setWeb3(null) }
+    })()
+  }, [])
+  return { web3, accounts };
 }
