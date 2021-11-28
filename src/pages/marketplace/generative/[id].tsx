@@ -94,7 +94,7 @@ const GenerativeTokenMarketplace: NextPage<Props> = ({ token }) => {
         <div className={cs(style.metrics)}>
           <article className={cs(style.metric)}>
             <span>1st sales</span>
-            <strong>{ token.marketStats?.primTotal ? `${displayMutez(token.marketStats.primTotal)} tez` : "/" }</strong>
+            <strong>{ token.marketStats?.primTotal ? `${displayMutez(token.marketStats.primTotal)} tez` : "0" }</strong>
           </article>
           <article className={cs(style.metric)}>
             <span>2nd sales (tez)</span>
