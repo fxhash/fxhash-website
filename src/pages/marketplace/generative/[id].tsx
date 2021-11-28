@@ -4,7 +4,7 @@ import { GetServerSideProps, NextPage } from "next"
 import layout from "../../../styles/Layout.module.scss"
 import style from "./GenerativeTokenMarketplace.module.scss"
 import colors from "../../../styles/Colors.module.css"
-import homeStyle from "../../../styles/Home.module.scss"
+import styleActivity from "../../../styles/Activity.module.scss"
 import cs from "classnames"
 import client from "../../../services/ApolloClient"
 import { GenerativeToken, GenTokFlag } from "../../../types/entities/GenerativeToken"
@@ -12,36 +12,35 @@ import { Spacing } from '../../../components/Layout/Spacing'
 import { UserBadge } from '../../../components/User/UserBadge'
 import { MintProgress } from '../../../components/Artwork/MintProgress'
 import { Button } from '../../../components/Button'
-import nl2br from 'react-nl2br'
 import { displayMutez, displayRoyalties } from '../../../utils/units'
 import { ipfsGatewayUrl } from '../../../services/Ipfs'
-import { SectionHeader } from '../../../components/Layout/SectionHeader'
-import { CardsContainer } from '../../../components/Card/CardsContainer'
-import { ObjktCard } from '../../../components/Card/ObjktCard'
-import ClientOnly from '../../../components/Utils/ClientOnly'
-import { EditTokenSnippet } from '../../../containers/Token/EditTokenSnippet'
-import { UserGuard } from '../../../components/Guards/UserGuard'
+import ClientOnly, { ClientOnlyEmpty } from '../../../components/Utils/ClientOnly'
 import { truncateEnd } from '../../../utils/strings'
-import { TitleHyphen } from '../../../components/Layout/TitleHyphen'
-import { ArtworkIframe, ArtworkIframeRef } from '../../../components/Artwork/PreviewIframe'
 import { useRef, useState } from 'react'
 import { Qu_genToken, Qu_genTokenMarketplace } from '../../../queries/generative-token'
 import { GenerativeActions } from '../../../containers/Generative/Actions'
-import { GenerativeExtraActions } from '../../../containers/Generative/ExtraActions'
 import { FlagBanner } from '../../../containers/Generative/FlagBanner'
-import { Unlock } from '../../../components/Utils/Unlock'
-import { format } from 'date-fns'
 import { ArtworkPreview } from '../../../components/Artwork/Preview'
 import { getGenerativeTokenUrl } from '../../../utils/generative-token'
+import { TabDefinition, Tabs } from '../../../components/Layout/Tabs'
+import { GenerativeOffersMarketplace } from '../../../containers/Marketplace/GenerativeOffersMarketplace'
 
 
 interface Props {
   token: GenerativeToken
 }
 
+const tabs: TabDefinition[] = [
+  {
+    name: "Listed"
+  },
+  {
+    name: "Recent trades"
+  }
+]
+
 const GenerativeTokenMarketplace: NextPage<Props> = ({ token }) => {
-  const hasCollection = token.objkts?.length > 0
-  const collectionUrl = `/generative/${token.id}/collection`
+  const [tabActive, setTabActive] = useState<number>(0)
 
   // get the display url for og:image
   const displayUrl = token.metadata?.displayUri && ipfsGatewayUrl(token.metadata?.displayUri)
@@ -81,7 +80,7 @@ const GenerativeTokenMarketplace: NextPage<Props> = ({ token }) => {
                 supply={token.supply}
               />
               <Spacing size="x-small"/>
-              <Link href={getGenerativeTokenUrl(token)}>
+              <Link href={getGenerativeTokenUrl(token)} passHref>
                 <Button isLink={true} size="small">
                   See Generative Token 
                 </Button>
@@ -135,6 +134,40 @@ const GenerativeTokenMarketplace: NextPage<Props> = ({ token }) => {
           </article>
         </div>
       </section>
+
+      <Spacing size="4x-large" />
+
+      <Tabs 
+        activeIdx={tabActive}
+        tabDefinitions={tabs}
+        tabsLayout="fixed-size"
+        onClickTab={setTabActive}
+      />
+
+      <section className={cs(layout['padding-big'])}>    
+        <Spacing size="3x-large" />
+        {tabActive === 0 ? (
+          <ClientOnlyEmpty>
+            <GenerativeOffersMarketplace
+              token={token}
+            />
+          </ClientOnlyEmpty>
+        ):(
+          <ClientOnlyEmpty>
+            <GenerativeActions
+              token={token}
+              filters={{
+                type_in: ["OFFER_ACCEPTED"]
+              }}
+              className={cs(styleActivity.activity)}
+            />
+          </ClientOnlyEmpty>
+        )}
+      </section>
+
+      {/* TODO: add some tabs for toggling between these 2 */}
+      {/* TODO: add the available offers for the token */}
+      {/* TODO: add the activity on the market for the collection */}
 
       <Spacing size="6x-large" />
       <Spacing size="6x-large" />

@@ -15,13 +15,14 @@ interface TabProps {
   definition: TabDefinition
   active: boolean
   wrapperComponent?: any
+  onClick?: () => void
 }
 
 const DefaultTabWrapper: FunctionComponent<HTMLAttributes<HTMLDivElement>> = ({ children, ...props }) => (
   <div {...props}>{ children }</div>
 )
 
-export function Tab({ definition, layout, active, wrapperComponent }: TabProps) {
+export function Tab({ definition, layout, active, wrapperComponent, onClick }: TabProps) {
   const Wrapper = wrapperComponent || DefaultTabWrapper
 
   return (
@@ -29,6 +30,7 @@ export function Tab({ definition, layout, active, wrapperComponent }: TabProps) 
       className={cs(style.tab, style[`tab-${layout}`], { 
         [style.active]: active
       })}
+      onClick={onClick}
       {...definition.props}
     >
       { definition.name }
@@ -43,6 +45,7 @@ interface Props {
   tabsClassName?: string
   contentClassName?: string
   tabWrapperComponent?: React.ReactNode
+  onClickTab?: (index: number) => void
 }
 
 /**
@@ -55,6 +58,7 @@ export function Tabs({
   tabsLayout = "full-width",
   activeIdx,
   tabsClassName,
+  onClickTab,
   contentClassName,
   tabWrapperComponent,
   children
@@ -69,6 +73,7 @@ export function Tabs({
             definition={def}
             layout={tabsLayout}
             wrapperComponent={tabWrapperComponent}
+            onClick={() => onClickTab?.(idx)}
           />
         ))}
       </nav>

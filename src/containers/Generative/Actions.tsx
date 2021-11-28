@@ -11,17 +11,18 @@ import { LoaderBlock } from "../../components/Layout/LoaderBlock"
 
 interface Props {
   token: GenerativeToken
-  initialActions: Action[]
-  className: string
+  initialActions?: Action[]
+  className?: string
+  filters?: any
 }
 
 const ITEMS_PER_PAGE = 20
 
 const Qu_genTokActions = gql`
-  query Query ($id: Float!, $skip: Int, $take: Int) {
+  query Query ($id: Float!, $skip: Int, $take: Int, $filters: ActionFilter) {
     generativeToken(id: $id) {
       id,
-      actions(skip: $skip, take: $take) {
+      actions(skip: $skip, take: $take, filters: $filters) {
         id
         type
         metadata
@@ -52,8 +53,11 @@ const Qu_genTokActions = gql`
 export function GenerativeActions({
   token,
   initialActions, 
-  className
+  className,
+  filters,
 }: Props) {
+  const initialSize = initialActions?.length || ITEMS_PER_PAGE
+  
   // use to know when to stop loading
   const currentLength = useRef<number>(0)
   const ended = useRef<boolean>(false)
@@ -63,7 +67,8 @@ export function GenerativeActions({
     variables: {
       id: token.id,
       skip: 0,
-      take: initialActions.length
+      take: initialSize,
+      filters
     }
   })
 
@@ -83,14 +88,15 @@ export function GenerativeActions({
       fetchMore({
         variables: {
           id: token.id,
-          skip: data.generativeToken.actions.length,
-          take: ITEMS_PER_PAGE
+          skip: data?.generativeToken?.actions?.length || 0,
+          take: ITEMS_PER_PAGE,
+          filters
         }
       })
     }
   }
 
-  const actions = data?.generativeToken?.actions || initialActions
+  const actions = data?.generativeToken?.actions || initialActions || []
 
   return (
     <>
