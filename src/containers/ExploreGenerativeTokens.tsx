@@ -1,15 +1,11 @@
-import { gql, useLazyQuery, useQuery } from '@apollo/client'
-import layout from '../styles/Layout.module.scss'
+import { gql, useQuery } from '@apollo/client'
 import { GenerativeToken } from '../types/entities/GenerativeToken'
 import { CardsContainer } from '../components/Card/CardsContainer'
 import { GenerativeTokenCard } from '../components/Card/GenerativeTokenCard'
 import { LoaderBlock } from '../components/Layout/LoaderBlock'
 import { InfiniteScrollTrigger } from '../components/Utils/InfiniteScrollTrigger'
-import { SearchInput } from '../components/Input/SearchInput'
 import { useState, useRef, useEffect } from 'react'
-import cs from "classnames"
 import { Spacing } from '../components/Layout/Spacing'
-import { SearchTerm } from '../components/Utils/SearchTerm'
 import { searchIndexGenerative } from '../services/Algolia'
 import { AlgoliaSearch } from '../components/Search/AlgoliaSearch'
 
