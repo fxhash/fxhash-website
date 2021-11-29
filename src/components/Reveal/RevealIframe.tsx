@@ -36,6 +36,7 @@ export const RevealIframe = forwardRef<HTMLIFrameElement, Props>(({
         <ClientOnlyEmpty>
           <iframe
             ref={ref}
+            sandbox="allow-scripts"
             onLoad={() => isLoaded()}
             // onReset
             src={url}
