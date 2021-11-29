@@ -191,11 +191,11 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
             <span><strong>Tags:</strong> { token.tags?.join(", ") || "/" }</span>
             <span><strong>Metadata:</strong> <a href={ipfsGatewayUrl(token.metadataUri)} target="_blank" referrerPolicy="no-referrer">{token.metadataUri}</a></span>
             <Spacing size="3x-small" />
-            {/* <Link href={getGenerativeTokenMarketplaceUrl(token)} passHref>
+            <Link href={getGenerativeTokenMarketplaceUrl(token)} passHref>
               <Button isLink={true} size="small">
                 See marketplace page 
               </Button>
-            </Link> */}
+            </Link>
           </div>
         </main>
       </section>

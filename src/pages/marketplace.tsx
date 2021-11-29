@@ -33,7 +33,7 @@ const MarketplacePage: NextPage = () => {
 
         <Spacing size="x-large" />
 
-        {/* <MarketplaceTabs active={0} /> */}
+        <MarketplaceTabs active={0} />
 
         <Spacing size="x-large"/>
 
