@@ -17,6 +17,7 @@ interface Props {
   onResults: (results: any[]|null) => void,
   onLoading: (loading: boolean) => void,
   variables?: Record<string, any>
+  nbHits?: number
 }
 
 const defaultVariables = {}
@@ -27,6 +28,7 @@ export function AlgoliaSearch({
   onResults,
   onLoading,
   variables = defaultVariables,
+  nbHits = 100,
   children,
 }: PropsWithChildren<Props>) {
   const [searchLoading, setSearchLoading] = useState<boolean>(false)
@@ -43,7 +45,7 @@ export function AlgoliaSearch({
   const triggerSearch = async () => {
     setSearchLoading(true)
     const results = await searchIndex.search(search, {
-      hitsPerPage: 100
+      hitsPerPage: nbHits
     })
     if (isMounted()) {
       setSearchHits(results)

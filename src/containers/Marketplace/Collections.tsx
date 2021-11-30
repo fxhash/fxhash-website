@@ -121,9 +121,14 @@ export const MarketplaceCollections = ({}: Props) => {
         gqlMapQuery={Qu_tokensById}
         onResults={setSearchResults}
         onLoading={setSearchLoading}
+        nbHits={10}
       />
 
       <Spacing size="large" />
+
+      {searchLoading && (
+        <LoaderBlock height="140px">searching</LoaderBlock>
+      )}
 
       {searchResults ? (
         searchResults.length > 0 ? (
