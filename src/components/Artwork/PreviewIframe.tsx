@@ -115,7 +115,7 @@ export const ArtworkIframe = forwardRef<ArtworkIframeRef, Props>(({ url, textWai
             newIframe.style.opacity = '1'
           }
           newIframe.onerror = () => setError(true)
-       // @ts-ignore: Object is possibly 'null'.
+          setTimeout(()=>{
          // @ts-ignore: Object is possibly 'null'.
             let els = document.querySelectorAll('.newhashIframe')
             if(els.length > 1){
@@ -126,6 +126,7 @@ export const ArtworkIframe = forwardRef<ArtworkIframeRef, Props>(({ url, textWai
                 }
               }
             }
+          }, 0)
         }, 0)
         iframeRef.current.style.display='none'
       })
