@@ -5,7 +5,7 @@ import { User } from '../../types/entities/User'
 import { Spacing } from '../../components/Layout/Spacing'
 import { Qu_user } from '../../queries/user'
 import { UserProfile } from "../../containers/User/UserProfile"
-import { getUserName } from "../../utils/user"
+import { getUserName, UserAliases } from "../../utils/user"
 import Head from "next/head"
 import { useMemo } from "react"
 import { ipfsGatewayUrl } from "../../services/Ipfs"
@@ -51,13 +51,18 @@ const UserPage: NextPage<Props> = ({ user }) => {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const name = context.params?.params && context.params.params[0]
+
+  // if there is an alias, query by ID instead
+  const userAlias = Object.values(UserAliases).find(alias => alias.name === name)
+  const variables = userAlias ? { id: userAlias.id } : { name }
+
   let user = null
 
-  if (name && name.length > 0) {
+  if (userAlias || (name && name.length > 0)) {
     const { data, error } = await client.query({
       query: Qu_user,
       fetchPolicy: "no-cache",
-      variables: { name }
+      variables
     })
     if (data) {
       user = data.user

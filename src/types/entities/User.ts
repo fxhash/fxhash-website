@@ -38,3 +38,10 @@ export interface User {
 export interface ConnectedUser extends Partial<User> {
   id: string
 }
+
+export interface UserAlias {
+  // the tz address of the account to alias
+  id: string
+  // user object will have some properties replaced by the alias
+  alias: Partial<User>
+}

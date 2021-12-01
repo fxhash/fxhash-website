@@ -5,7 +5,7 @@ import effects from "../../styles/Effects.module.scss"
 import cs from "classnames"
 import { User } from "../../types/entities/User"
 import { Avatar } from "../../components/User/Avatar"
-import { getUserName } from "../../utils/user"
+import { getUserName, isAdmin, isModerator, userAliases } from "../../utils/user"
 import nl2br from "react-nl2br"
 import { useContext, useMemo } from "react"
 import { UserContext } from "../UserProvider"
@@ -22,6 +22,7 @@ interface Props {
 }
 
 export function UserHeader({ user }: Props) {
+  user = userAliases(user)
   const userCtx = useContext(UserContext)
   const userConnected = userCtx.user!
   const { tzProfileData, loading } = useTzProfileVerification(user.id)
@@ -35,7 +36,7 @@ export function UserHeader({ user }: Props) {
           {user.id}
         </a>
         </small>}
-        <h1>{ getUserName(user) }</h1>
+        <h1 className={cs({ [style.moderator]: isAdmin(user) })}>{ getUserName(user) }</h1>
         {(tzProfileData||loading) && (
           <>
             <Spacing size="2x-small"/>
