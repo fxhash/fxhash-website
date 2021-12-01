@@ -1,5 +1,5 @@
 import { utcToZonedTime, zonedTimeToUtc } from "date-fns-tz"
-import { Timezone } from "./timzones"
+import { Timezone, getLocalTimezone } from "./timzones"
 
 export function isPlatformOpenedAt(date: Date, timezone: Timezone): boolean {
   const reference = utcToZonedTime(new Date(process.env.NEXT_PUBLIC_REFERENCE_OPENING!), timezone.utc[0])
@@ -15,3 +15,8 @@ export function isPlatformOpenedAt(date: Date, timezone: Timezone): boolean {
   return cycleHours < 12
 }
 
+export function getNextOpenTime(): string {
+  return utcToZonedTime(
+    new Date(process.env.NEXT_PUBLIC_REFERENCE_OPENING!),
+    getLocalTimezone().utc[0]).toLocaleTimeString([], { hour: 'numeric' });
+}
