@@ -186,7 +186,8 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
           </div>
           <Spacing size="small" />
           <div>
-            Mints on fx(hash) should run deterministically (consistently each time) given a specific hash. A different hash will result in a different but still self-same version of an artwork, while adhering to a variation on the theme of the mint. Before purchasing, verify that the buttons above produce satisfactory results - UPON PURCHASING YOU WILL RECEIVE A MINT WITH A SPECIFIC RANDOM HASH THAT DOES NOT CHANGE - not necessarily a rendering shown on this page.
+            Mints on fx(hash) should run deterministically (consistently each time) given a specific hash. The idea is that a different hash will result in a different but still self-same version of an artwork, while adhering to a variation on the theme of the mint. Before 
+            purchasing, verify that the buttons above produce satisfactory results - UPON PURCHASING YOU WILL RECEIVE A MINT WITH A SPECIFIC RANDOM HASH THAT DOES NOT CHANGE - not necessarily a rendering shown on this page
           </div>
         </div>
       </section>

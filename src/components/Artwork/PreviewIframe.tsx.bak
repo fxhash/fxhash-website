@@ -140,7 +140,6 @@ export const ArtworkIframe = forwardRef<ArtworkIframeRef, Props>(({ url, textWai
 
   useImperativeHandle(ref, () => ({
     reloadIframe,
-    reloadIframe_newhash,
     getHtmlIframe
   }))
 

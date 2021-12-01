@@ -42,16 +42,9 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
   const displayUrl = objkt.metadata?.displayUri && ipfsGatewayUrl(objkt.metadata?.displayUri)
 
   const iframeRef = useRef<ArtworkIframeRef>(null)
-
   const reload = () => {
     if (iframeRef.current) {
       iframeRef.current.reloadIframe()
-    }
-  }
-
-  const reload_newhash = () => {
-    if (iframeRef.current) {
-      iframeRef.current.reloadIframe_newhash()
     }
   }
 
@@ -111,7 +104,7 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
                 <Button
                   isLink={true}
                 >
-                  See Generative Token
+                  see generative token
                 </Button>
               </Link>
             </div>
@@ -138,14 +131,6 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
               onClick={reload}
             >
               reload
-            </Button>
-           <Button
-              size="small"
-              iconComp={<i aria-hidden className="fas fa-redo"/>}
-              iconSide="right"
-              onClick={reload_newhash}
-            >
-              reload w/ different hash
             </Button>
             <Link href={ipfsGatewayUrl(objkt.metadata?.artifactUri)} passHref>
               <Button
