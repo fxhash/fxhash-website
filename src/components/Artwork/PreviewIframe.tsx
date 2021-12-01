@@ -38,7 +38,7 @@ export const ArtworkIframe = forwardRef<ArtworkIframeRef, Props>(({ url, textWai
       if(document.querySelectorAll('.newhashIframe').length){
         let els = document.querySelectorAll('.newhashIframe')
         for(let i = 0; i < els.length; ++i){
-        // @ts-ignore: Object is possibly 'null'.
+       // @ts-ignore: Object is possibly 'null'.
           els[i].parentNode.removeChild(els[i])
         }
       }
@@ -116,8 +116,6 @@ export const ArtworkIframe = forwardRef<ArtworkIframeRef, Props>(({ url, textWai
           }
           newIframe.onerror = () => setError(true)
        // @ts-ignore: Object is possibly 'null'.
-          iframeRef.current.style.display='none'
-          setTimeout(()=>{
          // @ts-ignore: Object is possibly 'null'.
             let els = document.querySelectorAll('.newhashIframe')
             if(els.length > 1){
@@ -128,8 +126,8 @@ export const ArtworkIframe = forwardRef<ArtworkIframeRef, Props>(({ url, textWai
                 }
               }
             }
-          }, 200)
         }, 0)
+        iframeRef.current.style.display='none'
       })
     }
   }
