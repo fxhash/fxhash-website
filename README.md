@@ -55,6 +55,8 @@ ANALYZE = false
 NEXT_PUBLIC_BANNER_MESSAGE = <span><strong>Warning</strong>: fxhash is in BETA mode. More by clicking this banner</span>
 NEXT_PUBLIC_MAINTENANCE_MESSAGE = Deploying new backend architecture
 NEXT_PUBLIC_MAINTENANCE_MODE = 0
+
+NEXT_PUBLIC_REFERENCE_OPENING = 2021-11-26T06:00:00.000Z
 ```
 
 This will set the front-end to run against the main fxhash API and the contracts on the **mainnet** so **BE CAREFUL**. If you buy a token using this front-end running on your local machine using your wallet, it will be **as if you ran the same operation on the official website**.
