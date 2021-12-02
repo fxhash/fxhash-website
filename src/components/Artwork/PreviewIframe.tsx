@@ -128,6 +128,7 @@ export const ArtworkIframe = forwardRef<ArtworkIframeRef, Props>(({ url, textWai
             }
           }, 0)
         }, 0)
+      // @ts-ignore: Object is possibly 'null'.
         iframeRef.current.style.display='none'
       })
     }
