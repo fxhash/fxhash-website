@@ -50,7 +50,7 @@ export const ArtworkIframe = forwardRef<ArtworkIframeRef, Props>(({ url, textWai
         <iframe 
           ref={iframeRef}
           src={url}
-          sandbox="allow-scripts"
+          sandbox="allow-scripts allow-same-origin"
           className={cs(style.iframe)}
           onLoad={() => {
             onLoaded && onLoaded()

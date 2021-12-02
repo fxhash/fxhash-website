@@ -116,7 +116,7 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
             <div className={cs(style['preview-wrapper'])}>
               <ArtworkIframe 
                 ref={iframeRef}
-                url={ipfsGatewayUrl(objkt.metadata?.artifactUri)}
+                url={ipfsGatewayUrl(objkt.metadata?.artifactUri, "pinata-fxhash-safe")}
               />
             </div>
           </div>

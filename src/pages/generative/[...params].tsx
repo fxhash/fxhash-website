@@ -144,7 +144,7 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
             <div className={cs(style['preview-wrapper'])}>
               <ArtworkIframe 
                 ref={iframeRef}
-                url={ipfsGatewayUrl(token.metadata.artifactUri)}
+                url={ipfsGatewayUrl(token.metadata.artifactUri, "pinata-fxhash-safe")}
               />
             </div>
           </div>

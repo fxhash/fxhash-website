@@ -1,4 +1,4 @@
-import { getIpfsIoUrl, getPinataFxhashGateway, getPinataUrlFromCid } from "../utils/ipfs"
+import { getIpfsIoUrl, getPinataFxhashGateway, getPinataUrlFromCid, getPinataFxhashGatewaySafe } from "../utils/ipfs"
 
 // takes a stringas parameter, and if it matches an ipfs url returns the ID of the IPFS ressource
 const ipfsRegex = new RegExp("^ipfs:\/\/")
@@ -31,7 +31,7 @@ export function ipfsDisplayUrl(ipfsUrl: string|null|undefined) {
  */
 export function ipfsGatewayUrl(
   resource: string|null|undefined,
-  gateway: "ipfsio"|"pinata"|"pinata-fxhash" = "pinata-fxhash"
+  gateway: "ipfsio"|"pinata"|"pinata-fxhash"|"pinata-fxhash-safe" = "pinata-fxhash"
 ): string {
   if (!resource) return ""
   
@@ -40,6 +40,8 @@ export function ipfsGatewayUrl(
   switch (gateway) {
     case "pinata-fxhash":
       return getPinataFxhashGateway(cid)
+    case "pinata-fxhash-safe":
+      return getPinataFxhashGatewaySafe(cid)
     case "pinata":
       return getPinataUrlFromCid(cid)
     case "ipfsio":

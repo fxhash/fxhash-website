@@ -1,6 +1,6 @@
 import style from "./Sandbox.module.scss"
 import cs from "classnames"
-import { ArtworkIframe, ArtworkIframeRef } from "../../components/Artwork/PreviewIframe"
+import { ArtworkIframeRef } from "../../components/Artwork/PreviewIframe"
 import { Dropzone } from "../../components/Input/Dropzone"
 import { useState, useMemo, useRef } from "react"
 import { Button } from "../../components/Button"
