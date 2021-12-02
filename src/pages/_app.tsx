@@ -87,8 +87,6 @@ const App = ({ Component, pageProps }: AppProps) => {
     }
   }
 
-  console.log(retainedComponents.current)
-
   // Save the scroll position of current page before leaving
   const handleRouteChangeStart = (url: any) => {
     // first we clear the existing retained components, so that only the last one remains

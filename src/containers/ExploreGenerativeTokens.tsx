@@ -8,6 +8,7 @@ import { useState, useRef, useEffect } from 'react'
 import { Spacing } from '../components/Layout/Spacing'
 import { searchIndexGenerative } from '../services/Algolia'
 import { AlgoliaSearch } from '../components/Search/AlgoliaSearch'
+import { CardsLoading } from '../components/Card/CardsLoading'
 
 
 const ITEMS_PER_PAGE = 10
@@ -123,15 +124,16 @@ export const ExploreGenerativeTokens = ({}: Props) => {
           <p>Your query did not yield any results. 😟</p>
         )
       ):(
-        generativeTokens?.length > 0 && (
-          <InfiniteScrollTrigger onTrigger={infiniteScrollFetch}>
-            <CardsContainer>
-              {generativeTokens.map(token => (
-                <GenerativeTokenCard key={token.id} token={token}/>
-              ))}
-            </CardsContainer>
-          </InfiniteScrollTrigger>
-        )
+        <InfiniteScrollTrigger onTrigger={infiniteScrollFetch} canTrigger={!!data && !loading}>
+          <CardsContainer>
+            {generativeTokens?.length > 0 && generativeTokens.map(token => (
+              <GenerativeTokenCard key={token.id} token={token}/>
+            ))}
+            {loading && (
+              <CardsLoading number={ITEMS_PER_PAGE} />
+            )}
+          </CardsContainer>
+        </InfiniteScrollTrigger>
       )}
 
       {loading && <LoaderBlock height="30vh">loading</LoaderBlock>}

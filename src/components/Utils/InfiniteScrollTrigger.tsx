@@ -1,15 +1,17 @@
 import style from "./InfiniteScrollTrigger.module.scss"
 import cs from "classnames"
-import { PropsWithChildren, useEffect } from "react"
+import { PropsWithChildren, useEffect, useRef } from "react"
 import { useInView } from "react-intersection-observer"
 
 
 interface Props {
+  canTrigger?: boolean
   onTrigger: () => void
   className?: string
 }
 
 export function InfiniteScrollTrigger({
+  canTrigger = true,
   onTrigger,
   className,
   children
@@ -18,9 +20,11 @@ export function InfiniteScrollTrigger({
 
   useEffect(() => {
     if (inView) {
-      onTrigger()
+      if (canTrigger) {
+        onTrigger()
+      }
     }
-  }, [inView])
+  }, [inView, canTrigger])
 
   return (
     <div className={cs(style.container, className)}>

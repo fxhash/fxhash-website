@@ -24,9 +24,7 @@ interface Props {
 export function GenerativeCollection({ token }: Props) {
   // store the pages fetched
   const fetched = useRef<number[]>([])
-
   const [page, setPage] = useState<number>(0)
-  console.log(page)
 
   const { data, loading, fetchMore } = useQuery(Qu_genTokenObjkts, {
     notifyOnNetworkStatusChange: true,
@@ -53,7 +51,6 @@ export function GenerativeCollection({ token }: Props) {
 
   // derive the active data from the active page
   const objkts: Objkt[]|null = data?.generativeToken.objkts
-  console.log(objkts)
   const activeObjkts = useMemo<Objkt[]|null>(() => {
     if (!objkts) return null
     // get the start index based on the page
