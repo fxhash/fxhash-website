@@ -69,7 +69,7 @@ export const ArtworkIframe = forwardRef<ArtworkIframeRef, Props>(({ url, textWai
         newcontent = newcontent.replaceAll('src ="', 'src = "')
         newcontent = newcontent.replaceAll('src="', 'src = "')
         newcontent = newcontent.replaceAll('src= \'', 'src = \'')
-        newcontent = newcontent.replaceAll('src = \'', 'src = \'' + oldURL + '/')
+        newcontent = newcontent.replaceAll('src = \'/', 'src = \'' + oldURL + '/')
         newcontent = newcontent.replaceAll('src = "', 'src = "' + oldURL + '/')
         newcontent = newcontent.replaceAll('href=\'', 'href = \'')
         newcontent = newcontent.replaceAll('href =\'', 'href = \'')
