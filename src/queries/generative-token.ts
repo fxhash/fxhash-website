@@ -165,3 +165,36 @@ export const Qu_genTokenMarketplace = gql`
     }
   }
 `
+
+export const Qu_genTokenObjkts = gql`
+  query Query($id: Float, $slug: String, $take: Int, $skip: Int) {
+    generativeToken(id: $id, slug: $slug) {
+      id
+      objkts(take: $take, skip: $skip) {
+        id
+        owner {
+          id
+          name
+          avatarUri
+        }
+        issuer {
+          author {
+            id
+            name
+            avatarUri
+          }
+        }
+        name
+        metadata
+        offer {
+          issuer {
+            id
+            name
+            avatarUri
+          }
+          price
+        }
+      }
+    }
+  }
+`

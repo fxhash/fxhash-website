@@ -42,6 +42,7 @@ export interface GenerativeToken {
   royalties: number
   objkts: Objkt[]
   actions: Action[]
+  objktsCount: number
   createdAt: Date
   updatedAt: Date
   marketStats?: GenerativeTokenMarketStats

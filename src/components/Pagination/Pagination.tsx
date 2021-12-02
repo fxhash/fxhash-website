@@ -4,25 +4,20 @@ import cs from "classnames"
 import { useEffect, useMemo, useState, Fragment } from "react"
 
 
-interface Props<T> {
-  items: T[]
+interface Props {
+  activePage: number
+  itemsCount: number
   itemsPerPage: number,
-  onChange: (page: T) => void
+  onChange: (page: number) => void
 }
 
 export function Pagination({
-  items,
+  activePage,
+  itemsCount,
   itemsPerPage,
   onChange
-}: Props<any>) {
-  const L = items.length
-  const nbPages = Math.ceil(L / itemsPerPage)
-
-  const [activePage, setActivePage] = useState<number>(0)
-
-  useEffect(() => {
-    onChange(items.slice(activePage * itemsPerPage, (activePage+1) * itemsPerPage))
-  }, [activePage])
+}: Props) {
+  const nbPages = Math.ceil(itemsCount / itemsPerPage)
 
   // build the array of visible page btns based on their distance to the current page and
   // extremities
@@ -46,7 +41,7 @@ export function Pagination({
           [style.disabled]: activePage === 0
         })}
         onClick={() => {
-          setActivePage(activePage-1 < 0 ? 0 : activePage-1)
+          onChange(activePage-1 < 0 ? 0 : activePage-1)
         }}
       >
         <i aria-hidden className="fas fa-caret-left"/>
@@ -63,7 +58,7 @@ export function Pagination({
                     [style.active]: page ===  activePage 
                   })}
                   onClick={() => {
-                    setActivePage(page)
+                    onChange(page)
                   }}
                 >
                   {page+1}
@@ -78,7 +73,7 @@ export function Pagination({
           [style.disabled]: activePage === nbPages-1
         })}
         onClick={() => {
-          setActivePage(activePage+1 > nbPages-1 ? nbPages-1 : activePage+1)
+          onChange(activePage+1 > nbPages-1 ? nbPages-1 : activePage+1)
         }}
       >
         <i aria-hidden className="fas fa-caret-right"/>

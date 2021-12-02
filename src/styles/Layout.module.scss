@@ -100,6 +100,11 @@
   justify-content: center;
 }
 
+.x_centered {
+  display: flex;
+  justify-content: center;
+}
+
 .full_body_height {
   height: calc(100vh - 140px - 50px)
 }

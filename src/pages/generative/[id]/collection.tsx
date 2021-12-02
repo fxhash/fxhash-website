@@ -23,6 +23,7 @@ import { useState } from 'react'
 import { Objkt } from '../../../types/entities/Objkt'
 import { truncateEnd } from '../../../utils/strings'
 import { getGenerativeTokenUrl } from '../../../utils/generative-token'
+import { GenerativeCollection } from '../../../containers/Generative/Collection'
 
 
 interface Props {
@@ -40,11 +41,16 @@ const GenerativeTokenCollection: NextPage<Props> = ({ token }) => {
     <>
       <Head>
         <title>fxhash — collection of {token.name}</title>
-        <meta key="og:title" property="og:title" content={`fxhash — collection of ${token.name}`}/> 
+        <meta key="og:title" property="og:title" content={`${token.name} — collection`}/> 
         <meta key="description" name="description" content={truncateEnd(token.metadata?.description || "", 200, "")}/>
         <meta key="og:description" property="og:description" content={truncateEnd(token.metadata?.description || "", 200, "")}/>
         <meta key="og:type" property="og:type" content="website"/>
         <meta key="og:image" property="og:image" content={displayUrl || "https://www.fxhash.xyz/images/og/og1.jpg"}/>
+        <meta name="twitter:site" content="@fx_hash_"/>
+        <meta name="twitter:card" content="summary_large_image"/>
+        <meta name="twitter:title" content={`${token.name} — collection`}/>
+        <meta name="twitter:description" content={truncateEnd(token.metadata?.description || "", 200, "")}/>
+        <meta name="twitter:image" content={displayUrl || "https://www.fxhash.xyz/images/og/og1.jpg"}/>
       </Head>
 
       <Spacing size="6x-large" />
@@ -92,13 +98,13 @@ const GenerativeTokenCollection: NextPage<Props> = ({ token }) => {
 
       <section>
         <SectionHeader>
-          <h2>— Collection ({ token.objkts.length })</h2>
+          <h2>— Collection ({ token.objktsCount })</h2>
         </SectionHeader>
 
         <Spacing size="3x-large"/>
 
         <main className={cs(layout['padding-big'])}>
-          {hasCollection ? (
+          {/* {hasCollection ? (
             <>
               <CardsContainer>
                 {visibleObjkts.map(objkt => (
@@ -119,7 +125,10 @@ const GenerativeTokenCollection: NextPage<Props> = ({ token }) => {
             <>
               <p>Nobody has minted from this Generative Token. <strong>Become the first of the collection !</strong></p>
             </>
-          )}
+          )} */}
+          <GenerativeCollection
+            token={token}
+          />
         </main>
       </section>
 
@@ -149,53 +158,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
               balance
               enabled
               royalties
-              objkts {
-                id
-                owner {
-                  id
-                  name
-                  avatarUri
-                }
-                issuer {
-                  author {
-                    id
-                    name
-                    avatarUri
-                  }
-                }
-                name
-                metadata
-                offer {
-                  issuer {
-                    id
-                    name
-                    avatarUri
-                  }
-                  price
-                }
-              }
+              objktsCount
               createdAt
               updatedAt
-              actions {
-                id
-                type
-                metadata
-                createdAt
-                issuer {
-                  id
-                  name
-                  avatarUri
-                }
-                target {
-                  id
-                  name
-                  avatarUri
-                }
-                objkt {
-                  id
-                  name
-                }
-              }
               author {
                 id
                 name
