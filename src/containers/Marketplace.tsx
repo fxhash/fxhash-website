@@ -153,7 +153,7 @@ export const Marketplace = ({}: Props) => {
         currentLength.current = data.offers?.length
       }
     }
-  }, [data, loading])
+  }, [loading])
 
   const infiniteScrollFetch = () => {
     !ended.current && fetchMore?.({
@@ -167,6 +167,7 @@ export const Marketplace = ({}: Props) => {
   const offers: Offer[] = data?.offers
 
   useEffect(() => {
+    currentLength.current = 0
     refetch?.({
       skip: 0,
       take: ITEMS_PER_PAGE,
