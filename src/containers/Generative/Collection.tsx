@@ -24,25 +24,14 @@ interface Props {
 export function GenerativeCollection({ token }: Props) {
   const [page, setPage] = useState<number>(0)
 
-  const { data, loading, refetch } = useQuery(Qu_genTokenObjkts, {
+  const { data, loading } = useQuery(Qu_genTokenObjkts, {
     notifyOnNetworkStatusChange: true,
     variables: {
       id: token.id,
-      skip: 0,
-      take: ITEMS_PER_PAGE
-    },
-    fetchPolicy: "network-only"
-  })
-  
-  // when there's a change in the page, request the data
-  useEffect(() => {
-    refetch({
-      id: token.id,
       skip: page * ITEMS_PER_PAGE,
       take: ITEMS_PER_PAGE
-    })
-  }, [page])
-
+    },
+  })
 
   // derive the active data from the active page
   const objkts: Objkt[]|null = data?.generativeToken.objkts
