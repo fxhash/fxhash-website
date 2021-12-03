@@ -26,6 +26,17 @@ export const clientSideClient = new ApolloClient({
               return merged
             },
           },
+          offers: {
+            keyArgs: false,
+            // @ts-ignore
+            merge(existing, incoming, { args: { skip = 0 }}) {
+              const merged = existing ? existing.slice(0) : []
+              for (let i = 0; i < incoming.length; ++i) {
+                merged[skip + i] = incoming[i]
+              }
+              return merged
+            },
+          },
           objkts: {
             keyArgs: false,
             // @ts-ignore
@@ -43,6 +54,7 @@ export const clientSideClient = new ApolloClient({
               return merged
             },
             read(existing, { args }) {
+              console.log("read here")
               const { skip, take } = args as any
               // check if we have all the items in the existing array
               if (existing.length < skip + take) {

@@ -18,7 +18,7 @@ const Qu_offers = gql`
   query Query($id: Float!, $filters: ObjktFilter, $offerPrice: String, $offerCreatedAt: String, $skip: Int, $take: Int) {
     generativeToken(id: $id) {
       id
-      objkts(filters: $filters, offerPrice: $offerPrice, offerCreatedAt: $offerCreatedAt, skip: $skip, take: $take) {
+      offers(filters: $filters, offerPrice: $offerPrice, offerCreatedAt: $offerCreatedAt, skip: $skip, take: $take) {
         id
         name
         slug
@@ -92,6 +92,7 @@ export const GenerativeOffersMarketplace = ({
   const ended = useRef<boolean>(false)
 
   const { data, loading, fetchMore, refetch } = useQuery(Qu_offers, {
+    notifyOnNetworkStatusChange: true,
     variables: {
       filters: {
         offer_ne: null
@@ -103,36 +104,37 @@ export const GenerativeOffersMarketplace = ({
     }
   })
 
+  const objkts: Objkt[]|null = data?.generativeToken.offers
+
   useEffect(() => {
-    if (!loading) {
-      if (currentLength.current === data.offers?.length) {
+    if (!loading && objkts) {
+      if (currentLength.current === objkts.length) {
         ended.current = true
       }
       else {
-        currentLength.current = data.offers?.length
+        currentLength.current = objkts.length
       }
     }
   }, [loading])
 
-  const objkts: Objkt[] = data?.generativeToken.objkts
-
   const infiniteScrollFetch = () => {
-    // !ended.current && fetchMore?.({
-    //   variables: {
-    //     filters: {
-    //       offer_ne: null
-    //     },
-    //     id: token.id,
-    //     skip: objkts.length,
-    //     take: ITEMS_PER_PAGE,
-    //     ...sortVariables
-    //   },
-    // })
+    !ended.current && fetchMore?.({
+      variables: {
+        filters: {
+          offer_ne: null
+        },
+        id: token.id,
+        skip: objkts?.length || 0,
+        take: ITEMS_PER_PAGE,
+        ...sortVariables
+      },
+    })
   }
 
 
   useEffect(() => {
     currentLength.current = 0
+    ended.current = false
     refetch?.({
       filters: {
         offer_ne: null
@@ -157,31 +159,20 @@ export const GenerativeOffersMarketplace = ({
       <Spacing size="large" />
 
       <InfiniteScrollTrigger onTrigger={infiniteScrollFetch} canTrigger={!!data && !loading}>
-          <CardsContainer>
-            <>
-              {objkts?.length > 0 && objkts.map(objkt => (
-                <ObjktCard key={objkt.id} objkt={objkt}/>
-              ))}
-              {loading && (
-                <CardsLoading number={ITEMS_PER_PAGE} />
-              )}
-            </>
-          </CardsContainer>
-        </InfiniteScrollTrigger>
-
-      {/* {loading ? (
-        <LoaderBlock height="100px">loading</LoaderBlock>
-      ):(
-        (objkts?.length > 0) ? (
-          <CardsContainer>
-            {objkts.map(objkt => (
+        <CardsContainer>
+          <>
+            {objkts && objkts?.length > 0 && objkts.map(objkt => (
               <ObjktCard key={objkt.id} objkt={objkt}/>
             ))}
-          </CardsContainer>
-        ):(
-          <p>No items currently listed</p>
-        )
-      )} */}
+            {loading && (
+              <CardsLoading number={ITEMS_PER_PAGE} />
+            )}
+            {!loading && objkts?.length === 0 && (
+              <p>No items currently listed</p>
+            )}
+          </>
+        </CardsContainer>
+      </InfiniteScrollTrigger>
     </>
   )
 }

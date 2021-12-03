@@ -168,6 +168,7 @@ export const Marketplace = ({}: Props) => {
 
   useEffect(() => {
     currentLength.current = 0
+    ended.current = false
     refetch?.({
       skip: 0,
       take: ITEMS_PER_PAGE,
