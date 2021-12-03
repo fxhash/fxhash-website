@@ -50,14 +50,12 @@ export const clientSideClient = new ApolloClient({
               for (let i = 0; i < incoming.length; ++i) {
                 merged[skip + i] = incoming[i]
               }
-              console.log(merged)
               return merged
             },
             read(existing, { args }) {
-              console.log("read here")
               const { skip, take } = args as any
               // check if we have all the items in the existing array
-              if (existing.length < skip + take) {
+              if (!existing || existing.length < skip + take) {
                 return undefined
               }
               const sub = []
