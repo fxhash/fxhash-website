@@ -26,17 +26,27 @@ export const clientSideClient = new ApolloClient({
               return merged
             },
           },
-          objkts: {
-            keyArgs: false,
-            // @ts-ignore
-            merge(existing, incoming, { args: { skip = 0 }}) {
-              const merged = existing ? existing.slice(0) : []
-              for (let i = 0; i < incoming.length; ++i) {
-                merged[skip + i] = incoming[i]
-              }
-              return merged
-            },
-          },
+          // objkts: {
+          //   keyArgs: false,
+          //   // @ts-ignore
+          //   merge(existing, incoming, { args: { skip = 0 }}) {
+          //     const merged = Array(skip+incoming.length).fill(null)
+          //     if (existing) {
+          //       for (let i = 0; i < existing.length; i++) {
+          //         merged[i] = existing[i]
+          //       }
+          //     }
+          //     for (let i = 0; i < incoming.length; ++i) {
+          //       merged[skip + i] = incoming[i]
+          //     }
+          //     console.log(skip)
+          //     console.log(merged)
+          //     return merged
+          //   },
+          //   read(existing, { args }) {
+          //     console.log({ args, existing })
+          //   }
+          // },
         }
       },
       User: {

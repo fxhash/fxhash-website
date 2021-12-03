@@ -22,49 +22,41 @@ interface Props {
 }
 
 export function GenerativeCollection({ token }: Props) {
-  // store the pages fetched
-  const fetched = useRef<number[]>([])
   const [page, setPage] = useState<number>(0)
 
-  const { data, loading, fetchMore } = useQuery(Qu_genTokenObjkts, {
+  const { data, loading, refetch } = useQuery(Qu_genTokenObjkts, {
     notifyOnNetworkStatusChange: true,
     variables: {
       id: token.id,
       skip: 0,
       take: ITEMS_PER_PAGE
-    }
+    },
+    fetchPolicy: "network-only"
   })
   
   // when there's a change in the page, request the data
   useEffect(() => {
-    if (!fetched.current.includes(page)) {
-      fetchMore({
-        variables: {
-          id: token.id,
-          skip: page * ITEMS_PER_PAGE,
-          take: ITEMS_PER_PAGE
-        }
-      })
-    }
+    refetch({
+      id: token.id,
+      skip: page * ITEMS_PER_PAGE,
+      take: ITEMS_PER_PAGE
+    })
   }, [page])
 
 
   // derive the active data from the active page
   const objkts: Objkt[]|null = data?.generativeToken.objkts
-  const activeObjkts = useMemo<Objkt[]|null>(() => {
-    if (!objkts) return null
-    // get the start index based on the page
-    const startIdx = page * ITEMS_PER_PAGE
-    const endIdx = startIdx + ITEMS_PER_PAGE
 
-    // return a sub-portion of the array
-    const sub = objkts.slice(startIdx, endIdx)
-    // if there are some results, then we can store the page as "saved"
-    if (sub.length > 0 && !fetched.current.includes(page)) {
-      fetched.current.push(page)
-    }
-    return sub
-  }, [page, data])
+  // const activeObjkts = useMemo<Objkt[]|null>(() => {
+  //   if (!objkts) return null
+  //   // get the start index based on the page
+  //   const startIdx = page * ITEMS_PER_PAGE
+  //   const endIdx = startIdx + ITEMS_PER_PAGE
+
+  //   // return a sub-portion of the array
+  //   const sub = objkts.slice(startIdx, endIdx)
+  //   return sub
+  // }, [page, data])
 
   return (
     token.objktsCount > 0 ? (
@@ -73,7 +65,7 @@ export function GenerativeCollection({ token }: Props) {
           {loading ? (
             <CardsLoading number={ITEMS_PER_PAGE} />
           ):(
-            activeObjkts && activeObjkts.map(objkt => (
+            objkts?.map(objkt => (
               <ObjktCard key={objkt.id} objkt={objkt}/>
             ))
           )}

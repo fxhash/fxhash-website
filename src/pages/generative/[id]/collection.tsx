@@ -104,28 +104,6 @@ const GenerativeTokenCollection: NextPage<Props> = ({ token }) => {
         <Spacing size="3x-large"/>
 
         <main className={cs(layout['padding-big'])}>
-          {/* {hasCollection ? (
-            <>
-              <CardsContainer>
-                {visibleObjkts.map(objkt => (
-                  <ObjktCard key={objkt.id} objkt={objkt}/>
-                ))}
-              </CardsContainer>
-              <Spacing size="4x-large"/>
-
-              <div className={cs(style['view-collection-container'])}>
-                <Pagination
-                  items={token.objkts}
-                  itemsPerPage={12}
-                  onChange={setVisibleObjkts}
-                />
-              </div>
-            </>
-          ):(
-            <>
-              <p>Nobody has minted from this Generative Token. <strong>Become the first of the collection !</strong></p>
-            </>
-          )} */}
           <GenerativeCollection
             token={token}
           />
