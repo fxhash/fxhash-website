@@ -12,13 +12,13 @@ import { InfiniteScrollTrigger } from "../../components/Utils/InfiniteScrollTrig
 import { CardsLoading } from "../../components/Card/CardsLoading"
 
 
-const ITEMS_PER_PAGE = 1
+const ITEMS_PER_PAGE = 20
 
 const Qu_offers = gql`
-  query Query($id: Float!, $filters: ObjktFilter, $offerPrice: String, $offerCreatedAt: String) {
+  query Query($id: Float!, $filters: ObjktFilter, $offerPrice: String, $offerCreatedAt: String, $skip: Int, $take: Int) {
     generativeToken(id: $id) {
       id
-      objkts(filters: $filters, offerPrice: $offerPrice, offerCreatedAt: $offerCreatedAt) {
+      objkts(filters: $filters, offerPrice: $offerPrice, offerCreatedAt: $offerCreatedAt, skip: $skip, take: $take) {
         id
         name
         slug
@@ -117,17 +117,17 @@ export const GenerativeOffersMarketplace = ({
   const objkts: Objkt[] = data?.generativeToken.objkts
 
   const infiniteScrollFetch = () => {
-    !ended.current && fetchMore?.({
-      variables: {
-        filters: {
-          offer_ne: null
-        },
-        id: token.id,
-        skip: objkts.length,
-        take: ITEMS_PER_PAGE,
-        ...sortVariables
-      },
-    })
+    // !ended.current && fetchMore?.({
+    //   variables: {
+    //     filters: {
+    //       offer_ne: null
+    //     },
+    //     id: token.id,
+    //     skip: objkts.length,
+    //     take: ITEMS_PER_PAGE,
+    //     ...sortVariables
+    //   },
+    // })
   }
 
 
