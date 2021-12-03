@@ -60,11 +60,16 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
     <>
       <Head>
         <title>fxhash — {token.name}</title>
-        <meta key="og:title" property="og:title" content={`fxhash — ${token.name}`}/> 
+        <meta key="og:title" property="og:title" content={`${token.name} — fxhash`}/> 
         <meta key="description" name="description" content={truncateEnd(token.metadata?.description || "", 200, "")}/>
         <meta key="og:description" property="og:description" content={truncateEnd(token.metadata?.description || "", 200, "")}/>
         <meta key="og:type" property="og:type" content="website"/>
         <meta key="og:image" property="og:image" content={displayUrl || "https://www.fxhash.xyz/images/og/og1.jpg"}/>
+        <meta name="twitter:site" content="@fx_hash_"/>
+        <meta name="twitter:card" content="summary_large_image"/>
+        <meta name="twitter:title" content={`${token.name} — fxhash`}/>
+        <meta name="twitter:description" content={truncateEnd(token.metadata?.description || "", 200, "")}/>
+        <meta name="twitter:image" content={displayUrl || "https://www.fxhash.xyz/images/og/og1.jpg"}/>
       </Head>
 
       <FlagBanner token={token}/>
