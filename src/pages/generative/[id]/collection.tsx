@@ -22,7 +22,7 @@ import { Pagination } from '../../../components/Pagination/Pagination'
 import { useState } from 'react'
 import { Objkt } from '../../../types/entities/Objkt'
 import { truncateEnd } from '../../../utils/strings'
-import { getGenerativeTokenUrl } from '../../../utils/generative-token'
+import { getGenerativeTokenMarketplaceUrl, getGenerativeTokenUrl } from '../../../utils/generative-token'
 import { GenerativeCollection } from '../../../containers/Generative/Collection'
 
 
@@ -76,6 +76,12 @@ const GenerativeTokenCollection: NextPage<Props> = ({ token }) => {
               <Link href={getGenerativeTokenUrl(token)}>
                 <Button isLink={true} size="small">
                   See Generative Token 
+                </Button>
+              </Link>
+              <Spacing size="8px"/>
+              <Link href={getGenerativeTokenMarketplaceUrl(token)} passHref>
+                <Button isLink={true} size="small">
+                  See Marketplace
                 </Button>
               </Link>
             </div>

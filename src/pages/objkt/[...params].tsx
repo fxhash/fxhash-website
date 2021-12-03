@@ -27,7 +27,7 @@ import { Features } from '../../components/Features/Features'
 import { format } from 'date-fns'
 import { displayPercentage, displayRoyalties } from '../../utils/units'
 import { Qu_objkt } from '../../queries/objkt'
-import { getGenerativeTokenUrl } from '../../utils/generative-token'
+import { getGenerativeTokenMarketplaceUrl, getGenerativeTokenUrl } from '../../utils/generative-token'
 import { FlagBanner } from '../../containers/Generative/FlagBanner'
 
 
@@ -96,15 +96,20 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
               {/* @ts-ignore */}
               <ClientOnlyEmpty style={{ width: "100%" }}>
                 <UserGuard forceRedirect={false}>
-                  <OfferControl objkt={objkt}/>
+                  <>
+                    <OfferControl objkt={objkt}/>
+                  </>
                 </UserGuard>
               </ClientOnlyEmpty>
 
               <Link href={getGenerativeTokenUrl(objkt.issuer)} passHref>
-                <Button
-                  isLink={true}
-                >
+                <Button isLink={true} size="small">
                   See Generative Token
+                </Button>
+              </Link>
+              <Link href={getGenerativeTokenMarketplaceUrl(objkt.issuer)} passHref>
+                <Button isLink={true} size="small">
+                  See Marketplace
                 </Button>
               </Link>
             </div>
