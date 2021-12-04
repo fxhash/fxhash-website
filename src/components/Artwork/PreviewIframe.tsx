@@ -46,27 +46,28 @@ export const ArtworkIframe = forwardRef<ArtworkIframeRef, Props>(({ url, textWai
 
   return (
     <div className={style.container}>
-      <div className={cs(style['iframe-container'])}>
-        <iframe 
+      <div className={cs(style["iframe-container"])}>
+        <iframe
           ref={iframeRef}
           src={url}
           sandbox="allow-scripts allow-same-origin"
           className={cs(style.iframe)}
           onLoad={() => {
-            onLoaded && onLoaded()
-            setLoading(false)
+            onLoaded && onLoaded();
+            setLoading(false);
           }}
           onError={() => setError(true)}
+          allow="accelerometer; camera; gyroscope; microphone; xr-spatial-tracking;"
         />
-        {(loading && !error) &&(
-          <LoaderBlock height="100%" className={cs(style.loader)}>{textWaiting}</LoaderBlock>
+        {loading && !error && (
+          <LoaderBlock height="100%" className={cs(style.loader)}>
+            {textWaiting}
+          </LoaderBlock>
         )}
         {error && (
-          <Error className={cs(style.error)}>
-            Could not load the project
-          </Error>
+          <Error className={cs(style.error)}>Could not load the project</Error>
         )}
       </div>
     </div>
-  )
+  );
 })
