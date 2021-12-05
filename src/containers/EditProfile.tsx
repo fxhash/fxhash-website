@@ -24,7 +24,7 @@ import { UserVerification } from "./User/UserVerification"
 const Schema = Yup.object().shape({
   name: Yup.string()
     .min(3, 'Min 3 characters')
-    .max(32, 'Max 32 characters')
+    .max(64, 'Max 64 characters')
     .required('Min 3 characters'),
   description: Yup.string()
     .max(250, 'Max 250 characters')
