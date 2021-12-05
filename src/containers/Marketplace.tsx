@@ -24,6 +24,7 @@ const Qu_offers = gql`
         id
         name
         slug
+        assigned
         metadata
         offer {
           id
@@ -41,6 +42,7 @@ const Qu_offers = gql`
         }
         issuer {
           flag
+          name
           author {
             id
             name
@@ -63,6 +65,7 @@ const Qu_offersByIds = gql`
         name
         slug
         metadata
+        assigned
         offer {
           id
           price
@@ -79,6 +82,7 @@ const Qu_offersByIds = gql`
         }
         issuer {
           flag
+          name
           author {
             id
             name

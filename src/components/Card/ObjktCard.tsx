@@ -18,6 +18,7 @@ interface Props {
 export function ObjktCard({
   objkt
 }: Props) {
+  console.log(objkt)
   const owner = objkt.offer ? objkt.offer.issuer : objkt.owner!
   const url = getObjktUrl(objkt)
 
@@ -26,7 +27,7 @@ export function ObjktCard({
       <AnchorForward style={{ height: '100%' }}>
         <Card thumbnailUri={objkt.metadata?.thumbnailUri} undesirable={objkt.issuer.flag === GenTokFlag.MALICIOUS}>
           <div>
-            <h5>{ objkt.name }</h5>
+            <h5>{ objkt.name }{objkt.assigned === false && ` - ${objkt.issuer.name}`}</h5>
             <Spacing size="2x-small" />
             <UserBadge user={owner} size="regular" hasLink={false} />
           </div>

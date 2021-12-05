@@ -42,12 +42,14 @@ export const Qu_userObjkts = gql`
       id
       objkts(take: $take, skip: $skip) {
         id
+        assigned
         owner {
           id
           name
           avatarUri
         }
         issuer {
+          name
           flag
           author {
             id

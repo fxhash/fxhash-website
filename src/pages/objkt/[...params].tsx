@@ -72,7 +72,7 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
         <div className={cs(style['presentation-details'])}>
           <header>
             <small className={cs(colors.gray)}>GENTK#{ objkt.id }</small>
-            <h3>{ objkt.name }</h3>
+            <h3>{ objkt.name }{ objkt.assigned === false && ` - ${objkt.issuer.name}`}</h3>
             <Spacing size="x-small"/>
             <UserBadge 
               prependText="created by"

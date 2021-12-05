@@ -5,6 +5,7 @@ export const Qu_objkt = gql`
     objkt(id: $id, slug: $slug) {
       id
       royalties
+      assigned
       owner {
         id
         name
