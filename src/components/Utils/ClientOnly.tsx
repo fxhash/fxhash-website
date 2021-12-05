@@ -1,5 +1,5 @@
-import { PropsWithChildren, useEffect, useState } from "react"
-import { useIsMounted, useIsMountedState } from "../../utils/hookts"
+import { PropsWithChildren } from "react"
+import { useIsMountedState } from "../../utils/hookts"
 
 export default function ClientOnly({ children, ...delegated }: PropsWithChildren<{}>) {
   const isMounted = useIsMountedState()
@@ -12,5 +12,11 @@ export default function ClientOnly({ children, ...delegated }: PropsWithChildren
 }
 
 export function ClientOnlyEmpty({ children }: PropsWithChildren<{}>) {
-  return <ClientOnly>{children}</ClientOnly>
+  const isMounted = useIsMountedState()
+
+  if (!isMounted) {
+    return null
+  }
+
+  return <>{children}</>
 }
