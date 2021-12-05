@@ -17,13 +17,13 @@ export function ContractsOpened() {
     if (timeUntilClose < 0) {
       // we are closed
       const nextOpen = new Date(nextCycleStart)
-      const nextOpenString = nextOpen.toLocaleTimeString(getLocalTimezone().abbr, {hour:'numeric'})
+      const nextOpenString = nextOpen.toLocaleTimeString("en-US", {hour:'numeric'})
       setMintTimeStatus(`(opens at ${nextOpenString})`)
     }
     else {
       // we are open
       const nextClose = new Date(Date.now() + timeUntilClose)
-      const nextCloseString = nextClose.toLocaleTimeString(getLocalTimezone().abbr, {hour:'numeric'})
+      const nextCloseString = nextClose.toLocaleTimeString("en-US", {hour:'numeric'})
       setMintTimeStatus(`(closes at ${nextCloseString})`)
     }
   })
