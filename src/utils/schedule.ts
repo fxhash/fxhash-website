@@ -1,8 +1,8 @@
 import { utcToZonedTime, zonedTimeToUtc } from "date-fns-tz"
 import { Timezone } from "./timzones"
 
-const MS_PER_CYCLE = 82800000; // (1000ms * 60s * 60m * 23h)
-const MS_PER_OPEN = 43200000; // (1000ms * 60s * 60m * 12h)
+const MS_PER_CYCLE = 82800000 // (1000ms * 60s * 60m * 23h)
+const MS_PER_OPEN = 43200000 // (1000ms * 60s * 60m * 12h)
 
 export function isPlatformOpenedAt(date: Date, timezone: Timezone): boolean {
   const reference = utcToZonedTime(new Date(process.env.NEXT_PUBLIC_REFERENCE_OPENING!), timezone.utc[0])
@@ -27,10 +27,10 @@ export function isPlatformOpenedAt(date: Date, timezone: Timezone): boolean {
  * @returns number of ms until the next open/close event. Value is calculated as `(milliseconds of open) - (milliseconds into the current cycle)`
  */
 export function getMsUntilClose(): number {
-  const reference = new Date(process.env.NEXT_PUBLIC_REFERENCE_OPENING!);
-  const diff = Date.now() - reference.getTime();
-  const cycleTime = diff % MS_PER_CYCLE;
-  return MS_PER_OPEN - cycleTime;
+  const reference = new Date(process.env.NEXT_PUBLIC_REFERENCE_OPENING!)
+  const diff = Date.now() - reference.getTime()
+  const cycleTime = diff % MS_PER_CYCLE
+  return MS_PER_OPEN - cycleTime
 }
 
 /**
@@ -39,10 +39,10 @@ export function getMsUntilClose(): number {
  * @returns The start time of the next cycle (in Unix time)
  */
 export function getNextCycleStartTime(): number {
-  const reference = new Date(process.env.NEXT_PUBLIC_REFERENCE_OPENING!);
-  const currentTime = Date.now();
-  const diff = currentTime - reference.getTime();
-  const cycleTime = diff % MS_PER_CYCLE;
-  const startCurrentCycle = currentTime - cycleTime;
-  return startCurrentCycle + MS_PER_CYCLE;
+  const reference = new Date(process.env.NEXT_PUBLIC_REFERENCE_OPENING!)
+  const currentTime = Date.now()
+  const diff = currentTime - reference.getTime()
+  const cycleTime = diff % MS_PER_CYCLE
+  const startCurrentCycle = currentTime - cycleTime
+  return startCurrentCycle + MS_PER_CYCLE
 }
