@@ -20,6 +20,20 @@ export function useIsMounted() {
   return useCallback(() => isMounted.current, [])
 }
 
+/**
+ * useIsMounted() by triggers a state update when it mounts
+ */
+export function useIsMountedState(): boolean {
+  const [isMounted, setIsMounted] = useState<boolean>(false)
+  useEffect(() => {
+    setIsMounted(true)
+    return () => {
+      setIsMounted(false)
+    }
+  }, [])
+  return isMounted
+}
+
 export const useClientEffect = (effect: EffectCallback, dependencies?: DependencyList): void => {
   if (typeof window !== "undefined") {
     useEffect(effect, dependencies)
