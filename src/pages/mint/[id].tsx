@@ -37,7 +37,7 @@ const MintPage: NextPage<Props> = ({ token }) => {
 
       <FlagBanner token={token} />
 
-      {token.flag !== GenTokFlag.MALICIOUS && (
+      {!([GenTokFlag.MALICIOUS, GenTokFlag.HIDDEN].includes(token.flag)) && (
         <>
           <Spacing size="6x-large"/>
 

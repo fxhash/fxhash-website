@@ -44,7 +44,9 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
   const iframeRef = useRef<ArtworkIframeRef>(null)
 
   const [mintLocked, setMintLocked] = useState<boolean>(
-    token.flag === GenTokFlag.CLEAN ? false : Date.now() - (new Date(token.createdAt)).getTime() < 1*3600*1000
+    (token.flag === GenTokFlag.CLEAN || (token.supply-token.balance) === 0) 
+      ? false 
+      : Date.now() - (new Date(token.createdAt)).getTime() < 1*3600*1000
   )
 
   const reload = () => {
@@ -117,7 +119,7 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
             )}
             <Spacing size="2x-small"/>
             
-            {token.flag !== GenTokFlag.MALICIOUS && token.balance > 0 && (
+            {!([GenTokFlag.MALICIOUS, GenTokFlag.HIDDEN].includes(token.flag)) && token.balance > 0 && (
               <>
                 {!token.enabled && <small>token is currently <strong>disabled</strong> by author</small>}
                 <div className={cs(style.lock_container)}>

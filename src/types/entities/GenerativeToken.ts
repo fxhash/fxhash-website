@@ -10,6 +10,7 @@ export enum GenTokFlag {
   REPORTED          = "REPORTED",
   AUTO_DETECT_COPY  = "AUTO_DETECT_COPY",
   MALICIOUS         = "MALICIOUS",
+  HIDDEN            = "HIDDEN",
 }
 
 export interface GenerativeTokenMarketStats {

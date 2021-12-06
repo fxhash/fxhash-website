@@ -23,7 +23,12 @@ export function Collect({ offer, objkt }: Props) {
   const userCtx = useContext(UserContext)
   const router = useRouter()
 
-  const [locked, setLocked] = useState<boolean>([GenTokFlag.AUTO_DETECT_COPY, GenTokFlag.REPORTED, GenTokFlag.MALICIOUS].includes(objkt.issuer.flag))
+  const [locked, setLocked] = useState<boolean>([
+    GenTokFlag.AUTO_DETECT_COPY,
+    GenTokFlag.REPORTED,
+    GenTokFlag.MALICIOUS,
+    GenTokFlag.HIDDEN
+  ].includes(objkt.issuer.flag))
 
   const { state, loading: contractLoading, error: contractError, success, call, clear } = 
     useContractCall<CollectCall>(userCtx.walletManager?.collect)
