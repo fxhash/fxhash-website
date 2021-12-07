@@ -22,6 +22,7 @@ const Qu_offers = gql`
         id
         name
         slug
+        duplicate
         metadata
         offer {
           id

@@ -26,6 +26,7 @@ const Qu_offers = gql`
         slug
         assigned
         metadata
+        duplicate
         offer {
           id
           price
@@ -66,6 +67,7 @@ const Qu_offersByIds = gql`
         slug
         metadata
         assigned
+        duplicate
         offer {
           id
           price

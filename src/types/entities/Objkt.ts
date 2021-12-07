@@ -10,6 +10,7 @@ export interface Objkt {
   owner?: User|null
   assigned?: boolean
   generationHash?: string
+  duplicate?: boolean
   iteration?: number
   tags: string[]
   name?: string

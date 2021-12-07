@@ -5,6 +5,7 @@ import { AnchorForward } from "../Utils/AnchorForward"
 import { Card } from "./Card"
 import { UserBadge } from "../User/UserBadge"
 import style from "./Card.module.scss"
+import styleObjkt from "./ObjktCard.module.scss"
 import { Spacing } from "../Layout/Spacing"
 import { Objkt } from "../../types/entities/Objkt"
 import { displayMutez } from "../../utils/units"
@@ -26,6 +27,7 @@ export function ObjktCard({
       <AnchorForward style={{ height: '100%' }}>
         <Card thumbnailUri={objkt.metadata?.thumbnailUri} undesirable={objkt.issuer.flag === GenTokFlag.MALICIOUS}>
           <div>
+            {objkt.duplicate && <div className={cs(styleObjkt.dup_flag)}>[WARNING: DUPLICATE]</div>}
             <h5>{ objkt.name }{objkt.assigned === false && ` - ${objkt.issuer.name}`}</h5>
             <Spacing size="2x-small" />
             <UserBadge user={owner} size="regular" hasLink={false} />
