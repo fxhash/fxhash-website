@@ -60,7 +60,7 @@ export const ArtworkIframe = forwardRef<ArtworkIframeRef, Props>(({ url, textWai
           allow="accelerometer; camera; gyroscope; microphone; xr-spatial-tracking;"
         />
         {loading && !error && (
-          <LoaderBlock height="100%" className={cs(style.loader)}>
+          <LoaderBlock height="100%" color="white" className={cs(style.loader)}>
             {textWaiting}
           </LoaderBlock>
         )}
