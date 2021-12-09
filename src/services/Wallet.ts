@@ -17,6 +17,7 @@ import {
   ContractOperationStatus, 
   FxhashContract
 } from '../types/Contracts'
+import { shuffleArray } from '../utils/array'
 import { stringToByteString } from '../utils/convert'
 
 
@@ -47,7 +48,7 @@ export class WalletManager {
   rpcNodes: string[]
 
   constructor() {
-    this.rpcNodes = (process.env.NEXT_PUBLIC_RPC_NODES!).split(',')
+    this.rpcNodes = shuffleArray((process.env.NEXT_PUBLIC_RPC_NODES!).split(','))
     this.tezosToolkit = new TezosToolkit(this.rpcNodes[0])
     this.instanciateBeaconWallet()
   }
@@ -247,7 +248,8 @@ export class WalletManager {
       statusCallback && statusCallback(ContractOperationStatus.CALLING)
       const opSend = await issuerContract.methodsObject.mint(sendData).send({
         amount: tokenData.price,
-        mutez: true
+        mutez: true,
+        storageLimit: 450
       })
   
       // wait for confirmation
@@ -286,7 +288,7 @@ export class WalletManager {
   
       // wait for confirmation
       statusCallback && statusCallback(ContractOperationStatus.WAITING_CONFIRMATION)
-      await opSend.confirmation(2)
+      await opSend.confirmation(1)
   
       // OK, injected
       statusCallback && statusCallback(ContractOperationStatus.INJECTED)
