@@ -79,7 +79,7 @@ export function GenerativeEnjoy({ tokens, backLink, requestData }: Props) {
     if (tokens.length > 1) {
       // also, preload the next piece
       const toLoad = tokens[cursorShifted(1)]
-      fetch(ipfsGatewayUrl(toLoad.metadata?.artifactUri))
+      fetch(ipfsGatewayUrl(toLoad.metadata?.artifactUri, "pinata-fxhash-safe"))
     }
   }, [cursor])
 
