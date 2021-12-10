@@ -102,6 +102,11 @@ export function LiveFeed() {
         else {
           setReadyRevealNew(true)
         }
+        // finally we start to load the next resource in the background
+        if (toRevealNew.length > 0 && toRevealNew[0].metadata) {
+          const url = ipfsGatewayUrl(toRevealNew[0].metadata.artifactUri, "ipfsio")
+          fetch(url)
+        }
         setToReveal(toRevealNew)
       }
     }, 13000)
