@@ -1,0 +1,15 @@
+.container {
+  border-bottom: 3px solid var(--color-black);
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  margin-top: 10px;
+}
+
+.enabled {
+  color: var(--color-success);
+}
+
+.disabled {
+  color: var(--color-error);
+}
