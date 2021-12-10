@@ -48,3 +48,7 @@ export interface GenerativeToken {
   updatedAt: Date
   marketStats?: GenerativeTokenMarketStats
 }
+
+export interface GenerativeTokenWithCollection extends GenerativeToken {
+  entireCollection: Objkt[]
+}

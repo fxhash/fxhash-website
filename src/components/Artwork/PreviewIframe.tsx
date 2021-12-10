@@ -9,6 +9,7 @@ import { Error } from '../Error/Error'
 interface Props {
   url?: string
   textWaiting?: string
+  borderWidth?: number
   onLoaded?: () => void
 }
 
@@ -17,7 +18,12 @@ export interface ArtworkIframeRef {
   getHtmlIframe: () => HTMLIFrameElement | null
 }
 
-export const ArtworkIframe = forwardRef<ArtworkIframeRef, Props>(({ url, textWaiting, onLoaded }, ref) => {
+export const ArtworkIframe = forwardRef<ArtworkIframeRef, Props>(({ 
+  url, 
+  textWaiting, 
+  onLoaded,
+  borderWidth = 20
+}, ref) => {
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<boolean>(false)
   const iframeRef = useRef<HTMLIFrameElement>(null)
@@ -45,7 +51,7 @@ export const ArtworkIframe = forwardRef<ArtworkIframeRef, Props>(({ url, textWai
   }))
 
   return (
-    <div className={style.container}>
+    <div className={style.container} style={{ borderWidth }}>
       <div className={cs(style["iframe-container"])}>
         <iframe
           ref={iframeRef}

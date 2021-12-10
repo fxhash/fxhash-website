@@ -8,18 +8,20 @@ interface Props {
   title: string
   onClose: () => void
   index?: number
+  className?: string
 }
 export function Modal({
   title,
   index = 999999,
   onClose,
+  className,
   children
 }: PropsWithChildren<Props>) {
   return (
     <>
       <Cover onClick={onClose} index={index} />
       <div 
-        className={cs(style.modal, effects['drop-shadow-big'])}
+        className={cs(style.modal, effects['drop-shadow-big'], className)}
         style={{ zIndex: index+1 }}
       >
         <header>

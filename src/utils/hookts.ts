@@ -1,4 +1,4 @@
-import { DependencyList, EffectCallback, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { DependencyList, Dispatch, EffectCallback, SetStateAction, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import useAsyncEffect from 'use-async-effect'
 import useFetch, { CachePolicies } from 'use-http'
 import { API_BLOCKCHAIN_CONTRACT_STORAGE } from '../services/Blockchain'
@@ -351,4 +351,67 @@ export function useTzProfileVerification(address: string) {
   return {
     data, loading
   }
+}
+
+
+type TAnimationFrameCallback = (time: number, delta: number) => void
+
+/**
+ * Creates a request to use animation frame and calls the callback at each tick
+ * Responsible for handling dealloc
+ */
+export function useAnimationFrame(callback: TAnimationFrameCallback, dependencies?: DependencyList) {
+  const started = useRef<number>(0)
+  const lastFrameTime = useRef<number>(0)
+  const requestRef = useRef<number>()
+
+  const loop = () => {
+    requestRef.current = requestAnimationFrame(loop)
+
+    // compute time and delta time
+    const now = performance.now()
+    const time = now - started.current
+    const delta = now - lastFrameTime.current
+
+    // call callback & set last frame time for delta
+    callback(time, delta)
+    lastFrameTime.current = now
+  }
+  
+  useEffect(() => {
+    // initialize the values
+    started.current = lastFrameTime.current = performance.now()
+    requestRef.current = requestAnimationFrame(loop)
+
+    return () => cancelAnimationFrame(requestRef.current || 0)
+  }, dependencies)
+}
+
+
+/**
+ * Returns [true|false] depending on user interracting with the page
+ * Whenever the user doesn't interact with the page for X seconds, return true, otherwise
+ * returns false
+ */
+export function useHasInterractedIn(milliseconds: number = 2000, defaultValue: boolean = true): [boolean, Dispatch<SetStateAction<boolean>>] {
+  const timeoutID = useRef<ReturnType<typeof setTimeout>>()
+  const [inter, setInter] = useState<boolean>(defaultValue)
+
+  useEffect(() => {
+    const listener = () => {
+      // set user is active
+      timeoutID.current && clearTimeout(timeoutID.current)
+      setInter(true)
+
+      // trigger the inavtivity after X
+      timeoutID.current = setTimeout(() => {
+        setInter(false)
+      }, milliseconds)
+    }
+
+    window.addEventListener("mousemove", listener)
+    return () => window.addEventListener("mousemove", listener)
+  }, [])
+
+  return [inter, setInter]
 }

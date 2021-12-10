@@ -31,9 +31,6 @@ interface Props {
 }
 
 const GenerativeTokenCollection: NextPage<Props> = ({ token }) => {
-  const [visibleObjkts, setVisibleObjkts] = useState<Objkt[]>([])
-  const hasCollection = token.objkts?.length > 0
-
   // get the display url for og:image
   const displayUrl = token.metadata?.displayUri && ipfsGatewayUrl(token.metadata?.displayUri)
 
@@ -105,6 +102,15 @@ const GenerativeTokenCollection: NextPage<Props> = ({ token }) => {
       <section>
         <SectionHeader>
           <h2>— Collection ({ token.objktsCount })</h2>
+          <Link href={`/generative/${token.id}/enjoy`} passHref>
+            <Button
+              isLink={true}
+              iconComp={<i aria-hidden className="fas fa-arrow-right"/>}
+              iconSide="right"
+            >
+              enjoy
+            </Button>
+          </Link>
         </SectionHeader>
 
         <Spacing size="3x-large"/>
