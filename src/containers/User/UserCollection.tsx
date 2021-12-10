@@ -1,16 +1,17 @@
-// import style from "./UserGenerativeTokens.module.scss"
-import { useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client"
+import style from "./UserCollection.module.scss"
 import cs from "classnames"
-import { useRef, useEffect } from "react";
-import { CardsContainer } from "../../components/Card/CardsContainer";
-import { GenerativeTokenCard } from "../../components/Card/GenerativeTokenCard";
-import { ObjktCard } from "../../components/Card/ObjktCard";
-import { LoaderBlock } from "../../components/Layout/LoaderBlock";
-import { InfiniteScrollTrigger } from "../../components/Utils/InfiniteScrollTrigger";
-import { Qu_userGenTokens, Qu_userObjkts } from "../../queries/user";
-import { GenerativeToken } from "../../types/entities/GenerativeToken";
-import { Objkt } from "../../types/entities/Objkt";
-import { User } from "../../types/entities/User";
+import Link from "next/link"
+import { useRef, useEffect } from "react"
+import { CardsContainer } from "../../components/Card/CardsContainer"
+import { ObjktCard } from "../../components/Card/ObjktCard"
+import { LoaderBlock } from "../../components/Layout/LoaderBlock"
+import { InfiniteScrollTrigger } from "../../components/Utils/InfiniteScrollTrigger"
+import { Qu_userObjkts } from "../../queries/user"
+import { Objkt } from "../../types/entities/Objkt"
+import { User } from "../../types/entities/User"
+import { Spacing } from "../../components/Layout/Spacing"
+import { Button } from "../../components/Button"
 
 interface Props {
   user: User
@@ -58,6 +59,20 @@ export function UserCollection({
 
   return (
     <>
+      <header className={cs(style.header)}>
+        <Link href={`/enjoy-collection/${user}`} passHref>
+          <Button
+            isLink={true}
+            iconComp={<i aria-hidden className="fas fa-arrow-right"/>}
+            iconSide="right"
+          >
+            enjoy
+          </Button>
+        </Link>
+      </header>
+
+      <Spacing size="small"/>
+
       <InfiniteScrollTrigger
         onTrigger={load}
       >
