@@ -31,8 +31,9 @@ function toggleFullScreen() {
 interface Props {
   tokens: Objkt[]
   backLink: string
+  requestData?: () => void
 }
-export function GenerativeEnjoy({ tokens, backLink }: Props) {
+export function GenerativeEnjoy({ tokens, backLink, requestData }: Props) {
   // ref to elements manipulated directly
   const barRef = useRef<HTMLDivElement>(null)
   const frameContainerRef = useRef<HTMLDivElement>(null)
@@ -66,6 +67,11 @@ export function GenerativeEnjoy({ tokens, backLink }: Props) {
     cursorRef.current = cursorShifted(shift)
     setCursor(cursorRef.current)
     relativeTimer.current = 0
+
+    // if the cursor is at 10 from the end of the list request data
+    if (cursorRef.current > tokens.length - 10) {
+      requestData?.()
+    }
   }
 
   // whenever the cursor changed, we load the next one
@@ -96,7 +102,7 @@ export function GenerativeEnjoy({ tokens, backLink }: Props) {
         shiftIteration(1)
       }
     }
-  }, [paused, timePerIteration])
+  }, [paused, timePerIteration, tokens])
   
   // triggered when iframe is loaded 
   const onIframeLoaded = () => {
@@ -129,7 +135,7 @@ export function GenerativeEnjoy({ tokens, backLink }: Props) {
       >
         {tokens.length > 0 ? (
           <ArtworkIframe
-            url={ipfsGatewayUrl(selectedToken.metadata?.artifactUri)}
+            url={ipfsGatewayUrl(selectedToken.metadata?.artifactUri, "pinata-fxhash-safe")}
             borderWidth={0}
             onLoaded={onIframeLoaded}
           />
