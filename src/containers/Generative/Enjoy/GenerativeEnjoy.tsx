@@ -69,6 +69,7 @@ export function GenerativeEnjoy({ tokens, backLink, requestData }: Props) {
     relativeTimer.current = 0
 
     // if the cursor is at 10 from the end of the list request data
+    console.log({ pos: cursorRef.current, length: tokens.length })
     if (cursorRef.current > tokens.length - 10) {
       requestData?.()
     }

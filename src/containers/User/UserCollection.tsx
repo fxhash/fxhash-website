@@ -12,6 +12,7 @@ import { Objkt } from "../../types/entities/Objkt"
 import { User } from "../../types/entities/User"
 import { Spacing } from "../../components/Layout/Spacing"
 import { Button } from "../../components/Button"
+import { getUserProfileLink } from "../../utils/user"
 
 interface Props {
   user: User
@@ -60,7 +61,7 @@ export function UserCollection({
   return (
     <>
       <header className={cs(style.header)}>
-        <Link href={`/enjoy-collection/${user}`} passHref>
+        <Link href={`${getUserProfileLink(user)}/collection/enjoy`} passHref>
           <Button
             isLink={true}
             iconComp={<i aria-hidden className="fas fa-arrow-right"/>}

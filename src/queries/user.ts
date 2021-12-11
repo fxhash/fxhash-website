@@ -43,6 +43,7 @@ export const Qu_userObjkts = gql`
       objkts(take: $take, skip: $skip) {
         id
         assigned
+        iteration
         owner {
           id
           name
