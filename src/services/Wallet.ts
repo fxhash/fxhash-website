@@ -444,7 +444,8 @@ export class WalletManager {
       statusCallback && statusCallback(ContractOperationStatus.CALLING)
       const opSend = await marketContract.methodsObject.collect(data.offerId).send({
         mutez: true,
-        amount: data.price
+        amount: data.price,
+        storageLimit: 150
       })
   
       // wait for confirmation
