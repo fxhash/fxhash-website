@@ -75,7 +75,6 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
 
   // custom layout for the components
   const subLayout = Component.getLayout ?? ((page) => page)
-  console.log(subLayout)
 
   return (
     <>

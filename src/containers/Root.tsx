@@ -10,7 +10,8 @@ import { UserProvider } from "./UserProvider"
 
 const EXCLUDE_LAYOUT= [
   "/generative/[id]/enjoy",
-  "/u/[name]/collection/enjoy"
+  "/u/[name]/collection/enjoy",
+  "/pkh/[id]/collection/enjoy",
 ]
 
 export function Root({ children }: PropsWithChildren<{}>) {
