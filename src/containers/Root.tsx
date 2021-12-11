@@ -9,7 +9,8 @@ import { clientSideClient } from "../services/ApolloClient"
 import { UserProvider } from "./UserProvider"
 
 const EXCLUDE_LAYOUT= [
-  "/generative/[id]/enjoy"
+  "/generative/[id]/enjoy",
+  "/enjoy-collection/[name]"
 ]
 
 export function Root({ children }: PropsWithChildren<{}>) {
