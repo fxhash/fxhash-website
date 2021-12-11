@@ -1,13 +1,13 @@
-import style from "./UserItems.module.scss"
-import { useQuery } from "@apollo/client";
+import style from "./UserActions.module.scss"
+import { useQuery } from "@apollo/client"
 import cs from "classnames"
-import { useRef, useEffect } from "react";
-import { Activity } from "../../components/Activity/Activity";
-import { LoaderBlock } from "../../components/Layout/LoaderBlock";
-import { InfiniteScrollTrigger } from "../../components/Utils/InfiniteScrollTrigger";
-import { Qu_userActions } from "../../queries/user";
-import { Action } from "../../types/entities/Action";
-import { User } from "../../types/entities/User";
+import { useRef, useEffect } from "react"
+import { Activity } from "../../components/Activity/Activity"
+import { LoaderBlock } from "../../components/Layout/LoaderBlock"
+import { InfiniteScrollTrigger } from "../../components/Utils/InfiniteScrollTrigger"
+import { Qu_userActions } from "../../queries/user"
+import { Action } from "../../types/entities/Action"
+import { User } from "../../types/entities/User"
 
 interface Props {
   user: User
