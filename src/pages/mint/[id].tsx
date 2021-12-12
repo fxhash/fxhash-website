@@ -13,7 +13,7 @@ import { Mint } from "../../containers/Mint/Mint"
 import { truncateEnd } from "../../utils/strings"
 import { ipfsGatewayUrl } from "../../services/Ipfs"
 import { TitleHyphen } from "../../components/Layout/TitleHyphen"
-import { FlagBanner } from "../../containers/Generative/FlagBanner"
+import { GenerativeFlagBanner } from "../../containers/Generative/FlagBanner"
 
 
 interface Props {
@@ -35,7 +35,7 @@ const MintPage: NextPage<Props> = ({ token }) => {
         <meta key="og:image" property="og:image" content={displayUrl || "https://www.fxhash.xyz/images/og/og1.jpg"}/>
       </Head>
 
-      <FlagBanner token={token} />
+      <GenerativeFlagBanner token={token} />
 
       {!([GenTokFlag.MALICIOUS, GenTokFlag.HIDDEN].includes(token.flag)) && (
         <>

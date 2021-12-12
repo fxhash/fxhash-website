@@ -16,10 +16,18 @@ export enum UserRole {
   ADMIN             = "ADMIN",
 }
 
+export enum UserFlag {
+  NONE          = "NONE",
+  REVIEW        = "REVIEW",
+  SUSPICIOUS    = "SUSPICIOUS",
+  MALICIOUS     = "MALICIOUS", 
+}
+
 export interface User {
   id: string
   name?: string
   role: UserRole
+  flag: UserFlag
   metadata?: Record<string, any>
   metadataUri?: string
   description?: string

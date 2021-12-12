@@ -28,7 +28,7 @@ import { format } from 'date-fns'
 import { displayPercentage, displayRoyalties } from '../../utils/units'
 import { Qu_objkt } from '../../queries/objkt'
 import { getGenerativeTokenMarketplaceUrl, getGenerativeTokenUrl } from '../../utils/generative-token'
-import { FlagBanner } from '../../containers/Generative/FlagBanner'
+import { GenerativeFlagBanner } from '../../containers/Generative/FlagBanner'
 
 
 interface Props {
@@ -64,7 +64,7 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
         <meta name="twitter:image" content={displayUrl || "https://www.fxhash.xyz/images/og/og1.jpg"}/>
       </Head>
 
-      <FlagBanner token={objkt.issuer} />
+      <GenerativeFlagBanner token={objkt.issuer} />
 
       <Spacing size="6x-large" />
 

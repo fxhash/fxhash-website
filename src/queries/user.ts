@@ -7,6 +7,7 @@ export const Qu_user = gql`
       name
       metadata
       role
+      flag
       description
       avatarUri
       createdAt

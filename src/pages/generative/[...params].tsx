@@ -28,7 +28,7 @@ import { useRef, useState } from 'react'
 import { Qu_genToken } from '../../queries/generative-token'
 import { GenerativeActions } from '../../containers/Generative/Actions'
 import { GenerativeExtraActions } from '../../containers/Generative/ExtraActions'
-import { FlagBanner } from '../../containers/Generative/FlagBanner'
+import { GenerativeFlagBanner } from '../../containers/Generative/FlagBanner'
 import { Unlock } from '../../components/Utils/Unlock'
 import { format } from 'date-fns'
 import { getGenerativeTokenMarketplaceUrl } from '../../utils/generative-token'
@@ -74,7 +74,7 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
         <meta name="twitter:image" content={displayUrl || "https://www.fxhash.xyz/images/og/og1.jpg"}/>
       </Head>
 
-      <FlagBanner token={token}/>
+      <GenerativeFlagBanner token={token}/>
 
       <Spacing size="6x-large" />
 

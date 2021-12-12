@@ -19,7 +19,7 @@ import { truncateEnd } from '../../../utils/strings'
 import { useRef, useState } from 'react'
 import { Qu_genToken, Qu_genTokenMarketplace } from '../../../queries/generative-token'
 import { GenerativeActions } from '../../../containers/Generative/Actions'
-import { FlagBanner } from '../../../containers/Generative/FlagBanner'
+import { GenerativeFlagBanner } from '../../../containers/Generative/FlagBanner'
 import { ArtworkPreview } from '../../../components/Artwork/Preview'
 import { getGenerativeTokenUrl } from '../../../utils/generative-token'
 import { TabDefinition, Tabs } from '../../../components/Layout/Tabs'
@@ -61,7 +61,7 @@ const GenerativeTokenMarketplace: NextPage<Props> = ({ token }) => {
         <meta name="twitter:image" content={displayUrl || "https://www.fxhash.xyz/images/og/og1.jpg"}/>
       </Head>
 
-      <FlagBanner token={token}/>
+      <GenerativeFlagBanner token={token}/>
 
       <Spacing size="6x-large" />
 

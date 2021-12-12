@@ -10,6 +10,7 @@ import { User } from "../../types/entities/User"
 import { truncateEnd } from "../../utils/strings"
 import { getUserName, getUserProfileLink } from "../../utils/user"
 import { UserHeader } from "./UserHeader"
+import { UserFlagBanner } from "./FlagBanner"
 
 
 type TabWrapperProps = PropsWithChildren<LinkProps> & HTMLAttributes<HTMLAnchorElement>
@@ -78,6 +79,8 @@ export function UserProfileLayout({
         <meta key="og:type" property="og:type" content="website"/>
         <meta key="og:image" property="og:image" content={ogImageUrl || "https://www.fxhash.xyz/images/og/og1.jpg"}/>
       </Head>
+
+      <UserFlagBanner user={user} />
 
       <Spacing size="6x-large" />
 
