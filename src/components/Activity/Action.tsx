@@ -149,12 +149,12 @@ const ActionMapComponent: Record<string, FunctionComponent<Props>> = {
 
 const actionMapLink: Record<string, (action: ActionType) => string|null> = {
   MINTED: (action: ActionType) => `/generative/${action.token?.id}`,
-  MINTED_FROM: (action: ActionType) => `/objkt/${action.objkt?.id}`,
-  TRANSFERED: (action: ActionType) => `/objkt/${action.objkt?.id}`,
-  OFFER: (action: ActionType) => `/objkt/${action.objkt?.id}`,
-  OFFER_ACCEPTED: (action: ActionType) => `/objkt/${action.objkt?.id}`,
-  OFFER_CANCELLED: (action: ActionType) => `/objkt/${action.objkt?.id}`,
-  UPDATE_STATE: (action: ActionType) => `/objkt/${action.objkt?.id}`,
+  MINTED_FROM: (action: ActionType) => `/gentk/${action.objkt?.id}`,
+  TRANSFERED: (action: ActionType) => `/gentk/${action.objkt?.id}`,
+  OFFER: (action: ActionType) => `/gentk/${action.objkt?.id}`,
+  OFFER_ACCEPTED: (action: ActionType) => `/gentk/${action.objkt?.id}`,
+  OFFER_CANCELLED: (action: ActionType) => `/gentk/${action.objkt?.id}`,
+  UPDATE_STATE: (action: ActionType) => `/gentk/${action.objkt?.id}`,
   COMPLETED: (action: ActionType) => `/generative/${action.token?.id}`,
 }
 
