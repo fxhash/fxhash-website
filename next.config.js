@@ -22,7 +22,7 @@ module.exports = withBundleAnalyzer({
 
   redirects() {
     return [
-      { source: "/objkt/:params*", destination: "/gentk/:params*", permanent: false },
+      { source: "/objkt/:params*", destination: "/gentk/:params*", permanent: true },
       process.env.NEXT_PUBLIC_MAINTENANCE_MODE === "1"
         ? { source: "/((?!maintenance|_next).*)", destination: "/maintenance", permanent: false }
         : { source: "/maintenance", destination: "/", permanent: false }
