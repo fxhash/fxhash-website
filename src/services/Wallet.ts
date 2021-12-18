@@ -1,5 +1,6 @@
 import { BeaconWallet } from '@taquito/beacon-wallet'
-import { ContractAbstraction, MichelsonMap, TezosToolkit, Wallet } from '@taquito/taquito'
+import { MichelsonV1Expression } from '@taquito/rpc'
+import { ContractAbstraction, MichelsonMap, OpKind, TezosToolkit, Wallet } from '@taquito/taquito'
 import { 
   CancelOfferCall,
   CollectCall,
@@ -350,7 +351,61 @@ export class WalletManager {
       // get/create the contract interface
       const objktContract = await this.getContract(FxhashContract.OBJKT)
       const marketContract = await this.getContract(FxhashContract.MARKETPLACE)
-  
+
+      // the origination parameters
+      const updateOperatorsValue: MichelsonV1Expression = {
+        "prim": "Left",
+        "args": [
+          {
+            "prim": "Pair",
+            "args": [
+              {
+                "string": data.ownerAddress
+              },
+              {
+                "prim": "Pair",
+                "args": [
+                  {
+                    "string": addresses.MARKETPLACE
+                  },
+                  {
+                    "int": ""+data.tokenId
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+
+      const listItemValue: MichelsonV1Expression = {
+        "prim": "Pair",
+        "args": [
+          {
+            "prim": "Pair",
+            "args": [
+              {
+                "string": data.creatorAddress
+              },
+              {
+                "int": ""+data.tokenId
+              }
+            ]
+          },
+          {
+            "prim": "Pair",
+            "args": [
+              {
+                "int": ""+data.price
+              },
+              {
+                "int": ""+data.royalties
+              }
+            ]
+          }
+        ]
+      }
+
       // call the contract (open wallet)
       statusCallback && statusCallback(ContractOperationStatus.CALLING)
       // const opSend = await objktContract.methodsObject.update_operators().getSignature()
@@ -374,6 +429,32 @@ export class WalletManager {
             royalties: data.royalties
           })
         )
+        // .with([
+        //   {
+        //     kind: OpKind.TRANSACTION,
+        //     to: addresses.OBJKT,
+        //     fee: 600,
+        //     amount: 0,
+        //     parameter: {
+        //       entrypoint: "update_operators",
+        //       value: updateOperatorsValue
+        //     },
+        //     gasLimit: 2500,
+        //     storageLimit: 250,
+        //   },
+        //   {
+        //     kind: OpKind.TRANSACTION,
+        //     to: addresses.MARKETPLACE,
+        //     fee: 1000,
+        //     amount: 0,
+        //     parameter: {
+        //       entrypoint: "offer",
+        //       value: listItemValue,
+        //     },
+        //     gasLimit: 7000,
+        //     storageLimit: 250
+        //   }
+        // ])
         .send()
   
       // wait for confirmation
