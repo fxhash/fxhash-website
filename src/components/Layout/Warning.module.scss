@@ -1,0 +1,26 @@
+.container {
+  width: 100%;
+  background-color: var(--color-warning);
+  height: 40px;
+  display: flex;
+  align-items: center;
+  color: black;
+  font-weight: normal;
+  font-size: 0.8rem;
+  justify-content: space-between;
+  border-bottom: 3px solid var(--color-border);
+
+  .message {
+    display: flex;
+    align-items: center;
+  }
+
+  &:hover {
+    font-weight: bold;
+  }
+
+  i {
+    font-size: 28px;
+    margin-right: 10px;
+  }
+}
