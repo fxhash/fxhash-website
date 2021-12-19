@@ -353,7 +353,7 @@ export class WalletManager {
       const marketContract = await this.getContract(FxhashContract.MARKETPLACE)
 
       // the origination parameters
-      const updateOperatorsValue: MichelsonV1Expression = {
+      const updateOperatorsValue: MichelsonV1Expression = [{
         "prim": "Left",
         "args": [
           {
@@ -376,7 +376,7 @@ export class WalletManager {
             ]
           }
         ]
-      }
+      }]
 
       const listItemValue: MichelsonV1Expression = {
         "prim": "Pair",
@@ -410,51 +410,51 @@ export class WalletManager {
       statusCallback && statusCallback(ContractOperationStatus.CALLING)
       // const opSend = await objktContract.methodsObject.update_operators().getSignature()
       const batchOp = await this.tezosToolkit.wallet.batch() 
-        .withContractCall(
-          objktContract.methodsObject.update_operators([
-            {
-              add_operator: {
-                owner: data.ownerAddress,
-                operator: addresses.MARKETPLACE,
-                token_id: data.tokenId
-              }
-            }
-          ])
-        )
-        .withContractCall(
-          marketContract.methodsObject.offer({
-            price: data.price,
-            objkt_id: data.tokenId,
-            creator: data.creatorAddress, 
-            royalties: data.royalties
-          })
-        )
-        // .with([
-        //   {
-        //     kind: OpKind.TRANSACTION,
-        //     to: addresses.OBJKT,
-        //     fee: 600,
-        //     amount: 0,
-        //     parameter: {
-        //       entrypoint: "update_operators",
-        //       value: updateOperatorsValue
-        //     },
-        //     gasLimit: 2500,
-        //     storageLimit: 250,
-        //   },
-        //   {
-        //     kind: OpKind.TRANSACTION,
-        //     to: addresses.MARKETPLACE,
-        //     fee: 1000,
-        //     amount: 0,
-        //     parameter: {
-        //       entrypoint: "offer",
-        //       value: listItemValue,
-        //     },
-        //     gasLimit: 7000,
-        //     storageLimit: 250
-        //   }
-        // ])
+        // .withContractCall(
+        //   objktContract.methodsObject.update_operators([
+        //     {
+        //       add_operator: {
+        //         owner: data.ownerAddress,
+        //         operator: addresses.MARKETPLACE,
+        //         token_id: data.tokenId
+        //       }
+        //     }
+        //   ])
+        // )
+        // .withContractCall(
+        //   marketContract.methodsObject.offer({
+        //     price: data.price,
+        //     objkt_id: data.tokenId,
+        //     creator: data.creatorAddress, 
+        //     royalties: data.royalties
+        //   })
+        // )
+        .with([
+          {
+            kind: OpKind.TRANSACTION,
+            to: addresses.OBJKT,
+            fee: 1000,
+            amount: 0,
+            parameter: {
+              entrypoint: "update_operators",
+              value: updateOperatorsValue
+            },
+            gasLimit: 8000,
+            storageLimit: 250,
+          },
+          {
+            kind: OpKind.TRANSACTION,
+            to: addresses.MARKETPLACE,
+            fee: 1500,
+            amount: 0,
+            parameter: {
+              entrypoint: "offer",
+              value: listItemValue,
+            },
+            gasLimit: 10000,
+            storageLimit: 250
+          }
+        ])
         .send()
   
       // wait for confirmation
