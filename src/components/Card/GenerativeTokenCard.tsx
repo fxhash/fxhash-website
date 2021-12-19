@@ -8,6 +8,8 @@ import { UserBadge } from "../User/UserBadge"
 import { MintProgress } from "../Artwork/MintProgress"
 import { Spacing } from "../Layout/Spacing"
 import { getGenerativeTokenUrl } from "../../utils/generative-token"
+import { displayMutez } from "../../utils/units"
+
 
 interface Props {
   token: GenerativeToken
@@ -32,6 +34,7 @@ export function GenerativeTokenCard({
           <div>
             <Spacing size="small" />
             <MintProgress balance={token.balance} supply={token.supply} />
+            {displayMutez(token.price)} tez
           </div>
         </Card>
       </AnchorForward>
