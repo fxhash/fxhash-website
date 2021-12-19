@@ -22,6 +22,7 @@ export const Qu_userGenTokens = gql`
       id
       generativeTokens(take: $take, skip: $skip) {
         id
+        price
         supply
         balance
         name
