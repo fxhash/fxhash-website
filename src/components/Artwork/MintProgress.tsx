@@ -1,6 +1,7 @@
 import style from "./MintProgress.module.scss"
 import colors from "./../../styles/Colors.module.css"
 import cs from "classnames"
+import { PropsWithChildren } from "react"
 
 interface Props {
   balance: number
@@ -9,8 +10,9 @@ interface Props {
 
 export function MintProgress({
   balance,
-  supply
-}: Props) {
+  supply,
+  children,
+}: PropsWithChildren<Props>) {
   const minted = supply - balance
   const progress = minted / supply
   const complete = balance === 0
@@ -20,8 +22,11 @@ export function MintProgress({
       <span className={cs(style.infos, {
         [style.minted]: complete,
       })}>
-        <strong className={cs(colors.secondary)}>{minted}</strong>/{supply} minted 
-        {complete && <i aria-hidden className="fas fa-check-circle"/>}
+        <span>
+          <strong className={cs(colors.secondary)}>{minted}</strong>/{supply} minted 
+          {complete && <i aria-hidden className="fas fa-check-circle"/>}
+        </span>
+        {children}
       </span>
       <div className={cs(style.progress)}>
         <div 

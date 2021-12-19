@@ -24,6 +24,8 @@ import nl2br from 'react-nl2br'
 import { TitleHyphen } from '../components/Layout/TitleHyphen'
 import { PerformanceTimings } from '../utils/performance'
 import { getGenerativeTokenUrl } from '../utils/generative-token'
+import { useContext } from 'react'
+import { SettingsContext } from '../context/Theme'
 
 
 interface Props {
@@ -37,6 +39,8 @@ const Home: NextPage<Props> = ({
   generativeTokens,
   offers
 }) => {
+  const settings = useContext(SettingsContext)
+
   return (
     <>
       <Head>
@@ -125,7 +129,11 @@ const Home: NextPage<Props> = ({
         <main className={cs(layout['padding-big'])}>
           <CardsContainer className={cs(styles['row-responsive-limiter'])}>
             {generativeTokens.map(token => (
-              <GenerativeTokenCard key={token.id} token={token}/>
+              <GenerativeTokenCard
+                key={token.id}
+                token={token}
+                displayPrice={settings.displayPricesCard}
+              />
             ))}
           </CardsContainer>
         </main>

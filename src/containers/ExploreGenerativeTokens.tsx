@@ -4,11 +4,12 @@ import { CardsContainer } from '../components/Card/CardsContainer'
 import { GenerativeTokenCard } from '../components/Card/GenerativeTokenCard'
 import { LoaderBlock } from '../components/Layout/LoaderBlock'
 import { InfiniteScrollTrigger } from '../components/Utils/InfiniteScrollTrigger'
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useContext } from 'react'
 import { Spacing } from '../components/Layout/Spacing'
 import { searchIndexGenerative } from '../services/Algolia'
 import { AlgoliaSearch } from '../components/Search/AlgoliaSearch'
 import { CardsLoading } from '../components/Card/CardsLoading'
+import { SettingsContext } from '../context/Theme'
 
 
 const ITEMS_PER_PAGE = 10
@@ -66,6 +67,8 @@ export const ExploreGenerativeTokens = ({}: Props) => {
   const [searchResults, setSearchResults] = useState<GenerativeToken[]|null>(null)
   const [searchLoading, setSearchLoading] = useState<boolean>(false)
 
+  const settingsCtx = useContext(SettingsContext)
+
   // use to know when to stop loading
   const currentLength = useRef<number>(0)
   const ended = useRef<boolean>(false)
@@ -117,7 +120,11 @@ export const ExploreGenerativeTokens = ({}: Props) => {
         searchResults.length > 0 ? (
           <CardsContainer>
             {searchResults.map(token => (
-              <GenerativeTokenCard key={token.id} token={token}/>
+              <GenerativeTokenCard
+                key={token.id}
+                token={token}
+                displayPrice={settingsCtx.displayPricesCard}
+              />
             ))}
           </CardsContainer>
         ):(
@@ -127,7 +134,11 @@ export const ExploreGenerativeTokens = ({}: Props) => {
         <InfiniteScrollTrigger onTrigger={infiniteScrollFetch} canTrigger={!!data && !loading}>
           <CardsContainer>
             {generativeTokens?.length > 0 && generativeTokens.map(token => (
-              <GenerativeTokenCard key={token.id} token={token}/>
+              <GenerativeTokenCard
+                key={token.id}
+                token={token}
+                displayPrice={settingsCtx.displayPricesCard}
+              />
             ))}
             {loading && (
               <CardsLoading number={ITEMS_PER_PAGE} />

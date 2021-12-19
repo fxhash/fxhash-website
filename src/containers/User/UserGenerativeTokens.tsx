@@ -1,11 +1,12 @@
 // import style from "./UserGenerativeTokens.module.scss"
 import { useQuery } from "@apollo/client";
 import cs from "classnames"
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useContext } from "react";
 import { CardsContainer } from "../../components/Card/CardsContainer";
 import { GenerativeTokenCard } from "../../components/Card/GenerativeTokenCard";
 import { LoaderBlock } from "../../components/Layout/LoaderBlock";
 import { InfiniteScrollTrigger } from "../../components/Utils/InfiniteScrollTrigger";
+import { SettingsContext } from "../../context/Theme";
 import { Qu_userGenTokens } from "../../queries/user";
 import { GenerativeToken } from "../../types/entities/GenerativeToken";
 import { User } from "../../types/entities/User";
@@ -19,6 +20,8 @@ export function UserGenerativeTokens({
   // use to know when to stop loading
   const currentLength = useRef<number>(0)
   const ended = useRef<boolean>(false)
+
+  const settings = useContext(SettingsContext)
 
   const { data, loading, fetchMore } = useQuery(Qu_userGenTokens, {
     notifyOnNetworkStatusChange: true,
@@ -64,6 +67,7 @@ export function UserGenerativeTokens({
             <GenerativeTokenCard
               key={token.id}
               token={token}
+              displayPrice={settings.displayPricesCard}
             />
           ))}
         </CardsContainer>

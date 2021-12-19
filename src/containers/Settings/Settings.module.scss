@@ -1,10 +1,10 @@
 .root {
-  .line {
-    display: flex;
-    align-items: center;
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  align-items: center;
+  grid-gap: 5px 15px;
 
-    & > *+* {
-      margin-left: 15px;
-    }
+  strong {
+    font-size: var(--font-size-small);
   }
 }

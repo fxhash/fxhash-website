@@ -14,13 +14,17 @@ export function Settings({
 
   return (
     <div className={cs(style.root, className)}>
-      <div className={cs(style.line)}>
-        <strong>Dark mode</strong>
-        <Switch 
-          onChange={(value) => settings.update("darkTheme", value)} 
-          value={settings.darkTheme}
-        />
-      </div>
+      <strong>Dark mode</strong>
+      <Switch 
+        onChange={(value) => settings.update("darkTheme", value)} 
+        value={settings.darkTheme}
+      />
+
+      <strong>Display prices Generative</strong>
+      <Switch 
+        onChange={(value) => settings.update("displayPricesCard", value)} 
+        value={settings.displayPricesCard}
+      />
     </div>
   )  
 }

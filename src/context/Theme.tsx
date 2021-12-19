@@ -6,6 +6,7 @@ import cs from "classnames"
 
 interface ISettingsProperties {
   darkTheme: boolean
+  displayPricesCard: boolean
 }
 
 interface ISettingsContext extends ISettingsProperties {
@@ -13,7 +14,8 @@ interface ISettingsContext extends ISettingsProperties {
 }
 
 const defaultProperties: ISettingsProperties = {
-  darkTheme: false
+  darkTheme: false,
+  displayPricesCard: false
 }
 
 const defaultCtx: ISettingsContext = {
