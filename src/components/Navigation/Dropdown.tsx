@@ -10,6 +10,7 @@ interface Props {
   ariaLabel?: string
   className?: string
   btnClassName?: string
+  closeOnClick?: boolean
 }
 
 export function Dropdown({
@@ -17,6 +18,7 @@ export function Dropdown({
   ariaLabel,
   className,
   btnClassName,
+  closeOnClick = true,
   children
 }: PropsWithChildren<Props>) {
   const [opened, setOpened] = useState<boolean>(false)
@@ -28,10 +30,23 @@ export function Dropdown({
   useClientEffect(() => {
     if (opened) {
       const onClick = (evt: any) => {
-          // check if the element is inside the opened area
-          if (!evt.classList?.contains("avoid-close-event")) {
-            setOpened(false)
+        if (closeOnClick) {
+          setOpened(false)
+        }
+        else {
+          let close = true
+          if (evt.path) {
+            for (const el of evt.path) {
+              if (el.classList?.contains("dropdown_root")) {
+                close = false
+                break
+              }
+            }
+            if (close) {
+              setOpened(false)
+            }
           }
+        }
       }
       document.addEventListener("click", onClick)
       return () => {
@@ -41,7 +56,7 @@ export function Dropdown({
   }, [opened])
 
   return (
-    <div className={cs(style.container, {
+    <div className={cs(style.container, "dropdown_root", {
       "avoid-close-event": opened
     })}>
       <button 

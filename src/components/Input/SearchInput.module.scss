@@ -8,12 +8,13 @@
   }
 
   input {
-    border: 3px solid var(--color-black);
+    border: 3px solid var(--color-border-input);
     height: 50px;
     font-family: inherit;
     padding-left: 48px;
     outline: none;
     width: 100%;
+    background-color: var(--color-white);
 
     &:focus {
       border-color: var(--color-secondary);
@@ -28,4 +29,5 @@
   top: 50%;
   left: 5px;
   transform: translateY(-50%);
+  color: var(--color-border-input);
 }

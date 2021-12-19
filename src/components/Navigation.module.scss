@@ -157,10 +157,14 @@
 .avatar {
   width: 64px;
   height: 64px;
-  border: 3px solid var(--color-black);
+  border: 3px solid var(--color-border);
   transition: all .15s ease-out;
 
   &:hover {
     border-color: var(--color-secondary);
   }
+}
+
+.settings_container {
+  padding: 0 8px;
 }

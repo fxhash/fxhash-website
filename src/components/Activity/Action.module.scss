@@ -2,7 +2,7 @@
 
 .container {
   width: 100%;
-  border: 3px solid var(--color-black);
+  border: 3px solid var(--color-border);
   padding: 0 20px;
   height: 80px;
   display: flex;
@@ -11,6 +11,7 @@
   overflow-wrap: break-word;
   word-break: break-word;
   position: relative;
+  transition: border-color 0.2s;
 
   @media (max-width: $breakpoint-sm) {
     height: auto;

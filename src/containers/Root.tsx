@@ -7,6 +7,7 @@ import { Fragment, PropsWithChildren } from "react"
 import { Layout } from "../components/Layout"
 import { clientSideClient } from "../services/ApolloClient"
 import { UserProvider } from "./UserProvider"
+import { SettingsProvider } from "../context/Theme"
 
 const EXCLUDE_LAYOUT= [
   "/generative/[id]/enjoy",
@@ -22,11 +23,13 @@ export function Root({ children }: PropsWithChildren<{}>) {
 
   return (
     <ApolloProvider client={clientSideClient}>
-      <UserProvider>
-        <LayoutWrapper>
-          {children}
-        </LayoutWrapper>
-      </UserProvider>
+      <SettingsProvider>
+        <UserProvider>
+          <LayoutWrapper>
+            {children}
+          </LayoutWrapper>
+        </UserProvider>
+      </SettingsProvider>
     </ApolloProvider>
   )
 }

@@ -60,3 +60,12 @@
     }
   } 
 }
+
+:global .dark :local .article {
+  p, ul {
+    code {
+      background: black;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+    }
+  }
+}
