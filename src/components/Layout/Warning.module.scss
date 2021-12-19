@@ -1,7 +1,8 @@
+@import "../../styles/Variables.scss";
+
 .container {
   width: 100%;
   background-color: var(--color-warning);
-  height: 40px;
   display: flex;
   align-items: center;
   color: black;
@@ -10,9 +11,15 @@
   justify-content: space-between;
   border-bottom: 3px solid var(--color-border);
 
+  height: 80px;
+  @media (min-width: $breakpoint-sm) {
+    height: 40px;
+  }
+
   .message {
     display: flex;
     align-items: center;
+    margin-right: 10px;
   }
 
   &:hover {
