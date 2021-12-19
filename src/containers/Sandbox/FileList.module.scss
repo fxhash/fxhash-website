@@ -2,7 +2,7 @@
   width: 100%;
   padding: 15px;
   background-color: #F2F2F2;
-  border: 3px solid var(--color-black);
+  border: 3px solid var(--color-border);
   margin: 0;
   font-weight: bold;
   max-height: 200px;
@@ -21,4 +21,8 @@
     margin-left: 5px;
     border-left: 3px solid black;
   }
+}
+
+:global .dark :local .container {
+  background-color: var(--color-gray-light);
 }

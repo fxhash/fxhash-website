@@ -28,10 +28,13 @@ export function LogoGenerative() {
   }, [router.asPath])
 
   return (
-    <canvas
-      ref={canvasRef}
-      width={213}
-      height={120}
-    />
+    <div className={cs(style.logo_wrapper)}>
+      <canvas
+        ref={canvasRef}
+        width={213}
+        height={120}
+        className={cs(style.logo)}
+      />
+    </div>
   )
 }

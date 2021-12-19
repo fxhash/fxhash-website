@@ -6,13 +6,14 @@
   height: 50px;
   font-family: inherit;
   background: transparent;
-  border: 3px solid var(--color-black);
+  border: 3px solid var(--color-border-input);
   font-size: inherit;
   padding: 0 35px 0 15px;
   cursor: pointer;
   position: relative;
   line-height: 0;
   text-align: left;
+  color: inherit;
 
   .sizer {
     color: transparent;
@@ -35,7 +36,7 @@
     height: 0; 
     border-left: 6px solid transparent;
     border-right: 6px solid transparent;  
-    border-top: 6px solid var(--color-black);
+    border-top: 6px solid var(--color-border-input);
     transform: translateY(-1px);
   }
 
@@ -47,12 +48,13 @@
 }
 
 .options {
-  border: 3px solid var(--color-black);
+  border: 3px solid var(--color-border);
   position: absolute;
   left: 0;
   z-index: 100;
   background: var(--color-white);
   width: 100%;
+  color: inherit;
 
   .options_wrapper {
     max-height: 350px;
@@ -82,6 +84,7 @@
     cursor: pointer;
     text-align: left;
     width: 100%;
+    color: inherit;
 
     &:hover, &:focus {
       background-color: var(--color-black);
@@ -94,6 +97,8 @@
 
     &:disabled {
       pointer-events: none;
+      opacity: 0.5;
+      font-style: italic;
     }
   }
 }

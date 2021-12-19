@@ -22,6 +22,8 @@ body {
   --color-gray-dark: #484848;
   --color-black: #000000;
   --color-white: #FFFFFF;
+  --color-border: #000000;
+  --color-border-input: #000000;
 
   --layout-margin-big-lg: 80px;
   --layout-margin-small-lg: 30px;
@@ -43,6 +45,17 @@ body {
   --font-size-h3: 2rem;
   --font-size-h2: 2.4375rem;
   --font-size-h1: 3rem;
+}
+
+.dark {
+  --color-white: #242424;
+  --color-black: white;
+  --color-gray: #a5a5a5;
+  --color-gray-light: #505050;
+  --color-gray-dark: #999999;
+  --color-secondary: #c8ff00;
+  --color-border: #0f0f0f;
+  --color-border-input: #7e7e7e;
 }
 
 a {
@@ -114,4 +127,10 @@ p {
 button {
   font-family: inherit;
   font-size: inherit;
+}
+
+.dark {
+  input {
+    color: white;
+  }
 }

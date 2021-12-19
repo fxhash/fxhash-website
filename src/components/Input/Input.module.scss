@@ -1,9 +1,11 @@
 .input {
-  border: 3px solid var(--color-black);
+  border: 3px solid var(--color-border-input);
+  background-color: var(--color-white);
   padding: 15px;
   font-family: inherit;
   outline: none;
   font-size: inherit;
+  color: inherit;
 
   &:focus {
     border-color: var(--color-secondary);

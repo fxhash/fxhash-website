@@ -22,7 +22,7 @@
   width: 26px;
   display: block;
   background-color: transparent;
-  border: 3px solid var(--color-black);
+  border: 3px solid var(--color-border-input);
   overflow: hidden;
   position: relative;
   margin-right: 15px;
@@ -58,7 +58,7 @@
     top: 50%;
     width: 30px;
     height: 3px;
-    background-color: var(--color-black);
+    background-color: var(--color-border-input);
   }
   &:after {
     transform: translate(-50%, -50%) rotate(-45deg);

@@ -1,7 +1,7 @@
 .container {
   border-radius: 999px;
   overflow: hidden;
-  background-color: var(--color-black);
+  background-color: var(--color-border);
   background-size: cover;
   background-position: center;
 }
@@ -11,7 +11,7 @@
   font-family: inherit;
   font-size: inherit;
   padding: 0;
-  border: 3px solid var(--color-black);
+  border: 3px solid var(--color-border);
   transition: all 0.2s ease-out;
 
   span {

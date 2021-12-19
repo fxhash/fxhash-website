@@ -11,6 +11,8 @@ import { Avatar } from './User/Avatar'
 import { getUserProfileLink } from '../utils/user'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
+import { Settings } from '../containers/Settings/Settings'
+import { Switch } from './Input/Switch'
 
 export function Navigation() {
   const userCtx = useContext(UserContext)
@@ -71,6 +73,16 @@ export function Navigation() {
           <Link href="/articles/about-fxhash">
             <a>about fxhash</a>
           </Link>
+        </Dropdown>
+
+        <Dropdown
+          ariaLabel="Open settings"
+          itemComp={(
+            <i aria-hidden className="fas fa-cog"/>
+          )}
+          closeOnClick={false}
+        >
+          <Settings className={cs(style.settings_container)}/>
         </Dropdown>
 
         {userCtx.user ? (
