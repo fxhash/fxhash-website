@@ -4,8 +4,9 @@ import { getMutezDecimalsNb } from "./math"
 /**
  * Given a number in mutez, outputs a string with decimals provided, if any
  */
-export function displayMutez(mutez: number, fixedDecimals: false|number = false) {
-  const decimals = fixedDecimals === false ? getMutezDecimalsNb(mutez) : fixedDecimals
+export function displayMutez(mutez: number, maxDecimals?: number) {
+  let decimals = getMutezDecimalsNb(mutez)
+  decimals = maxDecimals != null ? Math.min(maxDecimals, decimals) : decimals
   const tez = (mutez/1000000)
   const dec = tez - (tez|0)
   return ((dec * (10**decimals))|0) > 0 ? tez.toFixed(decimals) : (tez|0)
