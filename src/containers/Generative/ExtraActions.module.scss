@@ -1,0 +1,65 @@
+.container {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.open_btn {
+  width: 30px;
+  height: 30px;
+  padding: 5px;
+  color: var(--color-gray);
+  box-sizing: content-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  i {
+    font-size: 20px;
+  }
+
+  &:hover {
+    color: var(--color-black);
+  }
+}
+
+.btns_container {
+  padding: 0;
+}
+
+.btn_action {
+  border: none;
+  background: transparent;
+  font-family: inherit;
+  cursor: pointer;
+  color: var(--color-gray-dark);
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+
+  i {
+    margin-right: 8px;
+  }
+  
+  &:hover {
+    color: var(--color-error);
+  }
+}
+
+.report_btns {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  & > *+* {
+    margin-left: 8px;
+  }
+}
+
+.reports_bottom {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
