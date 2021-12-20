@@ -40,13 +40,13 @@ export function ObjktCard({
 
           <div className={cs(style.bottom)}>
             <div className={cs(style.price)}>
-              {(objkt.offer && objkt.issuer.marketStats && settings.displayFloorPriceCard) ? (
+              {(objkt.offer && settings.displayFloorPriceCard && objkt.issuer.marketStats && objkt.issuer.marketStats.secVolumeNb ) ? (
                 <>{displayMutez(objkt.offer.price)} tez (floor {displayMutez(objkt.issuer.marketStats.floor)} tez)</>
+              ) : (objkt.issuer.marketStats && settings.displayFloorPriceCard && objkt.issuer.marketStats.secVolumeNb) ? (
+                <>Floor {displayMutez(objkt.issuer.marketStats.floor)} tez</>
               ) : (objkt.offer) ? (
                 <>{displayMutez(objkt.offer.price)} tez</>
-              ) : (objkt.issuer.marketStats && settings.displayFloorPriceCard && (
-                <>Floor {displayMutez(objkt.issuer.marketStats.floor)} tez</>
-              ))}
+              ) : (<></>)}
             </div>
             <div className={cs(style.badge)}>
               created by 

@@ -60,6 +60,7 @@ export const Qu_userObjkts = gql`
           },
           marketStats {
             floor
+            secVolumeNb
           }
         }
         name
