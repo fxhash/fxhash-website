@@ -118,7 +118,7 @@ const ReportsPage: NextPage<Props> = ({
               ))}
             </div>
           ):(
-            <em>No tokens are avaiting for moderation.</em>
+            <em>No tokens are awaiting for moderation.</em>
           )}
 
           <Spacing size="6x-large" />
