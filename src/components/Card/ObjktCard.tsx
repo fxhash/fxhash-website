@@ -1,6 +1,7 @@
 // import style from "./GenerativeTokenCard.module.scss"
 import Link from "next/link"
 import cs from "classnames"
+import { useContext } from "react";
 import { AnchorForward } from "../Utils/AnchorForward"
 import { Card } from "./Card"
 import { UserBadge } from "../User/UserBadge"
@@ -11,6 +12,7 @@ import { Objkt } from "../../types/entities/Objkt"
 import { displayMutez } from "../../utils/units"
 import { getObjktUrl } from "../../utils/objkt"
 import { GenTokFlag } from "../../types/entities/GenerativeToken"
+import { SettingsContext } from "../../context/Theme";
 
 interface Props {
   objkt: Objkt
@@ -21,6 +23,7 @@ export function ObjktCard({
 }: Props) {
   const owner = objkt.offer ? objkt.offer.issuer : objkt.owner!
   const url = getObjktUrl(objkt)
+  const settings = useContext(SettingsContext)
 
   return (
     <Link href={url} passHref>
@@ -37,9 +40,13 @@ export function ObjktCard({
 
           <div className={cs(style.bottom)}>
             <div className={cs(style.price)}>
-              {objkt.offer && (
+              {(objkt.offer && objkt.issuer.marketStats && settings.displayFloorPriceCard) ? (
+                <>{displayMutez(objkt.offer.price)} tez (floor {displayMutez(objkt.issuer.marketStats.floor)} tez)</>
+              ) : (objkt.offer) ? (
                 <>{displayMutez(objkt.offer.price)} tez</>
-              )}
+              ) : (objkt.issuer.marketStats && settings.displayFloorPriceCard && (
+                <>Floor {displayMutez(objkt.issuer.marketStats.floor)} tez</>
+              ))}
             </div>
             <div className={cs(style.badge)}>
               created by 

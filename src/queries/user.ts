@@ -57,6 +57,9 @@ export const Qu_userObjkts = gql`
             id
             name
             avatarUri
+          },
+          marketStats {
+            floor
           }
         }
         name
