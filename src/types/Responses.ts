@@ -1,5 +1,5 @@
 import { TokenFeature } from "./Metadata";
-import { CaptureMode } from "./Mint";
+import { CaptureMode, CaptureTriggerMode } from "./Mint";
 
 export enum ProfileUploadError {
   UNKNOWN =             "UNKNOWN",
@@ -59,10 +59,11 @@ export interface PreviewResponse {
   cidPreview: string
   cidThumbnail: string
   authenticationHash: string
-  mode: CaptureMode,
-  resX: number,
-  resY: number,
-  delay: number,
+  mode: CaptureMode
+  triggerMode: CaptureTriggerMode
+  resX: number
+  resY: number
+  delay: number
   canvasSelector: string
 }
 

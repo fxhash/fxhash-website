@@ -1,5 +1,5 @@
 import { Vec2 } from "./Math"
-import { CaptureMode } from "./Mint"
+import { CaptureMode, CaptureTriggerMode } from "./Mint"
 
 export interface TokenMetadata {
   "": string
@@ -19,6 +19,7 @@ export interface TokenFormat {
 
 export interface CaptureSettings {
   mode: CaptureMode
+  triggerMode: CaptureTriggerMode
   resolution?: Vec2
   delay?: number
   canvasSelector?: string

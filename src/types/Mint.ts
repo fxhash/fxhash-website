@@ -8,14 +8,22 @@ export interface GenerativeTokenInformations {
   royaties?: number
 }
 
+export enum CaptureTriggerMode {
+  DELAY             = "DELAY",
+  FN_TRIGGER        = "FN_TRIGGER",
+}
+export const CaptureTriggerModeList = Object.values(CaptureTriggerMode)
+
 export enum CaptureMode {
   CANVAS          = "CANVAS",
   CUSTOM          = "CUSTOM",
   VIEWPORT        = "VIEWPORT",
 }
+export const CaptureModeList = Object.values(CaptureMode)
 
 export interface CaptureSettings {
   mode: CaptureMode | null,
+  triggerMode: CaptureTriggerMode | null,
   canvasSelector?: string,
   delay: number,
   resX?: number,

@@ -8,7 +8,7 @@ import * as Yup from "yup"
 import useFetch, { CachePolicies } from "use-http"
 import { MetadataError, MetadataResponse } from "../../types/Responses"
 import { CaptureSettings, GenerativeTokenMetadata } from "../../types/Metadata"
-import { CaptureMode, GenTokenInformationsForm } from "../../types/Mint"
+import { CaptureMode, CaptureTriggerMode, GenTokenInformationsForm } from "../../types/Mint"
 import { Form } from "../../components/Form/Form"
 import { Field } from "../../components/Form/Field"
 import { InputText } from "../../components/Input/InputText"
@@ -106,18 +106,25 @@ export const StepInformations: StepComponent = ({ state, onNext }) => {
 
   const uploadInformations = (formInformations: GenTokenInformationsForm) => {
     const capture: CaptureSettings = {
-      mode: state.captureSettings!.mode!
+      mode: state.captureSettings!.mode!,
+      triggerMode: state.captureSettings!.triggerMode!,
     }
+    // set settings based on the capture mode
     if (state.captureSettings!.mode === CaptureMode.VIEWPORT) {
       capture.resolution = {
         x: state.captureSettings!.resX!,
         y: state.captureSettings!.resY!,
       }
-      capture.delay = state.captureSettings!.delay
     }
     else if (state.captureSettings!.mode === CaptureMode.CANVAS) {
-      capture.delay = state.captureSettings!.delay
       capture.canvasSelector = state.captureSettings!.canvasSelector
+    }
+    // set settings based on the trigger mode
+    if (state.captureSettings!.triggerMode === CaptureTriggerMode.DELAY) {
+      capture.delay = state.captureSettings!.delay
+    }
+    else if (state.captureSettings!.triggerMode === CaptureTriggerMode.FN_TRIGGER) {
+      // we don't need to add anything
     }
 
     const metadata: GenerativeTokenMetadata = {

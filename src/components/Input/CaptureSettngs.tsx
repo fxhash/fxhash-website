@@ -1,7 +1,7 @@
 import style from "./CaptureSettings.module.scss"
 import cs from "classnames"
 import { FunctionComponent } from "react"
-import { CaptureMode, CaptureSettings } from "../../types/Mint"
+import { CaptureMode, CaptureSettings, CaptureTriggerMode } from "../../types/Mint"
 import { Select } from "./Select"
 import Link from "next/link"
 import { SliderWithText } from "./SliderWithText"
@@ -23,6 +23,17 @@ const modeOptions = [
     value: CaptureMode.CUSTOM,
     label: "Custom export function",
     disabled: true
+  },
+]
+
+const triggerModeOptions = [
+  {
+    value: CaptureTriggerMode.DELAY,
+    label: "Fixed delay"
+  },
+  {
+    value: CaptureTriggerMode.FN_TRIGGER,
+    label: "Programmatic trigger using fxpreview()"
   },
 ]
 
@@ -55,13 +66,37 @@ export const InputCaptureSettings: FunctionComponent<Props> = ({
 
   return (
     <div className={cs(style.container)}>
+
+      <h5>Trigger</h5>
+      <p>When will the capture module trigger ?</p>
+      <Select
+        id="trigger-mode"
+        placeholder="Select the type of trigger"
+        value={settings.triggerMode ?? ""}
+        options={triggerModeOptions}
+        onChange={value => update("triggerMode", value)}
+        className={cs(style.select)}
+      />
+      {settings.triggerMode === CaptureTriggerMode.DELAY && (
+        <>
+          <Spacing size="3x-large"/>
+          <h5>Time before capture is taken</h5>
+          <p>Remember: better safe than sorry</p>
+          <SliderWithText
+            min={0.1}
+            max={40}
+            step={0.1}
+            value={settings.delay}
+            onChange={val => update("delay", val)}
+          />
+        </>
+      )}
+
+      <Spacing size="3x-large"/>
       
-      <h5>Capture mode</h5>
+      <h5>Target</h5>
       <p>
-        <span>The capture strategy which will be used to generate previews. Learn more about it in </span>
-        <Link href="/articles/guide-mint-generative-token#configure-capture-settings">
-          <a target="_blank">our guide</a>
-        </Link>
+        <span>What will be the target of the capture module ?</span>
       </p>
       <Select
         id="mode"
@@ -75,18 +110,6 @@ export const InputCaptureSettings: FunctionComponent<Props> = ({
 
       {settings.mode === CaptureMode.VIEWPORT && (
         <>
-          <Spacing size="3x-large"/>
-
-          <h5>Time before capture is taken</h5>
-          <p>Keep in mind that collectors will have to wait for the capture before their token is minted.</p>
-          <SliderWithText
-            min={0.1}
-            max={40}
-            step={0.1}
-            value={settings.delay}
-            onChange={val => update("delay", val)}
-          />
-
           <Spacing size="3x-large"/>
 
           <h5>Capture resolution</h5>
@@ -109,18 +132,6 @@ export const InputCaptureSettings: FunctionComponent<Props> = ({
 
       {settings.mode === CaptureMode.CANVAS && (
         <>
-          <Spacing size="3x-large"/>
-
-          <h5>Time before capture is taken</h5>
-          <p>Keep in mind that collectors will have to wait for the capture before their token is minted.</p>
-          <SliderWithText
-            min={0.1}
-            max={40}
-            step={0.1}
-            value={settings.delay}
-            onChange={val => update("delay", val)}
-          />
-
           <Spacing size="3x-large"/>
 
           <h5>Canvas CSS selector</h5>

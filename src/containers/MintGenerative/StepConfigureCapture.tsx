@@ -1,4 +1,5 @@
 import style from "./StepConfigureCapture.module.scss"
+import Link from "next/link"
 import styleC from "./StepCheckFiles.module.scss"
 import cs from "classnames"
 import { StepComponent } from "../../types/Steps"
@@ -14,10 +15,12 @@ import { getCaptureError, getPreviewError } from "../../utils/errors"
 import { CaptureSettings } from "../../types/Mint"
 import { InputCaptureSettings } from "../../components/Input/CaptureSettngs"
 import { validateCaptureSettings } from "../../utils/validations"
+import { LinkGuide } from "../../components/Link/LinkGuide"
 
 export const StepConfigureCapture: StepComponent = ({ onNext, state }) => {
   const [settings, setSettings] = useState<CaptureSettings>({
     mode: null,
+    triggerMode: null,
     delay: 2,
     resX: 800,
     resY: 800
@@ -44,6 +47,7 @@ export const StepConfigureCapture: StepComponent = ({ onNext, state }) => {
     post({
       url: `${getIpfsIoUrl(state.cidUrlParams!)}?fxhash=${state.previewHash}`,
       mode: settings.mode,
+      triggerMode: settings.triggerMode,
       canvasSelector: settings.canvasSelector,
       resX: settings.resX,
       resY: settings.resY,
@@ -55,6 +59,7 @@ export const StepConfigureCapture: StepComponent = ({ onNext, state }) => {
     if (validateCaptureSettings(settings)) {
       previewPost({
         mode: settings.mode,
+        triggerMode: settings.triggerMode,
         resX: settings.resX,
         resY: settings.resY,
         delay: settings.delay*1000,
@@ -83,6 +88,7 @@ export const StepConfigureCapture: StepComponent = ({ onNext, state }) => {
       onNext({
         captureSettings: {
           mode: safeDataPreview.mode,
+          triggerMode: safeDataPreview.triggerMode,
           resX: safeDataPreview.resX,
           resY: safeDataPreview.resY,
           delay: safeDataPreview.delay,
@@ -99,7 +105,8 @@ export const StepConfigureCapture: StepComponent = ({ onNext, state }) => {
     <>
       <p>
         When collectors will <strong>mint a token from your Generative Token</strong>, fxhash will generate a preview image to go with their Token. <br/>
-        You need to configure how this preview will be taken by fxhash capture module.
+        You need to configure how this preview will be taken by fxhash capture module.<br/>
+        Read more about the different <LinkGuide href="/articles/guide-mint-generative-token#configure-capture-settings">capture strategies in the guide</LinkGuide>
       </p>
 
       <Spacing size="5x-large"/>
