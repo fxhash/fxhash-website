@@ -24,7 +24,7 @@ import { UserGuard } from '../../components/Guards/UserGuard'
 import { truncateEnd } from '../../utils/strings'
 import { TitleHyphen } from '../../components/Layout/TitleHyphen'
 import { ArtworkIframe, ArtworkIframeRef } from '../../components/Artwork/PreviewIframe'
-import { useRef, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { Qu_genToken } from '../../queries/generative-token'
 import { GenerativeActions } from '../../containers/Generative/Actions'
 import { GenerativeExtraActions } from '../../containers/Generative/ExtraActions'
@@ -32,6 +32,7 @@ import { GenerativeFlagBanner } from '../../containers/Generative/FlagBanner'
 import { Unlock } from '../../components/Utils/Unlock'
 import { format } from 'date-fns'
 import { getGenerativeTokenMarketplaceUrl } from '../../utils/generative-token'
+import { generateFxHash } from '../../utils/hash'
 
 
 interface Props {
@@ -42,6 +43,9 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
   const hasCollection = token.objkts?.length > 0
   const collectionUrl = `/generative/${token.id}/collection`
   const iframeRef = useRef<ArtworkIframeRef>(null)
+
+  // used to preview the token in the iframe with different hashes
+  const [previewHash, setPreviewHash] = useState<string|null>(null)
 
   const [mintLocked, setMintLocked] = useState<boolean>(
     (token.flag === GenTokFlag.CLEAN || (token.supply-token.balance) === 0) 
@@ -55,8 +59,25 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
     }
   }
 
+  // sets a random preview hash to explore the generative token
+  const randomize = () => {
+    setPreviewHash(generateFxHash())
+  }
+
   // get the display url for og:image
   const displayUrl = token.metadata?.displayUri && ipfsGatewayUrl(token.metadata?.displayUri)
+
+  // the direct URL to the resource to display in the <iframe>
+  const artifactUrl = useMemo<string>(() => {
+    // if no hash is forced, use the artifact URI directly
+    if (!previewHash) {
+      return ipfsGatewayUrl(token.metadata.artifactUri, "pinata-fxhash-safe")
+    }
+    else {
+      // there is a forced hash, add it to the generative URL
+      return `${ipfsGatewayUrl(token.metadata.artifactUri, "pinata-fxhash-safe")}?fxhash=${previewHash}`
+    }
+  }, [previewHash])
 
   return (
     <>
@@ -151,7 +172,7 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
             <div className={cs(style['preview-wrapper'])}>
               <ArtworkIframe 
                 ref={iframeRef}
-                url={ipfsGatewayUrl(token.metadata.artifactUri, "pinata-fxhash-safe")}
+                url={artifactUrl}
               />
             </div>
           </div>
@@ -159,6 +180,14 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
           <Spacing size="8px"/>
 
           <div className={cs(layout['x-inline'])}>
+            <Button
+              size="small"
+              iconComp={<i aria-hidden className="fas fa-random"/>}
+              iconSide="right"
+              onClick={randomize}
+            >
+              randomize
+            </Button>
             <Button
               size="small"
               iconComp={<i aria-hidden className="fas fa-redo"/>}

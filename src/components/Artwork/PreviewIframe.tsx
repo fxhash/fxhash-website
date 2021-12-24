@@ -26,10 +26,11 @@ export const ArtworkIframe = forwardRef<ArtworkIframeRef, Props>(({
 }, ref) => {
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<boolean>(false)
+  const isLoaded = useRef<boolean>(false)
   const iframeRef = useRef<HTMLIFrameElement>(null)
 
   useEffect(() => {
-    setLoading(true)
+    setLoading(!isLoaded.current)
     setError(false)
   }, [])
 
@@ -39,6 +40,17 @@ export const ArtworkIframe = forwardRef<ArtworkIframeRef, Props>(({
       setError(false)
       iframeRef.current.src = iframeRef.current.src
     }
+  }
+
+  useEffect(() => {
+    // when the url changes, we set reload to true
+    setLoading(true)
+  }, [url])
+
+  // set iframe state to loaded and set ref to loaded to prevent loader init to loading
+  const setIframeLoaded = () => {
+    isLoaded.current = true
+    setLoading(false)
   }
 
   const getHtmlIframe = (): HTMLIFrameElement|null => {
@@ -59,8 +71,8 @@ export const ArtworkIframe = forwardRef<ArtworkIframeRef, Props>(({
           sandbox="allow-scripts allow-same-origin"
           className={cs(style.iframe)}
           onLoad={() => {
-            onLoaded && onLoaded();
-            setLoading(false);
+            onLoaded?.()
+            setIframeLoaded()
           }}
           onError={() => setError(true)}
           allow="accelerometer; camera; gyroscope; microphone; xr-spatial-tracking;"
