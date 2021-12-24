@@ -1,7 +1,7 @@
 export const snippetFromUrl = `
       let alphabet = "123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ"
       var fxhash = new URLSearchParams(window.location.search).get('fxhash')
-      let b58dec = (str) => str.split('').reduce((p,c,i) => p + alphabet.indexOf(c) * (Math.pow(alphabet.length, str.length-i-1)), 0)
+      let b58dec = str=>[...str].reduce((p,c)=>p*alphabet.length+alphabet.indexOf(c)|0, 0)
       let fxhashTrunc = fxhash.slice(2)
       let regex = new RegExp(".{" + ((fxhashTrunc.length/4)|0) + "}", 'g')
       let hashes = fxhashTrunc.match(regex).map(h => b58dec(h))
@@ -18,4 +18,7 @@ export const snippetFromUrl = `
         }
       }
       var fxrand = sfc32(...hashes)
+      function fxpreview() {
+        console.log("fxhash: TRIGGER PREVIEW")
+      }
 `
