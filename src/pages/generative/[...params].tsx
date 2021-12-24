@@ -75,7 +75,7 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
     }
     else {
       // there is a forced hash, add it to the generative URL
-      return `${ipfsGatewayUrl(token.metadata.artifactUri, "pinata-fxhash-safe")}?fxhash=${previewHash}`
+      return `${ipfsGatewayUrl(token.metadata.generativeUri, "pinata-fxhash-safe")}?fxhash=${previewHash}`
     }
   }, [previewHash])
 
