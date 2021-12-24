@@ -38,6 +38,7 @@ const RevealPage: NextPage<Props> = ({ hash, token }) => {
         <main className={cs(layout['padding-big'])}>
           {generativeUri && previewUri ? (
             <Reveal
+              hash={hash}
               generativeUri={generativeUri}
               previeweUri={previewUri}
               features={features}
