@@ -125,14 +125,16 @@ export const StepInformations: StepComponent = ({ state, onNext }) => {
       description: formInformations.description,
       childrenDescription: formInformations.childrenDescription || formInformations.description,
       tags: tagsFromString(formInformations.tags),
-      artifactUri: getIpfsSlash(state.cidFixedHash!),
+      artifactUri: `${getIpfsSlash(state.cidUrlParams!)}?fxhash=${state.previewHash}`,
       displayUri: getIpfsSlash(state.cidPreview!),
       thumbnailUri: getIpfsSlash(state.cidThumbnail!),
       generativeUri: getIpfsSlash(state.cidUrlParams!),
-      authenticityHash: state.authHash3!,
+      authenticityHash: state.authHash2!,
+      previewHash: state.previewHash!,
       capture,
       symbol: "FXGEN",
-      decimals: 0
+      decimals: 0,
+      version: "0.2"
     }
     setSavedInfos({
       name: formInformations.name,

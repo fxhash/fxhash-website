@@ -56,12 +56,11 @@ const STEPS: Step[] = [
     path: "/capture-settings",
     component: StepConfigureCapture,
     title: "3. Configure capture",
-    validateIn: (data) => !!(data.cidUrlParams && data.authHash1 && data.cidFixedHash && data.authHash2),
+    validateIn: (data) => !!(data.cidUrlParams && data.authHash1 && data.previewHash),
     clearDataDown: (data) => ({
       cidUrlParams: data.cidUrlParams,
       authHash1: data.authHash1,
-      cidFixedHash: data.cidFixedHash,
-      authHash2: data.authHash2,
+      previewHash: data.previewHash,
       minted: data.minted
     })
   },
@@ -70,15 +69,14 @@ const STEPS: Step[] = [
     component: StepVerification,
     title: "4. Verifications",
     validateIn: (data) => 
-      !!(data.cidUrlParams && data.authHash1 && data.cidFixedHash && data.authHash2
-        && data.cidPreview && data.authHash3 && data.captureSettings && data.cidThumbnail),
+      !!(data.cidUrlParams && data.authHash1 && data.previewHash
+        && data.cidPreview && data.authHash2 && data.captureSettings && data.cidThumbnail),
     clearDataDown: (data) => ({
       cidUrlParams: data.cidUrlParams,
       authHash1: data.authHash1,
-      cidFixedHash: data.cidFixedHash,
-      authHash2: data.authHash2,
+      previewHash: data.previewHash,
       cidPreview: data.cidPreview,
-      authHash3: data.authHash3,
+      authHash2: data.authHash2,
       captureSettings: data.captureSettings,
       cidThumbnail: data.cidThumbnail,
       minted: data.minted
@@ -89,15 +87,14 @@ const STEPS: Step[] = [
     component: StepInformations,
     title: "5. Mint",
     validateIn: (data) => 
-      !!(data.cidUrlParams && data.authHash1 && data.cidFixedHash && data.authHash2
-        && data.cidPreview && data.authHash3 && data.captureSettings && data.cidThumbnail),
+      !!(data.cidUrlParams && data.authHash1 && data.previewHash
+        && data.cidPreview && data.authHash2 && data.captureSettings && data.cidThumbnail),
     clearDataDown: (data) => ({
       cidUrlParams: data.cidUrlParams,
       authHash1: data.authHash1,
-      cidFixedHash: data.cidFixedHash,
-      authHash2: data.authHash2,
+      previewHash: data.previewHash,
       cidPreview: data.cidPreview,
-      authHash3: data.authHash3,
+      authHash2: data.authHash2,
       captureSettings: data.captureSettings,
       cidThumbnail: data.cidThumbnail,
       minted: data.minted
@@ -108,8 +105,8 @@ const STEPS: Step[] = [
     component: StepSuccess,
     hideTabs: true,
     validateIn: (data) => 
-      !!(data.cidUrlParams && data.authHash1 && data.cidFixedHash && data.authHash2
-        && data.cidPreview && data.authHash3 && data.captureSettings
+      !!(data.cidUrlParams && data.authHash1 && data.previewHash
+        && data.cidPreview && data.authHash2 && data.captureSettings
         && data.cidThumbnail),
     clearDataDown: (data) => data
   }

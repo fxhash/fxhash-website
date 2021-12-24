@@ -27,16 +27,14 @@ export interface MintGenerativeData {
   cidUrlParams?: string
   // a hash to verify that the first matches
   authHash1?: string
-  // the ipfs uri pointing to the project with fixed hash
-  cidFixedHash?: string
-  // a hash to verify both IPFS
-  authHash2?: string
+  // the hash selector for the preview
+  previewHash?: string
   // the ipfs uri to the preview
   cidPreview?: string
   // the ipfs uri to the thumbnail
   cidThumbnail?: string
-  // a hash to verify the 3 ipfs uri
-  authHash3?: string
+  // a hash to verify the 2 ipfs uri
+  authHash2?: string
   // capture settings
   captureSettings?: CaptureSettings
   // general informations about the token

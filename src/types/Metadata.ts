@@ -68,10 +68,15 @@ export interface GenerativeTokenMetadata {
   thumbnailUri: string
   // link to the generative URL project
   generativeUri: string
+  // an authenticity hash given by the backend
   authenticityHash: string
   capture: CaptureSettings
   decimals: number,
-  symbol: string
+  symbol: string,
+  // ADDED STARTING FROM v0.2
+  // a fake transaction hash used for the preview
+  previewHash?: string
+  version?: string
 }
 
 export interface ObjktMetadata extends GenerativeTokenMetadata {

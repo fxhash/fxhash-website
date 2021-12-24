@@ -6,11 +6,8 @@ import { Spacing } from "../../components/Layout/Spacing"
 import { ArtworkPreview } from "../../components/Artwork/Preview"
 import { Button } from "../../components/Button"
 import { useState, useEffect } from "react"
-import { SliderWithText } from "../../components/Input/SliderWithText"
-import { Vec2 } from "../../types/Math"
-import { InputResolution } from "../../components/Input/Resolution"
 import useFetch, { CachePolicies } from "use-http"
-import { CaptureErrorEnum, CaptureErrorResponse, CaptureResponse, PreviewError, PreviewResponse } from "../../types/Responses"
+import { CaptureErrorEnum, CaptureErrorResponse, PreviewError, PreviewResponse } from "../../types/Responses"
 import { getIpfsIoUrl } from "../../utils/ipfs"
 import { Error } from "../../components/Error/Error"
 import { getCaptureError, getPreviewError } from "../../utils/errors"
@@ -45,7 +42,7 @@ export const StepConfigureCapture: StepComponent = ({ onNext, state }) => {
 
   const captureTest = () => {
     post({
-      url: getIpfsIoUrl(state.cidFixedHash!),
+      url: `${getIpfsIoUrl(state.cidUrlParams!)}?fxhash=${state.previewHash}`,
       mode: settings.mode,
       canvasSelector: settings.canvasSelector,
       resX: settings.resX,
@@ -63,8 +60,8 @@ export const StepConfigureCapture: StepComponent = ({ onNext, state }) => {
         delay: settings.delay*1000,
         canvasSelector: settings.canvasSelector,
         cidParams: state.cidUrlParams,
-        cidStatic: state.cidFixedHash,
-        authHash: state.authHash2
+        previewHash: state.previewHash,
+        authHash: state.authHash1
       })
     }
   }
@@ -93,7 +90,7 @@ export const StepConfigureCapture: StepComponent = ({ onNext, state }) => {
         },
         cidPreview: safeDataPreview.cidPreview,
         cidThumbnail: safeDataPreview.cidThumbnail,
-        authHash3: safeDataPreview.authenticationHash
+        authHash2: safeDataPreview.authenticationHash
       })
     }
   }, [safeDataPreview])

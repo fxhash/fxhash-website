@@ -24,33 +24,15 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
   const artworkIframeRef = useRef<ArtworkIframeRef>(null)
   const [features, setFeatures] = useState<RawTokenFeatures | null>(null)
 
-  const { data, loading, error, post } = 
-    useFetch<StaticGenResponse|StaticGenError>(`${process.env.NEXT_PUBLIC_API_FILE_ROOT}/generate-static`,
-    { cachePolicy: CachePolicies.NO_CACHE })
-
-  // this variable ensures that we can safely access its data regardless of the state of the queries
-  const safeData: StaticGenResponse|false|undefined = !error && !loading && (data as StaticGenResponse)
-
   const url = useMemo<string>(() => {
     return `${getIpfsIoUrl(state.cidUrlParams!)}?fxhash=${hash}`
   }, [hash])
 
-  const sendData = () => {
-    const F = new FormData()
-    F.append("cidParams", state.cidUrlParams!)
-    F.append("authHash", state.authHash1!)
-    F.append("hash", hash)
-    post(F)
+  const nextStep = () => {
+    onNext({
+      previewHash: hash
+    })
   }
-
-  useEffect(() => {
-    if (safeData) {
-      onNext({
-        cidFixedHash: safeData.cidStatic,
-        authHash2: safeData.authenticationHash
-      })
-    }
-  }, [safeData])
 
   // attach event to window to get messages from 
   useEffect(() => {
@@ -151,20 +133,13 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
         </div>
         <Spacing size="large"/>
 
-        {error && (
-          <Error>
-            { getStaticGenError(data as StaticGenError) }
-          </Error>
-        )}
-
         <Button
           color="secondary"
           iconComp={<i aria-hidden className="fas fa-arrow-right"/>}
           iconSide="right"
           size="large"
           disabled={!check1 || !check2}
-          state={loading ? "loading" : "default"}
-          onClick={sendData}
+          onClick={nextStep}
         >
           Next step
         </Button>
