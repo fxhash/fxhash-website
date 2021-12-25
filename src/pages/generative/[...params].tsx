@@ -180,14 +180,14 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
           <Spacing size="8px"/>
 
           <div className={cs(layout['x-inline'])}>
-            <Button
+            {/* <Button
               size="small"
               iconComp={<i aria-hidden className="fas fa-random"/>}
               iconSide="right"
               onClick={randomize}
             >
               randomize
-            </Button>
+            </Button> */}
             <Button
               size="small"
               iconComp={<i aria-hidden className="fas fa-redo"/>}
