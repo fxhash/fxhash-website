@@ -73,6 +73,9 @@ export function Navigation() {
           <Link href="/articles/about-fxhash">
             <a>about fxhash</a>
           </Link>
+          <Link href="/articles/changelog">
+            <a>changelog</a>
+          </Link>
         </Dropdown>
 
         <Dropdown
