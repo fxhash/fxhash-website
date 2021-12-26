@@ -45,10 +45,25 @@ export interface MintGenerativeData {
   authHash2?: string
   // capture settings
   captureSettings?: CaptureSettings
+  // general settings
+  settings?: GenTokenSettings
   // general informations about the token
   informations?: GenerativeTokenInformations
   // minted successful
   minted: boolean
+}
+
+export interface GenTokenSettings {
+  exploration?: {
+    preMint?: {
+      enabled: boolean
+      hashConstraints?: string[] | null
+    },
+    postMint?: {
+      enabled: boolean
+      hashConstraints?: string[] | null
+    },
+  }
 }
 
 export interface GenTokenInformationsForm {

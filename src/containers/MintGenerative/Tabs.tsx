@@ -12,24 +12,6 @@ interface Props {
   steps: Step[]
 }
 
-const TABS = [ 
-  {
-    name: "1. Upload to IPFS",
-  },
-  {
-    name: "2. Check files",
-  },
-  {
-    name: "3. Configure capture",
-  },
-  {
-    name: "4. Verifications",
-  },
-  {
-    name: "5. Mint",
-  }
-]
-
 export function MintGenerativeTabs({ steps }: Props) {
   const location = useLocation()
 

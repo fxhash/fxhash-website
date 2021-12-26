@@ -10,6 +10,7 @@ import { StepConfigureCapture } from "./StepConfigureCapture"
 import { StepVerification } from "./StepVerification"
 import { StepInformations } from "./StepInformations"
 import { StepSuccess } from "./StepSuccess"
+import { StepExtraSettings } from "./StepExtraSettings"
 
 
 /**
@@ -83,9 +84,9 @@ const STEPS: Step[] = [
     })
   },
   {
-    path: "/informations",
-    component: StepInformations,
-    title: "5. Mint",
+    path: "/extra-settings",
+    component: StepExtraSettings,
+    title: "5. Extra settings",
     validateIn: (data) => 
       !!(data.cidUrlParams && data.authHash1 && data.previewHash
         && data.cidPreview && data.authHash2 && data.captureSettings && data.cidThumbnail),
@@ -96,6 +97,26 @@ const STEPS: Step[] = [
       cidPreview: data.cidPreview,
       authHash2: data.authHash2,
       captureSettings: data.captureSettings,
+      settings: data.settings,
+      cidThumbnail: data.cidThumbnail,
+      minted: data.minted
+    })
+  },
+  {
+    path: "/informations",
+    component: StepInformations,
+    title: "6. Mint",
+    validateIn: (data) => 
+      !!(data.cidUrlParams && data.authHash1 && data.previewHash
+        && data.cidPreview && data.authHash2 && data.captureSettings && data.cidThumbnail),
+    clearDataDown: (data) => ({
+      cidUrlParams: data.cidUrlParams,
+      authHash1: data.authHash1,
+      previewHash: data.previewHash,
+      cidPreview: data.cidPreview,
+      authHash2: data.authHash2,
+      captureSettings: data.captureSettings,
+      settings: data.settings,
       cidThumbnail: data.cidThumbnail,
       minted: data.minted
     })
@@ -180,8 +201,6 @@ export function MintGenerativeController({ anchor }: Props) {
             <step.component 
               onNext={onNext}
               state={state}
-              // validateIncoming={step.validateIn}
-              // onValidationFailed={onStepValidationFailed}
             />
           </Route>
         ))}
@@ -190,8 +209,6 @@ export function MintGenerativeController({ anchor }: Props) {
             <StepHome 
               onNext={onNext}
               state={state}
-              // validateIncoming={STEPS[0].validateIn}
-              // onValidationFailed={onStepValidationFailed}
             />
           </Route>
       </Switch>

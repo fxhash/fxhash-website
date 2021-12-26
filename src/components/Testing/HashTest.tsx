@@ -62,12 +62,14 @@ export function HashTest({
           size="small"
           color="primary"
           onClick={newHash}
+          type="button"
         >
           new hash
         </Button>
         <Button
           size="small"
           onClick={onRetry}
+          type="button"
         >
           retry with same hash
         </Button>

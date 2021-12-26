@@ -1,5 +1,5 @@
 import { Vec2 } from "./Math"
-import { CaptureMode, CaptureTriggerMode } from "./Mint"
+import { CaptureMode, CaptureTriggerMode, GenTokenSettings } from "./Mint"
 
 export interface TokenMetadata {
   "": string
@@ -72,6 +72,7 @@ export interface GenerativeTokenMetadata {
   // an authenticity hash given by the backend
   authenticityHash: string
   capture: CaptureSettings
+  settings?: GenTokenSettings|null
   decimals: number,
   symbol: string,
   // ADDED STARTING FROM v0.2

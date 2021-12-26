@@ -139,6 +139,7 @@ export const StepInformations: StepComponent = ({ state, onNext }) => {
       authenticityHash: state.authHash2!,
       previewHash: state.previewHash!,
       capture,
+      settings: state.settings ?? null,
       symbol: "FXGEN",
       decimals: 0,
       version: "0.2"

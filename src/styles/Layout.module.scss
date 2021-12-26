@@ -105,6 +105,12 @@
   justify-content: center;
 }
 
+.flex_column_left {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
 .full_body_height {
   height: calc(100vh - 140px - 50px)
 }

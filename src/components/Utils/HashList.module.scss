@@ -1,0 +1,44 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.hash {
+  background: black;
+  color: white;
+  border-radius: 4px;
+  font-size: var(--font-size-small);
+  font-weight: bold;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  
+  & > span {
+    padding: 8px 12px;
+    cursor: pointer;
+
+    &:hover {
+      color: var(--color-success);
+    }
+  }
+
+  &.active {
+    border: 1px solid rgba(255, 255, 255, 0.5);
+  }
+}
+
+.close_btn {
+  border: none;
+  background: transparent;
+  color: var(--color-error);
+  cursor: pointer;
+  padding: 8px 12px;
+  opacity: 0.5;
+
+  &:hover {
+    opacity: 1;
+  }
+}
