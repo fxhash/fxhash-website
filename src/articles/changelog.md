@@ -5,6 +5,14 @@ description: 'The fxhash changelog'
 ---
 
 
+# 26/12/2021
+
+* updated the `randomize` button feature by giving control back to artists
+  - feature was renamed to `variations`, as some strategies won't utilize pure randomness anymore
+  - added a step after the **verification** during the minting pipeline to control the `variations` button
+  - tokens minted prior to the addition of the feature will have the `variations` button disabled since we don't want to force any behaviour that wasn't implemented at the time of the mint
+  - artists can control the button during **the mint period** and **after generative token is fully minted**
+  - artists can define if the exploration of variations is infinite and random, or if the exploration can only be done for a finite number of variations they define.
 
 # 25/12/2021 🎅
 

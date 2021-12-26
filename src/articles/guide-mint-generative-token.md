@@ -192,6 +192,7 @@ Once your GT is ready to be published (once you carefully tested it in the sandb
 * **check files**: check again if your project behaves properly once uploaded to IPFS. Also if you implemented features, check if they work properly. This step is also used to configure which hash will be used for the preview of your project.
 * **configure capture**: select the capture mode and configure it. Also check if the capture is working properly
 * **verifications**: last check to see if token & capture work as intended
+* **extra settings**: configure extra settings, such as the variations a collector can explore when viewing your token
 * **mint**: enter informations about the Token & call the contract to mint
 
 ## Configure capture settings
@@ -212,6 +213,26 @@ This option defines what will be targetted by the capture module.
 * **From \<canvas\>**: capture module will directly grab the data of the canvas selected in the document with the CSS selector you provide. The preview will have the same size as the canvas.
 * **Viewport capture**: the capture will be made on the whole viewport, set at the resolution you will provide.
 * ~~**Custom function**~~ (not available yet): implement a custom function to provide the image directly from your code.
+
+
+## Configure extra settings
+
+At step 5, you can configure general-purpose settings related to your token. For now, you can only configure the exploration of variations.
+
+### Explore variation settings
+
+This step gives you control over the freedom viewers will have when exploring variations on the token page. Under the display frame, a `variations` button can be used to explore different variations, if enabled when you minted the Generative Token.
+
+![Mint overview](/images/articles/guide-mint/variations-button.jpg)
+
+You can configure the following settings, for both **during the mint** period and **after fully minted**:
+
+* **enabled**:  is the `variations` button enabled ? if disabled, the button won't be clickable and will appear gray.
+* **number of variations:**
+  - **infinite**: viewers can explore any amount of variations and so randomly
+  - **limited set of hashes**: define a list of hashes the viewers will cycle through when clicking on the button
+
+These settings should give enough control to define a strategy during the lifetime of your token. You can for instance disabled infinite exploration after token is minted, so that the front end only display a finite number of states through the minted collection of the token. You decide.
 
 
 # Guidelines
