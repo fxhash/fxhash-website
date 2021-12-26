@@ -2,29 +2,14 @@ import style from "./StepExtraSettings.module.scss"
 import layout from "../../styles/Layout.module.scss"
 import cs from "classnames"
 import { StepComponent } from "../../types/Steps"
-import { useContext, useEffect, useMemo, useRef, useState } from "react"
-import { Formik } from "formik"
-import * as Yup from "yup"
-import useFetch, { CachePolicies } from "use-http"
-import { MetadataError, MetadataResponse } from "../../types/Responses"
-import { CaptureSettings, GenerativeTokenMetadata } from "../../types/Metadata"
-import { CaptureMode, CaptureTriggerMode, GenTokenInformationsForm, GenTokenSettings } from "../../types/Mint"
+import { useMemo, useRef, useState } from "react"
+import { GenTokenSettings } from "../../types/Mint"
 import { Form } from "../../components/Form/Form"
 import { Field } from "../../components/Form/Field"
-import { InputText } from "../../components/Input/InputText"
 import { Spacing } from "../../components/Layout/Spacing"
-import { InputTextarea } from "../../components/Input/InputTextarea"
 import { Fieldset } from "../../components/Form/Fieldset"
 import { Checkbox } from "../../components/Input/Checkbox"
 import { Button } from "../../components/Button"
-import { InputTextUnit } from "../../components/Input/InputTextUnit"
-import { getIpfsSlash } from "../../utils/ipfs"
-import { UserContext } from "../UserProvider"
-import { useContractCall } from "../../utils/hookts"
-import { MintGenerativeCallData } from "../../types/ContractCalls"
-import { ContractFeedback } from "../../components/Feedback/ContractFeedback"
-import { isPositive } from "../../utils/math"
-import { tagsFromString } from "../../utils/strings"
 import { cloneDeep } from "@apollo/client/utilities"
 import { HashTest } from "../../components/Testing/HashTest"
 import { ArtworkIframe, ArtworkIframeRef } from "../../components/Artwork/PreviewIframe"
@@ -32,6 +17,7 @@ import { ipfsGatewayUrl } from "../../services/Ipfs"
 import { SquareContainer } from "../../components/Layout/SquareContainer"
 import { Select } from "../../components/Input/Select"
 import { HashList } from "../../components/Utils/HashList"
+import { generateFxHash } from "../../utils/hash"
 
 
 const initialSettings: Partial<GenTokenSettings> = {
@@ -63,7 +49,7 @@ export const StepExtraSettings: StepComponent = ({ state, onNext }) => {
   // form state (since not much data its ok to store there)
   const [settings, setSettings] = useState(state.settings ? cloneDeep(state.settings) : initialSettings)
   // current hash 
-  const [hash, setHash] = useState<string>(state.previewHash!)
+  const [hash, setHash] = useState<string>(generateFxHash())
   // the explore options
   const [preExploreOptions, setPreExploreOptions] = useState<string>("infinite")
   const [postExploreOptions, setPostExploreOptions] = useState<string>("infinite")
