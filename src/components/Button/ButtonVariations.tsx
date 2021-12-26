@@ -76,6 +76,10 @@ export function ButtonVariations({
   // update the preview hash, either by looping through available hashes, or by
   // generating a random hash
   const updatePreviewHash = () => {
+    // small front security for those removing the disabled property on the buttons
+    if (!activeSettings?.enabled) {
+      return
+    }
     // if no hash constraints, just give a random hash
     if (!hashes) {
       onChangeHash(generateFxHash())
