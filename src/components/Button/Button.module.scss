@@ -30,6 +30,13 @@
 
 :global .dark :local .button {
   color: white !important;
+
+  &.color-black {
+    &:disabled, &.disabled {
+      background-color: var(--color-gray-light);
+      opacity: 0.5;
+    }
+  }
 }
 
 .font-regular {
