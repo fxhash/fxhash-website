@@ -1,5 +1,6 @@
 import style from "./StepInformations.module.scss"
 import layout from "../../styles/Layout.module.scss"
+import colors from "../../styles/Colors.module.css"
 import cs from "classnames"
 import { StepComponent } from "../../types/Steps"
 import { useContext, useEffect, useState } from "react"
@@ -279,6 +280,10 @@ export const StepInformations: StepComponent = ({ state, onNext }) => {
                   Can be collected now
                 </Checkbox>
               </Field>
+              <em className={cs(colors.gray)}>
+                We suggest disabling the Generative Token first, and then check if it was minted properly (and only enable it if that's the case)
+              </em>
+              <Spacing size="regular"/>
 
               <Field error={errors.price}>
                 <label htmlFor="price">
