@@ -25,6 +25,13 @@ export function Settings({
         onChange={(value) => settings.update("displayPricesCard", value)} 
         value={settings.displayPricesCard}
       />
+
+      <strong>Display floor price</strong>
+      <Switch 
+        onChange={(value) => settings.update("displayFloorPriceCard", value)} 
+        value={settings.displayFloorPriceCard}
+      />
+
     </div>
   )  
 }
