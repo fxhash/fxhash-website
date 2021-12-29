@@ -29,9 +29,15 @@ export function ContractsOpened() {
   })
   
   return issuerStorage ? (
-    <div className={cs(style.state, { [style.state_closed]: issuerStorage.paused })}>
+    // <div className={cs(style.state, { [style.state_closed]: issuerStorage.paused })}>
+    //   <span>
+    //     MINT {issuerStorage.paused ? "CLOSED" : "OPENED"} {mintTimeStatus}
+    //   </span>
+    //   <div/>
+    // </div>
+    <div className={cs(style.state, style.state_closed)}>
       <span>
-        MINT {issuerStorage.paused ? "CLOSED" : "OPENED"} {mintTimeStatus}
+        MINT CLOSED UNTIL JAN 2, 15h UTC
       </span>
       <div/>
     </div>
