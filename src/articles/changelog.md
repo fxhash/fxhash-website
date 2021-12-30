@@ -5,6 +5,13 @@ description: 'The fxhash changelog'
 ---
 
 
+# 30/12/2021
+
+* gentk ownership optimization
+  - gentks ownerhip is no longer transferred to `fxhash marketplace` at the indexer level
+  - optimized queries to render gentk Cards over the whole application
+
+
 # 26/12/2021
 
 * updated the `randomize` button feature by giving control back to artists
@@ -13,6 +20,7 @@ description: 'The fxhash changelog'
   - tokens minted prior to the addition of the feature will have the `variations` button disabled since we don't want to force any behaviour that wasn't implemented at the time of the mint
   - artists can control the button during **the mint period** and **after generative token is fully minted**
   - artists can define if the exploration of variations is infinite and random, or if the exploration can only be done for a finite number of variations they define.
+
 
 # 25/12/2021 🎅
 

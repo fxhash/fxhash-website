@@ -1,17 +1,13 @@
-// import style from "./UserGenerativeTokens.module.scss"
-import { useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client"
 import cs from "classnames"
-import { useRef, useEffect } from "react";
-import { CardsContainer } from "../../components/Card/CardsContainer";
-import { GenerativeTokenCard } from "../../components/Card/GenerativeTokenCard";
-import { ObjktCard } from "../../components/Card/ObjktCard";
-import { LoaderBlock } from "../../components/Layout/LoaderBlock";
-import { InfiniteScrollTrigger } from "../../components/Utils/InfiniteScrollTrigger";
-import { Qu_userGenTokens, Qu_userObjkts, Qu_userOffers } from "../../queries/user";
-import { GenerativeToken } from "../../types/entities/GenerativeToken";
-import { Objkt } from "../../types/entities/Objkt";
-import { Offer } from "../../types/entities/Offer";
-import { User } from "../../types/entities/User";
+import { useRef, useEffect } from "react"
+import { CardsContainer } from "../../components/Card/CardsContainer"
+import { ObjktCard } from "../../components/Card/ObjktCard"
+import { LoaderBlock } from "../../components/Layout/LoaderBlock"
+import { InfiniteScrollTrigger } from "../../components/Utils/InfiniteScrollTrigger"
+import { Qu_userOffers } from "../../queries/user"
+import { Offer } from "../../types/entities/Offer"
+import { User } from "../../types/entities/User"
 
 interface Props {
   user: User

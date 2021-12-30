@@ -223,26 +223,25 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       idStr = context.params.params[0]
     }
   }
-  let token = null
+  let variables: Record<string, any> = {},
+      token = null
 
   if (idStr) {
     const id = parseInt(idStr as string)
     if (id === 0 || id) {
-      const { data } = await client.query({
-        query: Qu_objkt,
-        fetchPolicy: "no-cache",
-        variables: { id }
-      })
-      if (data) {
-        token = data.objkt
-      }
+      variables.id = id
     }
   }
   else if (slug) {
+    variables.slug = slug
+  }
+
+  // only run query if valid variables
+  if (Object.keys(variables).length > 0) {
     const { data } = await client.query({
       query: Qu_objkt,
       fetchPolicy: "no-cache",
-      variables: { slug }
+      variables
     })
     if (data) {
       token = data.objkt

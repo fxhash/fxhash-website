@@ -235,19 +235,14 @@ export async function getServerSideProps() {
                 avatarUri
               }
             }
-            offer {
-              id
-              price
-              issuer {
-                id
-                name
-                avatarUri
-              }
-            }
             owner {
               id
               name
               avatarUri
+            }
+            offer {
+              id
+              price
             }
           }
         }

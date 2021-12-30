@@ -15,6 +15,11 @@ export const Qu_genToken = gql`
       balance
       enabled
       royalties
+      author {
+        id
+        name
+        avatarUri
+      }
       objkts: latestObjkts {
         id
         owner {
@@ -26,11 +31,6 @@ export const Qu_genToken = gql`
         slug
         metadata
         offer {
-          issuer {
-            id
-            name
-            avatarUri
-          }
           price
         }
         issuer {
@@ -67,11 +67,6 @@ export const Qu_genToken = gql`
           id
           name
         }
-      }
-      author {
-        id
-        name
-        avatarUri
       }
     }
   }
@@ -92,6 +87,11 @@ export const Qu_genTokenMarketplace = gql`
       balance
       enabled
       royalties
+      author {
+        id
+        name
+        avatarUri
+      }
       marketStats {
         floor
         median
@@ -104,64 +104,8 @@ export const Qu_genTokenMarketplace = gql`
         secVolumeTz24
         secVolumeNb24
       }
-      objkts: latestObjkts {
-        id
-        owner {
-          id
-          name
-          avatarUri
-        }
-        name
-        slug
-        metadata
-        offer {
-          issuer {
-            id
-            name
-            avatarUri
-          }
-          price
-        }
-        issuer {
-          flag
-          author {
-            id
-            name
-            avatarUri
-          }
-        }
-      }
       createdAt
       updatedAt
-      actions: latestActions {
-        id
-        type
-        metadata
-        createdAt
-        issuer {
-          id
-          name
-          avatarUri
-        }
-        target {
-          id
-          name
-          avatarUri
-        }
-        objkt {
-          id
-          name
-        }
-        token {
-          id
-          name
-        }
-      }
-      author {
-        id
-        name
-        avatarUri
-      }
     }
   }
 `
@@ -187,11 +131,6 @@ export const Qu_genTokenObjkts = gql`
         name
         metadata
         offer {
-          issuer {
-            id
-            name
-            avatarUri
-          }
           price
         }
       }

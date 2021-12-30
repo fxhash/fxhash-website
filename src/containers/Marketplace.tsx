@@ -30,11 +30,6 @@ const Qu_offers = gql`
         offer {
           id
           price
-          issuer {
-            id
-            name
-            avatarUri
-          }
         }
         owner {
           id
@@ -71,11 +66,6 @@ const Qu_offersByIds = gql`
         offer {
           id
           price
-          issuer {
-            id
-            name
-            avatarUri
-          }
         }
         owner {
           id
