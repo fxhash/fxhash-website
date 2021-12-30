@@ -90,6 +90,9 @@ export const Qu_userOffers = gql`
             name
             avatarUri
           }
+          offer {
+            price
+          }
           issuer {
             flag
             author {
