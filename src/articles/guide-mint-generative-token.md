@@ -219,7 +219,55 @@ Your program must use pseudorandom number generation with a seed, where the seed
 
 - the ZIP file must be **under 15 Mo**. Please try to optimize your projects as much as possible.
 
+# Best practices and common mistakes
 
+*A list of best practices and common mistakes (and how to fix them) to ensure that your token has as long a life as possible.*
+
+## Test often
+
+This section comes first as it's the most important in ensuring that your token is as good as you can make it. Remember that once you release, you can't edit the token, so make sure to test as often as you can when developing.
+
+Testing often will also allow you to catch problems early that would become big issues later on. Nobody likes to get to the minting stage - or worse, selling out - only to discover that their token doesn't work properly.
+## Resolutions and DPRs
+
+*Ensure your token looks the same in all resolutions and DPRs.*
+
+It is ideal if your token produces the same artwork at different sizes. Make sure to test your token often at different resolutions and DPRs. One of the most common pitfalls that artists fall into is not doing so and having their tokens look different at different sizes - as well as different to the preview - as a result.
+
+There are a number of different ways of getting your token to work in a resolution independent manor. Jump into the creator-support channel if you'd like to ask any questions.
+
+## WebGL
+
+WebGL is a big subject and there are a number of items worth talking about in relation to it.
+
+### Power of two textures and framebuffers
+
+Some GPUs allow you to specify non power of two textures and framebuffers, however using non power of two textures and framebuffers will break the preview system.
+
+### WebGL on different silicone
+
+WebGL is an emulation layer on top of different graphics APIs which talk to hardware, as such implementation of basic things like sine calculation and float precision can vary.
+
+One important thing to remember about WebGL is that you should be doing as muchof your calculation up-front, in javascript, and providing those values to WebGL as uniforms.
+
+### WebGL and previews
+
+As of right now the preview system doesn't have a GPU. As such, rendering your scene falls to the CPU, which will render WebGL but at an extremely low framerate.
+
+If your token is WebGL then you want to make sure that you're rendering an accepable preview in the first couple of frames.
+
+## Computational complexity and previews
+
+If your token is computationally expensive, then it's possible that the preview system will stumble over it and the signer will not be able to sign mints! Please be aware that there exist ways to generate less complex previews for your tokens, but the implementation of this necessarily needs to fall on you, the artist. Jump into the creator-support channel if you'd like to ask any questions.
+
+## Test often
+
+This is such an important point that it bears mentioning twice.
+
+- Test often
+- Test in many different environments
+- Test using the same hash at different resolutions
+- Test in the sandbox as well as standalone
 # 3 ways to start a project
 
 *This section will provide you with some boilerplate projects to make the development on your GT easier.*
