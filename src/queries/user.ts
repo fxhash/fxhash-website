@@ -67,11 +67,6 @@ export const Qu_userObjkts = gql`
         offer {
           id
           price
-          issuer {
-            id
-            name
-            avatarUri
-          }
         }
       }
     }
@@ -90,7 +85,11 @@ export const Qu_userOffers = gql`
           id
           name
           metadata
-          createdAt
+          owner {
+            id
+            name
+            avatarUri
+          }
           issuer {
             flag
             author {
@@ -99,20 +98,6 @@ export const Qu_userOffers = gql`
               avatarUri
             }
           }
-          offer {
-            price
-            issuer {
-              id
-              name
-              avatarUri
-            }
-          }
-        }
-        createdAt
-        issuer {
-          id
-          name
-          avatarUri
         }
       }
     }

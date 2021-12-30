@@ -19,7 +19,6 @@ interface Props {
 export function ObjktCard({
   objkt
 }: Props) {
-  const owner = objkt.offer ? objkt.offer.issuer : objkt.owner!
   const url = getObjktUrl(objkt)
 
   return (
@@ -30,7 +29,7 @@ export function ObjktCard({
             {objkt.duplicate && <div className={cs(styleObjkt.dup_flag)}>[WARNING: DUPLICATE]</div>}
             <h5>{ objkt.name }{objkt.assigned === false && ` - ${objkt.issuer.name}`}</h5>
             <Spacing size="2x-small" />
-            <UserBadge user={owner} size="regular" hasLink={false} />
+            <UserBadge user={objkt.owner!} size="regular" hasLink={false} />
           </div>
 
           <Spacing size="small" />
