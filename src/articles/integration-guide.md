@@ -40,9 +40,9 @@ Also, try to think in terms of **query cost**. For instance, if your application
 
 The Generative Tokens and the Gentks have some self-explanatory properties, however others may require more details to be used properly. This is particularly the case of the metadata of those tokens.
 
-## Versionning
+## Versioning
 
-First of all, the metadata is versionned so that whenever a change is made to their definition, it reflects in their `version` field. Prior to version `0.2`, there wasn't any version field so if the `version` field is not defined in some metadata, one can assume that the version is `0.1`. This function ensures that given some metadata (let it be a Generative Token or a Gentk), it outputs its version:
+First of all, the metadata is versioned so that whenever a change is made to their definition, it reflects in their `version` field. Prior to version `0.2`, there wasn't any version field so if the `version` field is not defined in some metadata, one can assume that the version is `0.1`. This function ensures that given some metadata (let it be a Generative Token or a Gentk), it outputs its version:
 
 ```js
 function getVersion(metadata) {
