@@ -23,9 +23,7 @@ export function getIpfsSlash(cid: string): string {
  * outputs the CID in the rightmost section
  */
 export function ipfsUrlToCid(url: string): string {
-  return url
-    ? url.substr(7)
-    : ""
+  return url ? url.substring(7) : ""
 }
 
 /**

@@ -70,6 +70,9 @@ export function Navigation() {
           <Link href="/articles/moderation-system">
             <a>moderation system</a>
           </Link>
+          <Link href="/articles/integration-guide">
+            <a>integration guide</a>
+          </Link>
           <Link href="/articles/about-fxhash">
             <a>about fxhash</a>
           </Link>
