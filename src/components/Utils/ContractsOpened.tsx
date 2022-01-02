@@ -37,7 +37,7 @@ export function ContractsOpened() {
     // </div>
     <div className={cs(style.state, style.state_closed)}>
       <span>
-        MINT CLOSED UNTIL JAN 2, 15h UTC
+        MINT CLOSED UNTIL JAN 5, 12h UTC
       </span>
       <div/>
     </div>
