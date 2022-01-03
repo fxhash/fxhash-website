@@ -45,6 +45,8 @@ export function Collect({ offer, objkt }: Props) {
     }
   }
 
+  const isOwner = (objkt.owner?.id === userCtx.user?.id)
+
   return (
     <>
       <ContractFeedback
@@ -56,19 +58,24 @@ export function Collect({ offer, objkt }: Props) {
       />
 
       <div className={cs(style.lock_container)}>
-        <Button
-          state={contractLoading ? "loading" : "default"}
-          color="secondary"
-          onClick={callContract}
-          disabled={locked || (objkt.owner?.id === userCtx.user?.id)}
-        >
-          purchase token - {displayMutez(offer.price)} tez
-        </Button>
-        {locked && (
-          <Unlock
-            locked={true}
-            onClick={() => setLocked(false)}
-          />
+        {!isOwner && (
+          <>
+          <Button
+            state={contractLoading ? "loading" : "default"}
+            color="secondary"
+            onClick={callContract}
+            disabled={locked}
+          >
+            purchase token - {displayMutez(offer.price)} tez
+          </Button>
+
+          {locked && (
+            <Unlock
+              locked={true}
+              onClick={() => setLocked(false)}
+            />
+          )}
+          </>
         )}
       </div>
     </>
