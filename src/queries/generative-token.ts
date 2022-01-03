@@ -43,7 +43,6 @@ export const Qu_genToken = gql`
         }
       }
       createdAt
-      updatedAt
       actions: latestActions {
         id
         type
@@ -105,7 +104,6 @@ export const Qu_genTokenMarketplace = gql`
         secVolumeNb24
       }
       createdAt
-      updatedAt
     }
   }
 `

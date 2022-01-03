@@ -6,7 +6,6 @@ import {
   CollectCall,
   MintCall,
   MintGenerativeCallData,
-  MintGenerativeRawCall,
   ModerateCall,
   PlaceOfferCall,
   ProfileUpdateCallData,
@@ -195,19 +194,9 @@ export class WalletManager {
       // get/create the contract interface
       const issuerContract = await this.getContract(FxhashContract.ISSUER)
   
-      // the Metadata needs to be turned into a Michelson map
-      const metaMap = new MichelsonMap<string, string>()
-      metaMap.set("", stringToByteString(tokenData.metadata[""]))
-  
-      // build the raw data to send
-      const rawData: MintGenerativeRawCall = {
-        ...tokenData,
-        metadata: metaMap
-      }
-  
       // call the contract (open wallet)
       statusCallback && statusCallback(ContractOperationStatus.CALLING)
-      const opSend = await issuerContract.methodsObject.mint_issuer(rawData).send()
+      const opSend = await issuerContract.methodsObject.mint_issuer(tokenData).send()
   
       // wait for confirmation
       statusCallback && statusCallback(ContractOperationStatus.WAITING_CONFIRMATION)
@@ -238,16 +227,10 @@ export class WalletManager {
     try {
       // get/create the contract interface
       const issuerContract = await this.getContract(FxhashContract.ISSUER)
-      
-      // don't send everyting
-      const sendData: Partial<MintCall> = {
-        issuer_address: tokenData.issuer_address,
-        issuer_id: tokenData.issuer_id
-      }
   
       // call the contract (open wallet)
       statusCallback && statusCallback(ContractOperationStatus.CALLING)
-      const opSend = await issuerContract.methodsObject.mint(sendData).send({
+      const opSend = await issuerContract.methodsObject.mint(tokenData.issuer_id).send({
         amount: tokenData.price,
         mutez: true,
         storageLimit: 450

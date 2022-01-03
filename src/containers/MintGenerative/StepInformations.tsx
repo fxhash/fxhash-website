@@ -26,6 +26,7 @@ import { MintGenerativeCallData } from "../../types/ContractCalls"
 import { ContractFeedback } from "../../components/Feedback/ContractFeedback"
 import { getMutezDecimalsNb, isPositive } from "../../utils/math"
 import { tagsFromString } from "../../utils/strings"
+import { stringToByteString } from "../../utils/convert"
 
 
 const initialForm: Partial<GenTokenInformationsForm> = {
@@ -163,12 +164,9 @@ export const StepInformations: StepComponent = ({ state, onNext }) => {
       call({
         amount: savedInfos.editions!,
         enabled: savedInfos.enabled!,
-        metadata: {
-          "": getIpfsSlash(metadataCid)
-        },
+        metadata: stringToByteString(getIpfsSlash(metadataCid)),
         price: Math.floor(savedInfos.price! * 1000000),
         royalties: Math.floor(savedInfos.royalties! * 10),
-        token_name: savedInfos.name!
       })
     }
   }, [safeMetaData])

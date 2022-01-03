@@ -8,21 +8,9 @@ export interface ProfileUpdateCallData {
 export interface MintGenerativeCallData {
   amount: number,
   enabled: boolean,
-  metadata: {
-    "": string
-  },
+  metadata: string,
   price: number,
   royalties: number,
-  token_name: string
-}
-
-export interface MintGenerativeRawCall {
-  amount: number,
-  enabled: boolean,
-  metadata: MichelsonMap<string, string>
-  price: number,
-  royalties: number,
-  token_name: string
 }
 
 export interface UpdateGenerativeCallData {
@@ -33,7 +21,6 @@ export interface UpdateGenerativeCallData {
 }
 
 export interface MintCall {
-  issuer_address: string,
   issuer_id: number,
   price: number
 }

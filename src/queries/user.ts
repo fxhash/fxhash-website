@@ -11,7 +11,6 @@ export const Qu_user = gql`
       description
       avatarUri
       createdAt
-      updatedAt
     }
   }
 `
@@ -63,7 +62,6 @@ export const Qu_userObjkts = gql`
         name
         metadata
         createdAt
-        updatedAt
         offer {
           id
           price

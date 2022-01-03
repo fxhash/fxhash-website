@@ -41,7 +41,6 @@ const Qu_reportedGenTokens = gql`
       enabled
       royalties
       createdAt
-      updatedAt
       author {
         id
         name

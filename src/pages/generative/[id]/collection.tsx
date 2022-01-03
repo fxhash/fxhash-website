@@ -150,7 +150,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
               royalties
               objktsCount
               createdAt
-              updatedAt
               author {
                 id
                 name

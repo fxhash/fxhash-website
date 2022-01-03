@@ -27,7 +27,6 @@ const Qu_genTokens = gql`
       enabled
       royalties
       createdAt
-      updatedAt
       author {
         id
         name
@@ -50,7 +49,6 @@ const Qu_tokensById = gql`
       enabled
       royalties
       createdAt
-      updatedAt
       author {
         id
         name

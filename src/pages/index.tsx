@@ -193,7 +193,6 @@ export async function getServerSideProps() {
           enabled
           royalties
           createdAt
-          updatedAt
           author {
             id
             name
@@ -212,7 +211,6 @@ export async function getServerSideProps() {
           enabled
           royalties
           createdAt
-          updatedAt
           author {
             id
             name
