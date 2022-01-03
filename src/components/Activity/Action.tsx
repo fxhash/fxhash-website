@@ -124,6 +124,19 @@ const ActionUpdateState: FunctionComponent<Props> = ({ action }) => {
   )
 }
 
+const ActionBurnSupply: FunctionComponent<Props> = ({ action }) => {
+  const metadata = action.metadata
+  return (
+    <>
+      🔥<UserBadge className={cs(style.user)} hasLink={true} user={(action.issuer||action.target)!} size="regular" />
+      <span>
+        burnt some supply, <strong className={cs(colors.secondary)}>{metadata.from}</strong> -&#62; <strong className={cs(colors.secondary)}>{metadata.to}</strong>
+      </span>
+      <DateDistance timestamptz={action.createdAt} append/>
+    </>
+  )
+}
+
 const ActionCompleted: FunctionComponent<Props> = ({ action }) => (
   <>
     <span className={cs(style.align)}>
@@ -144,6 +157,7 @@ const ActionMapComponent: Record<string, FunctionComponent<Props>> = {
   OFFER_ACCEPTED:   ActionOfferAccepted,
   OFFER_CANCELLED:  ActionOfferCancelled,
   UPDATE_STATE:     ActionUpdateState,
+  BURN_SUPPLY:      ActionBurnSupply,
   COMPLETED:        ActionCompleted
 }
 
@@ -155,6 +169,7 @@ const actionMapLink: Record<string, (action: ActionType) => string|null> = {
   OFFER_ACCEPTED: (action: ActionType) => `/gentk/${action.objkt?.id}`,
   OFFER_CANCELLED: (action: ActionType) => `/gentk/${action.objkt?.id}`,
   UPDATE_STATE: (action: ActionType) => `/gentk/${action.objkt?.id}`,
+  BURN_SUPPLY: (action: ActionType) => `/gentk/${action.token?.id}`,
   COMPLETED: (action: ActionType) => `/generative/${action.token?.id}`,
 }
 

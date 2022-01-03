@@ -1,20 +1,21 @@
 import style from "./Activity.module.scss"
 import cs from "classnames"
-import { Action as ActionType } from "../../types/entities/Action"
+import { Action as ActionType, TokenActionType } from "../../types/entities/Action"
 import { Action } from "./Action"
 import { useMemo } from "react"
 
 
-const ActionsPredecescence = {
+const ActionsPredecescence: Record<TokenActionType, number> = {
   NONE              : 0,
   UPDATE_STATE      : 0,
+  BURN_SUPPLY       : 0,
   MINTED            : 0,
   MINTED_FROM       : 1,
   COMPLETED         : 20,
   TRANSFERED        : 10,
   OFFER             : 3,
   OFFER_CANCELLED   : 3,
-  OFFER_ACCEPTED    : 3
+  OFFER_ACCEPTED    : 3,
 }
 
 // group actions by timestamp, sort by type within group, then rebuild array

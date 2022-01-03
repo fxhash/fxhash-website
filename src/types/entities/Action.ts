@@ -7,6 +7,7 @@ import { User } from './User'
 export enum TokenActionType {
   NONE              = "NONE",
   UPDATE_STATE      = "UPDATE_STATE",
+  BURN_SUPPLY       = "BURN_SUPPLY",
   MINTED            = "MINTED",
   MINTED_FROM       = "MINTED_FROM",
   COMPLETED         = "COMPLETED",
