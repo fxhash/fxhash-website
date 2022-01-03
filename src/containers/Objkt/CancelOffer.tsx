@@ -9,6 +9,7 @@ import { UserContext } from "../UserProvider"
 import { CancelOfferCall, PlaceOfferCall } from "../../types/ContractCalls"
 import { ContractFeedback } from "../../components/Feedback/ContractFeedback"
 import { Offer } from "../../types/entities/Offer"
+import { displayMutez } from "../../utils/units"
 
 interface Props {
   offer: Offer
@@ -41,7 +42,7 @@ export function CancelOffer({ offer }: Props) {
         color="primary"
         onClick={callContract}
       >
-        cancel trade
+        cancel trade ({displayMutez(offer.price)} tez)
       </Button>
     </>
   )
