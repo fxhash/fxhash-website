@@ -26,10 +26,19 @@
 .progress_header {
 }
 
-.bar {
-  background-color: var(--color-secondary);
+.bar, .bar_burnt {
   position: absolute;
   top: 0;
-  left: 0;
   height: 100%;
+  transition: width 0.15s ease-out;
+}
+
+.bar {
+  background-color: var(--color-secondary);
+  left: 0;
+}
+
+.bar_burnt {
+  background-color: #b76200;
+  right: 0;
 }

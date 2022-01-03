@@ -83,6 +83,7 @@ const GenerativeTokenMarketplace: NextPage<Props> = ({ token }) => {
               <MintProgress
                 balance={token.balance}
                 supply={token.supply}
+                originalSupply={token.originalSupply}
               />
               <Spacing size="x-small"/>
               <Link href={getGenerativeTokenUrl(token)} passHref>

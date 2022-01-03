@@ -23,6 +23,7 @@ const Qu_genTokens = gql`
       metadata
       price
       supply
+      originalSupply
       balance
       enabled
       royalties
@@ -45,6 +46,7 @@ const Qu_tokensById = gql`
       metadata
       price
       supply
+      originalSupply
       balance
       enabled
       royalties

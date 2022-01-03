@@ -12,9 +12,11 @@ export const Qu_genToken = gql`
       metadataUri
       price
       supply
+      originalSupply
       balance
       enabled
       royalties
+      lockEnd
       author {
         id
         name
@@ -83,9 +85,11 @@ export const Qu_genTokenMarketplace = gql`
       metadataUri
       price
       supply
+      originalSupply
       balance
       enabled
       royalties
+      lockEnd
       author {
         id
         name

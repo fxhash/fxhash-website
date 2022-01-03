@@ -37,15 +37,17 @@ export interface GenerativeToken {
   metadataUri?: string
   tags?: string[]
   price: number
+  originalSupply: number
   supply: number
   balance: number
   enabled: boolean
   royalties: number
+  lockedSeconds: number
+  lockEnd: Date
   objkts: Objkt[]
   actions: Action[]
   objktsCount: number
   createdAt: Date
-  updatedAt: Date
   marketStats?: GenerativeTokenMarketStats
 }
 

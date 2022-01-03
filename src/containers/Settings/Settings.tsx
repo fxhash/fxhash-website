@@ -20,10 +20,16 @@ export function Settings({
         value={settings.darkTheme}
       />
 
-      <strong>Display prices Generative</strong>
+      <strong>Display prices Generative on cards</strong>
       <Switch 
         onChange={(value) => settings.update("displayPricesCard", value)} 
         value={settings.displayPricesCard}
+      />
+
+      <strong>Display editions burnt on cards</strong>
+      <Switch 
+        onChange={(value) => settings.update("displayBurntCard", value)} 
+        value={settings.displayBurntCard}
       />
     </div>
   )  

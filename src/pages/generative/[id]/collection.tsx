@@ -16,11 +16,6 @@ import { Button } from '../../../components/Button'
 import nl2br from 'react-nl2br'
 import { ipfsGatewayUrl } from '../../../services/Ipfs'
 import { SectionHeader } from '../../../components/Layout/SectionHeader'
-import { CardsContainer } from '../../../components/Card/CardsContainer'
-import { ObjktCard } from '../../../components/Card/ObjktCard'
-import { Pagination } from '../../../components/Pagination/Pagination'
-import { useState } from 'react'
-import { Objkt } from '../../../types/entities/Objkt'
 import { truncateEnd } from '../../../utils/strings'
 import { getGenerativeTokenMarketplaceUrl, getGenerativeTokenUrl } from '../../../utils/generative-token'
 import { GenerativeCollection } from '../../../containers/Generative/Collection'
@@ -68,6 +63,7 @@ const GenerativeTokenCollection: NextPage<Props> = ({ token }) => {
               <MintProgress
                 balance={token.balance}
                 supply={token.supply}
+                originalSupply={token.originalSupply}
               />
               <Spacing size="large"/>
               <Link href={getGenerativeTokenUrl(token)}>
@@ -145,6 +141,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
               metadataUri
               price
               supply
+              originalSupply
               balance
               enabled
               royalties

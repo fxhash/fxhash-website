@@ -128,6 +128,7 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
             <MintProgress
               balance={token.balance}
               supply={token.supply}
+              originalSupply={token.originalSupply}
             />
             <Spacing size="large"/>
 
@@ -159,6 +160,13 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
                 </div>
               </>
             )}
+
+            <Spacing size="regular" />
+            <Link href={getGenerativeTokenMarketplaceUrl(token)} passHref>
+              <Button isLink={true} size="small">
+                open marketplace page 
+              </Button>
+            </Link>
           </div>
         </div>
 
@@ -217,14 +225,10 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
             <span><strong>Minted the:</strong> { format(new Date(token.createdAt), "dd/MM/yyyy' at 'HH:mm") }</span>
             <span><strong>Price:</strong> { displayMutez(token.price) } tez</span>
             <span><strong>Royalties:</strong> { displayRoyalties(token.royalties) }</span>
+            <span><strong>Original supply:</strong> { token.originalSupply }</span>
+            <span><strong>Supply burnt:</strong> { token.originalSupply - token.supply }</span>
             <span><strong>Tags:</strong> { token.tags?.join(", ") || "/" }</span>
             <span><strong>Metadata:</strong> <a href={ipfsGatewayUrl(token.metadataUri)} target="_blank" referrerPolicy="no-referrer">{token.metadataUri}</a></span>
-            <Spacing size="3x-small" />
-            <Link href={getGenerativeTokenMarketplaceUrl(token)} passHref>
-              <Button isLink={true} size="small">
-                See marketplace page 
-              </Button>
-            </Link>
           </div>
         </main>
       </section>

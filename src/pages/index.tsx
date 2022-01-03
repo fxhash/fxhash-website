@@ -80,6 +80,7 @@ const Home: NextPage<Props> = ({
                   <MintProgress
                     balance={randomGenerativeToken.balance}
                     supply={randomGenerativeToken.supply}
+                    originalSupply={randomGenerativeToken.originalSupply}
                   />
 
                   <Spacing size="large"/>
@@ -189,6 +190,7 @@ export async function getServerSideProps() {
           metadataUri
           price
           supply
+          originalSupply
           balance
           enabled
           royalties
@@ -207,6 +209,7 @@ export async function getServerSideProps() {
           metadata
           price
           supply
+          originalSupply
           balance
           enabled
           royalties

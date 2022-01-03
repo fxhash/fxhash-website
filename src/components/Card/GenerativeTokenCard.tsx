@@ -36,7 +36,7 @@ export function GenerativeTokenCard({
           </div>
           <div>
             <Spacing size="small" />
-            <MintProgress balance={token.balance} supply={token.supply}>
+            <MintProgress balance={token.balance} supply={token.supply} originalSupply={token.originalSupply}>
               {displayPrice && (
                 <strong className={cs(colors.secondary)}>
                   {displayMutez(token.price, 4)} tez
