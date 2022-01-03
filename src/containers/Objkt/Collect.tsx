@@ -60,9 +60,9 @@ export function Collect({ offer, objkt }: Props) {
           state={contractLoading ? "loading" : "default"}
           color="secondary"
           onClick={callContract}
-          disabled={locked}
+          disabled={locked || (objkt.owner?.id === userCtx.user?.id)}
         >
-          collect token - {displayMutez(offer.price)} tez
+          purchase token - {displayMutez(offer.price)} tez
         </Button>
         {locked && (
           <Unlock
