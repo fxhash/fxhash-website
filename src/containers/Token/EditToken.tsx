@@ -19,6 +19,8 @@ import { useContractCall } from "../../utils/hookts"
 import { UpdateGenerativeCallData } from "../../types/ContractCalls"
 import { TitleHyphen } from "../../components/Layout/TitleHyphen"
 import { isPositive } from "../../utils/math"
+import { BurnEditions } from "./BurnEditions"
+import { BurnToken } from "./BurnToken"
 
 
 interface Props {
@@ -106,15 +108,7 @@ export function EditToken({ token }: Props) {
           >
             {({ values, handleChange, handleBlur, handleSubmit, errors }) => (
               <Form className={cs(style.form)} onSubmit={handleSubmit} autoComplete="off">
-                <Field className={cs(style.checkbox)}>
-                  <Checkbox
-                    name="enabled"
-                    value={values.enabled!}
-                    onChange={(_, event) => handleChange(event)}
-                  >
-                    Can be collected now
-                  </Checkbox>
-                </Field>
+                <h4>Edit token settings</h4>
 
                 <Field error={errors.price} errorPos="bottom-left">
                   <label htmlFor="price">
@@ -147,6 +141,16 @@ export function EditToken({ token }: Props) {
                   />
                 </Field>
 
+                <Field className={cs(style.checkbox)}>
+                  <Checkbox
+                    name="enabled"
+                    value={values.enabled!}
+                    onChange={(_, event) => handleChange(event)}
+                  >
+                    Can be collected now
+                  </Checkbox>
+                </Field>
+
                 <Spacing size="3x-large"/>
 
                 <ContractFeedback
@@ -160,17 +164,32 @@ export function EditToken({ token }: Props) {
                 <Button
                   type="submit"
                   color="secondary"
-                  size="large"
+                  size="medium"
                   disabled={Object.keys(errors).length > 0}
                   state={contractLoading ? "loading" : "default"}
                 >
-                  update token
+                  update token settings
                 </Button>
               </Form>
             )}
           </Formik>
+
+          <div>
+            <h4>Burn editions</h4>
+
+            <BurnEditions token={token} />
+          </div>
         </main>
+
+        <Spacing size="6x-large"/>
+
+        <section className={cs(layout['padding-big'])}>
+          <BurnToken token={token} />
+        </section>
       </section>
+
+      <Spacing size="6x-large"/>
+      <Spacing size="6x-large"/>
     </>
   )
 }

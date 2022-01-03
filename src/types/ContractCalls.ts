@@ -20,6 +20,11 @@ export interface UpdateGenerativeCallData {
   issuer_id: number
 }
 
+export interface BurnSupplyCallData {
+  amount: number
+  issuer_id: number
+}
+
 export interface MintCall {
   issuer_id: number,
   price: number

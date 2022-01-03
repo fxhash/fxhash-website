@@ -1,14 +1,25 @@
 .container {
   display: flex;
-  align-items: center;
-  flex-direction: column;
+  justify-content: center;
+  flex-direction: row;
+  gap: 40px;
+
+  & > * {
+    width: min(100%, 450px);
+  }
+
+  & > *:first-child {
+    border-right: 3px solid var(--color-black);
+  }
+
+  h4 {
+    margin-bottom: 40px;
+  }
 }
 
 .form {
-  width: min(100%, 500px);
-
   button {
-    align-self: center;
+    align-self: flex-start;
   }
 }
 

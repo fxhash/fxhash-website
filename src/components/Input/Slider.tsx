@@ -9,6 +9,7 @@ export interface Props {
   step: number
   value: number
   onChange: (value: number) => void
+  className?: string
 }
 
 export function Slider({
@@ -16,7 +17,8 @@ export function Slider({
   max,
   step,
   value,
-  onChange
+  onChange,
+  className,
 }: Props) {
   const gradient = useMemo<string>(() => {
     const T = (value-min) / (max-min)
@@ -31,7 +33,7 @@ export function Slider({
       step={step}
       value={value}
       onChange={evt => onChange(parseFloat(evt.target.value))}
-      className={cs(style.slider)}
+      className={cs(style.slider, className)}
       style={{
         background: gradient
       }}

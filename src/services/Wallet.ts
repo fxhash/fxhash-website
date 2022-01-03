@@ -2,6 +2,7 @@ import { BeaconWallet } from '@taquito/beacon-wallet'
 import { MichelsonV1Expression } from '@taquito/rpc'
 import { ContractAbstraction, MichelsonMap, OpKind, TezosToolkit, Wallet } from '@taquito/taquito'
 import { 
+  BurnSupplyCallData,
   CancelOfferCall,
   CollectCall,
   MintCall,
@@ -318,6 +319,40 @@ export class WalletManager {
       if (this.canErrorBeCycled(err) && currentTry < this.rpcNodes.length) {
         this.cycleRpcNode()
         await this.burnGenerativeToken(tokenID, statusCallback, currentTry++)
+      }
+      else {
+        // any error
+        statusCallback && statusCallback(ContractOperationStatus.ERROR)
+      }
+    }
+  }
+
+  /**
+   * Burn N editions of a token
+   */
+  burnSupply: ContractInteractionMethod<BurnSupplyCallData> = async (data, statusCallback, currentTry = 1) => {
+    try {
+      // get/create the contract interface
+      const issuerContract = await this.getContract(FxhashContract.ISSUER)
+  
+      // call the contract (open wallet)
+      statusCallback && statusCallback(ContractOperationStatus.CALLING)
+      const opSend = await issuerContract.methodsObject.burn_supply(data).send()
+  
+      // wait for confirmation
+      statusCallback && statusCallback(ContractOperationStatus.WAITING_CONFIRMATION)
+      await opSend.confirmation(2)
+  
+      // OK, injected
+      statusCallback && statusCallback(ContractOperationStatus.INJECTED)
+    }
+    catch(err: any) {
+      console.log({err})
+      
+      // if network error, and the nodes have not been all tried
+      if (this.canErrorBeCycled(err) && currentTry < this.rpcNodes.length) {
+        this.cycleRpcNode()
+        await this.burnSupply(data, statusCallback, currentTry++)
       }
       else {
         // any error

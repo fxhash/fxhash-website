@@ -40,8 +40,6 @@ export function EditTokenSnippet({ token }: Props) {
           <strong>royalties:</strong> {displayRoyalties(token.royalties)}
         </span>
       </div>
-
-      <BurnToken token={token} />
     </>
   ):null
 }

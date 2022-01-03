@@ -49,6 +49,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
               metadata
               price
               enabled
+              supply
+              originalSupply
+              balance
               royalties
               author {
                 id

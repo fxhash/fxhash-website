@@ -1,6 +1,7 @@
 import style from "./Slider.module.scss"
 import cs from "classnames"
 import { Props as SliderProps, Slider } from "./Slider"
+import { InputText } from "./InputText"
 
 
 interface Props extends SliderProps {
@@ -8,7 +9,7 @@ interface Props extends SliderProps {
   textTransform?: (value: number) => string
 }
 
-export function SliderWithText({
+export function SliderWithTextInput({
   unit = "s",
   textTransform = (val) => val.toFixed(1),
   ...props
@@ -16,9 +17,11 @@ export function SliderWithText({
   return (
     <div className={cs(style.withtext)}>
       <Slider {...props}/>
-      <span className={cs(style.text)}>
-        { textTransform(props.value) } { unit }
-      </span>
+      <InputText
+        value={props.value}
+        className={cs(style.input_text)}
+        onChange={evt => props.onChange(evt.target.value as any)}
+      />
     </div>
   )
 }
