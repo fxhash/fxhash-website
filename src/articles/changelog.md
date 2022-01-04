@@ -5,6 +5,30 @@ description: 'The fxhash changelog'
 ---
 
 
+# 04/01/2022
+
+This update was introduced to prevent scammers from making profits using fxhash, and to secure collectors at the contract level. The Issuer contract was swapper for a new contract and all the data from the old one was transferred to provide the best experience for the community. Old tokens will benefit from the new feature `burn_supply`.
+
+* update of the user moderation contract
+  - on-chain views to give other contracts the ability to use the flags set by moderators
+  - introducing the verified flag
+* update of the token moderation contract
+  - on-chain views to give other contracts the ability to use the flags set by moderators
+* update of the issuer contract, new features, on-chain securities against scammers
+  - more modular architecture
+  - the data of the old contract was transferred into the new one so that it does not impact users at all
+  - added `burn_supply` endpoint for artists to burn remaining supply
+  - intoducing a 1 hour delay for the publication of Generative Tokens to prevent duplicates
+  - no more batch minting
+  - 1-hour lock for new generative tokens only published by un-verified artists (to fight against scammers)
+  - tokens moderated cannot be minted anymore
+  - user banned cannot publish Generative Tokens anymore
+* front-end:
+  - added the `locked` page under the `explore` tab. This is where tokens locked for 1-hour will show up before hitting the explore page once they are not locked
+  - verification badge: users verified on the contract by the moderation team will now have a badge next to their name
+  - added a setting `Display editions burnt on cards` to reflect the new `burn_supply` entry point directly on the token cards (default off)
+  - improved the lock on the mint button to reflect the 1-hour lock on the contract (with a nice cooldown)
+
 # 30/12/2021
 
 * gentk ownership optimization

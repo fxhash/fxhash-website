@@ -47,7 +47,7 @@ export function UserHeader({ user }: Props) {
               message="This user was verified by the moderation team"
               className={cs(style.badge)}
             >
-              <i className="fas fa-badge-check"/>
+              <i aria-hidden className="fas fa-badge-check"/>
             </HoverTitle>
           )}
         </h1>
