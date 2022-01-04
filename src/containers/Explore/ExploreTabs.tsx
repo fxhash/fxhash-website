@@ -4,7 +4,8 @@ import { TabDefinition, Tabs } from "../../components/Layout/Tabs"
 
 const definition: TabDefinition[] = [
   { name: "gallery", props: { href: "/explore" } },
-  { name: "reveal feed", props: { href: "/explore/reveal-feed" } }
+  { name: "locked", props: { href: "/explore/locked" } },
+  { name: "reveal feed", props: { href: "/explore/reveal-feed" } },
 ]
 
 interface TabProps {

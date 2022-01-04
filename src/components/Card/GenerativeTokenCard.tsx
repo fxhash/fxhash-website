@@ -10,20 +10,26 @@ import { MintProgress } from "../Artwork/MintProgress"
 import { Spacing } from "../Layout/Spacing"
 import { getGenerativeTokenUrl } from "../../utils/generative-token"
 import { displayMutez } from "../../utils/units"
+import { useMemo, useState } from "react"
+import { Countdown } from "../Utils/Countdown"
 
 
 interface Props {
   token: GenerativeToken
   className?: string
   displayPrice?: boolean
+  lockedUntil?: string
 }
 
 export function GenerativeTokenCard({
   token,
   displayPrice = false,
   className,
+  lockedUntil,
 }: Props) {
   const url = getGenerativeTokenUrl(token)
+  const lockedUntilDate = useMemo<Date|null>(() => lockedUntil ? new Date(lockedUntil) : null, [lockedUntil])
+  const [unlocked, setUnlocked] = useState<boolean>(false)
 
   return (
     <Link href={url} passHref>
@@ -35,6 +41,24 @@ export function GenerativeTokenCard({
             <UserBadge user={token.author} size="regular" hasLink={false} />
           </div>
           <div>
+            {lockedUntilDate && (
+              <>
+                <Spacing size="small" />
+                {!unlocked ? (
+                  <strong className={cs(colors.gray)}>
+                    <span><i aria-hidden className="fas fa-lock"/> unlocks in </span>
+                    <Countdown
+                      until={lockedUntilDate}
+                      onEnd={() => setUnlocked(true)}
+                    />
+                  </strong>
+                ):(
+                  <strong className={cs(colors.success)}>
+                    <i aria-hidden className="fas fa-lock-open"/> unlocked
+                  </strong>
+                )}
+              </>
+            )}
             <Spacing size="small" />
             <MintProgress balance={token.balance} supply={token.supply} originalSupply={token.originalSupply}>
               {displayPrice && (

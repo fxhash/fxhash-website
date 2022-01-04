@@ -7,10 +7,7 @@ import ClientOnly from '../components/Utils/ClientOnly'
 import { ExploreGenerativeTokens } from '../containers/ExploreGenerativeTokens'
 import Head from 'next/head'
 import { TitleHyphen } from '../components/Layout/TitleHyphen'
-import { Tabs } from '../components/Layout/Tabs'
 import { ExploreTabs } from '../containers/Explore/ExploreTabs'
-
-
 
 const Explore: NextPage = () => {
   return (

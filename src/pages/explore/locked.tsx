@@ -1,24 +1,23 @@
 import type { NextPage } from 'next'
-import Head from 'next/head'
 import layout from '../../styles/Layout.module.scss'
 import cs from 'classnames'
 import { Spacing } from '../../components/Layout/Spacing'
 import { SectionHeader } from '../../components/Layout/SectionHeader'
 import ClientOnly from '../../components/Utils/ClientOnly'
+import { ExploreGenerativeTokens } from '../../containers/ExploreGenerativeTokens'
+import Head from 'next/head'
 import { TitleHyphen } from '../../components/Layout/TitleHyphen'
 import { ExploreTabs } from '../../containers/Explore/ExploreTabs'
-import { LiveFeed } from '../../containers/Explore/LiveFeed'
+import { ExploreLockedTokens } from '../../containers/Generative/ExploreLocked'
 
-
-
-const ExploreRevealFeed: NextPage = () => {
+const Explore: NextPage = () => {
   return (
     <>
       <Head>
-        <title>fxhash — feed</title>
-        <meta key="og:title" property="og:title" content="fxhash — feed"/> 
-        <meta key="description" name="description" content="Live feed of fxhash activity"/>
-        <meta key="og:description" property="og:description" content="Live feed of fxhash activity"/>
+        <title>fxhash — locked tokens</title>
+        <meta key="og:title" property="og:title" content="fxhash — explore"/> 
+        <meta key="description" name="description" content="Get a glimpse at the soon available tokens"/>
+        <meta key="og:description" property="og:description" content="Get a glimpse at the soon available tokens"/>
         <meta key="og:type" property="og:type" content="website"/>
         <meta key="og:image" property="og:image" content="https://www.fxhash.xyz/images/og/og1.jpg"/>
       </Head>
@@ -26,18 +25,19 @@ const ExploreRevealFeed: NextPage = () => {
 
       <section>
         <SectionHeader>
-          <TitleHyphen>explore / reveal feed</TitleHyphen>
+          <TitleHyphen>explore / locked works</TitleHyphen>
         </SectionHeader>
 
         <Spacing size="x-large" />
 
-        <ExploreTabs active={2} />
+        <ExploreTabs active={1} />
 
         <Spacing size="x-large"/>
 
         <main className={cs(layout['padding-big'])}>
+          <p>These tokens are currently locked and will soon will be mintable</p>
           <ClientOnly>
-            <LiveFeed />
+            <ExploreLockedTokens />
           </ClientOnly>
         </main>
       </section>
@@ -49,4 +49,4 @@ const ExploreRevealFeed: NextPage = () => {
   )
 }
 
-export default ExploreRevealFeed
+export default Explore
