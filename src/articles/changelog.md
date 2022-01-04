@@ -23,6 +23,7 @@ This update was introduced to prevent scammers from making profits using fxhash,
   - 1-hour lock for new generative tokens only published by un-verified artists (to fight against scammers)
   - tokens moderated cannot be minted anymore
   - user banned cannot publish Generative Tokens anymore
+  - creators can now mint from their token even if disabled
 * on-chain cycles:
   - we will be testing the schedule implementing on-chain !
   - a new contract defines when the platform is opened based on some defined cycles
