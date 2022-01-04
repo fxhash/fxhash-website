@@ -23,6 +23,10 @@ This update was introduced to prevent scammers from making profits using fxhash,
   - 1-hour lock for new generative tokens only published by un-verified artists (to fight against scammers)
   - tokens moderated cannot be minted anymore
   - user banned cannot publish Generative Tokens anymore
+* on-chain cycles:
+  - we will be testing the schedule implementing on-chain !
+  - a new contract defines when the platform is opened based on some defined cycles
+  - the `mint` entry-point (to mint unique iterations) and the `mint_issuer` entry point (to publish Generative Tokens) can follow different cycles now
 * front-end:
   - added the `locked` page under the `explore` tab. This is where tokens locked for 1-hour will show up before hitting the explore page once they are not locked
   - verification badge: users verified on the contract by the moderation team will now have a badge next to their name
