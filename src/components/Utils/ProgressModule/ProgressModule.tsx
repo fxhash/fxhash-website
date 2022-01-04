@@ -26,8 +26,6 @@ export function ProgressModule({
     ]
   }, [position])
 
-  console.log({ validPos, loadingPos })
-
   return (
     <div className={cs(style.container)}>
       <div className={cs(style.progress)}>

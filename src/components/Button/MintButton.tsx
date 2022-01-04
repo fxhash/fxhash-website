@@ -37,9 +37,6 @@ export function MintButton({
     return token.enabled || token.author.id === userContext.user?.id
   }, [token, userContext])
 
-  // 
-  console.log(token)
-
   return (
     <div className={cs(style.root)}>      
       {!isHidden && (

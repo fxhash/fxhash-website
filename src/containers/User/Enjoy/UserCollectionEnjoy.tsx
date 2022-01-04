@@ -39,7 +39,6 @@ export function UserCollectionEnjoy({
   }, [data, loading])
 
   const load = () => {
-    console.log("load more")
     if (!ended.current) {
       fetchMore({
         variables: {

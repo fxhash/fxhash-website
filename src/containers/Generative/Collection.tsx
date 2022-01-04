@@ -24,8 +24,6 @@ interface Props {
 }
 
 export function GenerativeCollection({ token }: Props) {
-  // const router = useRouter()
-  // console.log(router)
   const [page, setPage] = useState<number>(0)
 
   const { data, loading } = useQuery(Qu_genTokenObjkts, {
@@ -39,24 +37,6 @@ export function GenerativeCollection({ token }: Props) {
 
   // derive the active data from the active page
   const objkts: Objkt[]|null = data?.generativeToken.objkts
-
-  // when the page changes, updates the route
-  // useClientEffect(() => {
-  //   const search = new URLSearchParams(window.location.search)
-  //   const urlPage = search.get("page")
-  //   console.log(window.location)
-  //   console.log(urlPage)
-  //   // console.log(window.location)
-  //   const targetPage = (page+1)
-  //   try {
-  //     if (parseInt(urlPage) !== targetPage) {
-  //       search.set("page", ""+targetPage)
-  //       console.log(search.toString())
-  //       // window.history.pushState({}, `page ${page}`, )
-  //     }
-  //   }
-  //   catch {}
-  // }, [page])
 
   return (
     token.objktsCount > 0 ? (

@@ -84,7 +84,6 @@ export function Select({
     if (search && searcherRef.current) {
       if (searchString.length > 0) {
         const results = searcherRef.current.search(searchString)
-        console.log(results)
         // find within the options, those who match the search results
         const found: IOptions[] = []
         for (const result of results) {

@@ -39,7 +39,7 @@ export function UserBadge({
           <span className={cs(style.user_name)}>
             <span className={cs(style.prepend)}>{prependText}</span>
             <span className={cs({ [style.moderator]: isAdmin(userAlias) })}>{getUserName(userAlias, 15)}</span>
-            {verified && <i className={cs("fas", "fa-badge-check", style.verified)}/>}
+            {verified && <i aria-hidden className={cs("fas", "fa-badge-check", style.verified)}/>}
           </span>
         </a>
       </Link>
@@ -52,7 +52,7 @@ export function UserBadge({
         <span className={cs(style.user_name)}>
           <span className={cs(style.prepend)}>{prependText}</span>
           <span className={cs({ [style.moderator]: isAdmin(userAlias) })}>{getUserName(userAlias, 15)}</span>
-          {verified && <i className={cs("fas", "fa-badge-check", style.verified)}/>}
+          {verified && <i aria-hidden className={cs("fas", "fa-badge-check", style.verified)}/>}
         </span>
       </div>
     )

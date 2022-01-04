@@ -89,12 +89,9 @@ export function ButtonVariations({
     else {
       // find index of the active hash
       let idx = hashes?.indexOf(previewHash!)
-      console.log(idx)
       idx = idx === -1 || idx == null ? 0 : idx
       // compute the new index
       idx = (idx+1) % hashes.length
-      console.log(idx)
-      console.log(hashes[idx])
       onChangeHash(hashes[idx])
     }
   }
