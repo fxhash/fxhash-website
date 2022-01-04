@@ -20,7 +20,8 @@ export enum UserFlag {
   NONE          = "NONE",
   REVIEW        = "REVIEW",
   SUSPICIOUS    = "SUSPICIOUS",
-  MALICIOUS     = "MALICIOUS", 
+  MALICIOUS     = "MALICIOUS",
+  VERIFIED      = "VERIFIED",
 }
 
 export interface User {

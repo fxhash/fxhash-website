@@ -33,6 +33,7 @@ const Qu_genTokens = gql`
       author {
         id
         name
+        flag
         avatarUri
       }
       marketStats {
@@ -59,6 +60,7 @@ const Qu_tokensById = gql`
       author {
         id
         name
+        flag
         avatarUri
       }
       marketStats {

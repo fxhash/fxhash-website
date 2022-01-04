@@ -1,5 +1,6 @@
 // import style from "./GenerativeTokenCard.module.scss"
 import Link from "next/link"
+import colors from "../../styles/Colors.module.css"
 import cs from "classnames"
 import { AnchorForward } from "../Utils/AnchorForward"
 import { Card } from "./Card"
@@ -41,7 +42,7 @@ export function ObjktCard({
               )}
             </div>
             <div className={cs(style.badge)}>
-              created by 
+              <span className={cs(colors['gray-dark'])}>created by</span> 
               <UserBadge user={objkt.issuer.author} size="regular" hasLink={false} avatarSide="right" />
             </div>
           </div>

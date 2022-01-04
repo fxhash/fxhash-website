@@ -64,6 +64,9 @@ export function Navigation() {
           <Link href="/articles/collect-mint-tokens">
             <a>guide to collect</a>
           </Link>
+          <Link href="/articles/getting-verified">
+            <a>getting verified</a>
+          </Link>
           <Link href="/articles/code-of-conduct">
             <a>code of conduct</a>
           </Link>

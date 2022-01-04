@@ -75,6 +75,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
               author {
                 id
                 name
+                flag
                 avatarUri
               }
               entireCollection {
@@ -85,6 +86,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
                 owner {
                   id
                   name
+                  flag
                   avatarUri
                 }
               }

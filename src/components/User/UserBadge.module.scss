@@ -4,6 +4,19 @@
   color: var(--color-primary);
   font-weight: bold;
 
+  .user_name {
+    display: flex;
+    flex: row;
+    align-items: center;
+    gap: 0.25em;
+  }
+  
+  .verified {
+    font-size: 1.15em;
+    bottom: -1px;
+    position: relative;
+  }
+
   &.side-left {
     flex-direction: row;
   }
@@ -13,7 +26,10 @@
 
     .avatar {
       margin-right: 0;
-      margin-left: 8px;
+    }
+
+    .user_name {
+      flex-direction: row-reverse;
     }
   }
 }
@@ -28,7 +44,6 @@ a.container:hover {
 }
 
 .avatar {
-  margin-right: 8px;
   transition: all 0.3s ease-out;
 }
 
@@ -49,6 +64,7 @@ a.container:hover {
 
 .prepend {
   color: var(--color-black);
+  margin-right: 3px;
 }
 
 .avatar_mod {

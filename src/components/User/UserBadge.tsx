@@ -1,8 +1,9 @@
 import style from "./UserBadge.module.scss"
+import layout from "../../styles/Layout.module.scss"
 import cs from "classnames"
 import Link from 'next/link'
 import { User } from "../../types/entities/User"
-import { getUserName, getUserProfileLink, isAdmin, isModerator, userAliases } from "../../utils/user"
+import { getUserName, getUserProfileLink, isAdmin, isModerator, isUserVerified, userAliases } from "../../utils/user"
 import { Avatar } from "./Avatar"
 
 
@@ -25,6 +26,7 @@ export function UserBadge({
 }: Props) {
   // the user goes through an aliases check
   const userAlias = userAliases(user)
+  const verified = isUserVerified(user)
 
   return (
     hasLink ? (
@@ -34,9 +36,10 @@ export function UserBadge({
             uri={userAlias.avatarUri}
             className={cs(style.avatar, style[`avatar-${size}`], { [style.avatar_mod]: isAdmin(userAlias) })}
           />
-          <span>
-            <span className={cs(style.prepend)}>{prependText} </span>
+          <span className={cs(style.user_name)}>
+            <span className={cs(style.prepend)}>{prependText}</span>
             <span className={cs({ [style.moderator]: isAdmin(userAlias) })}>{getUserName(userAlias, 15)}</span>
+            {verified && <i className={cs("fas", "fa-badge-check", style.verified)}/>}
           </span>
         </a>
       </Link>
@@ -46,9 +49,10 @@ export function UserBadge({
           uri={userAlias.avatarUri}
           className={cs(style.avatar, style[`avatar-${size}`], { [style.avatar_mod]: isAdmin(userAlias) })}
         />
-        <span>
-          <span className={cs(style.prepend)}>{prependText} </span>
+        <span className={cs(style.user_name)}>
+          <span className={cs(style.prepend)}>{prependText}</span>
           <span className={cs({ [style.moderator]: isAdmin(userAlias) })}>{getUserName(userAlias, 15)}</span>
+          {verified && <i className={cs("fas", "fa-badge-check", style.verified)}/>}
         </span>
       </div>
     )

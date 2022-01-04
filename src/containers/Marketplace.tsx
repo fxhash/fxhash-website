@@ -17,9 +17,8 @@ const ITEMS_PER_PAGE = 10
 const Qu_offers = gql`
   query Query ($skip: Int, $take: Int, $price: String, $createdAt: String) {
     offers(skip: $skip, take: $take, price: $price, createdAt: $createdAt) {
+      id
       price
-      id
-      id
       objkt {
         id
         name
@@ -34,6 +33,7 @@ const Qu_offers = gql`
         owner {
           id
           name
+          flag
           avatarUri
         }
         issuer {
@@ -42,6 +42,7 @@ const Qu_offers = gql`
           author {
             id
             name
+            flag
             avatarUri
           }
         }
@@ -70,6 +71,7 @@ const Qu_offersByIds = gql`
         owner {
           id
           name
+          flag
           avatarUri
         }
         issuer {
@@ -78,6 +80,7 @@ const Qu_offersByIds = gql`
           author {
             id
             name
+            flag
             avatarUri
           }
         }

@@ -22,7 +22,6 @@ import { Offer } from '../types/entities/Offer'
 import { ObjktCard } from '../components/Card/ObjktCard'
 import nl2br from 'react-nl2br'
 import { TitleHyphen } from '../components/Layout/TitleHyphen'
-import { PerformanceTimings } from '../utils/performance'
 import { getGenerativeTokenUrl } from '../utils/generative-token'
 import { useContext } from 'react'
 import { SettingsContext } from '../context/Theme'
@@ -198,8 +197,8 @@ export async function getServerSideProps() {
           author {
             id
             name
+            flag
             avatarUri
-            description
           }
         }
         generativeTokens(skip: $skip, take: $take) {
@@ -217,6 +216,7 @@ export async function getServerSideProps() {
           author {
             id
             name
+            flag
             avatarUri
           }
         }
@@ -233,12 +233,14 @@ export async function getServerSideProps() {
               author {
                 id
                 name
+                flag
                 avatarUri
               }
             }
             owner {
               id
               name
+              flag
               avatarUri
             }
             offer {

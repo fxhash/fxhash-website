@@ -32,6 +32,7 @@ const Qu_genTokens = gql`
         id
         name
         avatarUri
+        flag
       }
     }
   }
@@ -55,6 +56,7 @@ const Qu_tokensById = gql`
         id
         name
         avatarUri
+        flag
       }
     }
   }

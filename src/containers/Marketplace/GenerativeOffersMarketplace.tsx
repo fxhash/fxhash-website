@@ -30,12 +30,14 @@ const Qu_offers = gql`
           issuer {
             id
             name
+            flag
             avatarUri
           }
         }
         owner {
           id
           name
+          flag
           avatarUri
         }
         issuer {
@@ -43,6 +45,7 @@ const Qu_offers = gql`
           author {
             id
             name
+            flag
             avatarUri
           }
         }

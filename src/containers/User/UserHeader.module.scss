@@ -44,3 +44,13 @@
 .moderator {
   color: var(--color-success);
 }
+
+.badge {
+  margin-left: 15px;
+  color: var(--color-secondary);
+}
+
+.name {
+  display: flex;
+  align-items: center;
+}

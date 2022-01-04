@@ -19,6 +19,7 @@ export const Qu_genToken = gql`
       lockEnd
       author {
         id
+        flag
         name
         avatarUri
       }
@@ -27,6 +28,7 @@ export const Qu_genToken = gql`
         owner {
           id
           name
+          flag
           avatarUri
         }
         name
@@ -40,6 +42,7 @@ export const Qu_genToken = gql`
           author {
             id
             name
+            flag
             avatarUri
           }
         }
@@ -53,11 +56,13 @@ export const Qu_genToken = gql`
         issuer {
           id
           name
+          flag
           avatarUri
         }
         target {
           id
           name
+          flag
           avatarUri
         }
         objkt {

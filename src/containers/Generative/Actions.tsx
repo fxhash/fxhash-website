@@ -30,11 +30,13 @@ const Qu_genTokActions = gql`
         issuer {
           id
           name
+          flag
           avatarUri
         }
         target {
           id
           name
+          flag
           avatarUri
         }
         objkt {

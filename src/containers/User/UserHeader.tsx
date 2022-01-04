@@ -5,7 +5,7 @@ import effects from "../../styles/Effects.module.scss"
 import cs from "classnames"
 import { User } from "../../types/entities/User"
 import { Avatar } from "../../components/User/Avatar"
-import { getUserName, isAdmin, isModerator, userAliases } from "../../utils/user"
+import { getUserName, isAdmin, isModerator, isUserVerified, userAliases } from "../../utils/user"
 import nl2br from "react-nl2br"
 import { useContext, useMemo } from "react"
 import { UserContext } from "../UserProvider"
@@ -15,6 +15,7 @@ import useFetch, { CachePolicies } from "use-http"
 import { useTzProfileVerification } from "../../utils/hookts"
 import { UserVerification } from "./UserVerification"
 import { Spacing } from "../../components/Layout/Spacing"
+import { HoverTitle } from "../../components/Utils/HoverTitle"
 
 
 interface Props {
@@ -26,17 +27,28 @@ export function UserHeader({ user }: Props) {
   const userCtx = useContext(UserContext)
   const userConnected = userCtx.user!
   const { tzProfileData, loading } = useTzProfileVerification(user.id)
+  const verified = isUserVerified(user)
 
   return (
     <header className={cs(style.container, layout['padding-small'])}>
       <Avatar uri={user.avatarUri} className={cs(style.avatar, effects['drop-shadow-big'])} />
       <div>
         {user.id && <small className={cs(colors['gray-light'])}>
-        <a href={ 'https://tzkt.io/'+ user.id } className={cs(style.tz_link)}>
-          {user.id}
-        </a>
+          <a href={ 'https://tzkt.io/'+ user.id } className={cs(style.tz_link)}>
+            {user.id}
+          </a>
         </small>}
-        <h1 className={cs({ [style.moderator]: isAdmin(user) })}>{ getUserName(user) }</h1>
+
+        <h1 className={cs(style.name, { [style.moderator]: isAdmin(user) })}>
+          <span>{ getUserName(user) }</span>
+          <HoverTitle
+            message="This user was verified by the moderation team"
+            className={cs(style.badge)}
+          >
+            <i className="fas fa-badge-check"/>
+          </HoverTitle>
+        </h1>
+
         {(tzProfileData||loading) && (
           <>
             <Spacing size="2x-small"/>

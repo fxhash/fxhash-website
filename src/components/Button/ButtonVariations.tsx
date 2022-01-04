@@ -5,6 +5,7 @@ import { Button } from "."
 import { useMemo } from "react"
 import { generateFxHash } from "../../utils/hash"
 import { uniq } from "lodash"
+import { HoverTitle } from "../Utils/HoverTitle"
 
 interface Props {
   token: GenerativeToken
@@ -99,9 +100,7 @@ export function ButtonVariations({
   }
 
   return (
-    <div className={cs(style.wrapper, {
-      [style.hover_enabled]: !!hoverMessage
-    })}>
+    <HoverTitle message={hoverMessage}>
       <Button
         type="button"
         size="small"
@@ -112,11 +111,6 @@ export function ButtonVariations({
       >
         variations
       </Button>
-      {hoverMessage && (
-        <div className={cs(style.hover_message)}>
-          {hoverMessage}
-        </div>
-      )}
-    </div>
+    </HoverTitle>
   )
 }

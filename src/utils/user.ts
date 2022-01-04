@@ -1,4 +1,4 @@
-import { ConnectedUser, User, UserAlias, UserItems, UserRole } from "../types/entities/User"
+import { ConnectedUser, User, UserAlias, UserFlag, UserItems, UserRole } from "../types/entities/User"
 import { truncateMiddle } from "./strings"
 
 export function userHasName(user: ConnectedUser): boolean {
@@ -117,4 +117,11 @@ export function userAliases(user: User): User {
     }
   }
   return user
+}
+
+/**
+ * Is the user verified in regards to its flags ?
+ */
+export function isUserVerified(user: User): boolean {
+  return user.flag === UserFlag.VERIFIED
 }

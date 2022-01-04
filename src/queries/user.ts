@@ -23,12 +23,14 @@ export const Qu_userGenTokens = gql`
         id
         price
         supply
+        originalSupply
         balance
         name
         metadata
         author {
           id
           name
+          flag
           metadataUri
           avatarUri
         }
@@ -48,6 +50,7 @@ export const Qu_userObjkts = gql`
         owner {
           id
           name
+          flag
           avatarUri
         }
         issuer {
@@ -56,6 +59,7 @@ export const Qu_userObjkts = gql`
           author {
             id
             name
+            flag
             avatarUri
           }
         }
@@ -86,6 +90,7 @@ export const Qu_userOffers = gql`
           owner {
             id
             name
+            flag
             avatarUri
           }
           offer {
@@ -96,6 +101,7 @@ export const Qu_userOffers = gql`
             author {
               id
               name
+              flag
               avatarUri
             }
           }
@@ -117,11 +123,13 @@ export const Qu_userActions = gql`
         issuer {
           id
           name
+          flag
           avatarUri
         }
         target {
           id
           name
+          flag
           avatarUri
         }
         token {

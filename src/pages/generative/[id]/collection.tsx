@@ -151,6 +151,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
                 id
                 name
                 avatarUri
+                flag
               }
             }
           }
