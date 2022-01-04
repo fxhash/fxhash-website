@@ -16,6 +16,7 @@ import { useTzProfileVerification } from "../../utils/hookts"
 import { UserVerification } from "./UserVerification"
 import { Spacing } from "../../components/Layout/Spacing"
 import { HoverTitle } from "../../components/Utils/HoverTitle"
+import { UserModeration } from "./UserModeration"
 
 
 interface Props {
@@ -41,12 +42,14 @@ export function UserHeader({ user }: Props) {
 
         <h1 className={cs(style.name, { [style.moderator]: isAdmin(user) })}>
           <span>{ getUserName(user) }</span>
-          <HoverTitle
-            message="This user was verified by the moderation team"
-            className={cs(style.badge)}
-          >
-            <i className="fas fa-badge-check"/>
-          </HoverTitle>
+          {verified && (
+            <HoverTitle
+              message="This user was verified by the moderation team"
+              className={cs(style.badge)}
+            >
+              <i className="fas fa-badge-check"/>
+            </HoverTitle>
+          )}
         </h1>
 
         {(tzProfileData||loading) && (
@@ -56,22 +59,29 @@ export function UserHeader({ user }: Props) {
           </>
         )}
         <p>{ nl2br(user.description) }</p>
-        {userConnected && userConnected.id === user.id && (
-          <div style={{
-            display: "inline-block"
-          }}>
-            <Link href="/edit-profile" passHref>
-              <Button
-                isLink
-                style={{
-                  alignSelf: "flex-start"
-                }}
-                size="small"
-              >
-                edit profile
-              </Button>
-            </Link>
-          </div>
+        {userConnected && (
+          <>
+            {userConnected.id === user.id && (
+              <div style={{
+                display: "inline-block"
+              }}>
+                <Link href="/edit-profile" passHref>
+                  <Button
+                    isLink
+                    style={{
+                      alignSelf: "flex-start"
+                    }}
+                    size="small"
+                  >
+                    edit profile
+                  </Button>
+                </Link>
+              </div>
+            )}
+            <UserModeration
+              user={user}
+            />
+          </>
         )}
       </div>
     </header>

@@ -55,3 +55,8 @@ export interface ModerateCall {
   tokenId: number
   state: number
 }
+
+export interface ModerateUserStateCall {
+  address: string
+  state: number
+}

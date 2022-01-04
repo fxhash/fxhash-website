@@ -24,6 +24,14 @@ export enum UserFlag {
   VERIFIED      = "VERIFIED",
 }
 
+export const UserFlagValues: Record<UserFlag, number> = {
+  NONE          : 0,
+  REVIEW        : 1,
+  SUSPICIOUS    : 2,
+  MALICIOUS     : 3,
+  VERIFIED      : 10,
+}
+
 export interface User {
   id: string
   name?: string

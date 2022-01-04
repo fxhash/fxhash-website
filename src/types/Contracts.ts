@@ -14,11 +14,12 @@ export type ContractOperationCallback = (status: ContractOperationStatus, data?:
 export type ContractInteractionMethod<T> = (data: T, operationCallback?: ContractOperationCallback, currentTry?: number) => any
 
 export enum FxhashContract {
-  ISSUER        = "ISSUER",
-  MARKETPLACE   = "MARKETPLACE",
-  OBJKT         = "OBJKT",
-  REGISTER      = "REGISTER",
-  MODERATION    = "MODERATION",
+  ISSUER            = "ISSUER",
+  MARKETPLACE       = "MARKETPLACE",
+  OBJKT             = "OBJKT",
+  REGISTER          = "REGISTER",
+  MODERATION        = "MODERATION",
+  USER_MODERATION   = "USER_MODERATION",
 }
 
 export type ContractCallHookReturn<T> = {

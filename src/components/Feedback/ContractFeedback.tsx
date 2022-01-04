@@ -11,6 +11,7 @@ interface Props {
   loading: boolean
   successMessage?: string
   errorMessage?: string
+  className?: string
 }
 
 export function messageFromState(state: ContractOperationStatus): string {
@@ -30,12 +31,13 @@ export function ContractFeedback({
   error,
   loading,
   successMessage = "The operation was successfully injected into the blockchain",
-  errorMessage = "There was an error when injecting into the blockchain"
+  errorMessage = "There was an error when injecting into the blockchain",
+  className,
 }: Props) {
   return (
     <>
       {(loading || success || error) && (
-        <div className={cs(style.container)}>
+        <div className={cs(style.container, className)}>
           {error ? (
             <span className={cs(style.error)}>{ errorMessage }</span>
           ):(
