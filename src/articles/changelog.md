@@ -31,7 +31,7 @@ This update was introduced to prevent scammers from making profits using fxhash,
   - added the `locked` page under the `explore` tab. This is where tokens locked for 1-hour will show up before hitting the explore page once they are not locked
   - verification badge: users verified on the contract by the moderation team will now have a badge next to their name
   - added a setting `Display editions burnt on cards` to reflect the new `burn_supply` entry point directly on the token cards (default off)
-  - improved the lock on the mint button to reflect the 1-hour lock on the contract (with a nice cooldown)
+  - improved the lock on the mint button to reflect the 1-hour lock on the contract (with a nice cooldown !)
 
 # 30/12/2021
 
