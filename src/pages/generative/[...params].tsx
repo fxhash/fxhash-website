@@ -34,6 +34,7 @@ import { format } from 'date-fns'
 import { getGenerativeTokenMarketplaceUrl } from '../../utils/generative-token'
 import { generateFxHash } from '../../utils/hash'
 import { ButtonVariations } from '../../components/Button/ButtonVariations'
+import { MintButton } from '../../components/Button/MintButton'
 
 
 interface Props {
@@ -47,12 +48,6 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
 
   // used to preview the token in the iframe with different hashes
   const [previewHash, setPreviewHash] = useState<string|null>(token.metadata.previewHash || null)
-
-  const [mintLocked, setMintLocked] = useState<boolean>(
-    (token.flag === GenTokFlag.CLEAN || (token.supply-token.balance) === 0) 
-      ? false 
-      : Date.now() - (new Date(token.createdAt)).getTime() < 1*3600*1000
-  )
 
   const reload = () => {
     if (iframeRef.current) {
@@ -131,36 +126,7 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
               originalSupply={token.originalSupply}
             />
             <Spacing size="large"/>
-
-            {mintLocked && (
-              <strong>Token mint is locked because the token was posted less than an hour ago. If you still want to mint, please verify if the author is legit.</strong>
-            )}
-            <Spacing size="2x-small"/>
-            
-            {!([GenTokFlag.MALICIOUS, GenTokFlag.HIDDEN].includes(token.flag)) && token.balance > 0 && (
-              <>
-                {!token.enabled && <small>token is currently <strong>disabled</strong> by author</small>}
-                <div className={cs(style.lock_container)}>
-                  <Link href={`/mint/${token.id}`} passHref>
-                    <Button
-                      isLink
-                      color="secondary"
-                      disabled={!token.enabled || mintLocked}
-                    >
-                      Mint unique token — {displayMutez(token.price)} tez
-                    </Button>
-                  </Link>
-
-                  {mintLocked && (
-                    <Unlock
-                      locked={true}
-                      onClick={() => setMintLocked(false)}
-                    />
-                  )}
-                </div>
-              </>
-            )}
-
+            <MintButton token={token} isLink={true} />
             <Spacing size="regular" />
             <Link href={getGenerativeTokenMarketplaceUrl(token)} passHref>
               <Button isLink={true} size="small">

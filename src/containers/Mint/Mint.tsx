@@ -12,6 +12,7 @@ import { Button } from "../../components/Button"
 import { displayMutez } from "../../utils/units"
 import { useRouter } from "next/router"
 import { getUserName } from "../../utils/user"
+import { MintButton } from "../../components/Button/MintButton"
 
 
 interface Props {
@@ -57,13 +58,12 @@ export function Mint({ token }: Props) {
         loading={loading}
       />
 
-      <Button 
-        color="secondary"
+      <MintButton
+        isLink={false}
+        token={token}
         onClick={mint}
         state={loading ? "loading" : "default"}
-      >
-        Mint token — {displayMutez(token.price)} tez
-      </Button>
+      />
     </div>
   )
 }

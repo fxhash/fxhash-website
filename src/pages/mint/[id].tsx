@@ -87,6 +87,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
               balance
               enabled
               royalties
+              lockEnd
               author {
                 id
                 name
