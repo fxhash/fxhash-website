@@ -163,7 +163,7 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
             >
               reload
             </Button>
-            <Link href={ipfsGatewayUrl(token.metadata?.artifactUri)} passHref>
+            <Link href={artifactUrl} passHref>
               <Button
                 isLink={true}
                 size="small"
