@@ -173,12 +173,13 @@ If the solutions provided above don't meet your needs, you can use other tools t
 
 These are the addresses of the smart contracts used by fxhash
 
-* `issuer` (Generative Tokens): KT1AEVuykWeuuFX7QkEAMNtffzwhe1Z98hJS
+* `issuer` (Generative Tokens): KT1XCoGnfupWk7Sp8536EfrxcP73LmT68Nyr
 * `gentks` (FA2 implementation): KT1KEa8z6vWXDJrVqtMrAeDVzsvxat3kHaCE
 * `marketplace`: KT1Xo5B7PNBAeynZPmca4bRh6LQow4og1Zb9
 * `user register`: KT1Ezht4PDKZri7aVppVGT4Jkw39sesaFnww
-* `token moderation`: KT1BQqRn7u4p1Z1nkRsGEGp8Pc92ftVFqNMg
-* `user moderation`: KT1CgsLyNpqFtNw3wdfGasQYZYfgsWSMJfGo
+* `token moderation`: KT1HgVuzNWVvnX16fahbV2LrnpwifYKoFMRd
+* `user moderation`: KT1TWWQ6FtLoosVfZgTKV2q68TMZaENhGm54
+* `cycles`: KT1ELEyZuzGXYafD2Gar6iegZN1YdQR3n3f5
 
 
 # About the moderation contracts
@@ -187,3 +188,13 @@ You can get some details on the moderation systems:
 
 * [User Moderation system](https://github.com/fxhash/system-descriptions/blob/master/USER_MODERATION.md)
 * [Generative Token moderation system](https://www.fxhash.xyz/articles/moderation-system)
+
+
+# Updates
+
+## 05/01/2022
+
+* A new issuer contract was deployed and will replace the new one. Some storage changes were made to optimize the space. Metadata was moved into the ledger. Ledger is now referenced by the issuer ID only, and the creator is now a field. This simplifies lookups on the contract side.
+  - issuer: `KT1AEVuykWeuuFX7QkEAMNtffzwhe1Z98hJS` -> `KT1XCoGnfupWk7Sp8536EfrxcP73LmT68Nyr`
+  - user moderation: `KT1CgsLyNpqFtNw3wdfGasQYZYfgsWSMJfGo` -> `KT1TWWQ6FtLoosVfZgTKV2q68TMZaENhGm54`
+  - user moderation: `KT1BQqRn7u4p1Z1nkRsGEGp8Pc92ftVFqNMg` -> `KT1HgVuzNWVvnX16fahbV2LrnpwifYKoFMRd`
