@@ -16,7 +16,7 @@ const ITEMS_PER_PAGE = 10
 
 const Qu_genTokens = gql`
   query Query ($skip: Int, $take: Int) {
-    generativeTokens: lockedGenerativeTokens(skip: $skip, take: $take) {
+    lockedGenerativeTokens(skip: $skip, take: $take) {
       id
       name
       slug
@@ -59,11 +59,11 @@ export const ExploreLockedTokens = ({}: Props) => {
 
   useEffect(() => {
     if (!loading) {
-      if (currentLength.current === data.generativeTokens.length) {
+      if (currentLength.current === data.lockedGenerativeTokens.length) {
         ended.current = true
       }
       else {
-        currentLength.current = data.generativeTokens.length
+        currentLength.current = data.lockedGenerativeTokens.length
       }
     }
   }, [data, loading])
@@ -72,14 +72,14 @@ export const ExploreLockedTokens = ({}: Props) => {
     if (!ended.current) {
       fetchMore({
         variables: {
-          skip: data.generativeTokens.length,
+          skip: data.lockedGenerativeTokens.length,
           take: ITEMS_PER_PAGE
         }
       })
     }
   }
 
-  const generativeTokens: GenerativeToken[] = data?.generativeTokens
+  const generativeTokens: GenerativeToken[] = data?.lockedGenerativeTokens
 
   return (
     <>
