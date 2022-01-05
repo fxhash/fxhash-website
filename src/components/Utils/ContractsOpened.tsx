@@ -1,45 +1,56 @@
 import style from "./ContractsOpened.module.scss"
 import cs from "classnames"
-import { useContractStorage } from "../../utils/hookts"
 import { getMsUntilClose, getNextCycleStartTime } from "../../utils/schedule"
-import { useEffect, useState } from "react"
-import { getLocalTimezone } from "../../utils/timzones"
+import { useMemo, useState } from "react"
+import { Countdown } from "./Countdown"
+import { addHours } from "date-fns"
 
 export function ContractsOpened() {
-  const { data: issuerStorage } = useContractStorage(process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_ISSUER!)
-  const [timeUntilClose, setTimeUntilClose] = useState<number>(0)
-  const [nextCycleStart, setNextCycleStart] = useState<number>(0)
-  const [mintTimeStatus, setMintTimeStatus] = useState<string>()
-  
-  useEffect(() => {
-    setTimeUntilClose(getMsUntilClose())
+  /**
+   * This whole thing needs to be rewritten properly with actual cycles, using tzkt
+   * to get list of cycles in the allower and the cycles that matches in the bigmap
+   * of the cycles contract (2 queries, only once on the client, in context) 
+   */
+  const [nextCycleStart, setNextCycleStart] = useState(getNextCycleStartTime())
+  const [timeToClose, setTimeToClose] = useState(getMsUntilClose())
+  const nextCycleDate = useMemo(() => new Date(nextCycleStart), [nextCycleStart])
+  const nextCycleEnd = useMemo(() => addHours(new Date(nextCycleStart), -11), [nextCycleStart])
+  const isOpened = timeToClose >= 0
+
+  const onEnd = () => {
     setNextCycleStart(getNextCycleStartTime())
-    if (timeUntilClose < 0) {
-      // we are closed
-      const nextOpen = new Date(nextCycleStart)
-      const nextOpenString = nextOpen.toLocaleTimeString("en-US", {hour:'numeric'})
-      setMintTimeStatus(`(opens at ${nextOpenString})`)
-    }
-    else {
-      // we are open
-      const nextClose = new Date(Date.now() + timeUntilClose)
-      const nextCloseString = nextClose.toLocaleTimeString("en-US", {hour:'numeric'})
-      setMintTimeStatus(`(closes at ${nextCloseString})`)
-    }
-  })
+    setTimeToClose(getMsUntilClose())
+    setTimeout(() => {
+      setNextCycleStart(getNextCycleStartTime())
+      setTimeToClose(getMsUntilClose())
+    }, 2000)
+  }
   
-  return issuerStorage ? (
-    // <div className={cs(style.state, { [style.state_closed]: issuerStorage.paused })}>
-    //   <span>
-    //     MINT {issuerStorage.paused ? "CLOSED" : "OPENED"} {mintTimeStatus}
-    //   </span>
-    //   <div/>
-    // </div>
-    <div className={cs(style.state, style.state_closed)}>
-      <span>
-        MINT CLOSED UNTIL JAN 5, 12h UTC
-      </span>
-      <div/>
-    </div>
-  ):null
+  return (
+    <>
+      {!isOpened ? (
+        <div className={cs(style.state, style.state_closed)}>
+          <span>OPEN IN</span>
+          <span>
+            <Countdown
+              until={nextCycleDate}
+              onEnd={onEnd}
+            />
+          </span>
+          <div/>
+        </div>
+      ):(
+        <div className={cs(style.state)}>
+          <span>OPENED FOR </span>
+          <span>
+            <Countdown
+              until={nextCycleEnd}
+              onEnd={onEnd}
+            />
+          </span>
+          <div/>
+        </div>
+      )}
+    </>
+  )
 }
