@@ -9,6 +9,7 @@ export const Qu_objkt = gql`
       owner {
         id
         name
+        flag
         avatarUri
       }
       name
@@ -22,6 +23,7 @@ export const Qu_objkt = gql`
         author {
           id
           name
+          flag
           avatarUri
         }
       }
@@ -38,6 +40,7 @@ export const Qu_objkt = gql`
         issuer {
           id
           name
+          flag
           avatarUri
         }
       }
@@ -49,11 +52,13 @@ export const Qu_objkt = gql`
         issuer {
           id
           name
+          flag
           avatarUri
         }
         target {
           id
           name
+          flag
           avatarUri
         }
         objkt {
