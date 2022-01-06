@@ -27,9 +27,9 @@ interface Props {
  *  - display a loader while <iframe> is loading
  *  - once iframe is loaded, reveal it with a flipping effect
  */
-export function Reveal({ hash, generativeUri, previeweUri, features }: Props) {
+export function Reveal({ generativeUri, previeweUri, features }: Props) {
   const iframeRef = useRef<HTMLIFrameElement>(null)
-  const viewUrl = useMemo<string>(() => `${ipfsGatewayUrl(generativeUri, "ipfsio")}?fxhash=${hash}`, [generativeUri])
+  const viewUrl = useMemo<string>(() => ipfsGatewayUrl(generativeUri, "ipfsio"), [generativeUri])
 
   const reloadIframe = () => {
     if (iframeRef.current) {
