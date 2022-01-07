@@ -19,7 +19,7 @@ interface Props {
 
 const RevealPage: NextPage<Props> = ({ hash, token }) => {
   // these are the URIs to the content to be revealed to the user
-  const [generativeUri, setGenerativeUri] = useState<string|null>(token && (token.assigned ? token.metadata!.artifactUri : null))
+  const [generativeUri, setGenerativeUri] = useState<string|null>(token && (token.assigned ? token.metadata!.generativeUri : null))
   const [previewUri, setPreviewUri] = useState<string|null>(token && (token.assigned ? token.metadata!.displayUri : null))
   const [features, setFeatures] = useState<TokenFeature[]|null|undefined>(token && (token.assigned ? token.features : null))
 
