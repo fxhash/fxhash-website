@@ -253,7 +253,7 @@ Your program must use pseudorandom number generation with a seed, where the seed
 
 ## Other
 
-- the ZIP file must be **under 15 Mo**. Please try to optimize your projects as much as possible.
+- the ZIP file must be **under 15 Mb**. Please try to optimize your projects as much as possible.
 
 # Best practices and common mistakes
 
