@@ -5,6 +5,14 @@ description: 'The fxhash changelog'
 ---
 
 
+# 07/01/2021
+
+* added boolean `isFxpreview` to check if the code is loaded in preview mode (server taking the capture)
+* increased the max delay from 40s to 80s
+* added support for SVG elements in the sandbox
+* increased the size limit from 15MB to 30MB
+
+
 # 04/01/2022
 
 This update was introduced to prevent scammers from making profits using fxhash, and to secure collectors at the contract level. The Issuer contract was swapper for a new contract and all the data from the old one was transferred to provide the best experience for the community. Old tokens will benefit from the new feature `burn_supply`.

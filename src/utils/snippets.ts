@@ -18,6 +18,7 @@ export const snippetFromUrl = `
         }
       }
       var fxrand = sfc32(...hashes)
+      var isFxpreview = new URLSearchParams(window.location.search).get('preview') === "1"
       function fxpreview() {
         console.log("fxhash: TRIGGER PREVIEW")
       }

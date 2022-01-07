@@ -82,6 +82,9 @@ fxhash requires you to insert the following code snippet in the `<head>` section
     }
   }
   var fxrand = sfc32(...hashes)
+  // true if preview mode active, false otherwise
+  // you can append preview=1 to the URL to simulate preview active
+  var isFxpreview = new URLSearchParams(window.location.search).get('preview') === "1"
   // call this method to trigger the preview
   function fxpreview() {
     console.log("fxhash: TRIGGER PREVIEW")
@@ -95,10 +98,12 @@ This snippet serves 2 purposes:
 - some parts of it will be replaced by fxhash to generate unique tokens from your GT (a static hash will be inserted instead of the random generation)
 - during the development stages, it emulates eventual hashes your program could get as an input. Every time you refresh the page, it generates a random hash. This way, you can really build your GT properly before deploying it.
 
-The code snippet exposes 2 variables:
+The code snippet exposes 4 variables:
 
 - `fxhash`: a random 51 characters base 58 encoded string (designed to have the same signature has a Tezos transaction hash). When someone mints a unique Token from a Generative Token, the transaction hash is hardcoded in place of the code that generates a random one.
 - `fxrand()`: a PRNG function that generates deterministic PRN between 0 and 1. **Simply use it instead of Math.random()**.
+- `fxpreview()`: a function you can call whenever the code is ready to be captured
+- `isFxpreview`: a boolean, true when the code is executed to take the capture, false otherwise
 
 **Those 2 variable/function will be globally accessible by your program, and must be used to drive any random process required by your piece**.
 
