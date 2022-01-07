@@ -79,17 +79,22 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## How to contribute
 
+You can find opened issues on the [https://github.com/fxhash/fxhash-website/issues](https://github.com/fxhash/fxhash-website/issues) tab. If you want to implement a feature, please check first if an issue is opened and see what needs to be implemented in that regard. If no issue is opened, feel free to implement your feature as you wish.
+
+### Workflow
+
 * fork the **dev** branch of this repo
 * create a branch to implement a feature or fix a bug
 * when done, push the branch to your git repository fork
 * create a pull request againts the **dev** branch
-* I will review it and merge it eventually
+* the team will review it, and either request changes or merge it
 
 If you find a bug with the front end, you can create an issue.
 
 ### Branch naming convention
 
 * `feature/_`: add a feature
+* `change/_`: a change on a particular feature
 * `bug/_`: fix a bug
 
 ### Stack used
