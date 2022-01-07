@@ -45,7 +45,7 @@ export const StepConfigureCapture: StepComponent = ({ onNext, state }) => {
 
   const captureTest = () => {
     post({
-      url: `${getIpfsIoUrl(state.cidUrlParams!)}?fxhash=${state.previewHash}`,
+      url: `${getIpfsIoUrl(state.cidUrlParams!)}?fxhash=${state.previewHash}&preview=1`,
       mode: settings.mode,
       triggerMode: settings.triggerMode,
       canvasSelector: settings.canvasSelector,
