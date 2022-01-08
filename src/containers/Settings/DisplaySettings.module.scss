@@ -1,0 +1,28 @@
+.settings_card {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 470px;
+
+  .settings_controls {
+    flex-grow: 2;
+
+    & > * {
+      min-height: 34px;
+    }
+
+    & > *+* {
+      margin-top: 12px;
+    }
+  }
+  
+  .card_wrapper {
+    font-size: var(--font-size-regular);
+    width: 320px;
+    pointer-events: none;
+  }
+}
+
+.slider {
+  width: auto !important;
+}

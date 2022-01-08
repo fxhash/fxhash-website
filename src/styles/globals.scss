@@ -47,12 +47,17 @@ body {
   --font-size-h3: 2rem;
   --font-size-h2: 2.4375rem;
   --font-size-h1: 3rem;
+
+  --cards-border-width: 3px;
+  --cards-shadow: 19px;
+  --cards-gap: 30px;
 }
 
 .dark {
   --color-white: #242424;
   --color-black: white;
   --color-gray: #a5a5a5;
+  --color-gray-vlight: #363636;
   --color-gray-light: #505050;
   --color-gray-dark: #999999;
   --color-secondary: #c8ff00;

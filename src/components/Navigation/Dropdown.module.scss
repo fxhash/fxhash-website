@@ -19,6 +19,7 @@
   transition: all 0.2s ease-out;
   pointer-events: none;
   z-index: 100000;
+  visibility: hidden;
 
   & > a {
     padding-top: 5px !important;
@@ -48,6 +49,7 @@
   opacity: 1;
   transform: translateY(0px);
   pointer-events: all;
+  visibility: visible;
 }
 
 @media (max-width: $breakpoint-md) {

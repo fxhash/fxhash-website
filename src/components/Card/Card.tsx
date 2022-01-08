@@ -8,17 +8,19 @@ import { useInView } from "react-intersection-observer"
 
 
 interface Props {
-  thumbnailUri: string|null|undefined
+  thumbnailUri?: string|null
   undesirable?: boolean
+  displayDetails?: boolean
 }
 
 export function Card({
   thumbnailUri,
   undesirable = false,
+  displayDetails = true,
   children
 }: PropsWithChildren<Props>) {
   const [loaded, setLoaded] = useState<string|null>(null)
-  const url = useMemo(() => ipfsGatewayUrl(thumbnailUri), [])
+  const url = useMemo(() => thumbnailUri && ipfsGatewayUrl(thumbnailUri), [])
   const { ref, inView } = useInView()
 
   // lazy load the image
@@ -46,17 +48,17 @@ export function Card({
           backgroundImage: loaded ? `url(${loaded})` : "none"
         }}
       >
-        {!loaded && (
+        {!loaded && url && (
           <div className={cs(style.loader)}>
             <Loader color="white" />
           </div>
         )}
-        {!url && (
+        {/* {!url && (
           <div className={cs(style.error)}>
             <i aria-hidden className="fas fa-exclamation-circle"/>
             <span>could not load image</span>
           </div>
-        )}
+        )} */}
         {undesirable && (
           <div className={cs(style.flag)}>
             <i aria-hidden className="fas fa-exclamation-triangle"/>
@@ -64,9 +66,11 @@ export function Card({
           </div>
         )}
       </div>
-      <div className={cs(style.content)}>
-        { children }
-      </div> 
+      {displayDetails && (
+        <div className={cs(style.content)}>
+          { children }
+        </div> 
+      )}
     </div>
   )
 }

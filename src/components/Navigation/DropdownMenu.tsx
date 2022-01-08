@@ -11,9 +11,11 @@ interface Props {
 
 export function DropdownMenu({ opened, className, children }: PropsWithChildren<Props>) {
   return (
-    <div className={cs(style.menu, className, effects['drop-shadow-big'], {
-      [style['menu-opened']]: opened
-    })}>
+    <div 
+      className={cs(style.menu, className, effects['drop-shadow-big'], {
+        [style['menu-opened']]: opened
+      })}
+    >
       { children }
     </div>
   )

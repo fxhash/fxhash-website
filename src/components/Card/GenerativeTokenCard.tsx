@@ -18,12 +18,14 @@ interface Props {
   token: GenerativeToken
   className?: string
   displayPrice?: boolean
+  displayDetails?: boolean
   lockedUntil?: string
 }
 
 export function GenerativeTokenCard({
   token,
   displayPrice = false,
+  displayDetails = true,
   className,
   lockedUntil,
 }: Props) {
@@ -34,7 +36,10 @@ export function GenerativeTokenCard({
   return (
     <Link href={url} passHref>
       <AnchorForward style={{ height: '100%' }} className={className}>
-        <Card thumbnailUri={token.metadata?.thumbnailUri}>
+        <Card
+          thumbnailUri={token.metadata?.thumbnailUri}
+          displayDetails={displayDetails}
+        >
           <div>
             <h5>{ token.name }</h5>
             <Spacing size="2x-small" />
@@ -60,7 +65,11 @@ export function GenerativeTokenCard({
               </>
             )}
             <Spacing size="small" />
-            <MintProgress balance={token.balance} supply={token.supply} originalSupply={token.originalSupply}>
+            <MintProgress 
+              balance={token.balance}
+              supply={token.supply}
+              originalSupply={token.originalSupply}
+            >
               {displayPrice && (
                 <strong className={cs(colors.secondary)}>
                   {displayMutez(token.price, 4)} tez

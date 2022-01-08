@@ -17,10 +17,10 @@ export interface Objkt {
   slug?: string
   metadata?: ObjktMetadata
   features?: TokenFeature[] | null
-  rarity?: number
+  rarity?: number|null
   metadataUri: string
   royalties: number
-  offer?: Offer
+  offer?: Offer|null
   actions: Action[]
   createdAt: string
   updatedAt: string

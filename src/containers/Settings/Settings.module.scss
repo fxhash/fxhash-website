@@ -1,10 +1,20 @@
-.root {
-  display: grid;
-  grid-template-columns: repeat(2, auto);
-  align-items: center;
-  grid-gap: 5px 15px;
-
-  strong {
-    font-size: var(--font-size-small);
+.page {
+  & > *+* {
+    margin-top: 16px;
   }
+}
+
+.toggle_line {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  
+  & > *:first-child {
+    width: 60%;
+  }
+}
+
+.disabled {
+  opacity: 0.1;
+  pointer-events: none;
 }

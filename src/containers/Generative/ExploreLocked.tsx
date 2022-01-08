@@ -92,6 +92,7 @@ export const ExploreLockedTokens = ({}: Props) => {
               key={token.id}
               token={token}
               displayPrice={settingsCtx.displayPricesCard}
+              displayDetails={settingsCtx.displayInfosGenerativeCard}
               lockedUntil={token.lockEnd as any}
             />
           ))}

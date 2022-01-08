@@ -126,6 +126,7 @@ export const ExploreGenerativeTokens = ({}: Props) => {
                 key={token.id}
                 token={token}
                 displayPrice={settingsCtx.displayPricesCard}
+                displayDetails={settingsCtx.displayInfosGenerativeCard}
               />
             ))}
           </CardsContainer>
@@ -140,6 +141,7 @@ export const ExploreGenerativeTokens = ({}: Props) => {
                 key={token.id}
                 token={token}
                 displayPrice={settingsCtx.displayPricesCard}
+                displayDetails={settingsCtx.displayInfosGenerativeCard}
               />
             ))}
             {loading && (

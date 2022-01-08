@@ -68,6 +68,7 @@ export function UserGenerativeTokens({
               key={token.id}
               token={token}
               displayPrice={settings.displayPricesCard}
+              displayDetails={settings.displayInfosGenerativeCard}
             />
           ))}
         </CardsContainer>
