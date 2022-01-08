@@ -61,9 +61,9 @@ export function SettingsModal({
               <div>2</div>
             ):null}
 
-            <span className={cs(style.info_bottom)}>
+            {/* <span className={cs(style.info_bottom)}>
               you can propose customization settings on discord
-            </span>
+            </span> */}
           </div>
         )}
       </TabsContainer>

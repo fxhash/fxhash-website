@@ -88,6 +88,7 @@ export function Navigation() {
           <button
             aria-label="Open settings modal"
             onClick={() => setSettingsModal(!settingsModal)}
+            className={cs(style.btn_icon)}
           >
             <i
               aria-hidden

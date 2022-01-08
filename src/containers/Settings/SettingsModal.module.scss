@@ -1,3 +1,5 @@
+@import "../../styles/Variables.scss";
+
 .root {
   width: 900px;
 }
@@ -26,4 +28,20 @@
   right: 6px;
   color: var(--color-gray-light);
   font-size: var(--font-size-small);
+}
+
+
+
+@media (max-width: $breakpoint-sm) {
+  .root {
+    height: 100vh;
+    width: 100vw;
+    transform: none;
+    top: 0;
+    left: 0;
+  }
+
+  .content { 
+    height: calc(100vh - 150px)
+  }
 }

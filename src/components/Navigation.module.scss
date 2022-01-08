@@ -5,12 +5,6 @@
     display: flex;
     align-items: center;
 
-    & > button {
-      background: none;
-      border: none;
-      cursor: pointer;
-    }
-
     a, button {
       font-weight: bold;
       color: var(--color-gray);
@@ -46,6 +40,12 @@
           }
         }
       }
+    }
+
+    .btn_icon {
+      background: none;
+      border: none;
+      cursor: pointer;
     }
 
     :global(.btn-sync) {
