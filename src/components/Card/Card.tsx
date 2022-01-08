@@ -1,10 +1,11 @@
 import style from "./Card.module.scss"
 import cs from "classnames"
-import { PropsWithChildren, useMemo, useState } from "react"
+import { PropsWithChildren, useContext, useMemo, useState } from "react"
 import { ipfsGatewayUrl } from "../../services/Ipfs"
 import { useClientAsyncEffect } from "../../utils/hookts"
 import { Loader } from "../Utils/Loader"
 import { useInView } from "react-intersection-observer"
+import { SettingsContext } from "../../context/Theme"
 
 
 interface Props {
@@ -22,6 +23,7 @@ export function Card({
   const [loaded, setLoaded] = useState<string|null>(null)
   const url = useMemo(() => thumbnailUri && ipfsGatewayUrl(thumbnailUri), [])
   const { ref, inView } = useInView()
+  const settings = useContext(SettingsContext)
 
   // lazy load the image
   useClientAsyncEffect(isMounted => {
@@ -41,7 +43,9 @@ export function Card({
   }, [inView])
 
   return (
-    <div className={cs(style.container)} ref={ref}>
+    <div className={cs(style.container, {
+      [style.hover_effect]: settings.hoverEffectCard
+    })} ref={ref}>
       <div 
         className={cs(style['thumbnail-container'], { [style.undesirable]: undesirable })}
         style={{

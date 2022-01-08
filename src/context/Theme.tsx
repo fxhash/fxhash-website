@@ -13,6 +13,7 @@ interface ISettingsProperties {
   displayInfosGentkCard: boolean
   borderWidthCards: number
   shadowCards: number
+  hoverEffectCard: boolean
 }
 
 export interface ISettingsContext extends ISettingsProperties {
@@ -28,6 +29,7 @@ const defaultProperties: ISettingsProperties = {
   displayInfosGentkCard: true,
   displayPricesCard: false,
   displayBurntCard: false,
+  hoverEffectCard: true,
 }
 
 const defaultCtx: ISettingsContext = {

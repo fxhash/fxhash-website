@@ -70,6 +70,13 @@ export function DisplaySettings({
                 step={1}
               />
             </div>
+            <div className={cs(styleSettings.toggle_line)}>
+              <span>Hover effect</span>
+              <Switch 
+                onChange={(value) => settings.update("hoverEffectCard", value)} 
+                value={settings.hoverEffectCard}
+              />
+            </div>
           </div>
           <div className={cs(style.card_wrapper)}>
             <Card>
