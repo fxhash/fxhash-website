@@ -30,7 +30,7 @@ export function Modal({
             className={cs(style.btn_close)}
             onClick={onClose}
           >
-            <i aria-hidden className="fas fa-times"/>
+            <i aria-hidden className="far fa-times"/>
           </button>
         </header>
         <main>

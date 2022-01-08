@@ -38,7 +38,7 @@ export function Tab({ definition, layout, active, wrapperComponent, onClick }: T
   )
 }
 
-interface Props {
+export interface Props {
   tabsLayout?: TabsLayout
   tabDefinitions: TabDefinition[]
   activeIdx: number

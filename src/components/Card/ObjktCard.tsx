@@ -12,20 +12,27 @@ import { Objkt } from "../../types/entities/Objkt"
 import { displayMutez } from "../../utils/units"
 import { getObjktUrl } from "../../utils/objkt"
 import { GenTokFlag } from "../../types/entities/GenerativeToken"
+import { useContext } from "react"
+import { SettingsContext } from "../../context/Theme"
 
 interface Props {
   objkt: Objkt
 }
 
 export function ObjktCard({
-  objkt
+  objkt,
 }: Props) {
   const url = getObjktUrl(objkt)
+  const settings = useContext(SettingsContext)
 
   return (
     <Link href={url} passHref>
       <AnchorForward style={{ height: '100%' }}>
-        <Card thumbnailUri={objkt.metadata?.thumbnailUri} undesirable={objkt.issuer.flag === GenTokFlag.MALICIOUS}>
+        <Card
+          thumbnailUri={objkt.metadata?.thumbnailUri} 
+          undesirable={objkt.issuer.flag === GenTokFlag.MALICIOUS}
+          displayDetails={settings.displayInfosGentkCard}
+        >
           <div>
             {objkt.duplicate && <div className={cs(styleObjkt.dup_flag)}>[WARNING: DUPLICATE]</div>}
             <h5>{ objkt.name }{objkt.assigned === false && ` - ${objkt.issuer.name}`}</h5>
@@ -38,12 +45,12 @@ export function ObjktCard({
           <div className={cs(style.bottom)}>
             <div className={cs(style.price)}>
               {objkt.offer && (
-                <>{displayMutez(objkt.offer.price)} tez</>
+                <>{displayMutez(objkt.offer.price!)} tez</>
               )}
             </div>
             <div className={cs(style.badge)}>
               <span className={cs(colors['gray-dark'])}>created by</span> 
-              <UserBadge user={objkt.issuer.author} size="regular" hasLink={false} avatarSide="right" />
+              <UserBadge user={objkt.issuer.author!} size="regular" hasLink={false} avatarSide="right" />
             </div>
           </div>
         </Card>

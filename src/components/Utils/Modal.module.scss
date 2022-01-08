@@ -3,13 +3,13 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  max-width: 70vw;
+  max-width: calc(100vw - 16px);
 
   header {
     background: var(--color-black);
     color: var(--color-white);
     font-weight: bold;
-    margin-left: 0;
+    margin-left: 0 !important;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -21,9 +21,10 @@
 
   main {
     background: var(--color-white);
-    border: 3px solid var(--color-border);
-    margin-top: -1px;
-    padding: 15px 10px 10px;
+    border: 3px solid var(--color-black);
+    border-top: none;
+    margin-top: 0;
+    padding: 10px;
   }
 }
 
@@ -40,4 +41,10 @@
   align-items: center;
   justify-content: center;
   font-size: 20px;
+  margin-right: 3px;
+  opacity: 0.5;
+
+  &:hover {
+    opacity: 1;
+  }
 }

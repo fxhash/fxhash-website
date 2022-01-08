@@ -133,6 +133,7 @@ const Home: NextPage<Props> = ({
                 key={token.id}
                 token={token}
                 displayPrice={settings.displayPricesCard}
+                displayDetails={settings.displayInfosGenerativeCard}
               />
             ))}
           </CardsContainer>

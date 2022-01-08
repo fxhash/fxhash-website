@@ -1,0 +1,29 @@
+.root {
+  width: 900px;
+}
+
+.tab {
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
+  font-size: var(--font-size-small);
+}
+
+.content {
+  padding-top: 5px;
+  height: 500px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  font-size: var(--font-size-small);
+}
+
+.info_bottom {
+  position: absolute;
+  bottom: 3px;
+  right: 6px;
+  color: var(--color-gray-light);
+  font-size: var(--font-size-small);
+}
