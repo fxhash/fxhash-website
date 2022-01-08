@@ -1,3 +1,5 @@
+import { DeepPartial } from "../types/DeepPartial"
+import { GenerativeToken } from "../types/entities/GenerativeToken"
 import { Objkt } from "../types/entities/Objkt"
 import { User } from "../types/entities/User"
 import { ObjktMetadata } from "../types/Metadata"
@@ -7,14 +9,14 @@ export function getGentkUrl(gentk: Objkt): string {
 }
 
 
-export const fakeGentk: Partial<Objkt> = {
+export const fakeGentk: DeepPartial<Objkt> = {
   id: 0,
   name: "[WAITING TO BE SIGNED]",
   owner: {
     id: "tz1gjftp2aoEkC4xvRfNNkPjcfF2fStESgwo",
     name: "fxhash",
     avatarUri: "ipfs://QmURUAU4YPa6Wwco3JSVrcN7WfCrFBZH7hY51BLrc87WjM"
-  } as User,
+  },
   metadata: {
     name: "[WAITING TO BE SIGNED]",
     description: "This Gentk is waiting to be signed by Fxhash Signer module",
@@ -23,7 +25,7 @@ export const fakeGentk: Partial<Objkt> = {
     thumbnailUri: "ipfs://QmbvEAn7FLMeYBDroYwBP8qWc3d3VVWbk19tTB83LCMB5S",
     symbol: "GENTK",
     decimals: 0
-  } as ObjktMetadata,
+  },
   iteration: 37,
   offer: null,
   issuer: {
@@ -31,7 +33,7 @@ export const fakeGentk: Partial<Objkt> = {
       id: "tz1PADW67gHdeXY8mxmM13vn7V7oXvW8MgPr",
       name: "Eltono",
       avatarUri: "ipfs://QmaAH6byCkjJiki3Q1gx9jdShR2DdP6gCzK2Mk3rx3m3Gx"
-    } as User,
+    },
   },
   rarity: null,
   duplicate: false

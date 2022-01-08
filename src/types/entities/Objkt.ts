@@ -6,7 +6,7 @@ import { User } from "./User"
 
 export interface Objkt {
   id: number
-  issuer: GenerativeToken|Partial<GenerativeToken>
+  issuer: GenerativeToken
   owner?: User|null
   assigned?: boolean
   generationHash?: string
@@ -20,7 +20,7 @@ export interface Objkt {
   rarity?: number|null
   metadataUri: string
   royalties: number
-  offer?: Offer|Partial<Offer>|null
+  offer?: Offer|null
   actions: Action[]
   createdAt: string
   updatedAt: string
