@@ -1,26 +1,26 @@
 import style from "./MintButton.module.scss"
+import layout from "../../styles/Layout.module.scss"
 import Link from "next/link"
 import cs from "classnames"
 import { GenerativeToken, GenTokFlag } from "../../types/entities/GenerativeToken"
 import { Spacing } from "../Layout/Spacing"
 import { Button, ButtonState } from "."
 import { displayMutez } from "../../utils/units"
-import { useContext, useMemo, useState } from "react"
+import { useContext, useEffect, useMemo, useState } from "react"
 import { Countdown } from "../Utils/Countdown"
 import { distanceSecondsClamped } from "../../utils/time"
 import { UserContext } from "../../containers/UserProvider"
+import { ContractFeedback } from "../Feedback/ContractFeedback"
+import { useContractCall } from "../../utils/hookts"
+import { MintCall } from "../../types/ContractCalls"
 
 interface Props {
   token: GenerativeToken
-  isLink: boolean
-  onClick?: () => void
-  state?: ButtonState
+  onReveal: (hash: string) => void
 }
 export function MintButton({
   token,
-  isLink,
-  onClick,
-  state,
+  onReveal,
 }: Props) {
   const userContext = useContext(UserContext)
   // is the token hidden ?
@@ -37,8 +37,55 @@ export function MintButton({
     return token.enabled || token.author.id === userContext.user?.id
   }, [token, userContext])
 
+  // hook to interact with the contract
+  const { state, loading, success, call, error, transactionHash } = 
+    useContractCall<MintCall>(userContext.walletManager?.mintToken)
+
+  console.log({
+    state,
+    loading,
+    success,
+    call,
+    error,
+    transactionHash
+  })
+
+  const mint = () => {
+    call({
+      issuer_id: token.id,
+      price: token.price
+    })
+  }
+
+  const buttonClick = async () => {
+    // if user is not connected, we request wallet sync
+    if (!userContext.user) {
+      await userContext.connect()
+      mint()
+    }
+    else {
+      mint()
+    }
+  }
+
+  // whenever there is a transaction hash, we can tell the mint was
+  // successful
+  useEffect(() => {
+    if (transactionHash) {
+      onReveal(transactionHash)
+    }
+  }, [transactionHash])
+
   return (
-    <div className={cs(style.root)}>      
+    <div className={cs(style.root)}>
+      <ContractFeedback
+        state={state}
+        error={error}
+        success={success}
+        loading={loading}
+        className={cs(style.contract_feedback)}
+      />
+
       {!isHidden && (
         <>
           {isLocked && (
@@ -55,26 +102,29 @@ export function MintButton({
           )}
 
           {!token.enabled && <small>token is currently <strong>disabled</strong> by author</small>}
-
-          {isLink ? (
-            <Link href={`/mint/${token.id}`} passHref>
-              <Button
-                isLink
-                color="secondary"
-                disabled={!isEnabled || isLocked}
-              >
-                mint unique token — {displayMutez(token.price)} tez
-              </Button>
-            </Link>
+          
+          {transactionHash ? (
+            <div className={cs(layout.buttons_inline, layout.flex_wrap)}>
+              <Link href={`/reveal/${token.id}/${transactionHash}`} passHref>
+                <Button
+                  isLink
+                  color="secondary"
+                  iconComp={<i aria-hidden className="fas fa-arrow-right"/>}
+                  iconSide="right"
+                >
+                  reveal
+                </Button>
+              </Link>
+            </div>
           ):(
             <Button
               type="button"
               color="secondary"
               disabled={!isEnabled || isLocked}
-              onClick={onClick}
-              state={state || "default"}
+              onClick={buttonClick}
+              state={loading ? "loading" : "default"}
             >
-              mint unique token — {displayMutez(token.price)} tez
+              mint iteration — {displayMutez(token.price)} tez
             </Button>
           )}
 

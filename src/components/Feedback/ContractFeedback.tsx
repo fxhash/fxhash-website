@@ -31,7 +31,7 @@ export function ContractFeedback({
   error,
   loading,
   successMessage = "The operation was successfully injected into the blockchain",
-  errorMessage = "There was an error when injecting into the blockchain",
+  errorMessage = "Error when injecting into the blockchain",
   className,
 }: Props) {
   return (

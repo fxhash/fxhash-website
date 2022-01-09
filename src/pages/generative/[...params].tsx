@@ -70,6 +70,12 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
     }
   }, [previewHash])
 
+  // will be called if the token is successfully minted
+  const onReveal = (transactionHash: string) => {
+    console.log("minted")
+    console.log(transactionHash)
+  }
+
   return (
     <>
       <Head>
@@ -125,9 +131,18 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
               supply={token.supply}
               originalSupply={token.originalSupply}
             />
-            <Spacing size="large"/>
-            <MintButton token={token} isLink={true} />
-            <Spacing size="regular" />
+          </div>
+
+          <Spacing size="large"/>
+
+          <MintButton
+            token={token}
+            onReveal={onReveal}
+          />
+
+          <Spacing size="regular" />
+
+          <div className={cs(layout.buttons_inline)}>
             <Link href={getGenerativeTokenMarketplaceUrl(token)} passHref>
               <Button isLink={true} size="small">
                 open marketplace page 

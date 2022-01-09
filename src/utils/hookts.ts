@@ -285,7 +285,7 @@ export function useEventSource<T, P = string, E = string>(
         source.close()
       }
     }
-  }, [counter])
+  }, [counter, url])
 
   return {
     progress,

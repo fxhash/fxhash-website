@@ -95,19 +95,6 @@ export function RevealProgress({ hash, onRevealed }: Props) {
           ]}
           position={success ? 100 : getProgressPosition(progress)}
         />
-
-        <Spacing size="3x-large"/>
-
-        <Button
-          iconComp={<i aria-hidden className="fas fa-arrow-right"/>}
-          iconSide="right"
-          color="secondary"
-          size="large"
-          disabled={!success}
-          onClick={reveal}
-        >
-          reveal your token
-        </Button>
       </div>
     </>
   )

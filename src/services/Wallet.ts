@@ -1,4 +1,5 @@
 import { BeaconWallet } from '@taquito/beacon-wallet'
+import { TezosOperationType } from '@airgap/beacon-sdk'
 import { MichelsonV1Expression } from '@taquito/rpc'
 import { ContractAbstraction, MichelsonMap, OpKind, TezosToolkit, Wallet } from '@taquito/taquito'
 import { 
@@ -243,8 +244,8 @@ export class WalletManager {
       const issuerContract = await this.getContract(FxhashContract.ISSUER)
   
       // call the contract (open wallet)
-      statusCallback && statusCallback(ContractOperationStatus.CALLING)
-      const opSend = await issuerContract.methodsObject.mint(tokenData.issuer_id).send({
+      // statusCallback && statusCallback(ContractOperationStatus.CALLING)
+      const opSend = await issuerContract.methods.mint(tokenData.issuer_id).send({
         amount: tokenData.price,
         mutez: true,
         storageLimit: 450
@@ -252,7 +253,7 @@ export class WalletManager {
   
       // wait for confirmation
       statusCallback && statusCallback(ContractOperationStatus.WAITING_CONFIRMATION)
-      await opSend.confirmation(1)
+      await opSend.confirmation(2)
   
       // OK, injected
       statusCallback && statusCallback(ContractOperationStatus.INJECTED, opSend.opHash)

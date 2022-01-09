@@ -103,6 +103,7 @@
 .x_centered {
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 
 .flex_column_left {
@@ -125,4 +126,8 @@
   flex-direction: row;
   align-items: center;
   gap: 8px;
+}
+
+.flex_wrap {
+  flex-wrap: wrap;
 }

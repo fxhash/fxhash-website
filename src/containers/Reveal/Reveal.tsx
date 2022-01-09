@@ -16,7 +16,7 @@ import { RevealIframe } from "../../components/Reveal/RevealIframe"
 interface Props {
   hash: string
   generativeUri: string
-  previeweUri: string
+  previeweUri?: string
   features?: TokenFeature[]|null
 }
 

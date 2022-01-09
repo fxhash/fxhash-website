@@ -10,7 +10,7 @@ interface UserContextType {
   autoConnectChecked: boolean
   user: ConnectedUser|null
   walletManager: WalletManager|null
-  connect: () => void
+  connect: () => Promise<void>
   disconnect: () => void
 }
 
@@ -18,7 +18,7 @@ const defaultCtx: UserContextType = {
   autoConnectChecked: false,
   user: null,
   walletManager: null,
-  connect: () => {},
+  connect: () => new Promise(r => r()),
   disconnect: () => {}
 }
 
@@ -49,7 +49,7 @@ export function UserProvider({ children }: PropsWithChildren<{}>) {
   }, [userData])
 
   // asks the manager for a connection
-  const connect = async () => {
+  const connect = () => new Promise<void>(async (resolve, reject) => {
     const ctx = ctxRef.current
 
     if (ctx.walletManager) {
@@ -66,9 +66,16 @@ export function UserProvider({ children }: PropsWithChildren<{}>) {
             id: pkh
           }
         })
+        resolve()
+      }
+      else {
+        reject()
       }
     }
-  }
+    else {
+      reject()
+    }
+  })
   
   // asks the manager for a disconnect & clears the context
   const disconnect = async () => {
