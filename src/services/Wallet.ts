@@ -52,7 +52,16 @@ export class WalletManager {
   rpcNodes: string[]
 
   constructor() {
-    this.rpcNodes = shuffleArray((process.env.NEXT_PUBLIC_RPC_NODES!).split(','))
+    // !todo: REMOVE THE SHUFFLE once tests are done
+    // for now 1/2 of the traffic is going to go through the fxhash RPC endpoint
+    // to test if it works properly with some pretty high traffic
+    let RPCS = [...(process.env.NEXT_PUBLIC_RPC_NODES!).split(',')]
+    // 1/2 chances to shuffle the array, and so it's about 1/2 to always have the 
+    // fxhash RPC first
+    if (Math.random() < 0.5) {
+      RPCS = shuffleArray(RPCS)
+    }
+    this.rpcNodes = RPCS
     this.tezosToolkit = new TezosToolkit(this.rpcNodes[0])
     this.instanciateBeaconWallet()
   }
