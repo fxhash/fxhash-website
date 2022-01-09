@@ -1,0 +1,133 @@
+@import './Variables.scss';
+
+.padding-small {
+  padding-left: var(--layout-margin-small-lg);
+  padding-right: var(--layout-margin-small-lg);
+
+  @media (max-width: $breakpoint-lg) {
+    padding-left: var(--layout-margin-small-md);
+    padding-right: var(--layout-margin-small-md);
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    padding-left: var(--layout-margin-small-sm);
+    padding-right: var(--layout-margin-small-sm);
+  }
+}
+
+.padding-big {
+  padding-left: var(--layout-margin-big-lg);
+  padding-right: var(--layout-margin-big-lg);
+
+  @media (max-width: $breakpoint-lg) {
+    padding-left: var(--layout-margin-big-md);
+    padding-right: var(--layout-margin-big-md);
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    padding-left: var(--layout-margin-big-sm);
+    padding-right: var(--layout-margin-big-sm);
+  }
+}
+
+.explore_header {
+  display: flex;
+  gap: var(--layout-gap-small-lg);
+  justify-content: space-between;
+}
+
+.search-container {
+  display: flex;
+  gap: var(--layout-gap-small-lg);
+  align-items: center;
+  flex-wrap: wrap;
+
+  @media (max-width: $breakpoint-md) {
+    gap: var(--layout-gap-small-md);
+  }
+}
+
+.search-bar {
+  width: calc(60% - var(--layout-gap-big-md) / 2);
+
+  @media (max-width: $breakpoint-vlg) {
+    width: calc(50% - var(--layout-gap-big-md) / 2);
+  }
+
+  @media (max-width: $breakpoint-lg) {
+    width: calc(67.3% - var(--layout-gap-big-md) / 2);
+  }
+
+  @media (max-width: $breakpoint-md) {
+    width: 100%;
+  }
+}
+
+.smallform {
+  align-items: center;
+  max-width: 1000px;
+  margin: auto;
+}
+
+.cols2 {
+  display: flex;
+  flex-direction: row;
+  gap: var(--layout-gap-big-lg);
+  width: 100%;
+
+  & > * {
+    flex: 1 0 0;
+  }
+
+  @media (max-width: $breakpoint-md) {
+    flex-direction: column;
+
+    &.responsive-reverse {
+      flex-direction: column-reverse;
+    }
+  }
+}
+
+.x-inline {
+  display: flex;
+  gap: 8px;
+}
+
+.y_centered {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.x_centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.flex_column_left {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.full_body_height {
+  height: calc(100vh - 140px - 50px)
+}
+
+.break_words {
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.buttons_inline {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+
+.flex_wrap {
+  flex-wrap: wrap;
+}

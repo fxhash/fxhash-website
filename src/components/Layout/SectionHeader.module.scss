@@ -1,0 +1,31 @@
+@import "../../styles/Variables.scss";
+
+.container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+  small {
+    font-size: var(--font-size-regular);
+    color: var(--color-grey-dark);
+  }
+
+  @media (max-width: $breakpoint-md) {
+    h2 {
+      font-size: var(--font-size-h4);
+    }
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    h2 {
+      font-size: var(--font-size-h4);
+    }
+
+    a {
+      padding-left: 15px !important;
+      padding-right: 15px !important;
+      height: 48px;
+    }
+  }
+}
