@@ -1,6 +1,8 @@
 import { utcToZonedTime, zonedTimeToUtc } from "date-fns-tz"
 import { Timezone } from "./timzones"
 
+const OPENING_HOURS = 12
+const CLOSING_HOURS = 11
 const MS_PER_CYCLE = 82800000 // (1000ms * 60s * 60m * 23h)
 const MS_PER_OPEN = 43200000 // (1000ms * 60s * 60m * 12h)
 
@@ -12,10 +14,10 @@ export function isPlatformOpenedAt(date: Date, timezone: Timezone): boolean {
   const hours = diff / 3600
 
   // modulo the cycle duration
-  const cycleHours = hours % 23
+  const cycleHours = hours % (OPENING_HOURS + CLOSING_HOURS)
 
   // if cycleHours > 12, it means that the platform should be closed, otherwise opened
-  return cycleHours < 12
+  return cycleHours < OPENING_HOURS
 }
 
 /**
