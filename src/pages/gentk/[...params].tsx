@@ -175,6 +175,7 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
             {objkt.features && objkt.features.length > 0 && objkt.rarity && (
               <span><strong>Rarity:</strong> { displayPercentage(objkt.rarity) }% (lower is rarer)</span>
             )}
+            <span><strong>Metadata:</strong> <a target="_blank" href={ipfsGatewayUrl(objkt.metadataUri, "pinata-fxhash")}>{ objkt.metadataUri }</a></span>
           </div>
 
           {objkt.features && objkt.features.length > 0 && (

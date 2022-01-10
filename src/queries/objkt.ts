@@ -28,6 +28,7 @@ export const Qu_objkt = gql`
         }
       }
       metadata
+      metadataUri
       features
       rarity
       assigned
