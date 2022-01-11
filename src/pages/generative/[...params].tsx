@@ -203,11 +203,11 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
         <main className={cs(layout['padding-big'], layout.break_words)}>
           <Spacing size="small" />
           <div className={cs(style.buttons)}>
-            <span><strong>Minted the:</strong> { format(new Date(token.createdAt), "dd/MM/yyyy' at 'HH:mm") }</span>
+            <span><strong>Minted on:</strong> { format(new Date(token.createdAt), "dd/MM/yyyy' at 'HH:mm") }</span>
             <span><strong>Price:</strong> { displayMutez(token.price) } tez</span>
             <span><strong>Royalties:</strong> { displayRoyalties(token.royalties) }</span>
             <span><strong>Original supply:</strong> { token.originalSupply }</span>
-            <span><strong>Supply burnt:</strong> { token.originalSupply - token.supply }</span>
+            <span><strong>Supply burned:</strong> { token.originalSupply - token.supply }</span>
             <span><strong>Tags:</strong> { token.tags?.join(", ") || "/" }</span>
             <span><strong>Metadata:</strong> <a href={ipfsGatewayUrl(token.metadataUri)} target="_blank" referrerPolicy="no-referrer">{token.metadataUri}</a></span>
           </div>
@@ -246,7 +246,7 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
             </>
           ):(
             <>
-              <p>Nobody has minted from this Generative Token. <strong>Become the first of the collection !</strong></p>
+              <p>No iterations have been minted from this Generative Token. <strong>Mint the first!</strong></p>
             </>
           )}
         </main>
