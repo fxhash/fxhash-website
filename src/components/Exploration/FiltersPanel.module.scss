@@ -1,0 +1,13 @@
+.root {
+  border-top: 3px solid var(--color-border-input);
+  width: 320px;
+  position: sticky;
+  top: 110px;
+  align-self: flex-start;
+  opacity: 0.4;
+  transition: opacity 0.15s;
+
+  &:hover {
+    opacity: 1;
+  }
+}

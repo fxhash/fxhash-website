@@ -1,4 +1,5 @@
 import style from "./AlgoliaSearch.module.scss"
+import styleSearch from "./Search.module.scss"
 import layout from "../../styles/Layout.module.scss"
 import cs from "classnames"
 import { useState, useEffect } from "react"
@@ -9,6 +10,7 @@ import { DocumentNode } from "graphql"
 import { useLazyQuery } from "@apollo/client"
 import { SearchTerm } from "../Utils/SearchTerm"
 import { PropsWithChildren } from "react-router/node_modules/@types/react"
+import { SearchHeader } from "./SearchHeader"
 
 
 interface Props {
@@ -94,13 +96,13 @@ export function AlgoliaSearch({
   }, [searchLoading])
 
   return (
-    <div className={cs(layout['search-container'])}>
+    <>
       <SearchInput
         value={search}
         onChange={setSearch}
         placeholder="search by artist name, tags, title..."
         onSearch={triggerSearch}
-        className={cs(layout['search-bar'])}
+        className={cs(styleSearch.search_bar)}
       />
       {currentSearchString && (
         <SearchTerm
@@ -108,12 +110,6 @@ export function AlgoliaSearch({
           onClear={clearResults}
         />
       )}
-
-      {children && (
-        <div className={cs(style.filters)}>
-          {children}
-        </div>
-      )}
-    </div>
+    </>
   )
 }

@@ -1,22 +1,28 @@
-import { gql, useLazyQuery, useQuery } from '@apollo/client'
+import layout from "../styles/Layout.module.scss"
+import cs from "classnames"
+import { gql, useQuery } from '@apollo/client'
 import { CardsContainer } from '../components/Card/CardsContainer'
 import { ObjktCard } from '../components/Card/ObjktCard'
 import { LoaderBlock } from '../components/Layout/LoaderBlock'
 import { InfiniteScrollTrigger } from '../components/Utils/InfiniteScrollTrigger'
 import { useState, useEffect, useMemo, useRef } from 'react'
 import { Spacing } from '../components/Layout/Spacing'
-import { Offer } from '../types/entities/Offer'
+import { Offer, OfferFilters } from '../types/entities/Offer'
 import { AlgoliaSearch } from '../components/Search/AlgoliaSearch'
 import { searchIndexMarketplace } from '../services/Algolia'
 import { IOptions, Select } from '../components/Input/Select'
 import { CardsLoading } from '../components/Card/CardsLoading'
+import { CardsExplorer } from "../components/Exploration/CardsExplorer"
+import { SearchHeader } from "../components/Search/SearchHeader"
+import { FiltersPanel } from "../components/Exploration/FiltersPanel"
+import { MarketplaceFilters } from "./Marketplace/MarketplaceFilters"
 
 
 const ITEMS_PER_PAGE = 10
 
 const Qu_offers = gql`
-  query Query ($skip: Int, $take: Int, $price: String, $createdAt: String) {
-    offers(skip: $skip, take: $take, price: $price, createdAt: $createdAt) {
+  query Query ($skip: Int, $take: Int, $price: String, $createdAt: String, $filters: OfferFilter) {
+    offers(skip: $skip, take: $take, price: $price, createdAt: $createdAt, filters: $filters) {
       id
       price
       objkt {
@@ -125,10 +131,12 @@ interface Props {
 
 export const Marketplace = ({}: Props) => {
   const [searchResults, setSearchResults] = useState<Offer[]|null>(null)
-  const [searchLoading, setSearchLoading] = useState<boolean>(false)
 
   const [sortValue, setSortValue] = useState<string>("createdAt-desc")
   const sortVariables = useMemo<Record<string, any>>(() => sortValueToSortVariable(sortValue), [sortValue])
+
+  // 
+  const [filters, setFilters] = useState<OfferFilters>({})
 
   // use to know when to stop loading
   const currentLength = useRef<number>(0)
@@ -139,7 +147,8 @@ export const Marketplace = ({}: Props) => {
     variables: {
       skip: 0,
       take: ITEMS_PER_PAGE,
-      ...sortVariables
+      ...sortVariables,
+      filters,
     }
   })
 
@@ -171,57 +180,81 @@ export const Marketplace = ({}: Props) => {
     refetch?.({
       skip: 0,
       take: ITEMS_PER_PAGE,
-      ...sortVariables
+      ...sortVariables,
+      filters,
     })
-  }, [sortVariables])
+  }, [sortVariables, filters])
 
   return (
-    <>
-      <AlgoliaSearch
-        searchIndex={searchIndexMarketplace}
-        gqlMapQuery={Qu_offersByIds}
-        onResults={setSearchResults}
-        onLoading={setSearchLoading}
-        variables={sortVariables}
-      >
-        <Select
-          value={sortValue}
-          options={sortOptions}
-          onChange={setSortValue}
-        />
-      </AlgoliaSearch>
+    <CardsExplorer>
+      {({ 
+        filtersVisible,
+        setFiltersVisible,
+        searchLoading,
+        setSearchLoading
+      }) => (
+        <>
+          <SearchHeader
+            hasFilters
+            onToggleFilters={() => setFiltersVisible(!filtersVisible)}
+            sortSelectComp={
+              <Select
+                value={sortValue}
+                options={sortOptions}
+                onChange={setSortValue}
+              />
+            }
+          >
+            <AlgoliaSearch
+              searchIndex={searchIndexMarketplace}
+              gqlMapQuery={Qu_offersByIds}
+              onResults={setSearchResults}
+              onLoading={setSearchLoading}
+              variables={sortVariables}
+            />
+          </SearchHeader>
 
-      <Spacing size="large" />
+          {searchLoading && (
+            <LoaderBlock height="100px">searching</LoaderBlock>
+          )}
 
-      {searchLoading && (
-        <LoaderBlock height="100px">searching</LoaderBlock>
+          <div className={cs(layout.cards_explorer)}>
+            {filtersVisible && (
+              <FiltersPanel>
+                <MarketplaceFilters
+                  filters={filters}
+                  setFilters={setFilters}
+                />
+              </FiltersPanel>
+            )}
+
+            {searchResults ? (
+              searchResults.length > 0 ? (
+                <CardsContainer>
+                  {searchResults.map(offer => (
+                    <ObjktCard key={offer.objkt.id} objkt={offer.objkt} />
+                  ))}
+                </CardsContainer>
+              ):(
+                <p>Your query did not yield any results. 😟</p>
+              )
+            ):(
+              <InfiniteScrollTrigger onTrigger={infiniteScrollFetch} canTrigger={!!data && !loading}>
+                <CardsContainer>
+                  <>
+                    {offers?.length > 0 && offers.map(offer => (
+                      <ObjktCard key={offer.objkt.id} objkt={offer.objkt}/>
+                    ))}
+                    {loading && (
+                      <CardsLoading number={ITEMS_PER_PAGE} />
+                    )}
+                  </>
+                </CardsContainer>
+              </InfiniteScrollTrigger>
+            )}
+          </div>
+        </>
       )}
-
-      {searchResults ? (
-        searchResults.length > 0 ? (
-          <CardsContainer>
-            {searchResults.map(offer => (
-              <ObjktCard key={offer.objkt.id} objkt={offer.objkt} />
-            ))}
-          </CardsContainer>
-        ):(
-          <p>Your query did not yield any results. 😟</p>
-        )
-      ):(
-        <InfiniteScrollTrigger onTrigger={infiniteScrollFetch} canTrigger={!!data && !loading}>
-          <CardsContainer>
-            <>
-              {offers?.length > 0 && offers.map(offer => (
-                <ObjktCard key={offer.objkt.id} objkt={offer.objkt}/>
-              ))}
-              {loading && (
-                <CardsLoading number={ITEMS_PER_PAGE} />
-              )}
-            </>
-          </CardsContainer>
-        </InfiniteScrollTrigger>
-      )}
-
-    </>
+    </CardsExplorer>
   )
 }

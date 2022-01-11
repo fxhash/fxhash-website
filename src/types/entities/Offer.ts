@@ -11,3 +11,10 @@ export interface Offer {
   createdAt: Date
   updatedAt: Date
 }
+
+export interface OfferFilters {
+  price_gte?: number
+  price_lte?: number
+  fullyMinted_eq?: boolean
+  authorVerified_eq?: boolean
+}

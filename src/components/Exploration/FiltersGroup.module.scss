@@ -1,0 +1,14 @@
+.root {
+  margin-top: 12px;
+  background: var(--color-gray-vvlight);
+  padding: 6px;
+  padding-top: 8px;
+
+  .title {
+    font-weight: bold;
+  }
+
+  .content {
+    margin-top: 12px;
+  }
+}
