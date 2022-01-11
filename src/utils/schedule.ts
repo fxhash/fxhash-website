@@ -3,8 +3,8 @@ import { Timezone } from "./timzones"
 
 const OPENING_HOURS = 8
 const CLOSING_HOURS = 14
-const MS_PER_CYCLE = 82800000 // (1000ms * 60s * 60m * 23h)
-const MS_PER_OPEN = 43200000 // (1000ms * 60s * 60m * 12h)
+const MS_PER_CYCLE = 1000*3600*(OPENING_HOURS+CLOSING_HOURS) // (1000ms * 60s * 60m * 23h)
+const MS_PER_OPEN = 1000*3600*OPENING_HOURS // (1000ms * 60s * 60m * 12h)
 
 export function isPlatformOpenedAt(date: Date, timezone: Timezone): boolean {
   const reference = utcToZonedTime(new Date(process.env.NEXT_PUBLIC_REFERENCE_OPENING!), timezone.utc[0])
