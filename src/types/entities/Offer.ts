@@ -13,8 +13,8 @@ export interface Offer {
 }
 
 export interface OfferFilters {
-  price_gte?: number
-  price_lte?: number
+  price_gte?: string
+  price_lte?: string
   fullyMinted_eq?: boolean
   authorVerified_eq?: boolean
 }

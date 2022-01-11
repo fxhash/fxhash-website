@@ -50,8 +50,8 @@ export function MarketplaceFilters({
   const [maxPrice, setMaxPrice] = useState<string>("")
 
   const updatePriceFilters = () => {
-    const minp = minPrice ? parseInt(minPrice) * 1000000 : undefined
-    const maxp = maxPrice ? parseInt(maxPrice) * 1000000 : undefined
+    const minp = minPrice ? ""+(parseFloat(minPrice) * 1000000) : undefined
+    const maxp = maxPrice ? ""+(parseFloat(maxPrice) * 1000000) : undefined
     setFilters({
       ...filters,
       price_gte: minp,

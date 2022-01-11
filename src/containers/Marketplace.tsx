@@ -16,6 +16,8 @@ import { CardsExplorer } from "../components/Exploration/CardsExplorer"
 import { SearchHeader } from "../components/Search/SearchHeader"
 import { FiltersPanel } from "../components/Exploration/FiltersPanel"
 import { MarketplaceFilters } from "./Marketplace/MarketplaceFilters"
+import { ExploreTagDef, ExploreTags } from "../components/Exploration/ExploreTags"
+import { displayMutez } from "../utils/units"
 
 
 const ITEMS_PER_PAGE = 10
@@ -185,6 +187,43 @@ export const Marketplace = ({}: Props) => {
     })
   }, [sortVariables, filters])
 
+  const removeFilter = (filter: string) => {
+    setFilters({
+      ...filters,
+      [filter]: undefined
+    })
+  }
+
+  // build the list of filters
+  const filterTags = useMemo<ExploreTagDef[]>(() => {
+    const tags: ExploreTagDef[] = []
+    for (const key in filters) {
+      let value: string|null = null
+      // @ts-ignore
+      if (filters[key] !== undefined) {
+        switch (key) {
+          case "price_gte":
+            //@ts-ignore
+            value = `price > ${displayMutez(filters[key])}`
+            break
+          case "price_lte":
+            //@ts-ignore
+            value = `price < ${displayMutez(filters[key])}`
+            break
+        }
+        if (value) {
+          tags.push({
+            value,
+            onClear: () => removeFilter(key)
+          })
+        }
+      }
+    }
+    return tags
+  }, [filters])
+
+  console.log(filterTags)
+
   return (
     <CardsExplorer>
       {({ 
@@ -211,6 +250,7 @@ export const Marketplace = ({}: Props) => {
               onResults={setSearchResults}
               onLoading={setSearchLoading}
               variables={sortVariables}
+              nbHits={5000}
             />
           </SearchHeader>
 
@@ -228,30 +268,38 @@ export const Marketplace = ({}: Props) => {
               </FiltersPanel>
             )}
 
-            {searchResults ? (
-              searchResults.length > 0 ? (
-                <CardsContainer>
-                  {searchResults.map(offer => (
-                    <ObjktCard key={offer.objkt.id} objkt={offer.objkt} />
-                  ))}
-                </CardsContainer>
-              ):(
-                <p>Your query did not yield any results. 😟</p>
-              )
-            ):(
-              <InfiniteScrollTrigger onTrigger={infiniteScrollFetch} canTrigger={!!data && !loading}>
-                <CardsContainer>
-                  <>
-                    {offers?.length > 0 && offers.map(offer => (
-                      <ObjktCard key={offer.objkt.id} objkt={offer.objkt}/>
+            <div style={{width: "100%"}}>
+              {filterTags.length > 0 && (
+                <ExploreTags
+                  terms={filterTags}
+                />
+              )}
+
+              {searchResults ? (
+                searchResults.length > 0 ? (
+                  <CardsContainer>
+                    {searchResults.map(offer => (
+                      <ObjktCard key={offer.objkt.id} objkt={offer.objkt} />
                     ))}
-                    {loading && (
-                      <CardsLoading number={ITEMS_PER_PAGE} />
-                    )}
-                  </>
-                </CardsContainer>
-              </InfiniteScrollTrigger>
-            )}
+                  </CardsContainer>
+                ):(
+                  <p>Your query did not yield any results. 😟</p>
+                )
+              ):(
+                <InfiniteScrollTrigger onTrigger={infiniteScrollFetch} canTrigger={!!data && !loading}>
+                  <CardsContainer>
+                    <>
+                      {offers?.length > 0 && offers.map(offer => (
+                        <ObjktCard key={offer.objkt.id} objkt={offer.objkt}/>
+                      ))}
+                      {loading && (
+                        <CardsLoading number={ITEMS_PER_PAGE} />
+                      )}
+                    </>
+                  </CardsContainer>
+                </InfiniteScrollTrigger>
+              )}
+            </div>
           </div>
         </>
       )}
