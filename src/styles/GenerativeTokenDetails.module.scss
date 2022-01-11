@@ -19,10 +19,8 @@
 }
 
 .presentation-details {
-  .presentation-title {
-    overflow-wrap: break-word;
-    word-break: break-word;
-  }
+  overflow-wrap: break-word;
+  word-break: break-word;
 
   &.inline {
     flex-grow: 2;
