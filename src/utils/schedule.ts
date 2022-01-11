@@ -1,8 +1,8 @@
 import { utcToZonedTime, zonedTimeToUtc } from "date-fns-tz"
 import { Timezone } from "./timzones"
 
-const OPENING_HOURS = 12
-const CLOSING_HOURS = 11
+const OPENING_HOURS = 8
+const CLOSING_HOURS = 14
 const MS_PER_CYCLE = 82800000 // (1000ms * 60s * 60m * 23h)
 const MS_PER_OPEN = 43200000 // (1000ms * 60s * 60m * 12h)
 
