@@ -49,7 +49,8 @@ export function MarketplaceFilters({
   const [minPrice, setMinPrice] = useState<string>("")
   const [maxPrice, setMaxPrice] = useState<string>("")
 
-  const updatePriceFilters = () => {
+  const updatePriceFilters = (evt: any) => {
+    evt.preventDefault()
     const minp = minPrice ? ""+(parseFloat(minPrice) * 1000000) : undefined
     const maxp = maxPrice ? ""+(parseFloat(maxPrice) * 1000000) : undefined
     setFilters({
@@ -62,28 +63,29 @@ export function MarketplaceFilters({
   return (
     <>
       <FiltersGroup title="Price">
-        <div className={cs(style.price_range)}>
-          <InputText
-            value={minPrice}
-            onChange={evt => setMinPrice(evt.target.value)}
-            placeholder="Min"
-          />
-          <span>to</span>
-          <InputText
-            value={maxPrice}
-            onChange={evt => setMaxPrice(evt.target.value)}
-            placeholder="Max"
-          />
-        </div>
-        <Button
-          type="button"
-          color="black"
-          size="small"
-          className={cs(style.apply_btn)}
-          onClick={updatePriceFilters}
-        >
-          apply
-        </Button>
+        <form onSubmit={updatePriceFilters}>
+          <div className={cs(style.price_range)}>
+            <InputText
+              value={minPrice}
+              onChange={evt => setMinPrice(evt.target.value)}
+              placeholder="Min"
+            />
+            <span>to</span>
+            <InputText
+              value={maxPrice}
+              onChange={evt => setMaxPrice(evt.target.value)}
+              placeholder="Max"
+            />
+          </div>
+          <Button
+            type="submit"
+            color="black"
+            size="small"
+            className={cs(style.apply_btn)}
+          >
+            apply
+          </Button>
+        </form>
       </FiltersGroup>
 
       <FiltersGroup title="Mint progress">

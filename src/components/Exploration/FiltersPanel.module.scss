@@ -1,13 +1,54 @@
+@import "../../styles/Variables.scss";
+
 .root {
-  border-top: 3px solid var(--color-border-input);
   width: 320px;
   position: sticky;
   top: 110px;
   align-self: flex-start;
   opacity: 0.4;
   transition: opacity 0.15s;
+  background: var(--color-white);
 
   &:hover {
     opacity: 1;
+  }
+}
+
+.mobile_header {
+  display: none;
+  padding-left: 10px;
+
+  button {
+    background: transparent;
+    border: none;
+    color: var(--color-black);
+    height: 50px;
+    padding: 0 20px;
+    cursor: pointer;
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .root {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: auto;
+    opacity: 1;
+    z-index: 10;
+    overscroll-behavior: contain;
+  }
+
+  .content {
+    padding: 10px;
+  }
+
+  .mobile_header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
   }
 }

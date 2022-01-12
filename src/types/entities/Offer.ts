@@ -17,4 +17,5 @@ export interface OfferFilters {
   price_lte?: string
   fullyMinted_eq?: boolean
   authorVerified_eq?: boolean
+  searchQuery_eq?: string
 }

@@ -10,9 +10,11 @@ export interface ExploreTagDef {
 
 interface Props {
   terms: ExploreTagDef[]
+  onClearAll: () => void
 }
 export function ExploreTags({
   terms,
+  onClearAll,
 }: Props) {
   return (
     <div className={cs(style.root)}>
@@ -23,6 +25,15 @@ export function ExploreTags({
           onClear={term.onClear}
         />
       ))}
+      {terms.length > 0 && (
+        <button
+          type="button"
+          className={cs(style.clear_all)}
+          onClick={onClearAll}
+        >
+          clear all
+        </button>
+      )}
     </div>
   )
 }

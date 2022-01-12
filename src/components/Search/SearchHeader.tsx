@@ -22,10 +22,11 @@ export function SearchHeader({
           onClick={onToggleFilters}
         >
           <i className="fas fa-filter"/>
+          <span>filters</span>
         </button>
       )}
-      {sortSelectComp}
       {children}
+      {sortSelectComp}
     </div>
   )
 }
