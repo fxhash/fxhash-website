@@ -1,0 +1,18 @@
+.root {
+  .title {
+    z-index: 10;
+    position: relative;
+    display: inline-block;
+    padding: 4px 10px;
+    font-weight: bold;
+  }
+
+  .content {
+    background: var(--color-gray-vlight);
+    padding: 10px;
+
+    & > *+* {
+      margin-top: 8px;
+    }
+  }
+}
