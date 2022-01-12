@@ -137,7 +137,10 @@ export const Marketplace = ({}: Props) => {
   useEffect(() => {
     // first we scroll to the top
     const top = (topMarkerRef.current?.offsetTop || 0) + 20
-    window.scrollTo(0, top)
+    if (window.scrollY > top) {
+      window.scrollTo(0, top)
+    }
+
     currentLength.current = 0
     ended.current = false
     refetch?.({
