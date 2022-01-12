@@ -248,7 +248,7 @@ export const Marketplace = ({}: Props) => {
                 <CardsContainer>
                   <>
                     {offers?.length > 0 && offers.map(offer => (
-                      <ObjktCard key={offer.objkt.id} objkt={offer.objkt}/>
+                      <ObjktCard key={offer.id} objkt={offer.objkt}/>
                     ))}
                     {loading && (
                       <CardsLoading number={ITEMS_PER_PAGE} />
