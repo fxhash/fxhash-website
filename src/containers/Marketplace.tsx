@@ -17,6 +17,7 @@ import { MarketplaceFilters } from "./Marketplace/MarketplaceFilters"
 import { ExploreTagDef, ExploreTags } from "../components/Exploration/ExploreTags"
 import { displayMutez } from "../utils/units"
 import { SearchInputControlled } from "../components/Input/SearchInputControlled"
+import { cloneDeep } from "@apollo/client/utilities"
 
 
 const ITEMS_PER_PAGE = 10
@@ -129,7 +130,7 @@ export const Marketplace = ({}: Props) => {
     })
   }
 
-  const offers: Offer[] = data?.offers && [...data.offers]
+  const offers: Offer[] = data?.offers && cloneDeep(data.offers)
 
   useEffect(() => {
     currentLength.current = 0
