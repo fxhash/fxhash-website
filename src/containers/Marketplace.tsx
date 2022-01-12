@@ -172,11 +172,19 @@ export const Marketplace = ({}: Props) => {
         switch (key) {
           case "price_gte":
             //@ts-ignore
-            value = `price > ${displayMutez(filters[key])} tez`
+            value = `price >= ${displayMutez(filters[key])} tez`
             break
           case "price_lte":
             //@ts-ignore
-            value = `price < ${displayMutez(filters[key])} tez`
+            value = `price <= ${displayMutez(filters[key])} tez`
+            break
+          case "tokenSupply_gte":
+            //@ts-ignore
+            value = `editions >= ${filters[key]}`
+            break
+          case "tokenSupply_lte":
+            //@ts-ignore
+            value = `editions <= ${filters[key]}`
             break
           case "authorVerified_eq":
             //@ts-ignore

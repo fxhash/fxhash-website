@@ -60,9 +60,23 @@ export function MarketplaceFilters({
     })
   }
 
+  const [minTokenSupply, setMinTokenSupply] = useState<string>("")
+  const [maxTokenSupply, setMaxTokenSupply] = useState<string>("")
+
+  const updateTokenSupplyFilters = (evt: any) => {
+    evt.preventDefault()
+    const min = minTokenSupply ? parseInt(minTokenSupply) : undefined
+    const max = maxTokenSupply ? parseFloat(maxTokenSupply) : undefined
+    setFilters({
+      ...filters,
+      tokenSupply_gte: min,
+      tokenSupply_lte: max,
+    })
+  }
+
   return (
     <>
-      <FiltersGroup title="Price">
+      <FiltersGroup title="Price (tez)">
         <form onSubmit={updatePriceFilters}>
           <div className={cs(style.price_range)}>
             <InputText
@@ -94,6 +108,32 @@ export function MarketplaceFilters({
           onChange={(value) => setFilters({ ...filters, fullyMinted_eq: value })}
           options={MintProgresOptions}
         />
+      </FiltersGroup>
+
+      <FiltersGroup title="Number of editions">
+        <form onSubmit={updateTokenSupplyFilters}>
+          <div className={cs(style.price_range)}>
+            <InputText
+              value={minTokenSupply}
+              onChange={evt => setMinTokenSupply(evt.target.value)}
+              placeholder="Min"
+            />
+            <span>to</span>
+            <InputText
+              value={maxTokenSupply}
+              onChange={evt => setMaxTokenSupply(evt.target.value)}
+              placeholder="Max"
+            />
+          </div>
+          <Button
+            type="submit"
+            color="black"
+            size="small"
+            className={cs(style.apply_btn)}
+          >
+            apply
+          </Button>
+        </form>
       </FiltersGroup>
 
       <FiltersGroup title="Artist">
