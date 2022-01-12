@@ -129,7 +129,7 @@ export const Marketplace = ({}: Props) => {
     })
   }
 
-  const offers: Offer[] = data?.offers
+  const offers: Offer[] = data?.offers && [...data.offers]
 
   useEffect(() => {
     currentLength.current = 0
@@ -252,14 +252,12 @@ export const Marketplace = ({}: Props) => {
 
               <InfiniteScrollTrigger onTrigger={infiniteScrollFetch} canTrigger={!!data && !loading}>
                 <CardsContainer>
-                  <>
-                    {offers?.length > 0 && offers.map(offer => (
-                      <ObjktCard key={offer.id} objkt={offer.objkt}/>
-                    ))}
-                    {loading && (
-                      <CardsLoading number={ITEMS_PER_PAGE} />
-                    )}
-                  </>
+                  {offers?.length > 0 && offers.map(offer => (
+                    <ObjktCard key={offer.id} objkt={offer.objkt}/>
+                  ))}
+                  {loading && (
+                    <CardsLoading number={ITEMS_PER_PAGE} />
+                  )}
                 </CardsContainer>
               </InfiniteScrollTrigger>
             </div>
