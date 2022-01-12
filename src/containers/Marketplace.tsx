@@ -193,6 +193,8 @@ export const Marketplace = ({}: Props) => {
     return tags
   }, [filters])
 
+  console.log(offers)
+
   return (
     <CardsExplorer>
       {({ 

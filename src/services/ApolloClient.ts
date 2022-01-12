@@ -149,6 +149,7 @@ export const clientSideClient = new ApolloClient({
               for (let i = 0; i < incoming.length; ++i) {
                 merged[skip + i] = incoming[i]
               }
+              console.log({merged})
               return merged
             },
           }
