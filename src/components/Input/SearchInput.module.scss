@@ -31,3 +31,8 @@
   transform: translateY(-50%);
   color: var(--color-border-input);
 }
+
+.large_search {
+  flex-grow: 2;
+  max-width: 800px;
+}

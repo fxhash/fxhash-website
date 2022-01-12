@@ -1,0 +1,23 @@
+.root {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 8px;
+
+  button {
+    border: 3px solid var(--color-border-input);
+    background: var(--color-white);
+    padding: 6px 0;
+    color: var(--color-black);
+    cursor: pointer;
+    transition: all 0.15s;
+
+    &:hover {
+      border-color: var(--color-black);
+    }
+    
+    &.active {
+      border-color: var(--color-secondary);
+      font-weight: bold;
+    }
+  }
+}
