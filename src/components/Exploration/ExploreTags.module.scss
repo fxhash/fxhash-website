@@ -1,0 +1,22 @@
+.root {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.clear_all {
+  border: none;
+  background: transparent;
+  font-size: var(--font-size-small);
+  color: var(--color-gray-light);
+  cursor: pointer;
+  padding: 0 10px;
+  transition: all 0.15s;
+  height: 40px;
+
+  &:hover {
+    color: var(--color-gray);
+  }
+}

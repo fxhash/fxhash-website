@@ -13,6 +13,14 @@ export function CardsContainer({
   return (
     <div {...props} className={cs(style.container, props.className)}>
       {children}
+      <div/>
+      <div/>
+      <div/>
+      <div/>
+      <div/>
+      <div/>
+      <div/>
+      <div/>
     </div>
   )
 }

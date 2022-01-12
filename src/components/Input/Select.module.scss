@@ -21,7 +21,7 @@
     opacity: 0;
   }
   
-  &:focus {
+  &:focus, &.opened {
     border-color: var(--color-secondary);
     outline: none;
   }
@@ -48,7 +48,7 @@
 }
 
 .options {
-  border: 3px solid var(--color-border);
+  border: 3px solid var(--color-secondary);
   position: absolute;
   left: 0;
   z-index: 100;
@@ -112,6 +112,7 @@
   .options {
     top: 100%;
     margin-top: -3px;
+    border-top-color: var(--color-border-input);
   }
 }
 

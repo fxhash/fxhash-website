@@ -7,14 +7,10 @@ import { Spacing } from "../../components/Layout/Spacing"
 import { useQuery } from "@apollo/client"
 import { Qu_genTokenObjkts } from "../../queries/generative-token"
 import { Pagination } from "../../components/Pagination/Pagination"
-import { useState, useMemo, useEffect, useRef } from "react"
+import { useState } from "react"
 import { Objkt } from "../../types/entities/Objkt"
 import { ObjktCard } from "../../components/Card/ObjktCard"
-import { LoaderBlock } from "../../components/Layout/LoaderBlock"
-import { CardLoading } from "../../components/Card/CardLoading"
 import { CardsLoading } from "../../components/Card/CardsLoading"
-import { useRouter } from "next/router"
-import { useClientEffect } from "../../utils/hookts"
 
 
 const ITEMS_PER_PAGE = 15
@@ -35,8 +31,12 @@ export function GenerativeCollection({ token }: Props) {
     },
   })
 
+  console.log(data)
+
   // derive the active data from the active page
   const objkts: Objkt[]|null = data?.generativeToken.objkts
+
+  console.log(objkts)
 
   return (
     token.objktsCount > 0 ? (
