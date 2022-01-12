@@ -18,4 +18,6 @@ export interface OfferFilters {
   fullyMinted_eq?: boolean
   authorVerified_eq?: boolean
   searchQuery_eq?: string
+  tokenSupply_lte?: number
+  tokenSupply_gte?: number
 }

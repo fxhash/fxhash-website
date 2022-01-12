@@ -11,7 +11,7 @@ export function FiltersGroup({
 }: PropsWithChildren<Props>) {
   return (
     <div className={cs(style.root)}>
-      <div className={cs(style.title)}>{title} (tez)</div>
+      <div className={cs(style.title)}>{title}</div>
       <div className={cs(style.content)}>{children}</div>
     </div>
   )
