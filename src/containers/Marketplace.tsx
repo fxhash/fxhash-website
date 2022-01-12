@@ -17,7 +17,6 @@ import { MarketplaceFilters } from "./Marketplace/MarketplaceFilters"
 import { ExploreTagDef, ExploreTags } from "../components/Exploration/ExploreTags"
 import { displayMutez } from "../utils/units"
 import { SearchInputControlled } from "../components/Input/SearchInputControlled"
-import { cloneDeep } from "@apollo/client/utilities"
 
 
 const ITEMS_PER_PAGE = 10
@@ -96,6 +95,9 @@ export const Marketplace = ({}: Props) => {
   // 
   const [filters, setFilters] = useState<OfferFilters>({})
 
+  // reference to an element at the top to scroll back
+  const topMarkerRef = useRef<HTMLDivElement>(null)
+
   // use to know when to stop loading
   const currentLength = useRef<number>(0)
   const ended = useRef<boolean>(false)
@@ -130,9 +132,12 @@ export const Marketplace = ({}: Props) => {
     })
   }
 
-  const offers: Offer[] = data?.offers && cloneDeep(data.offers)
+  const offers: Offer[] = data?.offers
 
   useEffect(() => {
+    // first we scroll to the top
+    const top = (topMarkerRef.current?.offsetTop || 0) + 20
+    window.scrollTo(0, top)
     currentLength.current = 0
     ended.current = false
     refetch?.({
@@ -194,8 +199,6 @@ export const Marketplace = ({}: Props) => {
     return tags
   }, [filters])
 
-  console.log(offers)
-
   return (
     <CardsExplorer>
       {({ 
@@ -203,6 +206,7 @@ export const Marketplace = ({}: Props) => {
         setFiltersVisible,
       }) => (
         <>
+          <div ref={topMarkerRef}/>
           <SearchHeader
             hasFilters
             onToggleFilters={() => setFiltersVisible(!filtersVisible)}
@@ -244,12 +248,6 @@ export const Marketplace = ({}: Props) => {
               {!loading && offers.length === 0 && (
                 <span>No results</span>
               )}
-
-              {offers && offers.map(offer => (
-                <div key={offer.id}>
-                  {offer.id} / {offer.objkt.name} / {offer.price}
-                </div>
-              ))}
 
               <InfiniteScrollTrigger onTrigger={infiniteScrollFetch} canTrigger={!!data && !loading}>
                 <CardsContainer>
