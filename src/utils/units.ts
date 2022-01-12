@@ -8,8 +8,8 @@ export function displayMutez(mutez: number, maxDecimals?: number) {
   let decimals = getMutezDecimalsNb(mutez)
   decimals = maxDecimals != null ? Math.min(maxDecimals, decimals) : decimals
   const tez = (mutez/1000000)
-  const dec = tez - (tez|0)
-  return ((dec * (10**decimals))|0) > 0 ? tez.toFixed(decimals) : (tez|0)
+  const dec = tez - Math.floor(tez)
+  return ((dec * (10**decimals))|0) > 0 ? tez.toFixed(decimals) : Math.floor(tez)
 }
 
 export function displayRoyalties(royalties: number): string {
