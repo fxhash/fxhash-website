@@ -4,7 +4,8 @@ export const clamp = (x: number, min: number, max: number) => Math.max(min, Math
 export function getMutezDecimalsNb(x: number): number {
   const mu = Math.floor(Math.abs(x))
   const st = (mu/1000000).toString()
-  return st.split(".").pop()?.length || 0
+  const split = st.split(".")
+  return split.length > 1 ? (split.pop()?.length || 0) : 0
 }
 
 export function getDecimalsNumber(x: number): number {

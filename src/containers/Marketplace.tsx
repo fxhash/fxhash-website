@@ -95,6 +95,9 @@ export const Marketplace = ({}: Props) => {
   // 
   const [filters, setFilters] = useState<OfferFilters>({})
 
+  // reference to an element at the top to scroll back
+  const topMarkerRef = useRef<HTMLDivElement>(null)
+
   // use to know when to stop loading
   const currentLength = useRef<number>(0)
   const ended = useRef<boolean>(false)
@@ -132,6 +135,12 @@ export const Marketplace = ({}: Props) => {
   const offers: Offer[] = data?.offers
 
   useEffect(() => {
+    // first we scroll to the top
+    const top = (topMarkerRef.current?.offsetTop || 0) + 20
+    if (window.scrollY > top) {
+      window.scrollTo(0, top)
+    }
+
     currentLength.current = 0
     ended.current = false
     refetch?.({
@@ -200,6 +209,7 @@ export const Marketplace = ({}: Props) => {
         setFiltersVisible,
       }) => (
         <>
+          <div ref={topMarkerRef}/>
           <SearchHeader
             hasFilters
             onToggleFilters={() => setFiltersVisible(!filtersVisible)}
@@ -244,14 +254,12 @@ export const Marketplace = ({}: Props) => {
 
               <InfiniteScrollTrigger onTrigger={infiniteScrollFetch} canTrigger={!!data && !loading}>
                 <CardsContainer>
-                  <>
-                    {offers?.length > 0 && offers.map(offer => (
-                      <ObjktCard key={offer.objkt.id} objkt={offer.objkt}/>
-                    ))}
-                    {loading && (
-                      <CardsLoading number={ITEMS_PER_PAGE} />
-                    )}
-                  </>
+                  {offers?.length > 0 && offers.map(offer => (
+                    <ObjktCard key={offer.id} objkt={offer.objkt}/>
+                  ))}
+                  {loading && (
+                    <CardsLoading number={ITEMS_PER_PAGE} />
+                  )}
                 </CardsContainer>
               </InfiniteScrollTrigger>
             </div>
