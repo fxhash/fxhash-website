@@ -1,20 +1,20 @@
 import style from "./Search.module.scss"
 import cs from "classnames"
-import { PropsWithChildren } from "react"
+import { forwardRef, PropsWithChildren } from "react"
 
 interface Props {
   sortSelectComp: React.ReactNode
   hasFilters?: boolean
   onToggleFilters?: () => void
 }
-export function SearchHeader({
+export const SearchHeader = forwardRef<HTMLDivElement, PropsWithChildren<Props>>(({
   sortSelectComp,
   hasFilters,
   onToggleFilters,
   children,
-}: PropsWithChildren<Props>) {
+}, ref) => {
   return (
-    <div className={cs(style.search_header)}>
+    <div className={cs(style.search_header)} ref={ref}>
       {hasFilters && (
         <button
           type="button"
@@ -29,4 +29,4 @@ export function SearchHeader({
       {sortSelectComp}
     </div>
   )
-}
+})

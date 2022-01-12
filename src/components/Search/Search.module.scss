@@ -45,6 +45,11 @@
 }
 
 @media (max-width: $breakpoint-sm) {
+  .search_header {
+    padding-top: 30px;
+    padding-bottom: 10px;
+  }
+
   .filter_btn {
     position: fixed;
     bottom: 10px;
