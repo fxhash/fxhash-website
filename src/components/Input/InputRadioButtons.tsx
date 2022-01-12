@@ -20,7 +20,7 @@ export function InputRadioButtons({
     <div className={cs(style.root)}>
       {options.map(option => (
         <button
-          key={option.value}
+          key={option.value ?? "undefined"}
           type="button"
           className={cs({
             [style.active]: option.value === value
