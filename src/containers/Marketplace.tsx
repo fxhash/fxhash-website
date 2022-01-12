@@ -244,6 +244,12 @@ export const Marketplace = ({}: Props) => {
                 <span>No results</span>
               )}
 
+              {offers.map(offer => (
+                <div key={offer.id}>
+                  {offer.id} / {offer.objkt.name} / {offer.price}
+                </div>
+              ))}
+
               <InfiniteScrollTrigger onTrigger={infiniteScrollFetch} canTrigger={!!data && !loading}>
                 <CardsContainer>
                   <>
