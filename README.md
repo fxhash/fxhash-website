@@ -115,4 +115,4 @@ If you find a bug with the front end, you can create an issue.
 * `/services`: modules to interact with external services
 * `/styles`: the generic styles of the app
 * `/types`: type definitions
-* `/utils`: general-purpose utility functions
+* `/utils`: general-purpose utility functions 
