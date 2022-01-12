@@ -7,7 +7,7 @@ import Head from "next/head"
 import { Root } from '../containers/Root'
 import { NextPage } from 'next'
 
-const ROUTES_TO_RETAIN = ['/explore', '/marketplace', '/marketplace/collections']
+const ROUTES_TO_RETAIN = ['/explore', '/marketplace/collections']
 
 type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode
