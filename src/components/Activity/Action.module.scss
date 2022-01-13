@@ -1,0 +1,67 @@
+@import "../../styles/Variables.scss";
+
+.container {
+  width: 100%;
+  border: 3px solid var(--color-border);
+  padding: 0 20px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  position: relative;
+  transition: border-color 0.2s;
+
+  @media (max-width: $breakpoint-sm) {
+    height: auto;
+    padding: 10px;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  &.is_link:hover {
+    border: 3px solid var(--color-secondary);
+  }
+}
+
+
+.date {
+  color: var(--color-gray);
+  flex-shrink: 0;
+  font-size: 0.7rem;
+  margin-left: auto;
+}
+
+.price {
+  justify-self: flex-end;
+  color: var(--color-secondary);
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.user {
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.icon {
+  font-size: 40px;
+}
+
+.align {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.link_wrapper {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: block;
+  z-index: 1;
+}
