@@ -14,7 +14,7 @@ export function ContractsOpened() {
   const [nextCycleStart, setNextCycleStart] = useState(getNextCycleStartTime())
   const [timeToClose, setTimeToClose] = useState(getMsUntilClose())
   const nextCycleDate = useMemo(() => new Date(nextCycleStart), [nextCycleStart])
-  const nextCycleEnd = useMemo(() => addHours(new Date(nextCycleStart), -11), [nextCycleStart])
+  const nextCycleEnd = useMemo(() => addHours(new Date(nextCycleStart), -14), [nextCycleStart])
   const isOpened = timeToClose >= 0
 
   const onEnd = () => {
