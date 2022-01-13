@@ -2,6 +2,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
   gap: 8px;
+  font-size: var(--font-size-small);
 
   button {
     border: 3px solid var(--color-border-input);

@@ -92,7 +92,7 @@ export const Marketplace = ({}: Props) => {
   const [sortValue, setSortValue] = useState<string>("createdAt-desc")
   const sortVariables = useMemo<Record<string, any>>(() => sortValueToSortVariable(sortValue), [sortValue])
 
-  // 
+  // filters
   const [filters, setFilters] = useState<OfferFilters>({})
 
   // reference to an element at the top to scroll back
@@ -220,6 +220,7 @@ export const Marketplace = ({}: Props) => {
           <div ref={topMarkerRef}/>
           <SearchHeader
             hasFilters
+            filtersOpened={filtersVisible}
             onToggleFilters={() => setFiltersVisible(!filtersVisible)}
             sortSelectComp={
               <Select
@@ -256,7 +257,7 @@ export const Marketplace = ({}: Props) => {
                 </>
               )}
 
-              {!loading && offers.length === 0 && (
+              {!loading && offers?.length === 0 && (
                 <span>No results</span>
               )}
 

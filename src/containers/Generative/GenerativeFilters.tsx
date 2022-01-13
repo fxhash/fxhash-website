@@ -1,21 +1,25 @@
-import style from "./MarketplaceFilters.module.scss"
+import style from "./GenerativeFilters.module.scss"
 import cs from "classnames"
 import { FiltersGroup } from "../../components/Exploration/FiltersGroup"
 import { InputText } from "../../components/Input/InputText"
 import { useState } from "react"
 import { InputRadioButtons, RadioOption } from "../../components/Input/InputRadioButtons"
 import { Button } from "../../components/Button"
-import { OfferFilters } from "../../types/entities/Offer"
+import { GenerativeTokenFilters } from "../../types/entities/GenerativeToken"
 
 
 const MintProgresOptions: RadioOption[] = [
   {
-    value: true,
+    value: "COMPLETED",
     label: "Completed",
   },
   {
-    value: false,
+    value: "ONGOING",
     label: "On going",
+  },
+  {
+    value: "ALMOST",
+    label: "Almost done",
   },
   {
     value: undefined,
@@ -39,10 +43,10 @@ const ArtistVerificationOptions: RadioOption[] = [
 ]
 
 interface Props {
-  filters: OfferFilters
-  setFilters: (filters: OfferFilters) => void
+  filters: GenerativeTokenFilters
+  setFilters: (filters: GenerativeTokenFilters) => void
 }
-export function MarketplaceFilters({
+export function GenerativeFilters({
   filters,
   setFilters,
 }: Props) {
@@ -51,8 +55,8 @@ export function MarketplaceFilters({
 
   const updatePriceFilters = (evt: any) => {
     evt.preventDefault()
-    const minp = minPrice ? ""+(parseFloat(minPrice) * 1000000) : undefined
-    const maxp = maxPrice ? ""+(parseFloat(maxPrice) * 1000000) : undefined
+    const minp = minPrice ? Math.floor(parseFloat(minPrice) * 1000000) : undefined
+    const maxp = maxPrice ? Math.floor(parseFloat(maxPrice) * 1000000) : undefined
     setFilters({
       ...filters,
       price_gte: minp,
@@ -63,14 +67,14 @@ export function MarketplaceFilters({
   const [minTokenSupply, setMinTokenSupply] = useState<string>("")
   const [maxTokenSupply, setMaxTokenSupply] = useState<string>("")
 
-  const updateTokenSupplyFilters = (evt: any) => {
+  const updateSupplyFilters = (evt: any) => {
     evt.preventDefault()
     const min = minTokenSupply ? parseInt(minTokenSupply) : undefined
     const max = maxTokenSupply ? parseFloat(maxTokenSupply) : undefined
     setFilters({
       ...filters,
-      tokenSupply_gte: min,
-      tokenSupply_lte: max,
+      supply_gte: min,
+      supply_lte: max,
     })
   }
 
@@ -104,14 +108,14 @@ export function MarketplaceFilters({
 
       <FiltersGroup title="Mint progress">
         <InputRadioButtons
-          value={filters.fullyMinted_eq}
-          onChange={(value) => setFilters({ ...filters, fullyMinted_eq: value })}
+          value={filters.mintProgress_eq}
+          onChange={(value) => setFilters({ ...filters, mintProgress_eq: value })}
           options={MintProgresOptions}
         />
       </FiltersGroup>
 
       <FiltersGroup title="Number of editions">
-        <form onSubmit={updateTokenSupplyFilters}>
+        <form onSubmit={updateSupplyFilters}>
           <div className={cs(style.price_range)}>
             <InputText
               value={minTokenSupply}

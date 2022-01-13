@@ -11,7 +11,7 @@ export type ButtonState = "default" | "loading"
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   iconComp?: React.ReactNode
   state?: ButtonState
-  size?: "regular" | "medium" | "large" | "small" | "very-large"
+  size?: "regular" | "medium" | "large" | "small" | "very-small" | "very-large"
   color?: "black" | "primary" | "secondary" | "transparent"
   className?: string
   iconSide?: "left" | "right"
