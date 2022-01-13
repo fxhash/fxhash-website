@@ -43,6 +43,17 @@
   
 }
 
+.size-very-small {
+  height: 36px;
+  padding-left: 8px !important;
+  padding-right: 8px !important;
+  font-size: var(--font-size-small);
+
+  &.state-loading {
+    margin-top: math.div((36px - 30px), 2);
+  }
+}
+
 .size-small {
   height: 44px;
   padding-left: 14px !important;

@@ -54,3 +54,13 @@ export interface GenerativeToken {
 export interface GenerativeTokenWithCollection extends GenerativeToken {
   entireCollection: Objkt[]
 }
+
+export interface GenerativeTokenFilters {
+  price_gte?: number
+  price_lte?: number
+  mintProgress_eq?: "COMPLETED"|"ONGOING"|"ALMOST"
+  authorVerified_eq?: boolean
+  searchQuery_eq?: string
+  supply_lte?: number
+  supply_gte?: number
+}
