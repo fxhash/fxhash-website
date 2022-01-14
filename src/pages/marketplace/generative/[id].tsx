@@ -100,7 +100,7 @@ const GenerativeTokenMarketplace: NextPage<Props> = ({ token }) => {
         <div className={cs(style.metrics)}>
           <article className={cs(style.metric)}>
             <span>1st sales</span>
-            <strong>{ token.marketStats?.primTotal ? `${displayMutez(token.marketStats.primTotal)} tez` : "0" }</strong>
+            <strong>{ token.marketStats?.primVolumeTz ? `${displayMutez(token.marketStats.primVolumeTz)} tez` : "0" }</strong>
           </article>
           <article className={cs(style.metric)}>
             <span>2nd sales (tez)</span>
@@ -120,7 +120,7 @@ const GenerativeTokenMarketplace: NextPage<Props> = ({ token }) => {
           </article>
           <article className={cs(style.metric)}>
             <span>Items for sale</span>
-            <strong>{ token.marketStats?.totalListing || "0" }</strong>
+            <strong>{ token.marketStats?.listed || "0" }</strong>
           </article>
           <article className={cs(style.metric)}>
             <span>Lowest 2nd sale</span>

@@ -38,7 +38,7 @@ export function GenerativeTokenCardList({
             </div>
             <div className={cs(style.metric)}>
               <span>For sale</span>
-              <strong>{ token.marketStats?.totalListing || "0" }</strong>
+              <strong>{ token.marketStats?.listed || "0" }</strong>
             </div>
             <div className={cs(style.metric, style.progress)}>
               <span>Minted</span>

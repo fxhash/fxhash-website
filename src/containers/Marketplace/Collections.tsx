@@ -38,7 +38,7 @@ const Qu_genTokens = gql`
       }
       marketStats {
         floor
-        totalListing
+        listed
       }
     }
   }
@@ -65,7 +65,7 @@ const Qu_tokensById = gql`
       }
       marketStats {
         floor
-        totalListing
+        listed
       }
     }
   }

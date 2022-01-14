@@ -16,10 +16,11 @@ export enum GenTokFlag {
 export interface GenerativeTokenMarketStats {
   floor: number|null
   median: number|null
-  totalListing: number|null
+  listed: number|null
   highestSold: number|null
   lowestSold: number|null
-  primTotal: number|null
+  primVolumeTz: number|null
+  primVolumeNb: number|null
 	secVolumeTz: number|null
 	secVolumeNb: number|null
 	secVolumeTz24: number|null

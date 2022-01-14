@@ -105,8 +105,9 @@ export const Qu_genTokenMarketplace = gql`
         median
         highestSold
         lowestSold
-        totalListing
-        primTotal
+        listed
+        primVolumeTz
+        primVolumeTz
         secVolumeTz
         secVolumeNb
         secVolumeTz24
