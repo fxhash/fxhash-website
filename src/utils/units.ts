@@ -2,6 +2,34 @@ import { getMutezDecimalsNb } from "./math"
 
 
 /**
+ * Given a number in mutez, outputs a more readable format such as 
+ * 1.1K or 200.0K  etc...
+ */
+export function bigMutezFormatter(num: number, digits: number = 1) {
+  if (num === 0) return "0"
+
+  // turn mutez into tez
+  num = num * 0.000001
+  const lookup = [
+    { value: 1, symbol: "" },
+    { value: 1e3, symbol: "K" },
+    { value: 1e6, symbol: "M" },
+  ]
+  var item = lookup.slice().reverse().find((item) => {
+    return num >= item.value;
+  })
+
+  // we increase the number of digits if under 100 tez
+  if (num < 100) {
+    digits++
+  }
+
+  const div = item ? item.value : 1
+
+  return (num / div).toFixed(digits) + (item?.symbol ?? "")
+}
+
+/**
  * Given a number in mutez, outputs a string with decimals provided, if any
  */
 export function displayMutez(mutez: number, maxDecimals?: number) {
