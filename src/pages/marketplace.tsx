@@ -31,6 +31,8 @@ const MarketplacePage: NextPage = () => {
       <HeaderRanks>
         <CollectionRanks/>
       </HeaderRanks>
+      
+      <Spacing size="6x-large" />
 
       <section>
         <MarketplaceTabs active={0} />

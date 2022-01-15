@@ -3,20 +3,33 @@
   flex-direction: row;
   align-items: center;
   gap: 8px;
+  color: inherit;
 
   .icon {
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
     background-position: center;
     background-size: cover;
     background-color: black;
     flex-shrink: 0;
     border: 3px solid var(--color-border);
+    transition: all 0.2s;
+  }
+
+  &:hover {
+    text-decoration: none;
   }
 
   .details {
     display: flex;
     flex-direction: column;
     font-size: var(--font-size-small);
+  }
+
+  .metric {
+    flex-shrink: 0;
+    margin-left: auto;
+    font-size: 1.1em;
+    font-weight: bold;
   }
 }

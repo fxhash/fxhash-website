@@ -1,4 +1,5 @@
 import style from "./HeaderRanks.module.scss"
+import layout from "../../styles/Layout.module.scss"
 import cs from "classnames"
 import { PropsWithChildren } from "react"
 
@@ -9,8 +10,10 @@ export function HeaderRanks({
   children,
 }: PropsWithChildren<Props>) {
   return (
-    <div className={cs(style.root)}>
-      { children }
-    </div>
+    <main className={cs(layout['padding-big'])}>
+      <div className={cs(style.root)}>
+        { children }
+      </div>
+    </main>
   )
 }

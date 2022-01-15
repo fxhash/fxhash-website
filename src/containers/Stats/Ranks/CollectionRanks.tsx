@@ -1,27 +1,29 @@
 import style from "./CollectionRanks.module.scss"
 import cs from "classnames"
 import { Ranks } from "../../../components/Stats/Ranks"
-import { IOptions } from "../../../components/Input/Select"
+import { IOptions, Select } from "../../../components/Input/Select"
 import { useQuery } from "@apollo/client"
 import { useMemo, useState } from "react"
 import { Qu_marketStatsCollections } from "../../../queries/stats"
 import { GenerativeTokenMarketStats } from "../../../types/entities/GenerativeToken"
 import { GenerativeRank } from "../../../components/Stats/GenerativeRank"
 import { RankPlaceholder } from "../../../components/Stats/RankPlaceholder"
+import { DisplayTezos } from "../../../components/Display/DisplayTezos"
+import { Spacing } from "../../../components/Layout/Spacing"
 
 
 const sortOptions: IOptions[] = [
   {
     label: "24 hours",
-    value: "secVolumeTz24-desc"
+    value: "secVolumeTz24"
   },
   {
-    label: "price (high to low)",
-    value: "secVolumeTz7d-desc",
+    label: "7 days",
+    value: "secVolumeTz7d",
   },
   {
-    label: "price (low to high)",
-    value: "secVolumeTz30d-asc",
+    label: "30 days",
+    value: "secVolumeTz30d",
   },
 ]
 
@@ -39,8 +41,8 @@ interface Props {
 export function CollectionRanks({
   
 }: Props) {
-  const [sortValue, setSortValue] = useState<string>("secVolumeTz7d-desc")
-  const sort = useMemo(() => sortValueToSortVariable(sortValue), [sortValue])
+  const [sortValue, setSortValue] = useState<string>("secVolumeTz7d")
+  const sort = useMemo(() => sortValueToSortVariable(`${sortValue}-desc`), [sortValue])
   
   const { data, loading } = useQuery(Qu_marketStatsCollections, {
     notifyOnNetworkStatusChange: true,
@@ -54,21 +56,37 @@ export function CollectionRanks({
   const stats: GenerativeTokenMarketStats[] = data?.marketStats?.generativeTokens
 
   return (
-    <Ranks>
-      {stats ? (
-        stats.map((stat, idx) => (
-          <GenerativeRank
-            key={idx}
-            token={stat.generativeToken!}
-          >
-            <Tezos
-          </GenerativeRank>
-        ))
-      ):(
-        Array(15).fill(0).map((_, idx) => (
-          <RankPlaceholder key={idx} />
-        ))
-      )}
-    </Ranks>
+    <>
+      <div className={cs(style.selector)}>
+        <span>Highest volume</span>
+        <Select 
+          value={sortValue}
+          options={sortOptions}
+          onChange={setSortValue}
+        />
+      </div>
+      <Spacing size="x-large" />
+      <Ranks>
+        {stats ? (
+          stats.map((stat, idx) => (
+            <GenerativeRank
+              key={idx}
+              token={stat.generativeToken!}
+            >
+              <DisplayTezos
+                // @ts-ignore
+                mutez={stat[sortValue]}
+                className="price"
+                formatBig
+              />
+            </GenerativeRank>
+          ))
+        ):(
+          Array(15).fill(0).map((_, idx) => (
+            <RankPlaceholder key={idx} />
+          ))
+        )}
+      </Ranks>
+    </>
   )
 }

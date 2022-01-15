@@ -3,4 +3,16 @@
   flex-direction: row;
   align-items: center;
   gap: 8px;
+
+  .icon {
+    width: 60px;
+    height: 60px;
+    flex-shrink: 0;
+    border: 3px solid var(--color-gray-light);
+  }
+  
+  .details {
+    height: 20px;
+    width: 100%;
+  }
 }
