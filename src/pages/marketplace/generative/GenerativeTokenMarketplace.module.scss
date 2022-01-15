@@ -4,6 +4,7 @@
   display: flex;
   align-items: center;
   flex-direction: row;
+  justify-content: center;
 
   .presentation_details {
     .artwork_details {
@@ -18,6 +19,11 @@
     width: 256px;
     height: 256px;
     margin-right: var(--layout-gap-small-lg);
+    flex-shrink: 0;
+  }
+
+  .progress_container {
+    width: 250px;
   }
 }
 
@@ -31,6 +37,7 @@
     flex-direction: column;
     gap: 4px;
     margin-top: 30px;
+    text-align: center;
 
     & > span {
       color: var(--color-gray);
@@ -39,7 +46,7 @@
 
     strong {
       color: var(--color-secondary);
-      font-size: var(--font-size-h5);
+      font-size: var(--font-size-h4);
     }
   }
 }

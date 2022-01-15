@@ -5,3 +5,31 @@
 .drop-shadow-big {
   box-shadow: 0px 2px 14px -4px rgba(0, 0, 0, 0.67);
 }
+
+
+@keyframes placeholder_load {
+  from {
+    left: -150px;
+  }
+  to {
+    left: 100%;
+  }
+}
+
+.placeholder {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--color-gray-vlight);
+
+  &::before {
+    content: '';
+    display: block;
+    position: absolute;
+    left: -150px;
+    top: 0;
+    height: 100%;
+    width: 150px;
+    background: linear-gradient(to right, transparent 0%, var(--color-gray-light) 50%, transparent 100%);
+    animation: placeholder_load 1s cubic-bezier(0.4, 0.0, 0.2, 1) infinite;
+  }
+}
