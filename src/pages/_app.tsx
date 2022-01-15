@@ -1,4 +1,5 @@
 import '../styles/globals.scss'
+import '../styles/fonts.css'
 import type { AppProps } from 'next/app'
 import { useRef, useEffect, memo, ReactElement, ReactNode } from 'react'
 import { useRouter } from 'next/router'
