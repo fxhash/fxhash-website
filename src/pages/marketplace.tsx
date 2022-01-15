@@ -9,6 +9,8 @@ import { Marketplace } from '../containers/Marketplace'
 import Head from 'next/head'
 import { TitleHyphen } from '../components/Layout/TitleHyphen'
 import { MarketplaceTabs } from '../containers/Marketplace/Tabs'
+import { CollectionRanks } from '../containers/Stats/Ranks/CollectionRanks'
+import { HeaderRanks } from '../components/Stats/HeaderRanks'
 
 
 
@@ -25,14 +27,12 @@ const MarketplacePage: NextPage = () => {
       </Head>
 
       <Spacing size="6x-large" />
+      
+      <HeaderRanks>
+        <CollectionRanks/>
+      </HeaderRanks>
 
       <section>
-        <SectionHeader>
-          <TitleHyphen>marketplace / explore</TitleHyphen>
-        </SectionHeader>
-
-        <Spacing size="x-large" />
-
         <MarketplaceTabs active={0} />
 
         <main className={cs(layout['padding-big'])}>

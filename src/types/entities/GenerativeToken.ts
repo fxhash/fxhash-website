@@ -25,6 +25,11 @@ export interface GenerativeTokenMarketStats {
 	secVolumeNb: number|null
 	secVolumeTz24: number|null
 	secVolumeNb24: number|null
+	secVolumeTz7d: number|null
+	secVolumeNb7d: number|null
+	secVolumeTz30d: number|null
+	secVolumeNb30d: number|null
+  generativeToken?: GenerativeToken
 }
 
 export interface GenerativeToken {
