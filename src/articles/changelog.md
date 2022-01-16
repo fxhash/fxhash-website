@@ -5,6 +5,40 @@ description: 'The fxhash changelog'
 ---
 
 
+# 15/01/2021
+
+* heavy optimization of the marketplace statistic computations
+* API now serves precomputed marketplace stats (and does so way faster than before when it had to get computed on-the-fly)
+* statistics are now stored with a 1 hour granularity in the database, so history is available
+* added generic endpoint to get those stats, with sort options
+* added a board of the most successful collections on secondary on the Marketplace page (to be moved to a separate stats page)
+
+
+# 13/01/2021
+
+* added sort/filters to the generativeToken endpoint of the API
+* added sort/filters to the exploration of the Generative Tokens
+
+
+# 12/01/2021
+
+* added filters on the offers endpoint of the API
+* added filters and sort options to the marketplace
+
+
+# 10/01/2021
+
+* improved the minting flow
+  - removed useless intermediate page with mint button only
+  - mint button on Generative Token page now directly calls the contract to mint
+  - added the animation for reveal using the transaction hash after the mint
+
+
+# 08/01/2021
+
+* added a new settings panel with customization settings for the UI, and a cleaner space for settings in general
+
+
 # 07/01/2021
 
 * added boolean `isFxpreview` to check if the code is loaded in preview mode (server taking the capture)
