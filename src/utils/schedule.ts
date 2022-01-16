@@ -1,4 +1,5 @@
 import { utcToZonedTime, zonedTimeToUtc } from "date-fns-tz"
+import { Cycle } from "../types/Cycles"
 import { Timezone } from "./timzones"
 
 const OPENING_HOURS = 8
@@ -18,6 +19,35 @@ export function isPlatformOpenedAt(date: Date, timezone: Timezone): boolean {
 
   // if cycleHours > 12, it means that the platform should be closed, otherwise opened
   return cycleHours < OPENING_HOURS
+}
+
+/**
+ * Given a Date (with its timezone), and a cycle, outputs true if the cycle is opened
+ * at the given date, and false otherwie
+ */
+export function isCycleOpenedAt(date: Date, cycle: Cycle, timezone: Timezone): boolean {
+  const reference = utcToZonedTime(cycle.start, timezone.utc[0])
+  
+  // get seconds between the 2 dates
+  const diff = (date.getTime() - reference.getTime()) / 1000
+  
+  // modulo the cycle duration
+  const cycleHours = diff % (cycle.opening + cycle.closing)
+  
+  // if cycleHours > 12, it means that the platform should be closed, otherwise opened
+  return cycleHours < cycle.opening
+}
+
+/**
+ * AND operation for each cycle against the given date, using the isCycleOpenedAt function
+ */
+export function areCyclesOpenedAt(date: Date, cycles: Cycle[], timezone: Timezone): boolean {
+  if (cycles.length === 0) return false
+  let opened = true
+  for (const cycle of cycles) {
+    opened = opened && isCycleOpenedAt(date, cycle, timezone)
+  }
+  return opened
 }
 
 /**

@@ -47,9 +47,8 @@ const SchedulePage: NextPage = () => {
         <Spacing size="3x-large" />
 
         <main className={cs(layout['padding-big'])}>
-          <p>The contracts of fxhash are following an opening schedule.</p>
-          <p>If the contracts are closed, you will not be able possible to publish a Generative Token not mint unique iterations. The marketplace stays open all the time.</p>
-          <p>The indicator on the top-right [🔴/🟢] reflects the current state of the contract.</p>
+          <p>The publication of new Generative Tokens is following a schedule. When the schedule is closed, no new Generative Tokens will be published on the platform, but minting unique iterations and interacting with the marketplace will remain possible.</p>
+          <p>The indicator on the top-right [🔴/🟢] reflects the current state of the opening for Generative Tokens.</p>
 
           <Spacing size="3x-large" />
 

@@ -1,25 +1,27 @@
 import style from "./Schedule.module.scss"
 import cs from "classnames"
 import { useMemo } from "react"
-import { isPlatformOpenedAt } from "../../utils/schedule"
+import { areCyclesOpenedAt, isCycleOpenedAt, isPlatformOpenedAt } from "../../utils/schedule"
 import { addHours, format, isToday, isTomorrow, isYesterday } from "date-fns"
 import { Timezone } from "../../utils/timzones"
 import { zonedTimeToUtc } from "date-fns-tz"
+import { Cycle } from "../../types/Cycles"
 
 
 interface Props {
   date: Date
+  cycles: Cycle[]
   timezone: Timezone
 }
-export function ScheduleLine({ date, timezone }: Props) {
+export function ScheduleLine({ date, cycles, timezone }: Props) {
   // compute if each hour is within the schedule
   const hours = useMemo(() => {
     const ret: boolean[] = []
     for (let i = 0; i < 24; i++) {
-      ret.push(isPlatformOpenedAt(addHours(date, i), timezone))
+      ret.push(areCyclesOpenedAt(addHours(date, i), cycles, timezone))
     }
     return ret
-  }, [date, timezone])
+  }, [date, timezone, cycles])
 
   const formatName = useMemo(() => {
     // if date is today, yesterday or tomorrow, return this

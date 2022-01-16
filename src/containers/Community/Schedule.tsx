@@ -1,10 +1,11 @@
 import style from "./Schedule.module.scss"
 import cs from "classnames"
 import { ScheduleLine } from "./ScheduleLine"
-import { useMemo } from "react"
+import { useContext, useMemo } from "react"
 import { addDays, startOfDay, subDays } from "date-fns"
 import { Timezone } from "../../utils/timzones"
 import { utcToZonedTime, zonedTimeToUtc } from "date-fns-tz"
+import { CyclesContext } from "../../context/Cycles"
 
 
 interface Props {
@@ -19,11 +20,16 @@ export function Schedule({ timezone }: Props) {
     const yesterday = subDays(startOfDay(nowTz), 1)   // todo: replace -3 by 1
     // 7 more days starting from "yesterday"
     const ret: Date[] = [ yesterday ]
-    for (let i = 0; i < 7; i++) {
+    for (let i = 0; i < 50; i++) {
       ret.push(addDays(yesterday, i+1))
     }
     return ret
   }, [timezone])
+
+  // get the list of active cycles
+  const { cycles } = useContext(CyclesContext)
+
+  console.log(cycles)
 
   // the hours at the top
   const hours = useMemo<string[]>(() => {
@@ -47,6 +53,7 @@ export function Schedule({ timezone }: Props) {
             <ScheduleLine
               key={idx}
               date={day}
+              cycles={cycles}
               timezone={timezone}
             />
           ))}
