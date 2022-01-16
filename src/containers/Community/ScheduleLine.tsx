@@ -1,7 +1,7 @@
 import style from "./Schedule.module.scss"
 import cs from "classnames"
 import { useMemo } from "react"
-import { areCyclesOpenedAt, isCycleOpenedAt, isPlatformOpenedAt } from "../../utils/schedule"
+import { areCyclesOpenedAt } from "../../utils/schedule"
 import { addHours, format, isToday, isTomorrow, isYesterday } from "date-fns"
 import { Timezone } from "../../utils/timzones"
 import { zonedTimeToUtc } from "date-fns-tz"

@@ -1,6 +1,6 @@
 import cs from "classnames"
 import layout from "../../styles/Layout.module.scss"
-import style from "./Reports.module.scss"
+import style from "./OpeningSchedule.module.scss"
 import { NextPage } from "next"
 import Link from "next/link"
 import { SectionHeader } from "../../components/Layout/SectionHeader"
@@ -10,11 +10,12 @@ import Head from "next/head"
 import { useMemo, useState } from "react"
 import { ClientOnlyEmpty } from "../../components/Utils/ClientOnly"
 import { ContractsOpened } from "../../components/Utils/ContractsOpened"
-import { addHours, formatRFC7231 } from "date-fns"
 import { Schedule } from "../../containers/Community/Schedule"
 import { getLocalTimezone, Timezone, timezones, timezoneSearchKeys } from "../../utils/timzones"
 import { IOptions, Select } from "../../components/Input/Select"
 import { Field } from "../../components/Form/Field"
+import { InputTextUnit } from "../../components/Input/InputTextUnit"
+import { InputText } from "../../components/Input/InputText"
 
 
 const optionsTimezones: IOptions[] = timezones.map(timezone => ({
@@ -25,6 +26,7 @@ const optionsTimezones: IOptions[] = timezones.map(timezone => ({
 const SchedulePage: NextPage = () => {
   const [timezone, setTimezone] = useState<Timezone>(getLocalTimezone())
   const updateTimezone = (value: string) => setTimezone(timezones.find(tz => tz.value === value)!)
+  const [nbDays, setNbDays] = useState<number>(7)
 
   return (
     <>
@@ -62,22 +64,33 @@ const SchedulePage: NextPage = () => {
 
           <h4>Planning</h4>
           <Spacing size="small"/>
-          <Field>
-            <label>Timezone</label>
-            <Select
-              value={timezone.value}
-              options={optionsTimezones}
-              onChange={updateTimezone}
-              search={true}
-              searchKeys={timezoneSearchKeys}
-              searchDictionnary={timezones}
-              searchValue="value"
-            />
-          </Field>
+          <div className={cs(style.selects)}>
+            <Field className={cs(style.select_timezone)}>
+              <label>Timezone</label>
+              <Select
+                value={timezone.value}
+                options={optionsTimezones}
+                onChange={updateTimezone}
+                search={true}
+                searchKeys={timezoneSearchKeys}
+                searchDictionnary={timezones}
+                searchValue="value"
+              />
+            </Field>
+            <Field className={cs(style.input_days_wrapper)}>
+              <label>Number of days</label>
+              <InputText
+                type="number"
+                value={nbDays}
+                onChange={evt => setNbDays(parseInt(evt.target.value))}
+              />
+            </Field>
+          </div>
           <Spacing size="large"/>
           <ClientOnlyEmpty>
             <Schedule
               timezone={timezone}
+              nbDays={nbDays}
             />
           </ClientOnlyEmpty>
 
