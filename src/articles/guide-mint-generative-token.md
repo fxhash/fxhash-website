@@ -20,9 +20,9 @@ GT on fxhash can only be written in **html/css/javascript**. Ultimately, GT are 
 
 ## 1. Upload and mint a GT
 
-First, you upload your project and mint it as a Generative Token. This project is a tiny website which sole purpose is to generate some visuals based on a 51-characters [base 58](https://en.bitcoinwiki.org/wiki/Base58) encoded number (Tezos transaction hashes have the same signature). The project needs to be designed in a way that, when the same string is given to it, it **always produces the same output**. However, a different string should produce a **different output**.
+First, you upload your project and mint it as a Generative Token. This project is a tiny website which sole purpose is to generate some visual/audio based on a 51-characters [base 58](https://en.bitcoinwiki.org/wiki/Base58) encoded number (Tezos transaction hashes have the same signature). The project needs to be designed in a way that, when the same string is given to it, it **always produces the same output**. However, a different string should produce a **different output**.
 
-![Generative Token overview](/images/articles/overview.jpg)
+![Generative Token overview](/images/articles/guide-mint/overview.jpg)
 
 ## 2. Your project is stored
 
@@ -30,9 +30,9 @@ Your project will be stored on the [IPFS](https://ipfs.io/) network, and then st
 
 ## 3. People mint a unique token from your GT
 
-When a GT is successfully minted on the platform, anyone will be able to mint a unique token from it. When such an event arises, the hash of the transaction is injected into a new instance of your project. Then, this new *website* is uploaded to IPFS, and is assigned to the metadata of the new Token. This process ensures that each token minted from your GT will be independent, self-contained and immutable. Anyone will get a unique link to a website stored on IPFS.
+When a GT is published on the platform, anyone will be able to mint unique iterations from it. When such an event arises, the mint transaction generates a unique hash. The hash is sent as a URL parameter to your project. A [code snippet](#fxhash-code-snippet) is used to get this hash from the URL so that it can be used in your code.
 
-![Mint overview](/images/articles/mint-desc.jpg)
+![Mint overview](/images/articles/guide-collect/guide-mint.jpg)
 
 ## 4. Image preview
 
@@ -209,7 +209,7 @@ This step will define the strategy the capture module should use to generate the
 The trigger defines when the capture module will take the preview after loading the token in a web browser:
 
 * **Fixed delay**: Give it a delay of X seconds, and once the project is loaded, the capture module will wait X seconds before triggering the capture
-* **fxpreview()**: The capture module will wait until your code calls `fxpreview()`. As soon as the function is called, the capture will be triggered. You can call this function whenever your algorithm is ready to be captured. *The capture module will automatically take a capture if 40 seconds have passed after your project was loaded in the browser.*
+* **fxpreview()**: The capture module will wait until your code calls `fxpreview()`. As soon as the function is called, the capture will be triggered. You can call this function whenever your algorithm is ready to be captured. *The capture module will automatically take a capture if 80 seconds have passed after your project was loaded in the browser.*
 
 ### Target
 
