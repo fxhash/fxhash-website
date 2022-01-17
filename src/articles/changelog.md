@@ -5,6 +5,16 @@ description: 'The fxhash changelog'
 ---
 
 
+# 17/01/2021
+
+* cycles are now directly pulled from the contracts and UI reflects cycles in contracts
+* added supported for any number of cycles layered (off days are now displayed properly)
+* added cycle IDs to the schedule (easier for communication)
+* improved the guides to collect, and to publish Generative Tokens
+* added guides to the header of the home page
+* improved responsive on home page
+
+
 # 15/01/2021
 
 * heavy optimization of the marketplace statistic computations
