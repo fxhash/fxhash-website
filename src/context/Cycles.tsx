@@ -69,6 +69,8 @@ export function CyclesProvider({ children }: PropsWithChildren<{}>) {
     }
   }, [])
 
+  console.log(context)
+
   return (
     <CyclesContext.Provider value={context}>
       {children}
