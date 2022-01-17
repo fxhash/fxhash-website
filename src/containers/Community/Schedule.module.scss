@@ -8,6 +8,9 @@
   width: 1200px;
 
   tr {
+    td {
+      min-width: 0;
+    }
     td:first-child, td:last-child {
       width: 100px;
     }
@@ -36,6 +39,15 @@
     td {
       border-bottom: 1px solid var(--color-gray-dark);
       padding: 0;
+
+      .cycle_id {
+        width: 20px;
+        display: block;
+        margin: auto;
+        margin-top: 14px;
+        color: black;
+        opacity: 0.5;
+      }
     }
     
     .square {

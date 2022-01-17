@@ -1,7 +1,7 @@
 import style from "./Schedule.module.scss"
 import cs from "classnames"
 import { useMemo } from "react"
-import { areCyclesOpenedAt } from "../../utils/schedule"
+import { areCyclesOpenedAt, getCycleTimeState, ICycleTimeState } from "../../utils/schedule"
 import { addHours, format, isToday, isTomorrow, isYesterday } from "date-fns"
 import { Timezone } from "../../utils/timzones"
 import { zonedTimeToUtc } from "date-fns-tz"
@@ -15,10 +15,10 @@ interface Props {
 }
 export function ScheduleLine({ date, cycles, timezone }: Props) {
   // compute if each hour is within the schedule
-  const hours = useMemo(() => {
-    const ret: boolean[] = []
+  const hours = useMemo<ICycleTimeState[]>(() => {
+    const ret: ICycleTimeState[] = []
     for (let i = 0; i < 24; i++) {
-      ret.push(areCyclesOpenedAt(addHours(date, i), cycles, timezone))
+      ret.push(getCycleTimeState(addHours(date, i), cycles, timezone))
     }
     return ret
   }, [date, timezone, cycles])
@@ -46,8 +46,10 @@ export function ScheduleLine({ date, cycles, timezone }: Props) {
         </div>
       </td>
       {hours.map((hour, idx) => (
-        <td key={idx} className={cs({ [style.active]: hour })}>
-          <div className={cs(style.square)}/>
+        <td key={idx} className={cs({ [style.active]: hour.opened })}>
+          <div className={cs(style.square)}>
+            <span className={cs(style.cycle_id)}>{ hour.opened && hour.id }</span>
+          </div>
         </td>
       ))}
       <td>

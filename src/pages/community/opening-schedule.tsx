@@ -49,7 +49,7 @@ const SchedulePage: NextPage = () => {
         <Spacing size="3x-large" />
 
         <main className={cs(layout['padding-big'])}>
-          <p>The publication of new Generative Tokens is following a schedule. When the schedule is closed, no new Generative Tokens will be published on the platform, but minting unique iterations and interacting with the marketplace will remain possible.</p>
+          <p>The publication of new Generative Tokens follows a schedule. When the schedule is closed, new Generative Tokens cannot be published on the platform, but minting unique iterations and interacting with the marketplace will remain possible.</p>
           <p>The indicator on the top-right [🔴/🟢] reflects the current state of the opening for Generative Tokens.</p>
 
           <Spacing size="3x-large" />

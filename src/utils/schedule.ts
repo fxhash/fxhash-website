@@ -32,6 +32,10 @@ export function areCyclesOpenedAt(date: Date, cycles: Cycle[], timezone?: Timezo
   return opened
 }
 
+export function getCycleIdAt(date: Date, cycle: Cycle): number {
+  return (date.getTime() - cycle.start.getTime()) / 1000 / (cycle.closing+cycle.opening) | 0
+}
+
 /**
  * Given a cycle, and a time (default = now), returns the Date of the closest
  * closing
@@ -112,5 +116,17 @@ export function getCyclesState(cycles: Cycle[]): CyclesState {
     opened,
     nextClosing,
     nextOpening,
+  }
+}
+
+export interface ICycleTimeState {
+  opened: boolean
+  id: number
+}
+
+export function getCycleTimeState(date: Date, cycles: Cycle[], timezone: Timezone): ICycleTimeState {
+  return {
+    opened: areCyclesOpenedAt(date, cycles, timezone),
+    id: getCycleIdAt(date, cycles[0])
   }
 }

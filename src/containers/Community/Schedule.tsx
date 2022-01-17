@@ -48,7 +48,7 @@ export function Schedule({ timezone, nbDays = 7 }: Props) {
           </tr>
         </thead>
         <tbody>
-          {days.map((day, idx) => (
+          {cycles.length > 0 && days.map((day, idx) => (
             <ScheduleLine
               key={idx}
               date={day}
