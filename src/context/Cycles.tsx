@@ -48,7 +48,7 @@ export function CyclesProvider({ children }: PropsWithChildren<{}>) {
       const allowedStorage = await allowedStorageData.json()
       
       // TODO: remove forced cycles
-      allowedStorage.cycle_ids = [ "31", "33" ]
+      // allowedStorage.cycle_ids = [ "31", "33" ]
 
       // finally get the active cycles
       const activeCycles = allowedStorage.cycle_ids.map((id: string) => cycles[parseInt(id)])
@@ -68,8 +68,6 @@ export function CyclesProvider({ children }: PropsWithChildren<{}>) {
       }
     }
   }, [])
-
-  console.log(context)
 
   return (
     <CyclesContext.Provider value={context}>
