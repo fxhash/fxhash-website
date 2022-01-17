@@ -1,16 +1,5 @@
 @import './Variables.scss';
 
-.presentation {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  h1 {
-    max-width: 800px;
-    text-align: center;
-  }
-}
-
 .random-artwork {
   display: flex;
   align-items: center;
@@ -22,6 +11,10 @@
     height: 40vw;
     min-width: 40vw;
     min-height: 40vw;
+  }
+
+  .mint_progress {
+    width: 300px;
   }
 
   .section-subtitle {
