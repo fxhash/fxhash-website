@@ -25,6 +25,7 @@ import { TitleHyphen } from '../components/Layout/TitleHyphen'
 import { getGenerativeTokenUrl } from '../utils/generative-token'
 import { useContext } from 'react'
 import { SettingsContext } from '../context/Theme'
+import { PresentationHeader } from '../containers/Home/PresentationHeader'
 
 
 interface Props {
@@ -52,10 +53,9 @@ const Home: NextPage<Props> = ({
       </Head>
 
       <Spacing size="3x-large" />
-      <section className={cs(styles.presentation, layout['padding-small'])}>
-        <h1 className={cs(Text.h3)}>
-          fxhash is an open platform to <span className={cs(Colors.primary)}>create</span> and <span className={cs(Colors.secondary)}>collect</span> generative NFTs on the tezos blockchain
-        </h1>
+
+      <section className={cs(layout['padding-big'])}>
+        <PresentationHeader/>
       </section>
 
       <Spacing size="6x-large" />
@@ -76,11 +76,13 @@ const Home: NextPage<Props> = ({
                 <Spacing size="x-small"/>
 
                 <div className={cs(styles['artwork-details'])}>
-                  <MintProgress
-                    balance={randomGenerativeToken.balance}
-                    supply={randomGenerativeToken.supply}
-                    originalSupply={randomGenerativeToken.originalSupply}
-                  />
+                  <div className={cs(styles.mint_progress)}>
+                    <MintProgress
+                      balance={randomGenerativeToken.balance}
+                      supply={randomGenerativeToken.supply}
+                      originalSupply={randomGenerativeToken.originalSupply}
+                    />
+                  </div>
 
                   <Spacing size="large"/>
 
