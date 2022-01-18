@@ -209,7 +209,7 @@ This step will define the strategy the capture module should use to generate the
 The trigger defines when the capture module will take the preview after loading the token in a web browser:
 
 * **Fixed delay**: Give it a delay of X seconds, and once the project is loaded, the capture module will wait X seconds before triggering the capture
-* **fxpreview()**: The capture module will wait until your code calls `fxpreview()`. As soon as the function is called, the capture will be triggered. You can call this function whenever your algorithm is ready to be captured. *The capture module will automatically take a capture if 80 seconds have passed after your project was loaded in the browser.*
+* **fxpreview()**: The capture module will wait until your code calls `fxpreview()`. As soon as the function is called, the capture will be triggered. You can call this function whenever your algorithm is ready to be captured. *The capture module will automatically take a capture if 300 seconds have passed after your project was loaded in the browser.*
 
 ### Target
 
