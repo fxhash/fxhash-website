@@ -84,7 +84,7 @@ export const InputCaptureSettings: FunctionComponent<Props> = ({
           <p>Remember: better safe than sorry</p>
           <SliderWithText
             min={0.1}
-            max={80}
+            max={300}
             step={0.1}
             value={settings.delay}
             onChange={val => update("delay", val)}
