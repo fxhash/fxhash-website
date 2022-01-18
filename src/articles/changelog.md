@@ -5,6 +5,11 @@ description: 'The fxhash changelog'
 ---
 
 
+# 18/01/2021
+
+* added relevance sort option when search is active (explore/marketplace)
+
+
 # 17/01/2021
 
 * cycles are now directly pulled from the contracts and UI reflects cycles in contracts

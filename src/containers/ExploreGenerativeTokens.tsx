@@ -49,7 +49,7 @@ const Qu_genTokens = gql`
   }
 `
 
-const sortOptions: IOptions[] = [
+const generalSortOptions: IOptions[] = [
   {
     label: "recently minted",
     value: "lockEnd-desc"
@@ -84,6 +84,14 @@ const sortOptions: IOptions[] = [
   },
 ]
 
+const searchSortOptions: IOptions[] = [
+  {
+    label: "search relevance",
+    value: "relevance-desc",
+  },
+  ...generalSortOptions
+]
+
 function sortValueToSortVariable(val: string) {
   if (val === "pertinence") return {}
   const split = val.split("-")
@@ -96,9 +104,20 @@ interface Props {
 }
 
 export const ExploreGenerativeTokens = ({}: Props) => {
-  // sort options
+  // sort variables
   const [sortValue, setSortValue] = useState<string>("lockEnd-desc")
   const sort = useMemo<Record<string, any>>(() => sortValueToSortVariable(sortValue), [sortValue])
+  // sort options - when the search is triggered, options are updated to include relevance
+  const [sortOptions, setSortOptions] = useState<IOptions[]>(generalSortOptions)
+  // keeps track of the search option used before the search was triggered
+  const sortBeforeSearch = useRef<string>(sortValue)
+
+  // effect to update the sortBeforeSearch value whenever a sort changes
+  useEffect(() => {
+    if (sortValue !== "relevance-desc") {
+      sortBeforeSearch.current = sortValue
+    }
+  }, [sortValue])
 
   // filters
   const [filters, setFilters] = useState<GenerativeTokenFilters>({})
@@ -171,6 +190,11 @@ export const ExploreGenerativeTokens = ({}: Props) => {
 
   const removeFilter = (filter: string) => {
     addFilter(filter, undefined)
+    // if the filter is search string, we reset the sort to what ti was
+    if (filter === "searchQuery_eq" && sortValue === "relevance-desc") {
+      setSortValue(sortBeforeSearch.current)
+      setSortOptions(generalSortOptions)
+    }
   }
 
   // build the list of filters
@@ -243,7 +267,20 @@ export const ExploreGenerativeTokens = ({}: Props) => {
             }
           >
             <SearchInputControlled
-              onSearch={(value) => value ? addFilter("searchQuery_eq", value) : removeFilter("searchQuery_eq")}
+              onSearch={(value) => {
+                if (value) {
+                  setSortOptions(searchSortOptions)
+                  setSortValue("relevance-desc")
+                  addFilter("searchQuery_eq", value)
+                }
+                else {
+                  removeFilter("searchQuery_eq")
+                  setSortOptions(generalSortOptions)
+                  if (sortValue === "relevance-desc") {
+                    setSortValue(sortBeforeSearch.current)
+                  }
+                }
+              }}
               className={styleSearch.large_search}
             />
           </SearchHeader>

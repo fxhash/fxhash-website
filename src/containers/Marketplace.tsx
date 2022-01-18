@@ -22,8 +22,8 @@ import { SearchInputControlled } from "../components/Input/SearchInputControlled
 const ITEMS_PER_PAGE = 10
 
 const Qu_offers = gql`
-  query Query ($skip: Int, $take: Int, $price: String, $createdAt: String, $filters: OfferFilter) {
-    offers(skip: $skip, take: $take, price: $price, createdAt: $createdAt, filters: $filters) {
+  query Query ($skip: Int, $take: Int, $sort: OffersSortInput, $filters: OfferFilter) {
+    offers(skip: $skip, take: $take, sort: $sort, filters: $filters) {
       id
       price
       objkt {
@@ -58,7 +58,7 @@ const Qu_offers = gql`
   }
 `
 
-const sortOptions: IOptions[] = [
+const generalSortOptions: IOptions[] = [
   {
     label: "recently listed",
     value: "createdAt-desc"
@@ -77,6 +77,14 @@ const sortOptions: IOptions[] = [
   },
 ]
 
+const searchSortOptions: IOptions[] = [
+  {
+    label: "search relevance",
+    value: "relevance-desc",
+  },
+  ...generalSortOptions
+]
+
 function sortValueToSortVariable(val: string) {
   if (val === "pertinence") return {}
   const split = val.split("-")
@@ -89,8 +97,20 @@ interface Props {
 }
 
 export const Marketplace = ({}: Props) => {
+  // sort variables
   const [sortValue, setSortValue] = useState<string>("createdAt-desc")
-  const sortVariables = useMemo<Record<string, any>>(() => sortValueToSortVariable(sortValue), [sortValue])
+  const sort = useMemo<Record<string, any>>(() => sortValueToSortVariable(sortValue), [sortValue])
+  // sort options - when the search is triggered, options are updated to include relevance
+  const [sortOptions, setSortOptions] = useState<IOptions[]>(generalSortOptions)
+  // keeps track of the search option used before the search was triggered
+  const sortBeforeSearch = useRef<string>(sortValue)
+
+  // effect to update the sortBeforeSearch value whenever a sort changes
+  useEffect(() => {
+    if (sortValue !== "relevance-desc") {
+      sortBeforeSearch.current = sortValue
+    }
+  }, [sortValue])
 
   // filters
   const [filters, setFilters] = useState<OfferFilters>({})
@@ -107,7 +127,7 @@ export const Marketplace = ({}: Props) => {
     variables: {
       skip: 0,
       take: ITEMS_PER_PAGE,
-      ...sortVariables,
+      sort,
       filters,
     }
   })
@@ -146,10 +166,10 @@ export const Marketplace = ({}: Props) => {
     refetch?.({
       skip: 0,
       take: ITEMS_PER_PAGE,
-      ...sortVariables,
+      sort,
       filters,
     })
-  }, [sortVariables, filters])
+  }, [sort, filters])
 
   const addFilter = (filter: string, value: any) => {
     setFilters({
@@ -160,6 +180,11 @@ export const Marketplace = ({}: Props) => {
 
   const removeFilter = (filter: string) => {
     addFilter(filter, undefined)
+    // if the filter is search string, we reset the sort to what ti was
+    if (filter === "searchQuery_eq" && sortValue === "relevance-desc") {
+      setSortValue(sortBeforeSearch.current)
+      setSortOptions(generalSortOptions)
+    }
   }
 
   // build the list of filters
@@ -231,7 +256,20 @@ export const Marketplace = ({}: Props) => {
             }
           >
             <SearchInputControlled
-              onSearch={(value) => value ? addFilter("searchQuery_eq", value) : removeFilter("searchQuery_eq")}
+              onSearch={(value) => {
+                if (value) {
+                  setSortOptions(searchSortOptions)
+                  setSortValue("relevance-desc")
+                  addFilter("searchQuery_eq", value)
+                }
+                else {
+                  removeFilter("searchQuery_eq")
+                  setSortOptions(generalSortOptions)
+                  if (sortValue === "relevance-desc") {
+                    setSortValue(sortBeforeSearch.current)
+                  }
+                }
+              }}
               className={styleSearch.large_search}
             />
           </SearchHeader>
