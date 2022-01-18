@@ -300,7 +300,11 @@ export const ExploreGenerativeTokens = ({}: Props) => {
                 <>
                   <ExploreTags
                     terms={filterTags}
-                    onClearAll={() => setFilters({})}
+                    onClearAll={() => {
+                      setFilters({})
+                      setSortOptions(generalSortOptions)
+                      setSortValue(sortBeforeSearch.current)
+                    }}
                   />
                   <Spacing size="regular"/>
                 </>

@@ -289,7 +289,11 @@ export const Marketplace = ({}: Props) => {
                 <>
                   <ExploreTags
                     terms={filterTags}
-                    onClearAll={() => setFilters({})}
+                    onClearAll={() => {
+                      setFilters({})
+                      setSortOptions(generalSortOptions)
+                      setSortValue(sortBeforeSearch.current)
+                    }}
                   />
                   <Spacing size="regular"/>
                 </>
