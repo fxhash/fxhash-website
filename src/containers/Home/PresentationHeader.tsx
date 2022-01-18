@@ -15,7 +15,7 @@ export function PresentationHeader({
         fxhash is an open platform to <span className={cs(Colors.primary)}>create</span> and <span className={cs(Colors.secondary)}>collect</span> generative NFTs on the tezos blockchain
       </h1>
       <div className={cs(style.guides_section)}>
-        <h4 className={cs(style.guides_section_title)}>Useful ressources</h4>
+        <h4 className={cs(style.guides_section_title)}>Useful resources</h4>
         <div className={cs(style.guides_wrapper)}>
           <Link href="/articles/collect-mint-tokens">
             <a className={cs(style.guide)}>
