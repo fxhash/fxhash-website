@@ -122,27 +122,27 @@ export function UserCollectionFilters({
     }
   }, [loading])
 
-  useEffect(() => {
+  const updateAuthorFilters = (selection: string[]) => {
     setFilters({
       ...filters,
-      author_in: selectedArtists.length > 0 ? selectedArtists : undefined
+      author_in: selection.length > 0 ? selection : undefined
     })
-  }, [selectedArtists])
+  }
 
-  useEffect(() => {
+  const updateIssuerFilters = (selection: number[]) => {
     setFilters({
       ...filters,
-      issuer_in: selectedGenerators.length > 0 ? selectedGenerators : undefined
+      issuer_in: selection.length > 0 ? selection : undefined
     })
-  }, [selectedGenerators])
+  }
 
   return (
     <>
       <FiltersGroup title="Artist">
         <InputMultiList
           listItems={listArtists}
-          selected={selectedArtists}
-          onChangeSelected={setSelectedArtists}
+          selected={filters.author_in || []}
+          onChangeSelected={updateAuthorFilters}
           className={cs(style.multi_list)}
         >
           {({ itemProps, selected }) => (
@@ -158,8 +158,8 @@ export function UserCollectionFilters({
       <FiltersGroup title="Generators">
         <InputMultiList
           listItems={listGenerators}
-          selected={selectedGenerators}
-          onChangeSelected={setSelectedGenerators}
+          selected={filters.issuer_in || []}
+          onChangeSelected={updateIssuerFilters}
           className={cs(style.multi_list)}
         >
           {({ itemProps, selected }) => (

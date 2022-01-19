@@ -133,9 +133,9 @@ export function UserCollection({
   useEffect(() => {
     // first we scroll to the top
     const top = (topMarkerRef.current?.offsetTop || 0) + 20
-    if (window.scrollY > top + 10) {
-      window.scrollTo(0, top)
-    }
+    // if (window.scrollY > top + 10) {
+    // }
+    window.scrollTo(0, top)
 
     currentLength.current = 0
     ended.current = false
@@ -188,6 +188,14 @@ export function UserCollection({
           case "searchQuery_eq":
             //@ts-ignore
             value = `search: ${filters[key]}`
+            break
+          case "author_in":
+            //@ts-ignore
+            value = `artists: (${filters[key].length})`
+            break
+          case "issuer_in":
+            //@ts-ignore
+            value = `generators: (${filters[key].length})`
             break
         }
         if (value) {
