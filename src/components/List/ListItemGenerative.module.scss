@@ -10,5 +10,10 @@
     background-size: cover;
     background-position: center;
     background-color: black;
+    flex-shrink: 0;
+  }
+
+  span {
+    text-align: left;
   }
 }
