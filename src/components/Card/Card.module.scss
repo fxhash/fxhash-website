@@ -20,7 +20,6 @@
   width: 100%;
   padding-top: 100%;
   position: relative;
-  background-color: var(--color-black);
   background-size: cover;
   background-position: center;
 }
@@ -80,6 +79,12 @@
     align-items: flex-end;
     font-size: 0.8em;
     gap: 4px;
+  }
+
+  .bottom_left {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
   }
 }
 

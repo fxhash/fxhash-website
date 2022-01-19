@@ -38,6 +38,12 @@
       font-size: var(--font-size-h4);
       text-align: center;
     }
+
+    .infos {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
   }
 }
 

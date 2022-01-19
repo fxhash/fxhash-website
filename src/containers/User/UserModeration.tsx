@@ -41,19 +41,19 @@ export function UserModeration({
             <Button
               type="button"
               size="small"
+              color="black"
+              onClick={() => setModerateModal(true)}
+            >
+              moderate
+            </Button>
+            <Button
+              type="button"
+              size="small"
               color="secondary"
               state={verifyLoading ? "loading" : "default"}
               onClick={() => callVerify(user.id)}
             >
               verify
-            </Button>
-            <Button
-              type="button"
-              size="small"
-              color="black"
-              onClick={() => setModerateModal(true)}
-            >
-              moderate
             </Button>
             <Button
               type="button"

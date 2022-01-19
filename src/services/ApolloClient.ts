@@ -86,9 +86,18 @@ export const clientSideClient = new ApolloClient({
             // @ts-ignore
             merge(existing, incoming, { args: { skip = 0 }}) {
               const merged = existing ? existing.slice(0) : []
-              for (let i = 0; i < incoming.length; ++i) {
-                merged[skip + i] = incoming[i]
-              }
+              let j = 0
+              mainLoop:
+                for (let i = 0; i < incoming.length; ++i) {
+                  if (existing) {
+                    for (const item of existing) {
+                      if (incoming[i].__ref === item.__ref) {
+                        continue mainLoop
+                      }
+                    }
+                  }
+                  merged[skip + (j++)] = incoming[i]
+                }
               return merged
             },
           },

@@ -14,13 +14,18 @@ import { getObjktUrl } from "../../utils/objkt"
 import { GenTokFlag } from "../../types/entities/GenerativeToken"
 import { useContext } from "react"
 import { SettingsContext } from "../../context/Theme"
+import { DisplayTezos } from "../Display/DisplayTezos"
 
 interface Props {
   objkt: Objkt
+  showOwner?: boolean
+  showRarity?: boolean
 }
 
 export function ObjktCard({
   objkt,
+  showOwner = true,
+  showRarity = false,
 }: Props) {
   const url = getObjktUrl(objkt)
   const settings = useContext(SettingsContext)
@@ -36,17 +41,34 @@ export function ObjktCard({
           <div>
             {objkt.duplicate && <div className={cs(styleObjkt.dup_flag)}>[WARNING: DUPLICATE]</div>}
             <h5>{ objkt.name }{objkt.assigned === false && ` - ${objkt.issuer.name}`}</h5>
-            <Spacing size="2x-small" />
-            <UserBadge user={objkt.owner!} size="regular" hasLink={false} />
+            {showOwner && (
+              <>
+                <Spacing size="2x-small" />
+                <UserBadge user={objkt.owner!} size="regular" hasLink={false} />
+              </>
+            )}
+            {showRarity && objkt.rarity != null && (
+              <>
+                <Spacing size="2x-small" />
+                <div className={cs(styleObjkt.rarity)}>
+                  Rarity: { objkt.rarity.toFixed(3) }
+                </div>
+              </>
+            )}
           </div>
 
           <Spacing size="small" />
 
           <div className={cs(style.bottom)}>
-            <div className={cs(style.price)}>
-              {objkt.offer && (
-                <>{displayMutez(objkt.offer.price!)} tez</>
-              )}
+            <div className={cs(style.bottom_left)}>
+              <div className={cs(style.price)}>
+                {objkt.offer && (
+                  <DisplayTezos
+                    mutez={objkt.offer.price!}
+                    formatBig={false}
+                  />
+                )}
+              </div>
             </div>
             <div className={cs(style.badge)}>
               <span className={cs(colors['gray-dark'])}>created by</span> 
