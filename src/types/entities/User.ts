@@ -73,6 +73,6 @@ export interface IUserCollectionFilters {
   assignedAt_lt?: string
   mintProgress_eq?: "COMPLETED"|"ONGOING"|"ALMOST"
   authorVerified_eq?: boolean
-  author_eq?: string
+  author_in?: string[]
   searchQuery_eq?: string
 }

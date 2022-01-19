@@ -76,6 +76,24 @@ export const Qu_userObjkts = gql`
   }
 `
 
+export const Qu_userObjktsSubResults = gql`
+  query Query($id: String!, $generativeFilters: ObjktFilter, $authorFilters: ObjktFilter) {
+    user(id: $id) {
+      generativeTokensFromObjktFilters(filters: $generativeFilters) {
+        id
+        name
+        metadata
+      } 
+      authorsFromObjktFilters(filters: $authorFilters) {
+        id
+        name
+        avatarUri
+        flag
+      }
+    }
+  }
+`
+
 export const Qu_userOffers = gql`
   query Query($id: String!, $take: Int, $skip: Int) {
     user(id: $id) {

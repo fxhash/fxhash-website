@@ -105,7 +105,7 @@ export function UserCollection({
       take: ITEMS_PER_PAGE,
       filters,
       sort,
-    }
+    },
   })
 
   useEffect(() => {
@@ -133,7 +133,7 @@ export function UserCollection({
   useEffect(() => {
     // first we scroll to the top
     const top = (topMarkerRef.current?.offsetTop || 0) + 20
-    if (window.scrollY > top) {
+    if (window.scrollY > top + 10) {
       window.scrollTo(0, top)
     }
 
@@ -258,6 +258,7 @@ export function UserCollection({
               {filtersVisible && (
                 <FiltersPanel onClose={() => setFiltersVisible(false)}>
                   <UserCollectionFilters
+                    user={user}
                     filters={filters}
                     setFilters={setFilters}
                   />

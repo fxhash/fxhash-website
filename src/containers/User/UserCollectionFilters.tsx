@@ -2,10 +2,16 @@ import style from "./UserCollectionFilters.module.scss"
 import cs from "classnames"
 import { FiltersGroup } from "../../components/Exploration/FiltersGroup"
 import { InputText } from "../../components/Input/InputText"
-import { useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { InputRadioButtons, RadioOption } from "../../components/Input/InputRadioButtons"
 import { Button } from "../../components/Button"
-import { GenerativeTokenFilters } from "../../types/entities/GenerativeToken"
+import { GenerativeToken, GenerativeTokenFilters } from "../../types/entities/GenerativeToken"
+import { useLazyQuery, useQuery } from "@apollo/client"
+import { Qu_userObjktsSubResults } from "../../queries/user"
+import { IUserCollectionFilters, User } from "../../types/entities/User"
+import { UserBadge } from "../../components/User/UserBadge"
+import { InputMultiList, MultiListItem } from "../../components/Input/InputMultiList"
+import { ListItemGenerative } from "../../components/List/ListItemGenerative"
 
 
 const MintProgresOptions: RadioOption[] = [
@@ -43,15 +49,127 @@ const ArtistVerificationOptions: RadioOption[] = [
 ]
 
 interface Props {
-  filters: GenerativeTokenFilters
-  setFilters: (filters: GenerativeTokenFilters) => void
+  user: User
+  filters: IUserCollectionFilters
+  setFilters: (filters: IUserCollectionFilters) => void
 }
 export function UserCollectionFilters({
+  user,
   filters,
   setFilters,
 }: Props) {
+
+  // a list of selected artists by filter
+  const [selectedArtists, setSelectedArtists] = useState<string[]>([])
+
+  // a list of selected generative tokens by IDs
+  const [selectedGenerators, setSelectedGenerators] = useState<number[]>([])
+
+  // we store the list of artists / collections in the state for better UX
+  const [listArtists, setListArtists] = useState<MultiListItem[]>([])
+  const [listGenerators, setListGenerators] = useState<MultiListItem[]>([])
+
+  // we remove the issuer_in filter for the generative filters, same for authors
+  const generativeFilters: IUserCollectionFilters = {
+    ...filters,
+    issuer_in: undefined
+  }
+  const authorFilters: IUserCollectionFilters = {
+    ...filters,
+    author_in: undefined
+  }
+
+  const { data, loading, fetchMore, refetch } = useQuery(Qu_userObjktsSubResults, {
+    notifyOnNetworkStatusChange: true,
+    variables: {
+      id: user.id,
+      generativeFilters,
+      authorFilters,
+    },
+    fetchPolicy: "no-cache"
+  })
+
+  const artists: User[]|null = data?.user?.authorsFromObjktFilters || null
+  const generativeTokens: GenerativeToken[]|null = data?.user?.generativeTokensFromObjktFilters || null
+
+  // when the query isn't loading anymore, the lists gets updated
+  useEffect(() => {
+    if (!loading) {
+      // build the list of artists
+      let la: MultiListItem[] = []
+      if (artists) {
+        la = artists.map(artist => ({
+          value: artist.id,
+          props: {
+            artist
+          }
+        }))
+      }
+
+      // build the list of generative tokens
+      let lg: MultiListItem[] = []
+      if (generativeTokens) {
+        lg = generativeTokens.map(token => ({
+          value: token.id,
+          props: {
+            token
+          }
+        }))
+      }
+
+      setListArtists(la)
+      setListGenerators(lg)
+    }
+  }, [loading])
+
+  useEffect(() => {
+    setFilters({
+      ...filters,
+      author_in: selectedArtists.length > 0 ? selectedArtists : undefined
+    })
+  }, [selectedArtists])
+
+  useEffect(() => {
+    setFilters({
+      ...filters,
+      issuer_in: selectedGenerators.length > 0 ? selectedGenerators : undefined
+    })
+  }, [selectedGenerators])
+
   return (
     <>
+      <FiltersGroup title="Artist">
+        <InputMultiList
+          listItems={listArtists}
+          selected={selectedArtists}
+          onChangeSelected={setSelectedArtists}
+          className={cs(style.multi_list)}
+        >
+          {({ itemProps, selected }) => (
+            <UserBadge
+              user={itemProps.artist}
+              size="small" 
+              hasLink={false}
+            />
+          )}
+        </InputMultiList>
+      </FiltersGroup>
+
+      <FiltersGroup title="Generators">
+        <InputMultiList
+          listItems={listGenerators}
+          selected={selectedGenerators}
+          onChangeSelected={setSelectedGenerators}
+          className={cs(style.multi_list)}
+        >
+          {({ itemProps, selected }) => (
+            <ListItemGenerative
+              token={itemProps.token}
+            />
+          )}
+        </InputMultiList>
+      </FiltersGroup>
+
       <FiltersGroup title="Mint progress">
         <InputRadioButtons
           value={filters.mintProgress_eq}
