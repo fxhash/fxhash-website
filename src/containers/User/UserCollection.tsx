@@ -133,9 +133,9 @@ export function UserCollection({
   useEffect(() => {
     // first we scroll to the top
     const top = (topMarkerRef.current?.offsetTop || 0) + 20
-    // if (window.scrollY > top + 10) {
-    // }
-    window.scrollTo(0, top)
+    if (window.scrollY > top + 10) {
+      window.scrollTo(0, top)
+    }
 
     currentLength.current = 0
     ended.current = false
