@@ -10,6 +10,7 @@
     align-items: center;
     gap: 0.25em;
     margin-left: 0.5em;
+    text-align: left;
   }
   
   .verified {
@@ -47,6 +48,7 @@ a.container:hover {
 
 .avatar {
   transition: all 0.3s ease-out;
+  flex-shrink: 0;
 }
 
 .avatar-small {

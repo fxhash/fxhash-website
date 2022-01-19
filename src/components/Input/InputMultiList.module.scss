@@ -12,6 +12,7 @@
   background: transparent;
   cursor: pointer;
   color: inherit;
+  gap: 8px;
 
   & > * {
     color: var(--color-black);
@@ -25,6 +26,7 @@
     margin-right: 2px;
     border-radius: 50%;
     border: 3px solid var(--color-gray-light);
+    flex-shrink: 0;
   }
 
   & + & {
