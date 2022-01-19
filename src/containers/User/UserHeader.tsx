@@ -33,7 +33,7 @@ export function UserHeader({ user }: Props) {
   return (
     <header className={cs(style.container, layout['padding-small'])}>
       <Avatar uri={user.avatarUri} className={cs(style.avatar, effects['drop-shadow-big'])} />
-      <div>
+      <div className={cs(style.infos)}>
         {user.id && <small className={cs(colors['gray-light'])}>
           <a href={ 'https://tzkt.io/'+ user.id } className={cs(style.tz_link)}>
             {user.id}
@@ -60,7 +60,7 @@ export function UserHeader({ user }: Props) {
         )}
         <p>{ nl2br(user.description) }</p>
         {userConnected && (
-          <>
+          <div className={cs(layout['x-inline'], layout.flex_wrap)}>
             {userConnected.id === user.id && (
               <div style={{
                 display: "inline-block"
@@ -81,7 +81,7 @@ export function UserHeader({ user }: Props) {
             <UserModeration
               user={user}
             />
-          </>
+          </div>
         )}
       </div>
     </header>

@@ -5,33 +5,3 @@
 .content {
   height: 180px;
 }
-
-.gradient {
-  animation-duration: 1.8s;
-  animation-fill-mode: forwards;
-  animation-iteration-count: infinite;
-  animation-name: placeHolderShimmer;
-  animation-timing-function: linear;
-  background: #000000;
-  background-image: linear-gradient(to right, #000000 8%, #303030 38%, #000000 54%);
-  background-size: 1000px 640px;
-
-  &.gradient_white {
-    background-image: linear-gradient(to right, #ffffff 8%, #dadada 38%, #ffffff 54%);
-  }
-}
-
-:global .dark :local .gradient {
-  &.gradient_white {
-    background-image: linear-gradient(to right, var(--color-white) 8%, #5f5f5f 38%, var(--color-white) 54%);
-  }
-}
-
-@keyframes placeHolderShimmer {
-  0% {
-    background-position: -468px 0
-  }
-  100% {
-    background-position: 468px 0
-  }
-}

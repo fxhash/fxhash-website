@@ -8,3 +8,11 @@ export function shuffleArray<T = any>(array: T[]): T[] {
   }
   return a
 }
+
+export function arrayRemove<T = any>(array: T[], item: T) {
+  const idx = array.indexOf(item)
+  if (idx > -1) {
+    array.splice(idx, 1)
+  }
+  return array
+}

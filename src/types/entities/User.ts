@@ -62,3 +62,17 @@ export interface UserAlias {
   // user object will have some properties replaced by the alias
   alias: Partial<User>
 }
+
+export interface IUserCollectionFilters {
+  issuer_in?: number[]
+  assigned_eq?: boolean
+  offer_ne?: string
+  createdAt_lt?: string
+  createdAt_gt?: string
+  assignedAt_gt?: string
+  assignedAt_lt?: string
+  mintProgress_eq?: "COMPLETED"|"ONGOING"|"ALMOST"
+  authorVerified_eq?: boolean
+  author_in?: string[]
+  searchQuery_eq?: string
+}

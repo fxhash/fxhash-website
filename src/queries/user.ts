@@ -40,12 +40,13 @@ export const Qu_userGenTokens = gql`
 `
 
 export const Qu_userObjkts = gql`
-  query Query($id: String!, $take: Int, $skip: Int) {
+  query Query($id: String!, $take: Int, $skip: Int, $sort: UserCollectionSortInput, $filters: ObjktFilter) {
     user(id: $id) {
       id
-      objkts(take: $take, skip: $skip) {
+      objkts(take: $take, skip: $skip, sort: $sort, filters: $filters) {
         id
         assigned
+        rarity
         iteration
         owner {
           id
@@ -70,6 +71,24 @@ export const Qu_userObjkts = gql`
           id
           price
         }
+      }
+    }
+  }
+`
+
+export const Qu_userObjktsSubResults = gql`
+  query Query($id: String!, $generativeFilters: ObjktFilter, $authorFilters: ObjktFilter) {
+    user(id: $id) {
+      generativeTokensFromObjktFilters(filters: $generativeFilters) {
+        id
+        name
+        metadata
+      } 
+      authorsFromObjktFilters(filters: $authorFilters) {
+        id
+        name
+        avatarUri
+        flag
       }
     }
   }

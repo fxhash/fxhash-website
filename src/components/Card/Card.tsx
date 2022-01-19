@@ -1,4 +1,5 @@
 import style from "./Card.module.scss"
+import effect from "../../styles/Effects.module.scss"
 import cs from "classnames"
 import { PropsWithChildren, useContext, useMemo, useState } from "react"
 import { ipfsGatewayUrl } from "../../services/Ipfs"
@@ -47,16 +48,14 @@ export function Card({
       [style.hover_effect]: settings.hoverEffectCard
     })} ref={ref}>
       <div 
-        className={cs(style['thumbnail-container'], { [style.undesirable]: undesirable })}
+        className={cs(style['thumbnail-container'], { 
+          [style.undesirable]: undesirable,
+          [effect.placeholder]: !loaded
+        })}
         style={{
           backgroundImage: loaded ? `url(${loaded})` : "none"
         }}
       >
-        {!loaded && url && (
-          <div className={cs(style.loader)}>
-            <Loader color="white" />
-          </div>
-        )}
         {/* {!url && (
           <div className={cs(style.error)}>
             <i aria-hidden className="fas fa-exclamation-circle"/>
