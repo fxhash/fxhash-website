@@ -145,3 +145,24 @@ export const Qu_genTokenObjkts = gql`
     }
   }
 `
+
+export const Qu_genTokenMarketHistory = gql`
+  query GenerativeTokenMarketHistory($id: Float, $filters: MarketStatsHistoryInput!) {
+    generativeToken(id: $id) {
+      id,
+      marketStatsHistory(filters: $filters) {
+        floor
+        median
+        from
+        to
+        listed
+        highestSold
+        lowestSold
+        primVolumeTz
+        primVolumeNb
+        secVolumeTz
+        secVolumeNb
+      }
+    }
+  }
+`

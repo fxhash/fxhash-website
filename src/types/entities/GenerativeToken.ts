@@ -32,6 +32,20 @@ export interface GenerativeTokenMarketStats {
   generativeToken?: GenerativeToken
 }
 
+export interface GenerativeTokenMarketStatsHistory {
+  floor: number|null
+  median: number|null
+  listed: number|null
+  highestSold: number|null
+  lowestSold: number|null
+  primVolumeTz: number|null
+  primVolumeNb: number|null
+	secVolumeTz: number|null
+	secVolumeNb: number|null
+  from: string
+  to: string
+}
+
 export interface GenerativeToken {
   id: number
   author: User
@@ -55,6 +69,7 @@ export interface GenerativeToken {
   objktsCount: number
   createdAt: Date
   marketStats?: GenerativeTokenMarketStats
+  marketStatsHistory?: GenerativeTokenMarketStatsHistory[]
 }
 
 export interface GenerativeTokenWithCollection extends GenerativeToken {

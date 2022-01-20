@@ -1,0 +1,17 @@
+.root {
+  position: relative;
+  width: 100%;
+  padding-top: min(600px, max(50%, 500px));
+
+  .chart_container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    canvas {
+      max-width: 100%;
+    }
+  }
+}

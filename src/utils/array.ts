@@ -16,3 +16,12 @@ export function arrayRemove<T = any>(array: T[], item: T) {
   }
   return array
 }
+
+export function arraySum(array: number[]) {
+  return array.reduce((prev, curr) => prev + curr, 0)
+}
+
+export function arrayAverage(array: number[]) {
+  const sum = arraySum(array)
+  return sum / array.length
+}

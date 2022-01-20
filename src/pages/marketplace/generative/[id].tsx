@@ -24,6 +24,7 @@ import { getGenerativeTokenUrl } from '../../../utils/generative-token'
 import { TabDefinition, Tabs } from '../../../components/Layout/Tabs'
 import { GenerativeOffersMarketplace } from '../../../containers/Marketplace/GenerativeOffersMarketplace'
 import { DisplayTezos } from '../../../components/Display/DisplayTezos'
+import { GenerativeStatsMarketplace } from '../../../containers/Marketplace/GenerativeStatsMarketplace'
 
 
 interface Props {
@@ -33,6 +34,9 @@ interface Props {
 const tabs: TabDefinition[] = [
   {
     name: "listed"
+  },
+  {
+    name: "stats"
   },
   {
     name: "recent trades"
@@ -157,6 +161,12 @@ const GenerativeTokenMarketplace: NextPage<Props> = ({ token }) => {
         {tabActive === 0 ? (
           <ClientOnlyEmpty>
             <GenerativeOffersMarketplace
+              token={token}
+            />
+          </ClientOnlyEmpty>
+        ):tabActive === 1 ? (
+          <ClientOnlyEmpty>
+            <GenerativeStatsMarketplace
               token={token}
             />
           </ClientOnlyEmpty>
