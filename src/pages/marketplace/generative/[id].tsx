@@ -7,17 +7,16 @@ import colors from "../../../styles/Colors.module.css"
 import styleActivity from "../../../styles/Activity.module.scss"
 import cs from "classnames"
 import client from "../../../services/ApolloClient"
-import { GenerativeToken, GenTokFlag } from "../../../types/entities/GenerativeToken"
+import { GenerativeToken } from "../../../types/entities/GenerativeToken"
 import { Spacing } from '../../../components/Layout/Spacing'
 import { UserBadge } from '../../../components/User/UserBadge'
 import { MintProgress } from '../../../components/Artwork/MintProgress'
 import { Button } from '../../../components/Button'
-import { displayMutez, displayRoyalties } from '../../../utils/units'
 import { ipfsGatewayUrl } from '../../../services/Ipfs'
-import ClientOnly, { ClientOnlyEmpty } from '../../../components/Utils/ClientOnly'
+import { ClientOnlyEmpty } from '../../../components/Utils/ClientOnly'
 import { truncateEnd } from '../../../utils/strings'
-import { useRef, useState } from 'react'
-import { Qu_genToken, Qu_genTokenMarketplace } from '../../../queries/generative-token'
+import { useState } from 'react'
+import { Qu_genTokenMarketplace } from '../../../queries/generative-token'
 import { GenerativeActions } from '../../../containers/Generative/Actions'
 import { GenerativeFlagBanner } from '../../../containers/Generative/FlagBanner'
 import { ArtworkPreview } from '../../../components/Artwork/Preview'
@@ -33,10 +32,10 @@ interface Props {
 
 const tabs: TabDefinition[] = [
   {
-    name: "Listed"
+    name: "listed"
   },
   {
-    name: "Recent trades"
+    name: "recent trades"
   }
 ]
 
@@ -64,7 +63,7 @@ const GenerativeTokenMarketplace: NextPage<Props> = ({ token }) => {
 
       <GenerativeFlagBanner token={token}/>
 
-      <Spacing size="6x-large" />
+      <Spacing size="3x-large" />
 
       <section className={cs(style.presentation, layout['padding-big'])}>        
         <header className={cs(style.presentation_header)}>

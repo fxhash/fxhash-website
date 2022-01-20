@@ -26,7 +26,7 @@ const MarketplacePage: NextPage = () => {
         <meta key="og:image" property="og:image" content="https://www.fxhash.xyz/images/og/og1.jpg"/>
       </Head>
 
-      <Spacing size="6x-large" />
+      <Spacing size="3x-large" />
       
       <HeaderRanks>
         <CollectionRanks/>

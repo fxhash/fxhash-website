@@ -8,6 +8,7 @@ import Head from 'next/head'
 import { TitleHyphen } from '../../components/Layout/TitleHyphen'
 import { MarketplaceTabs } from '../../containers/Marketplace/Tabs'
 import { MarketplaceCollections } from '../../containers/Marketplace/Collections'
+import { SectionTitle } from '../../components/Layout/SectionTitle'
 
 
 
@@ -23,14 +24,14 @@ const MarketplaceCollectionPage: NextPage = () => {
         <meta key="og:image" property="og:image" content="https://www.fxhash.xyz/images/og/og1.jpg"/>
       </Head>
 
-      <Spacing size="6x-large" />
+      <Spacing size="3x-large" />
 
       <section>
-        <SectionHeader>
-          <TitleHyphen>marketplace / collections</TitleHyphen>
+        <SectionHeader layout="center">
+          <SectionTitle>marketplace / collections</SectionTitle>
         </SectionHeader>
 
-        <Spacing size="x-large" />
+        <Spacing size="3x-large" />
 
         <MarketplaceTabs active={1} />
 

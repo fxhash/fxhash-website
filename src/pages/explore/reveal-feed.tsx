@@ -8,6 +8,7 @@ import ClientOnly from '../../components/Utils/ClientOnly'
 import { TitleHyphen } from '../../components/Layout/TitleHyphen'
 import { ExploreTabs } from '../../containers/Explore/ExploreTabs'
 import { LiveFeed } from '../../containers/Explore/LiveFeed'
+import { SectionTitle } from '../../components/Layout/SectionTitle'
 
 
 
@@ -22,14 +23,14 @@ const ExploreRevealFeed: NextPage = () => {
         <meta key="og:type" property="og:type" content="website"/>
         <meta key="og:image" property="og:image" content="https://www.fxhash.xyz/images/og/og1.jpg"/>
       </Head>
-      <Spacing size="6x-large" />
+      <Spacing size="3x-large" />
 
       <section>
-        <SectionHeader>
-          <TitleHyphen>explore / reveal feed</TitleHyphen>
+        <SectionHeader layout="center">
+          <SectionTitle>reveal feed</SectionTitle>
         </SectionHeader>
 
-        <Spacing size="x-large" />
+        <Spacing size="3x-large" />
 
         <ExploreTabs active={2} />
 

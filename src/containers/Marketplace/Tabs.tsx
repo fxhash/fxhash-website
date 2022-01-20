@@ -3,7 +3,7 @@ import Link from "next/link"
 import { TabDefinition, Tabs } from "../../components/Layout/Tabs"
 
 const definition: TabDefinition[] = [
-  { name: "offers", props: { href: "/marketplace" } },
+  { name: "listed", props: { href: "/marketplace" } },
   { name: "collections", props: { href: "/marketplace/collections" } }
 ]
 

@@ -2,8 +2,14 @@
 
 .container {
   nav {
-    display: flex;
     border-bottom: 3px solid var(--color-gray-light);
+    display: flex;
+  }
+  
+  &.layout-fixed-size {
+    nav {
+      justify-content: center;
+    }
   }
 }
 
@@ -38,7 +44,7 @@
   @media (max-width: $breakpoint-lg) {
     padding-left: 0;
     padding-right: 0;
-    flex: 1 1 0px;  
+    flex: 1 1 0px;
     display: flex;
     justify-content: center;
   }

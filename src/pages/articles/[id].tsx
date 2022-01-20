@@ -9,6 +9,7 @@ import { ArticleContent } from "../../components/Article/ArticleContent"
 import Head from "next/head"
 import { truncateEnd } from "../../utils/strings"
 import { TitleHyphen } from "../../components/Layout/TitleHyphen"
+import { SectionTitle } from "../../components/Layout/SectionTitle"
 
 
 interface Props {
@@ -31,8 +32,8 @@ const ArticlePage: NextPage<Props> = ({ article }) => {
       <Spacing size="6x-large"/>
 
       <section>
-        <SectionHeader>
-          <TitleHyphen>{article.title}</TitleHyphen>
+        <SectionHeader layout="center">
+          <SectionTitle>{article.title}</SectionTitle>
         </SectionHeader>
 
         <Spacing size="x-large"/>

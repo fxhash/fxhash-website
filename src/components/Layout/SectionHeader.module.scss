@@ -6,6 +6,11 @@
   align-items: center;
   justify-content: space-between;
 
+  &.layout_center {
+    justify-content: center;
+    text-align: center;
+  }
+
   small {
     font-size: var(--font-size-regular);
     color: var(--color-grey-dark);
