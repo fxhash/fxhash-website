@@ -253,7 +253,7 @@ export class WalletManager {
   
       // wait for confirmation
       statusCallback && statusCallback(ContractOperationStatus.WAITING_CONFIRMATION)
-      await opSend.confirmation(2)
+      await opSend.confirmation(3)
   
       // OK, injected
       statusCallback && statusCallback(ContractOperationStatus.INJECTED, opSend.opHash)
