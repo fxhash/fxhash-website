@@ -8,6 +8,10 @@
   flex-direction: row;
   align-items: center;
 
+  &.no_pad {
+    padding-left: 0px;
+  }
+
   input {
     position: absolute;
     opacity: 0;

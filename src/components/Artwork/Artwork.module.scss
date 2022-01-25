@@ -4,6 +4,9 @@
   border: 20px solid var(--color-border);
   background-color: var(--color-black);
   box-shadow: 0px 4px 25px -9px #000000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   img {
     object-fit: contain;

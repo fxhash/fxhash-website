@@ -1,7 +1,6 @@
-import { string } from "yup/lib/locale"
 import { FileUploadError } from "../types/errors"
 import { ProcessRawTokenFeatureErrorType } from "../types/Metadata"
-import { CaptureErrorEnum, MintError, PreviewError, StaticGenError } from "../types/Responses"
+import { MintError, PreviewError, StaticGenError, TestPreviewError } from "../types/Responses"
 
 
 const fileUploadErrors: Record<FileUploadError, string> = {
@@ -31,18 +30,6 @@ export function getStaticGenError(error: StaticGenError) {
   return staticGenErrors[error] || staticGenErrors[StaticGenError.UNKNOWN]
 }
 
-const captureErrors: Record<CaptureErrorEnum, string> = {
-  UNKNOWN: "Unkown error. Please try again.",
-  MISSING_PARAMETERS: "Parameters are missing from the request",
-  UNSUPPORTED_URL: "The URL of your project is not supported by the capture module",
-  INVALID_RESOLUTION: "Invalid resolution, lust be [256; 2048]",
-  INVALID_DELAY: "Invalid delay, must be [0.1; 40] sec"
-}
-
-export function getCaptureError(error: CaptureErrorEnum) {
-  return captureErrors[error] || captureErrors[StaticGenError.UNKNOWN]
-}
-
 const previewErrors: Record<PreviewError, string> = {
   UNKNOWN: "Unkown error. Please try again.",
   MISSING_PARAMETERS: "Parameters are missing from the request",
@@ -54,6 +41,19 @@ const previewErrors: Record<PreviewError, string> = {
 
 export function getPreviewError(error: PreviewError) {
   return previewErrors[error] || previewErrors[PreviewError.UNKNOWN]
+}
+
+const testPreviewErrors: Record<TestPreviewError, string> = {
+  UNKNOWN:                        "Unknown error",
+  TIMEOUT:                        "Execution timeout",
+  EXTRACT_SERVICE_UNREACHABLE:    "Extract service in unreachable",
+  INVALID_INPUT_PARAMETERS:       "Invalid input parameters",
+  JOB_QUEUE_FAILED:               "Job queue failed, please reach out on Discord",
+  JOB_EXECUTION_FAILED:           "Job execution failed, please reach out on Discord",
+}
+
+export function getTestPreviewError(error: TestPreviewError) {
+  return testPreviewErrors[error] || testPreviewErrors[PreviewError.UNKNOWN]
 }
 
 const mintErrors: Record<MintError, string> = {

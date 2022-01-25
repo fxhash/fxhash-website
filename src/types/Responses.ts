@@ -30,21 +30,10 @@ export interface StaticGenResponse {
   authenticationHash: string
 }
 
-export enum CaptureErrorEnum {
-  UNKNOWN               = "UNKNOWN",
-  MISSING_PARAMETERS    = "MISSING_PARAMETERS",
-  UNSUPPORTED_URL       = "UNSUPPORTED_URL",
-  INVALID_RESOLUTION    = "INVALID_RESOLUTION",
-  INVALID_DELAY         = "INVALID_DELAY"
-}
-
-export interface CaptureErrorResponse {
-  error: CaptureErrorEnum
-}
-
-export interface CaptureResponse {
-  capture: string
-}
+//
+// Responses related to generating Previews in the case of calling the 
+// /preview endpoint of the file-api
+//
 
 export enum PreviewError {
   UNKNOWN               = "UNKNOWN",
@@ -53,6 +42,10 @@ export enum PreviewError {
   INCORRECT_PARAMETERS  = "INCORRECT_PARAMETERS", 
   PREVIEW_ERROR         = "PREVIEW_ERROR",
   IPFS_ERROR            = "IPFS_ERROR", 
+}
+
+export interface PreviewErrorResponse {
+  error: PreviewError
 }
 
 export interface PreviewResponse {
@@ -65,6 +58,30 @@ export interface PreviewResponse {
   resY: number
   delay: number
   canvasSelector: string
+  gpu: boolean
+}
+
+
+//
+// Responses related to generating Previews in the case of Testing
+//
+
+export enum TestPreviewError {
+  UNKNOWN                       = "UNKNOWN",
+  TIMEOUT                       = "TIMEOUT",
+  EXTRACT_SERVICE_UNREACHABLE   = "EXTRACT_SERVICE_UNREACHABLE",
+  INVALID_INPUT_PARAMETERS      = "INVALID_INPUT_PARAMETERS",
+  JOB_QUEUE_FAILED              = "JOB_QUEUE_FAILED",
+  JOB_EXECUTION_FAILED          = "JOB_EXECUTION_FAILED",
+}
+
+export interface TestPreviewResponse {
+  captureBase64: string
+  features?: Record<string, any>
+}
+
+export interface TestPreviewErrorResponse {
+  error: TestPreviewError
 }
 
 export enum MetadataError {

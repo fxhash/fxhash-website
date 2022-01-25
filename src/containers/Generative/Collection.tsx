@@ -31,12 +31,8 @@ export function GenerativeCollection({ token }: Props) {
     },
   })
 
-  console.log(data)
-
   // derive the active data from the active page
   const objkts: Objkt[]|null = data?.generativeToken.objkts
-
-  console.log(objkts)
 
   return (
     token.objktsCount > 0 ? (

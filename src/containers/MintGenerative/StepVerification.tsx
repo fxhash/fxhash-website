@@ -55,6 +55,7 @@ export const StepVerification: StepComponent = ({
             <div className={cs(style['preview-wrapper'])}>
               <ArtworkPreview
                 url={getIpfsIoUrl(state.cidPreview!)}
+                loading={true}
               />
             </div>
           </div>

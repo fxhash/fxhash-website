@@ -1,4 +1,5 @@
 import style from "./CaptureSettings.module.scss"
+import colors from "../../styles/Colors.module.css"
 import cs from "classnames"
 import { FunctionComponent } from "react"
 import { CaptureMode, CaptureSettings, CaptureTriggerMode } from "../../types/Mint"
@@ -8,6 +9,7 @@ import { SliderWithText } from "./SliderWithText"
 import { Spacing } from "../Layout/Spacing"
 import { InputResolution } from "./Resolution"
 import { InputText } from "./InputText"
+import { Checkbox } from "./Checkbox"
 
 
 const modeOptions = [
@@ -57,7 +59,7 @@ export const InputCaptureSettings: FunctionComponent<Props> = ({
   settings,
   onChange
 }) => {
-  const update = (key: string, value: any) => {
+  const update = (key: keyof CaptureSettings, value: any) => {
     onChange({
       ...settings,
       [key]: value
@@ -79,7 +81,7 @@ export const InputCaptureSettings: FunctionComponent<Props> = ({
       />
       {settings.triggerMode === CaptureTriggerMode.DELAY && (
         <>
-          <Spacing size="3x-large"/>
+          <Spacing size="large"/>
           <h5>Time before capture is taken</h5>
           <p>Remember: better safe than sorry</p>
           <SliderWithText
@@ -92,7 +94,7 @@ export const InputCaptureSettings: FunctionComponent<Props> = ({
         </>
       )}
 
-      <Spacing size="3x-large"/>
+      <Spacing size="x-large"/>
       
       <h5>Target</h5>
       <p>
@@ -110,7 +112,7 @@ export const InputCaptureSettings: FunctionComponent<Props> = ({
 
       {settings.mode === CaptureMode.VIEWPORT && (
         <>
-          <Spacing size="3x-large"/>
+          <Spacing size="large"/>
 
           <h5>Capture resolution</h5>
           <p>A browser with this resolution will be spawned to take a fullscreen capture. [256; 2048]</p>
@@ -132,7 +134,7 @@ export const InputCaptureSettings: FunctionComponent<Props> = ({
 
       {settings.mode === CaptureMode.CANVAS && (
         <>
-          <Spacing size="3x-large"/>
+          <Spacing size="large"/>
 
           <h5>Canvas CSS selector</h5>
           <p>A CSS selector that targets the canvas on which your graphics are rendered</p>
@@ -142,6 +144,32 @@ export const InputCaptureSettings: FunctionComponent<Props> = ({
             onChange={val => update("canvasSelector", val.target.value)}
           />
         </>
+      )}
+
+      <Spacing size="3x-large"/>
+
+      <h5>Extra settings</h5>
+
+      <p>
+        <strong className={cs(colors.warning)}><i className="fas fa-flask"/> Warning: experimental feature</strong><br/>
+        <span>Only use if your project meet </span>
+        <Link href="/articles/guide-mint-generative-token#gpu-enabled-rendering">
+          <a target="_blank">
+            certain criteria
+          </a>
+        </Link>
+      </p>
+
+      <Checkbox
+        value={settings.gpu || false}
+        onChange={val => update("gpu", val)}
+        paddingLeft={false}
+      >
+        GPU-enabled render instances
+      </Checkbox>
+
+      {settings.gpu && (
+        <em>GPU instances can take up to 3 minutes to bootstrap, please be patient</em>
       )}
     </div>
   )

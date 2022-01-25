@@ -219,6 +219,21 @@ This option defines what will be targetted by the capture module.
 * **Viewport capture**: the capture will be made on the whole viewport, set at the resolution you will provide.
 * ~~**Custom function**~~ (not available yet): implement a custom function to provide the image directly from your code.
 
+### GPU-enabled rendering
+
+There are 2 types of rendering instances to generate previews of tokens:
+
+* **CPU only**: those are the default, and most scalable instances. They rely on a CPU fallback implementation for WebGL. They are suited for the majority of the projects
+* **GPU-enabled**: those are instances with a GPU. They can render with a GPU, but they are way slower to bootstrap and so the time it takes to generate a capture is longer because of the bootstrap time.
+
+For most of the cases, even if your project uses WebGL, CPU instances are better because we can scale an inifnite amount of instances, and so it doesn't bloat the rendering queue. However, in some cases, your project may need a GPU to render properly. **For now, we only have 4 instances available, and as a result the metadata assignation will be slower for projects using those GPU-enabled instances**.
+
+You should **only use GPU-enabled instances** if:
+
+* Your project doesn't render properly using regular instances
+
+If you don't use WebGL and only the regular canvas API, it's also possible that your project doesn't render properly on the CPU instance because the canvas API uses GPU acceleration. If you observe differences between the capture and your live version, then try using GPU-enabled rendering.
+
 
 ## Configure extra settings
 
