@@ -22,12 +22,13 @@ export enum CaptureMode {
 export const CaptureModeList = Object.values(CaptureMode)
 
 export interface CaptureSettings {
-  mode: CaptureMode | null,
-  triggerMode: CaptureTriggerMode | null,
-  canvasSelector?: string,
-  delay: number,
-  resX?: number,
+  mode: CaptureMode | null
+  triggerMode: CaptureTriggerMode | null
+  canvasSelector?: string
+  delay: number
+  resX?: number
   resY?: number
+  gpu?: boolean
 }
 
 export interface MintGenerativeData {

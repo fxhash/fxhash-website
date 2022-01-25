@@ -23,6 +23,7 @@ export interface CaptureSettings {
   resolution?: Vec2
   delay?: number
   canvasSelector?: string
+  gpu?: boolean
 }
 
 // token features as they can be exported by a Token

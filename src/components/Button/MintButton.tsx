@@ -41,15 +41,6 @@ export function MintButton({
   const { state, loading, success, call, error, transactionHash } = 
     useContractCall<MintCall>(userContext.walletManager?.mintToken)
 
-  console.log({
-    state,
-    loading,
-    success,
-    call,
-    error,
-    transactionHash
-  })
-
   const mint = () => {
     call({
       issuer_id: token.id,

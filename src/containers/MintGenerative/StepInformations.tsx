@@ -110,6 +110,7 @@ export const StepInformations: StepComponent = ({ state, onNext }) => {
     const capture: CaptureSettings = {
       mode: state.captureSettings!.mode!,
       triggerMode: state.captureSettings!.triggerMode!,
+      gpu: state.captureSettings!.gpu,
     }
     // set settings based on the capture mode
     if (state.captureSettings!.mode === CaptureMode.VIEWPORT) {

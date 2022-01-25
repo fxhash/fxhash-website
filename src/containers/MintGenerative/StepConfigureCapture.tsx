@@ -6,12 +6,11 @@ import { StepComponent } from "../../types/Steps"
 import { Spacing } from "../../components/Layout/Spacing"
 import { ArtworkPreview } from "../../components/Artwork/Preview"
 import { Button } from "../../components/Button"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 import useFetch, { CachePolicies } from "use-http"
-import { CaptureErrorEnum, CaptureErrorResponse, PreviewError, PreviewResponse } from "../../types/Responses"
-import { getIpfsIoUrl } from "../../utils/ipfs"
+import { PreviewError, PreviewErrorResponse, PreviewResponse, TestPreviewError, TestPreviewErrorResponse, TestPreviewResponse } from "../../types/Responses"
 import { Error } from "../../components/Error/Error"
-import { getCaptureError, getPreviewError } from "../../utils/errors"
+import { getPreviewError, getTestPreviewError } from "../../utils/errors"
 import { CaptureSettings } from "../../types/Mint"
 import { InputCaptureSettings } from "../../components/Input/CaptureSettngs"
 import { validateCaptureSettings } from "../../utils/validations"
@@ -23,21 +22,23 @@ export const StepConfigureCapture: StepComponent = ({ onNext, state }) => {
     triggerMode: null,
     delay: 2,
     resX: 800,
-    resY: 800
+    resY: 800,
+    gpu: false,
   })
-  const [previewUrl, setPreviewUrl] = useState<string|null>(null)
 
   const { data, loading, error, post } = 
-    useFetch<CaptureErrorResponse|ArrayBuffer>(process.env.NEXT_PUBLIC_API_CAPTURE, { 
+    useFetch<TestPreviewResponse|TestPreviewErrorResponse>(`${process.env.NEXT_PUBLIC_API_EXTRACT}/extract`, { 
       cachePolicy: CachePolicies.NO_CACHE,
-      responseType: "arrayBuffer"
+      responseType: "json"
     })
 
-  // this variable ensures that we can safely access its data regardless of the state of the queries
-  const safeData: ArrayBuffer|false|undefined = !error && !loading && (data as ArrayBuffer)
+  // extracts the test image base64 data from the response if any
+  const testImage = useMemo<string|null>(() => {
+    return (data && !loading && !error) ? (data as TestPreviewResponse).captureBase64 : null
+  }, [data])
 
   const { data: previewData, loading: previewLoading, error: previewError, post: previewPost } = 
-    useFetch<PreviewResponse|PreviewError>(`${process.env.NEXT_PUBLIC_API_FILE_ROOT}/preview`,
+    useFetch<PreviewResponse|PreviewErrorResponse>(`${process.env.NEXT_PUBLIC_API_FILE_ROOT}/preview`,
     { cachePolicy: CachePolicies.NO_CACHE })
 
   // this variable ensures that we can safely access its data regardless of the state of the queries
@@ -45,13 +46,16 @@ export const StepConfigureCapture: StepComponent = ({ onNext, state }) => {
 
   const captureTest = () => {
     post({
-      url: `${getIpfsIoUrl(state.cidUrlParams!)}?fxhash=${state.previewHash}&preview=1`,
+      cid: `${state.cidUrlParams!}?fxhash=${state.previewHash}`,
       mode: settings.mode,
       triggerMode: settings.triggerMode,
       canvasSelector: settings.canvasSelector,
       resX: settings.resX,
       resY: settings.resY,
       delay: settings.delay * 1000,
+      gpu: settings.gpu,
+      withFeatures: false,
+      priority: "high",
     })
   }
 
@@ -63,6 +67,7 @@ export const StepConfigureCapture: StepComponent = ({ onNext, state }) => {
         resX: settings.resX,
         resY: settings.resY,
         delay: settings.delay*1000,
+        gpu: settings.gpu,
         canvasSelector: settings.canvasSelector,
         cidParams: state.cidUrlParams,
         previewHash: state.previewHash,
@@ -70,18 +75,6 @@ export const StepConfigureCapture: StepComponent = ({ onNext, state }) => {
       })
     }
   }
-  
-  useEffect(() => {
-    if (safeData) {
-      // release previous URL
-      if (previewUrl) {
-        URL.revokeObjectURL(previewUrl)
-      }
-      const blob = new Blob([safeData], { type: "image/png" })
-      const url = URL.createObjectURL(blob)
-      setPreviewUrl(url)
-    }
-  }, [safeData])
 
   useEffect(() => {
     if (safeDataPreview) {
@@ -92,7 +85,8 @@ export const StepConfigureCapture: StepComponent = ({ onNext, state }) => {
           resX: safeDataPreview.resX,
           resY: safeDataPreview.resY,
           delay: safeDataPreview.delay,
-          canvasSelector: safeDataPreview.canvasSelector
+          canvasSelector: safeDataPreview.canvasSelector,
+          gpu: safeDataPreview.gpu,
         },
         cidPreview: safeDataPreview.cidPreview,
         cidThumbnail: safeDataPreview.cidThumbnail,
@@ -100,6 +94,11 @@ export const StepConfigureCapture: StepComponent = ({ onNext, state }) => {
       })
     }
   }, [safeDataPreview])
+
+  //
+  const testPreviewError: TestPreviewError|null = error 
+    ? (data ? (data as TestPreviewErrorResponse).error : TestPreviewError.UNKNOWN)
+    : null
 
   return (
     <>
@@ -120,9 +119,9 @@ export const StepConfigureCapture: StepComponent = ({ onNext, state }) => {
 
           <Spacing size="3x-large"/>
 
-          {error && (
+          {testPreviewError && (
             <Error>
-              { getCaptureError((data as CaptureErrorResponse)?.error || CaptureErrorEnum.UNKNOWN) }
+              { getTestPreviewError(testPreviewError || TestPreviewError.UNKNOWN) }
             </Error>
           )}
 
@@ -143,7 +142,7 @@ export const StepConfigureCapture: StepComponent = ({ onNext, state }) => {
           <div className={cs(styleC['preview-cont'])}>
             <div className={cs(styleC['preview-wrapper'])}>
               <ArtworkPreview
-                url={previewUrl || ""}
+                url={testImage || ""}
                 alt="Preview capture"
               />
             </div>
@@ -156,7 +155,7 @@ export const StepConfigureCapture: StepComponent = ({ onNext, state }) => {
       <div className={cs(style.bottom)}>
         {previewError && (
           <Error>
-            { getPreviewError(previewData as PreviewError) }
+            { getPreviewError(previewData as any as PreviewError) }
           </Error>
         )}
 
