@@ -167,6 +167,10 @@ export const InputCaptureSettings: FunctionComponent<Props> = ({
       >
         GPU-enabled render instances
       </Checkbox>
+
+      {settings.gpu && (
+        <em>GPU instances can take up to 3 minutes to bootstrap, please be patient</em>
+      )}
     </div>
   )
 }
