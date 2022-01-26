@@ -44,6 +44,9 @@ export function Navigation() {
             <Link href="/community/reports">
               <a>tokens reported</a>
             </Link>
+            <Link href="https://feedback.fxhash.xyz/">
+              <a target="_blank">feedback</a>
+            </Link>
           </Dropdown>
 
           <Link href="/marketplace">
