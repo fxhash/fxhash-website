@@ -6,13 +6,14 @@ import { GenerativeToken, GenTokFlag } from "../../types/entities/GenerativeToke
 import { Spacing } from "../Layout/Spacing"
 import { Button, ButtonState } from "."
 import { displayMutez } from "../../utils/units"
-import { useContext, useEffect, useMemo, useState } from "react"
+import { PropsWithChildren, useContext, useEffect, useMemo, useState } from "react"
 import { Countdown } from "../Utils/Countdown"
 import { distanceSecondsClamped } from "../../utils/time"
 import { UserContext } from "../../containers/UserProvider"
 import { ContractFeedback } from "../Feedback/ContractFeedback"
 import { useContractCall } from "../../utils/hookts"
 import { MintCall } from "../../types/ContractCalls"
+import { DisplayTezos } from "../Display/DisplayTezos"
 
 interface Props {
   token: GenerativeToken
@@ -21,7 +22,8 @@ interface Props {
 export function MintButton({
   token,
   onReveal,
-}: Props) {
+  children,
+}: PropsWithChildren<Props>) {
   const userContext = useContext(UserContext)
   // is the token hidden ?
   const isHidden = [GenTokFlag.MALICIOUS, GenTokFlag.HIDDEN].includes(token.flag) || token.balance === 0
@@ -77,36 +79,48 @@ export function MintButton({
         className={cs(style.contract_feedback)}
       />
 
-      {!isHidden && (
+      {isLocked && (
         <>
-          {isLocked && (
-            <>
-              <strong>
-                <span><i aria-hidden className="fas fa-lock"/> unlocks in </span>
-                <Countdown
-                  until={lockEnd}
-                  onEnd={() => setIsLocked(false)}
-                />
-              </strong>
-              <Spacing size="8px"/>
-            </>
-          )}
+          <strong>
+            <span><i aria-hidden className="fas fa-lock"/> unlocks in </span>
+            <Countdown
+              until={lockEnd}
+              onEnd={() => setIsLocked(false)}
+            />
+          </strong>
+          <Spacing size="8px"/>
+        </>
+      )}
 
-          {!token.enabled && <small>token is currently <strong>disabled</strong> by author</small>}
-          
-          {transactionHash ? (
-            <div className={cs(layout.buttons_inline, layout.flex_wrap)}>
-              <Link href={`/reveal/${token.id}/${transactionHash}`} passHref>
-                <Button
-                  isLink
-                  color="secondary"
-                  iconComp={<i aria-hidden className="fas fa-arrow-right"/>}
-                  iconSide="right"
-                >
-                  reveal
-                </Button>
-              </Link>
-            </div>
+      {!token.enabled && (
+        <>
+          <small>
+            <span>Token is currently <strong>disabled</strong> by author</span>
+            {isEnabled && (
+              <span>
+                <br/>
+                But as the author, you can still mint
+              </span>
+            )}
+          </small>
+          <Spacing size="2x-small"/>
+        </>
+      )}
+      
+      <div className={cs(layout.buttons_inline, layout.flex_wrap)}>
+        {!isHidden && (
+          transactionHash ? (
+            <Link href={`/reveal/${token.id}/${transactionHash}`} passHref>
+              <Button
+                isLink
+                color="secondary"
+                iconComp={<i aria-hidden className="fas fa-arrow-right"/>}
+                iconSide="right"
+                size="regular"
+              >
+                reveal
+              </Button>
+            </Link>
           ):(
             <Button
               type="button"
@@ -114,14 +128,15 @@ export function MintButton({
               disabled={!isEnabled || isLocked}
               onClick={buttonClick}
               state={loading ? "loading" : "default"}
+              size="regular"
             >
-              mint iteration — {displayMutez(token.price)} tez
+              mint iteration&nbsp;&nbsp;<DisplayTezos mutez={token.price} tezosSize="regular" formatBig={false} />
             </Button>
-          )}
+          )
+        )}
 
-          {!token.enabled && isEnabled && <small>as the author, you can still mint</small>}
-        </>
-      )}
+        {children}
+      </div>
     </div>
   )
 }

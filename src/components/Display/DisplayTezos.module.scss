@@ -1,6 +1,19 @@
 .root {
   .tezos {
-    font-size: 0.7em;
-    margin-right: 8px;
+    margin-right: 6px;
+
+    &.tezos_small {
+      font-size: 0.7em;
+    }
+
+    &.tezos_regular {
+      font-size: 1em;
+      position: relative;
+      top: 2px;
+    }
+
+    &.tezos_big {
+      font-size: 1.3em;
+    }
   }
 }

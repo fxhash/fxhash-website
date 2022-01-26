@@ -72,6 +72,11 @@ export function ButtonVariations({
         )
       }
     }
+    else {
+      return (
+        <i aria-hidden className="fas fa-infinity"/>
+      )
+    }
   }, [previewHash])
 
   // update the preview hash, either by looping through available hashes, or by
@@ -101,6 +106,7 @@ export function ButtonVariations({
       <Button
         type="button"
         size="small"
+        color="transparent"
         disabled={!activeSettings?.enabled}
         iconComp={icon}
         iconSide="right"

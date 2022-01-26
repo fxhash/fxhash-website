@@ -63,15 +63,24 @@
   &.state-loading {
     margin-top: math.div((44px - 30px), 2);
   }
+
+  i {
+    top: 2px;
+    position: relative;
+  }
+
+  &.icon-right i {
+    margin-left: 10px;
+  }
 }
 
 .size-regular {
-  height: 46px;
-  padding: 28px !important;
+  height: 50px;
+  padding: 0 28px !important;
   font-size: var(--font-size-regular);
 
   &.state-loading {
-    margin-top: math.div((46px - 30px) , 2);
+    margin-top: 0 !important;
   }
 }
 
@@ -135,11 +144,24 @@
 
 .color-transparent {
   background-color: transparent;
-  color: var(--color-gray) !important;
+  color: var(--color-black) !important;
   box-shadow: none;
+
+  &.size-small {
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+  }
   
   &:hover {
-    color: var(--color-black) !important;
+    color: var(--color-secondary) !important;
+    box-shadow: none;
+    border-color: transparent;
+  }
+  
+  &.disabled {
+    background-color: transparent;
+    opacity: 0.3;
+    box-shadow: none;
   }
 }
 

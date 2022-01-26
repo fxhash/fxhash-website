@@ -19,7 +19,7 @@ import { Spacing } from "../../components/Layout/Spacing"
 
 function OpenButton() {
   return (
-    <i aria-hidden className="fas fa-ellipsis-v"/>
+    <i aria-hidden className="fas fa-ellipsis-h"/>
   )
 }
 

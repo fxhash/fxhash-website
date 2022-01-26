@@ -4,6 +4,7 @@ import { GetServerSideProps, NextPage } from "next"
 import layout from "../../styles/Layout.module.scss"
 import style from "../../styles/GenerativeTokenDetails.module.scss"
 import colors from "../../styles/Colors.module.css"
+import text from "../../styles/Text.module.css"
 import homeStyle from "../../styles/Home.module.scss"
 import cs from "classnames"
 import client from "../../services/ApolloClient"
@@ -29,10 +30,8 @@ import { Qu_genToken } from '../../queries/generative-token'
 import { GenerativeActions } from '../../containers/Generative/Actions'
 import { GenerativeExtraActions } from '../../containers/Generative/ExtraActions'
 import { GenerativeFlagBanner } from '../../containers/Generative/FlagBanner'
-import { Unlock } from '../../components/Utils/Unlock'
 import { format } from 'date-fns'
 import { getGenerativeTokenMarketplaceUrl } from '../../utils/generative-token'
-import { generateFxHash } from '../../utils/hash'
 import { ButtonVariations } from '../../components/Button/ButtonVariations'
 import { MintButton } from '../../components/Button/MintButton'
 
@@ -94,124 +93,143 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
 
       <GenerativeFlagBanner token={token}/>
 
-      <Spacing size="6x-large" />
+      <Spacing size="3x-large" />
 
-      <section className={cs(style.presentation, layout.cols2, layout['responsive-reverse'], layout['padding-big'])}>
-        <div className={cs(style['presentation-details'])}>
-          <header style={{ position: "relative" }}>
-            <small className={cs(colors.gray)}>#{ token.id }</small>
-            <h3>{ token.name }</h3>
-            <Spacing size="x-small"/>
-            <UserBadge 
-              user={token.author}
-              size="big"
-            />
+      <section className={cs(layout['padding-big'])}>
+        <div className={cs(style.artwork_header_mobile, layout.break_words)}>
+          <UserBadge 
+            user={token.author}
+            size="regular"
+          />
+          <Spacing size="2x-small"/>
+          <h3>{ token.name }</h3>
+          <Spacing size="x-large"/>
+        </div>
+
+        <div className={cs(style.presentation, layout.cols2, layout['responsive-reverse'])}>
+          <div className={cs(style['presentation-details'])}>
+            <div className={cs(style.artwork_header)}>
+              <UserBadge 
+                user={token.author}
+                size="big"
+              />
+              <Spacing size="x-small"/>
+              <h3>{ token.name }</h3>
+            </div>
+
+            <Spacing size="x-large"/>
+
             <ClientOnly>
               <UserGuard forceRedirect={false}>
                 <EditTokenSnippet token={token} />
+                <Spacing size="large"/>
               </UserGuard>
             </ClientOnly>
 
-            <ClientOnly>
-              <UserGuard forceRedirect={false}>
-                <GenerativeExtraActions token={token} />
-              </UserGuard>
-            </ClientOnly>
-          </header>
-
-          <Spacing size="large"/>
-
-          <p>{ nl2br(token.metadata?.description) }</p>
-
-          <Spacing size="2x-large"/>
-
-          <div className={cs(style['artwork-details'])}>
-            <MintProgress
-              balance={token.balance}
-              supply={token.supply}
-              originalSupply={token.originalSupply}
-            />
-          </div>
-
-          <Spacing size="large"/>
-
-          <MintButton
-            token={token}
-            onReveal={onReveal}
-          />
-
-          <Spacing size="regular" />
-
-          <div className={cs(layout.buttons_inline)}>
-            <Link href={getGenerativeTokenMarketplaceUrl(token)} passHref>
-              <Button isLink={true} size="small">
-                open marketplace page 
-              </Button>
-            </Link>
-          </div>
-        </div>
-
-        <div className={cs(style['presentation-artwork'])}>
-          {/* <ArtworkPreview ipfsUri={token.metadata?.displayUri} /> */}
-          <div className={cs(style['preview-container-auto'])}>
-            <div className={cs(style['preview-wrapper'])}>
-              <ArtworkIframe 
-                ref={iframeRef}
-                url={artifactUrl}
+            <div className={cs(style['artwork-details'])}>
+              <MintProgress
+                balance={token.balance}
+                supply={token.supply}
+                originalSupply={token.originalSupply}
               />
+            </div>
+
+            <Spacing size="x-large"/>
+
+            <div className={cs(layout.buttons_inline)}>
+              <MintButton
+                token={token}
+                onReveal={onReveal}
+              >
+                <Link href={getGenerativeTokenMarketplaceUrl(token)} passHref>
+                  <Button isLink={true} size="regular">
+                    open marketplace 
+                  </Button>
+                </Link>
+              </MintButton>
+            </div>
+
+            <Spacing size="4x-large"/>
+
+            <div className={cs(style.buttons)}>
+              <div className={cs(layout.buttons_inline)}>
+                <strong>Project #{token.id}</strong>
+                <ClientOnly>
+                  <UserGuard forceRedirect={false}>
+                    <GenerativeExtraActions token={token} />
+                  </UserGuard>
+                </ClientOnly>
+              </div>
+              <strong>Minted on { format(new Date(token.createdAt), "dd/MM/yyyy' at 'HH:mm") }</strong>
+            </div>
+
+            <Spacing size="large"/>
+
+            <p>{ nl2br(token.metadata?.description) }</p>
+
+            <Spacing size="2x-large"/>
+
+            <div className={cs(style.buttons, layout.break_words)}>
+              <span><strong>Price:</strong> { displayMutez(token.price) } tez</span>
+              <span><strong>Royalties:</strong> { displayRoyalties(token.royalties) }</span>
+              <span><strong>Tags:</strong> { token.tags?.join(", ") || "/" }</span>
+              <span>
+                <strong>Metadata: </strong>
+                <a 
+                  target="_blank"
+                  referrerPolicy="no-referrer"
+                  href={ipfsGatewayUrl(token.metadataUri)}
+                >
+                  view on IPFS <i className="fas fa-external-link-square" aria-hidden/>
+                </a>
+              </span>
             </div>
           </div>
 
-          <Spacing size="8px"/>
+          <div className={cs(style['presentation-artwork'])}>
+            {/* <ArtworkPreview ipfsUri={token.metadata?.displayUri} /> */}
+            <div className={cs(style['preview-container-auto'])}>
+              <div className={cs(style['preview-wrapper'])}>
+                <ArtworkIframe 
+                  ref={iframeRef}
+                  url={artifactUrl}
+                />
+              </div>
+            </div>
 
-          <div className={cs(layout['x-inline'])}>
-            <ButtonVariations
-              token={token}
-              previewHash={previewHash}
-              onChangeHash={setPreviewHash}
-            />
-            <Button
-              size="small"
-              iconComp={<i aria-hidden className="fas fa-redo"/>}
-              iconSide="right"
-              onClick={reload}
-            >
-              reload
-            </Button>
-            <Link href={artifactUrl} passHref>
+            <Spacing size="8px"/>
+
+            <div className={cs(layout['x-inline'], style.artwork_buttons)}>
+              <ButtonVariations
+                token={token}
+                previewHash={previewHash}
+                onChangeHash={setPreviewHash}
+              />
               <Button
-                isLink={true}
                 size="small"
-                iconComp={<i aria-hidden className="fas fa-external-link-alt"></i>}
-                // @ts-ignore
-                target="_blank"
+                color="transparent"
+                iconComp={<i aria-hidden className="fas fa-redo"/>}
+                iconSide="right"
+                onClick={reload}
               >
-                open live
+                reload
               </Button>
-            </Link>
+              <Link href={artifactUrl} passHref>
+                <Button
+                  isLink={true}
+                  size="small"
+                  color="transparent"
+                  iconComp={<i aria-hidden className="fas fa-external-link-square"></i>}
+                  // @ts-ignore
+                  target="_blank"
+                  iconSide="right"
+                >
+                  open live
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
-      </section>
-
-      <Spacing size="6x-large" />
-
-      <section>
-        <SectionHeader>
-          <TitleHyphen>details</TitleHyphen>
-        </SectionHeader>
-        
-        <main className={cs(layout['padding-big'], layout.break_words)}>
-          <Spacing size="small" />
-          <div className={cs(style.buttons)}>
-            <span><strong>Minted the:</strong> { format(new Date(token.createdAt), "dd/MM/yyyy' at 'HH:mm") }</span>
-            <span><strong>Price:</strong> { displayMutez(token.price) } tez</span>
-            <span><strong>Royalties:</strong> { displayRoyalties(token.royalties) }</span>
-            <span><strong>Original supply:</strong> { token.originalSupply }</span>
-            <span><strong>Supply burnt:</strong> { token.originalSupply - token.supply }</span>
-            <span><strong>Tags:</strong> { token.tags?.join(", ") || "/" }</span>
-            <span><strong>Metadata:</strong> <a href={ipfsGatewayUrl(token.metadataUri)} target="_blank" referrerPolicy="no-referrer">{token.metadataUri}</a></span>
-          </div>
-        </main>
       </section>
 
       <Spacing size="6x-large" />

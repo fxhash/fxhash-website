@@ -26,9 +26,9 @@
 }
 
 .progress {
-  background: white;
-  color: black;
+  background: var(--color-black);
+  color: var(--color-white);
   border-radius: 500px;
-  padding: 1px 4px;
+  padding: 1px 5px;
   margin-left: 8px;
 }
