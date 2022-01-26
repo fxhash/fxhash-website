@@ -5,6 +5,18 @@ description: 'The fxhash changelog'
 ---
 
 
+# 25/01/2021
+
+* added GPU-enabled rendering instances
+
+
+# 20/01/2021
+
+* optimized the computations of the market stats microservice
+* added endpoints to the public API to get the history of the market stats for collections
+* added charts to the marketplace page of collections
+
+
 # 18/01/2021
 
 * added relevance sort option when search is active (explore/marketplace)
