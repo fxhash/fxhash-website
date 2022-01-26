@@ -113,7 +113,7 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
                 user={token.author}
                 size="big"
               />
-              <Spacing size="x-small"/>
+              <Spacing size="x-large"/>
               <h3>{ token.name }</h3>
             </div>
 
@@ -122,7 +122,6 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
             <ClientOnly>
               <UserGuard forceRedirect={false}>
                 <EditTokenSnippet token={token} />
-                <Spacing size="large"/>
               </UserGuard>
             </ClientOnly>
 
@@ -219,7 +218,7 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
                   isLink={true}
                   size="small"
                   color="transparent"
-                  iconComp={<i aria-hidden className="fas fa-external-link-square"></i>}
+                  iconComp={<i aria-hidden className="fas fa-external-link-square"/>}
                   // @ts-ignore
                   target="_blank"
                   iconSide="right"

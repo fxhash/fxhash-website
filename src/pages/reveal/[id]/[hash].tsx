@@ -21,7 +21,6 @@ interface Props {
 }
 
 const RevealPage: NextPage<Props> = ({ hash, token }) => {
-  console.log({ hash, token })
   return (
     <>
       <Head>
@@ -34,25 +33,8 @@ const RevealPage: NextPage<Props> = ({ hash, token }) => {
       </Head>
 
       <section>
-        <Spacing size="6x-large"/>
+        <Spacing size="3x-large"/>
         <main className={cs(layout['padding-big'])}>
-          {/* {generativeUri && previewUri ? (
-            <Reveal
-              hash={hash}
-              generativeUri={generativeUri}
-              previeweUri={previewUri}
-              features={features}
-            />
-          ):(
-            <RevealProgress 
-              hash={hash}
-              onRevealed={(genUri, prevUri, features) => {
-                setGenerativeUri(genUri)
-                setPreviewUri(prevUri)
-                setFeatures(features)
-              }}
-            />
-          )} */}
           <Reveal
             hash={hash}
             generativeUri={token.metadata.generativeUri}

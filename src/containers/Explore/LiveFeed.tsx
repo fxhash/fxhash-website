@@ -42,7 +42,7 @@ export function LiveFeed() {
     getObjktsFeed({
       variables: {
         "filters": {
-          "assigned_eq": "true",
+          "assigned_eq": true,
           "assignedAt_gt": lastFetch.current.toISOString()
         },
         "take": 20

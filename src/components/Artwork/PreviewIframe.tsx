@@ -1,8 +1,6 @@
 import { forwardRef, useEffect, useState, useRef, useImperativeHandle } from 'react'
 import style from './Artwork.module.scss'
 import cs from "classnames"
-import useAsyncEffect from "use-async-effect"
-import { fetchRetry } from '../../utils/network'
 import { LoaderBlock } from '../Layout/LoaderBlock'
 import { Error } from '../Error/Error'
 
@@ -22,7 +20,7 @@ export const ArtworkIframe = forwardRef<ArtworkIframeRef, Props>(({
   url, 
   textWaiting, 
   onLoaded,
-  borderWidth = 20
+  borderWidth = 10
 }, ref) => {
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<boolean>(false)

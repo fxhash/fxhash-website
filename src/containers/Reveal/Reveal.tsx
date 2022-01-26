@@ -58,6 +58,7 @@ export function Reveal({ hash, generativeUri, previeweUri, features }: Props) {
             iconComp={<i aria-hidden className="fas fa-redo"/>}
             iconSide="right"
             onClick={reloadIframe}
+            color="transparent"
           >
             reload
           </Button>
@@ -65,9 +66,11 @@ export function Reveal({ hash, generativeUri, previeweUri, features }: Props) {
             <Button
               isLink={true}
               size="small"
-              iconComp={<i aria-hidden className="fas fa-external-link-alt"></i>}
+              iconComp={<i aria-hidden className="fas fa-external-link-square"/>}
               // @ts-ignore
               target="_blank"
+              iconSide="right"
+              color="transparent"
             >
               open live
             </Button>

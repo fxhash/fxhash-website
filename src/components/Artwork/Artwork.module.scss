@@ -1,9 +1,9 @@
 .container {
   width: 100%;
   height: 100%;
-  border: 20px solid var(--color-border);
-  background-color: var(--color-black);
-  box-shadow: 0px 4px 25px -9px #000000;
+  border: 10px solid var(--color-white);
+  background-color: var(--color-white);
+  box-shadow: 0px 4px 25px -9px rgba(0, 0, 0, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -16,6 +16,10 @@
   }
 }
 
+:global .dark :local .container {
+  box-shadow: 0px 4px 25px -9px rgba(0, 0, 0, 0.5);
+}
+
 .iframe {
   width: 100%;
   height: 100%;
@@ -25,7 +29,8 @@
 .iframe-container {
   width: 100%;
   height: 100%;
-  background-color: var(--color-border);
+  background-color: white;
+  box-shadow: 0 0 0 1px var(--color-white) inset;
 }
 
 .loader {

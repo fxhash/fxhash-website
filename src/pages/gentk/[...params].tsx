@@ -139,6 +139,7 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
               iconComp={<i aria-hidden className="fas fa-redo"/>}
               iconSide="right"
               onClick={reload}
+              color="transparent"
             >
               reload
             </Button>
@@ -146,9 +147,11 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
               <Button
                 isLink={true}
                 size="small"
-                iconComp={<i aria-hidden className="fas fa-external-link-alt"></i>}
+                iconComp={<i aria-hidden className="fas fa-external-link-square"/>}
                 // @ts-ignore
                 target="_blank"
+                color="transparent"
+                iconSide="right"
               >
                 open live
               </Button>

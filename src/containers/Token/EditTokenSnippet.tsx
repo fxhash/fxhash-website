@@ -7,6 +7,7 @@ import { Button } from "../../components/Button"
 import { useContext } from "react"
 import { UserContext } from "../UserProvider"
 import { BurnToken } from "./BurnToken"
+import { Spacing } from "../../components/Layout/Spacing"
 
 
 interface Props {
@@ -40,6 +41,8 @@ export function EditTokenSnippet({ token }: Props) {
           <strong>royalties:</strong> {displayRoyalties(token.royalties)}
         </span>
       </div>
+
+      <Spacing size="large"/>
     </>
   ):null
 }
