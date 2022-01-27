@@ -33,11 +33,9 @@ const Explore: NextPage = () => {
 
         <ExploreTabs active={0} />
 
-        <main className={cs(layout['padding-big'])}>
-          <ClientOnly>
-            <ExploreGenerativeTokens />
-          </ClientOnly>
-        </main>
+        <ClientOnly>
+          <ExploreGenerativeTokens />
+        </ClientOnly>
       </section>
 
       <Spacing size="6x-large" />

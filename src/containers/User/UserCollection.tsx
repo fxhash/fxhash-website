@@ -211,7 +211,7 @@ export function UserCollection({
 
   return (
     <>
-      <header className={cs(style.header)}>
+      <header className={cs(style.header, layout['padding-small'])}>
         <Link href={`${getUserProfileLink(user)}/collection/enjoy`} passHref>
           <Button
             isLink={true}
@@ -262,7 +262,7 @@ export function UserCollection({
               />
             </SearchHeader>
 
-            <div className={cs(layout.cards_explorer)}>
+            <div className={cs(layout.cards_explorer, layout['padding-big'])}>
               {filtersVisible && (
                 <FiltersPanel onClose={() => setFiltersVisible(false)}>
                   <UserCollectionFilters

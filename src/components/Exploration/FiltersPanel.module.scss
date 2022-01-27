@@ -4,12 +4,12 @@
   width: 320px;
   min-width: 320px;
   position: sticky;
-  top: 110px;
+  top: 90px;
   align-self: flex-start;
   opacity: 0.4;
   transition: opacity 0.15s;
   background: var(--color-white);
-  max-height: calc(100vh - 120px);
+  max-height: calc(100vh - 100px);
   overflow-y: auto;
 
   &:hover {

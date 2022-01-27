@@ -70,6 +70,7 @@ export interface GenerativeToken {
   createdAt: Date
   marketStats?: GenerativeTokenMarketStats
   marketStatsHistory?: GenerativeTokenMarketStatsHistory[]
+  features?: GenerativeTokenFeature[]
 }
 
 export interface GenerativeTokenWithCollection extends GenerativeToken {
@@ -84,4 +85,14 @@ export interface GenerativeTokenFilters {
   searchQuery_eq?: string
   supply_lte?: number
   supply_gte?: number
+}
+
+export interface GenerativeTokenFeatureValue {
+  value: string|boolean|number
+  occur: number
+}
+
+export interface GenerativeTokenFeature {
+  name: string
+  values: GenerativeTokenFeatureValue[]
 }

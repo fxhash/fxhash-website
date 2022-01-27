@@ -1,4 +1,5 @@
 import style from "./Search.module.scss"
+import layout from "../../styles/Layout.module.scss"
 import cs from "classnames"
 import { forwardRef, PropsWithChildren } from "react"
 
@@ -16,7 +17,7 @@ export const SearchHeader = forwardRef<HTMLDivElement, PropsWithChildren<Props>>
   children,
 }, ref) => {
   return (
-    <div className={cs(style.search_header)} ref={ref}>
+    <div className={cs(style.search_header, layout['padding-big'])} ref={ref}>
       <div className={cs(style.search_wrapper)}>
         {hasFilters && (
           <button

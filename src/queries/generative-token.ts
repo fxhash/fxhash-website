@@ -118,6 +118,36 @@ export const Qu_genTokenMarketplace = gql`
   }
 `
 
+export const Qu_genTokenIterations = gql`
+  query GenerativeTokenIterations($id: Float, $take: Int, $skip: Int, $sort: ObjktsSortInput, $featureFilters: [FeatureFilter!]) {
+    generativeToken(id: $id) {
+      id
+      objkts(take: $take, skip: $skip, sort: $sort, featureFilters: $featureFilters) {
+        id
+        owner {
+          id
+          name
+          avatarUri
+        }
+        name
+        metadata
+        rarity
+        offer {
+          price
+        }
+      }
+    }
+  }
+`
+
+export const Qu_genTokenFeatures = gql`
+  query GenerativeTokenFeatures($id: Float) {
+    generativeToken(id: $id) {
+      features
+    }
+  }
+`
+
 export const Qu_genTokenObjkts = gql`
   query Query($id: Float, $slug: String, $take: Int, $skip: Int) {
     generativeToken(id: $id, slug: $slug) {

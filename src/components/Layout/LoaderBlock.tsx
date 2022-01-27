@@ -9,6 +9,7 @@ interface Props {
   className?: string
   textPos?: "top" | "bottom"
   color?: "white" | "black"
+  size?: "tiny" | "small" | "regular" | "large"
 }
 
 export function LoaderBlock({
@@ -16,12 +17,13 @@ export function LoaderBlock({
   className,
   textPos = "top",
   color = "black",
+  size = "regular",
   children
 }: PropsWithChildren<Props>) {
   return (
     <div className={cs(style.container, style[textPos], colors[color], className)} style={{ height }}>
       {children}
-      <Loader color={color} />
+      <Loader color={color} size={size} />
     </div>
   )
 }

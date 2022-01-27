@@ -21,6 +21,7 @@ interface Props {
   selected: any[]
   onChangeSelected: (selected: any[]) => void
   className?: string
+  btnClassName?: string
   children: FunctionComponent<MultiListItemProps>
 }
 export function InputMultiList({
@@ -28,6 +29,7 @@ export function InputMultiList({
   selected,
   onChangeSelected,
   className,
+  btnClassName,
   children,
 }: Props) {
 
@@ -45,7 +47,7 @@ export function InputMultiList({
       {listItems.map(item => (
         <button 
           key={item.value}
-          className={cs(style.item, { [style.selected]: selected.includes(item.value) })}
+          className={cs(style.item, { [style.selected]: selected.includes(item.value) }, btnClassName)}
           onClick={() => itemClicked(item)}
         >
           {children({

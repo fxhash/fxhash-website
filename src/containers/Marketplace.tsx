@@ -156,7 +156,7 @@ export const Marketplace = ({}: Props) => {
 
   useEffect(() => {
     // first we scroll to the top
-    const top = (topMarkerRef.current?.offsetTop || 0) + 20
+    const top = (topMarkerRef.current?.offsetTop || 0) + 30
     if (window.scrollY > top) {
       window.scrollTo(0, top)
     }
@@ -274,7 +274,7 @@ export const Marketplace = ({}: Props) => {
             />
           </SearchHeader>
 
-          <div className={cs(layout.cards_explorer)}>
+          <div className={cs(layout.cards_explorer, layout['padding-big'])}>
             {filtersVisible && (
               <FiltersPanel onClose={() => setFiltersVisible(false)}>
                 <MarketplaceFilters

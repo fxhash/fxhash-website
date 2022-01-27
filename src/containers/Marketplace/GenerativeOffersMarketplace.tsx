@@ -15,10 +15,10 @@ import { CardsLoading } from "../../components/Card/CardsLoading"
 const ITEMS_PER_PAGE = 20
 
 const Qu_offers = gql`
-  query Query($id: Float!, $filters: ObjktFilter, $offerPrice: String, $offerCreatedAt: String, $skip: Int, $take: Int) {
+  query Query($id: Float!, $filters: ObjktFilter, $sort: ObjktsSortInput, $skip: Int, $take: Int) {
     generativeToken(id: $id) {
       id
-      offers(filters: $filters, offerPrice: $offerPrice, offerCreatedAt: $offerCreatedAt, skip: $skip, take: $take) {
+      offers(filters: $filters, sort: $sort, skip: $skip, take: $take) {
         id
         name
         slug
@@ -89,7 +89,7 @@ export const GenerativeOffersMarketplace = ({
   token,
 }: Props) => {
   const [sortValue, setSortValue] = useState<string>("offerCreatedAt-desc")
-  const sortVariables = useMemo<Record<string, any>>(() => sortValueToSortVariable(sortValue), [sortValue])
+  const sort = useMemo<Record<string, any>>(() => sortValueToSortVariable(sortValue), [sortValue])
 
   // use to know when to stop loading
   const currentLength = useRef<number>(0)
@@ -104,7 +104,7 @@ export const GenerativeOffersMarketplace = ({
       id: token.id,
       skip: 0,
       take: ITEMS_PER_PAGE,
-      ...sortVariables
+      sort: sort
     }
   })
 
@@ -124,17 +124,12 @@ export const GenerativeOffersMarketplace = ({
   const infiniteScrollFetch = () => {
     !ended.current && fetchMore?.({
       variables: {
-        filters: {
-          offer_ne: null
-        },
         id: token.id,
         skip: objkts?.length || 0,
         take: ITEMS_PER_PAGE,
-        ...sortVariables
       },
     })
   }
-
 
   useEffect(() => {
     currentLength.current = 0
@@ -146,9 +141,9 @@ export const GenerativeOffersMarketplace = ({
       id: token.id,
       skip: 0,
       take: ITEMS_PER_PAGE,
-      ...sortVariables
+      sort
     })
-  }, [sortVariables])
+  }, [sort])
 
   return (
     <>

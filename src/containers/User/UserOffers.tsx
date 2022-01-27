@@ -1,5 +1,6 @@
-import { useQuery } from "@apollo/client"
+import layout from "../../styles/Layout.module.scss"
 import cs from "classnames"
+import { useQuery } from "@apollo/client"
 import { useRef, useEffect } from "react"
 import { CardsContainer } from "../../components/Card/CardsContainer"
 import { ObjktCard } from "../../components/Card/ObjktCard"
@@ -8,6 +9,7 @@ import { InfiniteScrollTrigger } from "../../components/Utils/InfiniteScrollTrig
 import { Qu_userOffers } from "../../queries/user"
 import { Offer } from "../../types/entities/Offer"
 import { User } from "../../types/entities/User"
+import { CardsLoading } from "../../components/Card/CardsLoading"
 
 interface Props {
   user: User
@@ -54,7 +56,7 @@ export function UserOffers({
   const offers: Offer[]|null = data?.user.offers || null
 
   return (
-    <>
+    <div className={cs(layout['padding-big'])}>
       <InfiniteScrollTrigger
         onTrigger={load}
       >
@@ -66,9 +68,10 @@ export function UserOffers({
             />
           ))}
         </CardsContainer>
+        {loading && (
+          <CardsLoading number={20} />
+        )}
       </InfiniteScrollTrigger>
-
-      {loading && data && <LoaderBlock height="100px"/>}
-    </>
+    </div>
   )
 }

@@ -34,7 +34,18 @@ import { format } from 'date-fns'
 import { getGenerativeTokenMarketplaceUrl } from '../../utils/generative-token'
 import { ButtonVariations } from '../../components/Button/ButtonVariations'
 import { MintButton } from '../../components/Button/MintButton'
+import { TabDefinition, Tabs } from '../../components/Layout/Tabs'
+import { GenerativeIterations } from '../../containers/Generative/Iterations/GenerativeIterations'
 
+
+const tabs: TabDefinition[] = [
+  {
+    name: "iterations"
+  },
+  {
+    name: "activity"
+  },
+]
 
 interface Props {
   token: GenerativeToken
@@ -47,6 +58,9 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
 
   // used to preview the token in the iframe with different hashes
   const [previewHash, setPreviewHash] = useState<string|null>(token.metadata.previewHash || null)
+
+  // bottom tab active
+  const [tabActive, setTabActive] = useState<number>(0)
 
   const reload = () => {
     if (iframeRef.current) {
@@ -233,60 +247,28 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
 
       <Spacing size="6x-large" />
       <Spacing size="6x-large" />
+      
+      <Tabs
+        activeIdx={tabActive}
+        tabDefinitions={tabs}
+        tabsLayout="fixed-size"
+        onClickTab={setTabActive}
+      />
 
-      <section>
-        <SectionHeader>
-          <TitleHyphen>latest tokens minted</TitleHyphen>
-          {hasCollection && (
-            <Link href={collectionUrl}>
-              <a>view entire collection &gt;</a>
-            </Link>
-          )}
-        </SectionHeader>
-
-        <Spacing size="3x-large"/>
-
+      {tabActive === 0 ? (
+        <GenerativeIterations
+          token={token}
+        />
+      ):(
         <main className={cs(layout['padding-big'])}>
-          {hasCollection ? (
-            <>
-              <CardsContainer className={cs(homeStyle['row-responsive-limiter'])}>
-                {token.objkts.slice(0, 5).map(objkt => (
-                  <ObjktCard key={objkt.id} objkt={objkt}/>
-                ))}
-              </CardsContainer>
-              <Spacing size="4x-large"/>
-              <div className={cs(style['view-collection-container'])}>
-                <Link href={collectionUrl} passHref>
-                  <Button isLink={true}>view entire collection</Button>
-                </Link>
-              </div>
-            </>
-          ):(
-            <>
-              <p>Nobody has minted from this Generative Token. <strong>Become the first of the collection !</strong></p>
-            </>
-          )}
-        </main>
-      </section>
-
-      <Spacing size="6x-large" />
-      <Spacing size="6x-large" />
-
-      <section>
-        <SectionHeader>
-          <h2>— activity ⚡</h2>
-        </SectionHeader>
-
-        <Spacing size="3x-large"/>
-
-        <main className={cs(layout['padding-big'])}>
+          <Spacing size="x-large"/>
           <GenerativeActions
             token={token}
             initialActions={token.actions}
             className={style.activity}
           /> 
         </main>
-      </section>
+      )}
 
       <Spacing size="6x-large" />
       <Spacing size="6x-large" />

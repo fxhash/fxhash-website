@@ -98,7 +98,7 @@ export function UserProfileLayout({
 
       <Spacing size="x-large" />
 
-      <section className={cs(layout['padding-big'])}>
+      <section>
         {children}
       </section>
 

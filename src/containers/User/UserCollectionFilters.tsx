@@ -58,13 +58,6 @@ export function UserCollectionFilters({
   filters,
   setFilters,
 }: Props) {
-
-  // a list of selected artists by filter
-  const [selectedArtists, setSelectedArtists] = useState<string[]>([])
-
-  // a list of selected generative tokens by IDs
-  const [selectedGenerators, setSelectedGenerators] = useState<number[]>([])
-
   // we store the list of artists / collections in the state for better UX
   const [listArtists, setListArtists] = useState<MultiListItem[]>([])
   const [listGenerators, setListGenerators] = useState<MultiListItem[]>([])

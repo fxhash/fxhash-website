@@ -37,11 +37,9 @@ const MarketplacePage: NextPage = () => {
       <section>
         <MarketplaceTabs active={0} />
 
-        <main className={cs(layout['padding-big'])}>
-          <ClientOnlyEmpty>
-            <Marketplace />
-          </ClientOnlyEmpty>
-        </main>
+        <ClientOnlyEmpty>
+          <Marketplace />
+        </ClientOnlyEmpty>
       </section>
 
       <Spacing size="6x-large" />

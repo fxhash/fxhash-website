@@ -67,6 +67,27 @@ body {
   --color-border-input: #7e7e7e;
 }
 
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-gray);
+
+  &:hover {
+    background: var(--color-gray-dark);
+  }
+  
+  &:active {
+    background: var(--color-black);
+  }
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-gray-vlight);
+}
+
 a {
   color: var(--color-secondary);
   font-weight: bold;

@@ -35,7 +35,7 @@ export function ObjktCard({
       <AnchorForward style={{ height: '100%' }}>
         <Card
           thumbnailUri={objkt.metadata?.thumbnailUri} 
-          undesirable={objkt.issuer.flag === GenTokFlag.MALICIOUS}
+          undesirable={objkt.issuer?.flag === GenTokFlag.MALICIOUS}
           displayDetails={settings.displayInfosGentkCard}
         >
           <div>
@@ -70,10 +70,12 @@ export function ObjktCard({
                 )}
               </div>
             </div>
-            <div className={cs(style.badge)}>
-              <span className={cs(colors['gray-dark'])}>created by</span> 
-              <UserBadge user={objkt.issuer.author!} size="regular" hasLink={false} avatarSide="right" />
-            </div>
+            {objkt.issuer && (
+              <div className={cs(style.badge)}>
+                <span className={cs(colors['gray-dark'])}>created by</span> 
+                <UserBadge user={objkt.issuer.author!} size="regular" hasLink={false} avatarSide="right" />
+              </div>
+            )}
           </div>
         </Card>
       </AnchorForward>
