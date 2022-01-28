@@ -5,6 +5,17 @@ description: 'The fxhash changelog'
 ---
 
 
+# 28/01/2021
+
+* UI improvements on the Generative Token page
+* the 20px black border around tokens was removed in favor of a 10px transparent one
+* page /generative/{id}/collection was removed
+* the full collection was moved to the main page instead
+* full generative collection isn't paginated but works with infinite scrolling
+* added sorting options to the generative collection
+* added filtering by features on generative collections
+
+
 # 25/01/2021
 
 * added GPU-enabled rendering instances
