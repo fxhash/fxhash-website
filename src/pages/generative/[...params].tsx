@@ -264,7 +264,6 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
           <Spacing size="x-large"/>
           <GenerativeActions
             token={token}
-            initialActions={token.actions}
             className={style.activity}
           /> 
         </main>

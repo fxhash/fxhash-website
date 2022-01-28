@@ -17,62 +17,12 @@ export const Qu_genToken = gql`
       enabled
       royalties
       lockEnd
+      createdAt
       author {
         id
         flag
         name
         avatarUri
-      }
-      objkts: latestObjkts {
-        id
-        owner {
-          id
-          name
-          flag
-          avatarUri
-        }
-        name
-        slug
-        metadata
-        offer {
-          price
-        }
-        issuer {
-          flag
-          author {
-            id
-            name
-            flag
-            avatarUri
-          }
-        }
-      }
-      createdAt
-      actions: latestActions {
-        id
-        type
-        metadata
-        createdAt
-        issuer {
-          id
-          name
-          flag
-          avatarUri
-        }
-        target {
-          id
-          name
-          flag
-          avatarUri
-        }
-        objkt {
-          id
-          name
-        }
-        token {
-          id
-          name
-        }
       }
     }
   }

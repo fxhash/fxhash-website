@@ -11,7 +11,6 @@ import { LoaderBlock } from "../../components/Layout/LoaderBlock"
 
 interface Props {
   token: GenerativeToken
-  initialActions?: Action[]
   className?: string
   filters?: any
 }
@@ -54,12 +53,9 @@ const Qu_genTokActions = gql`
 
 export function GenerativeActions({
   token,
-  initialActions, 
   className,
   filters,
-}: Props) {
-  const initialSize = initialActions?.length || ITEMS_PER_PAGE
-  
+}: Props) {  
   // use to know when to stop loading
   const currentLength = useRef<number>(0)
   const ended = useRef<boolean>(false)
@@ -69,7 +65,7 @@ export function GenerativeActions({
     variables: {
       id: token.id,
       skip: 0,
-      take: initialSize,
+      take: ITEMS_PER_PAGE,
       filters
     }
   })
@@ -98,7 +94,7 @@ export function GenerativeActions({
     }
   }
 
-  const actions = data?.generativeToken?.actions || initialActions || []
+  const actions = data?.generativeToken?.actions || []
 
   return (
     <>
