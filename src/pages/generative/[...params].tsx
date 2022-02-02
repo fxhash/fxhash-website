@@ -206,6 +206,7 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
                 <ArtworkIframe 
                   ref={iframeRef}
                   url={artifactUrl}
+                  hasLoading={false}
                 />
               </div>
             </div>

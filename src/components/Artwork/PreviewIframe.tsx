@@ -9,6 +9,7 @@ interface Props {
   textWaiting?: string
   borderWidth?: number
   onLoaded?: () => void
+  hasLoading?: boolean
 }
 
 export interface ArtworkIframeRef {
@@ -20,7 +21,8 @@ export const ArtworkIframe = forwardRef<ArtworkIframeRef, Props>(({
   url, 
   textWaiting, 
   onLoaded,
-  borderWidth = 10
+  borderWidth = 10,
+  hasLoading = true,
 }, ref) => {
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<boolean>(false)
@@ -75,7 +77,7 @@ export const ArtworkIframe = forwardRef<ArtworkIframeRef, Props>(({
           onError={() => setError(true)}
           allow="accelerometer; camera; gyroscope; microphone; xr-spatial-tracking;"
         />
-        {loading && !error && (
+        {loading && hasLoading && !error && (
           <LoaderBlock height="100%" color="white" className={cs(style.loader)}>
             {textWaiting}
           </LoaderBlock>
