@@ -1,20 +1,17 @@
 @import "../../styles/Variables.scss";
 
 .article {
-  width: min(100%, 700px);
-  margin: auto;
-  margin-top: 50px;
   line-height: 180%;
 
   h1 {
     font-size: var(--font-size-h3);
     margin-top: 2.2em;
-    margin-left: -40px;
+    // margin-left: -40px;
     line-height: 110%;
 
-    &::before {
-      content: "— ";
-    }
+    // &::before {
+    //   content: "— ";
+    // }
     
     @media (max-width: $breakpoint-sm) { 
       margin-left: 0;
@@ -30,6 +27,7 @@
   }
   h3 {
     font-size: var(--font-size-h5);
+    margin-top: 2em;
   }
 
   p, ul {
@@ -48,6 +46,12 @@
 
   pre, code {
     font-family: inherit;
+  }
+
+  pre {
+    max-width: 100%;
+    overflow-x: auto;
+    margin-top: 1.5em;
   }
 
   pre code {

@@ -4,7 +4,7 @@ import text from '../styles/Text.module.css'
 import effects from '../styles/Effects.module.scss'
 import cs from 'classnames'
 import { Button } from './Button'
-import { useContext } from 'react'
+import { useContext, useMemo } from 'react'
 import { UserContext } from '../containers/UserProvider'
 import { Dropdown } from './Navigation/Dropdown'
 import { Avatar } from './User/Avatar'
@@ -19,6 +19,10 @@ export function Navigation() {
   const [opened, setOpened] = useState(false)
   const [settingsModal, setSettingsModal] = useState<boolean>(false)
 
+  const routerRoot = useMemo<string>(() => {
+    return router.pathname.split("/")[1]
+  }, [router.pathname])
+
   useEffect(() => {
     setOpened(false)
   }, [router.asPath])
@@ -32,11 +36,12 @@ export function Navigation() {
 
         <div className={cs(style.content)}>
           <Link href="/explore">
-            <a className={cs({ [style.active]: router.pathname === "/explore" })}>explore</a>
+            <a className={cs({ [style.active]: routerRoot === "explore" })}>explore</a>
           </Link>
 
           <Dropdown
             itemComp={<span>community</span>}
+            btnClassName={cs({ [style.active]: routerRoot === "community" })}
           >
             <Link href="/community/opening-schedule">
               <a>opening schedule</a>
@@ -50,43 +55,14 @@ export function Navigation() {
           </Dropdown>
 
           <Link href="/marketplace">
-            <a className={cs({ [style.active]: router.pathname === "/marketplace" })}>marketplace</a>
+            <a className={cs({ [style.active]: routerRoot === "marketplace" })}>marketplace</a>
           </Link>
           <Link href="/sandbox">
-            <a className={cs({ [style.active]: router.pathname === "/sandbox" })}>sandbox</a>
+            <a className={cs({ [style.active]: routerRoot === "sandbox" })}>sandbox</a>
           </Link>
-
-          <Dropdown
-            itemComp={<span>about</span>}
-          >
-            <Link href="/articles/beta">
-              <a>beta</a>
-            </Link>
-            <Link href="/articles/guide-mint-generative-token">
-              <a>guide to mint Generative Token</a>
-            </Link>
-            <Link href="/articles/collect-mint-tokens">
-              <a>guide to collect</a>
-            </Link>
-            <Link href="/articles/getting-verified">
-              <a>getting verified</a>
-            </Link>
-            <Link href="/articles/code-of-conduct">
-              <a>code of conduct</a>
-            </Link>
-            <Link href="/articles/moderation-system">
-              <a>moderation system</a>
-            </Link>
-            <Link href="/articles/integration-guide">
-              <a>integration guide</a>
-            </Link>
-            <Link href="/articles/about-fxhash">
-              <a>about fxhash</a>
-            </Link>
-            <Link href="/articles/changelog">
-              <a>changelog</a>
-            </Link>
-          </Dropdown>
+          <Link href="/doc">
+            <a className={cs({ [style.active]: routerRoot === "doc" })}>doc</a>
+          </Link>
 
           <button
             aria-label="Open settings modal"

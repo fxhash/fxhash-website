@@ -77,3 +77,97 @@ export async function getArticleData(id: string) {
     contentHtml
   }
 }
+
+
+/**
+ * TODO: REMOVE WHAT'S ABOVE
+ */
+
+const docDir = path.join(process.cwd(), "src", "doc")
+const docJsonPath = path.join(docDir, "doc.json")
+
+/**
+ * Define an article within the doc page
+ */
+export interface IDocArticle {
+  title: string
+  link: string
+}
+
+/**
+ * Defines a category within the doc page
+ */
+export interface IDocCategory {
+  title: string
+  icon: string
+  link: string
+  articles: IDocArticle[]
+}
+
+export interface IDocPage {
+  title: string
+  description: string
+  categories: IDocCategory[]
+}
+
+/**
+ * Parses the /about/about.json file to get the structure of the about section
+ */
+export async function getDocDefinition(): Promise<IDocPage> {
+  const docFile = fs.readFileSync(docJsonPath, "utf8")
+  return JSON.parse(docFile)
+}
+
+/**
+ * Returns a list of parameters for getStaticPaths given the structure of the
+ * about file
+ */
+export async function getDocIds() {
+  const file = await getDocDefinition()
+  let ids: any[] = []
+  for (const cat of file.categories) {
+    ids = ids.concat(cat.articles.map(article => ({
+      params: {
+        category: cat.link,
+        article: article.link
+      }
+    })))
+  }
+  return ids
+}
+
+/**
+ * Given a category link (ie ID) and an article link (ie ID), outputs the contents
+ * of the file formatted in HTML using a markdown preprocessor
+ */
+export async function getArticle(category: string, article: string) {
+  try {
+    const filePath = path.join(docDir, category, `${article}.md`)
+    const fileContents = fs.readFileSync(filePath, 'utf8')
+  
+    // Use gray-matter to parse the post metadata section
+    const matterResult = matter(fileContents)
+    const processed = await unified()
+      .use(remarkParse)
+      .use(remarkToc, {
+        maxDepth: 1,
+      })
+      .use(remarkRehype)
+      .use(slug)
+      .use(rehypeHighlight)
+      .use(rehypeFormat)
+      .use(rehypeStringify)
+      .process(matterResult.content)
+  
+    const contentHtml = processed.toString()
+  
+    return {
+      id: `/${category}/${article}`,
+      ...matterResult.data,
+      contentHtml
+    }
+  }
+  catch {
+    return null
+  }
+}

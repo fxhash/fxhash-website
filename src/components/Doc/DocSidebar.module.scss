@@ -1,0 +1,59 @@
+@import "../../styles/Variables.scss";
+
+.root {
+  padding: 0 20px;
+}
+
+.content {
+  margin-top: 20px;
+}
+
+.title {
+  pointer-events: none;
+  background: none;
+  border: none;
+  color: inherit;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-size: var(--font-size-h5);
+  font-weight: bold;
+  
+  i {
+    display: none;
+    margin-right: 15px;
+    font-size: 24px;
+  }
+}
+
+@media (max-width: $breakpoint-md) {
+  .content {
+    display: none;
+    padding: 6px;
+    border: 3px solid var(--color-gray-vvlight);
+    margin-top: 0;
+    border-top: none;
+  }
+
+  .title {
+    cursor: pointer;
+    pointer-events: all;
+    width: 100%;
+    background: var(--color-gray-vvlight);
+    padding: 5px 10px;
+  
+    i {
+      display: block;
+    }
+  }
+
+  .root {
+    margin-bottom: 30px;
+
+    &.opened {
+      .content {
+        display: block;
+      }
+    }
+  }
+}

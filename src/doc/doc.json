@@ -1,0 +1,71 @@
+{
+  "title": "Documentation",
+  "description": "Learn about fxhash, its principles as an artist and as a collector.",
+  "categories": [
+    {
+      "title": "Artistic guides",
+      "icon": "fas fa-laptop-code",
+      "link": "artist",
+      "articles": [
+        {
+          "title": "Publish a Generative Token",
+          "link": "guide-publish-generative-token"
+        },
+        {
+          "title": "Artist Code of conduct",
+          "link": "code-of-conduct"
+        }
+      ]
+    },
+    {
+      "title": "Collecting on fxhash",
+      "icon": "fas fa-book",
+      "link": "collect",
+      "articles": [
+        {
+          "title": "Guide to collect",
+          "link": "guide"
+        },
+        {
+          "title": "fxhash RPC",
+          "link": "rpc"
+        },
+        {
+          "title": "Collector Code of conduct",
+          "link": "code-of-conduct"
+        }
+      ]
+    },
+    {
+      "title": "The plateform",
+      "icon": "far fa-browser",
+      "link": "fxhash",
+      "articles": [
+        {
+          "title": "Beta version",
+          "link": "beta"
+        },
+        {
+          "title": "Roadmap",
+          "link": "roadmap"
+        },
+        {
+          "title": "Moderation system",
+          "link": "moderation"
+        },
+        {
+          "title": "Getting verified",
+          "link": "verification"
+        },
+        {
+          "title": "Integration guide",
+          "link": "integration-guide"
+        },
+        {
+          "title": "Changelog",
+          "link": "changelog"
+        }
+      ]
+    }
+  ] 
+}
