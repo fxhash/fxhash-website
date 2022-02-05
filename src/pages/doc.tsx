@@ -38,7 +38,7 @@ const Explore: NextPage<IProps> = ({ definition }) => {
         
         <Spacing size="large"/>
 
-        <div className={cs(style.content)}>
+        <div className={cs(style.content, layout['padding-big'])}>
           <p className={cs(style.description)}>
             { definition.description }
           </p>
