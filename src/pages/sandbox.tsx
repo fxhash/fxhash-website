@@ -35,12 +35,12 @@ const SandboxPage: NextPage = () => {
             The sandbox is a space in which you can drop a .zip of your project and see how it would behave when it will be minted on fxhash. 
             If your artwork does not behave properly in the sandbox, it will not work after being minted. <br/>
             <span>If you are new to the platform please read our </span>
-            <LinkGuide href="/articles/guide-mint-generative-token">
+            <LinkGuide href="/doc/artist/guide-publish-generative-token">
               Guide to build a Generative Token.
             </LinkGuide>
           </p>
           <p>
-            Please make sure that your project follows the fxhash <LinkGuide href="/articles/code-of-conduct">Code of Conduct</LinkGuide>.
+            Please make sure that your project follows the fxhash <LinkGuide href="/doc/artist/code-of-conduct">Code of Conduct</LinkGuide>.
           </p>
 
           <Spacing size="3x-large"/>

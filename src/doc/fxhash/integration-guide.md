@@ -187,7 +187,7 @@ These are the addresses of the smart contracts used by fxhash
 You can get some details on the moderation systems:
 
 * [User Moderation system](https://github.com/fxhash/system-descriptions/blob/master/USER_MODERATION.md)
-* [Generative Token moderation system](https://www.fxhash.xyz/articles/moderation-system)
+* [Generative Token moderation system](https://www.fxhash.xyz/doc/fxhash/moderation)
 
 
 # Updates

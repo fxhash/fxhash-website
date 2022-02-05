@@ -13,13 +13,13 @@ export const StepHome:StepComponent = ({ onNext }) => {
     <>
       <p className={cs(style.presentation)}>
         <span>Before minting a generative token on the blockchain, please read our </span>
-        <LinkGuide href="/articles/guide-mint-generative-token">Guide to build a Generative Token</LinkGuide>
+        <LinkGuide href="/doc/artist/guide-publish-generative-token">Guide to build a Generative Token</LinkGuide>
         <span> and test your zip file in the </span>
         <Link href="/sandbox"><a>sandbox</a></Link><span>.</span>
       </p>
 
       <p className={cs(style.presentation)}>
-        Please also take a look at fxhash <LinkGuide href="/articles/code-of-conduct">Code of Conduct</LinkGuide>. If your token does not follow the code, it may get moderated by our team
+        Please also take a look at fxhash <LinkGuide href="/doc/artist/code-of-conduct">Code of Conduct</LinkGuide>. If your token does not follow the code, it may get moderated by our team
       </p>
 
       <Spacing size="3x-large"/>

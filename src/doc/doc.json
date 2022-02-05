@@ -42,6 +42,10 @@
       "link": "fxhash",
       "articles": [
         {
+          "title": "Overview",
+          "link": "overview"
+        },
+        {
           "title": "Beta version",
           "link": "beta"
         },

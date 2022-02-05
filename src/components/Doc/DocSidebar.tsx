@@ -23,7 +23,7 @@ export function DocSidebar({
         className={cs(style.title)}
         onClick={() => setOpened(!opened)}
       >
-        <i className="fas fa-bars"/>
+        <i className="fas fa-bars" aria-hidden/>
         <span>Documentation</span>
       </button>
   
