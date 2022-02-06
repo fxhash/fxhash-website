@@ -37,7 +37,7 @@
       ]
     },
     {
-      "title": "The plateform",
+      "title": "The platform",
       "icon": "far fa-browser",
       "link": "fxhash",
       "articles": [
@@ -68,6 +68,25 @@
         {
           "title": "Changelog",
           "link": "changelog"
+        }
+      ]
+    },
+    {
+      "title": "Community",
+      "icon": "far fa-browser",
+      "link": "community",
+      "articles": [
+        {
+          "title": "FXH token & DAO",
+          "link": "token-dao"
+        },
+        {
+          "title": "TreeDAO",
+          "link": "treedao"
+        },
+        {
+          "title": "Curation",
+          "link": "curation"
         }
       ]
     }
