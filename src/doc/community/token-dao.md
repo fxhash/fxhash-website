@@ -5,6 +5,8 @@ description: 'About the FXH token and the FXH DAO'
 ---
 
 
+# TODO
+
 *This document describes the FXH Token and DAO, which are not implemented into the platform yet.*
 
 
