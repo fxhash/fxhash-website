@@ -1,0 +1,81 @@
+@import "../../styles/Variables.scss";
+
+.root {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  & > *+* {
+    margin-left: 60px;
+  }
+
+  & > * {
+    flex: 1 1 0;
+  }
+
+  .presentation_text {
+    max-width: 800px;
+    font-size: var(--font-size-h3);
+  }
+}
+
+.guides_section {
+  .guides_section_title {
+    margin-bottom: 1em;
+  }
+
+  .guide + .guide {
+    margin-top: 8px;
+  }
+}
+
+.guide {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  max-width: 600px;
+  padding: 8px;
+  padding-left: 16px;
+  box-sizing: border-box;
+
+  i {
+    font-size: 32px;
+  }
+
+  .guide_details {
+    display: flex;
+    flex-direction: column;
+    margin-left: 24px;
+
+    span {
+      color: var(--color-gray);
+      font-weight: normal;
+      font-size: var(--font-size-small);
+    }
+  }
+
+  &:hover {
+    background: var(--color-gray-vvlight);
+    text-decoration: none;
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .root {
+    flex-direction: column;
+
+    .presentation_text {
+      font-size: var(--font-size-h4);
+      text-align: center;
+    }
+
+    & > *+* {
+      margin-left: 0px;
+      margin-top: 60px;
+    }
+
+    .guides_section_title {
+      font-size: var(--font-size-h4);
+    }
+  }
+}

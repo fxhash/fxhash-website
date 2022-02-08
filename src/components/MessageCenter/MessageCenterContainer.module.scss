@@ -1,0 +1,16 @@
+.root {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  width: min(400px, 100%);
+
+  & > *+* {
+    margin-top: 10px;
+  }
+
+  &:hover :global .message {
+    .loader {
+      animation-play-state: paused;
+    }
+  }
+}
