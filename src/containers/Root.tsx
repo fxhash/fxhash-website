@@ -9,6 +9,7 @@ import { clientSideClient } from "../services/ApolloClient"
 import { UserProvider } from "./UserProvider"
 import { SettingsProvider } from "../context/Theme"
 import { CyclesProvider } from "../context/Cycles"
+import { MessageCenterProvider } from "../context/MessageCenter"
 
 const EXCLUDE_LAYOUT= [
   "/generative/[id]/enjoy",
@@ -26,11 +27,13 @@ export function Root({ children }: PropsWithChildren<{}>) {
     <ApolloProvider client={clientSideClient}>
       <SettingsProvider>
         <UserProvider>
-          <CyclesProvider>
-            <LayoutWrapper>
-              {children}
-            </LayoutWrapper>
-          </CyclesProvider>
+          <MessageCenterProvider>
+            <CyclesProvider>
+              <LayoutWrapper>
+                {children}
+              </LayoutWrapper>
+            </CyclesProvider>
+          </MessageCenterProvider>
         </UserProvider>
       </SettingsProvider>
     </ApolloProvider>

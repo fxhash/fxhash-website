@@ -1,10 +1,7 @@
 import React, { PropsWithChildren, useState, useCallback, useRef, useEffect } from "react"
 import { useClientAsyncEffect, useClientEffect } from "../utils/hookts"
-import style from "./Theme.module.scss"
-import cs from "classnames"
 import { Cycle } from "../types/Cycles"
 import { API_BLOCKCHAIN_CONTRACT_STORAGE, API_CYCLES_LIST } from "../services/Blockchain"
-import { addHours, subHours } from "date-fns"
 
 
 interface ICyclesContext {
