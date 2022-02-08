@@ -1,0 +1,12 @@
+@import '../../styles/Variables.scss';
+
+.container {
+  width: 100%;
+  display: grid; 
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  gap: var(--cards-gap);
+
+  & > a {
+    text-decoration: none !important;
+  }
+}

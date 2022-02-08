@@ -1,0 +1,184 @@
+@import "../../../styles/Variables.scss";
+
+$bands_height: 80px;
+
+.root {
+  background: black;
+  width: 100vw;
+  height: 100vh;
+  color: var(--color-gray);
+}
+
+.frame_container {
+  position: fixed;
+  top: $bands_height;
+  left: 0;
+  right: 0;
+  bottom: $bands_height;
+  transition: opacity 3s ease-in-out;
+
+  &.hidden {
+    opacity: 0;
+  }
+
+  &.is_empty {
+    opacity: 1 !important;
+  }
+}
+
+.header {
+  position: fixed;
+  left: 0;
+  height: $bands_height;
+  right: 0;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 30px;
+  opacity: 0.5;
+  transition: all 0.4s ease-in-out;
+  
+  .back {
+    display: flex;
+    align-items: center;
+    padding: 15px 15px 15px 0;
+    
+    & > *+* {
+      margin-left: 15px;
+    }  
+    
+    &:hover {    
+      text-decoration: none;
+      
+      span {
+        text-decoration: underline;
+      }
+    }
+  }
+  
+  .header_details {
+    display: flex;
+    align-items: center;
+    
+    & > *+* {
+      margin-left: 15px;
+    }
+  }
+
+  &.hide {
+    top: -$bands_height;
+  }
+}
+
+.footer {
+  position: fixed;
+  left: 0;
+  height: $bands_height;
+  right: 0;
+  bottom: 0;
+  padding: 0 30px;
+  display: flex;
+  align-items: center;
+  transition: all 0.4s ease-in-out;
+
+  & > * {
+    flex: 1 1 0px;
+    justify-content: center;
+  }
+
+  &.hide {
+    bottom: -$bands_height;
+  }
+}
+
+.progress {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  height: 3px;
+
+  .bar {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    background-color: var(--color-gray-dark);
+    opacity: 0.5;
+  }
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+
+  button {
+    background: transparent;
+    border: none;
+    color: white;
+    padding: 10px;
+    cursor: pointer;
+    transition: opacity 0.1s ease-out;
+    opacity: 0.5;
+
+    &:hover {
+      opacity: 1;
+    }
+
+    i {
+      font-size: 22px;
+    }
+  }
+}
+
+.right_controls {
+  justify-content: flex-end;
+}
+
+.gentk_details {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  opacity: 0.5;
+  
+  &>*+* {
+    margin-left: 8px;
+  }
+}
+
+.settings_modal {
+  min-width: min(600px, 100vw);
+
+  .line {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+
+    @media (max-width: $breakpoint-sm) {
+      flex-direction: column;
+    }
+  }
+}
+
+.no_cursor {
+  cursor: none;
+}
+
+@media (max-width: $breakpoint-sm) {
+  .back, .gentk_details, .right_controls {
+    display: none !important;
+  }
+
+  .header {
+    justify-content: center;
+  }
+}
+
+.empty {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
