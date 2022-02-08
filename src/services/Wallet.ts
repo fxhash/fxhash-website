@@ -196,7 +196,7 @@ export class WalletManager {
       }
       else {
         // any error
-        statusCallback && statusCallback(ContractOperationStatus.ERROR)
+        statusCallback && statusCallback(ContractOperationStatus.ERROR, err.description ?? null)
       }
     }
   }
@@ -230,7 +230,7 @@ export class WalletManager {
       }
       else {
         // any error
-        statusCallback && statusCallback(ContractOperationStatus.ERROR)
+        statusCallback && statusCallback(ContractOperationStatus.ERROR, err.description || null)
       }
     }
   }
@@ -268,7 +268,7 @@ export class WalletManager {
       }
       else {
         // any error
-        statusCallback && statusCallback(ContractOperationStatus.ERROR)
+        statusCallback && statusCallback(ContractOperationStatus.ERROR, err.description || null)
       }
     }
   }
@@ -302,7 +302,7 @@ export class WalletManager {
       }
       else {
         // any error
-        statusCallback && statusCallback(ContractOperationStatus.ERROR)
+        statusCallback && statusCallback(ContractOperationStatus.ERROR, err.description || null)
       }
     }
   }
@@ -336,7 +336,7 @@ export class WalletManager {
       }
       else {
         // any error
-        statusCallback && statusCallback(ContractOperationStatus.ERROR)
+        statusCallback && statusCallback(ContractOperationStatus.ERROR, err.description || null)
       }
     }
   }
@@ -370,7 +370,7 @@ export class WalletManager {
       }
       else {
         // any error
-        statusCallback && statusCallback(ContractOperationStatus.ERROR)
+        statusCallback && statusCallback(ContractOperationStatus.ERROR, err.description || null)
       }
     }
   }
@@ -506,7 +506,7 @@ export class WalletManager {
       }
       else {
         // any error
-        statusCallback && statusCallback(ContractOperationStatus.ERROR)
+        statusCallback && statusCallback(ContractOperationStatus.ERROR, err.description || null)
       }
     }
   }
@@ -540,7 +540,7 @@ export class WalletManager {
       }
       else {
         // any error
-        statusCallback && statusCallback(ContractOperationStatus.ERROR)
+        statusCallback && statusCallback(ContractOperationStatus.ERROR, err.description || null)
       }
     }
   }
@@ -578,7 +578,7 @@ export class WalletManager {
       }
       else {
         // any error
-        statusCallback && statusCallback(ContractOperationStatus.ERROR)
+        statusCallback && statusCallback(ContractOperationStatus.ERROR, err.description || null)
       }
     }
   }
@@ -612,7 +612,7 @@ export class WalletManager {
       }
       else {
         // any error
-        statusCallback && statusCallback(ContractOperationStatus.ERROR)
+        statusCallback && statusCallback(ContractOperationStatus.ERROR, err.description || null)
       }
     }
   }
@@ -649,7 +649,7 @@ export class WalletManager {
       }
       else {
         // any error
-        statusCallback && statusCallback(ContractOperationStatus.ERROR)
+        statusCallback && statusCallback(ContractOperationStatus.ERROR, err.description || null)
       }
     }
   }
@@ -686,7 +686,7 @@ export class WalletManager {
       }
       else {
         // any error
-        statusCallback && statusCallback(ContractOperationStatus.ERROR)
+        statusCallback && statusCallback(ContractOperationStatus.ERROR, err.description || null)
       }
     }
   }
@@ -721,7 +721,7 @@ export class WalletManager {
       }
       else {
         // any error
-        statusCallback && statusCallback(ContractOperationStatus.ERROR)
+        statusCallback && statusCallback(ContractOperationStatus.ERROR, err.description || null)
       }
     }
   }
@@ -756,7 +756,7 @@ export class WalletManager {
       }
       else {
         // any error
-        statusCallback && statusCallback(ContractOperationStatus.ERROR)
+        statusCallback && statusCallback(ContractOperationStatus.ERROR, err.description || null)
       }
     }
   }

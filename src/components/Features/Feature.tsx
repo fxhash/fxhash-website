@@ -1,7 +1,6 @@
 import style from "./Features.module.scss"
 import cs from "classnames"
 import { TokenFeature, TokenFeatureValueType } from "../../types/Metadata"
-import { getMutezDecimalsNb } from "../../utils/math"
 import { displayPercentage } from "../../utils/units"
 
 

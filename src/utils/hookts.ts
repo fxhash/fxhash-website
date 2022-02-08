@@ -1,6 +1,7 @@
-import { DependencyList, Dispatch, EffectCallback, SetStateAction, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { DependencyList, Dispatch, EffectCallback, SetStateAction, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import useAsyncEffect from 'use-async-effect'
 import useFetch, { CachePolicies } from 'use-http'
+import { MessageCenterContext } from '../context/MessageCenter'
 import { API_BLOCKCHAIN_CONTRACT_STORAGE } from '../services/Blockchain'
 import { ContractCallHookReturn, ContractInteractionMethod, ContractOperationStatus } from '../types/Contracts'
 import { MintError, MintProgressMessage, MintResponse } from '../types/Responses'
@@ -73,6 +74,7 @@ export function useContractCall<T>(contractMethod?: ContractInteractionMethod<T>
   const [transactionHash, setTransactionHash] = useState<string|null>(null)
   const counter = useRef<number>(0)
   const isMounted = useIsMounted()
+  const messageCenter = useContext(MessageCenterContext)
 
   const clear = () => {
     setLoading(false)
@@ -105,6 +107,11 @@ export function useContractCall<T>(contractMethod?: ContractInteractionMethod<T>
         else if (opState === ContractOperationStatus.ERROR) {
           setLoading(false)
           setError(true)
+          messageCenter.addMessage({
+            type: "error",
+            title: "Error when calling contract",
+            content: opData,
+          })
         }
       }
     })
