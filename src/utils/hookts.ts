@@ -1,10 +1,12 @@
-import { DependencyList, Dispatch, EffectCallback, SetStateAction, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { DependencyList, Dispatch, EffectCallback, SetStateAction, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import useAsyncEffect from 'use-async-effect'
 import useFetch, { CachePolicies } from 'use-http'
+import { MessageCenterContext } from '../context/MessageCenter'
 import { API_BLOCKCHAIN_CONTRACT_STORAGE } from '../services/Blockchain'
 import { ContractCallHookReturn, ContractInteractionMethod, ContractOperationStatus } from '../types/Contracts'
 import { MintError, MintProgressMessage, MintResponse } from '../types/Responses'
 import { processTzProfile } from './user'
+import { getWalletOperationText } from "./wallet"
 
 export function useIsMounted() {
   const isMounted = useRef(false)
@@ -73,6 +75,7 @@ export function useContractCall<T>(contractMethod?: ContractInteractionMethod<T>
   const [transactionHash, setTransactionHash] = useState<string|null>(null)
   const counter = useRef<number>(0)
   const isMounted = useIsMounted()
+  const messageCenter = useContext(MessageCenterContext)
 
   const clear = () => {
     setLoading(false)
@@ -98,14 +101,28 @@ export function useContractCall<T>(contractMethod?: ContractInteractionMethod<T>
         if (opState === ContractOperationStatus.INJECTED) {
           setSuccess(true)
           setLoading(false)
-          if (opData) {
-            setTransactionHash(opData)
+          if (opData?.hash) {
+            setTransactionHash(opData.hash)
           }
         }
         else if (opState === ContractOperationStatus.ERROR) {
           setLoading(false)
           setError(true)
         }
+      }
+      // even if not mounted anymore we push the messages to message center
+      if (opState === ContractOperationStatus.INJECTED) {
+        messageCenter.addMessage({
+          type: "success",
+          title: `Operation "${getWalletOperationText(opData.operationType)}" successfully applied`
+        })
+      }
+      else if (opState === ContractOperationStatus.ERROR) {
+        messageCenter.addMessage({
+          type: "error",
+          title: "Error when calling contract",
+          content: opData,
+        })
       }
     })
   }

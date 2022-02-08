@@ -8,7 +8,7 @@ export enum ContractOperationStatus {
 }
 
 // generic method to handle updates made on a call to a contract
-export type ContractOperationCallback = (status: ContractOperationStatus, data?: string) => any
+export type ContractOperationCallback = (status: ContractOperationStatus, data?: any) => any
 
 // generic signature for any contract-interraction method
 export type ContractInteractionMethod<T> = (data: T, operationCallback?: ContractOperationCallback, currentTry?: number) => any

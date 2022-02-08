@@ -22,6 +22,7 @@ import {
 } from '../types/Contracts'
 import { shuffleArray } from '../utils/array'
 import { stringToByteString } from '../utils/convert'
+import { isOperationApplied } from './Blockchain'
 
 
 // short
@@ -32,6 +33,24 @@ const addresses: Record<FxhashContract, string> = {
   REGISTER: process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_USERREGISTER!,
   MODERATION: process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_TOK_MODERATION!,
   USER_MODERATION: process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_USER_MODERATION!,
+}
+
+// the different operations which can be performed by the wallet
+export enum EWalletOperations {
+  UPDATE_PROFILE = "UPDATE_PROFILE",
+  PUBLISH_GENERATIVE = "PUBLISH_GENERATIVE",
+  UPDATE_GENERATIVE = "UPDATE_GENERATIVE",
+  BURN_GENERATIVE = "BURN_GENERATIVE",
+  BURN_GENERATIVE_SUPPLY = "BURN_GENERATIVE_SUPPLY",
+  MINT_ITERATION = "MINT_ITERATION",
+  LIST_TOKEN = "LIST_TOKEN",
+  CANCEL_LISTING = "CANCEL_LISTING",
+  COLLECT = "COLLECT",
+  REPORT = "REPORT",
+  MODERATE_TOKEN = "MODERATE_TOKEN",
+  MODERATE_USER = "MODERATE_USER",
+  VERIFY_USER = "VERIFY_USER",
+  BAN_USER = "BAN_USER",
 }
 
 /**
@@ -181,10 +200,13 @@ export class WalletManager {
   
       // wait for confirmation
       statusCallback && statusCallback(ContractOperationStatus.WAITING_CONFIRMATION)
-      await opSend.confirmation(2)
+      await isOperationApplied(opSend.opHash)
   
       // OK, injected
-      statusCallback && statusCallback(ContractOperationStatus.INJECTED)
+      statusCallback && statusCallback(ContractOperationStatus.INJECTED, {
+        hash: opSend.opHash,
+        operationType: EWalletOperations.UPDATE_PROFILE,
+      })
     }
     catch(err: any) {
       console.log({err})
@@ -196,7 +218,7 @@ export class WalletManager {
       }
       else {
         // any error
-        statusCallback && statusCallback(ContractOperationStatus.ERROR)
+        statusCallback && statusCallback(ContractOperationStatus.ERROR, err.description || err.message || null)
       }
     }
   }
@@ -215,10 +237,13 @@ export class WalletManager {
   
       // wait for confirmation
       statusCallback && statusCallback(ContractOperationStatus.WAITING_CONFIRMATION)
-      await opSend.confirmation(1)
+      await isOperationApplied(opSend.opHash)
   
       // OK, injected
-      statusCallback && statusCallback(ContractOperationStatus.INJECTED)
+      statusCallback && statusCallback(ContractOperationStatus.INJECTED, {
+        hash: opSend.opHash,
+        operationType: EWalletOperations.PUBLISH_GENERATIVE,
+      })
     }
     catch(err: any) {
       console.log({err})
@@ -230,7 +255,7 @@ export class WalletManager {
       }
       else {
         // any error
-        statusCallback && statusCallback(ContractOperationStatus.ERROR)
+        statusCallback && statusCallback(ContractOperationStatus.ERROR, err.description || err.message || null)
       }
     }
   }
@@ -253,10 +278,13 @@ export class WalletManager {
   
       // wait for confirmation
       statusCallback && statusCallback(ContractOperationStatus.WAITING_CONFIRMATION)
-      await opSend.confirmation(3)
+      await isOperationApplied(opSend.opHash)
   
       // OK, injected
-      statusCallback && statusCallback(ContractOperationStatus.INJECTED, opSend.opHash)
+      statusCallback && statusCallback(ContractOperationStatus.INJECTED, {
+        hash: opSend.opHash,
+        operationType: EWalletOperations.MINT_ITERATION,
+      })
     }
     catch(err: any) {
       console.log({err})
@@ -268,7 +296,7 @@ export class WalletManager {
       }
       else {
         // any error
-        statusCallback && statusCallback(ContractOperationStatus.ERROR)
+        statusCallback && statusCallback(ContractOperationStatus.ERROR, err.description || err.message || null)
       }
     }
   }
@@ -287,10 +315,13 @@ export class WalletManager {
   
       // wait for confirmation
       statusCallback && statusCallback(ContractOperationStatus.WAITING_CONFIRMATION)
-      await opSend.confirmation(1)
+      await isOperationApplied(opSend.opHash)
   
       // OK, injected
-      statusCallback && statusCallback(ContractOperationStatus.INJECTED)
+      statusCallback && statusCallback(ContractOperationStatus.INJECTED, {
+        hash: opSend.opHash,
+        operationType: EWalletOperations.UPDATE_GENERATIVE,
+      })
     }
     catch(err: any) {
       console.log({err})
@@ -302,7 +333,7 @@ export class WalletManager {
       }
       else {
         // any error
-        statusCallback && statusCallback(ContractOperationStatus.ERROR)
+        statusCallback && statusCallback(ContractOperationStatus.ERROR, err.description || err.message || null)
       }
     }
   }
@@ -321,10 +352,13 @@ export class WalletManager {
   
       // wait for confirmation
       statusCallback && statusCallback(ContractOperationStatus.WAITING_CONFIRMATION)
-      await opSend.confirmation(2)
+      await isOperationApplied(opSend.opHash)
   
       // OK, injected
-      statusCallback && statusCallback(ContractOperationStatus.INJECTED)
+      statusCallback && statusCallback(ContractOperationStatus.INJECTED, {
+        hash: opSend.opHash,
+        operationType: EWalletOperations.BURN_GENERATIVE,
+      })
     }
     catch(err: any) {
       console.log({err})
@@ -336,7 +370,7 @@ export class WalletManager {
       }
       else {
         // any error
-        statusCallback && statusCallback(ContractOperationStatus.ERROR)
+        statusCallback && statusCallback(ContractOperationStatus.ERROR, err.description || err.message || null)
       }
     }
   }
@@ -355,10 +389,13 @@ export class WalletManager {
   
       // wait for confirmation
       statusCallback && statusCallback(ContractOperationStatus.WAITING_CONFIRMATION)
-      await opSend.confirmation(2)
+      await isOperationApplied(opSend.opHash)
   
       // OK, injected
-      statusCallback && statusCallback(ContractOperationStatus.INJECTED)
+      statusCallback && statusCallback(ContractOperationStatus.INJECTED, {
+        hash: opSend.opHash,
+        operationType: EWalletOperations.BURN_GENERATIVE_SUPPLY,
+      })
     }
     catch(err: any) {
       console.log({err})
@@ -370,7 +407,7 @@ export class WalletManager {
       }
       else {
         // any error
-        statusCallback && statusCallback(ContractOperationStatus.ERROR)
+        statusCallback && statusCallback(ContractOperationStatus.ERROR, err.description || err.message || null)
       }
     }
   }
@@ -380,10 +417,6 @@ export class WalletManager {
    */
   placeOffer: ContractInteractionMethod<PlaceOfferCall> = async (data, statusCallback, currentTry = 1) => {
     try {
-      // get/create the contract interface
-      const objktContract = await this.getContract(FxhashContract.OBJKT)
-      const marketContract = await this.getContract(FxhashContract.MARKETPLACE)
-
       // the origination parameters
       const updateOperatorsValue: MichelsonV1Expression = [{
         "prim": "Left",
@@ -491,10 +524,13 @@ export class WalletManager {
   
       // wait for confirmation
       statusCallback && statusCallback(ContractOperationStatus.WAITING_CONFIRMATION)
-      await batchOp.confirmation(2)
+      await isOperationApplied(batchOp.opHash)
   
       // OK, injected
-      statusCallback && statusCallback(ContractOperationStatus.INJECTED)
+      statusCallback && statusCallback(ContractOperationStatus.INJECTED, {
+        hash: batchOp.opHash,
+        operationType: EWalletOperations.LIST_TOKEN,
+      })
     }
     catch(err: any) {
       console.log({err})
@@ -506,7 +542,7 @@ export class WalletManager {
       }
       else {
         // any error
-        statusCallback && statusCallback(ContractOperationStatus.ERROR)
+        statusCallback && statusCallback(ContractOperationStatus.ERROR, err.description || err.message || null)
       }
     }
   }
@@ -525,10 +561,13 @@ export class WalletManager {
   
       // wait for confirmation
       statusCallback && statusCallback(ContractOperationStatus.WAITING_CONFIRMATION)
-      await opSend.confirmation(2)
+      await isOperationApplied(opSend.opHash)
   
       // OK, injected
-      statusCallback && statusCallback(ContractOperationStatus.INJECTED)
+      statusCallback && statusCallback(ContractOperationStatus.INJECTED, {
+        hash: opSend.opHash,
+        operationType: EWalletOperations.CANCEL_LISTING,
+      })
     }
     catch(err: any) {
       console.log({err})
@@ -540,7 +579,7 @@ export class WalletManager {
       }
       else {
         // any error
-        statusCallback && statusCallback(ContractOperationStatus.ERROR)
+        statusCallback && statusCallback(ContractOperationStatus.ERROR, err.description || err.message || null)
       }
     }
   }
@@ -563,10 +602,13 @@ export class WalletManager {
   
       // wait for confirmation
       statusCallback && statusCallback(ContractOperationStatus.WAITING_CONFIRMATION)
-      await opSend.confirmation(2)
+      await isOperationApplied(opSend.opHash)
   
       // OK, injected
-      statusCallback && statusCallback(ContractOperationStatus.INJECTED)
+      statusCallback && statusCallback(ContractOperationStatus.INJECTED, {
+        hash: opSend.opHash,
+        operationType: EWalletOperations.COLLECT,
+      })
     }
     catch(err: any) {
       console.log({err})
@@ -578,7 +620,7 @@ export class WalletManager {
       }
       else {
         // any error
-        statusCallback && statusCallback(ContractOperationStatus.ERROR)
+        statusCallback && statusCallback(ContractOperationStatus.ERROR, err.description || err.message || null)
       }
     }
   }
@@ -597,10 +639,13 @@ export class WalletManager {
   
       // wait for confirmation
       statusCallback && statusCallback(ContractOperationStatus.WAITING_CONFIRMATION)
-      await opSend.confirmation(2)
+      await isOperationApplied(opSend.opHash)
   
       // OK, injected
-      statusCallback && statusCallback(ContractOperationStatus.INJECTED)
+      statusCallback && statusCallback(ContractOperationStatus.INJECTED, {
+        hash: opSend.opHash,
+        operationType: EWalletOperations.REPORT,
+      })
     }
     catch(err: any) {
       console.log({err})
@@ -612,7 +657,7 @@ export class WalletManager {
       }
       else {
         // any error
-        statusCallback && statusCallback(ContractOperationStatus.ERROR)
+        statusCallback && statusCallback(ContractOperationStatus.ERROR, err.description || err.message || null)
       }
     }
   }
@@ -634,10 +679,13 @@ export class WalletManager {
   
       // wait for confirmation
       statusCallback && statusCallback(ContractOperationStatus.WAITING_CONFIRMATION)
-      await opSend.confirmation(1)
+      await isOperationApplied(opSend.opHash)
   
       // OK, injected
-      statusCallback && statusCallback(ContractOperationStatus.INJECTED)
+      statusCallback && statusCallback(ContractOperationStatus.INJECTED, {
+        hash: opSend.opHash,
+        operationType: EWalletOperations.MODERATE_TOKEN,
+      })
     }
     catch(err: any) {
       console.log({err})
@@ -649,7 +697,7 @@ export class WalletManager {
       }
       else {
         // any error
-        statusCallback && statusCallback(ContractOperationStatus.ERROR)
+        statusCallback && statusCallback(ContractOperationStatus.ERROR, err.description || err.message || null)
       }
     }
   }
@@ -671,10 +719,13 @@ export class WalletManager {
   
       // wait for confirmation
       statusCallback && statusCallback(ContractOperationStatus.WAITING_CONFIRMATION)
-      await opSend.confirmation(1)
+      await isOperationApplied(opSend.opHash)
   
       // OK, injected
-      statusCallback && statusCallback(ContractOperationStatus.INJECTED)
+      statusCallback && statusCallback(ContractOperationStatus.INJECTED, {
+        hash: opSend.opHash,
+        operationType: EWalletOperations.MODERATE_USER,
+      })
     }
     catch(err: any) {
       console.log({err})
@@ -686,7 +737,7 @@ export class WalletManager {
       }
       else {
         // any error
-        statusCallback && statusCallback(ContractOperationStatus.ERROR)
+        statusCallback && statusCallback(ContractOperationStatus.ERROR, err.description || err.message || null)
       }
     }
   }
@@ -706,10 +757,13 @@ export class WalletManager {
   
       // wait for confirmation
       statusCallback && statusCallback(ContractOperationStatus.WAITING_CONFIRMATION)
-      await opSend.confirmation(1)
+      await isOperationApplied(opSend.opHash)
   
       // OK, injected
-      statusCallback && statusCallback(ContractOperationStatus.INJECTED)
+      statusCallback && statusCallback(ContractOperationStatus.INJECTED, {
+        hash: opSend.opHash,
+        operationType: EWalletOperations.VERIFY_USER,
+      })
     }
     catch(err: any) {
       console.log({err})
@@ -721,7 +775,7 @@ export class WalletManager {
       }
       else {
         // any error
-        statusCallback && statusCallback(ContractOperationStatus.ERROR)
+        statusCallback && statusCallback(ContractOperationStatus.ERROR, err.description || err.message || null)
       }
     }
   }
@@ -741,10 +795,13 @@ export class WalletManager {
   
       // wait for confirmation
       statusCallback && statusCallback(ContractOperationStatus.WAITING_CONFIRMATION)
-      await opSend.confirmation(1)
+      await isOperationApplied(opSend.opHash)
   
       // OK, injected
-      statusCallback && statusCallback(ContractOperationStatus.INJECTED)
+      statusCallback && statusCallback(ContractOperationStatus.INJECTED, {
+        hash: opSend.opHash,
+        operationType: EWalletOperations.BAN_USER,
+      })
     }
     catch(err: any) {
       console.log({err})
@@ -756,7 +813,7 @@ export class WalletManager {
       }
       else {
         // any error
-        statusCallback && statusCallback(ContractOperationStatus.ERROR)
+        statusCallback && statusCallback(ContractOperationStatus.ERROR, err.description || err.message || null)
       }
     }
   }
