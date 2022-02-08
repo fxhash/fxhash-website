@@ -5,58 +5,60 @@ description: 'About the FXH token and the FXH DAO'
 ---
 
 
-*This document describes the FXH Token and DAO which are yet to be implemented. Please look at the roadmap if you want more informations on when those features will see the daylight.*
+*This document describes the FXH Token and DAO, which are yet to be implemented. Please look at the roadmap if you want more information on when those features will see daylight.*
 
 In this document, the token is referred to as the **FXH token**, which is not its final name.
 
-
 # The DAO
 
-As a community platform, fxhash will have a main DAO which will be tied to its token. 50% of the platform fees will be sent to the main DAO.
+As a community platform, fxhash will have a main DAO tied to its token. The main DAO will receive 50% of fxhash platform fees.
 
 ## Staking
 
-By staking FXH tokens on the main DAO, stakers will receive a share of the fees every 7 days.
+By staking FXH tokens on the main DAO, stakers receive a share of fxhash platform fees every seven days.
 
-When staking FXH tokens, they will be moved to a waiting pool. Every 7 days, the DAO will perform 2 tasks:
+The main DAO has 2 pools of tokens:
 
-* distribute the fees it received between all the stakers
-* move FXH tokens from the waiting pool to the staking pool
+* Waiting pool: tokens waiting to be moved to the staking pool
+* Staking pool: tokens which are eligible for distribution of the platform fees
 
-By design, it will take 14 days for staked tokens to return tezos.
+When staking, tokens are put in the waiting pool. Every seven days, the DAO performs two tasks:
+
+* Distribute the fees it received between all the stakers
+* Move FXH tokens from the waiting pool to the staking pool
+
+By design, it will take up to 14 days for staked tokens to return Tezos.
 
 ## Withdrawing staked FXH tokens
 
-Any user can decide to withdraw their tokens when they see fit. When withdrawing tokens from the DAO, it will first withdraw tokens from the waiting pool and then withdraw tokens from the staking pool. 
+Any user can decide to withdraw their tokens when they see fit. When withdrawing tokens from the DAO, they're first removed from the waiting pool and then withdrawn from the staking pool.
 
 For instance, if you have:
 
-* 10 FXH Tokens in the staking pool
-* 5 FXH Tokens in the waiting pool
-* 0 FXH Tokens in your wallet
+* 10 FXH tokens in the staking pool
+* 5 FXH tokens in the waiting pool
+* 0 FXH tokens in your wallet
 
-You decide to withdraw 8 FXH Tokens from the DAO. You will end up having:
+...and decide to withdraw 8 FXH tokens from the DAO, you will have:
 
-* 7 FXH Tokens in the staking pool
-* 0 FXH Tokens in the waiting pool
-* 8 FXH Tokens in your wallet
+* 7 FXH tokens in the staking pool
+* 0 FXH tokens in the waiting pool
+* 8 FXH tokens in your wallet
 
-
-# The FXH Token
+# The FXH token
 
 ## Initial distribution
 
 **TODO**
 
-## Economical value
+## Economic value
 
-Since the token will give users access to a share of the platform fees, it will by default hold a certain value tied to the revenues of the platform.
+FXH tokens give users access to a share of fxhash revenue expressed as platform fees. Therefore, the FXH token, a value distribution mechanism, contains a particular value itself. 
 
 ## Utility value
 
-We are planning on adding utility functions to the token later down the line, as we will discover interesting ways to utilize the token. The first goal is to have the token hold some value. Adding utility is less important for the first iteration as it can be added by adding new features.
+We plan to add utility functions to the token as we explore and discover exciting ways to utilize it in a way that benefits all fxhash users. But first, the goal is to have the token hold some value. Adding utility is less important in the first iteration and can be added over time.
 
 ## Proposing and voting
 
-Proposals can be made on the main DAO by spending *N* FXH tokens. Having tokens in the staking pool will give voting powers to their owners. Once a proposal is made, it will enter a voting phase. Once a quorum is reached, the fxhash team will be responsible for applying changes if needed.
-
+FXH holders can create proposals on the main DAO by spending *N* FXH tokens. After creation, proposals enter a voting phase wherein FXH stakers have the power to vote. After voting reaches a quorum, the fxhash team is held responsible for iterating changes as needed.
