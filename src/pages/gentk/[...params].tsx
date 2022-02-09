@@ -128,12 +128,12 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
             <div className={cs(layout.buttons_inline, layout.flex_wrap)}>
               <Link href={getGenerativeTokenUrl(objkt.issuer)} passHref>
                 <Button isLink={true} size="regular">
-                  Open Project
+                  open project
                 </Button>
               </Link>
               <Link href={getGenerativeTokenMarketplaceUrl(objkt.issuer)} passHref>
                 <Button isLink={true} size="regular">
-                  Open Marketplace
+                  open marketplace
                 </Button>
               </Link>
             </div>
