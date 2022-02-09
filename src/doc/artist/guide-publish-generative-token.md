@@ -1,10 +1,10 @@
 ---
 title: 'Guide to mint a Generative Token'
-date: '2021-10-20'
-description: 'Learn how to create and mint a Generative Token on fxhash'
+date: '2022-02-09'
+description: 'Learn how to create and publish a Generative Token on fxhash'
 ---
 
-This document will walk you through all the concepts you need to know to understand how you can build and mint a **Generative Token** (GT) on **fxhash**.
+This document will walk you through all the concepts you need to know to understand how you can build and publish a **Generative Token** (GT) on **fxhash**.
 
 
 # Table of Contents
@@ -18,23 +18,23 @@ GT on fxhash can only be written in **html/css/javascript**. Ultimately, GT are 
 
 *This section will give you a rough overview of the Generative Tokens on fxhash. Don't worry if some informations are missing for you to properly understand the process, it will be covered later in this document.*
 
-## 1. Upload and mint a GT
+## Upload and mint a GT
 
 First, you upload your project and mint it as a Generative Token. This project is a tiny website which sole purpose is to generate some visual/audio based on a 51-characters [base 58](https://en.bitcoinwiki.org/wiki/Base58) encoded number (Tezos transaction hashes have the same signature). The project needs to be designed in a way that, when the same string is given to it, it **always produces the same output**. However, a different string should produce a **different output**.
 
 ![Generative Token overview](/images/articles/guide-mint/overview.jpg)
 
-## 2. Your project is stored
+## Your project is stored
 
 Your project will be stored on the [IPFS](https://ipfs.io/) network, and then stored on the tezos blockchain. It ensures its immutability.
 
-## 3. People mint a unique token from your GT
+## People mint a unique token from your GT
 
 When a GT is published on the platform, anyone will be able to mint unique iterations from it. When such an event arises, the mint transaction generates a unique hash. The hash is sent as a URL parameter to your project. A [code snippet](#fxhash-code-snippet) is used to get this hash from the URL so that it can be used in your code.
 
 ![Mint overview](/images/articles/guide-collect/guide-mint.jpg)
 
-## 4. Image preview
+## Image preview
 
 When a token is minted, fxhash provides a service to generate a preview, which will be attached to the tokens as an alternate way to visualize them.
 
