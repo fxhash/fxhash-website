@@ -62,7 +62,7 @@ const Home: NextPage<Props> = ({
 
       {randomGenerativeToken && (
         <>
-          <section className={cs(styles['random-artwork'], layout['padding-big'])}>
+          <section className={cs(styles['random-artwork'], layout['padding-big'], layout.break_words)}>
             <div className={cs(styles['artwork-infos'])}>
               <span className={cs(styles['section-subtitle'], Colors.gray)}>— a random artwork</span>
               <Spacing size="4x-large" />
@@ -84,20 +84,20 @@ const Home: NextPage<Props> = ({
                     />
                   </div>
 
-                  <Spacing size="large"/>
-
-                  <p>{nl2br(randomGenerativeToken.metadata.description)}</p>
-
-                  <Spacing size="large"/>
+                  <Spacing size="2x-large"/>
 
                   <Link href={getGenerativeTokenUrl(randomGenerativeToken)} passHref>
                     <Button 
                       isLink={true}
-                      iconComp={<i aria-hidden className="fas fa-eye"/>}
+                      size="regular"
                     >
-                      open Generative Token
+                      open project
                     </Button>
                   </Link>
+
+                  <Spacing size="large"/>
+
+                  <p>{nl2br(randomGenerativeToken.metadata.description)}</p>
                 </div>
               </div>
             </div>
@@ -113,13 +113,14 @@ const Home: NextPage<Props> = ({
       )}
 
       <section>
-        <SectionHeader>
+        <SectionHeader className={cs(styles.section_header)}>
           <TitleHyphen>recent works</TitleHyphen>
           <Link href="/explore" passHref>
             <Button
               isLink={true}
               iconComp={<i aria-hidden className="fas fa-arrow-right"/>}
               iconSide="right"
+              color="transparent"
             >
               explore
             </Button>
@@ -146,7 +147,7 @@ const Home: NextPage<Props> = ({
       <Spacing size="6x-large" />
 
       <section>
-        <SectionHeader>
+        <SectionHeader className={cs(styles.section_header)}>
           <div>
             <small>late to the party ?</small>
             <TitleHyphen>marketplace</TitleHyphen>
@@ -156,6 +157,7 @@ const Home: NextPage<Props> = ({
               isLink={true}
               iconComp={<i aria-hidden className="fas fa-arrow-right"/>}
               iconSide="right"
+              color="transparent"
             >
               marketplace
             </Button>

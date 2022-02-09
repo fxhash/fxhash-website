@@ -51,7 +51,7 @@
     display: none;
   }
 
-  & > *:nth-child(1) {
+  & > *:nth-child(1), & > *:nth-child(2) {
     display: block;
   }
 
@@ -78,4 +78,18 @@
       display: block;
     }
   }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .section_header {
+    a {
+      & > span {
+        display: none;
+      }
+
+      & > i {
+        margin-left: 0 !important;
+      }
+    }
+  }  
 }
