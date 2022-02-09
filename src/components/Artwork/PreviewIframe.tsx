@@ -7,7 +7,6 @@ import { Error } from '../Error/Error'
 interface Props {
   url?: string
   textWaiting?: string
-  borderWidth?: number
   onLoaded?: () => void
   hasLoading?: boolean
 }
@@ -21,7 +20,6 @@ export const ArtworkIframe = forwardRef<ArtworkIframeRef, Props>(({
   url, 
   textWaiting, 
   onLoaded,
-  borderWidth = 10,
   hasLoading = true,
 }, ref) => {
   const [loading, setLoading] = useState<boolean>(false)
@@ -63,29 +61,27 @@ export const ArtworkIframe = forwardRef<ArtworkIframeRef, Props>(({
   }))
 
   return (
-    <div className={style.container} style={{ borderWidth }}>
-      <div className={cs(style["iframe-container"])}>
-        <iframe
-          ref={iframeRef}
-          src={url}
-          sandbox="allow-scripts allow-same-origin"
-          className={cs(style.iframe)}
-          onLoad={() => {
-            onLoaded?.()
-            setIframeLoaded()
-          }}
-          onError={() => setError(true)}
-          allow="accelerometer; camera; gyroscope; microphone; xr-spatial-tracking;"
-        />
-        {loading && hasLoading && !error && (
-          <LoaderBlock height="100%" color="white" className={cs(style.loader)}>
-            {textWaiting}
-          </LoaderBlock>
-        )}
-        {error && (
-          <Error className={cs(style.error)}>Could not load the project</Error>
-        )}
-      </div>
+    <div className={cs(style["iframe-container"])}>
+      <iframe
+        ref={iframeRef}
+        src={url}
+        sandbox="allow-scripts allow-same-origin"
+        className={cs(style.iframe)}
+        onLoad={() => {
+          onLoaded?.()
+          setIframeLoaded()
+        }}
+        onError={() => setError(true)}
+        allow="accelerometer; camera; gyroscope; microphone; xr-spatial-tracking;"
+      />
+      {loading && hasLoading && !error && (
+        <LoaderBlock height="100%" color="white" className={cs(style.loader)}>
+          {textWaiting}
+        </LoaderBlock>
+      )}
+      {error && (
+        <Error className={cs(style.error)}>Could not load the project</Error>
+      )}
     </div>
   );
 })

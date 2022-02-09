@@ -12,6 +12,16 @@
   & > *:first-child {
     width: 60%;
   }
+
+  & > span {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    em {
+      color: var(--color-gray);
+    }
+  }
 }
 
 .disabled {

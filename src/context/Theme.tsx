@@ -2,9 +2,11 @@ import React, { PropsWithChildren, useState, useCallback, useRef, useEffect } fr
 import { useClientEffect } from "../utils/hookts"
 import style from "./Theme.module.scss"
 import cs from "classnames"
+import isMobile from "is-mobile"
 
 
 interface ISettingsProperties {
+  // display
   darkTheme: boolean
   spaceBetweenCards: number
   displayPricesCard: boolean
@@ -14,6 +16,8 @@ interface ISettingsProperties {
   borderWidthCards: number
   shadowCards: number
   hoverEffectCard: boolean
+  // performances
+  quality: number
 }
 
 const Colors = {
@@ -88,6 +92,7 @@ const defaultProperties: ISettingsProperties = {
   displayPricesCard: false,
   displayBurntCard: false,
   hoverEffectCard: true,
+  quality: isMobile() ? 0 : 1,
 }
 
 const defaultCtx: ISettingsContext = {

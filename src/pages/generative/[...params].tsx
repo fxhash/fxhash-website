@@ -25,7 +25,7 @@ import { UserGuard } from '../../components/Guards/UserGuard'
 import { truncateEnd } from '../../utils/strings'
 import { TitleHyphen } from '../../components/Layout/TitleHyphen'
 import { ArtworkIframe, ArtworkIframeRef } from '../../components/Artwork/PreviewIframe'
-import { useMemo, useRef, useState } from 'react'
+import { useContext, useMemo, useRef, useState } from 'react'
 import { Qu_genToken } from '../../queries/generative-token'
 import { GenerativeActions } from '../../containers/Generative/Actions'
 import { GenerativeExtraActions } from '../../containers/Generative/ExtraActions'
@@ -36,6 +36,8 @@ import { ButtonVariations } from '../../components/Button/ButtonVariations'
 import { MintButton } from '../../components/Button/MintButton'
 import { TabDefinition, Tabs } from '../../components/Layout/Tabs'
 import { GenerativeIterations } from '../../containers/Generative/Iterations/GenerativeIterations'
+import { ArtworkFrame } from '../../components/Artwork/ArtworkFrame'
+import { SettingsContext } from '../../context/Theme'
 
 
 const tabs: TabDefinition[] = [
@@ -52,14 +54,15 @@ interface Props {
 }
 
 const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
-  const hasCollection = token.objkts?.length > 0
-  const collectionUrl = `/generative/${token.id}/collection`
+  const settings = useContext(SettingsContext)
+
   const iframeRef = useRef<ArtworkIframeRef>(null)
 
   // used to preview the token in the iframe with different hashes
   const [previewHash, setPreviewHash] = useState<string|null>(token.metadata.previewHash || null)
-
-  // bottom tab active
+  // are we exploring variations ? use to force quality = 1
+  const [exploreVariations, setExploreVariations] = useState<boolean>(false)
+  // bottom tab active0
   const [tabActive, setTabActive] = useState<number>(0)
 
   const reload = () => {
@@ -203,11 +206,17 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
             {/* <ArtworkPreview ipfsUri={token.metadata?.displayUri} /> */}
             <div className={cs(style['preview-container-auto'])}>
               <div className={cs(style['preview-wrapper'])}>
-                <ArtworkIframe 
-                  ref={iframeRef}
-                  url={artifactUrl}
-                  hasLoading={false}
-                />
+                <ArtworkFrame>
+                  {settings.quality === 0 && !exploreVariations ? (
+                    <img src={displayUrl} alt={`${token.name} preview`}/>
+                  ):(
+                    <ArtworkIframe 
+                      ref={iframeRef}
+                      url={artifactUrl}
+                      hasLoading={false}
+                    />
+                  )}
+                </ArtworkFrame>
               </div>
             </div>
 
@@ -217,17 +226,32 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
               <ButtonVariations
                 token={token}
                 previewHash={previewHash}
-                onChangeHash={setPreviewHash}
+                onChangeHash={(hash) => {
+                  setExploreVariations(true)
+                  setPreviewHash(hash)
+                }}
               />
-              <Button
-                size="small"
-                color="transparent"
-                iconComp={<i aria-hidden className="fas fa-redo"/>}
-                iconSide="right"
-                onClick={reload}
-              >
-                reload
-              </Button>
+              {settings.quality === 0 && !exploreVariations ? (
+                <Button
+                  size="small"
+                  color="transparent"
+                  iconComp={<i aria-hidden className="fas fa-play"/>}
+                  iconSide="right"
+                  onClick={() => setExploreVariations(true)}
+                >
+                  run
+                </Button>
+              ):(
+                <Button
+                  size="small"
+                  color="transparent"
+                  iconComp={<i aria-hidden className="fas fa-redo"/>}
+                  iconSide="right"
+                  onClick={reload}
+                >
+                  reload
+                </Button>
+              )}
               <Link href={artifactUrl} passHref>
                 <Button
                   isLink={true}
@@ -238,7 +262,7 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
                   target="_blank"
                   iconSide="right"
                 >
-                  open live
+                  open
                 </Button>
               </Link>
             </div>

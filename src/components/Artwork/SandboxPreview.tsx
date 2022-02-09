@@ -98,18 +98,16 @@ export const SandboxPreview = forwardRef<ArtworkIframeRef, Props>(({
   }))
 
   return (
-    <div className={style.container}>
-      <div className={cs(style['iframe-container'])}>
-        <iframe 
-          ref={iframeRef}
-          sandbox="allow-scripts allow-same-origin"
-          className={cs(style.iframe)}
-          onLoad={onLoaded}
-        />
-        {/* {loading &&(
-          <LoaderBlock height="100%">{textWaiting}</LoaderBlock>
-        )} */}
-      </div>
+    <div className={cs(style['iframe-container'])}>
+      <iframe 
+        ref={iframeRef}
+        sandbox="allow-scripts allow-same-origin"
+        className={cs(style.iframe)}
+        onLoad={onLoaded}
+      />
+      {/* {loading &&(
+        <LoaderBlock height="100%">{textWaiting}</LoaderBlock>
+      )} */}
     </div>
   )
 })

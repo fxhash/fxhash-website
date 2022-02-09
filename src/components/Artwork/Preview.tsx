@@ -2,6 +2,7 @@ import { ipfsGatewayUrl } from '../../services/Ipfs'
 import { useLazyImage } from '../../utils/hookts'
 import { Loader } from '../Utils/Loader'
 import style from './Artwork.module.scss'
+import { ArtworkFrame } from './ArtworkFrame'
 
 interface Props {
   ipfsUri?: string
@@ -20,9 +21,9 @@ export function ArtworkPreview({
   const loaded = useLazyImage(U)
 
   return (
-    <div className={style.container}>
+    <ArtworkFrame>
       {U && loaded && <img src={U} alt={alt} />}
       {loading && !loaded && <Loader color="white" />}
-    </div>
+    </ArtworkFrame>
   )
 }

@@ -32,6 +32,16 @@ export function DisplaySettings({
             value={settings.darkTheme}
           />
         </div>
+        <div className={cs(styleSettings.toggle_line)}>
+          <span>
+            <span>Image previews</span>
+            <em>Display image previews instead of real-time code</em>
+          </span>
+          <Switch 
+            onChange={(value) => settings.update("quality", value ? 0 : 1)} 
+            value={!settings.quality}
+          />
+        </div>
       </SettingsGroup>
 
       <SettingsGroup title="Cards design">

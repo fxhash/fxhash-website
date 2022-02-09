@@ -8,6 +8,7 @@ import { ArtworkPreview } from "../../components/Artwork/Preview"
 import { Spacing } from "../../components/Layout/Spacing"
 import Link from "next/link"
 import { Button } from "../../components/Button"
+import { ArtworkFrame } from "../../components/Artwork/ArtworkFrame"
 
 
 export const StepVerification: StepComponent = ({
@@ -26,10 +27,12 @@ export const StepVerification: StepComponent = ({
           <Spacing size="regular"/>
           <div className={cs(style['preview-cont'])}>
             <div className={cs(style['preview-wrapper'])}>
-              <ArtworkIframe
-                url={ipfsUrlWithHash(state.cidUrlParams!, state.previewHash!)}
-                textWaiting="looking for content on IPFS"
-              />
+              <ArtworkFrame>
+                <ArtworkIframe
+                  url={ipfsUrlWithHash(state.cidUrlParams!, state.previewHash!)}
+                  textWaiting="looking for content on IPFS"
+                />
+              </ArtworkFrame>
             </div>
           </div>
           <Spacing size="small"/>

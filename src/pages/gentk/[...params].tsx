@@ -22,13 +22,15 @@ import { Collect } from '../../containers/Objkt/Collect'
 import { truncateEnd } from '../../utils/strings'
 import { TitleHyphen } from '../../components/Layout/TitleHyphen'
 import { ArtworkIframe, ArtworkIframeRef } from '../../components/Artwork/PreviewIframe'
-import { useRef } from 'react'
+import { useContext, useRef, useState } from 'react'
 import { Features } from '../../components/Features/Features'
 import { format } from 'date-fns'
 import { displayPercentage, displayRoyalties } from '../../utils/units'
 import { Qu_objkt } from '../../queries/objkt'
 import { getGenerativeTokenMarketplaceUrl, getGenerativeTokenUrl } from '../../utils/generative-token'
 import { GenerativeFlagBanner } from '../../containers/Generative/FlagBanner'
+import { SettingsContext } from '../../context/Theme'
+import { ArtworkFrame } from '../../components/Artwork/ArtworkFrame'
 
 
 interface Props {
@@ -38,8 +40,11 @@ interface Props {
 const ObjktDetails: NextPage<Props> = ({ objkt }) => {
   const owner: User = (objkt.offer ? objkt.offer.issuer : objkt.owner)!
   const creator: User = objkt.issuer.author
+  const settings = useContext(SettingsContext)
   // get the display url for og:image
   const displayUrl = objkt.metadata?.displayUri && ipfsGatewayUrl(objkt.metadata?.displayUri)
+  // used to run code if mode image is active
+  const [running, setRunning] = useState<boolean>(false)
 
   const iframeRef = useRef<ArtworkIframeRef>(null)
   const reload = () => {
@@ -124,26 +129,44 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
         <div className={cs(style['presentation-artwork'])}>
         <div className={cs(style['preview-container-auto'])}>
             <div className={cs(style['preview-wrapper'])}>
-              <ArtworkIframe 
-                ref={iframeRef}
-                url={ipfsGatewayUrl(objkt.metadata?.artifactUri, "pinata-fxhash-safe")}
-                hasLoading={false}
-              />
+              <ArtworkFrame>
+                {settings.quality === 0 && !running ? (
+                  <img src={displayUrl} alt={`${objkt.name} preview`}/>
+                ):(
+                  <ArtworkIframe 
+                    ref={iframeRef}
+                    url={ipfsGatewayUrl(objkt.metadata?.artifactUri, "pinata-fxhash-safe")}
+                    hasLoading={false}
+                  />
+                )}
+              </ArtworkFrame>
             </div>
           </div>
 
           <Spacing size="8px"/>
 
           <div className={cs(layout['x-inline'])}>
-            <Button
-              size="small"
-              iconComp={<i aria-hidden className="fas fa-redo"/>}
-              iconSide="right"
-              onClick={reload}
-              color="transparent"
-            >
-              reload
-            </Button>
+            {settings.quality === 0 && !running ? (
+                <Button
+                  size="small"
+                  color="transparent"
+                  iconComp={<i aria-hidden className="fas fa-play"/>}
+                  iconSide="right"
+                  onClick={() => setRunning(true)}
+                >
+                  run
+                </Button>
+              ):(
+                <Button
+                  size="small"
+                  iconComp={<i aria-hidden className="fas fa-redo"/>}
+                  iconSide="right"
+                  onClick={reload}
+                  color="transparent"
+                >
+                  reload
+                </Button>
+              )}
             <Link href={ipfsGatewayUrl(objkt.metadata?.artifactUri)} passHref>
               <Button
                 isLink={true}
@@ -154,7 +177,7 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
                 color="transparent"
                 iconSide="right"
               >
-                open live
+                open
               </Button>
             </Link>
           </div>

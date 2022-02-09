@@ -14,6 +14,7 @@ import { SandboxFiles } from "../../types/Sandbox"
 import { generateFxHash } from "../../utils/hash"
 import { RawTokenFeatures } from "../../types/Metadata"
 import { RawFeatures } from "../../components/Features/RawFeatures"
+import { ArtworkFrame } from "../../components/Artwork/ArtworkFrame"
 
 
 export function Sandbox() {
@@ -163,14 +164,16 @@ export function Sandbox() {
       <div className={cs(style.artwork)}>
         <div className={cs(style['iframe-container'])}>
           <div className={cs(style['iframe-wrapper'])}>
-            <SandboxPreview 
-              hash={hash}
-              ref={artworkIframeRef}
-              record={filesRecord || undefined}
-              textWaiting="Waiting for content to be reachable"
-              onUrlUpdate={setUrl}
-              onLoaded={iframeLoaded}
-            />
+            <ArtworkFrame>
+              <SandboxPreview 
+                hash={hash}
+                ref={artworkIframeRef}
+                record={filesRecord || undefined}
+                textWaiting="Waiting for content to be reachable"
+                onUrlUpdate={setUrl}
+                onLoaded={iframeLoaded}
+              />
+            </ArtworkFrame>
           </div>
         </div>
         

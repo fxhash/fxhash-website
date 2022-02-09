@@ -9,12 +9,9 @@ import { getIpfsIoUrl } from "../../utils/ipfs"
 import { HashTest } from "../../components/Testing/HashTest"
 import { Checkbox } from "../../components/Input/Checkbox"
 import { Button } from "../../components/Button"
-import useFetch, { CachePolicies } from "use-http"
-import { StaticGenError, StaticGenResponse } from "../../types/Responses"
-import { Error } from "../../components/Error/Error"
-import { getStaticGenError } from "../../utils/errors"
 import { RawTokenFeatures } from "../../types/Metadata"
 import { RawFeatures } from "../../components/Features/RawFeatures"
+import { ArtworkFrame } from "../../components/Artwork/ArtworkFrame"
 
 
 export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
@@ -109,12 +106,14 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
         <div className={cs(style.artwork)}>
           <div className={cs(style['preview-cont'])}>
             <div className={cs(style['preview-wrapper'])}>
-              <ArtworkIframe
-                ref={artworkIframeRef}
-                url={url}
-                textWaiting="looking for content on IPFS"
-                onLoaded={iframeLoaded}
-              />
+              <ArtworkFrame>
+                <ArtworkIframe
+                  ref={artworkIframeRef}
+                  url={url}
+                  textWaiting="looking for content on IPFS"
+                  onLoaded={iframeLoaded}
+                />
+              </ArtworkFrame>
             </div>
           </div>
         </div>
