@@ -1,7 +1,13 @@
 .root {
-  
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 .contract_feedback {
   max-width: 400px;
+}
+
+.buttons_wrapper {
+  gap: 12px;
 }

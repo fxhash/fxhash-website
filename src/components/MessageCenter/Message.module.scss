@@ -1,6 +1,6 @@
 @keyframes progress {
   from {
-    right: 0;
+    right: -1px;
   }
   to {
     right: 100%;
@@ -13,6 +13,7 @@
   position: relative;
   color: white;
   transition: transform 0.5s;
+  border: 1px solid rgba(255, 255, 255, 0.3);
 
   .header {
     display: flex;
@@ -30,16 +31,16 @@
     content: "";
     display: block;
     position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
+    bottom: -1px;
+    left: -1px;
+    right: -1px;
     height: 2px;
     background-color: white;
     animation: progress 5s linear 1 forwards;
   }
 
   i {
-    font-size: 32px;
+    font-size: 24px;
     margin-right: 10px;
     opacity: 0.5;
   }
@@ -51,7 +52,7 @@
   
   .content {
     padding: 15px;
-    border-top: 1px solid rgba(255, 255, 255, 0.4);
+    border-top: 1px solid rgba(255, 255, 255, 0.3);
   }
 
   .close {

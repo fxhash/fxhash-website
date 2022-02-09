@@ -150,18 +150,16 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
 
             <Spacing size="x-large"/>
 
-            <div className={cs(layout.buttons_inline)}>
-              <MintButton
-                token={token}
-                onReveal={onReveal}
-              >
-                <Link href={getGenerativeTokenMarketplaceUrl(token)} passHref>
-                  <Button isLink={true} size="regular">
-                    open marketplace 
-                  </Button>
-                </Link>
-              </MintButton>
-            </div>
+            <MintButton
+              token={token}
+              onReveal={onReveal}
+            >
+              <Link href={getGenerativeTokenMarketplaceUrl(token)} passHref>
+                <Button isLink={true} size="regular">
+                  open marketplace 
+                </Button>
+              </Link>
+            </MintButton>
 
             <Spacing size="4x-large"/>
 

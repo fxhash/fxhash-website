@@ -92,6 +92,23 @@ export function MintButton({
         </>
       )}
 
+      {transactionHash && (
+        <>
+          <Link href={`/reveal/${token.id}/${transactionHash}`} passHref>
+            <Button
+              isLink
+              color="secondary"
+              iconComp={<i aria-hidden className="fas fa-arrow-right"/>}
+              iconSide="right"
+              size="regular"
+            >
+              reveal
+            </Button>
+          </Link>
+          <Spacing size="regular"/>
+        </>
+      )}
+
       {!token.enabled && (
         <>
           <small>
@@ -107,32 +124,18 @@ export function MintButton({
         </>
       )}
       
-      <div className={cs(layout.buttons_inline, layout.flex_wrap)}>
+      <div className={cs(layout.buttons_inline, layout.flex_wrap, style.buttons_wrapper)}>
         {!isHidden && (
-          transactionHash ? (
-            <Link href={`/reveal/${token.id}/${transactionHash}`} passHref>
-              <Button
-                isLink
-                color="secondary"
-                iconComp={<i aria-hidden className="fas fa-arrow-right"/>}
-                iconSide="right"
-                size="regular"
-              >
-                reveal
-              </Button>
-            </Link>
-          ):(
-            <Button
-              type="button"
-              color="secondary"
-              disabled={!isEnabled || isLocked}
-              onClick={buttonClick}
-              state={loading ? "loading" : "default"}
-              size="regular"
-            >
-              mint iteration&nbsp;&nbsp;<DisplayTezos mutez={token.price} tezosSize="regular" formatBig={false} />
-            </Button>
-          )
+          <Button
+            type="button"
+            color="secondary"
+            disabled={!isEnabled || isLocked}
+            onClick={buttonClick}
+            state={loading ? "loading" : "default"}
+            size="regular"
+          >
+            mint iteration&nbsp;&nbsp;<DisplayTezos mutez={token.price} tezosSize="regular" formatBig={false} />
+          </Button>
         )}
 
         {children}
