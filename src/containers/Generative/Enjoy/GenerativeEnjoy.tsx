@@ -136,7 +136,6 @@ export function GenerativeEnjoy({ tokens, backLink, requestData }: Props) {
         {tokens.length > 0 ? (
           <ArtworkIframe
             url={ipfsGatewayUrl(selectedToken.metadata?.artifactUri, "pinata-fxhash-safe")}
-            borderWidth={0}
             onLoaded={onIframeLoaded}
           />
         ):(
