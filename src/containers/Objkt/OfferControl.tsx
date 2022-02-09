@@ -1,11 +1,9 @@
 // import style from "./PlaceOffer.module.scss"
-import cs from "classnames"
 import { useContext } from "react"
 import { Objkt } from "../../types/entities/Objkt"
 import { User } from "../../types/entities/User"
 import { UserContext } from "../UserProvider"
 import { CancelOffer } from "./CancelOffer"
-import { Collect } from "./Collect"
 import { PlaceOffer } from "./PlaceOffer"
 
 

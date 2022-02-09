@@ -114,3 +114,17 @@
   flex-direction: row;
   gap: var(--layout-gap-big-md);
 }
+
+.show_md {
+  display: none;
+}
+
+@media (max-width: $breakpoint-md) {
+  .hide_md {
+    display: none;
+  }
+
+  .show_md {
+    display: block;
+  }
+}

@@ -3,9 +3,6 @@ import Head from 'next/head'
 import { GetServerSideProps, NextPage } from "next"
 import layout from "../../styles/Layout.module.scss"
 import style from "../../styles/GenerativeTokenDetails.module.scss"
-import colors from "../../styles/Colors.module.css"
-import text from "../../styles/Text.module.css"
-import homeStyle from "../../styles/Home.module.scss"
 import cs from "classnames"
 import client from "../../services/ApolloClient"
 import { GenerativeToken, GenTokFlag } from "../../types/entities/GenerativeToken"
@@ -16,14 +13,10 @@ import { Button } from '../../components/Button'
 import nl2br from 'react-nl2br'
 import { displayMutez, displayRoyalties } from '../../utils/units'
 import { ipfsGatewayUrl } from '../../services/Ipfs'
-import { SectionHeader } from '../../components/Layout/SectionHeader'
-import { CardsContainer } from '../../components/Card/CardsContainer'
-import { ObjktCard } from '../../components/Card/ObjktCard'
 import ClientOnly from '../../components/Utils/ClientOnly'
 import { EditTokenSnippet } from '../../containers/Token/EditTokenSnippet'
 import { UserGuard } from '../../components/Guards/UserGuard'
 import { truncateEnd } from '../../utils/strings'
-import { TitleHyphen } from '../../components/Layout/TitleHyphen'
 import { ArtworkIframe, ArtworkIframeRef } from '../../components/Artwork/PreviewIframe'
 import { useContext, useMemo, useRef, useState } from 'react'
 import { Qu_genToken } from '../../queries/generative-token'
@@ -172,7 +165,7 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
                   </UserGuard>
                 </ClientOnly>
               </div>
-              <strong>Minted on { format(new Date(token.createdAt), "dd/MM/yyyy' at 'HH:mm") }</strong>
+              <strong>Published on { format(new Date(token.createdAt), "dd/MM/yyyy' at 'HH:mm") }</strong>
             </div>
 
             <Spacing size="large"/>

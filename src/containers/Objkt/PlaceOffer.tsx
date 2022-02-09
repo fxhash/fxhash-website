@@ -63,8 +63,8 @@ export function PlaceOffer({ objkt }: Props) {
           <Button
             state={contractLoading ? "loading" : "default"}
             color="secondary"
-            size="small"
             onClick={callContract}
+            size="regular"
           >
             list
           </Button>

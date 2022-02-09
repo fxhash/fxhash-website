@@ -71,34 +71,46 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
 
       <GenerativeFlagBanner token={objkt.issuer} />
 
-      <Spacing size="6x-large" />
+      <Spacing size="3x-large" />
 
-      <section className={cs(layout.cols2, layout['responsive-reverse'], layout['padding-big'])}>
-        <div className={cs(style['presentation-details'])}>
-          <header>
-            <small className={cs(colors.gray)}>GENTK#{ objkt.id }</small>
-            <h3>{ objkt.name }{ objkt.assigned === false && ` - ${objkt.issuer.name}`}</h3>
-            <Spacing size="x-small"/>
-            <UserBadge 
-              prependText="created by"
-              user={creator}
-              size="big"
-            />
-            <Spacing size="2x-small"/>
-            <UserBadge 
-              prependText="owned by"
-              user={owner}
-              size="big"
-            />
-          </header>
+      <section className={cs(layout['padding-big'])}>
+        <div className={cs(style.artwork_header_mobile, layout.break_words)}>
+          <h3>{ objkt.name }</h3>
+          <Spacing size="regular"/>
+          <UserBadge 
+            prependText="created by"
+            user={creator}
+            size="regular"
+          />
+          <Spacing size="2x-small"/>
+          <UserBadge 
+            prependText="owned by"
+            user={owner}
+            size="regular"
+          />
+          <Spacing size="x-large"/>
+        </div>
 
-          <Spacing size="large"/>
+        <div className={cs(layout.cols2, layout['responsive-reverse'])}>
+          <div className={cs(style['presentation-details'])}>
+            <div className={cs(style.artwork_header)}>
+              <UserBadge 
+                prependText="created by"
+                user={creator}
+                size="regular"
+              />
+              <Spacing size="2x-small"/>
+              <UserBadge 
+                prependText="owned by"
+                user={owner}
+                size="regular"
+              />
+              <Spacing size="x-large"/>
+              <h3>{ objkt.name }{ objkt.assigned === false && ` - ${objkt.issuer.name}`}</h3>
+            </div>
 
-          <p>{ nl2br(objkt.metadata?.description) }</p>
+            <Spacing size="x-large"/>
 
-          <Spacing size="2x-large"/>
-
-          <div className={cs(style['artwork-details'])} style={{ width: "100%" }}>
             <div className={cs(style.buttons)}>
               {objkt.offer && (
                 <Collect offer={objkt.offer} objkt={objkt} />
@@ -106,47 +118,93 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
               {/* @ts-ignore */}
               <ClientOnlyEmpty style={{ width: "100%" }}>
                 <UserGuard forceRedirect={false}>
-                  <>
-                    <OfferControl objkt={objkt}/>
-                  </>
+                  <OfferControl objkt={objkt}/>
                 </UserGuard>
               </ClientOnlyEmpty>
+            </div>
 
+            <Spacing size="regular"/>
+            
+            <div className={cs(layout.buttons_inline, layout.flex_wrap)}>
               <Link href={getGenerativeTokenUrl(objkt.issuer)} passHref>
-                <Button isLink={true} size="small">
-                  See Generative Token
+                <Button isLink={true} size="regular">
+                  Open Project
                 </Button>
               </Link>
               <Link href={getGenerativeTokenMarketplaceUrl(objkt.issuer)} passHref>
-                <Button isLink={true} size="small">
-                  See Marketplace
+                <Button isLink={true} size="regular">
+                  Open Marketplace
                 </Button>
               </Link>
             </div>
-          </div>
-        </div>
 
-        <div className={cs(style['presentation-artwork'])}>
-        <div className={cs(style['preview-container-auto'])}>
-            <div className={cs(style['preview-wrapper'])}>
-              <ArtworkFrame>
-                {settings.quality === 0 && !running ? (
-                  <img src={displayUrl} alt={`${objkt.name} preview`}/>
-                ):(
-                  <ArtworkIframe 
-                    ref={iframeRef}
-                    url={ipfsGatewayUrl(objkt.metadata?.artifactUri, "pinata-fxhash-safe")}
-                    hasLoading={false}
-                  />
-                )}
-              </ArtworkFrame>
+            <Spacing size="4x-large"/>
+
+            <div className={cs(style.buttons)}>
+              <strong>Project #{objkt.issuer.id} — iteration #{objkt.iteration}</strong>
+              <strong>Minted on { format(new Date(objkt.createdAt), "dd/MM/yyyy' at 'HH:mm") }</strong>
+            </div>
+
+            <Spacing size="large"/>
+
+            <p>{ nl2br(objkt.metadata?.description) }</p>
+
+            <Spacing size="2x-large"/>
+
+            <div className={cs(style.buttons, layout.break_words)}>
+            <span><strong>Royalties:</strong> { displayRoyalties(objkt.royalties) }</span>
+            {objkt.features && objkt.features.length > 0 && objkt.rarity && (
+              <span><strong>Rarity:</strong> { displayPercentage(objkt.rarity) }% (lower is rarer)</span>
+            )}
+            <span>
+              <strong>Operation hash: </strong>
+              <a 
+                target="_blank"
+                referrerPolicy="no-referrer"
+                href={`https://tzkt.io/${objkt.generationHash}`}
+              >
+                {objkt.generationHash} <i className="fas fa-external-link-square" aria-hidden/>
+              </a>
+            </span>
+            <span>
+              <strong>Metadata: </strong>
+              {objkt.assigned ? (
+                <a 
+                  target="_blank"
+                  referrerPolicy="no-referrer"
+                  href={ipfsGatewayUrl(objkt.metadataUri)}
+                >
+                  view on IPFS <i className="fas fa-external-link-square" aria-hidden/>
+                </a>
+              ):(
+                <em>not yet assigned</em>
+              )}
+            </span>
+
             </div>
           </div>
 
-          <Spacing size="8px"/>
+          <div className={cs(style['presentation-artwork'])}>
+            <div className={cs(style['preview-container-auto'])}>
+              <div className={cs(style['preview-wrapper'])}>
+                <ArtworkFrame>
+                  {settings.quality === 0 && !running ? (
+                    <img src={displayUrl} alt={`${objkt.name} preview`}/>
+                  ):(
+                    <ArtworkIframe 
+                      ref={iframeRef}
+                      url={ipfsGatewayUrl(objkt.metadata?.artifactUri, "pinata-fxhash-safe")}
+                      hasLoading={false}
+                    />
+                  )}
+                </ArtworkFrame>
+              </div>
+            </div>
 
-          <div className={cs(layout['x-inline'])}>
-            {settings.quality === 0 && !running ? (
+            <Spacing size="8px"/>
+
+            <div className={cs(layout['x-inline'])}>
+              {settings.quality === 0 && !running ? (
                 <Button
                   size="small"
                   color="transparent"
@@ -167,53 +225,40 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
                   reload
                 </Button>
               )}
-            <Link href={ipfsGatewayUrl(objkt.metadata?.artifactUri)} passHref>
-              <Button
-                isLink={true}
-                size="small"
-                iconComp={<i aria-hidden className="fas fa-external-link-square"/>}
-                // @ts-ignore
-                target="_blank"
-                color="transparent"
-                iconSide="right"
-              >
-                open
-              </Button>
-            </Link>
+              <Link href={ipfsGatewayUrl(objkt.metadata?.artifactUri)} passHref>
+                <Button
+                  isLink={true}
+                  size="small"
+                  iconComp={<i aria-hidden className="fas fa-external-link-square"/>}
+                  // @ts-ignore
+                  target="_blank"
+                  color="transparent"
+                  iconSide="right"
+                >
+                  open
+                </Button>
+              </Link>
+            </div>
+
+            {objkt.features && objkt.features.length > 0 && (
+              <div className={cs(style.features_wrapper, layout.hide_md)}>
+                <Spacing size="3x-large" />
+                <h4>Features</h4>
+                <Spacing size="small" />
+                <Features features={objkt.features} />
+              </div>
+            )}
           </div>
         </div>
-      </section>
 
-      <Spacing size="6x-large" />
-
-      <section>
-        <SectionHeader>
-          <TitleHyphen>gentk details</TitleHyphen>
-        </SectionHeader>
-        
-        <main className={cs(layout['padding-big'], layout.break_words)}>
-          <Spacing size="small" />
-          <div className={cs(style.buttons)}>
-            <span><strong>Minted the:</strong> { format(new Date(objkt.createdAt), "dd/MM/yyyy' at 'HH:mm") }</span>
-            <span><strong>Royalties:</strong> { displayRoyalties(objkt.royalties) }</span>
-            <span><strong>Metadata assigned:</strong> { objkt.assigned ? "yes" : "no" }</span>
-            <span><strong>Transaction hash:</strong> { objkt.generationHash }</span>
-            <span><strong>Iteration number:</strong> { objkt.iteration }</span>
-            {objkt.features && objkt.features.length > 0 && objkt.rarity && (
-              <span><strong>Rarity:</strong> { displayPercentage(objkt.rarity) }% (lower is rarer)</span>
-            )}
-            <span><strong>Metadata:</strong> <a target="_blank" href={ipfsGatewayUrl(objkt.metadataUri, "pinata-fxhash")}>{ objkt.metadataUri }</a></span>
+        {objkt.features && objkt.features.length > 0 && (
+          <div className={cs(style.features_wrapper, layout.show_md)}>
+            <Spacing size="3x-large" />
+            <h4>Features</h4>
+            <Spacing size="small" />
+            <Features features={objkt.features} />
           </div>
-
-          {objkt.features && objkt.features.length > 0 && (
-            <>
-              <Spacing size="x-large" />
-              <h4>Features</h4>
-              <Spacing size="small" />
-              <Features features={objkt.features} />
-            </>
-          )}
-        </main>
+        )}
       </section>
 
       <Spacing size="6x-large" />
