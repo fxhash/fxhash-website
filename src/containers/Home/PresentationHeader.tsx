@@ -17,7 +17,7 @@ export function PresentationHeader({
       <div className={cs(style.guides_section)}>
         <h4 className={cs(style.guides_section_title)}>Useful resources</h4>
         <div className={cs(style.guides_wrapper)}>
-          <Link href="/articles/collect-mint-tokens">
+          <Link href="/doc/collect/guide">
             <a className={cs(style.guide)}>
               <i aria-hidden className="fas fa-book"/>
               <div className={cs(style.guide_details)}>
@@ -26,7 +26,7 @@ export function PresentationHeader({
               </div>
             </a>
           </Link>
-          <Link href="/articles/guide-mint-generative-token">
+          <Link href="/doc/artist/guide-publish-generative-token">
             <a className={cs(style.guide)}>
               <i aria-hidden className="fas fa-book"/>
               <div className={cs(style.guide_details)}>

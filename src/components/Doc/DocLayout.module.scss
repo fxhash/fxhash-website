@@ -1,0 +1,55 @@
+@import "../../styles/Variables.scss";
+
+.root {
+  display: flex;
+  flex-direction: row;
+}
+
+.content {
+  border-left: 3px solid var(--color-gray-light);
+  max-width: calc(100vw - 360px);
+  padding: 30px 100px;
+  width: min(1000px, 100%);
+}
+
+.sidebar {
+  position: sticky;
+  top: 40px;
+  align-self: flex-start;
+  width: 350px;
+  flex-shrink: 0;
+}
+
+
+@media (max-width: 1400px) {
+  .content {
+    width: min(800px, 100%);
+    margin-right: 0;
+    padding: 30px 50px;
+  }
+}
+
+@media (max-width: $breakpoint-md) {
+  .root {
+    flex-direction: column;
+  }
+  
+  .content {
+    border-left: none;
+    max-width: auto;
+    width: 100%;
+    max-width: none;
+    margin-top: 20px;
+  }
+
+  .sidebar {
+    position: static;
+    width: 100%;
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .content {
+    padding: 0 20px;
+  }
+}
