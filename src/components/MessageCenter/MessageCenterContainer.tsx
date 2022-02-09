@@ -11,7 +11,6 @@ export function MessageCenterContainer({
   messages,
   removeMessage,
 }: Props) {
-  console.log(messages)
   return (
     <div className={cs(style.root)}>
       {messages.map((message) => (

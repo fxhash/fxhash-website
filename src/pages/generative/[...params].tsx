@@ -88,8 +88,6 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
 
   // will be called if the token is successfully minted
   const onReveal = (transactionHash: string) => {
-    console.log("minted")
-    console.log(transactionHash)
   }
 
   return (

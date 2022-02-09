@@ -73,7 +73,6 @@ export function GenerativeIterations({
 
   // serialize the feature filters to send to the backend
   const serializedFeatureFilters = useMemo<IObjktFeatureFilter[]>(() => {
-    console.log("recompute here")
     return featureFilters.map(filter => ({
       name: filter.name,
       type: filter.type,
