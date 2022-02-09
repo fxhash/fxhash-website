@@ -9,7 +9,7 @@ description: 'How does the community curation work ?'
 
 # System overview
 
-Curated spaces will be at the core of the platform. They will be displayed on the front page and will allow users to curate the content. Since fxhash is open, the plateform became the host of a wide variety of works, and so relying on the community itself to organize this content seems to be the best (if not the only suitable) way.
+Curated spaces will be at the core of the platform. They will be displayed on the front page and will allow users to curate content. Since fxhash is open, the platform became the host of a wide variety of works, and so relying on the community itself to organize this content seems to be the best (if not the only suitable) way.
 
 A Smart Contract will allow entities (let it be single users or groups of users clustered in DAOs) to curate some fxhash work and have it displayed on the website. We really want to put a major focus on these spaces to browse the content of the platform rather than relying on more chaotic approaches  as it's currently the case.
 
@@ -20,7 +20,7 @@ We don't want those spaces to only become a way to organize content, but also pr
 
 ## Curate Generative Tokens
 
-The most straightforward way to promote content is to curate a selection of Generative Tokens. As projects are at the root of the plateform, displaying some subset of the whole works seems to be a necessary way to curate content.
+The most straightforward way to promote content is to curate a selection of Generative Tokens. As projects are at the root of the platform, displaying some subset of the whole works seems to be a necessary way to curate content.
 
 ## Curate Iterations
 
@@ -28,16 +28,16 @@ Some people are especially interested in particular iterations exhibiting partic
 
 ## Write articles
 
-Promoting the content itself doesn't seem really meaningful if communities cannot share their perspective on the curation. We have already seen a lot of content being published on external websites to share some unique insights on some of the works on the plateform.
+Promoting the content itself doesn't seem really meaningful if communities cannot share their perspective on the curation. We have already seen a lot of content being published on external websites to share some unique insights on some of the works on the platform.
 
-Moreover, articles don't have to be directly related to the curation itself as any type of content could justify a write up. We can easily imagine spaces hosting educationnal content only, spaces interviewing artists... etc
+Moreover, articles don't have to be directly related to the curation itself as any type of content could justify a write up. We can easily imagine spaces hosting educational content only, spaces interviewing artists... etc
 
 
 ## Connecting articles to the work itself
 
-One way to tie the content together would be to give the ability for articles to link back to some work on the platform and vice-versa. We would like to connect Generative Tokens to write-up on which they were featured to facilitate the discovery (we can imagine a list of articles on a Generative Token page in which the token was featured).
+One way to tie the content together would be to give the ability for articles to link back to some work on the platform and vice-versa. We would like to connect Generative Tokens to write-ups in which they were featured to facilitate the discovery (we can imagine a list of articles on a Generative Token page in which the token was featured).
 
-All these features should make curated spaces a major component of the plateform for the years to come.
+All these features should make curated spaces a major component of the platform for the years to come.
 
 
 # The decentralized way

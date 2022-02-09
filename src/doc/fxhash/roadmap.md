@@ -54,7 +54,7 @@ We originally wanted to release it along with the FXH token, but we eventually r
 
 ## TreeDAO
 
-[More on the TreeDAO architecture](/doc/community/treedao)
+[More on the TreeDAO architecture](/doc/community/subdaos)
 
 The next milestone following the curated spaces will be to implement the TreeDAO architecture. 
 
