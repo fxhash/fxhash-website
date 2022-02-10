@@ -46,10 +46,10 @@ const validation = Yup.object().shape({
     .max(42, "Max 42 characters")
     .required("Required"),
   description: Yup.string()
-    .max(1024, "Max 1024 characters")
+    .max(4096, "Max 4096 characters")
     .required("Required"),
   childrenDescription: Yup.string()
-    .max(1024, "Max 1024 characters"),
+    .max(4096, "Max 4096 characters"),
   editions: Yup.number()
     .min(1, "At least 1 edition")
     .max(2500, "2500 editions max.")
