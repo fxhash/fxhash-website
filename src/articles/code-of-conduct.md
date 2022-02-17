@@ -52,8 +52,8 @@ Generative projects can use textures and images in a number of different ways, t
 ## What is not acceptable
 
 - Projects that are simply a collection generated static image
-- Projects that are layered multiple static images on top of each other but not described as such in the project description
-- Projects that involve static images with javascript being used to manipulate the image further but not described as such in the project description
+- Projects that are layered multiple static images on top of each other but **not described as such** in the project description
+- Projects that involve static images with javascript being used to manipulate the image further but **not described as such** in the project description
 
 ## Project descriptions
 
