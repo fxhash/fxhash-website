@@ -61,6 +61,8 @@ The methods used to generate these projects must be described thoroughly in the 
 
 A good rule of thumb when putting together a description of your token is that there is no such thing as too much communication of the core ideas and methodologies involved in your token. The more a collector knows about the underlying principles of your token the more comfortable they’re going to feel collecting it.
 
+In future, a tagging system will be implemented that will allow artists to add layered / static PNG as tags that will be more clearly visible to collectors, however we still recommend being as descriptive of the artwork as possible.
+
 ## tl;dr
 
 If you're struggling with how to describe your artwork, the bare minimum you need to include, if your artwork is made of layered PNGs chosen at random is: This artwork is made by layering PNGs chosen at random.
