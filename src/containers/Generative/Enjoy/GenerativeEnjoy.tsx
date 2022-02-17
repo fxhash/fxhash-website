@@ -79,7 +79,7 @@ export function GenerativeEnjoy({ tokens, backLink, requestData }: Props) {
     if (tokens.length > 1) {
       // also, preload the next piece
       const toLoad = tokens[cursorShifted(1)]
-      fetch(ipfsGatewayUrl(toLoad.metadata?.artifactUri, "pinata-fxhash-safe"))
+      fetch(ipfsGatewayUrl(toLoad.metadata?.artifactUri, "ipfsio"))
     }
   }, [cursor])
 
@@ -135,7 +135,7 @@ export function GenerativeEnjoy({ tokens, backLink, requestData }: Props) {
       >
         {tokens.length > 0 ? (
           <ArtworkIframe
-            url={ipfsGatewayUrl(selectedToken.metadata?.artifactUri, "pinata-fxhash-safe")}
+            url={ipfsGatewayUrl(selectedToken.metadata?.artifactUri, "ipfsio")}
             onLoaded={onIframeLoaded}
           />
         ):(

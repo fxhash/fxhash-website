@@ -193,7 +193,7 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
                   ):(
                     <ArtworkIframe 
                       ref={iframeRef}
-                      url={ipfsGatewayUrl(objkt.metadata?.artifactUri, "pinata-fxhash-safe")}
+                      url={ipfsGatewayUrl(objkt.metadata?.artifactUri, "ipfsio")}
                       hasLoading={false}
                     />
                   )}

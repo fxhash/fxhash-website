@@ -71,11 +71,11 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
   const artifactUrl = useMemo<string>(() => {
     // if no hash is forced, use the artifact URI directly
     if (!previewHash) {
-      return ipfsGatewayUrl(token.metadata.artifactUri, "pinata-fxhash-safe")
+      return ipfsGatewayUrl(token.metadata.artifactUri, "ipfsio")
     }
     else {
       // there is a forced hash, add it to the generative URL
-      return `${ipfsGatewayUrl(token.metadata.generativeUri, "pinata-fxhash-safe")}?fxhash=${previewHash}`
+      return `${ipfsGatewayUrl(token.metadata.generativeUri, "ipfsio")}/?fxhash=${previewHash}`
     }
   }, [previewHash])
 
