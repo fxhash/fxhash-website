@@ -10,6 +10,7 @@ import { BrowserRouter as Router } from "react-router-dom"
 import { useRef } from "react"
 import Head from "next/head"
 import { TitleHyphen } from "../components/Layout/TitleHyphen"
+import { ContractsOpened } from "../components/Utils/ContractsOpened";
 
 const MintGenerative: NextPage = () => {
   const anchorRef = useRef<HTMLElement>(null)
@@ -18,20 +19,29 @@ const MintGenerative: NextPage = () => {
     <>
       <Head>
         <title>fxhash — mint Generative Token</title>
-        <meta key="og:title" property="og:title" content="fxhash — mint Generative Token"/> 
-        <meta key="description" name="description" content="Mint your generative Token"/>
+        <meta
+          key="og:title"
+          property="og:title"
+          content="fxhash — mint Generative Token"
+        />
+        <meta
+          key="description"
+          name="description"
+          content="Mint your generative Token"
+        />
       </Head>
 
-      <Spacing size="6x-large"/>
+      <Spacing size="6x-large" />
 
       <section ref={anchorRef}>
         <SectionHeader>
           <TitleHyphen>mint a Generative Token</TitleHyphen>
+          <ContractsOpened />
         </SectionHeader>
 
-        <Spacing size="x-large"/>
+        <Spacing size="x-large" />
 
-        <main className={cs(layout['padding-big'])}>
+        <main className={cs(layout["padding-big"])}>
           <ClientOnly>
             <UserGuard>
               <Router basename="/mint-generative">
@@ -42,7 +52,7 @@ const MintGenerative: NextPage = () => {
         </main>
       </section>
     </>
-  )
+  );
 }
 
 export default MintGenerative
