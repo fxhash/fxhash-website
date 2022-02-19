@@ -3,7 +3,6 @@ import layout from "../../styles/Layout.module.scss"
 import cs from "classnames"
 import { FunctionComponent } from "react"
 import Link from "next/link"
-import { ContractsOpened } from "../Utils/ContractsOpened"
 
 export const Warning: FunctionComponent = ({ children }) => {
   return (
@@ -13,7 +12,6 @@ export const Warning: FunctionComponent = ({ children }) => {
           <i aria-hidden className="fas fa-radiation-alt"/>
           {children}
         </span>
-        <ContractsOpened />
       </a>
     </Link>
   )
