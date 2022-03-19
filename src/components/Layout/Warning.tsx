@@ -13,7 +13,6 @@ export const Warning: FunctionComponent = ({ children }) => {
           <i aria-hidden className="fas fa-radiation-alt"/>
           {children}
         </span>
-        <ContractsOpened />
       </a>
     </Link>
   )
