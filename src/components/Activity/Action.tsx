@@ -185,15 +185,21 @@ const ActionSigned: FunctionComponent<Props> = ({ action, verbose }) => (
 
 const ActionTransfered: FunctionComponent<Props> = ({ action, verbose }) => (
   <>
-    ⬅️<UserBadge className={cs(style.user)} hasLink={true} user={(action.issuer||action.target)!} size="regular" />
+    <UserBadge
+      className={cs(style.user)}
+      hasLink={true}
+      user={action.issuer!}
+      size="small"
+    />
     <span>
-       received 
-      {verbose ? (
-        <> token <strong>{action.objkt?.name}</strong></>
-      ):(
-        <strong> token {getTokenIdx(action.objkt?.name!)}</strong> 
-      )}
+      transfered <strong>#{verbose ? action.objkt!.name : action.objkt!.iteration}</strong> to
     </span>
+    <UserBadge
+      className={cs(style.user)}
+      hasLink={true}
+      user={action.target!}
+      size="small"
+    />
   </>
 )
 
@@ -290,7 +296,7 @@ const ActionBurnSupply: FunctionComponent<Props> = ({ action }) => {
  * LISTINGS
  */
 
-const ActionListing: TActionComp = ({ action }) => (
+const ActionListing: TActionComp = ({ action, verbose }) => (
   <>
     <UserBadge
       className={cs(style.user)}
@@ -299,7 +305,7 @@ const ActionListing: TActionComp = ({ action }) => (
       size="small"
     />
     <span>
-      listed <strong>#{action.objkt!.iteration}</strong> for 
+      listed <strong>{verbose ? action.objkt!.name : `#${action.objkt!.iteration}`}</strong> for 
     </span>
     <span className={cs(style.price)}>
       <DisplayTezos
@@ -311,7 +317,7 @@ const ActionListing: TActionComp = ({ action }) => (
   </>
 )
 
-const ActionListingAccepted: TActionComp = ({ action }) => (
+const ActionListingAccepted: TActionComp = ({ action, verbose }) => (
   <>
     <UserBadge
       className={cs(style.user)}
@@ -320,7 +326,7 @@ const ActionListingAccepted: TActionComp = ({ action }) => (
       size="small"
     />
     <span>
-      bought <strong>#{action.objkt!.iteration}</strong> from
+      bought <strong>{verbose ? action.objkt!.name : `#${action.objkt!.iteration}`}</strong> from
     </span>
     <UserBadge
       className={cs(style.user)}
@@ -375,7 +381,7 @@ const ActionOffer: FunctionComponent<Props> = ({ action, verbose }) => (
         tezosSize="regular"
       />
     </span>
-    <span>for #{action.objkt!.iteration}</span>
+    <span>for {verbose ? action.objkt!.name : `#${action.objkt!.iteration}`}</span>
   </>
 )
 

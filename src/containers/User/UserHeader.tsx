@@ -5,13 +5,12 @@ import effects from "../../styles/Effects.module.scss"
 import cs from "classnames"
 import { User } from "../../types/entities/User"
 import { Avatar } from "../../components/User/Avatar"
-import { getUserName, isAdmin, isModerator, isUserVerified, userAliases } from "../../utils/user"
+import { getUserName, isPlatformOwned, isUserVerified, userAliases } from "../../utils/user"
 import nl2br from "react-nl2br"
 import { useContext, useMemo } from "react"
 import { UserContext } from "../UserProvider"
 import Link from "next/link"
 import { Button } from "../../components/Button"
-import useFetch, { CachePolicies } from "use-http"
 import { useTzProfileVerification } from "../../utils/hookts"
 import { UserVerification } from "./UserVerification"
 import { Spacing } from "../../components/Layout/Spacing"
@@ -40,7 +39,7 @@ export function UserHeader({ user }: Props) {
           </a>
         </small>}
 
-        <h1 className={cs(style.name, { [style.moderator]: isAdmin(user) })}>
+        <h1 className={cs(style.name, { [style.moderator]: isPlatformOwned(user) })}>
           <span>{ getUserName(user) }</span>
           {verified && (
             <HoverTitle

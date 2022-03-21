@@ -28,6 +28,7 @@ export const Qu_genToken = gql`
 `
 
 export const Qu_genTokenMarketplace = gql`
+  ${Frag_GenAuthor}
   query Query($id: Float, $slug: String) {
     generativeToken(id: $id, slug: $slug) {
       id
@@ -37,18 +38,12 @@ export const Qu_genTokenMarketplace = gql`
       tags
       metadata
       metadataUri
-      price
       supply
       originalSupply
       balance
       enabled
       royalties
       lockEnd
-      author {
-        id
-        name
-        avatarUri
-      }
       marketStats {
         floor
         median
@@ -63,6 +58,7 @@ export const Qu_genTokenMarketplace = gql`
         secVolumeNb24
       }
       createdAt
+      ...Author
     }
   }
 `

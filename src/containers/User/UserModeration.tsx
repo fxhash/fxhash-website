@@ -3,7 +3,7 @@ import style from "./UserModeration.module.scss"
 import layout from "../../styles/Layout.module.scss"
 import { Button } from "../../components/Button"
 import { User } from "../../types/entities/User"
-import { isModerator } from "../../utils/user"
+import { isUserModerator } from "../../utils/user"
 import { useContext, useState } from "react"
 import { UserContext } from "../UserProvider"
 import { useContractCall } from "../../utils/hookts"
@@ -28,7 +28,7 @@ export function UserModeration({
     useContractCall<string>(userCtx.walletManager!.banUser)
 
   return (
-    isModerator(userConnected as User) ? (
+    isUserModerator(userConnected as User) ? (
       <>
         {moderateModal && (
           <UserModerationModal

@@ -77,10 +77,15 @@
   i {
     margin-left: 5px;
     font-size: 14px;
+    margin-bottom: -2px;
   }
 
   &:hover {
     color: var(--color-secondary);
+
+    i {
+      text-decoration: none;
+    }
   }
 }
 

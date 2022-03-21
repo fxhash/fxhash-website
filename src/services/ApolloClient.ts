@@ -26,7 +26,7 @@ export const clientSideClient = new ApolloClient({
               return merged
             },
           },
-          offers: {
+          activeListedObjkts: {
             keyArgs: false,
             // @ts-ignore
             merge(existing, incoming, { args: { skip = 0 }}) {
@@ -118,7 +118,7 @@ export const clientSideClient = new ApolloClient({
               return merged
             },
           },
-          offers: {
+          listings: {
             keyArgs: false,
             // @ts-ignore
             merge(existing, incoming, { args: { skip = 0 }}) {
@@ -164,18 +164,7 @@ export const clientSideClient = new ApolloClient({
               return merged
             },
           },
-          lockedGenerativeTokens: {
-            keyArgs: false,
-            // @ts-ignore
-            merge(existing, incoming, { args: { skip = 0 }}) {
-              const merged = existing ? existing.slice(0) : []
-              for (let i = 0; i < incoming.length; ++i) {
-                merged[skip + i] = incoming[i]
-              }
-              return merged
-            },
-          },
-          offers: {
+          listings: {
             keyArgs: false,
             // @ts-ignore
             merge(existing, incoming, { args: { skip = 0 }}) {

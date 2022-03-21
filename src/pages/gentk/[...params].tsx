@@ -38,7 +38,7 @@ interface Props {
 }
 
 const ObjktDetails: NextPage<Props> = ({ objkt }) => {
-  const owner: User = (objkt.offer ? objkt.offer.issuer : objkt.owner)!
+  const owner: User = (objkt.activeListing ? objkt.activeListing.issuer : objkt.owner)!
   const creator: User = objkt.issuer.author
   const settings = useContext(SettingsContext)
   // get the display url for og:image
@@ -106,14 +106,14 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
                 size="regular"
               />
               <Spacing size="x-large"/>
-              <h3>{ objkt.name }{ objkt.assigned === false && ` - ${objkt.issuer.name}`}</h3>
+              <h3>{ objkt.name }</h3>
             </div>
 
             <Spacing size="x-large"/>
 
             <div className={cs(style.buttons)}>
-              {objkt.offer && (
-                <Collect offer={objkt.offer} objkt={objkt} />
+              {objkt.activeListing && (
+                <Collect offer={objkt.activeListing} objkt={objkt} />
               )}
               {/* @ts-ignore */}
               <ClientOnlyEmpty style={{ width: "100%" }}>

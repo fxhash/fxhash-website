@@ -7,7 +7,7 @@ import { ObjktCard } from '../components/Card/ObjktCard'
 import { InfiniteScrollTrigger } from '../components/Utils/InfiniteScrollTrigger'
 import { useState, useEffect, useMemo, useRef } from 'react'
 import { Spacing } from '../components/Layout/Spacing'
-import { Offer, OfferFilters } from '../types/entities/Offer'
+import { Listing, ListingFilters } from '../types/entities/Listing'
 import { IOptions, Select } from '../components/Input/Select'
 import { CardsLoading } from '../components/Card/CardsLoading'
 import { CardsExplorer } from "../components/Exploration/CardsExplorer"
@@ -17,23 +17,24 @@ import { MarketplaceFilters } from "./Marketplace/MarketplaceFilters"
 import { ExploreTagDef, ExploreTags } from "../components/Exploration/ExploreTags"
 import { displayMutez } from "../utils/units"
 import { SearchInputControlled } from "../components/Input/SearchInputControlled"
+import { Frag_GenAuthor } from "../queries/fragments/generative-token"
 
 
-const ITEMS_PER_PAGE = 10
+const ITEMS_PER_PAGE = 20
 
-const Qu_offers = gql`
-  query Query ($skip: Int, $take: Int, $sort: OffersSortInput, $filters: OfferFilter) {
-    offers(skip: $skip, take: $take, sort: $sort, filters: $filters) {
+const Qu_listings = gql`
+  ${Frag_GenAuthor}
+  query Query ($skip: Int, $take: Int, $sort: ListingsSortInput, $filters: ListingFilter) {
+    listings(skip: $skip, take: $take, sort: $sort, filters: $filters) {
       id
       price
       objkt {
         id
         name
         slug
-        assigned
         metadata
         duplicate
-        offer {
+        activeListing {
           id
           price
         }
@@ -46,12 +47,7 @@ const Qu_offers = gql`
         issuer {
           flag
           name
-          author {
-            id
-            name
-            flag
-            avatarUri
-          }
+          ...Author
         }
       }
     }
@@ -113,7 +109,7 @@ export const Marketplace = ({}: Props) => {
   }, [sortValue])
 
   // filters
-  const [filters, setFilters] = useState<OfferFilters>({})
+  const [filters, setFilters] = useState<ListingFilters>({})
 
   // reference to an element at the top to scroll back
   const topMarkerRef = useRef<HTMLDivElement>(null)
@@ -122,7 +118,7 @@ export const Marketplace = ({}: Props) => {
   const currentLength = useRef<number>(0)
   const ended = useRef<boolean>(false)
 
-  const { data, loading, fetchMore, refetch } = useQuery(Qu_offers, {
+  const { data, loading, fetchMore, refetch } = useQuery(Qu_listings, {
     notifyOnNetworkStatusChange: true,
     variables: {
       skip: 0,
@@ -134,11 +130,11 @@ export const Marketplace = ({}: Props) => {
 
   useEffect(() => {
     if (!loading) {
-      if (currentLength.current === data.offers?.length) {
+      if (currentLength.current === data.listings?.length) {
         ended.current = true
       }
       else {
-        currentLength.current = data.offers?.length
+        currentLength.current = data.listings?.length
       }
     }
   }, [loading])
@@ -146,13 +142,13 @@ export const Marketplace = ({}: Props) => {
   const infiniteScrollFetch = () => {
     !ended.current && fetchMore?.({
       variables: {
-        skip: data.offers.length,
+        skip: data.listings.length,
         take: ITEMS_PER_PAGE,
       },
     })
   }
 
-  const offers: Offer[] = data?.offers
+  const listings: Listing[] = data?.listings
 
   useEffect(() => {
     // first we scroll to the top
@@ -299,13 +295,13 @@ export const Marketplace = ({}: Props) => {
                 </>
               )}
 
-              {!loading && offers?.length === 0 && (
+              {!loading && listings?.length === 0 && (
                 <span>No results</span>
               )}
 
               <InfiniteScrollTrigger onTrigger={infiniteScrollFetch} canTrigger={!!data && !loading}>
                 <CardsContainer>
-                  {offers?.length > 0 && offers.map(offer => (
+                  {listings?.length > 0 && listings.map(offer => (
                     <ObjktCard key={offer.id} objkt={offer.objkt}/>
                   ))}
                   {loading && (

@@ -6,22 +6,22 @@ import { CardsContainer } from "../../components/Card/CardsContainer"
 import { ObjktCard } from "../../components/Card/ObjktCard"
 import { LoaderBlock } from "../../components/Layout/LoaderBlock"
 import { InfiniteScrollTrigger } from "../../components/Utils/InfiniteScrollTrigger"
-import { Qu_userOffers } from "../../queries/user"
-import { Offer } from "../../types/entities/Offer"
+import { Qu_userListings } from "../../queries/user"
+import { Listing } from "../../types/entities/Listing"
 import { User } from "../../types/entities/User"
 import { CardsLoading } from "../../components/Card/CardsLoading"
 
 interface Props {
   user: User
 }
-export function UserOffers({
+export function UserListings({
   user,
 }: Props) {
   // use to know when to stop loading
   const currentLength = useRef<number>(0)
   const ended = useRef<boolean>(false)
 
-  const { data, loading, fetchMore } = useQuery(Qu_userOffers, {
+  const { data, loading, fetchMore } = useQuery(Qu_userListings, {
     notifyOnNetworkStatusChange: true,
     variables: {
       id: user.id,
@@ -32,11 +32,11 @@ export function UserOffers({
 
   useEffect(() => {
     if (!loading) {
-      if (currentLength.current === data.user.offers?.length) {
+      if (currentLength.current === data.user.listings?.length) {
         ended.current = true
       }
       else {
-        currentLength.current = data.user.offers?.length
+        currentLength.current = data.user.listings?.length
       }
     }
   }, [data, loading])
@@ -46,14 +46,14 @@ export function UserOffers({
       fetchMore({
         variables: {
           id: user.id,
-          skip: data?.user.offers.length || 0,
+          skip: data?.user.listings.length || 0,
           take: 20
         }
       })
     }
   }
 
-  const offers: Offer[]|null = data?.user.offers || null
+  const listings: Listing[]|null = data?.user.listings || null
 
   return (
     <div className={cs(layout['padding-big'])}>
@@ -61,7 +61,7 @@ export function UserOffers({
         onTrigger={load}
       >
         <CardsContainer>
-          {offers?.map(offer => (
+          {listings?.map(offer => (
             <ObjktCard
               key={offer.objkt.id}
               objkt={offer.objkt}

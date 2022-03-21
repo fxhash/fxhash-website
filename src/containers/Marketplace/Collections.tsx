@@ -13,33 +13,32 @@ import { AlgoliaSearch } from '../../components/Search/AlgoliaSearch'
 import { CardListsContainer } from "../../components/Card/CardListsContainer"
 import { GenerativeTokenCardList } from "../../components/Card/GenerativeTokenCardList"
 import { getGenerativeTokenMarketplaceUrl } from "../../utils/generative-token"
+import { Frag_GenAuthor, Frag_GenPricing } from "../../queries/fragments/generative-token"
 
 
 const ITEMS_PER_PAGE = 10
 
 const Qu_genTokens = gql`
+  ${Frag_GenAuthor}
+  ${Frag_GenPricing}
+
   query Query ($skip: Int, $take: Int) {
     generativeTokens(skip: $skip, take: $take) {
       id
       name
       slug
       metadata
-      price
       supply
       balance
       enabled
       royalties
       createdAt
-      author {
-        id
-        name
-        flag
-        avatarUri
-      }
       marketStats {
         floor
         listed
       }
+      ...Author
+      ...Pricing
     }
   }
 `

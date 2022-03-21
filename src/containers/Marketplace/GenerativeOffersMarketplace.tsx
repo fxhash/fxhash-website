@@ -14,17 +14,17 @@ import { CardsLoading } from "../../components/Card/CardsLoading"
 
 const ITEMS_PER_PAGE = 20
 
-const Qu_offers = gql`
+const Qu_listings = gql`
   query Query($id: Float!, $filters: ObjktFilter, $sort: ObjktsSortInput, $skip: Int, $take: Int) {
     generativeToken(id: $id) {
       id
-      offers(filters: $filters, sort: $sort, skip: $skip, take: $take) {
+      activeListedObjkts(filters: $filters, sort: $sort, skip: $skip, take: $take) {
         id
         name
         slug
         duplicate
         metadata
-        offer {
+        activeListing {
           id
           price
           issuer {
@@ -40,15 +40,6 @@ const Qu_offers = gql`
           flag
           avatarUri
         }
-        issuer {
-          flag
-          author {
-            id
-            name
-            flag
-            avatarUri
-          }
-        }
       }
     }
   }
@@ -57,19 +48,19 @@ const Qu_offers = gql`
 const sortOptions: IOptions[] = [
   {
     label: "recently listed",
-    value: "offerCreatedAt-desc"
+    value: "listingCreatedAt-desc"
   },
   {
     label: "price (high to low)",
-    value: "offerPrice-desc",
+    value: "listingPrice-desc",
   },
   {
     label: "price (low to high)",
-    value: "offerPrice-asc",
+    value: "listingPrice-asc",
   },
   {
     label: "oldest listed",
-    value: "offerCreatedAt-asc",
+    value: "listingCreatedAt-asc",
   },
 ]
 
@@ -88,19 +79,17 @@ interface Props {
 export const GenerativeOffersMarketplace = ({ 
   token,
 }: Props) => {
-  const [sortValue, setSortValue] = useState<string>("offerCreatedAt-desc")
+  const [sortValue, setSortValue] = useState<string>("listingCreatedAt-desc")
   const sort = useMemo<Record<string, any>>(() => sortValueToSortVariable(sortValue), [sortValue])
 
   // use to know when to stop loading
   const currentLength = useRef<number>(0)
   const ended = useRef<boolean>(false)
 
-  const { data, loading, fetchMore, refetch } = useQuery(Qu_offers, {
+  const { data, loading, fetchMore, refetch } = useQuery(Qu_listings, {
     notifyOnNetworkStatusChange: true,
     variables: {
-      filters: {
-        offer_ne: null
-      },
+      filters: {},
       id: token.id,
       skip: 0,
       take: ITEMS_PER_PAGE,
@@ -108,7 +97,7 @@ export const GenerativeOffersMarketplace = ({
     }
   })
 
-  const objkts: Objkt[]|null = data?.generativeToken.offers
+  const objkts: Objkt[]|null = data?.generativeToken.activeListedObjkts
 
   useEffect(() => {
     if (!loading && objkts) {
@@ -135,9 +124,7 @@ export const GenerativeOffersMarketplace = ({
     currentLength.current = 0
     ended.current = false
     refetch?.({
-      filters: {
-        offer_ne: null
-      },
+      filters: {},
       id: token.id,
       skip: 0,
       take: ITEMS_PER_PAGE,
@@ -161,7 +148,10 @@ export const GenerativeOffersMarketplace = ({
         <CardsContainer>
           <>
             {objkts && objkts?.length > 0 && objkts.map(objkt => (
-              <ObjktCard key={objkt.id} objkt={objkt}/>
+              <ObjktCard
+                key={objkt.id}
+                objkt={objkt}
+              />
             ))}
             {loading && (
               <CardsLoading number={ITEMS_PER_PAGE} />

@@ -40,7 +40,7 @@ export function ObjktCard({
         >
           <div>
             {objkt.duplicate && <div className={cs(styleObjkt.dup_flag)}>[WARNING: DUPLICATE]</div>}
-            <h5>{ objkt.name }{objkt.assigned === false && ` - ${objkt.issuer.name}`}</h5>
+            <h5>{ objkt.name }</h5>
             {showOwner && (
               <>
                 <Spacing size="2x-small" />

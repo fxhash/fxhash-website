@@ -25,6 +25,7 @@ import { TabDefinition, Tabs } from '../../../components/Layout/Tabs'
 import { GenerativeOffersMarketplace } from '../../../containers/Marketplace/GenerativeOffersMarketplace'
 import { DisplayTezos } from '../../../components/Display/DisplayTezos'
 import { GenerativeStatsMarketplace } from '../../../containers/Marketplace/GenerativeStatsMarketplace'
+import { TokenActionType } from '../../../types/entities/Action'
 
 
 interface Props {
@@ -42,6 +43,18 @@ const tabs: TabDefinition[] = [
     name: "recent trades"
   }
 ]
+
+const actionTypeFilters: TokenActionType[] = [
+  TokenActionType.LISTING_V1_ACCEPTED,
+  TokenActionType.LISTING_V2_ACCEPTED,
+  TokenActionType.COLLECTION_OFFER_ACCEPTED,
+  TokenActionType.OFFER_ACCEPTED,
+  TokenActionType.AUCTION_FULFILLED,
+]
+
+const actionFilters = {
+  type_in: actionTypeFilters
+}
 
 const GenerativeTokenMarketplace: NextPage<Props> = ({ token }) => {
   const [tabActive, setTabActive] = useState<number>(0)
@@ -174,9 +187,7 @@ const GenerativeTokenMarketplace: NextPage<Props> = ({ token }) => {
           <ClientOnlyEmpty>
             <GenerativeActions
               token={token}
-              filters={{
-                type_in: ["OFFER_ACCEPTED"]
-              }}
+              filters={actionFilters}
               className={cs(styleActivity.activity)}
             />
           </ClientOnlyEmpty>
