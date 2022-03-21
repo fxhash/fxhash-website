@@ -81,7 +81,7 @@ export const Qu_genTokenIterations = gql`
         name
         metadata
         rarity
-        offer {
+        activeListing {
           price
         }
       }

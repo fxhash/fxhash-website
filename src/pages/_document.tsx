@@ -9,7 +9,7 @@ export default class MyDocument extends Document {
             href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap"
             rel="stylesheet"
           />          
-          <script src="https://kit.fontawesome.com/0aadf73f47.js" crossOrigin="anonymous"></script>
+          <script src="https://kit.fontawesome.com/bf487ca473.js" crossOrigin="anonymous"></script>
         </Head>
 
         <body>

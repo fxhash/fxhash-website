@@ -1,5 +1,5 @@
 .container {
   & > *+* {
-    margin-top: var(--layout-gap-small-lg);
+    margin-top: 8px;
   }
 }

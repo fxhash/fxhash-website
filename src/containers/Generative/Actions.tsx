@@ -24,6 +24,8 @@ const Qu_genTokActions = gql`
       actions(skip: $skip, take: $take, filters: $filters) {
         id
         type
+        opHash
+        numericValue
         metadata
         createdAt
         issuer {
@@ -41,6 +43,7 @@ const Qu_genTokActions = gql`
         objkt {
           id
           name
+          iteration
         }
         token {
           id
