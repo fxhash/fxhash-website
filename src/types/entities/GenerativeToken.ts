@@ -13,6 +13,11 @@ export enum GenTokFlag {
   HIDDEN            = "HIDDEN",
 }
 
+export enum GenTokPricing {
+  FIXED           = "FIXED",
+  DUTCH_AUCTION   = "DUTCH_AUCTION",
+}
+
 export interface GenerativeTokenMarketStats {
   floor: number|null
   median: number|null
@@ -78,6 +83,10 @@ export interface GenerativeTokenWithCollection extends GenerativeToken {
 }
 
 export interface GenerativeTokenFilters {
+  id_in?: number[]
+  flag_eq?: GenTokFlag
+  flag_in?: GenTokFlag[]
+  flag_neq?: GenTokFlag
   price_gte?: number
   price_lte?: number
   mintProgress_eq?: "COMPLETED"|"ONGOING"|"ALMOST"
@@ -85,6 +94,8 @@ export interface GenerativeTokenFilters {
   searchQuery_eq?: string
   supply_lte?: number
   supply_gte?: number
+  pricingMethod_eq?: GenTokPricing
+  locked_eq?: boolean
 }
 
 export interface GenerativeTokenFeatureValue {

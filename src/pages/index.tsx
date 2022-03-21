@@ -1,15 +1,13 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import Image from 'next/image'
 import Link from 'next/link'
 import styles from '../styles/Home.module.scss'
 import layout from '../styles/Layout.module.scss'
 import cs from 'classnames'
-import Text from '../styles/Text.module.css'
 import Colors from '../styles/Colors.module.css'
 import client from '../services/ApolloClient'
 import { gql } from '@apollo/client'
-import { GenerativeToken } from '../types/entities/GenerativeToken'
+import { GenerativeToken, GenerativeTokenFilters, GenTokFlag } from '../types/entities/GenerativeToken'
 import { ArtworkPreview } from '../components/Artwork/Preview'
 import { Button } from '../components/Button'
 import { Spacing } from '../components/Layout/Spacing'
@@ -18,7 +16,7 @@ import { UserBadge } from '../components/User/UserBadge'
 import { SectionHeader } from '../components/Layout/SectionHeader'
 import { CardsContainer } from '../components/Card/CardsContainer'
 import { GenerativeTokenCard } from '../components/Card/GenerativeTokenCard'
-import { Offer } from '../types/entities/Offer'
+import { Listing } from '../types/entities/Listing'
 import { ObjktCard } from '../components/Card/ObjktCard'
 import nl2br from 'react-nl2br'
 import { TitleHyphen } from '../components/Layout/TitleHyphen'
@@ -26,18 +24,19 @@ import { getGenerativeTokenUrl } from '../utils/generative-token'
 import { useContext } from 'react'
 import { SettingsContext } from '../context/Theme'
 import { PresentationHeader } from '../containers/Home/PresentationHeader'
+import { Frag_GenAuthor, Frag_GenPricing } from '../queries/fragments/generative-token'
 
 
 interface Props {
   randomGenerativeToken: GenerativeToken | null
   generativeTokens: GenerativeToken[]
-  offers: Offer[]
+  listings: Listing[]
 }
 
 const Home: NextPage<Props> = ({ 
   randomGenerativeToken,
   generativeTokens,
-  offers
+  listings
 }) => {
   const settings = useContext(SettingsContext)
 
@@ -168,8 +167,8 @@ const Home: NextPage<Props> = ({
 
         <main className={cs(layout['padding-big'])}>
           <CardsContainer className={cs(styles['row-responsive-limiter'])}>
-            {offers.map(offer => (
-              <ObjktCard key={offer.objkt.id} objkt={offer.objkt}/>
+            {listings.map(listing => (
+              <ObjktCard key={listing.objkt.id} objkt={listing.objkt}/>
             ))}
           </CardsContainer>
         </main>
@@ -183,64 +182,56 @@ const Home: NextPage<Props> = ({
 }
 
 export async function getServerSideProps() {
-  const { data } = await client.query({
+  interface IQueryVariables {
+    skip: number
+    take: number
+    filters: GenerativeTokenFilters
+  }
+
+  const { data, error } = await client.query<any, IQueryVariables>({
     query: gql`
-      query Query ($skip: Int, $take: Int) {
+      ${Frag_GenAuthor}
+      ${Frag_GenPricing}
+      query Query ($skip: Int, $take: Int, $filters: GenerativeTokenFilter) {
         randomGenerativeToken {
           id
           name
           slug
           metadata
           metadataUri
-          price
+          ...Pricing
           supply
           originalSupply
           balance
           enabled
           royalties
           createdAt
-          author {
-            id
-            name
-            flag
-            avatarUri
-          }
+          ...Author
         }
-        generativeTokens(skip: $skip, take: $take) {
+        generativeTokens(skip: $skip, take: $take, filters: $filters) {
           id
           name
           slug
           metadata
-          price
+          ...Pricing
           supply
           originalSupply
           balance
           enabled
           royalties
           createdAt
-          author {
-            id
-            name
-            flag
-            avatarUri
-          }
+          ...Author
         }
-        offers(skip: $skip, take: $take) {
+        listings(skip: $skip, take: $take) {
+          id
           price
-          id
-          id
           objkt {
             id
             name
             slug
             metadata
             issuer {
-              author {
-                id
-                name
-                flag
-                avatarUri
-              }
+              ...Author
             }
             owner {
               id
@@ -248,7 +239,7 @@ export async function getServerSideProps() {
               flag
               avatarUri
             }
-            offer {
+            activeListing {
               id
               price
             }
@@ -260,6 +251,13 @@ export async function getServerSideProps() {
     variables: {
       skip: 0,
       take: 5,
+      filters: {
+        locked_eq: false,
+        flag_in: [
+          GenTokFlag.CLEAN,
+          GenTokFlag.NONE,
+        ]
+      }
     }
   })
 
@@ -267,7 +265,7 @@ export async function getServerSideProps() {
     props: {
       randomGenerativeToken: data.randomGenerativeToken,
       generativeTokens: data.generativeTokens,
-      offers: data.offers
+      listings: data.listings
     },
   }
 }

@@ -3,7 +3,7 @@ import layout from "../../styles/Layout.module.scss"
 import cs from "classnames"
 import Link from 'next/link'
 import { User } from "../../types/entities/User"
-import { getUserName, getUserProfileLink, isAdmin, isModerator, isUserVerified, userAliases } from "../../utils/user"
+import { getUserName, getUserProfileLink, isPlatformOwned, isUserVerified, userAliases } from "../../utils/user"
 import { Avatar } from "./Avatar"
 
 
@@ -34,11 +34,11 @@ export function UserBadge({
         <a className={cs(style.container, style[`side-${avatarSide}`], className)}>
           <Avatar 
             uri={userAlias.avatarUri}
-            className={cs(style.avatar, style[`avatar-${size}`], { [style.avatar_mod]: isAdmin(userAlias) })}
+            className={cs(style.avatar, style[`avatar-${size}`], { [style.avatar_mod]: isPlatformOwned(userAlias) })}
           />
           <span className={cs(style.user_name)}>
             {prependText && <span className={cs(style.prepend)}>{prependText}</span>}
-            <span className={cs({ [style.moderator]: isAdmin(userAlias) })}>{getUserName(userAlias, 15)}</span>
+            <span className={cs({ [style.moderator]: isPlatformOwned(userAlias) })}>{getUserName(userAlias, 15)}</span>
             {verified && <i aria-hidden className={cs("fas", "fa-badge-check", style.verified)}/>}
           </span>
         </a>
@@ -47,11 +47,11 @@ export function UserBadge({
       <div className={cs(style.container, style[`side-${avatarSide}`], className)}>
         <Avatar 
           uri={userAlias.avatarUri}
-          className={cs(style.avatar, style[`avatar-${size}`], { [style.avatar_mod]: isAdmin(userAlias) })}
+          className={cs(style.avatar, style[`avatar-${size}`], { [style.avatar_mod]: isPlatformOwned(userAlias) })}
         />
         <span className={cs(style.user_name)}>
           {prependText && <span className={cs(style.prepend)}>{prependText}</span>}
-          <span className={cs({ [style.moderator]: isAdmin(userAlias) })}>{getUserName(userAlias, 15)}</span>
+          <span className={cs({ [style.moderator]: isPlatformOwned(userAlias) })}>{getUserName(userAlias, 15)}</span>
           {verified && <i aria-hidden className={cs("fas", "fa-badge-check", style.verified)}/>}
         </span>
       </div>

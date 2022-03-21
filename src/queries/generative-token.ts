@@ -1,6 +1,10 @@
 import { gql } from "@apollo/client"
+import { Frag_GenAuthor, Frag_GenPricing } from "./fragments/generative-token"
 
 export const Qu_genToken = gql`
+  ${Frag_GenAuthor}
+  ${Frag_GenPricing}
+
   query Query($id: Float, $slug: String) {
     generativeToken(id: $id, slug: $slug) {
       id
@@ -10,7 +14,6 @@ export const Qu_genToken = gql`
       tags
       metadata
       metadataUri
-      price
       supply
       originalSupply
       balance
@@ -18,12 +21,8 @@ export const Qu_genToken = gql`
       royalties
       lockEnd
       createdAt
-      author {
-        id
-        flag
-        name
-        avatarUri
-      }
+      ...Pricing
+      ...Author
     }
   }
 `

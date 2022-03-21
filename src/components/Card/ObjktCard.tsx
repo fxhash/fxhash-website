@@ -62,9 +62,9 @@ export function ObjktCard({
           <div className={cs(style.bottom)}>
             <div className={cs(style.bottom_left)}>
               <div className={cs(style.price)}>
-                {objkt.offer && (
+                {objkt.activeListing && (
                   <DisplayTezos
-                    mutez={objkt.offer.price!}
+                    mutez={objkt.activeListing.price!}
                     formatBig={false}
                   />
                 )}

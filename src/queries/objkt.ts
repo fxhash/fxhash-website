@@ -1,4 +1,5 @@
 import { gql } from "@apollo/client"
+import { Frag_GenAuthor } from "./fragments/generative-token"
 
 export const Qu_objkt = gql`
   query Query($id: Float, $slug: String) {
@@ -72,6 +73,7 @@ export const Qu_objkt = gql`
 `
 
 export const Qu_objktsFeed = gql`
+  ${Frag_GenAuthor}
   query Query($filters: ObjktFilter, $take: Int) {
     objkts(filters: $filters, take: $take) {
       id
@@ -89,12 +91,7 @@ export const Qu_objktsFeed = gql`
         name
         slug
         metadata
-        author {
-          id
-          flag
-          name
-          avatarUri
-        }
+        ...Author
       }
       metadata
       features
@@ -104,7 +101,7 @@ export const Qu_objktsFeed = gql`
       generationHash
       createdAt
       assignedAt
-      offer {
+      activeListing {
         id
         price
       }

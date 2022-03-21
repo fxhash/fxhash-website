@@ -58,7 +58,8 @@ export function UserProvider({ children }: PropsWithChildren<{}>) {
         // user is connected, we can update context and request gql api for user data
         const nCtx = { ...ctx }
         nCtx.user = {
-          id: pkh
+          id: pkh,
+          authorizations: [],
         }
         setContext(nCtx)
         getUser({
@@ -104,7 +105,8 @@ export function UserProvider({ children }: PropsWithChildren<{}>) {
     const pkh = await manager.connectFromStorage()
     if (pkh) {
       initCtx.user = {
-        id: pkh
+        id: pkh,
+        authorizations: [],
       }
       getUser({
         variables: {

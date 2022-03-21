@@ -6,7 +6,10 @@ export const Qu_user = gql`
       id
       name
       metadata
-      role
+      authorizations
+      collaborationContracts {
+        id
+      }
       flag
       description
       avatarUri

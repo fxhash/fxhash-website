@@ -1,5 +1,5 @@
 import { gql, useQuery } from '@apollo/client'
-import { GenerativeToken } from '../../types/entities/GenerativeToken'
+import { GenerativeToken, GenTokFlag } from '../../types/entities/GenerativeToken'
 import { CardsContainer } from '../../components/Card/CardsContainer'
 import { GenerativeTokenCard } from '../../components/Card/GenerativeTokenCard'
 import { LoaderBlock } from '../../components/Layout/LoaderBlock'
@@ -10,18 +10,21 @@ import { searchIndexGenerative } from '../../services/Algolia'
 import { AlgoliaSearch } from '../../components/Search/AlgoliaSearch'
 import { CardsLoading } from '../../components/Card/CardsLoading'
 import { SettingsContext } from '../../context/Theme'
+import { Frag_GenAuthor, Frag_GenPricing } from '../../queries/fragments/generative-token'
 
 
-const ITEMS_PER_PAGE = 10
+const ITEMS_PER_PAGE = 20
 
 const Qu_genTokens = gql`
-  query Query ($skip: Int, $take: Int) {
-    lockedGenerativeTokens(skip: $skip, take: $take) {
+  ${Frag_GenAuthor}
+  ${Frag_GenPricing}
+  query Query ($skip: Int, $take: Int, $sort: GenerativeSortInput, $filters: GenerativeTokenFilter) {
+    generativeTokens(skip: $skip, take: $take, sort: $sort, filters: $filters) {
       id
       name
       slug
       metadata
-      price
+      ...Pricing
       supply
       originalSupply
       balance
@@ -29,12 +32,7 @@ const Qu_genTokens = gql`
       lockEnd
       royalties
       createdAt
-      author {
-        id
-        name
-        avatarUri
-        flag
-      }
+      ...Author
     }
   }
 `
@@ -53,17 +51,24 @@ export const ExploreLockedTokens = ({}: Props) => {
     notifyOnNetworkStatusChange: true,
     variables: {
       skip: 0,
-      take: ITEMS_PER_PAGE
+      take: ITEMS_PER_PAGE,
+      filters: {
+        locked_eq: true,
+        flag_in: [
+          GenTokFlag.CLEAN,
+          GenTokFlag.NONE,
+        ]
+      }
     }
   })
 
   useEffect(() => {
     if (!loading) {
-      if (currentLength.current === data.lockedGenerativeTokens.length) {
+      if (currentLength.current === data.generativeTokens.length) {
         ended.current = true
       }
       else {
-        currentLength.current = data.lockedGenerativeTokens.length
+        currentLength.current = data.generativeTokens.length
       }
     }
   }, [data, loading])
@@ -72,14 +77,14 @@ export const ExploreLockedTokens = ({}: Props) => {
     if (!ended.current) {
       fetchMore({
         variables: {
-          skip: data.lockedGenerativeTokens.length,
+          skip: data.generativeTokens.length,
           take: ITEMS_PER_PAGE
         }
       })
     }
   }
 
-  const generativeTokens: GenerativeToken[] = data?.lockedGenerativeTokens
+  const generativeTokens: GenerativeToken[] = data?.generativeTokens
 
   return (
     <>
