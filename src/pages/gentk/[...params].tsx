@@ -106,6 +106,11 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
                 size="regular"
               />
               <Spacing size="x-large"/>
+              {objkt.duplicate && (
+                <strong className={cs(colors.error)}>
+                  [WARNING: DUPLICATE]
+                </strong>
+              )}
               <h3>{ objkt.name }{ objkt.assigned === false && ` - ${objkt.issuer.name}`}</h3>
             </div>
 

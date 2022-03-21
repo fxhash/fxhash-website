@@ -32,6 +32,7 @@ export const Qu_objkt = gql`
       features
       rarity
       assigned
+      duplicate
       iteration
       generationHash
       createdAt
