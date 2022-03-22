@@ -14,19 +14,22 @@ interface Props {
 /**
  * This component should:
  *  - if user is owner:
- *    - has offer ? cancel offer
- *    - doesn't have offer ? place offer
+ *    - has activeListing ? cancel activeListing
+ *    - doesn't have activeListing ? place activeListing
  */
 export function OfferControl({ objkt }: Props) {
   const userCtx = useContext(UserContext)
   const user = userCtx.user!
-  const owner: User = (objkt.offer ? objkt.offer.issuer : objkt.owner)!
+  const owner: User = objkt.owner!
 
   return (
     <>
       {owner.id === user.id ? (
-        objkt.offer ? (
-          <CancelOffer offer={objkt.offer} />
+        objkt.activeListing ? (
+          <CancelOffer
+            listing={objkt.activeListing}
+            objkt={objkt}
+          />
         ):(
           <PlaceOffer objkt={objkt} />
         )

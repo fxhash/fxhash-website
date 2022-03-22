@@ -6,6 +6,7 @@ import { User } from "./User"
 
 export interface Objkt {
   id: number
+  version: 0|1
   issuer: GenerativeToken
   owner?: User|null
   assigned?: boolean

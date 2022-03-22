@@ -8,22 +8,26 @@ import { useContractCall } from "../../utils/hookts"
 import { UserContext } from "../UserProvider"
 import { CancelOfferCall, PlaceOfferCall } from "../../types/ContractCalls"
 import { ContractFeedback } from "../../components/Feedback/ContractFeedback"
-import { Offer } from "../../types/entities/Offer"
+import { Listing } from "../../types/entities/Listing"
 import { displayMutez } from "../../utils/units"
+import { useContractOperation } from "../../hooks/useContractOperation"
+import { ListingCancelOperation, TListingCancelOperationParams } from "../../services/contract-operations/ListingCancel"
 
 interface Props {
-  offer: Offer
+  listing: Listing
+  objkt: Objkt
 }
 
-export function CancelOffer({ offer }: Props) {
+export function CancelOffer({ listing, objkt }: Props) {
   const userCtx = useContext(UserContext)
 
   const { state, loading: contractLoading, error: contractError, success, call, clear } = 
-    useContractCall<CancelOfferCall>(userCtx.walletManager!.cancelOffer)
+    useContractOperation<TListingCancelOperationParams>(ListingCancelOperation)
 
   const callContract = () => {
     call({
-      offerId: offer.id
+      listing: listing,
+      objkt: objkt,
     })
   }
 
@@ -34,7 +38,7 @@ export function CancelOffer({ offer }: Props) {
         loading={contractLoading}
         success={success}
         error={contractError}
-        successMessage="Your offer has been cancelled"
+        successMessage="Your listing has been cancelled"
       />
 
       <Button
@@ -42,7 +46,7 @@ export function CancelOffer({ offer }: Props) {
         color="primary"
         onClick={callContract}
       >
-        cancel trade ({displayMutez(offer.price)} tez)
+        cancel listing ({displayMutez(listing.price)} tez)
       </Button>
     </>
   )

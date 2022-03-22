@@ -113,7 +113,10 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
 
             <div className={cs(style.buttons)}>
               {objkt.activeListing && (
-                <Collect offer={objkt.activeListing} objkt={objkt} />
+                <Collect 
+                  listing={objkt.activeListing}
+                  objkt={objkt}
+                />
               )}
               {/* @ts-ignore */}
               <ClientOnlyEmpty style={{ width: "100%" }}>

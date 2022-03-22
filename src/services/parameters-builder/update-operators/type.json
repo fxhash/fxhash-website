@@ -1,0 +1,62 @@
+{
+  "prim": "list",
+  "args": [
+    {
+      "prim": "or",
+      "args": [
+        {
+          "prim": "pair",
+          "args": [
+            {
+              "prim": "address",
+              "annots": [
+                "%owner"
+              ]
+            },
+            {
+              "prim": "address",
+              "annots": [
+                "%operator"
+              ]
+            },
+            {
+              "prim": "nat",
+              "annots": [
+                "%token_id"
+              ]
+            }
+          ],
+          "annots": [
+            "%add_operator"
+          ]
+        },
+        {
+          "prim": "pair",
+          "args": [
+            {
+              "prim": "address",
+              "annots": [
+                "%owner"
+              ]
+            },
+            {
+              "prim": "address",
+              "annots": [
+                "%operator"
+              ]
+            },
+            {
+              "prim": "nat",
+              "annots": [
+                "%token_id"
+              ]
+            }
+          ],
+          "annots": [
+            "%remove_operator"
+          ]
+        }
+      ]
+    }
+  ]
+}

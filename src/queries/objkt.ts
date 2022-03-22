@@ -6,6 +6,7 @@ export const Qu_objkt = gql`
   query Query($id: Float, $slug: String) {
     objkt(id: $id, slug: $slug) {
       id
+      version
       royalties
       assigned
       owner {
@@ -76,6 +77,7 @@ export const Qu_objktsFeed = gql`
   query Query($filters: ObjktFilter, $take: Int) {
     objkts(filters: $filters, take: $take) {
       id
+      version
       royalties
       owner {
         id

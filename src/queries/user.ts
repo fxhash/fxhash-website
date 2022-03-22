@@ -48,6 +48,7 @@ export const Qu_userObjkts = gql`
       id
       objkts(take: $take, skip: $skip, sort: $sort, filters: $filters) {
         id
+        version
         assigned
         rarity
         iteration
@@ -104,6 +105,7 @@ export const Qu_userListings = gql`
         royalties
         objkt {
           id
+          version
           name
           metadata
           owner {

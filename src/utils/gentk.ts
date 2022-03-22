@@ -1,3 +1,4 @@
+import { FxhashContract } from "../types/Contracts"
 import { DeepPartial } from "../types/DeepPartial"
 import { GenerativeToken } from "../types/entities/GenerativeToken"
 import { Objkt } from "../types/entities/Objkt"
@@ -27,7 +28,7 @@ export const fakeGentk: DeepPartial<Objkt> = {
     decimals: 0
   },
   iteration: 37,
-  offer: null,
+  activeListing: null,
   issuer: {
     author: {
       id: "tz1PADW67gHdeXY8mxmM13vn7V7oXvW8MgPr",
@@ -37,4 +38,13 @@ export const fakeGentk: DeepPartial<Objkt> = {
   },
   rarity: null,
   duplicate: false
+}
+
+export function getGentkFA2Contract(gentk: Objkt): FxhashContract {
+  if (gentk.version === 0) {
+    return FxhashContract.GENTK_V1
+  }
+  else {
+    return FxhashContract.GENTK_V2
+  }
 }

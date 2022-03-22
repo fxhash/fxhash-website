@@ -30,6 +30,7 @@ const Qu_listings = gql`
       price
       objkt {
         id
+        version
         name
         slug
         metadata

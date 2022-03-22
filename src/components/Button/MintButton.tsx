@@ -14,6 +14,8 @@ import { ContractFeedback } from "../Feedback/ContractFeedback"
 import { useContractCall } from "../../utils/hookts"
 import { MintCall } from "../../types/ContractCalls"
 import { DisplayTezos } from "../Display/DisplayTezos"
+import { useContractOperation } from "../../hooks/useContractOperation"
+import { MintOperation, TMintOperationParams } from "../../services/contract-operations/Mint"
 
 interface Props {
   token: GenerativeToken
@@ -40,34 +42,23 @@ export function MintButton({
   }, [token, userContext])
 
   // hook to interact with the contract
-  const { state, loading, success, call, error, transactionHash } = 
-    useContractCall<MintCall>(userContext.walletManager?.mintToken)
+  const { state, loading, success, call, error, opHash } = 
+    useContractOperation<TMintOperationParams>(MintOperation)
 
   const mint = () => {
     call({
-      issuer_id: token.id,
+      token: token,
       price: token.price
     })
-  }
-
-  const buttonClick = async () => {
-    // if user is not connected, we request wallet sync
-    if (!userContext.user) {
-      await userContext.connect()
-      mint()
-    }
-    else {
-      mint()
-    }
   }
 
   // whenever there is a transaction hash, we can tell the mint was
   // successful
   useEffect(() => {
-    if (transactionHash) {
-      onReveal(transactionHash)
+    if (opHash) {
+      onReveal(opHash)
     }
-  }, [transactionHash])
+  }, [opHash])
 
   return (
     <div className={cs(style.root)}>
@@ -92,9 +83,9 @@ export function MintButton({
         </>
       )}
 
-      {transactionHash && (
+      {opHash && (
         <>
-          <Link href={`/reveal/${token.id}/${transactionHash}`} passHref>
+          <Link href={`/reveal/${token.id}/${opHash}`} passHref>
             <Button
               isLink
               color="secondary"
@@ -130,7 +121,7 @@ export function MintButton({
             type="button"
             color="secondary"
             disabled={!isEnabled || isLocked}
-            onClick={buttonClick}
+            onClick={mint}
             state={loading ? "loading" : "default"}
             size="regular"
           >

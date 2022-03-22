@@ -20,6 +20,7 @@ const Qu_listings = gql`
       id
       activeListedObjkts(filters: $filters, sort: $sort, skip: $skip, take: $take) {
         id
+        version
         name
         slug
         duplicate
