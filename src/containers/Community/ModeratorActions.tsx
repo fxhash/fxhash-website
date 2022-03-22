@@ -3,13 +3,14 @@ import layout from "../../styles/Layout.module.scss"
 import cs from "classnames"
 import { useContext } from "react"
 import { GenerativeToken } from "../../types/entities/GenerativeToken"
-import { UserRole } from "../../types/entities/User"
+import { User } from "../../types/entities/User"
 import { UserContext } from "../UserProvider"
 import { Button } from "../../components/Button"
 import { Spacing } from "../../components/Layout/Spacing"
 import { useContractCall } from "../../utils/hookts"
 import { ModerateCall } from "../../types/ContractCalls"
 import { ContractFeedback } from "../../components/Feedback/ContractFeedback"
+import { isTokenModerator } from "../../utils/user"
 
 interface Props {
   token: GenerativeToken
@@ -30,7 +31,7 @@ export function ModeratorActions({
     })
   }
   
-  return user && user.role === UserRole.MODERATOR ? (
+  return user && isTokenModerator(user as User) ? (
     <>
       <Spacing size="x-small"/>
 

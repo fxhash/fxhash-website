@@ -8,6 +8,8 @@ import { useContractCall } from "../../utils/hookts"
 import { UserContext } from "../UserProvider"
 import { PlaceOfferCall } from "../../types/ContractCalls"
 import { ContractFeedback } from "../../components/Feedback/ContractFeedback"
+import { useContractOperation } from "../../hooks/useContractOperation"
+import { ListingOperation, TListingOperationParams } from "../../services/contract-operations/Listing"
 
 interface Props {
   objkt: Objkt
@@ -21,7 +23,7 @@ export function PlaceOffer({ objkt }: Props) {
   const [price, setPrice] = useState<string>("")
 
   const { state, loading: contractLoading, error: contractError, success, call, clear } = 
-    useContractCall<PlaceOfferCall>(userCtx.walletManager!.placeOffer)
+    useContractOperation<TListingOperationParams>(ListingOperation)
 
   const callContract = () => {
     const mutez = Math.floor(parseFloat(price) * 1000000)
@@ -30,11 +32,8 @@ export function PlaceOffer({ objkt }: Props) {
     }
     else {
       call({
-        ownerAddress: objkt.owner!.id,
-        tokenId: objkt.id,
+        token: objkt,
         price: mutez,
-        creatorAddress: objkt.issuer.author.id,
-        royalties: objkt.royalties
       })
     }
   }

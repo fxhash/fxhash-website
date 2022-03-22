@@ -2,7 +2,7 @@ import { gql, useQuery } from '@apollo/client'
 import cs from "classnames"
 import layout from "../styles/Layout.module.scss"
 import styleSearch from "../components/Input/SearchInput.module.scss"
-import { GenerativeToken, GenerativeTokenFilters } from '../types/entities/GenerativeToken'
+import { GenerativeToken, GenerativeTokenFilters, GenTokFlag } from '../types/entities/GenerativeToken'
 import { CardsContainer } from '../components/Card/CardsContainer'
 import { GenerativeTokenCard } from '../components/Card/GenerativeTokenCard'
 import { InfiniteScrollTrigger } from '../components/Utils/InfiniteScrollTrigger'
@@ -21,30 +21,28 @@ import { SearchHeader } from '../components/Search/SearchHeader'
 import { SearchInputControlled } from '../components/Input/SearchInputControlled'
 import { displayMutez } from '../utils/units'
 import { GenerativeFilters } from './Generative/GenerativeFilters'
+import { Frag_GenAuthor, Frag_GenPricing } from '../queries/fragments/generative-token'
 
 
-const ITEMS_PER_PAGE = 10
+const ITEMS_PER_PAGE = 20
 
 const Qu_genTokens = gql`
+  ${Frag_GenAuthor}
+  ${Frag_GenPricing}
   query Query ($skip: Int, $take: Int, $sort: GenerativeSortInput, $filters: GenerativeTokenFilter) {
     generativeTokens(skip: $skip, take: $take, sort: $sort, filters: $filters) {
       id
       name
       slug
       metadata
-      price
+      ...Pricing
       supply
       originalSupply
       balance
       enabled
       royalties
       createdAt
-      author {
-        id
-        name
-        avatarUri
-        flag
-      }
+      ...Author
     }
   }
 `
@@ -122,6 +120,16 @@ export const ExploreGenerativeTokens = ({}: Props) => {
   // filters
   const [filters, setFilters] = useState<GenerativeTokenFilters>({})
 
+  // we have some default filters on top of that
+  const filtersWithDefaults = useMemo<GenerativeTokenFilters>(() => ({
+    ...filters,
+    locked_eq: false,
+    flag_in: [
+      GenTokFlag.CLEAN,
+      GenTokFlag.NONE,
+    ]
+  }), [filters])
+
   // reference to an element at the top to scroll back
   const topMarkerRef = useRef<HTMLDivElement>(null)
   const settingsCtx = useContext(SettingsContext)
@@ -136,7 +144,7 @@ export const ExploreGenerativeTokens = ({}: Props) => {
       skip: 0,
       take: ITEMS_PER_PAGE,
       sort,
-      filters,
+      filters: filtersWithDefaults,
     }
   })
 
@@ -177,9 +185,9 @@ export const ExploreGenerativeTokens = ({}: Props) => {
       skip: 0,
       take: ITEMS_PER_PAGE,
       sort,
-      filters,
+      filters: filtersWithDefaults,
     })
-  }, [sort, filters])
+  }, [sort, filtersWithDefaults])
 
   const addFilter = (filter: string, value: any) => {
     setFilters({

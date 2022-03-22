@@ -2,7 +2,7 @@ import { User } from '../../../types/entities/User'
 import { UserProfileLayout } from "../../../containers/User/UserProfileLayout"
 import { getServerSidePropsUserById } from "../../../services/ServerSideProps/ServerSidePropsUser"
 import { ReactElement } from "react"
-import { UserOffers } from '../../../containers/User/UserOffers'
+import { UserListings } from '../../../containers/User/UserListings'
 
 
 interface Props {
@@ -11,7 +11,7 @@ interface Props {
 
 const UserPageSales = ({ user }: Props) => {
   return (
-    <UserOffers user={user}/>
+    <UserListings user={user}/>
   )
 }
 

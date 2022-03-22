@@ -19,13 +19,16 @@ import ClientOnly from "../../components/Utils/ClientOnly"
 import { UserGuard } from "../../components/Guards/UserGuard"
 import { ModeratorActions } from "../../containers/Community/ModeratorActions"
 import { CardsContainer } from "../../components/Card/CardsContainer"
+import { Frag_GenAuthor, Frag_GenPricing } from "../../queries/fragments/generative-token"
 
 const Chart = dynamic(() => import("../../components/Charts/Chart"))
 
 
 const Qu_reportedGenTokens = gql`
-  query Query ($skip: Int, $take: Int) {
-    reportedGenerativeTokens(skip: $skip, take: $take) {
+  ${Frag_GenAuthor}
+  ${Frag_GenPricing}
+  query Query ($skip: Int, $take: Int, $filters: GenerativeTokenFilter) {
+    generativeTokens(skip: $skip, take: $take, filters: $filters) {
       id
       flag
       reports {
@@ -35,17 +38,13 @@ const Qu_reportedGenTokens = gql`
       name
       slug
       metadata
-      price
       supply
       balance
       enabled
       royalties
       createdAt
-      author {
-        id
-        name
-        avatarUri
-      }
+      ...Pricing
+      ...Author
     }
   }
 `
@@ -148,12 +147,19 @@ export async function getStaticProps() {
     variables: {
       skip: 0,
       take: 50,
+      filters: {
+        flag_in: [
+          GenTokFlag.REPORTED,
+          GenTokFlag.AUTO_DETECT_COPY,
+          GenTokFlag.MALICIOUS,
+        ]
+      }
     }
   })
 
   return {
     props: {
-      tokens: data.reportedGenerativeTokens,
+      tokens: data.generativeTokens,
     },
     revalidate: 60
   }

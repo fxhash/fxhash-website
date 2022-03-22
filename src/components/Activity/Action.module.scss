@@ -1,10 +1,9 @@
 @import "../../styles/Variables.scss";
 
 .container {
+  height: 44px;
+  padding: 8px 10px;
   width: 100%;
-  border: 3px solid var(--color-border);
-  padding: 0 20px;
-  height: 80px;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -12,25 +11,82 @@
   word-break: break-word;
   position: relative;
   transition: border-color 0.2s;
+  font-size: var(--font-size-small);
+  border: 1px solid var(--color-gray-vvlight);
+
+  .content {
+    display: flex;
+    align-items: center;
+    flex-grow: 2;
+  }
+
+  .details {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-grow: 2;
+  }
+
+  .details_content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-grow: 2;
+  }
 
   @media (max-width: $breakpoint-sm) {
     height: auto;
     padding: 10px;
-    flex-direction: column;
-    text-align: center;
+  
+    .content {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .details_content {
+      flex-wrap: wrap;
+    }
+
+    .date {
+      margin-left: auto;
+    }
   }
 
   &.is_link:hover {
-    border: 3px solid var(--color-secondary);
+    background-color: var(--color-gray-vvlight);
   }
 }
 
+.icon {
+  width: 15px;
+  text-align: center;
+  margin-bottom: -2px;
+}
 
 .date {
   color: var(--color-gray);
   flex-shrink: 0;
   font-size: 0.7rem;
-  margin-left: auto;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-weight: normal;
+  z-index: 1;
+
+  i {
+    margin-left: 5px;
+    font-size: 14px;
+    margin-bottom: -2px;
+  }
+
+  &:hover {
+    color: var(--color-secondary);
+
+    i {
+      text-decoration: none;
+    }
+  }
 }
 
 .price {
@@ -44,10 +100,6 @@
   flex-shrink: 0;
   position: relative;
   z-index: 1;
-}
-
-.icon {
-  font-size: 40px;
 }
 
 .align {

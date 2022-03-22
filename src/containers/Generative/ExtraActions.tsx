@@ -12,9 +12,10 @@ import { GenerativeToken, GenTokFlag } from "../../types/entities/GenerativeToke
 import { ContractFeedback } from "../../components/Feedback/ContractFeedback"
 import { Select } from "../../components/Input/Select"
 import { Form } from "../../components/Form/Form"
-import { UserRole } from "../../types/entities/User"
 import { Field } from "../../components/Form/Field"
 import { Spacing } from "../../components/Layout/Spacing"
+import { isTokenModerator } from "../../utils/user"
+import { User } from "../../types/entities/User"
 
 
 function OpenButton() {
@@ -158,7 +159,7 @@ export function GenerativeExtraActions({
             <span>report token</span>
           </button>
 
-          {user && user.role === UserRole.MODERATOR && (
+          {user && isTokenModerator(user as User) && (
             <button
               className={cs(style.btn_action)}
               onClick={() => setModerateModal(true)}

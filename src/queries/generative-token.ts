@@ -1,6 +1,10 @@
 import { gql } from "@apollo/client"
+import { Frag_GenAuthor, Frag_GenPricing } from "./fragments/generative-token"
 
 export const Qu_genToken = gql`
+  ${Frag_GenAuthor}
+  ${Frag_GenPricing}
+
   query Query($id: Float, $slug: String) {
     generativeToken(id: $id, slug: $slug) {
       id
@@ -10,7 +14,6 @@ export const Qu_genToken = gql`
       tags
       metadata
       metadataUri
-      price
       supply
       originalSupply
       balance
@@ -18,17 +21,14 @@ export const Qu_genToken = gql`
       royalties
       lockEnd
       createdAt
-      author {
-        id
-        flag
-        name
-        avatarUri
-      }
+      ...Pricing
+      ...Author
     }
   }
 `
 
 export const Qu_genTokenMarketplace = gql`
+  ${Frag_GenAuthor}
   query Query($id: Float, $slug: String) {
     generativeToken(id: $id, slug: $slug) {
       id
@@ -38,18 +38,12 @@ export const Qu_genTokenMarketplace = gql`
       tags
       metadata
       metadataUri
-      price
       supply
       originalSupply
       balance
       enabled
       royalties
       lockEnd
-      author {
-        id
-        name
-        avatarUri
-      }
       marketStats {
         floor
         median
@@ -64,6 +58,7 @@ export const Qu_genTokenMarketplace = gql`
         secVolumeNb24
       }
       createdAt
+      ...Author
     }
   }
 `
@@ -74,6 +69,7 @@ export const Qu_genTokenIterations = gql`
       id
       objkts(take: $take, skip: $skip, sort: $sort, featureFilters: $featureFilters) {
         id
+        version
         owner {
           id
           name
@@ -82,7 +78,7 @@ export const Qu_genTokenIterations = gql`
         name
         metadata
         rarity
-        offer {
+        activeListing {
           price
         }
       }
@@ -104,6 +100,7 @@ export const Qu_genTokenObjkts = gql`
       id
       objkts(take: $take, skip: $skip) {
         id
+        version
         owner {
           id
           name

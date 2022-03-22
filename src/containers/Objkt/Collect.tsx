@@ -8,18 +8,20 @@ import { useContractCall } from "../../utils/hookts"
 import { UserContext } from "../UserProvider"
 import { CancelOfferCall, CollectCall, PlaceOfferCall } from "../../types/ContractCalls"
 import { ContractFeedback } from "../../components/Feedback/ContractFeedback"
-import { Offer } from "../../types/entities/Offer"
+import { Listing } from "../../types/entities/Listing"
 import { displayMutez } from "../../utils/units"
 import { useRouter } from "next/router"
 import { GenTokFlag } from "../../types/entities/GenerativeToken"
 import { Unlock } from "../../components/Utils/Unlock"
+import { useContractOperation } from "../../hooks/useContractOperation"
+import { ListingAcceptOperation, TListingAcceptOperationParams } from "../../services/contract-operations/ListingAccept"
 
 interface Props {
-  offer: Offer
+  listing: Listing
   objkt: Objkt
 }
 
-export function Collect({ offer, objkt }: Props) {
+export function Collect({ listing, objkt }: Props) {
   const userCtx = useContext(UserContext)
   const router = useRouter()
 
@@ -31,18 +33,13 @@ export function Collect({ offer, objkt }: Props) {
   ].includes(objkt.issuer.flag))
 
   const { state, loading: contractLoading, error: contractError, success, call, clear } = 
-    useContractCall<CollectCall>(userCtx.walletManager?.collect)
+    useContractOperation<TListingAcceptOperationParams>(ListingAcceptOperation)
 
   const callContract = () => {
-    if (!userCtx.user) {
-      router.push(`/sync-redirect?target=${encodeURIComponent(router.asPath)}`)
-    }
-    else {
-      call({
-        offerId: offer.id,
-        price: offer.price
-      })
-    }
+    call({
+      listing: listing,
+      objkt: objkt,
+    })
   }
 
   const isOwner = (objkt.owner?.id === userCtx.user?.id)
@@ -66,7 +63,7 @@ export function Collect({ offer, objkt }: Props) {
             onClick={callContract}
             disabled={locked}
           >
-            purchase token - {displayMutez(offer.price)} tez
+            purchase token - {displayMutez(listing.price)} tez
           </Button>
 
           {locked && (

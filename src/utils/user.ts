@@ -1,4 +1,4 @@
-import { ConnectedUser, User, UserAlias, UserFlag, UserItems, UserRole } from "../types/entities/User"
+import { ConnectedUser, User, UserAlias, UserAuthorization, UserFlag, UserItems } from "../types/entities/User"
 import { truncateMiddle } from "./strings"
 
 export function userHasName(user: ConnectedUser): boolean {
@@ -24,20 +24,25 @@ export function getUserName(user: User, truncateLength?: number): string {
     : (truncateLength ? truncateMiddle(user.id, truncateLength) : user.id)
 }
 
-
-const UserModeratorRoles = [ UserRole.MODERATOR, UserRole.ADMIN ]
 /**
- * Returns true if the user is a moderator / admin
+ * Returns true if the user has the rights to moderate the tokens
  */
-export function isModerator(user: User): boolean {
-  return user.role && UserModeratorRoles.includes(user.role)
+export function isTokenModerator(user: User): boolean {
+  return user.authorizations.includes(UserAuthorization.TOKEN_MODERATION)
 }
 
 /**
- * Returns true if the user is a moderator / admin
+ * Returns true if the user has the rights to moderate the users
  */
-export function isAdmin(user: User): boolean {
-  return user.role && user.role === UserRole.ADMIN
+ export function isUserModerator(user: User): boolean {
+  return user.authorizations.includes(UserAuthorization.USER_MODERATION)
+}
+
+/**
+ * Is the user owned by the platform - set through aliases
+ */
+export function isPlatformOwned(user: User): boolean {
+  return !!user.platformOwned
 }
 
 export interface TzProfile {
@@ -98,7 +103,7 @@ export const UserAliases: Record<string, Partial<User>> = {
     id: process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_MARKETPLACE!,
     name: "fxhash marketplace",
     description: "The official fxhash [beta] marketplace",
-    role: UserRole.ADMIN,
+    authorizations: Object.values(UserAuthorization),
     avatarUri: "ipfs://QmURUAU4YPa6Wwco3JSVrcN7WfCrFBZH7hY51BLrc87WjM"
   }
 }

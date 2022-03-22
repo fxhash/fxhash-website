@@ -1,8 +1,9 @@
 import { Objkt } from './Objkt'
 import { User } from './User'
 
-export interface Offer {
+export interface Listing {
   id: number
+  version: number
   issuer: User
 	issuerId: number
   objkt: Objkt
@@ -12,7 +13,7 @@ export interface Offer {
   updatedAt: Date
 }
 
-export interface OfferFilters {
+export interface ListingFilters {
   price_gte?: string
   price_lte?: string
   fullyMinted_eq?: boolean

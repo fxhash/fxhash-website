@@ -1,19 +1,13 @@
 import { Action } from "./Action"
 import { GenerativeToken } from "./GenerativeToken"
 import { Objkt } from "./Objkt"
-import { Offer } from "./Offer"
+import { Listing } from "./Listing"
 
 export interface UserItems {
   generativeTokens?: GenerativeToken[]
   objkts?: Objkt[]
-  offers?: Offer[]
+  listings?: Listing[]
   actions?: Action[]
-}
-
-export enum UserRole {
-  USER              = "USER",
-  MODERATOR         = "MODERATOR",
-  ADMIN             = "ADMIN",
 }
 
 export enum UserFlag {
@@ -22,6 +16,12 @@ export enum UserFlag {
   SUSPICIOUS    = "SUSPICIOUS",
   MALICIOUS     = "MALICIOUS",
   VERIFIED      = "VERIFIED",
+}
+
+export enum UserAuthorization {
+  TOKEN_MODERATION          = "TOKEN_MODERATION",
+  USER_MODERATION           = "USER_MODERATION",
+  GOVERNANCE_MODERATION     = "GOVERNANCE_MODERATION",
 }
 
 export const UserFlagValues: Record<UserFlag, number> = {
@@ -35,7 +35,7 @@ export const UserFlagValues: Record<UserFlag, number> = {
 export interface User {
   id: string
   name?: string
-  role: UserRole
+  authorizations: UserAuthorization[]
   flag: UserFlag
   metadata?: Record<string, any>
   metadataUri?: string
@@ -45,15 +45,18 @@ export interface User {
   actionsAsIssuer: Action[]
   actionsAsTarget: Action[]
   objkts: Objkt[]
-  offers: Offer[]
+  offers: Listing[]
   createdAt: Date
   updatedAt: Date
   // can be populated to merge the actions, however not returned by api
   actions?: Action[]
+  // is set by aliases to manually enforce platform accounts
+  platformOwned?: boolean
 }
 
 export interface ConnectedUser extends Partial<User> {
   id: string
+  authorizations: UserAuthorization[]
 }
 
 export interface UserAlias {

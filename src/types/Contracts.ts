@@ -15,8 +15,10 @@ export type ContractInteractionMethod<T> = (data: T, operationCallback?: Contrac
 
 export enum FxhashContract {
   ISSUER            = "ISSUER",
-  MARKETPLACE       = "MARKETPLACE",
-  OBJKT             = "OBJKT",
+  MARKETPLACE_V1    = "MARKETPLACE_V1",
+  MARKETPLACE_V2    = "MARKETPLACE_V2",
+  GENTK_V1          = "GENTK_V1",
+  GENTK_V2          = "GENTK_V2",
   REGISTER          = "REGISTER",
   MODERATION        = "MODERATION",
   USER_MODERATION   = "USER_MODERATION",
@@ -29,5 +31,15 @@ export type ContractCallHookReturn<T> = {
   error: boolean,
   transactionHash: string|null,
   call: (data: T) => void,
+  clear: () => void
+}
+
+export type TContractOperationHookReturn<Params> = {
+  state: ContractOperationStatus,
+  loading: boolean,
+  success: boolean,
+  error: boolean,
+  opHash: string|null,
+  call: (data: Params) => void,
   clear: () => void
 }

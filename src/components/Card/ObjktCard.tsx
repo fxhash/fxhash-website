@@ -40,7 +40,7 @@ export function ObjktCard({
         >
           <div>
             {objkt.duplicate && <div className={cs(styleObjkt.dup_flag)}>[WARNING: DUPLICATE]</div>}
-            <h5>{ objkt.name }{objkt.assigned === false && ` - ${objkt.issuer.name}`}</h5>
+            <h5>{ objkt.name }</h5>
             {showOwner && (
               <>
                 <Spacing size="2x-small" />
@@ -62,9 +62,9 @@ export function ObjktCard({
           <div className={cs(style.bottom)}>
             <div className={cs(style.bottom_left)}>
               <div className={cs(style.price)}>
-                {objkt.offer && (
+                {objkt.activeListing && (
                   <DisplayTezos
-                    mutez={objkt.offer.price!}
+                    mutez={objkt.activeListing.price!}
                     formatBig={false}
                   />
                 )}

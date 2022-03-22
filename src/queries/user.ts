@@ -1,4 +1,5 @@
 import { gql } from "@apollo/client"
+import { Frag_GenAuthor, Frag_GenPricing } from "./fragments/generative-token"
 
 export const Qu_user = gql`
   query Query($id: String, $name: String) {
@@ -6,7 +7,10 @@ export const Qu_user = gql`
       id
       name
       metadata
-      role
+      authorizations
+      collaborationContracts {
+        id
+      }
       flag
       description
       avatarUri
@@ -16,35 +20,35 @@ export const Qu_user = gql`
 `
 
 export const Qu_userGenTokens = gql`
+  ${Frag_GenAuthor}
+  ${Frag_GenPricing}
+
   query Query($id: String!, $take: Int, $skip: Int) {
     user(id: $id) {
       id
       generativeTokens(take: $take, skip: $skip) {
         id
-        price
         supply
         originalSupply
         balance
         name
         metadata
-        author {
-          id
-          name
-          flag
-          metadataUri
-          avatarUri
-        }
+        ...Author
+        ...Pricing
       }
     }
   }
 `
 
 export const Qu_userObjkts = gql`
+  ${Frag_GenAuthor}
+
   query Query($id: String!, $take: Int, $skip: Int, $sort: UserCollectionSortInput, $filters: ObjktFilter) {
     user(id: $id) {
       id
       objkts(take: $take, skip: $skip, sort: $sort, filters: $filters) {
         id
+        version
         assigned
         rarity
         iteration
@@ -57,17 +61,12 @@ export const Qu_userObjkts = gql`
         issuer {
           name
           flag
-          author {
-            id
-            name
-            flag
-            avatarUri
-          }
+          ...Author
         }
         name
         metadata
         createdAt
-        offer {
+        activeListing {
           id
           price
         }
@@ -94,16 +93,19 @@ export const Qu_userObjktsSubResults = gql`
   }
 `
 
-export const Qu_userOffers = gql`
+export const Qu_userListings = gql`
+  ${Frag_GenAuthor}
+
   query Query($id: String!, $take: Int, $skip: Int) {
     user(id: $id) {
       id
-      offers(take: $take, skip: $skip) {
+      listings(take: $take, skip: $skip) {
         id
         price
         royalties
         objkt {
           id
+          version
           name
           metadata
           owner {
@@ -112,17 +114,12 @@ export const Qu_userOffers = gql`
             flag
             avatarUri
           }
-          offer {
+          activeListing {
             price
           }
           issuer {
             flag
-            author {
-              id
-              name
-              flag
-              avatarUri
-            }
+            ...Author
           }
         }
       }
@@ -136,7 +133,9 @@ export const Qu_userActions = gql`
       id
       actions(take: $take, skip: $skip) {
         id
+        opHash
         type
+        numericValue
         metadata
         createdAt
         issuer {
@@ -158,6 +157,7 @@ export const Qu_userActions = gql`
         objkt {
           id
           name
+          iteration
         }
       }
     }

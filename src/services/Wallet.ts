@@ -17,22 +17,26 @@ import {
 } from '../types/ContractCalls'
 import { 
   ContractInteractionMethod,
+  ContractOperationCallback,
   ContractOperationStatus, 
   FxhashContract
 } from '../types/Contracts'
 import { shuffleArray } from '../utils/array'
 import { stringToByteString } from '../utils/convert'
 import { isOperationApplied } from './Blockchain'
+import { ContractOperation, TContractOperation } from './contract-operations/ContractOperation'
 
 
 // short
 const addresses: Record<FxhashContract, string> = {
   ISSUER: process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_ISSUER!,
-  MARKETPLACE: process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_MARKETPLACE!,
-  OBJKT: process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_OBJKT!,
+  GENTK_V1: process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_GENTK_V1!,
+  GENTK_V2: process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_GENTK_V2!,
   REGISTER: process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_USERREGISTER!,
   MODERATION: process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_TOK_MODERATION!,
   USER_MODERATION: process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_USER_MODERATION!,
+  MARKETPLACE_V1: process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_MARKETPLACE_V1!,
+  MARKETPLACE_V2: process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_MARKETPLACE_V2!,
 }
 
 // the different operations which can be performed by the wallet
@@ -63,8 +67,10 @@ export class WalletManager {
   tezosToolkit: TezosToolkit
   contracts: Record<FxhashContract, ContractAbstraction<Wallet>|null> = {
     ISSUER: null,
-    MARKETPLACE: null,
-    OBJKT: null,
+    MARKETPLACE_V1: null,
+    MARKETPLACE_V2: null,
+    GENTK_V1: null,
+    GENTK_V2: null,
     REGISTER: null,
     MODERATION: null,
     USER_MODERATION: null,
@@ -128,8 +134,10 @@ export class WalletManager {
     this.beaconWallet = null
     this.contracts = {
       ISSUER: null,
-      MARKETPLACE: null,
-      OBJKT: null,
+      MARKETPLACE_V1: null,
+      MARKETPLACE_V2: null,
+      GENTK_V1: null,
+      GENTK_V2: null,
       REGISTER: null,
       MODERATION: null,
       USER_MODERATION: null,
@@ -168,6 +176,61 @@ export class WalletManager {
     return err && (err.name === "HttpRequestFailed" || err.status === 500 || err.status === 408)
   }
 
+  /**
+   * Generic method to wrap Contract Interaction methods to add some general
+   * logic required for each contract call (refetch, RPC cycling, checking
+   * if operation is applied... etc)
+   */
+  async runContractOperation<Params>(
+    OperationClass: TContractOperation<Params>,
+    params: Params,
+    statusCallback: ContractOperationCallback,
+  ) {
+    // instanciate the class
+    const contractOperation = new OperationClass(this, params)
+
+    // we create a loop over the number of available nodes, representing retry
+    // operations on failure. (exits under certain criteria)
+    for (let i = 0; i < this.rpcNodes.length+2; i++) {
+      try {
+        // run the preparations
+        statusCallback?.(ContractOperationStatus.CALLING)
+        await contractOperation.prepare()
+  
+        // now run the contract call
+        const op = await contractOperation.call()
+  
+        // wait for the confirmation of the operation
+        statusCallback?.(ContractOperationStatus.WAITING_CONFIRMATION)
+        await isOperationApplied(op.opHash)
+  
+        // operation is injected, display a success message and exits loop
+        return statusCallback?.(ContractOperationStatus.INJECTED, {
+          hash: op.opHash,
+          operationType: EWalletOperations.UPDATE_PROFILE,
+          message: contractOperation.success(),
+        })
+      }
+      catch(err: any) {
+        console.log({ err })
+        
+        // if network error, and the nodes have not been all tried
+        if (this.canErrorBeCycled(err) && i < this.rpcNodes.length) {
+          this.cycleRpcNode()
+          // retry after RPCs were swapped
+          continue
+        }
+        else {
+          // we just fail, and exit the loop
+          return statusCallback?.(
+            ContractOperationStatus.ERROR,
+            err.description || err.message || null
+          )
+        }
+      }
+    }
+  }
+
   //---------------------
   //---CONTRACTS STUFF---
   //---------------------
@@ -181,6 +244,13 @@ export class WalletManager {
       this.contracts[contract] = await this.tezosToolkit.wallet.at(addresses[contract])
     }
     return this.contracts[contract]!
+  }
+
+  /**
+   * Simply gets a contract address from it's identifier
+   */
+  getContractAddress(contract: FxhashContract): string {
+    return addresses[contract]
   }
 
   /**
@@ -252,47 +322,6 @@ export class WalletManager {
       if (this.canErrorBeCycled(err) && currentTry < this.rpcNodes.length) {
         this.cycleRpcNode()
         await this.mintGenerative(tokenData, statusCallback, currentTry++)
-      }
-      else {
-        // any error
-        statusCallback && statusCallback(ContractOperationStatus.ERROR, err.description || err.message || null)
-      }
-    }
-  }
-
-  /**
-   * Mint a Token from generative token
-   */
-   mintToken: ContractInteractionMethod<MintCall> = async (tokenData, statusCallback, currentTry = 1) => {
-    try {
-      // get/create the contract interface
-      const issuerContract = await this.getContract(FxhashContract.ISSUER)
-  
-      // call the contract (open wallet)
-      // statusCallback && statusCallback(ContractOperationStatus.CALLING)
-      const opSend = await issuerContract.methods.mint(tokenData.issuer_id).send({
-        amount: tokenData.price,
-        mutez: true,
-        storageLimit: 450
-      })
-  
-      // wait for confirmation
-      statusCallback && statusCallback(ContractOperationStatus.WAITING_CONFIRMATION)
-      await isOperationApplied(opSend.opHash)
-  
-      // OK, injected
-      statusCallback && statusCallback(ContractOperationStatus.INJECTED, {
-        hash: opSend.opHash,
-        operationType: EWalletOperations.MINT_ITERATION,
-      })
-    }
-    catch(err: any) {
-      console.log({err})
-      
-      // if network error, and the nodes have not been all tried
-      if (this.canErrorBeCycled(err) && currentTry < this.rpcNodes.length) {
-        this.cycleRpcNode()
-        await this.mintToken(tokenData, statusCallback, currentTry++)
       }
       else {
         // any error
@@ -404,219 +433,6 @@ export class WalletManager {
       if (this.canErrorBeCycled(err) && currentTry < this.rpcNodes.length) {
         this.cycleRpcNode()
         await this.burnSupply(data, statusCallback, currentTry++)
-      }
-      else {
-        // any error
-        statusCallback && statusCallback(ContractOperationStatus.ERROR, err.description || err.message || null)
-      }
-    }
-  }
-
-  /**
-   * Place an offer on an Objkt
-   */
-  placeOffer: ContractInteractionMethod<PlaceOfferCall> = async (data, statusCallback, currentTry = 1) => {
-    try {
-      // the origination parameters
-      const updateOperatorsValue: MichelsonV1Expression = [{
-        "prim": "Left",
-        "args": [
-          {
-            "prim": "Pair",
-            "args": [
-              {
-                "string": data.ownerAddress
-              },
-              {
-                "prim": "Pair",
-                "args": [
-                  {
-                    "string": addresses.MARKETPLACE
-                  },
-                  {
-                    "int": ""+data.tokenId
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      }]
-
-      const listItemValue: MichelsonV1Expression = {
-        "prim": "Pair",
-        "args": [
-          {
-            "prim": "Pair",
-            "args": [
-              {
-                "string": data.creatorAddress
-              },
-              {
-                "int": ""+data.tokenId
-              }
-            ]
-          },
-          {
-            "prim": "Pair",
-            "args": [
-              {
-                "int": ""+data.price
-              },
-              {
-                "int": ""+data.royalties
-              }
-            ]
-          }
-        ]
-      }
-
-      // call the contract (open wallet)
-      statusCallback && statusCallback(ContractOperationStatus.CALLING)
-      // const opSend = await objktContract.methodsObject.update_operators().getSignature()
-      const batchOp = await this.tezosToolkit.wallet.batch() 
-        // .withContractCall(
-        //   objktContract.methodsObject.update_operators([
-        //     {
-        //       add_operator: {
-        //         owner: data.ownerAddress,
-        //         operator: addresses.MARKETPLACE,
-        //         token_id: data.tokenId
-        //       }
-        //     }
-        //   ])
-        // )
-        // .withContractCall(
-        //   marketContract.methodsObject.offer({
-        //     price: data.price,
-        //     objkt_id: data.tokenId,
-        //     creator: data.creatorAddress, 
-        //     royalties: data.royalties
-        //   })
-        // )
-        .with([
-          {
-            kind: OpKind.TRANSACTION,
-            to: addresses.OBJKT,
-            fee: 1000,
-            amount: 0,
-            parameter: {
-              entrypoint: "update_operators",
-              value: updateOperatorsValue
-            },
-            gasLimit: 8000,
-            storageLimit: 250,
-          },
-          {
-            kind: OpKind.TRANSACTION,
-            to: addresses.MARKETPLACE,
-            fee: 1500,
-            amount: 0,
-            parameter: {
-              entrypoint: "offer",
-              value: listItemValue,
-            },
-            gasLimit: 10000,
-            storageLimit: 250
-          }
-        ])
-        .send()
-  
-      // wait for confirmation
-      statusCallback && statusCallback(ContractOperationStatus.WAITING_CONFIRMATION)
-      await isOperationApplied(batchOp.opHash)
-  
-      // OK, injected
-      statusCallback && statusCallback(ContractOperationStatus.INJECTED, {
-        hash: batchOp.opHash,
-        operationType: EWalletOperations.LIST_TOKEN,
-      })
-    }
-    catch(err: any) {
-      console.log({err})
-      
-      // if network error, and the nodes have not been all tried
-      if (this.canErrorBeCycled(err) && currentTry < this.rpcNodes.length) {
-        this.cycleRpcNode()
-        await this.placeOffer(data, statusCallback, currentTry++)
-      }
-      else {
-        // any error
-        statusCallback && statusCallback(ContractOperationStatus.ERROR, err.description || err.message || null)
-      }
-    }
-  }
-
-  /**
-   * Cancel the offer on an objky
-   */
-   cancelOffer: ContractInteractionMethod<CancelOfferCall> = async (data, statusCallback, currentTry = 1) => {
-    try {
-      // get/create the contract interface
-      const marketContract = await this.getContract(FxhashContract.MARKETPLACE)
-  
-      // call the contract (open wallet)
-      statusCallback && statusCallback(ContractOperationStatus.CALLING)
-      const opSend = await marketContract.methodsObject.cancel_offer(data.offerId).send()
-  
-      // wait for confirmation
-      statusCallback && statusCallback(ContractOperationStatus.WAITING_CONFIRMATION)
-      await isOperationApplied(opSend.opHash)
-  
-      // OK, injected
-      statusCallback && statusCallback(ContractOperationStatus.INJECTED, {
-        hash: opSend.opHash,
-        operationType: EWalletOperations.CANCEL_LISTING,
-      })
-    }
-    catch(err: any) {
-      console.log({err})
-      
-      // if network error, and the nodes have not been all tried
-      if (this.canErrorBeCycled(err) && currentTry < this.rpcNodes.length) {
-        this.cycleRpcNode()
-        await this.cancelOffer(data, statusCallback, currentTry++)
-      }
-      else {
-        // any error
-        statusCallback && statusCallback(ContractOperationStatus.ERROR, err.description || err.message || null)
-      }
-    }
-  }
-
-  /**
-   * Cancel the offer on an objky
-   */
-  collect: ContractInteractionMethod<CollectCall> = async (data, statusCallback, currentTry = 1) => {
-    try {
-      // get/create the contract interface
-      const marketContract = await this.getContract(FxhashContract.MARKETPLACE)
-  
-      // call the contract (open wallet)
-      statusCallback && statusCallback(ContractOperationStatus.CALLING)
-      const opSend = await marketContract.methodsObject.collect(data.offerId).send({
-        mutez: true,
-        amount: data.price,
-        storageLimit: 150
-      })
-  
-      // wait for confirmation
-      statusCallback && statusCallback(ContractOperationStatus.WAITING_CONFIRMATION)
-      await isOperationApplied(opSend.opHash)
-  
-      // OK, injected
-      statusCallback && statusCallback(ContractOperationStatus.INJECTED, {
-        hash: opSend.opHash,
-        operationType: EWalletOperations.COLLECT,
-      })
-    }
-    catch(err: any) {
-      console.log({err})
-      
-      // if network error, and the nodes have not been all tried
-      if (this.canErrorBeCycled(err) && currentTry < this.rpcNodes.length) {
-        this.cycleRpcNode()
-        await this.collect(data, statusCallback, currentTry++)
       }
       else {
         // any error
