@@ -19,6 +19,8 @@ import { useContractCall, useTzProfileVerification } from "../utils/hookts"
 import { ProfileUpdateCallData } from "../types/ContractCalls"
 import { ContractFeedback } from "../components/Feedback/ContractFeedback"
 import { UserVerification } from "./User/UserVerification"
+import { useContractOperation } from "../hooks/useContractOperation"
+import { TUpdateProfileParams, UpdateProfileOperation } from "../services/contract-operations/UpdateProfile"
 
 
 const Schema = Yup.object().shape({
@@ -49,7 +51,7 @@ export function EditProfile() {
 
   // comment je voudrais l'utiliser ?
   const { state, loading: contractLoading, error: contractError, success, call, clear } = 
-    useContractCall<ProfileUpdateCallData>(userCtx.walletManager!.updateProfile)
+    useContractOperation<TUpdateProfileParams>(UpdateProfileOperation)
 
   useEffect(() => {
     if (safeData && userCtx.walletManager) {
