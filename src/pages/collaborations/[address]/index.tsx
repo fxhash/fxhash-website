@@ -15,6 +15,7 @@ import { Qu_collaboration } from "../../../queries/user"
 import { SectionTitle } from "../../../components/Layout/SectionTitle"
 import { UserBadge } from "../../../components/User/UserBadge"
 import { useMemo } from "react"
+import { CollaborationManager } from "../../../containers/Collaborations/CollaborationManager"
 
 
 interface Props {
@@ -54,7 +55,9 @@ const CollaborationIndex: NextPage<Props> = ({
         <main className={cs(layout['padding-big'])}>
           <ClientOnly>
             <UserGuard>
-              
+              <CollaborationManager
+                collaboration={collaboration}
+              />
             </UserGuard>
           </ClientOnly>
         </main>
