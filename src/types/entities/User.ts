@@ -24,6 +24,11 @@ export enum UserAuthorization {
   GOVERNANCE_MODERATION     = "GOVERNANCE_MODERATION",
 }
 
+export enum UserType {
+  REGULAR               = "REGULAR",
+  COLLAB_CONTRACT_V1    = "COLLAB_CONTRACT_V1"
+}
+
 export const UserFlagValues: Record<UserFlag, number> = {
   NONE          : 0,
   REVIEW        : 1,
@@ -35,6 +40,7 @@ export const UserFlagValues: Record<UserFlag, number> = {
 export interface User {
   id: string
   name?: string
+  type: UserType
   authorizations: UserAuthorization[]
   flag: UserFlag
   metadata?: Record<string, any>
@@ -52,11 +58,17 @@ export interface User {
   actions?: Action[]
   // is set by aliases to manually enforce platform accounts
   platformOwned?: boolean
+  // as a regular user, it can have collaboration contracts
+  collaborationContracts: Collaboration[]
 }
 
 export interface ConnectedUser extends Partial<User> {
   id: string
   authorizations: UserAuthorization[]
+}
+
+export interface Collaboration extends User {
+  collaborators: User[]
 }
 
 export interface UserAlias {

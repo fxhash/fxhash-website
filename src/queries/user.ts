@@ -163,3 +163,39 @@ export const Qu_userActions = gql`
     }
   }
 `
+
+export const Qu_userCollaborations = gql`
+  query Query($id: String!) {
+    user(id: $id) {
+      id
+      collaborationContracts {
+        id
+        name
+        createdAt
+        collaborators {
+          id
+          name
+          avatarUri
+          flag
+        }
+      }
+    }
+  }
+`
+
+export const Qu_collaboration = gql`
+  query Collaboration($id: String!) {
+    user(id: $id) {
+      id
+      name
+      type
+      createdAt
+      collaborators {
+        id
+        name
+        avatarUri
+        flag
+      }
+    }
+  }
+`
