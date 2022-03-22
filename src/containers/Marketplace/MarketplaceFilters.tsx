@@ -5,7 +5,7 @@ import { InputText } from "../../components/Input/InputText"
 import { useState } from "react"
 import { InputRadioButtons, RadioOption } from "../../components/Input/InputRadioButtons"
 import { Button } from "../../components/Button"
-import { OfferFilters } from "../../types/entities/Offer"
+import { ListingFilters } from "../../types/entities/Listing"
 
 
 const MintProgresOptions: RadioOption[] = [
@@ -39,8 +39,8 @@ const ArtistVerificationOptions: RadioOption[] = [
 ]
 
 interface Props {
-  filters: OfferFilters
-  setFilters: (filters: OfferFilters) => void
+  filters: ListingFilters
+  setFilters: (filters: ListingFilters) => void
 }
 export function MarketplaceFilters({
   filters,
