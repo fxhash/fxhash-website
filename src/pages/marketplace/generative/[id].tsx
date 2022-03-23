@@ -40,7 +40,7 @@ const tabs: TabDefinition[] = [
     name: "stats"
   },
   {
-    name: "recent trades"
+    name: "activity"
   }
 ]
 
