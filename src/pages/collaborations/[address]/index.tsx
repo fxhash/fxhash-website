@@ -52,15 +52,13 @@ const CollaborationIndex: NextPage<Props> = ({
 
         <Spacing size="6x-large"/>
 
-        <main className={cs(layout['padding-big'])}>
-          <ClientOnly>
-            <UserGuard>
-              <CollaborationManager
-                collaboration={collaboration}
-              />
-            </UserGuard>
-          </ClientOnly>
-        </main>
+        <ClientOnly>
+          <UserGuard>
+            <CollaborationManager
+              collaboration={collaboration}
+            />
+          </UserGuard>
+        </ClientOnly>
       </section>
     </>
   )

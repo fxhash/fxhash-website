@@ -3,7 +3,10 @@ import updateOperatorsType from "./update-operators/type.json"
 import listingType from "./listing/type.json"
 import listingCancelType from "./listing-cancel/type.json"
 import listingAcceptType from "./listing-accept/type.json"
+import mintIssuerType from "./mint-issuer/type.json"
+import pricingFixedType from "./pricing-fixed/type.json"
 import { Schema } from "@taquito/michelson-encoder"
+import { packData, packDataBytes, unpackDataBytes } from "@taquito/michel-codec"
 
 /**
  * An Enumeration of the different parameter builders available
@@ -13,6 +16,8 @@ export enum EBuildableParams {
   LISTING               = "LISTING",
   LISTING_CANCEL        = "LISTING_CANCEL",
   LISTING_ACCEPT        = "LISTING_ACCEPT",
+  MINT_ISSUER           = "MINT_ISSUER",
+  PRICING_FIXED         = "PRICING_FIXED",
 }
 
 // maps a builadable param type with the actual type in json
@@ -21,6 +26,8 @@ const buildableParamTypes: Record<EBuildableParams, MichelsonV1Expression> = {
   LISTING: listingType,
   LISTING_CANCEL: listingCancelType,
   LISTING_ACCEPT: listingAcceptType,
+  MINT_ISSUER: mintIssuerType,
+  PRICING_FIXED: pricingFixedType,
 }
 
 /**
@@ -33,4 +40,15 @@ const buildableParamTypes: Record<EBuildableParams, MichelsonV1Expression> = {
 export function buildParameters<T>(params: T, type: EBuildableParams) {
   const schema = new Schema(buildableParamTypes[type])
   return schema.Encode(params)
+}
+
+/**
+ * Given some packed bytes as input and a type of the bytes, decodes the bytes
+ * into a human-readable javascript object which corresponds to the type given
+ * as parameter
+ */
+export function unpackBytes<T = any>(bytes: string, type: EBuildableParams): T {
+  const unpacked = unpackDataBytes({ bytes })
+  const schema = new Schema(buildableParamTypes[type])
+  return schema.Execute(unpacked)
 }

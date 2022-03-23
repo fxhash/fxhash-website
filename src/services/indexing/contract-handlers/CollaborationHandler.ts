@@ -5,7 +5,7 @@ import { ContractIndexingHandler } from "./ContractHandler"
 
 type TApprovals = Record<string, boolean>
 
-interface CollaborationProposal {
+export interface CollaborationProposal {
   id: number
   createdAt: Date
   approvals: TApprovals
@@ -15,6 +15,7 @@ interface CollaborationProposal {
   }
   executed: boolean
   executedBy: string|null
+  executedAt: Date|null
   initiator: string
 }
 
@@ -88,7 +89,8 @@ export const CollaborationContractHandler: ContractIndexingHandler<
         },
         executed: false,
         initiator: values.initiator,
-        executedBy: null
+        executedBy: null,
+        executedAt: null,
       }
 
       return updated
@@ -127,6 +129,7 @@ export const CollaborationContractHandler: ContractIndexingHandler<
       const updated = cloneDeep(state) as CollaborationContractState
       updated.proposals[id].executed = true
       updated.proposals[id].executedBy = op.sender.address
+      updated.proposals[id].executedAt = new Date(op.timestamp)
       return updated
     },
   }
