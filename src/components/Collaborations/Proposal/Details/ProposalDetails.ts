@@ -1,9 +1,11 @@
 import { FunctionComponent } from "react"
 import { CollaborationProposal } from "../../../../services/indexing/contract-handlers/CollaborationHandler"
+import { Collaboration } from "../../../../types/entities/User"
 import { ProposalDetailsMintIssuerExpanded, ProposalDetailsMintIssuerHeader } from "./MintIssuer"
 
 export interface ProposalDetailsProps {
   proposal: CollaborationProposal
+  collaboration: Collaboration
 }
 
 export interface IProposalDetails {

@@ -1,18 +1,37 @@
 import cs from "classnames"
+import style from "./JsonViewer.module.scss"
 import dynamic from "next/dynamic"
-import { useState } from "react"
+import { useContext, useState } from "react"
+import { SettingsContext } from "../../context/Theme"
 import { useClientEffect } from "../../utils/hookts"
 
 let ReactJson: any
 
-export function JsonViewer({ json }: { json: object }) {
+interface IProps {
+  json: object
+  collapsed?: boolean|number
+}
+export function JsonViewer({ 
+  json,
+  collapsed = false,
+}: IProps) {
   const [ReactJson, setReactJson] = useState<any>(null)
+  const settings = useContext(SettingsContext)
 
   useClientEffect(() => {
     setReactJson(dynamic(() => import("react-json-view")))
   }, [])
 
   return (
-    ReactJson ? <ReactJson src={json} /> : null
+    ReactJson ? (
+      <div className={cs(style.root)}>
+        <ReactJson
+          src={json}
+          theme="threezerotwofour"
+          collapsed={collapsed}
+          name={null}
+        />
+      </div>
+    ): null
   )
 }

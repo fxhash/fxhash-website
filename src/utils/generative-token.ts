@@ -1,4 +1,6 @@
-import { GenerativeToken } from "../types/entities/GenerativeToken"
+import { TInputMintIssuer } from "../services/parameters-builder/mint-issuer/input"
+import { TInputPricingDetails } from "../services/parameters-builder/pricing/input"
+import { GenerativeToken, GenTokFlag } from "../types/entities/GenerativeToken"
 import { User } from "../types/entities/User"
 import { GenerativeTokenMetadata } from "../types/Metadata"
 
@@ -46,4 +48,49 @@ export const fakeGenerativeToken: Partial<GenerativeToken> = {
     name: "fxhash",
     avatarUri: "ipfs://QmURUAU4YPa6Wwco3JSVrcN7WfCrFBZH7hY51BLrc87WjM"
   } as User,
+}
+
+/**
+ * A function to turn call settings into a fake Generative Token, for the
+ * purpose of display
+ */
+export function generativeFromMintParams(
+  params: TInputMintIssuer<number, TInputPricingDetails<number>>,
+  metadata: GenerativeTokenMetadata,
+  metadataUri: string,
+  author: User,
+): GenerativeToken {
+  return {
+    id: 0,
+    author: author,
+    name: metadata.name,
+    flag: GenTokFlag.NONE,
+    metadata: metadata,
+    metadataUri: metadataUri,
+    tags: metadata.tags,
+    pricingFixed: params.pricing.pricing_id === 0 ? ({
+      price: params.pricing.details.price,
+      opensAt: params.pricing.details.opensAt 
+        ? new Date(params.pricing.details.opensAt) 
+        : undefined as any
+    }): undefined,
+    // todo
+    pricingDutchAuction: undefined,
+    // todo: remove
+    price: 0,
+    originalSupply: params.amount,
+    supply: params.amount,
+    balance: params.amount,
+    enabled: params.enabled,
+    royalties: params.royalties,
+    splitsPrimary: params.primary_split,
+    splitsSecondary: params.royalties_split,
+    // todo
+    reserves: params.reserves as any,
+    lockedSeconds: 0,
+    lockEnd: new Date(0),
+    objkts: [],
+    actions: [],
+    createdAt: new Date(),
+  }
 }

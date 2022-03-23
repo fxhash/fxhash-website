@@ -58,34 +58,38 @@ export function CollaborationManager({
         height="25vh"
       />
     ):(
-      <TabsContainer
-        tabDefinitions={tabs}
-        tabsLayout="fixed-size"
-      >
-        {({ tabIndex }) => (
-          <>
-            <Spacing size="3x-large"/>
+      <>
+        <TabsContainer
+          tabDefinitions={tabs}
+          tabsLayout="fixed-size"
+        >
+          {({ tabIndex }) => (
+            <>
+              <Spacing size="3x-large"/>
 
-            <main className={cs(layout['padding-big'])}>
-              {tabIndex === 0 ? (
-                <Proposals
-                  proposals={filetered.awaiting}
-                  collaborators={collaboration.collaborators}
-                />
-              ):tabIndex === 1 ? (
-                <Proposals
-                  proposals={filetered.executed}
-                  collaborators={collaboration.collaborators}
-                />
-              ):(
-                <div>
-                  more
-                </div>
-              )}
-            </main>
-          </>
-        )}
-      </TabsContainer>
+              <main className={cs(layout['padding-big'])}>
+                {tabIndex === 0 ? (
+                  <Proposals
+                    proposals={filetered.awaiting}
+                    collaboration={collaboration}
+                  />
+                ):tabIndex === 1 ? (
+                  <Proposals
+                    proposals={filetered.executed}
+                    collaboration={collaboration}
+                  />
+                ):(
+                  <div>
+                    more
+                  </div>
+                )}
+              </main>
+            </>
+          )}
+        </TabsContainer>
+  
+        <Spacing size="6x-large"/>
+      </>
     )
   )
 }

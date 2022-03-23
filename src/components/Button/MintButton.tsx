@@ -19,7 +19,7 @@ import { MintOperation, TMintOperationParams } from "../../services/contract-ope
 
 interface Props {
   token: GenerativeToken
-  onReveal: (hash: string) => void
+  onReveal?: (hash: string) => void
 }
 export function MintButton({
   token,
@@ -56,7 +56,7 @@ export function MintButton({
   // successful
   useEffect(() => {
     if (opHash) {
-      onReveal(opHash)
+      onReveal?.(opHash)
     }
   }, [opHash])
 

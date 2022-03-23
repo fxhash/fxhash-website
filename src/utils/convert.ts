@@ -54,3 +54,7 @@ export function processRawTokenFeatures(rawFeatures: any): TokenFeature[] {
     }
   }
 }
+
+export function hexStringToString(str: string): string {
+	return str.length > 1 ? String.fromCharCode.apply(null, str.match(/.{2}/g)!.map(hx => parseInt(hx, 16))) : ""
+}

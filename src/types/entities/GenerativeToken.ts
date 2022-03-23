@@ -1,7 +1,10 @@
 import { GenerativeTokenMetadata } from "../Metadata"
 import { Action } from "./Action"
 import { Objkt } from "./Objkt"
+import { IPricingDutchAuction, IPricingFixed } from "./Pricing"
 import { Report } from "./Report"
+import { IReserve } from "./Reserve"
+import { ISplit } from "./Split"
 import { User } from "./User"
 
 export enum GenTokFlag {
@@ -61,17 +64,24 @@ export interface GenerativeToken {
   metadata: GenerativeTokenMetadata
   metadataUri?: string
   tags?: string[]
+  labels?: number[]
+  // todo:  remove
   price: number
+  pricingFixed?: IPricingFixed
+  pricingDutchAuction?: IPricingDutchAuction
   originalSupply: number
   supply: number
   balance: number
   enabled: boolean
   royalties: number
+  splitsPrimary: ISplit[]
+  splitsSecondary: ISplit[]
+  reserves: IReserve[]
   lockedSeconds: number
   lockEnd: Date
   objkts: Objkt[]
   actions: Action[]
-  objktsCount: number
+  objktsCount?: number
   createdAt: Date
   marketStats?: GenerativeTokenMarketStats
   marketStatsHistory?: GenerativeTokenMarketStatsHistory[]

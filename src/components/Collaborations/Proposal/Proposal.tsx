@@ -4,16 +4,16 @@ import { format } from "date-fns"
 import { CollaborationProposal } from "../../../services/indexing/contract-handlers/CollaborationHandler"
 import { useMemo, useState } from "react"
 import { ProposalDetails } from "./Details/ProposalDetails"
-import { User } from "../../../types/entities/User"
+import { Collaboration } from "../../../types/entities/User"
 import { UserBadge } from "../../User/UserBadge"
 
 interface Props {
   proposal: CollaborationProposal
-  collaborators: User[]
+  collaboration: Collaboration
 }
 export function Proposal({
   proposal,
-  collaborators,
+  collaboration,
 }: Props) {
   const [expanded, setExpanded] = useState<boolean>(false)
   console.log(proposal)
@@ -28,7 +28,10 @@ export function Proposal({
         className={cs(style.section, style.header)}
         onClick={() => setExpanded(!expanded)}
       >
-        <Details.header proposal={proposal}/>
+        <Details.header
+          proposal={proposal}
+          collaboration={collaboration}
+        />
         <div>
           <span>details </span>
           <i aria-hidden className={`fa-solid fa-caret-${expanded?"up":"down"}`}/>
@@ -37,7 +40,10 @@ export function Proposal({
 
       {expanded && (
         <section className={cs(style.section)}>
-          <Details.expanded proposal={proposal}/>
+          <Details.expanded
+            proposal={proposal}
+            collaboration={collaboration}
+          />
         </section>
       )}
   
@@ -45,7 +51,9 @@ export function Proposal({
         <div className={cs(style.line)}>
           <span>Initiated by</span>
           <UserBadge
-            user={collaborators.find(u => u.id === proposal.initiator)!}
+            user={collaboration.collaborators.find(
+              u => u.id === proposal.initiator
+            )!}
             size="small"
           />
           <span>
@@ -54,13 +62,14 @@ export function Proposal({
         </div>
       </section>
 
-
       {proposal.executed ? (
         <section className={cs(style.execution, style.section)}>
           <i aria-hidden className="fas fa-check-circle"/>
           <span>executed by</span>
           <UserBadge
-            user={collaborators.find(u => u.id === proposal.executedBy)!}
+            user={collaboration.collaborators.find(
+              u => u.id === proposal.executedBy
+            )!}
             size="small"
           />
           <span>
