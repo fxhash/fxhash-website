@@ -104,7 +104,7 @@ export function LiveFeed() {
         }
         // finally we start to load the next resource in the background
         if (toRevealNew.length > 0 && toRevealNew[0].metadata) {
-          const url = ipfsGatewayUrl(toRevealNew[0].metadata.artifactUri, "ipfsio")
+          const url = ipfsGatewayUrl(toRevealNew[0].metadata.artifactUri, "pinata-fxhash-safe")
           fetch(url)
         }
         setToReveal(toRevealNew)

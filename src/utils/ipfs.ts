@@ -3,15 +3,15 @@ export function getIpfsIoUrl(cid: string) {
 }
 
 export function getPinataUrlFromCid(cid: string): string {
-  return `https://gateway.pinata.cloud/ipfs/${cid}`
+  return `https://gateway-mainnet.dev.fxhash2.xyz/ipfs/${cid}`
 }
 
 export function getPinataFxhashGateway(cid: string): string {
-  return `https://gateway.fxhash.xyz/ipfs/${cid}`
+  return `https://gateway-mainnet.dev.fxhash2.xyz/ipfs/${cid}`
 }
 
 export function getPinataFxhashGatewaySafe(cid: string): string {
-  return `https://gateway.fxhash2.xyz/ipfs/${cid}`
+  return `https://gateway-mainnet.dev.fxhash2.xyz/ipfs/${cid}`
 }
 
 export function getIpfsSlash(cid: string): string {

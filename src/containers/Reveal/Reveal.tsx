@@ -32,10 +32,10 @@ export function Reveal({ hash, generativeUri, previeweUri, features }: Props) {
   const viewUrl = useMemo<string>(() => {
     // the old system doesn't include fxhash in the generative Uri, so we have to add it if needed
     if (generativeUri.includes("fxhash")) {
-      return ipfsGatewayUrl(generativeUri, "ipfsio")
+      return ipfsGatewayUrl(generativeUri, "pinata-fxhash-safe")
     }
     else {
-      return `${ipfsGatewayUrl(generativeUri, "ipfsio")}?fxhash=${hash}`
+      return `${ipfsGatewayUrl(generativeUri, "pinata-fxhash-safe")}?fxhash=${hash}`
     }
   }, [generativeUri])
 

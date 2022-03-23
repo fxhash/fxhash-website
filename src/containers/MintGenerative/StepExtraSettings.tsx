@@ -60,7 +60,7 @@ export const StepExtraSettings: StepComponent = ({ state, onNext }) => {
   // DERIVED FROM STATE
   // the url to display in the iframe
   const iframeUrl = useMemo<string>(() => {
-    return `${ipfsGatewayUrl(state.cidUrlParams, "ipfsio")}?fxhash=${hash}`
+    return `${ipfsGatewayUrl(state.cidUrlParams, "pinata-fxhash-safe")}?fxhash=${hash}`
   }, [hash])
 
   // FUNCTIONS
