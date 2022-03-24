@@ -15,6 +15,8 @@ import { InputSplits } from "../../components/Input/InputSplits"
 import { useContractOperation } from "../../hooks/useContractOperation"
 import { CreateCollabOperation, TCreateCollabParams } from "../../services/contract-operations/CreateCollab"
 import { ContractFeedback } from "../../components/Feedback/ContractFeedback"
+import { useValidate } from "../../hooks/useValidate"
+import { validateCollabSplits } from "../../utils/validation/collab-splits"
 
 interface Props {
   
@@ -30,15 +32,19 @@ export function CollaborationCreate({
     address: userCtx.user!.id,
     pct: 1000,
   }])
+  // deferrer validation
+  const { errors, validate } = useValidate(splits, validateCollabSplits)
 
-  const { call, state, error, success, loading } = useContractOperation<TCreateCollabParams>(CreateCollabOperation)
+  const { call, state, error, success, loading, clear } = useContractOperation<TCreateCollabParams>(CreateCollabOperation)
 
   const createCollab = () => {
-    call({
-      splits: splits,
-    })
+    clear()
+    if (validate()) {
+      call({
+        splits: splits,
+      })
+    }
   }
-
 
   return (
     <>
@@ -80,6 +86,14 @@ export function CollaborationCreate({
           <Spacing size="x-large"/>
 
           <div className={cs(layout.y_centered)}>
+            {errors && errors.length > 0 && (
+              <>
+                <strong className={cs(colors.error)}>
+                  {errors[0]}
+                </strong>
+                <Spacing size="x-small"/>
+              </>
+            )}
             <ContractFeedback
               state={state}
               success={success}
