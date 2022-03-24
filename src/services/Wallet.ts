@@ -1,6 +1,4 @@
 import { BeaconWallet } from '@taquito/beacon-wallet'
-import { TezosOperationType } from '@airgap/beacon-sdk'
-import { MichelsonV1Expression } from '@taquito/rpc'
 import { ContractAbstraction, MichelsonMap, OpKind, TezosToolkit, Wallet } from '@taquito/taquito'
 import { 
   BurnSupplyCallData,
@@ -21,7 +19,6 @@ import {
   ContractOperationStatus, 
   FxhashContract
 } from '../types/Contracts'
-import { shuffleArray } from '../utils/array'
 import { stringToByteString } from '../utils/convert'
 import { isOperationApplied } from './Blockchain'
 import { ContractOperation, TContractOperation } from './contract-operations/ContractOperation'
@@ -210,6 +207,8 @@ export class WalletManager {
         // operation is injected, display a success message and exits loop
         return statusCallback?.(ContractOperationStatus.INJECTED, {
           hash: op.opHash,
+          operation: op,
+          // todo: remove this
           operationType: EWalletOperations.UPDATE_PROFILE,
           message: contractOperation.success(),
         })

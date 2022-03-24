@@ -11,6 +11,7 @@ import { StepVerification } from "./StepVerification"
 import { StepInformations } from "./StepInformations"
 import { StepSuccess } from "./StepSuccess"
 import { StepExtraSettings } from "./StepExtraSettings"
+import { StepAuthoring } from "./StepAuthoring"
 
 
 /**
@@ -31,27 +32,33 @@ const STEPS: Step[] = [
     requiredProps: [ "minted" ],
   },
   {
+    path: "/authoring",
+    component: StepAuthoring,
+    title: "Authoring",
+    requiredProps: [],
+  },
+  {
     path: "/upload-ipfs",
     component: StepUploadIpfs,
-    title: "1. Upload to IPFS",
-    requiredProps: [],
+    title: "Upload to IPFS",
+    requiredProps: [ "collaboration" ],
   },
   {
     path: "/check-files",
     component: StepCheckFiles,
-    title: "2. Check files",
+    title: "Check files",
     requiredProps: [ "cidUrlParams", "authHash1" ],
   },
   {
     path: "/capture-settings",
     component: StepConfigureCapture,
-    title: "3. Configure capture",
+    title: "Configure capture",
     requiredProps: [ "previewHash" ],
   },
   {
     path: "/verifications",
     component: StepVerification,
-    title: "4. Verifications",
+    title: "Verifications",
     requiredProps: [ 
       "cidPreview", "authHash2", "captureSettings", "cidThumbnail"
     ],
@@ -59,13 +66,13 @@ const STEPS: Step[] = [
   {
     path: "/extra-settings",
     component: StepExtraSettings,
-    title: "5. Extra settings",
+    title: "Extra settings",
     requiredProps: [],
   },
   {
     path: "/informations",
     component: StepInformations,
-    title: "6. Mint",
+    title: "Mint",
     requiredProps: [ "settings" ],
   },
   {

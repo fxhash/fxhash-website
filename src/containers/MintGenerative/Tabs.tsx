@@ -19,7 +19,12 @@ export function MintGenerativeTabs({ steps }: Props) {
     const filter = steps.filter(step => !step.hideTabs)
     return [
       filter.map(step => step.path),
-      filter.map(step => ({ name: step.title! }))
+      filter.map((step, idx) => ({ 
+        name: step.title!,
+        props: {
+          idx: idx
+        }
+      }))
     ]
   }, [steps])
 
@@ -35,6 +40,16 @@ export function MintGenerativeTabs({ steps }: Props) {
         activeIdx={tabIndex}
         tabsLayout="full-width"
         tabsClassName={cs(style.tab)}
+        tabWrapperComponent={(props: any) => (
+          <div {...props} style={{
+            flexGrow: tabIndex === props.idx ? 2.5 : 1
+          }}>
+            <span>{props.idx+1}</span>
+            {tabIndex === props.idx && (
+              <span>. {props.children}</span>
+            )}
+          </div>
+        )}
       />
       <Spacing size="2x-large"/>
     </>

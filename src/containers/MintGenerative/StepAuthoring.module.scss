@@ -1,0 +1,34 @@
+.select {
+  width: 100%;
+}
+
+.multilist {
+  border: 3px solid var(--color-border-input);
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.multilist_item {
+  padding: 16px 12px !important;
+  margin-top: 0 !important;
+}
+
+.users {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.collab {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+
+  .address, .date {
+    font-size: 0.8em;
+    color: var(--color-gray);
+  }
+}

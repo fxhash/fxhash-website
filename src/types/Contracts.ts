@@ -1,3 +1,5 @@
+import type { WalletOperation } from "@taquito/taquito"
+
 // a value for the state of the transaction
 export enum ContractOperationStatus {
   NONE                    = "NONE",
@@ -41,6 +43,7 @@ export type TContractOperationHookReturn<Params> = {
   success: boolean,
   error: boolean,
   opHash: string|null,
+  operation: WalletOperation|null
   call: (data: Params) => void,
   clear: () => void
 }

@@ -9,36 +9,38 @@ interface MultiListLocalItemProps {
   itemProps: any
 }
 
-type MultiListItemProps = Record<string, any> & MultiListLocalItemProps
+export type MultiListItemProps = Record<string, any> & MultiListLocalItemProps
 
 export interface MultiListItem {
   value: any
   props: Record<string, any>
 }
 
-interface Props {
+interface Props<ItemType> {
   listItems: MultiListItem[]
-  selected: any[]
-  onChangeSelected: (selected: any[]) => void
+  selected: ItemType[]
+  onChangeSelected: (selected: ItemType[]) => void
   className?: string
   btnClassName?: string
+  multiple?: boolean
   children: FunctionComponent<MultiListItemProps>
 }
-export function InputMultiList({
+export function InputMultiList<ItemType = any>({
   listItems,
   selected,
+  multiple = true,
   onChangeSelected,
   className,
   btnClassName,
   children,
-}: Props) {
+}: Props<ItemType>) {
 
   const itemClicked = (item: MultiListItem) => {
     if (selected.includes(item.value)) {
       onChangeSelected(arrayRemove([...selected], item.value))
     }
     else {
-      onChangeSelected([ ...selected, item.value ])
+      onChangeSelected(multiple ? [ ...selected, item.value ] : [ item.value ])
     }
   }
 
@@ -47,6 +49,7 @@ export function InputMultiList({
       {listItems.map(item => (
         <button 
           key={item.value}
+          type="button"
           className={cs(style.item, { [style.selected]: selected.includes(item.value) }, btnClassName)}
           onClick={() => itemClicked(item)}
         >

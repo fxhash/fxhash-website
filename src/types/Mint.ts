@@ -1,3 +1,4 @@
+import { Collaboration } from "./entities/User"
 import { GenerativeTokenMetadata } from "./Metadata"
 
 export interface GenerativeTokenInformations {
@@ -32,6 +33,8 @@ export interface CaptureSettings {
 }
 
 export interface MintGenerativeData {
+  // if the project is authored as a collaboration
+  collaboration?: string|null
   // the ipfs uri pointing to the project with URL params
   cidUrlParams?: string
   // a hash to verify that the first matches
