@@ -88,8 +88,8 @@ export const InputCaptureSettings: FunctionComponent<Props> = ({
             min={0.1}
             max={300}
             step={0.1}
-            value={settings.delay}
-            onChange={val => update("delay", val)}
+            value={settings.delay/1000}
+            onChange={val => update("delay", val*1000)}
           />
         </>
       )}

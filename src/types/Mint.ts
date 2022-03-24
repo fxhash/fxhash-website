@@ -51,7 +51,7 @@ export interface MintGenerativeData {
   // general informations about the token
   informations?: GenerativeTokenInformations
   // minted successful
-  minted: boolean
+  minted?: boolean
 }
 
 export interface GenTokenSettings {

@@ -28,110 +28,78 @@ const STEPS: Step[] = [
     path: "/",
     component: StepHome,
     hideTabs: true,
-    validateIn: () => true,
-    clearDataDown: (data) => ({
-      minted: data.minted
-    })
+    requiredProps: [ "minted" ],
   },
   {
     path: "/upload-ipfs",
     component: StepUploadIpfs,
     title: "1. Upload to IPFS",
-    validateIn: () => true,
-    clearDataDown: (data) => ({
-      minted: data.minted
-    })
+    requiredProps: [],
   },
   {
     path: "/check-files",
     component: StepCheckFiles,
     title: "2. Check files",
-    validateIn: (data) => !!(data.cidUrlParams && data.authHash1),
-    clearDataDown: (data) => ({
-      cidUrlParams: data.cidUrlParams,
-      authHash1: data.authHash1,
-      minted: data.minted
-    })
+    requiredProps: [ "cidUrlParams", "authHash1" ],
   },
   {
     path: "/capture-settings",
     component: StepConfigureCapture,
     title: "3. Configure capture",
-    validateIn: (data) => !!(data.cidUrlParams && data.authHash1 && data.previewHash),
-    clearDataDown: (data) => ({
-      cidUrlParams: data.cidUrlParams,
-      authHash1: data.authHash1,
-      previewHash: data.previewHash,
-      minted: data.minted
-    })
+    requiredProps: [ "previewHash" ],
   },
   {
     path: "/verifications",
     component: StepVerification,
     title: "4. Verifications",
-    validateIn: (data) => 
-      !!(data.cidUrlParams && data.authHash1 && data.previewHash
-        && data.cidPreview && data.authHash2 && data.captureSettings && data.cidThumbnail),
-    clearDataDown: (data) => ({
-      cidUrlParams: data.cidUrlParams,
-      authHash1: data.authHash1,
-      previewHash: data.previewHash,
-      cidPreview: data.cidPreview,
-      authHash2: data.authHash2,
-      captureSettings: data.captureSettings,
-      cidThumbnail: data.cidThumbnail,
-      minted: data.minted
-    })
+    requiredProps: [ 
+      "cidPreview", "authHash2", "captureSettings", "cidThumbnail"
+    ],
   },
   {
     path: "/extra-settings",
     component: StepExtraSettings,
     title: "5. Extra settings",
-    validateIn: (data) => 
-      !!(data.cidUrlParams && data.authHash1 && data.previewHash
-        && data.cidPreview && data.authHash2 && data.captureSettings && data.cidThumbnail),
-    clearDataDown: (data) => ({
-      cidUrlParams: data.cidUrlParams,
-      authHash1: data.authHash1,
-      previewHash: data.previewHash,
-      cidPreview: data.cidPreview,
-      authHash2: data.authHash2,
-      captureSettings: data.captureSettings,
-      settings: data.settings,
-      cidThumbnail: data.cidThumbnail,
-      minted: data.minted
-    })
+    requiredProps: [],
   },
   {
     path: "/informations",
     component: StepInformations,
     title: "6. Mint",
-    validateIn: (data) => 
-      !!(data.cidUrlParams && data.authHash1 && data.previewHash
-        && data.cidPreview && data.authHash2 && data.captureSettings && data.cidThumbnail),
-    clearDataDown: (data) => ({
-      cidUrlParams: data.cidUrlParams,
-      authHash1: data.authHash1,
-      previewHash: data.previewHash,
-      cidPreview: data.cidPreview,
-      authHash2: data.authHash2,
-      captureSettings: data.captureSettings,
-      settings: data.settings,
-      cidThumbnail: data.cidThumbnail,
-      minted: data.minted
-    })
+    requiredProps: [ "settings" ],
   },
   {
     path: "/success",
     component: StepSuccess,
     hideTabs: true,
-    validateIn: (data) => 
-      !!(data.cidUrlParams && data.authHash1 && data.previewHash
-        && data.cidPreview && data.authHash2 && data.captureSettings
-        && data.cidThumbnail),
-    clearDataDown: (data) => data
+    requiredProps: [ "informations" ],
   }
 ]
+
+// validates if a list of properties are set in a given state
+function validateState(
+  state: MintGenerativeData,
+  props: (keyof MintGenerativeData)[],
+): boolean {
+  for (const prop of props) {
+    if (typeof state[prop] === "undefined") {
+      return false
+    }
+  }
+  return true
+}
+
+// creates a new state by only passing a list of properties from the previous
+function clearDataDown(
+  state: MintGenerativeData,
+  props: (keyof MintGenerativeData)[],
+): MintGenerativeData {
+  const nstate: MintGenerativeData = {}
+  for (const prop of props) {
+    nstate[prop] = state[prop] as any
+  }
+  return nstate
+}
 
 interface Props {
   anchor?: RefObject<HTMLElement>
@@ -172,10 +140,21 @@ export function MintGenerativeController({ anchor }: Props) {
       })
     }
 
-    const step = STEPS[stepIndex]
-    if (step.validateIn(state)) {
-      // clear the data down the state
-      setState(step.clearDataDown(state))
+    // we take the current step and all the steps before to build the list of 
+    // required properties, used to validate state & clear state down
+    const requiredProps = STEPS.slice(0, stepIndex+1)
+      .map(step => step.requiredProps)
+      .reduce((prev, props) => prev.concat(props), [])
+
+    // checks if the step has all the required props
+    if (validateState(state, requiredProps)) {
+      // clear the data down the state, keeping the props required up to the
+      // next step
+      const keepProps = STEPS.slice(0, stepIndex+2)
+        .map(step => step.requiredProps)
+        .reduce((prev, props) => prev.concat(props), [])
+
+      setState(clearDataDown(state, keepProps))
     }
     else {
       // move to the previous step

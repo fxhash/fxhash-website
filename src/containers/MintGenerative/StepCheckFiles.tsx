@@ -15,7 +15,9 @@ import { ArtworkFrame } from "../../components/Artwork/ArtworkFrame"
 
 
 export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
-  const [hash, setHash] = useState<string>(generateFxHash())
+  const [hash, setHash] = useState<string>(
+    state.previewHash ?? generateFxHash()
+  )
   const [check1, setCheck1] = useState<boolean>(false)
   const [check2, setCheck2] = useState<boolean>(false)
   const artworkIframeRef = useRef<ArtworkIframeRef>(null)
