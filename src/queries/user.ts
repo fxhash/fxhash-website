@@ -19,6 +19,17 @@ export const Qu_user = gql`
   }
 `
 
+export const Qu_userLight = gql`
+  query UserLight($id: String) {
+    user(id: $id) {
+      id
+      name
+      flag
+      avatarUri
+    }
+  }
+`
+
 export const Qu_userGenTokens = gql`
   ${Frag_GenAuthor}
   ${Frag_GenPricing}
@@ -196,6 +207,17 @@ export const Qu_collaboration = gql`
         avatarUri
         flag
       }
+    }
+  }
+`
+
+export const Qu_searchUser = gql`
+  query SearchUser($filters: UserFilter) {
+    users(filters: $filters, take: 50, sort: { relevance: "DESC" }) {
+      id
+      name
+      flag
+      avatarUri
     }
   }
 `

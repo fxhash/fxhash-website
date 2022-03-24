@@ -2,10 +2,14 @@ import style from "./InputReactiveSearch.module.scss"
 import cs from "classnames"
 import { FunctionComponent, useRef, useState } from "react"
 import useAsyncEffect from "use-async-effect"
+import { InputText } from "./InputText"
+import { Cover } from "../Utils/Cover"
+import { LoaderBlock } from "../Layout/LoaderBlock"
 
 
 
 interface Props<ObjectType> {
+  placeholder?: string
   value: string
   onChange: (val: string) => void
   // should perform a search given an input
@@ -35,9 +39,10 @@ interface PropsChildren<ObjectType> {
  *  - display the items in a scrollable area, with each item passed as a prop
  *    to the child of the component using the render props pattern
  */
-export function InputReactiveSearch<ObjectType>({
+export function InputReactiveSearch<ObjectType extends { id: any }>({
   value,
   onChange,
+  placeholder,
   searchFn,
   transformSearchResults,
   valueFromResult,
@@ -51,6 +56,10 @@ export function InputReactiveSearch<ObjectType>({
   const [loading, setLoading] = useState<boolean>(false)
   // the items, result of the search
   const [results, setResults] = useState<ObjectType[] | null>(null)
+  // can force-hide the results
+  const [hideResults, setHideResults] = useState<boolean>(false)
+  // the selected value on click
+  const [selectedValue, setSelectedValue] = useState<string>()
 
   // an async effect is triggered at each inut change
   useAsyncEffect(async (isMounted) => {
@@ -58,12 +67,20 @@ export function InputReactiveSearch<ObjectType>({
     if (timeout.current != null) {
       window.clearTimeout(timeout.current)
     }
+    // if there are less than 3 characters, we clear the results and return
+    if (value.length < 3 || value === selectedValue) {
+      setResults(null)
+      if (value.length < 3) {
+        setSelectedValue(undefined)
+      }
+      return
+    }
     // sets up the timeout to make call to get results
     timeout.current = window.setTimeout(async () => {
       // start the loading 
       if (isMounted()) {
         setLoading(true)
-        // todo: clear items ?
+        setSelectedValue(undefined)
       }
       // make the request to get the results
       const results = await searchFn(value)
@@ -72,15 +89,52 @@ export function InputReactiveSearch<ObjectType>({
       // finally update the items in the state
       if (isMounted()) {
         setLoading(false)
+        setHideResults(false)
         setResults(items)
       }
     }, debounceDuration)
   }, [value])
 
   return (
-    // with the items, map and use children to render
-    // <div #wrapper>
-    //   {children({ item })}
-    // </div>
+    <>
+      <div className={cs(style.root)}>
+        <InputText
+          value={value}
+          onChange={evt => onChange(evt.target.value)}
+          placeholder={placeholder}
+        />
+        {results && results.length > 0 && !hideResults && (
+          <>
+            <div className={cs(style.results_wrapper)}>
+              <div className={cs(style.results)}>
+                {results.map(result => (
+                  <button
+                    key={result.id}
+                    className={cs(style.result)}
+                    onClick={() => {
+                      const nval = valueFromResult(result)
+                      setSelectedValue(nval)
+                      onChange(nval)
+                      if (value === nval) {
+                        setHideResults(true)
+                      }
+                    }}
+                  >
+                    {children({
+                      item: result
+                    })}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <Cover
+              index={1}
+              opacity={0}
+              onClick={() => setHideResults(true)}
+            />
+          </>
+        )}
+      </div>
+    </>
   )
 }

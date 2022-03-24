@@ -22,6 +22,7 @@ export enum FxhashContract {
   REGISTER          = "REGISTER",
   MODERATION        = "MODERATION",
   USER_MODERATION   = "USER_MODERATION",
+  COLLAB_FACTORY    = "COLLAB_FACTORY",
 }
 
 export type ContractCallHookReturn<T> = {

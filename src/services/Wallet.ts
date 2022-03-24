@@ -37,6 +37,7 @@ const addresses: Record<FxhashContract, string> = {
   USER_MODERATION: process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_USER_MODERATION!,
   MARKETPLACE_V1: process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_MARKETPLACE_V1!,
   MARKETPLACE_V2: process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_MARKETPLACE_V2!,
+  COLLAB_FACTORY: process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_COLLAB_FACTORY!,
 }
 
 // the different operations which can be performed by the wallet
@@ -74,6 +75,7 @@ export class WalletManager {
     REGISTER: null,
     MODERATION: null,
     USER_MODERATION: null,
+    COLLAB_FACTORY: null,
   }
   rpcNodes: string[]
 
@@ -141,6 +143,7 @@ export class WalletManager {
       REGISTER: null,
       MODERATION: null,
       USER_MODERATION: null,
+      COLLAB_FACTORY: null,
     }
   }
 

@@ -8,6 +8,7 @@ import { UserGuard } from "../../components/Guards/UserGuard"
 import { TitleHyphen } from "../../components/Layout/TitleHyphen"
 import Head from "next/head"
 import { CollaborationsList } from "../../containers/Collaborations/CollaborationsList"
+import { CollaborationCreate } from "../../containers/Collaborations/CollaborationCreate"
 
 
 const CollaborationsIndex: NextPage = () => {
@@ -23,7 +24,11 @@ const CollaborationsIndex: NextPage = () => {
       <section>
         <SectionHeader>
           <TitleHyphen>your collaborations</TitleHyphen>
-          <div>button create</div>
+          <ClientOnly>
+            <UserGuard>
+              <CollaborationCreate/>
+            </UserGuard>
+          </ClientOnly>
         </SectionHeader>
 
         <Spacing size="6x-large"/>

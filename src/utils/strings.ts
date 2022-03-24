@@ -26,3 +26,10 @@ export function truncateEnd(str: string, maxLength: number, append: string = "..
 export function tagsFromString(str: string): string[] {
   return str.split(",").map(tag => tag.trim()).filter(tag => tag.length > 0)
 }
+
+/**
+ * Is a string a tezos address ?
+ */
+export function isTezosAddress(str: string): boolean {
+  return /^tz[1-3][a-zA-Z0-9]{33}$/.test(str)
+}

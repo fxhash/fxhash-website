@@ -41,8 +41,6 @@ export function CollaborationManager({
     CollaborationContractHandler
   )
 
-  console.log({ loading, data })
-
   const filetered = useMemo<IFilteredProposals>(() => {
     const arr = data ? Object.values(data.proposals) : []
     return {
