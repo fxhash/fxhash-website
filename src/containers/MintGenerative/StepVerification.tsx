@@ -17,7 +17,7 @@ export const StepVerification: StepComponent = ({
 }) => {
   return (
     <>
-      <p>Last occasion to check your project.</p>
+      <p>The preview image should match the Generative Artwork</p>
 
       <Spacing size="3x-large"/>
 

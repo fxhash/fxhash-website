@@ -5,6 +5,7 @@ export const Qu_user = gql`
   query Query($id: String, $name: String) {
     user(id: $id, name: $name) {
       id
+      type
       name
       metadata
       authorizations
@@ -182,6 +183,7 @@ export const Qu_userCollaborations = gql`
       collaborationContracts {
         id
         name
+        type
         createdAt
         collaborators {
           id

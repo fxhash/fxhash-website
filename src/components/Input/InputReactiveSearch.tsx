@@ -10,6 +10,8 @@ import { LoaderBlock } from "../Layout/LoaderBlock"
 
 interface Props<ObjectType> {
   placeholder?: string
+  className?: string
+  classNameResults?: string
   value: string
   onChange: (val: string) => void
   // should perform a search given an input
@@ -47,6 +49,8 @@ export function InputReactiveSearch<ObjectType extends { id: any }>({
   transformSearchResults,
   valueFromResult,
   debounceDuration = 250,
+  className,
+  classNameResults,
   children,
 }: Props<ObjectType>) {
   // keeps the last setTimeout in memory
@@ -97,16 +101,18 @@ export function InputReactiveSearch<ObjectType extends { id: any }>({
 
   return (
     <>
-      <div className={cs(style.root)}>
+      <div className={cs(style.root, className)}>
         <InputText
           value={value}
           onChange={evt => onChange(evt.target.value)}
           placeholder={placeholder}
+          className={style.input_search}
+          onFocus={() => hideResults && setHideResults(false)}
         />
         {results && results.length > 0 && !hideResults && (
           <>
             <div className={cs(style.results_wrapper)}>
-              <div className={cs(style.results)}>
+              <div className={cs(style.results, classNameResults)}>
                 {results.map(result => (
                   <button
                     key={result.id}

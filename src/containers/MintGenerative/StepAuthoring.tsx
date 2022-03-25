@@ -4,28 +4,11 @@ import colors from "../../styles/Colors.module.css"
 import cs from "classnames"
 import { StepComponent } from "../../types/Steps"
 import { useContext, useEffect, useMemo, useState } from "react"
-import { Formik } from "formik"
-import useFetch, { CachePolicies } from "use-http"
-import { MetadataError, MetadataResponse } from "../../types/Responses"
-import { CaptureSettings, GenerativeTokenMetadata } from "../../types/Metadata"
-import { CaptureMode, CaptureTriggerMode, GenTokenInformationsForm } from "../../types/Mint"
 import { Form } from "../../components/Form/Form"
 import { Field } from "../../components/Form/Field"
-import { InputText } from "../../components/Input/InputText"
 import { Spacing } from "../../components/Layout/Spacing"
-import { InputTextarea } from "../../components/Input/InputTextarea"
-import { Fieldset } from "../../components/Form/Fieldset"
-import { Checkbox } from "../../components/Input/Checkbox"
 import { Button } from "../../components/Button"
-import { InputTextUnit } from "../../components/Input/InputTextUnit"
-import { getIpfsSlash } from "../../utils/ipfs"
 import { UserContext } from "../UserProvider"
-import { useContractCall } from "../../utils/hookts"
-import { MintGenerativeCallData } from "../../types/ContractCalls"
-import { ContractFeedback } from "../../components/Feedback/ContractFeedback"
-import { getMutezDecimalsNb, isPositive } from "../../utils/math"
-import { tagsFromString } from "../../utils/strings"
-import { stringToByteString } from "../../utils/convert"
 import { IOptions, Select } from "../../components/Input/Select"
 import { useQuery } from "@apollo/client"
 import { Qu_userCollaborations } from "../../queries/user"
@@ -73,7 +56,7 @@ export const StepAuthoring: StepComponent = ({ state, onNext }) => {
 
   // the selected collaboration address
   const [selectedCollab, setSelectedCollab] = useState<string|undefined>(
-    state.collaboration !== null ? state.collaboration : undefined
+    state.collaboration ? state.collaboration.id : undefined
   )
 
   // extract collaborations from data
@@ -88,6 +71,7 @@ export const StepAuthoring: StepComponent = ({ state, onNext }) => {
 
   // a list of the collaborations created on-demand with the module
   const [createdCollabs, setCreatedCollabs] = useState<Collaboration[]>([])
+
 
   // build the list items from the collaboration contract
   const collaborationsListItem = useMemo<MultiListItem[]>(() => {
@@ -111,8 +95,14 @@ export const StepAuthoring: StepComponent = ({ state, onNext }) => {
 
   const handleSubmit = (evt: any) => {
     evt.preventDefault()
+    let collab: Collaboration|null = null
+    if (authorType === 1) {
+      // build the full list of collaborations (using created ones too)
+      const collabs = [...collaborations, ...createdCollabs]
+      collab = collabs.find(c => c.id === selectedCollab)!
+    }
     onNext({
-      collaboration: authorType === 0 ? null : selectedCollab,
+      collaboration: collab,
     })
   }
 

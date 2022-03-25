@@ -1,5 +1,8 @@
 import { Collaboration } from "./entities/User"
+import { IPricingFixed, IPricingDutchAuction } from "./entities/Pricing"
 import { GenerativeTokenMetadata } from "./Metadata"
+import { GenTokPricing } from "./entities/GenerativeToken"
+import { ISplit } from "./entities/Split"
 
 export interface GenerativeTokenInformations {
   metadata: GenerativeTokenMetadata
@@ -34,7 +37,7 @@ export interface CaptureSettings {
 
 export interface MintGenerativeData {
   // if the project is authored as a collaboration
-  collaboration?: string|null
+  collaboration?: Collaboration|null
   // the ipfs uri pointing to the project with URL params
   cidUrlParams?: string
   // a hash to verify that the first matches
@@ -47,6 +50,8 @@ export interface MintGenerativeData {
   cidThumbnail?: string
   // a hash to verify the 2 ipfs uri
   authHash2?: string
+  // the distribution parameters
+  distribution?: GenTokDistributionForm
   // capture settings
   captureSettings?: CaptureSettings
   // general settings
@@ -68,6 +73,21 @@ export interface GenTokenSettings {
       hashConstraints?: string[] | null
     },
   }
+}
+
+export interface GenTokPricingForm {
+  pricingMethod?: GenTokPricing
+  pricingFixed?: IPricingFixed
+  pricingDutchAuction?: IPricingDutchAuction
+}
+
+export interface GenTokDistributionForm {
+  pricing: GenTokPricingForm
+  editions?: number
+  royalties?: number
+  enabled: boolean
+  splitsPrimary: ISplit[]
+  splitsSecondary: ISplit[]
 }
 
 export interface GenTokenInformationsForm {

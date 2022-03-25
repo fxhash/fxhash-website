@@ -9,10 +9,14 @@ import { UserBadge } from "../User/UserBadge"
 interface Props {
   value: string
   onChange: (value: string) => void
+  className?: string
+  classNameResults?: string
 }
 export function InputSearchUser({
   value,
   onChange,
+  className,
+  classNameResults,
 }: Props) {
   const client = useApolloClient()
 
@@ -48,6 +52,8 @@ export function InputSearchUser({
       searchFn={searchUsers}
       transformSearchResults={resultsIntoUsers}
       valueFromResult={valueFromUser}
+      className={className}
+      classNameResults={classNameResults}
     >
       {({ item: user }) => (
         <UserBadge

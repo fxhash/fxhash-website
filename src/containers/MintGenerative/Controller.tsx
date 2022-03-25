@@ -12,6 +12,7 @@ import { StepInformations } from "./StepInformations"
 import { StepSuccess } from "./StepSuccess"
 import { StepExtraSettings } from "./StepExtraSettings"
 import { StepAuthoring } from "./StepAuthoring"
+import { StepDistribution } from "./StepDistribution"
 
 
 /**
@@ -64,10 +65,16 @@ const STEPS: Step[] = [
     ],
   },
   {
+    path: "/distribution",
+    component: StepDistribution,
+    title: "Distribution",
+    requiredProps: [],
+  },
+  {
     path: "/extra-settings",
     component: StepExtraSettings,
     title: "Extra settings",
-    requiredProps: [],
+    requiredProps: [ "distribution" ],
   },
   {
     path: "/informations",

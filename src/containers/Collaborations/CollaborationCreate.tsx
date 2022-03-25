@@ -7,7 +7,7 @@ import { Modal } from "../../components/Utils/Modal"
 import { Button } from "../../components/Button"
 import { Spacing } from "../../components/Layout/Spacing"
 import { InputSearchUser } from "../../components/Input/InputSearchUser"
-import { Collaboration, User } from "../../types/entities/User"
+import { Collaboration, User, UserType } from "../../types/entities/User"
 import { UserContext } from "../UserProvider"
 import { isTezosAddress } from "../../utils/strings"
 import { ISplit } from "../../types/entities/Split"
@@ -67,6 +67,7 @@ export function CollaborationCreate({
                 onCreate({
                   id: address,
                   createdAt: new Date(),
+                  type: UserType.COLLAB_CONTRACT_V1,
                   collaborators: splits.map(split => ({
                     id: split.address,
                   }) as User)

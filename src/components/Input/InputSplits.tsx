@@ -9,12 +9,15 @@ import { Spacing } from "../Layout/Spacing"
 import { UserFromAddress } from "../User/UserFromAddress"
 import { UserBadge } from "../User/UserBadge"
 import { InputText } from "./InputText"
+import { transformSplitsEqual, TSplitsTransformer } from "../../utils/transformers/splits"
 
 
 interface Props {
   value: ISplit[]
   onChange: (value: ISplit[]) => void
   unremoveableAddresses?: string[]
+  sharesTransformer?: TSplitsTransformer
+  textShares?: string
 }
 
 /**
@@ -26,16 +29,17 @@ export function InputSplits({
   value,
   onChange,
   unremoveableAddresses = [],
+  sharesTransformer = transformSplitsEqual,
+  textShares = "Shares"
 }: Props) {
   // the pkh of the input
   const [pkh, setPkh] = useState<string>("")
 
   // updates the split and forces the shares to match, if defined
   const update = (splits: ISplit[]) => {
-    const share = Math.floor(1000 / splits.length)
-    onChange(splits.map(split => ({
+    onChange(splits.map((split, idx) => ({
       address: split.address,
-      pct: share,
+      pct: sharesTransformer(splits.length, idx),
     })))
   }
 
@@ -71,7 +75,7 @@ export function InputSplits({
         <thead>
           <tr>
             <td>User</td>
-            <td>Shares</td>
+            <td className={cs(style.share_cell)}>{textShares}</td>
             <td>Actions</td>
           </tr>
         </thead>
@@ -95,12 +99,19 @@ export function InputSplits({
               <td className={cs(style.share_cell)}>
                 <InputText
                   value={split.pct}
-                  onChange={evt => updateShare(split.address, evt.target.value as any)}
+                  onChange={
+                    evt => updateShare(split.address, evt.target.value as any)
+                  }
+                  type="number"
+                  min={1}
+                  max={1000}
+                  step={1}
                 />
               </td>
-              <td>
+              <td width={107}>
                 {!unremoveableAddresses.includes(split.address) && (
                   <button
+                    type="button"
                     className={cs(style.btn_remove)}
                     onClick={() => remove(split.address)}
                   >
@@ -110,26 +121,31 @@ export function InputSplits({
               </td>
             </tr>
           ))}
+
+          <tr>
+            <td className={cs(style.input_cell)} colSpan={3}>
+              <div className={cs(style.add_container)}>
+                <InputSearchUser
+                  value={pkh}
+                  onChange={setPkh}
+                  className={style.address_input}
+                  classNameResults={style.search_results}
+                />
+                <Button
+                  size="regular"
+                  type="button"
+                  color="transparent"
+                  iconComp={<i aria-hidden className="fa-solid fa-circle-plus"/>}
+                  disabled={!isTezosAddress(pkh)}
+                  onClick={add}
+                >
+                  add
+                </Button>
+              </div>
+            </td>
+          </tr>
         </tbody>
       </table>
-
-      <Spacing size="small"/>
-
-      <div className={cs(style.add_container)}>
-        <InputSearchUser
-          value={pkh}
-          onChange={setPkh}
-        />
-        <Button
-          size="regular"
-          color="transparent"
-          iconComp={<i aria-hidden className="fa-solid fa-circle-plus"/>}
-          disabled={!isTezosAddress(pkh)}
-          onClick={add}
-        >
-          add
-        </Button>
-      </div>
     </>
   )
 }

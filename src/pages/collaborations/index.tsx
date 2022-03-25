@@ -41,6 +41,8 @@ const CollaborationsIndex: NextPage = () => {
           </ClientOnly>
         </main>
       </section>
+
+      <Spacing size="6x-large"/>
     </>
   )
 }
