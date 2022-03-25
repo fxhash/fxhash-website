@@ -85,6 +85,12 @@
   align-items: flex-start;
 }
 
+.flex_row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
 .full_body_height {
   height: calc(100vh - 140px - 50px)
 }

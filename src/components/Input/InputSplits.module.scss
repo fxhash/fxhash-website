@@ -47,18 +47,6 @@
   }
 }
 
-.btn_remove {
-  background: transparent;
-  border: none;
-  color: var(--color-gray);
-  cursor: pointer;
-  padding: 8px;
-
-  &:hover {
-    color: var(--color-error);
-  }
-}
-
 .address_input {
   flex-grow: 2;
 

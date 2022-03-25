@@ -1,11 +1,11 @@
 export interface IPricingFixed {
   price: number
-  opensAt: Date
+  opensAt?: Date|null
 }
 
 export interface IPricingDutchAuction {
   levels: number[]
   restingPrice?: number
   decrementDuration: number
-  opensAt?: Date
+  opensAt?: Date|null
 }

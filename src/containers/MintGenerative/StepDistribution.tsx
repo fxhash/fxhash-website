@@ -113,7 +113,19 @@ const defaultDistribution = (user: User|Collaboration): GenTokDistributionForm =
   }
 
   return {
-    pricing: {},
+    pricing: {
+      pricingFixed: {},
+      pricingDutchAuction: {
+        decrementDuration: 10,
+        levels: [
+          50,
+          30,
+          20,
+          10,
+          5
+        ],
+      }
+    },
     enabled: false,
     splitsPrimary: [...splits],
     splitsSecondary: [...splits]
@@ -187,21 +199,9 @@ export const StepDistribution: StepComponent = ({ state, onNext }) => {
             </Field>
 
             <Field>
-              <InputPricing/>
-            </Field>
-
-            <Field error={errors.price}>
-              <label htmlFor="price">
-                Price
-              </label>
-              <InputTextUnit
-                unit="tez"
-                type="text"
-                name="price"
-                value={values.price||""}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                error={!!errors.price}
+              <InputPricing
+                value={distribution.pricing}
+                onChange={val => update("pricing", val)}
               />
             </Field>
 

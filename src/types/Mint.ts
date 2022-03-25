@@ -77,8 +77,8 @@ export interface GenTokenSettings {
 
 export interface GenTokPricingForm {
   pricingMethod?: GenTokPricing
-  pricingFixed?: IPricingFixed
-  pricingDutchAuction?: IPricingDutchAuction
+  pricingFixed: Partial<IPricingFixed>
+  pricingDutchAuction: Partial<IPricingDutchAuction>
 }
 
 export interface GenTokDistributionForm {

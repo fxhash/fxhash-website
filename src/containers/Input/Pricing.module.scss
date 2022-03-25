@@ -1,0 +1,24 @@
+.checkbox {
+  label {
+    flex-direction: row-reverse !important;
+    justify-content: flex-end;
+    padding-left: 0;
+
+    span {
+      margin-left: 20px;
+    }
+  }
+}
+
+.levels {
+  & > div:not(:first-child) {
+    input {
+      border-top: none;
+      height: 48px;
+    }
+  }
+
+  .close {
+    
+  }
+}

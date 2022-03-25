@@ -1,6 +1,6 @@
 import style from "./Input.module.scss"
 import cs from "classnames"
-import { InputHTMLAttributes, forwardRef } from "react"
+import { InputHTMLAttributes, forwardRef, useEffect } from "react"
 
 
 export interface Props extends InputHTMLAttributes<HTMLInputElement> {

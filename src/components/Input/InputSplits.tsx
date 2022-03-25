@@ -10,6 +10,7 @@ import { UserFromAddress } from "../User/UserFromAddress"
 import { UserBadge } from "../User/UserBadge"
 import { InputText } from "./InputText"
 import { transformSplitsEqual, TSplitsTransformer } from "../../utils/transformers/splits"
+import { ButtonDelete } from "../Button/ButtonDelete"
 
 
 interface Props {
@@ -110,13 +111,9 @@ export function InputSplits({
               </td>
               <td width={107}>
                 {!unremoveableAddresses.includes(split.address) && (
-                  <button
-                    type="button"
-                    className={cs(style.btn_remove)}
+                  <ButtonDelete
                     onClick={() => remove(split.address)}
-                  >
-                    <i aria-hidden className="fa-solid fa-circle-xmark"/>
-                  </button>
+                  />
                 )}
               </td>
             </tr>

@@ -33,3 +33,8 @@
 .very_small {
   font-size: 0.8rem;
 }
+
+.info {
+  font-size: var(--font-size-small);
+  color: var(--color-gray);
+}

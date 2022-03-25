@@ -4,26 +4,28 @@ import dynamic from "next/dynamic"
 import "react-datepicker/dist/react-datepicker.css"
 import { useState } from "react"
 import { addMonths, startOfYesterday } from "date-fns"
+import { InputProps } from "../../types/Inputs"
 
-const Datepicker = dynamic(() => import("react-datepicker"))
 
+const DatePicker = dynamic(() => import("react-datepicker"))
 
-interface Props {
+interface Props extends InputProps<Date> {
   
 }
 export function InputDatetime({
-  
+  value,
+  onChange,
 }: Props) {
   const [startDate, setStartDate] = useState<Date|null>(new Date())
 
   return (
     <div className={cs(style.root)}>
-      <Datepicker
+      <DatePicker
         showTimeInput
         dateFormat="dd MMMM yyyy, HH:mm"
-        selected={startDate}
+        selected={value}
         // @ts-ignore
-        onChange={setStartDate}
+        onChange={onChange}
         // @ts-ignore
         excludeDateIntervals={[{
           start: new Date(0),
