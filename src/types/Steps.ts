@@ -15,8 +15,8 @@ export interface Step {
   path: string
   title?: string
   hideTabs?: boolean
-  // needs to be called when component mounts, to check if it can process to next step
-  validateIn: (data: MintGenerativeData) => boolean
-  // needs to be called after validation IN, to clear eventual data down the state
-  clearDataDown: (data: MintGenerativeData) => MintGenerativeData
+  // a list of the properties which the step must be set in the generative data
+  // state before reaching the step. 
+  // it will be used to validate current data & clear data down
+  requiredProps: (keyof MintGenerativeData)[]
 }
