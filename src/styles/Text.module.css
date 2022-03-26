@@ -38,3 +38,8 @@
   font-size: var(--font-size-small);
   color: var(--color-gray);
 }
+
+.error {
+  font-weight: bold;
+  color: var(--color-error);
+}

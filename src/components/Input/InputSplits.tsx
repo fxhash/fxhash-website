@@ -1,4 +1,5 @@
 import style from "./InputSplits.module.scss"
+import text from "../../styles/Text.module.css"
 import cs from "classnames"
 import { ISplit } from "../../types/entities/Split"
 import { InputSearchUser } from "./InputSearchUser"
@@ -11,6 +12,7 @@ import { UserBadge } from "../User/UserBadge"
 import { InputText } from "./InputText"
 import { transformSplitsEqual, TSplitsTransformer } from "../../utils/transformers/splits"
 import { ButtonDelete } from "../Button/ButtonDelete"
+import { FormikErrors } from "formik"
 
 
 interface Props {
@@ -19,6 +21,7 @@ interface Props {
   unremoveableAddresses?: string[]
   sharesTransformer?: TSplitsTransformer
   textShares?: string
+  errors?: FormikErrors<ISplit[]>
 }
 
 /**
@@ -31,7 +34,8 @@ export function InputSplits({
   onChange,
   unremoveableAddresses = [],
   sharesTransformer = transformSplitsEqual,
-  textShares = "Shares"
+  textShares = "Shares",
+  errors,
 }: Props) {
   // the pkh of the input
   const [pkh, setPkh] = useState<string>("")
@@ -70,6 +74,14 @@ export function InputSplits({
     }
   }
 
+  // given the index of split, outputs the error related to the share if any
+  const getShareError = (idx: number) => {
+    if (!errors || typeof errors === "string") return undefined
+    const err = errors[idx]
+    if (!err) return undefined
+    return err.pct || undefined 
+  }
+
   return (
     <>
       <table className={cs(style.splits)}>
@@ -81,43 +93,54 @@ export function InputSplits({
           </tr>
         </thead>
         <tbody>
-          {value.map(split => (
-            <tr key={split.address}>
-              <td className={cs(style.user_cell)}>
-                <UserFromAddress
-                  address={split.address}
-                >
-                  {({ user }) => (
-                    <UserBadge
-                      size="small"
-                      user={user}
-                      hasLink={false}
-                      displayAddress
+          {value.map((split, idx) => {
+            const shareError = getShareError(idx)
+            return (
+              <tr key={split.address}>
+                <td className={cs(style.user_cell)}>
+                  <UserFromAddress
+                    address={split.address}
+                  >
+                    {({ user }) => (
+                      <UserBadge
+                        size="small"
+                        user={user}
+                        hasLink={false}
+                        displayAddress
+                      />
+                    )}
+                  </UserFromAddress>
+                </td>
+                <td className={cs(style.share_cell, {
+                  [style.error]: !!shareError,
+                })}>
+                  <InputText
+                    value={split.pct}
+                    onChange={
+                      evt => updateShare(split.address, evt.target.value as any)
+                    }
+                    type="text"
+                    min={1}
+                    max={1000}
+                    step={1}
+                    error={!!shareError}
+                  />
+                  {shareError && (
+                    <span className={cs(text.error)}>
+                      {shareError}
+                    </span>
+                  )}
+                </td>
+                <td width={107}>
+                  {!unremoveableAddresses.includes(split.address) && (
+                    <ButtonDelete
+                      onClick={() => remove(split.address)}
                     />
                   )}
-                </UserFromAddress>
-              </td>
-              <td className={cs(style.share_cell)}>
-                <InputText
-                  value={split.pct}
-                  onChange={
-                    evt => updateShare(split.address, evt.target.value as any)
-                  }
-                  type="number"
-                  min={1}
-                  max={1000}
-                  step={1}
-                />
-              </td>
-              <td width={107}>
-                {!unremoveableAddresses.includes(split.address) && (
-                  <ButtonDelete
-                    onClick={() => remove(split.address)}
-                  />
-                )}
-              </td>
-            </tr>
-          ))}
+                </td>
+              </tr>
+            )
+          })}
 
           <tr>
             <td className={cs(style.input_cell)} colSpan={3}>

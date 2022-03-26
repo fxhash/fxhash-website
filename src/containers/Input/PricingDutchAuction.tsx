@@ -2,25 +2,42 @@ import style from "./Pricing.module.scss"
 import text from "../../styles/Text.module.css"
 import layout from "../../styles/Layout.module.scss"
 import cs from "classnames"
-import { InputDatetime } from "../../components/Input/InputDatetime"
+import { IInputDatetimeFastBtn, InputDatetime } from "../../components/Input/InputDatetime"
 import { IPricingDutchAuction } from "../../types/entities/Pricing"
 import { InputProps } from "../../types/Inputs"
 import { InputTextUnit } from "../../components/Input/InputTextUnit"
 import { FocusEventHandler } from "react"
 import { Field } from "../../components/Form/Field"
-import { Checkbox } from "../../components/Input/Checkbox"
-import { Spacing } from "../../components/Layout/Spacing"
-import { addHours, startOfHour } from "date-fns"
 import { ButtonDelete } from "../../components/Button/ButtonDelete"
 import { Button } from "../../components/Button"
+import { FormikErrors } from "formik"
+import { addHours, startOfHour } from "date-fns"
+
+
+const dutchAucDateFast: IInputDatetimeFastBtn[] = [
+  {
+    label: "end of next hour",
+    generate: () => addHours(startOfHour(new Date()), 2)
+  },
+  {
+    label: "+1h",
+    generate: (date) => addHours(date, 1)
+  },
+  {
+    label: "-1h",
+    generate: (date) => addHours(date, -1)
+  },
+]
 
 interface Props extends InputProps<Partial<IPricingDutchAuction>> {
   onBlur?: FocusEventHandler<HTMLInputElement>
+  errors?: FormikErrors<IPricingDutchAuction>
 }
 export function InputPricingDutchAuction({
   value,
   onChange,
   onBlur,
+  errors,
 }: Props) {
 
   const update = (key: keyof IPricingDutchAuction, nval: any) => {
@@ -32,7 +49,9 @@ export function InputPricingDutchAuction({
 
   return (
     <>
-      <Field /*error={errors.price}*/ >
+      <Field error={
+        (typeof errors?.levels === "string") ? errors.levels : undefined}
+      >
         <label htmlFor="price">
           Price steps
           <small>
@@ -41,6 +60,23 @@ export function InputPricingDutchAuction({
         </label>
 
         <div className={cs(style.levels)}>
+          <Button
+            size="small"
+            type="button"
+            color="transparent"
+            iconComp={<i aria-hidden className="fa-solid fa-circle-plus"/>}
+            onClick={() => {
+              const levels = value.levels!
+              let V = 50
+              if (levels?.length >= 1) {
+                V = Math.floor(levels[0]*2)
+              }
+              update("levels", levels ? [V, ...levels] : [V])
+            }}
+          >
+            add
+          </Button>
+
           {value.levels?.map((price, idx) => (
             <div
               key={idx}
@@ -57,15 +93,25 @@ export function InputPricingDutchAuction({
                   update("levels", nlevels)
                 }}
                 // onBlur={onBlur}
-                // error={!!errors.price}
+                error={
+                  !(typeof errors?.levels === "string") && !!errors?.levels?.[idx]
+                }
               />
               <ButtonDelete
                 onClick={() => {
-                  const nlevels = [...value.levels!]
-                  nlevels.splice(idx, 1)
-                  update("levels", nlevels)
+                  if (value.levels!.length > 2) {
+                    const nlevels = [...value.levels!]
+                    nlevels.splice(idx, 1)
+                    update("levels", nlevels)
+                  }
                 }}
+                disabled={value.levels!.length <= 2}
               />
+              {errors?.levels && !(typeof errors.levels === "string") && errors.levels[idx] && (
+                <span className={cs(style.error)}>
+                  {errors.levels[idx]}
+                </span>
+              )}
             </div>
           ))}
 
@@ -78,7 +124,7 @@ export function InputPricingDutchAuction({
               const levels = value.levels!
               let V = 50
               if (levels?.length >= 1) {
-                V = Math.floor(levels[levels.length-1]*.5)
+                V = Math.floor(levels[levels.length-1]*50) / 100
               }
               update("levels", levels ? [...levels, V] : [V])
             }}
@@ -88,7 +134,7 @@ export function InputPricingDutchAuction({
         </div>
       </Field>
 
-      <Field>
+      <Field error={errors?.opensAt}>
         <label>
           Opening time
           <small>In your local timezone</small>
@@ -96,10 +142,12 @@ export function InputPricingDutchAuction({
         <InputDatetime
           value={value.opensAt!}
           onChange={val => update("opensAt", val)}
+          error={!!errors?.opensAt}
+          fastBtns={dutchAucDateFast}
         />
       </Field>
 
-      <Field /*error={errors.price}*/ >
+      <Field error={errors?.decrementDuration}>
         <label htmlFor="price">
           Time between steps
         </label>
@@ -110,7 +158,7 @@ export function InputPricingDutchAuction({
           value={value?.decrementDuration ?? ""}
           onChange={evt => update("decrementDuration", evt.target.value)}
           // onBlur={onBlur}
-          // error={!!errors.price}
+          error={!!errors?.decrementDuration}
         />
       </Field>
     </>

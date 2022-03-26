@@ -1,7 +1,7 @@
 import style from "./Pricing.module.scss"
 import text from "../../styles/Text.module.css"
 import cs from "classnames"
-import { InputDatetime } from "../../components/Input/InputDatetime"
+import { IInputDatetimeFastBtn, InputDatetime } from "../../components/Input/InputDatetime"
 import { IPricingFixed } from "../../types/entities/Pricing"
 import { InputProps } from "../../types/Inputs"
 import { InputTextUnit } from "../../components/Input/InputTextUnit"
@@ -10,14 +10,33 @@ import { Field } from "../../components/Form/Field"
 import { Checkbox } from "../../components/Input/Checkbox"
 import { Spacing } from "../../components/Layout/Spacing"
 import { addHours, startOfHour } from "date-fns"
+import { FormikErrors } from "formik"
+
+
+const dateFast: IInputDatetimeFastBtn[] = [
+  {
+    label: "end of next hour",
+    generate: () => addHours(startOfHour(new Date()), 2)
+  },
+  {
+    label: "+1h",
+    generate: (date) => addHours(date, 1)
+  },
+  {
+    label: "-1h",
+    generate: (date) => addHours(date, -1)
+  },
+]
 
 interface Props extends InputProps<Partial<IPricingFixed>> {
   onBlur?: FocusEventHandler<HTMLInputElement>
+  errors?: FormikErrors<IPricingFixed>
 }
 export function InputPricingFixed({
   value,
   onChange,
   onBlur,
+  errors,
 }: Props) {
 
   const update = (key: keyof IPricingFixed, nval: any) => {
@@ -29,7 +48,7 @@ export function InputPricingFixed({
 
   return (
     <>
-      <Field /*error={errors.price}*/ >
+      <Field error={errors?.price}>
         <label htmlFor="price">
           Price
         </label>
@@ -40,7 +59,7 @@ export function InputPricingFixed({
           value={value?.price ?? ""}
           onChange={evt => update("price", evt.target.value)}
           // onBlur={onBlur}
-          // error={!!errors.price}
+          error={!!errors?.price}
         />
       </Field>
 
@@ -69,7 +88,7 @@ export function InputPricingFixed({
       </Field>
 
       {value.opensAt != null && (
-        <Field>
+        <Field error={errors?.opensAt}>
           <label>
             Opening time
             <small>In your local timezone</small>
@@ -77,6 +96,8 @@ export function InputPricingFixed({
           <InputDatetime
             value={value.opensAt!}
             onChange={val => update("opensAt", val)}
+            fastBtns={dateFast}
+            error={!!errors?.opensAt}
           />
         </Field>
       )}

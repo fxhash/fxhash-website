@@ -1,4 +1,9 @@
 .root {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+
   :global {
     .react-datepicker {
       font-family: inherit;
@@ -7,6 +12,10 @@
       border: 3px solid var(--color-border-input);
       border-top: none;
       background-color: var(--color-white);
+
+      &-wrapper {
+        width: auto;
+      }
 
       &__input-container input {
         border: 3px solid var(--color-border-input);
@@ -105,4 +114,8 @@
       }
     }
   }
+}
+
+.error {
+  border-color: var(--color-error) !important;
 }

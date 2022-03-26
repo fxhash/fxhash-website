@@ -1,9 +1,10 @@
 import style from "./StepDistribution.module.scss"
 import layout from "../../styles/Layout.module.scss"
 import colors from "../../styles/Colors.module.css"
+import text from "../../styles/Text.module.css"
 import cs from "classnames"
 import { StepComponent } from "../../types/Steps"
-import { useContext, useEffect, useState } from "react"
+import { useContext, useEffect, useMemo, useState } from "react"
 import { Formik } from "formik"
 import * as Yup from "yup"
 import useFetch, { CachePolicies } from "use-http"
@@ -32,65 +33,35 @@ import { ISplit } from "../../types/entities/Split"
 import { InputSplits } from "../../components/Input/InputSplits"
 import { transformSplitsSum1000 } from "../../utils/transformers/splits"
 import { InputPricing } from "../Input/Pricing"
+import { GenTokPricing } from "../../types/entities/GenerativeToken"
+import { addHours, isAfter } from "date-fns"
+import { YupPrice, YupPricingDutchAuction, YupPricingFixed } from "../../utils/yup/price"
+import { YupRoyalties } from "../../utils/yup/royalties"
+import { cloneDeep } from "@apollo/client/utilities"
+import { YupSplits } from "../../utils/yup/splits"
 
-
-const initialForm: Partial<GenTokenInformationsForm> = {
-  name: "",
-  description: "",
-  childrenDescription: "",
-  tags: "",
-  editions: 1,
-  enabled: false,
-  price: undefined,
-  royalties: undefined
-}
 
 const validation = Yup.object().shape({
-  name: Yup.string()
-    .min(3, "Min 3 characters")
-    .max(42, "Max 42 characters")
-    .required("Required"),
-  description: Yup.string()
-    .max(4096, "Max 4096 characters")
-    .required("Required"),
-  childrenDescription: Yup.string()
-    .max(4096, "Max 4096 characters"),
   editions: Yup.number()
+    .typeError("Valid number plz")
     .min(1, "At least 1 edition")
     .max(10000, "10000 editions max.")
     .required("Required"),
-  price: Yup.number()
-    .when("enabled", {
-      is: true,
-      then: Yup.number()
-        .typeError("Valid number plz")
-        .required("Price is required if token is enabled")
-        .test(
-          "positive",
-          `Price must be >= ${parseFloat(process.env.NEXT_PUBLIC_GT_MIN_PRICE!)}`,
-          isPositive
-        ),
-      otherwise: Yup.number()
-        .typeError("Valid number plz")
-        .test(
-          "positive",
-          `Price must be >= ${parseFloat(process.env.NEXT_PUBLIC_GT_MIN_PRICE!)}`,
-          isPositive
-        )
-    }),
-  royalties: Yup.number()
-    .when("enabled", {
-      is: true,
-      then: Yup.number()
-        .typeError("Valid number plz")
-        .required("Royalties are required if token is enabled")
-        .min(10, "Min 10%")
-        .max(25, "Max 25%"),
-      otherwise: Yup.number()
-        .typeError("Valid number plz")
-        .min(10, "Min 10%")
-        .max(25, "Max 25%")
-    })
+  pricing: Yup.object({
+    pricingFixed: Yup.object()
+      .when("pricingMethod", {
+        is: GenTokPricing.FIXED,
+        then: YupPricingFixed,
+      }),
+    pricingDutchAuction: Yup.object()
+      .when("pricingMethod", {
+        is: GenTokPricing.DUTCH_AUCTION,
+        then: YupPricingDutchAuction,
+      })
+  }),
+  royalties: YupRoyalties,
+  splitsPrimary: YupSplits,
+  splitsSecondary: YupSplits,
 })
 
 const defaultDistribution = (user: User|Collaboration): GenTokDistributionForm => {
@@ -114,6 +85,7 @@ const defaultDistribution = (user: User|Collaboration): GenTokDistributionForm =
 
   return {
     pricing: {
+      pricingMethod: GenTokPricing.FIXED,
       pricingFixed: {},
       pricingDutchAuction: {
         decrementDuration: 10,
@@ -127,8 +99,8 @@ const defaultDistribution = (user: User|Collaboration): GenTokDistributionForm =
       }
     },
     enabled: false,
-    splitsPrimary: [...splits],
-    splitsSecondary: [...splits]
+    splitsPrimary: cloneDeep(splits),
+    splitsSecondary: cloneDeep(splits)
   }
 }
 
@@ -141,17 +113,17 @@ export const StepDistribution: StepComponent = ({ state, onNext }) => {
   console.log(state)
 
   // the object built at this step
-  const [distribution, setDistribution] = useState<GenTokDistributionForm>(
-    state.distribution ?? defaultDistribution(state.collaboration ?? user)
-  )
+  const distribution = useMemo<GenTokDistributionForm>(
+    () => state.distribution ?? defaultDistribution(state.collaboration ?? user)
+  , [])
 
   console.log(distribution)
 
   const update = (key: keyof GenTokDistributionForm, value: any) => {
-    setDistribution({
-      ...distribution,
-      [key]: value,
-    })
+    // setDistribution({
+    //   ...distribution,
+    //   [key]: value,
+    // })
   }
 
   const uploadInformations = (formInformations: GenTokenInformationsForm) => {
@@ -165,13 +137,13 @@ export const StepDistribution: StepComponent = ({ state, onNext }) => {
       <Spacing size="3x-large"/>
 
       <Formik
-        initialValues={initialForm}
+        initialValues={distribution}
         validationSchema={validation}
         onSubmit={(values) => {
-          uploadInformations(values as GenTokenInformationsForm)
+          // uploadInformations(values as GenTokenInformationsForm)
         }}
       >
-        {({ values, handleChange, handleBlur, handleSubmit, errors }) => (
+        {({ values, handleChange, setFieldValue, handleBlur, handleSubmit, errors }) => (
           <Form 
             className={cs(layout.smallform, style.form)} 
             onSubmit={handleSubmit}
@@ -189,7 +161,7 @@ export const StepDistribution: StepComponent = ({ state, onNext }) => {
                 <small>how many NFT can be generated using your Token - <strong>can only be decreased after publication</strong></small>
               </label>
               <InputText
-                type="number"
+                type="text"
                 name="editions"
                 value={values.editions}
                 onChange={handleChange}
@@ -200,12 +172,18 @@ export const StepDistribution: StepComponent = ({ state, onNext }) => {
 
             <Field>
               <InputPricing
-                value={distribution.pricing}
-                onChange={val => update("pricing", val)}
+                value={values.pricing}
+                onChange={val => setFieldValue("pricing", val)}
+                errors={errors.pricing}
               />
             </Field>
 
-            <Field>
+            <Field 
+              error={typeof errors.splitsPrimary === "string"
+                ? errors.splitsPrimary
+                : undefined
+              }
+            >
               <label>
                 Primary Splits
                 <small>
@@ -213,10 +191,11 @@ export const StepDistribution: StepComponent = ({ state, onNext }) => {
                 </small>
               </label>
               <InputSplits
-                value={distribution.splitsPrimary}
-                onChange={splits => update("splitsPrimary", splits)}
+                value={values.splitsPrimary}
+                onChange={splits => setFieldValue("splitsPrimary", splits)}
                 sharesTransformer={transformSplitsSum1000}
                 textShares="Shares (out of 1000)"
+                errors={errors.splitsPrimary as any}
               />
             </Field>
 
@@ -236,7 +215,12 @@ export const StepDistribution: StepComponent = ({ state, onNext }) => {
               />
             </Field>
 
-            <Field>
+            <Field
+              error={typeof errors.splitsSecondary === "string" 
+                ? errors.splitsSecondary
+                : undefined
+              }
+            >
               <label>
                 Royalties Splits
                 <small>
@@ -244,13 +228,21 @@ export const StepDistribution: StepComponent = ({ state, onNext }) => {
                 </small>
               </label>
               <InputSplits
-                value={distribution.splitsSecondary}
-                onChange={splits => update("splitsSecondary", splits)}
+                value={values.splitsSecondary}
+                onChange={splits => setFieldValue("splitsSecondary", splits)}
                 sharesTransformer={transformSplitsSum1000}
                 textShares="Shares (out of 1000)"
+                errors={errors.splitsSecondary as any}
               />
             </Field>
 
+            <Spacing size="3x-large"/>
+
+            <em className={cs(text.info)} style={{ alignSelf: "flex-start"}}>
+              If disabled, collectors cannot mint the token at all. It overrides pricing settings.<br/>
+              You will have to enable it manually afterwards.
+            </em>
+            <Spacing size="small"/>
             <Field className={cs(style.checkbox)}>
               <Checkbox
                 name="enabled"
@@ -260,10 +252,6 @@ export const StepDistribution: StepComponent = ({ state, onNext }) => {
                 Enabled
               </Checkbox>
             </Field>
-            <em className={cs(colors.gray)} style={{ alignSelf: "flex-start"}}>
-              If disabled, collectors cannot mint the token at all.<br/>
-              You will have to enable it manually afterwards.
-            </em>
 
             <Spacing size="3x-large"/>
 

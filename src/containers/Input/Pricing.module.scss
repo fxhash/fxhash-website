@@ -11,14 +11,31 @@
 }
 
 .levels {
-  & > div:not(:first-child) {
+  & > div {
     input {
-      border-top: none;
-      height: 48px;
+      border-top-width: 2px;
+      border-bottom-width: 1px;
+    }
+
+    &:nth-child(2) {
+      input {
+        border-top-width: 3px;
+      }
+    }
+
+    &:nth-last-child(2) {
+      input {
+        border-bottom-width: 3px;
+      }
     }
   }
 
-  .close {
-    
+  .error {
+    margin-left: 15px;
   }
+}
+
+.error {
+  font-weight: bold;
+  color: var(--color-error);
 }

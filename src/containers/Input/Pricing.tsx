@@ -1,5 +1,6 @@
 // import style from "./Pricing.module.scss"
 import cs from "classnames"
+import { FormikErrors } from "formik"
 import { useState } from "react"
 import { Field } from "../../components/Form/Field"
 import { Fieldset } from "../../components/Form/Fieldset"
@@ -24,13 +25,15 @@ const PricingOptions: IOptions[] = [
 interface Props {
   value: GenTokPricingForm
   onChange: (value: GenTokPricingForm) => void
+  errors?: FormikErrors<GenTokPricingForm>
 }
 export function InputPricing({
   value,
   onChange,
+  errors,
 }: Props) {
 
-  console.log({ value })
+  console.log({ value, errors })
 
   const update = (key: keyof GenTokPricingForm, nvalue: any) => {
     onChange({
@@ -58,6 +61,7 @@ export function InputPricing({
         <InputPricingFixed
           value={value.pricingFixed}
           onChange={v => update("pricingFixed", v)}
+          errors={errors?.pricingFixed}
         />
       )}
 
@@ -65,6 +69,7 @@ export function InputPricing({
         <InputPricingDutchAuction
           value={value.pricingDutchAuction}
           onChange={v => update("pricingDutchAuction", v)}
+          errors={errors?.pricingDutchAuction}
         />
       )}
     </Fieldset>
