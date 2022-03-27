@@ -1,5 +1,5 @@
 import { ContractAbstraction, MichelsonMap, TransactionWalletOperation, Wallet } from "@taquito/taquito"
-import { FxhashContract } from "../../types/Contracts"
+import { FxhashContracts } from "../../types/Contracts"
 import { ISplit } from "../../types/entities/Split"
 import { stringToByteString } from "../../utils/convert"
 import { ContractOperation } from "./ContractOperation"
@@ -16,7 +16,7 @@ export class CreateCollabOperation extends ContractOperation<TCreateCollabParams
 
   async prepare() {
     this.collabContract = await this.manager.getContract(
-      FxhashContract.COLLAB_FACTORY
+      FxhashContracts.COLLAB_FACTORY
     )
   }
 

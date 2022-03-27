@@ -1,13 +1,13 @@
-import { FxhashContract } from "../types/Contracts"
+import { FxhashContracts } from "../types/Contracts"
 import { Listing } from "../types/entities/Listing"
 
 
-export function getListingFA2Contract(listing: Listing): FxhashContract {
+export function getListingFA2Contract(listing: Listing): string {
   if (listing.version === 0) {
-    return FxhashContract.MARKETPLACE_V1
+    return FxhashContracts.MARKETPLACE_V1
   }
   else {
-    return FxhashContract.MARKETPLACE_V2
+    return FxhashContracts.MARKETPLACE_V2
   }
 }
 

@@ -1,4 +1,4 @@
-import { FxhashContract } from "../types/Contracts"
+import { FxhashContracts } from "../types/Contracts"
 import { DeepPartial } from "../types/DeepPartial"
 import { GenerativeToken } from "../types/entities/GenerativeToken"
 import { Objkt } from "../types/entities/Objkt"
@@ -40,11 +40,11 @@ export const fakeGentk: DeepPartial<Objkt> = {
   duplicate: false
 }
 
-export function getGentkFA2Contract(gentk: Objkt): FxhashContract {
+export function getGentkFA2Contract(gentk: Objkt): string {
   if (gentk.version === 0) {
-    return FxhashContract.GENTK_V1
+    return FxhashContracts.GENTK_V1
   }
   else {
-    return FxhashContract.GENTK_V2
+    return FxhashContracts.GENTK_V2
   }
 }

@@ -1,8 +1,9 @@
 import { ContractAbstraction, TransactionWalletOperation, Wallet } from "@taquito/taquito"
-import { FxhashContract } from "../../types/Contracts"
+import { FxhashCollabFactoryCalls, FxhashContracts } from "../../types/Contracts"
 import { GenerativeToken } from "../../types/entities/GenerativeToken"
 import { GenerativeTokenMetadata } from "../../types/Metadata"
 import { MintGenerativeData } from "../../types/Mint"
+import { packMintIssuer } from "../../utils/pack/mint-issuer"
 import { packPricing } from "../../utils/pack/pricing"
 import { transformGenTokFormToNumbers } from "../../utils/transformers/gen-tok-input-form"
 import { ContractOperation } from "./ContractOperation"
@@ -18,10 +19,12 @@ export type TMintIssuerOperationParams = {
  * todo: setup the price stuff
  */
 export class MintIssuerOperation extends ContractOperation<TMintIssuerOperationParams> {
-  issuerContract: ContractAbstraction<Wallet>|null = null
+  contract: ContractAbstraction<Wallet>|null = null
 
   async prepare() {
-    this.issuerContract = await this.manager.getContract(FxhashContract.ISSUER)
+    this.contract = await this.manager.getContract(
+      this.params.data.collaboration?.id || FxhashContracts.ISSUER
+    )
   }
 
   async call(): Promise<TransactionWalletOperation> {
@@ -39,8 +42,6 @@ export class MintIssuerOperation extends ContractOperation<TMintIssuerOperationP
     )
     console.log(packedPricing)
 
-    console.log(this.issuerContract!.methodsObject.mint_issuer().getSignature())
-
     const distribution = numbered.distribution!
     const informations = numbered.informations!
 
@@ -52,17 +53,31 @@ export class MintIssuerOperation extends ContractOperation<TMintIssuerOperationP
       primary_split: distribution.splitsPrimary,
       // todo
       reserves: [],
-      royalties: distribution.royalties,
+      royalties: distribution.royalties!,
       royalties_split: distribution.splitsSecondary,
       tags: informations.labels,
     }
-
     console.log(params)
+    console.log(this.params.data.collaboration)
 
-    return this.issuerContract!.methodsObject.mint_issuer(params).send()
+    // if the author is a collab contract, we have to call the collab contract
+    // proposal EP instead
+    if (this.params.data.collaboration) {
+      const packed = packMintIssuer(params)
+      console.log(packed)
+      return this.contract!.methodsObject.make_proposal({
+        call_id: FxhashCollabFactoryCalls.MINT_ISSUER,
+        call_params: packed,
+      }).send()
+    }
+    else { 
+      return this.contract!.methodsObject.mint_issuer(params).send()
+    }
   }
 
   success(): string {
-    return `Your project ${this.params.metadata.name} is successfully published`
+    return this.params.data.collaboration
+     ? `A request to publish ${this.params.metadata.name} was successfully sent`
+     : `Your project ${this.params.metadata.name} is successfully published`
   }
 }

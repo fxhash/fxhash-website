@@ -1,5 +1,5 @@
 import { ContractAbstraction, TransactionWalletOperation, Wallet } from "@taquito/taquito"
-import { FxhashContract } from "../../types/Contracts"
+import { FxhashContracts } from "../../types/Contracts"
 import { GenerativeToken } from "../../types/entities/GenerativeToken"
 import { ContractOperation } from "./ContractOperation"
 
@@ -16,7 +16,7 @@ export class MintOperation extends ContractOperation<TMintOperationParams> {
   issuerContract: ContractAbstraction<Wallet>|null = null
 
   async prepare() {
-    this.issuerContract = await this.manager.getContract(FxhashContract.ISSUER)
+    this.issuerContract = await this.manager.getContract(FxhashContracts.ISSUER)
   }
 
   async call(): Promise<TransactionWalletOperation> {

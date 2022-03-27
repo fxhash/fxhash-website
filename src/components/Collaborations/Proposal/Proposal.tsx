@@ -6,6 +6,10 @@ import { useMemo, useState } from "react"
 import { ProposalDetails } from "./Details/ProposalDetails"
 import { Collaboration } from "../../../types/entities/User"
 import { UserBadge } from "../../User/UserBadge"
+import { Approvals } from "./Approvals/Approvals"
+import { ProposalActionVote } from "./Actions/ActionVote"
+import { ProposalActionExecute } from "./Actions/ActionExecute"
+import { Spacing } from "../../Layout/Spacing"
 
 interface Props {
   proposal: CollaborationProposal
@@ -77,10 +81,28 @@ export function Proposal({
           </span>
         </section>
       ):(
-        <section className={cs(style.section)}>
-          list of approvals + button tp approve / reject (a check or a cross)
-          button to execute if possible
-        </section>
+        <>
+          <section className={cs(style.section, style.section_spaced)}>
+            <h6>Approvals</h6>
+            <Approvals
+              collaboration={collaboration}
+              proposal={proposal}
+            />
+          </section>
+
+          <section className={cs(style.section, style.section_spaced)}>
+            <h6>Actions</h6>
+            <ProposalActionVote
+              collaboration={collaboration}
+              proposal={proposal}
+            />
+            <Spacing size="small"/>
+            <ProposalActionExecute
+              collaboration={collaboration}
+              proposal={proposal}
+            />
+          </section>
+        </>
       )}
     </div>
   )

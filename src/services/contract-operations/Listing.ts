@@ -1,5 +1,5 @@
 import { OpKind, WalletOperation } from "@taquito/taquito"
-import { FxhashContract } from "../../types/Contracts"
+import { FxhashContracts } from "../../types/Contracts"
 import { Objkt } from "../../types/entities/Objkt"
 import { getGentkFA2Contract } from "../../utils/gentk"
 import { displayMutez } from "../../utils/units"
@@ -23,7 +23,7 @@ export class ListingOperation extends ContractOperation<TListingOperationParams>
     const updateOperatorsParams = buildParameters<TInputUpdateOperators>([{
       add_operator: {
         owner: this.params.token.owner!.id,
-        operator: this.manager.getContractAddress(FxhashContract.MARKETPLACE_V2),
+        operator: FxhashContracts.MARKETPLACE_V2,
         token_id: this.params.token.id,
       }
     }], EBuildableParams.UPDATE_OPERATORS)
@@ -40,9 +40,7 @@ export class ListingOperation extends ContractOperation<TListingOperationParams>
       .with([
         {
           kind: OpKind.TRANSACTION,
-          to: this.manager.getContractAddress(
-            getGentkFA2Contract(this.params.token)
-          ),
+          to: getGentkFA2Contract(this.params.token),
           fee: 1000,
           amount: 0,
           parameter: {
@@ -54,7 +52,7 @@ export class ListingOperation extends ContractOperation<TListingOperationParams>
         },
         {
           kind: OpKind.TRANSACTION,
-          to: this.manager.getContractAddress(FxhashContract.MARKETPLACE_V2),
+          to: FxhashContracts.MARKETPLACE_V2,
           fee: 1500,
           amount: 0,
           parameter: {

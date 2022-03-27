@@ -12,6 +12,7 @@ interface Props {
   successMessage?: string
   errorMessage?: string
   className?: string
+  noSpacing?: boolean
 }
 
 export function messageFromState(state: ContractOperationStatus): string {
@@ -32,6 +33,7 @@ export function ContractFeedback({
   loading,
   successMessage = "The operation was successfully injected into the blockchain",
   errorMessage = "Error when injecting into the blockchain",
+  noSpacing = false,
   className,
 }: Props) {
   return (
@@ -49,7 +51,7 @@ export function ContractFeedback({
               )
             )
           )}
-          <Spacing size="x-small"/>
+          {!noSpacing && <Spacing size="x-small"/>}
         </div>
       )}
     </>

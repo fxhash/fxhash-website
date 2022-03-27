@@ -17,25 +17,11 @@ import {
   ContractInteractionMethod,
   ContractOperationCallback,
   ContractOperationStatus, 
-  FxhashContract
+  FxhashContracts,
 } from '../types/Contracts'
 import { stringToByteString } from '../utils/convert'
 import { isOperationApplied } from './Blockchain'
 import { ContractOperation, TContractOperation } from './contract-operations/ContractOperation'
-
-
-// short
-const addresses: Record<FxhashContract, string> = {
-  ISSUER: process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_ISSUER!,
-  GENTK_V1: process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_GENTK_V1!,
-  GENTK_V2: process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_GENTK_V2!,
-  REGISTER: process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_USERREGISTER!,
-  MODERATION: process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_TOK_MODERATION!,
-  USER_MODERATION: process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_USER_MODERATION!,
-  MARKETPLACE_V1: process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_MARKETPLACE_V1!,
-  MARKETPLACE_V2: process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_MARKETPLACE_V2!,
-  COLLAB_FACTORY: process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_COLLAB_FACTORY!,
-}
 
 // the different operations which can be performed by the wallet
 export enum EWalletOperations {
@@ -63,17 +49,7 @@ export enum EWalletOperations {
 export class WalletManager {
   beaconWallet: BeaconWallet|null = null
   tezosToolkit: TezosToolkit
-  contracts: Record<FxhashContract, ContractAbstraction<Wallet>|null> = {
-    ISSUER: null,
-    MARKETPLACE_V1: null,
-    MARKETPLACE_V2: null,
-    GENTK_V1: null,
-    GENTK_V2: null,
-    REGISTER: null,
-    MODERATION: null,
-    USER_MODERATION: null,
-    COLLAB_FACTORY: null,
-  }
+  contracts: Record<string, ContractAbstraction<Wallet>|null> = {}
   rpcNodes: string[]
 
   constructor() {
@@ -131,17 +107,7 @@ export class WalletManager {
     await this.getBeaconWallet().disconnect()
     this.tezosToolkit.setWalletProvider(undefined)
     this.beaconWallet = null
-    this.contracts = {
-      ISSUER: null,
-      MARKETPLACE_V1: null,
-      MARKETPLACE_V2: null,
-      GENTK_V1: null,
-      GENTK_V2: null,
-      REGISTER: null,
-      MODERATION: null,
-      USER_MODERATION: null,
-      COLLAB_FACTORY: null,
-    }
+    this.contracts = {}
   }
 
   async connect(): Promise<string|false> {
@@ -241,18 +207,11 @@ export class WalletManager {
    * Search for the contract in the in-memory record of the class, creates it if it doesn't exist,
    * and then returns it.
    */
-  async getContract(contract: FxhashContract): Promise<ContractAbstraction<Wallet>> {
-    if (!this.contracts[contract]) {
-      this.contracts[contract] = await this.tezosToolkit.wallet.at(addresses[contract])
+  async getContract(address: string): Promise<ContractAbstraction<Wallet>> {
+    if (!this.contracts[address]) {
+      this.contracts[address] = await this.tezosToolkit.wallet.at(address)
     }
-    return this.contracts[contract]!
-  }
-
-  /**
-   * Simply gets a contract address from it's identifier
-   */
-  getContractAddress(contract: FxhashContract): string {
-    return addresses[contract]
+    return this.contracts[address]!
   }
 
   /**
@@ -261,7 +220,7 @@ export class WalletManager {
   updateProfile: ContractInteractionMethod<ProfileUpdateCallData> = async (profileData, statusCallback, currentTry = 1) => {
     try {
       // get/create the contract interface
-      const userContract = await this.getContract(FxhashContract.REGISTER)
+      const userContract = await this.getContract(FxhashContracts.REGISTER)
   
       // call the contract (open wallet)
       statusCallback && statusCallback(ContractOperationStatus.CALLING)
@@ -301,7 +260,7 @@ export class WalletManager {
   mintGenerative: ContractInteractionMethod<MintGenerativeCallData> = async (tokenData, statusCallback, currentTry = 1) => {
     try {
       // get/create the contract interface
-      const issuerContract = await this.getContract(FxhashContract.ISSUER)
+      const issuerContract = await this.getContract(FxhashContracts.ISSUER)
   
       // call the contract (open wallet)
       statusCallback && statusCallback(ContractOperationStatus.CALLING)
@@ -338,7 +297,7 @@ export class WalletManager {
   updateGenerativeToken: ContractInteractionMethod<UpdateGenerativeCallData> = async (genData, statusCallback, currentTry = 1) => {
     try {
       // get/create the contract interface
-      const issuerContract = await this.getContract(FxhashContract.ISSUER)
+      const issuerContract = await this.getContract(FxhashContracts.ISSUER)
   
       // call the contract (open wallet)
       statusCallback && statusCallback(ContractOperationStatus.CALLING)
@@ -375,7 +334,7 @@ export class WalletManager {
   burnGenerativeToken: ContractInteractionMethod<number> = async (tokenID, statusCallback, currentTry = 1) => {
     try {
       // get/create the contract interface
-      const issuerContract = await this.getContract(FxhashContract.ISSUER)
+      const issuerContract = await this.getContract(FxhashContracts.ISSUER)
   
       // call the contract (open wallet)
       statusCallback && statusCallback(ContractOperationStatus.CALLING)
@@ -412,7 +371,7 @@ export class WalletManager {
   burnSupply: ContractInteractionMethod<BurnSupplyCallData> = async (data, statusCallback, currentTry = 1) => {
     try {
       // get/create the contract interface
-      const issuerContract = await this.getContract(FxhashContract.ISSUER)
+      const issuerContract = await this.getContract(FxhashContracts.ISSUER)
   
       // call the contract (open wallet)
       statusCallback && statusCallback(ContractOperationStatus.CALLING)
@@ -449,7 +408,7 @@ export class WalletManager {
   report: ContractInteractionMethod<ReportCall> = async (data, statusCallback, currentTry = 1) => {
     try {
       // get/create the contract interface
-      const modContract = await this.getContract(FxhashContract.MODERATION)
+      const modContract = await this.getContract(FxhashContracts.MODERATION)
   
       // call the contract (open wallet)
       statusCallback && statusCallback(ContractOperationStatus.CALLING)
@@ -486,7 +445,7 @@ export class WalletManager {
   moderateToken: ContractInteractionMethod<ModerateCall> = async (data, statusCallback, currentTry = 1) => {
     try {
       // get/create the contract interface
-      const modContract = await this.getContract(FxhashContract.MODERATION)
+      const modContract = await this.getContract(FxhashContracts.MODERATION)
   
       // call the contract (open wallet)
       statusCallback && statusCallback(ContractOperationStatus.CALLING)
@@ -526,7 +485,7 @@ export class WalletManager {
   moderateUser: ContractInteractionMethod<ModerateUserStateCall> = async (data, statusCallback, currentTry = 1) => {
     try {
       // get/create the contract interface
-      const modContract = await this.getContract(FxhashContract.USER_MODERATION)
+      const modContract = await this.getContract(FxhashContracts.USER_MODERATION)
   
       // call the contract (open wallet)
       statusCallback && statusCallback(ContractOperationStatus.CALLING)
@@ -567,7 +526,7 @@ export class WalletManager {
   verifyUser: ContractInteractionMethod<string> = async (address, statusCallback, currentTry = 1) => {
     try {
       // get/create the contract interface
-      const modContract = await this.getContract(FxhashContract.USER_MODERATION)
+      const modContract = await this.getContract(FxhashContracts.USER_MODERATION)
   
       // call the contract (open wallet)
       statusCallback && statusCallback(ContractOperationStatus.CALLING)
@@ -605,7 +564,7 @@ export class WalletManager {
   banUser: ContractInteractionMethod<string> = async (address, statusCallback, currentTry = 1) => {
     try {
       // get/create the contract interface
-      const modContract = await this.getContract(FxhashContract.USER_MODERATION)
+      const modContract = await this.getContract(FxhashContracts.USER_MODERATION)
   
       // call the contract (open wallet)
       statusCallback && statusCallback(ContractOperationStatus.CALLING)

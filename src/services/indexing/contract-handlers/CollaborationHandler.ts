@@ -3,7 +3,7 @@ import { getDiffByPath } from "../../../utils/indexing"
 import { ContractIndexingHandler } from "./ContractHandler"
 
 
-type TApprovals = Record<string, boolean>
+export type TApprovals = Record<string, boolean>
 
 export interface CollaborationProposal {
   id: number

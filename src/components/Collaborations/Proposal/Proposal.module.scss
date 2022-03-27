@@ -9,6 +9,12 @@
   .section {
     background-color: var(--color-gray-vvlight);
     padding: 12px;
+
+    &.section_spaced {
+      & > *+* {
+        margin-top: 10px;
+      }
+    }
   }
 
   & > button {
