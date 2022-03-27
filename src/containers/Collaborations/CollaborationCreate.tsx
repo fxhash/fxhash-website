@@ -85,6 +85,7 @@ export function CollaborationCreate({
     <>
       <Button
         size="regular"
+        type="button"
         iconComp={<i aria-hidden className="fa-solid fa-plus"/>}
         onClick={() => setShow(true)}
       >

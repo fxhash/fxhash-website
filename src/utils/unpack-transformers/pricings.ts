@@ -7,7 +7,7 @@ export function transformPricingFixedBigNumbers(
 ): TInputPricingFixed<number> {
   return {
     price: bnInput.price.toNumber(),
-    opensAt: bnInput.opensAt,
+    opens_at: bnInput.opens_at,
   }
 }
 

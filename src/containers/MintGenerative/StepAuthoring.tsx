@@ -18,17 +18,25 @@ import { UserBadge } from "../../components/User/UserBadge"
 import { format } from "date-fns"
 import { CollaborationCreate } from "../Collaborations/CollaborationCreate"
 import { UserFromAddress } from "../../components/User/UserFromAddress"
+import { RadioOption } from "../../components/Input/InputRadioButtons"
+import { InputRadioBtnIcon } from "../../components/Input/InputRadioBtnIcon"
 
 
-const authoringOptions: IOptions[] = [
+const AuthoringOptions: RadioOption[] = [
   {
-    label: "yourself",
     value: 0,
+    label: "You",
+    optProps: {
+      icon: <i aria-hidden className="fa-solid fa-user-cowboy"/>
+    }
   },
   {
-    label: "other creators and yourself (collaboration)",
     value: 1,
-  }
+    label: "Collaboration",
+    optProps: {
+      icon: <i aria-hidden className="fa-solid fa-people-carry-box"/>
+    }
+  },
 ]
 
 interface IMultiListItemProps extends MultiListItemProps {
@@ -121,25 +129,25 @@ export const StepAuthoring: StepComponent = ({ state, onNext }) => {
     <div className={cs(style.container)}>
       <Spacing size="6x-large"/>
 
-      <Form className={cs(layout.smallform, style.form)} onSubmit={handleSubmit}>
-        <Field>
+      <Form 
+        className={cs(layout.smallform, style.form, layout.w100)} 
+        onSubmit={handleSubmit}
+      >
+        <Field className={cs(layout.y_centered)}>
           <label htmlFor="authoring-type">
             Who's authoring the piece ?
           </label>
-          <Select
-            id="authoring-type"
-            name="authoring-type"
-            placeholder="Who's authoring the piece ?"
+          <InputRadioBtnIcon
             value={authorType}
-            options={authoringOptions}
             onChange={setAuthorType}
-            className={cs(style.select)}
+            options={AuthoringOptions}
+            className={cs(layout.w100, layout.grid_center)}
           />
         </Field>
 
         {authorType === 1 && (
           <>
-            <Field>
+            <Field className={cs(layout.y_centered, layout.w100)}>
               <label>
                 Select the collaboration
               </label>
@@ -155,7 +163,7 @@ export const StepAuthoring: StepComponent = ({ state, onNext }) => {
                   }
                 }}
                 multiple={false}
-                className={cs(style.multilist)}
+                className={cs(style.multilist, layout.w100)}
                 btnClassName={cs(style.multilist_item)}
               >
                 {({ selected, itemProps }: IMultiListItemProps) => (

@@ -52,3 +52,21 @@ export function unpackBytes<T = any>(bytes: string, type: EBuildableParams): T {
   const schema = new Schema(buildableParamTypes[type])
   return schema.Execute(unpacked)
 }
+
+/**
+ * Given some data to pack represented as a **clean** js object (no extra 
+ * properties than those allowed by the type) and its corresponding type
+ * (identified by its EBuildableParams key enum), outputs the data packed as
+ * bytes string, ready to be sent to the contract
+ */
+export function pack<T = any>(data: any, type: EBuildableParams) {
+  // just get the type object
+  const A = buildableParamTypes[type]
+  // turn js object into its michelson version
+  const encoded = buildParameters<T>(data, type)
+  console.log({
+    data, A, encoded
+  })
+  // now pack the data, and returns it
+  return packDataBytes(encoded, A as any).bytes
+}

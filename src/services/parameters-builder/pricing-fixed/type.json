@@ -4,8 +4,6 @@
     {
       "prim": "option",
       "args": [{
-        "prim": "unit"
-      },{
         "prim": "timestamp"
       }],
       "annots": [

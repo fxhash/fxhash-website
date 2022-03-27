@@ -15,20 +15,18 @@ export const StepSuccess: StepComponent = ({ state, onNext }) => {
   
   return (
     <div className={cs(style.container)}>
-      <Spacing size="3x-large"/>
-      <Spacing size="3x-large"/>
+      <Spacing size="6x-large"/>
       <Spacing size="3x-large"/>
       <h3>
-        <span>🎉</span>
+        <i className="fa-solid fa-party-horn" aria-hidden/>
         <span>
           Your Generative Token is now on the blockchain<br/>
           May it have a happy life
         </span>
-        <span>🎉</span>
+        <i className="fa-solid fa-party-horn" aria-hidden/>
       </h3>
       
-      <Spacing size="3x-large"/>
-      <Spacing size="3x-large"/>
+      <Spacing size="6x-large"/>
 
       <Link href={getUserProfileLink(user)} passHref>
         <Button
@@ -38,7 +36,7 @@ export const StepSuccess: StepComponent = ({ state, onNext }) => {
           iconSide="right"
           size="large"
         >
-          Go to your profile
+          go to your profile
         </Button>
       </Link>
     </div>

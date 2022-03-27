@@ -4,38 +4,42 @@ import { FormikErrors } from "formik"
 import { useState } from "react"
 import { Field } from "../../components/Form/Field"
 import { Fieldset } from "../../components/Form/Fieldset"
-import { IOptions, Select } from "../../components/Input/Select"
+import { InputRadioBtnIcon } from "../../components/Input/InputRadioBtnIcon"
+import { RadioOption } from "../../components/Input/InputRadioButtons"
 import { GenTokPricing } from "../../types/entities/GenerativeToken"
 import { GenTokPricingForm } from "../../types/Mint"
 import { InputPricingDutchAuction } from "./PricingDutchAuction"
 import { InputPricingFixed } from "./PricingFixed"
 
 
-const PricingOptions: IOptions[] = [
+const PricingOptions: RadioOption[] = [
   {
-    label: "Fixed price",
     value: GenTokPricing.FIXED,
+    label: "Fixed price",
+    optProps: {
+      icon: <i aria-hidden className="fa-solid fa-equals"/>
+    }
   },
   {
-    label: "Dutch auction",
     value: GenTokPricing.DUTCH_AUCTION,
+    label: "Dutch auction",
+    optProps: {
+      icon: <i aria-hidden className="fa-solid fa-arrow-down-right"/>
+    }
   },
 ]
 
 interface Props {
-  value: GenTokPricingForm
-  onChange: (value: GenTokPricingForm) => void
-  errors?: FormikErrors<GenTokPricingForm>
+  value: GenTokPricingForm<string>
+  onChange: (value: GenTokPricingForm<string>) => void
+  errors?: FormikErrors<GenTokPricingForm<string>>
 }
 export function InputPricing({
   value,
   onChange,
   errors,
 }: Props) {
-
-  console.log({ value, errors })
-
-  const update = (key: keyof GenTokPricingForm, nvalue: any) => {
+  const update = (key: keyof GenTokPricingForm<string>, nvalue: any) => {
     onChange({
       ...value,
       [key]: nvalue,
@@ -49,13 +53,13 @@ export function InputPricing({
           Pricing method
           <small>You will not be able to update the pricing method after publication, only its pricing settings</small>
         </label>
-        <Select
-          options={PricingOptions}
-          value={value.pricingMethod ?? ""}
+        <InputRadioBtnIcon
+          value={value.pricingMethod}
           onChange={val => update("pricingMethod", val)}
-          placeholder="Select a pricing method"
+          options={PricingOptions}
         />
       </Field>
+
 
       {value.pricingMethod === GenTokPricing.FIXED && (
         <InputPricingFixed

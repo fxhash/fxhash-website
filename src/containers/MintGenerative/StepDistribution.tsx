@@ -51,7 +51,7 @@ const validation = Yup.object().shape({
   splitsSecondary: YupSplits,
 })
 
-const defaultDistribution = (user: User|Collaboration): GenTokDistributionForm => {
+const defaultDistribution = (user: User|Collaboration): GenTokDistributionForm<string> => {
   let splits: ISplit[] = []
 
   // if user is single, we create a simple split
@@ -75,13 +75,13 @@ const defaultDistribution = (user: User|Collaboration): GenTokDistributionForm =
       pricingMethod: GenTokPricing.FIXED,
       pricingFixed: {},
       pricingDutchAuction: {
-        decrementDuration: 10,
+        decrementDuration: "10",
         levels: [
-          50,
-          30,
-          20,
-          10,
-          5
+          "50",
+          "30",
+          "20",
+          "10",
+          "5"
         ],
       }
     },
@@ -95,26 +95,15 @@ export const StepDistribution: StepComponent = ({ state, onNext }) => {
   const userCtx = useContext(UserContext)
   const user = userCtx.user! as User
 
-  console.log(user)
-
-  console.log(state)
-
   // the object built at this step
-  const distribution = useMemo<GenTokDistributionForm>(
+  const distribution = useMemo<GenTokDistributionForm<string>>(
     () => state.distribution ?? defaultDistribution(state.collaboration ?? user)
   , [])
 
-  console.log(distribution)
-
-  const update = (key: keyof GenTokDistributionForm, value: any) => {
-    // setDistribution({
-    //   ...distribution,
-    //   [key]: value,
-    // })
-  }
-
-  const uploadInformations = (formInformations: GenTokenInformationsForm) => {
-    
+  const next = (values: GenTokDistributionForm<string>) => {
+    onNext({
+      distribution: values,
+    })
   }
 
   return (
@@ -127,7 +116,7 @@ export const StepDistribution: StepComponent = ({ state, onNext }) => {
         initialValues={distribution}
         validationSchema={validation}
         onSubmit={(values) => {
-          // uploadInformations(values as GenTokenInformationsForm)
+          next(values)
         }}
       >
         {({ values, handleChange, setFieldValue, handleBlur, handleSubmit, errors }) => (
@@ -135,7 +124,6 @@ export const StepDistribution: StepComponent = ({ state, onNext }) => {
             className={cs(layout.smallform, style.form)} 
             onSubmit={handleSubmit}
           >
-            
             <em className={cs(colors.gray)}>
               You will be able to edit these settings after the publication, except if stated otherwise on the corresponding fields.
             </em>

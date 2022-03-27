@@ -13,6 +13,7 @@ import { StepSuccess } from "./StepSuccess"
 import { StepExtraSettings } from "./StepExtraSettings"
 import { StepAuthoring } from "./StepAuthoring"
 import { StepDistribution } from "./StepDistribution"
+import { StepPreviewMint } from "./StepPreviewMint"
 
 
 /**
@@ -79,14 +80,20 @@ const STEPS: Step[] = [
   {
     path: "/informations",
     component: StepInformations,
-    title: "Mint",
+    title: "Project details",
     requiredProps: [ "settings" ],
+  },
+  {
+    path: "/preview-mint",
+    component: StepPreviewMint,
+    title: "Preview & Mint",
+    requiredProps: [ "informations" ],
   },
   {
     path: "/success",
     component: StepSuccess,
     hideTabs: true,
-    requiredProps: [ "informations" ],
+    requiredProps: [],
   }
 ]
 
@@ -147,6 +154,7 @@ export function MintGenerativeController({ anchor }: Props) {
   useEffect(() => {
     // move user back to top of the page
     if (stepIndex !== 0 && anchor?.current) {
+      console.log(`scroll to ${anchor.current.offsetTop}`)
       window.scrollTo({
         top: anchor.current.offsetTop - 30,
         left: 0,
@@ -183,6 +191,9 @@ export function MintGenerativeController({ anchor }: Props) {
       history.replace(STEPS[STEPS.length-1].path)
     }
   }, [state])
+
+  // todo: remove
+  console.log(state)
 
   return (
     <>

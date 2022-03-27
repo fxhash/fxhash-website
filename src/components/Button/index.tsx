@@ -50,8 +50,10 @@ export const Button = React.forwardRef<HTMLButtonElement & HTMLAnchorElement, Pr
       disabled={disabled}
       {...props}
     >
-      {iconComp}
-      <span>{ children }</span>
+      <div className={cs(style.btn_content)}>
+        {iconComp}
+        <span>{ children }</span>
+      </div>
     </ButtonOrLink>
   )
 })

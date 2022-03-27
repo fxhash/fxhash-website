@@ -1,5 +1,6 @@
 import style from "./GenerativeDisplay.module.scss"
 import layout from "../../../styles/Layout.module.scss"
+import text from "../../../styles/Text.module.css"
 import cs from "classnames"
 import { GenerativeToken } from "../../../types/entities/GenerativeToken"
 import { UserBadge } from "../../../components/User/UserBadge"
@@ -28,9 +29,11 @@ import { GenerativeArtwork } from "../../../components/GenerativeToken/Generativ
 
 interface Props {
   token: GenerativeToken
+  offlineMode?: boolean
 }
 export function GenerativeDisplay({
-  token
+  token,
+  offlineMode = false,
 }: Props) {
   return (
     <>
@@ -61,11 +64,13 @@ export function GenerativeDisplay({
 
           <Spacing size="x-large"/>
 
-          <ClientOnly>
-            <UserGuard forceRedirect={false}>
-              <EditTokenSnippet token={token} />
-            </UserGuard>
-          </ClientOnly>
+          {!offlineMode && (
+            <ClientOnly>
+              <UserGuard forceRedirect={false}>
+                <EditTokenSnippet token={token} />
+              </UserGuard>
+            </ClientOnly>
+          )}
 
           <div className={cs(style.artwork_details)}>
             <MintProgress
@@ -81,7 +86,11 @@ export function GenerativeDisplay({
             token={token}
           >
             <Link href={getGenerativeTokenMarketplaceUrl(token)} passHref>
-              <Button isLink={true} size="regular">
+              <Button
+                isLink={true}
+                size="regular"
+                disabled={offlineMode}
+              >
                 open marketplace 
               </Button>
             </Link>
@@ -92,15 +101,17 @@ export function GenerativeDisplay({
           <div className={cs(style.buttons)}>
             <div className={cs(layout.buttons_inline)}>
               <strong>Project #{token.id}</strong>
-              <ClientOnly>
-                <UserGuard forceRedirect={false}>
-                  <GenerativeExtraActions token={token} />
-                </UserGuard>
-              </ClientOnly>
+              {!offlineMode && (
+                <ClientOnly>
+                  <UserGuard forceRedirect={false}>
+                    <GenerativeExtraActions token={token} />
+                  </UserGuard>
+                </ClientOnly>
+              )}
             </div>
-            <strong>
+            <span className={cs(text.info)}>
               Published on { format(new Date(token.createdAt), "dd/MM/yyyy' at 'HH:mm") }
-            </strong>
+            </span>
           </div>
 
           <Spacing size="large"/>

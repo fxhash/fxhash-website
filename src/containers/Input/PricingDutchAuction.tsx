@@ -29,7 +29,7 @@ const dutchAucDateFast: IInputDatetimeFastBtn[] = [
   },
 ]
 
-interface Props extends InputProps<Partial<IPricingDutchAuction>> {
+interface Props extends InputProps<Partial<IPricingDutchAuction<string>>> {
   onBlur?: FocusEventHandler<HTMLInputElement>
   errors?: FormikErrors<IPricingDutchAuction>
 }
@@ -69,7 +69,7 @@ export function InputPricingDutchAuction({
               const levels = value.levels!
               let V = 50
               if (levels?.length >= 1) {
-                V = Math.floor(levels[0]*2)
+                V = Math.floor(parseFloat(levels[0])*2)
               }
               update("levels", levels ? [V, ...levels] : [V])
             }}
@@ -124,7 +124,7 @@ export function InputPricingDutchAuction({
               const levels = value.levels!
               let V = 50
               if (levels?.length >= 1) {
-                V = Math.floor(levels[levels.length-1]*50) / 100
+                V = Math.floor(parseFloat(levels[levels.length-1])*50) / 100
               }
               update("levels", levels ? [...levels, V] : [V])
             }}

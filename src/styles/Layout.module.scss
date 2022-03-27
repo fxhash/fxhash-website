@@ -111,6 +111,11 @@
   flex-wrap: wrap;
 }
 
+.grid_center {
+  align-items: center;
+  justify-content: center;
+}
+
 /**
  * CARDS layout
  **/
@@ -123,6 +128,10 @@
 
 .show_md {
   display: none;
+}
+
+.w100 {
+  width: 100%;
 }
 
 @media (max-width: $breakpoint-md) {

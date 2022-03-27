@@ -21,6 +21,14 @@ export enum GenTokPricing {
   DUTCH_AUCTION   = "DUTCH_AUCTION",
 }
 
+export enum GenTokLabel {
+  EPILEPTIC_TRIGGER   = 0,
+  SEXUAL_CONTENT      = 1,
+  SENSITIVE           = 2,
+  IMAGE_COMPOSITION   = 100,
+  ANIMATED            = 101,
+}
+
 export interface GenerativeTokenMarketStats {
   floor: number|null
   median: number|null

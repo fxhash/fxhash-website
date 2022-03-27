@@ -1,4 +1,5 @@
 import style from "./StepUploadIpfs.module.scss"
+import layout from "../../styles/Layout.module.scss"
 import cs from "classnames"
 import { useState, useEffect } from "react"
 import { Dropzone } from "../../components/Input/Dropzone"
@@ -40,11 +41,10 @@ export const StepUploadIpfs: StepComponent = ({ onNext }) => {
   }, [safeData])
   
   return (
-    <>
-      <p>First, you need to upload the .zip file of your Generative Project on the <a href="https://ipfs.io/" target="_blank">IPFS network</a>.</p>
+    <div className={cs(layout.y_centered)}>
+      <p>The .zip file of your project needs to be uploaded on the <a href="https://ipfs.io/" target="_blank">IPFS network</a>.</p>
 
-      <Spacing size="3x-large"/>
-      <Spacing size="3x-large"/>
+      <Spacing size="2x-large"/>
 
       <section className={cs(style['btn-cont'])}>
         <Dropzone
@@ -55,8 +55,7 @@ export const StepUploadIpfs: StepComponent = ({ onNext }) => {
           className={cs(style.dropzone)}
         />
 
-        <Spacing size="3x-large"/>
-        <Spacing size="3x-large"/>
+        <Spacing size="4x-large"/>
 
         {error && (
           <Error>
@@ -74,6 +73,6 @@ export const StepUploadIpfs: StepComponent = ({ onNext }) => {
           upload
         </Button>
       </section>
-    </>
+    </div>
   )
 }

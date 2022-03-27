@@ -28,7 +28,7 @@ const dateFast: IInputDatetimeFastBtn[] = [
   },
 ]
 
-interface Props extends InputProps<Partial<IPricingFixed>> {
+interface Props extends InputProps<Partial<IPricingFixed<string>>> {
   onBlur?: FocusEventHandler<HTMLInputElement>
   errors?: FormikErrors<IPricingFixed>
 }
