@@ -66,6 +66,8 @@ export const StepUploadIpfs: StepComponent = ({ onNext }) => {
         <Button
           onClick={upload}
           color="secondary"
+          iconComp={<i aria-hidden className="fas fa-arrow-right"/>}
+          iconSide="right"
           disabled={!file}
           size="large"
           state={loading ? "loading" : "default"}

@@ -3,7 +3,7 @@ import text from "../../styles/Text.module.css"
 import cs from "classnames"
 import { ISplit } from "../../types/entities/Split"
 import { InputSearchUser } from "./InputSearchUser"
-import { useState } from "react"
+import { FunctionComponent, useState } from "react"
 import { isTezosAddress } from "../../utils/strings"
 import { Button } from "../Button"
 import { Spacing } from "../Layout/Spacing"
@@ -15,6 +15,10 @@ import { ButtonDelete } from "../Button/ButtonDelete"
 import { FormikErrors } from "formik"
 
 
+interface PropsChildren {
+  addAddress: (address: string) => void
+}
+
 interface Props {
   value: ISplit[]
   onChange: (value: ISplit[]) => void
@@ -22,6 +26,7 @@ interface Props {
   sharesTransformer?: TSplitsTransformer
   textShares?: string
   errors?: FormikErrors<ISplit[]>
+  children?: FunctionComponent<PropsChildren>
 }
 
 /**
@@ -36,6 +41,7 @@ export function InputSplits({
   sharesTransformer = transformSplitsEqual,
   textShares = "Shares",
   errors,
+  children,
 }: Props) {
   // the pkh of the input
   const [pkh, setPkh] = useState<string>("")
@@ -48,15 +54,19 @@ export function InputSplits({
     })))
   }
 
+  const addAddress = (address: string) => {
+    update([
+      ...value,
+      {
+        address: address,
+        pct: 0,
+      }
+    ])
+  }
+
   const add = () => {
     if (!value.find(split => split.address === pkh)) {
-      update([
-        ...value,
-        {
-          address: pkh,
-          pct: 0,
-        }
-      ])
+      addAddress(pkh)
     }
     setPkh("")
   }
@@ -164,6 +174,14 @@ export function InputSplits({
               </div>
             </td>
           </tr>
+
+          {children && (
+            <tr>
+              <td colSpan={3}>
+                {children({ addAddress })}
+              </td>
+            </tr>
+          )}
         </tbody>
       </table>
     </>

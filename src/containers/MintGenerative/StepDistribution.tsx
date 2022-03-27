@@ -26,6 +26,7 @@ import { YupPricingDutchAuction, YupPricingFixed } from "../../utils/yup/price"
 import { YupRoyalties } from "../../utils/yup/royalties"
 import { cloneDeep } from "@apollo/client/utilities"
 import { YupSplits } from "../../utils/yup/splits"
+import { FxhashContracts } from "../../types/Contracts"
 
 
 const validation = Yup.object().shape({
@@ -208,7 +209,24 @@ export const StepDistribution: StepComponent = ({ state, onNext }) => {
                 sharesTransformer={transformSplitsSum1000}
                 textShares="Shares (out of 1000)"
                 errors={errors.splitsSecondary as any}
-              />
+              >
+                {!values.splitsSecondary.find(
+                  split => split.address === FxhashContracts.GENTK_V2
+                )?(({ addAddress }) => (
+                  <div className={cs(style.royalties_last_row)}>
+                    <Button
+                      type="button"
+                      size="very-small"
+                      iconComp={<i className="fa-solid fa-plus" aria-hidden/>}
+                      onClick={() => {
+                        addAddress(FxhashContracts.GENTK_V2)
+                      }}
+                    >
+                      give some royalties to first collector
+                    </Button>
+                  </div>
+                )):undefined}
+              </InputSplits>
             </Field>
 
             <Spacing size="3x-large"/>
@@ -232,6 +250,8 @@ export const StepDistribution: StepComponent = ({ state, onNext }) => {
 
             <Button
               type="submit"
+              iconComp={<i aria-hidden className="fas fa-arrow-right"/>}
+              iconSide="right"
               color="secondary"
               size="large"
               disabled={Object.keys(errors).length > 0}

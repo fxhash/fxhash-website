@@ -219,6 +219,8 @@ export const StepAuthoring: StepComponent = ({ state, onNext }) => {
 
         <Button
           type="submit"
+          iconComp={<i aria-hidden className="fas fa-arrow-right"/>}
+          iconSide="right"
           color="secondary"
           size="large"
           disabled={!isValid}

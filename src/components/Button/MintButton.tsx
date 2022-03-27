@@ -19,10 +19,12 @@ import { MintOperation, TMintOperationParams } from "../../services/contract-ope
 
 interface Props {
   token: GenerativeToken
+  forceDisabled?: boolean
   onReveal?: (hash: string) => void
 }
 export function MintButton({
   token,
+  forceDisabled = false,
   onReveal,
   children,
 }: PropsWithChildren<Props>) {
@@ -38,8 +40,10 @@ export function MintButton({
   // is the token enabled ?
   const isEnabled = useMemo<boolean>(() => {
     // token is enabled if its state is enabled or if its disabled and author is the user
-    return token.enabled || token.author.id === userContext.user?.id
-  }, [token, userContext])
+    return !forceDisabled && (
+      token.enabled || token.author.id === userContext.user?.id
+    )
+  }, [token, userContext, forceDisabled])
 
   // hook to interact with the contract
   const { state, loading, success, call, error, opHash } = 

@@ -89,7 +89,7 @@ export const StepVerification: StepComponent = ({
           size="large"
           onClick={() => onNext({})}
         >
-          Next step
+          next step
         </Button>
       </section>
 

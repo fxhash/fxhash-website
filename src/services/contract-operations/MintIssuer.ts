@@ -33,14 +33,10 @@ export class MintIssuerOperation extends ContractOperation<TMintIssuerOperationP
     // it can be sent to contract correctly (or packed)
     const numbered = transformGenTokFormToNumbers(this.params.data)
 
-    console.log(this.params.data)
-    console.log(numbered)
-
     // let's pack the pricing (only sub-field "details" gets packed)
     const packedPricing = packPricing(
       numbered.distribution!.pricing
     )
-    console.log(packedPricing)
 
     const distribution = numbered.distribution!
     const informations = numbered.informations!
@@ -57,14 +53,11 @@ export class MintIssuerOperation extends ContractOperation<TMintIssuerOperationP
       royalties_split: distribution.splitsSecondary,
       tags: informations.labels,
     }
-    console.log(params)
-    console.log(this.params.data.collaboration)
 
     // if the author is a collab contract, we have to call the collab contract
     // proposal EP instead
     if (this.params.data.collaboration) {
       const packed = packMintIssuer(params)
-      console.log(packed)
       return this.contract!.methodsObject.make_proposal({
         call_id: FxhashCollabFactoryCalls.MINT_ISSUER,
         call_params: packed,

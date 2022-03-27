@@ -104,7 +104,14 @@ export const UserAliases: Record<string, Partial<User>> = {
     name: "fxhash marketplace",
     description: "The official fxhash [beta] marketplace",
     authorizations: Object.values(UserAuthorization),
-    avatarUri: "ipfs://QmURUAU4YPa6Wwco3JSVrcN7WfCrFBZH7hY51BLrc87WjM"
+    avatarUri: "ipfs://QmURUAU4YPa6Wwco3JSVrcN7WfCrFBZH7hY51BLrc87WjM",
+    platformOwned: true,
+  },
+
+  [process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_GENTK_V2!]: {
+    id: "The minter of each iteration will get some royalties",
+    name: "Minter",
+    platformOwned: true,
   }
 }
 

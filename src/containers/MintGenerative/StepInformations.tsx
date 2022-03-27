@@ -267,6 +267,8 @@ export const StepInformations: StepComponent = ({ state, onNext }) => {
             <Button
               type="submit"
               color="secondary"
+              iconComp={<i aria-hidden className="fas fa-arrow-right"/>}
+              iconSide="right"
               size="large"
               disabled={Object.keys(errors).length > 0}
               state={loading ? "loading" : "default"}

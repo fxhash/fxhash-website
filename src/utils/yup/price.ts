@@ -44,7 +44,6 @@ export const YupPricingDutchAuction = Yup.object({
           || (typeof arr[i-1] === "undefined")) {
             continue
           }
-          console.log(arr[i]! >= arr[i-1]!)
           if (arr[i]! >= arr[i-1]!) {
             return false
           }

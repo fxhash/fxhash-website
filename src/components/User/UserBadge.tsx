@@ -46,7 +46,7 @@ export function UserBadge({
             </span>
             {displayAddress && (
               <span className={cs(style.user_address)}>
-                {user.id}
+                {userAlias.id}
               </span>
             )}
           </div>
@@ -60,13 +60,21 @@ export function UserBadge({
         />
         <div className={cs(style.user_infos)}>
           <span className={cs(style.user_name)}>
-            {prependText && <span className={cs(style.prepend)}>{prependText}</span>}
-            <span className={cs({ [style.moderator]: isPlatformOwned(userAlias) })}>{getUserName(userAlias, 15)}</span>
-            {verified && <i aria-hidden className={cs("fas", "fa-badge-check", style.verified)}/>}
+            {prependText && (
+              <span className={cs(style.prepend)}>{prependText}</span>
+            )}
+            <span 
+              className={cs({ [style.moderator]: isPlatformOwned(userAlias) })}
+            >
+              {getUserName(userAlias, 15)}
+            </span>
+            {verified && (
+              <i aria-hidden className={cs("fas", "fa-badge-check", style.verified)}/>
+            )}
           </span>
           {displayAddress && (
             <span className={cs(style.user_address)}>
-              {user.id}
+              {userAlias.id}
             </span>
           )}
         </div>

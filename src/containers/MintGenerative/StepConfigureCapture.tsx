@@ -171,7 +171,7 @@ export const StepConfigureCapture: StepComponent = ({ onNext, state }) => {
           onClick={sendCapture}
           disabled={!validateCaptureSettings(settings)}
         >
-          Next step
+          next step
         </Button>
       </div>
 

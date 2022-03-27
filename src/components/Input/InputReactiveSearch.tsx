@@ -116,6 +116,7 @@ export function InputReactiveSearch<ObjectType extends { id: any }>({
                 {results.map(result => (
                   <button
                     key={result.id}
+                    type="button"
                     className={cs(style.result)}
                     onClick={() => {
                       const nval = valueFromResult(result)

@@ -18,7 +18,6 @@ export class ListingCancelOperation extends ContractOperation<TListingCancelOper
   async prepare() {}
 
   async call(): Promise<WalletOperation> {
-    console.log(this.params)
     const listingCancelParams = buildParameters<TInputListingCancel>(
       this.params.listing.id, 
       EBuildableParams.LISTING_CANCEL

@@ -67,9 +67,6 @@ export function pack<T = any>(data: any, type: EBuildableParams) {
   const A = buildableParamTypes[type]
   // turn js object into its michelson version
   const encoded = buildParameters<T>(data, type)
-  console.log({
-    data, A, encoded
-  })
   // now pack the data, and returns it
   return packDataBytes(encoded, A as any).bytes
 }

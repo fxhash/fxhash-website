@@ -154,7 +154,6 @@ export function MintGenerativeController({ anchor }: Props) {
   useEffect(() => {
     // move user back to top of the page
     if (stepIndex !== 0 && anchor?.current) {
-      console.log(`scroll to ${anchor.current.offsetTop}`)
       window.scrollTo({
         top: anchor.current.offsetTop - 30,
         left: 0,
@@ -191,9 +190,6 @@ export function MintGenerativeController({ anchor }: Props) {
       history.replace(STEPS[STEPS.length-1].path)
     }
   }, [state])
-
-  // todo: remove
-  console.log(state)
 
   return (
     <>

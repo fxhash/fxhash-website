@@ -271,7 +271,10 @@ export const StepExtraSettings: StepComponent = ({ state, onNext }) => {
         <div className={cs(layout.y_centered)}>
           <Button
             type="submit"
+            size="large"
             color="secondary"
+            iconComp={<i aria-hidden className="fas fa-arrow-right"/>}
+            iconSide="right"
           >
             next step
           </Button>

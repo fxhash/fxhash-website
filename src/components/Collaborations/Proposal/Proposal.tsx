@@ -20,7 +20,6 @@ export function Proposal({
   collaboration,
 }: Props) {
   const [expanded, setExpanded] = useState<boolean>(false)
-  console.log(proposal)
 
   const Details = useMemo(() => {
     return ProposalDetails[proposal.callSettings.id]

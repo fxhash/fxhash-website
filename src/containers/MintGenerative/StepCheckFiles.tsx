@@ -142,7 +142,7 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
           disabled={!check1 || !check2}
           onClick={nextStep}
         >
-          Next step
+          next step
         </Button>
       </div>
 

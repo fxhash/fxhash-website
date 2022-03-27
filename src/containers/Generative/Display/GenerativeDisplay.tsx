@@ -84,6 +84,7 @@ export function GenerativeDisplay({
 
           <MintButton
             token={token}
+            forceDisabled
           >
             <Link href={getGenerativeTokenMarketplaceUrl(token)} passHref>
               <Button
