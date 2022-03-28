@@ -21,6 +21,7 @@ import { ipfsGatewayUrl } from "../../../services/Ipfs"
 import { GenerativeArtwork } from "../../../components/GenerativeToken/GenerativeArtwork"
 import { ListSplits } from "../../../components/List/ListSplits"
 import { EntityBadge } from "../../../components/User/EntityBadge"
+import { GenerativePricing } from "../../../components/GenerativeToken/GenerativePricing"
 
 /**
  * This is the Core component resposible for the display logic of a Generative
@@ -125,17 +126,25 @@ export function GenerativeDisplay({
           <Spacing size="2x-large"/>
 
           <div className={cs(style.buttons, layout.break_words)}>
-            <span><strong>Price:</strong> { displayMutez(token.price) } tez</span>
+            <GenerativePricing
+              token={token}
+            />
             <ListSplits
               name="Primary split"
               splits={token.splitsPrimary}
             />
-            <span><strong>Royalties:</strong> { displayRoyalties(token.royalties) }</span>
+            <span>
+              <strong>Royalties: </strong>
+              {displayRoyalties(token.royalties)}
+            </span>
             <ListSplits
               name="Royalties split"
               splits={token.splitsSecondary}
             />
-            <span><strong>Tags:</strong> { token.tags?.join(", ") || "/" }</span>
+            <span>
+              <strong>Tags: </strong>
+              {token.tags?.join(", ") || "/"}
+            </span>
             <span>
               <strong>Metadata: </strong>
               <a 
