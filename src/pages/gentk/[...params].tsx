@@ -32,6 +32,7 @@ import { GenerativeFlagBanner } from '../../containers/Generative/FlagBanner'
 import { SettingsContext } from '../../context/Theme'
 import { ArtworkFrame } from '../../components/Artwork/ArtworkFrame'
 import { EntityBadge } from '../../components/User/EntityBadge'
+import { ListSplits } from '../../components/List/ListSplits'
 
 
 interface Props {
@@ -157,7 +158,14 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
             <Spacing size="2x-large"/>
 
             <div className={cs(style.buttons, layout.break_words)}>
-            <span><strong>Royalties:</strong> { displayRoyalties(objkt.royalties) }</span>
+            <span>
+              <strong>Royalties: </strong>
+              {displayRoyalties(objkt.royalties)}
+            </span>
+            <ListSplits
+              name="Royalties split"
+              splits={objkt.royaltiesSplit}
+            />
             {objkt.features && objkt.features.length > 0 && objkt.rarity && (
               <span><strong>Rarity:</strong> { displayPercentage(objkt.rarity) }% (lower is rarer)</span>
             )}
