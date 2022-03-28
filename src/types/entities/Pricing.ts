@@ -6,6 +6,7 @@ export interface IPricingFixed<N = number> {
 export interface IPricingDutchAuction<N = number> {
   levels: N[]
   restingPrice?: number
+  finalPrice?: number
   decrementDuration: N
   opensAt?: Date|null
 }

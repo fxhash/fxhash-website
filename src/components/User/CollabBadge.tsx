@@ -41,9 +41,11 @@ export function CollabBadge(props: Props) {
         disabled={!toggeable}
       >
         {users.map(user => (
-          <div className={cs(style.avatar_wrapper)}>
+          <div 
+            key={user.id}
+            className={cs(style.avatar_wrapper)}
+          >
             <Avatar
-              key={user.id}
               uri={user.avatarUri}
               className={cs(
                 badgeStyle.avatar,

@@ -175,6 +175,16 @@ export function generativeFromMintForm(
   const dist = data.distribution!
   const pricing = dist.pricing
 
+  // we need to * 60 the decrement duration from the form
+  const pricingDA = pricing.pricingMethod === GenTokPricing.DUTCH_AUCTION 
+    ? transformPricingDutchInputToNumbers(
+      pricing.pricingDutchAuction as IPricingDutchAuction<string>
+    )
+    : undefined
+  if (pricingDA) {
+    pricingDA.decrementDuration *= 60
+  }
+
   return {
     id: 0,
     author: data.collaboration ?? user,
@@ -188,11 +198,7 @@ export function generativeFromMintForm(
         pricing.pricingFixed as IPricingFixed<string>
       )
       : undefined,
-    pricingDutchAuction: pricing.pricingMethod === GenTokPricing.DUTCH_AUCTION 
-      ? transformPricingDutchInputToNumbers(
-        pricing.pricingDutchAuction as IPricingDutchAuction<string>
-      )
-      : undefined,
+    pricingDutchAuction: pricingDA,
     // todo: remove
     price: 0,
     originalSupply: parseInt(dist.editions!),

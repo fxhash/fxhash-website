@@ -9,6 +9,7 @@ export const Frag_GenPricing = gql`
     pricingDutchAuction {
       levels
       restingPrice
+      finalPrice
       decrementDuration
       opensAt
     }
