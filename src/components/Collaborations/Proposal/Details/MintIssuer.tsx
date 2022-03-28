@@ -45,7 +45,8 @@ export function ProposalDetailsMintIssuerExpanded({
       unpacked,
       metadata,
       uri,
-      collaboration
+      collaboration,
+      collaboration.collaborators,
     )
     if (isMounted()) {
       setToken(generative)

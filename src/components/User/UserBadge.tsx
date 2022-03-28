@@ -15,6 +15,7 @@ interface Props {
   className?: string
   avatarSide?: "left" | "right"
   displayAddress?: boolean
+  displayAvatar?: boolean
 }
 
 export function UserBadge({
@@ -24,20 +25,25 @@ export function UserBadge({
   hasLink = true,
   avatarSide = "left",
   displayAddress = false,
+  displayAvatar = true,
   className
 }: Props) {
   // the user goes through an aliases check
   const userAlias = userAliases(user)
   const verified = isUserVerified(user)
+  // alias can force no link
+  hasLink = hasLink && !userAlias.preventLink
 
   return (
     hasLink ? (
       <Link href={getUserProfileLink(userAlias)}>
         <a className={cs(style.container, style[`side-${avatarSide}`], className)}>
-          <Avatar 
-            uri={userAlias.avatarUri}
-            className={cs(style.avatar, style[`avatar-${size}`], { [style.avatar_mod]: isPlatformOwned(userAlias) })}
-          />
+          {displayAvatar && (
+            <Avatar 
+              uri={userAlias.avatarUri}
+              className={cs(style.avatar, style[`avatar-${size}`], { [style.avatar_mod]: isPlatformOwned(userAlias) })}
+            />
+          )}
           <div className={cs(style.user_infos)}>
             <span className={cs(style.user_name)}>
               {prependText && <span className={cs(style.prepend)}>{prependText}</span>}
@@ -54,10 +60,12 @@ export function UserBadge({
       </Link>
     ):(
       <div className={cs(style.container, style[`side-${avatarSide}`], className)}>
-        <Avatar 
-          uri={userAlias.avatarUri}
-          className={cs(style.avatar, style[`avatar-${size}`], { [style.avatar_mod]: isPlatformOwned(userAlias) })}
-        />
+        {displayAvatar && (
+          <Avatar 
+            uri={userAlias.avatarUri}
+            className={cs(style.avatar, style[`avatar-${size}`], { [style.avatar_mod]: isPlatformOwned(userAlias) })}
+          />
+        )}
         <div className={cs(style.user_infos)}>
           <span className={cs(style.user_name)}>
             {prependText && (

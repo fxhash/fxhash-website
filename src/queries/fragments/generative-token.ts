@@ -32,3 +32,31 @@ export const Frag_GenAuthor = gql`
     }
   }
 `
+
+export const Frag_GenSplitsPrimary = gql`
+  fragment SplitsPrimary on GenerativeToken {
+    splitsPrimary {
+      pct
+      user {
+        id
+        name
+        avatarUri
+        flag
+      }
+    }
+  }
+`
+
+export const Frag_GenSplitsSecondary = gql`
+  fragment SplitsSecondary on GenerativeToken {
+    splitsSecondary {
+      pct
+      user {
+        id
+        name
+        avatarUri
+        flag
+      }
+    }
+  }
+`

@@ -19,6 +19,7 @@ import nl2br from "react-nl2br"
 import { displayMutez, displayRoyalties } from "../../../utils/units"
 import { ipfsGatewayUrl } from "../../../services/Ipfs"
 import { GenerativeArtwork } from "../../../components/GenerativeToken/GenerativeArtwork"
+import { ListSplits } from "../../../components/List/ListSplits"
 
 /**
  * This is the Core component resposible for the display logic of a Generative
@@ -123,7 +124,15 @@ export function GenerativeDisplay({
 
           <div className={cs(style.buttons, layout.break_words)}>
             <span><strong>Price:</strong> { displayMutez(token.price) } tez</span>
+            <ListSplits
+              name="Primary Split"
+              splits={token.splitsPrimary}
+            />
             <span><strong>Royalties:</strong> { displayRoyalties(token.royalties) }</span>
+            <ListSplits
+              name="Royalties Split"
+              splits={token.splitsSecondary}
+            />
             <span><strong>Tags:</strong> { token.tags?.join(", ") || "/" }</span>
             <span>
               <strong>Metadata: </strong>

@@ -36,6 +36,8 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
   // get the display url for og:image
   const displayUrl = token.metadata?.displayUri && ipfsGatewayUrl(token.metadata?.displayUri)
 
+  console.log(token)
+
   return (
     <>
       <Head>

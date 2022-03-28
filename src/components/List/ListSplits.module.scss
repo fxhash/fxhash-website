@@ -1,0 +1,46 @@
+.root {
+  .splits {
+    margin-left: 20px;
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 4px 0px;
+    margin-top: 8px;
+    align-items: center;
+    font-size: var(--font-size-small);
+  }
+
+  .split {
+    
+  }
+
+  .user {
+
+    a {
+      color: var(--color-black) !important;
+      font-weight: normal !important;
+    }
+  }
+
+  .pct {
+    color: var(--color-gray);
+    position: relative;
+
+    &::before {
+      content: "";
+      position: absolute;
+      right: calc(100% + 8px);
+      bottom: calc(50% - 1px);
+      width: 10px;
+      height: 35px;
+      border-bottom: 1px solid var(--color-gray-light);
+      border-left: 1px solid var(--color-gray-light);
+      border-bottom-left-radius: 5px;
+    }
+
+    &:first-child {
+      &::before {
+        height: 16px;
+      }
+    }
+  }
+}

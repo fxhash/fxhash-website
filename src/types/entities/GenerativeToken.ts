@@ -4,7 +4,7 @@ import { Objkt } from "./Objkt"
 import { IPricingDutchAuction, IPricingFixed } from "./Pricing"
 import { Report } from "./Report"
 import { IReserve } from "./Reserve"
-import { ISplit } from "./Split"
+import { ISplit, Split } from "./Split"
 import { User } from "./User"
 
 export enum GenTokFlag {
@@ -82,8 +82,8 @@ export interface GenerativeToken {
   balance: number
   enabled: boolean
   royalties: number
-  splitsPrimary: ISplit[]
-  splitsSecondary: ISplit[]
+  splitsPrimary: Split[]
+  splitsSecondary: Split[]
   reserves: IReserve[]
   lockedSeconds: number
   lockEnd: Date

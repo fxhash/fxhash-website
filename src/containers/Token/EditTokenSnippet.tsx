@@ -31,15 +31,6 @@ export function EditTokenSnippet({ token }: Props) {
             edit
           </Button>
         </Link>
-        <strong className={cs({ [style.enabled]: token.enabled, [style.disabled]: !token.enabled })}>
-          {token.enabled ? "enabled" : "disabled"}
-        </strong>
-        <span>
-          <strong>price:</strong> {displayMutez(token.price)}tez
-        </span>
-        <span>
-          <strong>royalties:</strong> {displayRoyalties(token.royalties)}
-        </span>
       </div>
 
       <Spacing size="large"/>

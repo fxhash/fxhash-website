@@ -64,6 +64,7 @@ export function generativeFromMintParams(
   metadata: GenerativeTokenMetadata,
   metadataUri: string,
   author: User,
+  usersLoaded: User[],
 ): GenerativeToken {
   return {
     id: 0,
@@ -88,8 +89,18 @@ export function generativeFromMintParams(
     balance: params.amount,
     enabled: params.enabled,
     royalties: params.royalties,
-    splitsPrimary: params.primary_split,
-    splitsSecondary: params.royalties_split,
+    splitsPrimary: params.primary_split.map(split => ({
+      pct: split.pct,
+      user: usersLoaded.find(u => u.id === split.address) || {
+        id: split.address
+      } as User
+    })),
+    splitsSecondary: params.primary_split.map(split => ({
+      pct: split.pct,
+      user: usersLoaded.find(u => u.id === split.address) || {
+        id: split.address
+      } as User
+    })),
     // todo
     reserves: params.reserves as any,
     lockedSeconds: 0,
@@ -189,8 +200,18 @@ export function generativeFromMintForm(
     balance: parseInt(dist.editions!),
     enabled: dist.enabled,
     royalties: Math.floor(parseFloat(dist.royalties!)*10),
-    splitsPrimary: dist.splitsPrimary,
-    splitsSecondary: dist.splitsSecondary,
+    splitsPrimary: dist.splitsPrimary.map(split => ({
+      pct: split.pct,
+      user: {
+        id: split.address
+      } as User
+    })),
+    splitsSecondary: dist.splitsSecondary.map(split => ({
+      pct: split.pct,
+      user: {
+        id: split.address
+      } as User
+    })),
     reserves: [],
     lockedSeconds: 0,
     lockEnd: new Date(0),

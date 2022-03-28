@@ -112,6 +112,7 @@ export const UserAliases: Record<string, Partial<User>> = {
     id: "The minter of each iteration will get some royalties",
     name: "Minter",
     platformOwned: true,
+    preventLink: true,
   }
 }
 
