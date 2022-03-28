@@ -15,6 +15,7 @@ import { GenTokFlag } from "../../types/entities/GenerativeToken"
 import { useContext } from "react"
 import { SettingsContext } from "../../context/Theme"
 import { DisplayTezos } from "../Display/DisplayTezos"
+import { EntityBadge } from "../User/EntityBadge"
 
 interface Props {
   objkt: Objkt
@@ -73,7 +74,12 @@ export function ObjktCard({
             {objkt.issuer && (
               <div className={cs(style.badge)}>
                 <span className={cs(colors['gray-dark'])}>created by</span> 
-                <UserBadge user={objkt.issuer.author!} size="regular" hasLink={false} avatarSide="right" />
+                <EntityBadge
+                  user={objkt.issuer.author!}
+                  size="regular"
+                  hasLink={false}
+                  avatarSide="right"
+                />
               </div>
             )}
           </div>

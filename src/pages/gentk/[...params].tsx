@@ -31,6 +31,7 @@ import { getGenerativeTokenMarketplaceUrl, getGenerativeTokenUrl } from '../../u
 import { GenerativeFlagBanner } from '../../containers/Generative/FlagBanner'
 import { SettingsContext } from '../../context/Theme'
 import { ArtworkFrame } from '../../components/Artwork/ArtworkFrame'
+import { EntityBadge } from '../../components/User/EntityBadge'
 
 
 interface Props {
@@ -94,16 +95,17 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
         <div className={cs(layout.cols2, layout['responsive-reverse'])}>
           <div className={cs(style['presentation-details'])}>
             <div className={cs(style.artwork_header)}>
-              <UserBadge 
+              <EntityBadge 
                 prependText="created by"
                 user={creator}
-                size="regular"
+                size="big"
+                toggeable
               />
               <Spacing size="2x-small"/>
               <UserBadge 
                 prependText="owned by"
                 user={owner}
-                size="regular"
+                size="big"
               />
               <Spacing size="x-large"/>
               <h3>{ objkt.name }</h3>

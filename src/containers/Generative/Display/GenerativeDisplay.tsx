@@ -20,6 +20,7 @@ import { displayMutez, displayRoyalties } from "../../../utils/units"
 import { ipfsGatewayUrl } from "../../../services/Ipfs"
 import { GenerativeArtwork } from "../../../components/GenerativeToken/GenerativeArtwork"
 import { ListSplits } from "../../../components/List/ListSplits"
+import { EntityBadge } from "../../../components/User/EntityBadge"
 
 /**
  * This is the Core component resposible for the display logic of a Generative
@@ -39,7 +40,7 @@ export function GenerativeDisplay({
   return (
     <>
       <div className={cs(style.artwork_header_mobile, layout.break_words)}>
-        <UserBadge
+        <EntityBadge
           user={token.author}
           size="regular"
         />
@@ -55,9 +56,10 @@ export function GenerativeDisplay({
       }>
         <div className={cs(style.presentation_details)}>
           <div className={cs(style.artwork_header)}>
-            <UserBadge 
+            <EntityBadge 
               user={token.author}
               size="big"
+              toggeable
             />
             <Spacing size="x-large"/>
             <h3>{ token.name }</h3>

@@ -3,6 +3,7 @@ import Link from "next/link"
 import cs from "classnames"
 import { GenerativeToken } from "../../types/entities/GenerativeToken"
 import colors from "../../styles/Colors.module.css"
+import text from "../../styles/Text.module.css"
 import { AnchorForward } from "../Utils/AnchorForward"
 import { Card } from "./Card"
 import { UserBadge } from "../User/UserBadge"
@@ -12,6 +13,7 @@ import { getGenerativeTokenUrl } from "../../utils/generative-token"
 import { displayMutez } from "../../utils/units"
 import { useMemo, useState } from "react"
 import { Countdown } from "../Utils/Countdown"
+import { EntityBadge } from "../User/EntityBadge"
 
 
 interface Props {
@@ -43,7 +45,11 @@ export function GenerativeTokenCard({
           <div>
             <h5>{ token.name }</h5>
             <Spacing size="2x-small" />
-            <UserBadge user={token.author} size="regular" hasLink={false} />
+            <EntityBadge
+              user={token.author}
+              size="regular"
+              hasLink={false}
+            />
           </div>
           <div>
             {lockedUntilDate && (
