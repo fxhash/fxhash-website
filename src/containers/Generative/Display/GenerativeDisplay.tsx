@@ -125,12 +125,12 @@ export function GenerativeDisplay({
           <div className={cs(style.buttons, layout.break_words)}>
             <span><strong>Price:</strong> { displayMutez(token.price) } tez</span>
             <ListSplits
-              name="Primary Split"
+              name="Primary split"
               splits={token.splitsPrimary}
             />
             <span><strong>Royalties:</strong> { displayRoyalties(token.royalties) }</span>
             <ListSplits
-              name="Royalties Split"
+              name="Royalties split"
               splits={token.splitsSecondary}
             />
             <span><strong>Tags:</strong> { token.tags?.join(", ") || "/" }</span>

@@ -9,8 +9,32 @@
     font-size: var(--font-size-small);
   }
 
-  .split {
-    
+  .btn_toggle {
+    border: none;
+    background: transparent;
+    font-size: inherit;
+    color: inherit;
+    cursor: pointer;
+    padding: 0;
+    position: relative;
+    padding-left: 15px;
+    left: -15px;
+
+    i {
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(calc(-50% + 1px));
+      font-size: 10px;
+      color: var(--color-gray);
+      transition: all 0.15s;
+    }
+
+    &:hover {
+      i {
+        color: var(--color-black);
+      }
+    }
   }
 
   .user {
