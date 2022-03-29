@@ -104,7 +104,9 @@ interface Props {
 export const ExploreGenerativeTokens = ({}: Props) => {
   // sort variables
   const [sortValue, setSortValue] = useState<string>("lockEnd-desc")
-  const sort = useMemo<Record<string, any>>(() => sortValueToSortVariable(sortValue), [sortValue])
+  const sort = useMemo<Record<string, any>>(() => sortValueToSortVariable(
+    sortValue
+  ), [sortValue])
   // sort options - when the search is triggered, options are updated to include relevance
   const [sortOptions, setSortOptions] = useState<IOptions[]>(generalSortOptions)
   // keeps track of the search option used before the search was triggered
@@ -123,7 +125,7 @@ export const ExploreGenerativeTokens = ({}: Props) => {
   // we have some default filters on top of that
   const filtersWithDefaults = useMemo<GenerativeTokenFilters>(() => ({
     ...filters,
-    locked_eq: false,
+    mintOpened_eq: true,
     flag_in: [
       GenTokFlag.CLEAN,
       GenTokFlag.NONE,
@@ -145,7 +147,9 @@ export const ExploreGenerativeTokens = ({}: Props) => {
       take: ITEMS_PER_PAGE,
       sort,
       filters: filtersWithDefaults,
-    }
+    },
+    fetchPolicy: "network-only",
+    nextFetchPolicy: "cache-and-network",
   })
 
   useEffect(() => {

@@ -6,17 +6,17 @@ import { SectionHeader } from '../../components/Layout/SectionHeader'
 import ClientOnly from '../../components/Utils/ClientOnly'
 import Head from 'next/head'
 import { ExploreTabs } from '../../containers/Explore/ExploreTabs'
-import { ExploreLockedTokens } from '../../containers/Generative/ExploreLocked'
+import { ExploreIncomingTokens } from '../../containers/Generative/ExploreIncoming'
 import { SectionTitle } from '../../components/Layout/SectionTitle'
 
 const Explore: NextPage = () => {
   return (
     <>
       <Head>
-        <title>fxhash — locked tokens</title>
+        <title>fxhash — incoming projects</title>
         <meta key="og:title" property="og:title" content="fxhash — explore"/> 
-        <meta key="description" name="description" content="Get a glimpse at the soon available tokens"/>
-        <meta key="og:description" property="og:description" content="Get a glimpse at the soon available tokens"/>
+        <meta key="description" name="description" content="Get a glimpse at the soon available projects"/>
+        <meta key="og:description" property="og:description" content="Get a glimpse at the soon available projects"/>
         <meta key="og:type" property="og:type" content="website"/>
         <meta key="og:image" property="og:image" content="https://www.fxhash.xyz/images/og/og1.jpg"/>
       </Head>
@@ -24,7 +24,7 @@ const Explore: NextPage = () => {
 
       <section>
         <SectionHeader layout="center">
-          <SectionTitle>explore locked generators</SectionTitle>
+          <SectionTitle>incoming projects</SectionTitle>
         </SectionHeader>
 
         <Spacing size="3x-large" />
@@ -34,9 +34,11 @@ const Explore: NextPage = () => {
         <Spacing size="x-large"/>
 
         <main className={cs(layout['padding-big'])}>
-          <p>These tokens are currently locked and will soon will be mintable</p>
+          <p>
+            These tokens cannot be minted yet
+          </p>
           <ClientOnly>
-            <ExploreLockedTokens />
+            <ExploreIncomingTokens />
           </ClientOnly>
         </main>
       </section>

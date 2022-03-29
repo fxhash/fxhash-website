@@ -37,12 +37,14 @@ export function Countdown({
 
   const seconds = distanceSeconds % 60
   const minutes = ((distanceSeconds-seconds)/60) % 60
-  const hours = (distanceSeconds - minutes*60 - seconds) / 3600
+  const hours = ((distanceSeconds - minutes*60 - seconds) / 3600) % 24
+  const days = Math.floor(distanceSeconds/(60*60*24))
 
   return (
     <span>
+      {days > 0 && <span>{days}d </span>}
       {hours > 0 && <span>{hours}h </span>}
-      {minutes > 0 && <span>{minutes}min </span>}
+      {days < 1 && minutes > 0 && <span>{minutes}min </span>}
       {hours < 1 && <span>{seconds}s</span>}
     </span>
   )

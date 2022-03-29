@@ -9,12 +9,13 @@ import { Card } from "./Card"
 import { UserBadge } from "../User/UserBadge"
 import { MintProgress } from "../Artwork/MintProgress"
 import { Spacing } from "../Layout/Spacing"
-import { getGenerativeTokenUrl } from "../../utils/generative-token"
+import { genTokCurrentPrice, getGenerativeTokenUrl } from "../../utils/generative-token"
 import { displayMutez } from "../../utils/units"
 import { useMemo, useState } from "react"
 import { Countdown } from "../Utils/Countdown"
 import { EntityBadge } from "../User/EntityBadge"
 import { MintingState } from "../GenerativeToken/MintingState/MintingState"
+import { DisplayTezos } from "../Display/DisplayTezos"
 
 
 interface Props {
@@ -55,8 +56,6 @@ export function GenerativeTokenCard({
             />
           </div>
 
-          <Spacing size="2x-small" />
-
           <div className={cs(text.small)}>
             <MintProgress 
               balance={token.balance}
@@ -64,9 +63,23 @@ export function GenerativeTokenCard({
               originalSupply={token.originalSupply}
             >
               {displayPrice && (
-                <strong className={cs(colors.secondary)}>
-                  {displayMutez(token.price, 4)} tez
-                </strong>
+                <div>
+                  <strong className={cs(colors.secondary, text.regular)}>
+                    <DisplayTezos
+                      mutez={genTokCurrentPrice(token)}
+                      formatBig={false}
+                      tezosSize="regular"
+                    />
+                  </strong>
+                  {!!token.pricingDutchAuction && (
+                    <i 
+                      className={cs(
+                        "fa-solid fa-arrow-down-right",
+                        colors['gray-light'],
+                      )}
+                    />
+                  )}
+                </div>
               )}
             </MintProgress>
           </div>

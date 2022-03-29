@@ -114,6 +114,7 @@ export interface GenerativeTokenFilters {
   supply_gte?: number
   pricingMethod_eq?: GenTokPricing
   locked_eq?: boolean
+  mintOpened_eq?: boolean
 }
 
 export interface GenerativeTokenFeatureValue {

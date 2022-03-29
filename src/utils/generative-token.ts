@@ -1,3 +1,4 @@
+import { differenceInSeconds } from "date-fns"
 import { TInputMintIssuer } from "../services/parameters-builder/mint-issuer/input"
 import { TInputPricingDetails } from "../services/parameters-builder/pricing/input"
 import { GenerativeToken, GenTokFlag, GenTokLabel, GenTokPricing } from "../types/entities/GenerativeToken"
@@ -6,6 +7,7 @@ import { User } from "../types/entities/User"
 import { CaptureSettings, GenerativeTokenMetadata } from "../types/Metadata"
 import { CaptureMode, CaptureTriggerMode, MintGenerativeData } from "../types/Mint"
 import { getIpfsSlash } from "./ipfs"
+import { clamp } from "./math"
 import { tagsFromString } from "./strings"
 import { transformPricingDutchInputToNumbers, transformPricingFixedInputToNumbers } from "./transformers/pricing"
 
@@ -255,4 +257,33 @@ export const mapGenTokPricingToId: Record<GenTokPricing, number> = {
  */
 export function genTokPricingToId(pricingEnum: GenTokPricing) {
   return mapGenTokPricingToId[pricingEnum]
+}
+
+/**
+ * Outputs the current price of a Generative Token based on its pricing
+ * settings and based on the current time
+ */
+export function genTokCurrentPrice(token: GenerativeToken) {
+  let price = 0
+  if (token.pricingFixed) {
+    price = token.pricingFixed.price
+  }
+  else if (token.pricingDutchAuction) {
+    const da = token.pricingDutchAuction
+    // if there's a final price for the auction, we set it
+    if (da.finalPrice) {
+      price = da.finalPrice
+    }
+    // otherwise we compute price based on timer
+    else {
+      const diff = differenceInSeconds(new Date(), new Date(da.opensAt!))
+      const idx = clamp(
+        Math.floor(diff/da.decrementDuration),
+        0,
+        da.levels.length-1
+      )
+      price = da.levels[idx]
+    }
+  }
+  return price
 }
