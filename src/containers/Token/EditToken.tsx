@@ -19,8 +19,10 @@ import { useContractCall } from "../../utils/hookts"
 import { UpdateGenerativeCallData } from "../../types/ContractCalls"
 import { TitleHyphen } from "../../components/Layout/TitleHyphen"
 import { isPositive } from "../../utils/math"
-import { BurnEditions } from "./BurnEditions"
-import { BurnToken } from "./BurnToken"
+import { BurnEditions } from "./Edit/BurnEditions"
+import { BurnToken } from "./Edit/BurnToken"
+import { EditGeneralSettings } from "./Edit/EditGeneralSettings"
+import { EditPricing } from "./Edit/EditPricing"
 
 
 interface Props {
@@ -94,98 +96,24 @@ export function EditToken({ token }: Props) {
 
         <Spacing size="6x-large"/>
 
-        <main className={cs(style.container, layout['padding-big'])}>
-          <Formik
-            initialValues={{
-              price: token.price / 1000000,
-              royalties: token.royalties / 10,
-              enabled: token.enabled
-            }}
-            validationSchema={validation}
-            onSubmit={(values) => {
-              callContract(values as UpdateGenerativeCallData)
-            }}
-          >
-            {({ values, handleChange, handleBlur, handleSubmit, errors }) => (
-              <Form className={cs(style.form)} onSubmit={handleSubmit} autoComplete="off">
-                <h4>Edit token settings</h4>
-
-                <Field error={errors.price} errorPos="bottom-left">
-                  <label htmlFor="price">
-                    Price
-                  </label>
-                  <InputTextUnit
-                    unit="tez"
-                    type="text"
-                    name="price"
-                    value={values.price||""}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    error={!!errors.price}
-                  />
-                </Field>
-
-                <Field error={errors.royalties} errorPos="bottom-left">
-                  <label htmlFor="royalties">
-                    Royalties
-                    <small>in %, between 10 and 25</small>
-                  </label>
-                  <InputTextUnit
-                    unit="%"
-                    type="text"
-                    name="royalties"
-                    value={values.royalties||""}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    error={!!errors.royalties}
-                  />
-                </Field>
-
-                <Field className={cs(style.checkbox)}>
-                  <Checkbox
-                    name="enabled"
-                    value={values.enabled!}
-                    onChange={(_, event) => handleChange(event)}
-                  >
-                    Can be collected now
-                  </Checkbox>
-                </Field>
-
-                <Spacing size="3x-large"/>
-
-                <ContractFeedback
-                  state={callState}
-                  loading={contractLoading}
-                  success={success}
-                  error={contractError}
-                  successMessage="Your token is updated !"
-                />
-
-                <Button
-                  type="submit"
-                  color="secondary"
-                  size="medium"
-                  disabled={Object.keys(errors).length > 0}
-                  state={contractLoading ? "loading" : "default"}
-                >
-                  update token settings
-                </Button>
-              </Form>
-            )}
-          </Formik>
-
-          <div>
-            <h4>Burn editions</h4>
-
-            <BurnEditions token={token} />
-          </div>
+        <main className={cs(layout.smallform, layout['padding-big'])}>
+          <EditGeneralSettings
+            token={token}
+          />
+          <Spacing size="6x-large"/>
+          <EditPricing
+            token={token}
+          />
+          <Spacing size="6x-large"/>
+          <BurnEditions
+            token={token}
+          />
+          <Spacing size="6x-large"/>
+          <Spacing size="6x-large"/>
+          <BurnToken
+            token={token}
+          />
         </main>
-
-        <Spacing size="6x-large"/>
-
-        <section className={cs(layout['padding-big'])}>
-          <BurnToken token={token} />
-        </section>
       </section>
 
       <Spacing size="6x-large"/>

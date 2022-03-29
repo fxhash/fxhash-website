@@ -1,15 +1,17 @@
 import style from "./BurnToken.module.scss"
-import colors from "../../styles/Colors.module.css"
+import colors from "../../../styles/Colors.module.css"
 import cs from "classnames"
-import { GenerativeToken } from "../../types/entities/GenerativeToken"
-import { canTokenBeBurned } from "../../utils/tokens"
-import { Button } from "../../components/Button"
+import { GenerativeToken } from "../../../types/entities/GenerativeToken"
+import { canTokenBeBurned } from "../../../utils/tokens"
+import { Button } from "../../../components/Button"
 import { useContext, useEffect } from "react"
-import { UserContext } from "../UserProvider"
-import { useContractCall } from "../../utils/hookts"
-import { ContractFeedback } from "../../components/Feedback/ContractFeedback"
+import { UserContext } from "../../UserProvider"
+import { useContractCall } from "../../../utils/hookts"
+import { ContractFeedback } from "../../../components/Feedback/ContractFeedback"
 import { useRouter } from "next/router"
-import { getUserProfileLink } from "../../utils/user"
+import { getUserProfileLink } from "../../../utils/user"
+import { BurnTokenOperation } from "../../../services/contract-operations/BurnToken"
+import { useContractOperation } from "../../../hooks/useContractOperation"
 
 
 interface Props {
@@ -17,17 +19,13 @@ interface Props {
 }
 
 export function BurnToken({ token }: Props) {
-  const userCtx = useContext(UserContext)
-  const router = useRouter()
-
-  const { state, loading, success, call, error } = 
-    useContractCall<number>(userCtx.walletManager!.burnGenerativeToken)
-
-  useEffect(() => {
-    if (success && userCtx && userCtx.user) {
-      router.replace(getUserProfileLink(userCtx.user))
-    }
-  }, [success])
+  const {
+    call,
+    loading,
+    error,
+    success,
+    state,
+  } = useContractOperation(BurnTokenOperation)
     
   return (
     <div className={cs(style.container, {
@@ -48,12 +46,15 @@ export function BurnToken({ token }: Props) {
         success={success}
         error={error}
         loading={loading}
+        successMessage="Project was burnt."
       />
 
       <Button
         color="primary"
         size="medium"
-        onClick={() => call(token.id)}
+        onClick={() => call({
+          token: token,
+        })}
         state={loading ? "loading" : "default"}
         disabled={!canTokenBeBurned(token)}
       >

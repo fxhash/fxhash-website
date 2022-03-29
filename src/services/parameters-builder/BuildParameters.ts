@@ -6,6 +6,7 @@ import listingAcceptType from "./listing-accept/type.json"
 import mintIssuerType from "./mint-issuer/type.json"
 import pricingFixedType from "./pricing-fixed/type.json"
 import pricingDutchAuctionType from "./pricing-dutch-auction/type.json"
+import updateIssuerType from "./update-issuer/type.json"
 import { Schema } from "@taquito/michelson-encoder"
 import { packData, packDataBytes, unpackDataBytes } from "@taquito/michel-codec"
 
@@ -20,6 +21,7 @@ export enum EBuildableParams {
   MINT_ISSUER           = "MINT_ISSUER",
   PRICING_FIXED         = "PRICING_FIXED",
   PRICING_DUTCH_AUCTION = "PRICING_DUTCH_AUCTION",
+  UPDATE_ISSUER         = "UPDATE_ISSUER",
 }
 
 // maps a builadable param type with the actual type in json
@@ -31,6 +33,7 @@ const buildableParamTypes: Record<EBuildableParams, MichelsonV1Expression> = {
   MINT_ISSUER: mintIssuerType,
   PRICING_FIXED: pricingFixedType,
   PRICING_DUTCH_AUCTION: pricingDutchAuctionType,
+  UPDATE_ISSUER: updateIssuerType,
 }
 
 /**

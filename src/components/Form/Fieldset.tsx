@@ -2,9 +2,16 @@ import style from "./Form.module.scss"
 import cs from "classnames"
 import { PropsWithChildren } from "react-router/node_modules/@types/react"
 
-export function Fieldset({ children }: PropsWithChildren<any>) {
+interface Props {
+  className?: string
+}
+
+export function Fieldset({
+  className,
+  children,
+}: PropsWithChildren<Props>) {
   return (
-    <fieldset className={cs(style.fieldset)}>
+    <fieldset className={cs(style.fieldset, className)}>
       {children}
     </fieldset>
   )
