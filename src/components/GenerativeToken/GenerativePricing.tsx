@@ -75,7 +75,7 @@ export function GenerativePricing({
           <span>
             {format(
               new Date(token.pricingFixed.opensAt), 
-              "dd/MM/yyyy' at 'HH:mm"
+              "MMMM d, yyyy' at 'HH:mm"
             )}
           </span>
         </span>
@@ -87,7 +87,7 @@ export function GenerativePricing({
           <span>
             {format(
               new Date(token.pricingDutchAuction.opensAt!), 
-              "dd/MM/yyyy' at 'HH:mm"
+              "MMMM d, yyyy' at 'HH:mm"
             )}
           </span>
         </span>

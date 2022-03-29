@@ -171,6 +171,44 @@
         }
       }
     }
+
+    &.opened {
+      .avatars {
+        .avatar_wrapper:not(:first-child) {
+          margin-left: -37px;
+        }
+      }
+    }
+  }
+
+  &.size_small {
+    .avatars {
+      .avatar {
+        border-width: 1px;
+      }
+
+      .avatar_wrapper {
+        &:not(:first-child) {
+          margin-left: -10px;
+        }
+      }
+
+      .link {
+        padding: 0 8px;
+
+        i {
+          font-size: 0.8em;
+        }
+      }
+    }
+
+    &.opened {
+      .avatars {
+        .avatar_wrapper:not(:first-child) {
+          margin-left: -37px;
+        }
+      }
+    }
   }
 
   //

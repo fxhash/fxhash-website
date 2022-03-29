@@ -199,7 +199,7 @@ export const StepAuthoring: StepComponent = ({ state, onNext }) => {
                     <span className={cs(style.date)}>
                       <strong>Created on: </strong>
                       <span>
-                        {format(new Date(itemProps.collab.createdAt), "dd/MM/yyyy' at 'HH:mm")}
+                        {format(new Date(itemProps.collab.createdAt), "MMMM d, yyyy' at 'HH:mm")}
                       </span>
                     </span>
                   </div>

@@ -2,6 +2,7 @@ import Link from 'next/link'
 import Head from 'next/head'
 import { GetServerSideProps, NextPage } from "next"
 import layout from "../../styles/Layout.module.scss"
+import text from "../../styles/Text.module.css"
 import style from "../../styles/GenerativeTokenDetails.module.scss"
 import colors from "../../styles/Colors.module.css"
 import cs from "classnames"
@@ -147,8 +148,15 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
             <Spacing size="4x-large"/>
 
             <div className={cs(style.buttons)}>
-              <strong>Project #{objkt.issuer.id} — iteration #{objkt.iteration}</strong>
-              <strong>Minted on { format(new Date(objkt.createdAt), "dd/MM/yyyy' at 'HH:mm") }</strong>
+              <strong>
+                Project #{objkt.issuer.id} — iteration #{objkt.iteration}
+              </strong>
+              <span className={cs(text.info)}>
+                Minted on {format(
+                  new Date(objkt.createdAt),
+                  "MMMM d, yyyy' at 'HH:mm"
+                )}
+              </span>
             </div>
 
             <Spacing size="large"/>
@@ -175,6 +183,7 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
                 target="_blank"
                 referrerPolicy="no-referrer"
                 href={`https://tzkt.io/${objkt.generationHash}`}
+                className={cs(text.very_small)}
               >
                 {objkt.generationHash} <i className="fas fa-external-link-square" aria-hidden/>
               </a>

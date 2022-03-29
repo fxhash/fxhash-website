@@ -14,6 +14,7 @@ import { displayMutez } from "../../utils/units"
 import { useMemo, useState } from "react"
 import { Countdown } from "../Utils/Countdown"
 import { EntityBadge } from "../User/EntityBadge"
+import { MintingState } from "../GenerativeToken/MintingState/MintingState"
 
 
 interface Props {
@@ -32,8 +33,6 @@ export function GenerativeTokenCard({
   lockedUntil,
 }: Props) {
   const url = getGenerativeTokenUrl(token)
-  const lockedUntilDate = useMemo<Date|null>(() => lockedUntil ? new Date(lockedUntil) : null, [lockedUntil])
-  const [unlocked, setUnlocked] = useState<boolean>(false)
 
   return (
     <Link href={url} passHref>
@@ -50,27 +49,15 @@ export function GenerativeTokenCard({
               size="regular"
               hasLink={false}
             />
+            <Spacing size="2x-small" />
+            <MintingState
+              token={token}
+            />
           </div>
-          <div>
-            {lockedUntilDate && (
-              <>
-                <Spacing size="small" />
-                {!unlocked ? (
-                  <strong className={cs(colors.gray)}>
-                    <span><i aria-hidden className="fas fa-lock"/> unlocks in </span>
-                    <Countdown
-                      until={lockedUntilDate}
-                      onEnd={() => setUnlocked(true)}
-                    />
-                  </strong>
-                ):(
-                  <strong className={cs(colors.success)}>
-                    <i aria-hidden className="fas fa-lock-open"/> unlocked
-                  </strong>
-                )}
-              </>
-            )}
-            <Spacing size="small" />
+
+          <Spacing size="2x-small" />
+
+          <div className={cs(text.small)}>
             <MintProgress 
               balance={token.balance}
               supply={token.supply}

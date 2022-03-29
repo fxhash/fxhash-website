@@ -8,6 +8,7 @@ import { Spacing } from "../Layout/Spacing"
 import { getGenerativeTokenUrl } from "../../utils/generative-token"
 import { CardList } from "./CardList"
 import { displayMutez } from "../../utils/units"
+import { EntityBadge } from "../User/EntityBadge"
 
 interface Props {
   token: GenerativeToken
@@ -26,10 +27,14 @@ export function GenerativeTokenCardList({
     <Link href={url} passHref>
       <AnchorForward style={{ height: '100%' }} className={className}>
         <CardList thumbnailUri={token.metadata?.thumbnailUri}>
-          <div>
+          <div className={cs(style.main_details)}>
             <h6>{ token.name }</h6>
             <Spacing size="8px" />
-            <UserBadge user={token.author} size="small" hasLink={false} />
+            <EntityBadge
+              user={token.author}
+              size="small"
+              hasLink={false}
+            />
           </div>
           <div className={cs(style.details)}>
             <div className={cs(style.metric)}>

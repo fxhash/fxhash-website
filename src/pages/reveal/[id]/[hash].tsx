@@ -13,6 +13,7 @@ import { Article } from "../../../components/Article/Article"
 import { UserBadge } from "../../../components/User/UserBadge"
 import Link from "next/link"
 import { Button } from "../../../components/Button"
+import { EntityBadge } from "../../../components/User/EntityBadge"
 
 
 interface Props {
@@ -47,13 +48,17 @@ const RevealPage: NextPage<Props> = ({ hash, token }) => {
             <h2>{ token.name }</h2>
             <div className={cs(layout.x_centered)}>
               <span style={{ marginRight: 10 }}>created by </span>
-              <UserBadge user={token.author} />
+              <EntityBadge
+                size="regular"
+                user={token.author}
+                toggeable
+              />
             </div>
           </div>
 
           <Spacing size="3x-large"/>
 
-          <Article>
+          <Article className={cs(layout.small_centered)}>
             <p>
               Your token will now have to go through a <strong>signing process</strong>. No more actions are required from yourself, this happens automatically in the back stage ! Until this process is finished, your token will appear as <strong>[waiting to be signed]</strong> in your wallet and on fxhash.
             </p>
@@ -71,7 +76,7 @@ const RevealPage: NextPage<Props> = ({ hash, token }) => {
 
           <Spacing size="6x-large"/>
 
-          <div className={cs(layout.y_centered)}>
+          {/* <div className={cs(layout.y_centered)}>
             <Link href={`/reveal/progress/${hash}`} passHref>
               <Button
                 isLink
@@ -82,7 +87,7 @@ const RevealPage: NextPage<Props> = ({ hash, token }) => {
                 signing progress
               </Button>
             </Link>
-          </div>
+          </div> */}
         </main>
       </section>
 

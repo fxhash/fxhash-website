@@ -4,10 +4,14 @@ import { PropsWithChildren } from "react"
 
 
 interface Props {
+  className?: string
 }
-export function Article({ children }: PropsWithChildren<Props>) {
+export function Article({
+  className,
+  children,
+}: PropsWithChildren<Props>) {
   return (
-    <article className={cs(style.article)}>
+    <article className={cs(style.article, className)}>
       {children}
     </article>
   )

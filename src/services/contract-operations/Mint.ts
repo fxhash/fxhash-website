@@ -10,7 +10,6 @@ export type TMintOperationParams = {
 
 /**
  * Mint an unique iteration of a Generative Token
- * todo: setup the price stuff
  */
 export class MintOperation extends ContractOperation<TMintOperationParams> {
   issuerContract: ContractAbstraction<Wallet>|null = null
@@ -25,7 +24,7 @@ export class MintOperation extends ContractOperation<TMintOperationParams> {
       referrer: null,
       reserve_input: null
     }).send({
-      amount: 20000000,
+      amount: this.params.price,
       mutez: true,
       storageLimit: 450
     })

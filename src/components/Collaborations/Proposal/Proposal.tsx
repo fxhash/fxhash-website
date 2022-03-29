@@ -60,7 +60,7 @@ export function Proposal({
             size="small"
           />
           <span>
-            on {format(new Date(proposal.createdAt), "dd/MM/yyyy' at 'HH:mm")}
+            on {format(new Date(proposal.createdAt), "MMMM d, yyyy' at 'HH:mm")}
           </span>
         </div>
       </section>
@@ -76,7 +76,7 @@ export function Proposal({
             size="small"
           />
           <span>
-            on {format(new Date(proposal.executedAt!), "dd/MM/yyyy' at 'HH:mm")}
+            on {format(new Date(proposal.executedAt!), "MMMM d, yyyy' at 'HH:mm")}
           </span>
         </section>
       ):(

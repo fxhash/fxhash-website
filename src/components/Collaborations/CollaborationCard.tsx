@@ -45,7 +45,7 @@ export function CollaborationCard({
       <div className={cs(style.line)}>
         <strong>Created on:</strong>
         <span>
-          {format(new Date(collaboration.createdAt), "dd/MM/yyyy' at 'HH:mm")}
+          {format(new Date(collaboration.createdAt), "MMMM d, yyyy' at 'HH:mm")}
         </span>
       </div>
     </div>

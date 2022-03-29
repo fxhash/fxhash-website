@@ -208,13 +208,19 @@ export function generativeFromMintForm(
     royalties: Math.floor(parseFloat(dist.royalties!)*10),
     splitsPrimary: dist.splitsPrimary.map(split => ({
       pct: split.pct,
-      user: {
+      user: split.address === user.id ? user 
+      : (data.collaboration && data.collaboration.collaborators.find(
+        user => user.id === split.address
+      )) || {
         id: split.address
       } as User
     })),
     splitsSecondary: dist.splitsSecondary.map(split => ({
       pct: split.pct,
-      user: {
+      user: split.address === user.id ? user 
+      : (data.collaboration && data.collaboration.collaborators.find(
+        user => user.id === split.address
+      )) || {
         id: split.address
       } as User
     })),

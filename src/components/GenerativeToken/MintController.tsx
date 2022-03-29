@@ -1,10 +1,10 @@
-import style from "./MintButton.module.scss"
+import style from "./MintController.module.scss"
 import layout from "../../styles/Layout.module.scss"
 import Link from "next/link"
 import cs from "classnames"
 import { GenerativeToken, GenTokFlag } from "../../types/entities/GenerativeToken"
 import { Spacing } from "../Layout/Spacing"
-import { Button, ButtonState } from "."
+import { Button, ButtonState } from "../../components/Button"
 import { displayMutez } from "../../utils/units"
 import { PropsWithChildren, useContext, useEffect, useMemo, useState } from "react"
 import { Countdown } from "../Utils/Countdown"
@@ -16,34 +16,44 @@ import { MintCall } from "../../types/ContractCalls"
 import { DisplayTezos } from "../Display/DisplayTezos"
 import { useContractOperation } from "../../hooks/useContractOperation"
 import { MintOperation, TMintOperationParams } from "../../services/contract-operations/Mint"
+import { MintingState } from "./MintingState/MintingState"
+import { useMintingState } from "../../hooks/useMintingState"
 
 interface Props {
   token: GenerativeToken
   forceDisabled?: boolean
   onReveal?: (hash: string) => void
 }
-export function MintButton({
+
+/**
+ * This Component controls the minting flow by applying logic to the Generative
+ * Token settings in order to derive some UI states.
+ * It should:
+ *  * control the enabled state of the mint button
+ *  * control the price displayed on the button depending on the pricing method
+ *  * display some UI state based on the most pertinent information to display
+ *    (if locked/opensAt, only show the most recent)
+ *  * display some extra details given the state of the pricing
+ *    (dutch auction, if active: show time until next decrement, next price)
+ */
+export function MintController({
   token,
   forceDisabled = false,
   onReveal,
   children,
 }: PropsWithChildren<Props>) {
-  const userContext = useContext(UserContext)
-  // is the token hidden ?
-  const isHidden = [GenTokFlag.MALICIOUS, GenTokFlag.HIDDEN].includes(token.flag) || token.balance === 0
-  
-  const lockEnd = useMemo(() => new Date(token.lockEnd), [token])
-  
-  // is the token locked ?
-  const [isLocked, setIsLocked] = useState<boolean>(distanceSecondsClamped(new Date(), lockEnd) > 0)
+  // the mint context, handles display logic
+  const mintingState = useMintingState(token, forceDisabled)
+  const {
+    hidden,
+    enabled,
+    locked,
+    price,
+    dutchAuctionState,
+    fixedPricingState,
+  } = mintingState
 
-  // is the token enabled ?
-  const isEnabled = useMemo<boolean>(() => {
-    // token is enabled if its state is enabled or if its disabled and author is the user
-    return !forceDisabled && (
-      token.enabled || token.author.id === userContext.user?.id
-    )
-  }, [token, userContext, forceDisabled])
+  console.log(mintingState)
 
   // hook to interact with the contract
   const { state, loading, success, call, error, opHash } = 
@@ -52,7 +62,7 @@ export function MintButton({
   const mint = () => {
     call({
       token: token,
-      price: token.price
+      price: price
     })
   }
 
@@ -66,6 +76,13 @@ export function MintButton({
 
   return (
     <div className={cs(style.root)}>
+
+      <MintingState
+        token={token}
+        existingState={mintingState}
+        verbose
+      />
+
       <ContractFeedback
         state={state}
         error={error}
@@ -74,18 +91,17 @@ export function MintButton({
         className={cs(style.contract_feedback)}
       />
 
-      {isLocked && (
+      {/* {locked && (
         <>
           <strong>
             <span><i aria-hidden className="fas fa-lock"/> unlocks in </span>
             <Countdown
               until={lockEnd}
-              onEnd={() => setIsLocked(false)}
             />
           </strong>
           <Spacing size="8px"/>
         </>
-      )}
+      )} */}
 
       {opHash && (
         <>
@@ -104,11 +120,11 @@ export function MintButton({
         </>
       )}
 
-      {!token.enabled && (
+      {!token.enabled && token.balance > 0 && (
         <>
           <small>
             <span>Token is currently <strong>disabled</strong> by author</span>
-            {isEnabled && (
+            {enabled && (
               <span>
                 <br/>
                 But as the author, you can still mint
@@ -119,17 +135,19 @@ export function MintButton({
         </>
       )}
       
-      <div className={cs(layout.buttons_inline, layout.flex_wrap, style.buttons_wrapper)}>
-        {!isHidden && (
+      <div className={cs(
+        layout.buttons_inline, layout.flex_wrap, style.buttons_wrapper
+      )}>
+        {!hidden && (
           <Button
             type="button"
             color="secondary"
-            disabled={!isEnabled || isLocked}
+            disabled={!enabled || locked}
             onClick={mint}
             state={loading ? "loading" : "default"}
             size="regular"
           >
-            mint iteration&nbsp;&nbsp;<DisplayTezos mutez={token.price} tezosSize="regular" formatBig={false} />
+            mint iteration&nbsp;&nbsp;<DisplayTezos mutez={price} tezosSize="regular" formatBig={false} />
           </Button>
         )}
 

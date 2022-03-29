@@ -150,12 +150,16 @@
   }
 }
 
-.buttons {
+.multilines {
   display: flex;
   flex-direction: column;
   gap: var(--layout-margin-small-sm);
   align-items: flex-start;
   width: 100%;
+}
+
+.extra_details {
+  // font-size: var(--font-size-small);
 }
 
 .features_wrapper {

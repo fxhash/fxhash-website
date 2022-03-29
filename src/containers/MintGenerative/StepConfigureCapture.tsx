@@ -131,7 +131,8 @@ export const StepConfigureCapture: StepComponent = ({ onNext, state }) => {
           <Button
             onClick={captureTest}
             state={loading ? "loading" : "default"}
-            color="primary"
+            color="black"
+            size="regular"
             style={{
               alignSelf: "center"
             }}

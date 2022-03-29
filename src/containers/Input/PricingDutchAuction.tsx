@@ -25,7 +25,7 @@ const dutchAucDateFast: IInputDatetimeFastBtn[] = [
   },
   {
     label: "-1h",
-    generate: (date) => date ? addHours(date, 1) : addHours(new Date(), -1)
+    generate: (date) => date ? addHours(date, -1) : addHours(new Date(), -1)
   },
 ]
 

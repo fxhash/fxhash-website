@@ -9,7 +9,7 @@ import ClientOnly from "../../../components/Utils/ClientOnly"
 import { UserGuard } from "../../../components/Guards/UserGuard"
 import { EditTokenSnippet } from "../../Token/EditTokenSnippet"
 import { MintProgress } from "../../../components/Artwork/MintProgress"
-import { MintButton } from "../../../components/Button/MintButton"
+import { MintController } from "../../../components/GenerativeToken/MintController"
 import Link from "next/link"
 import { getGenerativeTokenMarketplaceUrl } from "../../../utils/generative-token"
 import { Button } from "../../../components/Button"
@@ -85,10 +85,9 @@ export function GenerativeDisplay({
           </div>
 
           <Spacing size="x-large"/>
-
-          <MintButton
+          
+          <MintController
             token={token}
-            forceDisabled
           >
             <Link href={getGenerativeTokenMarketplaceUrl(token)} passHref>
               <Button
@@ -99,11 +98,11 @@ export function GenerativeDisplay({
                 open marketplace 
               </Button>
             </Link>
-          </MintButton>
+          </MintController>
 
           <Spacing size="4x-large"/>
 
-          <div className={cs(style.buttons)}>
+          <div className={cs(style.multilines)}>
             <div className={cs(layout.buttons_inline)}>
               <strong>Project #{token.id}</strong>
               {!offlineMode && (
@@ -115,7 +114,7 @@ export function GenerativeDisplay({
               )}
             </div>
             <span className={cs(text.info)}>
-              Published on { format(new Date(token.createdAt), "dd/MM/yyyy' at 'HH:mm") }
+              Published on { format(new Date(token.createdAt), "MMMM d, yyyy' at 'HH:mm") }
             </span>
           </div>
 
@@ -125,7 +124,11 @@ export function GenerativeDisplay({
 
           <Spacing size="2x-large"/>
 
-          <div className={cs(style.buttons, layout.break_words)}>
+          <div className={cs(
+            style.multilines,
+            layout.break_words,
+            style.extra_details,
+          )}>
             <GenerativePricing
               token={token}
             />
