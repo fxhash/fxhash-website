@@ -191,7 +191,6 @@ export function EditGeneralSettings({
                 loading={loading}
                 success={success}
                 error={error}
-                successMessage="Your project settings were updated"
               />
               <Button
                 type="submit"

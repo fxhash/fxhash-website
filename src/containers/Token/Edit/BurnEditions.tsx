@@ -50,8 +50,6 @@ export function BurnEditions({
     call({
       supply: editions,
       token: token,
-      // todo
-      collaboration: undefined,
     })
   }
   
@@ -99,7 +97,6 @@ export function BurnEditions({
             loading={loading}
             success={success}
             error={error}
-            successMessage="Editions were burnt"
           />
           <Button
             type="submit"

@@ -1,6 +1,7 @@
 import { FunctionComponent } from "react"
 import { CollaborationProposal } from "../../../../services/indexing/contract-handlers/CollaborationHandler"
 import { Collaboration } from "../../../../types/entities/User"
+import { ProposalDetailsBurnSupplyExpanded, ProposalDetailsBurnSupplyHeader } from "./BurnSupply"
 import { ProposalDetailsMintIssuerExpanded, ProposalDetailsMintIssuerHeader } from "./MintIssuer"
 import { ProposalDetailsUpdateIssuerExpanded, ProposalDetailsUpdateIssuerHeader } from "./UpdateIssuer"
 import { ProposalDetailsUpdatePriceExpanded, ProposalDetailsUpdatePriceHeader } from "./UpdatePrice"
@@ -30,4 +31,9 @@ export const ProposalDetails: Record<number, IProposalDetails> = {
     header: ProposalDetailsUpdatePriceHeader,
     expanded: ProposalDetailsUpdatePriceExpanded,
   },
+  //todo: update reserve
+  4: {
+    header: ProposalDetailsBurnSupplyHeader,
+    expanded: ProposalDetailsBurnSupplyExpanded,
+  }
 }

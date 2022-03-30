@@ -9,17 +9,11 @@ import { useLazyQuery, useQuery } from "@apollo/client"
 import { Qu_genToken } from "../../../../queries/generative-token"
 import { Spacing } from "../../../Layout/Spacing"
 import { JsonViewer } from "../../../Utils/JsonViewer"
-import { unpackUpdateIssuer } from "../../../../utils/unpack/update-issuer"
 import { LoaderBlock } from "../../../Layout/LoaderBlock"
-import { ListSplits } from "../../../List/ListSplits"
-import { Qu_users } from "../../../../queries/user"
-import { User } from "../../../../types/entities/User"
-import { displayRoyalties } from "../../../../utils/units"
 import { GenerativeToken } from "../../../../types/entities/GenerativeToken"
 import { LinkIcon } from "../../../Link/LinkIcon"
 import { getGenerativeTokenUrl } from "../../../../utils/generative-token"
 import { unpackUpdatePrice } from "../../../../utils/unpack/update-price"
-import { unpackPricingDetails } from "../../../../utils/unpack/pricing"
 import { transformPricingDutchAuctionBigNumbers, transformPricingFixedBigNumbers } from "../../../../utils/unpack-transformers/pricings"
 import { GenerativePricing } from "../../../GenerativeToken/GenerativePricing"
 
@@ -65,8 +59,6 @@ export function ProposalDetailsUpdatePriceExpanded({
     }
   }, [token])
 
-  console.log(priceDetails)
-
   // build a fake token from the price details so that we can leverage the
   // generic display component
   const fakeNewToken = useMemo(() => {
@@ -87,9 +79,6 @@ export function ProposalDetailsUpdatePriceExpanded({
     }
     return tok
   }, [priceDetails])
-
-  console.log(token)
-
 
   return (
     <div>

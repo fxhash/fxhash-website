@@ -46,7 +46,6 @@ export function BurnToken({ token }: Props) {
         success={success}
         error={error}
         loading={loading}
-        successMessage="Project was burnt."
       />
 
       <Button

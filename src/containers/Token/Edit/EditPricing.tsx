@@ -129,7 +129,6 @@ export function EditPricing({
                 loading={loading}
                 success={success}
                 error={error}
-                successMessage="Your project settings were updated"
               />
               <Button
                 type="submit"

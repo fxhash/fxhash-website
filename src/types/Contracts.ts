@@ -31,6 +31,9 @@ export const FxhashCollabFactoryCalls = {
   MINT_ISSUER:      0,
   UPDATE_ISSUER:    1,
   UPDATE_PRICE:     2,
+  UPDATE_RESERVE:   3,
+  BURN_SUPPLY:      4,
+  BURN:             5,
 }
 
 export type ContractCallHookReturn<T> = {

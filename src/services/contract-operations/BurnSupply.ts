@@ -1,25 +1,26 @@
 import { ContractAbstraction, TransactionWalletOperation, Wallet } from "@taquito/taquito"
-import { FxhashContracts } from "../../types/Contracts"
+import { FxhashCollabFactoryCalls, FxhashContracts } from "../../types/Contracts"
 import { GenerativeToken } from "../../types/entities/GenerativeToken"
-import { Collaboration } from "../../types/entities/User"
+import { Collaboration, UserType } from "../../types/entities/User"
+import { EBuildableParams, pack } from "../parameters-builder/BuildParameters"
 import { ContractOperation } from "./ContractOperation"
 
 export type TBurnSupplyOperationParams = {
-  collaboration?: Collaboration
   token: GenerativeToken
   supply: number
 }
 
 /**
- * Update the general settings of the an issuer
- * issuer > update_issuer
+ * Burns some supply of a Generative Token
  */
 export class BurnSupplyOperation extends ContractOperation<TBurnSupplyOperationParams> {
   contract: ContractAbstraction<Wallet>|null = null
+  collab: boolean = false
 
   async prepare() {
+    this.collab = this.params.token.author.type === UserType.COLLAB_CONTRACT_V1
     this.contract = await this.manager.getContract(
-      this.params.collaboration?.id || FxhashContracts.ISSUER
+      this.collab ? this.params.token.author.id : FxhashContracts.ISSUER
     )
   }
 
@@ -32,20 +33,20 @@ export class BurnSupplyOperation extends ContractOperation<TBurnSupplyOperationP
 
     // if the author is a collab contract, we have to call the collab contract
     // proposal EP instead
-    // if (this.params.collaboration) {
-    //   const packed = packBurnSupply(params)
-    //   return this.contract!.methodsObject.make_proposal({
-    //     call_id: FxhashCollabFactoryCalls.MINT_ISSUER,
-    //     call_params: packed,
-    //   }).send()
-    // }
-    // else { 
+    if (this.collab) {
+      const packed = pack(params, EBuildableParams.BURN_SUPPLY)
+      return this.contract!.methodsObject.make_proposal({
+        call_id: FxhashCollabFactoryCalls.BURN_SUPPLY,
+        call_params: packed,
+      }).send()
+    }
+    else { 
       return this.contract!.methodsObject.burn_supply(params).send()
-    // }
+    }
   }
 
   success(): string {
-    return this.params.collaboration
+    return this.collab
      ? `A proposal to burn ${this.params.supply} editions of ${this.params.token.name} was successfully sent`
      : `You have burnt ${this.params.supply} editions of ${this.params.token.name}`
   }
