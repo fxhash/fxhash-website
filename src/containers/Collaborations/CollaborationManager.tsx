@@ -70,11 +70,13 @@ export function CollaborationManager({
                   <Proposals
                     proposals={filetered.awaiting}
                     collaboration={collaboration}
+                    showOldSettings={true}
                   />
                 ):tabIndex === 1 ? (
                   <Proposals
                     proposals={filetered.executed}
                     collaboration={collaboration}
+                    showOldSettings={false}
                   />
                 ):(
                   <div>

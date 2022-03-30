@@ -22,75 +22,73 @@ export function GenerativePricing({
 }: Props) {
   return (
     <>
-      <span className={cs(style.group)}>
-        <strong>Price: </strong>
-        <span>
-          {token.pricingFixed && (
-            <DisplayTezos
-              mutez={token.pricingFixed.price}
-              tezosSize="regular"
-              formatBig={false}
-            />
-          )}
+      <strong>Price</strong>
+      <span>
+        {token.pricingFixed && (
+          <DisplayTezos
+            mutez={token.pricingFixed.price}
+            tezosSize="regular"
+            formatBig={false}
+          />
+        )}
 
-          {token.pricingDutchAuction && (
-            <span className={cs(style.group_details)}>
-              <span>
-                <span>Dutch auction </span>
-                <InfoIconLink
-                  href="/doc/collect/pricing"
-                  title="Learn more about Dutch Auctions"
-                />
-              </span>
-              <span className={cs(style.levels)}>
-                <IconTezos
-                  className={cs(style.tezos_icon)}
-                />
-                {token.pricingDutchAuction.levels.map((level, idx) => (
-                  <Fragment key={idx}>
-                    {displayMutez(level)}
-                    {idx !== token.pricingDutchAuction!.levels.length-1 && (
-                      <span className={cs(style.sep)}>{"->"}</span>
-                    )}
-                  </Fragment>
-                ))}
-              </span>
-              <span>
-                {formatDuration(
-                  intervalToDuration({
-                    start: 0,
-                    end: token.pricingDutchAuction.decrementDuration*1000
-                  })
-                )}
-                <span> between decrements</span>
-              </span>
+        {token.pricingDutchAuction && (
+          <span className={cs(style.group_details)}>
+            <span>
+              <span>Dutch auction </span>
+              <InfoIconLink
+                href="/doc/collect/pricing"
+                title="Learn more about Dutch Auctions"
+              />
             </span>
-          )}
-        </span>
+            <span className={cs(style.levels)}>
+              <IconTezos
+                className={cs(style.tezos_icon)}
+              />
+              {token.pricingDutchAuction.levels.map((level, idx) => (
+                <Fragment key={idx}>
+                  {displayMutez(level)}
+                  {idx !== token.pricingDutchAuction!.levels.length-1 && (
+                    <span className={cs(style.sep)}>{"->"}</span>
+                  )}
+                </Fragment>
+              ))}
+            </span>
+            <span>
+              changes every{" "}
+              {formatDuration(
+                intervalToDuration({
+                  start: 0,
+                  end: token.pricingDutchAuction.decrementDuration*1000
+                })
+              )}
+            </span>
+          </span>
+        )}
       </span>
 
       {token.pricingFixed?.opensAt && (
-        <span>
-          <strong>Minting opens on: </strong>
+        <>
+          <strong>Minting opens</strong>
           <span>
             {format(
               new Date(token.pricingFixed.opensAt), 
               "MMMM d, yyyy' at 'HH:mm"
             )}
           </span>
-        </span>
+        </>
       )}
 
       {token.pricingDutchAuction && (
-        <span>
-          <strong>Auction starts on: </strong>
+        <>
+          <strong>Auction starts</strong>
           <span>
             {format(
               new Date(token.pricingDutchAuction.opensAt!), 
               "MMMM d, yyyy' at 'HH:mm"
             )}
           </span>
-        </span>
+        </>
       )}
     </>
   )

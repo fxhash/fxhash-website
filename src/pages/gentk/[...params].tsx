@@ -165,20 +165,22 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
 
             <Spacing size="2x-large"/>
 
-            <div className={cs(style.buttons, layout.break_words)}>
-            <span>
-              <strong>Royalties: </strong>
-              {displayRoyalties(objkt.royalties)}
-            </span>
-            <ListSplits
-              name="Royalties split"
-              splits={objkt.royaltiesSplit}
-            />
-            {objkt.features && objkt.features.length > 0 && objkt.rarity && (
-              <span><strong>Rarity:</strong> { displayPercentage(objkt.rarity) }% (lower is rarer)</span>
-            )}
-            <span>
-              <strong>Operation hash: </strong>
+            <div className={cs(
+              style.buttons, layout.break_words, style.extra_details
+            )}>
+              <strong>Royalties</strong>
+              <span>{displayRoyalties(objkt.royalties)}</span>
+              <ListSplits
+                name="Royalties split"
+                splits={objkt.royaltiesSplit}
+              />
+              {objkt.features && objkt.features.length > 0 && objkt.rarity && (
+                <>
+                  <strong>Rarity</strong>
+                  <span>{displayPercentage(objkt.rarity)}% (lower is rarer)</span>
+                </>
+              )}
+              <strong>Operation hash</strong>
               <a 
                 target="_blank"
                 referrerPolicy="no-referrer"
@@ -187,9 +189,7 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
               >
                 {objkt.generationHash} <i className="fas fa-external-link-square" aria-hidden/>
               </a>
-            </span>
-            <span>
-              <strong>Metadata: </strong>
+              <strong>Metadata</strong>
               {objkt.assigned ? (
                 <a 
                   target="_blank"
@@ -199,10 +199,8 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
                   view on IPFS <i className="fas fa-external-link-square" aria-hidden/>
                 </a>
               ):(
-                <em>not yet assigned</em>
+                <em className={cs(text.info)}>not yet assigned</em>
               )}
-            </span>
-
             </div>
           </div>
 

@@ -160,3 +160,10 @@
 .features_wrapper {
   width: 100%;
 }
+
+.extra_details {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  align-items: baseline;
+  gap: 10px 5px;
+}

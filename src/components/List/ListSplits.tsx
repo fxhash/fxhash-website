@@ -20,21 +20,21 @@ export function ListSplits({
   const [opened, setOpened] = useState<boolean>(toggled)
 
   return (
-    <div className={cs(style.root)}>
+    <>
       <button
         type="button"
         onClick={() => setOpened(!opened)}
         className={cs(style.btn_toggle)}
       >
         <i className={`fa-solid fa-angle-${opened?"up":"down"}`} aria-hidden/>
-        <strong>{name} </strong>
-        <span className={cs(text.info)}>
-          ({splits.length})
-        </span>
+        <strong>{name}</strong>
       </button>
 
-      {opened && (
-        <div className={cs(style.splits)}>
+      {opened ? (
+        <div className={cs(style.splits, {
+          [style.single_split]: splits.length === 1,
+          [style.more_2_split]: splits.length > 2,
+        })}>
           {splits.map((split, idx) => (
             <Fragment
               key={idx}
@@ -52,7 +52,11 @@ export function ListSplits({
             </Fragment>
           ))}
         </div>
+      ):(
+        <span className={cs(text.info)}>
+          ({splits.length})
+        </span>
       )}
-    </div>
+    </>
   )
 }

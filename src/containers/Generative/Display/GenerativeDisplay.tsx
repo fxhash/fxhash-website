@@ -137,28 +137,22 @@ export function GenerativeDisplay({
               name="Primary split"
               splits={token.splitsPrimary}
             />
-            <span>
-              <strong>Royalties: </strong>
-              {displayRoyalties(token.royalties)}
-            </span>
+            <strong>Royalties</strong>
+            <span>{displayRoyalties(token.royalties)}</span>
             <ListSplits
               name="Royalties split"
               splits={token.splitsSecondary}
             />
-            <span>
-              <strong>Tags: </strong>
-              {token.tags?.join(", ") || "/"}
-            </span>
-            <span>
-              <strong>Metadata: </strong>
-              <a 
-                target="_blank"
-                referrerPolicy="no-referrer"
-                href={ipfsGatewayUrl(token.metadataUri)}
-              >
-                view on IPFS <i className="fas fa-external-link-square" aria-hidden/>
-              </a>
-            </span>
+            <strong>Tags</strong>
+            <span>{token.tags?.join(", ") || "/"}</span>
+            <strong>Metadata</strong>
+            <a 
+              target="_blank"
+              referrerPolicy="no-referrer"
+              href={ipfsGatewayUrl(token.metadataUri)}
+            >
+              view on IPFS <i className="fas fa-external-link-square" aria-hidden/>
+            </a>
           </div>
         </div>
 

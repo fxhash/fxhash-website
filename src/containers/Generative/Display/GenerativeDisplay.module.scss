@@ -159,7 +159,14 @@
 }
 
 .extra_details {
-  // font-size: var(--font-size-small);
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  align-items: baseline;
+  gap: 10px 5px;
+
+  // & > *:nth-child(2n):not(a) {
+  //   opacity: 0.6;
+  // }
 }
 
 .features_wrapper {

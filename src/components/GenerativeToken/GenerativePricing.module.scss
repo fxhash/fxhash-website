@@ -1,14 +1,7 @@
-.group {
+.group_details {
   display: flex;
-  align-items: flex-start;
-  flex-direction: row;
-  gap: 0.8em;
-
-  .group_details {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
+  flex-direction: column;
+  gap: 6px;
 }
 
 .levels {
