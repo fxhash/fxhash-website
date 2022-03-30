@@ -1,0 +1,14 @@
+.root {
+
+  .bottom {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 20px;
+    align-items: center;
+
+    button {
+      flex-shrink: 0;
+    }
+  }
+}

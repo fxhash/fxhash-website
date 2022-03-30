@@ -88,6 +88,7 @@ export function GenerativeDisplay({
           
           <MintController
             token={token}
+            forceDisabled={offlineMode}
           >
             <Link href={getGenerativeTokenMarketplaceUrl(token)} passHref>
               <Button

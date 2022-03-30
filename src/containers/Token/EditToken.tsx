@@ -23,6 +23,8 @@ import { BurnEditions } from "./Edit/BurnEditions"
 import { BurnToken } from "./Edit/BurnToken"
 import { EditGeneralSettings } from "./Edit/EditGeneralSettings"
 import { EditPricing } from "./Edit/EditPricing"
+import { isGenerativeAuthor } from "../../utils/generative-token"
+import { User } from "../../types/entities/User"
 
 
 interface Props {
@@ -68,24 +70,15 @@ export function EditToken({ token }: Props) {
   const userCtx = useContext(UserContext)
   const user = userCtx.user!
   const router = useRouter()
-
-  const { state: callState, loading: contractLoading, success, call, error: contractError } = 
-    useContractCall<UpdateGenerativeCallData>(userCtx.walletManager!.updateGenerativeToken)
   
   useEffect(() => {
-    if (userCtx && userCtx.autoConnectChecked && token.author.id !== user.id) {
+    if (userCtx 
+      && userCtx.autoConnectChecked 
+      && !isGenerativeAuthor(token, user as User)
+    ) {
       router.replace("/")
     }
   }, [user])
-
-  const callContract = (values: UpdateGenerativeCallData) => {
-    call({
-      price: Math.floor(values.price * 1000000),
-      royalties: Math.floor(values.royalties * 10),
-      enabled: values.enabled,
-      issuer_id: token.id
-    })
-  }
 
   return (
     <>

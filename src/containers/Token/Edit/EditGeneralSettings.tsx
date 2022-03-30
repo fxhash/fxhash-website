@@ -38,8 +38,6 @@ export function EditGeneralSettings({
   const update = (values: UpdateIssuerForm<string>) => {
     call({
       token: token,
-      // todo
-      collaboration: undefined,
       data: values,
     })
   }

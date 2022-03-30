@@ -1,4 +1,4 @@
-import style from "./ActionVote.module.scss"
+import style from "./ActionExecute.module.scss"
 import cs from "classnames"
 import layout from "../../../../styles/Layout.module.scss"
 import text from "../../../../styles/Text.module.css"
@@ -24,14 +24,7 @@ export function ProposalActionExecute({
   const canBeExecuted = canProposalBeExecuted(proposal, collaboration)
 
   return (
-    <>
-      <span className={cs(text.info)}>
-        {canBeExecuted 
-          ? "Since all the collaborators have approved the operation, any collaborator can execute it in the name of the group." 
-          : "When all the collaborators will have approved the operation, it can be executed by any collaborator in the name of the whole group."
-        }
-      </span>
-
+    <div className={cs(style.root)}>
       <ContractFeedback
         state={state}
         success={success}
@@ -40,19 +33,27 @@ export function ProposalActionExecute({
         noSpacing
       />
 
-      <Button
-        color="secondary"
-        size="small"
-        iconComp={<i aria-hidden className="fa-solid fa-sparkles"/>}
-        disabled={!canBeExecuted}
-        state={loading ? "loading" : "default"}
-        onClick={() => call({ 
-          proposal,
-          collaboration,
-        })}
-      >
-        execute operation
-      </Button>
-    </>
+      <div className={cs(style.bottom)}>
+        <span className={cs(text.info)}>
+          {canBeExecuted 
+            ? "Since all the collaborators have approved the operation, any collaborator can execute it in the name of the group." 
+            : "When all the collaborators will have approved the operation, it can be executed by any collaborator in the name of the whole group."
+          }
+        </span>
+        <Button
+          color="secondary"
+          size="small"
+          iconComp={<i aria-hidden className="fa-solid fa-sparkles"/>}
+          disabled={!canBeExecuted}
+          state={loading ? "loading" : "default"}
+          onClick={() => call({ 
+            proposal,
+            collaboration,
+          })}
+        >
+          execute operation
+        </Button>
+      </div>
+    </div>
   )
 }

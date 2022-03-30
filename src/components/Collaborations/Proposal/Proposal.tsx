@@ -1,4 +1,6 @@
 import style from "./Proposal.module.scss"
+import text from "../../../styles/Text.module.css"
+import colors from "../../../styles/Colors.module.css"
 import cs from "classnames"
 import { format } from "date-fns"
 import { CollaborationProposal } from "../../../services/indexing/contract-handlers/CollaborationHandler"
@@ -51,7 +53,7 @@ export function Proposal({
       )}
   
       <section className={cs(style.section)}>
-        <div className={cs(style.line)}>
+        <div className={cs(style.line, text.small)}>
           <span>Initiated by</span>
           <UserBadge
             user={collaboration.collaborators.find(
@@ -59,14 +61,14 @@ export function Proposal({
             )!}
             size="small"
           />
-          <span>
+          <span className={cs(colors.gray)}>
             on {format(new Date(proposal.createdAt), "MMMM d, yyyy' at 'HH:mm")}
           </span>
         </div>
       </section>
 
       {proposal.executed ? (
-        <section className={cs(style.execution, style.section)}>
+        <section className={cs(style.execution, style.section, text.small)}>
           <i aria-hidden className="fas fa-check-circle"/>
           <span>executed by</span>
           <UserBadge

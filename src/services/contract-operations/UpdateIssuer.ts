@@ -1,14 +1,14 @@
 import { ContractAbstraction, TransactionWalletOperation, Wallet } from "@taquito/taquito"
-import { FxhashContracts } from "../../types/Contracts"
+import { FxhashCollabFactoryCalls, FxhashContracts } from "../../types/Contracts"
 import { GenerativeToken } from "../../types/entities/GenerativeToken"
-import { Collaboration } from "../../types/entities/User"
+import { Collaboration, UserType } from "../../types/entities/User"
 import { UpdateIssuerForm } from "../../types/UpdateIssuer"
 // import { packUpdateIssuer } from "../../utils/pack/mint-issuer"
 import { transformUpdateIssuerFormToNumbers } from "../../utils/transformers/update-issuer"
+import { EBuildableParams, pack } from "../parameters-builder/BuildParameters"
 import { ContractOperation } from "./ContractOperation"
 
 export type TUpdateIssuerOperationParams = {
-  collaboration?: Collaboration
   token: GenerativeToken
   data: UpdateIssuerForm<string>
 }
@@ -19,10 +19,12 @@ export type TUpdateIssuerOperationParams = {
  */
 export class UpdateIssuerOperation extends ContractOperation<TUpdateIssuerOperationParams> {
   contract: ContractAbstraction<Wallet>|null = null
+  collab: boolean = false
 
   async prepare() {
+    this.collab = this.params.token.author.type === UserType.COLLAB_CONTRACT_V1
     this.contract = await this.manager.getContract(
-      this.params.collaboration?.id || FxhashContracts.ISSUER
+      this.collab ? this.params.token.author.id : FxhashContracts.ISSUER
     )
   }
 
@@ -44,20 +46,22 @@ export class UpdateIssuerOperation extends ContractOperation<TUpdateIssuerOperat
 
     // if the author is a collab contract, we have to call the collab contract
     // proposal EP instead
-    // if (this.params.collaboration) {
-    //   const packed = packUpdateIssuer(params)
-    //   return this.contract!.methodsObject.make_proposal({
-    //     call_id: FxhashCollabFactoryCalls.MINT_ISSUER,
-    //     call_params: packed,
-    //   }).send()
-    // }
-    // else { 
+    if (this.collab) {
+      const packed = pack(params, EBuildableParams.UPDATE_ISSUER)
+      console.log(packed)
+
+      return this.contract!.methodsObject.make_proposal({
+        call_id: FxhashCollabFactoryCalls.UPDATE_ISSUER,
+        call_params: packed,
+      }).send()
+    }
+    else { 
       return this.contract!.methodsObject.update_issuer(params).send()
-    // }
+    }
   }
 
   success(): string {
-    return this.params.collaboration
+    return this.collab
      ? `A proposal to update ${this.params.token.name} was successfully sent`
      : `Your project ${this.params.token.name} was updated`
   }

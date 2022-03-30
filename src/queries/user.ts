@@ -20,6 +20,18 @@ export const Qu_user = gql`
   }
 `
 
+export const Qu_users = gql`
+  query Users($filters: UserFilter) {
+    users(filters: $filters, skip: 0, take: 50) {
+      id
+      type
+      name
+      avatarUri
+      flag
+    }
+  }
+`
+
 export const Qu_userLight = gql`
   query UserLight($id: String) {
     user(id: $id) {

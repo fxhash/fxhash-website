@@ -1,13 +1,13 @@
 import style from "./EditTokenSnippet.module.scss"
 import cs from "classnames"
 import { GenerativeToken } from "../../types/entities/GenerativeToken"
-import { displayMutez, displayRoyalties } from "../../utils/units"
 import Link from "next/link"
 import { Button } from "../../components/Button"
 import { useContext } from "react"
 import { UserContext } from "../UserProvider"
-import { BurnToken } from "./BurnToken"
 import { Spacing } from "../../components/Layout/Spacing"
+import { isGenerativeAuthor } from "../../utils/generative-token"
+import { User } from "../../types/entities/User"
 
 
 interface Props {
@@ -20,7 +20,7 @@ export function EditTokenSnippet({ token }: Props) {
 
   if (!user || !token) return null
 
-  return user.id === token.author.id ? (
+  return isGenerativeAuthor(token, user as User) ? (
     <>
       <div className={cs(style.container)}>
         <Link href={`/edit-generative/${token.id}`} passHref>

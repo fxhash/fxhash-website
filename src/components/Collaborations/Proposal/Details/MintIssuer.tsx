@@ -66,14 +66,12 @@ export function ProposalDetailsMintIssuerExpanded({
 
         <Spacing size="3x-large"/>
 
-        <h5>Details</h5>
+        <h5>Call parameters</h5>
         <Spacing size="regular"/>
-        <div className={cs(style.json)}>
-          <JsonViewer
-            json={token as any}
-            collapsed={true}
-          />
-        </div>
+        <JsonViewer
+          json={token as any}
+          collapsed={true}
+        />
       </div>
     ):(
       <LoaderBlock

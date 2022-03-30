@@ -3,7 +3,7 @@ import { TInputMintIssuer } from "../services/parameters-builder/mint-issuer/inp
 import { TInputPricingDetails } from "../services/parameters-builder/pricing/input"
 import { GenerativeToken, GenTokFlag, GenTokLabel, GenTokPricing } from "../types/entities/GenerativeToken"
 import { IPricingDutchAuction, IPricingFixed } from "../types/entities/Pricing"
-import { User } from "../types/entities/User"
+import { Collaboration, User, UserType } from "../types/entities/User"
 import { CaptureSettings, GenerativeTokenMetadata } from "../types/Metadata"
 import { CaptureMode, CaptureTriggerMode, MintGenerativeData } from "../types/Mint"
 import { getIpfsSlash } from "./ipfs"
@@ -286,4 +286,22 @@ export function genTokCurrentPrice(token: GenerativeToken) {
     }
   }
   return price
+}
+
+/**
+ * Is the user the author of a Generative Token ?
+ * Looks for author as a member of authoring collaboration if any.
+ */
+export function isGenerativeAuthor(
+  token: GenerativeToken,
+  user: User,
+): boolean {
+  if (token.author.type === UserType.COLLAB_CONTRACT_V1) {
+    return !!(token.author as Collaboration).collaborators.find(
+      author => author.id === user.id
+    )
+  }
+  else {
+    return token.author.id === user.id
+  }
 }

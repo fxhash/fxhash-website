@@ -10,12 +10,14 @@ import { Fragment, useState } from "react"
 interface Props {
   name: string
   splits: Split[]
+  toggled?: boolean
 }
 export function ListSplits({
   name,
   splits,
+  toggled = false,
 }: Props) {
-  const [opened, setOpened] = useState<boolean>(false)
+  const [opened, setOpened] = useState<boolean>(toggled)
 
   return (
     <div className={cs(style.root)}>
