@@ -57,6 +57,9 @@ export const ExploreIncomingTokens = ({}: Props) => {
           GenTokFlag.CLEAN,
           GenTokFlag.NONE,
         ]
+      },
+      sort: {
+        mintOpensAt: "ASC",
       }
     },
     fetchPolicy: "network-only",

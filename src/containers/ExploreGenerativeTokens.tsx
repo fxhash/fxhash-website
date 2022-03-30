@@ -50,11 +50,11 @@ const Qu_genTokens = gql`
 const generalSortOptions: IOptions[] = [
   {
     label: "recently minted",
-    value: "lockEnd-desc"
+    value: "mintOpensAt-desc"
   },
   {
     label: "oldest minted",
-    value: "lockEnd-asc",
+    value: "mintOpensAt-asc",
   },
   {
     label: "price (low to high)",
@@ -103,7 +103,7 @@ interface Props {
 
 export const ExploreGenerativeTokens = ({}: Props) => {
   // sort variables
-  const [sortValue, setSortValue] = useState<string>("lockEnd-desc")
+  const [sortValue, setSortValue] = useState<string>("mintOpensAt-desc")
   const sort = useMemo<Record<string, any>>(() => sortValueToSortVariable(
     sortValue
   ), [sortValue])
