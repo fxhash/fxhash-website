@@ -44,7 +44,9 @@ const validation = Yup.object().shape({
     pricingDutchAuction: Yup.object()
       .when("pricingMethod", {
         is: GenTokPricing.DUTCH_AUCTION,
-        then: YupPricingDutchAuction,
+        then: YupPricingDutchAuction(
+          1, "At least in 1 hour"
+        ),
       })
   }),
   royalties: YupRoyalties,

@@ -1,28 +1,28 @@
 import style from "./EditStyle.module.scss"
 import layout from "../../../styles/Layout.module.scss"
 import cs from "classnames"
+import * as Yup from "yup"
 import { GenerativeToken, GenTokPricing } from "../../../types/entities/GenerativeToken"
 import { Formik } from "formik"
 import { Form } from "../../../components/Form/Form"
 import { Fieldset } from "../../../components/Form/Fieldset"
-import { Field } from "../../../components/Form/Field"
-import { Checkbox } from "../../../components/Input/Checkbox"
 import { Spacing } from "../../../components/Layout/Spacing"
-import { InputTextUnit } from "../../../components/Input/InputTextUnit"
-import { InputSplits } from "../../../components/Input/InputSplits"
-import { transformSplitsSum1000 } from "../../../utils/transformers/splits"
-import { FxhashContracts } from "../../../types/Contracts"
 import { Button } from "../../../components/Button"
 import { useContractOperation } from "../../../hooks/useContractOperation"
-import { UpdateIssuerOperation } from "../../../services/contract-operations/UpdateIssuer"
-import { UpdateIssuerForm } from "../../../types/UpdateIssuer"
 import { ContractFeedback } from "../../../components/Feedback/ContractFeedback"
 import { InputPricingFixed } from "../../Input/PricingFixed"
 import { transformPricingDutchNumbersToString, transformPricingFixedNumbersToString } from "../../../utils/transformers/pricing"
 import { InputPricingDutchAuction } from "../../Input/PricingDutchAuction"
 import { UpdatePricingOperation } from "../../../services/contract-operations/UpdatePricing"
 import { isAfter } from "date-fns"
+import { YupPricingDutchAuction, YupPricingFixed } from "../../../utils/yup/price"
 
+
+const validation = Yup.object({
+  pricingFixed: YupPricingFixed.nullable(),
+  pricingDutchAuction: YupPricingDutchAuction(0, "Must be after now")
+    .nullable(),
+})
 
 interface Props {
   token: GenerativeToken
@@ -70,6 +70,7 @@ export function EditPricing({
           ):null,
       }}
       onSubmit={update}
+      validationSchema={validation}
     >
       {({ 
         values,
@@ -89,6 +90,8 @@ export function EditPricing({
           >
             <h4>Pricing settings</h4>
             <Spacing size="large"/>
+
+            {console.log(errors)}
 
             {disabled && (
               <>
@@ -133,6 +136,7 @@ export function EditPricing({
                 color="secondary"
                 size="regular"
                 state={loading ? "loading" : "default"}
+                disabled={Object.keys(errors).length > 0}
               >
                 edit pricing
               </Button>

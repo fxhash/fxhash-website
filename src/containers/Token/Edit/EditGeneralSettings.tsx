@@ -2,6 +2,7 @@ import style from "../EditToken.module.scss"
 import editStyle from "./EditStyle.module.scss"
 import layout from "../../../styles/Layout.module.scss"
 import cs from "classnames"
+import * as Yup from "yup"
 import { GenerativeToken } from "../../../types/entities/GenerativeToken"
 import { Formik } from "formik"
 import { Form } from "../../../components/Form/Form"
@@ -18,7 +19,15 @@ import { useContractOperation } from "../../../hooks/useContractOperation"
 import { UpdateIssuerOperation } from "../../../services/contract-operations/UpdateIssuer"
 import { UpdateIssuerForm } from "../../../types/UpdateIssuer"
 import { ContractFeedback } from "../../../components/Feedback/ContractFeedback"
+import { YupRoyalties } from "../../../utils/yup/royalties"
+import { YupSplits } from "../../../utils/yup/splits"
 
+
+const validation = Yup.object().shape({
+  royalties: YupRoyalties,
+  splitsPrimary: YupSplits,
+  splitsSecondary: YupSplits,
+})
 
 interface Props {
   token: GenerativeToken
@@ -59,6 +68,7 @@ export function EditGeneralSettings({
         })),
       }}
       onSubmit={update}
+      validationSchema={validation}
     >
       {({ 
         values,
@@ -119,7 +129,7 @@ export function EditGeneralSettings({
               />
             </Field>
 
-            <Field error={errors.royalties} errorPos="bottom-left">
+            <Field error={errors.royalties}>
               <label htmlFor="royalties">
                 Royalties
                 <small>in %, between 10 and 25</small>
@@ -188,6 +198,7 @@ export function EditGeneralSettings({
                 color="secondary"
                 size="regular"
                 state={loading ? "loading" : "default"}
+                disabled={Object.keys(errors).length > 0}
               >
                 edit general settings
               </Button>

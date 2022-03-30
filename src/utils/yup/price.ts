@@ -22,7 +22,10 @@ export const YupPricingFixed = Yup.object({
 })
 
 // validates a PricingDutchAuction
-export const YupPricingDutchAuction = Yup.object({
+export const YupPricingDutchAuction = (
+  minHours: number,
+  minHoursError: string,
+) => Yup.object({
   decrementDuration: Yup.number()
     .typeError("Valid number plz")
     .required("Required")
@@ -31,7 +34,7 @@ export const YupPricingDutchAuction = Yup.object({
   opensAt: Yup.date()
     .typeError("Invalid date")
     .required("Required")
-    .min(addHours(new Date(), 1), "At least in 1 hour"),
+    .min(addHours(new Date(), minHours), minHoursError),
   levels: Yup.array()
     .of(YupPrice)
     .test(

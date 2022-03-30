@@ -105,7 +105,7 @@ export function BurnEditions({
             type="submit"
             size="regular"
             color="primary"
-            disabled={disabled}
+            disabled={disabled || editions === 0}
             state={loading ? "loading" : "default"}
           >
             burn editions (irreversible)
