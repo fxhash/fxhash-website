@@ -12,7 +12,7 @@ export function transformTezosInputToMutezNumber(input: string) {
  * Turns a tezos mutez price int into a string/1000000
  */
 export function transformTezosMutezToInputString(mutez: number) {
-  return (mutez/1000000).toFixed()
+  return (mutez/1000000).toString()
 }
 
 /**

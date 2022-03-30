@@ -37,7 +37,7 @@ export function Proposal({
           proposal={proposal}
           collaboration={collaboration}
         />
-        <div>
+        <div className={cs(text.small, colors.gray)}>
           <span>details </span>
           <i aria-hidden className={`fa-solid fa-caret-${expanded?"up":"down"}`}/>
         </div>
