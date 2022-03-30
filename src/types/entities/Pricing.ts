@@ -1,6 +1,6 @@
-export interface IPricingFixed<N = number> {
-  price: N
-  opensAt?: Date|null
+export interface IPricingFixed<GNumber = number, GDate = Date> {
+  price: GNumber
+  opensAt?: GDate|null
 }
 
 export interface IPricingDutchAuction<N = number> {

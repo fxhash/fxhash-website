@@ -86,11 +86,11 @@ export interface GenerativeToken {
   splitsSecondary: Split[]
   reserves: IReserve[]
   lockedSeconds: number
-  lockEnd: Date
+  lockEnd: string
   objkts: Objkt[]
   actions: Action[]
   objktsCount?: number
-  createdAt: Date
+  createdAt: string
   marketStats?: GenerativeTokenMarketStats
   marketStatsHistory?: GenerativeTokenMarketStatsHistory[]
   features?: GenerativeTokenFeature[]

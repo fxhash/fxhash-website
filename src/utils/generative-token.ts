@@ -106,10 +106,10 @@ export function generativeFromMintParams(
     // todo
     reserves: params.reserves as any,
     lockedSeconds: 0,
-    lockEnd: new Date(0),
+    lockEnd: (new Date(0)).toISOString(),
     objkts: [],
     actions: [],
-    createdAt: new Date(),
+    createdAt: new Date().toISOString(),
   }
 }
 
@@ -228,10 +228,10 @@ export function generativeFromMintForm(
     })),
     reserves: [],
     lockedSeconds: 0,
-    lockEnd: new Date(0),
+    lockEnd: new Date(0).toISOString(),
     objkts: [],
     actions: [],
-    createdAt: new Date(),
+    createdAt: new Date().toISOString(),
   }
 }
 
