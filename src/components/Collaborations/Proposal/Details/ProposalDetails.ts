@@ -1,6 +1,7 @@
 import { FunctionComponent } from "react"
 import { CollaborationProposal } from "../../../../services/indexing/contract-handlers/CollaborationHandler"
 import { Collaboration } from "../../../../types/entities/User"
+import { ProposalDetailsBurnExpanded, ProposalDetailsBurnHeader } from "./Burn"
 import { ProposalDetailsBurnSupplyExpanded, ProposalDetailsBurnSupplyHeader } from "./BurnSupply"
 import { ProposalDetailsMintIssuerExpanded, ProposalDetailsMintIssuerHeader } from "./MintIssuer"
 import { ProposalDetailsUpdateIssuerExpanded, ProposalDetailsUpdateIssuerHeader } from "./UpdateIssuer"
@@ -35,5 +36,9 @@ export const ProposalDetails: Record<number, IProposalDetails> = {
   4: {
     header: ProposalDetailsBurnSupplyHeader,
     expanded: ProposalDetailsBurnSupplyExpanded,
+  },
+  5: {
+    header: ProposalDetailsBurnHeader,
+    expanded: ProposalDetailsBurnExpanded,
   }
 }
