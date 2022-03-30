@@ -35,7 +35,7 @@ export function transformPricingFixedNumbersToString(
 ): IPricingFixed<string> {
   return {
     price: transformTezosMutezToInputString(input.price),
-    opensAt: new Date(input.opensAt as any)
+    opensAt: input.opensAt ? new Date(input.opensAt as any) : null,
   }
 }
 
@@ -61,7 +61,7 @@ export function transformPricingFixedNumbersToString(
   return {
     levels: input.levels.map(v => transformTezosMutezToInputString(v)),
     decrementDuration: (input.decrementDuration/60).toFixed(0),
-    opensAt: new Date(input.opensAt as any)
+    opensAt: input.opensAt ? new Date(input.opensAt as any) : null,
   }
 }
 

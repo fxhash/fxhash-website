@@ -3,10 +3,12 @@ import { CollaborationProposal } from "../../../../services/indexing/contract-ha
 import { Collaboration } from "../../../../types/entities/User"
 import { ProposalDetailsMintIssuerExpanded, ProposalDetailsMintIssuerHeader } from "./MintIssuer"
 import { ProposalDetailsUpdateIssuerExpanded, ProposalDetailsUpdateIssuerHeader } from "./UpdateIssuer"
+import { ProposalDetailsUpdatePriceExpanded, ProposalDetailsUpdatePriceHeader } from "./UpdatePrice"
 
 export interface ProposalDetailsProps {
   proposal: CollaborationProposal
   collaboration: Collaboration
+  showOldSettings?: boolean
 }
 
 export interface IProposalDetails {
@@ -23,5 +25,9 @@ export const ProposalDetails: Record<number, IProposalDetails> = {
   1: {
     header: ProposalDetailsUpdateIssuerHeader,
     expanded: ProposalDetailsUpdateIssuerExpanded,
-  }
+  },
+  2: {
+    header: ProposalDetailsUpdatePriceHeader,
+    expanded: ProposalDetailsUpdatePriceExpanded,
+  },
 }

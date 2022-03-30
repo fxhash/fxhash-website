@@ -1,3 +1,4 @@
+import { TInputPricingDutchAuction } from "../pricing-dutch-auction/input"
 import { TInputPricingFixed } from "../pricing-fixed/input"
 
 export type TInputPricingDetails<N = number> = 

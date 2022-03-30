@@ -78,12 +78,14 @@ export function generativeFromMintParams(
     tags: metadata.tags,
     pricingFixed: params.pricing.pricing_id === 0 ? ({
       price: params.pricing.details.price,
-      opensAt: params.pricing.details.opens_at 
-        ? new Date(params.pricing.details.opens_at) 
-        : undefined as any
+      opensAt: params.pricing.details.opens_at as any,
     }): undefined,
     // todo
-    pricingDutchAuction: undefined,
+    pricingDutchAuction: params.pricing.pricing_id === 1 ? ({
+      levels: (params.pricing.details as any).levels,
+      opensAt: params.pricing.details.opens_at as any,
+      decrementDuration: (params.pricing.details as any).decrement_duration,
+    }): undefined,
     // todo: remove
     price: 0,
     originalSupply: params.amount,

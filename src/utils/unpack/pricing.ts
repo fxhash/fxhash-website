@@ -12,5 +12,8 @@ export function unpackPricingDetails(
   if (id === 0) {
     type = EBuildableParams.PRICING_FIXED
   }
+  else if (id === 1) {
+    type = EBuildableParams.PRICING_DUTCH_AUCTION
+  }
   return unpackBytes<TInputPricingDetails<BigNumber>>(pricing.details, type)
 }

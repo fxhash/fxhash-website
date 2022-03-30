@@ -49,8 +49,6 @@ export function EditPricing({
         pricingDutchAuction: values.pricingDutchAuction,
       },
       token: token,
-      // todo
-      collaboration: undefined,
     })
   }
 
