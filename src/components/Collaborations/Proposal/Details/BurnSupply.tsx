@@ -26,6 +26,7 @@ export function ProposalDetailsBurnSupplyHeader({
 export function ProposalDetailsBurnSupplyExpanded({
   proposal,
   collaboration,
+  showOldSettings,
 }: ProposalDetailsProps) {
   const unpacked = useMemo(() =>
     unpackBurnSupply(proposal.callSettings.params)
@@ -73,10 +74,12 @@ export function ProposalDetailsBurnSupplyExpanded({
                   <strong>Burn amount: </strong>
                   {unpacked.amount}
                 </div>
-                <div>
-                  <strong>Balance: </strong>
-                  {token.balance}{" -> "}{token.balance - unpacked.amount}
-                </div>
+                {showOldSettings && (
+                  <div>
+                    <strong>Balance: </strong>
+                    {token.balance}{" -> "}{token.balance - unpacked.amount}
+                  </div>
+                )}
               </div>
             </>
           )}

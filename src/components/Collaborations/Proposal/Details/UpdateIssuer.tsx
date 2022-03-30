@@ -31,6 +31,7 @@ export function ProposalDetailsUpdateIssuerHeader({
 export function ProposalDetailsUpdateIssuerExpanded({
   proposal,
   collaboration,
+  showOldSettings,
 }: ProposalDetailsProps) {
   const unpacked = useMemo(() =>
     unpackUpdateIssuer(proposal.callSettings.params)
@@ -65,10 +66,6 @@ export function ProposalDetailsUpdateIssuerExpanded({
       }
     })
   }, [unpacked])
-
-  console.log(unpacked)
-  console.log(tokenData)
-  console.log(usersData)
 
   // we transformed the packed data into something that can be shown
   const splits = useMemo(() => {
@@ -153,7 +150,7 @@ export function ProposalDetailsUpdateIssuerExpanded({
               </div>
             </div>
 
-            {token && (
+            {token && showOldSettings && (
               <div>
                 <h6>Current settings</h6>
                 <Spacing size="8px"/>

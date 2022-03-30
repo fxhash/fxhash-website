@@ -16,10 +16,12 @@ import { Spacing } from "../../Layout/Spacing"
 interface Props {
   proposal: CollaborationProposal
   collaboration: Collaboration
+  showOldSettings: boolean
 }
 export function Proposal({
   proposal,
   collaboration,
+  showOldSettings,
 }: Props) {
   const [expanded, setExpanded] = useState<boolean>(false)
 
@@ -48,6 +50,7 @@ export function Proposal({
           <Details.expanded
             proposal={proposal}
             collaboration={collaboration}
+            showOldSettings={showOldSettings}
           />
         </section>
       )}

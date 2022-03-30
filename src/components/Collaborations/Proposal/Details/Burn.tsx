@@ -26,6 +26,7 @@ export function ProposalDetailsBurnHeader({
 export function ProposalDetailsBurnExpanded({
   proposal,
   collaboration,
+  showOldSettings,
 }: ProposalDetailsProps) {
   const unpacked = useMemo(() =>
     unpackBytes(
@@ -57,7 +58,7 @@ export function ProposalDetailsBurnExpanded({
           <h5>Preview</h5>
           <Spacing size="small"/>
           
-          {token && (
+          {token ? (
             <>
               <strong>Token: </strong>
               <LinkIcon
@@ -74,6 +75,12 @@ export function ProposalDetailsBurnExpanded({
                 This operation will burn the token completely. It will be removed from the contracts and from the indexer.
               </strong>
             </>
+          ):(
+            !showOldSettings && (
+              <strong className={cs(colors.error)}>
+                This token isn't visible anymore as it was burnt.
+              </strong>
+            )
           )}
         </>
       )}

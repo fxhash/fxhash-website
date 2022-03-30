@@ -9,10 +9,12 @@ import { useMemo } from "react"
 interface Props {
   proposals: CollaborationProposal[]
   collaboration: Collaboration
+  showOldSettings: boolean
 }
 export function Proposals({
   proposals,
   collaboration,
+  showOldSettings,
 }: Props) {
   const ordered = useMemo(() => {
     return [...proposals].sort((a, b) => {
@@ -35,6 +37,7 @@ export function Proposals({
               key={prop.id}
               proposal={prop}
               collaboration={collaboration}
+              showOldSettings={showOldSettings}
             />
           ))}
         </div>

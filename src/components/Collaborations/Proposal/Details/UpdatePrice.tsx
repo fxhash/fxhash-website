@@ -29,6 +29,7 @@ export function ProposalDetailsUpdatePriceHeader({
 export function ProposalDetailsUpdatePriceExpanded({
   proposal,
   collaboration,
+  showOldSettings,
 }: ProposalDetailsProps) {
   const unpacked = useMemo(() =>
     unpackUpdatePrice(proposal.callSettings.params)
@@ -119,17 +120,19 @@ export function ProposalDetailsUpdatePriceExpanded({
                     />
                   </div>
                 </div>
-
-                <div>
-                  <h6>Current settings</h6>
-                  <Spacing size="8px"/>
-                  
-                  <div className={cs(style.details)}>
-                    <GenerativePricing
-                      token={token}
-                    />
+                
+                {showOldSettings && (
+                  <div>
+                    <h6>Current settings</h6>
+                    <Spacing size="8px"/>
+                    
+                    <div className={cs(style.details)}>
+                      <GenerativePricing
+                        token={token}
+                      />
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
             </>
           )}
