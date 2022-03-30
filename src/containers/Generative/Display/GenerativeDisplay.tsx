@@ -22,6 +22,7 @@ import { GenerativeArtwork } from "../../../components/GenerativeToken/Generativ
 import { ListSplits } from "../../../components/List/ListSplits"
 import { EntityBadge } from "../../../components/User/EntityBadge"
 import { GenerativePricing } from "../../../components/GenerativeToken/GenerativePricing"
+import { Tags } from "../../../components/Tags/Tags"
 
 /**
  * This is the Core component resposible for the display logic of a Generative
@@ -144,12 +145,19 @@ export function GenerativeDisplay({
               splits={token.splitsSecondary}
             />
             <strong>Tags</strong>
-            <span>{token.tags?.join(", ") || "/"}</span>
+            <span>
+              {token.tags && token.tags.length > 0 ? (
+                <Tags tags={token.tags}/>
+              ):(
+                <span className={cs(text.info)}>{"/"}</span>
+              )}
+            </span>
             <strong>Metadata</strong>
             <a 
               target="_blank"
               referrerPolicy="no-referrer"
               href={ipfsGatewayUrl(token.metadataUri)}
+              className={cs(text.info_link)}
             >
               view on IPFS <i className="fas fa-external-link-square" aria-hidden/>
             </a>

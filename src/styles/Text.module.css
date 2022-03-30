@@ -39,6 +39,16 @@
   color: var(--color-gray);
 }
 
+.info_link {
+  font-size: var(--font-size-small);
+  color: var(--color-gray);
+  font-weight: normal;
+}
+
+.info_link:hover {
+  color: var(--color-secondary);
+}
+
 .error {
   font-weight: bold;
   color: var(--color-error);
