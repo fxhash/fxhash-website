@@ -11,7 +11,9 @@ On the 1st of April 2022, **The Big Burn** happened. All the remaining editions 
 
 The `mint()` entry point of the current generative token contract was locked, making it impossible to mint new NFTs from existing projects. To be precise, editions were not burnt on-chain on the 1st of April, but when the new contract will be deployed, projects will be transfered without any supply left. So effectively, it's as if they were burnt on the 1st of April.
 
-The API *hacks* the remaining supply served to the front-end (making it 0), so that it translates the state of the projects in advance.
+To reflect the future state of the projects after the transfer, the front-end will already display the editions as if they were already properly burnt.
+
+Note that this will not affect the NFTs already minted on fxhash.
 
 
 ## What's next
