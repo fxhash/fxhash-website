@@ -141,7 +141,7 @@ const ReportsPage: NextPage<Props> = ({
   )
 }
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
   const { data } = await client.query({
     query: Qu_reportedGenTokens,
     fetchPolicy: "no-cache",
@@ -155,7 +155,7 @@ export async function getStaticProps() {
     props: {
       tokens: data?.reportedGenerativeTokens || [],
     },
-    revalidate: 60
+    // revalidate: 60
   }
 }
 
