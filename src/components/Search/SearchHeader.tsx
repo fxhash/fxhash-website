@@ -15,7 +15,7 @@ export const SearchHeader = forwardRef<HTMLDivElement, PropsWithChildren<Props>>
   hasFilters,
   onToggleFilters,
   filtersOpened,
-  padding,
+  padding = "big",
   children,
 }, ref) => {
   return (
