@@ -8,16 +8,21 @@ interface Props {
   hasFilters?: boolean
   onToggleFilters?: () => void
   filtersOpened?: boolean
+  padding?: "big"|"small"
 }
 export const SearchHeader = forwardRef<HTMLDivElement, PropsWithChildren<Props>>(({
   sortSelectComp,
   hasFilters,
   onToggleFilters,
   filtersOpened,
+  padding,
   children,
 }, ref) => {
   return (
-    <div className={cs(style.search_header, layout['padding-big'])} ref={ref}>
+    <div className={cs(
+      style.search_header,
+      layout[`padding-${padding}`]
+    )} ref={ref}>
       <div className={cs(style.search_wrapper)}>
         {hasFilters && (
           <button

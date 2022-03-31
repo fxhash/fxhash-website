@@ -177,9 +177,10 @@ export function GenerativeIterations({
                 onChange={setSortValue}
               />
             }
+            padding="small"
           />
 
-          <section className={cs(layout.cards_explorer, layout['padding-big'])}>
+          <section className={cs(layout.cards_explorer, layout['padding-small'])}>
             {filtersVisible && (
               <FiltersPanel onClose={() => setFiltersVisible(false)}>
                 <GenerativeIterationsFilters
