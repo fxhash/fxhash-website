@@ -153,7 +153,7 @@ export async function getStaticProps() {
 
   return {
     props: {
-      tokens: data.reportedGenerativeTokens,
+      tokens: data?.reportedGenerativeTokens || [],
     },
     revalidate: 60
   }
