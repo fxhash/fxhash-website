@@ -7,7 +7,7 @@ import { ContractsOpened } from "../Utils/ContractsOpened"
 
 export const Warning: FunctionComponent = ({ children }) => {
   return (
-    <Link href="/articles/beta">
+    <Link href="/doc/fxhash/big-burn">
       <a className={cs(style.container)}>
         <span className={cs(style.message)}>
           <i aria-hidden className="fas fa-fire-alt"/>
