@@ -1,0 +1,145 @@
+@import './Variables.scss';
+
+.padding-small {
+  padding-left: var(--layout-margin-small-lg);
+  padding-right: var(--layout-margin-small-lg);
+
+  @media (max-width: $breakpoint-lg) {
+    padding-left: var(--layout-margin-small-md);
+    padding-right: var(--layout-margin-small-md);
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    padding-left: var(--layout-margin-small-sm);
+    padding-right: var(--layout-margin-small-sm);
+  }
+}
+
+.padding-big {
+  padding-left: var(--layout-margin-big-lg);
+  padding-right: var(--layout-margin-big-lg);
+
+  @media (max-width: $breakpoint-lg) {
+    padding-left: var(--layout-margin-big-md);
+    padding-right: var(--layout-margin-big-md);
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    padding-left: var(--layout-margin-big-sm);
+    padding-right: var(--layout-margin-big-sm);
+  }
+}
+
+.explore_header {
+  display: flex;
+  gap: var(--layout-gap-small-lg);
+  justify-content: space-between;
+}
+
+.smallform, .small_centered {
+  align-items: center;
+  max-width: 1000px;
+  margin: auto;
+}
+
+.cols2 {
+  display: flex;
+  flex-direction: row;
+  gap: var(--layout-gap-big-lg);
+  width: 100%;
+
+  & > * {
+    flex: 1 0 0;
+  }
+
+  @media (max-width: $breakpoint-md) {
+    flex-direction: column;
+
+    &.responsive-reverse {
+      flex-direction: column-reverse;
+    }
+  }
+}
+
+.x-inline {
+  display: flex;
+  gap: 8px;
+}
+
+.y_centered {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.x_centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.flex_column_left {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.flex_row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.full_body_height {
+  height: calc(100vh - 140px - 50px)
+}
+
+.break_words {
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.buttons_inline {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+
+.flex_wrap {
+  flex-wrap: wrap;
+}
+
+.grid_center {
+  align-items: center;
+  justify-content: center;
+}
+
+/**
+ * CARDS layout
+ **/
+.cards_explorer {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  gap: var(--layout-gap-big-md);
+}
+
+.show_md {
+  display: none;
+}
+
+.w100 {
+  width: 100%;
+}
+
+@media (max-width: $breakpoint-md) {
+  .hide_md {
+    display: none;
+  }
+
+  .show_md {
+    display: block;
+  }
+}

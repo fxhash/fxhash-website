@@ -1,0 +1,29 @@
+.inputs {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 24px;
+  
+  .input_wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+  }
+}
+
+.chart_container {
+  position: relative;
+  transition: all 0.2s;
+
+  &.loading {
+    opacity: 0.3;
+  }
+
+  .loader {
+    position: absolute;
+    top: calc(50% - 20px);
+    left: calc(50% - 20px);
+  }
+}
