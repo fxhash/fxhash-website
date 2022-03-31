@@ -4,6 +4,7 @@ import { PropsWithChildren } from "react"
 import { Footer } from "./Footer"
 import { Header } from "./Header"
 import { Warning } from "./Layout/Warning"
+import { BigBurnEffect } from "./Layout/BigBurnEffect"
 
 export function Layout({ children }: PropsWithChildren<{}>) {
   return (
@@ -13,6 +14,8 @@ export function Layout({ children }: PropsWithChildren<{}>) {
           <span dangerouslySetInnerHTML={{ __html: process.env.NEXT_PUBLIC_BANNER_MESSAGE! }}/>
         </Warning>
       )}
+
+      <BigBurnEffect/>
 
       <Header />
 

@@ -2,10 +2,10 @@
 
 .container {
   width: 100%;
-  background-color: var(--color-warning);
+  background-color: var(--color-error);
   display: flex;
   align-items: center;
-  color: black;
+  color: white;
   font-weight: normal;
   font-size: 0.8rem;
   justify-content: space-between;
@@ -28,7 +28,12 @@
   }
 
   i {
-    font-size: 28px;
+    font-size: 24px;
     margin-right: 10px;
+  }
+
+  i:last-child {
+    margin-left: 10px;
+    font-size: 14px;
   }
 }

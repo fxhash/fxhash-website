@@ -10,8 +10,9 @@ export const Warning: FunctionComponent = ({ children }) => {
     <Link href="/articles/beta">
       <a className={cs(style.container)}>
         <span className={cs(style.message)}>
-          <i aria-hidden className="fas fa-radiation-alt"/>
-          {children}
+          <i aria-hidden className="fas fa-fire-alt"/>
+          {children}{" "}
+          <i aria-hidden className="fas fa-arrow-right"/>
         </span>
       </a>
     </Link>
