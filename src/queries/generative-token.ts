@@ -74,6 +74,7 @@ export const Qu_genTokenIterations = gql`
       objkts(take: $take, skip: $skip, sort: $sort, featureFilters: $featureFilters) {
         id
         version
+        iteration
         owner {
           id
           name

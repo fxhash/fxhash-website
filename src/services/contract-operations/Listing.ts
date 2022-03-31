@@ -1,4 +1,4 @@
-import { OpKind, WalletOperation } from "@taquito/taquito"
+import { ContractAbstraction, OpKind, Wallet, WalletOperation } from "@taquito/taquito"
 import { FxhashContracts } from "../../types/Contracts"
 import { Objkt } from "../../types/entities/Objkt"
 import { getGentkFA2Contract } from "../../utils/gentk"
@@ -17,52 +17,46 @@ export type TListingOperationParams = {
  * List a gentk on the Marketplace
  */
 export class ListingOperation extends ContractOperation<TListingOperationParams> {
-  async prepare() {}
+  gentkContract: ContractAbstraction<Wallet>|null = null
+  marketplaceContract: ContractAbstraction<Wallet>|null = null
+
+  async prepare() {
+    this.gentkContract = await this.manager.getContract(
+      getGentkFA2Contract(this.params.token)
+    )
+    this.marketplaceContract = await this.manager.getContract(
+      FxhashContracts.MARKETPLACE_V2
+    )
+  }
 
   async call(): Promise<WalletOperation> {
-    const updateOperatorsParams = buildParameters<TInputUpdateOperators>([{
+    const updateOperatorsParams = [{
       add_operator: {
         owner: this.params.token.owner!.id,
         operator: FxhashContracts.MARKETPLACE_V2,
         token_id: this.params.token.id,
       }
-    }], EBuildableParams.UPDATE_OPERATORS)
+    }]
 
-    const listingParams = buildParameters<TInputListing>({
+    const listingParams = {
       gentk: {
         id: this.params.token.id,
         version: this.params.token.version,
       },
       price: this.params.price,
-    }, EBuildableParams.LISTING)
+    }
 
     return this.manager.tezosToolkit.wallet.batch() 
-      .with([
-        {
-          kind: OpKind.TRANSACTION,
-          to: getGentkFA2Contract(this.params.token),
-          fee: 1000,
-          amount: 0,
-          parameter: {
-            entrypoint: "update_operators",
-            value: updateOperatorsParams
-          },
-          gasLimit: 8000,
-          storageLimit: 250,
-        },
-        {
-          kind: OpKind.TRANSACTION,
-          to: FxhashContracts.MARKETPLACE_V2,
-          fee: 1500,
-          amount: 0,
-          parameter: {
-            entrypoint: "listing",
-            value: listingParams,
-          },
-          gasLimit: 10000,
-          storageLimit: 250
-        }
-      ])
+      .withContractCall(
+        this.gentkContract!.methodsObject.update_operators(
+          updateOperatorsParams
+        )
+      )
+      .withContractCall(
+        this.marketplaceContract!.methodsObject.listing(
+          listingParams
+        )
+      )
       .send()
   }
 

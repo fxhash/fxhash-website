@@ -252,20 +252,23 @@ export function useMintingState(
         activeTimer.current = T
         // we compute when we need to trigger the timer
         const triggerIn = T - Date.now()
-        // request a state update when timer will trigger
-        const timeoutID = setTimeout(() => {
-          setState(
-            deriveMintingStateFromToken(
-              token,
-              userContext.user,
-              forceDisabled,
+        // only trigger anything if it's in the future
+        if (triggerIn >= 0) {
+          // request a state update when timer will trigger
+          const timeoutID = setTimeout(() => {
+            setState(
+              deriveMintingStateFromToken(
+                token,
+                userContext.user,
+                forceDisabled,
+              )
             )
-          )
-        }, triggerIn + 10)
-        // return the timer clear
-        return () => {
-          activeTimer.current = undefined
-          clearTimeout(timeoutID)
+          }, triggerIn + 10)
+          // return the timer clear
+          return () => {
+            activeTimer.current = undefined
+            clearTimeout(timeoutID)
+          }
         }
       }
     }
