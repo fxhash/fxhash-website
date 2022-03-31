@@ -1,0 +1,29 @@
+import Head from "next/head"
+import style from "./Layout.module.scss"
+import { PropsWithChildren } from "react"
+import { Footer } from "./Footer"
+import { Header } from "./Header"
+import { Warning } from "./Layout/Warning"
+import { BigBurnEffect } from "./Layout/BigBurnEffect"
+
+export function Layout({ children }: PropsWithChildren<{}>) {
+  return (
+    <>
+      {process.env.NEXT_PUBLIC_BETA_MODE === "on" && (
+        <Warning>
+          <span dangerouslySetInnerHTML={{ __html: process.env.NEXT_PUBLIC_BANNER_MESSAGE! }}/>
+        </Warning>
+      )}
+
+      <BigBurnEffect/>
+
+      <Header />
+
+      <main className={style.main}>
+        {children}
+      </main>
+      
+      <Footer />
+    </>
+  )
+}

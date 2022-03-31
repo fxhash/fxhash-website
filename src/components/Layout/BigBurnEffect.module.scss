@@ -1,0 +1,52 @@
+.root {
+  position: fixed;
+  z-index: 80000;
+  bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+}
+
+.flame {
+  position: absolute;
+  font-size: 80px;
+  animation: fire1 8s infinite alternate;
+  color: var(--color-error);
+  mix-blend-mode: screen;
+  opacity: 0.7;
+
+  &.animation_2 {
+    animation-name: fire2;
+  }
+}
+
+@keyframes fire1 {
+  0% {
+    transform: rotate(15deg) translateY(-1vh);
+  }
+  50% {
+    transform: rotate(-8deg) translateY(1vh);
+  }
+  75% {
+    transform: rotate(9deg) translateY(-2vh);
+  }
+  100% {
+    transform: rotate(-15deg) translateY(0);
+  }
+}
+
+@keyframes fire2 {
+  0% {
+    transform: rotate(30deg) translateY(-1vh);
+  }
+  50% {
+    transform: rotate(-5deg) translateY(0vh);
+  }
+  75% {
+    transform: rotate(14deg) translateY(-3vh);
+  }
+  100% {
+    transform: rotate(-5deg) translateY(1vh);
+  }
+}
