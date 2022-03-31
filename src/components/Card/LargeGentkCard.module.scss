@@ -1,0 +1,19 @@
+.topper {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--font-size-small);
+  font-weight: normal;
+  color: var(--color-gray);
+}
+
+.bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: var(--font-size-small);
+}
+
+.tezos {
+  color: var(--color-secondary);
+  font-size: var(--font-size-regular);
+}

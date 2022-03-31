@@ -252,7 +252,7 @@ export async function getServerSideProps() {
       skip: 0,
       take: 5,
       filters: {
-        locked_eq: false,
+        mintOpened_eq: true,
         flag_in: [
           GenTokFlag.CLEAN,
           GenTokFlag.NONE,

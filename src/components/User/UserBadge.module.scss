@@ -4,13 +4,22 @@
   color: var(--color-primary);
   font-weight: bold;
 
+  .user_infos {
+    margin-left: 0.5em;
+  }
+
   .user_name {
     display: flex;
     flex: row;
-    align-items: center;
+    align-items: baseline;
     gap: 0.25em;
-    margin-left: 0.5em;
     text-align: left;
+  }
+
+  .user_address {
+    color: var(--color-gray);
+    font-weight: normal;
+    font-size: 0.8em;
   }
   
   .verified {

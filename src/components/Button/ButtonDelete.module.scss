@@ -1,0 +1,16 @@
+.btn_delete {
+  background: transparent;
+  border: none;
+  color: var(--color-gray);
+  cursor: pointer;
+  padding: 8px;
+
+  &:hover {
+    color: var(--color-error);
+  }
+
+  &:disabled {
+    opacity: 0.1;
+    pointer-events: none;
+  }
+}

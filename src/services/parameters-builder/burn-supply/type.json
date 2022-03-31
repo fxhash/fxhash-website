@@ -1,0 +1,17 @@
+{
+  "prim": "pair",
+  "args": [
+    {
+      "prim": "nat",
+      "annots": [
+        "%amount"
+      ]
+    },
+    {
+      "prim": "nat",
+      "annots": [
+        "%issuer_id"
+      ]
+    }
+  ]
+}

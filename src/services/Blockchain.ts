@@ -7,6 +7,19 @@ export const API_CYCLES_LIST = `${process.env.NEXT_PUBLIC_TZKT_API}bigmaps/updat
 
 export const API_OPERATION = (hash: string) => `${process.env.NEXT_PUBLIC_TZKT_API}operations/${hash}`
 
+export const API_BLOCKCHAIN_CONTRACT_OPERATIONS = (
+  address: string,
+  cursorId: number,
+  entrypoints: string[],
+  limit: number = 1000,
+) => `${process.env.NEXT_PUBLIC_TZKT_API}operations/transactions\
+?target=${address}\
+&entrypoint.in=${entrypoints.join(",")}\
+&offset.cr=${cursorId}\
+&status=applied\
+&select=id,level,timestamp,sender,amount,parameter,diffs,target,initiator,hash\
+&limit=${limit}`
+
 
 /**
  * Given an operation hash, checks if the operation was included in the blockchain (check it the

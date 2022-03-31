@@ -15,8 +15,6 @@ $size: 100px;
   box-sizing: content-box;
 
   &:hover {
-    transform: translateX(-8px);
-    box-shadow: 5px 2px 19px -3px rgba(0, 0, 0, 0.4);
     text-decoration: none !important;
   }
 }

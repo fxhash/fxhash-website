@@ -1,0 +1,9 @@
+.root {
+  color: var(--color-gray-light);
+  font-size: 0.8em;
+  transition: all 0.15s;
+
+  &:hover {
+    color: var(--color-secondary);
+  }
+}

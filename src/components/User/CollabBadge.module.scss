@@ -1,0 +1,248 @@
+.root {
+  .avatars {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    cursor: pointer;
+    background: transparent;
+    padding: 0;
+    border: none;
+    position: relative;
+    z-index: 1;
+    // pointer-events: none;
+
+    &:hover {
+      .link {
+        color: var(--color-black);
+      }
+    }
+
+    .avatar_wrapper {
+      transition: all 0.3s;
+
+      &:not(:first-child) {
+        margin-left: -28px;
+      }
+
+      .user_name {
+        display: none;
+        font-weight: bold;
+        color: var(--color-primary);
+        font-size: var(--font-size-small);
+      }
+    }
+  
+    .avatar {
+      border: 3px solid var(--color-white);
+    }
+  
+    .link {
+      background-color: var(--color-white);
+      border-radius: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: auto;
+      font-size: var(--font-size-small);
+      padding: 0 16px;
+      color: var(--color-gray);
+      box-shadow: 0px 2px 8px -4px rgb(0 0 0 / 8%);
+  
+      .caret {
+        font-size: 0.8em;
+      }
+    }
+  }
+
+  &.opened {
+    .avatars {
+      .avatar_wrapper:not(:first-child) {
+        margin-left: -50px;
+      }
+    }
+  }
+
+  .collaborators {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: var(--font-size-small);
+    margin-top: 0;
+    margin-left: 3px;
+    transition: all 0.3s;
+    pointer-events: none;
+    position: relative;
+    z-index: 0;
+
+    .collaborator {
+      margin-top: -40px;
+      opacity: 0;
+      transition: all 0.3s ease-out;
+    }
+  }
+
+  &.opened {
+    .avatar {
+      box-shadow: none;
+    }
+
+    .link {
+      box-shadow: 0px 2px 8px -4px rgb(0 0 0 / 15%);
+    }
+
+    .collaborators {
+      margin-top: 8px;
+      pointer-events: all;
+
+      .collaborator {
+        margin-top: 0;
+        opacity: 1;
+      }
+    }
+  }
+
+  &.toggeable {
+    .avatars {
+      pointer-events: all;
+    }
+  }
+
+  &:not(.toggeable) {
+    .avatars {
+      width: 100%;
+      overflow: hidden;
+
+      &:hover {
+        .link {
+          color: var(--color-gray);
+        }
+      }
+
+      .avatar_wrapper {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        position: relative;
+
+        &:not(.link):hover {
+          flex-grow: 2;
+
+          .user_name {
+            position: absolute;
+            left: 4px;
+            width: 300px;
+            display: flex;
+
+            .user_name_content {
+              display: flex;
+              flex-direction: row;
+              align-items: baseline;
+              gap: 5px;
+              background-color: var(--color-white);
+              padding: 5px 10px;
+              border-radius: 30px;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  //
+  // size related stuff
+  //
+  &.size_regular {
+    .avatars {
+      .avatar {
+        border-width: 2px;
+      }
+
+      .avatar_wrapper {
+        &:not(:first-child) {
+          margin-left: -20px;
+        }
+      }
+
+      .link {
+        padding: 0 12px;
+
+        i {
+          font-size: 0.9em;
+        }
+      }
+    }
+
+    &.opened {
+      .avatars {
+        .avatar_wrapper:not(:first-child) {
+          margin-left: -37px;
+        }
+      }
+    }
+  }
+
+  &.size_small {
+    .avatars {
+      .avatar {
+        border-width: 1px;
+      }
+
+      .avatar_wrapper {
+        &:not(:first-child) {
+          margin-left: -10px;
+        }
+      }
+
+      .link {
+        padding: 0 8px;
+
+        i {
+          font-size: 0.8em;
+        }
+      }
+    }
+
+    &.opened {
+      .avatars {
+        .avatar_wrapper:not(:first-child) {
+          margin-left: -37px;
+        }
+      }
+    }
+  }
+
+  //
+  // side-related stuff
+  //
+  &.side_right {
+    .avatars {
+      flex-direction: row-reverse;
+
+      .avatar_wrapper {
+        flex-direction: row-reverse;
+
+        &:not(:first-child) {
+          margin-left: 0;
+          margin-right: -20px;
+        }
+
+        &:not(.link):hover {
+          .user_name {
+            margin-left: 10px;
+            position: relative;
+            margin-right: -30px;
+            width: auto;
+          }
+        }
+      }
+    }
+  }
+}
+
+:global(.dark) :local(.root) {
+  &.opened {
+    .link {
+      box-shadow: 0px 2px 8px -4px rgb(0 0 0 / 70%);
+    }
+  }
+}

@@ -8,6 +8,15 @@ export const Qu_objkt = gql`
       id
       version
       royalties
+      royaltiesSplit {
+        pct
+        user {
+          id
+          name
+          flag
+          avatarUri
+        }
+      }
       assigned
       owner {
         id

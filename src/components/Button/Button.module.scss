@@ -15,6 +15,12 @@
   border: 1px solid transparent;
   text-decoration: none !important;
 
+  .btn_content {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+  }
+
   &:hover {
     box-shadow: 0px 2px 24px -4px rgba(0, 0, 0, 0.67);
     border: 1px solid var(--color-white);
@@ -119,7 +125,9 @@
 }
 
 .icon-right {
-  flex-direction: row-reverse;
+  .btn_content {
+    flex-direction: row-reverse;
+  }
 }
 
 .icon-right i {

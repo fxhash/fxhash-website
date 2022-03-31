@@ -5,16 +5,40 @@ import Link from 'next/link'
 import { User } from "../../types/entities/User"
 import { getUserName, getUserProfileLink, isPlatformOwned, isUserVerified, userAliases } from "../../utils/user"
 import { Avatar } from "./Avatar"
+import { IProps as IEntityBadgeProps } from "./EntityBadge"
+import { FunctionComponent, ReactNode, useMemo } from "react"
 
 
-interface Props {
-  user: User
-  size?: "regular" | "big" | "small"
-  prependText?: string
-  hasLink?: boolean
-  className?: string
-  avatarSide?: "left" | "right"
+export interface Props extends IEntityBadgeProps {
 }
+
+interface WrapperProps {
+  className: string
+  user: User
+  children: ReactNode
+}
+
+const WrapperLink = ({ 
+  className, 
+  user,
+  children,
+}: WrapperProps) => (
+  <Link href={getUserProfileLink(user)}>
+    <a className={className}>
+      {children}
+    </a>
+  </Link>
+)
+
+const WrapperDiv = ({ 
+  className, 
+  user,
+  children,
+}: WrapperProps) => (
+  <div className={className}>
+    {children}
+  </div>
+)
 
 export function UserBadge({
   user,
@@ -22,39 +46,56 @@ export function UserBadge({
   size = "regular",
   hasLink = true,
   avatarSide = "left",
+  displayAddress = false,
+  displayAvatar = true,
   className
 }: Props) {
   // the user goes through an aliases check
-  const userAlias = userAliases(user)
+  const userAlias = useMemo(() => userAliases(user), [user])
   const verified = isUserVerified(user)
+  // alias can force no link
+  hasLink = hasLink && !userAlias.preventLink
+  // the wrapper component, either a link or a div
+  const Wrapper = hasLink ? WrapperLink : WrapperDiv
 
   return (
-    hasLink ? (
-      <Link href={getUserProfileLink(userAlias)}>
-        <a className={cs(style.container, style[`side-${avatarSide}`], className)}>
-          <Avatar 
-            uri={userAlias.avatarUri}
-            className={cs(style.avatar, style[`avatar-${size}`], { [style.avatar_mod]: isPlatformOwned(userAlias) })}
-          />
-          <span className={cs(style.user_name)}>
-            {prependText && <span className={cs(style.prepend)}>{prependText}</span>}
-            <span className={cs({ [style.moderator]: isPlatformOwned(userAlias) })}>{getUserName(userAlias, 15)}</span>
-            {verified && <i aria-hidden className={cs("fas", "fa-badge-check", style.verified)}/>}
-          </span>
-        </a>
-      </Link>
-    ):(
-      <div className={cs(style.container, style[`side-${avatarSide}`], className)}>
+    <Wrapper 
+      className={cs(style.container, style[`side-${avatarSide}`], className)}
+      user={userAlias}
+    >
+      {displayAvatar && (
         <Avatar 
           uri={userAlias.avatarUri}
-          className={cs(style.avatar, style[`avatar-${size}`], { [style.avatar_mod]: isPlatformOwned(userAlias) })}
+          className={cs(
+            style.avatar,
+            style[`avatar-${size}`],
+            { [style.avatar_mod]: isPlatformOwned(userAlias) }
+          )}
         />
+      )}
+  
+      <div className={cs(style.user_infos)}>
         <span className={cs(style.user_name)}>
-          {prependText && <span className={cs(style.prepend)}>{prependText}</span>}
-          <span className={cs({ [style.moderator]: isPlatformOwned(userAlias) })}>{getUserName(userAlias, 15)}</span>
-          {verified && <i aria-hidden className={cs("fas", "fa-badge-check", style.verified)}/>}
+          {prependText && (
+            <span className={cs(style.prepend)}>{prependText}</span>
+          )}
+          <span className={cs({ [style.moderator]: isPlatformOwned(userAlias) })}>
+            {getUserName(userAlias, 15)}
+          </span>
+          {verified && (
+            <i 
+              aria-hidden 
+              className={cs("fas", "fa-badge-check", style.verified)}
+            />
+          )}
         </span>
+
+        {displayAddress && (
+          <span className={cs(style.user_address)}>
+            {userAlias.id}
+          </span>
+        )}
       </div>
-    )
+    </Wrapper>
   )
 }

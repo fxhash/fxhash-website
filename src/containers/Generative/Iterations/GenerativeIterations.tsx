@@ -17,6 +17,7 @@ import { FiltersPanel } from "../../../components/Exploration/FiltersPanel"
 import { GenerativeIterationsFilters } from "./GenerativeIterationsFilters"
 import { ExploreTagDef, ExploreTags } from "../../../components/Exploration/ExploreTags"
 import { Spacing } from "../../../components/Layout/Spacing"
+import { LargeGentkCard } from "../../../components/Card/LargeGentkCard"
 
 
 const ITEMS_PER_PAGE = 20
@@ -176,9 +177,10 @@ export function GenerativeIterations({
                 onChange={setSortValue}
               />
             }
+            padding="small"
           />
 
-          <section className={cs(layout.cards_explorer, layout['padding-big'])}>
+          <section className={cs(layout.cards_explorer, layout['padding-small'])}>
             {filtersVisible && (
               <FiltersPanel onClose={() => setFiltersVisible(false)}>
                 <GenerativeIterationsFilters
@@ -206,10 +208,13 @@ export function GenerativeIterations({
                 <span>No results</span>
               )}
 
-              <InfiniteScrollTrigger onTrigger={infiniteScrollFetch} canTrigger={!!data && !loading}>
+              <InfiniteScrollTrigger
+                onTrigger={infiniteScrollFetch}
+                canTrigger={!!data && !loading}
+              >
                 <CardsContainer>
                   {tokens?.map(gentk => (
-                    <ObjktCard
+                    <LargeGentkCard
                       key={gentk.id}
                       objkt={gentk}
                       showRarity={sort.rarity != null}

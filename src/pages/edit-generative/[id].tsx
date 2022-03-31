@@ -8,6 +8,7 @@ import ClientOnly from '../../components/Utils/ClientOnly'
 import { EditToken } from '../../containers/Token/EditToken'
 import { UserGuard } from '../../components/Guards/UserGuard'
 import { truncateEnd } from '../../utils/strings'
+import { Qu_genToken } from '../../queries/generative-token'
 
 
 interface Props {
@@ -41,24 +42,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     const id = parseInt(idStr as string)
     if (id === 0 || id) {
       const { data, error } = await client.query({
-        query: gql`
-          query Query($id: Float!) {
-            generativeToken(id: $id) {
-              id
-              name
-              metadata
-              price
-              enabled
-              supply
-              originalSupply
-              balance
-              royalties
-              author {
-                id
-              }
-            }
-          }
-        `,
+        query: Qu_genToken,
         fetchPolicy: "no-cache",
         variables: { id }
       })

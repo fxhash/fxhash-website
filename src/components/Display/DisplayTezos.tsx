@@ -1,6 +1,7 @@
 import style from "./DisplayTezos.module.scss"
 import cs from "classnames"
 import { bigMutezFormatter, displayMutez } from "../../utils/units"
+import { IconTezos } from "../Icons/IconTezos"
 
 interface Props {
   mutez: number
@@ -16,7 +17,7 @@ export function DisplayTezos({
 }: Props) {
   return (
     <span className={cs(style.root, className)}>
-      <span className={cs('icon-tezos-xtz-logo', style.tezos, style[`tezos_${tezosSize}`])}/>
+      <IconTezos size={tezosSize}/>
       <span>{formatBig ? bigMutezFormatter(mutez) : displayMutez(mutez)}</span>
     </span>
   )

@@ -5,6 +5,7 @@ export const Qu_user = gql`
   query Query($id: String, $name: String) {
     user(id: $id, name: $name) {
       id
+      type
       name
       metadata
       authorizations
@@ -15,6 +16,29 @@ export const Qu_user = gql`
       description
       avatarUri
       createdAt
+    }
+  }
+`
+
+export const Qu_users = gql`
+  query Users($filters: UserFilter) {
+    users(filters: $filters, skip: 0, take: 50) {
+      id
+      type
+      name
+      avatarUri
+      flag
+    }
+  }
+`
+
+export const Qu_userLight = gql`
+  query UserLight($id: String) {
+    user(id: $id) {
+      id
+      name
+      flag
+      avatarUri
     }
   }
 `
@@ -160,6 +184,54 @@ export const Qu_userActions = gql`
           iteration
         }
       }
+    }
+  }
+`
+
+export const Qu_userCollaborations = gql`
+  query Query($id: String!) {
+    user(id: $id) {
+      id
+      collaborationContracts {
+        id
+        name
+        type
+        createdAt
+        collaborators {
+          id
+          name
+          avatarUri
+          flag
+        }
+      }
+    }
+  }
+`
+
+export const Qu_collaboration = gql`
+  query Collaboration($id: String!) {
+    user(id: $id) {
+      id
+      name
+      type
+      createdAt
+      collaborators {
+        id
+        name
+        avatarUri
+        flag
+      }
+    }
+  }
+`
+
+export const Qu_searchUser = gql`
+  query SearchUser($filters: UserFilter) {
+    users(filters: $filters, take: 50, sort: { relevance: "DESC" }) {
+      id
+      name
+      flag
+      avatarUri
     }
   }
 `

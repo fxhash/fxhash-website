@@ -1,3 +1,5 @@
+import type { WalletOperation } from "@taquito/taquito"
+
 // a value for the state of the transaction
 export enum ContractOperationStatus {
   NONE                    = "NONE",
@@ -13,15 +15,25 @@ export type ContractOperationCallback = (status: ContractOperationStatus, data?:
 // generic signature for any contract-interraction method
 export type ContractInteractionMethod<T> = (data: T, operationCallback?: ContractOperationCallback, currentTry?: number) => any
 
-export enum FxhashContract {
-  ISSUER            = "ISSUER",
-  MARKETPLACE_V1    = "MARKETPLACE_V1",
-  MARKETPLACE_V2    = "MARKETPLACE_V2",
-  GENTK_V1          = "GENTK_V1",
-  GENTK_V2          = "GENTK_V2",
-  REGISTER          = "REGISTER",
-  MODERATION        = "MODERATION",
-  USER_MODERATION   = "USER_MODERATION",
+export const FxhashContracts = {
+  ISSUER            : process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_ISSUER!,
+  MARKETPLACE_V1    : process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_MARKETPLACE_V1!,
+  MARKETPLACE_V2    : process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_MARKETPLACE_V2!,
+  GENTK_V1          : process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_GENTK_V1!,
+  GENTK_V2          : process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_GENTK_V2!,
+  REGISTER          : process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_USERREGISTER!,
+  MODERATION        : process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_TOK_MODERATION!,
+  USER_MODERATION   : process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_USER_MODERATION!,
+  COLLAB_FACTORY    : process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_COLLAB_FACTORY!,
+}
+
+export const FxhashCollabFactoryCalls = {
+  MINT_ISSUER:      0,
+  UPDATE_ISSUER:    1,
+  UPDATE_PRICE:     2,
+  UPDATE_RESERVE:   3,
+  BURN_SUPPLY:      4,
+  BURN:             5,
 }
 
 export type ContractCallHookReturn<T> = {
@@ -40,6 +52,7 @@ export type TContractOperationHookReturn<Params> = {
   success: boolean,
   error: boolean,
   opHash: string|null,
+  operation: WalletOperation|null
   call: (data: Params) => void,
   clear: () => void
 }

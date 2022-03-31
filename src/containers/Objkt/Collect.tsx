@@ -15,6 +15,7 @@ import { GenTokFlag } from "../../types/entities/GenerativeToken"
 import { Unlock } from "../../components/Utils/Unlock"
 import { useContractOperation } from "../../hooks/useContractOperation"
 import { ListingAcceptOperation, TListingAcceptOperationParams } from "../../services/contract-operations/ListingAccept"
+import { DisplayTezos } from "../../components/Display/DisplayTezos"
 
 interface Props {
   listing: Listing
@@ -63,7 +64,11 @@ export function Collect({ listing, objkt }: Props) {
             onClick={callContract}
             disabled={locked}
           >
-            purchase token - {displayMutez(listing.price)} tez
+            purchase token - <DisplayTezos
+              mutez={listing.price}
+              tezosSize="regular"
+              formatBig={false}
+            />
           </Button>
 
           {locked && (

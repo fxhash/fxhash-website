@@ -1,7 +1,10 @@
 import { GenerativeTokenMetadata } from "../Metadata"
 import { Action } from "./Action"
 import { Objkt } from "./Objkt"
+import { IPricingDutchAuction, IPricingFixed } from "./Pricing"
 import { Report } from "./Report"
+import { IReserve } from "./Reserve"
+import { ISplit, Split } from "./Split"
 import { User } from "./User"
 
 export enum GenTokFlag {
@@ -16,6 +19,14 @@ export enum GenTokFlag {
 export enum GenTokPricing {
   FIXED           = "FIXED",
   DUTCH_AUCTION   = "DUTCH_AUCTION",
+}
+
+export enum GenTokLabel {
+  EPILEPTIC_TRIGGER   = 0,
+  SEXUAL_CONTENT      = 1,
+  SENSITIVE           = 2,
+  IMAGE_COMPOSITION   = 100,
+  ANIMATED            = 101,
 }
 
 export interface GenerativeTokenMarketStats {
@@ -61,18 +72,25 @@ export interface GenerativeToken {
   metadata: GenerativeTokenMetadata
   metadataUri?: string
   tags?: string[]
+  labels?: number[]
+  // todo:  remove
   price: number
+  pricingFixed?: IPricingFixed
+  pricingDutchAuction?: IPricingDutchAuction
   originalSupply: number
   supply: number
   balance: number
   enabled: boolean
   royalties: number
+  splitsPrimary: Split[]
+  splitsSecondary: Split[]
+  reserves: IReserve[]
   lockedSeconds: number
-  lockEnd: Date
+  lockEnd: string
   objkts: Objkt[]
   actions: Action[]
-  objktsCount: number
-  createdAt: Date
+  objktsCount?: number
+  createdAt: string
   marketStats?: GenerativeTokenMarketStats
   marketStatsHistory?: GenerativeTokenMarketStatsHistory[]
   features?: GenerativeTokenFeature[]
@@ -96,6 +114,7 @@ export interface GenerativeTokenFilters {
   supply_gte?: number
   pricingMethod_eq?: GenTokPricing
   locked_eq?: boolean
+  mintOpened_eq?: boolean
 }
 
 export interface GenerativeTokenFeatureValue {

@@ -15,32 +15,50 @@ export const StepSuccess: StepComponent = ({ state, onNext }) => {
   
   return (
     <div className={cs(style.container)}>
-      <Spacing size="3x-large"/>
-      <Spacing size="3x-large"/>
+      <Spacing size="6x-large"/>
       <Spacing size="3x-large"/>
       <h3>
-        <span>🎉</span>
-        <span>
-          Your Generative Token is now on the blockchain<br/>
-          May it have a happy life
-        </span>
-        <span>🎉</span>
+        <i className="fa-solid fa-party-horn" aria-hidden/>
+        {state.collaboration ? (
+          <span>
+            A proposal to publish this project with your collaborators has been made.
+          </span>
+        ):(
+          <span>
+            Your Generative Token is now on the blockchain<br/>
+            May it have a happy life
+          </span>
+        )}
+        <i className="fa-solid fa-party-horn" aria-hidden/>
       </h3>
       
-      <Spacing size="3x-large"/>
-      <Spacing size="3x-large"/>
-
-      <Link href={getUserProfileLink(user)} passHref>
-        <Button
-          isLink
-          color="secondary"
-          iconComp={<i aria-hidden className="fas fa-arrow-right"/>}
-          iconSide="right"
-          size="large"
-        >
-          Go to your profile
-        </Button>
-      </Link>
+      <Spacing size="6x-large"/>
+      
+      {state.collaboration ? (
+        <Link href={`/collaborations/${state.collaboration.id}`} passHref>
+          <Button
+            isLink
+            color="secondary"
+            iconComp={<i aria-hidden className="fas fa-arrow-right"/>}
+            iconSide="right"
+            size="large"
+          >
+            go to the collaboration page
+          </Button>
+        </Link>
+      ):(
+        <Link href={getUserProfileLink(user)} passHref>
+          <Button
+            isLink
+            color="secondary"
+            iconComp={<i aria-hidden className="fas fa-arrow-right"/>}
+            iconSide="right"
+            size="large"
+          >
+            go to your profile
+          </Button>
+        </Link>
+      )}
     </div>
   )
 }

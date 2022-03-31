@@ -17,14 +17,17 @@ import { validateCaptureSettings } from "../../utils/validations"
 import { LinkGuide } from "../../components/Link/LinkGuide"
 
 export const StepConfigureCapture: StepComponent = ({ onNext, state }) => {
-  const [settings, setSettings] = useState<CaptureSettings>({
-    mode: null,
-    triggerMode: null,
-    delay: 2,
-    resX: 800,
-    resY: 800,
-    gpu: false,
-  })
+  const [settings, setSettings] = useState<CaptureSettings>(
+    state.captureSettings ?? 
+    {
+      mode: null,
+      triggerMode: null,
+      delay: 2000,
+      resX: 800,
+      resY: 800,
+      gpu: false,
+    }
+  )
 
   const { data, loading, error, post } = 
     useFetch<TestPreviewResponse|TestPreviewErrorResponse>(`${process.env.NEXT_PUBLIC_API_EXTRACT}/extract`, { 
@@ -52,7 +55,7 @@ export const StepConfigureCapture: StepComponent = ({ onNext, state }) => {
       canvasSelector: settings.canvasSelector,
       resX: settings.resX,
       resY: settings.resY,
-      delay: settings.delay * 1000,
+      delay: settings.delay,
       gpu: settings.gpu,
       withFeatures: false,
       priority: "high",
@@ -66,7 +69,7 @@ export const StepConfigureCapture: StepComponent = ({ onNext, state }) => {
         triggerMode: settings.triggerMode,
         resX: settings.resX,
         resY: settings.resY,
-        delay: settings.delay*1000,
+        delay: settings.delay,
         gpu: settings.gpu,
         canvasSelector: settings.canvasSelector,
         cidParams: state.cidUrlParams,
@@ -105,7 +108,7 @@ export const StepConfigureCapture: StepComponent = ({ onNext, state }) => {
       <p>
         When collectors will <strong>mint a token from your Generative Token</strong>, fxhash will generate a preview image to go with their Token. <br/>
         You need to configure how this preview will be taken by fxhash capture module.<br/>
-        Read more about the different <LinkGuide href="/articles/guide-mint-generative-token#configure-capture-settings">capture strategies in the guide</LinkGuide>
+        Read more about the different <LinkGuide href="/articles/guide-mint-generative-token#configure-capture-settings" newTab={true}>capture strategies in the guide</LinkGuide>
       </p>
 
       <Spacing size="5x-large"/>
@@ -128,7 +131,8 @@ export const StepConfigureCapture: StepComponent = ({ onNext, state }) => {
           <Button
             onClick={captureTest}
             state={loading ? "loading" : "default"}
-            color="primary"
+            color="black"
+            size="regular"
             style={{
               alignSelf: "center"
             }}
@@ -168,7 +172,7 @@ export const StepConfigureCapture: StepComponent = ({ onNext, state }) => {
           onClick={sendCapture}
           disabled={!validateCaptureSettings(settings)}
         >
-          Next step
+          next step
         </Button>
       </div>
 

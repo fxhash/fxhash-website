@@ -19,3 +19,15 @@
 .form {
   width: 100%;
 }
+
+.labels_container {
+  border: 3px solid var(--color-border-input);
+
+  .label {
+    padding: 4px 8px;
+  }
+
+  button {
+    margin-top: 0 !important;
+  }
+}

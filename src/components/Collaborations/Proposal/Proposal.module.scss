@@ -1,0 +1,58 @@
+.root {
+  border: 3px solid var(--color-border);
+  padding: 4px;
+
+  & > .section+.section {
+    margin-top: 4px;
+  }
+
+  .section {
+    background-color: var(--color-gray-vvlight);
+    padding: 0.5em 0.7em;
+
+    &.section_spaced {
+      & > *+* {
+        margin-top: 10px;
+      }
+    }
+  }
+
+  & > button {
+    border: none;
+    color: inherit;
+    width: 100%;
+    cursor: pointer;
+
+    &:hover {
+      background-color: var(--color-gray-vlight);
+    }
+  }
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+  .expand_btn {
+    background-color: transparent;
+
+  }
+}
+
+.line {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+
+.execution {
+  color: var(--color-success);
+  font-weight: bold;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}

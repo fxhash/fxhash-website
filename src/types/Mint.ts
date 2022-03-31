@@ -1,4 +1,8 @@
+import { Collaboration } from "./entities/User"
+import { IPricingFixed, IPricingDutchAuction } from "./entities/Pricing"
 import { GenerativeTokenMetadata } from "./Metadata"
+import { GenTokLabel, GenTokPricing } from "./entities/GenerativeToken"
+import { ISplit } from "./entities/Split"
 
 export interface GenerativeTokenInformations {
   metadata: GenerativeTokenMetadata
@@ -31,7 +35,9 @@ export interface CaptureSettings {
   gpu?: boolean
 }
 
-export interface MintGenerativeData {
+export interface MintGenerativeData<N = string> {
+  // if the project is authored as a collaboration
+  collaboration?: Collaboration|null
   // the ipfs uri pointing to the project with URL params
   cidUrlParams?: string
   // a hash to verify that the first matches
@@ -44,14 +50,16 @@ export interface MintGenerativeData {
   cidThumbnail?: string
   // a hash to verify the 2 ipfs uri
   authHash2?: string
+  // the distribution parameters
+  distribution?: GenTokDistributionForm<N>
   // capture settings
   captureSettings?: CaptureSettings
   // general settings
   settings?: GenTokenSettings
   // general informations about the token
-  informations?: GenerativeTokenInformations
+  informations?: GenTokenInformationsForm
   // minted successful
-  minted: boolean
+  minted?: boolean
 }
 
 export interface GenTokenSettings {
@@ -67,13 +75,25 @@ export interface GenTokenSettings {
   }
 }
 
+export interface GenTokPricingForm<N> {
+  pricingMethod?: GenTokPricing
+  pricingFixed: Partial<IPricingFixed<N>>
+  pricingDutchAuction: Partial<IPricingDutchAuction<N>>
+}
+
+export interface GenTokDistributionForm<N> {
+  pricing: GenTokPricingForm<N>
+  editions?: N
+  royalties?: N
+  enabled: boolean
+  splitsPrimary: ISplit[]
+  splitsSecondary: ISplit[]
+}
+
 export interface GenTokenInformationsForm {
-  name: string,
+  name: string
   description: string
   childrenDescription: string
   tags: string
-  editions: number
-  enabled: boolean
-  price: number
-  royalties: number
+  labels: GenTokLabel[]
 }

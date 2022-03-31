@@ -1,26 +1,34 @@
 import { addMinutes } from "date-fns/esm"
 import { useEffect, useState } from "react"
+import useAsyncEffect from "use-async-effect"
 import { distanceSecondsClamped } from "../../utils/time"
 
 interface Props {
   until: Date
-  onEnd?: () => void
 }
 export function Countdown({
   until,
-  onEnd,
 }: Props) {
-  const [distanceSeconds, setDistanceSeconds] = useState<number>(distanceSecondsClamped(new Date(), until))
+  const [distanceSeconds, setDistanceSeconds] = useState<number>(
+    distanceSecondsClamped(new Date(), until)
+  )
 
-  useEffect(() => {
+  useAsyncEffect((isMounted) => {
+    // optimisation for 1h + timers (no need for 1s refresh)
+    const dist = distanceSecondsClamped(new Date(), until)
+
     const interval = setInterval(() => {
-      const D = distanceSecondsClamped(new Date(), until)
-      setDistanceSeconds(D)
-      if (D <= 0) {
-        onEnd?.()
+      if (isMounted()) {
+        const D = distanceSecondsClamped(new Date(), until)
+        setDistanceSeconds(D)
+        if (D <= 0) {
+          clearInterval(interval)
+        }
+      }
+      else {
         clearInterval(interval)
       }
-    }, 1000)
+    }, dist > 7200 ? 60000 : 1000)
 
     return () => {
       clearInterval(interval)
@@ -29,13 +37,15 @@ export function Countdown({
 
   const seconds = distanceSeconds % 60
   const minutes = ((distanceSeconds-seconds)/60) % 60
-  const hours = (distanceSeconds - minutes*60 - seconds) / 3600
+  const hours = ((distanceSeconds - minutes*60 - seconds) / 3600) % 24
+  const days = Math.floor(distanceSeconds/(60*60*24))
 
   return (
     <span>
+      {days > 0 && <span>{days}d </span>}
       {hours > 0 && <span>{hours}h </span>}
-      {minutes > 0 && <span>{minutes}min </span>}
-      {<span>{seconds}s</span>}
+      {days < 1 && minutes > 0 && <span>{minutes}min </span>}
+      {hours < 1 && <span>{seconds}s</span>}
     </span>
   )
 }

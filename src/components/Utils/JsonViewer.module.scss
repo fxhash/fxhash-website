@@ -1,0 +1,8 @@
+.root {
+  background-color: #282a36;
+  padding: 10px;
+
+  :global .react-json-view {
+    background-color: transparent !important;
+  }
+}

@@ -4,13 +4,17 @@
   gap: 8px;
   font-size: var(--font-size-small);
 
+  &.layout_fixed-size {
+    grid-template-columns: repeat(auto-fit, 200px);
+  }
+
   button {
     border: 3px solid var(--color-border-input);
     background: var(--color-white);
-    padding: 6px 0;
     color: var(--color-black);
     cursor: pointer;
     transition: all 0.15s;
+    padding: 0;
 
     &:hover {
       border-color: var(--color-black);
@@ -21,4 +25,8 @@
       font-weight: bold;
     }
   }
+}
+
+.opt_default_renderer_root {
+  padding: 7px 0;
 }

@@ -3,7 +3,7 @@ import layout from "../../styles/Layout.module.scss"
 import colors from "../../styles/Colors.module.css"
 import cs from "classnames"
 import { StepComponent } from "../../types/Steps"
-import { useContext, useEffect, useState } from "react"
+import { useContext, useEffect, useMemo, useState } from "react"
 import { Formik } from "formik"
 import * as Yup from "yup"
 import useFetch, { CachePolicies } from "use-http"
@@ -27,18 +27,25 @@ import { ContractFeedback } from "../../components/Feedback/ContractFeedback"
 import { getMutezDecimalsNb, isPositive } from "../../utils/math"
 import { tagsFromString } from "../../utils/strings"
 import { stringToByteString } from "../../utils/convert"
+import { InputMultiList, MultiListItem } from "../../components/Input/InputMultiList"
+import { mapGenTokLabels } from "../../utils/generative-token"
 
 
-const initialForm: Partial<GenTokenInformationsForm> = {
+const initialForm: GenTokenInformationsForm = {
   name: "",
   description: "",
   childrenDescription: "",
   tags: "",
-  editions: 1,
-  enabled: false,
-  price: undefined,
-  royalties: undefined
+  labels: [],
 }
+
+const labelsList: MultiListItem[] = Object.keys(mapGenTokLabels).map(id => ({
+  value: parseInt(id),
+  props: {
+    // @ts-ignore
+    label: mapGenTokLabels[id], 
+  }
+}))
 
 const validation = Yup.object().shape({
   name: Yup.string()
@@ -50,49 +57,17 @@ const validation = Yup.object().shape({
     .required("Required"),
   childrenDescription: Yup.string()
     .max(4096, "Max 4096 characters"),
-  editions: Yup.number()
-    .min(1, "At least 1 edition")
-    .max(2500, "2500 editions max.")
-    .required("Required"),
-  price: Yup.number()
-    .when("enabled", {
-      is: true,
-      then: Yup.number()
-        .typeError("Valid number plz")
-        .required("Price is required if token is enabled")
-        .test(
-          "positive",
-          `Price must be >= ${parseFloat(process.env.NEXT_PUBLIC_GT_MIN_PRICE!)}`,
-          isPositive
-        ),
-      otherwise: Yup.number()
-        .typeError("Valid number plz")
-        .test(
-          "positive",
-          `Price must be >= ${parseFloat(process.env.NEXT_PUBLIC_GT_MIN_PRICE!)}`,
-          isPositive
-        )
-    }),
-  royalties: Yup.number()
-    .when("enabled", {
-      is: true,
-      then: Yup.number()
-        .typeError("Valid number plz")
-        .required("Royalties are required if token is enabled")
-        .min(10, "Min 10%")
-        .max(25, "Max 25%"),
-      otherwise: Yup.number()
-        .typeError("Valid number plz")
-        .min(10, "Min 10%")
-        .max(25, "Max 25%")
-    })
 })
 
 export const StepInformations: StepComponent = ({ state, onNext }) => {
   const userCtx = useContext(UserContext)
   const user = userCtx.user!
 
-  const [savedInfos, setSavedInfos] = useState<Partial<GenTokenInformationsForm>>()
+  const [savedInfos, setSavedInfos] = useState<GenTokenInformationsForm>()
+
+  const initialState = useMemo(
+    () => state.informations || initialForm
+  , [])
   
   // hook to interact with file API metadata
   const { data: metaData, loading: metaLoading, error: metaError, post: metaPost } = 
@@ -147,13 +122,6 @@ export const StepInformations: StepComponent = ({ state, onNext }) => {
       decimals: 0,
       version: "0.2"
     }
-    setSavedInfos({
-      name: formInformations.name,
-      editions: formInformations.editions,
-      enabled: formInformations.enabled,
-      price: formInformations.price || 0,
-      royalties: formInformations.royalties || 10
-    })
     metaPost(metadata)
   }
 
@@ -162,13 +130,14 @@ export const StepInformations: StepComponent = ({ state, onNext }) => {
     if (safeMetaData && savedInfos) {
       const metadataCid = safeMetaData.cid
       // call the contract
-      call({
-        amount: savedInfos.editions!,
-        enabled: savedInfos.enabled!,
-        metadata: stringToByteString(getIpfsSlash(metadataCid)),
-        price: Math.floor(savedInfos.price! * 1000000),
-        royalties: Math.floor(savedInfos.royalties! * 10),
-      })
+      // call({
+      //   amount: savedInfos.editions!,
+      //   enabled: savedInfos.enabled!,
+      //   metadata: stringToByteString(getIpfsSlash(metadataCid)),
+      //   price: Math.floor(savedInfos.price! * 1000000),
+      //   royalties: Math.floor(savedInfos.royalties! * 10),
+      // })
+      // todo: move to next step
     }
   }, [safeMetaData])
 
@@ -184,25 +153,31 @@ export const StepInformations: StepComponent = ({ state, onNext }) => {
   // derived from state, to take account for both side-effects interactions
   const loading = metaLoading || contractLoading
 
+  const next = (values: GenTokenInformationsForm) => {
+    onNext({
+      informations: values
+    })
+  }
+
   return (
     <div className={cs(style.container)}>
-      <h5>Almost done 😮‍💨</h5>
+      <h4>Project details</h4>
 
       <Spacing size="3x-large"/>
 
       <Formik
-        initialValues={initialForm}
+        initialValues={initialState}
         validationSchema={validation}
         onSubmit={(values) => {
-          uploadInformations(values as GenTokenInformationsForm)
+          next(values)
         }}
       >
-        {({ values, handleChange, handleBlur, handleSubmit, errors }) => (
+        {({ values, handleChange, setFieldValue, handleBlur, handleSubmit, errors }) => (
           <Form className={cs(layout.smallform, style.form)} onSubmit={handleSubmit}>
             <Field error={errors.name}>
               <label htmlFor="name">
                 Name of the piece
-                <small> (“ #N” will be added to the collected NFTs)</small>
+                <small>“ #N” will be added to the collected NFTs</small>
               </label>
               <InputText
                 name="name"
@@ -229,7 +204,9 @@ export const StepInformations: StepComponent = ({ state, onNext }) => {
             <Field error={errors.childrenDescription}>
               <label htmlFor="childrenDescription">
                 Collected NFTs description
-                <small>(leave empty if you want the same as Generative Token)</small>
+                <small>
+                  Leave empty if you want the same as Generative Token
+                </small>
               </label>
               <InputTextarea
                 name="childrenDescription"
@@ -243,7 +220,9 @@ export const StepInformations: StepComponent = ({ state, onNext }) => {
             <Field error={errors.tags}>
               <label htmlFor="tags">
                 Tags
-                <small>(comma separated)</small>
+                <small>
+                  Comma-separated values (used to enhance search results)
+                </small>
               </label>
               <InputText
                 name="tags"
@@ -254,69 +233,26 @@ export const StepInformations: StepComponent = ({ state, onNext }) => {
               />
             </Field>
 
-            <Field error={errors.editions}>
-              <label htmlFor="editions">
-                Number of editions
-                <small>(how many NFT can be generated from your Token)</small>
+            <Field>
+              <label>
+                Labels
+                <small>
+                  Can be edited by the moderators at any time
+                </small>
               </label>
-              <InputText
-                type="number"
-                name="editions"
-                value={values.editions}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                error={!!errors.editions}
-              />
+              <InputMultiList
+                listItems={labelsList}
+                selected={values.labels || []}
+                onChangeSelected={n => setFieldValue("labels", n)}
+                className={cs(style.labels_container)}
+              >
+                {({ itemProps }) => (
+                  <span className={cs(style.label)}>
+                    { itemProps.label }
+                  </span>
+                )}
+              </InputMultiList>
             </Field>
-
-            <Fieldset>
-              <Field className={cs(style.checkbox)}>
-                <Checkbox
-                  name="enabled"
-                  value={values.enabled!}
-                  onChange={(_, event) => handleChange(event)}
-                >
-                  Can be collected now
-                </Checkbox>
-              </Field>
-              <em className={cs(colors.gray)}>
-                We suggest disabling the Generative Token first, and then check if it was minted properly (and only enable it if that's the case)
-              </em>
-              <Spacing size="regular"/>
-
-              <Field error={errors.price}>
-                <label htmlFor="price">
-                  Price
-                </label>
-                <InputTextUnit
-                  unit="tez"
-                  type="text"
-                  name="price"
-                  value={values.price||""}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  error={!!errors.price}
-                />
-              </Field>
-
-              <Field error={errors.royalties}>
-                <label htmlFor="royalties">
-                  Royalties
-                  <small>in %, between 10 and 25</small>
-                </label>
-                <InputTextUnit
-                  unit="%"
-                  type="text"
-                  name="royalties"
-                  value={values.royalties||""}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  error={!!errors.royalties}
-                />
-              </Field>
-
-              <small>you will be able to change those 3 fields after the token will be minted</small>
-            </Fieldset>
 
             <Spacing size="3x-large"/>
 
@@ -331,11 +267,13 @@ export const StepInformations: StepComponent = ({ state, onNext }) => {
             <Button
               type="submit"
               color="secondary"
+              iconComp={<i aria-hidden className="fas fa-arrow-right"/>}
+              iconSide="right"
               size="large"
               disabled={Object.keys(errors).length > 0}
               state={loading ? "loading" : "default"}
             >
-              Mint Token
+              final preview
             </Button>
           </Form>
         )}

@@ -1,0 +1,121 @@
+.root {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+
+  :global {
+    .react-datepicker {
+      font-family: inherit;
+      color: inherit;
+      border-radius: 0;
+      border: 3px solid var(--color-border-input);
+      border-top: none;
+      background-color: var(--color-white);
+
+      &-wrapper {
+        width: auto;
+      }
+
+      &__input-container input {
+        border: 3px solid var(--color-border-input);
+        background-color: var(--color-white);
+        padding: 15px;
+        font-family: inherit;
+        outline: none;
+        font-size: inherit;
+        color: inherit;
+        height: 50px;
+    
+        &:focus {
+          border-color: var(--color-secondary);
+        }
+      }
+  
+      &-popper {
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+        z-index: 4;
+
+        &[data-placement="top-start"] {
+          margin-bottom: -5px;
+          .react-datepicker {
+            border-top: 3px solid var(--color-border-input);
+            border-bottom: none;
+          }
+        }
+      }
+  
+      &__triangle {
+        display: none;
+      }
+
+      &__header {
+        background-color: var(--color-gray-vvlight);
+        border-radius: 0;
+        border: none;
+        color: inherit;
+        padding-top: 12px;
+      }
+
+      &__current-month {
+        color: inherit;
+      }
+
+      &__day-name {
+        color: var(--color-gray);
+      }
+
+      &__day {
+        color: inherit;
+
+        &:hover {
+          border-radius: 0;
+          background-color: var(--color-gray-light);
+        }
+
+        &--selected {
+          background-color: var(--color-secondary);
+          color: var(--color-white);
+          font-weight: bold;
+        }
+
+        &--disabled {
+          pointer-events: none;
+          opacity: 0.3;
+        }
+      }
+
+      &__navigation {
+        top: 8px;
+
+        &-icon {
+          &::before, &::after {
+            border-color: var(--color-gray);
+          }
+        }
+      }
+
+      &-time__input {
+        input {
+          background: transparent;
+          border: 2px solid var(--color-border-input);
+          padding: 5px;
+          outline: none;
+
+          &::-webkit-calendar-picker-indicator {
+            filter: invert(100%) brightness(50%);
+          }
+
+          &:focus {
+            border-color: var(--color-secondary);
+          }
+        }
+      }
+    }
+  }
+}
+
+.error {
+  border-color: var(--color-error) !important;
+}

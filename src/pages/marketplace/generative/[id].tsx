@@ -26,6 +26,7 @@ import { GenerativeOffersMarketplace } from '../../../containers/Marketplace/Gen
 import { DisplayTezos } from '../../../components/Display/DisplayTezos'
 import { GenerativeStatsMarketplace } from '../../../containers/Marketplace/GenerativeStatsMarketplace'
 import { TokenActionType } from '../../../types/entities/Action'
+import { EntityBadge } from '../../../components/User/EntityBadge'
 
 
 interface Props {
@@ -40,7 +41,7 @@ const tabs: TabDefinition[] = [
     name: "stats"
   },
   {
-    name: "recent trades"
+    name: "activity"
   }
 ]
 
@@ -91,9 +92,10 @@ const GenerativeTokenMarketplace: NextPage<Props> = ({ token }) => {
             <small className={cs(colors.gray)}>#{ token.id }</small>
             <h3>{ token.name }</h3>
             <Spacing size="3x-small"/>
-            <UserBadge 
+            <EntityBadge 
               user={token.author}
               size="regular"
+              toggeable
             />
             <Spacing size="small"/>
             <div className={cs(style.artwork_details)}>

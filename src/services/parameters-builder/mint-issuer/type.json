@@ -1,0 +1,156 @@
+{
+  "prim": "pair",
+  "args": [
+    {
+      "prim": "pair",
+      "args": [
+        {
+          "prim": "pair",
+          "args": [
+            {
+              "prim": "nat",
+              "annots": [
+                "%amount"
+              ]
+            },
+            {
+              "prim": "bool",
+              "annots": [
+                "%enabled"
+              ]
+            }
+          ]
+        },
+        {
+          "prim": "bytes",
+          "annots": [
+            "%metadata"
+          ]
+        },
+        {
+          "prim": "pair",
+          "args": [
+            {
+              "prim": "bytes",
+              "annots": [
+                "%details"
+              ]
+            },
+            {
+              "prim": "nat",
+              "annots": [
+                "%pricing_id"
+              ]
+            }
+          ],
+          "annots": [
+            "%pricing"
+          ]
+        }
+      ]
+    },
+    {
+      "prim": "pair",
+      "args": [
+        {
+          "prim": "list",
+          "args": [
+            {
+              "prim": "pair",
+              "args": [
+                {
+                  "prim": "address",
+                  "annots": [
+                    "%address"
+                  ]
+                },
+                {
+                  "prim": "nat",
+                  "annots": [
+                    "%pct"
+                  ]
+                }
+              ]
+            }
+          ],
+          "annots": [
+            "%primary_split"
+          ]
+        },
+        {
+          "prim": "list",
+          "args": [
+            {
+              "prim": "pair",
+              "args": [
+                {
+                  "prim": "nat",
+                  "annots": [
+                    "%amount"
+                  ]
+                },
+                {
+                  "prim": "bytes",
+                  "annots": [
+                    "%data"
+                  ]
+                },
+                {
+                  "prim": "nat",
+                  "annots": [
+                    "%method_id"
+                  ]
+                }
+              ]
+            }
+          ],
+          "annots": [
+            "%reserves"
+          ]
+        }
+      ]
+    },
+    {
+      "prim": "nat",
+      "annots": [
+        "%royalties"
+      ]
+    },
+    {
+      "prim": "list",
+      "args": [
+        {
+          "prim": "pair",
+          "args": [
+            {
+              "prim": "address",
+              "annots": [
+                "%address"
+              ]
+            },
+            {
+              "prim": "nat",
+              "annots": [
+                "%pct"
+              ]
+            }
+          ]
+        }
+      ],
+      "annots": [
+        "%royalties_split"
+      ]
+    },
+    {
+      "prim": "list",
+      "args": [
+        {
+          "prim": "nat"
+        }
+      ],
+      "annots": [
+        "%tags"
+      ]
+    }
+  ]
+}

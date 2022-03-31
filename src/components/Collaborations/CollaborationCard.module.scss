@@ -1,0 +1,43 @@
+.root {
+  width: 100%;
+  background-color: var(--color-gray-vvlight);
+  border: 3px solid var(--color-border);
+  padding: 15px;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.users {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  z-index: 2;
+  position: relative;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.line {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  gap: 8px;
+  margin-top: 5px;
+
+  strong {
+    overflow-wrap: normal;
+    word-break: normal;
+  }
+}
+
+.address {
+  position: relative;
+  z-index: 2;
+
+  i {
+    margin-left: 5px;
+  }
+}

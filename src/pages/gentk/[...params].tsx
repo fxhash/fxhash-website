@@ -2,6 +2,7 @@ import Link from 'next/link'
 import Head from 'next/head'
 import { GetServerSideProps, NextPage } from "next"
 import layout from "../../styles/Layout.module.scss"
+import text from "../../styles/Text.module.css"
 import style from "../../styles/GenerativeTokenDetails.module.scss"
 import colors from "../../styles/Colors.module.css"
 import cs from "classnames"
@@ -31,6 +32,8 @@ import { getGenerativeTokenMarketplaceUrl, getGenerativeTokenUrl } from '../../u
 import { GenerativeFlagBanner } from '../../containers/Generative/FlagBanner'
 import { SettingsContext } from '../../context/Theme'
 import { ArtworkFrame } from '../../components/Artwork/ArtworkFrame'
+import { EntityBadge } from '../../components/User/EntityBadge'
+import { ListSplits } from '../../components/List/ListSplits'
 
 
 interface Props {
@@ -94,16 +97,17 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
         <div className={cs(layout.cols2, layout['responsive-reverse'])}>
           <div className={cs(style['presentation-details'])}>
             <div className={cs(style.artwork_header)}>
-              <UserBadge 
+              <EntityBadge 
                 prependText="created by"
                 user={creator}
-                size="regular"
+                size="big"
+                toggeable
               />
               <Spacing size="2x-small"/>
               <UserBadge 
                 prependText="owned by"
                 user={owner}
-                size="regular"
+                size="big"
               />
               <Spacing size="x-large"/>
               <h3>{ objkt.name }</h3>
@@ -144,8 +148,15 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
             <Spacing size="4x-large"/>
 
             <div className={cs(style.buttons)}>
-              <strong>Project #{objkt.issuer.id} — iteration #{objkt.iteration}</strong>
-              <strong>Minted on { format(new Date(objkt.createdAt), "dd/MM/yyyy' at 'HH:mm") }</strong>
+              <strong>
+                Project #{objkt.issuer.id} — iteration #{objkt.iteration}
+              </strong>
+              <span className={cs(text.info)}>
+                Minted on {format(
+                  new Date(objkt.createdAt),
+                  "MMMM d, yyyy' at 'HH:mm"
+                )}
+              </span>
             </div>
 
             <Spacing size="large"/>
@@ -154,23 +165,31 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
 
             <Spacing size="2x-large"/>
 
-            <div className={cs(style.buttons, layout.break_words)}>
-            <span><strong>Royalties:</strong> { displayRoyalties(objkt.royalties) }</span>
-            {objkt.features && objkt.features.length > 0 && objkt.rarity && (
-              <span><strong>Rarity:</strong> { displayPercentage(objkt.rarity) }% (lower is rarer)</span>
-            )}
-            <span>
-              <strong>Operation hash: </strong>
+            <div className={cs(
+              style.buttons, layout.break_words, style.extra_details
+            )}>
+              <strong>Royalties</strong>
+              <span>{displayRoyalties(objkt.royalties)}</span>
+              <ListSplits
+                name="Royalties split"
+                splits={objkt.royaltiesSplit}
+              />
+              {objkt.features && objkt.features.length > 0 && objkt.rarity && (
+                <>
+                  <strong>Rarity</strong>
+                  <span>{displayPercentage(objkt.rarity)}% (lower is rarer)</span>
+                </>
+              )}
+              <strong>Operation hash</strong>
               <a 
                 target="_blank"
                 referrerPolicy="no-referrer"
                 href={`https://tzkt.io/${objkt.generationHash}`}
+                className={cs(text.very_small)}
               >
                 {objkt.generationHash} <i className="fas fa-external-link-square" aria-hidden/>
               </a>
-            </span>
-            <span>
-              <strong>Metadata: </strong>
+              <strong>Metadata</strong>
               {objkt.assigned ? (
                 <a 
                   target="_blank"
@@ -180,10 +199,8 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
                   view on IPFS <i className="fas fa-external-link-square" aria-hidden/>
                 </a>
               ):(
-                <em>not yet assigned</em>
+                <em className={cs(text.info)}>not yet assigned</em>
               )}
-            </span>
-
             </div>
           </div>
 

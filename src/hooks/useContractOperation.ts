@@ -1,3 +1,4 @@
+import type { WalletOperation } from "@taquito/taquito"
 import { useContext, useRef, useState } from "react"
 import { UserContext } from "../containers/UserProvider"
 import { MessageCenterContext } from "../context/MessageCenter"
@@ -18,6 +19,7 @@ export function useContractOperation<Params>(
   const [success, setSuccess] = useState<boolean>(false)
   const [error, setError] = useState<boolean>(false)
   const [opHash, setOpHash] = useState<string|null>(null)
+  const [operation, setOperation] = useState<WalletOperation|null>(null)
   const counter = useRef<number>(0)
   const isMounted = useIsMounted()
   const userContext = useContext(UserContext)
@@ -29,6 +31,7 @@ export function useContractOperation<Params>(
     setSuccess(false)
     setError(false)
     setOpHash(null)
+    setOperation(null)
     setState(ContractOperationStatus.NONE)
   }
 
@@ -38,6 +41,7 @@ export function useContractOperation<Params>(
     setSuccess(false)
     setError(false)
     setOpHash(null)
+    setOperation(null)
     setState(ContractOperationStatus.NONE)
     
     // assign the ID to this call and increment it to prevent overlaps
@@ -55,6 +59,9 @@ export function useContractOperation<Params>(
           // todo: type this shit
           if (data?.hash) {
             setOpHash(data.hash)
+          }
+          if (data?.operation) {
+            setOperation(data.operation)
           }
         }
         else if (status === ContractOperationStatus.ERROR) {
@@ -105,6 +112,7 @@ export function useContractOperation<Params>(
   return {
     state,
     opHash,
+    operation,
     loading,
     success,
     call,

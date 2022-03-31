@@ -45,6 +45,10 @@
   }
 }
 
+.main_details {
+  flex-grow: 2;
+}
+
 
 
 @media (max-width: $breakpoint-sm) {
