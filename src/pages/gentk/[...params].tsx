@@ -45,7 +45,8 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
   const creator: User = objkt.issuer.author
   const settings = useContext(SettingsContext)
   // get the display url for og:image
-  const displayUrl = objkt.metadata?.displayUri && ipfsGatewayUrl(objkt.metadata?.displayUri, "pinata-fxhash-safe")
+  const displayUrl = objkt.metadata?.displayUri 
+    && ipfsGatewayUrl(objkt.metadata?.displayUri)
   // used to run code if mode image is active
   const [running, setRunning] = useState<boolean>(false)
 
@@ -213,7 +214,7 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
                   ):(
                     <ArtworkIframe 
                       ref={iframeRef}
-                      url={ipfsGatewayUrl(objkt.metadata?.artifactUri, "pinata-fxhash-safe")}
+                      url={ipfsGatewayUrl(objkt.metadata?.artifactUri)}
                       hasLoading={false}
                     />
                   )}

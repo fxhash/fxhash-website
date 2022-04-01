@@ -9,7 +9,6 @@ import cs from "classnames"
 import client from "../../../services/ApolloClient"
 import { GenerativeToken } from "../../../types/entities/GenerativeToken"
 import { Spacing } from '../../../components/Layout/Spacing'
-import { UserBadge } from '../../../components/User/UserBadge'
 import { MintProgress } from '../../../components/Artwork/MintProgress'
 import { Button } from '../../../components/Button'
 import { ipfsGatewayUrl } from '../../../services/Ipfs'

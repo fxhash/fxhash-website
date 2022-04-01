@@ -37,7 +37,7 @@ export function Card({
       }
       img.onerror = () => {
         // we fallback to the IPFS gateway
-        img.src = ipfsGatewayUrl(thumbnailUri, "ipfsio")
+        img.src = ipfsGatewayUrl(thumbnailUri)
       }
       img.src = url
     }

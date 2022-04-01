@@ -38,7 +38,7 @@ export function ProposalDetailsMintIssuerExpanded({
   useAsyncEffect(async (isMounted) => {
     // we get the JSON object on IPFS
     const uri = hexStringToString(unpacked.metadata)
-    const response = await fetchRetry(ipfsGatewayUrl(uri, "ipfsio"))
+    const response = await fetchRetry(ipfsGatewayUrl(uri))
     const metadata = await response.json()
     // we generate a generative token from the details + metadata
     const generative = generativeFromMintParams(

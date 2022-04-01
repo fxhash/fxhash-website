@@ -1,4 +1,23 @@
-import { getIpfsIoUrl, getPinataFxhashGateway, getPinataUrlFromCid, getPinataFxhashGatewaySafe } from "../utils/ipfs"
+export enum EGatewayIpfs {
+  FXHASH =        "FXHASH",
+  FXHASH_SAFE =   "FXHASH_SAFE",
+  IPFSIO =        "IPFSIO",
+}
+
+/**
+ * Given a gateway enum, outputs the http url root of the gateway
+ */
+export function ipfsGatewayRoot(gateway: EGatewayIpfs): string {
+  switch(gateway) {
+    case EGatewayIpfs.FXHASH:
+      return process.env.NEXT_PUBLIC_IPFS_GATEWAY!
+    case EGatewayIpfs.FXHASH_SAFE:
+      return process.env.NEXT_PUBLIC_IPFS_GATEWAY_SAFE!
+    case EGatewayIpfs.IPFSIO:
+    default:
+      return "https://ipfs.io"
+  }
+}
 
 // takes a stringas parameter, and if it matches an ipfs url returns the ID of the IPFS ressource
 const ipfsRegex = new RegExp("^ipfs:\/\/")
@@ -16,14 +35,6 @@ export function ipfsCidFromUriOrCid(resource: string): string {
   return resource.slice(7)
 }
 
-export function ipfsDisplayUrl(ipfsUrl: string|null|undefined) {
-  if (!ipfsUrl || ipfsUrl.length < 15) return ""
-  const cid = ipfsUrlToID(ipfsUrl)
-  if (!cid) return ""
-  return `https://ipfs.io/ipfs/${cid}`
-}
-
-
 /**
  * Given a CID or ipfs://<CID>, returns an URL to a gateway pointing to the resource
  * @param resource the resource input, either a CID or ipfs://<CID>
@@ -31,21 +42,9 @@ export function ipfsDisplayUrl(ipfsUrl: string|null|undefined) {
  */
 export function ipfsGatewayUrl(
   resource: string|null|undefined,
-  gateway: "ipfsio"|"pinata"|"pinata-fxhash"|"pinata-fxhash-safe" = "pinata-fxhash"
+  gateway: EGatewayIpfs = EGatewayIpfs.FXHASH_SAFE,
 ): string {
   if (!resource) return ""
-  
   const cid = ipfsCidFromUriOrCid(resource)
-
-  switch (gateway) {
-    case "pinata-fxhash":
-      return getPinataFxhashGateway(cid)
-    case "pinata-fxhash-safe":
-      return getPinataFxhashGatewaySafe(cid)
-    case "pinata":
-      return getPinataUrlFromCid(cid)
-    case "ipfsio":
-    default:
-      return getIpfsIoUrl(cid)
-  }
+  return `${ipfsGatewayRoot(gateway)}/ipfs/${cid}`
 }

@@ -17,7 +17,8 @@ interface Props {
 
 const GenerativeTokenEnjoy: NextPage<Props> = ({ token }) => {
   // get the display url for og:image
-  const displayUrl = token.metadata?.displayUri && ipfsGatewayUrl(token.metadata?.displayUri)
+  const displayUrl = token.metadata?.displayUri 
+    && ipfsGatewayUrl(token.metadata?.displayUri)
 
   // inject the author within the issuer of the token
   for (const gentk of token.entireCollection) {

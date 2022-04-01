@@ -14,7 +14,7 @@ export function ListItemGenerative({
       <div 
         className={cs(style.icon)}
         style={{
-          backgroundImage: `url(${ipfsGatewayUrl(token.metadata.thumbnailUri, "pinata-fxhash")})`
+          backgroundImage: `url(${ipfsGatewayUrl(token.metadata.thumbnailUri)})`
         }}
       />
       <span>{ token.name }</span>

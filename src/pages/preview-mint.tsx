@@ -6,12 +6,12 @@ import style from "../styles/PreviewMint.module.scss"
 import layout from "../styles/Layout.module.scss"
 import cs from "classnames"
 import { useMemo, useRef } from "react"
-import { getIpfsIoUrl } from "../utils/ipfs"
 import { ArtworkIframe, ArtworkIframeRef } from "../components/Artwork/PreviewIframe"
 import { Button } from "../components/Button"
 import { ArtworkPreview } from "../components/Artwork/Preview"
 import Head from "next/head"
 import { TitleHyphen } from "../components/Layout/TitleHyphen"
+import { ipfsGatewayUrl } from "../services/Ipfs"
 
 
 const PreviewMintPage: NextPage = () => {
@@ -19,11 +19,11 @@ const PreviewMintPage: NextPage = () => {
   const iframeRef = useRef<ArtworkIframeRef>(null)
 
   const urlLive = useMemo<string|null>(() => {
-    return getIpfsIoUrl(router.query.cidLive as string) || null
+    return ipfsGatewayUrl(router.query.cidLive as string) || null
   }, [router.query])
 
   const urlPreview = useMemo<string|null>(() => {
-    return getIpfsIoUrl(router.query.cidPreview as string) || null
+    return ipfsGatewayUrl(router.query.cidPreview as string) || null
   }, [router.query])
 
   const reload = () => {

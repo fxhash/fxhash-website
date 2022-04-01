@@ -5,13 +5,13 @@ import { Spacing } from "../../components/Layout/Spacing"
 import { ArtworkIframe, ArtworkIframeRef } from "../../components/Artwork/PreviewIframe"
 import { useMemo, useState, useRef, useEffect } from "react"
 import { generateFxHash } from "../../utils/hash"
-import { getIpfsIoUrl } from "../../utils/ipfs"
 import { HashTest } from "../../components/Testing/HashTest"
 import { Checkbox } from "../../components/Input/Checkbox"
 import { Button } from "../../components/Button"
 import { RawTokenFeatures } from "../../types/Metadata"
 import { RawFeatures } from "../../components/Features/RawFeatures"
 import { ArtworkFrame } from "../../components/Artwork/ArtworkFrame"
+import { ipfsGatewayUrl } from "../../services/Ipfs"
 
 
 export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
@@ -24,7 +24,7 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
   const [features, setFeatures] = useState<RawTokenFeatures | null>(null)
 
   const url = useMemo<string>(() => {
-    return `${getIpfsIoUrl(state.cidUrlParams!)}?fxhash=${hash}`
+    return `${ipfsGatewayUrl(state.cidUrlParams!)}?fxhash=${hash}`
   }, [hash])
 
   const nextStep = () => {

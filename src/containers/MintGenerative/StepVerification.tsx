@@ -3,12 +3,13 @@ import styleSteps from "./Steps.module.scss"
 import cs from "classnames"
 import { StepComponent } from "../../types/Steps"
 import { ArtworkIframe } from "../../components/Artwork/PreviewIframe"
-import { getIpfsIoUrl, ipfsUrlWithHash } from "../../utils/ipfs"
+import { ipfsUrlWithHash } from "../../utils/ipfs"
 import { ArtworkPreview } from "../../components/Artwork/Preview"
 import { Spacing } from "../../components/Layout/Spacing"
 import Link from "next/link"
 import { Button } from "../../components/Button"
 import { ArtworkFrame } from "../../components/Artwork/ArtworkFrame"
+import { ipfsGatewayUrl } from "../../services/Ipfs"
 
 
 export const StepVerification: StepComponent = ({
@@ -57,13 +58,13 @@ export const StepVerification: StepComponent = ({
           <div className={cs(style['preview-cont'])}>
             <div className={cs(style['preview-wrapper'])}>
               <ArtworkPreview
-                url={getIpfsIoUrl(state.cidPreview!)}
+                url={ipfsGatewayUrl(state.cidPreview!)}
                 loading={true}
               />
             </div>
           </div>
           <Spacing size="small"/>
-          <Link href={getIpfsIoUrl(state.cidPreview!)} passHref>
+          <Link href={ipfsGatewayUrl(state.cidPreview!)} passHref>
             <Button
               isLink
               // @ts-ignore

@@ -21,7 +21,7 @@ export function GenerativeRank({
         <div 
           className={cs(style.icon)}
           style={{
-            backgroundImage: `url(${ipfsGatewayUrl(token.metadata.thumbnailUri, "pinata-fxhash")})`
+            backgroundImage: `url(${ipfsGatewayUrl(token.metadata.thumbnailUri)})`
           }}
         />
         <div className={cs(style.details)}>

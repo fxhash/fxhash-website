@@ -34,7 +34,8 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
   const [tabActive, setTabActive] = useState<number>(0)
 
   // get the display url for og:image
-  const displayUrl = token.metadata?.displayUri && ipfsGatewayUrl(token.metadata?.displayUri)
+  const displayUrl = token.metadata?.displayUri 
+    && ipfsGatewayUrl(token.metadata?.displayUri)
 
   console.log(token)
 
