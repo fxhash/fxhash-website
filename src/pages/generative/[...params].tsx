@@ -37,8 +37,6 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
   const displayUrl = token.metadata?.displayUri 
     && ipfsGatewayUrl(token.metadata?.displayUri)
 
-  console.log(token)
-
   return (
     <>
       <Head>

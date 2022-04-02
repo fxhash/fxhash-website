@@ -42,13 +42,10 @@ export class UpdateIssuerOperation extends ContractOperation<TUpdateIssuerOperat
       royalties_split: numbered.splitsSecondary,
     }
 
-    console.log(params)
-
     // if the author is a collab contract, we have to call the collab contract
     // proposal EP instead
     if (this.collab) {
       const packed = pack(params, EBuildableParams.UPDATE_ISSUER)
-      console.log(packed)
 
       return this.contract!.methodsObject.make_proposal({
         call_id: FxhashCollabFactoryCalls.UPDATE_ISSUER,

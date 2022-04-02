@@ -148,7 +148,6 @@ export const clientSideClient = new ApolloClient({
             keyArgs: false,
             // @ts-ignore
             merge(existing, incoming, { args: { skip = 0, filters }}) {
-              console.log("merge")
               const merged = existing ? existing.slice(0) : []
               let j = 0
               mainLoop:
@@ -169,7 +168,6 @@ export const clientSideClient = new ApolloClient({
             keyArgs: false,
             // @ts-ignore
             merge(existing, incoming, { args: { skip = 0, filters }}) {
-              console.log("incoming merge")
               const merged = existing ? existing.slice(0) : []
               let j = 0
               mainLoop:

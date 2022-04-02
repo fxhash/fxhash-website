@@ -61,6 +61,7 @@ export function LargeGentkCard({
                   user={objkt.owner!}
                   size="small"
                   hasLink={false}
+                  className={cs(style.badge)}
                 />
               </>
             )}

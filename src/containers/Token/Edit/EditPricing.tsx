@@ -91,8 +91,6 @@ export function EditPricing({
             <h4>Pricing settings</h4>
             <Spacing size="large"/>
 
-            {console.log(errors)}
-
             {disabled && (
               <>
                 <span className={cs(style.disabled_message)}>
