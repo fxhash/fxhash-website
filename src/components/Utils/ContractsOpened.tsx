@@ -36,7 +36,6 @@ export function ContractsOpened() {
             <span>
               <Countdown
                 until={cyclesState.nextOpening}
-                onEnd={onEnd}
               />
             </span>
             <div/>
@@ -47,7 +46,6 @@ export function ContractsOpened() {
             <span>
               <Countdown
                 until={cyclesState.nextClosing}
-                onEnd={onEnd}
               />
             </span>
             <div/>

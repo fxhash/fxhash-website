@@ -8,7 +8,7 @@ type TLayout = "default" | "fixed-size"
 export interface RadioOption<T = any, OptProps = any> {
   value: T
   label: string
-  optProps: OptProps
+  optProps?: OptProps
 }
 
 interface PropsOptionRenderer<T = any, OptProps = any> {
