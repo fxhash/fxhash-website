@@ -53,6 +53,8 @@ export function MintController({
     fixedPricingState,
   } = mintingState
 
+  console.log({locked})
+
   // hook to interact with the contract
   const { state, loading, success, call, error, opHash } = 
     useContractOperation<TMintOperationParams>(MintOperation)

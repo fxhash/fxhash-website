@@ -131,8 +131,6 @@ function deriveMintingStateFromToken(
     const ended = isAfter(now, endsAt)
     // is the auction active ? now € [start, ends]
     const active = started && !ended
-    // globally locked if not started
-    locked = !started
     
     // set a basic state with required values
     daState = {
@@ -168,6 +166,8 @@ function deriveMintingStateFromToken(
     if (!refreshTimer || isAfter(activeTimer, refreshTimer)) {
       activeMintingState = EMintingState.DUTCH_AUCTION
       refreshTimer = activeTimer
+      // globally locked if not started
+      locked = !started
     }
   }
   // if it's a fixed pricing
@@ -182,13 +182,13 @@ function deriveMintingStateFromToken(
       fixedState.opensAt = opensAt
       // it's only activeif now > opensAt
       fixedState.active = isAfter(now, opensAt)
-      // globally locked if not active
-      locked = !fixedState.active
 
       // check if the pricing fixed state needs to prevail
       if (!refreshTimer || isAfter(opensAt, refreshTimer)) {
         activeMintingState = EMintingState.FIXED_PRICING
         refreshTimer = opensAt
+        // globally locked if not active
+        locked = !fixedState.active
       }
     }
 
