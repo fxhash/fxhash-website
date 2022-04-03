@@ -58,6 +58,10 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
     }
   }
 
+  console.log({
+    url: gentkLiveUrl(objkt)
+  })
+
   return (
     <>
       <Head>
