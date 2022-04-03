@@ -35,7 +35,7 @@ export function GenerativeTokenCard({
     <Link href={url} passHref>
       <AnchorForward style={{ height: '100%' }} className={className}>
         <Card
-          thumbnailUri={token.metadata?.thumbnailUri}
+          thumbnailUri={token.thumbnailUri}
           displayDetails={displayDetails}
         >
           <div>

@@ -15,14 +15,14 @@ const ITEMS_PER_PAGE = 20
 const Qu_genTokens = gql`
   ${Frag_GenAuthor}
   ${Frag_GenPricing}
-  query Query ($skip: Int, $take: Int, $sort: GenerativeSortInput, $filters: GenerativeTokenFilter) {
+  query GenerativeTokensIncoming($skip: Int, $take: Int, $sort: GenerativeSortInput, $filters: GenerativeTokenFilter) {
     incomingGenerativeTokens: generativeTokens(
       skip: $skip, take: $take, sort: $sort, filters: $filters
     ) {
       id
       name
       slug
-      metadata
+      thumbnailUri
       ...Pricing
       supply
       originalSupply

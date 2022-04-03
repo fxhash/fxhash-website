@@ -71,6 +71,9 @@ export interface GenerativeToken {
   slug?: string
   metadata: GenerativeTokenMetadata
   metadataUri?: string
+  generativeUri?: string
+  thumbnailUri?: string
+  displayUri?: string
   tags?: string[]
   labels?: number[]
   // todo:  remove

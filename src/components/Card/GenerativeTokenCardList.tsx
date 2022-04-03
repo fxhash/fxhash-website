@@ -26,7 +26,7 @@ export function GenerativeTokenCardList({
   return (
     <Link href={url} passHref>
       <AnchorForward style={{ height: '100%' }} className={className}>
-        <CardList thumbnailUri={token.metadata?.thumbnailUri}>
+        <CardList thumbnailUri={token.thumbnailUri}>
           <div className={cs(style.main_details)}>
             <h6>{ token.name }</h6>
             <Spacing size="8px" />

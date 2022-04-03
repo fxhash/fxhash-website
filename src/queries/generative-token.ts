@@ -99,35 +99,6 @@ export const Qu_genTokenFeatures = gql`
   }
 `
 
-export const Qu_genTokenObjkts = gql`
-  query Query($id: Float, $slug: String, $take: Int, $skip: Int) {
-    generativeToken(id: $id, slug: $slug) {
-      id
-      objkts(take: $take, skip: $skip) {
-        id
-        version
-        owner {
-          id
-          name
-          avatarUri
-        }
-        issuer {
-          author {
-            id
-            name
-            avatarUri
-          }
-        }
-        name
-        metadata
-        offer {
-          price
-        }
-      }
-    }
-  }
-`
-
 export const Qu_genTokenMarketHistory = gql`
   query GenerativeTokenMarketHistory($id: Float, $filters: MarketStatsHistoryInput!) {
     generativeToken(id: $id) {

@@ -2,7 +2,7 @@ import { gql } from "@apollo/client"
 import { Frag_GenAuthor, Frag_GenPricing } from "./fragments/generative-token"
 
 export const Qu_user = gql`
-  query Query($id: String, $name: String) {
+  query User($id: String, $name: String) {
     user(id: $id, name: $name) {
       id
       type
@@ -47,7 +47,7 @@ export const Qu_userGenTokens = gql`
   ${Frag_GenAuthor}
   ${Frag_GenPricing}
 
-  query Query($id: String!, $take: Int, $skip: Int) {
+  query UserGenerativeTokens($id: String!, $take: Int, $skip: Int) {
     user(id: $id) {
       id
       generativeTokens(take: $take, skip: $skip) {
@@ -56,7 +56,7 @@ export const Qu_userGenTokens = gql`
         originalSupply
         balance
         name
-        metadata
+        thumbnailUri
         ...Author
         ...Pricing
       }
@@ -67,7 +67,7 @@ export const Qu_userGenTokens = gql`
 export const Qu_userObjkts = gql`
   ${Frag_GenAuthor}
 
-  query Query($id: String!, $take: Int, $skip: Int, $sort: UserCollectionSortInput, $filters: ObjktFilter) {
+  query UserCollection($id: String!, $take: Int, $skip: Int, $sort: UserCollectionSortInput, $filters: ObjktFilter) {
     user(id: $id) {
       id
       objkts(take: $take, skip: $skip, sort: $sort, filters: $filters) {

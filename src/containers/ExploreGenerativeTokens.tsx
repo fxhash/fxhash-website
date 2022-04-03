@@ -32,7 +32,7 @@ const Qu_genTokens = gql`
       id
       name
       slug
-      metadata
+      thumbnailUri
       ...Pricing
       supply
       originalSupply

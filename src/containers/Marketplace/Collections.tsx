@@ -2,8 +2,6 @@ import style from "./MarketplaceCollections.module.scss"
 import cs from "classnames"
 import { gql, useQuery } from '@apollo/client'
 import { GenerativeToken } from '../../types/entities/GenerativeToken'
-import { CardsContainer } from '../../components/Card/CardsContainer'
-import { GenerativeTokenCard } from '../../components/Card/GenerativeTokenCard'
 import { LoaderBlock } from '../../components/Layout/LoaderBlock'
 import { InfiniteScrollTrigger } from '../../components/Utils/InfiniteScrollTrigger'
 import { useState, useRef, useEffect } from 'react'
@@ -27,7 +25,7 @@ const Qu_genTokens = gql`
       id
       name
       slug
-      metadata
+      thumbnailUri
       supply
       balance
       enabled
@@ -49,7 +47,7 @@ const Qu_tokensById = gql`
       id
       name
       slug
-      metadata
+      thumbnailUri
       price
       supply
       balance
