@@ -47,7 +47,12 @@ export function GenerativePricing({
               />
               {token.pricingDutchAuction.levels.map((level, idx) => (
                 <Fragment key={idx}>
-                  {displayMutez(level)}
+                  <span className={cs({
+                    [style.active_price]: 
+                      level === token.pricingDutchAuction!.finalPrice
+                  })}>
+                    {displayMutez(level)}
+                  </span>
                   {idx !== token.pricingDutchAuction!.levels.length-1 && (
                     <span className={cs(style.sep)}>{"->"}</span>
                   )}
