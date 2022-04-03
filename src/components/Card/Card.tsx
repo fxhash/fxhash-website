@@ -22,13 +22,14 @@ export function Card({
   children
 }: PropsWithChildren<Props>) {
   const [loaded, setLoaded] = useState<string|null>(null)
+  const [error, setError] = useState<boolean>(false)
   const url = useMemo(() => thumbnailUri && ipfsGatewayUrl(thumbnailUri), [])
   const { ref, inView } = useInView()
   const settings = useContext(SettingsContext)
 
   // lazy load the image
   useClientAsyncEffect(isMounted => {
-    if (inView && !loaded && url) {
+    if (inView && !loaded && url && !error) {
       const img = new Image()
       img.onload = () => {
         if (isMounted()) {
@@ -37,7 +38,8 @@ export function Card({
       }
       img.onerror = () => {
         // we fallback to the IPFS gateway
-        img.src = ipfsGatewayUrl(thumbnailUri)
+        // img.src = ipfsGatewayUrl(thumbnailUri)
+        setError(true)
       }
       img.src = url
     }
@@ -50,18 +52,18 @@ export function Card({
       <div 
         className={cs(style['thumbnail-container'], { 
           [style.undesirable]: undesirable,
-          [effect.placeholder]: !loaded
+          [effect.placeholder]: !loaded && !error
         })}
         style={{
           backgroundImage: loaded ? `url(${loaded})` : "none"
         }}
       >
-        {/* {!url && (
+        {error && (
           <div className={cs(style.error)}>
-            <i aria-hidden className="fas fa-exclamation-circle"/>
+            <i aria-hidden className="fa-solid fa-bug"/>
             <span>could not load image</span>
           </div>
-        )} */}
+        )}
         {undesirable && (
           <div className={cs(style.flag)}>
             <i aria-hidden className="fas fa-exclamation-triangle"/>

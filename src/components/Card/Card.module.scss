@@ -42,7 +42,8 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  color: var(--color-white);
+  color: var(--color-gray-light);
+  font-size: var(--font-size-small);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -50,8 +51,8 @@
   text-align: center;
 
   i {
-    color: var(--color-error);
-    font-size: 60px;
+    color: var(--color-gray-light);
+    font-size: 30px;
     margin-bottom: 15px;
   }
 }

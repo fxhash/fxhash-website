@@ -1,9 +1,9 @@
 import style from "./CardList.module.scss"
 import cs from "classnames"
+import effect from "../../styles/Effects.module.scss"
 import { PropsWithChildren, useMemo, useState } from "react"
 import { ipfsGatewayUrl } from "../../services/Ipfs"
 import { useClientAsyncEffect } from "../../utils/hookts"
-import { Loader } from "../Utils/Loader"
 import { useInView } from "react-intersection-observer"
 
 
@@ -32,7 +32,7 @@ export function CardList({
       }
       img.onerror = () => {
         // we fallback to the IPFS gateway
-        img.src = ipfsGatewayUrl(thumbnailUri)
+        // img.src = ipfsGatewayUrl(thumbnailUri)
       }
       img.src = url
     }
@@ -41,16 +41,14 @@ export function CardList({
   return (
     <div className={cs(style.container)} ref={ref}>
       <div 
-        className={cs(style['thumbnail-container'], { [style.undesirable]: undesirable })}
+        className={cs(style['thumbnail-container'], { 
+          [style.undesirable]: undesirable,
+          [effect.placeholder]: !loaded,
+        })}
         style={{
           backgroundImage: loaded ? `url(${loaded})` : "none"
         }}
       >
-        {!loaded && (
-          <div className={cs(style.loader)}>
-            <Loader color="white" />
-          </div>
-        )}
         {!url && (
           <div className={cs(style.error)}>
             <i aria-hidden className="fas fa-exclamation-circle"/>
