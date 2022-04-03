@@ -1,6 +1,6 @@
 import { TzktOperation } from "../../types/Tzkt";
 import { fetchRetry } from "../../utils/network";
-import { API_BLOCKCHAIN_CONTRACT_OPERATIONS, API_BLOCKCHAIN_CONTRACT_STORAGE } from "../Blockchain";
+import { API_BLOCKCHAIN_CONTRACT_DETAILS, API_BLOCKCHAIN_CONTRACT_OPERATIONS, API_BLOCKCHAIN_CONTRACT_STORAGE } from "../Blockchain";
 import { ContractIndexingHandler } from "./contract-handlers/ContractHandler";
 
 /**
@@ -49,6 +49,18 @@ export class Indexer<Result> {
       const data = await response.json()
       // the handler is resposible for updating the state
       this.result = await this.contractHandler.indexStorage(data, this.result)
+      // eventually trigger an update
+      this.update?.(this.result)
+    }
+
+    // if the handler specifies global function, we query general details
+    if (this.contractHandler.indexDetails) {
+      const response = await fetchRetry(
+        API_BLOCKCHAIN_CONTRACT_DETAILS(this.address)
+      )
+      const data = await response.json()
+      // the handler responsible for processing the details
+      this.result = await this.contractHandler.indexDetails(data, this.result)
       // eventually trigger an update
       this.update?.(this.result)
     }

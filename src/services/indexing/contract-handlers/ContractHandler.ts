@@ -10,6 +10,8 @@ export interface ContractIndexingHandler<Result> {
   init: () => Result
   // allies the storage to the current data, if not defined is ignored
   indexStorage?: (storage: any, current: Readonly<Result>) => Promise<Result>
+  // gets the contract's details, if not defined gets ignored
+  indexDetails?: (details: any, current: Readonly<Result>) => Promise<Result>
   // handles individual operations and updates the result
   handlers: Record<string, ContractOperationHandler<Result>>
 }

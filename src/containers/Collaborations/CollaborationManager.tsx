@@ -10,6 +10,7 @@ import { LoaderBlock } from "../../components/Layout/LoaderBlock"
 import { TabsContainer } from "../../components/Layout/TabsContainer"
 import { useMemo } from "react"
 import { Proposals } from "../../components/Collaborations/Proposal/Proposals"
+import { CollaborationInformations } from "./CollaborationInformations"
 
 
 const tabs: TabDefinition[] = [
@@ -79,9 +80,10 @@ export function CollaborationManager({
                     showOldSettings={false}
                   />
                 ):(
-                  <div>
-                    more
-                  </div>
+                  <CollaborationInformations
+                    collaboration={collaboration}
+                    state={data!}
+                  />
                 )}
               </main>
             </>

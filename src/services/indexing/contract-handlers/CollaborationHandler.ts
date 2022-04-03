@@ -20,6 +20,7 @@ export interface CollaborationProposal {
 }
 
 export interface CollaborationContractState {
+  balance?: number
   initiator: string|null
   shares: Record<string, number>
   proposals: Record<number, CollaborationProposal>
@@ -62,6 +63,12 @@ export const CollaborationContractHandler: ContractIndexingHandler<
     }
 
     return res
+  },
+
+  indexDetails: async (details, state) => {
+    const nstate = {...state}
+    nstate.balance = details.balance
+    return nstate
   },
 
   handlers: {
