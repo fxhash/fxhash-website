@@ -212,7 +212,7 @@ export async function getServerSideProps() {
           id
           name
           slug
-          metadata
+          thumbnailUri
           ...Pricing
           supply
           originalSupply
