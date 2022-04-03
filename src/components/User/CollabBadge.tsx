@@ -8,7 +8,7 @@ import { Avatar } from "./Avatar"
 import { useMemo, useState } from "react"
 import { shuffleArray } from "../../utils/array"
 import { UserBadge } from "./UserBadge"
-import { isUserVerified } from "../../utils/user"
+import { getUserName, isUserVerified } from "../../utils/user"
 
 interface Props extends IEntityBadgeProps {
   user: Collaboration
@@ -55,7 +55,7 @@ export function CollabBadge(props: Props) {
             />
             <span className={cs(style.user_name)}>
               <span className={cs(style.user_name_content)}>
-                {user.name}
+                {getUserName(user, 10)}
                 {isUserVerified(user) && (
                   <i 
                     aria-hidden 
