@@ -20,6 +20,7 @@ import { Button } from "../../components/Button"
 import { getGentkUrl } from "../../utils/gentk"
 import { SectionHeader } from "../../components/Layout/SectionHeader"
 import { ProgressAnimated, ProgressAnimatedRef } from "../../components/Utils/ProgressAnimated"
+import { gentkLiveUrl } from "../../utils/objkt"
 
 export function LiveFeed() {
   const isMounted = useIsMounted()
@@ -120,7 +121,7 @@ export function LiveFeed() {
         {revealing ? (
           <>
             <RevealIframe
-              url={ipfsGatewayUrl(revealing.metadata?.artifactUri)}
+              url={gentkLiveUrl(revealing)}
               onLoaded={revealedFinished}
               resetOnUrlChange={true}
             />

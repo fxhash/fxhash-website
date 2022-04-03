@@ -3,7 +3,7 @@ import { Frag_GenAuthor } from "./fragments/generative-token"
 
 export const Qu_objkt = gql`
   ${Frag_GenAuthor}
-  query Query($id: Float, $slug: String) {
+  query Gentk($id: Float, $slug: String) {
     objkt(id: $id, slug: $slug) {
       id
       version
@@ -31,7 +31,7 @@ export const Qu_objkt = gql`
         name
         flag
         slug
-        metadata
+        generativeUri
         ...Author
       }
       metadata
@@ -101,7 +101,7 @@ export const Qu_objktsFeed = gql`
         id
         name
         slug
-        metadata
+        generativeUri
         ...Author
       }
       metadata

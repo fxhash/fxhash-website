@@ -45,7 +45,9 @@ const RevealPage: NextPage<Props> = ({ hash, token }) => {
 
           <div className={cs(layout.y_centered)}>
             <span className={cs(text.small, color.gray)}>this is your unique iteration of</span>
+            <Spacing size="8px"/>
             <h2>{ token.name }</h2>
+            <Spacing size="8px"/>
             <div className={cs(layout.x_centered)}>
               <span style={{ marginRight: 10 }}>created by </span>
               <EntityBadge

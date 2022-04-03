@@ -34,6 +34,7 @@ import { SettingsContext } from '../../context/Theme'
 import { ArtworkFrame } from '../../components/Artwork/ArtworkFrame'
 import { EntityBadge } from '../../components/User/EntityBadge'
 import { ListSplits } from '../../components/List/ListSplits'
+import { gentkLiveUrl } from '../../utils/objkt'
 
 
 interface Props {
@@ -214,7 +215,7 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
                   ):(
                     <ArtworkIframe 
                       ref={iframeRef}
-                      url={ipfsGatewayUrl(objkt.metadata?.artifactUri)}
+                      url={gentkLiveUrl(objkt)}
                       hasLoading={false}
                     />
                   )}
@@ -246,11 +247,13 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
                   reload
                 </Button>
               )}
-              <Link href={ipfsGatewayUrl(objkt.metadata?.artifactUri)} passHref>
+              <Link href={gentkLiveUrl(objkt)} passHref>
                 <Button
                   isLink={true}
                   size="small"
-                  iconComp={<i aria-hidden className="fas fa-external-link-square"/>}
+                  iconComp={
+                    <i aria-hidden className="fas fa-external-link-square"/>
+                  }
                   // @ts-ignore
                   target="_blank"
                   color="transparent"

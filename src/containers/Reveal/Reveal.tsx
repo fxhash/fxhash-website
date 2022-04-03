@@ -30,12 +30,13 @@ interface Props {
 export function Reveal({ hash, generativeUri, previeweUri, features }: Props) {
   const iframeRef = useRef<HTMLIFrameElement>(null)
   const viewUrl = useMemo<string>(() => {
-    // the old system doesn't include fxhash in the generative Uri, so we have to add it if needed
+    // the old system doesn't include fxhash in the generative Uri, 
+    // so we have to add it if needed
     if (generativeUri.includes("fxhash")) {
       return ipfsGatewayUrl(generativeUri)
     }
     else {
-      return `${ipfsGatewayUrl(generativeUri)}?fxhash=${hash}`
+      return `${ipfsGatewayUrl(generativeUri)}/?fxhash=${hash}`
     }
   }, [generativeUri])
 
