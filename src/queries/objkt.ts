@@ -31,6 +31,7 @@ export const Qu_objkt = gql`
         name
         flag
         slug
+        labels
         generativeUri
         ...Author
       }

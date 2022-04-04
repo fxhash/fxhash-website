@@ -28,13 +28,14 @@ import { Features } from '../../components/Features/Features'
 import { format } from 'date-fns'
 import { displayPercentage, displayRoyalties } from '../../utils/units'
 import { Qu_objkt } from '../../queries/objkt'
-import { getGenerativeTokenMarketplaceUrl, getGenerativeTokenUrl } from '../../utils/generative-token'
+import { getGenerativeTokenMarketplaceUrl, getGenerativeTokenUrl, getGenTokLabelStrings } from '../../utils/generative-token'
 import { GenerativeFlagBanner } from '../../containers/Generative/FlagBanner'
 import { SettingsContext } from '../../context/Theme'
 import { ArtworkFrame } from '../../components/Artwork/ArtworkFrame'
 import { EntityBadge } from '../../components/User/EntityBadge'
 import { ListSplits } from '../../components/List/ListSplits'
 import { gentkLiveUrl } from '../../utils/objkt'
+import { Tags } from '../../components/Tags/Tags'
 
 
 interface Props {
@@ -58,9 +59,8 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
     }
   }
 
-  console.log({
-    url: gentkLiveUrl(objkt)
-  })
+  // turn the generative int[] labels into string[]
+  const labels = getGenTokLabelStrings(objkt.issuer.labels || [])
 
   return (
     <>
@@ -163,6 +163,7 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
                   "MMMM d, yyyy' at 'HH:mm"
                 )}
               </span>
+              {labels.length > 0 && <Tags tags={labels}/>}
             </div>
 
             <Spacing size="large"/>
