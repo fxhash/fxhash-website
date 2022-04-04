@@ -1,4 +1,4 @@
-import { addHours, addSeconds, differenceInSeconds, isAfter, subHours } from "date-fns"
+import { addHours, addSeconds, differenceInSeconds, isAfter, isBefore, subHours } from "date-fns"
 import { useContext, useEffect, useRef, useState } from "react"
 import { UserContext } from "../containers/UserProvider"
 import { GenerativeToken, GenTokFlag } from "../types/entities/GenerativeToken"
@@ -163,7 +163,9 @@ function deriveMintingStateFromToken(
     price = da.levels[levelIdx]
 
     // check if the dutch auction state needs to prevail
-    if (!refreshTimer || isAfter(activeTimer, refreshTimer)) {
+    if (!refreshTimer 
+      || (isAfter(activeTimer, refreshTimer)) && isBefore(unlocksAt, opensAt)
+    ) {
       activeMintingState = EMintingState.DUTCH_AUCTION
       refreshTimer = activeTimer
       // globally locked if not started
@@ -184,7 +186,9 @@ function deriveMintingStateFromToken(
       fixedState.active = isAfter(now, opensAt)
 
       // check if the pricing fixed state needs to prevail
-      if (!refreshTimer || isAfter(opensAt, refreshTimer)) {
+      if (!refreshTimer 
+        || (isAfter(opensAt, refreshTimer) && isBefore(unlocksAt, opensAt))
+      ) {
         activeMintingState = EMintingState.FIXED_PRICING
         refreshTimer = opensAt
         // globally locked if not active

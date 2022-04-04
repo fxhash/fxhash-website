@@ -27,6 +27,8 @@ export function MintingState({
   existingState,
 }: Props) {
   const state = existingState || useMintingState(token)
+
+  console.log(state)
   
   return (
     <>
