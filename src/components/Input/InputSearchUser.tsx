@@ -8,7 +8,7 @@ import { UserBadge } from "../User/UserBadge"
 
 interface Props {
   value: string
-  onChange: (value: string) => void
+  onChange: (value: string, autofill: boolean) => void
   className?: string
   classNameResults?: string
 }

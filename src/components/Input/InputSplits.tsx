@@ -64,9 +64,10 @@ export function InputSplits({
     ])
   }
 
-  const add = () => {
-    if (!value.find(split => split.address === pkh)) {
-      addAddress(pkh)
+  const add = (address?: string) => {
+    address = address ?? pkh
+    if (!value.find(split => split.address === address)) {
+      addAddress(address)
     }
     setPkh("")
   }
@@ -157,7 +158,14 @@ export function InputSplits({
               <div className={cs(style.add_container)}>
                 <InputSearchUser
                   value={pkh}
-                  onChange={setPkh}
+                  onChange={(value, autofill) => {
+                    if (autofill) {
+                      add(value)
+                    }
+                    else {
+                      setPkh(value)
+                    }
+                  }}
                   className={style.address_input}
                   classNameResults={style.search_results}
                 />
@@ -167,7 +175,7 @@ export function InputSplits({
                   color="transparent"
                   iconComp={<i aria-hidden className="fa-solid fa-circle-plus"/>}
                   disabled={!isTezosAddress(pkh)}
-                  onClick={add}
+                  onClick={() => add()}
                 >
                   add
                 </Button>

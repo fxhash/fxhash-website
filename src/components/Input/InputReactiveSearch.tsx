@@ -13,7 +13,7 @@ interface Props<ObjectType> {
   className?: string
   classNameResults?: string
   value: string
-  onChange: (val: string) => void
+  onChange: (val: string, autofill: boolean) => void
   // should perform a search given an input
   searchFn: (searchInput: string) => Promise<any>
   // given the output of the searchFn, outputs a list of objects
@@ -104,7 +104,7 @@ export function InputReactiveSearch<ObjectType extends { id: any }>({
       <div className={cs(style.root, className)}>
         <InputText
           value={value}
-          onChange={evt => onChange(evt.target.value)}
+          onChange={evt => onChange(evt.target.value, false)}
           placeholder={placeholder}
           className={style.input_search}
           onFocus={() => hideResults && setHideResults(false)}
@@ -121,7 +121,7 @@ export function InputReactiveSearch<ObjectType extends { id: any }>({
                     onClick={() => {
                       const nval = valueFromResult(result)
                       setSelectedValue(nval)
-                      onChange(nval)
+                      onChange(nval, true)
                       if (value === nval) {
                         setHideResults(true)
                       }
