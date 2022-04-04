@@ -32,7 +32,7 @@ export function MintingState({
     <>
       {state.activeState === EMintingState.DUTCH_AUCTION ? (
         <DutchAuctionState
-          state={state.dutchAuctionState!}
+          state={state}
           verbose={verbose}  
         />
       ):state.activeState === EMintingState.FIXED_PRICING ? (

@@ -3,24 +3,3 @@
   flex-direction: column;
   gap: 6px;
 }
-
-.levels {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-
-  .tezos_icon {
-    margin-right: 12px;
-  }
-
-  .sep {
-    font-size: 0.6em;
-    margin: 0 5px;
-    color: var(--color-gray);
-  }
-}
-
-.active_price {
-  color: var(--color-secondary);
-  font-weight: bold;
-}

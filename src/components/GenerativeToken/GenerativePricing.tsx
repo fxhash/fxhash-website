@@ -7,6 +7,7 @@ import { Fragment } from "react"
 import { displayMutez } from "../../utils/units"
 import { IconTezos } from "../Icons/IconTezos"
 import { InfoIconLink } from "../Icons/InfoIconLink"
+import { DutchAuctionLevels } from "./Pricing/DutchAuctionLevels"
 
 
 interface Props {
@@ -41,24 +42,10 @@ export function GenerativePricing({
                 title="Learn more about Dutch Auctions"
               />
             </span>
-            <span className={cs(style.levels)}>
-              <IconTezos
-                className={cs(style.tezos_icon)}
-              />
-              {token.pricingDutchAuction.levels.map((level, idx) => (
-                <Fragment key={idx}>
-                  <span className={cs({
-                    [style.active_price]: 
-                      level === token.pricingDutchAuction!.finalPrice
-                  })}>
-                    {displayMutez(level)}
-                  </span>
-                  {idx !== token.pricingDutchAuction!.levels.length-1 && (
-                    <span className={cs(style.sep)}>{"->"}</span>
-                  )}
-                </Fragment>
-              ))}
-            </span>
+            <DutchAuctionLevels
+              levels={token.pricingDutchAuction.levels}
+              activeLevel={token.pricingDutchAuction.finalPrice}
+            />
             <span>
               changes every{" "}
               {formatDuration(

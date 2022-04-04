@@ -53,3 +53,8 @@
   font-weight: bold;
   color: var(--color-error);
 }
+
+.success {
+  font-weight: bold;
+  color: var(--color-success);
+}
