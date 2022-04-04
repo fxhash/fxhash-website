@@ -11,7 +11,7 @@ import { EditTokenSnippet } from "../../Token/EditTokenSnippet"
 import { MintProgress } from "../../../components/Artwork/MintProgress"
 import { MintController } from "../../../components/GenerativeToken/MintController"
 import Link from "next/link"
-import { getGenerativeTokenMarketplaceUrl } from "../../../utils/generative-token"
+import { getGenerativeTokenMarketplaceUrl, getGenTokLabelStrings } from "../../../utils/generative-token"
 import { Button } from "../../../components/Button"
 import { GenerativeExtraActions } from "../ExtraActions"
 import { format } from "date-fns"
@@ -39,6 +39,9 @@ export function GenerativeDisplay({
   token,
   offlineMode = false,
 }: Props) {
+  // turn labels int[] into their string[]
+  const labels = getGenTokLabelStrings(token.labels || [])
+
   return (
     <>
       <div className={cs(style.artwork_header_mobile, layout.break_words)}>
@@ -118,6 +121,7 @@ export function GenerativeDisplay({
             <span className={cs(text.info)}>
               Published on { format(new Date(token.createdAt), "MMMM d, yyyy' at 'HH:mm") }
             </span>
+            {labels.length > 0 && <Tags tags={labels}/>}
           </div>
 
           <Spacing size="large"/>

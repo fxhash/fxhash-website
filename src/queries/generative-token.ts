@@ -14,6 +14,7 @@ export const Qu_genToken = gql`
       flag
       slug
       tags
+      labels
       metadata
       metadataUri
       supply

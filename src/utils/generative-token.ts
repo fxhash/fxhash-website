@@ -249,6 +249,12 @@ export const mapGenTokLabels: Record<GenTokLabel, string> = {
   101: "Animated",
 }
 
+export function getGenTokLabelStrings(labels: number[]) {
+  //@ts-ignore
+  return labels.map(label => mapGenTokLabels[label as any])
+    .filter(str => !!str)
+}
+
 export const mapGenTokPricingToId: Record<GenTokPricing, number> = {
   "FIXED": 0,
   "DUTCH_AUCTION": 1,
