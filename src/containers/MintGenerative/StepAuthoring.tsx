@@ -146,73 +146,74 @@ export const StepAuthoring: StepComponent = ({ state, onNext }) => {
         </Field>
 
         {authorType === 1 && (
-          <>
-            <Field className={cs(layout.y_centered, layout.w100)}>
-              <label>
+          <Field className={cs(layout.y_centered, layout.w100)}>
+            <div className={cs(layout.flex_space_between)}>
+              <h5>
                 Select the collaboration
-              </label>
-              <InputMultiList<string>
-                listItems={collaborationsListItem}
-                selected={selectedCollab ? [ selectedCollab ] : []}
-                onChangeSelected={(collab) => {
-                  if (collab.length > 0) {
-                    setSelectedCollab(collab[0])
-                  }
-                  else {
-                    setSelectedCollab(undefined)
-                  }
-                }}
-                multiple={false}
-                className={cs(style.multilist, layout.w100)}
-                btnClassName={cs(style.multilist_item)}
-              >
-                {({ selected, itemProps }: IMultiListItemProps) => (
-                  <div className={cs(style.collab)}>
-                    <span className={cs(style.address)}>
-                      {itemProps.collab.id}
-                    </span>
-                    <div className={cs(style.users)}>
-                      {itemProps.collab.collaborators.map(user => (
-                        itemProps.fresh ? (
-                          <UserFromAddress
-                            key={user.id}
-                            address={user.id}
-                          >
-                            {({ user }) => (
-                              <UserBadge
-                                size="small"
-                                user={user}
-                                hasLink={false}
-                              />
-                            )}
-                          </UserFromAddress>
-                        ):(
-                          <UserBadge
-                            key={user.id}
-                            size="small"
-                            user={user}
-                            hasLink={false}
-                          />
-                        )
-                      ))}
-                    </div>
-                    <span className={cs(style.date)}>
-                      <strong>Created on: </strong>
-                      <span>
-                        {format(new Date(itemProps.collab.createdAt), "MMMM d, yyyy' at 'HH:mm")}
-                      </span>
-                    </span>
+              </h5>
+              <CollaborationCreate
+                buttonSize="small"
+                onCreate={onCreateCollab}
+                hideOnCreate
+              />
+            </div>
+            <Spacing size="x-small"/>
+            <InputMultiList<string>
+              placeholder="This account isn't linked to any collaboration contract. You need to create a collaboration first."
+              listItems={collaborationsListItem}
+              selected={selectedCollab ? [ selectedCollab ] : []}
+              onChangeSelected={(collab) => {
+                if (collab.length > 0) {
+                  setSelectedCollab(collab[0])
+                }
+                else {
+                  setSelectedCollab(undefined)
+                }
+              }}
+              multiple={false}
+              className={cs(style.multilist, layout.w100)}
+              btnClassName={cs(style.multilist_item)}
+            >
+              {({ selected, itemProps }: IMultiListItemProps) => (
+                <div className={cs(style.collab)}>
+                  <span className={cs(style.address)}>
+                    {itemProps.collab.id}
+                  </span>
+                  <div className={cs(style.users)}>
+                    {itemProps.collab.collaborators.map(user => (
+                      itemProps.fresh ? (
+                        <UserFromAddress
+                          key={user.id}
+                          address={user.id}
+                        >
+                          {({ user }) => (
+                            <UserBadge
+                              size="small"
+                              user={user}
+                              hasLink={false}
+                            />
+                          )}
+                        </UserFromAddress>
+                      ):(
+                        <UserBadge
+                          key={user.id}
+                          size="small"
+                          user={user}
+                          hasLink={false}
+                        />
+                      )
+                    ))}
                   </div>
-                )}
-              </InputMultiList>
-            </Field>
-            
-            <Spacing size="regular"/>
-            <CollaborationCreate
-              onCreate={onCreateCollab}
-              hideOnCreate
-            />
-          </>
+                  <span className={cs(style.date)}>
+                    <strong>Created on: </strong>
+                    <span>
+                      {format(new Date(itemProps.collab.createdAt), "MMMM d, yyyy' at 'HH:mm")}
+                    </span>
+                  </span>
+                </div>
+              )}
+            </InputMultiList>
+          </Field>
         )}
 
         <Spacing size="6x-large"/>

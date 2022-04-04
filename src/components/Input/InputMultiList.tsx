@@ -23,6 +23,7 @@ interface Props<ItemType> {
   className?: string
   btnClassName?: string
   multiple?: boolean
+  placeholder?: string
   children: FunctionComponent<MultiListItemProps>
 }
 export function InputMultiList<ItemType = any>({
@@ -32,6 +33,7 @@ export function InputMultiList<ItemType = any>({
   onChangeSelected,
   className,
   btnClassName,
+  placeholder,
   children,
 }: Props<ItemType>) {
 
@@ -46,6 +48,11 @@ export function InputMultiList<ItemType = any>({
 
   return (
     <div className={cs(style.root, className)}>
+      {placeholder && listItems.length === 0 && (
+        <div className={cs(style.placeholder)}>
+          {placeholder}
+        </div>
+      )}
       {listItems.map(item => (
         <button 
           key={item.value}

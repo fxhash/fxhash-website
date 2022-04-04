@@ -4,7 +4,7 @@ import colors from "../../styles/Colors.module.css"
 import layout from "../../styles/Layout.module.scss"
 import { useContext, useEffect, useMemo, useState } from "react"
 import { Modal } from "../../components/Utils/Modal"
-import { Button } from "../../components/Button"
+import { Button, ButtonSize } from "../../components/Button"
 import { Spacing } from "../../components/Layout/Spacing"
 import { InputSearchUser } from "../../components/Input/InputSearchUser"
 import { Collaboration, User, UserType } from "../../types/entities/User"
@@ -22,10 +22,12 @@ import useAsyncEffect from "use-async-effect"
 interface Props {
   onCreate?: (collab: Collaboration) => void
   hideOnCreate?: boolean
+  buttonSize?: ButtonSize
 }
 export function CollaborationCreate({
   onCreate,
   hideOnCreate = false,
+  buttonSize = "regular",
 }: Props) {
   const userCtx = useContext(UserContext)
   // display the modal
@@ -84,7 +86,7 @@ export function CollaborationCreate({
   return (
     <>
       <Button
-        size="regular"
+        size={buttonSize}
         type="button"
         iconComp={<i aria-hidden className="fa-solid fa-plus"/>}
         onClick={() => setShow(true)}
@@ -138,6 +140,7 @@ export function CollaborationCreate({
               successMessage="Your collaboration contract was created"
             />
             <Button
+              type="button"
               color="secondary"
               style={{ margin: "auto" }}
               onClick={createCollab}
