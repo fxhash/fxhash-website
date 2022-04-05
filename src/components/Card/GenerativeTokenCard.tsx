@@ -39,7 +39,8 @@ export function GenerativeTokenCard({
           displayDetails={displayDetails}
           thumbInfosComp={token.labels?.includes(GenTokLabel.ANIMATED) && 
             <div className={cs(style.animated)}>
-              <i className="fa-solid fa-clapperboard" aria-hidden/>
+              Animated{" "}
+              <i className="fa-solid fa-film" aria-hidden/>
             </div>
           }
         >

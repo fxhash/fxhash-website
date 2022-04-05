@@ -1,6 +1,11 @@
 .animated {
-  background-color: rgba(0, 0, 0, 0.7);
-  padding: 3px;
-  padding-left: 6px;
-  font-size: 1em;
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: 2px 2px 1px 5px;
+  font-size: 0.8em;
+  color: white;
+  // font-weight: bold;
+
+  i {
+    font-size: 14px;
+  }
 }

@@ -22,6 +22,8 @@ const Qu_genTokens = gql`
       id
       name
       slug
+      flag
+      labels
       thumbnailUri
       ...Pricing
       supply
