@@ -1,7 +1,7 @@
-// import style from "./GenerativeTokenCard.module.scss"
+import style from "./GenerativeTokenCard.module.scss"
 import Link from "next/link"
 import cs from "classnames"
-import { GenerativeToken } from "../../types/entities/GenerativeToken"
+import { GenerativeToken, GenTokLabel } from "../../types/entities/GenerativeToken"
 import colors from "../../styles/Colors.module.css"
 import text from "../../styles/Text.module.css"
 import { AnchorForward } from "../Utils/AnchorForward"
@@ -37,6 +37,11 @@ export function GenerativeTokenCard({
         <Card
           thumbnailUri={token.thumbnailUri}
           displayDetails={displayDetails}
+          thumbInfosComp={token.labels?.includes(GenTokLabel.ANIMATED) && 
+            <div className={cs(style.animated)}>
+              <i className="fa-solid fa-clapperboard" aria-hidden/>
+            </div>
+          }
         >
           <div>
             <h5>{ token.name }</h5>

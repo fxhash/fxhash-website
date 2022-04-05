@@ -1,7 +1,7 @@
 import style from "./Card.module.scss"
 import effect from "../../styles/Effects.module.scss"
 import cs from "classnames"
-import { PropsWithChildren, useContext, useMemo, useState } from "react"
+import { PropsWithChildren, ReactNode, useContext, useMemo, useState } from "react"
 import { ipfsGatewayUrl } from "../../services/Ipfs"
 import { useClientAsyncEffect } from "../../utils/hookts"
 import { Loader } from "../Utils/Loader"
@@ -13,12 +13,14 @@ interface Props {
   thumbnailUri?: string|null
   undesirable?: boolean
   displayDetails?: boolean
+  thumbInfosComp?: ReactNode
 }
 
 export function Card({
   thumbnailUri,
   undesirable = false,
   displayDetails = true,
+  thumbInfosComp,
   children
 }: PropsWithChildren<Props>) {
   const [loaded, setLoaded] = useState<string|null>(null)
@@ -68,6 +70,11 @@ export function Card({
           <div className={cs(style.flag)}>
             <i aria-hidden className="fas fa-exclamation-triangle"/>
             <span>undesirable content</span>
+          </div>
+        )}
+        {thumbInfosComp && (
+          <div className={cs(style.thumbinfos)}>
+            {thumbInfosComp}
           </div>
         )}
       </div>
