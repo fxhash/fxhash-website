@@ -37,7 +37,10 @@ export const StepVerification: StepComponent = ({
             </div>
           </div>
           <Spacing size="small"/>
-          <Link href={ipfsUrlWithHash(state.cidUrlParams!, state.previewHash!)} passHref>
+          <Link 
+            href={ipfsUrlWithHash(state.cidUrlParams!, state.previewHash!)} 
+            passHref
+          >
             <Button
               isLink
               // @ts-ignore

@@ -14,5 +14,5 @@ export function ipfsUrlWithHash(
   hash: string,
   transform: ((cid: string) => string) = ipfsGatewayUrl
 ) {
-  return `${transform(cid)}?fxhash=${hash}`
+  return `${transform(cid)}/?fxhash=${hash}`
 }

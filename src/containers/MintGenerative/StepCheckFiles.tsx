@@ -12,6 +12,7 @@ import { RawTokenFeatures } from "../../types/Metadata"
 import { RawFeatures } from "../../components/Features/RawFeatures"
 import { ArtworkFrame } from "../../components/Artwork/ArtworkFrame"
 import { ipfsGatewayUrl } from "../../services/Ipfs"
+import { ipfsUrlWithHash } from "../../utils/ipfs"
 
 
 export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
@@ -24,7 +25,7 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
   const [features, setFeatures] = useState<RawTokenFeatures | null>(null)
 
   const url = useMemo<string>(() => {
-    return `${ipfsGatewayUrl(state.cidUrlParams!)}?fxhash=${hash}`
+    return ipfsUrlWithHash(state.cidUrlParams!, hash)
   }, [hash])
 
   const nextStep = () => {

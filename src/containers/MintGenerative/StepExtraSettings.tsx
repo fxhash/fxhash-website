@@ -18,6 +18,7 @@ import { SquareContainer } from "../../components/Layout/SquareContainer"
 import { Select } from "../../components/Input/Select"
 import { HashList } from "../../components/Utils/HashList"
 import { generateFxHash } from "../../utils/hash"
+import { ipfsUrlWithHash } from "../../utils/ipfs"
 
 
 const initialSettings: Partial<GenTokenSettings> = {
@@ -60,7 +61,7 @@ export const StepExtraSettings: StepComponent = ({ state, onNext }) => {
   // DERIVED FROM STATE
   // the url to display in the iframe
   const iframeUrl = useMemo<string>(() => {
-    return `${ipfsGatewayUrl(state.cidUrlParams)}?fxhash=${hash}`
+    return ipfsUrlWithHash(state.cidUrlParams!, hash)
   }, [hash])
 
   // FUNCTIONS

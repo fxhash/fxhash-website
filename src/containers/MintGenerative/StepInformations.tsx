@@ -61,98 +61,9 @@ const validation = Yup.object().shape({
 })
 
 export const StepInformations: StepComponent = ({ state, onNext }) => {
-  const userCtx = useContext(UserContext)
-  const user = userCtx.user!
-
-  const [savedInfos, setSavedInfos] = useState<GenTokenInformationsForm>()
-
   const initialState = useMemo(
     () => state.informations || initialForm
   , [])
-  
-  // hook to interact with file API metadata
-  const { data: metaData, loading: metaLoading, error: metaError, post: metaPost } = 
-    useFetch<MetadataResponse|MetadataError>(`${process.env.NEXT_PUBLIC_API_FILE_ROOT}/metadata`,
-    { cachePolicy: CachePolicies.NO_CACHE })
-
-  // this variable ensures that we can safely access its data regardless of the state of the queries
-  const safeMetaData: MetadataResponse|false|undefined = !metaError && !metaLoading && (metaData as MetadataResponse)
-
-  // hook to interact with the contract
-  const { state: callState, loading: contractLoading, success, call, error: contractError } = 
-    useContractCall<MintGenerativeCallData>(userCtx.walletManager!.mintGenerative)
-
-  const uploadInformations = (formInformations: GenTokenInformationsForm) => {
-    const capture: CaptureSettings = {
-      mode: state.captureSettings!.mode!,
-      triggerMode: state.captureSettings!.triggerMode!,
-      gpu: state.captureSettings!.gpu,
-    }
-    // set settings based on the capture mode
-    if (state.captureSettings!.mode === CaptureMode.VIEWPORT) {
-      capture.resolution = {
-        x: state.captureSettings!.resX!,
-        y: state.captureSettings!.resY!,
-      }
-    }
-    else if (state.captureSettings!.mode === CaptureMode.CANVAS) {
-      capture.canvasSelector = state.captureSettings!.canvasSelector
-    }
-    // set settings based on the trigger mode
-    if (state.captureSettings!.triggerMode === CaptureTriggerMode.DELAY) {
-      capture.delay = state.captureSettings!.delay
-    }
-    else if (state.captureSettings!.triggerMode === CaptureTriggerMode.FN_TRIGGER) {
-      // we don't need to add anything
-    }
-
-    const metadata: GenerativeTokenMetadata = {
-      name: formInformations.name,
-      description: formInformations.description,
-      childrenDescription: formInformations.childrenDescription || formInformations.description,
-      tags: tagsFromString(formInformations.tags),
-      artifactUri: `${getIpfsSlash(state.cidUrlParams!)}?fxhash=${state.previewHash}`,
-      displayUri: getIpfsSlash(state.cidPreview!),
-      thumbnailUri: getIpfsSlash(state.cidThumbnail!),
-      generativeUri: getIpfsSlash(state.cidUrlParams!),
-      authenticityHash: state.authHash2!,
-      previewHash: state.previewHash!,
-      capture,
-      settings: state.settings ?? null,
-      symbol: "FXGEN",
-      decimals: 0,
-      version: "0.2"
-    }
-    metaPost(metadata)
-  }
-
-  // when we receive metadata CID, we can initiate the call to contract
-  useEffect(() => {
-    if (safeMetaData && savedInfos) {
-      const metadataCid = safeMetaData.cid
-      // call the contract
-      // call({
-      //   amount: savedInfos.editions!,
-      //   enabled: savedInfos.enabled!,
-      //   metadata: stringToByteString(getIpfsSlash(metadataCid)),
-      //   price: Math.floor(savedInfos.price! * 1000000),
-      //   royalties: Math.floor(savedInfos.royalties! * 10),
-      // })
-      // todo: move to next step
-    }
-  }, [safeMetaData])
-
-  // if contract lands success, go to the success screen
-  useEffect(() => {
-    if (success) {
-      onNext({
-        minted: true
-      })
-    }
-  }, [success])
-
-  // derived from state, to take account for both side-effects interactions
-  const loading = metaLoading || contractLoading
 
   const next = (values: GenTokenInformationsForm) => {
     onNext({
@@ -257,14 +168,6 @@ export const StepInformations: StepComponent = ({ state, onNext }) => {
 
             <Spacing size="3x-large"/>
 
-            <ContractFeedback
-              state={callState}
-              loading={contractLoading}
-              success={success}
-              error={contractError}
-              successMessage="Success !"
-            />
-
             <Button
               type="submit"
               color="secondary"
@@ -272,7 +175,6 @@ export const StepInformations: StepComponent = ({ state, onNext }) => {
               iconSide="right"
               size="large"
               disabled={Object.keys(errors).length > 0}
-              state={loading ? "loading" : "default"}
             >
               final preview
             </Button>
