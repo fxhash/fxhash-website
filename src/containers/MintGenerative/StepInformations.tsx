@@ -28,7 +28,7 @@ import { getMutezDecimalsNb, isPositive } from "../../utils/math"
 import { tagsFromString } from "../../utils/strings"
 import { stringToByteString } from "../../utils/convert"
 import { InputMultiList, MultiListItem } from "../../components/Input/InputMultiList"
-import { mapGenTokLabels } from "../../utils/generative-token"
+import { genTokLabelDefinitions } from "../../utils/generative-token"
 
 
 const initialForm: GenTokenInformationsForm = {
@@ -39,13 +39,14 @@ const initialForm: GenTokenInformationsForm = {
   labels: [],
 }
 
-const labelsList: MultiListItem[] = Object.keys(mapGenTokLabels).map(id => ({
-  value: parseInt(id),
-  props: {
-    // @ts-ignore
-    label: mapGenTokLabels[id], 
-  }
-}))
+const labelsList: MultiListItem[] = Object.keys(genTokLabelDefinitions)
+  .map(id => ({
+    value: parseInt(id),
+    props: {
+      // @ts-ignore
+      label: genTokLabelDefinitions[id].label, 
+    }
+  }))
 
 const validation = Yup.object().shape({
   name: Yup.string()

@@ -1,3 +1,4 @@
+import { CSSProperties } from "react"
 import { GenerativeTokenMetadata } from "../Metadata"
 import { Action } from "./Action"
 import { Objkt } from "./Objkt"
@@ -27,6 +28,17 @@ export enum GenTokLabel {
   SENSITIVE           = 2,
   IMAGE_COMPOSITION   = 100,
   ANIMATED            = 101,
+}
+
+export enum GenTokLabelGroup {
+  WARNING       = "WARNING",
+  DETAILS       = "DETAILS",
+}
+
+export interface GenTokLabelDefinition {
+  label: string
+  shortLabel: string
+  group: GenTokLabelGroup
 }
 
 export interface GenerativeTokenMarketStats {

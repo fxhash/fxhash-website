@@ -1,7 +1,7 @@
 import { differenceInSeconds } from "date-fns"
 import { TInputMintIssuer } from "../services/parameters-builder/mint-issuer/input"
 import { TInputPricingDetails } from "../services/parameters-builder/pricing/input"
-import { GenerativeToken, GenTokFlag, GenTokLabel, GenTokPricing } from "../types/entities/GenerativeToken"
+import { GenerativeToken, GenTokFlag, GenTokLabel, GenTokLabelDefinition, GenTokLabelGroup, GenTokPricing } from "../types/entities/GenerativeToken"
 import { IPricingDutchAuction, IPricingFixed } from "../types/entities/Pricing"
 import { Collaboration, User, UserType } from "../types/entities/User"
 import { CaptureSettings, GenerativeTokenMetadata } from "../types/Metadata"
@@ -237,23 +237,44 @@ export function generativeFromMintForm(
   }
 }
 
-
 /**
- * Maps the label identifiers with their string names
+ * Maps the labels integers to their definition
  */
-export const mapGenTokLabels: Record<GenTokLabel, string> = {
-  0: "Epileptic trigger",
-  1: "Sexual content",
-  2: "Sensitive content (blood, gore,...)",
-  100: "Image composition",
-  101: "Animated",
+export const genTokLabelDefinitions: Record<GenTokLabel, GenTokLabelDefinition> = {
+  0: {
+    label: "Epileptic trigger",
+    shortLabel: "Epileptic trigger",
+    group: GenTokLabelGroup.WARNING,
+  },
+  1: {
+    label: "Sexual content",
+    shortLabel: "Sexual content",
+    group: GenTokLabelGroup.WARNING,
+  },
+  2: {
+    label: "Sensitive content (blood, gore,...)",
+    shortLabel: "Sensitive content",
+    group: GenTokLabelGroup.WARNING,
+  },
+  100: {
+    label: "Image composition",
+    shortLabel: "Image composition",
+    group: GenTokLabelGroup.DETAILS,
+  },
+  101: {
+    label: "Animated",
+    shortLabel: "Animated",
+    group: GenTokLabelGroup.DETAILS,
+  },
 }
 
-export function getGenTokLabelStrings(labels: number[]) {
+export const getGenTokLabelDefinition = (label: number): GenTokLabelDefinition => 
   //@ts-ignore
-  return labels.map(label => mapGenTokLabels[label as any])
-    .filter(str => !!str)
-}
+  genTokLabelDefinitions[label]
+
+export const getGenTokLabelDefinitions = (labels: number[]) =>
+  labels.map(label => getGenTokLabelDefinition(label))
+        .filter(res => !!res)
 
 export const mapGenTokPricingToId: Record<GenTokPricing, number> = {
   "FIXED": 0,
