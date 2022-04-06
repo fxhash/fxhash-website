@@ -3,6 +3,7 @@ import { IPricingFixed, IPricingDutchAuction } from "./entities/Pricing"
 import { GenerativeTokenMetadata } from "./Metadata"
 import { GenTokLabel, GenTokPricing } from "./entities/GenerativeToken"
 import { ISplit } from "./entities/Split"
+import { IReserve } from "./entities/Reserve"
 
 export interface GenerativeTokenInformations {
   metadata: GenerativeTokenMetadata
@@ -88,6 +89,7 @@ export interface GenTokDistributionForm<N> {
   enabled: boolean
   splitsPrimary: ISplit[]
   splitsSecondary: ISplit[]
+  reserves: IReserve<N>[]
 }
 
 export interface GenTokenInformationsForm {

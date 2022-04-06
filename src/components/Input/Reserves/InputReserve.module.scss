@@ -1,0 +1,19 @@
+.reserve {
+  border: 3px solid var(--color-gray-vvlight);
+
+  & > header {
+    background-color: var(--color-gray-vvlight);
+    padding: 8px 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .btn_delete {
+      font-size: var(--font-size-small);
+    }
+  }
+
+  & > main {
+    padding: 15px;
+  }
+}

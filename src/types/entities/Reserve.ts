@@ -1,10 +1,10 @@
 export enum EReserveMethod {
   WHITELIST         = "WHITELIST",
-  TOKEN_STAKERS     = "TOKEN_STAKERS",
+  // TOKEN_STAKERS     = "TOKEN_STAKERS",
 }
 
-export interface IReserve {
+export interface IReserve<GNumber = number> {
   data: any
-  amount: number
+  amount: GNumber
   method: EReserveMethod,
 }

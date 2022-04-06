@@ -27,6 +27,10 @@ import { YupRoyalties } from "../../utils/yup/royalties"
 import { cloneDeep } from "@apollo/client/utilities"
 import { YupSplits } from "../../utils/yup/splits"
 import { FxhashContracts } from "../../types/Contracts"
+import { Fieldset } from "../../components/Form/Fieldset"
+import { InputReserves } from "../../components/Input/Reserves/InputReserves"
+import Link from "next/link"
+import { LinkIcon } from "../../components/Link/LinkIcon"
 
 
 const validation = Yup.object().shape({
@@ -69,7 +73,7 @@ const defaultDistribution = (user: User|Collaboration): GenTokDistributionForm<s
     const collab = user as Collaboration
     splits = collab.collaborators.map((user, idx) => ({
       address: user.id,
-      pct: transformSplitsSum1000(collab.collaborators.length, idx)
+      pct: transformSplitsSum1000(collab.collaborators, idx)
     }))
   }
 
@@ -90,7 +94,8 @@ const defaultDistribution = (user: User|Collaboration): GenTokDistributionForm<s
     },
     enabled: false,
     splitsPrimary: cloneDeep(splits),
-    splitsSecondary: cloneDeep(splits)
+    splitsSecondary: cloneDeep(splits),
+    reserves: [],
   }
 }
 
@@ -231,13 +236,33 @@ export const StepDistribution: StepComponent = ({ state, onNext }) => {
               </InputSplits>
             </Field>
 
+            <Fieldset>
+              <h5>Reserves</h5>
+              <span className={cs(text.info)}>
+                You can reserve a certain amount of editions using different constraints.<br/>
+                We recommend{" "}
+                <LinkIcon
+                  iconComp={
+                    <i aria-hidden className="fas fa-external-link-square"/>
+                  }
+                  href="/doc/artist/reserves"
+                  iconSide="right"
+                  newTab
+                >
+                  reading the article about reserves
+                </LinkIcon>
+                {" "}to use the feature properly.
+              </span>
+              <Spacing size="regular"/>
+              <InputReserves
+                maxSize={parseInt(values.editions ?? "0")}
+                value={values.reserves}
+                onChange={reserves => setFieldValue("reserves", reserves)}
+              />
+            </Fieldset>
+
             <Spacing size="3x-large"/>
 
-            <em className={cs(text.info)} style={{ alignSelf: "flex-start"}}>
-              If disabled, collectors cannot mint the token at all. It overrides pricing settings.<br/>
-              You will have to enable it manually afterwards.
-            </em>
-            <Spacing size="small"/>
             <Field className={cs(style.checkbox)}>
               <Checkbox
                 name="enabled"
@@ -247,6 +272,11 @@ export const StepDistribution: StepComponent = ({ state, onNext }) => {
                 Enabled
               </Checkbox>
             </Field>
+            <Spacing size="3x-small"/>
+            <span className={cs(text.info)} style={{ alignSelf: "flex-start"}}>
+              If disabled, collectors cannot mint the token at all. It overrides pricing settings.<br/>
+              You will have to enable it manually afterwards.
+            </span>
 
             <Spacing size="3x-large"/>
 

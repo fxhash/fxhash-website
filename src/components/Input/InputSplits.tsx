@@ -25,6 +25,7 @@ interface Props {
   unremoveableAddresses?: string[]
   sharesTransformer?: TSplitsTransformer
   textShares?: string
+  defaultShares?: number
   errors?: FormikErrors<ISplit[]>
   children?: FunctionComponent<PropsChildren>
 }
@@ -40,6 +41,7 @@ export function InputSplits({
   unremoveableAddresses = [],
   sharesTransformer = transformSplitsEqual,
   textShares = "Shares",
+  defaultShares = 0,
   errors,
   children,
 }: Props) {
@@ -50,7 +52,7 @@ export function InputSplits({
   const update = (splits: ISplit[]) => {
     onChange(splits.map((split, idx) => ({
       address: split.address,
-      pct: sharesTransformer(splits.length, idx),
+      pct: sharesTransformer(splits, idx),
     })))
   }
 
@@ -59,7 +61,7 @@ export function InputSplits({
       ...value,
       {
         address: address,
-        pct: 0,
+        pct: defaultShares,
       }
     ])
   }
@@ -99,8 +101,10 @@ export function InputSplits({
         <thead>
           <tr>
             <td>User</td>
-            <td className={cs(style.share_cell)}>{textShares}</td>
-            <td>Actions</td>
+            <td className={cs(style.share_cell)}>
+              {value.length > 0 ? textShares: ""}
+            </td>
+            <td></td>
           </tr>
         </thead>
         <tbody>

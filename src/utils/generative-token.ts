@@ -1,8 +1,11 @@
 import { differenceInSeconds } from "date-fns"
+import { TInputReserve } from "../components/Input/Reserves/InputReserve"
+import { InputReserveWhitelist } from "../components/Input/Reserves/InputReserveWhitelist"
 import { TInputMintIssuer } from "../services/parameters-builder/mint-issuer/input"
 import { TInputPricingDetails } from "../services/parameters-builder/pricing/input"
 import { GenerativeToken, GenTokFlag, GenTokLabel, GenTokLabelDefinition, GenTokLabelGroup, GenTokPricing } from "../types/entities/GenerativeToken"
 import { IPricingDutchAuction, IPricingFixed } from "../types/entities/Pricing"
+import { EReserveMethod } from "../types/entities/Reserve"
 import { Collaboration, User, UserType } from "../types/entities/User"
 import { CaptureSettings, GenerativeTokenMetadata } from "../types/Metadata"
 import { CaptureMode, CaptureTriggerMode, MintGenerativeData } from "../types/Mint"
@@ -333,4 +336,24 @@ export function isGenerativeAuthor(
   else {
     return token.author.id === user.id
   }
+}
+
+
+//
+// RESERVE STUFF
+//
+
+interface IReserveDefinition {
+  label: string
+  description: string
+  inputComponent: TInputReserve,
+}
+
+// maps reserves to their definition
+export const mapReserveDefinition: Record<EReserveMethod, IReserveDefinition> = {
+  WHITELIST: {
+    label: "Access List",
+    description: "A list of users to whom a number of editions is reserved",
+    inputComponent: InputReserveWhitelist,
+  },
 }

@@ -16,6 +16,11 @@
 
     td {
       border: 1px solid var(--color-gray-vlight);
+      white-space: nowrap;
+    }
+
+    td:first-child {
+      width: 100%;
     }
   }
 
@@ -26,6 +31,10 @@
     &.input_cell {
       padding: 0;
       font-size: var(--font-size-small);
+
+      input, button {
+        height: 43px;
+      }
     }
   }
 

@@ -19,6 +19,7 @@ interface Props extends InputHTMLAttributes<HTMLSelectElement> {
   value: any
   onChange: (value: any) => void
   className?: string
+  classNameRoot?: string
   search?: boolean
   searchKeys?: string[]
   searchDictionnary?: any[]
@@ -31,6 +32,7 @@ export function Select({
   onChange,
   placeholder,
   className,
+  classNameRoot,
   search = false,
   searchKeys,
   searchDictionnary,
@@ -103,7 +105,14 @@ export function Select({
 
   return (
     <>
-      <div className={cs(style.root, style[`opening_${direction}`])} ref={selectRef}>
+      <div 
+        className={cs(
+          style.root, 
+          style[`opening_${direction}`],
+          classNameRoot,
+        )}
+        ref={selectRef}
+      >
         <button 
           className={cs(style.select, className, { [style.opened]: opened })} 
           onClick={toggleOpened}
