@@ -13,6 +13,7 @@ import { getIpfsSlash } from "./ipfs"
 import { clamp } from "./math"
 import { tagsFromString } from "./strings"
 import { transformPricingDutchInputToNumbers, transformPricingFixedInputToNumbers } from "./transformers/pricing"
+import { transformReserveInputToGeneric } from "./transformers/reserves"
 
 export function getGenerativeTokenUrl(generative: GenerativeToken): string {
   return generative.slug ? `/generative/slug/${generative.slug}` : `/generative/${generative.id}`
@@ -200,6 +201,7 @@ export function generativeFromMintForm(
     metadata: metadata,
     metadataUri: "ipfs://not-uploaded-to-ipfs-yet",
     tags: metadata.tags,
+    labels: data.informations?.labels,
     pricingFixed: pricing.pricingMethod === GenTokPricing.FIXED 
       ? transformPricingFixedInputToNumbers(
         pricing.pricingFixed as IPricingFixed<string>
@@ -231,7 +233,9 @@ export function generativeFromMintForm(
         id: split.address
       } as User
     })),
-    reserves: [],
+    reserves: data.distribution?.reserves
+      ? transformReserveInputToGeneric(data.distribution?.reserves)
+      : [],
     lockedSeconds: 0,
     lockEnd: new Date(0).toISOString(),
     objkts: [],
@@ -344,6 +348,7 @@ export function isGenerativeAuthor(
 //
 
 interface IReserveDefinition {
+  id: number,
   label: string
   description: string
   inputComponent: TInputReserve,
@@ -352,6 +357,7 @@ interface IReserveDefinition {
 // maps reserves to their definition
 export const mapReserveDefinition: Record<EReserveMethod, IReserveDefinition> = {
   WHITELIST: {
+    id: 0,
     label: "Access List",
     description: "A list of users to whom a number of editions is reserved",
     inputComponent: InputReserveWhitelist,

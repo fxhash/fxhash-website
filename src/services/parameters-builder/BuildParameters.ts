@@ -10,6 +10,7 @@ import updateIssuerType from "./update-issuer/type.json"
 import updatePriceType from "./update-price/type.json"
 import burnSupplyType from "./burn-supply/type.json"
 import burnType from "./burn/type.json"
+import reserveWhitelistType from "./reserve-whitelist/type.json"
 import { Schema } from "@taquito/michelson-encoder"
 import { packData, packDataBytes, unpackDataBytes } from "@taquito/michel-codec"
 
@@ -28,6 +29,7 @@ export enum EBuildableParams {
   UPDATE_PRICE          = "UPDATE_PRICE",
   BURN_SUPPLY           = "BURN_SUPPLY",
   BURN                  = "BURN",
+  RESERVE_WHITELIST     = "RESERVE_WHITELIST",
 }
 
 // maps a builadable param type with the actual type in json
@@ -43,6 +45,7 @@ const buildableParamTypes: Record<EBuildableParams, MichelsonV1Expression> = {
   UPDATE_PRICE: updatePriceType,
   BURN_SUPPLY: burnSupplyType,
   BURN: burnType,
+  RESERVE_WHITELIST: reserveWhitelistType,
 }
 
 /**

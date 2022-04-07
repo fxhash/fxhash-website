@@ -14,6 +14,7 @@ export function transformGenTokDistribFormToNumbers(
     editions: parseInt(input.editions!),
     royalties: Math.floor(parseFloat(input.royalties!)*10),
     pricing: transformPricingFormToNumbers(input.pricing),
+    reserves: input.reserves as any,
   }
 }
 

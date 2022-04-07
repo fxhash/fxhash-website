@@ -61,3 +61,13 @@ export const Frag_GenSplitsSecondary = gql`
     }
   }
 `
+
+export const Frag_GenReserves = gql`
+  fragment Reserves on GenerativeToken {
+    reserves {
+      data
+      amount
+      method
+    }
+  }
+`

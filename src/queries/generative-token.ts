@@ -1,11 +1,12 @@
 import { gql } from "@apollo/client"
-import { Frag_GenAuthor, Frag_GenPricing, Frag_GenSplitsPrimary, Frag_GenSplitsSecondary } from "./fragments/generative-token"
+import { Frag_GenAuthor, Frag_GenPricing, Frag_GenReserves, Frag_GenSplitsPrimary, Frag_GenSplitsSecondary } from "./fragments/generative-token"
 
 export const Qu_genToken = gql`
   ${Frag_GenAuthor}
   ${Frag_GenPricing}
   ${Frag_GenSplitsPrimary}
   ${Frag_GenSplitsSecondary}
+  ${Frag_GenReserves}
 
   query Query($id: Float, $slug: String) {
     generativeToken(id: $id, slug: $slug) {
@@ -28,6 +29,7 @@ export const Qu_genToken = gql`
       ...Author
       ...SplitsPrimary
       ...SplitsSecondary
+      ...Reserves
     }
   }
 `

@@ -3,8 +3,10 @@ import { FxhashCollabFactoryCalls, FxhashContracts } from "../../types/Contracts
 import { GenerativeToken } from "../../types/entities/GenerativeToken"
 import { GenerativeTokenMetadata } from "../../types/Metadata"
 import { MintGenerativeData } from "../../types/Mint"
+import { mapReserveDefinition } from "../../utils/generative-token"
 import { packMintIssuer } from "../../utils/pack/mint-issuer"
 import { packPricing } from "../../utils/pack/pricing"
+import { packReserveData } from "../../utils/pack/reserves"
 import { transformGenTokFormToNumbers } from "../../utils/transformers/gen-tok-input-form"
 import { ContractOperation } from "./ContractOperation"
 
@@ -16,7 +18,6 @@ export type TMintIssuerOperationParams = {
 
 /**
  * Mint an unique iteration of a Generative Token
- * todo: setup the price stuff
  */
 export class MintIssuerOperation extends ContractOperation<TMintIssuerOperationParams> {
   contract: ContractAbstraction<Wallet>|null = null
@@ -37,9 +38,16 @@ export class MintIssuerOperation extends ContractOperation<TMintIssuerOperationP
     const packedPricing = packPricing(
       numbered.distribution!.pricing
     )
-
+    
     const distribution = numbered.distribution!
     const informations = numbered.informations!
+
+    // let's build the reserves array
+    const reserves = distribution.reserves.map(reserve => ({
+      amount: reserve.amount,
+      method_id: mapReserveDefinition[reserve.method].id,
+      data: packReserveData(reserve),
+    }))
 
     const params = {
       amount: distribution.editions!,
@@ -47,8 +55,7 @@ export class MintIssuerOperation extends ContractOperation<TMintIssuerOperationP
       metadata: this.params.metadataBytes,
       pricing: packedPricing,
       primary_split: distribution.splitsPrimary,
-      // todo
-      reserves: [],
+      reserves: reserves,
       royalties: distribution.royalties!,
       royalties_split: distribution.splitsSecondary,
       tags: informations.labels,
