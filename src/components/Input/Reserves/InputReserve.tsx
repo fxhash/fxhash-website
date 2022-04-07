@@ -1,38 +1,35 @@
 import style from "./InputReserve.module.scss"
 import text from "../../../styles/Text.module.css"
-import cs, { Value } from "classnames"
-import { EReserveMethod, IReserve } from "../../../types/entities/Reserve"
+import cs from "classnames"
+import { IReserve } from "../../../types/entities/Reserve"
 import { FunctionComponent, PropsWithChildren, useMemo } from "react"
 import { InputProps } from "../../../types/Inputs"
-import { InputReserveWhitelist } from "./InputReserveWhitelist"
 import { mapReserveDefinition } from "../../../utils/generative-token"
 import { Field } from "../../Form/Field"
-import { InputText } from "../InputText"
 import { SliderWithText } from "../SliderWithText"
-import { InputSplits } from "../InputSplits"
-import { Button } from "../../Button"
 import { ButtonDelete } from "../../Button/ButtonDelete"
 import { Spacing } from "../../Layout/Spacing"
+import { FormikErrors } from "formik"
 
 
 // the type of a reserve input update component
-export type TInputReserveProps<T> = PropsWithChildren<InputProps<T>>
+export interface TInputReserveProps<T> extends PropsWithChildren<InputProps<T>> {
+  errors?: FormikErrors<T>
+}
 export type TInputReserve<T = any> = FunctionComponent<TInputReserveProps<T>>
 
-// maps a reserve method to the component to edit it
-const InputReserveByMethod: Record<EReserveMethod, TInputReserve> = {
-  WHITELIST: InputReserveWhitelist
-}
 
 interface Props extends InputProps<IReserve<string>> {
   maxSize: number
   onRemove: () => void
+  errors?: FormikErrors<IReserve>
 }
 export function InputReserve({
   value,
   onChange,
   maxSize,
   onRemove,
+  errors,
 }: Props) {
   // grab definition of the reserve
   const definition = useMemo(
@@ -64,8 +61,11 @@ export function InputReserve({
         <definition.inputComponent
           value={value.data}
           onChange={val => update("data", val)}
+          errors={
+            (typeof errors?.data !== "string" ? errors?.data : undefined) as any
+          }
         >
-          <Field>
+          <Field error={errors?.amount}>
             <strong>Amount</strong>
             <Spacing size="8px"/>
             <SliderWithText
@@ -79,7 +79,11 @@ export function InputReserve({
             />
           </Field>
           <Spacing size="regular"/>
-          <strong>Content</strong>
+          <Field error={
+            typeof errors?.data === "string" ? errors.data : undefined
+          }>
+            <strong>Content</strong>
+          </Field>
           <Spacing size="8px"/>
         </definition.inputComponent>
       </main>

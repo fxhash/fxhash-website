@@ -6,6 +6,7 @@ import { Button } from "../../Button"
 import { IOptions, Select } from "../Select"
 import { useState } from "react"
 import { InputReserve } from "./InputReserve"
+import { FormikErrors } from "formik"
 
 
 const MethodOptions: IOptions[] = [
@@ -17,11 +18,13 @@ const MethodOptions: IOptions[] = [
 
 interface Props extends InputProps<IReserve<string>[]> {
   maxSize: number
+  errors: FormikErrors<IReserve[]>
 }
 export function InputReserves({
   maxSize,
   value,
   onChange,
+  errors,
 }: Props) {
   const [method, setMethod] = useState<EReserveMethod>()
 
@@ -51,6 +54,13 @@ export function InputReserves({
     onChange(nval)
   }
 
+  // given the index of a reserve, outputs the error if any
+  const getReserveError = (idx: number) => {
+    if (!errors || typeof errors === "string") return undefined
+    const err = errors[idx]
+    return err || undefined 
+  }
+
   return (
     <div className={cs(style.root)}>
       {value.map((reserve, idx) => (
@@ -60,6 +70,7 @@ export function InputReserves({
           value={reserve}
           onChange={value => updateReserve(value, idx)}
           onRemove={() => removeReserve(idx)}
+          errors={getReserveError(idx)}
         />
       ))}
       <div className={cs(style.select_method_root)}>

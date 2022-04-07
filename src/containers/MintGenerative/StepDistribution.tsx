@@ -27,10 +27,12 @@ import { YupRoyalties } from "../../utils/yup/royalties"
 import { cloneDeep } from "@apollo/client/utilities"
 import { YupSplits } from "../../utils/yup/splits"
 import { FxhashContracts } from "../../types/Contracts"
+import { EReserveMethod } from "../../types/entities/Reserve"
 import { Fieldset } from "../../components/Form/Fieldset"
 import { InputReserves } from "../../components/Input/Reserves/InputReserves"
 import Link from "next/link"
 import { LinkIcon } from "../../components/Link/LinkIcon"
+import { YupReserves } from "../../utils/yup/reserves"
 
 
 const validation = Yup.object().shape({
@@ -56,9 +58,12 @@ const validation = Yup.object().shape({
   royalties: YupRoyalties,
   splitsPrimary: YupSplits,
   splitsSecondary: YupSplits,
+  reserves: YupReserves,
 })
 
-const defaultDistribution = (user: User|Collaboration): GenTokDistributionForm<string> => {
+const defaultDistribution = (
+  user: User|Collaboration
+): GenTokDistributionForm<string> => {
   let splits: ISplit[] = []
 
   // if user is single, we create a simple split
@@ -236,7 +241,12 @@ export const StepDistribution: StepComponent = ({ state, onNext }) => {
               </InputSplits>
             </Field>
 
-            <Fieldset>
+            <Fieldset
+              error={typeof errors.reserves === "string" 
+                ? errors.reserves
+                : undefined
+              }
+            >
               <h5>Reserves</h5>
               <span className={cs(text.info)}>
                 You can reserve a certain amount of editions using different constraints.<br/>
@@ -258,6 +268,7 @@ export const StepDistribution: StepComponent = ({ state, onNext }) => {
                 maxSize={parseInt(values.editions ?? "0")}
                 value={values.reserves}
                 onChange={reserves => setFieldValue("reserves", reserves)}
+                errors={errors.reserves as any}
               />
             </Fieldset>
 

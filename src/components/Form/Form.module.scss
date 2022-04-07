@@ -52,6 +52,12 @@
     top: 0;
   }
 
+  &.field_error {
+    &::before {
+      background-color: var(--color-error);
+    }
+  }
+
   & > small {
     font-size: 1rem;
     color: var(--color-gray);
