@@ -82,6 +82,7 @@ export function generativeFromMintParams(
     metadata: metadata,
     metadataUri: metadataUri,
     tags: metadata.tags,
+    labels: metadata.tags as any,
     pricingFixed: params.pricing.pricing_id === 0 ? ({
       price: params.pricing.details.price,
       opensAt: params.pricing.details.opens_at as any,

@@ -16,6 +16,7 @@ import { getGenerativeTokenUrl } from "../../../../utils/generative-token"
 import { unpackUpdateReserve } from "../../../../utils/unpack/update-reserve"
 import { transformPricingDutchAuctionBigNumbers, transformPricingFixedBigNumbers } from "../../../../utils/unpack-transformers/pricings"
 import { GenerativePricing } from "../../../GenerativeToken/GenerativePricing"
+import { ListReserves } from "../../../List/ListReserves"
 
 
 export function ProposalDetailsUpdateReserveHeader({
@@ -35,8 +36,6 @@ export function ProposalDetailsUpdateReserveExpanded({
     unpackUpdateReserve(proposal.callSettings.params)
   , [proposal])
 
-  console.log(unpacked)
-
   // the query to get the issuer associated with the call
   const { data, loading } = useQuery(Qu_genToken, {
     variables: {
@@ -46,42 +45,6 @@ export function ProposalDetailsUpdateReserveExpanded({
 
   // easier
   const token: GenerativeToken = data?.generativeToken
-
-  const priceDetails = useMemo(() => {
-    if (!token) return null
-    if (token.pricingFixed) {
-      return transformPricingFixedBigNumbers(
-        unpackBytes(unpacked.details, EBuildableParams.PRICING_FIXED)
-      )
-    }
-    else {
-      return transformPricingDutchAuctionBigNumbers(unpackBytes(
-        unpacked.details,
-        EBuildableParams.PRICING_DUTCH_AUCTION
-      ))
-    }
-  }, [token])
-
-  // build a fake token from the price details so that we can leverage the
-  // generic display component
-  const fakeNewToken = useMemo(() => {
-    if (!priceDetails) return null
-    const tok: Partial<GenerativeToken> = {}
-    if (token.pricingFixed) {
-      tok.pricingFixed = {
-        price: priceDetails.price,
-        opensAt: priceDetails.opens_at,
-      }
-    }
-    else {
-      tok.pricingDutchAuction = {
-        levels: priceDetails.levels,
-        opensAt: priceDetails.opens_at,
-        decrementDuration: priceDetails.decrement_duration,
-      }
-    }
-    return tok
-  }, [priceDetails])
 
   return (
     <div>
@@ -95,7 +58,7 @@ export function ProposalDetailsUpdateReserveExpanded({
           <h5>Preview</h5>
           <Spacing size="small"/>
           
-          {/* {token && (
+          {token && (
             <>
               <div>
                 <strong>Token: </strong>
@@ -117,8 +80,9 @@ export function ProposalDetailsUpdateReserveExpanded({
                   <Spacing size="8px"/>
 
                   <div className={cs(style.details)}>
-                    <GenerativePricing
-                      token={fakeNewToken as GenerativeToken}
+                    <ListReserves
+                      reserves={unpacked.reserves}
+                      toggled
                     />
                   </div>
                 </div>
@@ -129,14 +93,15 @@ export function ProposalDetailsUpdateReserveExpanded({
                     <Spacing size="8px"/>
                     
                     <div className={cs(style.details)}>
-                      <GenerativePricing
-                        token={token}
+                      <ListReserves
+                        reserves={token.reserves}
+                        toggled
                       />
                     </div>
                   </div>
                 )}
               </div>
-            </> */}
+            </>
           )}
         </>
       )}

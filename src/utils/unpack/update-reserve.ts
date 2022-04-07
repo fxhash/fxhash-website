@@ -5,10 +5,12 @@ import { TInputUpdateReserve } from "../../services/parameters-builder/update-re
 import { EReserveMethod, IReserve } from "../../types/entities/Reserve"
 import { mapReserveIdtoEnum } from "../generative-token"
 import { transformUpdateReserveBigNumbers } from "../unpack-transformers/update-reserve"
+import { unpackReserve } from "./reserve"
+
 
 export function unpackUpdateReserve(
   bytes: string,
-): IReserve[] {
+) {
   // unpack (get BigNumbers)
   const unpacked = unpackBytes<TInputUpdateReserve<BigNumber>>(
     bytes,
@@ -18,24 +20,12 @@ export function unpackUpdateReserve(
   const numbered = transformUpdateReserveBigNumbers(unpacked)
 
   // for each reserve, we unpack the data
-  const reservesUnpacked = numbered.reserves.map(reserve => {
-    const method = mapReserveIdtoEnum[reserve.method_id]
-    let data: any
-    if (method === EReserveMethod.WHITELIST) {
-      const map = unpackBytes<MichelsonMap<string, BigNumber>>(
-        reserve.data, 
-        EBuildableParams.RESERVE_WHITELIST
-      )
-      // now turn the map into { address: amount }
-      data = {}
-      map.forEach((V, K) => data[K] = V.toNumber())
-    }
-    return {
-      method: method,
-      data: data,
-      amount: reserve.amount,
-    }
-  })
+  const reservesUnpacked = numbered.reserves.map(
+    reserve => unpackReserve(reserve)
+  )
 
-  return reservesUnpacked
+  return {
+    issuer_id: unpacked.issuer_id.toNumber(),
+    reserves: reservesUnpacked,
+  }
 }

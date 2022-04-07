@@ -4,6 +4,7 @@ import { TInputMintIssuer } from "../../services/parameters-builder/mint-issuer/
 import { TInputPricingDetails } from "../../services/parameters-builder/pricing/input"
 import { transformMintIssuerBigNumbers } from "../unpack-transformers/mint-issuer"
 import { unpackPricingDetails } from "./pricing"
+import { unpackReserve } from "./reserve"
 
 export function unpackMintIssuer(bytes: string): TInputMintIssuer<number, TInputPricingDetails<number>> {
   // unpack (get BigNumbers)
@@ -24,5 +25,15 @@ export function unpackMintIssuer(bytes: string): TInputMintIssuer<number, TInput
   }
 
   // turns all the BigNumbers into JS numbers to consume easily
-  return transformMintIssuerBigNumbers(withPricingUnpacked)
+  const numbered = transformMintIssuerBigNumbers(withPricingUnpacked)
+
+  // unpack reserves too
+  const withReservesUnpacked = {
+    ...numbered,
+    reserves: numbered.reserves.map(
+      reserve => unpackReserve(reserve)
+    )
+  }
+
+  return withReservesUnpacked as any
 }
