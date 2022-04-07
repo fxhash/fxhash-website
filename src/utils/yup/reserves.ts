@@ -1,7 +1,9 @@
 import * as Yup from "yup"
 import { EReserveMethod } from "../../types/entities/Reserve"
 
-export const YupReserves = Yup.array().of(
+export const YupReserves = (
+  getAmount = (ctx: any): number => ctx.parent.editions
+) => Yup.array().of(
   Yup.object({
     amount: Yup.number()
       .positive("At least 1"),
@@ -24,7 +26,7 @@ export const YupReserves = Yup.array().of(
   "lowerEqualEditions",
   "Sum of reserve amounts must be <= nb editions",
   (value, context) => {
-    const eds = context.parent.editions
+    const eds = getAmount(context)
     const sum: any = value?.reduce((a, b) => a + b.amount!, 0)
     return sum <= eds
   }

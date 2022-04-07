@@ -58,7 +58,7 @@ const validation = Yup.object().shape({
   royalties: YupRoyalties,
   splitsPrimary: YupSplits,
   splitsSecondary: YupSplits,
-  reserves: YupReserves,
+  reserves: YupReserves(),
 })
 
 const defaultDistribution = (
