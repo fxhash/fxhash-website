@@ -1,11 +1,13 @@
 import { differenceInSeconds } from "date-fns"
+import { TRenderReserveComponent } from "../components/GenerativeToken/Reserves/Reserve"
+import { ReserveAccessList } from "../components/GenerativeToken/Reserves/ReserveAccessList"
 import { TInputReserve } from "../components/Input/Reserves/InputReserve"
 import { InputReserveWhitelist } from "../components/Input/Reserves/InputReserveWhitelist"
 import { TInputMintIssuer } from "../services/parameters-builder/mint-issuer/input"
 import { TInputPricingDetails } from "../services/parameters-builder/pricing/input"
 import { GenerativeToken, GenTokFlag, GenTokLabel, GenTokLabelDefinition, GenTokLabelGroup, GenTokPricing } from "../types/entities/GenerativeToken"
 import { IPricingDutchAuction, IPricingFixed } from "../types/entities/Pricing"
-import { EReserveMethod } from "../types/entities/Reserve"
+import { EReserveMethod, IReserve } from "../types/entities/Reserve"
 import { Collaboration, User, UserType } from "../types/entities/User"
 import { CaptureSettings, GenerativeTokenMetadata } from "../types/Metadata"
 import { CaptureMode, CaptureTriggerMode, MintGenerativeData } from "../types/Mint"
@@ -273,6 +275,11 @@ export const genTokLabelDefinitions: Record<GenTokLabel, GenTokLabelDefinition> 
     shortLabel: "Animated",
     group: GenTokLabelGroup.DETAILS,
   },
+  102: {
+    label: "Interactive",
+    shortLabel: "Interactive",
+    group: GenTokLabelGroup.DETAILS,
+  }
 }
 
 export const getGenTokLabelDefinition = (label: number): GenTokLabelDefinition => 
@@ -348,10 +355,11 @@ export function isGenerativeAuthor(
 //
 
 interface IReserveDefinition {
-  id: number,
+  id: number
   label: string
   description: string
-  inputComponent: TInputReserve,
+  inputComponent: TInputReserve
+  renderComponent: TRenderReserveComponent
 }
 
 // maps reserves to their definition
@@ -361,6 +369,7 @@ export const mapReserveDefinition: Record<EReserveMethod, IReserveDefinition> = 
     label: "Access List",
     description: "A list of users to whom a number of editions is reserved",
     inputComponent: InputReserveWhitelist,
+    renderComponent: ReserveAccessList,
   },
 }
 
@@ -370,3 +379,39 @@ export const mapReserveIdtoEnum: Record<number, EReserveMethod> = Object.fromEnt
     (K) => [mapReserveDefinition[K as EReserveMethod].id, K]
   ) as any
 )
+
+/**
+ * Is a user elligible to mint from the reserve of a token ?
+ */
+export function reserveEligibleAmount(
+  user: User,
+  token: GenerativeToken,
+): number {
+  let eligibleFor = 0
+  if (token.reserves) {
+    for (const reserve of token.reserves) {
+      if (reserve.amount > 0) {
+        // check if user is in the reserve
+        if (reserve.method === EReserveMethod.WHITELIST) {
+          if (reserve.data[user.id]) {
+            // we add the amount value clamped to reserve size
+            eligibleFor += Math.min(
+              reserve.data[user.id],
+              reserve.amount,
+            )
+          }
+        }
+      }
+    }
+  }
+  return eligibleFor
+}
+
+/**
+ * Returns the size of the reserves
+ */
+export function getReservesAmount(reserves: IReserve[]): number {
+  return reserves && reserves.length > 0
+    ? reserves.reduce((a, b) => a + b.amount, 0)
+    : 0
+}

@@ -24,6 +24,7 @@ import { EntityBadge } from "../../../components/User/EntityBadge"
 import { GenerativePricing } from "../../../components/GenerativeToken/GenerativePricing"
 import { Tags } from "../../../components/Tags/Tags"
 import { Labels } from "../../../components/GenerativeToken/Label/Labels"
+import { ListReserves } from "../../../components/List/ListReserves"
 
 /**
  * This is the Core component resposible for the display logic of a Generative
@@ -80,9 +81,8 @@ export function GenerativeDisplay({
 
           <div className={cs(style.artwork_details)}>
             <MintProgress
-              balance={token.balance}
-              supply={token.supply}
-              originalSupply={token.originalSupply}
+              token={token}
+              showReserve
             />
           </div>
 
@@ -163,6 +163,10 @@ export function GenerativeDisplay({
             >
               view on IPFS <i className="fas fa-external-link-square" aria-hidden/>
             </a>
+            <ListReserves
+              reserves={token.reserves}
+              token={token}
+            />
           </div>
         </div>
 

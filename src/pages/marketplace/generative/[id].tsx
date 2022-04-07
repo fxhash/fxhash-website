@@ -100,9 +100,7 @@ const GenerativeTokenMarketplace: NextPage<Props> = ({ token }) => {
             <div className={cs(style.artwork_details)}>
               <div className={cs(style.progress_container)}>
                 <MintProgress
-                  balance={token.balance}
-                  supply={token.supply}
-                  originalSupply={token.originalSupply}
+                  token={token}
                 />
               </div>
               <Spacing size="x-small"/>

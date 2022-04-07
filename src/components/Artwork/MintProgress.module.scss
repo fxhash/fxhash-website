@@ -6,6 +6,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-bottom: 2px;
 
   &.minted {
     color: var(--color-secondary);
@@ -26,7 +27,7 @@
 .progress_header {
 }
 
-.bar, .bar_burnt {
+.bar, .bar_burnt, .bar_reserve {
   position: absolute;
   top: 0;
   height: 100%;
@@ -41,4 +42,17 @@
 .bar_burnt {
   background-color: #b76200;
   right: 0;
+}
+
+.bar_reserve {
+  background-color: var(--color-seconday-light);
+}
+
+.reserve_text {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  color: var(--color-seconday-light);
+  margin-top: 4px;
+  font-size: var(--font-size-small);
 }

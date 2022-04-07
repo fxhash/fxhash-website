@@ -28,6 +28,7 @@ export enum GenTokLabel {
   SENSITIVE           = 2,
   IMAGE_COMPOSITION   = 100,
   ANIMATED            = 101,
+  INTERACTIVE         = 102,
 }
 
 export enum GenTokLabelGroup {

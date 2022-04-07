@@ -77,9 +77,7 @@ const Home: NextPage<Props> = ({
                 <div className={cs(styles['artwork-details'])}>
                   <div className={cs(styles.mint_progress)}>
                     <MintProgress
-                      balance={randomGenerativeToken.balance}
-                      supply={randomGenerativeToken.supply}
-                      originalSupply={randomGenerativeToken.originalSupply}
+                      token={randomGenerativeToken}
                     />
                   </div>
 

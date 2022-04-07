@@ -60,9 +60,7 @@ export function GenerativeTokenCard({
 
           <div className={cs(text.small)}>
             <MintProgress 
-              balance={token.balance}
-              supply={token.supply}
-              originalSupply={token.originalSupply}
+              token={token}
             >
               {displayPrice && (
                 <div>

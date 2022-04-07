@@ -1,0 +1,20 @@
+.user {
+  a {
+    font-weight: normal;
+    color: var(--color-black);
+  }
+}
+
+.amount {
+  color: var(--color-gray);
+}
+
+.active {
+  color: var(--color-success);
+  font-weight: bold;
+
+  a {
+    color: var(--color-success);
+    font-weight: bold;
+  }
+}

@@ -2,7 +2,8 @@ import { addHours, addSeconds, differenceInSeconds, isAfter, isBefore, subHours 
 import { useContext, useEffect, useRef, useState } from "react"
 import { UserContext } from "../containers/UserProvider"
 import { GenerativeToken, GenTokFlag } from "../types/entities/GenerativeToken"
-import { ConnectedUser } from "../types/entities/User"
+import { ConnectedUser, User } from "../types/entities/User"
+import { getReservesAmount, reserveEligibleAmount } from "../utils/generative-token"
 import { clamp } from "../utils/math"
 
 
@@ -198,6 +199,16 @@ function deriveMintingStateFromToken(
 
     // we also set the price
     price = token.pricingFixed.price
+  }
+
+  // check for top-level locking states
+  if (token.reserves && token.reserves.length > 0) {
+    if (getReservesAmount(token.reserves) >= token.balance) {
+      // then we check if user has access
+      if (reserveEligibleAmount(user as User, token) <= 0) {
+        locked = true
+      }
+    }
   }
 
   return {

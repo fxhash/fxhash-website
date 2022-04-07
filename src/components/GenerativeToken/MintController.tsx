@@ -2,17 +2,11 @@ import style from "./MintController.module.scss"
 import layout from "../../styles/Layout.module.scss"
 import Link from "next/link"
 import cs from "classnames"
-import { GenerativeToken, GenTokFlag } from "../../types/entities/GenerativeToken"
+import { GenerativeToken } from "../../types/entities/GenerativeToken"
 import { Spacing } from "../Layout/Spacing"
-import { Button, ButtonState } from "../../components/Button"
-import { displayMutez } from "../../utils/units"
-import { PropsWithChildren, useContext, useEffect, useMemo, useState } from "react"
-import { Countdown } from "../Utils/Countdown"
-import { distanceSecondsClamped } from "../../utils/time"
-import { UserContext } from "../../containers/UserProvider"
+import { Button } from "../../components/Button"
+import { PropsWithChildren, useEffect } from "react"
 import { ContractFeedback } from "../Feedback/ContractFeedback"
-import { useContractCall } from "../../utils/hookts"
-import { MintCall } from "../../types/ContractCalls"
 import { DisplayTezos } from "../Display/DisplayTezos"
 import { useContractOperation } from "../../hooks/useContractOperation"
 import { MintOperation, TMintOperationParams } from "../../services/contract-operations/Mint"
@@ -88,18 +82,6 @@ export function MintController({
         loading={loading}
         className={cs(style.contract_feedback)}
       />
-
-      {/* {locked && (
-        <>
-          <strong>
-            <span><i aria-hidden className="fas fa-lock"/> unlocks in </span>
-            <Countdown
-              until={lockEnd}
-            />
-          </strong>
-          <Spacing size="8px"/>
-        </>
-      )} */}
 
       {opHash && (
         <>
