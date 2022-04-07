@@ -26,7 +26,7 @@ export class MintOperation extends ContractOperation<TMintOperationParams> {
     }).send({
       amount: this.params.price,
       mutez: true,
-      storageLimit: 450,
+      storageLimit: 550,
     })
   }
 
