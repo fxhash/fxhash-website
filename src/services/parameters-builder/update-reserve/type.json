@@ -1,0 +1,42 @@
+{
+  "prim": "pair",
+  "args": [
+    {
+      "prim": "nat",
+      "annots": [
+        "%issuer_id"
+      ]
+    },
+    {
+      "prim": "list",
+      "args": [
+        {
+          "prim": "pair",
+          "args": [
+            {
+              "prim": "nat",
+              "annots": [
+                "%amount"
+              ]
+            },
+            {
+              "prim": "bytes",
+              "annots": [
+                "%data"
+              ]
+            },
+            {
+              "prim": "nat",
+              "annots": [
+                "%method_id"
+              ]
+            }
+          ]
+        }
+      ],
+      "annots": [
+        "%reserves"
+      ]
+    }
+  ]
+}

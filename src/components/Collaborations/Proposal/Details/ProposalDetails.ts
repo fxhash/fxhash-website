@@ -6,6 +6,7 @@ import { ProposalDetailsBurnSupplyExpanded, ProposalDetailsBurnSupplyHeader } fr
 import { ProposalDetailsMintIssuerExpanded, ProposalDetailsMintIssuerHeader } from "./MintIssuer"
 import { ProposalDetailsUpdateIssuerExpanded, ProposalDetailsUpdateIssuerHeader } from "./UpdateIssuer"
 import { ProposalDetailsUpdatePriceExpanded, ProposalDetailsUpdatePriceHeader } from "./UpdatePrice"
+import { ProposalDetailsUpdateReserveExpanded, ProposalDetailsUpdateReserveHeader } from "./UpdateReserve"
 
 export interface ProposalDetailsProps {
   proposal: CollaborationProposal
@@ -32,7 +33,10 @@ export const ProposalDetails: Record<number, IProposalDetails> = {
     header: ProposalDetailsUpdatePriceHeader,
     expanded: ProposalDetailsUpdatePriceExpanded,
   },
-  //todo: update reserve
+  3: {
+    header: ProposalDetailsUpdateReserveHeader,
+    expanded: ProposalDetailsUpdateReserveExpanded,
+  },
   4: {
     header: ProposalDetailsBurnSupplyHeader,
     expanded: ProposalDetailsBurnSupplyExpanded,

@@ -8,6 +8,7 @@ import pricingFixedType from "./pricing-fixed/type.json"
 import pricingDutchAuctionType from "./pricing-dutch-auction/type.json"
 import updateIssuerType from "./update-issuer/type.json"
 import updatePriceType from "./update-price/type.json"
+import updateReserveType from "./update-reserve/type.json"
 import burnSupplyType from "./burn-supply/type.json"
 import burnType from "./burn/type.json"
 import reserveWhitelistType from "./reserve-whitelist/type.json"
@@ -27,6 +28,7 @@ export enum EBuildableParams {
   PRICING_DUTCH_AUCTION = "PRICING_DUTCH_AUCTION",
   UPDATE_ISSUER         = "UPDATE_ISSUER",
   UPDATE_PRICE          = "UPDATE_PRICE",
+  UPDATE_RESERVE        = "UPDATE_RESERVE",
   BURN_SUPPLY           = "BURN_SUPPLY",
   BURN                  = "BURN",
   RESERVE_WHITELIST     = "RESERVE_WHITELIST",
@@ -43,6 +45,7 @@ const buildableParamTypes: Record<EBuildableParams, MichelsonV1Expression> = {
   PRICING_DUTCH_AUCTION: pricingDutchAuctionType,
   UPDATE_ISSUER: updateIssuerType,
   UPDATE_PRICE: updatePriceType,
+  UPDATE_RESERVE: updateReserveType,
   BURN_SUPPLY: burnSupplyType,
   BURN: burnType,
   RESERVE_WHITELIST: reserveWhitelistType,

@@ -1,0 +1,154 @@
+import style from "./UpdateIssuer.module.scss"
+import colors from "../../../../styles/Colors.module.css"
+import layout from "../../../../styles/Layout.module.scss"
+import cs from "classnames"
+import { ProposalDetailsProps } from "./ProposalDetails"
+import { useEffect, useMemo } from "react"
+import { EBuildableParams, unpackBytes } from "../../../../services/parameters-builder/BuildParameters"
+import { useLazyQuery, useQuery } from "@apollo/client"
+import { Qu_genToken } from "../../../../queries/generative-token"
+import { Spacing } from "../../../Layout/Spacing"
+import { JsonViewer } from "../../../Utils/JsonViewer"
+import { LoaderBlock } from "../../../Layout/LoaderBlock"
+import { GenerativeToken } from "../../../../types/entities/GenerativeToken"
+import { LinkIcon } from "../../../Link/LinkIcon"
+import { getGenerativeTokenUrl } from "../../../../utils/generative-token"
+import { unpackUpdateReserve } from "../../../../utils/unpack/update-reserve"
+import { transformPricingDutchAuctionBigNumbers, transformPricingFixedBigNumbers } from "../../../../utils/unpack-transformers/pricings"
+import { GenerativePricing } from "../../../GenerativeToken/GenerativePricing"
+
+
+export function ProposalDetailsUpdateReserveHeader({
+  proposal,
+}: ProposalDetailsProps) {
+  return (
+    <h5>Update Generative Token {"->"} Update reserves</h5>
+  )
+}
+
+export function ProposalDetailsUpdateReserveExpanded({
+  proposal,
+  collaboration,
+  showOldSettings,
+}: ProposalDetailsProps) {
+  const unpacked = useMemo(() =>
+    unpackUpdateReserve(proposal.callSettings.params)
+  , [proposal])
+
+  console.log(unpacked)
+
+  // the query to get the issuer associated with the call
+  const { data, loading } = useQuery(Qu_genToken, {
+    variables: {
+      id: unpacked.issuer_id
+    }
+  })
+
+  // easier
+  const token: GenerativeToken = data?.generativeToken
+
+  const priceDetails = useMemo(() => {
+    if (!token) return null
+    if (token.pricingFixed) {
+      return transformPricingFixedBigNumbers(
+        unpackBytes(unpacked.details, EBuildableParams.PRICING_FIXED)
+      )
+    }
+    else {
+      return transformPricingDutchAuctionBigNumbers(unpackBytes(
+        unpacked.details,
+        EBuildableParams.PRICING_DUTCH_AUCTION
+      ))
+    }
+  }, [token])
+
+  // build a fake token from the price details so that we can leverage the
+  // generic display component
+  const fakeNewToken = useMemo(() => {
+    if (!priceDetails) return null
+    const tok: Partial<GenerativeToken> = {}
+    if (token.pricingFixed) {
+      tok.pricingFixed = {
+        price: priceDetails.price,
+        opensAt: priceDetails.opens_at,
+      }
+    }
+    else {
+      tok.pricingDutchAuction = {
+        levels: priceDetails.levels,
+        opensAt: priceDetails.opens_at,
+        decrementDuration: priceDetails.decrement_duration,
+      }
+    }
+    return tok
+  }, [priceDetails])
+
+  return (
+    <div>
+      {loading ? (
+        <LoaderBlock
+          height="20vh"
+          size="small"
+        />
+      ):(
+        <>
+          <h5>Preview</h5>
+          <Spacing size="small"/>
+          
+          {/* {token && (
+            <>
+              <div>
+                <strong>Token: </strong>
+                <LinkIcon
+                  iconComp={
+                    <i aria-hidden className="fas fa-external-link-square"/>
+                  }
+                  href={getGenerativeTokenUrl(token)}
+                  newTab
+                >
+                  {token.name}
+                </LinkIcon>
+                <Spacing size="regular"/>
+              </div>
+
+              <div className={cs(layout.cols2)}>
+                <div>
+                  <h6>New settings</h6>
+                  <Spacing size="8px"/>
+
+                  <div className={cs(style.details)}>
+                    <GenerativePricing
+                      token={fakeNewToken as GenerativeToken}
+                    />
+                  </div>
+                </div>
+                
+                {showOldSettings && (
+                  <div>
+                    <h6>Current settings</h6>
+                    <Spacing size="8px"/>
+                    
+                    <div className={cs(style.details)}>
+                      <GenerativePricing
+                        token={token}
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
+            </> */}
+          )}
+        </>
+      )}
+
+      <Spacing size="large"/>
+
+      <h5>Call parameters</h5>
+      <Spacing size="8px"/>
+      <JsonViewer
+        json={unpacked as any}
+        collapsed={true}
+      />
+    </div>
+  )
+}

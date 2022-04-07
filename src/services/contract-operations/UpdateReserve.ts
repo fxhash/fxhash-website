@@ -46,9 +46,9 @@ export class UpdateReservesOperation extends ContractOperation<TUpdateReservesOp
     // if the author is a collab contract, we have to call the collab contract
     // proposal EP instead
     if (this.collab) {
-      const packed = pack(params, EBuildableParams.UPDATE_PRICE)
+      const packed = pack(params, EBuildableParams.UPDATE_RESERVE)
       return this.contract!.methodsObject.make_proposal({
-        call_id: FxhashCollabFactoryCalls.UPDATE_PRICE,
+        call_id: FxhashCollabFactoryCalls.UPDATE_RESERVE,
         call_params: packed,
       }).send()
     }

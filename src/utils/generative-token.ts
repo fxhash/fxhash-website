@@ -363,3 +363,10 @@ export const mapReserveDefinition: Record<EReserveMethod, IReserveDefinition> = 
     inputComponent: InputReserveWhitelist,
   },
 }
+
+// maps the reserve IDs to their enum
+export const mapReserveIdtoEnum: Record<number, EReserveMethod> = Object.fromEntries(
+  Object.keys(mapReserveDefinition).map(
+    (K) => [mapReserveDefinition[K as EReserveMethod].id, K]
+  ) as any
+)
