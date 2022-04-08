@@ -15,6 +15,7 @@ import { CaptureSettings } from "../../types/Mint"
 import { InputCaptureSettings } from "../../components/Input/CaptureSettngs"
 import { validateCaptureSettings } from "../../utils/validations"
 import { LinkGuide } from "../../components/Link/LinkGuide"
+import { ipfsUrlWithHash } from "../../utils/ipfs"
 
 export const StepConfigureCapture: StepComponent = ({ onNext, state }) => {
   const [settings, setSettings] = useState<CaptureSettings>(
@@ -30,10 +31,12 @@ export const StepConfigureCapture: StepComponent = ({ onNext, state }) => {
   )
 
   const { data, loading, error, post } = 
-    useFetch<TestPreviewResponse|TestPreviewErrorResponse>(`${process.env.NEXT_PUBLIC_API_EXTRACT}/extract`, { 
-      cachePolicy: CachePolicies.NO_CACHE,
-      responseType: "json"
-    })
+    useFetch<TestPreviewResponse|TestPreviewErrorResponse>(
+      `${process.env.NEXT_PUBLIC_API_EXTRACT}/extract`, { 
+        cachePolicy: CachePolicies.NO_CACHE,
+        responseType: "json"
+      }
+    )
 
   // extracts the test image base64 data from the response if any
   const testImage = useMemo<string|null>(() => {
@@ -49,7 +52,11 @@ export const StepConfigureCapture: StepComponent = ({ onNext, state }) => {
 
   const captureTest = () => {
     post({
-      cid: `${state.cidUrlParams!}?fxhash=${state.previewHash}`,
+      cid: ipfsUrlWithHash(
+        state.cidUrlParams!,
+        state.previewHash!,
+        cid => cid,
+      ),
       mode: settings.mode,
       triggerMode: settings.triggerMode,
       canvasSelector: settings.canvasSelector,
