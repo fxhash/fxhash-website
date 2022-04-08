@@ -10,11 +10,13 @@ interface Props {
   proposals: CollaborationProposal[]
   collaboration: Collaboration
   showOldSettings: boolean
+  onAction?: () => void
 }
 export function Proposals({
   proposals,
   collaboration,
   showOldSettings,
+  onAction,
 }: Props) {
   const ordered = useMemo(() => {
     return [...proposals].sort((a, b) => {
@@ -38,6 +40,7 @@ export function Proposals({
               proposal={prop}
               collaboration={collaboration}
               showOldSettings={showOldSettings}
+              onAction={onAction}
             />
           ))}
         </div>

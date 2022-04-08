@@ -7,18 +7,27 @@ import { Button } from "../../../Button"
 import { useContractOperation } from "../../../../hooks/useContractOperation"
 import { CollabVoteProposalOperation } from "../../../../services/contract-operations/CollabVoteProposal"
 import { ContractFeedback } from "../../../Feedback/ContractFeedback"
+import { useEffect } from "react"
 
 interface Props {
   proposal: CollaborationProposal
   collaboration: Collaboration
+  onVoteSubmitted?: () => void
 }
 export function ProposalActionVote({
   proposal,
   collaboration,
+  onVoteSubmitted,
 }: Props) {
   const { call, state, success, error, loading } = useContractOperation(
     CollabVoteProposalOperation
   )
+
+  useEffect(() => {
+    if (success) {
+      onVoteSubmitted?.()
+    }
+  }, [success])
 
   return (
     <>

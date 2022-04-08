@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useRef, useState } from "react"
 import useAsyncEffect from "use-async-effect"
 import { ContractIndexingHandler } from "../services/indexing/contract-handlers/ContractHandler"
 import { Indexer } from "../services/indexing/Indexer"
@@ -8,6 +8,7 @@ export interface IIndexerHookReturn<Result> {
   loading: boolean
   data: Result|null
   error: boolean
+  reIndex: () => Promise<void>
 }
 
 /**
@@ -26,7 +27,7 @@ export interface IIndexerHookReturn<Result> {
 export function useIndexer<Result>(
   contractAddress: string,
   contractHandler: ContractIndexingHandler<Result>,
-  realtime: boolean = false,
+  refreshInterval: number|false = false,
 ): IIndexerHookReturn<Result> {
   // true until indexing is fully done
   const [loading, setLoading] = useState<boolean>(true)
@@ -34,6 +35,18 @@ export function useIndexer<Result>(
   const [data, setData] = useState<Result|null>(null)
   // if there's any error, it's set there
   const [error, setError] = useState<boolean>(false)
+  // reference to the indexer instance
+  const indexerRef = useRef<Indexer<Result>|null>(null)
+
+  // a function to trigger manually the indexer
+  const reIndex = async () => {
+    if (indexerRef.current) {
+      const nres = await indexerRef.current.index()
+      if (nres !== data) {
+        setData(nres)
+      }
+    }
+  }
 
   // bootstraps the indexing manager on the contract and processes operations
   useAsyncEffect(async (isMounted) => {
@@ -49,24 +62,40 @@ export function useIndexer<Result>(
     const indexer = new Indexer(
       contractAddress,
       contractHandler,
-      realtime ? updateData : undefined
     )
+    indexerRef.current = indexer
+
+    // stores the indexing result, mostly in case of a periodic refresh
+    let result: Result
     
     try {
       // first initialized the indexer (fetches the storage if defined in handler)
       await indexer.init()
   
       // runs the indexing and eventually get some data
-      const result = await indexer.index()
+      result = await indexer.index()
 
       // the state can be updated with the output data
-      if (!realtime) {
-        updateData(result)
-      }
+      isMounted() && updateData(result)
     }
     catch(err) {
       console.error(err)
       isMounted() && setError(true)
+    }
+
+    // if an interval is set, we request an indexer refresh every now and then
+    if (refreshInterval !== false) {
+      const interval = setInterval(async () => {
+        const nresult = await indexer.index()
+        if (nresult !== result && isMounted()) {
+          setData(nresult)
+        }
+        result = nresult
+      }, refreshInterval)
+
+      return () => {
+        clearInterval(interval)
+      }
     }
   }, [])
 
@@ -74,5 +103,6 @@ export function useIndexer<Result>(
     loading,
     data,
     error,
+    reIndex,
   }
 }

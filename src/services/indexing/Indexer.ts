@@ -26,14 +26,12 @@ export class Indexer<Result> {
   constructor(
     address: string,
     contractHandler: ContractIndexingHandler<Result>,
-    updateFn?: (data: Result) => void,
     batchSize: number = 100,
   ) {
     this.address = address
     this.contractHandler = contractHandler
     this.batchSize = batchSize
     this.cursor = 0
-    this.update = updateFn
     this.result = this.contractHandler.init()
   }
 

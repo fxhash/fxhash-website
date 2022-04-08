@@ -8,7 +8,7 @@ import { TabDefinition, Tabs } from "../../components/Layout/Tabs"
 import { Spacing } from "../../components/Layout/Spacing"
 import { LoaderBlock } from "../../components/Layout/LoaderBlock"
 import { TabsContainer } from "../../components/Layout/TabsContainer"
-import { useMemo } from "react"
+import { useEffect, useMemo } from "react"
 import { Proposals } from "../../components/Collaborations/Proposal/Proposals"
 import { CollaborationInformations } from "./CollaborationInformations"
 
@@ -37,12 +37,13 @@ export function CollaborationManager({
   collaboration,
 }: Props) {
 
-  const { loading, data } = useIndexer<CollaborationContractState>(
+  const { loading, data, reIndex } = useIndexer<CollaborationContractState>(
     collaboration.id,
-    CollaborationContractHandler
+    CollaborationContractHandler,
+    10000,
   )
 
-  const filetered = useMemo<IFilteredProposals>(() => {
+  const filtered = useMemo<IFilteredProposals>(() => {
     const arr = data ? Object.values(data.proposals) : []
     return {
       awaiting: arr.filter(prop => !prop.executed),
@@ -69,13 +70,14 @@ export function CollaborationManager({
               <main className={cs(layout['padding-big'])}>
                 {tabIndex === 0 ? (
                   <Proposals
-                    proposals={filetered.awaiting}
+                    proposals={filtered.awaiting}
                     collaboration={collaboration}
                     showOldSettings={true}
+                    onAction={() => reIndex()}
                   />
                 ):tabIndex === 1 ? (
                   <Proposals
-                    proposals={filetered.executed}
+                    proposals={filtered.executed}
                     collaboration={collaboration}
                     showOldSettings={false}
                   />

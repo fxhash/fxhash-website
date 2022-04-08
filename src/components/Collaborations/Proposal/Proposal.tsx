@@ -17,11 +17,13 @@ interface Props {
   proposal: CollaborationProposal
   collaboration: Collaboration
   showOldSettings: boolean
+  onAction?: () => void
 }
 export function Proposal({
   proposal,
   collaboration,
   showOldSettings,
+  onAction,
 }: Props) {
   const [expanded, setExpanded] = useState<boolean>(false)
 
@@ -99,6 +101,7 @@ export function Proposal({
             <ProposalActionVote
               collaboration={collaboration}
               proposal={proposal}
+              onVoteSubmitted={onAction}
             />
             <Spacing size="small"/>
             <ProposalActionExecute
