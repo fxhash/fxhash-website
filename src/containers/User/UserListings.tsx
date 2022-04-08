@@ -30,13 +30,16 @@ export function UserListings({
     }
   })
 
+  // safe access to gentoks
+  const listings: Listing[] = data?.user?.listings || null
+
   useEffect(() => {
     if (!loading) {
-      if (currentLength.current === data.user.listings?.length) {
+      if (currentLength.current === listings?.length) {
         ended.current = true
       }
       else {
-        currentLength.current = data.user.listings?.length
+        currentLength.current = listings?.length
       }
     }
   }, [data, loading])
@@ -46,14 +49,12 @@ export function UserListings({
       fetchMore({
         variables: {
           id: user.id,
-          skip: data?.user.listings.length || 0,
+          skip: listings?.length || 0,
           take: 20
         }
       })
     }
   }
-
-  const listings: Listing[]|null = data?.user.listings || null
 
   return (
     <div className={cs(layout['padding-big'])}>

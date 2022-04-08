@@ -108,13 +108,16 @@ export function UserCollection({
     },
   })
 
+  // safe access to gentks
+  const objkts: Objkt[] = data?.user?.objkts || null
+
   useEffect(() => {
     if (!loading) {
-      if (currentLength.current === data.user.objkts?.length) {
+      if (currentLength.current === objkts?.length) {
         ended.current = true
       }
       else {
-        currentLength.current = data.user.objkts?.length
+        currentLength.current = objkts?.length
       }
     }
   }, [data, loading])
@@ -123,7 +126,7 @@ export function UserCollection({
     if (!ended.current) {
       fetchMore({
         variables: {
-          skip: data?.user.objkts.length || 0,
+          skip: objkts?.length || 0,
           take: ITEMS_PER_PAGE
         }
       })
@@ -146,8 +149,6 @@ export function UserCollection({
       filters,
     })
   }, [sort, filters])
-
-  const objkts: Objkt[]|null = data?.user.objkts || null
 
   const addFilter = (filter: string, value: any) => {
     setFilters({

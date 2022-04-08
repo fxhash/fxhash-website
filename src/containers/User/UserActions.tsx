@@ -28,13 +28,16 @@ export function UserActions({
     }
   })
 
+  // safe access to actions
+  const actions: Action[] = data?.user?.actions || null
+
   useEffect(() => {
     if (!loading) {
-      if (currentLength.current === data.user.actions?.length) {
+      if (currentLength.current === actions?.length) {
         ended.current = true
       }
       else {
-        currentLength.current = data.user.actions?.length
+        currentLength.current = actions?.length
       }
     }
   }, [data, loading])
@@ -44,14 +47,12 @@ export function UserActions({
       fetchMore({
         variables: {
           id: user.id,
-          skip: data?.user.actions.length || 0,
+          skip: actions?.length || 0,
           take: 20
         }
       })
     }
   }
-
-  const actions: Action[]|null = data?.user.actions || null
 
   return (
     <>

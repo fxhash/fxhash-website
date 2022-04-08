@@ -34,13 +34,16 @@ export function UserGenerativeTokens({
     },
   })
 
+  // safe access to gentoks
+  const genToks: GenerativeToken[] = data?.user?.generativeTokens || null
+
   useEffect(() => {
     if (!loading) {
-      if (currentLength.current === data.user.generativeTokens?.length) {
+      if (currentLength.current === genToks?.length) {
         ended.current = true
       }
       else {
-        currentLength.current = data.user.generativeTokens?.length
+        currentLength.current = genToks?.length
       }
     }
   }, [data, loading])
@@ -50,14 +53,12 @@ export function UserGenerativeTokens({
       fetchMore({
         variables: {
           id: user.id,
-          skip: data?.user.generativeTokens.length || 0,
+          skip: genToks?.length || 0,
           take: 20
         }
       })
     }
   }
-
-  const generativeTokens: GenerativeToken[]|null = data?.user.generativeTokens || null
 
   return (
     <div className={cs(layout['padding-big'])}>
@@ -65,7 +66,7 @@ export function UserGenerativeTokens({
         onTrigger={load}
       >
         <CardsContainer>
-          {generativeTokens?.map(token => (
+          {genToks?.map(token => (
             <GenerativeTokenCard
               key={token.id}
               token={token}
