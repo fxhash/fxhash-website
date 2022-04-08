@@ -30,7 +30,7 @@ export function CollaborationInformations({
 
   return (
     <div>
-      <h5>Additionnal informations</h5>
+      <h5>Additionnal information</h5>
 
       <Spacing size="large"/>
 

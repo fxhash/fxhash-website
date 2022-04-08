@@ -39,8 +39,9 @@ export function ProposalActionExecute({
             <span className={cs(text.success)}>
               Since all the collaborators have approved the operation, any collaborator can execute it in the name of the group.
             </span>
-          ): "When all the collaborators will have approved the operation, it can be executed by any collaborator in the name of the whole group."
-          }
+          ):(
+            "When all the collaborators have approved the operation, it can be executed by any collaborator in the name of the whole group."
+          )}
         </span>
         <Button
           color="secondary"

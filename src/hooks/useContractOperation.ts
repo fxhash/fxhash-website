@@ -74,7 +74,7 @@ export function useContractOperation<Params>(
       if (status === ContractOperationStatus.INJECTED) {
         messageCenter.addMessage({
           type: "success",
-          title: `Operation apllied`,
+          title: `Operation applied`,
           content: `${data.message}`
         })
       }
