@@ -16,7 +16,7 @@ const Qu_genTokens = gql`
   ${Frag_GenAuthor}
   ${Frag_GenPricing}
   query GenerativeTokensIncoming($skip: Int, $take: Int, $sort: GenerativeSortInput, $filters: GenerativeTokenFilter) {
-    incomingGenerativeTokens: generativeTokens(
+    generativeTokens(
       skip: $skip, take: $take, sort: $sort, filters: $filters
     ) {
       id
@@ -70,11 +70,11 @@ export const ExploreIncomingTokens = ({}: Props) => {
 
   useEffect(() => {
     if (!loading) {
-      if (currentLength.current === data.incomingGenerativeTokens.length) {
+      if (currentLength.current === data.generativeTokens.length) {
         ended.current = true
       }
       else {
-        currentLength.current = data.incomingGenerativeTokens.length
+        currentLength.current = data.generativeTokens.length
       }
     }
   }, [data, loading])
@@ -83,14 +83,14 @@ export const ExploreIncomingTokens = ({}: Props) => {
     if (!ended.current) {
       fetchMore({
         variables: {
-          skip: data.incomingGenerativeTokens.length,
+          skip: data.generativeTokens.length,
           take: ITEMS_PER_PAGE
         }
       })
     }
   }
 
-  const generativeTokens: GenerativeToken[] = data?.incomingGenerativeTokens
+  const generativeTokens: GenerativeToken[] = data?.generativeTokens
 
   return (
     <>

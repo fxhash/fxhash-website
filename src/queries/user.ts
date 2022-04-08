@@ -67,7 +67,13 @@ export const Qu_userGenTokens = gql`
 export const Qu_userObjkts = gql`
   ${Frag_GenAuthor}
 
-  query UserCollection($id: String!, $take: Int, $skip: Int, $sort: UserCollectionSortInput, $filters: ObjktFilter) {
+  query UserCollection(
+    $id: String!,
+    $take: Int,
+    $skip: Int,
+    $sort: UserCollectionSortInput,
+    $filters: ObjktFilter
+  ) {
     user(id: $id) {
       id
       objkts(take: $take, skip: $skip, sort: $sort, filters: $filters) {
@@ -92,6 +98,7 @@ export const Qu_userObjkts = gql`
         createdAt
         activeListing {
           id
+          version
           price
         }
       }
@@ -120,11 +127,12 @@ export const Qu_userObjktsSubResults = gql`
 export const Qu_userListings = gql`
   ${Frag_GenAuthor}
 
-  query Query($id: String!, $take: Int, $skip: Int) {
+  query UserListings($id: String!, $take: Int, $skip: Int) {
     user(id: $id) {
       id
       listings(take: $take, skip: $skip) {
         id
+        version
         price
         royalties
         objkt {
@@ -139,6 +147,8 @@ export const Qu_userListings = gql`
             avatarUri
           }
           activeListing {
+            id
+            version
             price
           }
           issuer {

@@ -21,7 +21,9 @@ export function Root({ children }: PropsWithChildren<{}>) {
   const router = useRouter()
 
   // should the page be renderer with the layout ?
-  const LayoutWrapper = EXCLUDE_LAYOUT.includes(router.pathname) ? Fragment : Layout
+  const LayoutWrapper = EXCLUDE_LAYOUT.includes(router.pathname) 
+    ? Fragment 
+    : Layout
 
   return (
     <ApolloProvider client={clientSideClient}>

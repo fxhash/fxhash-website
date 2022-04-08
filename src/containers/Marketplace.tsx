@@ -17,43 +17,10 @@ import { MarketplaceFilters } from "./Marketplace/MarketplaceFilters"
 import { ExploreTagDef, ExploreTags } from "../components/Exploration/ExploreTags"
 import { displayMutez } from "../utils/units"
 import { SearchInputControlled } from "../components/Input/SearchInputControlled"
-import { Frag_GenAuthor } from "../queries/fragments/generative-token"
+import { Qu_listings } from "../queries/listing"
 
 
 const ITEMS_PER_PAGE = 20
-
-const Qu_listings = gql`
-  ${Frag_GenAuthor}
-  query Query ($skip: Int, $take: Int, $sort: ListingsSortInput, $filters: ListingFilter) {
-    listings(skip: $skip, take: $take, sort: $sort, filters: $filters) {
-      id
-      price
-      objkt {
-        id
-        version
-        name
-        slug
-        metadata
-        duplicate
-        activeListing {
-          id
-          price
-        }
-        owner {
-          id
-          name
-          flag
-          avatarUri
-        }
-        issuer {
-          flag
-          name
-          ...Author
-        }
-      }
-    }
-  }
-`
 
 const generalSortOptions: IOptions[] = [
   {
@@ -96,7 +63,10 @@ interface Props {
 export const Marketplace = ({}: Props) => {
   // sort variables
   const [sortValue, setSortValue] = useState<string>("createdAt-desc")
-  const sort = useMemo<Record<string, any>>(() => sortValueToSortVariable(sortValue), [sortValue])
+  const sort = useMemo<Record<string, any>>(
+    () => sortValueToSortVariable(sortValue), 
+    [sortValue]
+  )
   // sort options - when the search is triggered, options are updated to include relevance
   const [sortOptions, setSortOptions] = useState<IOptions[]>(generalSortOptions)
   // keeps track of the search option used before the search was triggered

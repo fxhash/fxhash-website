@@ -46,6 +46,7 @@ export const Qu_objkt = gql`
       createdAt
       activeListing {
         id
+        version
         price
         issuer {
           id
@@ -115,6 +116,7 @@ export const Qu_objktsFeed = gql`
       assignedAt
       activeListing {
         id
+        version
         price
       }
     }

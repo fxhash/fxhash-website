@@ -1,4 +1,4 @@
-import { ApolloClient, InMemoryCache } from "@apollo/client";
+import { ApolloClient, FieldFunctionOptions, InMemoryCache } from "@apollo/client";
 
 const client = new ApolloClient({
   uri: process.env.NEXT_PUBLIC_API_ROOT,
@@ -7,6 +7,38 @@ const client = new ApolloClient({
   ssrForceFetchDelay: 1000
 })
 
+
+
+/**
+ * Given a set of existing data, incoming data and pagination arguments,
+ * merges incoming with existing **while ignoring incoming duplicates already
+ * stored in existing**.
+ */
+export function cacheMergePaginatedField(
+  existing: any[] = [],
+  incoming: any[],
+  { args }: FieldFunctionOptions<any>
+): any[] {
+  // shallow copy existing array
+  const merged = [...existing]
+  const { skip } = args
+  let j = 0
+  mainLoop: for (let i = 0; i < incoming.length; ++i) {
+    // we check for duplicates in the existing cache
+    if (existing) {
+      for (const item of existing) {
+        // if there's  duplicate, we ignore the incoming one and continue
+        if (incoming[i].__ref === item.__ref) {
+          continue mainLoop
+        }
+      }
+    }
+    // add the incoming to the merge array
+    merged[skip + (j++)] = incoming[i]
+  }
+  return merged
+}
+
 export const clientSideClient = new ApolloClient({
   uri: process.env.NEXT_PUBLIC_API_ROOT,
   cache: new InMemoryCache({
@@ -14,74 +46,16 @@ export const clientSideClient = new ApolloClient({
       GenerativeToken: {
         fields: {
           actions: {
-            keyArgs: false,
-            // @ts-ignore
-            merge(existing, incoming, { args: { skip = 0 }, variables }) {
-              const merged = existing ? existing.slice(0) : []
-              // filter incoming for duplicates
-              const singles = incoming.filter((a: any) => merged.find((b: any) => a.__ref === b.__ref) !== -1)
-              for (let i = 0; i < singles.length; ++i) {
-                merged[skip + i] = singles[i]
-              }
-              return merged
-            },
+            keyArgs: ["filters"],
+            merge: cacheMergePaginatedField,
           },
           activeListedObjkts: {
-            keyArgs: false,
-            // @ts-ignore
-            merge(existing, incoming, { args: { skip = 0 }}) {
-              const merged = existing ? existing.slice(0) : []
-              for (let i = 0; i < incoming.length; ++i) {
-                merged[skip + i] = incoming[i]
-              }
-              return merged
-            },
+            keyArgs: ["filters", "sort"],
+            merge: cacheMergePaginatedField,
           },
           objkts: {
-            keyArgs: false,
-            // @ts-ignore
-            merge(existing, incoming, { args: { skip = 0, take = 20 }}) {
-              const merged = existing ? existing.slice(0) : []
-              let j = 0
-              mainLoop:
-                for (let i = 0; i < incoming.length; ++i) {
-                  if (existing) {
-                    for (const item of existing) {
-                      if (incoming[i].__ref === item.__ref) {
-                        continue mainLoop
-                      }
-                    }
-                  }
-                  merged[skip + (j++)] = incoming[i]
-                }
-              return merged
-            }
-            
-            // @ts-ignore
-            //   // we populate a new array with max length, and copy the results
-            //   const merged = []
-            //   for (let i = 0, max = Math.max(skip+take, existing?.length || 0); i < max; i++) {
-            //     merged[i] = existing?.[i] || null
-            //   }
-            //   // copy what's incoming into merge
-            //   for (let i = 0; i < incoming.length; ++i) {
-            //     merged[skip + i] = incoming[i]
-            //   }
-            //   return merged
-            // },
-            // read(existing, { args }) {
-            //   const { skip, take } = args as any
-            //   // check if we have all the items in the existing array
-            //   if (!existing || existing.length < skip + take) {
-            //     return undefined
-            //   }
-            //   const sub = []
-            //   for (let i = skip; i < skip+take; i++) {
-            //     if (!existing[i]) return undefined
-            //     sub[i] = existing[i]
-            //   }
-            //   return sub
-            // }
+            keyArgs: ["sort", "featureFilters"],
+            merge: cacheMergePaginatedField,
           },
         }
       },
@@ -89,120 +63,34 @@ export const clientSideClient = new ApolloClient({
         fields: {
           generativeTokens: {
             keyArgs: false,
-            // @ts-ignore
-            merge(existing, incoming, { args: { skip = 0 }}) {
-              const merged = existing ? existing.slice(0) : []
-              for (let i = 0; i < incoming.length; ++i) {
-                merged[skip + i] = incoming[i]
-              }
-              return merged
-            },
+            merge: cacheMergePaginatedField,
           },
           objkts: {
-            keyArgs: false,
-            // @ts-ignore
-            merge(existing, incoming, { args: { skip = 0 }}) {
-              const merged = existing ? existing.slice(0) : []
-              let j = 0
-              mainLoop:
-                for (let i = 0; i < incoming.length; ++i) {
-                  if (existing) {
-                    for (const item of existing) {
-                      if (incoming[i].__ref === item.__ref) {
-                        continue mainLoop
-                      }
-                    }
-                  }
-                  merged[skip + (j++)] = incoming[i]
-                }
-              return merged
-            },
+            keyArgs: ["sort", "filters"],
+            merge: cacheMergePaginatedField,
           },
           listings: {
             keyArgs: false,
-            // @ts-ignore
-            merge(existing, incoming, { args: { skip = 0 }}) {
-              const merged = existing ? existing.slice(0) : []
-              for (let i = 0; i < incoming.length; ++i) {
-                merged[skip + i] = incoming[i]
-              }
-              return merged
-            },
+            merge: cacheMergePaginatedField,
           },
           actions: {
             keyArgs: false,
-            // @ts-ignore
-            merge(existing, incoming, { args: { skip = 0 }}) {
-              const merged = existing ? existing.slice(0) : []
-              for (let i = 0; i < incoming.length; ++i) {
-                merged[skip + i] = incoming[i]
-              }
-              return merged
-            },
+            merge: cacheMergePaginatedField,
           },
         }
+      },
+      Listing: {
+        keyFields: ["id", "version"]
       },
       Query: {
         fields: {
           generativeTokens: {
-            keyArgs: false,
-            // @ts-ignore
-            merge(existing, incoming, { args: { skip = 0, filters }}) {
-              const merged = existing ? existing.slice(0) : []
-              let j = 0
-              mainLoop:
-                for (let i = 0; i < incoming.length; ++i) {
-                  if (existing) {
-                    for (const item of existing) {
-                      if (incoming[i].__ref === item.__ref) {
-                        continue mainLoop
-                      }
-                    }
-                  }
-                  merged[skip + (j++)] = incoming[i]
-                }
-              return merged
-            },
-          },
-          incomingGenerativeTokens: {
-            keyArgs: false,
-            // @ts-ignore
-            merge(existing, incoming, { args: { skip = 0, filters }}) {
-              const merged = existing ? existing.slice(0) : []
-              let j = 0
-              mainLoop:
-                for (let i = 0; i < incoming.length; ++i) {
-                  if (existing) {
-                    for (const item of existing) {
-                      if (incoming[i].__ref === item.__ref) {
-                        continue mainLoop
-                      }
-                    }
-                  }
-                  merged[skip + (j++)] = incoming[i]
-                }
-              return merged
-            },
+            keyArgs: ["sort", "filters"],
+            merge: cacheMergePaginatedField,
           },
           listings: {
-            keyArgs: false,
-            // @ts-ignore
-            merge(existing, incoming, { args: { skip = 0 }}) {
-              const merged = existing ? existing.slice(0) : []
-              let j = 0
-              mainLoop:
-                for (let i = 0; i < incoming.length; ++i) {
-                  if (existing) {
-                    for (const item of existing) {
-                      if (incoming[i].__ref === item.__ref) {
-                        continue mainLoop
-                      }
-                    }
-                  }
-                  merged[skip + (j++)] = incoming[i]
-                }
-              return merged
-            },
+            keyArgs: ["sort", "filters"],
+            merge: cacheMergePaginatedField,
           }
         }
       }
