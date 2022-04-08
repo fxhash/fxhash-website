@@ -7,7 +7,6 @@ import { Qu_genTokenIterations } from "../../../queries/generative-token"
 import { CardsContainer } from "../../../components/Card/CardsContainer"
 import { IObjktFeatureFilter, Objkt } from "../../../types/entities/Objkt"
 import { CardsLoading } from "../../../components/Card/CardsLoading"
-import { ObjktCard } from "../../../components/Card/ObjktCard"
 import { useEffect, useMemo, useRef, useState } from "react"
 import { SearchHeader } from "../../../components/Search/SearchHeader"
 import { IOptions, Select } from "../../../components/Input/Select"
@@ -222,7 +221,10 @@ export function GenerativeIterations({
                   ))}
 
                   {loading && (
-                    <CardsLoading number={ITEMS_PER_PAGE} />
+                    <CardsLoading
+                      type="large"
+                      number={ITEMS_PER_PAGE}
+                    />
                   )}
                 </CardsContainer>
               </InfiniteScrollTrigger>
