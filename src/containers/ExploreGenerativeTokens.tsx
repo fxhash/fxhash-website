@@ -22,7 +22,7 @@ import { GenerativeFilters } from './Generative/GenerativeFilters'
 import { Frag_GenAuthor, Frag_GenPricing } from '../queries/fragments/generative-token'
 
 
-const ITEMS_PER_PAGE = 6
+const ITEMS_PER_PAGE = 20
 
 const Qu_genTokens = gql`
   ${Frag_GenAuthor}
