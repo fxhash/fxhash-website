@@ -18,7 +18,6 @@ export function UserGuard({
   const router = useRouter()
 
   useEffect(() => {
-    console.log("here")
     if (forceRedirect && userCtx.autoConnectChecked) {
       if (!userCtx.user) {
         router.push(`/sync-redirect?target=${encodeURIComponent(router.asPath)}`)
