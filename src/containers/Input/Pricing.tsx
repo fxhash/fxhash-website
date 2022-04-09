@@ -7,6 +7,7 @@ import { Fieldset } from "../../components/Form/Fieldset"
 import { InputRadioBtnIcon } from "../../components/Input/InputRadioBtnIcon"
 import { RadioOption } from "../../components/Input/InputRadioButtons"
 import { GenTokPricing } from "../../types/entities/GenerativeToken"
+import { Collaboration } from "../../types/entities/User"
 import { GenTokPricingForm } from "../../types/Mint"
 import { InputPricingDutchAuction } from "./PricingDutchAuction"
 import { InputPricingFixed } from "./PricingFixed"
@@ -33,11 +34,15 @@ interface Props {
   value: GenTokPricingForm<string>
   onChange: (value: GenTokPricingForm<string>) => void
   errors?: FormikErrors<GenTokPricingForm<string>>
+  lockWarning?: boolean
+  collaboration?: Collaboration|null
 }
 export function InputPricing({
   value,
   onChange,
   errors,
+  lockWarning,
+  collaboration,
 }: Props) {
   const update = (key: keyof GenTokPricingForm<string>, nvalue: any) => {
     onChange({
@@ -66,6 +71,8 @@ export function InputPricing({
           value={value.pricingFixed}
           onChange={v => update("pricingFixed", v)}
           errors={errors?.pricingFixed}
+          lockWarning={lockWarning}
+          collaboration={collaboration}
         />
       )}
 
@@ -74,6 +81,8 @@ export function InputPricing({
           value={value.pricingDutchAuction}
           onChange={v => update("pricingDutchAuction", v)}
           errors={errors?.pricingDutchAuction}
+          lockWarning={lockWarning}
+          collaboration={collaboration}
         />
       )}
     </Fieldset>

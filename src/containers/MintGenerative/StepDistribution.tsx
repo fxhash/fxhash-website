@@ -27,10 +27,8 @@ import { YupRoyalties } from "../../utils/yup/royalties"
 import { cloneDeep } from "@apollo/client/utilities"
 import { YupSplits } from "../../utils/yup/splits"
 import { FxhashContracts } from "../../types/Contracts"
-import { EReserveMethod } from "../../types/entities/Reserve"
 import { Fieldset } from "../../components/Form/Fieldset"
 import { InputReserves } from "../../components/Input/Reserves/InputReserves"
-import Link from "next/link"
 import { LinkIcon } from "../../components/Link/LinkIcon"
 import { YupReserves } from "../../utils/yup/reserves"
 
@@ -163,6 +161,8 @@ export const StepDistribution: StepComponent = ({ state, onNext }) => {
                 value={values.pricing}
                 onChange={val => setFieldValue("pricing", val)}
                 errors={errors.pricing}
+                lockWarning
+                collaboration={state.collaboration}
               />
             </Field>
 

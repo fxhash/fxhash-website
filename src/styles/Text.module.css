@@ -58,3 +58,8 @@
   font-weight: bold;
   color: var(--color-success);
 }
+
+.warning {
+  font-weight: bold;
+  color: var(--color-warning);
+}

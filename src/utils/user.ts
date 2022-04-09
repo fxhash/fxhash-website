@@ -1,4 +1,4 @@
-import { ConnectedUser, User, UserAlias, UserAuthorization, UserFlag, UserItems } from "../types/entities/User"
+import { Collaboration, ConnectedUser, User, UserAlias, UserAuthorization, UserFlag, UserItems } from "../types/entities/User"
 import { truncateMiddle } from "./strings"
 
 export function userHasName(user: ConnectedUser): boolean {
@@ -34,8 +34,27 @@ export function isTokenModerator(user: User): boolean {
 /**
  * Returns true if the user has the rights to moderate the users
  */
- export function isUserModerator(user: User): boolean {
+export function isUserModerator(user: User): boolean {
   return user.authorizations.includes(UserAuthorization.USER_MODERATION)
+}
+
+/**
+ * Returns true if the user is verified
+ * (accepts collaboration contracts in which case it checks the verified status
+ * of all the users)
+ */
+export function isEntityVerified(entity: User|Collaboration): boolean {
+  if ((entity as Collaboration).collaborators) {
+    for (const user of (entity as Collaboration).collaborators) {
+      if (!isUserVerified(user)) {
+        return false
+      }
+    }
+    return true
+  }
+  else {
+    return isUserVerified(entity)
+  }
 }
 
 /**

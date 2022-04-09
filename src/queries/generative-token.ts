@@ -42,6 +42,7 @@ export const Qu_genTokenMarketplace = gql`
       id
       name
       flag
+      moderationReason
       slug
       tags
       metadata

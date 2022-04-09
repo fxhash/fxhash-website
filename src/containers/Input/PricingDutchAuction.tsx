@@ -6,12 +6,17 @@ import { IInputDatetimeFastBtn, InputDatetime } from "../../components/Input/Inp
 import { IPricingDutchAuction } from "../../types/entities/Pricing"
 import { InputProps } from "../../types/Inputs"
 import { InputTextUnit } from "../../components/Input/InputTextUnit"
-import { FocusEventHandler } from "react"
+import { FocusEventHandler, useContext } from "react"
 import { Field } from "../../components/Form/Field"
 import { ButtonDelete } from "../../components/Button/ButtonDelete"
 import { Button } from "../../components/Button"
 import { FormikErrors } from "formik"
 import { addHours, startOfHour } from "date-fns"
+import { Collaboration, User } from "../../types/entities/User"
+import { isEntityVerified } from "../../utils/user"
+import { Spacing } from "../../components/Layout/Spacing"
+import { TextWarning } from "../../components/Text/TextWarning"
+import { UserContext } from "../UserProvider"
 
 
 const dutchAucDateFast: IInputDatetimeFastBtn[] = [
@@ -32,13 +37,19 @@ const dutchAucDateFast: IInputDatetimeFastBtn[] = [
 interface Props extends InputProps<Partial<IPricingDutchAuction<string>>> {
   onBlur?: FocusEventHandler<HTMLInputElement>
   errors?: FormikErrors<IPricingDutchAuction>
+  lockWarning?: boolean
+  collaboration?: Collaboration|null
 }
 export function InputPricingDutchAuction({
   value,
   onChange,
   onBlur,
   errors,
+  lockWarning = false,
+  collaboration,
 }: Props) {
+
+  const { user } = useContext(UserContext)
 
   const update = (key: keyof IPricingDutchAuction, nval: any) => {
     onChange({
@@ -145,6 +156,22 @@ export function InputPricingDutchAuction({
           error={!!errors?.opensAt}
           fastBtns={dutchAucDateFast}
         />
+        {!isEntityVerified(collaboration || (user as User)) && (
+          <>
+            <Spacing size="2x-small"/>
+            <TextWarning>
+              Because
+              {collaboration ? (
+                " not all the members of the collaboration are "
+              ):(
+                " you are not "
+              )}
+              verified, your project will be locked for 3 hours.
+              <br/>
+              You may want to schedule an opening time in more than 3 hours.
+            </TextWarning>
+          </>
+        )}
       </Field>
 
       <Field error={errors?.decrementDuration}>

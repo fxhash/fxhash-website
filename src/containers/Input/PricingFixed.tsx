@@ -5,12 +5,16 @@ import { IInputDatetimeFastBtn, InputDatetime } from "../../components/Input/Inp
 import { IPricingFixed } from "../../types/entities/Pricing"
 import { InputProps } from "../../types/Inputs"
 import { InputTextUnit } from "../../components/Input/InputTextUnit"
-import { FocusEventHandler } from "react"
+import { FocusEventHandler, useContext } from "react"
 import { Field } from "../../components/Form/Field"
 import { Checkbox } from "../../components/Input/Checkbox"
 import { Spacing } from "../../components/Layout/Spacing"
 import { addHours, startOfHour } from "date-fns"
 import { FormikErrors } from "formik"
+import { UserContext } from "../UserProvider"
+import { TextWarning } from "../../components/Text/TextWarning"
+import { Collaboration, User } from "../../types/entities/User"
+import { isEntityVerified } from "../../utils/user"
 
 
 const dateFast: IInputDatetimeFastBtn[] = [
@@ -31,13 +35,19 @@ const dateFast: IInputDatetimeFastBtn[] = [
 interface Props extends InputProps<Partial<IPricingFixed<string>>> {
   onBlur?: FocusEventHandler<HTMLInputElement>
   errors?: FormikErrors<IPricingFixed>
+  lockWarning?: boolean
+  collaboration?: Collaboration|null
 }
 export function InputPricingFixed({
   value,
   onChange,
   onBlur,
   errors,
+  lockWarning = false,
+  collaboration,
 }: Props) {
+
+  const { user } = useContext(UserContext)
 
   const update = (key: keyof IPricingFixed, nval: any) => {
     onChange({
@@ -99,6 +109,22 @@ export function InputPricingFixed({
             fastBtns={dateFast}
             error={!!errors?.opensAt}
           />
+          {!isEntityVerified(collaboration || (user as User)) && (
+            <>
+              <Spacing size="2x-small"/>
+              <TextWarning>
+                Because
+                {collaboration ? (
+                  " not all the members of the collaboration are "
+                ):(
+                  " you are not "
+                )}
+                verified, your project will be locked for 3 hours.
+                <br/>
+                You may want to schedule an opening time in more than 3 hours.
+              </TextWarning>
+            </>
+          )}
         </Field>
       )}
     </>
