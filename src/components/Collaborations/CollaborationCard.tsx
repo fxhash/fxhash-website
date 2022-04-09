@@ -6,6 +6,7 @@ import { useMemo } from "react"
 import { Spacing } from "../Layout/Spacing"
 import { format } from "date-fns"
 import Link from "next/link"
+import { Tags } from "../Tags/Tags"
 
 interface Props {
   user: User
@@ -22,6 +23,8 @@ export function CollaborationCard({
     )
   }, [collaboration.collaborators])
 
+  const genToks = collaboration.generativeTokens
+
   return (
     <div className={cs(style.root)}>
       <div className={cs(style.users)}>
@@ -29,6 +32,7 @@ export function CollaborationCard({
           <UserBadge
             key={user.id}
             user={user}
+            size="small"
           />
         ))}
       </div>
@@ -47,6 +51,16 @@ export function CollaborationCard({
         <span>
           {format(new Date(collaboration.createdAt), "MMMM d, yyyy' at 'HH:mm")}
         </span>
+      </div>
+      <div className={cs(style.line)}>
+        <strong>Projects:</strong>
+        {genToks && genToks.length > 0 ? (
+          <span>
+            {genToks.map(g => g.name).join(", ")}
+          </span>
+        ):(
+          "/"
+        )}
       </div>
     </div>
   )

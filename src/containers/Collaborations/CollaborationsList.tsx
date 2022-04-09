@@ -29,6 +29,8 @@ export function CollaborationsList({
 
   const collaborations: Collaboration[] = data?.user?.collaborationContracts
 
+  console.log(collaborations)
+
   return (
     <div className={cs(style.root)}>
       {loading ? (

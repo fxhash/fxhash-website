@@ -216,6 +216,10 @@ export const Qu_userCollaborations = gql`
           avatarUri
           flag
         }
+        generativeTokens {
+          id
+          name
+        }
       }
     }
   }
