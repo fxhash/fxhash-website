@@ -13,6 +13,7 @@ export const Qu_user = gql`
         id
       }
       flag
+      moderationReason
       description
       avatarUri
       createdAt

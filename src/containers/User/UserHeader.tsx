@@ -31,7 +31,10 @@ export function UserHeader({ user }: Props) {
 
   return (
     <header className={cs(style.container, layout['padding-small'])}>
-      <Avatar uri={user.avatarUri} className={cs(style.avatar, effects['drop-shadow-big'])} />
+      <Avatar
+        uri={user.avatarUri}
+        className={cs(style.avatar, effects['drop-shadow-big'])}
+      />
       <div className={cs(style.infos)}>
         {user.id && <small className={cs(colors['gray-light'])}>
           <a href={ 'https://tzkt.io/'+ user.id } className={cs(style.tz_link)}>
@@ -39,7 +42,11 @@ export function UserHeader({ user }: Props) {
           </a>
         </small>}
 
-        <h1 className={cs(style.name, { [style.moderator]: isPlatformOwned(user) })}>
+        <h1 
+          className={cs(style.name, { 
+            [style.moderator]: isPlatformOwned(user) 
+          })}
+        >
           <span>{ getUserName(user) }</span>
           {verified && (
             <HoverTitle

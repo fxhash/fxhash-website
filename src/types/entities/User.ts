@@ -62,6 +62,7 @@ export interface User {
   preventLink?: boolean
   // as a regular user, it can have collaboration contracts
   collaborationContracts: Collaboration[]
+  moderationReason?: string|null
 }
 
 export interface ConnectedUser extends Partial<User> {

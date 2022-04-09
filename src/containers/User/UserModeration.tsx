@@ -2,13 +2,16 @@ import cs from "classnames"
 import style from "./UserModeration.module.scss"
 import layout from "../../styles/Layout.module.scss"
 import { Button } from "../../components/Button"
-import { User } from "../../types/entities/User"
+import { User, UserFlag, UserFlagValues } from "../../types/entities/User"
 import { isUserModerator } from "../../utils/user"
 import { useContext, useState } from "react"
 import { UserContext } from "../UserProvider"
 import { useContractCall } from "../../utils/hookts"
 import { ContractFeedback } from "../../components/Feedback/ContractFeedback"
 import { UserModerationModal } from "./UserModerationModal"
+import { ModerationModal } from "../../components/Moderation/Modal/ModerationModal"
+import { useContractOperation } from "../../hooks/useContractOperation"
+import { ModerateOperation } from "../../services/contract-operations/Moderate"
 
 interface Props {
   user: User
@@ -21,22 +24,38 @@ export function UserModeration({
   
   const [moderateModal, setModerateModal] = useState<boolean>(false)
 
-  const { state: verifyCallState, loading: verifyLoading, success: verifySuccess, call: callVerify, error: verifyError } = 
-    useContractCall<string>(userCtx.walletManager!.verifyUser)
-
-  const { state: banCallState, loading: banLoading, success: banSuccess, call: callBan, error: banError } = 
-    useContractCall<string>(userCtx.walletManager!.banUser)
+  const { 
+    state, 
+    loading, 
+    success, 
+    call, 
+    error
+  } = useContractOperation(ModerateOperation)
 
   return (
     isUserModerator(userConnected as User) ? (
       <>
         {moderateModal && (
-          <UserModerationModal
-            user={user}
+          <ModerationModal
+            entityId={user.id}
+            moderationContract="user"
+            title="Moderate user account"
+            infoText="You can moderate the tezos address associated with the account. It can restrict some contract features."
+            flags={Object.keys(UserFlag).map((flag, idx) => ({
+              label: flag,
+              value: UserFlagValues[flag as UserFlag]
+            }))}
             onClose={() => setModerateModal(false)}
           />
         )}
         <div>
+          <ContractFeedback
+            state={state}
+            loading={loading}
+            success={success}
+            error={error}
+            className={cs(style.contract_feedback)}
+          />
           <div className={cs(layout.buttons_inline)}>
             <Button
               type="button"
@@ -50,8 +69,14 @@ export function UserModeration({
               type="button"
               size="small"
               color="secondary"
-              state={verifyLoading ? "loading" : "default"}
-              onClick={() => callVerify(user.id)}
+              onClick={() => {
+                call({
+                  entityId: user.id,
+                  reason: -1,
+                  state: UserFlagValues[UserFlag.VERIFIED],
+                  contract: "user"
+                })
+              }}
             >
               verify
             </Button>
@@ -59,30 +84,18 @@ export function UserModeration({
               type="button"
               size="small"
               color="primary"
-              state={banLoading ? "loading" : "default"}
-              onClick={() => callBan(user.id)}
+              onClick={() => {
+                call({
+                  entityId: user.id,
+                  reason: -1,
+                  state: UserFlagValues[UserFlag.MALICIOUS],
+                  contract: "user"
+                })
+              }}
             >
               ban
             </Button>
           </div>
-
-          <ContractFeedback
-            state={verifyCallState}
-            loading={verifyLoading}
-            success={verifySuccess}
-            error={verifyError}
-            successMessage="User is now verified"
-            className={cs(style.contract_feedback)}
-          />
-
-          <ContractFeedback
-            state={banCallState}
-            loading={banLoading}
-            success={banSuccess}
-            error={banError}
-            successMessage="User is now banned"
-            className={cs(style.contract_feedback)}
-          />
         </div>
       </>
     ):null
