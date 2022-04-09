@@ -110,6 +110,7 @@ export interface GenerativeToken {
   marketStats?: GenerativeTokenMarketStats
   marketStatsHistory?: GenerativeTokenMarketStatsHistory[]
   features?: GenerativeTokenFeature[]
+  moderationReason?: string|null
 }
 
 export interface GenerativeTokenWithCollection extends GenerativeToken {

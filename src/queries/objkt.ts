@@ -30,6 +30,7 @@ export const Qu_objkt = gql`
         id
         name
         flag
+        moderationReason
         slug
         labels
         generativeUri

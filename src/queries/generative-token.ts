@@ -13,6 +13,7 @@ export const Qu_genToken = gql`
       id
       name
       flag
+      moderationReason
       slug
       tags
       labels

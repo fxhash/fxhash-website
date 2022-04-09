@@ -7,7 +7,7 @@ function getFlagText(flag: GenTokFlag): string {
     case GenTokFlag.AUTO_DETECT_COPY:
       return "The fxhash system has automatically flagged this token as a potential copymint. The moderation team has not yet stated if it respects the Guidelines of the platform. Please wait until a decision is taken."
     case GenTokFlag.MALICIOUS:
-      return "This token was flagged as undesirable content. It means that it doesn't follow the guidelines of the platform (copyminting, stolen content, hateful content...). The moderation team took the decision to flag this content as undesirable."
+      return "This token was flagged as undesirable content by the moderation team."
     case GenTokFlag.HIDDEN:
       return "This token was hidden, not because it doesn't follow the rules of fxhash but because an incident happened when it was released (duplicate for instance). Please consider it as non-existing."
     case GenTokFlag.REPORTED:
@@ -22,12 +22,22 @@ interface Props {
 export function GenerativeFlagBanner({
   token
 }: Props) {
-  const flagged = [GenTokFlag.AUTO_DETECT_COPY, GenTokFlag.MALICIOUS, GenTokFlag.REPORTED, GenTokFlag.HIDDEN].includes(token.flag)
+  const flagged = [
+    GenTokFlag.AUTO_DETECT_COPY,
+    GenTokFlag.MALICIOUS,
+    GenTokFlag.REPORTED,
+    GenTokFlag.HIDDEN,
+  ].includes(token.flag)
 
   return flagged ? (
     <FlagBanner>
       <h4>Warning ! This Generative Token has been flagged</h4>
       <p>{ getFlagText(token.flag) }</p>
+      {token.moderationReason && (
+        <span>
+          <strong>Reason</strong>: {token.moderationReason}
+        </span>
+      )}
     </FlagBanner>
   ):null
 }
