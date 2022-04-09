@@ -8,6 +8,10 @@ import { ListSplits } from "../../components/List/ListSplits"
 import { Spacing } from "../../components/Layout/Spacing"
 import { DisplayTezos } from "../../components/Display/DisplayTezos"
 import { LinkIcon } from "../../components/Link/LinkIcon"
+import { Button } from "../../components/Button"
+import { useContractOperation } from "../../hooks/useContractOperation"
+import { CollabWithdrawOperation } from "../../services/contract-operations/CollabWithdraw"
+import { ContractFeedback } from "../../components/Feedback/ContractFeedback"
 
 interface Props {
   collaboration: Collaboration
@@ -28,6 +32,15 @@ export function CollaborationInformations({
     }))
   }, [state, collaboration])
 
+  // withdraw funds op
+  const {
+    state: callState,
+    loading,
+    success,
+    error,
+    call,
+  } = useContractOperation(CollabWithdrawOperation)
+
   return (
     <div>
       <h5>Additionnal information</h5>
@@ -45,18 +58,40 @@ export function CollaborationInformations({
         >
           {collaboration.id}
         </LinkIcon>
+        <ListSplits
+          name="Shares"
+          splits={splits}
+          toggled
+        />
         <strong>Contract balance</strong>
         <DisplayTezos
           mutez={state.balance!}
           formatBig={false}
           tezosSize="regular"
         />
-        <ListSplits
-          name="Shares"
-          splits={splits}
-          toggled
-        />
       </div>
+      
+      <Spacing size="regular"/>
+      <ContractFeedback
+        state={callState}
+        loading={loading}
+        success={success}
+        error={error}
+        successMessage="Balance withdrawn !"
+      />
+      <Button
+        type="button"
+        size="small"
+        disabled={state.balance! === 0}
+        state={loading ? "loading" : "default"}
+        onClick={() => {
+          call({
+            collaboration
+          })
+        }}
+      >
+        withdraw funds (split with shares)
+      </Button>
     </div>
   )
 }
