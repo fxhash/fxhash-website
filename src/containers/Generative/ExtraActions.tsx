@@ -1,6 +1,7 @@
 import style from "./ExtraActions.module.scss"
 import cs from "classnames"
 import colors from "../../styles/Colors.module.css"
+import text from "../../styles/Text.module.css"
 import { Dropdown } from "../../components/Navigation/Dropdown"
 import { useContext, useState } from "react"
 import { Modal } from "../../components/Utils/Modal"
@@ -16,6 +17,9 @@ import { Field } from "../../components/Form/Field"
 import { Spacing } from "../../components/Layout/Spacing"
 import { isTokenModerator } from "../../utils/user"
 import { User } from "../../types/entities/User"
+import Link from "next/link"
+import { InputModerationReason } from "../../components/Input/InputModerationReason"
+import { ModerationModal } from "../../components/Moderation/Modal/ModerationModal"
 
 
 function OpenButton() {
@@ -35,25 +39,13 @@ export function GenerativeExtraActions({
   
   const [reportModal, setReportModal] = useState<boolean>(false)
   const [moderateModal, setModerateModal] = useState<boolean>(false)
-  const [moderateVal, setModerateVal] = useState<number>(0)
 
   const { state: callState, loading: contractLoading, success, call, error: contractError } = 
     useContractCall<ReportCall>(userCtx.walletManager!.report)
 
-  const { state: callStateMod, loading: contractLoadingMod, success: successMod, call: callMod, error: contractErrorMod } = 
-    useContractCall<ModerateCall>(userCtx.walletManager!.moderateToken)
-
   const report = () => {
     call({
       tokenId: token.id
-    })
-  }
-
-  const moderate = (evt: any) => {
-    evt.preventDefault()
-    callMod({
-      tokenId: token.id,
-      state: moderateVal
     })
   }
 
@@ -102,47 +94,18 @@ export function GenerativeExtraActions({
       )}
 
       {moderateModal && (
-        <Modal
+        <ModerationModal
+          entityId={token.id}
+          moderationContract="token"
+          flags={Object.keys(GenTokFlag).map((flag, idx) => ({
+            label: flag,
+            value: idx
+          }))}
           title="Manual moderation of a Token"
+          infoText='With this utility you can force the moderation of a Generative Token. This action can be reversed at any point in time. In case of a doubt, setting the flag "REPORTED" will put the Token in the "Awaiting Moderation" list for further deliberation.'
+          infoState='If set to "malicious", will prevent minting on-chain'
           onClose={() => setModerateModal(false)}
-        >
-          <p>
-            With this utility you can force the moderation of a Generative Token. This action can be reversed at any point in time. In case of a doubt, setting the flag "REPORTED" will put the Token in the "Awaiting Moderation" list for further deliberation.
-          </p>
-
-          <div className={cs(style.reports_bottom)}>
-            <ContractFeedback
-              state={callStateMod}
-              loading={contractLoadingMod}
-              success={successMod}
-              error={contractErrorMod}
-              successMessage="Token was moderated !"
-            />
-
-            <div className={cs(style.report_btns)}>
-              <Form onSubmit={moderate}>
-                <Field>
-                  <Select
-                    value={moderateVal}
-                    onChange={setModerateVal}
-                    options={Object.keys(GenTokFlag).map((flag, idx) => ({
-                      label: flag,
-                      value: idx
-                    }))}
-                  />
-                </Field>
-                <Spacing size="x-small"/>
-                <Button
-                  color="primary"
-                  size="regular"
-                  state={contractLoadingMod ? "loading" : "default"}
-                >
-                  moderate the token
-                </Button>
-              </Form>
-            </div>
-          </div>
-        </Modal>
+        />
       )}
 
       <div className={cs(style.container)}>

@@ -4,7 +4,7 @@ import { Cover } from "./Cover"
 import { PropsWithChildren } from "react"
 import effects from "../../styles/Effects.module.scss"
 
-interface Props {
+export interface Props {
   title: string
   onClose: () => void
   index?: number

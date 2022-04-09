@@ -22,7 +22,7 @@ export function UserGuard({
       if (!userCtx.user) {
         router.push(`/sync-redirect?target=${encodeURIComponent(router.asPath)}`)
       }
-      else if (allowed && !allowed(userCtx.user)) {
+      else if (userCtx.userFetched && allowed && !allowed(userCtx.user)) {
         router.push(`/`)
       }
     }

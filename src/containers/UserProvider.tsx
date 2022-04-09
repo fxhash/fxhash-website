@@ -9,6 +9,7 @@ import { useClientAsyncEffect, useClientEffect } from "../utils/hookts"
 interface UserContextType {
   autoConnectChecked: boolean
   user: ConnectedUser|null
+  userFetched: boolean
   walletManager: WalletManager|null
   connect: () => Promise<void>
   disconnect: () => void
@@ -17,6 +18,7 @@ interface UserContextType {
 const defaultCtx: UserContextType = {
   autoConnectChecked: false,
   user: null,
+  userFetched: false,
   walletManager: null,
   connect: () => new Promise(r => r()),
   disconnect: () => {}
@@ -43,7 +45,8 @@ export function UserProvider({ children }: PropsWithChildren<{}>) {
     if (userData && userData.user) {
       setContext({
         ...context,
-        user: userData.user
+        user: userData.user,
+        userFetched: true,
       })
     }
   }, [userData])
