@@ -57,6 +57,8 @@ export const Qu_userGenTokens = gql`
         balance
         name
         thumbnailUri
+        labels
+        lockEnd
         ...Author
         ...Pricing
       }
