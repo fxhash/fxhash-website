@@ -20,6 +20,7 @@ export function InputReserveWhitelist({
         textShares="Nb of editions"
         defaultShares={1}
         sharesTransformer={transformSplitsAccessList}
+        showPercentages={false}
       />
     </div>
   )

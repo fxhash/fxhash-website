@@ -47,10 +47,13 @@ export function displayRoyalties(royalties: number): string {
 /**
  * Given a number in the [0; 1] range, displays the percentage in an elegant manner
  */
-export function displayPercentage(x: number): string {
+export function displayPercentage(
+  x: number,
+  prettifyLow: boolean = true,
+): string {
   const x100 = x * 100
   // if x100 < precision, return like it
-  if (x100 < 0.0001) return "< 0.0001"
+  if (x100 < 0.0001 && prettifyLow) return "< 0.0001"
 
   let fixed = x100.toFixed(1)
   // check if right part is made of 0's only

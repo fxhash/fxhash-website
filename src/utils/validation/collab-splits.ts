@@ -11,12 +11,25 @@ export const validateCollabSplits: TValidationFunction<ISplit[]> = (splits) => {
   }
 
   for (const split of splits) {
-    if (split.pct < 100) {
+    const N = parseFloat(split.pct as any)
+    if (isNaN(N)) {
       errors.push(
-        `Individual shares must be over 100 (wrong: ${split.pct})`
+        `"${split.pct}" is not a valid number`
       )
       break
     }
+    if (N%1 > 0) {
+      errors.push(
+        `Only integer number are accepted. Wrong: ${split.pct}`
+      )
+    }
+  }
+
+  const S = splits.reduce((a, b) => a + parseFloat(b.pct as any), 0)
+  if (S < 1) {
+    errors.push(
+      `The sum of the shares must be >= 1 (current: ${S})`
+    )
   }
 
   return {

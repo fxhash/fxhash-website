@@ -3,7 +3,7 @@ import text from "../../styles/Text.module.css"
 import cs from "classnames"
 import { ISplit } from "../../types/entities/Split"
 import { InputSearchUser } from "./InputSearchUser"
-import { FunctionComponent, useState } from "react"
+import { FunctionComponent, useMemo, useState } from "react"
 import { isTezosAddress } from "../../utils/strings"
 import { Button } from "../Button"
 import { Spacing } from "../Layout/Spacing"
@@ -13,6 +13,7 @@ import { InputText } from "./InputText"
 import { transformSplitsEqual, TSplitsTransformer } from "../../utils/transformers/splits"
 import { ButtonDelete } from "../Button/ButtonDelete"
 import { FormikErrors } from "formik"
+import { displayPercentage } from "../../utils/units"
 
 
 interface PropsChildren {
@@ -26,6 +27,7 @@ interface Props {
   sharesTransformer?: TSplitsTransformer
   textShares?: string
   defaultShares?: number
+  showPercentages?: boolean
   errors?: FormikErrors<ISplit[]>
   children?: FunctionComponent<PropsChildren>
 }
@@ -42,11 +44,21 @@ export function InputSplits({
   sharesTransformer = transformSplitsEqual,
   textShares = "Shares",
   defaultShares = 0,
+  showPercentages = true,
   errors,
   children,
 }: Props) {
   // the pkh of the input
   const [pkh, setPkh] = useState<string>("")
+
+  // compute the sum of the shares
+  const sum = useMemo<number|false>(
+    () => {
+      const S = value.reduce((a, b) => a + parseInt(b.pct as any), 0)
+      return isNaN(S) ? false : S
+    },
+    [value]
+  )
 
   // updates the split and forces the shares to match, if defined
   const update = (splits: ISplit[]) => {
@@ -104,7 +116,10 @@ export function InputSplits({
             <td className={cs(style.share_cell)}>
               {value.length > 0 ? textShares: ""}
             </td>
-            <td></td>
+            {showPercentages && (
+              <td>Equivalent in %</td>
+            )}
+            <td width={107}></td>
           </tr>
         </thead>
         <tbody>
@@ -146,6 +161,15 @@ export function InputSplits({
                     </span>
                   )}
                 </td>
+                {showPercentages && (
+                  <td className={cs(style.percentage)}>
+                    {sum === false ? (
+                      "/"
+                    ):(
+                      displayPercentage(parseInt(split.pct as any)/sum, false) + "%"
+                    )}
+                  </td>
+                )}
                 <td width={107}>
                   {!unremoveableAddresses.includes(split.address) && (
                     <ButtonDelete
@@ -158,7 +182,7 @@ export function InputSplits({
           })}
 
           <tr>
-            <td className={cs(style.input_cell)} colSpan={3}>
+            <td className={cs(style.input_cell)} colSpan={4}>
               <div className={cs(style.add_container)}>
                 <InputSearchUser
                   value={pkh}
@@ -189,7 +213,7 @@ export function InputSplits({
 
           {children && (
             <tr>
-              <td colSpan={3}>
+              <td colSpan={4}>
                 {children({ addAddress })}
               </td>
             </tr>

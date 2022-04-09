@@ -18,6 +18,7 @@ import { ContractFeedback } from "../../components/Feedback/ContractFeedback"
 import { useValidate } from "../../hooks/useValidate"
 import { validateCollabSplits } from "../../utils/validation/collab-splits"
 import useAsyncEffect from "use-async-effect"
+import { transformSplitsAccessList } from "../../utils/transformers/splits"
 
 interface Props {
   onCreate?: (collab: Collaboration) => void
@@ -35,12 +36,13 @@ export function CollaborationCreate({
   // the initial collaborators is set to current user
   const [splits, setSplits] = useState<ISplit[]>([{
     address: userCtx.user!.id,
-    pct: 1000,
+    pct: 1,
   }])
   // deferrer validation
   const { errors, validate } = useValidate(splits, validateCollabSplits)
 
-  const { call, state, error, success, loading, clear, operation } = useContractOperation<TCreateCollabParams>(CreateCollabOperation)
+  const { call, state, error, success, loading, clear, operation } 
+  = useContractOperation<TCreateCollabParams>(CreateCollabOperation)
 
   const createCollab = () => {
     clear()
@@ -118,6 +120,8 @@ export function CollaborationCreate({
               value={splits}
               onChange={setSplits}
               unremoveableAddresses={[userCtx.user!.id]}
+              sharesTransformer={transformSplitsAccessList}
+              defaultShares={1}
             />
           </div>
 
