@@ -50,7 +50,11 @@ const CollaborationIndex: NextPage<Props> = ({
         <Spacing size="6x-large"/>
 
         <ClientOnly>
-          <UserGuard>
+          <UserGuard
+            allowed={
+              user => !!collaboration.collaborators.find(c => c.id === user.id)
+            }
+          >
             <CollaborationManager
               collaboration={collaboration}
             />
