@@ -1,40 +1,57 @@
-@import '../styles/Variables.scss';
+@import '../../styles/Variables.scss';
 
 .footer {
-  height: 20vw;
   background-color: black;
   color: var(--color-gray-dark);
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
   position: relative;
+  font-size: var(--font-size-small);
+  padding: 100px 0;
 
-  h1 {
-    color: var(--color-primary);
+  a {
+    color: var(--color-gray);
+    font-weight: normal;
+
+    &:hover {
+      color: var(--color-secondary);
+    }
   }
 }
 
 .content {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 50px;
 }
 
-.details {
+.links {
   display: flex;
-  font-weight: bold;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+
+  a {
+    padding: 4px;
+  }
+}
+
+.logo_wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
 }
 
 .socials {
   & > *+* {
-    margin-left: 5px;
+    margin-left: 10px;
   }
+
   a {
-    font-size: 20px;
+    font-size: 16px;
     transition: all 0.2s ease-out;
-    color: var(--color-grey-dark);
+    color: var(--color-grey);
 
     &:hover {
       color: var(--color-secondary);
@@ -52,23 +69,7 @@
 }
 
 @media (max-width: $breakpoint-md) {
-  .footer {
-    height: auto;
-    text-align: center;
-    padding: 50px 0 70px;
-  }
-
-  .details {
-    flex-direction: column;
-    gap: 20px;
-  }
-
-  .socials {
-    & > *+* {
-      margin-left: 15px;
-    }
-    a {
-      font-size: 32px;
-    }
+  .content {
+    flex-direction: column-reverse;
   }
 }

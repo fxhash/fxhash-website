@@ -1,7 +1,7 @@
 import Head from "next/head"
 import style from "./Layout.module.scss"
 import { PropsWithChildren } from "react"
-import { Footer } from "./Footer"
+import { Footer } from "../containers/Footer/Footer"
 import { Header } from "./Header"
 import { Warning } from "./Layout/Warning"
 

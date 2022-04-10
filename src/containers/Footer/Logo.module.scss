@@ -1,0 +1,13 @@
+.root {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  color: white;
+  font-weight: bold;
+
+  img {
+    margin-right: 12px;
+    width: 32px;
+    height: 32px;
+  }
+}
