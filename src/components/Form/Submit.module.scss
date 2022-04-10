@@ -1,3 +1,9 @@
 .root {
   margin-top: 2em;
+  display: flex;
+  justify-content: flex-start;
+
+  &.layout_center {
+    justify-content: center;
+  }
 }

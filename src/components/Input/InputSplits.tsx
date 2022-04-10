@@ -14,10 +14,13 @@ import { transformSplitsEqual, TSplitsTransformer } from "../../utils/transforme
 import { ButtonDelete } from "../Button/ButtonDelete"
 import { FormikErrors } from "formik"
 import { displayPercentage } from "../../utils/units"
+import { cloneDeep } from "@apollo/client/utilities"
 
 
 interface PropsChildren {
   addAddress: (address: string) => void
+  addAddresses: (addresses: string[]) => void
+  addSplits: (splits: ISplit[]) => void
 }
 
 interface Props {
@@ -76,6 +79,30 @@ export function InputSplits({
         pct: defaultShares,
       }
     ])
+  }
+
+  const addAddresses = (addresses: string[]) => {
+    update([
+      ...value,
+      ...addresses.map(address => ({
+        address,
+        pct: defaultShares,
+      }))
+    ])
+  }
+
+  const addSplits = (splits: ISplit[]) => {
+    const nsplits = cloneDeep(value)
+    for (const split of splits) {
+      const F = nsplits.find(s => s.address === split.address)
+      if (F) {
+        F.pct += split.pct
+      }
+      else {
+        nsplits.push(split)
+      }
+    }
+    onChange(nsplits)
   }
 
   const add = (address?: string) => {
@@ -214,7 +241,11 @@ export function InputSplits({
           {children && (
             <tr>
               <td colSpan={4}>
-                {children({ addAddress })}
+                {children({ 
+                  addAddress, 
+                  addAddresses,
+                  addSplits,
+                })}
               </td>
             </tr>
           )}

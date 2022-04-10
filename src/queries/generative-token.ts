@@ -126,3 +126,17 @@ export const Qu_genTokenMarketHistory = gql`
     }
   }
 `
+
+export const Qu_genTokOwners = gql`
+  query GetGenTokOwners($filters: GenerativeTokenFilter) {
+    generativeTokens(filters: $filters) {
+      id
+      entireCollection {
+        owner {
+          id
+          name
+        }
+      }
+    }
+  }
+`

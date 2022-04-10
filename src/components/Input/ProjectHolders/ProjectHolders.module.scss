@@ -1,0 +1,30 @@
+.multi_wrapper {
+  max-height: 250px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border: 3px solid var(--color-border-input);
+}
+
+.project {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  height: 30px;
+  align-items: center;
+  font-size: var(--font-size-small);
+
+  img {
+    width: 30px;
+    height: 30px;
+  }
+
+  &.selected {
+    img {
+      outline: 2px solid var(--color-secondary);
+    }
+  }
+}
+
+.modal {
+  width: 800px;
+}

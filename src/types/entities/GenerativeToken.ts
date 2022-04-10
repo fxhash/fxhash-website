@@ -111,6 +111,7 @@ export interface GenerativeToken {
   marketStatsHistory?: GenerativeTokenMarketStatsHistory[]
   features?: GenerativeTokenFeature[]
   moderationReason?: string|null
+  entireCollection?: Objkt[]
 }
 
 export interface GenerativeTokenWithCollection extends GenerativeToken {
