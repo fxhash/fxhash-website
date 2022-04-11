@@ -21,7 +21,7 @@ export function cacheMergePaginatedField(
 ): any[] {
   // shallow copy existing array
   const merged = [...existing]
-  const { skip } = args
+  const { skip } = args || { skip: 0 }
   let j = 0
   mainLoop: for (let i = 0; i < incoming.length; ++i) {
     // we check for duplicates in the existing cache
