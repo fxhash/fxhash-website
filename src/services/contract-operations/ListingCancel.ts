@@ -1,4 +1,5 @@
-import { OpKind, WalletOperation } from "@taquito/taquito"
+import { ContractAbstraction, OpKind, Wallet, WalletOperation } from "@taquito/taquito"
+import { FxhashContracts } from "../../types/Contracts"
 import { Listing } from "../../types/entities/Listing"
 import { Objkt } from "../../types/entities/Objkt"
 import { getListingCancelEp, getListingFA2Contract } from "../../utils/listing"
@@ -15,30 +16,20 @@ export type TListingCancelOperationParams = {
  * List a gentk on the Marketplace
  */
 export class ListingCancelOperation extends ContractOperation<TListingCancelOperationParams> {
-  async prepare() {}
+  contract: ContractAbstraction<Wallet>|null = null
+  ep: string = ""
+
+  async prepare() {
+    this.contract = await this.manager.getContract(
+      getListingFA2Contract(this.params.listing)
+    )
+    this.ep = getListingCancelEp(this.params.listing)
+  }
 
   async call(): Promise<WalletOperation> {
-    const listingCancelParams = buildParameters<TInputListingCancel>(
-      this.params.listing.id, 
-      EBuildableParams.LISTING_CANCEL
-    )
-
-    return this.manager.tezosToolkit.wallet.batch() 
-      .with([
-        {
-          kind: OpKind.TRANSACTION,
-          to: getListingFA2Contract(this.params.listing),
-          fee: 1500,
-          amount: 0,
-          parameter: {
-            entrypoint: getListingCancelEp(this.params.listing),
-            value: listingCancelParams,
-          },
-          gasLimit: 10000,
-          storageLimit: 0,
-        },
-      ])
-      .send()
+    return this.contract!.methodsObject[this.ep](
+      this.params.listing.id
+    ).send()
   }
 
   success(): string {
