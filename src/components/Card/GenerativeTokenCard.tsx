@@ -37,12 +37,17 @@ export function GenerativeTokenCard({
         <Card
           thumbnailUri={token.thumbnailUri}
           displayDetails={displayDetails}
-          thumbInfosComp={token.labels?.includes(GenTokLabel.ANIMATED) && 
+          thumbInfosComp={token.labels?.includes(GenTokLabel.INTERACTIVE) ? (
+            <div className={cs(style.animated)}>
+              Interactive{" "}
+              <i className="fa-solid fa-hand-pointer" aria-hidden/>
+            </div>
+          ):token.labels?.includes(GenTokLabel.ANIMATED) && (
             <div className={cs(style.animated)}>
               Animated{" "}
               <i className="fa-solid fa-film" aria-hidden/>
             </div>
-          }
+          )}
         >
           <div>
             <h5>{ token.name }</h5>
