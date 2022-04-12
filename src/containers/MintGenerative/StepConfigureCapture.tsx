@@ -115,7 +115,7 @@ export const StepConfigureCapture: StepComponent = ({ onNext, state }) => {
       <p>
         When collectors will <strong>mint a token from your Generative Token</strong>, fxhash will generate a preview image to go with their Token. <br/>
         You need to configure how this preview will be taken by fxhash capture module.<br/>
-        Read more about the different <LinkGuide href="/articles/guide-mint-generative-token#configure-capture-settings" newTab={true}>capture strategies in the guide</LinkGuide>
+        Read more about the different <LinkGuide href="/doc/artist/capture-settings" newTab={true}>capture strategies in the guide</LinkGuide>
       </p>
 
       <Spacing size="5x-large"/>

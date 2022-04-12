@@ -1,7 +1,6 @@
 // import style from "./Pricing.module.scss"
 import cs from "classnames"
 import { FormikErrors } from "formik"
-import { useState } from "react"
 import { Field } from "../../components/Form/Field"
 import { Fieldset } from "../../components/Form/Fieldset"
 import { InputRadioBtnIcon } from "../../components/Input/InputRadioBtnIcon"

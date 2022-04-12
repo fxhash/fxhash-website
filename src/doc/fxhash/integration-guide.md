@@ -11,12 +11,35 @@ description: 'An integration guide of different fxhash components for the develo
 
 # Scope of the guide
 
-This guide provides informations on how to integrate some of the components of fxhash into any external application. First of all, this guide currently targets the beta version, and so some informations might change as some components are updated. Because we want to encourage the development of ecosystems around applications in the decentralized world, we think applications should provide resources to developers in order to facilitate those integrations. This guide will point you to tools and cover best practices. This guide will always describe the integration for the latest version, but as it will get updated you will find thoses updates at the end of the article, if needed.
+This guide provides informations on how to integrate some of the components of fxhash into any external application. Because we want to encourage the development of ecosystems around applications in the decentralized web, we think applications should provide resources for developers in order to facilitate those integrations. This guide will point you to tools and cover best practices. It will always describe the integration for the latest version, but as it will get updated you will find thoses updates at the end of the article, if needed.
+
+
+# Fxhash contracts
+
+These are the addresses of the contracts actively being used by fxhash:
+
+| ID | Address | Description |
+| --- | --- | --- |
+| issuer | `{{process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_ISSUER}}` | Generative Tokens - stores the projects & main entrypoint to mint NFTs |
+| gentk_v1 | `{{process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_GENTK_V1}}` | FA2 NFTs, beta tokens |
+| gentk_v2 | `{{process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_GENTK_V2}}` | FA2 NFTs, tokens since fxhash 1.0 |
+| marketplace_v1 | `{{process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_MARKETPLACE_V1}}` | The beta marketplace contract, still indexed but no more listings are made through this contract. Shouldn't be used anymore, soon to be deprecated. |
+| marketplace_v2 | `{{process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_MARKETPLACE_V2}}` | The marketplace contact since fxhash 1.0 |
+| user_register | `{{process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_USERREGISTER}}` | Used to store user name & user profile |
+| moderation_team | `{{process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_TEAM_MODERATION}}` | Controls which tezos addresses have special rights on fxhash contracts |
+| moderation_token | `{{process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_TOK_MODERATION}}` | Can be used by moderation to assign a flag to a token |
+| moderation_user | `{{process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_USER_MODERATION}}` | Can be used by moderation to assign a flag to a user |
+| cycles | `{{process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_CYCLES}}` | Defines cycles, used by issuer to control open/close state |
+| collab_factory | `{{process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_COLLAB_FACTORY}}` | The contract which can be used to originate collaboration contracts |
+
+The most complex yet versatile way to query the contracts data is to use the [public tzkt api](https://api.tzkt.io/). Recommended only for experienced users. If you want to quickly build an app on top of fxhash, we recommend using our public API.
+
+We realize that it has become difficult to index our contracts, so if you have any issues we would love your feedback to create a better integration guide for the next people who will need it: [discord](https://discord.gg/fxhash) (channel `#3rd-party-integration`). We're sorry about this, but fxhash was released as a test project a few month ago and we had to develop the platform while maintaining the existing contracts in the best way we could. This is our best solution for a transition to our version 1.0.
 
 
 # Using the open GraphQL API
 
-fxhash exposes a public GraphQL API (*the API will be open sourced in the upcoming days*). The API is exposed under the following URL: [https://api.fxhash.xyz/graphql](https://api.fxhash.xyz/graphql). You can interact with the API by sending HTTP POST requests complying to the GraphQL specifications. This is a very easy and flexible way to get only the data you need. This article briefly explains how to interact with the GraphQL APIs using HTTP requests: [https://graphql.org/graphql-js/graphql-clients/](https://graphql.org/graphql-js/graphql-clients/).
+fxhash exposes a public GraphQL API. The API is exposed under the following URL: `https://api.fxhash.xyz/graphql`. You can interact with the API by sending HTTP POST requests complying to the GraphQL specifications. This is a very easy and flexible way to get only the data you need. This article briefly explains how to interact with the GraphQL APIs using HTTP requests: [https://graphql.org/graphql-js/graphql-clients/](https://graphql.org/graphql-js/graphql-clients/).
 
 ## Tooling
 
@@ -31,9 +54,9 @@ The API enables [introspection](https://graphql.org/learn/introspection/), which
 
 ## Best practices
 
-Try to compose your queries to only request the data you need. Each extra byte might not seem to have a huge impact individually, but when operating at a large scale it can quickly become a huge overload for the application and worsen the experience of all the users. If we all make the efforts to optimize the queries, we can reduce this load and improve the experience for all the community.
+Try to compose your queries to only request the data you need. Each extra byte might not seem to have a huge impact individually, but when operating at a large scale it can quickly become a huge overload for the application and worsen the experience of all the users. We try to provide the best infrastructure we can, but if we all make the efforts to optimize the queries, we can reduce this load and improve the experience for all the community (and eventually our costs).
 
-Also, try to think in terms of **query cost**. For instance, if your application needs to run lots of queries, and if those queries seem to be slow (+800ms), it's quite possible that they could be optimised. Check if other endpoints can provide the same informations using pagination for instance. Ultimately, feel free to reach out on [discord](https://discord.gg/wzqxfdCKCC) (channel `#3rd-party-integration`) if you encounter any issue / want to report a problem.
+Also, try to think in terms of **query cost**. For instance, if your application needs to run lots of queries, and if those queries seem to be slow (+800ms), it's quite possible that they could be optimised. Check if other endpoints can provide the same informations using pagination for instance. Ultimately, feel free to reach out on [discord](https://discord.gg/fxhash) (channel `#3rd-party-integration`) if you encounter any issue / want to report a problem.
 
 
 # Integrating fxhash resources
@@ -167,20 +190,6 @@ export function gentkLiveDisplayUrl(uri) {
 * The thumbnails are 300x300 png images. They should be used instead of the HQ preview if possible, to reduce the cost of the gateway.
 
 
-# Inspecting the contracts directly
-
-If the solutions provided above don't meet your needs, you can use other tools to inspect the contract's data with as much control as you need (for instance general-purpose public APIs such as [tzkt](https://api.tzkt.io/)).
-
-These are the addresses of the smart contracts used by fxhash
-
-* `issuer` (Generative Tokens): KT1XCoGnfupWk7Sp8536EfrxcP73LmT68Nyr
-* `gentks` (FA2 implementation): KT1KEa8z6vWXDJrVqtMrAeDVzsvxat3kHaCE
-* `marketplace`: KT1Xo5B7PNBAeynZPmca4bRh6LQow4og1Zb9
-* `user register`: KT1Ezht4PDKZri7aVppVGT4Jkw39sesaFnww
-* `token moderation`: KT1HgVuzNWVvnX16fahbV2LrnpwifYKoFMRd
-* `user moderation`: KT1TWWQ6FtLoosVfZgTKV2q68TMZaENhGm54
-* `cycles`: KT1ELEyZuzGXYafD2Gar6iegZN1YdQR3n3f5
-
 
 # About the moderation contracts
 
@@ -198,3 +207,43 @@ You can get some details on the moderation systems:
   - issuer: `KT1AEVuykWeuuFX7QkEAMNtffzwhe1Z98hJS` -> `KT1XCoGnfupWk7Sp8536EfrxcP73LmT68Nyr`
   - user moderation: `KT1CgsLyNpqFtNw3wdfGasQYZYfgsWSMJfGo` -> `KT1TWWQ6FtLoosVfZgTKV2q68TMZaENhGm54`
   - user moderation: `KT1BQqRn7u4p1Z1nkRsGEGp8Pc92ftVFqNMg` -> `KT1HgVuzNWVvnX16fahbV2LrnpwifYKoFMRd`
+
+
+## 16/04/2022 - Migration to fxhash 1.0
+
+The version 1.0 of fxhash comes with many updates, especially on the contract-side. To support these updates and start again from a solid state, the API was partially re-written. If you were using the API in your applications, there are high chances that you will need to rewrite the concerned parts.
+
+### API 
+
+This document covers the breaking changes made to the API: [https://github.com/fxhash/fxhash-api/blob/dev/CHANGELOG.md](https://github.com/fxhash/fxhash-api/blob/dev/CHANGELOG.md)
+
+If some of your queries which used to be working are still not working after you applied the changes, you can reach out on [discord](https://discord.gg/fxhash) (channel `#3rd-party-integration`). It's possible that we forgot to include those changes due to the amount of work that was required for transitionning to v1.0.
+
+### Contracts
+
+A new gentk contract was deployed, any new gentk will be minted to the new contract.
+
+The issuer contract was replaced by a new one, which implements many more features. The data from the previous issuer was transfered to the new one so that we can leverage a few of its new features to affect beta Generative Tokens.
+
+* issuer: `KT1XCoGnfupWk7Sp8536EfrxcP73LmT68Nyr` -> `{{process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_ISSUER}}`
+
+Prices are not defined on the issuer contract anymore, but on the pricing contracts. Each pricing method has its own Smart Contract, and if you want to index Generative Token prices, you will also need to index the pricing contracts.
+
+The new marketplace contract will now replace the marketplace_v1 contract. The name of the entry points was normalized to ease their integration. For listings, these are the 3 entry points concerned:
+
+* `listing`: create a listing
+* `listing_accept`: accept a listing
+* `listing_cancel`: cancel a listing
+
+The marketplace_v2 contract supports both the gentk_v1 and gentk_v2 contracts. When an entry point needs a reference to a gentk, it will ask for:
+
+```js
+{
+  id: 0, // the id of the token
+  version: 0 // the version, 0: gentk_v1, 1: gentk_v2
+}
+```
+
+**You should NOT create new listings on the marketplace_v1 contract, as we aim to deprecate it in the following months**.
+
+The `token_moderation` and `user_moderation` contracts were redeployed and the data was transfered from the previous contract. Not much changed but now those contracts supports moderation reasons to contextualize the actions taken by the moderators.

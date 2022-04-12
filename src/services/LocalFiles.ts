@@ -3,12 +3,15 @@ import path from "path"
 import matter from "gray-matter"
 import remarkToc from "remark-toc"
 import remarkParse from "remark-parse"
+import remarkGfm from "remark-gfm"
 import { unified } from "unified"
 import remarkRehype from "remark-rehype"
 import rehypeFormat from "rehype-format"
 import rehypeStringify from "rehype-stringify"
 import slug from "rehype-slug"
 import rehypeHighlight from "rehype-highlight"
+import { visit } from "unist-util-visit"
+import { retextEnvVariables } from "../utils/retext/retext-env"
 
 /**
  * The LocalFiles service provide a way to get the contents of the files on the local system
@@ -148,7 +151,9 @@ export async function getArticle(category: string, article: string) {
     // Use gray-matter to parse the post metadata section
     const matterResult = matter(fileContents)
     const processed = await unified()
+      .use(retextEnvVariables as any) 
       .use(remarkParse)
+      .use(remarkGfm)
       .use(remarkToc, {
         maxDepth: 1,
       })

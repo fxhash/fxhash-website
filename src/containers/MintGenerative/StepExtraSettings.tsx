@@ -19,6 +19,7 @@ import { Select } from "../../components/Input/Select"
 import { HashList } from "../../components/Utils/HashList"
 import { generateFxHash } from "../../utils/hash"
 import { ipfsUrlWithHash } from "../../utils/ipfs"
+import { LinkGuide } from "../../components/Link/LinkGuide"
 
 
 const initialSettings: Partial<GenTokenSettings> = {
@@ -115,6 +116,13 @@ export const StepExtraSettings: StepComponent = ({ state, onNext }) => {
       <p>These settings will help you define how much freedom users will have in exploring the variety of your Generative Token. When they land on the page of your Generative Token, a <strong>variations</strong> button can give them the ability to see more variations than the one you provided for the preview. These settings are independant from the random outputs collectors will generate when minting.</p>
 
       <p>If exploration is <strong>disabled</strong>, the variations buttons will be disabled on the Generative Token page.</p>
+
+      <LinkGuide
+        href="/doc/artist/explore-variation-settings"
+        newTab
+      >
+        read more on the explore variation settings
+      </LinkGuide>
 
       <Spacing size="x-large"/>
 

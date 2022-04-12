@@ -31,6 +31,7 @@ import { Fieldset } from "../../components/Form/Fieldset"
 import { InputReserves } from "../../components/Input/Reserves/InputReserves"
 import { LinkIcon } from "../../components/Link/LinkIcon"
 import { YupReserves } from "../../utils/yup/reserves"
+import { LinkGuide } from "../../components/Link/LinkGuide"
 
 
 const validation = Yup.object().shape({
@@ -121,6 +122,11 @@ export const StepDistribution: StepComponent = ({ state, onNext }) => {
     <div className={cs(style.container)}>
       <h5>How will your piece be sold</h5>
 
+      <Spacing size="3x-large"/>
+
+      <span>
+        Read more <LinkGuide href="/doc/artist/pricing-your-project" newTab>about pricing your project</LinkGuide>
+      </span>
       <Spacing size="3x-large"/>
 
       <Formik
@@ -251,16 +257,12 @@ export const StepDistribution: StepComponent = ({ state, onNext }) => {
               <span className={cs(text.info)}>
                 You can reserve a certain amount of editions using different constraints.<br/>
                 We recommend{" "}
-                <LinkIcon
-                  iconComp={
-                    <i aria-hidden className="fas fa-external-link-square"/>
-                  }
+                <LinkGuide
                   href="/doc/artist/reserves"
-                  iconSide="right"
                   newTab
                 >
                   reading the article about reserves
-                </LinkIcon>
+                </LinkGuide>
                 {" "}to use the feature properly.
               </span>
               <Spacing size="regular"/>

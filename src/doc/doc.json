@@ -12,6 +12,26 @@
           "link": "guide-publish-generative-token"
         },
         {
+          "title": "Collaborations",
+          "link": "collaborations"
+        },
+        {
+          "title": "Capture settings",
+          "link": "capture-settings"
+        },
+        {
+          "title": "Explore variation settings",
+          "link": "explore-variation-settings"
+        },
+        {
+          "title": "Pricing your project",
+          "link": "pricing-your-project"
+        },
+        {
+          "title": "Reserves",
+          "link": "reserves"
+        },
+        {
           "title": "Artist Code of conduct",
           "link": "code-of-conduct"
         }

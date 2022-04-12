@@ -20,6 +20,7 @@ import { LinkIcon } from "../../../components/Link/LinkIcon"
 import { InputReserves } from "../../../components/Input/Reserves/InputReserves"
 import { YupReserves } from "../../../utils/yup/reserves"
 import { UpdateReservesOperation } from "../../../services/contract-operations/UpdateReserve"
+import { LinkGuide } from "../../../components/Link/LinkGuide"
 
 
 interface Props {
@@ -98,16 +99,12 @@ export function EditReserves({
             <span className={cs(text.info)}>
               You can reserve a certain amount of editions using different constraints.<br/>
               We recommend{" "}
-              <LinkIcon
-                iconComp={
-                  <i aria-hidden className="fas fa-external-link-square"/>
-                }
-                href="/doc/artist/reserves"
-                iconSide="right"
+              <LinkGuide
+                href="/doc/artist/reserves#updating-a-reserve"
                 newTab
               >
                 reading how to update the reserves properly
-              </LinkIcon>
+              </LinkGuide>
             </span>
 
             <Spacing size="regular"/>

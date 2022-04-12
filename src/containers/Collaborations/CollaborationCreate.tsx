@@ -19,6 +19,7 @@ import { useValidate } from "../../hooks/useValidate"
 import { validateCollabSplits } from "../../utils/validation/collab-splits"
 import useAsyncEffect from "use-async-effect"
 import { transformSplitsAccessList } from "../../utils/transformers/splits"
+import { LinkGuide } from "../../components/Link/LinkGuide"
 
 interface Props {
   onCreate?: (collab: Collaboration) => void
@@ -102,7 +103,8 @@ export function CollaborationCreate({
           onClose={() => setShow(false)}
         >
           <em className={cs(style.desc)}>
-            This module lets you originate a new collaboration contract with other artists. A collaboration contract can be used to sign operations related to the creation/update of Generative Tokens as a group. Each collaborator will have to give their approval before an operation can be sent.
+            This module lets you originate a new collaboration contract with other artists.<br/>
+            Read more in <LinkGuide href="/doc/artist/collaborations" newTab>the documentation about collaborations</LinkGuide>
           </em>
 
           <Spacing size="regular"/>
@@ -146,6 +148,7 @@ export function CollaborationCreate({
             <Button
               type="button"
               color="secondary"
+              size="small"
               style={{ margin: "auto" }}
               onClick={createCollab}
               state={loading ? "loading" : "default"}
