@@ -9,7 +9,7 @@ export function validateCaptureTriggerSettings(settings: CaptureSettings): boole
   if (settings.triggerMode === CaptureTriggerMode.DELAY) {
     if (settings.delay == null) return false
     // check if the delay is valid
-    if (isNaN(settings.delay) || settings.delay < 0 || settings.delay > 40000) {
+    if (isNaN(settings.delay) || settings.delay < 0 || settings.delay > 300000) {
       return false
     }
   }
