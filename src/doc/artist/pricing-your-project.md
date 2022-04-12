@@ -45,6 +45,17 @@ Your project will only become mintable (even by yourself) on the 01/01/2100 at 0
 Once a Dutch Auction has started, **it cannot be updated anymore**, even after the reserve price is met. This is designed to ensure fairness for the collectors who commited when the auction was active.
 
 
+# Splitting the proceeds
+
+When publishing a project, you can define how the proceeds will be split on both the primary & secondary market.
+
+For the primary splits, it's automatically applied to any transaction made by collectors to mint their unique iteration.
+
+For the secondary splits, unique iterations will copy the current value on the issue and it will never change. So even if you change the secondary splits, it won't affect previously minted iterations. Only future ones.
+
+We recommend keeping the number of splits under 10, because otherwise it will make any transaction where the splits have to be distributed slightly more expensive for the initiator of the transaction.
+
+
 # Pricing recommendations
 
 If you are still lacking experience in selling your work on crypto platforms, we know that putting some value on it can be both challenging and emotionally demanding. As you will get more experience, it will become easier to find the right price. Not easy, but easier.
