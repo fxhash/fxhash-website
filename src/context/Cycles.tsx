@@ -37,15 +37,13 @@ export function CyclesProvider({ children }: PropsWithChildren<{}>) {
         closing: parseInt(update.content.value.closing_duration),
       }))
   
-      // get the storage of the issuer contract (to get the address of the mint_issuer allowed)
-      const issuerStorageData = await fetch(API_BLOCKCHAIN_CONTRACT_STORAGE(process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_ISSUER!))
-      const issuerStorage = await issuerStorageData.json()
       // get the storage of the mint_issuer_allowed contract (to get the IDs of the cycles opened)
-      const allowedStorageData = await fetch(API_BLOCKCHAIN_CONTRACT_STORAGE(issuerStorage.allowed_mint_issuer_contract))
+      const allowedStorageData = await fetch(
+        API_BLOCKCHAIN_CONTRACT_STORAGE(
+          process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_ALLOWED_MINT_ISSUER!
+        )
+      )
       const allowedStorage = await allowedStorageData.json()
-      
-      // TODO: remove forced cycles
-      // allowedStorage.cycle_ids = [ "31", "33" ]
 
       // finally get the active cycles
       const activeCycles = allowedStorage.cycle_ids.map((id: string) => cycles[parseInt(id)])

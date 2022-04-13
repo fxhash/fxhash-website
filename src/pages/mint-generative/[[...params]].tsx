@@ -10,6 +10,7 @@ import { UserGuard } from "../../components/Guards/UserGuard"
 import { MintGenerativeController } from "../../containers/MintGenerative/Controller"
 import { BrowserRouter as Router } from "react-router-dom"
 import { TitleHyphen } from "../../components/Layout/TitleHyphen"
+import { ContractsOpened } from "../../components/Utils/ContractsOpened"
 
 const MintGenerative: NextPage = () => {
   const anchorRef = useRef<HTMLElement>(null)
@@ -24,9 +25,13 @@ const MintGenerative: NextPage = () => {
 
       <Spacing size="6x-large"/>
 
+
       <section ref={anchorRef}>
         <SectionHeader>
           <TitleHyphen>mint a Generative Token</TitleHyphen>
+          <ClientOnly>
+            <ContractsOpened/>
+          </ClientOnly>
         </SectionHeader>
 
         <Spacing size="x-large"/>

@@ -5,9 +5,11 @@ import { distanceSecondsClamped } from "../../utils/time"
 
 interface Props {
   until: Date
+  onEnd?: () => void
 }
 export function Countdown({
   until,
+  onEnd,
 }: Props) {
   const [distanceSeconds, setDistanceSeconds] = useState<number>(
     distanceSecondsClamped(new Date(), until)
@@ -23,6 +25,7 @@ export function Countdown({
         setDistanceSeconds(D)
         if (D <= 0) {
           clearInterval(interval)
+          onEnd?.()
         }
       }
       else {

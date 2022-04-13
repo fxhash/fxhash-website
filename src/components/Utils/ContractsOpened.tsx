@@ -32,20 +32,22 @@ export function ContractsOpened() {
       ):(
         !cyclesState.opened ? (
           <div className={cs(style.state, style.state_closed)}>
-            <span>OPENS IN</span>
+            <span>Publishing new projects closed for </span>
             <span>
               <Countdown
                 until={cyclesState.nextOpening}
+                onEnd={onEnd}
               />
             </span>
             <div/>
           </div>
         ):(
           <div className={cs(style.state)}>
-            <span>OPENED FOR </span>
+            <span>Publishing new projects opened for </span>
             <span>
               <Countdown
                 until={cyclesState.nextClosing}
+                onEnd={onEnd}
               />
             </span>
             <div/>
