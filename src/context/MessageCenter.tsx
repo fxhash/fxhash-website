@@ -18,11 +18,13 @@ export interface IMessage extends IMessageSent {
 interface IMessageCenterContext {
   messages: IMessage[]
   addMessage: (message: IMessageSent) => void
+  addMessages: (message: IMessageSent[]) => void
 }
 
 const defaultProperties: IMessageCenterContext = {
   messages: [],
   addMessage: () => {},
+  addMessages: () => {},
 }
 
 const defaultCtx: IMessageCenterContext = {
@@ -52,9 +54,25 @@ export function MessageCenterProvider({ children }: PropsWithChildren<{}>) {
       })
     }
 
+    const addMessages = (messages: IMessageSent[]) => {
+      const toAdd: IMessage[] = messages.map(message => ({
+        ...message,
+        id: ""+Math.random(),
+        createdAt: performance.now(),
+      }))
+      setContext({
+        ...context,
+        messages: [
+          ...context.messages,
+          ...toAdd,
+        ]
+      })
+    }
+
     return {
       ...context,
       addMessage,
+      addMessages,
     }
   }, [context])
 

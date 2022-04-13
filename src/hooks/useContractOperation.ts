@@ -72,11 +72,19 @@ export function useContractOperation<Params>(
 
       // even if not mounted anymore we push the messages to message center
       if (status === ContractOperationStatus.INJECTED) {
-        messageCenter.addMessage({
-          type: "success",
-          title: `Operation applied`,
-          content: `${data.message}`
-        })
+        console.log("op injected !")
+        messageCenter.addMessages([
+          {
+            type: "warning",
+            title: "Indexer delay",
+            content: "We've added a 2 minutes delay to our indexer to protect against blockchain rollbacks occuring since last protocol update. It will take about 2 minutes for your operation to be visible on the website."
+          },
+          {
+            type: "success",
+            title: `Operation applied`,
+            content: `${data.message}`
+          }
+        ])
       }
       else if (status === ContractOperationStatus.ERROR) {
         messageCenter.addMessage({
