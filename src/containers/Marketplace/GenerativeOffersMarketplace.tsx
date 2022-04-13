@@ -1,6 +1,6 @@
 import style from "./GenerativeOffersMarketplace.module.scss"
 import cs from "classnames"
-import { gql, useLazyQuery, useQuery } from '@apollo/client'
+import { useQuery } from '@apollo/client'
 import { CardsContainer } from '../../components/Card/CardsContainer'
 import { ObjktCard } from '../../components/Card/ObjktCard'
 import { useState, useEffect, useMemo, useRef } from 'react'
@@ -10,41 +10,10 @@ import { GenerativeToken } from '../../types/entities/GenerativeToken'
 import { Objkt } from '../../types/entities/Objkt'
 import { InfiniteScrollTrigger } from "../../components/Utils/InfiniteScrollTrigger"
 import { CardsLoading } from "../../components/Card/CardsLoading"
+import { Qu_genTokListings } from "../../queries/marketplace"
 
 
 const ITEMS_PER_PAGE = 20
-
-const Qu_listings = gql`
-  query Query($id: Float!, $filters: ObjktFilter, $sort: ObjktsSortInput, $skip: Int, $take: Int) {
-    generativeToken(id: $id) {
-      id
-      activeListedObjkts(filters: $filters, sort: $sort, skip: $skip, take: $take) {
-        id
-        version
-        name
-        slug
-        duplicate
-        metadata
-        activeListing {
-          id
-          price
-          issuer {
-            id
-            name
-            flag
-            avatarUri
-          }
-        }
-        owner {
-          id
-          name
-          flag
-          avatarUri
-        }
-      }
-    }
-  }
-`
 
 const sortOptions: IOptions[] = [
   {
@@ -87,7 +56,7 @@ export const GenerativeOffersMarketplace = ({
   const currentLength = useRef<number>(0)
   const ended = useRef<boolean>(false)
 
-  const { data, loading, fetchMore, refetch } = useQuery(Qu_listings, {
+  const { data, loading, fetchMore, refetch } = useQuery(Qu_genTokListings, {
     notifyOnNetworkStatusChange: true,
     variables: {
       filters: {},
