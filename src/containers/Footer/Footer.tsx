@@ -34,11 +34,17 @@ export function Footer() {
             <Link href="/doc">
               <a>Documentation</a>
             </Link>
-            <Link href="/doc">
-              <a>Terms and conditions</a>
+            <Link href="/doc/fxhash/integration-guide">
+              <a>3rd party integration</a>
             </Link>
-            <Link href="/doc">
-              <a>Feature request</a>
+            <Link href="/doc/legal/terms.pdf">
+              <a target="_blank">Terms and conditions (english soon)</a>
+            </Link>
+            <Link href="/doc/legal/referencement.pdf">
+              <a target="_blank">Referencing (english soon)</a>
+            </Link>
+            <Link href="https://feedback.fxhash.xyz">
+              <a target="_blank">Feature request</a>
             </Link>
           </div>
         </div>
