@@ -38,7 +38,7 @@ export function GenerativePricing({
             <span>
               <span>Dutch auction </span>
               <InfoIconLink
-                href="/doc/collect/pricing"
+                href="/doc/artist/pricing-your-project#dutch-auction"
                 title="Learn more about Dutch Auctions"
               />
             </span>
