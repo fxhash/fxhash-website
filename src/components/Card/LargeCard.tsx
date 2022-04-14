@@ -35,10 +35,6 @@ export function LargeCard({
           setLoaded(img.src)
         }
       }
-      img.onerror = () => {
-        // we fallback to the IPFS gateway
-        img.src = ipfsGatewayUrl(thumbnailUri)
-      }
       img.src = url
     }
   }, [inView])
