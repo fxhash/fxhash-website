@@ -20,7 +20,7 @@ import { SearchInputControlled } from "../components/Input/SearchInputControlled
 import { Qu_listings } from "../queries/listing"
 
 
-const ITEMS_PER_PAGE = 20
+const ITEMS_PER_PAGE = 40
 
 const generalSortOptions: IOptions[] = [
   {
@@ -102,6 +102,7 @@ export const Marketplace = ({}: Props) => {
   useEffect(() => {
     if (!loading) {
       if (currentLength.current === data.listings?.length) {
+        console.log("end current")
         ended.current = true
       }
       else {
