@@ -119,3 +119,4 @@ If you find a bug with the front end, you can create an issue.
 * `/styles`: the generic styles of the app
 * `/types`: type definitions
 * `/utils`: general-purpose utility functions 
+
