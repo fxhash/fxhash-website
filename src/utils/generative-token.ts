@@ -389,7 +389,7 @@ export function reserveEligibleAmount(
   token: GenerativeToken,
 ): number {
   let eligibleFor = 0
-  if (token.reserves) {
+  if (token.reserves && user && user.id) {
     for (const reserve of token.reserves) {
       if (reserve.amount > 0) {
         // check if user is in the reserve
