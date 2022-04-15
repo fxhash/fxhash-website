@@ -215,7 +215,7 @@ The version 1.0 of fxhash comes with many updates, especially on the contract-si
 
 ### API 
 
-This document covers the breaking changes made to the API: [https://github.com/fxhash/fxhash-api/blob/dev/CHANGELOG.md](https://github.com/fxhash/fxhash-api/blob/dev/CHANGELOG.md)
+This document covers the breaking changes made to the API: [https://github.com/fxhash/fxhash-api/blob/main/doc/MIGRATION_V1.md](https://github.com/fxhash/fxhash-api/blob/main/doc/MIGRATION_V1.md)
 
 If some of your queries which used to be working are still not working after you applied the changes, you can reach out on [discord](https://discord.gg/fxhash) (channel `#3rd-party-integration`). It's possible that we forgot to include those changes due to the amount of work that was required for transitionning to v1.0.
 
