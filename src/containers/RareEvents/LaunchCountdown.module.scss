@@ -1,0 +1,20 @@
+.root {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 4em;
+
+  h1 {
+    font-size: 30px;
+    color: var(--color-gray);
+    font-weight: normal;
+  }
+}
+
+.countdown {
+  font-size: 5vw;
+  font-weight: bold;
+}

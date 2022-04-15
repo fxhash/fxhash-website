@@ -5,10 +5,12 @@ import { distanceSecondsClamped } from "../../utils/time"
 
 interface Props {
   until: Date
+  showFull?: boolean
   onEnd?: () => void
 }
 export function Countdown({
   until,
+  showFull = false,
   onEnd,
 }: Props) {
   const [distanceSeconds, setDistanceSeconds] = useState<number>(
@@ -31,7 +33,7 @@ export function Countdown({
       else {
         clearInterval(interval)
       }
-    }, dist > 7200 ? 60000 : 1000)
+    }, (dist > 7200 && !showFull) ? 60000 : 1000)
 
     return () => {
       clearInterval(interval)
@@ -47,8 +49,8 @@ export function Countdown({
     <span>
       {days > 0 && <span>{days}d </span>}
       {hours > 0 && <span>{hours}h </span>}
-      {days < 1 && minutes > 0 && <span>{minutes}min </span>}
-      {hours < 1 && <span>{seconds}s</span>}
+      {(days < 1 && minutes > 0) && <span>{minutes}min </span>}
+      {(hours < 1 || showFull) && <span>{seconds}s</span>}
     </span>
   )
 }
