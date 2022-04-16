@@ -9,7 +9,7 @@ export const Warning: FunctionComponent = ({ children }) => {
     <Link href="/doc/fxhash/one">
       <a className={cs(style.container)}>
         <span className={cs(style.message)}>
-          <i aria-hidden className="fas fa-radiation-alt"/>
+          <i aria-hidden className="fa-solid fa-party-horn"/>
           {children}
         </span>
       </a>
