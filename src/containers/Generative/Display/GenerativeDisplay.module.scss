@@ -41,6 +41,9 @@
 }
 
 .presentation_details {
+  overflow-wrap: break-word;
+  word-break: break-word;
+
   .presentation_title {
     overflow-wrap: break-word;
     word-break: break-word;
