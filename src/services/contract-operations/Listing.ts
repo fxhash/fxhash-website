@@ -46,17 +46,35 @@ export class ListingOperation extends ContractOperation<TListingOperationParams>
       price: this.params.price,
     }
 
-    return this.manager.tezosToolkit.wallet.batch() 
-      .withContractCall(
-        this.gentkContract!.methodsObject.update_operators(
-          updateOperatorsParams
-        )
-      )
-      .withContractCall(
-        this.marketplaceContract!.methodsObject.listing(
-          listingParams
-        )
-      )
+    return this.manager.tezosToolkit.wallet.batch()
+      .with([
+        {
+          kind: OpKind.TRANSACTION,
+          to: getGentkFA2Contract(this.params.token),
+          amount: 0,
+          parameter: {
+            entrypoint: "update_operators",
+            value: buildParameters(
+              updateOperatorsParams,
+              EBuildableParams.UPDATE_OPERATORS
+            )
+          },
+          storageLimit: 300,
+        },
+        {
+          kind: OpKind.TRANSACTION,
+          to: FxhashContracts.MARKETPLACE_V2,
+          amount: 0,
+          parameter: {
+            entrypoint: "listing",
+            value: buildParameters(
+              listingParams,
+              EBuildableParams.LISTING
+            )
+          },
+          storageLimit: 450
+        }
+      ])
       .send()
   }
 
