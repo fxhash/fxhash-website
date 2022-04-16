@@ -127,9 +127,6 @@ export function GenerativeStatsMarketplace({
 
   return (
     <div>
-      <p className={cs(colors.gray)} style={{ maxWidth: "700px" }}>
-        Note: for early tokens, the floor and the median are incorrect and bugged. This is due to an indexer issue which can only be solved by re-running the indexer from scratch.
-      </p>
       <div className={cs(style.inputs)}>
         <div className={cs(style.input_wrapper)}>
           <span>Period:</span>
