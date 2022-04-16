@@ -22,34 +22,24 @@ const EXCLUDE_LAYOUT= [
 export function Root({ children }: PropsWithChildren<{}>) {
   const router = useRouter()
 
-  // are we in countdown mode ?
-  const countdownMode = useMemo(
-    () => isLaunchCountdown(),
-    []
-  )
-
   // should the page be renderer with the layout ?
-  const LayoutWrapper = (EXCLUDE_LAYOUT.includes(router.pathname) || countdownMode) 
+  const LayoutWrapper = (EXCLUDE_LAYOUT.includes(router.pathname)) 
     ? Fragment 
     : Layout
 
   return (
     <ApolloProvider client={clientSideClient}>
-      <LaunchCountdown
-        active={countdownMode}
-      >
-        <SettingsProvider>
-          <UserProvider>
-            <MessageCenterProvider>
-              <CyclesProvider>
-                <LayoutWrapper>
-                  {children}
-                </LayoutWrapper>
-              </CyclesProvider>
-            </MessageCenterProvider>
-          </UserProvider>
-        </SettingsProvider>
-      </LaunchCountdown>
+      <SettingsProvider>
+        <UserProvider>
+          <MessageCenterProvider>
+            <CyclesProvider>
+              <LayoutWrapper>
+                {children}
+              </LayoutWrapper>
+            </CyclesProvider>
+          </MessageCenterProvider>
+        </UserProvider>
+      </SettingsProvider>
     </ApolloProvider>
   )
 }
