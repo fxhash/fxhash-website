@@ -106,7 +106,7 @@ export function generativeFromMintParams(
         id: split.address
       } as User
     })),
-    splitsSecondary: params.primary_split.map(split => ({
+    splitsSecondary: params.royalties_split.map(split => ({
       pct: split.pct,
       user: usersLoaded.find(u => u.id === split.address) || {
         id: split.address
