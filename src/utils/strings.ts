@@ -31,5 +31,5 @@ export function tagsFromString(str: string): string[] {
  * Is a string a tezos address ?
  */
 export function isTezosAddress(str: string): boolean {
-  return /^tz[1-3][a-zA-Z0-9]{33}$/.test(str)
+  return /^(tz|KT)[1-3][a-zA-Z0-9]{33}$/.test(str)
 }
