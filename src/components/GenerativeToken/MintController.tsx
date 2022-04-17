@@ -69,11 +69,13 @@ export function MintController({
   return (
     <div className={cs(style.root)}>
 
-      <MintingState
-        token={token}
-        existingState={mintingState}
-        verbose
-      />
+      {token.balance > 0 && (
+        <MintingState
+          token={token}
+          existingState={mintingState}
+          verbose
+        />
+      )}
 
       <ContractFeedback
         state={state}

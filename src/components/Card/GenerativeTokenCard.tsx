@@ -58,9 +58,11 @@ export function GenerativeTokenCard({
               hasLink={false}
             />
             <Spacing size="2x-small" />
-            <MintingState
-              token={token}
-            />
+            {token.balance > 0 && (
+              <MintingState
+                token={token}
+              />
+            )}
           </div>
 
           <div className={cs(text.small)}>
