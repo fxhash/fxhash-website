@@ -23,7 +23,7 @@ export const Qu_user = gql`
 
 export const Qu_users = gql`
   query Users($filters: UserFilter) {
-    users(filters: $filters, skip: 0, take: 50) {
+    users(filters: $filters, skip: 0, take: 500) {
       id
       type
       name
