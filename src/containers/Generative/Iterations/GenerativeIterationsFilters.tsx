@@ -1,23 +1,14 @@
 import style from "./GenerativeIterationsFilters.module.scss"
 import cs from "classnames"
 import { FiltersGroup } from "../../../components/Exploration/FiltersGroup"
-import { InputText } from "../../../components/Input/InputText"
-import { useEffect, useMemo, useState } from "react"
-import { InputRadioButtons, RadioOption } from "../../../components/Input/InputRadioButtons"
-import { Button } from "../../../components/Button"
-import { GenerativeToken, GenerativeTokenFeature, GenerativeTokenFilters } from "../../../types/entities/GenerativeToken"
-import { useLazyQuery, useQuery } from "@apollo/client"
-import { Qu_userObjktsSubResults } from "../../../queries/user"
-import { IUserCollectionFilters, User } from "../../../types/entities/User"
-import { UserBadge } from "../../../components/User/UserBadge"
+import { useMemo } from "react"
+import { GenerativeToken, GenerativeTokenFeature } from "../../../types/entities/GenerativeToken";
 import { InputMultiList, MultiListItem } from "../../../components/Input/InputMultiList"
-import { ListItemGenerative } from "../../../components/List/ListItemGenerative"
 import { IObjktFeatureFilter, objktFeatureType } from "../../../types/entities/Objkt"
 import { Qu_genTokenFeatures } from "../../../queries/generative-token"
-import { cloneDeep } from "@apollo/client/utilities"
 import { FiltersSubGroup } from "../../../components/Exploration/FiltersSubGroup"
-import { Loader } from "../../../components/Utils/Loader"
 import { LoaderBlock } from "../../../components/Layout/LoaderBlock"
+import { useQuery } from "@apollo/client";
 
 
 interface IFeatureListItems {

@@ -74,7 +74,7 @@ export const Qu_userObjkts = gql`
     $id: String!,
     $take: Int,
     $skip: Int,
-    $sort: UserCollectionSortInput,
+    $sort: ObjktsSortInput,
     $filters: ObjktFilter
   ) {
     user(id: $id) {
