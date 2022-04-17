@@ -51,7 +51,9 @@ export const Qu_userGenTokens = gql`
   query UserGenerativeTokens($id: String!, $take: Int, $skip: Int) {
     user(id: $id) {
       id
-      generativeTokens(take: $take, skip: $skip) {
+      generativeTokens(take: $take, skip: $skip, filters: {
+        flag_ne: "HIDDEN"
+      }) {
         id
         supply
         originalSupply
