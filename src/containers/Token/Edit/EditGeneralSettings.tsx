@@ -62,7 +62,7 @@ export function EditGeneralSettings({
           address: split.user.id,
           pct: split.pct,
         })),
-        splitsSecondary: token.splitsPrimary.map(split => ({
+        splitsSecondary: token.splitsSecondary.map(split => ({
           address: split.user.id,
           pct: split.pct,
         })),
