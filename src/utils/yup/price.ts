@@ -5,7 +5,13 @@ import * as Yup from "yup"
 export const YupPrice = Yup.number()
   .typeError("Valid number plz")
   .required("Required")
-  .positive("Must be positive")
+  .test(
+    ">= 0",
+    "Must be positive",
+    (val?: number) => {
+      return val === undefined || val >= 0
+    }
+  )
 
 // validates a PricingFixed input object
 export const YupPricingFixed = Yup.object({
