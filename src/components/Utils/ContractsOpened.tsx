@@ -27,11 +27,7 @@ export function ContractsOpened() {
   
   return (
     <>
-      <div className={cs(style.state)}>
-        <span>Publishing new projects opened</span>
-        <div/>
-      </div>
-      {/* {cycles.length === 0 ? (
+      {cycles.length === 0 ? (
         <Loader size="small" />
       ):(
         !cyclesState.opened ? (
@@ -57,7 +53,7 @@ export function ContractsOpened() {
             <div/>
           </div>
         )
-      )} */}
+      )}
     </>
   )
 }
