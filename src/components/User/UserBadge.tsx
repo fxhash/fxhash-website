@@ -18,8 +18,8 @@ interface WrapperProps {
   children: ReactNode
 }
 
-const WrapperLink = ({ 
-  className, 
+const WrapperLink = ({
+  className,
   user,
   children,
 }: WrapperProps) => (
@@ -30,8 +30,8 @@ const WrapperLink = ({
   </Link>
 )
 
-const WrapperDiv = ({ 
-  className, 
+const WrapperDiv = ({
+  className,
   user,
   children,
 }: WrapperProps) => (
@@ -51,20 +51,20 @@ export function UserBadge({
   className
 }: Props) {
   // the user goes through an aliases check
-  const userAlias = useMemo(() => userAliases(user), [user])
-  const verified = isUserVerified(user)
+  const userAlias = useMemo(() => user && userAliases(user), [user])
+  const verified = user && isUserVerified(user)
   // alias can force no link
-  hasLink = hasLink && !userAlias.preventLink
+  hasLink = user && hasLink && !userAlias.preventLink
   // the wrapper component, either a link or a div
   const Wrapper = hasLink ? WrapperLink : WrapperDiv
 
-  return (
-    <Wrapper 
+  return user ? (
+    <Wrapper
       className={cs(style.container, style[`side-${avatarSide}`], className)}
       user={userAlias}
     >
       {displayAvatar && (
-        <Avatar 
+        <Avatar
           uri={userAlias.avatarUri}
           className={cs(
             style.avatar,
@@ -73,7 +73,7 @@ export function UserBadge({
           )}
         />
       )}
-  
+
       <div className={cs(style.user_infos)}>
         <span className={cs(style.user_name)}>
           {prependText && (
@@ -83,8 +83,8 @@ export function UserBadge({
             {getUserName(userAlias, 15)}
           </span>
           {verified && (
-            <i 
-              aria-hidden 
+            <i
+              aria-hidden
               className={cs("fas", "fa-badge-check", style.verified)}
             />
           )}
@@ -97,5 +97,5 @@ export function UserBadge({
         )}
       </div>
     </Wrapper>
-  )
+  ) : <></>
 }
