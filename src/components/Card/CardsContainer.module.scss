@@ -5,8 +5,13 @@
   display: grid; 
   grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
   gap: var(--cards-gap);
+  grid-auto-flow: column;
 
   & > a {
     text-decoration: none !important;
+  }
+  .col {
+    display: grid;
+    grid-gap: var(--cards-gap);
   }
 }

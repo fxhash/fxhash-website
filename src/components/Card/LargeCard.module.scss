@@ -1,6 +1,7 @@
 .root {
   color: var(--color-black);
-
+  margin-bottom: var(--cards-gap);
+  
   .thumbnail_wrapper {
     width: 100%;
     position: relative;
