@@ -62,34 +62,72 @@ interface Props {
   urlQuery: Record<string, string>
 }
 
+// a map of (listing filter) => transformer
+// to turn the query parameters into gql-ready variables
+type TQueryFilterHandler = {
+  param: string,
+  transform: (param?: string) => any|undefined,
+  encode: (value?: any) => string|undefined
+}
+const queryListingFilterHandlers: Record<
+  keyof ListingFilters, TQueryFilterHandler
+> = {
+  price_lte: {
+    param: "price_lte",
+    transform: param => param || undefined,
+    encode: value => value ? encodeURIComponent(value) : undefined,
+  },
+  price_gte: {
+    param: "price_gte",
+    transform: param => param || undefined,
+    encode: value => value ? encodeURIComponent(value) : undefined,
+  },
+  fullyMinted_eq: {
+    param: "fullMint",
+    transform: param => param ? param === "1" : undefined,
+    encode: value => value !== undefined 
+      ? encodeURIComponent(value ? "1" : "0")
+      : undefined
+  },
+  authorVerified_eq: {
+    param: "verified",
+    transform: param => param ? param === "1" : undefined,
+    encode: value => value !== undefined 
+      ? encodeURIComponent(value ? "1" : "0")
+      : undefined
+  },
+  searchQuery_eq: {
+    param: "search",
+    transform: param => param || undefined,
+    encode: value => value || undefined,
+  },
+  tokenSupply_lte: {
+    param: "supply_lte",
+    transform: param => param ? parseInt(param) : undefined,
+    encode: value => value ? encodeURIComponent(value) : undefined
+  },
+  tokenSupply_gte: {
+    param: "supply_gte",
+    transform: param => param ? parseInt(param) : undefined,
+    encode: value => value ? encodeURIComponent(value) : undefined
+  },
+}
+
+/**
+ * Given a record of query parameters, outputs some Listing filters
+ */
 const getFiltersFromUrlQuery = (urlQuery: Record<string, string>) => {
-  const {
-    search,
-    price_gte,
-    price_lte,
-    fullMint,
-    verified,
-    supply_lte,
-    supply_gte
-  } = urlQuery
-
-  // check all filters except for the search parameter
-  let p_lte = price_lte ? parseFloat(price_lte) : undefined
-  let p_gte = price_gte ? parseFloat(price_gte) : undefined
-  let ts_lte = supply_lte ? parseInt(supply_lte) : undefined
-  let ts_gte = supply_gte ? parseInt(supply_gte) : undefined
-  let loadedFilters: ListingFilters = {}
-  if (p_lte && p_lte !== NaN) loadedFilters.price_lte = p_lte.toString()
-  if (p_gte && p_gte !== NaN) loadedFilters.price_gte = p_gte.toString()
-  if (fullMint) loadedFilters.fullyMinted_eq = fullMint === "1"
-  if (verified) loadedFilters.authorVerified_eq = verified === "1"
-  if (ts_lte && ts_lte !== NaN) loadedFilters.tokenSupply_lte = ts_lte
-  if (ts_gte && ts_gte !== NaN) loadedFilters.tokenSupply_gte = ts_gte
-
-  // if there is a search query, add the searchQuery_eq filter and load the correct sort options
-  if (search) loadedFilters.searchQuery_eq = search
-
-  // set all loaded filters
+  const loadedFilters: ListingFilters = {}
+  // go through each prop of the handler and eventually transform query param
+  for (const K in queryListingFilterHandlers) {
+    const F = K as keyof ListingFilters
+    const handler = queryListingFilterHandlers[F]
+    if (urlQuery[handler.param]) {
+      loadedFilters[F] = queryListingFilterHandlers[F].transform(
+        urlQuery[handler.param]
+      )
+    }
+  }
   return loadedFilters
 }
 
@@ -112,13 +150,18 @@ const getSortFromUrlQuery = (urlQuery: Record<string, string>) => {
 export const Marketplace = ({ urlQuery }: Props) => {
 
   // sort variables
-  const [sortValue, setSortValue] = useState<string>(getSortFromUrlQuery(urlQuery))
+  const [sortValue, setSortValue] = useState<string>(
+    getSortFromUrlQuery(urlQuery)
+  )
   const sort = useMemo<Record<string, any>>(
     () => sortValueToSortVariable(sortValue),
     [sortValue]
   )
-  // sort options - when the search is triggered, options are updated to include relevance
-  const [sortOptions, setSortOptions] = useState<IOptions[]>(urlQuery.search ? searchSortOptions : generalSortOptions)
+  // sort options - when the search is triggered, options are updated 
+  // to include relevance
+  const [sortOptions, setSortOptions] = useState<IOptions[]>(
+    urlQuery.search ? searchSortOptions : generalSortOptions
+  )
   // keeps track of the search option used before the search was triggered
   const sortBeforeSearch = useRef<string>(sortValue)
 
@@ -130,7 +173,9 @@ export const Marketplace = ({ urlQuery }: Props) => {
   }, [sortValue])
 
   // filters
-  const [filters, setFilters] = useState<ListingFilters>(getFiltersFromUrlQuery(urlQuery))
+  const [filters, setFilters] = useState<ListingFilters>(
+    getFiltersFromUrlQuery(urlQuery)
+  )
 
   // reference to an element at the top to scroll back
   const topMarkerRef = useRef<HTMLDivElement>(null)
@@ -150,28 +195,20 @@ export const Marketplace = ({ urlQuery }: Props) => {
   })
 
   const router = useRouter()
+
   // update url parameters on filters changes
   useEffect(() => {
+    const query: any = {}
 
-    const {
-      price_gte,
-      price_lte,
-      fullyMinted_eq,
-      authorVerified_eq,
-      searchQuery_eq,
-      tokenSupply_lte,
-      tokenSupply_gte
-    } = filters
-
-    let query: any = {}
-
-    if (price_gte && price_gte !== 'NaN') query.price_gte = encodeURIComponent(price_gte)
-    if (price_lte && price_lte !== 'NaN') query.price_lte = encodeURIComponent(price_lte)
-    if (fullyMinted_eq !== undefined) query.fullMint = encodeURIComponent(fullyMinted_eq ? '1' : '0')
-    if (authorVerified_eq !== undefined) query.verified = encodeURIComponent(authorVerified_eq ? '1' : '0')
-    if (searchQuery_eq) query.search = encodeURIComponent(searchQuery_eq)
-    if (tokenSupply_lte && tokenSupply_lte !== NaN) query.supply_lte = encodeURIComponent(tokenSupply_lte)
-    if (tokenSupply_gte && tokenSupply_gte !== NaN) query.supply_gte = encodeURIComponent(tokenSupply_gte)
+    // go through each prop of the handler and eventually encode query param
+    for (const K in queryListingFilterHandlers) {
+      const F = K as keyof ListingFilters
+      const handler = queryListingFilterHandlers[F]
+      const encoded = handler.encode(filters[F])
+      if (encoded) {
+        query[handler.param] = encoded
+      }
+    }
 
     query.sort = encodeURIComponent(sortValue)
 
@@ -186,7 +223,6 @@ export const Marketplace = ({ urlQuery }: Props) => {
   useEffect(() => {
     if (!loading && data) {
       if (currentLength.current === data.listings?.length) {
-        console.log("end current")
         ended.current = true
       }
       else {
@@ -359,7 +395,10 @@ export const Marketplace = ({ urlQuery }: Props) => {
                 <span>No results</span>
               )}
 
-              <InfiniteScrollTrigger onTrigger={infiniteScrollFetch} canTrigger={!!data && !loading}>
+              <InfiniteScrollTrigger
+                onTrigger={infiniteScrollFetch}
+                canTrigger={!!data && !loading}
+              >
                 <CardsContainer>
                   {listings?.length > 0 && listings.map(offer => (
                     <ObjktCard key={offer.id} objkt={offer.objkt} />
