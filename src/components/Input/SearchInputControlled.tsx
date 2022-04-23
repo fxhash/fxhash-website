@@ -1,10 +1,12 @@
 import cs from "classnames"
-import { useState } from "react"
+import { useRouter } from "next/router"
+import { useEffect, useState } from "react"
 import { SearchInput } from "./SearchInput"
 
 interface Props {
   onSearch: (query: string) => void
   placeholder?: string
+  initialValue?: string
   className?: string
 }
 
@@ -16,9 +18,10 @@ interface Props {
 export function SearchInputControlled({
   placeholder = "search by artist name, tags, title...",
   onSearch,
+  initialValue = "",
   className,
 }: Props) {
-  const [value, setValue] = useState<string>("")
+  const [value, setValue] = useState<string>(initialValue)
 
   return (
     <SearchInput
