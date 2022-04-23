@@ -27,11 +27,11 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
   const router = useRouter()
   const retainedComponents = useRef<any>({})
 
-  const isRetainableRoute = ROUTES_TO_RETAIN.includes(router.asPath)
+  const isRetainableRoute = ROUTES_TO_RETAIN.includes(router.pathname)
 
   // if the current route is stored in memory and is loaded now, reset its index
-  if (retainedComponents.current[router.asPath]) {
-    retainedComponents.current[router.asPath].index = -1 // -1 because it will be incremented just after
+  if (retainedComponents.current[router.pathname]) {
+    retainedComponents.current[router.pathname].index = -1 // -1 because it will be incremented just after
   }
 
   // clear the retained component if they reach a threshold
@@ -44,12 +44,12 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
         delete retainedComponents.current[key]
       }
     }
-  }, [router.asPath])
+  }, [router.pathname])
 
   // Add Component to retainedComponents if we haven't got it already
-  if (isRetainableRoute && !retainedComponents.current[router.asPath]) {
+  if (isRetainableRoute && !retainedComponents.current[router.pathname]) {
     const MemoComponent = memo(Component)
-    retainedComponents.current[router.asPath] = {
+    retainedComponents.current[router.pathname] = {
       component: <MemoComponent {...pageProps} />,
       scrollPos: 0,
       index: 0
@@ -60,22 +60,22 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
   const handleRouteChangeStart = (url: any) => {
     // first we clear the existing retained components, so that only the last one remains
     if (isRetainableRoute) {
-      retainedComponents.current[router.asPath].scrollPos = window.scrollY
+      retainedComponents.current[router.pathname].scrollPos = window.scrollY
     }
   }
 
-  // Save scroll position - requires an up-to-date router.asPath
+  // Save scroll position - requires an up-to-date router.pathname
   useEffect(() => {
     router.events.on('routeChangeStart', handleRouteChangeStart)
     return () => {
       router.events.off('routeChangeStart', handleRouteChangeStart)
     }
-  }, [router.asPath])
+  }, [router.pathname])
 
   // Scroll to the saved position when we load a retained component
   useEffect(() => {
-    if (isRetainableRoute && retainedComponents.current[router.asPath]) {
-      window.scrollTo(0, retainedComponents.current[router.asPath].scrollPos)
+    if (isRetainableRoute && retainedComponents.current[router.pathname]) {
+      window.scrollTo(0, retainedComponents.current[router.pathname].scrollPos)
     }
   }, [Component, pageProps])
 
@@ -111,7 +111,7 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
               {Object.entries(retainedComponents.current).map(([path, c]: any) => (
                 <div
                   key={path}
-                  style={{ display: router.asPath === path ? 'block' : 'none' }}
+                  style={{ display: router.pathname === path ? 'block' : 'none' }}
                 >
                   {c.component}
                 </div>
