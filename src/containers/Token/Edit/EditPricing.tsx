@@ -16,6 +16,7 @@ import { InputPricingDutchAuction } from "../../Input/PricingDutchAuction"
 import { UpdatePricingOperation } from "../../../services/contract-operations/UpdatePricing"
 import { isAfter } from "date-fns"
 import { YupPricingDutchAuction, YupPricingFixed } from "../../../utils/yup/price"
+import { TextWarning } from "../../../components/Text/TextWarning"
 
 
 const validation = Yup.object({
@@ -56,6 +57,36 @@ export function EditPricing({
     || (token.pricingDutchAuction && isAfter(
         new Date(), new Date(token.pricingDutchAuction.opensAt!)
       ))
+
+  // show a warning message in case the author wants to edit the opens at field
+  // to push their token at the top of the gallery
+  // this can be done by updating the opens_at field, which is alloxed in case
+  // on an issue during the opening
+  const warningTopGalleryAbuse = (opensAtInput?: Date|null) => {
+    // only for pricing fixed
+    if (token.pricingFixed) {
+      const now = new Date()
+      // check if the token has already opened
+      if (opensAtInput && isAfter(now, new Date(token.mintOpensAt))) {
+        // check if the value in the input is after now
+        if (isAfter(opensAtInput, now)) {
+          // if previous value was null, then it's abuse material
+          if (!token.pricingFixed.opensAt) {
+            return true
+          }
+          // otherwise check if the values are different
+          else if (opensAtInput.getTime() !== new Date(token.pricingFixed.opensAt).getTime()) {
+            return true
+          }
+          // no abuse
+          else {
+            return false
+          }
+        }
+      }
+    }
+    return false
+  }
   
   return (
     <Formik
@@ -104,11 +135,21 @@ export function EditPricing({
             )}
 
             {values.pricingFixed && (
-              <InputPricingFixed
-                value={values.pricingFixed}
-                onChange={v => setFieldValue("pricingFixed", v)}
-                errors={errors?.pricingFixed as any}
-              />
+              <>
+                <InputPricingFixed
+                  value={values.pricingFixed}
+                  onChange={v => setFieldValue("pricingFixed", v)}
+                  errors={errors?.pricingFixed as any}
+                />
+                {warningTopGalleryAbuse(values.pricingFixed.opensAt) && (
+                  <>
+                    <Spacing size="small"/>
+                    <TextWarning>
+                      Warning: only reschedule opening in case of an issue with the project/platform. Rescheduling an opening time will push your token at the top of the gallery, it is considered as an abuse and it will be moderated.
+                    </TextWarning>
+                  </>
+                )}
+              </>
             )}
 
             {values.pricingDutchAuction && (

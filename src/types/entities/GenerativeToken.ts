@@ -103,6 +103,7 @@ export interface GenerativeToken {
   reserves: IReserve[]
   lockedSeconds: number
   lockEnd: string
+  mintOpensAt: string
   objkts: Objkt[]
   actions: Action[]
   objktsCount?: number

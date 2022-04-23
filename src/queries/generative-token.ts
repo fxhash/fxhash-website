@@ -25,6 +25,7 @@ export const Qu_genToken = gql`
       enabled
       royalties
       lockEnd
+      mintOpensAt
       createdAt
       ...Pricing
       ...Author
