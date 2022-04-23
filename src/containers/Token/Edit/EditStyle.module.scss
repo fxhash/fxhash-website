@@ -1,0 +1,8 @@
+.disabled {
+  pointer-events: none;
+
+  & > *:not(.disabled_message) {
+    opacity: 0.15;
+    filter: grayscale(100%);
+  }
+}
