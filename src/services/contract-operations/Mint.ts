@@ -6,6 +6,7 @@ import { ContractOperation } from "./ContractOperation"
 export type TMintOperationParams = {
   token: GenerativeToken
   price: number
+  consumeReserve: boolean
 }
 
 /**
@@ -22,7 +23,7 @@ export class MintOperation extends ContractOperation<TMintOperationParams> {
     return this.issuerContract!.methodsObject.mint({
       issuer_id: this.params.token.id,
       referrer: null,
-      reserve_input: null
+      reserve_input: this.params.consumeReserve ? "00" : null,
     }).send({
       amount: this.params.price,
       mutez: true,

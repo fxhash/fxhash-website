@@ -5,13 +5,17 @@ import cs from "classnames"
 import { GenerativeToken } from "../../types/entities/GenerativeToken"
 import { Spacing } from "../Layout/Spacing"
 import { Button } from "../../components/Button"
-import { PropsWithChildren, useEffect } from "react"
+import { PropsWithChildren, useContext, useEffect, useMemo } from "react"
 import { ContractFeedback } from "../Feedback/ContractFeedback"
 import { DisplayTezos } from "../Display/DisplayTezos"
 import { useContractOperation } from "../../hooks/useContractOperation"
 import { MintOperation, TMintOperationParams } from "../../services/contract-operations/Mint"
 import { MintingState } from "./MintingState/MintingState"
 import { useMintingState } from "../../hooks/useMintingState"
+import { UserContext } from "../../containers/UserProvider"
+import { reserveEligibleAmount, reserveSize } from "../../utils/generative-token"
+import { User } from "../../types/entities/User"
+import { MintButton } from "./MintButton"
 
 interface Props {
   token: GenerativeToken
@@ -43,18 +47,17 @@ export function MintController({
     enabled,
     locked,
     price,
-    dutchAuctionState,
-    fixedPricingState,
   } = mintingState
 
   // hook to interact with the contract
   const { state, loading, success, call, error, opHash } = 
     useContractOperation<TMintOperationParams>(MintOperation)
 
-  const mint = () => {
+  const mint = (consumeReserve: boolean) => {
     call({
       token: token,
-      price: price
+      price: price,
+      consumeReserve: consumeReserve,
     })
   }
 
@@ -121,16 +124,14 @@ export function MintController({
         layout.buttons_inline, layout.flex_wrap, style.buttons_wrapper
       )}>
         {!hidden && (
-          <Button
-            type="button"
-            color="secondary"
+          <MintButton
+            token={token}
+            loading={loading}
             disabled={!enabled || locked}
-            onClick={mint}
-            state={loading ? "loading" : "default"}
-            size="regular"
+            onMint={mint}
           >
             mint iteration&nbsp;&nbsp;<DisplayTezos mutez={price} tezosSize="regular" formatBig={false} />
-          </Button>
+          </MintButton>
         )}
 
         {children}
