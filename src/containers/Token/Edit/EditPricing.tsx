@@ -67,7 +67,7 @@ export function EditPricing({
     if (token.pricingFixed) {
       const now = new Date()
       // check if the token has already opened
-      if (opensAtInput && isAfter(now, new Date(token.mintOpensAt))) {
+      if (opensAtInput && isAfter(now, new Date(token.mintOpensAt!))) {
         // check if the value in the input is after now
         if (isAfter(opensAtInput, now)) {
           // if previous value was null, then it's abuse material

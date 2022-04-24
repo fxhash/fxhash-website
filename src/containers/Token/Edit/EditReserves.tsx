@@ -54,7 +54,7 @@ export function EditReserves({
     })
   }
 
-  const disabled = token.balance === 0
+  const disabled = token.balance === 0 || token.enabled
   
   return (
     <Formik
@@ -90,7 +90,10 @@ export function EditReserves({
             {disabled && (
               <>
                 <span className={cs(style.disabled_message)}>
-                  You cannot update the reserves once the token is fully minted.
+                  {token.enabled 
+                    ? "You must disable the token to edit its reserve."
+                    : "You cannot update the reserves once the token is fully minted."
+                  }
                 </span>
                 <Spacing size="large"/>
               </>
