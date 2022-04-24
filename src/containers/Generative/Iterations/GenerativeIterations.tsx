@@ -4,7 +4,7 @@ import cs from "classnames"
 import { GenerativeToken } from "../../../types/entities/GenerativeToken"
 import { useQuery } from "@apollo/client"
 import { Qu_genTokenIterations } from "../../../queries/generative-token"
-import { CardsContainer } from "../../../components/Card/CardsContainer"
+import { MasonryCardsContainer } from "../../../components/Card/MasonryCardsContainer"
 import { IObjktFeatureFilter, Objkt } from "../../../types/entities/Objkt"
 import { CardsLoading } from "../../../components/Card/CardsLoading"
 import { useEffect, useMemo, useRef, useState } from "react"
@@ -211,7 +211,7 @@ export function GenerativeIterations({
                 onTrigger={infiniteScrollFetch}
                 canTrigger={!!data && !loading}
               >
-                <CardsContainer>
+                <MasonryCardsContainer>
                   {tokens?.map(gentk => (
                     <LargeGentkCard
                       key={gentk.id}
@@ -219,14 +219,13 @@ export function GenerativeIterations({
                       showRarity={sort.rarity != null}
                     />
                   ))}
-
-                  {loading && (
-                    <CardsLoading
-                      type="large"
-                      number={ITEMS_PER_PAGE}
-                    />
-                  )}
-                </CardsContainer>
+                </MasonryCardsContainer>
+                {loading && (
+                  <CardsLoading
+                    type="large"
+                    number={ITEMS_PER_PAGE}
+                  />
+                )}
               </InfiniteScrollTrigger>
             </div>
           </section>
