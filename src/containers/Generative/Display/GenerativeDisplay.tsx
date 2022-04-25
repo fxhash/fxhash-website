@@ -155,14 +155,16 @@ export function GenerativeDisplay({
               )}
             </span>
             <strong>Metadata</strong>
-            <a 
-              target="_blank"
-              referrerPolicy="no-referrer"
-              href={ipfsGatewayUrl(token.metadataUri)}
-              className={cs(text.info_link)}
-            >
-              view on IPFS <i className="fas fa-external-link-square" aria-hidden/>
-            </a>
+	    <div>
+	      <a 
+		target="_blank"
+		referrerPolicy="no-referrer"
+		href={ipfsGatewayUrl(token.metadataUri)}
+		className={cs(text.info_link)}
+	      >
+		view on IPFS <i className="fas fa-external-link-square" aria-hidden/>
+	      </a>
+	    </div>
             <ListReserves
               reserves={token.reserves}
               token={token}
