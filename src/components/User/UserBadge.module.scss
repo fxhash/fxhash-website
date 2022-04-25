@@ -46,7 +46,12 @@
   }
 }
 
-a.container:hover {
+.link {
+  display: inline-block;
+  color: var(--color-primary);
+}
+
+.link:hover {
   .avatar {
     transform: scale(1.05);
   }

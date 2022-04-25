@@ -24,8 +24,10 @@ const WrapperLink = ({
   children,
 }: WrapperProps) => (
   <Link href={getUserProfileLink(user)}>
-    <a className={className}>
-      {children}
+    <a className={cs(style.link, className)}>
+      <div className={style.container}>
+	{children}
+      </div>
     </a>
   </Link>
 )
@@ -60,7 +62,7 @@ export function UserBadge({
 
   return user ? (
     <Wrapper
-      className={cs(style.container, style[`side-${avatarSide}`], className)}
+      className={cs({[style.container]: !hasLink}, style[`side-${avatarSide}`], className)}
       user={userAlias}
     >
       {displayAvatar && (
