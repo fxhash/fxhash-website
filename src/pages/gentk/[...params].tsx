@@ -185,24 +185,28 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
                   <span>{displayPercentage(objkt.rarity)}% (lower is rarer)</span>
                 </>
               )}
-              <strong>Operation hash</strong>
-              <a 
-                target="_blank"
-                referrerPolicy="no-referrer"
-                href={`https://tzkt.io/${objkt.generationHash}`}
-                className={cs(text.very_small)}
-              >
-                {objkt.generationHash} <i className="fas fa-external-link-square" aria-hidden/>
-              </a>
+	      <strong>Operation hash</strong>
+	      <div>
+		<a 
+		  target="_blank"
+		  referrerPolicy="no-referrer"
+		  href={`https://tzkt.io/${objkt.generationHash}`}
+		  className={cs(text.very_small)}
+		>
+		  {objkt.generationHash} <i className="fas fa-external-link-square" aria-hidden/>
+		</a>
+	      </div>
               <strong>Metadata</strong>
-              {objkt.assigned ? (
-                <a 
-                  target="_blank"
-                  referrerPolicy="no-referrer"
-                  href={ipfsGatewayUrl(objkt.metadataUri)}
-                >
-                  view on IPFS <i className="fas fa-external-link-square" aria-hidden/>
-                </a>
+	      {objkt.assigned ? (
+		<div>
+		  <a 
+		    target="_blank"
+		    referrerPolicy="no-referrer"
+		    href={ipfsGatewayUrl(objkt.metadataUri)}
+		  >
+		    view on IPFS <i className="fas fa-external-link-square" aria-hidden/>
+		  </a>
+		</div>
               ):(
                 <em className={cs(text.info)}>not yet assigned</em>
               )}
