@@ -44,6 +44,9 @@ const Qu_genTokens = gql`
       enabled
       royalties
       createdAt
+      reserves {
+        amount
+      }
       ...Author
     }
   }
@@ -103,7 +106,7 @@ function sortValueToSortVariable(val: string) {
 interface Props {
 }
 
-export const ExploreGenerativeTokens = ({}: Props) => {
+export const ExploreGenerativeTokens = ({ }: Props) => {
   // sort variables
   const [sortValue, setSortValue] = useState<string>("mintOpensAt-desc")
   const sort = useMemo<Record<string, any>>(() => sortValueToSortVariable(
@@ -199,7 +202,7 @@ export const ExploreGenerativeTokens = ({}: Props) => {
     setFilters({
       ...filters,
       [filter]: value
-    })  
+    })
   }
 
   const removeFilter = (filter: string) => {
@@ -215,7 +218,7 @@ export const ExploreGenerativeTokens = ({}: Props) => {
   const filterTags = useMemo<ExploreTagDef[]>(() => {
     const tags: ExploreTagDef[] = []
     for (const key in filters) {
-      let value: string|null = null
+      let value: string | null = null
       let k: any = key
       // @ts-ignore
       if (filters[k] !== undefined) {
@@ -262,12 +265,12 @@ export const ExploreGenerativeTokens = ({}: Props) => {
 
   return (
     <CardsExplorer>
-      {({ 
+      {({
         filtersVisible,
         setFiltersVisible,
       }) => (
         <>
-          <div ref={topMarkerRef}/>
+          <div ref={topMarkerRef} />
           <SearchHeader
             hasFilters
             filtersOpened={filtersVisible}
@@ -309,7 +312,7 @@ export const ExploreGenerativeTokens = ({}: Props) => {
               </FiltersPanel>
             )}
 
-            <div style={{width: "100%"}}>
+            <div style={{ width: "100%" }}>
               {filterTags.length > 0 && (
                 <>
                   <ExploreTags
@@ -320,7 +323,7 @@ export const ExploreGenerativeTokens = ({}: Props) => {
                       setSortValue(sortBeforeSearch.current)
                     }}
                   />
-                  <Spacing size="regular"/>
+                  <Spacing size="regular" />
                 </>
               )}
 
