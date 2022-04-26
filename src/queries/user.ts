@@ -64,6 +64,9 @@ export const Qu_userGenTokens = gql`
         lockEnd
         ...Author
         ...Pricing
+        reserves {
+          amount
+        }
       }
     }
   }
