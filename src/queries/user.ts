@@ -90,6 +90,7 @@ export const Qu_userObjkts = gql`
         assigned
         rarity
         iteration
+        generationHash
         owner {
           id
           name
@@ -99,10 +100,10 @@ export const Qu_userObjkts = gql`
         issuer {
           name
           flag
+          generativeUri
           ...Author
         }
         name
-        metadata
         createdAt
         activeListing {
           id
