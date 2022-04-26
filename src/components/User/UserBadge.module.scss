@@ -1,0 +1,89 @@
+.container {
+  display: flex;
+  align-items: center;
+  color: var(--color-primary);
+  font-weight: bold;
+
+  .user_infos {
+    margin-left: 0.5em;
+  }
+
+  .user_name {
+    display: flex;
+    flex: row;
+    align-items: baseline;
+    gap: 0.25em;
+    text-align: left;
+  }
+
+  .user_address {
+    color: var(--color-gray);
+    font-weight: normal;
+    font-size: 0.8em;
+  }
+  
+  .verified {
+    font-size: 1.15em;
+    bottom: -1px;
+    position: relative;
+  }
+
+  &.side-left {
+    flex-direction: row;
+  }
+
+  &.side-right {
+    flex-direction: row-reverse;
+
+    .avatar {
+      margin-right: 0;
+      margin-left: 0.5em;
+    }
+
+    .user_name {
+      flex-direction: row-reverse;
+    }
+  }
+}
+
+a.container:hover {
+  .avatar {
+    transform: scale(1.05);
+  }
+  .append {
+    text-decoration: none !important;
+  }
+}
+
+.avatar {
+  transition: all 0.3s ease-out;
+  flex-shrink: 0;
+}
+
+.avatar-small {
+  width: 26px;
+  height: 26px;
+}
+
+.avatar-regular {
+  width: 37px;
+  height: 37px;
+}
+
+.avatar-big {
+  width: 50px;
+  height: 50px;
+}
+
+.prepend {
+  color: var(--color-black);
+  margin-right: 3px;
+}
+
+.avatar_mod {
+  border: 3px solid var(--color-success);
+}
+
+.moderator {
+  color: var(--color-success);
+}
