@@ -10,7 +10,7 @@ import { Cycle } from "../../types/Cycles"
 
 interface Props {
   date: Date
-  cycles: Cycle[]
+  cycles: Cycle[][]
   timezone: Timezone
 }
 export function ScheduleLine({ date, cycles, timezone }: Props) {
@@ -47,9 +47,7 @@ export function ScheduleLine({ date, cycles, timezone }: Props) {
       </td>
       {hours.map((hour, idx) => (
         <td key={idx} className={cs({ [style.active]: hour.opened })}>
-          <div className={cs(style.square)}>
-            <span className={cs(style.cycle_id)}>{ hour.opened && hour.id }</span>
-          </div>
+          <div className={cs(style.square)}/>
         </td>
       ))}
       <td>

@@ -1,4 +1,4 @@
-import { addSeconds } from "date-fns"
+import { addSeconds, isBefore } from "date-fns"
 import { utcToZonedTime } from "date-fns-tz"
 import { Cycle, CyclesState } from "../types/Cycles"
 import { Timezone } from "./timzones"
@@ -12,6 +12,11 @@ export function isCycleOpenedAt(date: Date, cycle: Cycle, timezone?: Timezone): 
   
   // get seconds between the 2 dates
   const diff = (date.getTime() - reference.getTime()) / 1000
+
+  // if the diff is negative, it's de facto disabled
+  if (diff < 0) {
+    return false
+  }
   
   // modulo the cycle duration
   const cycleHours = diff % (cycle.opening + cycle.closing)
@@ -21,13 +26,23 @@ export function isCycleOpenedAt(date: Date, cycle: Cycle, timezone?: Timezone): 
 }
 
 /**
- * AND operation for each cycle against the given date, using the isCycleOpenedAt function
+ * Performs a OR operation between the different array of cycles, and for each
+ * array performs a AND operations for the cycles within
+ * [[a,b], [c]] => ((a AND b) OR (c))
  */
-export function areCyclesOpenedAt(date: Date, cycles: Cycle[], timezone?: Timezone): boolean {
+export function areCyclesOpenedAt(
+  date: Date,
+  cycles: Cycle[][],
+  timezone?: Timezone,
+): boolean {
   if (cycles.length === 0) return false
-  let opened = true
-  for (const cycle of cycles) {
-    opened = opened && isCycleOpenedAt(date, cycle, timezone)
+  let opened = false
+  for (const cycleGroup of cycles) {
+    let groupOpened = true
+    for (const cycle of cycleGroup) {
+      groupOpened = groupOpened && isCycleOpenedAt(date, cycle, timezone)
+    }
+    opened = opened || groupOpened
   }
   return opened
 }
@@ -71,51 +86,72 @@ export function getCycleNextOpeningTime(cycle: Cycle, time: Date = new Date()): 
  * outputs the next opening time, otherwise outputs true and the next
  * closing time
  */
-export function getCyclesState(cycles: Cycle[]): CyclesState {
+export function getCyclesState(cycles: Cycle[][]): CyclesState {
   const now = new Date()
 
   // are the cycles current opened ?
   const opened = areCyclesOpenedAt(now, cycles)
 
-  // the next closing time can be found by finding the nearest closing time
-  // among any cycle
-  // a list of the closing time for each cycle
-  const closings = cycles.map(cycle => getCycleNextClosingTime(cycle, now))
-  // get the smallest
-  const nextClosing = closings.reduce((prev, curr) => curr < prev ? curr : prev, closings[0])
+  // PROBLEM: find the closest opening & closing for any given set of cycles
+  // with OR and AND operations
+  // this is a brute force solution:
+  // - loop through all the cycles
+  // - find the next opening/closing of the cycle
+  // - for the opening:
+  //    - if all cycles are opened at the time of opening: add to list
+  // - for closing:
+  //    - if all cycles are closed at the time, add to list
+  // find the min of each list
 
+  // record the closest opening/closing where all the cycles are opened/closed
+  let closestOpening: Date|null = null
+  let closestClosing: Date|null = null
 
-  // the next opening is not as easy, and maybe an analytical solution exists but
-  // this is a brute force solution which also works
-  // we need to find the next opening where ALL the cycles are enabled
-  // for each cycle, loop through all their next openings and stop until one of the
-  // next openings is opened for all the cycles
-  // then the closest date is the closest opening where all the cycles are opened
+  // a list of cycles: [[]] => []
+  const cyclesList = cycles.reduce((prev, curr) => prev.concat(curr), [])
 
-  // record the closest openings where all the cycles are opened
-  const closestOpenings: Date[] = []
+  let duration,
+      time,
+      closestCycleOpening,
+      closestCycleClosing
 
-  for (const cycle of cycles) {
-    // get the closest next opening
-    const closestCycleOpening = getCycleNextOpeningTime(cycle, now)
-    const duration = cycle.closing + cycle.opening
-    // only check within the next openings
-    for (let i = 0; i < 30; i++) {
-      const time = addSeconds(closestCycleOpening, i * duration)
+  for (const cycle of cyclesList) {
+    // get the closest next opening & closing
+    closestCycleOpening = getCycleNextOpeningTime(cycle, now)
+    closestCycleClosing = getCycleNextClosingTime(cycle, now)
+    duration = cycle.closing + cycle.opening
+  
+    // only check within the next 20 openings
+    for (let i = 0; i < 20; i++) {
+      time = addSeconds(closestCycleOpening, i * duration)
+      // if opened at T and T is new min, set
       if (areCyclesOpenedAt(time, cycles)) {
-        closestOpenings.push(time)
-        break
+        if (!closestOpening || isBefore(time, closestOpening)) {
+          closestOpening = time
+          // we can move to next cycle
+          break
+        }
+      }
+    }
+
+    // same for closing
+    for (let i = 0; i < 20; i++) {
+      time = addSeconds(closestCycleClosing, i * duration)
+      // if closed at T and T is new min, set
+      if (!areCyclesOpenedAt(time, cycles)) {
+        if (!closestClosing || isBefore(time, closestClosing)) {
+          closestClosing = time
+          // we can move to next cycle
+          break
+        }
       }
     }
   }
 
-  // now the closest opening is the nearest
-  const nextOpening = closestOpenings.reduce((prev, curr) => curr < prev ? curr : prev, closestOpenings[0])
-
   return {
     opened,
-    nextClosing,
-    nextOpening,
+    nextClosing: closestClosing!,
+    nextOpening: closestOpening!,
   }
 }
 
@@ -124,9 +160,17 @@ export interface ICycleTimeState {
   id: number
 }
 
-export function getCycleTimeState(date: Date, cycles: Cycle[], timezone: Timezone): ICycleTimeState {
+/**
+ * Outputs the cycles state at a given point in time
+ * (defined as a tuple (Date, Timezone))
+ */
+export function getCycleTimeState(
+  date: Date, 
+  cycles: Cycle[][], 
+  timezone: Timezone
+): ICycleTimeState {
   return {
     opened: areCyclesOpenedAt(date, cycles, timezone),
-    id: getCycleIdAt(date, cycles[0])
+    id: 0,
   }
 }
