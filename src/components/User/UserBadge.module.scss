@@ -43,11 +43,13 @@
     }
   }
 }
+.default_font_styles {
+  color: var(--color-primary);
+  font-weight: bold;
+}
 
 .link {
   display: inline-block;
-  color: var(--color-primary);
-  font-weight: bold;
 }
 
 .link:hover {
