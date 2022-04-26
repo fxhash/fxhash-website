@@ -10,7 +10,7 @@ import { useEffect, useMemo, useRef, useState } from "react"
 import { shuffleArray } from "../../../utils/array"
 import { useAnimationFrame, useHasInterractedIn } from "../../../utils/hookts"
 import { Objkt } from "../../../types/entities/Objkt"
-import { getObjktUrl } from "../../../utils/objkt"
+import { gentkLiveUrl, getObjktUrl } from "../../../utils/objkt"
 import { Modal } from "../../../components/Utils/Modal"
 import { SliderWithText } from "../../../components/Input/SliderWithText"
 
@@ -135,7 +135,7 @@ export function GenerativeEnjoy({ tokens, backLink, requestData }: Props) {
       >
         {tokens.length > 0 ? (
           <ArtworkIframe
-            url={ipfsGatewayUrl(selectedToken.metadata?.artifactUri)}
+            url={gentkLiveUrl(selectedToken)}
             onLoaded={onIframeLoaded}
           />
         ):(
