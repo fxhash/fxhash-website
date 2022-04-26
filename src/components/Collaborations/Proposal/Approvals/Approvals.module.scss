@@ -1,0 +1,8 @@
+.approvals {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: max-content;
+  gap: 8px 16px;
+  align-items: center;
+  font-size: var(--font-size-small);
+}
