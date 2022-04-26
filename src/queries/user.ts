@@ -91,6 +91,7 @@ export const Qu_userObjkts = gql`
         rarity
         iteration
         generationHash
+        metadata
         owner {
           id
           name
