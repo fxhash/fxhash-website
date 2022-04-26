@@ -11,6 +11,6 @@ export function getObjktUrl(objkt: Objkt): string {
  */
 export function gentkLiveUrl(gentk: Objkt): string {
   return ipfsGatewayUrl(
-    `${gentk.issuer.generativeUri}/?fxhash=${gentk.generationHash}`
+    `${gentk.metadata.generatorUri}/?fxhash=${gentk.metadata.iterationHash}`
   )
 }
