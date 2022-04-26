@@ -1,8 +1,6 @@
 .container {
   display: flex;
   align-items: center;
-  color: var(--color-primary);
-  font-weight: bold;
 
   .user_infos {
     margin-left: 0.5em;
@@ -49,6 +47,7 @@
 .link {
   display: inline-block;
   color: var(--color-primary);
+  font-weight: bold;
 }
 
 .link:hover {
