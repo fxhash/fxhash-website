@@ -37,6 +37,7 @@ export const MessageCenterContext = React.createContext<IMessageCenterContext>(d
 
 export function MessageCenterProvider({ children }: PropsWithChildren<{}>) {
   const [context, setContext] = useState<IMessageCenterContext>(defaultCtx)
+  
   // memoize to prevent rerendering JIC
   const withAddMessage = useMemo<IMessageCenterContext>(() => {
     // adds a message to the list of messages to display
