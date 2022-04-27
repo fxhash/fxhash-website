@@ -71,6 +71,39 @@ export const Qu_userGenTokens = gql`
     }
   }
 `
+export const Qu_userEntireCollection = gql`
+  ${Frag_GenAuthor}
+
+  query UserCollection(
+    $id: String!,
+  ) {
+    user(id: $id) {
+      id
+      entireCollection {
+        id
+        version
+        assigned
+        rarity
+        iteration
+        generationHash
+        metadata
+        issuer {
+          name
+          flag
+          generativeUri
+          ...Author
+        }
+        name
+        createdAt
+        activeListing {
+          id
+          version
+          price
+        }
+      }
+    }
+  }
+`
 
 export const Qu_userObjkts = gql`
   ${Frag_GenAuthor}

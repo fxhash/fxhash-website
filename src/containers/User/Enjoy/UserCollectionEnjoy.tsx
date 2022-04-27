@@ -3,7 +3,7 @@ import cs from "classnames"
 import { User } from "../../../types/entities/User"
 import { useEffect, useRef } from "react"
 import { useQuery } from "@apollo/client"
-import { Qu_userObjkts } from "../../../queries/user"
+import { Qu_userEntireCollection } from "../../../queries/user"
 import { Objkt } from "../../../types/entities/Objkt"
 import { GenerativeEnjoy } from "../../Generative/Enjoy/GenerativeEnjoy"
 import { getUserProfileLink } from "../../../utils/user"
@@ -18,22 +18,20 @@ export function UserCollectionEnjoy({
   const currentLength = useRef<number>(0)
   const ended = useRef<boolean>(false)
 
-  const { data, loading, fetchMore } = useQuery(Qu_userObjkts, {
+  const { data, loading, fetchMore } = useQuery(Qu_userEntireCollection, {
     notifyOnNetworkStatusChange: true,
     variables: {
       id: user.id,
-      skip: 0,
-      take: 5
     }
   })
 
   useEffect(() => {
     if (!loading) {
-      if (currentLength.current === data.user.objkts?.length) {
+      if (currentLength.current === data.user.entireCollection?.length) {
         ended.current = true
       }
       else {
-        currentLength.current = data.user.objkts?.length
+        currentLength.current = data.user.entireCollection?.length
       }
     }
   }, [data, loading])
@@ -43,18 +41,16 @@ export function UserCollectionEnjoy({
       fetchMore({
         variables: {
           id: user.id,
-          skip: data?.user.objkts.length || 0,
-          take: 5
         }
       })
     }
   }
 
-  const objkts: Objkt[]|null = data?.user.objkts || null
+  const entireCollection: Objkt[]|null = data?.user.entireCollection || null
 
   return (
     <GenerativeEnjoy
-      tokens={objkts || []}
+      tokens={entireCollection || []}
       backLink={`${getUserProfileLink(user)}/collection`}
       requestData={load}
     />
