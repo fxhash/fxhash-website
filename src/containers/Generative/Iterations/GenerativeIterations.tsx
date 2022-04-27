@@ -40,6 +40,21 @@ const sortOptions: IOptions[] = [
   },
 ]
 
+const cardSizeOptions: IOptions[] = [
+  {
+    label: 'small',
+    value: 120,
+  },
+  {
+    label: 'medium',
+    value: 270,
+  },
+  {
+    label: 'large',
+    value: 400,
+  },
+]
+
 function sortValueToSortVariable(val: string) {
   if (val === "pertinence") return {}
   const split = val.split("-")
@@ -67,7 +82,6 @@ export function GenerativeIterations({
   // the sort value
   const [sortValue, setSortValue] = useState<string>("iteration-asc")
   const sort = useMemo<Record<string, any>>(() => sortValueToSortVariable(sortValue), [sortValue])
-
   // the filters on the features, default no filters
   const [featureFilters, setFeatureFilters] = useState<IObjktFeatureFilter[]>([])
 
@@ -143,6 +157,7 @@ export function GenerativeIterations({
     }
   }, [loading])
 
+
   const clearFeatureFilter = (name: string) => {
     setFeatureFilters(featureFilters.filter(filter => filter.name !== name))
   }
@@ -158,10 +173,12 @@ export function GenerativeIterations({
   }, [serializedFeatureFilters])
 
   return (
-    <CardsExplorer>
+    <CardsExplorer cardSizeScope="generative-iteration">
       {({ 
         filtersVisible,
-        setFiltersVisible,
+	setFiltersVisible,
+	cardSize,
+	setCardSize, 
       }) => (
         <>
           <div ref={topMarkerRef}/>
@@ -175,7 +192,20 @@ export function GenerativeIterations({
                 options={sortOptions}
                 onChange={setSortValue}
               />
-            }
+	    }
+	    sizeSelectComp={
+	      <div className={style.card_size_select}>
+		{cardSizeOptions.map(option => 
+		  <button
+		    key={option.label}
+		    className={cs({[style.active]: option.value === cardSize})}
+		    onClick={() => setCardSize(option.value)}
+		  >
+		    <i className="fa-solid fa-square"></i>
+		  </button>
+		)}
+	      </div>	
+	    }
             padding="small"
           />
 
@@ -188,7 +218,7 @@ export function GenerativeIterations({
                   setFeatureFilters={setFeatureFilters}
                 />
               </FiltersPanel>
-            )}
+	    )}
 
             <div style={{width: "100%"}}>
               {filterTags.length > 0 && (
