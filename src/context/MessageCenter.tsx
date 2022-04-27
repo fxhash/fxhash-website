@@ -17,12 +17,14 @@ export interface IMessage extends IMessageSent {
 
 interface IMessageCenterContext {
   messages: IMessage[]
+  removeMessage: (id: string) => void
   addMessage: (message: IMessageSent) => void
   addMessages: (message: IMessageSent[]) => void
 }
 
 const defaultProperties: IMessageCenterContext = {
   messages: [],
+  removeMessage: () => {},
   addMessage: () => {},
   addMessages: () => {},
 }
@@ -35,7 +37,7 @@ export const MessageCenterContext = React.createContext<IMessageCenterContext>(d
 
 export function MessageCenterProvider({ children }: PropsWithChildren<{}>) {
   const [context, setContext] = useState<IMessageCenterContext>(defaultCtx)
-  
+
   // memoize to prevent rerendering JIC
   const withAddMessage = useMemo<IMessageCenterContext>(() => {
     // adds a message to the list of messages to display
@@ -69,27 +71,28 @@ export function MessageCenterProvider({ children }: PropsWithChildren<{}>) {
       })
     }
 
+    const removeMessage = (id: string) => {
+      const messages = context.messages.filter(message => message.id !== id)
+      setContext({
+        ...context,
+        messages,
+      })
+    }
+
     return {
       ...context,
+      removeMessage,
       addMessage,
       addMessages,
     }
   }, [context])
-
-  const removeMessage = (id: string) => {
-    const messages = context.messages.filter(message => message.id !== id)
-    setContext({
-      ...context,
-      messages,
-    })
-  }
 
   return (
     <MessageCenterContext.Provider value={withAddMessage}>
       {children}
       <MessageCenterContainer
         messages={context.messages}
-        removeMessage={removeMessage}
+        removeMessage={context.removeMessage}
       />
     </MessageCenterContext.Provider>
   )
