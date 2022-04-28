@@ -154,7 +154,7 @@ export function UserCollection({
     setFilters({
       ...filters,
       [filter]: value
-    })  
+    })
   }
 
   const removeFilter = (filter: string) => {
@@ -225,7 +225,7 @@ export function UserCollection({
       </header>
 
       <CardsExplorer>
-        {({ 
+        {({
           filtersVisible,
           setFiltersVisible,
         }) => (
@@ -245,6 +245,7 @@ export function UserCollection({
               }
             >
               <SearchInputControlled
+                minimizeOnMobile
                 onSearch={(value) => {
                   if (value) {
                     setSortOptions(searchSortOptions)

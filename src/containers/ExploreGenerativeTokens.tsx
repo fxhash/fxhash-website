@@ -284,6 +284,7 @@ export const ExploreGenerativeTokens = ({ }: Props) => {
             }
           >
             <SearchInputControlled
+              minimizeOnMobile
               onSearch={(value) => {
                 if (value) {
                   setSortOptions(searchSortOptions)

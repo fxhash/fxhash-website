@@ -1,6 +1,13 @@
+@import "../../styles/Variables.scss";
+
 .search {
   display: flex;
-  position: relative;
+  flex-direction: row;
+  align-items: center;
+  border: 3px solid var(--color-border-input);
+  background-color: var(--color-white);
+  height: 50px;
+  padding-left: 4px;
 
   button {
     border: none;
@@ -8,31 +15,41 @@
   }
 
   input {
-    border: 3px solid var(--color-border-input);
-    height: 50px;
+    border: 0;
     font-family: inherit;
-    padding-left: 48px;
     outline: none;
     width: 100%;
-    background-color: var(--color-white);
+  }
 
-    &:focus {
-      border-color: var(--color-secondary);
-    }
+  &:focus-within {
+    border-color: var(--color-secondary);
   }
 }
 
 .search-icon {
-  position: absolute;
   font-size: 25px;
-  pointer-events: none;
-  top: 50%;
-  left: 5px;
-  transform: translateY(-50%);
   color: var(--color-border-input);
 }
 
 .large_search {
   flex-grow: 2;
   max-width: 800px;
+}
+
+@media (max-width: $breakpoint-sm) {
+  .search {
+    transition: 0.2s all ease-out;
+    &--minimize {
+      box-shadow: none;
+      padding-left: 0;
+      border-color: transparent;
+      input {
+        transition: 0.2s all ease-out;
+        width: 0;
+      }
+      &:focus-within {
+        border-color: transparent;
+      }
+    }
+  }
 }

@@ -85,14 +85,14 @@ const queryListingFilterHandlers: Record<
   fullyMinted_eq: {
     param: "fullMint",
     transform: param => param ? param === "1" : undefined,
-    encode: value => value !== undefined 
+    encode: value => value !== undefined
       ? encodeURIComponent(value ? "1" : "0")
       : undefined
   },
   authorVerified_eq: {
     param: "verified",
     transform: param => param ? param === "1" : undefined,
-    encode: value => value !== undefined 
+    encode: value => value !== undefined
       ? encodeURIComponent(value ? "1" : "0")
       : undefined
   },
@@ -157,7 +157,7 @@ export const Marketplace = ({ urlQuery }: Props) => {
     () => sortValueToSortVariable(sortValue),
     [sortValue]
   )
-  // sort options - when the search is triggered, options are updated 
+  // sort options - when the search is triggered, options are updated
   // to include relevance
   const [sortOptions, setSortOptions] = useState<IOptions[]>(
     urlQuery.search ? searchSortOptions : generalSortOptions
@@ -347,6 +347,7 @@ export const Marketplace = ({ urlQuery }: Props) => {
             }
           >
             <SearchInputControlled
+              minimizeOnMobile
               onSearch={(value) => {
                 if (value) {
                   setSortOptions(searchSortOptions)

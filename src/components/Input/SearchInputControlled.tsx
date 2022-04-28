@@ -1,13 +1,13 @@
 import cs from "classnames"
-import { useRouter } from "next/router"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { SearchInput } from "./SearchInput"
 
 interface Props {
   onSearch: (query: string) => void
   placeholder?: string
   initialValue?: string
-  className?: string
+  className?: string,
+  minimizeOnMobile?: boolean,
 }
 
 /**
@@ -20,6 +20,7 @@ export function SearchInputControlled({
   onSearch,
   initialValue = "",
   className,
+  minimizeOnMobile,
 }: Props) {
   const [value, setValue] = useState<string>(initialValue)
 
@@ -30,6 +31,7 @@ export function SearchInputControlled({
       placeholder={placeholder}
       onSearch={onSearch}
       className={cs(className)}
+      minimizeOnMobile={minimizeOnMobile}
     />
   )
 }
