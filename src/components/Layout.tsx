@@ -1,4 +1,3 @@
-import Head from "next/head"
 import style from "./Layout.module.scss"
 import { PropsWithChildren } from "react"
 import { Footer } from "../containers/Footer/Footer"
@@ -19,7 +18,7 @@ export function Layout({ children }: PropsWithChildren<{}>) {
       <main className={style.main}>
         {children}
       </main>
-      
+
       <Footer />
     </>
   )
