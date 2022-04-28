@@ -17,6 +17,7 @@ import { GenerativeIterationsFilters } from "./GenerativeIterationsFilters"
 import { ExploreTagDef, ExploreTags } from "../../../components/Exploration/ExploreTags"
 import { Spacing } from "../../../components/Layout/Spacing"
 import { LargeGentkCard } from "../../../components/Card/LargeGentkCard"
+import { useInView } from "react-intersection-observer";
 
 
 const ITEMS_PER_PAGE = 20
@@ -63,6 +64,9 @@ export function GenerativeIterations({
   // use to know when to stop loading
   const currentLength = useRef<number>(0)
   const ended = useRef<boolean>(false)
+  const { ref: refCardsContainer, inView: inViewCardsContainer } = useInView({
+    rootMargin: '-300px 0px -100px'
+  })
 
   // the sort value
   const [sortValue, setSortValue] = useState<string>("iteration-asc")
@@ -159,7 +163,7 @@ export function GenerativeIterations({
 
   return (
     <CardsExplorer>
-      {({ 
+      {({
         filtersVisible,
         setFiltersVisible,
       }) => (
@@ -168,6 +172,7 @@ export function GenerativeIterations({
 
           <SearchHeader
             hasFilters
+            showFiltersOnMobile={inViewCardsContainer}
             onToggleFilters={() => setFiltersVisible(!filtersVisible)}
             sortSelectComp={
               <Select
@@ -211,7 +216,7 @@ export function GenerativeIterations({
                 onTrigger={infiniteScrollFetch}
                 canTrigger={!!data && !loading}
               >
-                <CardsContainer>
+                <CardsContainer ref={refCardsContainer}>
                   {tokens?.map(gentk => (
                     <LargeGentkCard
                       key={gentk.id}

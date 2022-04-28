@@ -19,6 +19,7 @@ import { displayMutez } from "../utils/units"
 import { SearchInputControlled } from "../components/Input/SearchInputControlled"
 import { Qu_listings } from "../queries/listing"
 import { useRouter } from "next/router"
+import { useInView } from "react-intersection-observer";
 
 
 const ITEMS_PER_PAGE = 40
@@ -85,14 +86,14 @@ const queryListingFilterHandlers: Record<
   fullyMinted_eq: {
     param: "fullMint",
     transform: param => param ? param === "1" : undefined,
-    encode: value => value !== undefined 
+    encode: value => value !== undefined
       ? encodeURIComponent(value ? "1" : "0")
       : undefined
   },
   authorVerified_eq: {
     param: "verified",
     transform: param => param ? param === "1" : undefined,
-    encode: value => value !== undefined 
+    encode: value => value !== undefined
       ? encodeURIComponent(value ? "1" : "0")
       : undefined
   },
@@ -157,13 +158,17 @@ export const Marketplace = ({ urlQuery }: Props) => {
     () => sortValueToSortVariable(sortValue),
     [sortValue]
   )
-  // sort options - when the search is triggered, options are updated 
+  // sort options - when the search is triggered, options are updated
   // to include relevance
   const [sortOptions, setSortOptions] = useState<IOptions[]>(
     urlQuery.search ? searchSortOptions : generalSortOptions
   )
   // keeps track of the search option used before the search was triggered
   const sortBeforeSearch = useRef<string>(sortValue)
+
+  const { ref: refCardsContainer, inView: inViewCardsContainer } = useInView({
+    rootMargin: '-300px 0px -100px'
+  })
 
   // effect to update the sortBeforeSearch value whenever a sort changes
   useEffect(() => {
@@ -336,6 +341,7 @@ export const Marketplace = ({ urlQuery }: Props) => {
           <div ref={topMarkerRef} />
           <SearchHeader
             hasFilters
+            showFiltersOnMobile={inViewCardsContainer}
             filtersOpened={filtersVisible}
             onToggleFilters={() => setFiltersVisible(!filtersVisible)}
             sortSelectComp={
@@ -399,7 +405,7 @@ export const Marketplace = ({ urlQuery }: Props) => {
                 onTrigger={infiniteScrollFetch}
                 canTrigger={!!data && !loading}
               >
-                <CardsContainer>
+                <CardsContainer ref={refCardsContainer}>
                   {listings?.length > 0 && listings.map(offer => (
                     <ObjktCard key={offer.id} objkt={offer.objkt} />
                   ))}

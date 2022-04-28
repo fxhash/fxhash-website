@@ -23,6 +23,7 @@ import { MarketplaceFilters } from "../Marketplace/MarketplaceFilters"
 import { ExploreTagDef, ExploreTags } from "../../components/Exploration/ExploreTags"
 import { UserCollectionFilters } from "./UserCollectionFilters"
 import { CardsLoading } from "../../components/Card/CardsLoading"
+import { useInView } from "react-intersection-observer";
 
 
 const ITEMS_PER_PAGE = 20
@@ -79,6 +80,9 @@ export function UserCollection({
   const [sortOptions, setSortOptions] = useState<IOptions[]>(generalSortOptions)
   // keeps track of the search option used before the search was triggered
   const sortBeforeSearch = useRef<string>(sortValue)
+  const { ref: refCardsContainer, inView: inViewCardsContainer } = useInView({
+    rootMargin: '-300px 0px -100px'
+  });
 
   // effect to update the sortBeforeSearch value whenever a sort changes
   useEffect(() => {
@@ -154,7 +158,7 @@ export function UserCollection({
     setFilters({
       ...filters,
       [filter]: value
-    })  
+    })
   }
 
   const removeFilter = (filter: string) => {
@@ -225,7 +229,7 @@ export function UserCollection({
       </header>
 
       <CardsExplorer>
-        {({ 
+        {({
           filtersVisible,
           setFiltersVisible,
         }) => (
@@ -235,6 +239,7 @@ export function UserCollection({
             <SearchHeader
               hasFilters
               filtersOpened={filtersVisible}
+              showFiltersOnMobile={inViewCardsContainer}
               onToggleFilters={() => setFiltersVisible(!filtersVisible)}
               sortSelectComp={
                 <Select
@@ -296,7 +301,7 @@ export function UserCollection({
                 <InfiniteScrollTrigger
                   onTrigger={load}
                 >
-                  <CardsContainer>
+                  <CardsContainer ref={refCardsContainer}>
                     {objkts?.map(objkt => (
                       <ObjktCard
                         key={objkt.id}
