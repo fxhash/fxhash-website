@@ -6,7 +6,7 @@ import { GenerativeToken, GenerativeTokenFilters, GenTokFlag } from '../types/en
 import { CardsContainer } from '../components/Card/CardsContainer'
 import { GenerativeTokenCard } from '../components/Card/GenerativeTokenCard'
 import { InfiniteScrollTrigger } from '../components/Utils/InfiniteScrollTrigger'
-import { useState, useRef, useEffect, useContext, useMemo } from 'react'
+import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { Spacing } from '../components/Layout/Spacing'
 import { CardsLoading } from '../components/Card/CardsLoading'
 import { SettingsContext } from '../context/Theme'
@@ -14,12 +14,11 @@ import { IOptions, Select } from '../components/Input/Select'
 import { ExploreTagDef, ExploreTags } from '../components/Exploration/ExploreTags'
 import { CardsExplorer } from '../components/Exploration/CardsExplorer'
 import { FiltersPanel } from '../components/Exploration/FiltersPanel'
-import { MarketplaceFilters } from './Marketplace/MarketplaceFilters'
 import { SearchHeader } from '../components/Search/SearchHeader'
 import { SearchInputControlled } from '../components/Input/SearchInputControlled'
-import { displayMutez } from '../utils/units'
 import { GenerativeFilters } from './Generative/GenerativeFilters'
 import { Frag_GenAuthor, Frag_GenPricing } from '../queries/fragments/generative-token'
+import { ITagsFilters, tagsFilters } from "../utils/filters";
 
 
 const ITEMS_PER_PAGE = 20
@@ -198,70 +197,35 @@ export const ExploreGenerativeTokens = ({ }: Props) => {
     })
   }, [sort, filtersWithDefaults])
 
-  const addFilter = (filter: string, value: any) => {
+  const addFilter = useCallback((filter: string, value: any) => {
     setFilters({
       ...filters,
       [filter]: value
     })
-  }
+  }, [filters])
 
-  const removeFilter = (filter: string) => {
+  const removeFilter = useCallback((filter: string) => {
     addFilter(filter, undefined)
     // if the filter is search string, we reset the sort to what ti was
     if (filter === "searchQuery_eq" && sortValue === "relevance-desc") {
       setSortValue(sortBeforeSearch.current)
       setSortOptions(generalSortOptions)
     }
-  }
+  }, [addFilter, sortValue])
 
   // build the list of filters
   const filterTags = useMemo<ExploreTagDef[]>(() => {
-    const tags: ExploreTagDef[] = []
-    for (const key in filters) {
-      let value: string | null = null
-      let k: any = key
-      // @ts-ignore
-      if (filters[k] !== undefined) {
-        switch (key) {
-          case "price_gte":
-            //@ts-ignore
-            value = `price >= ${displayMutez(filters[key])} tez`
-            break
-          case "price_lte":
-            //@ts-ignore
-            value = `price <= ${displayMutez(filters[key])} tez`
-            break
-          case "supply_gte":
-            //@ts-ignore
-            value = `editions >= ${filters[key]}`
-            break
-          case "supply_lte":
-            //@ts-ignore
-            value = `editions <= ${filters[key]}`
-            break
-          case "authorVerified_eq":
-            //@ts-ignore
-            value = `artist: ${filters[key] ? "verified" : "un-verified"}`
-            break
-          case "mintProgress_eq":
-            //@ts-ignore
-            value = `mint progress: ${filters[key]?.toLowerCase()}`
-            break
-          case "searchQuery_eq":
-            //@ts-ignore
-            value = `search: ${filters[key]}`
-            break
-        }
-        if (value) {
-          tags.push({
-            value,
-            onClear: () => removeFilter(key)
-          })
-        }
+    return Object.entries(filters).reduce((acc, [key, value]) => {
+      const getTag: (value: any) => string = tagsFilters[key as keyof ITagsFilters];
+      if (getTag) {
+        acc.push({
+          value: getTag(value),
+          onClear: () => removeFilter(key)
+        })
       }
-    }
-    return tags
-  }, [filters])
+      return acc;
+    }, [] as ExploreTagDef[])
+  }, [filters, removeFilter])
 
   return (
     <CardsExplorer>
