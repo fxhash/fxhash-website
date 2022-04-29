@@ -1,18 +1,16 @@
 import style from "./GenerativeEnjoy.module.scss"
 import Link from "next/link"
 import cs from "classnames"
-import { GenerativeTokenWithCollection } from "../../../types/entities/GenerativeToken"
 import { ArtworkIframe } from "../../../components/Artwork/PreviewIframe"
 import { ipfsGatewayUrl } from "../../../services/Ipfs"
 import { UserBadge } from "../../../components/User/UserBadge"
-import { getGenerativeTokenUrl } from "../../../utils/generative-token"
 import { useEffect, useMemo, useRef, useState } from "react"
-import { shuffleArray } from "../../../utils/array"
 import { useAnimationFrame, useHasInterractedIn } from "../../../utils/hookts"
 import { Objkt } from "../../../types/entities/Objkt"
 import { gentkLiveUrl, getObjktUrl } from "../../../utils/objkt"
 import { Modal } from "../../../components/Utils/Modal"
 import { SliderWithText } from "../../../components/Input/SliderWithText"
+import { Loader } from "../../../components/Utils/Loader"
 
 const DEFAULT_TIME_PER_ITERATION_MS = 20000
 const TRANSITION_DURATION_MS = 3000
@@ -32,8 +30,14 @@ interface Props {
   tokens: Objkt[]
   backLink: string
   requestData?: () => void
+  loading?: boolean
 }
-export function GenerativeEnjoy({ tokens, backLink, requestData }: Props) {
+export function GenerativeEnjoy({ 
+  tokens, 
+  backLink, 
+  requestData,
+  loading,
+}: Props) {
   // ref to elements manipulated directly
   const barRef = useRef<HTMLDivElement>(null)
   const frameContainerRef = useRef<HTMLDivElement>(null)
@@ -130,10 +134,19 @@ export function GenerativeEnjoy({ tokens, backLink, requestData }: Props) {
       </header>
 
       <div 
-        className={cs(style.frame_container, style.hidden, { [style.is_empty]: tokens.length === 0 })}
+        className={cs(style.frame_container, style.hidden, { 
+          [style.is_empty]: tokens.length === 0 || loading
+        })}
         ref={frameContainerRef}
       >
-        {tokens.length > 0 ? (
+        {loading ? (
+          <div className={cs(style.empty)}>
+            <Loader
+              color="white"
+              size="small"
+            />
+          </div>
+        ):tokens.length > 0 ? (
           <ArtworkIframe
             url={gentkLiveUrl(selectedToken)}
             onLoaded={onIframeLoaded}

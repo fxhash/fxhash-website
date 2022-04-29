@@ -14,37 +14,12 @@ interface Props {
 export function UserCollectionEnjoy({
   user
 }: Props) {
-  // use to know when to stop loading
-  const currentLength = useRef<number>(0)
-  const ended = useRef<boolean>(false)
-
-  const { data, loading, fetchMore } = useQuery(Qu_userEntireCollection, {
+  const { data, loading } = useQuery(Qu_userEntireCollection, {
     notifyOnNetworkStatusChange: true,
     variables: {
       id: user.id,
     }
   })
-
-  useEffect(() => {
-    if (!loading) {
-      if (currentLength.current === data.user.entireCollection?.length) {
-        ended.current = true
-      }
-      else {
-        currentLength.current = data.user.entireCollection?.length
-      }
-    }
-  }, [data, loading])
-
-  const load = () => {
-    if (!ended.current) {
-      fetchMore({
-        variables: {
-          id: user.id,
-        }
-      })
-    }
-  }
 
   const entireCollection: Objkt[]|null = data?.user.entireCollection || null
 
@@ -52,7 +27,7 @@ export function UserCollectionEnjoy({
     <GenerativeEnjoy
       tokens={entireCollection || []}
       backLink={`${getUserProfileLink(user)}/collection`}
-      requestData={load}
+      loading={loading}
     />
   )
 }
