@@ -1,7 +1,7 @@
 import style from "./UserCollectionEnjoy.module.scss"
 import cs from "classnames"
 import { User } from "../../../types/entities/User"
-import { useEffect, useRef } from "react"
+import { useEffect, useMemo, useRef } from "react"
 import { useQuery } from "@apollo/client"
 import { Qu_userEntireCollection } from "../../../queries/user"
 import { Objkt } from "../../../types/entities/Objkt"
@@ -12,7 +12,7 @@ interface Props {
   user: User
 }
 export function UserCollectionEnjoy({
-  user
+  user,
 }: Props) {
   const { data, loading } = useQuery(Qu_userEntireCollection, {
     notifyOnNetworkStatusChange: true,
@@ -21,7 +21,15 @@ export function UserCollectionEnjoy({
     }
   })
 
-  const entireCollection: Objkt[]|null = data?.user.entireCollection || null
+  const entireCollection: Objkt[]|null = useMemo(
+    () => data?.user.entireCollection
+      ? data.user.entireCollection.map((gentk: Objkt) => ({
+        ...gentk,
+        owner: user,
+      }))
+      : null,
+    [data]
+  )
 
   return (
     <GenerativeEnjoy
