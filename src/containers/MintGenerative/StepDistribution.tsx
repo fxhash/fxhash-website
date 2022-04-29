@@ -32,6 +32,7 @@ import { InputReserves } from "../../components/Input/Reserves/InputReserves"
 import { LinkIcon } from "../../components/Link/LinkIcon"
 import { YupReserves } from "../../utils/yup/reserves"
 import { LinkGuide } from "../../components/Link/LinkGuide"
+import { Donations } from "../Input/Donations"
 
 
 const validation = Yup.object().shape({
@@ -190,7 +191,15 @@ export const StepDistribution: StepComponent = ({ state, onNext }) => {
                 sharesTransformer={transformSplitsSum1000}
                 textShares="Shares (out of 1000)"
                 errors={errors.splitsPrimary as any}
-              />
+              >
+                {(({ addAddress }) => (
+                  <div className={cs(style.royalties_last_row)}>
+                    <Donations
+                      onClickDonation={addAddress}
+                    />
+                  </div>
+                ))}
+              </InputSplits>
             </Field>
 
             <Field error={errors.royalties}>
@@ -228,22 +237,27 @@ export const StepDistribution: StepComponent = ({ state, onNext }) => {
                 textShares="Shares (out of 1000)"
                 errors={errors.splitsSecondary as any}
               >
-                {!values.splitsSecondary.find(
-                  split => split.address === FxhashContracts.GENTK_V2
-                )?(({ addAddress }) => (
+                {(({ addAddress }) => (
                   <div className={cs(style.royalties_last_row)}>
-                    <Button
-                      type="button"
-                      size="very-small"
-                      iconComp={<i className="fa-solid fa-plus" aria-hidden/>}
-                      onClick={() => {
-                        addAddress(FxhashContracts.GENTK_V2)
-                      }}
-                    >
-                      give some royalties to first collector
-                    </Button>
+                    {!values.splitsSecondary.find(
+                      split => split.address === FxhashContracts.GENTK_V2
+                    ) && (
+                      <Button
+                        type="button"
+                        size="very-small"
+                        iconComp={<i className="fa-solid fa-plus" aria-hidden/>}
+                        onClick={() => {
+                          addAddress(FxhashContracts.GENTK_V2)
+                        }}
+                      >
+                        royalties to the minter
+                      </Button>
+                    )}
+                    <Donations
+                      onClickDonation={addAddress}
+                    />
                   </div>
-                )):undefined}
+                ))}
               </InputSplits>
             </Field>
 
