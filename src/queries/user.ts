@@ -86,7 +86,6 @@ export const Qu_userEntireCollection = gql`
         rarity
         iteration
         generationHash
-        metadata
         issuer {
           name
           flag

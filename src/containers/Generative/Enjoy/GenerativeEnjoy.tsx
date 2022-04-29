@@ -78,15 +78,6 @@ export function GenerativeEnjoy({
     }
   }
 
-  // whenever the cursor changed, we load the next one
-  useEffect(() => {
-    if (tokens.length > 1) {
-      // also, preload the next piece
-      const toLoad = tokens[cursorShifted(1)]
-      fetch(ipfsGatewayUrl(toLoad.metadata?.artifactUri))
-    }
-  }, [cursor])
-
   useAnimationFrame((time, delta) => {
     if (!paused) {
       relativeTimer.current+= delta
