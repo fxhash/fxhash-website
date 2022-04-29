@@ -64,9 +64,6 @@ export function GenerativeIterations({
   // use to know when to stop loading
   const currentLength = useRef<number>(0)
   const ended = useRef<boolean>(false)
-  const { ref: refCardsContainer, inView: inViewCardsContainer } = useInView({
-    rootMargin: '-300px 0px -100px'
-  })
 
   // the sort value
   const [sortValue, setSortValue] = useState<string>("iteration-asc")
@@ -166,6 +163,8 @@ export function GenerativeIterations({
       {({
         filtersVisible,
         setFiltersVisible,
+        inViewCardsContainer,
+        refCardsContainer,
       }) => (
         <>
           <div ref={topMarkerRef}/>

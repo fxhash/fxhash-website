@@ -166,10 +166,6 @@ export const Marketplace = ({ urlQuery }: Props) => {
   // keeps track of the search option used before the search was triggered
   const sortBeforeSearch = useRef<string>(sortValue)
 
-  const { ref: refCardsContainer, inView: inViewCardsContainer } = useInView({
-    rootMargin: '-300px 0px -100px'
-  })
-
   // effect to update the sortBeforeSearch value whenever a sort changes
   useEffect(() => {
     if (sortValue !== "relevance-desc") {
@@ -336,6 +332,8 @@ export const Marketplace = ({ urlQuery }: Props) => {
       {({
         filtersVisible,
         setFiltersVisible,
+        inViewCardsContainer,
+        refCardsContainer,
       }) => (
         <>
           <div ref={topMarkerRef} />

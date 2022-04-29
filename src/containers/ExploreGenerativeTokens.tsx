@@ -117,9 +117,6 @@ export const ExploreGenerativeTokens = ({ }: Props) => {
   const [sortOptions, setSortOptions] = useState<IOptions[]>(generalSortOptions)
   // keeps track of the search option used before the search was triggered
   const sortBeforeSearch = useRef<string>(sortValue)
-  const { ref: refCardsContainer, inView: inViewCardsContainer } = useInView({
-    rootMargin: '-300px 0px -100px'
-  })
 
   // effect to update the sortBeforeSearch value whenever a sort changes
   useEffect(() => {
@@ -272,6 +269,8 @@ export const ExploreGenerativeTokens = ({ }: Props) => {
       {({
         filtersVisible,
         setFiltersVisible,
+        inViewCardsContainer,
+        refCardsContainer,
       }) => (
         <>
           <div ref={topMarkerRef} />
