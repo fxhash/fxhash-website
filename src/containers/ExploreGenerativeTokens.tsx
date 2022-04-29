@@ -19,6 +19,7 @@ import { SearchInputControlled } from '../components/Input/SearchInputControlled
 import { GenerativeFilters } from './Generative/GenerativeFilters'
 import { Frag_GenAuthor, Frag_GenPricing } from '../queries/fragments/generative-token'
 import { ITagsFilters, tagsFilters } from "../utils/filters";
+import { sortValueToSortVariable } from "../utils/sort";
 
 
 const ITEMS_PER_PAGE = 20
@@ -93,14 +94,6 @@ const searchSortOptions: IOptions[] = [
   },
   ...generalSortOptions
 ]
-
-function sortValueToSortVariable(val: string) {
-  if (val === "pertinence") return {}
-  const split = val.split("-")
-  return {
-    [split[0]]: split[1].toUpperCase()
-  }
-}
 
 interface Props {
 }
@@ -217,7 +210,7 @@ export const ExploreGenerativeTokens = ({ }: Props) => {
   const filterTags = useMemo<ExploreTagDef[]>(() => {
     return Object.entries(filters).reduce((acc, [key, value]) => {
       const getTag: (value: any) => string = tagsFilters[key as keyof ITagsFilters];
-      if (getTag) {
+      if (value && getTag) {
         acc.push({
           value: getTag(value),
           onClear: () => removeFilter(key)
