@@ -37,6 +37,7 @@ import { ListSplits } from '../../components/List/ListSplits'
 import { gentkLiveUrl } from '../../utils/objkt'
 import { Tags } from '../../components/Tags/Tags'
 import { Labels } from '../../components/GenerativeToken/Label/Labels'
+import { BetaBadge } from '../../components/GenerativeToken/BetaBadge'
 
 
 interface Props {
@@ -114,7 +115,10 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
                 size="big"
               />
               <Spacing size="x-large"/>
-              <h3>{ objkt.name }</h3>
+	      <div className={style.artwork_name}>
+	      <h3>{ objkt.name }</h3>
+	      {objkt.version === 0 && <BetaBadge />}
+	      </div>
             </div>
 
             <Spacing size="x-large"/>
