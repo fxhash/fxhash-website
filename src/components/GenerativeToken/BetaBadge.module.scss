@@ -1,0 +1,29 @@
+.beta_badge {
+  margin: 0 16px;
+  position: relative;
+  i {
+    color: var(--color-secondary);
+  }
+  .beta_icon {
+    color: var(--color-white);
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%,0);
+  }
+}
+
+.size_default { 
+  font-size: 30px;
+  line-height: 30px; 
+  .beta_icon {
+    font-size: 15px;
+  }
+}
+
+.size_small { 
+  font-size: 20px;
+  line-height: 20px; 
+  .beta_icon {
+    font-size: 10px;
+  }
+}
