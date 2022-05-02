@@ -15,6 +15,7 @@ import { useContext } from "react"
 import { SettingsContext } from "../../context/Theme"
 import { DisplayTezos } from "../Display/DisplayTezos"
 import { EntityBadge } from "../User/EntityBadge"
+import {BetaBadge} from "../GenerativeToken/BetaBadge"
 
 interface Props {
   objkt: Objkt
@@ -29,7 +30,6 @@ export function ObjktCard({
 }: Props) {
   const url = getObjktUrl(objkt)
   const settings = useContext(SettingsContext)
-
   return (
     <Link href={url} passHref>
       <AnchorForward style={{ height: '100%' }}>
@@ -40,7 +40,10 @@ export function ObjktCard({
         >
           <div>
             {objkt.duplicate && <div className={cs(styleObjkt.dup_flag)}>[WARNING: DUPLICATE]</div>}
-            <h5>{ objkt.name }</h5>
+	    <div className={styleObjkt.name}>
+	      <h5>{ objkt.name }</h5>
+	      {objkt.version === 0 && <BetaBadge size="small" />}
+	    </div>
             {showOwner && (
               <>
                 <Spacing size="2x-small" />
