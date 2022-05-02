@@ -2,8 +2,8 @@ import style from "./BetaBadge.module.scss"
 import cx from 'classnames';
 
 interface Props {
-  className: GenerativeToken,
-  size: "small" | "default"
+  className?: GenerativeToken,
+  size?: "small" | "default"
 }
 
 export function BetaBadge({
