@@ -8,7 +8,7 @@ interface Props {
 
 export function BetaBadge({
   className,
-  size="small"
+  size="default"
 } : Props) {
 
   return (
