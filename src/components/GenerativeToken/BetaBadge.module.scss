@@ -1,6 +1,8 @@
 .beta_badge {
+  display: inline-block;
   margin: 0 16px;
   position: relative;
+  font-weight: normal;
   i {
     color: var(--color-secondary);
   }
