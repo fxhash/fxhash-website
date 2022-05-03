@@ -115,10 +115,10 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
                 size="big"
               />
               <Spacing size="x-large"/>
-	      <div className={style.artwork_name}>
-	      <h3>{ objkt.name }</h3>
-	      {objkt.version === 0 && <BetaBadge />}
-	      </div>
+	      <h3>
+		{ objkt.name }
+	        {objkt.version === 0 && <BetaBadge />}
+	      </h3>
             </div>
 
             <Spacing size="x-large"/>

@@ -40,10 +40,10 @@ export function ObjktCard({
         >
           <div>
             {objkt.duplicate && <div className={cs(styleObjkt.dup_flag)}>[WARNING: DUPLICATE]</div>}
-	    <div className={styleObjkt.name}>
-	      <h5>{ objkt.name }</h5>
+	    <h5>
+	      { objkt.name }
 	      {objkt.version === 0 && <BetaBadge size="small" />}
-	    </div>
+	    </h5>
             {showOwner && (
               <>
                 <Spacing size="2x-small" />
