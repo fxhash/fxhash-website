@@ -16,6 +16,8 @@ interface PropsChildren {
   setSearchLoading: (loading: boolean) => void,
   refCardsContainer: (node?: (Element | null | undefined)) => void,
   inViewCardsContainer: boolean,
+  isSearchMinimized: boolean,
+  setIsSearchMinimized: (state: boolean) => void,
 }
 
 interface Props {
@@ -34,6 +36,8 @@ export function CardsExplorer({
   const [filtersVisible, setFiltersVisible] = useState<boolean>(filtersVisibleDefault)
   // is the search loading ?
   const [searchLoading, setSearchLoading] = useState<boolean>(false)
+  // is search minimized on mobile
+  const [isSearchMinimized, setIsSearchMinimized] = useState<boolean>(true)
 
   return children({
     refCardsContainer,
@@ -41,6 +45,8 @@ export function CardsExplorer({
     filtersVisible,
     setFiltersVisible,
     searchLoading,
-    setSearchLoading
+    setSearchLoading,
+    isSearchMinimized,
+    setIsSearchMinimized
   })
 }

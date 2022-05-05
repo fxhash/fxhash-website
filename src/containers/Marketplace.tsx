@@ -1,7 +1,7 @@
 import layout from "../styles/Layout.module.scss"
 import styleSearch from "../components/Input/SearchInput.module.scss"
 import cs from "classnames"
-import { gql, useQuery } from '@apollo/client'
+import { useQuery } from '@apollo/client'
 import { CardsContainer } from '../components/Card/CardsContainer'
 import { ObjktCard } from '../components/Card/ObjktCard'
 import { InfiniteScrollTrigger } from '../components/Utils/InfiniteScrollTrigger'
@@ -19,7 +19,7 @@ import { displayMutez } from "../utils/units"
 import { SearchInputControlled } from "../components/Input/SearchInputControlled"
 import { Qu_listings } from "../queries/listing"
 import { useRouter } from "next/router"
-import { useInView } from "react-intersection-observer";
+import styleCardsExplorer from "../components/Exploration/CardsExplorer.module.scss";
 
 
 const ITEMS_PER_PAGE = 40
@@ -334,6 +334,8 @@ export const Marketplace = ({ urlQuery }: Props) => {
         setFiltersVisible,
         inViewCardsContainer,
         refCardsContainer,
+        setIsSearchMinimized,
+        isSearchMinimized,
       }) => (
         <>
           <div ref={topMarkerRef} />
@@ -344,6 +346,9 @@ export const Marketplace = ({ urlQuery }: Props) => {
             onToggleFilters={() => setFiltersVisible(!filtersVisible)}
             sortSelectComp={
               <Select
+                classNameRoot={cs({
+                  [styleCardsExplorer['hide-sort']]: !isSearchMinimized
+                })}
                 value={sortValue}
                 options={sortOptions}
                 onChange={setSortValue}
@@ -351,6 +356,8 @@ export const Marketplace = ({ urlQuery }: Props) => {
             }
           >
             <SearchInputControlled
+              minimizeOnMobile
+              onMinimize={setIsSearchMinimized}
               onSearch={(value) => {
                 if (value) {
                   setSortOptions(searchSortOptions)
