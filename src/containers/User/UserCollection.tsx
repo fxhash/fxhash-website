@@ -23,6 +23,7 @@ import { MarketplaceFilters } from "../Marketplace/MarketplaceFilters"
 import { ExploreTagDef, ExploreTags } from "../../components/Exploration/ExploreTags"
 import { UserCollectionFilters } from "./UserCollectionFilters"
 import { CardsLoading } from "../../components/Card/CardsLoading"
+import { useInView } from "react-intersection-observer";
 
 
 const ITEMS_PER_PAGE = 20
@@ -154,7 +155,7 @@ export function UserCollection({
     setFilters({
       ...filters,
       [filter]: value
-    })  
+    })
   }
 
   const removeFilter = (filter: string) => {
@@ -225,9 +226,11 @@ export function UserCollection({
       </header>
 
       <CardsExplorer>
-        {({ 
+        {({
           filtersVisible,
           setFiltersVisible,
+          refCardsContainer,
+          inViewCardsContainer
         }) => (
           <>
             <div ref={topMarkerRef}/>
@@ -235,6 +238,7 @@ export function UserCollection({
             <SearchHeader
               hasFilters
               filtersOpened={filtersVisible}
+              showFiltersOnMobile={inViewCardsContainer}
               onToggleFilters={() => setFiltersVisible(!filtersVisible)}
               sortSelectComp={
                 <Select
@@ -296,7 +300,7 @@ export function UserCollection({
                 <InfiniteScrollTrigger
                   onTrigger={load}
                 >
-                  <CardsContainer>
+                  <CardsContainer ref={refCardsContainer}>
                     {objkts?.map(objkt => (
                       <ObjktCard
                         key={objkt.id}
