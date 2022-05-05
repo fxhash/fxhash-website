@@ -21,6 +21,7 @@ import { FiltersPanel } from "../../components/Exploration/FiltersPanel";
 import { GenerativeFilters } from "../Generative/GenerativeFilters";
 import style from './Collections.module.scss';
 import { sortOptions, sortOptionsCollections, sortValueToSortVariable } from "../../utils/sort";
+import styleCardsExplorer from "../../components/Exploration/CardsExplorer.module.scss";
 
 const ITEMS_PER_PAGE = 10
 
@@ -159,14 +160,22 @@ export const MarketplaceCollections = ({}: Props) => {
       {({
         filtersVisible,
         setFiltersVisible,
+        inViewCardsContainer,
+        refCardsContainer,
+        isSearchMinimized,
+        setIsSearchMinimized
       }) => (
         <>
           <SearchHeader
             hasFilters
+            showFiltersOnMobile={inViewCardsContainer}
             filtersOpened={filtersVisible}
             onToggleFilters={() => setFiltersVisible(!filtersVisible)}
             sortSelectComp={
               <Select
+                classNameRoot={cs({
+                  [styleCardsExplorer['hide-sort']]: !isSearchMinimized
+                })}
                 value={sortValue}
                 options={sortOptions}
                 onChange={setSortValue}
@@ -174,6 +183,8 @@ export const MarketplaceCollections = ({}: Props) => {
             }
           >
             <SearchInputControlled
+              minimizeOnMobile
+              onMinimize={setIsSearchMinimized}
               onSearch={handleSearch}
               className={styleSearch.large_search}
             />
@@ -206,7 +217,7 @@ export const MarketplaceCollections = ({}: Props) => {
               )}
               {generativeTokens?.length > 0 && (
                   <InfiniteScrollTrigger onTrigger={infiniteScrollFetch}>
-                    <CardListsContainer>
+                    <CardListsContainer ref={refCardsContainer}>
                       {generativeTokens.map(token => (
                         <GenerativeTokenCardList
                           key={token.id}
