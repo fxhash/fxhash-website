@@ -19,6 +19,7 @@ import { displayMutez } from "../utils/units"
 import { SearchInputControlled } from "../components/Input/SearchInputControlled"
 import { Qu_listings } from "../queries/listing"
 import { useRouter } from "next/router"
+import { useInView } from "react-intersection-observer";
 
 
 const ITEMS_PER_PAGE = 40
@@ -331,11 +332,14 @@ export const Marketplace = ({ urlQuery }: Props) => {
       {({
         filtersVisible,
         setFiltersVisible,
+        inViewCardsContainer,
+        refCardsContainer,
       }) => (
         <>
           <div ref={topMarkerRef} />
           <SearchHeader
             hasFilters
+            showFiltersOnMobile={inViewCardsContainer}
             filtersOpened={filtersVisible}
             onToggleFilters={() => setFiltersVisible(!filtersVisible)}
             sortSelectComp={
@@ -400,7 +404,7 @@ export const Marketplace = ({ urlQuery }: Props) => {
                 onTrigger={infiniteScrollFetch}
                 canTrigger={!!data && !loading}
               >
-                <CardsContainer>
+                <CardsContainer ref={refCardsContainer}>
                   {listings?.length > 0 && listings.map(offer => (
                     <ObjktCard key={offer.id} objkt={offer.objkt} />
                   ))}

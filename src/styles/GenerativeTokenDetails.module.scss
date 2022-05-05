@@ -166,4 +166,6 @@
   grid-template-columns: max-content 1fr;
   align-items: baseline;
   gap: 10px 5px;
+  /* prevents children elements from streching */
+  justify-items: start;
 }

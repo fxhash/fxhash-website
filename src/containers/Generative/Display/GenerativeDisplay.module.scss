@@ -166,7 +166,8 @@
   grid-template-columns: max-content 1fr;
   align-items: baseline;
   gap: 12px 5px;
-
+  /* prevents children elements from streching */
+  justify-items: start;
   // & > *:nth-child(2n):not(a) {
   //   opacity: 0.6;
   // }

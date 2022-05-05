@@ -26,7 +26,8 @@ const GenerativeTokenEnjoy: NextPage<Props> = ({ token }) => {
     gentk.issuer = {
       id: token.id,
       name: token.name,
-      author: token.author
+      author: token.author,
+      generativeUri: token.generativeUri,
     }
   }
   
@@ -73,6 +74,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
               id
               name
               metadata
+              generativeUri
               author {
                 id
                 name
@@ -84,6 +86,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
                 name
                 metadata
                 iteration
+                generationHash
                 owner {
                   id
                   name

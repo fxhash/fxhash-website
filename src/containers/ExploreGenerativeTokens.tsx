@@ -20,6 +20,7 @@ import { SearchInputControlled } from '../components/Input/SearchInputControlled
 import { displayMutez } from '../utils/units'
 import { GenerativeFilters } from './Generative/GenerativeFilters'
 import { Frag_GenAuthor, Frag_GenPricing } from '../queries/fragments/generative-token'
+import { useInView } from "react-intersection-observer";
 
 
 const ITEMS_PER_PAGE = 20
@@ -268,11 +269,14 @@ export const ExploreGenerativeTokens = ({ }: Props) => {
       {({
         filtersVisible,
         setFiltersVisible,
+        inViewCardsContainer,
+        refCardsContainer,
       }) => (
         <>
           <div ref={topMarkerRef} />
           <SearchHeader
             hasFilters
+            showFiltersOnMobile={inViewCardsContainer}
             filtersOpened={filtersVisible}
             onToggleFilters={() => setFiltersVisible(!filtersVisible)}
             sortSelectComp={
@@ -333,7 +337,7 @@ export const ExploreGenerativeTokens = ({ }: Props) => {
               )}
 
               <InfiniteScrollTrigger onTrigger={infiniteScrollFetch} canTrigger={!!data && !loading}>
-                <CardsContainer>
+                <CardsContainer ref={refCardsContainer}>
                   {generativeTokens?.length > 0 && generativeTokens.map(token => (
                     <GenerativeTokenCard
                       key={token.id}

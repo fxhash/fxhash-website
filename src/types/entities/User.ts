@@ -58,6 +58,8 @@ export interface User {
   actions?: Action[]
   // is set by aliases to manually enforce platform accounts
   platformOwned?: boolean
+  donationAddress?: boolean
+  descriptionLight?: string
   // is set by aliases to prevent profile from being linked
   preventLink?: boolean
   // as a regular user, it can have collaboration contracts
