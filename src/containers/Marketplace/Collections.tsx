@@ -113,7 +113,7 @@ export const MarketplaceCollections = ({}: Props) => {
 
   return (
     <>
-      <AlgoliaSearch 
+      <AlgoliaSearch
         searchIndex={searchIndexGenerative}
         gqlMapQuery={Qu_tokensById}
         onResults={setSearchResults}
@@ -156,7 +156,6 @@ export const MarketplaceCollections = ({}: Props) => {
           </InfiniteScrollTrigger>
         )
       )}
-
       {loading && <LoaderBlock height="30vh">loading</LoaderBlock>}
     </>
   )
