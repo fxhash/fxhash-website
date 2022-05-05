@@ -1,4 +1,3 @@
-import style from "./GenerativeIterations.module.scss"
 import layout from "../../../styles/Layout.module.scss"
 import cs from "classnames"
 import { GenerativeToken } from "../../../types/entities/GenerativeToken"
@@ -17,7 +16,7 @@ import { GenerativeIterationsFilters } from "./GenerativeIterationsFilters"
 import { ExploreTagDef, ExploreTags } from "../../../components/Exploration/ExploreTags"
 import { Spacing } from "../../../components/Layout/Spacing"
 import { LargeGentkCard } from "../../../components/Card/LargeGentkCard"
-
+import { CardSizeSelect } from "../../../components/Input/CardSizeSelect"
 
 const ITEMS_PER_PAGE = 20
 
@@ -40,20 +39,6 @@ const sortOptions: IOptions[] = [
   },
 ]
 
-const cardSizeOptions: IOptions[] = [
-  {
-    label: 'small',
-    value: 200,
-  },
-  {
-    label: 'medium',
-    value: 270,
-  },
-  {
-    label: 'large',
-    value: 400,
-  },
-]
 
 function sortValueToSortVariable(val: string) {
   if (val === "pertinence") return {}
@@ -180,7 +165,7 @@ export function GenerativeIterations({
         inViewCardsContainer,
         refCardsContainer,
         cardSize,
-	      setCardSize,
+        setCardSize,
       }) => (
         <>
           <div ref={topMarkerRef}/>
@@ -197,17 +182,10 @@ export function GenerativeIterations({
               />
 	    }
 	    sizeSelectComp={
-	      <div className={style.card_size_select}>
-		{cardSizeOptions.map(option => 
-		  <button
-		    key={option.label}
-		    className={cs({[style.active]: option.value === cardSize})}
-		    onClick={() => setCardSize(option.value)}
-		  >
-		    <i className="fa-solid fa-square"></i>
-		  </button>
-		)}
-	      </div>	
+	      <CardSizeSelect
+		value={cardSize}
+	        onChange={setCardSize}
+	      />
 	    }
             padding="small"
           />

@@ -1,0 +1,37 @@
+.card_size_select {
+  button {
+    width: 50px;
+    height: 50px;
+    margin: 0;
+    padding: 0;
+    border: 3px solid var(--color-border-input);
+    background: transparent;
+    color: var(--color-border-input);
+    &.active {
+      background: var(--color-border-input);
+      color: var(--color-white);
+    }
+    &:hover {
+      //border-color: var(--color-secondary);
+      color: var(--color-secondary);
+    }
+    &:nth-child(1) {
+      border-right: 0;
+      i {
+      }
+    }
+    &:nth-child(2) {
+      border-left: 0;
+      border-right: 0;
+      i {
+	transform: scale(1.25);
+      }
+    }
+    &:nth-child(3) {
+      border-left: 0; 
+      i {
+	transform: scale(1.45);
+      }
+    }
+  }
+}
