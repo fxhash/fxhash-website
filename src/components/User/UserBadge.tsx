@@ -3,7 +3,7 @@ import layout from "../../styles/Layout.module.scss"
 import cs from "classnames"
 import Link from 'next/link'
 import { User } from "../../types/entities/User"
-import { getUserName, getUserProfileLink, isPlatformOwned, isUserVerified, userAliases } from "../../utils/user"
+import { getUserName, getUserProfileLink, isDonator, isPlatformOwned, isUserVerified, userAliases } from "../../utils/user"
 import { Avatar } from "./Avatar"
 import { IProps as IEntityBadgeProps } from "./EntityBadge"
 import { FunctionComponent, ReactNode, useMemo } from "react"
@@ -24,8 +24,10 @@ const WrapperLink = ({
   children,
 }: WrapperProps) => (
   <Link href={getUserProfileLink(user)}>
-    <a className={className}>
-      {children}
+    <a className={cs(style.link, style.default_font_styles, className)}>
+      <div className={style.container}>
+	      {children}
+      </div>
     </a>
   </Link>
 )
@@ -60,7 +62,12 @@ export function UserBadge({
 
   return user ? (
     <Wrapper
-      className={cs(style.container, style[`side-${avatarSide}`], className)}
+      className={cs({
+        [style.container]: !hasLink,
+        [style.default_font_styles]: !hasLink, },
+        style[`side-${avatarSide}`],
+        className
+      )}
       user={userAlias}
     >
       {displayAvatar && (
@@ -68,9 +75,10 @@ export function UserBadge({
           uri={userAlias.avatarUri}
           className={cs(
             style.avatar,
-            style[`avatar-${size}`],
-            { [style.avatar_mod]: isPlatformOwned(userAlias) }
-          )}
+            style[`avatar-${size}`], { 
+            [style.avatar_mod]: isPlatformOwned(userAlias),
+            [style.avatar_donation]: isDonator(userAlias)
+          })}
         />
       )}
 
@@ -79,7 +87,10 @@ export function UserBadge({
           {prependText && (
             <span className={cs(style.prepend)}>{prependText}</span>
           )}
-          <span className={cs({ [style.moderator]: isPlatformOwned(userAlias) })}>
+          <span className={cs({ 
+            [style.moderator]: isPlatformOwned(userAlias),
+            [style.donation]: isDonator(userAlias),
+          })}>
             {getUserName(userAlias, 15)}
           </span>
           {verified && (

@@ -71,6 +71,38 @@ export const Qu_userGenTokens = gql`
     }
   }
 `
+export const Qu_userEntireCollection = gql`
+  ${Frag_GenAuthor}
+
+  query UserCollection(
+    $id: String!,
+  ) {
+    user(id: $id) {
+      id
+      entireCollection {
+        id
+        version
+        assigned
+        rarity
+        iteration
+        generationHash
+        issuer {
+          name
+          flag
+          generativeUri
+          ...Author
+        }
+        name
+        createdAt
+        activeListing {
+          id
+          version
+          price
+        }
+      }
+    }
+  }
+`
 
 export const Qu_userObjkts = gql`
   ${Frag_GenAuthor}
@@ -90,6 +122,8 @@ export const Qu_userObjkts = gql`
         assigned
         rarity
         iteration
+        generationHash
+        metadata
         owner {
           id
           name
@@ -99,10 +133,10 @@ export const Qu_userObjkts = gql`
         issuer {
           name
           flag
+          generativeUri
           ...Author
         }
         name
-        metadata
         createdAt
         activeListing {
           id

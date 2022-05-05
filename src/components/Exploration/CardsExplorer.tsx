@@ -2,6 +2,9 @@ import style from "./CardsExplorer.module.scss"
 import cs from "classnames"
 import { FunctionComponent, useState, useEffect, useContext, useMemo } from "react"
 import { SettingsContext } from '../../context/Theme';
+import { useInView } from "react-intersection-observer";
+
+
 /**
  * Component dedicated to holding the state of common explore pages (generative tokens, marketplace,
  * profile... etc)
@@ -11,7 +14,11 @@ interface PropsChildren {
   filtersVisible: boolean
   setFiltersVisible: (visible: boolean) => void
   searchLoading: boolean
-  setSearchLoading: (loading: boolean) => void
+  setSearchLoading: (loading: boolean) => void,
+  refCardsContainer: (node?: (Element | null | undefined)) => void,
+  inViewCardsContainer: boolean,
+  isSearchMinimized: boolean,
+  setIsSearchMinimized: (state: boolean) => void,
 }
 
 interface Props {
@@ -26,6 +33,11 @@ export function CardsExplorer({
 }: Props) {
 
   const settings = useContext(SettingsContext);
+
+  const { ref: refCardsContainer, inView: inViewCardsContainer } = useInView({
+    rootMargin: '-300px 0px -100px'
+  });
+
   // is the filters panel visible ?
   const [filtersVisible, setFiltersVisible] = useState<boolean>(filtersVisibleDefault)
   // is the search loading ?
@@ -40,12 +52,19 @@ export function CardsExplorer({
     root.style.setProperty("--cards-size", `${cardSize}px`)
   }, [cardSize])
 
+        // is search minimized on mobile
+  const [isSearchMinimized, setIsSearchMinimized] = useState<boolean>(true)
+
   return children({
+    refCardsContainer,
+    inViewCardsContainer,
     filtersVisible,
     setFiltersVisible,
     searchLoading,
     setSearchLoading,
     cardSize,
     setCardSize: (value) => settings.update('cardSize', value),
+    isSearchMinimized,
+    setIsSearchMinimized
   })
 }
