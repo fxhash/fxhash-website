@@ -43,7 +43,7 @@ const sortOptions: IOptions[] = [
 const cardSizeOptions: IOptions[] = [
   {
     label: 'small',
-    value: 120,
+    value: 200,
   },
   {
     label: 'medium',
