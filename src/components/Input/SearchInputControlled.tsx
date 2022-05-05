@@ -8,6 +8,7 @@ interface Props {
   initialValue?: string
   className?: string,
   minimizeOnMobile?: boolean,
+  onMinimize?: (value: boolean) => void,
 }
 
 /**
@@ -21,6 +22,7 @@ export function SearchInputControlled({
   initialValue = "",
   className,
   minimizeOnMobile,
+  onMinimize,
 }: Props) {
   const [value, setValue] = useState<string>(initialValue)
 
@@ -32,6 +34,7 @@ export function SearchInputControlled({
       onSearch={onSearch}
       className={cs(className)}
       minimizeOnMobile={minimizeOnMobile}
+      onMinimize={onMinimize}
     />
   )
 }

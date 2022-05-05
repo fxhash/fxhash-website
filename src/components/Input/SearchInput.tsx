@@ -12,6 +12,7 @@ interface Props {
   className?: string
   onChange: (value: string) => void
   onSearch: (value: string) => void
+  onMinimize?: (value: boolean) => void
   minimizeOnMobile?: boolean,
 }
 
@@ -21,6 +22,7 @@ export function SearchInput({
   onSearch,
   className,
   onChange,
+  onMinimize,
   minimizeOnMobile = false
 }: Props) {
   const refInput = useRef<HTMLInputElement>(null);
@@ -28,22 +30,28 @@ export function SearchInput({
   const [isMinimizedOnMobile, setIsMinimizedOnMobile] = useState(minimizeOnMobile);
   const { width } = useWindowSize();
   const isMobile = useMemo(() => width !== undefined && (width <= breakpoints.sm), [width]);
+  const handleMinimize = useCallback((newState) => {
+    setIsMinimizedOnMobile(newState);
+    if (onMinimize) {
+      onMinimize(newState);
+    }
+  }, [onMinimize]);
   const handleSubmit = useCallback((event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (isMobile && minimizeOnMobile) {
-      setIsMinimizedOnMobile(true);
+      handleMinimize(true);
     }
     onSearch(value);
   }, [isMobile, minimizeOnMobile, onSearch, value]);
   const handleToggleMinimize = useCallback(() => {
     if (isMobile && minimizeOnMobile) {
-      setIsMinimizedOnMobile(state => !state)
+      handleMinimize(!isMinimizedOnMobile)
     }
     if (refInput.current && refInput.current.scrollWidth > 0) {
       refInput.current.focus();
     }
-  }, [isMobile, minimizeOnMobile]);
-  useClickOutside(refForm, () => setIsMinimizedOnMobile(true),
+  }, [handleMinimize, isMinimizedOnMobile, isMobile, minimizeOnMobile]);
+  useClickOutside(refForm, () => handleMinimize(true),
     !minimizeOnMobile || (minimizeOnMobile && isMobile && isMinimizedOnMobile));
   return (
     <form

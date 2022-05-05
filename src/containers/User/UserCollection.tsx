@@ -1,5 +1,6 @@
 import { useQuery } from "@apollo/client"
 import style from "./UserCollection.module.scss"
+import styleCardsExplorer from "../../components/Exploration/CardsExplorer.module.scss"
 import styleSearch from "../../components/Input/SearchInput.module.scss"
 import layout from "../../styles/Layout.module.scss"
 import cs from "classnames"
@@ -19,12 +20,9 @@ import { SearchHeader } from "../../components/Search/SearchHeader"
 import { IOptions, Select } from "../../components/Input/Select"
 import { SearchInputControlled } from "../../components/Input/SearchInputControlled"
 import { FiltersPanel } from "../../components/Exploration/FiltersPanel"
-import { MarketplaceFilters } from "../Marketplace/MarketplaceFilters"
 import { ExploreTagDef, ExploreTags } from "../../components/Exploration/ExploreTags"
 import { UserCollectionFilters } from "./UserCollectionFilters"
 import { CardsLoading } from "../../components/Card/CardsLoading"
-import { useInView } from "react-intersection-observer";
-
 
 const ITEMS_PER_PAGE = 20
 
@@ -230,7 +228,9 @@ export function UserCollection({
           filtersVisible,
           setFiltersVisible,
           refCardsContainer,
-          inViewCardsContainer
+          inViewCardsContainer,
+          setIsSearchMinimized,
+          isSearchMinimized,
         }) => (
           <>
             <div ref={topMarkerRef}/>
@@ -242,6 +242,9 @@ export function UserCollection({
               onToggleFilters={() => setFiltersVisible(!filtersVisible)}
               sortSelectComp={
                 <Select
+                  classNameRoot={cs({
+                    [styleCardsExplorer['hide-sort']]: !isSearchMinimized
+                  })}
                   value={sortValue}
                   options={sortOptions}
                   onChange={setSortValue}
@@ -250,6 +253,7 @@ export function UserCollection({
             >
               <SearchInputControlled
                 minimizeOnMobile
+                onMinimize={setIsSearchMinimized}
                 onSearch={(value) => {
                   if (value) {
                     setSortOptions(searchSortOptions)

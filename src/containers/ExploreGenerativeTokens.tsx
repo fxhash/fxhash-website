@@ -20,7 +20,7 @@ import { SearchInputControlled } from '../components/Input/SearchInputControlled
 import { displayMutez } from '../utils/units'
 import { GenerativeFilters } from './Generative/GenerativeFilters'
 import { Frag_GenAuthor, Frag_GenPricing } from '../queries/fragments/generative-token'
-import { useInView } from "react-intersection-observer";
+import styleCardsExplorer from "../components/Exploration/CardsExplorer.module.scss";
 
 
 const ITEMS_PER_PAGE = 20
@@ -271,6 +271,8 @@ export const ExploreGenerativeTokens = ({ }: Props) => {
         setFiltersVisible,
         inViewCardsContainer,
         refCardsContainer,
+        isSearchMinimized,
+        setIsSearchMinimized
       }) => (
         <>
           <div ref={topMarkerRef} />
@@ -281,6 +283,9 @@ export const ExploreGenerativeTokens = ({ }: Props) => {
             onToggleFilters={() => setFiltersVisible(!filtersVisible)}
             sortSelectComp={
               <Select
+                classNameRoot={cs({
+                  [styleCardsExplorer['hide-sort']]: !isSearchMinimized
+                })}
                 value={sortValue}
                 options={sortOptions}
                 onChange={setSortValue}
@@ -289,6 +294,7 @@ export const ExploreGenerativeTokens = ({ }: Props) => {
           >
             <SearchInputControlled
               minimizeOnMobile
+              onMinimize={setIsSearchMinimized}
               onSearch={(value) => {
                 if (value) {
                   setSortOptions(searchSortOptions)
