@@ -32,9 +32,7 @@ export function SearchInput({
   const isMobile = useMemo(() => width !== undefined && (width <= breakpoints.sm), [width]);
   const handleMinimize = useCallback((newState) => {
     setIsMinimizedOnMobile(newState);
-    if (onMinimize) {
-      onMinimize(newState);
-    }
+    onMinimize?.(newState);
   }, [onMinimize]);
   const handleSubmit = useCallback((event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();

@@ -7,7 +7,7 @@
   border: 3px solid var(--color-border-input);
   background-color: var(--color-white);
   height: 50px;
-  padding-left: 4px;
+  padding: 0 10px 0 4px;
 
   button {
     border: none;
@@ -15,6 +15,7 @@
   }
 
   input {
+    background: transparent;
     border: 0;
     font-family: inherit;
     outline: none;
