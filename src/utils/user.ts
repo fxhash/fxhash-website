@@ -64,6 +64,10 @@ export function isPlatformOwned(user: User): boolean {
   return !!user.platformOwned
 }
 
+export function isDonator(user: User): boolean {
+  return !!user.donationAddress
+}
+
 export interface TzProfile {
   twitter?: {
     handle: string|undefined|null,
@@ -116,6 +120,38 @@ export function processTzProfile(data: any): TzProfile|null {
   }
 }
 
+export const UserDonationAliases: Record<string, Partial<User>> = {
+  "tz1aPHze1U5BEEKrGYt3dvY6aAQEeiWm8jjK": {
+    id: "tz1aPHze1U5BEEKrGYt3dvY6aAQEeiWm8jjK",
+    name: "Processing Foundation",
+    descriptionLight: "The Processing Foundation's mission is to promote software literacy within the visual arts. They are developping p5.js",
+    description: "The Processing Foundation's mission is to promote software literacy within the visual arts, and visual literacy within technology-related fields — and to make these fields accessible to diverse communities. They are developping and distributing a group of related software projects, which includes Processing (Java), p5.js (JavaScript), and Processing.py (Python)",
+    avatarUri: "ipfs://QmXEjnYw9R7TWpdSeh5Txg2QeTGvstDShY9Neigj3nxFuL",
+    donationAddress: true,
+    flag: UserFlag.VERIFIED,
+  },
+  
+  "tz1ZUohCAkGjp7vPjQcC4VWcpgYZR1t3Si5C": {
+    id: "tz1ZUohCAkGjp7vPjQcC4VWcpgYZR1t3Si5C",
+    name: "Three.js",
+    descriptionLight: "Three.js is an easy to use, lightweight, cross-browser, general purpose 3D library.",
+    description: "Three.js is an easy to use, lightweight, cross-browser, general purpose 3D library.",
+    avatarUri: "ipfs://QmZbR1AVihDaj5WRSnbxwzVmKR5DoKMP9E1CY6fXJABCmZ",
+    donationAddress: true,
+    flag: UserFlag.VERIFIED,
+  },
+
+  "tz1V1WKxhK9g5UFbhRNUnQMmDnnL2vtBzoZJ": {
+    id: "tz1V1WKxhK9g5UFbhRNUnQMmDnnL2vtBzoZJ",
+    name: "Hydra",
+    descriptionLight: "Hydra is a set of tools for livecoding networked visuals. Inspired by analog modular synthesizers.",
+    description: "Hydra is a set of tools for livecoding networked visuals. Inspired by analog modular synthesizers.",
+    avatarUri: "ipfs://QmZUUcAw82oTGLVcB5ekGX7kLWMSdY3P9nxj3TtwFRBCNt",
+    donationAddress: true,
+    flag: UserFlag.VERIFIED,
+  },
+}
+
 // a list of User aliases
 export const UserAliases: Record<string, Partial<User>> = {
   [process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_MARKETPLACE!]: {
@@ -132,7 +168,9 @@ export const UserAliases: Record<string, Partial<User>> = {
     name: "Minter",
     platformOwned: true,
     preventLink: true,
-  }
+  },
+
+  ...UserDonationAliases,
 }
 
 /**

@@ -1,5 +1,6 @@
 import { useQuery } from "@apollo/client"
 import style from "./UserCollection.module.scss"
+import styleCardsExplorer from "../../components/Exploration/CardsExplorer.module.scss"
 import styleSearch from "../../components/Input/SearchInput.module.scss"
 import layout from "../../styles/Layout.module.scss"
 import cs from "classnames"
@@ -19,11 +20,9 @@ import { SearchHeader } from "../../components/Search/SearchHeader"
 import { IOptions, Select } from "../../components/Input/Select"
 import { SearchInputControlled } from "../../components/Input/SearchInputControlled"
 import { FiltersPanel } from "../../components/Exploration/FiltersPanel"
-import { MarketplaceFilters } from "../Marketplace/MarketplaceFilters"
 import { ExploreTagDef, ExploreTags } from "../../components/Exploration/ExploreTags"
 import { UserCollectionFilters } from "./UserCollectionFilters"
 import { CardsLoading } from "../../components/Card/CardsLoading"
-
 
 const ITEMS_PER_PAGE = 20
 
@@ -154,7 +153,7 @@ export function UserCollection({
     setFilters({
       ...filters,
       [filter]: value
-    })  
+    })
   }
 
   const removeFilter = (filter: string) => {
@@ -225,9 +224,13 @@ export function UserCollection({
       </header>
 
       <CardsExplorer>
-        {({ 
+        {({
           filtersVisible,
           setFiltersVisible,
+          refCardsContainer,
+          inViewCardsContainer,
+          setIsSearchMinimized,
+          isSearchMinimized,
         }) => (
           <>
             <div ref={topMarkerRef}/>
@@ -235,9 +238,13 @@ export function UserCollection({
             <SearchHeader
               hasFilters
               filtersOpened={filtersVisible}
+              showFiltersOnMobile={inViewCardsContainer}
               onToggleFilters={() => setFiltersVisible(!filtersVisible)}
               sortSelectComp={
                 <Select
+                  classNameRoot={cs({
+                    [styleCardsExplorer['hide-sort']]: !isSearchMinimized
+                  })}
                   value={sortValue}
                   options={sortOptions}
                   onChange={setSortValue}
@@ -245,6 +252,8 @@ export function UserCollection({
               }
             >
               <SearchInputControlled
+                minimizeOnMobile
+                onMinimize={setIsSearchMinimized}
                 onSearch={(value) => {
                   if (value) {
                     setSortOptions(searchSortOptions)
@@ -296,7 +305,7 @@ export function UserCollection({
                 <InfiniteScrollTrigger
                   onTrigger={load}
                 >
-                  <CardsContainer>
+                  <CardsContainer ref={refCardsContainer}>
                     {objkts?.map(objkt => (
                       <ObjktCard
                         key={objkt.id}

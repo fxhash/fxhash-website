@@ -20,6 +20,7 @@ import { GenerativeFilters } from './Generative/GenerativeFilters'
 import { Frag_GenAuthor, Frag_GenPricing } from '../queries/fragments/generative-token'
 import { ITagsFilters, tagsFilters } from "../utils/filters";
 import { sortValueToSortVariable } from "../utils/sort";
+import styleCardsExplorer from "../components/Exploration/CardsExplorer.module.scss";
 
 
 const ITEMS_PER_PAGE = 20
@@ -225,15 +226,23 @@ export const ExploreGenerativeTokens = ({ }: Props) => {
       {({
         filtersVisible,
         setFiltersVisible,
+        inViewCardsContainer,
+        refCardsContainer,
+        isSearchMinimized,
+        setIsSearchMinimized
       }) => (
         <>
           <div ref={topMarkerRef} />
           <SearchHeader
             hasFilters
+            showFiltersOnMobile={inViewCardsContainer}
             filtersOpened={filtersVisible}
             onToggleFilters={() => setFiltersVisible(!filtersVisible)}
             sortSelectComp={
               <Select
+                classNameRoot={cs({
+                  [styleCardsExplorer['hide-sort']]: !isSearchMinimized
+                })}
                 value={sortValue}
                 options={sortOptions}
                 onChange={setSortValue}
@@ -241,6 +250,8 @@ export const ExploreGenerativeTokens = ({ }: Props) => {
             }
           >
             <SearchInputControlled
+              minimizeOnMobile
+              onMinimize={setIsSearchMinimized}
               onSearch={(value) => {
                 if (value) {
                   setSortOptions(searchSortOptions)
@@ -289,7 +300,7 @@ export const ExploreGenerativeTokens = ({ }: Props) => {
               )}
 
               <InfiniteScrollTrigger onTrigger={infiniteScrollFetch} canTrigger={!!data && !loading}>
-                <CardsContainer>
+                <CardsContainer ref={refCardsContainer}>
                   {generativeTokens?.length > 0 && generativeTokens.map(token => (
                     <GenerativeTokenCard
                       key={token.id}

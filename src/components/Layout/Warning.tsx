@@ -1,5 +1,4 @@
 import style from "./Warning.module.scss"
-import layout from "../../styles/Layout.module.scss"
 import cs from "classnames"
 import { FunctionComponent } from "react"
 import Link from "next/link"

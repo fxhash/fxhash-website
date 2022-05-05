@@ -159,15 +159,18 @@ export function GenerativeIterations({
 
   return (
     <CardsExplorer>
-      {({ 
+      {({
         filtersVisible,
         setFiltersVisible,
+        inViewCardsContainer,
+        refCardsContainer,
       }) => (
         <>
           <div ref={topMarkerRef}/>
 
           <SearchHeader
             hasFilters
+            showFiltersOnMobile={inViewCardsContainer}
             onToggleFilters={() => setFiltersVisible(!filtersVisible)}
             sortSelectComp={
               <Select
@@ -211,7 +214,7 @@ export function GenerativeIterations({
                 onTrigger={infiniteScrollFetch}
                 canTrigger={!!data && !loading}
               >
-                <CardsContainer>
+                <CardsContainer ref={refCardsContainer}>
                   {tokens?.map(gentk => (
                     <LargeGentkCard
                       key={gentk.id}
