@@ -8,6 +8,7 @@ import { InfiniteScrollTrigger } from "../../components/Utils/InfiniteScrollTrig
 import { Qu_userActions } from "../../queries/user"
 import { Action } from "../../types/entities/Action"
 import { User } from "../../types/entities/User"
+import Skeleton from "../../components/Skeleton";
 
 interface Props {
   user: User
@@ -63,8 +64,16 @@ export function UserActions({
           <Activity actions={actions} className={cs(style.activity)} verbose={true} />
         )}
       </InfiniteScrollTrigger>
-
-      {loading && data && <LoaderBlock height="100px"/>}
+      {loading && data &&
+        [...Array(20)].map((_, idx) => (
+          <Skeleton
+            className={cs(style['activity-loading'])}
+            key={idx}
+            width="900px"
+            height="42px"
+          />
+        ))
+      }
     </>
   )
 }
