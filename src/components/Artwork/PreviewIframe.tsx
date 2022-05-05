@@ -33,16 +33,17 @@ export const ArtworkIframe = forwardRef<ArtworkIframeRef, Props>(({
   }, [])
 
   const reloadIframe = () => {
-    if (iframeRef.current) {
+    if (url && iframeRef?.current?.contentWindow) {
       setLoading(true)
       setError(false)
-      iframeRef.current.src = iframeRef.current.src
+      iframeRef.current.contentWindow.location.replace(url);
     }
   }
 
   useEffect(() => {
     // when the url changes, we set reload to true
     setLoading(true)
+    console.log(url)
     if (url && iframeRef?.current?.contentWindow) {
       // keep iframe history hidden
       iframeRef.current.contentWindow.location.replace(url);
