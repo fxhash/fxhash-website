@@ -93,3 +93,12 @@
 .moderator {
   color: var(--color-success);
 }
+
+.donation {
+  color: var(--color-donator);
+  font-weight: bold;
+}
+
+.avatar_donation {
+  border: 3px solid var(--color-donator);
+}

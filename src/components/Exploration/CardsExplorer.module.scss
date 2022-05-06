@@ -1,0 +1,7 @@
+@import "../../styles/Variables.scss";
+
+@media (max-width: $breakpoint-sm) {
+  .hide-sort {
+    display: none;
+  }
+}

@@ -6,3 +6,11 @@
     filter: grayscale(100%);
   }
 }
+
+.royalties_last_row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}

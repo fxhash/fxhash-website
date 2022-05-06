@@ -8,7 +8,8 @@ interface Props {
   hasFilters?: boolean
   onToggleFilters?: () => void
   filtersOpened?: boolean
-  padding?: "big"|"small"
+  padding?: "big"|"small",
+  showFiltersOnMobile?: boolean,
 }
 export const SearchHeader = forwardRef<HTMLDivElement, PropsWithChildren<Props>>(({
   sortSelectComp,
@@ -17,6 +18,7 @@ export const SearchHeader = forwardRef<HTMLDivElement, PropsWithChildren<Props>>
   filtersOpened,
   padding = "big",
   children,
+  showFiltersOnMobile = true,
 }, ref) => {
   return (
     <div className={cs(
@@ -28,7 +30,8 @@ export const SearchHeader = forwardRef<HTMLDivElement, PropsWithChildren<Props>>
           <button
             type="button"
             className={cs(style.filter_btn, {
-              [style.filters_opened]: filtersOpened
+              [style.filters_opened]: filtersOpened,
+              [style['filter_btn--show-mobile']]: showFiltersOnMobile,
             })}
             onClick={onToggleFilters}
           >
@@ -46,3 +49,4 @@ export const SearchHeader = forwardRef<HTMLDivElement, PropsWithChildren<Props>>
     </div>
   )
 })
+SearchHeader.displayName = 'SearchHeader';
