@@ -95,6 +95,7 @@ export function UserProfileLayout({
         tabsClassName={cs(layout['padding-big'])}
         tabWrapperComponent={TabWrapper}
       />
+      
       <Spacing size="x-large" />
 
       <section>
