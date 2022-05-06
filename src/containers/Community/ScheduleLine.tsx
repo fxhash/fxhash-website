@@ -1,17 +1,17 @@
 import style from "./Schedule.module.scss"
 import cs from "classnames"
 import { useMemo } from "react"
-import { areCyclesOpenedAt, getCycleTimeState, ICycleTimeState } from "../../utils/schedule"
+import { getCycleTimeState, ICycleTimeState } from "../../utils/schedule"
 import { addHours, format, isToday, isTomorrow, isYesterday } from "date-fns"
-import { Timezone } from "../../utils/timzones"
 import { zonedTimeToUtc } from "date-fns-tz"
 import { Cycle } from "../../types/Cycles"
+import { TimeZone } from "@vvo/tzdb";
 
 
 interface Props {
   date: Date
   cycles: Cycle[][]
-  timezone: Timezone
+  timezone: TimeZone
 }
 export function ScheduleLine({ date, cycles, timezone }: Props) {
   // compute if each hour is within the schedule
@@ -25,9 +25,9 @@ export function ScheduleLine({ date, cycles, timezone }: Props) {
 
   const formatName = useMemo(() => {
     // if date is today, yesterday or tomorrow, return this
-    if (isYesterday(zonedTimeToUtc(date, timezone.utc[0]))) return "yesterday"
-    if (isToday(zonedTimeToUtc(date, timezone.utc[0]))) return "today"
-    if (isTomorrow(zonedTimeToUtc(date, timezone.utc[0]))) return "tomorrow"
+    if (isYesterday(zonedTimeToUtc(date, timezone.name))) return "yesterday"
+    if (isToday(zonedTimeToUtc(date, timezone.name))) return "today"
+    if (isTomorrow(zonedTimeToUtc(date, timezone.name))) return "tomorrow"
     return format(date, "EEEE")
   }, [date, timezone])
 
@@ -35,7 +35,7 @@ export function ScheduleLine({ date, cycles, timezone }: Props) {
     return format(date, "dd/MM/yyyy")
   }, [date, timezone])
 
-  const isDayToday = useMemo(() => isToday(zonedTimeToUtc(date, timezone.utc[0])), [date, timezone])
+  const isDayToday = useMemo(() => isToday(zonedTimeToUtc(date, timezone.name)), [date, timezone])
 
   return (
     <tr className={cs({ [style.today]: isDayToday })}>
