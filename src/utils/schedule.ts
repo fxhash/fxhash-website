@@ -1,7 +1,6 @@
-import { addSeconds, format, isBefore, isSameDay } from "date-fns"
+import { addSeconds, isBefore } from "date-fns"
 import { utcToZonedTime } from "date-fns-tz"
 import { Cycle, CyclesState } from "../types/Cycles"
-import { Timezone } from "./timzones"
 import { TimeZone } from "@vvo/tzdb";
 
 /**
@@ -10,16 +9,6 @@ import { TimeZone } from "@vvo/tzdb";
  */
 export function isCycleOpenedAt(date: Date, cycle: Cycle, timezone?: TimeZone): boolean {
   const reference = timezone ? utcToZonedTime(cycle.start, timezone.name) : cycle.start
-
-/*
-  if (isSameDay(date, new Date('05/05/2022'))) {
-    console.log(format(date, 'HH:mm z'), '-',
-      format(cycle.start, 'HH:mm z'), ' to ', format(reference, 'HH:mm'),
-      timezone?.utc[0]
-      )
-  }
-*/
-
 
   // get seconds between the 2 dates
   const diff = (date.getTime() - reference.getTime()) / 1000

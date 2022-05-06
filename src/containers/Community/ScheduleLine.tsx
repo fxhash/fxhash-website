@@ -2,11 +2,17 @@ import style from "./Schedule.module.scss"
 import cs from "classnames"
 import { useMemo } from "react"
 import { getCycleTimeState, ICycleTimeState } from "../../utils/schedule"
-import { addHours, format, isToday, isTomorrow, isYesterday } from "date-fns"
+import { addHours, addMinutes, format, isToday, isTomorrow, isYesterday } from "date-fns"
 import { zonedTimeToUtc } from "date-fns-tz"
 import { Cycle } from "../../types/Cycles"
 import { TimeZone } from "@vvo/tzdb";
 
+interface Hour {
+  time: number,
+  openQuarter?: number,
+  closeQuarter?: number,
+  quarters: ICycleTimeState[],
+}
 
 interface Props {
   date: Date
@@ -15,10 +21,26 @@ interface Props {
 }
 export function ScheduleLine({ date, cycles, timezone }: Props) {
   // compute if each hour is within the schedule
-  const hours = useMemo<ICycleTimeState[]>(() => {
-    const ret: ICycleTimeState[] = []
+  const hours = useMemo<Hour[]>(() => {
+    const ret: Hour[] = []
     for (let i = 0; i < 24; i++) {
-      ret.push(getCycleTimeState(addHours(date, i), cycles, timezone))
+      const currentHour = addHours(date, i)
+      const hour: Hour = {
+        time: i,
+        openQuarter: undefined,
+        closeQuarter: undefined,
+        quarters: []
+      }
+      for (let j = 0; j < 4; j++) {
+        const currentHalf = addMinutes(currentHour, j * 15)
+        const quarter = getCycleTimeState(currentHalf, cycles, timezone)
+        if (quarter.opened) {
+          if (hour.openQuarter === undefined) hour.openQuarter = j;
+          hour.closeQuarter = j;
+        }
+        hour.quarters.push(quarter);
+      }
+      ret.push(hour);
     }
     return ret
   }, [date, timezone, cycles])
@@ -33,21 +55,32 @@ export function ScheduleLine({ date, cycles, timezone }: Props) {
 
   const formatDate = useMemo(() => {
     return format(date, "dd/MM/yyyy")
-  }, [date, timezone])
+  }, [date])
 
   const isDayToday = useMemo(() => isToday(zonedTimeToUtc(date, timezone.name)), [date, timezone])
 
   return (
     <tr className={cs({ [style.today]: isDayToday })}>
       <td className={cs(style.date_name)}>
-        <div className={cs(style.square)}>
+        <div>
           <span>{ formatName }</span>
           <span className={cs(style.date)}>{ formatDate }</span>
         </div>
       </td>
       {hours.map((hour, idx) => (
-        <td key={idx} className={cs({ [style.active]: hour.opened })}>
-          <div className={cs(style.square)}/>
+        <td key={hour.time}>
+          <div className={cs(style.square)}>
+            {hour.quarters.map((quarter, idxQ) =>
+              <div
+                key={`${hour.time}${idxQ}`}
+                className={cs(style.quarter, {
+                  [style.active]: quarter.opened,
+                  [style['border-left']]: idxQ > 0 && hour.openQuarter === idxQ,
+                  [style['border-right']]: idxQ < hour.quarters.length - 1 && hour.closeQuarter === idxQ,
+                })}
+              />
+            )}
+          </div>
         </td>
       ))}
       <td>
