@@ -27,7 +27,6 @@ export const Warning: FunctionComponent = ({ children }) => {
     if (node) setMessage(node.textContent)
   }, [children])
 
-  console.log(isOpen)
 
   return (
     <div
