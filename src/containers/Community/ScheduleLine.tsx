@@ -1,7 +1,7 @@
 import style from "./Schedule.module.scss"
 import cs from "classnames"
 import { useMemo } from "react"
-import { getCycleTimeState, ICycleTimeState } from "../../utils/schedule"
+import { getCycleTimeState, getHourDividerFromTimezoneOffset, ICycleTimeState } from "../../utils/schedule"
 import { addHours, addMinutes, format, isToday, isTomorrow, isYesterday } from "date-fns"
 import { zonedTimeToUtc } from "date-fns-tz"
 import { Cycle } from "../../types/Cycles"
@@ -22,6 +22,8 @@ interface Props {
 export function ScheduleLine({ date, cycles, timezone }: Props) {
   // compute if each hour is within the schedule
   const hours = useMemo<Hour[]>(() => {
+    const divider = getHourDividerFromTimezoneOffset(timezone.currentTimeOffsetInMinutes);
+    const quarterSize = 60 / divider;
     const ret: Hour[] = []
     for (let i = 0; i < 24; i++) {
       const currentHour = addHours(date, i)
@@ -31,9 +33,9 @@ export function ScheduleLine({ date, cycles, timezone }: Props) {
         closeQuarter: undefined,
         quarters: []
       }
-      for (let j = 0; j < 4; j++) {
-        const currentHalf = addMinutes(currentHour, j * 15)
-        const quarter = getCycleTimeState(currentHalf, cycles, timezone)
+      for (let j = 0; j < divider; j++) {
+        const currentQuarter = addMinutes(currentHour, j * quarterSize)
+        const quarter = getCycleTimeState(currentQuarter, cycles, timezone)
         if (quarter.opened) {
           if (hour.openQuarter === undefined) hour.openQuarter = j;
           hour.closeQuarter = j;

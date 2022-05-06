@@ -174,3 +174,13 @@ export function getCycleTimeState(
     id: 0,
   }
 }
+
+
+/**
+ * Returns a number which is how many parts an hour must be sliced to be displayed correctly
+ */
+export function getHourDividerFromTimezoneOffset(offsetInMinutes: number): number {
+  if (offsetInMinutes % 60 === 0) return 1;
+  if (offsetInMinutes % 30 === 0) return 2;
+  return 4;
+}
