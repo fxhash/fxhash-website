@@ -10,6 +10,7 @@ import { UserProvider } from "./UserProvider"
 import { SettingsProvider } from "../context/Theme"
 import { CyclesProvider } from "../context/Cycles"
 import { MessageCenterProvider } from "../context/MessageCenter"
+import { TopBannerProvider } from "../context/TopBanner"
 import { LaunchCountdown } from "./RareEvents/LaunchCountdown"
 import { isLaunchCountdown } from "../utils/rare-events/launch"
 
@@ -30,14 +31,16 @@ export function Root({ children }: PropsWithChildren<{}>) {
   return (
     <ApolloProvider client={clientSideClient}>
       <SettingsProvider>
-        <UserProvider>
-          <MessageCenterProvider>
-            <CyclesProvider>
-              <LayoutWrapper>
-                {children}
-              </LayoutWrapper>
-            </CyclesProvider>
-          </MessageCenterProvider>
+	<UserProvider>
+	  <TopBannerProvider>
+	    <MessageCenterProvider>
+	      <CyclesProvider>
+		<LayoutWrapper>
+		  {children}
+		</LayoutWrapper>
+	      </CyclesProvider>
+	    </MessageCenterProvider>
+	  </TopBannerProvider>
         </UserProvider>
       </SettingsProvider>
     </ApolloProvider>
