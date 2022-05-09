@@ -1,47 +1,24 @@
-import React, { useContext, useCallback, useState } from 'react'
+import React from 'react'
 import style from "./Warning.module.scss"
 import cs from "classnames"
-import { TopBannerContext, ITopBannerContext } from '../../context/TopBanner'
-import { FunctionComponent } from "react"
+import { PropsWithChildren } from "react"
 import Link from "next/link"
 
-export const Warning: FunctionComponent = ({ children }) => {
-  const [message, setMessage] = useState<string|null>(null);
-  const { 
-    history, 
-    addMessage 
-  } = useContext<ITopBannerContext>(TopBannerContext)
+interface Props {
+  closeButton: React.ReactNode | null
+  children: React.ReactNode
+  className: string
+}
 
-  const isOpen = !message || !history.find(m => m.text === message); 
-
-  const handleClose = () => {
-    if (isOpen && message) {
-      addMessage({
-	text: message,
-	from: Date.now(), 
-      }) 
-    }
-  }
-
-  const messageRef = useCallback(node => {
-    if (node) setMessage(node.textContent)
-  }, [children])
-
-
+export function Warning({ children, className, closeButton }:PropsWithChildren<Props>) {
   return (
     <div
-      className={cs(style.container, {[style.hidden]: !isOpen})}
+      className={cs(className, style.container)}
     >
-      <button
-	className={cs(style.btn_close)}
-	onClick={handleClose}
-      >
-	<i aria-hidden className="far fa-times"/>
-      </button>
+      {closeButton}
       <Link href="/doc/fxhash/one">
 	<a>
-	  <span className={cs(style.message)} ref={messageRef}>
-	    <i aria-hidden className="fa-solid fa-party-horn"/>
+	  <span className={cs(style.message)}>
 	    {children}
 	  </span>
 	</a>
