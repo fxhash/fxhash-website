@@ -17,7 +17,7 @@ const MarketplaceCollectionPage: NextPage = () => {
     <>
       <Head>
         <title>fxhash — marketplace collections</title>
-        <meta key="og:title" property="og:title" content="fxhash — marketplace collections"/> 
+        <meta key="og:title" property="og:title" content="fxhash — marketplace collections"/>
         <meta key="description" name="description" content="Explore the collections in the marketplace"/>
         <meta key="og:description" property="og:description" content="Explore the collections in the marketplace"/>
         <meta key="og:type" property="og:type" content="website"/>
@@ -34,10 +34,7 @@ const MarketplaceCollectionPage: NextPage = () => {
         <Spacing size="3x-large" />
 
         <MarketplaceTabs active={1} />
-
-        <Spacing size="x-large"/>
-
-        <main className={cs(layout['padding-big'])}>
+        <main>
           <ClientOnlyEmpty>
             <MarketplaceCollections />
           </ClientOnlyEmpty>

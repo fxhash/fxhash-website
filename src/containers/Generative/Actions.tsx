@@ -105,7 +105,7 @@ export function GenerativeActions({
         onTrigger={load}
         className={style.activity_wrapper}
       >
-        <Activity actions={actions} className={className} />
+        <Activity actions={actions} className={className} loading={loading} />
       </InfiniteScrollTrigger>
 
       {loading && data && <LoaderBlock/>}
