@@ -10,6 +10,7 @@
     &.active {
       background: var(--color-border-input);
       color: var(--color-white);
+      pointer-events: none;
     }
     &:hover {
       //border-color: var(--color-secondary);
