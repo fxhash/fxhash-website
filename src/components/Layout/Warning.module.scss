@@ -16,22 +16,23 @@
     color: black;
     font-weight: normal;
     font-size: 0.8rem;
+    flex-grow: 1;
+    &:hover {
+      font-weight: bold;
+    }
   }
 
   .message {
     display: flex;
     align-items: center;
     margin-right: 10px;
+    i {
+      font-size: 24px;
+      margin-right: 10px;
+    }
   }
 
-  &:hover {
-    font-weight: bold;
-  }
 
-  i {
-    font-size: 24px;
-    margin-right: 10px;
-  }
 
 }
 

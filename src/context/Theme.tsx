@@ -18,8 +18,7 @@ interface ISettingsProperties {
   hoverEffectCard: boolean
   // performances
   quality: number
-  topBannerMessageHash: string 
-  topBannerIsHidden: boolean
+  topBannerMessage: string 
 }
 
 const Colors = {
@@ -95,8 +94,7 @@ const defaultProperties: ISettingsProperties = {
   displayBurntCard: false,
   hoverEffectCard: true,
   quality: isMobile() ? 0 : 1,
-  topBannerMessageHash: '', 
-  topBannerIsHidden: true, 
+  topBannerMessage: '', 
 }
 
 const defaultCtx: ISettingsContext = {
@@ -140,14 +138,9 @@ export function SettingsProvider({ children }: PropsWithChildren<{}>) {
     // check for the settings in the local storage
     const fromStorage = localStorage.getItem("settings")
     const values = fromStorage ? JSON.parse(fromStorage) : defaultProperties
-    // set the default for topBannerIsHidden based on the stored hash to avoid bad ux
-    // by shortly showing the banner and then hiding after client side effect
-    const currentTopBannerMessageHash = window.btoa(process.env.NEXT_PUBLIC_BANNER_MESSAGE)
-    const topBannerIsHidden = currentTopBannerMessageHash === values.topBannerMessageHash;
     updateContext({
       ...defaultProperties,
       ...values,
-      topBannerIsHidden,
       update,
     })
   }, [])
@@ -160,16 +153,6 @@ export function SettingsProvider({ children }: PropsWithChildren<{}>) {
     root.style.setProperty("--cards-shadow", `${context.shadowCards}px`)
     root.style.setProperty("--cards-gap", `${context.spaceBetweenCards}px`) 
   }, [context])
-
-  useEffect(() => {
-    // check if top banner should be hidden
-    const currentTopBannerMessageHash = window.btoa(process.env.NEXT_PUBLIC_BANNER_MESSAGE)
-    if (currentTopBannerMessageHash === context.topBannerMessageHash) {
-      context.update('topBannerIsHidden', true)
-    } else {
-      context.update('topBannerIsHidden', false)
-    }
-  }, [context.topBannerMessageHash])
 
   return (
     <SettingsContext.Provider value={context}>

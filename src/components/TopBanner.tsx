@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import style from "./TopBanner.module.scss"
 import cs from "classnames"
 import { SettingsContext, ISettingsContext } from '../context/Theme'
@@ -11,13 +11,18 @@ interface Props {
 export function TopBanner({ message }:Props) {
   const settings = useContext<ISettingsContext>(SettingsContext)
 
-  const isOpen = !settings.topBannerIsHidden; 
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const handleClose = () => {
     if (isOpen && message) {
-      settings.update('topBannerMessageHash', window.btoa(message))
+      settings.update('topBannerMessage', message)
     }
   }
+
+  useEffect(() => {
+    const { topBannerMessage } = settings;
+    setIsOpen(message !== topBannerMessage)
+  }, [settings.topBannerMessage]);
 
   return (
     <Warning
