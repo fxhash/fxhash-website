@@ -1,15 +1,15 @@
 import { addSeconds, isBefore } from "date-fns"
 import { utcToZonedTime } from "date-fns-tz"
 import { Cycle, CyclesState } from "../types/Cycles"
-import { Timezone } from "./timzones"
+import { TimeZone } from "@vvo/tzdb";
 
 /**
  * Given a Date (with its timezone), and a cycle, outputs true if the cycle is opened
  * at the given date, and false otherwie
  */
-export function isCycleOpenedAt(date: Date, cycle: Cycle, timezone?: Timezone): boolean {
-  const reference = timezone ? utcToZonedTime(cycle.start, timezone.utc[0]) : cycle.start
-  
+export function isCycleOpenedAt(date: Date, cycle: Cycle, timezone?: TimeZone): boolean {
+  const reference = timezone ? utcToZonedTime(cycle.start, timezone.name) : cycle.start
+
   // get seconds between the 2 dates
   const diff = (date.getTime() - reference.getTime()) / 1000
 
@@ -17,10 +17,10 @@ export function isCycleOpenedAt(date: Date, cycle: Cycle, timezone?: Timezone): 
   if (diff < 0) {
     return false
   }
-  
+
   // modulo the cycle duration
   const cycleHours = diff % (cycle.opening + cycle.closing)
-  
+
   // if cycleHours > 12, it means that the platform should be closed, otherwise opened
   return cycleHours < cycle.opening
 }
@@ -33,7 +33,7 @@ export function isCycleOpenedAt(date: Date, cycle: Cycle, timezone?: Timezone): 
 export function areCyclesOpenedAt(
   date: Date,
   cycles: Cycle[][],
-  timezone?: Timezone,
+  timezone?: TimeZone,
 ): boolean {
   if (cycles.length === 0) return false
   let opened = false
@@ -120,7 +120,7 @@ export function getCyclesState(cycles: Cycle[][]): CyclesState {
     closestCycleOpening = getCycleNextOpeningTime(cycle, now)
     closestCycleClosing = getCycleNextClosingTime(cycle, now)
     duration = cycle.closing + cycle.opening
-  
+
     // only check within the next 20 openings
     for (let i = 0; i < 20; i++) {
       time = addSeconds(closestCycleOpening, i * duration)
@@ -165,12 +165,22 @@ export interface ICycleTimeState {
  * (defined as a tuple (Date, Timezone))
  */
 export function getCycleTimeState(
-  date: Date, 
-  cycles: Cycle[][], 
-  timezone: Timezone
+  date: Date,
+  cycles: Cycle[][],
+  timezone: TimeZone
 ): ICycleTimeState {
   return {
     opened: areCyclesOpenedAt(date, cycles, timezone),
     id: 0,
   }
+}
+
+
+/**
+ * Returns a number which is how many parts an hour must be sliced to be displayed correctly
+ */
+export function getHourDividerFromTimezoneOffset(offsetInMinutes: number): number {
+  if (offsetInMinutes % 60 === 0) return 1;
+  if (offsetInMinutes % 30 === 0) return 2;
+  return 4;
 }
