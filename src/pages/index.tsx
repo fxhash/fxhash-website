@@ -33,7 +33,7 @@ interface Props {
   listings: Listing[]
 }
 
-const Home: NextPage<Props> = ({ 
+const Home: NextPage<Props> = ({
   randomGenerativeToken,
   generativeTokens,
   listings
@@ -44,7 +44,7 @@ const Home: NextPage<Props> = ({
     <>
       <Head>
         <title>fxhash — home</title>
-        <meta key="og:title" property="og:title" content="fxhash — Generative Art on the Blockchain"/> 
+        <meta key="og:title" property="og:title" content="fxhash — Generative Art on the Blockchain"/>
         <meta key="description" name="description" content="fxhash is an open platform to mint and collect Generative Tokens on the Tezos blockchain"/>
         <meta key="og:description" property="og:description" content="fxhash is a platform to mint and collect Generative Tokens on the Tezos blockchain"/>
         <meta key="og:type" property="og:type" content="website"/>
@@ -68,7 +68,7 @@ const Home: NextPage<Props> = ({
               <div>
                 <h3>{ randomGenerativeToken.name }</h3>
                 <Spacing size="x-small"/>
-                <UserBadge 
+                <UserBadge
                   user={randomGenerativeToken.author}
                   size="big"
                 />
@@ -84,7 +84,7 @@ const Home: NextPage<Props> = ({
                   <Spacing size="2x-large"/>
 
                   <Link href={getGenerativeTokenUrl(randomGenerativeToken)} passHref>
-                    <Button 
+                    <Button
                       isLink={true}
                       size="regular"
                     >
@@ -100,7 +100,7 @@ const Home: NextPage<Props> = ({
             </div>
 
             <div className={cs(styles['artwork-container'])}>
-              <ArtworkPreview ipfsUri={randomGenerativeToken.metadata?.displayUri} /> 
+              <ArtworkPreview ipfsUri={randomGenerativeToken.metadata?.displayUri} />
             </div>
           </section>
 

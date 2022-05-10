@@ -5,12 +5,16 @@
   background-color: var(--color-white);
   display: flex;
   align-items: center;
-  color: black;
+  color: var(--color-black);
   font-weight: normal;
   font-size: 0.8rem;
   justify-content: space-between;
-  border-bottom: 3px solid var(--color-border);
+  border-bottom: 3px solid var(--color-black);
   padding: 8px 8px;
+
+  :global .dark :local & {
+    border-bottom-color: var(--color-gray-light);
+  }
 
   .message {
     display: flex;

@@ -1,6 +1,7 @@
 import style from "./CardsExplorer.module.scss"
 import cs from "classnames"
 import { FunctionComponent, useState } from "react"
+import { useInView } from "react-intersection-observer";
 
 
 /**
@@ -12,7 +13,11 @@ interface PropsChildren {
   filtersVisible: boolean
   setFiltersVisible: (visible: boolean) => void
   searchLoading: boolean
-  setSearchLoading: (loading: boolean) => void
+  setSearchLoading: (loading: boolean) => void,
+  refCardsContainer: (node?: (Element | null | undefined)) => void,
+  inViewCardsContainer: boolean,
+  isSearchMinimized: boolean,
+  setIsSearchMinimized: (state: boolean) => void,
 }
 
 interface Props {
@@ -23,15 +28,25 @@ export function CardsExplorer({
   filtersVisibleDefault = false,
   children,
 }: Props) {
+  const { ref: refCardsContainer, inView: inViewCardsContainer } = useInView({
+    rootMargin: '-300px 0px -100px'
+  });
+
   // is the filters panel visible ?
   const [filtersVisible, setFiltersVisible] = useState<boolean>(filtersVisibleDefault)
   // is the search loading ?
   const [searchLoading, setSearchLoading] = useState<boolean>(false)
+  // is search minimized on mobile
+  const [isSearchMinimized, setIsSearchMinimized] = useState<boolean>(true)
 
   return children({
+    refCardsContainer,
+    inViewCardsContainer,
     filtersVisible,
     setFiltersVisible,
     searchLoading,
-    setSearchLoading
+    setSearchLoading,
+    isSearchMinimized,
+    setIsSearchMinimized
   })
 }

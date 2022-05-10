@@ -25,6 +25,10 @@ const sortOptions: IOptions[] = [
     label: "30 days",
     value: "secVolumeTz30d",
   },
+  {
+    label: "all time",
+    value: "secVolumeTz",
+  },
 ]
 
 function sortValueToSortVariable(val: string) {
