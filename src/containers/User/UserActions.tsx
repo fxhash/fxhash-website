@@ -57,6 +57,7 @@ export function UserActions({
     <>
       <InfiniteScrollTrigger
         onTrigger={load}
+        canTrigger={!loading}
       >
         {actions && (
           <Activity
