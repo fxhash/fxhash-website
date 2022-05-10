@@ -1,0 +1,30 @@
+.page {
+  & > *+* {
+    margin-top: 16px;
+  }
+}
+
+.toggle_line {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  
+  & > *:first-child {
+    width: 60%;
+  }
+
+  & > span {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    em {
+      color: var(--color-gray);
+    }
+  }
+}
+
+.disabled {
+  opacity: 0.1;
+  pointer-events: none;
+}

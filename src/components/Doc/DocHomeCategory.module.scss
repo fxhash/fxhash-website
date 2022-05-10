@@ -1,0 +1,23 @@
+.root {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+
+  i {
+    font-size: 32px;
+    margin-top: 2px;
+  }
+  
+  h4 {
+    margin-bottom: 5px;
+  }
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+
+  .item {
+    margin-top: 8px;
+  }
+}
