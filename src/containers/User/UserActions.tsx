@@ -3,7 +3,6 @@ import { useQuery } from "@apollo/client"
 import cs from "classnames"
 import { useRef, useEffect } from "react"
 import { Activity } from "../../components/Activity/Activity"
-import { LoaderBlock } from "../../components/Layout/LoaderBlock"
 import { InfiniteScrollTrigger } from "../../components/Utils/InfiniteScrollTrigger"
 import { Qu_userActions } from "../../queries/user"
 import { Action } from "../../types/entities/Action"
@@ -60,11 +59,14 @@ export function UserActions({
         onTrigger={load}
       >
         {actions && (
-          <Activity actions={actions} className={cs(style.activity)} verbose={true} />
+          <Activity
+            actions={actions}
+            className={cs(style.activity)}
+            verbose={true}
+            loading={loading}
+          />
         )}
       </InfiniteScrollTrigger>
-
-      {loading && data && <LoaderBlock height="100px"/>}
     </>
   )
 }
