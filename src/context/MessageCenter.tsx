@@ -4,7 +4,7 @@ import { MessageCenterContainer } from "../components/MessageCenter/MessageCente
 
 type TMessageType = "success" | "warning" | "error"
 
-interface IMessageSent {
+export interface IMessageSent {
   type: TMessageType
   title: string
   content?: string|null

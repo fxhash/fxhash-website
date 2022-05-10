@@ -1,7 +1,7 @@
 import type { WalletOperation } from "@taquito/taquito"
 import { useContext, useRef, useState } from "react"
 import { UserContext } from "../containers/UserProvider"
-import { MessageCenterContext } from "../context/MessageCenter"
+import { IMessageSent, MessageCenterContext } from "../context/MessageCenter"
 import { TContractOperation } from "../services/contract-operations/ContractOperation"
 import { ContractOperationCallback, ContractOperationStatus, TContractOperationHookReturn } from "../types/Contracts"
 import { useIsMounted } from "../utils/hookts"
@@ -73,12 +73,17 @@ export function useContractOperation<Params>(
       // even if not mounted anymore we push the messages to message center
       if (status === ContractOperationStatus.INJECTED) {
         console.log("op injected !")
+        const messageOp: IMessageSent = data.operationType === "UPDATE_PROFILE" ? {
+          type: "warning",
+          title: "Profile update delay",
+          content: "Profile update may take a few days to populate on site",
+        } : {
+          type: "warning",
+          title: "Indexer delay",
+          content: "We've added a 2 minutes delay to our indexer to protect against blockchain rollbacks occuring since last protocol update. It will take about 2 minutes for your operation to be visible on the website."
+        };
         messageCenter.addMessages([
-          {
-            type: "warning",
-            title: "Indexer delay",
-            content: "We've added a 2 minutes delay to our indexer to protect against blockchain rollbacks occuring since last protocol update. It will take about 2 minutes for your operation to be visible on the website."
-          },
+          messageOp,
           {
             type: "success",
             title: `Operation applied`,
