@@ -5,6 +5,8 @@ import { SettingsContext } from '../../context/Theme';
 import { useInView } from "react-intersection-observer";
 
 
+const DEFAULT_SIZE = 270;
+
 /**
  * Component dedicated to holding the state of common explore pages (generative tokens, marketplace,
  * profile... etc)
@@ -44,12 +46,17 @@ export function CardsExplorer({
   const [searchLoading, setSearchLoading] = useState<boolean>(false)
   // get cardSize from scope or use default
   const cardSize = useMemo<number>(
-    () => !cardSizeScope ? 270 : settings.cardSize,
+    () => !cardSizeScope ? DEFAULT_SIZE : settings.cardSize,
     [settings.cardSize, cardSizeScope]
-  )
+  )  
+
   useEffect(() => {
     const root = document.documentElement
     root.style.setProperty("--cards-size", `${cardSize}px`)
+    // Reset to default size when cleanup
+    return () => {
+      root.style.setProperty("--cards-size",  `${DEFAULT_SIZE}px`)
+    }
   }, [cardSize])
 
         // is search minimized on mobile
