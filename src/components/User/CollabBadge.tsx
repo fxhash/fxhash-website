@@ -1,11 +1,10 @@
 import style from "./CollabBadge.module.scss"
-import colors from "../../styles/Colors.module.css"
 import badgeStyle from "./UserBadge.module.scss"
 import cs from "classnames"
 import { IProps as IEntityBadgeProps } from "./EntityBadge"
 import { Collaboration } from "../../types/entities/User"
 import { Avatar } from "./Avatar"
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { shuffleArray } from "../../utils/array"
 import { UserBadge } from "./UserBadge"
 import { getUserName, isUserVerified } from "../../utils/user"
@@ -14,24 +13,28 @@ interface Props extends IEntityBadgeProps {
   user: Collaboration
 }
 export function CollabBadge(props: Props) {
-  // extract from props
   const {
     user,
     size,
     toggeable = false,
     avatarSide,
   } = props
+  const [collaborators, setCollaborators] = useState(user.collaborators);
+  const [isInitialized, setIsInitialized] = useState(false);
 
-  const [opened, setOpened] = useState<boolean>(false)
-  const users = useMemo(() => shuffleArray(user.collaborators), [user])
-
+  const [opened, setOpened] = useState<boolean>(false);
+  useEffect(() => {
+    setCollaborators(stateArray => shuffleArray(stateArray));
+    setIsInitialized(true);
+  }, [])
   return (
     <div className={cs(
-      style.root, 
-      style[`size_${size}`], 
+      style.root,
+      style[`size_${size}`],
       style[`side_${avatarSide}`], {
         [style.opened]: opened,
         [style.toggeable]: toggeable,
+        [style.hide]: !isInitialized,
       }
     )}>
       <button
@@ -40,8 +43,8 @@ export function CollabBadge(props: Props) {
         onClick={() => setOpened(!opened)}
         disabled={!toggeable}
       >
-        {users.map(user => (
-          <div 
+        {collaborators.map(user => (
+          <div
             key={user.id}
             className={cs(style.avatar_wrapper)}
           >
@@ -57,8 +60,8 @@ export function CollabBadge(props: Props) {
               <span className={cs(style.user_name_content)}>
                 {getUserName(user, 10)}
                 {isUserVerified(user) && (
-                  <i 
-                    aria-hidden 
+                  <i
+                    aria-hidden
                     className={cs("fas", "fa-badge-check", style.verified)}
                   />
                 )}
@@ -66,7 +69,7 @@ export function CollabBadge(props: Props) {
             </span>
           </div>
         ))}
-        <div 
+        <div
           className={cs(
             badgeStyle.avatar,
             badgeStyle[`avatar-${size}`],
@@ -78,7 +81,7 @@ export function CollabBadge(props: Props) {
           <span>
             {toggeable ? (
               <>
-                <i 
+                <i
                   className={cs(
                     `fa-solid fa-angle-${opened?"up":"down"}`,
                     style.caret,
@@ -93,10 +96,10 @@ export function CollabBadge(props: Props) {
           </span>
         </div>
       </button>
-  
+
       {toggeable && (
         <div className={cs(style.collaborators)}>
-          {users.map(user => (
+          {collaborators.map(user => (
             <UserBadge
               key={user.id}
               {...props}
