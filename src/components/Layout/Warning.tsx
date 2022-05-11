@@ -16,11 +16,11 @@ export function Warning({ children, className, closeButton }:PropsWithChildren<P
       className={cs(className, style.container)}
     >
       <Link href="/doc/fxhash/one">
-	<a>
-	  <span className={cs(style.message)}>
-	    {children}
-	  </span>
-	</a>
+        <a>
+          <span className={cs(style.message)}>
+            {children}
+          </span>
+        </a>
       </Link>
       {closeButton}
     </div>

@@ -7,7 +7,7 @@
 .btn_close {
   width: 40px;
   height: 32px;
-  color: var(--color-black);
+  color: var(--color-gray);
   background: transparent;
   border: none;
   font-family: inherit;
@@ -16,11 +16,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 20px;
-  margin-right: 3px;
-  opacity: 0.5;
+
+  i {
+    font-size: 20px !important;
+  }
 
   &:hover {
-    opacity: 1;
+    color: var(--color-black);
   }
 }
