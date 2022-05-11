@@ -19,6 +19,7 @@ interface ISettingsProperties {
   hoverEffectCard: boolean
   // performances
   quality: number
+  topBannerMessage: string 
 }
 
 const Colors = {
@@ -95,6 +96,7 @@ const defaultProperties: ISettingsProperties = {
   displayBurntCard: false,
   hoverEffectCard: true,
   quality: isMobile() ? 0 : 1,
+  topBannerMessage: '', 
 }
 
 const defaultCtx: ISettingsContext = {
@@ -151,7 +153,7 @@ export function SettingsProvider({ children }: PropsWithChildren<{}>) {
     const root = document.documentElement
     root.style.setProperty("--cards-border-width", `${context.borderWidthCards}px`)
     root.style.setProperty("--cards-shadow", `${context.shadowCards}px`)
-    root.style.setProperty("--cards-gap", `${context.spaceBetweenCards}px`)
+    root.style.setProperty("--cards-gap", `${context.spaceBetweenCards}px`) 
   }, [context])
 
   return (
