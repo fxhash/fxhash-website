@@ -1,0 +1,27 @@
+@import "../styles/Variables.scss";
+
+.hidden {
+  display: none !important;
+}
+
+.btn_close {
+  width: 40px;
+  height: 32px;
+  color: var(--color-gray);
+  background: transparent;
+  border: none;
+  font-family: inherit;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  i {
+    font-size: 20px !important;
+  }
+
+  &:hover {
+    color: var(--color-black);
+  }
+}
