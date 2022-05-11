@@ -42,7 +42,7 @@ export function CardSizeSelect({
 	  className={cs({[style.active]: option.value === value})}
 	  onClick={() => onChange(option.value)}
 	>
-	  <i className="fa-solid fa-square"></i>
+	  <i/>
 	</button>
       )}
     </div>	
