@@ -30,8 +30,9 @@
     }
 
     &:hover {
-      //border-color: var(--color-secondary);
-      color: var(--color-secondary);
+      i {
+        background-color: var(--color-secondary);
+      }
     }
 
     &:nth-child(1) {
