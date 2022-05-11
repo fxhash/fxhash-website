@@ -1,0 +1,41 @@
+.checkbox {
+  label {
+    flex-direction: row-reverse !important;
+    justify-content: flex-end;
+    padding-left: 0;
+
+    span {
+      margin-left: 20px;
+    }
+  }
+}
+
+.levels {
+  & > div {
+    input {
+      border-top-width: 2px;
+      border-bottom-width: 1px;
+    }
+
+    &:nth-child(2) {
+      input {
+        border-top-width: 3px;
+      }
+    }
+
+    &:nth-last-child(2) {
+      input {
+        border-bottom-width: 3px;
+      }
+    }
+  }
+
+  .error {
+    margin-left: 15px;
+  }
+}
+
+.error {
+  font-weight: bold;
+  color: var(--color-error);
+}
