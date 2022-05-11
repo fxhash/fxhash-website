@@ -7,31 +7,39 @@
     border: 3px solid var(--color-border-input);
     background: transparent;
     color: var(--color-border-input);
+    cursor: pointer;
+
     &.active {
       background: var(--color-border-input);
       color: var(--color-white);
       pointer-events: none;
     }
+
     &:hover {
       //border-color: var(--color-secondary);
       color: var(--color-secondary);
     }
+
     &:nth-child(1) {
       border-right: 0;
-      i {
-      }
+
+      i {}
     }
+
     &:nth-child(2) {
       border-left: 0;
       border-right: 0;
+
       i {
-	transform: scale(1.25);
+        transform: scale(1.25);
       }
     }
+
     &:nth-child(3) {
-      border-left: 0; 
+      border-left: 0;
+
       i {
-	transform: scale(1.45);
+        transform: scale(1.45);
       }
     }
   }
