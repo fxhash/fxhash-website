@@ -59,11 +59,22 @@ export function GenerativeEnjoy({
   const [showUI, setShowUI] = useState<boolean>(true)
 
   // derive show UI from props & user active
-  const hideUI = !showUI && !isUserActive
+  const hideUI = false //!showUI && !isUserActive
+
+  const [sortRandom, setSortRandom] = useState<boolean>(false);
+
+  const sortedTokens = useMemo<Objkt[]>(
+    () => sortRandom ? 
+	[
+	  ...tokens.slice(0, cursor + 1),
+	  ...tokens.slice(cursor + 1, tokens.length).sort(() => Math.random() - 0.5)
+	] : tokens,
+    [sortRandom, tokens]
+  );
 
   const shiftIteration = (shift: number = 1) => {
     // first, hide if not hidden 
-    if (!frameContainerRef.current?.classList.contains(style.hidden) && tokens.length > 1) {
+    if (!frameContainerRef.current?.classList.contains(style.hidden) && sortedTokens.length > 1) {
       frameContainerRef.current?.classList.add(style.hidden)
     }
 
@@ -73,7 +84,7 @@ export function GenerativeEnjoy({
     relativeTimer.current = 0
 
     // if the cursor is at 10 from the end of the list request data
-    if (cursorRef.current > tokens.length - 10) {
+    if (cursorRef.current > sortedTokens.length - 10) {
       requestData?.()
     }
   }
@@ -89,7 +100,7 @@ export function GenerativeEnjoy({
   
       if (relativeTimer.current > (timeIterationMs - TRANSITION_DURATION_MS)
       && !frameContainerRef.current?.classList.contains(style.hidden)
-      && tokens.length > 1) {
+      && sortedTokens.length > 1) {
         frameContainerRef.current?.classList.add(style.hidden)
       }
         
@@ -97,15 +108,20 @@ export function GenerativeEnjoy({
         shiftIteration(1)
       }
     }
-  }, [paused, timePerIteration, tokens])
-  
+  }, [paused, timePerIteration, sortedTokens])
+
   // triggered when iframe is loaded 
   const onIframeLoaded = () => {
     frameContainerRef.current?.classList.remove(style.hidden)
   }
 
+  const handleClickShuffle = () => {
+    setSortRandom(!sortRandom)
+  }
+
   // derive the url to display using the cursor
-  const selectedToken = tokens[cursor]
+  const selectedToken = sortedTokens[cursor]
+
 
   return (
     <main className={cs(style.root, { [style.no_cursor]: hideUI })}>
@@ -116,8 +132,8 @@ export function GenerativeEnjoy({
             <span>back</span>
           </a>
         </Link>
-        {tokens.length > 0 && (
-          <div className={cs(style.header_details)}>
+        {sortedTokens.length > 0 && (
+	  <div className={cs(style.header_details)}>
             <strong>{selectedToken.issuer.name}</strong> 
             <UserBadge size="small" user={selectedToken.issuer.author}/>
           </div>
@@ -126,7 +142,7 @@ export function GenerativeEnjoy({
 
       <div 
         className={cs(style.frame_container, style.hidden, { 
-          [style.is_empty]: tokens.length === 0 || loading
+          [style.is_empty]: sortedTokens.length === 0 || loading
         })}
         ref={frameContainerRef}
       >
@@ -137,7 +153,7 @@ export function GenerativeEnjoy({
               size="small"
             />
           </div>
-        ):tokens.length > 0 ? (
+        ):sortedTokens.length > 0 ? (
           <ArtworkIframe
             url={gentkLiveUrl(selectedToken)}
             onLoaded={onIframeLoaded}
@@ -149,7 +165,7 @@ export function GenerativeEnjoy({
         )}
       </div>
 
-      {tokens.length > 0 && (
+      {sortedTokens.length > 0 && (
         <footer className={cs(style.footer, { [style.hide]: hideUI })}>
           <div className={cs(style.gentk_details)}>
             <Link href={getObjktUrl(selectedToken)}>
@@ -179,10 +195,16 @@ export function GenerativeEnjoy({
               title="next"
             >
               <i className="fas fa-chevron-right"/>
-            </button>
+	    </button>
           </div>
 
           <div className={cs(style.controls, style.right_controls)}>
+	    <button 
+	      className={cs({[style.active]: sortRandom})} 
+	      onClick={handleClickShuffle}
+	    >
+	      <i className="fa-solid fa-shuffle"></i>
+	    </button>
             <button 
               onClick={() => {
                 if (showUI) {
@@ -205,7 +227,7 @@ export function GenerativeEnjoy({
               title="toggle fullscreen"
             >
               <i className="fas fa-expand"/>
-            </button>
+	    </button>
           </div>
         </footer>
       )}

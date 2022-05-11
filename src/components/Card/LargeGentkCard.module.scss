@@ -11,6 +11,7 @@
   justify-content: space-between;
   align-items: center;
   font-size: var(--font-size-small);
+  gap: 10px;
 }
 
 .tezos {
@@ -21,4 +22,6 @@
 .badge {
   color: var(--color-gray) !important;
   font-weight: normal !important;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
