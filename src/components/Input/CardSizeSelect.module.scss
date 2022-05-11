@@ -1,3 +1,5 @@
+@import "../../styles/Variables.scss";
+
 .card_size_select {
   display: flex;
   flex-direction: row;
@@ -49,5 +51,9 @@
     &:nth-child(3) {
       i {}
     }
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    display: none;
   }
 }
