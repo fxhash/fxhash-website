@@ -48,7 +48,7 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
   const creator: User = objkt.issuer.author
   const settings = useContext(SettingsContext)
   // get the display url for og:image
-  const displayUrl = objkt.metadata?.displayUri 
+  const displayUrl = objkt.metadata?.displayUri
     && ipfsGatewayUrl(objkt.metadata?.displayUri)
   // used to run code if mode image is active
   const [running, setRunning] = useState<boolean>(false)
@@ -64,7 +64,7 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
     <>
       <Head>
         <title>fxhash — {objkt.name}</title>
-        <meta key="og:title" property="og:title" content={`${objkt.name} — fxhash`}/> 
+        <meta key="og:title" property="og:title" content={`${objkt.name} — fxhash`}/>
         <meta key="description" name="description" content={truncateEnd(objkt.metadata?.description || "", 200, "")}/>
         <meta key="og:description" property="og:description" content={truncateEnd(objkt.metadata?.description || "", 200, "")}/>
         <meta key="og:type" property="og:type" content="website"/>
@@ -84,13 +84,13 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
         <div className={cs(style.artwork_header_mobile, layout.break_words)}>
           <h3>{ objkt.name }</h3>
           <Spacing size="regular"/>
-          <UserBadge 
+          <UserBadge
             prependText="created by"
             user={creator}
             size="regular"
           />
           <Spacing size="2x-small"/>
-          <UserBadge 
+          <UserBadge
             prependText="owned by"
             user={owner}
             size="regular"
@@ -101,14 +101,14 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
         <div className={cs(layout.cols2, layout['responsive-reverse'])}>
           <div className={cs(style['presentation-details'])}>
             <div className={cs(style.artwork_header)}>
-              <EntityBadge 
+              <EntityBadge
                 prependText="created by"
                 user={creator}
                 size="big"
                 toggeable
               />
               <Spacing size="2x-small"/>
-              <UserBadge 
+              <UserBadge
                 prependText="owned by"
                 user={owner}
                 size="big"
@@ -121,7 +121,7 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
 
             <div className={cs(style.buttons)}>
               {objkt.activeListing && (
-                <Collect 
+                <Collect
                   listing={objkt.activeListing}
                   objkt={objkt}
                 />
@@ -135,7 +135,7 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
             </div>
 
             <Spacing size="regular"/>
-            
+
             <div className={cs(layout.buttons_inline, layout.flex_wrap)}>
               <Link href={getGenerativeTokenUrl(objkt.issuer)} passHref>
                 <Button isLink={true} size="regular">
@@ -186,7 +186,7 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
                 </>
               )}
               <strong>Operation hash</strong>
-              <a 
+              <a
                 target="_blank"
                 referrerPolicy="no-referrer"
                 href={`https://tzkt.io/${objkt.generationHash}`}
@@ -196,7 +196,7 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
               </a>
               <strong>Metadata</strong>
               {objkt.assigned ? (
-                <a 
+                <a
                   target="_blank"
                   referrerPolicy="no-referrer"
                   href={ipfsGatewayUrl(objkt.metadataUri)}
@@ -216,7 +216,7 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
                   {settings.quality === 0 && !running ? (
                     <img src={displayUrl} alt={`${objkt.name} preview`}/>
                   ):(
-                    <ArtworkIframe 
+                    <ArtworkIframe
                       ref={iframeRef}
                       url={gentkLiveUrl(objkt)}
                       hasLoading={false}
@@ -314,7 +314,7 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   let idStr,
       slug
-  
+
   if (context.params?.params && context.params.params[0]) {
     if (context.params.params[0] === "slug" && context.params.params[1]) {
       slug = context.params.params[1]
