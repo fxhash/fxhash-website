@@ -11,6 +11,7 @@ interface ISettingsProperties {
   spaceBetweenCards: number
   displayPricesCard: boolean
   displayBurntCard: boolean
+  cardSize: number
   displayInfosGenerativeCard: boolean
   displayInfosGentkCard: boolean
   borderWidthCards: number
@@ -88,6 +89,7 @@ const defaultProperties: ISettingsProperties = {
   spaceBetweenCards: 30,
   borderWidthCards: 3,
   shadowCards: 19,
+  cardSize: 270,
   displayInfosGenerativeCard: true,
   displayInfosGentkCard: true,
   displayPricesCard: false,

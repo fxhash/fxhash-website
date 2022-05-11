@@ -5,34 +5,30 @@
   background-color: var(--color-white);
   display: flex;
   align-items: center;
-  border-bottom: 3px solid var(--color-border);
-  height: 80px;
+  color: var(--color-black);
+  font-weight: normal;
+  font-size: 0.8rem;
+  justify-content: space-between;
+  border-bottom: 3px solid var(--color-black);
   padding: 8px 8px;
 
-  @media (min-width: $breakpoint-sm) {
-    height: 40px;
-  }
-  a {
-    color: black;
-    font-weight: normal;
-    font-size: 0.8rem;
-    flex-grow: 1;
-    &:hover {
-      font-weight: bold;
-    }
+  :global .dark :local & {
+    border-bottom-color: var(--color-gray-light);
   }
 
   .message {
     display: flex;
     align-items: center;
     margin-right: 10px;
+
     i {
       font-size: 24px;
       margin-right: 10px;
     }
   }
 
-
-
+  i {
+    font-size: 24px;
+    margin-right: 10px;
+  }
 }
-
