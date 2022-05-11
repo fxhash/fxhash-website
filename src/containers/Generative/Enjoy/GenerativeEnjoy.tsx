@@ -203,7 +203,7 @@ export function GenerativeEnjoy({
 	      className={cs({[style.active]: sortRandom})} 
 	      onClick={handleClickShuffle}
 	    >
-	      <i class="fa-solid fa-shuffle"></i>
+	      <i className="fa-solid fa-shuffle"></i>
 	    </button>
             <button 
               onClick={() => {

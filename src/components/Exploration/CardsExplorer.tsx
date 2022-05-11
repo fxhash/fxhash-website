@@ -21,6 +21,8 @@ interface PropsChildren {
   inViewCardsContainer: boolean,
   isSearchMinimized: boolean,
   setIsSearchMinimized: (state: boolean) => void,
+  cardSize: number,
+  setCardSize: (size: number|null) => void
 }
 
 interface Props {

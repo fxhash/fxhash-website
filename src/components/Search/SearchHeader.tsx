@@ -4,8 +4,8 @@ import cs from "classnames"
 import { forwardRef, PropsWithChildren } from "react"
 
 interface Props {
-  sortSelectComp: React.ReactNode
-  sizeSelectComp: React.ReactNode
+  sortSelectComp?: React.ReactNode
+  sizeSelectComp?: React.ReactNode
   hasFilters?: boolean
   onToggleFilters?: () => void
   filtersOpened?: boolean
