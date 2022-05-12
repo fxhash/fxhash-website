@@ -18,7 +18,7 @@ import { SearchHeader } from '../components/Search/SearchHeader'
 import { SearchInputControlled } from '../components/Input/SearchInputControlled'
 import { GenerativeFilters } from './Generative/GenerativeFilters'
 import { Frag_GenAuthor, Frag_GenPricing } from '../queries/fragments/generative-token'
-import { ITagsFilters, tagsFilters } from "../utils/filters";
+import { getTagsFromFiltersObject, ITagsFilters, tagsFilters } from "../utils/filters";
 import { sortValueToSortVariable } from "../utils/sort";
 import styleCardsExplorer from "../components/Exploration/CardsExplorer.module.scss";
 
@@ -208,18 +208,12 @@ export const ExploreGenerativeTokens = ({ }: Props) => {
   }, [addFilter, sortValue])
 
   // build the list of filters
-  const filterTags = useMemo<ExploreTagDef[]>(() => {
-    return Object.entries(filters).reduce((acc, [key, value]) => {
-      const getTag: (value: any) => string = tagsFilters[key as keyof ITagsFilters];
-      if (value && getTag) {
-        acc.push({
-          value: getTag(value),
-          onClear: () => removeFilter(key)
-        })
-      }
-      return acc;
-    }, [] as ExploreTagDef[])
-  }, [filters, removeFilter])
+  const filterTags = useMemo<ExploreTagDef[]>(() =>
+    getTagsFromFiltersObject<GenerativeTokenFilters, ExploreTagDef>(filters, ({ label, key }) => ({
+      value: label,
+      onClear: () => removeFilter(key)
+    }))
+  , [filters, removeFilter])
 
   return (
     <CardsExplorer>
