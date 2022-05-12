@@ -74,10 +74,17 @@ export const Qu_genTokenMarketplace = gql`
 `
 
 export const Qu_genTokenIterations = gql`
-  query GenerativeTokenIterations($id: Float, $take: Int, $skip: Int, $sort: ObjktsSortInput, $featureFilters: [FeatureFilter!]) {
+  query GenerativeTokenIterations(
+    $id: Float 
+    $take: Int 
+    $skip: Int
+    $sort: ObjktsSortInput 
+    $featureFilters: [FeatureFilter!]
+    $filters: ObjktFilter
+  ) {
     generativeToken(id: $id) {
       id
-      objkts(take: $take, skip: $skip, sort: $sort, featureFilters: $featureFilters) {
+      objkts(take: $take, skip: $skip, sort: $sort, featureFilters: $featureFilters, filters: $filters) {
         id
         version
         iteration

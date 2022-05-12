@@ -30,6 +30,10 @@ export interface Objkt {
   assignedAt: string|null
 }
 
+export interface ObjktFilters {
+  activeListing_exist?: boolean
+}
+
 export enum EObjktFeatureType {
   BOOLEAN              = "BOOLEAN",
   STRING               = "STRING",
@@ -47,5 +51,5 @@ export function objktFeatureType(value: any): EObjktFeatureType {
   if (type === "boolean") return EObjktFeatureType.BOOLEAN
   else if (type === "number") return EObjktFeatureType.NUMBER
   else return EObjktFeatureType.STRING
-  
+
 }
