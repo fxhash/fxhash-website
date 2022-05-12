@@ -30,6 +30,14 @@ const sortOptions: IOptions[] = [
     value: "iteration-desc",
   },
   {
+    label: "price (low to high)",
+    value: "listingPrice-asc",
+  },
+  {
+    label: "price (high to low)",
+    value: "listingPrice-desc",
+  },
+  {
     label: "rarity (rarest first)",
     value: "rarity-asc",
   },
@@ -158,7 +166,7 @@ export function GenerativeIterations({
   }, [serializedFeatureFilters])
 
   return (
-    <CardsExplorer cardSizeScope="generative-iteration"> 
+    <CardsExplorer cardSizeScope="generative-iteration">
       {({
         filtersVisible,
         setFiltersVisible,
