@@ -81,6 +81,23 @@ export function GenerativeIterations({
   const [featureFilters, setFeatureFilters] = useState<IObjktFeatureFilter[]>([])
   const [objtkFilters, setObjtkFilters] = useState<ObjktFilters>({})
 
+  const removeObjtkFilter = useCallback((key: keyof ObjktFilters) => {
+    setObjtkFilters(oldFilters => {
+      const newFilters = { ...oldFilters };
+      delete newFilters[key];
+      return newFilters;
+    })
+  }, [])
+
+  const clearFeatureFilter = useCallback((name: string) => {
+    setFeatureFilters(oldFeaturesFilters => oldFeaturesFilters.filter(filter => filter.name !== name))
+  }, [])
+
+  const handleClearAllTags = useCallback(() => {
+    setFeatureFilters([])
+    setObjtkFilters({});
+  }, []);
+
   // serialize the feature filters to send to the backend
   const serializedFeatureFilters = useMemo<IObjktFeatureFilter[]>(() => {
     return featureFilters.map(filter => ({
@@ -111,6 +128,21 @@ export function GenerativeIterations({
   // FAST ACCESS
   //
   const tokens: Objkt[]|null = data?.generativeToken?.objkts
+
+  // the visible filter tags
+  const filterTags = useMemo<ExploreTagDef[]>(() => {
+    const featuresFiltersTags = serializedFeatureFilters.map(filter => {
+      return {
+        value: `${filter.name}: ${filter.values.join(', ')}`,
+        onClear: () => clearFeatureFilter(filter.name)
+      }
+    })
+    const objtkFiltersTags = getTagsFromFiltersObject<ObjktFilters, ExploreTagDef>(objtkFilters, ({ key, label}) => ({
+      value: label,
+      onClear: () => removeObjtkFilter(key)
+    }));
+    return featuresFiltersTags.concat(objtkFiltersTags)
+  }, [clearFeatureFilter, objtkFilters, removeObjtkFilter, serializedFeatureFilters])
 
   //
   // UTILITIES
@@ -155,34 +187,6 @@ export function GenerativeIterations({
       }
     }
   }, [loading])
-
-  const removeObjtkFilter = useCallback((key: keyof ObjktFilters) => {
-    setObjtkFilters(oldFilters => {
-      const newFilters = { ...oldFilters };
-      delete newFilters[key];
-      return newFilters;
-    })
-  }, [])
-
-  const clearFeatureFilter = (name: string) => {
-    setFeatureFilters(featureFilters.filter(filter => filter.name !== name))
-  }
-
-  // the visible filter tags
-  const filterTags = useMemo<ExploreTagDef[]>(() => {
-    const featuresFiltersTags = serializedFeatureFilters.map(filter => {
-      return {
-        value: `${filter.name}: ${filter.values.join(', ')}`,
-        onClear: () => clearFeatureFilter(filter.name)
-      }
-    })
-    const objtkFiltersTags = getTagsFromFiltersObject<ObjktFilters, ExploreTagDef>(objtkFilters, ({ key, label}) => ({
-      value: label,
-      onClear: () => removeObjtkFilter(key)
-    }));
-    return featuresFiltersTags.concat(objtkFiltersTags)
-  }, [clearFeatureFilter, objtkFilters, removeObjtkFilter, serializedFeatureFilters])
-
   return (
     <CardsExplorer cardSizeScope="generative-iteration">
       {({
@@ -232,10 +236,7 @@ export function GenerativeIterations({
                 <>
                   <ExploreTags
                     terms={filterTags}
-                    onClearAll={() => {
-                      setFeatureFilters([])
-                      setObjtkFilters({});
-                    }}
+                    onClearAll={handleClearAllTags}
                   />
                   <Spacing size="regular"/>
                 </>
