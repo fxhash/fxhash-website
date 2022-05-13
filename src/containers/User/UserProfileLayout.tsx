@@ -24,9 +24,9 @@ interface Props {
   user: User
   tabIndex: number
 }
-export function UserProfileLayout({ 
+export function UserProfileLayout({
   user,
-  tabIndex, 
+  tabIndex,
   children
 }: PropsWithChildren<Props>) {
   // find the lastest work/item of the user
@@ -42,7 +42,7 @@ export function UserProfileLayout({
   }, [])
 
   // TABS href are computed using the user profile URL
-  const TABS = [ 
+  const TABS = [
     {
       name: "creations",
       props: {
@@ -62,9 +62,9 @@ export function UserProfileLayout({
       }
     },
     {
-      name: "activity",
+      name: "dashboard",
       props: {
-        href: `${getUserProfileLink(user)}/activity`
+        href: `${getUserProfileLink(user)}/dashboard`
       }
     }
   ]
@@ -73,7 +73,7 @@ export function UserProfileLayout({
     <>
       <Head>
         <title>fxhash — {getUserName(user)} profile</title>
-        <meta key="og:title" property="og:title" content={`fxhash — ${getUserName(user)} profile`}/> 
+        <meta key="og:title" property="og:title" content={`fxhash — ${getUserName(user)} profile`}/>
         <meta key="description" property="description" content={truncateEnd(user.metadata?.description || "", 200, "")}/>
         <meta key="og:description" property="og:description" content={truncateEnd(user.metadata?.description || "", 200, "")}/>
         <meta key="og:type" property="og:type" content="website"/>

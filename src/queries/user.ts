@@ -240,6 +240,38 @@ export const Qu_userActions = gql`
   }
 `
 
+export const Qu_userSales = gql`
+  query UserSales($id: String!) {
+    user(id: $id) {
+      id
+      sales {
+        id
+        type
+        numericValue
+        opHash
+        createdAt
+        issuer {
+          id
+          name
+          flag
+          avatarUri
+        }
+        target {
+          id
+          name
+          flag
+          avatarUri
+        }
+        objkt {
+          id
+          name
+          metadata
+        }
+      }
+    }
+  }
+`
+
 export const Qu_userCollaborations = gql`
   query Query($id: String!) {
     user(id: $id) {
