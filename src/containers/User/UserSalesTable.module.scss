@@ -1,3 +1,5 @@
+@import "../../styles/Variables";
+
 .sales {
   width: calc(min(100%, 1440px));
   margin: auto;
@@ -7,4 +9,16 @@
 .title {
   text-align: center;
   margin-bottom: 32px;
+}
+
+@media (max-width: $breakpoint-md) {
+  .sales {
+    padding: 0 16px;
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .sales {
+    padding: 0 10px;
+  }
 }

@@ -1,3 +1,5 @@
+@import "../../styles/Variables.scss";
+
 .wrapper {
   display: block;
   width: 100%;
@@ -5,6 +7,17 @@
   overflow-y: scroll;
   overscroll-behavior: contain;
   border: 1px solid var(--color-gray-vlight);
+}
+
+.hide {
+  display: none;
+}
+
+.container-button {
+  margin-bottom: 8px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
 }
 
 .table {
@@ -38,17 +51,27 @@
   }
 }
 
-.col-gentk {
-  width: 44%;
+.th-gentk {
+  width: 40%;
 }
-.col-user {
-  width: 17%;
+.th-user {
+  width: 19%;
 }
-.col-price {
+.th-price {
   width: 10%;
 }
-.col-time {
+.th-time {
   width: 12%;
+}
+
+.td-gentk {
+}
+.td-user {
+  overflow: hidden;
+}
+.td-price {
+}
+.td-time {
 }
 
 .price {
@@ -65,4 +88,25 @@
 
 .skeleton-thumbnail {
   margin-right: 8px;
+}
+
+@media (max-width: $breakpoint-lg) {
+  .th-gentk {
+    width: 34%;
+  }
+  .th-user {
+    width: 22%;
+  }
+  .th-price {
+    width: 10%;
+  }
+  .th-time {
+    width: 12%;
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .th-user, .th-time, .td-user, .td-time {
+    display: none;
+  }
 }
