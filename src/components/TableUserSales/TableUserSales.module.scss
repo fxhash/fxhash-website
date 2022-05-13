@@ -90,6 +90,11 @@
   margin-right: 8px;
 }
 
+.empty {
+  padding: 0 8px;
+  text-align: center;
+}
+
 @media (max-width: $breakpoint-lg) {
   .th-gentk {
     width: 34%;
@@ -106,6 +111,11 @@
 }
 
 @media (max-width: $breakpoint-sm) {
+  .wrapper {
+    height: auto;
+    max-height: 400px;
+    overscroll-behavior: auto;
+  }
   .th-user, .th-time, .td-user, .td-time {
     display: none;
   }

@@ -32,7 +32,7 @@ const _TableUserSalesMobile = ({ sales, loading }: TableUserSalesMobileProps) =>
           </tr>
           </thead>
           <tbody>
-          {sales.map(sale => (
+          {(loading || sales.length > 0) ? sales.map(sale => (
             <tr key={sale.id}>
               <td className={style['td-gentk']}>
                 {sale.objkt &&
@@ -51,7 +51,13 @@ const _TableUserSalesMobile = ({ sales, loading }: TableUserSalesMobileProps) =>
                 />
               </td>
             </tr>
-          ))}
+          )) :
+            <tr>
+              <td className={style.empty} colSpan={2}>
+                No sales found
+              </td>
+            </tr>
+          }
           {loading && (
             [...Array(20)].map((_, idx) => (
               <tr key={idx}>

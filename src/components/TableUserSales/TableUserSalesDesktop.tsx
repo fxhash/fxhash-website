@@ -24,7 +24,7 @@ const _TableUserSalesDesktop = ({ sales, loading }: TableUserSalesDesktopProps) 
         </tr>
       </thead>
       <tbody>
-        {sales.map(sale => (
+        {(loading || sales.length > 0) ? sales.map(sale => (
           <tr key={sale.id}>
             <td className={style['td-gentk']}>
               {sale.objkt &&
@@ -64,7 +64,13 @@ const _TableUserSalesDesktop = ({ sales, loading }: TableUserSalesDesktopProps) 
               <ActionReference action={sale} />
             </td>
           </tr>
-        ))}
+        )) :
+          <tr>
+            <td className={style.empty} colSpan={5}>
+              No sales found
+            </td>
+          </tr>
+        }
         {loading && (
           [...Array(20)].map((_, idx) => (
             <tr key={idx}>
