@@ -3,7 +3,7 @@ import effect from "../../styles/Effects.module.scss"
 import cs from "classnames"
 import { PropsWithChildren, ReactNode, useContext, useMemo, useState } from "react"
 import { ipfsGatewayUrl } from "../../services/Ipfs"
-import { useClientAsyncEffect } from "../../utils/hookts"
+import { useClientAsyncEffect, useClientEffect } from "../../utils/hookts"
 import { Loader } from "../Utils/Loader"
 import { useInView } from "react-intersection-observer"
 import { SettingsContext } from "../../context/Theme"
@@ -23,19 +23,23 @@ export function Card({
   thumbInfosComp,
   children
 }: PropsWithChildren<Props>) {
-  const [loaded, setLoaded] = useState<string|null>(null)
+  const [loaded, setLoaded] = useState<{ [key: string]: any }>({})
   const [error, setError] = useState<boolean>(false)
-  const url = useMemo(() => thumbnailUri && ipfsGatewayUrl(thumbnailUri), [])
+  const url = useMemo(
+    () => thumbnailUri && ipfsGatewayUrl(thumbnailUri),
+    [thumbnailUri]
+  )
   const { ref, inView } = useInView()
   const settings = useContext(SettingsContext)
+  const loadedUrl = url != undefined ? loaded[url] : null;
 
   // lazy load the image
   useClientAsyncEffect(isMounted => {
-    if (inView && !loaded && url && !error) {
+    if (inView && !loadedUrl && url && !error) {
       const img = new Image()
       img.onload = () => {
         if (isMounted()) {
-          setLoaded(img.src)
+	  setLoaded({...loaded, [url]: img.src})
         }
       }
       img.onerror = () => {
@@ -45,7 +49,7 @@ export function Card({
       }
       img.src = url
     }
-  }, [inView])
+  }, [inView, url])
 
   return (
     <div className={cs(style.container, {
@@ -54,10 +58,10 @@ export function Card({
       <div 
         className={cs(style['thumbnail-container'], { 
           [style.undesirable]: undesirable,
-          [effect.placeholder]: !loaded && !error
+          [effect.placeholder]: !loadedUrl && !error
         })}
         style={{
-          backgroundImage: loaded ? `url(${loaded})` : "none"
+          backgroundImage: loadedUrl ? `url(${loadedUrl})` : "none"
         }}
       >
         {error && (
