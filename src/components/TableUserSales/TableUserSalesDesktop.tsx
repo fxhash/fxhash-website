@@ -6,12 +6,14 @@ import { DisplayTezos } from "../Display/DisplayTezos";
 import { UserBadge } from "../User/UserBadge";
 import { ObjktImageAndName } from "../Objkt/ObjktImageAndName";
 import Skeleton from "../Skeleton";
+import { User } from '../../types/entities/User';
 
 interface TableUserSalesDesktopProps {
+  user: User,
   sales: Action[],
   loading?: boolean,
 }
-const _TableUserSalesDesktop = ({ sales, loading }: TableUserSalesDesktopProps) => (
+const _TableUserSalesDesktop = ({ user, sales, loading }: TableUserSalesDesktopProps) => (
   <div className={style.wrapper}>
     <table className={style.table}>
       <thead>
@@ -35,20 +37,26 @@ const _TableUserSalesDesktop = ({ sales, loading }: TableUserSalesDesktopProps) 
               }
             </td>
             <td className={style['td-user']}>
+              {sale.target ? (
+                user.id === sale.target.id
+                  ? <strong>you</strong>
+                  : (
+                    <UserBadge
+                      hasLink
+                      user={sale.target}
+                      size="small"
+                      displayAvatar={false}
+                    /> 
+                  )
+              ): <span>Unknown</span>}
+            </td>
+            <td className={style['td-user']}>
               {sale.issuer ?
                 <UserBadge
                   hasLink
                   user={sale.issuer}
                   size="small"
-                /> : <span>Unknown</span>
-              }
-            </td>
-            <td className={style['td-user']}>
-              {sale.target ?
-                <UserBadge
-                  hasLink
-                  user={sale.target}
-                  size="small"
+                  displayAvatar={false}
                 /> : <span>Unknown</span>
               }
             </td>

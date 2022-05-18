@@ -21,7 +21,7 @@ const _UserSalesTable = ({ user }: UserSalesTableProps) => {
   return (
     <div className={cs(style.sales)}>
       <h5 className={cs(style.title)}>Sales</h5>
-      <TableUserSales loading={loading} sales={sales} />
+      <TableUserSales user={user} loading={loading} sales={sales} />
     </div>
   );
 };
