@@ -23,6 +23,7 @@ import { FiltersPanel } from "../../components/Exploration/FiltersPanel"
 import { ExploreTagDef, ExploreTags } from "../../components/Exploration/ExploreTags"
 import { UserCollectionFilters } from "./UserCollectionFilters"
 import { CardsLoading } from "../../components/Card/CardsLoading"
+import { getTagsFromFiltersObject } from "../../utils/filters"
 
 const ITEMS_PER_PAGE = 20
 
@@ -166,48 +167,12 @@ export function UserCollection({
   }
 
   // build the list of filters
-  const filterTags = useMemo<ExploreTagDef[]>(() => {
-    const tags: ExploreTagDef[] = []
-    for (const key in filters) {
-      let value: string|null = null
-      // @ts-ignore
-      if (filters[key] !== undefined) {
-        switch (key) {
-          case "assigned_eq":
-            //@ts-ignore
-            value = `metadata assigned: ${filters[key] ? "yes" : "no"} tez`
-            break
-          case "authorVerified_eq":
-            //@ts-ignore
-            value = `artist: ${filters[key] ? "verified" : "un-verified"}`
-            break
-          case "mintProgress_eq":
-            //@ts-ignore
-            value = `mint progress: ${filters[key]?.toLowerCase()}`
-            break
-          case "searchQuery_eq":
-            //@ts-ignore
-            value = `search: ${filters[key]}`
-            break
-          case "author_in":
-            //@ts-ignore
-            value = `artists: (${filters[key].length})`
-            break
-          case "issuer_in":
-            //@ts-ignore
-            value = `generators: (${filters[key].length})`
-            break
-        }
-        if (value) {
-          tags.push({
-            value,
-            onClear: () => removeFilter(key)
-          })
-        }
-      }
-    }
-    return tags
-  }, [filters])
+  const filterTags = useMemo<ExploreTagDef[]>(() =>
+    getTagsFromFiltersObject<IUserCollectionFilters, ExploreTagDef>(filters, ({ label, key }) => ({
+      value: label,
+      onClear: () => removeFilter(key)
+    }))
+    , [filters, removeFilter])
 
   return (
     <>
@@ -215,7 +180,7 @@ export function UserCollection({
         <Link href={`${getUserProfileLink(user)}/collection/enjoy`} passHref>
           <Button
             isLink={true}
-            iconComp={<i aria-hidden className="fas fa-arrow-right"/>}
+            iconComp={<i aria-hidden className="fas fa-arrow-right" />}
             iconSide="right"
           >
             enjoy
@@ -233,7 +198,7 @@ export function UserCollection({
           isSearchMinimized,
         }) => (
           <>
-            <div ref={topMarkerRef}/>
+            <div ref={topMarkerRef} />
 
             <SearchHeader
               hasFilters
@@ -283,7 +248,7 @@ export function UserCollection({
                 </FiltersPanel>
               )}
 
-              <div style={{width: "100%"}}>
+              <div style={{ width: "100%" }}>
                 {filterTags.length > 0 && (
                   <>
                     <ExploreTags
@@ -294,7 +259,7 @@ export function UserCollection({
                         setSortValue(sortBeforeSearch.current)
                       }}
                     />
-                    <Spacing size="regular"/>
+                    <Spacing size="regular" />
                   </>
                 )}
 
