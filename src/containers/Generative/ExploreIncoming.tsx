@@ -1,3 +1,4 @@
+import style from "./ExploreIncoming.module.scss"
 import { gql, useQuery } from '@apollo/client'
 import { GenerativeToken, GenTokFlag } from '../../types/entities/GenerativeToken'
 import { CardsContainer } from '../../components/Card/CardsContainer'
@@ -8,7 +9,8 @@ import { Spacing } from '../../components/Layout/Spacing'
 import { CardsLoading } from '../../components/Card/CardsLoading'
 import { SettingsContext } from '../../context/Theme'
 import { Frag_GenAuthor, Frag_GenPricing } from '../../queries/fragments/generative-token'
-
+import { CardsExplorer } from '../../components/Exploration/CardsExplorer'
+import { CardSizeSelect } from "../../components/Input/CardSizeSelect"
 
 const ITEMS_PER_PAGE = 20
 
@@ -25,6 +27,7 @@ const Qu_genTokens = gql`
       flag
       labels
       thumbnailUri
+      displayUri
       ...Pricing
       supply
       originalSupply
@@ -42,6 +45,7 @@ const Qu_genTokens = gql`
 `
 
 interface Props {
+
 }
 
 export const ExploreIncomingTokens = ({ }: Props) => {
@@ -96,28 +100,38 @@ export const ExploreIncomingTokens = ({ }: Props) => {
   const generativeTokens: GenerativeToken[] = data?.generativeTokens
 
   return (
-    <>
-      <Spacing size="large" />
-
-      <InfiniteScrollTrigger
-        onTrigger={infiniteScrollFetch}
-        canTrigger={!!data && !loading}
-      >
-        <CardsContainer>
-          {generativeTokens?.length > 0 && generativeTokens.map(token => (
-            <GenerativeTokenCard
-              key={token.id}
-              token={token}
-              displayPrice={settingsCtx.displayPricesCard}
-              displayDetails={settingsCtx.displayInfosGenerativeCard}
-              lockedUntil={token.lockEnd as any}
-            />
-          ))}
-          {loading && (
-            <CardsLoading number={ITEMS_PER_PAGE} />
-          )}
-        </CardsContainer>
-      </InfiniteScrollTrigger>
-    </>
+    <CardsExplorer cardSizeScope="explore">
+      {({
+	cardSize,
+	setCardSize
+      }) => (
+	<>
+	  <div className={style.top_bar}>
+	    <CardSizeSelect value={cardSize} onChange={setCardSize}  />
+	  </div>
+	  <Spacing size="large" />
+	  <InfiniteScrollTrigger
+	    onTrigger={infiniteScrollFetch}
+	    canTrigger={!!data && !loading}
+	  >
+	    <CardsContainer>
+	      {generativeTokens?.length > 0 && generativeTokens.map(token => (
+		<GenerativeTokenCard
+		  key={token.id}
+		  token={token}
+		  displayPrice={settingsCtx.displayPricesCard}
+		  displayDetails={settingsCtx.displayInfosGenerativeCard}
+		  lockedUntil={token.lockEnd as any}
+		  useHQ={cardSize >= 400}
+		/>
+	      ))}
+	      {loading && (
+		<CardsLoading number={ITEMS_PER_PAGE} />
+	      )}
+	    </CardsContainer>
+	  </InfiniteScrollTrigger>
+	</>
+      )}
+    </CardsExplorer>
   )
 }

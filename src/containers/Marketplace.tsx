@@ -20,6 +20,7 @@ import { SearchInputControlled } from "../components/Input/SearchInputControlled
 import { Qu_listings } from "../queries/listing"
 import { useRouter } from "next/router"
 import styleCardsExplorer from "../components/Exploration/CardsExplorer.module.scss";
+import { CardSizeSelect } from "../components/Input/CardSizeSelect"
 
 
 const ITEMS_PER_PAGE = 40
@@ -328,7 +329,7 @@ export const Marketplace = ({ urlQuery }: Props) => {
   }, [filters])
 
   return (
-    <CardsExplorer>
+    <CardsExplorer cardSizeScope="marketplace">
       {({
         filtersVisible,
         setFiltersVisible,
@@ -336,6 +337,8 @@ export const Marketplace = ({ urlQuery }: Props) => {
         refCardsContainer,
         setIsSearchMinimized,
         isSearchMinimized,
+	cardSize,
+	setCardSize
       }) => (
         <>
           <div ref={topMarkerRef} />
@@ -354,7 +357,8 @@ export const Marketplace = ({ urlQuery }: Props) => {
                 onChange={setSortValue}
               />
             }
-          >
+	    sizeSelectComp={<CardSizeSelect value={cardSize} onChange={setCardSize} />}
+	  >
             <SearchInputControlled
               minimizeOnMobile
               onMinimize={setIsSearchMinimized}
@@ -412,7 +416,11 @@ export const Marketplace = ({ urlQuery }: Props) => {
               >
                 <CardsContainer ref={refCardsContainer}>
                   {listings?.length > 0 && listings.map(offer => (
-                    <ObjktCard key={offer.id} objkt={offer.objkt} />
+		    <ObjktCard
+		      key={offer.id}
+		      objkt={offer.objkt}
+		      useHQ={cardSize >= 400}
+		    />
                   ))}
                   {loading && (
                     <CardsLoading number={ITEMS_PER_PAGE} />

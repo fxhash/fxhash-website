@@ -11,7 +11,8 @@ import { Objkt } from '../../types/entities/Objkt'
 import { InfiniteScrollTrigger } from "../../components/Utils/InfiniteScrollTrigger"
 import { CardsLoading } from "../../components/Card/CardsLoading"
 import { Qu_genTokListings } from "../../queries/marketplace"
-
+import { CardsExplorer } from '../../components/Exploration/CardsExplorer'
+import { CardSizeSelect } from "../../components/Input/CardSizeSelect"
 
 const ITEMS_PER_PAGE = 20
 
@@ -103,8 +104,14 @@ export const GenerativeOffersMarketplace = ({
   }, [sort])
 
   return (
+    <CardsExplorer cardSizeScope="explore">
+      {({
+	cardSize,
+	setCardSize
+      }) => (
     <>
       <div className={cs(style.top_bar)}>
+	    <CardSizeSelect value={cardSize} onChange={setCardSize}  />
         <Select
           value={sortValue}
           options={sortOptions}
@@ -121,6 +128,7 @@ export const GenerativeOffersMarketplace = ({
               <ObjktCard
                 key={objkt.id}
                 objkt={objkt}
+		useHQ={cardSize >= 400}
               />
             ))}
             {loading && (
@@ -133,5 +141,7 @@ export const GenerativeOffersMarketplace = ({
         </CardsContainer>
       </InfiniteScrollTrigger>
     </>
+    )}
+   </CardsExplorer>
   )
 }

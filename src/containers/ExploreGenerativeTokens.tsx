@@ -21,6 +21,7 @@ import { Frag_GenAuthor, Frag_GenPricing } from '../queries/fragments/generative
 import { ITagsFilters, tagsFilters } from "../utils/filters";
 import { sortValueToSortVariable } from "../utils/sort";
 import styleCardsExplorer from "../components/Exploration/CardsExplorer.module.scss";
+import { CardSizeSelect } from "../components/Input/CardSizeSelect"
 
 
 const ITEMS_PER_PAGE = 20
@@ -35,6 +36,7 @@ const Qu_genTokens = gql`
       id
       name
       slug
+      displayUri
       thumbnailUri
       flag
       labels
@@ -220,16 +222,17 @@ export const ExploreGenerativeTokens = ({ }: Props) => {
       return acc;
     }, [] as ExploreTagDef[])
   }, [filters, removeFilter])
-
   return (
-    <CardsExplorer>
+    <CardsExplorer cardSizeScope="explore">
       {({
         filtersVisible,
         setFiltersVisible,
         inViewCardsContainer,
         refCardsContainer,
         isSearchMinimized,
-        setIsSearchMinimized
+	setIsSearchMinimized,
+	cardSize,
+	setCardSize
       }) => (
         <>
           <div ref={topMarkerRef} />
@@ -248,6 +251,12 @@ export const ExploreGenerativeTokens = ({ }: Props) => {
                 onChange={setSortValue}
               />
             }
+	    sizeSelectComp={
+	      <CardSizeSelect
+		value={cardSize}
+	        onChange={setCardSize}
+	      />
+	    }
           >
             <SearchInputControlled
               minimizeOnMobile
@@ -307,6 +316,7 @@ export const ExploreGenerativeTokens = ({ }: Props) => {
                       token={token}
                       displayPrice={settingsCtx.displayPricesCard}
                       displayDetails={settingsCtx.displayInfosGenerativeCard}
+		      useHQ={cardSize >= 400}
                     />
                   ))}
                   {loading && (
