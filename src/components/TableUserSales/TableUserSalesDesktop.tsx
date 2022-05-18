@@ -19,9 +19,9 @@ const _TableUserSalesDesktop = ({ user, sales, loading }: TableUserSalesDesktopP
       <thead>
         <tr>
           <th className={style['th-gentk']}>Gentk</th>
+          <th className={style['th-price']}>Price</th>
           <th className={style['th-user']}>Seller</th>
           <th className={style['th-user']}>Buyer</th>
-          <th className={style['th-price']}>Price</th>
           <th className={style['th-time']}>Time</th>
         </tr>
       </thead>
@@ -35,6 +35,14 @@ const _TableUserSalesDesktop = ({ user, sales, loading }: TableUserSalesDesktopP
                   imagePriority
                 />
               }
+            </td>
+            <td className={style['td-price']}>
+              <DisplayTezos
+                className={style.price}
+                formatBig={false}
+                mutez={sale.numericValue}
+                tezosSize="regular"
+              />
             </td>
             <td className={style['td-user']}>
               {sale.target ? (
@@ -59,14 +67,6 @@ const _TableUserSalesDesktop = ({ user, sales, loading }: TableUserSalesDesktopP
                   displayAvatar={false}
                 /> : <span>Unknown</span>
               }
-            </td>
-            <td className={style['td-price']}>
-              <DisplayTezos
-                className={style.price}
-                formatBig={false}
-                mutez={sale.numericValue}
-                tezosSize="regular"
-              />
             </td>
             <td className={style['td-time']}>
               <ActionReference action={sale} />
