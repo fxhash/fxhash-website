@@ -241,10 +241,10 @@ export const Qu_userActions = gql`
 `
 
 export const Qu_userSales = gql`
-  query UserSales($id: String!) {
+  query UserSales($id: String!, $take: Int, $skip: Int) {
     user(id: $id) {
       id
-      sales {
+      sales(take: $take, skip: $skip) {
         id
         type
         numericValue
@@ -253,13 +253,11 @@ export const Qu_userSales = gql`
         issuer {
           id
           name
-          flag
           avatarUri
         }
         target {
           id
           name
-          flag
           avatarUri
         }
         objkt {

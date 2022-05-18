@@ -77,6 +77,10 @@ export const clientSideClient = new ApolloClient({
             keyArgs: false,
             merge: cacheMergePaginatedField,
           },
+          sales: {
+            keyArgs: false,
+            merge: cacheMergePaginatedField,
+          },
         }
       },
       Listing: {

@@ -10,11 +10,16 @@ interface UserSalesTableProps {
   user: User
 }
 
+const ITEMS_PER_PAGE = 30
+
 const _UserSalesTable = ({ user }: UserSalesTableProps) => {
   const { data, loading } = useQuery(Qu_userSales, {
     notifyOnNetworkStatusChange: true,
     variables: {
       id: user.id,
+      // todo: implement infinite scroll
+      skip: 0,
+      take: ITEMS_PER_PAGE,
     }
   })
   const sales = data?.user?.sales || [];
