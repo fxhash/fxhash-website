@@ -15,18 +15,20 @@ const _ObjtkImageAndName = ({ objkt, imagePriority }: ObjtkImageAndNameProps) =>
   return (
     <Link href={`/gentk/${objkt.id}`}>
       <div className={style.container}>
-        {thumbnailUrl &&
-          <Image
-            width={40}
-            height={40}
-            placeholder="blur"
-            layout="fixed"
-            src={thumbnailUrl}
-            blurDataURL={thumbnailUrl}
-            alt={`thumbnail of ${objkt.name}`}
-            priority={imagePriority}
-          />
-        }
+        <div className={style.image}>
+          {thumbnailUrl &&
+            <Image
+              width={40}
+              height={40}
+              placeholder="blur"
+              layout="fixed"
+              src={thumbnailUrl}
+              blurDataURL={thumbnailUrl}
+              alt={`thumbnail of ${objkt.name}`}
+              priority={imagePriority}
+            />
+          }
+        </div>
         <span className={style.name}>
           {objkt.name}
         </span>
