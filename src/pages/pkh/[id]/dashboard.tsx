@@ -3,19 +3,25 @@ import { UserProfileLayout } from "../../../containers/User/UserProfileLayout"
 import { getServerSidePropsUserById } from "../../../services/ServerSideProps/ServerSidePropsUser"
 import { ReactElement } from "react"
 import { UserActions } from '../../../containers/User/UserActions'
+import { UserSalesTable } from "../../../containers/User/UserSalesTable";
+import { Spacing } from "../../../components/Layout/Spacing";
 
 
 interface Props {
   user: User
 }
 
-const UserPageActivity = ({ user }: Props) => {
+const UserPageDashboard = ({ user }: Props) => {
   return (
-    <UserActions user={user}/>
+    <>
+      <UserSalesTable user={user} />
+      <Spacing size="5x-large" />
+      <UserActions user={user}/>
+    </>
   )
 }
 
-UserPageActivity.getLayout = function getLayout(page: ReactElement) {
+UserPageDashboard.getLayout = function getLayout(page: ReactElement) {
   return (
     <UserProfileLayout
       user={page.props.user}
@@ -28,4 +34,4 @@ UserPageActivity.getLayout = function getLayout(page: ReactElement) {
 
 export const getServerSideProps = getServerSidePropsUserById
 
-export default UserPageActivity
+export default UserPageDashboard
