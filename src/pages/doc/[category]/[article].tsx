@@ -19,7 +19,7 @@ interface Props {
   article: Article
 }
 
-const DocArticlePage: NextPage<Props> = ({ 
+const DocArticlePage: NextPage<Props> = ({
   categoryLink,
   articleLink,
   article,
@@ -29,7 +29,7 @@ const DocArticlePage: NextPage<Props> = ({
     <>
       <Head>
         <title>fxhash — {article.title}</title>
-        <meta key="og:title" property="og:title" content={`fxhash — ${article.title}`}/> 
+        <meta key="og:title" property="og:title" content={`fxhash — ${article.title}`}/>
         <meta key="description" name="description" content={truncateEnd(article.description || "", 200, "")}/>
         <meta key="og:description" property="og:description" content={truncateEnd(article.description || "", 200, "")}/>
         <meta key="og:type" property="og:type" content="article"/>
@@ -37,7 +37,7 @@ const DocArticlePage: NextPage<Props> = ({
         <link rel="stylesheet" href="/highlight/dracula.css"/>
       </Head>
 
-      <Spacing size="large"/>
+      <Spacing size="large" sm="none"/>
 
       <section>
         <DocLayout
@@ -53,9 +53,9 @@ const DocArticlePage: NextPage<Props> = ({
 
       </section>
 
-      <Spacing size="6x-large"/>
-      <Spacing size="6x-large"/>
-      <Spacing size="6x-large"/>
+      <Spacing size="6x-large" sm="6x-large" />
+      <Spacing size="6x-large" sm="none"/>
+      <Spacing size="6x-large" sm="none"/>
     </>
   )
 }
@@ -71,7 +71,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const categoryLink = params?.category
   const articleLink = params?.article
-  
+
   // get the data of the page based on category / article
   const article = categoryLink && articleLink && await getArticle(categoryLink as string, articleLink as string)
 
