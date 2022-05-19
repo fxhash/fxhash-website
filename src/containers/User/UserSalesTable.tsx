@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useCallback, useMemo } from 'react';
 import style from "./UserSalesTable.module.scss";
 import { User } from "../../types/entities/User";
 import cs from "classnames";
@@ -13,20 +13,33 @@ interface UserSalesTableProps {
 const ITEMS_PER_PAGE = 30
 
 const _UserSalesTable = ({ user }: UserSalesTableProps) => {
-  const { data, loading } = useQuery(Qu_userSales, {
+  const { data, loading, fetchMore } = useQuery(Qu_userSales, {
     notifyOnNetworkStatusChange: true,
     variables: {
       id: user.id,
-      // todo: implement infinite scroll
       skip: 0,
       take: ITEMS_PER_PAGE,
     }
   })
-  const sales = data?.user?.sales || [];
+  const sales = useMemo(() => data?.user?.sales || [], [data?.user?.sales]) ;
+  const handleFetchMore = useCallback(async () => {
+    if (loading) return false;
+    await fetchMore({
+      variables: {
+        skip: sales.length,
+        take: ITEMS_PER_PAGE
+      }
+    });
+  }, [loading, fetchMore, sales.length])
   return (
     <div className={cs(style.sales)}>
       <h5 className={cs(style.title)}>Sales</h5>
-      <TableUserSales user={user} loading={loading} sales={sales} />
+      <TableUserSales
+        user={user}
+        loading={loading}
+        sales={sales}
+        onScrollToBottom={handleFetchMore}
+      />
     </div>
   );
 };
