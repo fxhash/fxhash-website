@@ -54,7 +54,10 @@ export function UserActions({
   }
 
   return (
-    <>
+    <div
+      className={cs(style.activity)}
+    >
+      <h5 className={cs(style.title)}>Activity</h5>
       <InfiniteScrollTrigger
         onTrigger={load}
         canTrigger={!loading}
@@ -62,12 +65,11 @@ export function UserActions({
         {actions && (
           <Activity
             actions={actions}
-            className={cs(style.activity)}
             verbose={true}
             loading={loading}
           />
         )}
       </InfiniteScrollTrigger>
-    </>
+    </div>
   )
 }

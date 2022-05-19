@@ -46,7 +46,8 @@ export function GenerativeDisplay({
       <div className={cs(style.artwork_header_mobile, layout.break_words)}>
         <EntityBadge
           user={token.author}
-          size="regular"
+	  size="regular"
+	  toggeable
         />
         <Spacing size="2x-small"/>
         <h3>{ token.name }</h3>
