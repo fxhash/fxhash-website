@@ -11,13 +11,13 @@ import { Button } from "../Button";
 import cs from "classnames";
 import useHasScrolledToBottom from "../../hooks/useHasScrolledToBottom";
 
-interface TableUserSalesDesktopProps {
+interface TableUserSalesProps {
   user: User,
   sales: Action[],
   loading?: boolean,
   onScrollToBottom?: () => void,
 }
-const _TableUserSalesDesktop = ({ user, sales, loading, onScrollToBottom }: TableUserSalesDesktopProps) => {
+const _TableUserSales = ({ user, sales, loading, onScrollToBottom }: TableUserSalesProps) => {
   const refWrapper = useRef<HTMLDivElement>(null);
   const [hideTable, setHideTable] = useState<boolean>(false);
   useHasScrolledToBottom(refWrapper, {
@@ -126,4 +126,4 @@ const _TableUserSalesDesktop = ({ user, sales, loading, onScrollToBottom }: Tabl
   );
 }
 
-export const TableUserSales = memo(_TableUserSalesDesktop);
+export const TableUserSales = memo(_TableUserSales);
