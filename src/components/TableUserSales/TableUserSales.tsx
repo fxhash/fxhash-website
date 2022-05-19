@@ -40,8 +40,8 @@ const _TableUserSales = ({ user, sales, loading, onScrollToBottom }: TableUserSa
           <tr>
             <th className={style['th-gentk']}>Gentk</th>
             <th className={style['th-price']}>Price</th>
-            <th className={style['th-user']}>Seller</th>
             <th className={style['th-user']}>Buyer</th>
+            <th className={style['th-user']}>Seller</th>
             <th className={style['th-time']}>Time</th>
           </tr>
           </thead>
@@ -65,20 +65,6 @@ const _TableUserSales = ({ user, sales, loading, onScrollToBottom }: TableUserSa
                   />
                 </td>
                 <td className={style['td-user']}>
-                  {sale.target ? (
-                    user.id === sale.target.id
-                      ? <strong>you</strong>
-                      : (
-                        <UserBadge
-                          hasLink
-                          user={sale.target}
-                          size="small"
-                          displayAvatar={false}
-                        />
-                      )
-                  ): <span>Unknown</span>}
-                </td>
-                <td className={style['td-user']}>
                   {sale.issuer ? (
                     user.id === sale.issuer.id
                       ? <strong>you</strong>
@@ -86,6 +72,20 @@ const _TableUserSales = ({ user, sales, loading, onScrollToBottom }: TableUserSa
                         <UserBadge
                           hasLink
                           user={sale.issuer}
+                          size="small"
+                          displayAvatar={false}
+                        />
+                      )
+                  ): <span>Unknown</span>}
+                </td>
+                <td className={style['td-user']}>
+                  {sale.target ? (
+                    user.id === sale.target.id
+                      ? <strong>you</strong>
+                      : (
+                        <UserBadge
+                          hasLink
+                          user={sale.target}
                           size="small"
                           displayAvatar={false}
                         />
