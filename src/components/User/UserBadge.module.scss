@@ -19,7 +19,7 @@
     font-weight: normal;
     font-size: 0.8em;
   }
-  
+
   .verified {
     font-size: 1.15em;
     bottom: -1px;
@@ -43,6 +43,13 @@
     }
   }
 }
+
+.no_avatar {
+  .user_infos {
+    margin-left: 0;
+  }
+}
+
 .default_font_styles {
   color: var(--color-primary);
   font-weight: bold;
@@ -56,6 +63,7 @@
   .avatar {
     transform: scale(1.05);
   }
+
   .append {
     text-decoration: none !important;
   }

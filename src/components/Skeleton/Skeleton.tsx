@@ -9,7 +9,7 @@ interface SkeletonProps {
 }
 
 export const Skeleton = memo(({ width = "auto", height, className }: SkeletonProps) => {
-  const style = useMemo(() => ({ maxWidth: width, width: '100%', height }), [height, width])
+  const style = useMemo(() => ({ maxWidth: width, width: '100%', height, display: 'inline-block' }), [height, width])
   return (
     <div className={cs(effect.placeholder, className)} style={style} />
   );

@@ -1,15 +1,26 @@
 import style from "./GenerativeIterationsFilters.module.scss"
 import cs from "classnames"
 import { FiltersGroup } from "../../../components/Exploration/FiltersGroup"
-import { useMemo } from "react"
+import { Dispatch, SetStateAction, useCallback, useMemo } from "react"
 import { GenerativeToken, GenerativeTokenFeature } from "../../../types/entities/GenerativeToken";
 import { InputMultiList, MultiListItem } from "../../../components/Input/InputMultiList"
-import { IObjktFeatureFilter, objktFeatureType } from "../../../types/entities/Objkt"
+import { IObjktFeatureFilter, objktFeatureType, ObjktFilters } from "../../../types/entities/Objkt"
 import { Qu_genTokenFeatures } from "../../../queries/generative-token"
 import { FiltersSubGroup } from "../../../components/Exploration/FiltersSubGroup"
 import { LoaderBlock } from "../../../components/Layout/LoaderBlock"
 import { useQuery } from "@apollo/client";
+import { InputRadioButtons, RadioOption } from "../../../components/Input/InputRadioButtons";
 
+const ActiveListingsOptions: RadioOption[] = [
+  {
+    value: undefined,
+    label: "All",
+  },
+  {
+    value: true,
+    label: "For sale",
+  },
+]
 
 interface IFeatureListItems {
   name: string
@@ -19,20 +30,31 @@ interface IFeatureListItems {
 interface Props {
   token: GenerativeToken
   featureFilters: IObjktFeatureFilter[]
-  setFeatureFilters: (filters: IObjktFeatureFilter[]) => void
+  setFeatureFilters: Dispatch<SetStateAction<IObjktFeatureFilter[]>>
+  objtkFilters: ObjktFilters
+  setObjtkFilters: Dispatch<SetStateAction<ObjktFilters>>
 }
 export function GenerativeIterationsFilters({
   token,
   featureFilters,
   setFeatureFilters,
+  objtkFilters,
+  setObjtkFilters
 }: Props) {
-  const { data, loading, fetchMore, refetch } = useQuery(Qu_genTokenFeatures, {
+  const { data, loading } = useQuery(Qu_genTokenFeatures, {
     notifyOnNetworkStatusChange: true,
     variables: {
       id: token.id,
     },
     fetchPolicy: "no-cache"
   })
+
+  const handleChangeFilters = useCallback((field) => (option: boolean | undefined) => {
+    setObjtkFilters((oldFilters) => ({
+      ...oldFilters,
+      [field]: option,
+    }))
+  }, [setObjtkFilters]);
 
   const features: GenerativeTokenFeature[]|null = data?.generativeToken?.features || null
 
@@ -100,6 +122,13 @@ export function GenerativeIterationsFilters({
             <em className={cs(style.no_filters)}>No features</em>
           )
         )}
+      </FiltersGroup>
+      <FiltersGroup title="Listings">
+        <InputRadioButtons
+          value={objtkFilters.activeListing_exist}
+          onChange={handleChangeFilters('activeListing_exist')}
+          options={ActiveListingsOptions}
+        />
       </FiltersGroup>
     </>
   )
