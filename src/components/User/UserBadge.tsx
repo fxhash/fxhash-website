@@ -64,7 +64,8 @@ export function UserBadge({
     <Wrapper
       className={cs({
         [style.container]: !hasLink,
-        [style.default_font_styles]: !hasLink, },
+        [style.default_font_styles]: !hasLink,
+        [style.no_avatar]: !displayAvatar },
         style[`side-${avatarSide}`],
         className
       )}

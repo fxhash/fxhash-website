@@ -54,7 +54,7 @@ export const clientSideClient = new ApolloClient({
             merge: cacheMergePaginatedField,
           },
           objkts: {
-            keyArgs: ["sort", "featureFilters"],
+            keyArgs: ["sort", "featureFilters", "filters"],
             merge: cacheMergePaginatedField,
           },
         }
@@ -74,6 +74,10 @@ export const clientSideClient = new ApolloClient({
             merge: cacheMergePaginatedField,
           },
           actions: {
+            keyArgs: false,
+            merge: cacheMergePaginatedField,
+          },
+          sales: {
             keyArgs: false,
             merge: cacheMergePaginatedField,
           },

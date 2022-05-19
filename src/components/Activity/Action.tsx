@@ -26,7 +26,7 @@ const DateDistance = ({ timestamptz, append = false }: { timestamptz: string, ap
   return <span>{ dist }</span>
 }
 
-const ActionReference = ({ action }: { action: ActionType }) => {
+export const ActionReference = ({ action }: { action: ActionType }) => {
   return (
     <a
       className={cs(style.date)}
@@ -169,7 +169,7 @@ const ActionMintedFrom: FunctionComponent<Props> = ({ action, verbose }) => (
       {verbose ? (
         <strong>{action.objkt!.name}</strong>
       ):(
-        <strong>#{action.objkt!.iteration}</strong> 
+        <strong>#{action.objkt!.iteration}</strong>
       )}
     </span>
   </>
@@ -305,7 +305,7 @@ const ActionListing: TActionComp = ({ action, verbose }) => (
       size="small"
     />
     <span>
-      listed <strong>{verbose ? action.objkt!.name : `#${action.objkt!.iteration}`}</strong> for 
+      listed <strong>{verbose ? action.objkt!.name : `#${action.objkt!.iteration}`}</strong> for
     </span>
     <span className={cs(style.price)}>
       <DisplayTezos
@@ -417,7 +417,7 @@ const ActionMapComponent: Record<TokenActionType, FunctionComponent<Props>> = {
   BURN_SUPPLY:                    ActionBurnSupply,
   COMPLETED:                      ActionCompleted,
 
-  // TODO         
+  // TODO
   NONE:                           ActionTODO,
   OFFER_CANCELLED:                ActionTODO,
   OFFER_ACCEPTED:                 ActionTODO,
@@ -426,7 +426,7 @@ const ActionMapComponent: Record<TokenActionType, FunctionComponent<Props>> = {
   COLLECTION_OFFER_ACCEPTED:      ActionTODO,
   AUCTION:                        ActionTODO,
   AUCTION_BID:                    ActionTODO,
-  AUCTION_CANCELLED:              ActionTODO,  
+  AUCTION_CANCELLED:              ActionTODO,
   AUCTION_FULFILLED:              ActionTODO,
 }
 
@@ -448,14 +448,14 @@ const actionMapLink: Record<TokenActionType, (action: ActionType) => string|null
   UPDATE_PRICING: (action: ActionType) => `/generative/${action.token?.id}`,
   BURN_SUPPLY: (action: ActionType) => `/gentk/${action.token?.id}`,
   COMPLETED: (action: ActionType) => `/generative/${action.token?.id}`,
-  // TODO         
+  // TODO
   NONE: (action: ActionType) => null,
   COLLECTION_OFFER: (action: ActionType) => null,
   COLLECTION_OFFER_CANCELLED: (action: ActionType) => null,
   COLLECTION_OFFER_ACCEPTED: (action: ActionType) => null,
   AUCTION: (action: ActionType) => null,
   AUCTION_BID: (action: ActionType) => null,
-  AUCTION_CANCELLED: (action: ActionType) => null,  
+  AUCTION_CANCELLED: (action: ActionType) => null,
   AUCTION_FULFILLED: (action: ActionType) => null,
 }
 
@@ -477,14 +477,14 @@ const ActionMapIcon: Record<TokenActionType, FunctionComponent> = {
   OFFER:                          IconSend,
   OFFER_ACCEPTED:                 IconTransfer,
   OFFER_CANCELLED:                IconCancel,
-  // TODO         
+  // TODO
   NONE:                           IconCancel,
   COLLECTION_OFFER:               IconCancel,
   COLLECTION_OFFER_CANCELLED:     IconCancel,
   COLLECTION_OFFER_ACCEPTED:      IconCancel,
   AUCTION:                        IconCancel,
   AUCTION_BID:                    IconCancel,
-  AUCTION_CANCELLED:              IconCancel,  
+  AUCTION_CANCELLED:              IconCancel,
   AUCTION_FULFILLED:              IconCancel,
 }
 
@@ -492,7 +492,7 @@ const ActionMapIcon: Record<TokenActionType, FunctionComponent> = {
 
 function LinkWrapper({ action, children }: PropsWithChildren<{ action: ActionType }>) {
   const link = actionMapLink[action.type] && actionMapLink[action.type](action)
-  return link 
+  return link
     ? (
       <article className={cs(style.container, style.is_link)}>
         <Link href={link}>
