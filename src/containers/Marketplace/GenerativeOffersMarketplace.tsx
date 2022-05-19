@@ -104,7 +104,7 @@ export const GenerativeOffersMarketplace = ({
   }, [sort])
 
   return (
-    <CardsExplorer cardSizeScope="explore">
+    <CardsExplorer cardSizeScope="marketplace">
       {({
 	cardSize,
 	setCardSize
