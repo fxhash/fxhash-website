@@ -3,8 +3,6 @@ import { Listing } from "../../types/entities/Listing"
 import { Objkt } from "../../types/entities/Objkt"
 import { getListingAcceptEp, getListingFA2Contract } from "../../utils/listing"
 import { displayMutez } from "../../utils/units"
-import { buildParameters, EBuildableParams } from "../parameters-builder/BuildParameters"
-import { TInputListingAccept } from "../parameters-builder/listing-accept/input"
 import { ContractOperation } from "./ContractOperation"
 
 export type TListingAcceptOperationParams = {
