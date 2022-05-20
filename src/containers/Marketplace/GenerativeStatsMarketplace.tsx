@@ -131,6 +131,7 @@ export function GenerativeStatsMarketplace({
         <div className={cs(style.input_wrapper)}>
           <span>Period:</span>
           <Select
+            className={cs(style.select)}
             options={PeriodOptions}
             value={period}
             onChange={setPeriod}
@@ -139,6 +140,7 @@ export function GenerativeStatsMarketplace({
         <div className={cs(style.input_wrapper)}>
           <span>Metric:</span>
           <Select
+            className={cs(style.select)}
             options={MetricOptions}
             value={metric}
             onChange={setMetric}
@@ -147,7 +149,7 @@ export function GenerativeStatsMarketplace({
       </div>
 
       <div className={cs(style.chart_container, { [style.loading]: loading })}>
-        <MarketChart 
+        <MarketChart
           data={formatted}
         />
         {loading && (

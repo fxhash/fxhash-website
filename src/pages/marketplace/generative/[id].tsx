@@ -66,7 +66,7 @@ const GenerativeTokenMarketplace: NextPage<Props> = ({ token }) => {
     <>
       <Head>
         <title>fxhash — marketplace / {token.name}</title>
-        <meta key="og:title" property="og:title" content={`marketplace — ${token.name} — fxhash`}/> 
+        <meta key="og:title" property="og:title" content={`marketplace — ${token.name} — fxhash`}/>
         <meta key="description" name="description" content={truncateEnd(token.metadata?.description || "", 200, "")}/>
         <meta key="og:description" property="og:description" content={truncateEnd(token.metadata?.description || "", 200, "")}/>
         <meta key="og:type" property="og:type" content="website"/>
@@ -82,7 +82,7 @@ const GenerativeTokenMarketplace: NextPage<Props> = ({ token }) => {
 
       <Spacing size="3x-large" />
 
-      <section className={cs(style.presentation, layout['padding-big'])}>        
+      <section className={cs(style.presentation, layout['padding-big'])}>
         <header className={cs(style.presentation_header)}>
           <div className={cs(style.preview_wrapper)}>
             <ArtworkPreview ipfsUri={token.metadata?.thumbnailUri} />
@@ -91,7 +91,7 @@ const GenerativeTokenMarketplace: NextPage<Props> = ({ token }) => {
             <small className={cs(colors.gray)}>#{ token.id }</small>
             <h3>{ token.name }</h3>
             <Spacing size="3x-small"/>
-            <EntityBadge 
+            <EntityBadge
               user={token.author}
               size="regular"
               toggeable
@@ -106,7 +106,7 @@ const GenerativeTokenMarketplace: NextPage<Props> = ({ token }) => {
               <Spacing size="x-small"/>
               <Link href={getGenerativeTokenUrl(token)} passHref>
                 <Button isLink={true} size="small">
-                  See Generative Token 
+                  See Generative Token
                 </Button>
               </Link>
             </div>
@@ -161,14 +161,14 @@ const GenerativeTokenMarketplace: NextPage<Props> = ({ token }) => {
 
       <Spacing size="4x-large" />
 
-      <Tabs 
+      <Tabs
         activeIdx={tabActive}
         tabDefinitions={tabs}
         tabsLayout="fixed-size"
         onClickTab={setTabActive}
       />
 
-      <section className={cs(layout['padding-big'])}>    
+      <section className={cs(layout['padding-big'])}>
         <Spacing size="3x-large" />
         {tabActive === 0 ? (
           <ClientOnlyEmpty>
@@ -197,8 +197,8 @@ const GenerativeTokenMarketplace: NextPage<Props> = ({ token }) => {
       {/* TODO: add the available offers for the token */}
       {/* TODO: add the activity on the market for the collection */}
 
-      <Spacing size="6x-large" />
-      <Spacing size="6x-large" />
+      <Spacing size="6x-large" sm="3x-large" />
+      <Spacing size="6x-large" sm="none" />
     </>
   )
 }
