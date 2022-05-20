@@ -14,7 +14,8 @@
   }
 
   .mint_progress {
-    width: 300px;
+    max-width: 300px;
+    width: 100%;
   }
 
   .section-subtitle {
@@ -44,6 +45,10 @@
       display: none;
     }
   }
+}
+
+.section_header_marketplace_mobile {
+  display: none;
 }
 
 .row-responsive-limiter {
@@ -91,5 +96,18 @@
         margin-left: 0 !important;
       }
     }
-  }  
+  }
+  .section_header_marketplace {
+    display: none;
+  }
+  .section_header_marketplace_mobile {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    a {
+      padding-left: 0 !important;
+      padding-right: 8px !important;
+      height: 48px;
+    }
+  }
 }

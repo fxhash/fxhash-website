@@ -40,6 +40,18 @@ const Home: NextPage<Props> = ({
 }) => {
   const settings = useContext(SettingsContext)
 
+  const linkMarketPlace = (
+    <Link href="/marketplace" passHref>
+      <Button
+        isLink={true}
+        iconComp={<i aria-hidden className="fas fa-arrow-right"/>}
+        iconSide="right"
+        color="transparent"
+      >
+        marketplace
+      </Button>
+    </Link>
+  );
   return (
     <>
       <Head>
@@ -141,7 +153,7 @@ const Home: NextPage<Props> = ({
       </section>
 
       <Spacing size="6x-large" />
-      <Spacing size="6x-large" />
+      <Spacing size="6x-large" sm="none" />
 
       <section>
         <SectionHeader className={cs(styles.section_header)}>
@@ -149,17 +161,13 @@ const Home: NextPage<Props> = ({
             <small>late to the party ?</small>
             <TitleHyphen>marketplace</TitleHyphen>
           </div>
-          <Link href="/marketplace" passHref>
-            <Button
-              isLink={true}
-              iconComp={<i aria-hidden className="fas fa-arrow-right"/>}
-              iconSide="right"
-              color="transparent"
-            >
-              marketplace
-            </Button>
-          </Link>
+          <div className={styles.section_header_marketplace}>
+            {linkMarketPlace}
+          </div>
         </SectionHeader>
+        <div className={styles.section_header_marketplace_mobile}>
+          {linkMarketPlace}
+        </div>
 
         <Spacing size="3x-large"/>
 
@@ -173,8 +181,8 @@ const Home: NextPage<Props> = ({
       </section>
 
       <Spacing size="6x-large" />
-      <Spacing size="6x-large" />
-      <Spacing size="6x-large" />
+      <Spacing size="6x-large" sm="none" />
+      <Spacing size="6x-large" sm="none" />
     </>
   )
 }
