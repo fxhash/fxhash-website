@@ -1,12 +1,14 @@
 import { ContractAbstraction, OpKind, Wallet, WalletOperation } from "@taquito/taquito"
 import { FxhashContracts } from "../../types/Contracts"
 import { Objkt } from "../../types/entities/Objkt"
+import { Offer } from "../../types/entities/Offer"
 import { getGentkFA2Contract } from "../../utils/gentk"
 import { displayMutez } from "../../utils/units"
 import { buildParameters, EBuildableParams } from "../parameters-builder/BuildParameters"
 import { ContractOperation } from "./ContractOperation"
 
-export type TListingOperationParams = {
+export type TOfferAcceptOperationParams = {
+  offer: Offer
   token: Objkt
   price: number
 }
@@ -14,7 +16,7 @@ export type TListingOperationParams = {
 /**
  * List a gentk on the Marketplace
  */
-export class ListingOperation extends ContractOperation<TListingOperationParams> {
+export class OfferAcceptOperation extends ContractOperation<TOfferAcceptOperationParams> {
   gentkContract: ContractAbstraction<Wallet>|null = null
   marketplaceContract: ContractAbstraction<Wallet>|null = null
 
@@ -36,13 +38,7 @@ export class ListingOperation extends ContractOperation<TListingOperationParams>
       }
     }]
 
-    const listingParams = {
-      gentk: {
-        id: this.params.token.id,
-        version: this.params.token.version,
-      },
-      price: this.params.price,
-    }
+    const offerAcceptParams = this.params.offer.id
 
     return this.manager.tezosToolkit.wallet.batch()
       .with([
@@ -64,11 +60,8 @@ export class ListingOperation extends ContractOperation<TListingOperationParams>
           to: FxhashContracts.MARKETPLACE_V2,
           amount: 0,
           parameter: {
-            entrypoint: "listing",
-            value: buildParameters(
-              listingParams,
-              EBuildableParams.LISTING
-            )
+            entrypoint: "offer_accept",
+            value: offerAcceptParams
           },
           storageLimit: 450
         }
@@ -77,6 +70,6 @@ export class ListingOperation extends ContractOperation<TListingOperationParams>
   }
 
   success(): string {
-    return `You have listed ${this.params.token.name} for ${displayMutez(this.params.price)} tez`
+    return `You have accepted the offer on ${this.params.token.name} for ${displayMutez(this.params.price)} tez`
   }
 }
