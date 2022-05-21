@@ -30,7 +30,7 @@ const ActionsPredecescence: Record<TokenActionType, number> = {
   COLLECTION_OFFER_ACCEPTED     : 4,
   AUCTION                       : 4,
   AUCTION_BID                   : 4,
-  AUCTION_CANCELLED             : 4,  
+  AUCTION_CANCELLED             : 4,
   AUCTION_FULFILLED             : 4,
 }
 
@@ -39,7 +39,7 @@ function sortActions(actions: ActionType[]): ActionType[] {
   // batch actions by timestamp
   const batches: Record<string, ActionType[]> = {}
   for (const action of actions) {
-    if (!batches[action.createdAt]) 
+    if (!batches[action.createdAt])
       batches[action.createdAt] = []
     batches[action.createdAt].push(action)
   }

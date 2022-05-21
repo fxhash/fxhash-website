@@ -16,7 +16,7 @@ import { CardsExplorer } from "../../components/Exploration/CardsExplorer";
 import layout from "../../styles/Layout.module.scss";
 import cs from "classnames";
 import { ExploreTagDef, ExploreTags } from "../../components/Exploration/ExploreTags";
-import { ITagsFilters, tagsFilters } from "../../utils/filters";
+import { getTagsFromFiltersObject, ITagsFilters, tagsFilters } from "../../utils/filters";
 import { FiltersPanel } from "../../components/Exploration/FiltersPanel";
 import { GenerativeFilters } from "../Generative/GenerativeFilters";
 import style from './Collections.module.scss';
@@ -126,18 +126,12 @@ export const MarketplaceCollections = ({}: Props) => {
     }
   }, [addFilter, removeFilter, sortValue])
 
-  const filterTags = useMemo<ExploreTagDef[]>(() => {
-    return Object.entries(filters).reduce((acc, [key, value]) => {
-      const getTag: (value: any) => string = tagsFilters[key as keyof ITagsFilters];
-      if (value !== undefined && getTag) {
-        acc.push({
-          value: getTag(value),
-          onClear: () => removeFilter(key)
-        })
-      }
-      return acc;
-    }, [] as ExploreTagDef[])
-  }, [filters, removeFilter])
+  const filterTags = useMemo<ExploreTagDef[]>(() =>
+    getTagsFromFiltersObject<GenerativeTokenFilters, ExploreTagDef>(filters, ({ label, key }) => ({
+      value: label,
+      onClear: () => removeFilter(key)
+    }))
+  , [filters, removeFilter])
 
   useEffect(() => {
     if (sortValue !== "relevance-desc") {
