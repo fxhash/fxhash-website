@@ -3,7 +3,7 @@
 .container {
   width: 100%;
   display: grid; 
-  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(var(--cards-size), 1fr));
   gap: var(--cards-gap);
   grid-auto-flow: column;
 

@@ -1,14 +1,13 @@
-import { ReactChild, useEffect, useRef, useState } from 'react'
+import { ReactChild, useEffect, useRef, useState, forwardRef, useCallback } from 'react'
 import style from "./MasonryCardsContainer.module.scss"
 import cs from "classnames"
 import { HTMLAttributes, PropsWithChildren } from "react"
 
 import { useEventListener } from "../../utils/useEventListener"
 
-const MIN_WIDTH = 400
-
 interface Props extends HTMLAttributes<HTMLDivElement> {
-  children?: ReactChild[]
+  children?: ReactChild[],
+  cardSize?: number, 
 }
 
 const fillCols = (children: ReactChild[], cols: Array<ReactChild[]>) => {
@@ -17,22 +16,25 @@ const fillCols = (children: ReactChild[], cols: Array<ReactChild[]>) => {
 
 export function MasonryCardsContainer({
   children,
+  cardSize=270, 
   ...props
 }: PropsWithChildren<Props>) {
 
-  const elementRef = useRef<HTMLDivElement>(null);
-  const [numCols, setNumCols] = useState(4)
+  const elementRef = useRef(null)
+  const [numCols, setNumCols] = useState<number>(3)
   const cols = [...Array(numCols)].map(() => [])
   children && fillCols(children, cols)
   
-  const resizeHandler = () => {
+  const resizeHandler = useCallback(() => {
     if(elementRef.current) {
-      setNumCols(Math.ceil(elementRef.current.offsetWidth / MIN_WIDTH))
+      const numCols = Math.max(1, Math.floor(elementRef.current.offsetWidth / cardSize) - 1)
+      setNumCols(numCols)
     }
-  }
+  }, [elementRef, cardSize, setNumCols])
 
-  useEffect(resizeHandler, [])
+  useEffect(resizeHandler, [resizeHandler])
   useEventListener(`resize`, resizeHandler)
+
 
   return (
     <div {...props} ref={elementRef} className={cs(style.container, props.className)}>
@@ -45,3 +47,5 @@ export function MasonryCardsContainer({
     </div>
   )
 }
+
+MasonryCardsContainer.displayName = "MasonryCardsContainer"

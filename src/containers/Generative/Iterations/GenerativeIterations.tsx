@@ -222,8 +222,8 @@ export function GenerativeIterations({
                 onTrigger={infiniteScrollFetch}
                 canTrigger={!!data && !loading}
               >
-                <MasonryCardsContainer ref={refCardsContainer}>
-                  {tokens?.map(gentk => (
+                <MasonryCardsContainer cardSize={cardSize}>
+                  {tokens?.map(gentk => ( 
                     <LargeGentkCard
                       key={gentk.id}
                       objkt={gentk}
