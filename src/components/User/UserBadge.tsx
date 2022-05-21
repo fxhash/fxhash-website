@@ -3,7 +3,7 @@ import layout from "../../styles/Layout.module.scss"
 import cs from "classnames"
 import Link from 'next/link'
 import { User } from "../../types/entities/User"
-import { getUserName, getUserProfileLink, isPlatformOwned, isUserVerified, userAliases } from "../../utils/user"
+import { getUserName, getUserProfileLink, isDonator, isPlatformOwned, isUserVerified, userAliases } from "../../utils/user"
 import { Avatar } from "./Avatar"
 import { IProps as IEntityBadgeProps } from "./EntityBadge"
 import { FunctionComponent, ReactNode, useMemo } from "react"
@@ -18,20 +18,22 @@ interface WrapperProps {
   children: ReactNode
 }
 
-const WrapperLink = ({ 
-  className, 
+const WrapperLink = ({
+  className,
   user,
   children,
 }: WrapperProps) => (
   <Link href={getUserProfileLink(user)}>
-    <a className={className}>
-      {children}
+    <a className={cs(style.link, style.default_font_styles, className)}>
+      <div className={style.container}>
+	      {children}
+      </div>
     </a>
   </Link>
 )
 
-const WrapperDiv = ({ 
-  className, 
+const WrapperDiv = ({
+  className,
   user,
   children,
 }: WrapperProps) => (
@@ -51,40 +53,49 @@ export function UserBadge({
   className
 }: Props) {
   // the user goes through an aliases check
-  const userAlias = useMemo(() => userAliases(user), [user])
-  const verified = isUserVerified(user)
+  const userAlias = useMemo(() => user && userAliases(user), [user])
+  const verified = user && isUserVerified(user)
   // alias can force no link
-  hasLink = hasLink && !userAlias.preventLink
+  hasLink = user && hasLink && !userAlias.preventLink
   // the wrapper component, either a link or a div
   const Wrapper = hasLink ? WrapperLink : WrapperDiv
 
-  return (
-    <Wrapper 
-      className={cs(style.container, style[`side-${avatarSide}`], className)}
+  return user ? (
+    <Wrapper
+      className={cs({
+        [style.container]: !hasLink,
+        [style.default_font_styles]: !hasLink, },
+        style[`side-${avatarSide}`],
+        className
+      )}
       user={userAlias}
     >
       {displayAvatar && (
-        <Avatar 
+        <Avatar
           uri={userAlias.avatarUri}
           className={cs(
             style.avatar,
-            style[`avatar-${size}`],
-            { [style.avatar_mod]: isPlatformOwned(userAlias) }
-          )}
+            style[`avatar-${size}`], { 
+            [style.avatar_mod]: isPlatformOwned(userAlias),
+            [style.avatar_donation]: isDonator(userAlias)
+          })}
         />
       )}
-  
+
       <div className={cs(style.user_infos)}>
         <span className={cs(style.user_name)}>
           {prependText && (
             <span className={cs(style.prepend)}>{prependText}</span>
           )}
-          <span className={cs({ [style.moderator]: isPlatformOwned(userAlias) })}>
+          <span className={cs({ 
+            [style.moderator]: isPlatformOwned(userAlias),
+            [style.donation]: isDonator(userAlias),
+          })}>
             {getUserName(userAlias, 15)}
           </span>
           {verified && (
-            <i 
-              aria-hidden 
+            <i
+              aria-hidden
               className={cs("fas", "fa-badge-check", style.verified)}
             />
           )}
@@ -97,5 +108,5 @@ export function UserBadge({
         )}
       </div>
     </Wrapper>
-  )
+  ) : <></>
 }

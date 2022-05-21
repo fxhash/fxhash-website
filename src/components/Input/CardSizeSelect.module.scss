@@ -1,0 +1,60 @@
+@import "../../styles/Variables.scss";
+
+.card_size_select {
+  display: flex;
+  flex-direction: row;
+
+  button {
+    height: 50px;
+    margin: 0;
+    padding: 0 4px;
+    border: none;
+    background: transparent;
+    color: var(--color-border-input);
+    cursor: pointer;
+
+    i {
+      width: 24px;
+      height: 24px;
+      border-radius: 3px;
+      background-color: var(--color-border-input);
+      display: block;
+    }
+
+    &.active {
+      pointer-events: none;
+
+      i {
+        background-color: var(--color-secondary);
+      }
+    }
+
+    &:hover {
+      i {
+        background-color: var(--color-secondary);
+      }
+    }
+
+    &:nth-child(1) {
+      i {
+        width: 16px;
+        height: 16px;
+      }
+    }
+
+    &:nth-child(2) {
+      i {
+        width: 20px;
+        height: 20px;
+      }
+    }
+
+    &:nth-child(3) {
+      i {}
+    }
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    display: none;
+  }
+}

@@ -5,7 +5,10 @@ import { SearchInput } from "./SearchInput"
 interface Props {
   onSearch: (query: string) => void
   placeholder?: string
-  className?: string
+  initialValue?: string
+  className?: string,
+  minimizeOnMobile?: boolean,
+  onMinimize?: (value: boolean) => void,
 }
 
 /**
@@ -16,9 +19,12 @@ interface Props {
 export function SearchInputControlled({
   placeholder = "search by artist name, tags, title...",
   onSearch,
+  initialValue = "",
   className,
+  minimizeOnMobile,
+  onMinimize,
 }: Props) {
-  const [value, setValue] = useState<string>("")
+  const [value, setValue] = useState<string>(initialValue)
 
   return (
     <SearchInput
@@ -27,6 +33,8 @@ export function SearchInputControlled({
       placeholder={placeholder}
       onSearch={onSearch}
       className={cs(className)}
+      minimizeOnMobile={minimizeOnMobile}
+      onMinimize={onMinimize}
     />
   )
 }

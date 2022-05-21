@@ -382,6 +382,19 @@ export const mapReserveIdtoEnum: Record<number, EReserveMethod> = Object.fromEnt
 )
 
 /**
+ * How many editions are left in the reserve ?
+ */
+export function reserveSize(
+  token: GenerativeToken,
+): number {
+  let size = 0
+  for (const reserve of token.reserves) {
+    size += reserve.amount
+  }
+  return Math.min(token.balance, size)
+}
+
+/**
  * Is a user elligible to mint from the reserve of a token ?
  */
 export function reserveEligibleAmount(

@@ -20,6 +20,7 @@ export function Countdown({
   useAsyncEffect((isMounted) => {
     // optimisation for 1h + timers (no need for 1s refresh)
     const dist = distanceSecondsClamped(new Date(), until)
+    setDistanceSeconds(dist)
 
     const interval = setInterval(() => {
       if (isMounted()) {

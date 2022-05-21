@@ -11,6 +11,7 @@ interface ISettingsProperties {
   spaceBetweenCards: number
   displayPricesCard: boolean
   displayBurntCard: boolean
+  cardSize: number
   displayInfosGenerativeCard: boolean
   displayInfosGentkCard: boolean
   borderWidthCards: number
@@ -18,6 +19,7 @@ interface ISettingsProperties {
   hoverEffectCard: boolean
   // performances
   quality: number
+  topBannerMessage: string 
 }
 
 const Colors = {
@@ -87,12 +89,14 @@ const defaultProperties: ISettingsProperties = {
   spaceBetweenCards: 30,
   borderWidthCards: 3,
   shadowCards: 19,
+  cardSize: 270,
   displayInfosGenerativeCard: true,
   displayInfosGentkCard: true,
   displayPricesCard: false,
   displayBurntCard: false,
   hoverEffectCard: true,
   quality: isMobile() ? 0 : 1,
+  topBannerMessage: '', 
 }
 
 const defaultCtx: ISettingsContext = {
@@ -149,7 +153,7 @@ export function SettingsProvider({ children }: PropsWithChildren<{}>) {
     const root = document.documentElement
     root.style.setProperty("--cards-border-width", `${context.borderWidthCards}px`)
     root.style.setProperty("--cards-shadow", `${context.shadowCards}px`)
-    root.style.setProperty("--cards-gap", `${context.spaceBetweenCards}px`)
+    root.style.setProperty("--cards-gap", `${context.spaceBetweenCards}px`) 
   }, [context])
 
   return (

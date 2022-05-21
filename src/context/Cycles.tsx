@@ -7,7 +7,7 @@ import { API_BLOCKCHAIN_CONTRACT_STORAGE, API_CYCLES_LIST } from "../services/Bl
 interface ICyclesContext {
   loading: boolean
   error: boolean
-  cycles: Cycle[]
+  cycles: Cycle[][]
 }
 
 const defaultProperties: ICyclesContext = {
@@ -46,7 +46,11 @@ export function CyclesProvider({ children }: PropsWithChildren<{}>) {
       const allowedStorage = await allowedStorageData.json()
 
       // finally get the active cycles
-      const activeCycles = allowedStorage.cycle_ids.map((id: string) => cycles[parseInt(id)])
+      const activeCycles = allowedStorage.cycle_ids.map(
+        (ids: string[]) => ids.map(
+          (id: string) => cycles[parseInt(id)]
+        )
+      )
 
       setContext({
         loading: false,

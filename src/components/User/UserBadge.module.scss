@@ -1,8 +1,6 @@
 .container {
   display: flex;
   align-items: center;
-  color: var(--color-primary);
-  font-weight: bold;
 
   .user_infos {
     margin-left: 0.5em;
@@ -45,8 +43,16 @@
     }
   }
 }
+.default_font_styles {
+  color: var(--color-primary);
+  font-weight: bold;
+}
 
-a.container:hover {
+.link {
+  display: inline-block;
+}
+
+.link:hover {
   .avatar {
     transform: scale(1.05);
   }
@@ -86,4 +92,13 @@ a.container:hover {
 
 .moderator {
   color: var(--color-success);
+}
+
+.donation {
+  color: var(--color-donator);
+  font-weight: bold;
+}
+
+.avatar_donation {
+  border: 3px solid var(--color-donator);
 }

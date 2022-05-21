@@ -4,19 +4,23 @@ import cs from "classnames"
 import { forwardRef, PropsWithChildren } from "react"
 
 interface Props {
-  sortSelectComp: React.ReactNode
+  sortSelectComp?: React.ReactNode
+  sizeSelectComp?: React.ReactNode
   hasFilters?: boolean
   onToggleFilters?: () => void
   filtersOpened?: boolean
-  padding?: "big"|"small"
+  padding?: "big"|"small",
+  showFiltersOnMobile?: boolean,
 }
 export const SearchHeader = forwardRef<HTMLDivElement, PropsWithChildren<Props>>(({
   sortSelectComp,
+  sizeSelectComp,
   hasFilters,
   onToggleFilters,
   filtersOpened,
   padding = "big",
   children,
+  showFiltersOnMobile = true,
 }, ref) => {
   return (
     <div className={cs(
@@ -28,7 +32,8 @@ export const SearchHeader = forwardRef<HTMLDivElement, PropsWithChildren<Props>>
           <button
             type="button"
             className={cs(style.filter_btn, {
-              [style.filters_opened]: filtersOpened
+              [style.filters_opened]: filtersOpened,
+              [style['filter_btn--show-mobile']]: showFiltersOnMobile,
             })}
             onClick={onToggleFilters}
           >
@@ -42,7 +47,10 @@ export const SearchHeader = forwardRef<HTMLDivElement, PropsWithChildren<Props>>
         )}
         {children}
       </div>
+      {sizeSelectComp}
       {sortSelectComp}
     </div>
   )
 })
+
+SearchHeader.displayName = 'SearchHeader';

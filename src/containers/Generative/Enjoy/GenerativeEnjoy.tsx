@@ -1,18 +1,16 @@
 import style from "./GenerativeEnjoy.module.scss"
 import Link from "next/link"
 import cs from "classnames"
-import { GenerativeTokenWithCollection } from "../../../types/entities/GenerativeToken"
 import { ArtworkIframe } from "../../../components/Artwork/PreviewIframe"
 import { ipfsGatewayUrl } from "../../../services/Ipfs"
 import { UserBadge } from "../../../components/User/UserBadge"
-import { getGenerativeTokenUrl } from "../../../utils/generative-token"
 import { useEffect, useMemo, useRef, useState } from "react"
-import { shuffleArray } from "../../../utils/array"
 import { useAnimationFrame, useHasInterractedIn } from "../../../utils/hookts"
 import { Objkt } from "../../../types/entities/Objkt"
-import { getObjktUrl } from "../../../utils/objkt"
+import { gentkLiveUrl, getObjktUrl } from "../../../utils/objkt"
 import { Modal } from "../../../components/Utils/Modal"
 import { SliderWithText } from "../../../components/Input/SliderWithText"
+import { Loader } from "../../../components/Utils/Loader"
 
 const DEFAULT_TIME_PER_ITERATION_MS = 20000
 const TRANSITION_DURATION_MS = 3000
@@ -32,8 +30,14 @@ interface Props {
   tokens: Objkt[]
   backLink: string
   requestData?: () => void
+  loading?: boolean
 }
-export function GenerativeEnjoy({ tokens, backLink, requestData }: Props) {
+export function GenerativeEnjoy({ 
+  tokens, 
+  backLink, 
+  requestData,
+  loading,
+}: Props) {
   // ref to elements manipulated directly
   const barRef = useRef<HTMLDivElement>(null)
   const frameContainerRef = useRef<HTMLDivElement>(null)
@@ -55,11 +59,22 @@ export function GenerativeEnjoy({ tokens, backLink, requestData }: Props) {
   const [showUI, setShowUI] = useState<boolean>(true)
 
   // derive show UI from props & user active
-  const hideUI = !showUI && !isUserActive
+  const hideUI = false //!showUI && !isUserActive
+
+  const [sortRandom, setSortRandom] = useState<boolean>(false);
+
+  const sortedTokens = useMemo<Objkt[]>(
+    () => sortRandom ? 
+	[
+	  ...tokens.slice(0, cursor + 1),
+	  ...tokens.slice(cursor + 1, tokens.length).sort(() => Math.random() - 0.5)
+	] : tokens,
+    [sortRandom, tokens]
+  );
 
   const shiftIteration = (shift: number = 1) => {
     // first, hide if not hidden 
-    if (!frameContainerRef.current?.classList.contains(style.hidden) && tokens.length > 1) {
+    if (!frameContainerRef.current?.classList.contains(style.hidden) && sortedTokens.length > 1) {
       frameContainerRef.current?.classList.add(style.hidden)
     }
 
@@ -69,19 +84,10 @@ export function GenerativeEnjoy({ tokens, backLink, requestData }: Props) {
     relativeTimer.current = 0
 
     // if the cursor is at 10 from the end of the list request data
-    if (cursorRef.current > tokens.length - 10) {
+    if (cursorRef.current > sortedTokens.length - 10) {
       requestData?.()
     }
   }
-
-  // whenever the cursor changed, we load the next one
-  useEffect(() => {
-    if (tokens.length > 1) {
-      // also, preload the next piece
-      const toLoad = tokens[cursorShifted(1)]
-      fetch(ipfsGatewayUrl(toLoad.metadata?.artifactUri))
-    }
-  }, [cursor])
 
   useAnimationFrame((time, delta) => {
     if (!paused) {
@@ -94,7 +100,7 @@ export function GenerativeEnjoy({ tokens, backLink, requestData }: Props) {
   
       if (relativeTimer.current > (timeIterationMs - TRANSITION_DURATION_MS)
       && !frameContainerRef.current?.classList.contains(style.hidden)
-      && tokens.length > 1) {
+      && sortedTokens.length > 1) {
         frameContainerRef.current?.classList.add(style.hidden)
       }
         
@@ -102,15 +108,20 @@ export function GenerativeEnjoy({ tokens, backLink, requestData }: Props) {
         shiftIteration(1)
       }
     }
-  }, [paused, timePerIteration, tokens])
-  
+  }, [paused, timePerIteration, sortedTokens])
+
   // triggered when iframe is loaded 
   const onIframeLoaded = () => {
     frameContainerRef.current?.classList.remove(style.hidden)
   }
 
+  const handleClickShuffle = () => {
+    setSortRandom(!sortRandom)
+  }
+
   // derive the url to display using the cursor
-  const selectedToken = tokens[cursor]
+  const selectedToken = sortedTokens[cursor]
+
 
   return (
     <main className={cs(style.root, { [style.no_cursor]: hideUI })}>
@@ -121,8 +132,8 @@ export function GenerativeEnjoy({ tokens, backLink, requestData }: Props) {
             <span>back</span>
           </a>
         </Link>
-        {tokens.length > 0 && (
-          <div className={cs(style.header_details)}>
+        {sortedTokens.length > 0 && (
+	  <div className={cs(style.header_details)}>
             <strong>{selectedToken.issuer.name}</strong> 
             <UserBadge size="small" user={selectedToken.issuer.author}/>
           </div>
@@ -130,12 +141,21 @@ export function GenerativeEnjoy({ tokens, backLink, requestData }: Props) {
       </header>
 
       <div 
-        className={cs(style.frame_container, style.hidden, { [style.is_empty]: tokens.length === 0 })}
+        className={cs(style.frame_container, style.hidden, { 
+          [style.is_empty]: sortedTokens.length === 0 || loading
+        })}
         ref={frameContainerRef}
       >
-        {tokens.length > 0 ? (
+        {loading ? (
+          <div className={cs(style.empty)}>
+            <Loader
+              color="white"
+              size="small"
+            />
+          </div>
+        ):sortedTokens.length > 0 ? (
           <ArtworkIframe
-            url={ipfsGatewayUrl(selectedToken.metadata?.artifactUri)}
+            url={gentkLiveUrl(selectedToken)}
             onLoaded={onIframeLoaded}
           />
         ):(
@@ -145,7 +165,7 @@ export function GenerativeEnjoy({ tokens, backLink, requestData }: Props) {
         )}
       </div>
 
-      {tokens.length > 0 && (
+      {sortedTokens.length > 0 && (
         <footer className={cs(style.footer, { [style.hide]: hideUI })}>
           <div className={cs(style.gentk_details)}>
             <Link href={getObjktUrl(selectedToken)}>
@@ -175,10 +195,16 @@ export function GenerativeEnjoy({ tokens, backLink, requestData }: Props) {
               title="next"
             >
               <i className="fas fa-chevron-right"/>
-            </button>
+	    </button>
           </div>
 
           <div className={cs(style.controls, style.right_controls)}>
+	    <button 
+	      className={cs({[style.active]: sortRandom})} 
+	      onClick={handleClickShuffle}
+	    >
+	      <i className="fa-solid fa-shuffle"></i>
+	    </button>
             <button 
               onClick={() => {
                 if (showUI) {
@@ -201,7 +227,7 @@ export function GenerativeEnjoy({ tokens, backLink, requestData }: Props) {
               title="toggle fullscreen"
             >
               <i className="fas fa-expand"/>
-            </button>
+	    </button>
           </div>
         </footer>
       )}

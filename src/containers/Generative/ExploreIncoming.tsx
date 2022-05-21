@@ -33,6 +33,9 @@ const Qu_genTokens = gql`
       lockEnd
       royalties
       createdAt
+      reserves {
+        amount
+      }
       ...Author
     }
   }
@@ -41,7 +44,7 @@ const Qu_genTokens = gql`
 interface Props {
 }
 
-export const ExploreIncomingTokens = ({}: Props) => {
+export const ExploreIncomingTokens = ({ }: Props) => {
   const settingsCtx = useContext(SettingsContext)
 
   // use to know when to stop loading

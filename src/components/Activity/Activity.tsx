@@ -3,6 +3,7 @@ import cs from "classnames"
 import { Action as ActionType, TokenActionType } from "../../types/entities/Action"
 import { Action } from "./Action"
 import { useMemo } from "react"
+import Skeleton from "../Skeleton"
 
 
 const ActionsPredecescence: Record<TokenActionType, number> = {
@@ -55,17 +56,35 @@ interface Props {
   actions: ActionType[]
   className?: string
   verbose?: boolean
+  loading?: boolean
 }
 
-export function Activity({ actions, className, verbose = false }: Props) {
+export function Activity({
+  actions,
+  className,
+  verbose = false,
+  loading = false
+}: Props) {
   const sortedActions = useMemo(() => sortActions(actions), [actions])
 
   return (
     <section className={cs(style.container, className)}>
-      {sortedActions?.length > 0 ? (
-        sortedActions.map(action => (
-          <Action key={action.id} action={action} verbose={verbose} />
-        ))
+      {sortedActions?.length > 0 || loading ? (
+        <>
+          {sortedActions?.length > 0 && (
+            sortedActions.map(action => (
+              <Action key={action.id} action={action} verbose={verbose} />
+            ))
+          )}
+          {loading && (
+            [...Array(20)].map((_, idx) => (
+              <Skeleton
+                key={idx}
+                height="42px"
+              />
+            ))
+          )}
+        </>
       ):(
         <em>No activity yet</em>
       )}
