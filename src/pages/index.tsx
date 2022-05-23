@@ -40,18 +40,6 @@ const Home: NextPage<Props> = ({
 }) => {
   const settings = useContext(SettingsContext)
 
-  const linkMarketPlace = (
-    <Link href="/marketplace" passHref>
-      <Button
-        isLink={true}
-        iconComp={<i aria-hidden className="fas fa-arrow-right"/>}
-        iconSide="right"
-        color="transparent"
-      >
-        marketplace
-      </Button>
-    </Link>
-  );
   return (
     <>
       <Head>
@@ -161,13 +149,17 @@ const Home: NextPage<Props> = ({
             <small>late to the party ?</small>
             <TitleHyphen>marketplace</TitleHyphen>
           </div>
-          <div className={styles.section_header_marketplace}>
-            {linkMarketPlace}
-          </div>
+          <Link href="/marketplace" passHref>
+            <Button
+              isLink={true}
+              iconComp={<i aria-hidden className="fas fa-arrow-right"/>}
+              iconSide="right"
+              color="transparent"
+            >
+              marketplace
+            </Button>
+          </Link>
         </SectionHeader>
-        <div className={styles.section_header_marketplace_mobile}>
-          {linkMarketPlace}
-        </div>
 
         <Spacing size="3x-large"/>
 

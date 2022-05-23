@@ -47,10 +47,6 @@
   }
 }
 
-.section_header_marketplace_mobile {
-  display: none;
-}
-
 .row-responsive-limiter {
   & > * {
     display: none;
@@ -88,26 +84,15 @@
 @media (max-width: $breakpoint-sm) {
   .section_header {
     a {
-      & > span {
-        display: none;
+      &, & > div {
+        & > span {
+          display: none;
+        }
+  
+        & > i {
+          margin-left: 0 !important;
+        }
       }
-
-      & > i {
-        margin-left: 0 !important;
-      }
-    }
-  }
-  .section_header_marketplace {
-    display: none;
-  }
-  .section_header_marketplace_mobile {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
-    a {
-      padding-left: 0 !important;
-      padding-right: 8px !important;
-      height: 48px;
     }
   }
 }
