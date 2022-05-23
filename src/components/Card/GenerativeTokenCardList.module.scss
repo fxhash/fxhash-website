@@ -26,7 +26,7 @@
     .supply {
       color: var(--color-gray);
       font-weight: normal;
-      
+
       &.minted_done {
         color: var(--color-secondary);
         font-weight: bold;
@@ -52,7 +52,16 @@
 
 
 @media (max-width: $breakpoint-sm) {
-  .details {
+  .main_details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     width: 100%;
+    text-align: center;
+  }
+  .details {
+    margin-top: 12px;
+    width: 100%;
+    text-align: center;
   }
 }

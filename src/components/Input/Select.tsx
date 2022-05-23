@@ -105,16 +105,16 @@ export function Select({
 
   return (
     <>
-      <div 
+      <div
         className={cs(
-          style.root, 
+          style.root,
           style[`opening_${direction}`],
           classNameRoot,
         )}
         ref={selectRef}
       >
-        <button 
-          className={cs(style.select, className, { [style.opened]: opened })} 
+        <button
+          className={cs(style.select, className, { [style.opened]: opened })}
           onClick={toggleOpened}
           type="button"
         >
@@ -124,7 +124,7 @@ export function Select({
               <div aria-hidden="true" className={cs(style.sizer)}>{placeholder}</div>
             </>
           ):(
-            <div>{selectedOption.label}</div>
+            <div className={style.value}>{selectedOption.label}</div>
           )}
           {options.map((opt, idx) => (
             <div key={idx} aria-hidden="true" className={cs(style.sizer)}>{opt.label}</div>

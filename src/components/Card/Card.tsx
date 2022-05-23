@@ -51,8 +51,8 @@ export function Card({
     <div className={cs(style.container, {
       [style.hover_effect]: settings.hoverEffectCard
     })} ref={ref}>
-      <div 
-        className={cs(style['thumbnail-container'], { 
+      <div
+        className={cs(style['thumbnail-container'], {
           [style.undesirable]: undesirable,
           [effect.placeholder]: !loaded && !error
         })}
@@ -81,7 +81,7 @@ export function Card({
       {displayDetails && (
         <div className={cs(style.content)}>
           { children }
-        </div> 
+        </div>
       )}
     </div>
   )
