@@ -111,10 +111,16 @@ $size: 100px;
 
 @media (max-width: $breakpoint-sm) {
   .container {
-    height: 150px;
+    flex-direction: column;
+    align-items: center;
+    height: auto;
+  }
+  .thumbnail-container {
+    height: 100px;
   }
 
   .content {
+    width: 100%;
     flex-direction: column;
     align-items: flex-start;
   }

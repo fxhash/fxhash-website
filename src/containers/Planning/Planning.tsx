@@ -27,6 +27,7 @@ const _Planning = () => {
         <Field className={cs(style.select_timezone)}>
           <label>Timezone</label>
           <Select
+            className={style.select}
             value={timezone?.name}
             options={optionsTimezones}
             onChange={updateTimezone}

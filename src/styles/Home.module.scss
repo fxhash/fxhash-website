@@ -14,7 +14,8 @@
   }
 
   .mint_progress {
-    width: 300px;
+    max-width: 300px;
+    width: 100%;
   }
 
   .section-subtitle {
@@ -83,13 +84,15 @@
 @media (max-width: $breakpoint-sm) {
   .section_header {
     a {
-      & > span {
-        display: none;
-      }
-
-      & > i {
-        margin-left: 0 !important;
+      &, & > div {
+        & > span {
+          display: none;
+        }
+  
+        & > i {
+          margin-left: 0 !important;
+        }
       }
     }
-  }  
+  }
 }
