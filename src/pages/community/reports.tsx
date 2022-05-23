@@ -67,14 +67,14 @@ const ReportsPage: NextPage<Props> = ({
     <>
       <Head>
         <title>fxhash — reports by community</title>
-        <meta key="og:title" property="og:title" content="fxhash — reports by community"/> 
+        <meta key="og:title" property="og:title" content="fxhash — reports by community"/>
         <meta key="description" name="description" content="Reports mades by the community"/>
         <meta key="og:description" property="og:description" content="Reports mades by the community"/>
         <meta key="og:type" property="og:type" content="website"/>
         <meta key="og:image" property="og:image" content="https://www.fxhash.xyz/images/og/og1.jpg"/>
       </Head>
 
-      <Spacing size="6x-large" />
+      <Spacing size="6x-large" sm="3x-large" />
 
       <section>
         <SectionHeader>

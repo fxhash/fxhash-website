@@ -17,7 +17,7 @@ const ExploreRevealFeed: NextPage = () => {
     <>
       <Head>
         <title>fxhash — feed</title>
-        <meta key="og:title" property="og:title" content="fxhash — feed"/> 
+        <meta key="og:title" property="og:title" content="fxhash — feed"/>
         <meta key="description" name="description" content="Live feed of fxhash activity"/>
         <meta key="og:description" property="og:description" content="Live feed of fxhash activity"/>
         <meta key="og:type" property="og:type" content="website"/>
@@ -43,9 +43,9 @@ const ExploreRevealFeed: NextPage = () => {
         </main>
       </section>
 
-      <Spacing size="6x-large" />
-      <Spacing size="6x-large" />
-      <Spacing size="6x-large" />
+      <Spacing size="6x-large" sm="none" />
+      <Spacing size="6x-large" sm="none" />
+      <Spacing size="6x-large" sm="none" />
     </>
   )
 }
