@@ -34,6 +34,7 @@ import { EntityBadge } from '../../components/User/EntityBadge'
 import { ListSplits } from '../../components/List/ListSplits'
 import { gentkLiveUrl } from '../../utils/objkt'
 import { Tags } from '../../components/Tags/Tags'
+import { ObjktTabs } from "../../containers/Objkt/ObjktTabs"
 import { Labels } from '../../components/GenerativeToken/Label/Labels'
 import { MarketplaceActions } from '../../containers/Objkt/MarketplaceActions'
 import { ListingAccept } from '../../containers/Objkt/ListingAccept'
@@ -291,19 +292,9 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
       <Spacing size="6x-large" />
       <Spacing size="6x-large" />
 
-      <section>
-        <SectionHeader>
-          <TitleHyphen>activity ⚡</TitleHyphen>
-        </SectionHeader>
-
-        <Spacing size="3x-large"/>
-
-        <main className={cs(layout['padding-big'])}>
-          <div className={cs(style['activity-wrapper'])}>
-            <Activity actions={objkt.actions} className={style.activity} />
-          </div>
-        </main>
-      </section>
+      <ObjktTabs
+        objkt={objkt}
+      />
 
       <Spacing size="6x-large" />
       <Spacing size="6x-large" />

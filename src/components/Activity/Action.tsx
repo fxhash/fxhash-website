@@ -21,7 +21,7 @@ type TActionComp = FunctionComponent<Props>
 
 const getTokenIdx = (name: string) => '#' + name.split("#").pop()
 
-const DateDistance = ({ timestamptz, append = false }: { timestamptz: string, append?: boolean }) => {
+export const DateDistance = ({ timestamptz, append = false }: { timestamptz: string, append?: boolean }) => {
   const dist = useMemo(() => formatDistance(new Date(timestamptz), new Date(), { addSuffix: true,  }), [])
   return <span>{ dist }</span>
 }
