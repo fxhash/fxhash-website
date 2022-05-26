@@ -3,8 +3,8 @@ import { useContext } from "react"
 import { Objkt } from "../../types/entities/Objkt"
 import { User } from "../../types/entities/User"
 import { UserContext } from "../UserProvider"
-import { CancelOffer } from "./CancelOffer"
-import { PlaceOffer } from "./PlaceOffer"
+import { ListingCancel } from "./ListingCancel"
+import { ListingCreate } from "./ListingCreate"
 
 
 interface Props {
@@ -17,7 +17,7 @@ interface Props {
  *    - has activeListing ? cancel activeListing
  *    - doesn't have activeListing ? place activeListing
  */
-export function OfferControl({ objkt }: Props) {
+export function MarketplaceActions({ objkt }: Props) {
   const userCtx = useContext(UserContext)
   const user = userCtx.user!
   const owner: User = objkt.owner!
@@ -26,12 +26,12 @@ export function OfferControl({ objkt }: Props) {
     <>
       {owner.id === user.id ? (
         objkt.activeListing ? (
-          <CancelOffer
+          <ListingCancel
             listing={objkt.activeListing}
             objkt={objkt}
           />
         ):(
-          <PlaceOffer objkt={objkt} />
+          <ListingCreate objkt={objkt} />
         )
       ):null}
     </>

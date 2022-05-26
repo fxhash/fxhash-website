@@ -18,8 +18,6 @@ import { Objkt } from '../../types/entities/Objkt'
 import { User } from '../../types/entities/User'
 import { ClientOnlyEmpty } from '../../components/Utils/ClientOnly'
 import { UserGuard } from '../../components/Guards/UserGuard'
-import { OfferControl } from '../../containers/Objkt/OfferControl'
-import { Collect } from '../../containers/Objkt/Collect'
 import { truncateEnd } from '../../utils/strings'
 import { TitleHyphen } from '../../components/Layout/TitleHyphen'
 import { ArtworkIframe, ArtworkIframeRef } from '../../components/Artwork/PreviewIframe'
@@ -37,6 +35,8 @@ import { ListSplits } from '../../components/List/ListSplits'
 import { gentkLiveUrl } from '../../utils/objkt'
 import { Tags } from '../../components/Tags/Tags'
 import { Labels } from '../../components/GenerativeToken/Label/Labels'
+import { MarketplaceActions } from '../../containers/Objkt/MarketplaceActions'
+import { ListingAccept } from '../../containers/Objkt/ListingAccept'
 
 
 interface Props {
@@ -121,7 +121,7 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
 
             <div className={cs(style.buttons)}>
               {objkt.activeListing && (
-                <Collect
+                <ListingAccept
                   listing={objkt.activeListing}
                   objkt={objkt}
                 />
@@ -129,7 +129,7 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
               {/* @ts-ignore */}
               <ClientOnlyEmpty style={{ width: "100%" }}>
                 <UserGuard forceRedirect={false}>
-                  <OfferControl objkt={objkt}/>
+                  <MarketplaceActions objkt={objkt}/>
                 </UserGuard>
               </ClientOnlyEmpty>
             </div>
