@@ -3,6 +3,7 @@ import cs from "classnames"
 import { FunctionComponent, useState, useEffect, useContext, useMemo } from "react"
 import { SettingsContext } from '../../context/Theme';
 import { useInView } from "react-intersection-observer";
+import { useRouter } from 'next/router'
 
 
 const DEFAULT_SIZE = 270;
@@ -37,7 +38,8 @@ export function CardsExplorer({
 }: Props) {
 
   const settings = useContext(SettingsContext);
-
+  const router = useRouter();
+  
   const { ref: refCardsContainer, inView: inViewCardsContainer } = useInView({
     rootMargin: '-300px 0px -100px'
   });
@@ -45,24 +47,40 @@ export function CardsExplorer({
   // is the filters panel visible ?
   const [filtersVisible, setFiltersVisible] = useState<boolean>(filtersVisibleDefault)
   // is the search loading ?
-  const [searchLoading, setSearchLoading] = useState<boolean>(false)
+  const [searchLoading, setSearchLoading] = useState<boolean>(false) 
+
   // get cardSize from scope or use default
   const cardSize = useMemo<number>(
-    () => !cardSizeScope ? DEFAULT_SIZE : settings.cardSize,
-    [settings.cardSize, cardSizeScope]
-  )  
+    () => !cardSizeScope || !settings.cardSize[cardSizeScope]
+    ? DEFAULT_SIZE 
+    : settings.cardSize[cardSizeScope],
+    [cardSizeScope, settings.cardSize]
+  )
 
+  const handleSetCardSize = (value) => {
+    settings.update('cardSize', {...settings.cardSize, [cardSizeScope]: value})
+  }
+  
+  // get the basePath from pathname
+  const basePath = useMemo<string>(() => router.pathname.split('/')[1],[router.pathname])
+  const isActiveScope = basePath === cardSizeScope; 
+  
   useEffect(() => {
-    const root = document.documentElement
-    root.style.setProperty("--cards-size", `${cardSize}px`)
-    // Reset to default size when cleanup
-    return () => {
-      root.style.setProperty("--cards-size",  `${DEFAULT_SIZE}px`)
+    // cardSize scopes need to match the basePath to prevent race conditions
+    // when updating cardSize for retained routes
+    if(isActiveScope) {
+      const root = document.documentElement
+      root.style.setProperty("--cards-size", `${cardSize}px`)
+      // Reset to default size when cleanup
+      return () => {
+	root.style.setProperty("--cards-size",  `${DEFAULT_SIZE}px`)
+      }
     }
-  }, [cardSize])
-
-        // is search minimized on mobile
+  }, [cardSize, router.pathname])
+   
+  // is search minimized on mobile
   const [isSearchMinimized, setIsSearchMinimized] = useState<boolean>(true)
+
 
   return children({
     refCardsContainer,
@@ -72,7 +90,7 @@ export function CardsExplorer({
     searchLoading,
     setSearchLoading,
     cardSize,
-    setCardSize: (value) => settings.update('cardSize', value),
+    setCardSize: handleSetCardSize,
     isSearchMinimized,
     setIsSearchMinimized
   })
