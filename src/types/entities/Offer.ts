@@ -7,9 +7,9 @@ export interface Offer {
   buyer: User
   objkt: Objkt
   price: number
-  createdAt: Date
-  cancelledAt: Date
-  acceptedAt: Date
+  createdAt: string
+  cancelledAt: string
+  acceptedAt: string
 }
 
 // export interface OfferFilters {

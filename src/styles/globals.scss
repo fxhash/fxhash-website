@@ -42,6 +42,7 @@ body {
   --layout-gap-small-lg: 30px;
   --layout-gap-small-md: 15px;
 
+  --font-size-vsmall: 0.7rem;
   --font-size-small: 0.875rem;
   --font-size-regular: 1rem;
   --font-size-h6: 1rem;
@@ -82,7 +83,7 @@ body {
   &:hover {
     background: var(--color-gray-dark);
   }
-  
+
   &:active {
     background: var(--color-black);
   }
@@ -113,23 +114,33 @@ strong {
 h6 {
   font-size: var(--font-size-h6);
 }
+
 h5 {
   font-size: var(--font-size-h5);
 }
+
 h4 {
   font-size: var(--font-size-h4);
 }
+
 h3 {
   font-size: var(--font-size-h3);
 }
+
 h2 {
   font-size: var(--font-size-h2);
 }
+
 h1 {
   font-size: var(--font-size-h1);
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   margin: 0;
 }
 
@@ -137,18 +148,23 @@ h1, h2, h3, h4, h5, h6 {
   h6 {
     font-size: var(--font-size-h6);
   }
+
   h5 {
     font-size: var(--font-size-h6);
   }
+
   h4 {
     font-size: var(--font-size-h5);
   }
+
   h3 {
     font-size: var(--font-size-h4);
   }
+
   h2 {
     font-size: var(--font-size-h3);
   }
+
   h1 {
     font-size: var(--font-size-h2);
   }
