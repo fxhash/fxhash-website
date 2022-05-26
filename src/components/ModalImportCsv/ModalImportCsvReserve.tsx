@@ -99,7 +99,7 @@ const _ModalImportCsvReserve = ({ onClose, onImport }: ModalImportCsvReserveProp
         </code>
       </pre>
       <Dropzone
-        textDefault="Drop your .csv file here (on click to browse)"
+        textDefault="Drop your .csv file here (or click to browse)"
         accepted={'text/csv'}
         files={file && [file]}
         onChange={handleDropzoneChange}
@@ -119,7 +119,6 @@ const _ModalImportCsvReserve = ({ onClose, onImport }: ModalImportCsvReserveProp
         <div className={style.splits}>
           <InputSplits
             value={splits}
-            onChange={() => {}}
             textShares="Nb of editions"
             defaultShares={1}
             sharesTransformer={transformSplitsAccessList}
