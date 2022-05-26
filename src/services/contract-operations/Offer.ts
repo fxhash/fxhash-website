@@ -28,7 +28,10 @@ export class OfferOperation extends ContractOperation<TOfferOperationParams> {
         version: this.params.token.version,
       },
       price: this.params.price,
-    }).send()
+    }).send({
+      mutez: true,
+      amount: this.params.price
+    })
   }
 
   success(): string {
