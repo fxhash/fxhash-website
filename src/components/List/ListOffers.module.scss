@@ -20,6 +20,11 @@
     flex: 1 1 0;
   }
 
+  .user_badge_wrapper {
+    display: flex;
+    align-items: center;
+  }
+
   .price {
     font-weight: bold;
     color: var(--color-secondary);

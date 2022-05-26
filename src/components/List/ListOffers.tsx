@@ -87,10 +87,12 @@ export function ListOffers({
             </div>
           )}
           <div className={cs(style.offer)}>
-            <UserBadge
-              user={offer.buyer}
-              size="small"
-            />
+            <div className={cs(style.user_badge_wrapper)}>
+              <UserBadge
+                user={offer.buyer}
+                size="small"
+              />
+            </div>
             <DisplayTezos
               mutez={offer.price}
               formatBig={false}
