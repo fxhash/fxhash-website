@@ -62,6 +62,9 @@ export const Qu_userGenTokens = gql`
         thumbnailUri
         labels
         lockEnd
+	objkts {
+	  version
+	}
         ...Author
         ...Pricing
         reserves {

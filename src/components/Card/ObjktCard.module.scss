@@ -8,3 +8,8 @@
   font-size: var(--font-size-small);
   color: var(--color-gray);
 }
+
+.name {
+  display: flex;
+  align-items: center;
+}

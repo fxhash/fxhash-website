@@ -12,6 +12,7 @@ import { genTokCurrentPrice, getGenerativeTokenUrl } from "../../utils/generativ
 import { EntityBadge } from "../User/EntityBadge"
 import { MintingState } from "../GenerativeToken/MintingState/MintingState"
 import { DisplayTezos } from "../Display/DisplayTezos"
+import {BetaBadge} from "../GenerativeToken/BetaBadge"
 
 
 interface Props {
@@ -30,7 +31,7 @@ export function GenerativeTokenCard({
   lockedUntil,
 }: Props) {
   const url = getGenerativeTokenUrl(token)
-
+  const isBetaToken = token.objkts?.[0]?.version == 0
   return (
     <Link href={url} passHref>
       <AnchorForward style={{ height: '100%' }} className={className}>
@@ -49,8 +50,11 @@ export function GenerativeTokenCard({
             </div>
           )}
         >
-          <div>
-            <h5>{ token.name }</h5>
+	  <div>
+	    <h5>
+	      { token.name }
+	      {isBetaToken && <BetaBadge size="small" />}
+	    </h5>
             <Spacing size="2x-small" />
             <EntityBadge
               user={token.author}

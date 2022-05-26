@@ -7,6 +7,11 @@
   display: none;
 }
 
+.artwork_name {
+  display: flex;
+  align-items: center;
+}
+
 @media (max-width: $breakpoint-md) {
   .artwork_header {
     display: none;
