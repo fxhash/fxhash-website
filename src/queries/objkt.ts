@@ -56,6 +56,18 @@ export const Qu_objkt = gql`
           avatarUri
         }
       }
+      offers(filters: { active_eq: true }) {
+        id
+        price
+        version
+        createdAt
+        cancelledAt
+        acceptedAt
+        buyer {
+          id
+          name
+        }
+      }
       actions {
         id
         opHash
