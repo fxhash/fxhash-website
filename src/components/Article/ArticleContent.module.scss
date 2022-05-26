@@ -44,6 +44,11 @@
     display: block;
   }
 
+  img[type=simple] {
+    margin: initial;
+    display: inline-block;
+  }
+
   pre, code {
     font-family: inherit;
   }

@@ -147,25 +147,24 @@ export async function getArticle(category: string, article: string) {
   try {
     const filePath = path.join(docDir, category, `${article}.md`)
     const fileContents = fs.readFileSync(filePath, 'utf8')
-  
+
     // Use gray-matter to parse the post metadata section
     const matterResult = matter(fileContents)
     const processed = await unified()
-      .use(retextEnvVariables as any) 
+      .use(retextEnvVariables as any)
       .use(remarkParse)
       .use(remarkGfm)
       .use(remarkToc, {
-        maxDepth: 1,
+       maxDepth: 1,
       })
-      .use(remarkRehype)
+      .use(remarkRehype, { allowDangerousHtml: true })
       .use(slug)
       .use(rehypeHighlight)
       .use(rehypeFormat)
-      .use(rehypeStringify)
+      .use(rehypeStringify, { allowDangerousHtml: true })
       .process(matterResult.content)
-  
+
     const contentHtml = processed.toString()
-  
     return {
       id: `/${category}/${article}`,
       ...matterResult.data,
