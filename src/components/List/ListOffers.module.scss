@@ -16,6 +16,10 @@
   gap: 8px;
   height: 60px;
 
+  &.small_padding {
+    padding-left: 4px;
+  }
+
   &>* {
     flex: 1 1 0;
   }
@@ -42,6 +46,12 @@
   .call_btn {
     flex-grow: 0;
     flex-basis: 80px;
+  }
+
+  .objkt {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
   }
 }
 
