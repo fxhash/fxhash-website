@@ -1,5 +1,6 @@
-import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
+import React, { memo, useCallback, useContext, useEffect, useRef, useState } from 'react';
 import style from "./TableUserSales.module.scss";
+import text from "../../styles/Text.module.css"
 import { Action } from "../../types/entities/Action";
 import { ActionReference } from "../Activity/Action";
 import { DisplayTezos } from "../Display/DisplayTezos";
@@ -10,6 +11,7 @@ import { User } from '../../types/entities/User';
 import { Button } from "../Button";
 import cs from "classnames";
 import useHasScrolledToBottom from "../../hooks/useHasScrolledToBottom";
+import { UserContext } from '../../containers/UserProvider';
 
 interface TableUserSalesProps {
   user: User,
@@ -18,6 +20,7 @@ interface TableUserSalesProps {
   onScrollToBottom?: () => void,
 }
 const _TableUserSales = ({ user, sales, loading, onScrollToBottom }: TableUserSalesProps) => {
+  const { user: userInCtx } = useContext(UserContext)
   const refWrapper = useRef<HTMLDivElement>(null);
   const [hideTable, setHideTable] = useState<boolean>(false);
   useHasScrolledToBottom(refWrapper, {
@@ -68,30 +71,28 @@ const _TableUserSales = ({ user, sales, loading, onScrollToBottom }: TableUserSa
                 </td>
                 <td className={style['td-user']}>
                   {sale.issuer ? (
-                    user.id === sale.issuer.id
-                      ? <strong>you</strong>
-                      : (
-                        <UserBadge
-                          hasLink
-                          user={sale.issuer}
-                          size="small"
-                          displayAvatar={false}
-                        />
-                      )
+                    <UserBadge
+                      hasLink
+                      user={sale.issuer}
+                      size="small"
+                      displayAvatar={false}
+                      className={cs({
+                        [text.bold]: userInCtx?.id === sale.issuer.id
+                      })}
+                    />
                   ): <span>Unknown</span>}
                 </td>
                 <td className={style['td-user']}>
                   {sale.target ? (
-                    user.id === sale.target.id
-                      ? <strong>you</strong>
-                      : (
-                        <UserBadge
-                          hasLink
-                          user={sale.target}
-                          size="small"
-                          displayAvatar={false}
-                        />
-                      )
+                    <UserBadge
+                      hasLink
+                      user={sale.target}
+                      size="small"
+                      displayAvatar={false}
+                      className={cs({
+                        [text.bold]: userInCtx?.id === sale.target.id
+                      })}
+                    />
                   ): <span>Unknown</span>}
                 </td>
                 <td className={style['td-time']}>
