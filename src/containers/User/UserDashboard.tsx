@@ -5,11 +5,13 @@ import { UserSalesTable } from "./UserSalesTable";
 import { UserActions } from "./UserActions";
 import { getUserProfileLink } from "../../utils/user";
 import { User } from "../../types/entities/User";
+import { UserOffersReceived } from "./UserOffersReceived";
+import { UserOffersSent } from "./UserOffersSent";
 
 const userDashboardComponents = {
   sales: UserSalesTable,
-  ['offers-received']: UserSalesTable,
-  ['offers-sent']: UserSalesTable,
+  ['offers-received']: UserOffersReceived,
+  ['offers-sent']: UserOffersSent,
   activity: UserActions,
 }
 export const userDashboardComponentsKeys = Object.keys(userDashboardComponents);
