@@ -7,7 +7,7 @@ module.exports = withBundleAnalyzer({
   reactStrictMode: true,
 
   images: {
-    domains: ['gateway.fxhash.xyz', 'gateway.fxhash2.xyz']
+    domains: ['gateway.fxhash.xyz', 'gateway.fxhash2.xyz', 'gateway.fxhash-dev.xyz', 'gateway.fxhash-dev2.xyz']
   },
 
   async headers() {
