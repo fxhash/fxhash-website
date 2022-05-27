@@ -44,9 +44,15 @@ export function UserProfileLayout({
   // TABS href are computed using the user profile URL
   const TABS = [
     {
+      name: "dashboard",
+      props: {
+        href: getUserProfileLink(user),
+      }
+    },
+    {
       name: "creations",
       props: {
-        href: getUserProfileLink(user)
+        href: `${getUserProfileLink(user)}/creations`
       }
     },
     {
@@ -61,12 +67,6 @@ export function UserProfileLayout({
         href: `${getUserProfileLink(user)}/sales`
       }
     },
-    {
-      name: "dashboard",
-      props: {
-        href: `${getUserProfileLink(user)}/dashboard`
-      }
-    }
   ]
 
   return (

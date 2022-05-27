@@ -1,15 +1,23 @@
 import style from "./Tabs.module.scss"
 import cs from "classnames"
-import { PropsWithChildren } from "react"
-import { FunctionComponent, HTMLAttributes } from "react-router/node_modules/@types/react"
+import React, { HTMLAttributes, PropsWithChildren } from "react"
+import Link, { LinkProps } from "next/link";
 
+const DefaultTabWrapper = ({ children, ...props }: PropsWithChildren<HTMLAttributes<HTMLDivElement>>) => (
+  <div {...props}>{ children }</div>
+)
+type LinkTabWrapperProps = PropsWithChildren<LinkProps> & HTMLAttributes<HTMLAnchorElement>
+export const LinkTabWrapper = ({ children, ...props }: LinkTabWrapperProps) => (
+  <Link {...props}>
+    <a className={props.className}>{ children }</a>
+  </Link>
+)
 
 export type TabDefinition = {
   name: string,
   props?: any
 }
-type TabsLayout = "full-width" | "fixed-size"
-
+type TabsLayout = "full-width" | "fixed-size" | "subtabs"
 interface TabProps {
   layout: TabsLayout
   definition: TabDefinition
@@ -17,17 +25,12 @@ interface TabProps {
   wrapperComponent?: any
   onClick?: () => void
 }
-
-const DefaultTabWrapper: FunctionComponent<HTMLAttributes<HTMLDivElement>> = ({ children, ...props }) => (
-  <div {...props}>{ children }</div>
-)
-
 export function Tab({ definition, layout, active, wrapperComponent, onClick }: TabProps) {
   const Wrapper = wrapperComponent || DefaultTabWrapper
 
   return (
-    <Wrapper 
-      className={cs(style.tab, style[`tab-${layout}`], { 
+    <Wrapper
+      className={cs(style.tab, style[`tab-${layout}`], {
         [style.active]: active
       })}
       onClick={onClick}
@@ -50,7 +53,7 @@ export interface Props {
 
 /**
  * The Tabs module takes a list of Tab Definitions, an active tab index N, and only renders the
- * N-th component in its children list. Component is uncontrolled to allow for Controller 
+ * N-th component in its children list. Component is uncontrolled to allow for Controller
  * components to usee it higher in the hierarchy
  */
 export function Tabs({
@@ -67,7 +70,7 @@ export function Tabs({
     <div className={cs(style.container, style[`layout-${tabsLayout}`])}>
       <nav className={cs(tabsClassName)}>
         {tabDefinitions.map((def, idx) => (
-          <Tab 
+          <Tab
             key={idx}
             active={idx === activeIdx}
             definition={def}

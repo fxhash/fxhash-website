@@ -1,0 +1,17 @@
+@import "../../styles/Variables";
+.container {
+  width: calc(min(100%, 1440px));
+  margin: auto;
+  padding: 0 32px;
+}
+@media (max-width: $breakpoint-md) {
+  .container {
+    padding: 0 16px;
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .container {
+    padding: 0;
+  }
+}
