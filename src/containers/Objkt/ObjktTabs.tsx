@@ -7,6 +7,7 @@ import { Spacing } from "../../components/Layout/Spacing"
 import { TabsContainer } from "../../components/Layout/TabsContainer"
 import { Activity } from "../../components/Activity/Activity"
 import { ListOffers } from "../../components/List/ListOffers"
+import { SectionWrapper } from "../../components/Layout/SectionWrapper"
 
 interface Props {
   objkt: Objkt
@@ -30,20 +31,20 @@ export function ObjktTabs({
         <section className={cs(layout['padding-big'])}>    
           <Spacing size="3x-large" />
           {tabIndex === 0 ? (
-            <div className={cs(style.activity_wrapper)}>
+            <SectionWrapper layout="fixed-width-centered">
               <Activity 
                 actions={objkt.actions}
                 className={cs(style.activity)}
               />
-            </div>
+            </SectionWrapper>
           ):tabIndex === 1 ? (
-            <div className={cs(style.activity_wrapper)}>
+            <SectionWrapper layout="fixed-width-centered">
               <ListOffers
                 objkt={objkt}
                 offers={objkt.offers!}
                 className={cs(style.activity)}
               />
-            </div>
+            </SectionWrapper>
           ):null}
         </section>
       )}
