@@ -21,7 +21,7 @@ const _ObjtkImageAndName = ({
   const thumbnailUrl = useMemo(() => ipfsGatewayUrl(objkt.metadata?.thumbnailUri), [objkt])
   return (
     <Link href={`/gentk/${objkt.id}`}>
-      <div className={style.container}>
+      <a className={style.container}>
         {thumbnailUrl &&
           <Image
             width={size}
@@ -37,7 +37,7 @@ const _ObjtkImageAndName = ({
         <span className={style.name}>
           {shortName ? `#${objkt.iteration}` : objkt.name}
         </span>
-      </div>
+      </a>
     </Link>
   );
 };
