@@ -49,12 +49,14 @@ const _TableUserSales = ({ user, sales, loading, onScrollToBottom }: TableUserSa
           {(loading || sales.length > 0) ? sales.map(sale => (
               <tr key={sale.id}>
                 <td className={style['td-gentk']}>
-                  {sale.objkt &&
-                    <ObjktImageAndName
-                      objkt={sale.objkt}
-                      imagePriority
-                    />
-                  }
+                  {sale.objkt && (
+                    <div className={cs(style.link_wrapper)}>
+                      <ObjktImageAndName
+                        objkt={sale.objkt}
+                        imagePriority
+                      />
+                    </div>
+                  )}
                 </td>
                 <td className={style['td-price']}>
                   <DisplayTezos
