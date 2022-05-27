@@ -67,7 +67,11 @@
   width: 180px;
 }
 
-.td-gentk {}
+.td-gentk {
+  .link_wrapper {
+    display: flex;
+  }
+}
 
 .td-user {
   overflow-wrap: break-word;
@@ -108,6 +112,7 @@
   .hide {
     display: none;
   }
+
   .container-button {
     display: flex;
     margin-bottom: 8px;

@@ -12,16 +12,22 @@ import { useContractOperation } from "../../hooks/useContractOperation"
 import { OfferCancelOperation } from "../../services/contract-operations/OfferCancel"
 import { ContractFeedback } from "../Feedback/ContractFeedback"
 import { OfferAcceptOperation } from "../../services/contract-operations/OfferAccept"
+import { ObjktImageAndName } from "../Objkt/ObjktImageAndName"
+import Skeleton from "../Skeleton"
 
 interface Props {
   objkt?: Objkt
   offers: Offer[]
   className?: string
+  showObjkt?: boolean
+  loading?: boolean
 }
 export function ListOffers({
   objkt,
   offers,
   className,
+  showObjkt = false,
+  loading = false,
 }: Props) {
   const { user } = useContext(UserContext)
 
@@ -60,7 +66,7 @@ export function ListOffers({
 
   return (
     <div className={cs(style.root, className)}>
-      {offers.map(offer => (
+      {offers?.map(offer => (
         <Fragment key={`${offer.id}-${offer.version}`}>
           {cancelParams?.offer.id === offer.id && (
             <div className={cs(style.contract_feedback)}>
@@ -86,7 +92,18 @@ export function ListOffers({
               />
             </div>
           )}
-          <div className={cs(style.offer)}>
+          <div className={cs(style.offer, {
+            [style.small_padding]: !!showObjkt
+          })}>
+            {showObjkt && (
+              <div className={cs(style.objkt)}>
+                <ObjktImageAndName
+                  objkt={offer.objkt}
+                  size={50}
+                  shortName
+                />
+              </div>
+            )}
             <div className={cs(style.user_badge_wrapper)}>
               <UserBadge
                 user={offer.buyer}
@@ -109,7 +126,7 @@ export function ListOffers({
                 >
                   cancel
                 </Button>
-              ):objkt?.owner?.id === user?.id ? (
+              ):(objkt?.owner?.id || offer.objkt?.owner?.id) === user?.id ? (
                 <Button
                   type="button"
                   color="secondary"
@@ -129,6 +146,12 @@ export function ListOffers({
           </div>
         </Fragment>
       ))}
+      {loading && [...Array(10)].map((_, idx) => (
+        <Skeleton height="60px"/>
+      ))}
+      {!loading && offers?.length === 0 && (
+        <span>There are no offers on any iteration of this collection.</span>
+      )}
     </div>
   )
 }
