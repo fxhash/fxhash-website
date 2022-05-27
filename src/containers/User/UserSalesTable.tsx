@@ -21,7 +21,7 @@ const _UserSalesTable = ({ user }: UserSalesTableProps) => {
       take: ITEMS_PER_PAGE,
     }
   })
-  const sales = useMemo(() => data?.user?.sales || [], [data?.user?.sales]) ;
+  const sales = useMemo(() => data?.user?.sales || [], [data?.user?.sales])
   const handleFetchMore = useCallback(async () => {
     if (loading) return false;
     await fetchMore({

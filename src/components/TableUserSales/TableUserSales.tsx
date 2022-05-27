@@ -12,6 +12,7 @@ import { Button } from "../Button";
 import cs from "classnames";
 import useHasScrolledToBottom from "../../hooks/useHasScrolledToBottom";
 import { UserContext } from '../../containers/UserProvider';
+import { getActionBuyer, getActionSeller } from '../../utils/entities/actions';
 
 interface TableUserSalesProps {
   user: User,
@@ -70,30 +71,26 @@ const _TableUserSales = ({ user, sales, loading, onScrollToBottom }: TableUserSa
                   />
                 </td>
                 <td className={style['td-user']}>
-                  {sale.issuer ? (
-                    <UserBadge
-                      hasLink
-                      user={sale.issuer}
-                      size="small"
-                      displayAvatar={false}
-                      className={cs({
-                        [text.bold]: userInCtx?.id === sale.issuer.id
-                      })}
-                    />
-                  ): <span>Unknown</span>}
+                  <UserBadge
+                    hasLink
+                    user={getActionBuyer(sale)}
+                    size="small"
+                    displayAvatar={false}
+                    className={cs({
+                      [text.bold]: userInCtx?.id === getActionBuyer(sale).id
+                    })}
+                  />
                 </td>
                 <td className={style['td-user']}>
-                  {sale.target ? (
-                    <UserBadge
-                      hasLink
-                      user={sale.target}
-                      size="small"
-                      displayAvatar={false}
-                      className={cs({
-                        [text.bold]: userInCtx?.id === sale.target.id
-                      })}
-                    />
-                  ): <span>Unknown</span>}
+                  <UserBadge
+                    hasLink
+                    user={getActionSeller(sale)}
+                    size="small"
+                    displayAvatar={false}
+                    className={cs({
+                      [text.bold]: userInCtx?.id === getActionSeller(sale).id
+                    })}
+                  />
                 </td>
                 <td className={style['td-time']}>
                   <ActionReference action={sale} />
