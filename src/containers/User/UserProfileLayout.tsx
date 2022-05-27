@@ -4,7 +4,7 @@ import cs from "classnames"
 import layout from "../../styles/Layout.module.scss"
 import { HTMLAttributes, PropsWithChildren, useMemo } from "react"
 import { Spacing } from "../../components/Layout/Spacing"
-import { Tabs } from "../../components/Layout/Tabs"
+import { checkIsTabKeyActive, Tabs } from "../../components/Layout/Tabs"
 import { ipfsGatewayUrl } from "../../services/Ipfs"
 import { User } from "../../types/entities/User"
 import { truncateEnd } from "../../utils/strings"
@@ -22,11 +22,11 @@ const TabWrapper = ({ children, ...props }: TabWrapperProps) => (
 
 interface Props {
   user: User
-  tabIndex: number
+  activeTab: 'dashboard' | 'creations' | 'collection' | 'on-sale'
 }
 export function UserProfileLayout({
   user,
-  tabIndex,
+  activeTab,
   children
 }: PropsWithChildren<Props>) {
   // find the lastest work/item of the user
@@ -44,26 +44,34 @@ export function UserProfileLayout({
   // TABS href are computed using the user profile URL
   const TABS = [
     {
+      key: "dashboard",
       name: "dashboard",
       props: {
+        scroll: false,
         href: getUserProfileLink(user),
       }
     },
     {
+      key: "creations",
       name: "creations",
       props: {
+        scroll: false,
         href: `${getUserProfileLink(user)}/creations`
       }
     },
     {
+      key: "collection",
       name: "collection",
       props: {
+        scroll: false,
         href: `${getUserProfileLink(user)}/collection`
       }
     },
     {
+      key: "on-sale",
       name: "on sale",
       props: {
+        scroll: false,
         href: `${getUserProfileLink(user)}/sales`
       }
     },
@@ -90,7 +98,8 @@ export function UserProfileLayout({
 
       <Tabs
         tabDefinitions={TABS}
-        activeIdx={tabIndex}
+        checkIsTabActive={checkIsTabKeyActive}
+        activeIdx={activeTab}
         tabsLayout="fixed-size"
         tabsClassName={cs(layout['padding-big'])}
         tabWrapperComponent={TabWrapper}

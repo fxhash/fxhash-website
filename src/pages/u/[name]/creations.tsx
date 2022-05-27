@@ -19,7 +19,7 @@ UserPageCreations.getLayout = function getLayout(page: ReactElement) {
   return (
     <UserProfileLayout
       user={page.props.user}
-      tabIndex={1}
+      activeTab="creations"
     >
       {page}
     </UserProfileLayout>

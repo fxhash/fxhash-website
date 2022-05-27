@@ -10,7 +10,7 @@ interface Props {
 
 const UserPageDashboard = ({ user }: Props) => {
   return (
-    <UserDashboard user={user} />
+    <UserDashboard activeTab="sales" user={user} />
   )
 }
 
@@ -18,7 +18,7 @@ UserPageDashboard.getLayout = function getLayout(page: ReactElement) {
   return (
     <UserProfileLayout
       user={page.props.user}
-      tabIndex={0}
+      activeTab="dashboard"
     >
       {page}
     </UserProfileLayout>

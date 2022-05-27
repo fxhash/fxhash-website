@@ -14,6 +14,7 @@ export const LinkTabWrapper = ({ children, ...props }: LinkTabWrapperProps) => (
 )
 
 export type TabDefinition = {
+  key?: string,
   name: string,
   props?: any
 }
@@ -41,16 +42,20 @@ export function Tab({ definition, layout, active, wrapperComponent, onClick }: T
   )
 }
 
+/** tab routing by key instead of idx **/
+type IsTabActiveHandler = (def: TabDefinition, activeIdx: number | string, tabIdx: number) => boolean
+export const checkIsTabKeyActive: IsTabActiveHandler = (def, activeIdx ) =>
+  def.key === activeIdx
 export interface Props {
   tabsLayout?: TabsLayout
   tabDefinitions: TabDefinition[]
-  activeIdx: number
+  activeIdx: number | string
   tabsClassName?: string
   contentClassName?: string
   tabWrapperComponent?: React.ReactNode
-  onClickTab?: (index: number) => void
+  onClickTab?: (index: number) => void,
+  checkIsTabActive?: IsTabActiveHandler,
 }
-
 /**
  * The Tabs module takes a list of Tab Definitions, an active tab index N, and only renders the
  * N-th component in its children list. Component is uncontrolled to allow for Controller
@@ -60,6 +65,7 @@ export function Tabs({
   tabDefinitions,
   tabsLayout = "full-width",
   activeIdx,
+  checkIsTabActive,
   tabsClassName,
   onClickTab,
   contentClassName,
@@ -69,16 +75,19 @@ export function Tabs({
   return (
     <div className={cs(style.container, style[`layout-${tabsLayout}`])}>
       <nav className={cs(tabsClassName)}>
-        {tabDefinitions.map((def, idx) => (
-          <Tab
-            key={idx}
-            active={idx === activeIdx}
-            definition={def}
-            layout={tabsLayout}
-            wrapperComponent={tabWrapperComponent}
-            onClick={() => onClickTab?.(idx)}
-          />
-        ))}
+        {tabDefinitions.map((def, idx) => {
+          const isActive = checkIsTabActive ? checkIsTabActive(def, activeIdx, idx) : idx === activeIdx
+          return (
+            <Tab
+              key={idx}
+              active={isActive}
+              definition={def}
+              layout={tabsLayout}
+              wrapperComponent={tabWrapperComponent}
+              onClick={() => onClickTab?.(idx)}
+            />
+          )
+        })}
       </nav>
     </div>
   )
