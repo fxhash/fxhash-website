@@ -270,6 +270,50 @@ export const Qu_userSales = gql`
   }
 `
 
+export const Qu_userOffersReceived = gql`
+  query UserOffersReceived($id: String!) {
+    user(id: $id) {
+      id
+      offersReceived {
+        id
+        price
+        createdAt
+        buyer {
+          id
+          name
+        }
+        objkt {
+          id
+          name
+          metadata
+        }
+      }
+    }
+  }
+`
+
+export const Qu_userOffersSent = gql`
+  query UserOffersSent($id: String!) {
+    user(id: $id) {
+      id
+      offersSent {
+        id
+        price
+        createdAt
+        objkt {
+          id
+          name
+          metadata
+          owner {
+            id
+            name
+          }
+        }
+      }
+    }
+  }
+`
+
 export const Qu_userCollaborations = gql`
   query Query($id: String!) {
     user(id: $id) {

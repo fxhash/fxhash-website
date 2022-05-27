@@ -1,10 +1,10 @@
 import React, { memo, useCallback, useMemo } from 'react';
-import style from "./UserSalesTable.module.scss";
+import style from "./UserSales.module.scss";
 import { User } from "../../types/entities/User";
 import cs from "classnames";
 import { useQuery } from "@apollo/client";
 import { Qu_userSales } from "../../queries/user";
-import TableUserSales from "../../components/TableUserSales";
+import { TableUserSales } from "../../components/Tables";
 
 interface UserSalesTableProps {
   user: User
@@ -32,7 +32,7 @@ const _UserSalesTable = ({ user }: UserSalesTableProps) => {
     });
   }, [loading, fetchMore, sales.length])
   return (
-    <div className={cs(style.sales)}>
+    <div>
       <TableUserSales
         loading={loading}
         sales={sales}
@@ -42,4 +42,4 @@ const _UserSalesTable = ({ user }: UserSalesTableProps) => {
   );
 };
 
-export const UserSalesTable = memo(_UserSalesTable);
+export const UserSales = memo(_UserSalesTable);

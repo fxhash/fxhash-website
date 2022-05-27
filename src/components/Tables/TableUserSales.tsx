@@ -1,5 +1,5 @@
 import React, { memo, useContext, useRef } from 'react';
-import style from "./TableUserSales.module.scss";
+import style from "./TableUser.module.scss";
 import text from "../../styles/Text.module.css"
 import { Action } from "../../types/entities/Action";
 import { ActionReference } from "../Activity/Action";
