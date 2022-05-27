@@ -19,7 +19,7 @@ UserPageSales.getLayout = function getLayout(page: ReactElement) {
   return (
     <UserProfileLayout
       user={page.props.user}
-      tabIndex={2}
+      tabIndex={3}
     >
       {page}
     </UserProfileLayout>
