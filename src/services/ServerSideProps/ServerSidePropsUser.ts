@@ -1,11 +1,17 @@
-import { GetServerSideProps } from "next"
+import { GetServerSideProps, GetServerSidePropsContext } from "next"
 import { Qu_user } from "../../queries/user"
 import { User, UserFlag, UserType } from "../../types/entities/User"
 import { isTezosAddress } from "../../utils/strings"
 import { UserAliases } from "../../utils/user"
 import client from "../ApolloClient"
 
-export const getServerSidePropsUserByName: GetServerSideProps = async (context) => {
+type ServerSidePropsUserPayload = {
+  props: {
+    user: User | null
+  },
+  notFound: boolean
+}
+export const getServerSidePropsUserByName = async (context: GetServerSidePropsContext): Promise<ServerSidePropsUserPayload> => {
   const name = context.params?.name
 
   // if there is an alias, query by ID instead
@@ -32,7 +38,7 @@ export const getServerSidePropsUserByName: GetServerSideProps = async (context) 
   }
 }
 
-export const getServerSidePropsUserById: GetServerSideProps = async (context) => {
+export const getServerSidePropsUserById = async (context: GetServerSidePropsContext): Promise<ServerSidePropsUserPayload> => {
   const pkh = context.params?.id
   let user: User|null = null
 

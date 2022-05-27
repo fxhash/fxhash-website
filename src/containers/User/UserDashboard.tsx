@@ -6,16 +6,18 @@ import { UserActions } from "./UserActions";
 import { getUserProfileLink } from "../../utils/user";
 import { User } from "../../types/entities/User";
 
-export const userDashboardComponents = {
+const userDashboardComponents = {
   sales: UserSalesTable,
   ['offers-received']: UserSalesTable,
   ['offers-sent']: UserSalesTable,
   activity: UserActions,
 }
+export const userDashboardComponentsKeys = Object.keys(userDashboardComponents);
 
+export type DashboardTabsKey = 'sales' | 'offers-received' | 'offers-sent' | 'activity'
 interface UserDashboardProps {
   user: User
-  activeTab: 'sales' | 'offers-received' | 'offers-sent' | 'activity'
+  activeTab: DashboardTabsKey,
 }
 const _UserDashboard = ({ user, activeTab }: UserDashboardProps) => {
   const tabs = useMemo(() => [
@@ -23,13 +25,15 @@ const _UserDashboard = ({ user, activeTab }: UserDashboardProps) => {
       key: 'sales',
       name: "Sales",
       props: {
-        href: `${getUserProfileLink(user)}/dashboard/sales`
+        scroll: false,
+        href: `${getUserProfileLink(user)}`
       }
     },
     {
       key: 'offers-received',
       name: "Offers (received)",
       props: {
+        scroll: false,
         href: `${getUserProfileLink(user)}/dashboard/offers-received`
       }
     },
@@ -37,6 +41,7 @@ const _UserDashboard = ({ user, activeTab }: UserDashboardProps) => {
       key: 'offers-sent',
       name: "Offers (sent)",
       props: {
+        scroll: false,
         href: `${getUserProfileLink(user)}/dashboard/offers-sent`
       }
     },
@@ -44,6 +49,7 @@ const _UserDashboard = ({ user, activeTab }: UserDashboardProps) => {
       key: 'activity',
       name: "Activity",
       props: {
+        scroll: false,
         href: `${getUserProfileLink(user)}/dashboard/activity`
       }
     },
