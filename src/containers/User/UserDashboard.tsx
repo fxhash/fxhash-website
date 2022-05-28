@@ -28,7 +28,7 @@ const _UserDashboard = ({ user, activeTab }: UserDashboardProps) => {
       name: "Sales",
       props: {
         scroll: false,
-        href: `${getUserProfileLink(user)}`
+        href: `${getUserProfileLink(user)}/dashboard/sales`
       }
     },
     {
