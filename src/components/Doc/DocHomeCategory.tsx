@@ -11,7 +11,9 @@ export function DocHomeCategory({
 }: Props) {
   return (
     <div className={cs(style.root)}>
-      <i aria-hidden className={category.icon}/>
+      <div className={style['icon-wrapper']}>
+        <i aria-hidden className={category.icon}/>
+      </div>
       <div>
         <h4>{ category.title }</h4>
         <div className={cs(style.content)}>
