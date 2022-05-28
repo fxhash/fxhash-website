@@ -284,6 +284,7 @@ export const Qu_userOffersReceived = gql`
         }
         objkt {
           id
+          version
           name
           metadata
           activeListing {
@@ -312,6 +313,7 @@ export const Qu_userOffersSent = gql`
         }
         objkt {
           id
+          version
           name
           metadata
           owner {
