@@ -9,6 +9,7 @@ import cs from "classnames";
 import useHasScrolledToBottom from "../../hooks/useHasScrolledToBottom";
 import { Offer } from "../../types/entities/Offer";
 import { OfferActions } from '../Offers/OfferActions';
+import { FloorDifference } from "../Display/FloorDifference"
 
 interface TableUserOffersReceivedProps {
   offers: Offer[],
@@ -26,6 +27,8 @@ const _TableUserOffersReceived = ({
     offsetBottom: 100
   });
 
+  console.log(offers)
+
   return (
     <>
       <div ref={refWrapper} className={cs(style.wrapper)}>
@@ -34,6 +37,7 @@ const _TableUserOffersReceived = ({
           <tr>
             <th className={style['th-gentk']}>Gentk</th>
             <th className={style['th-price']}>Price</th>
+            <th className={style['th-floor']}>Floor Difference</th>
             <th className={style['th-user']}>From</th>
             <th className={style['th-time']}>Time</th>
             <th className={style['th-action']}>Action</th>
@@ -73,6 +77,12 @@ const _TableUserOffersReceived = ({
                           formatBig={false}
                           mutez={offer.price}
                           tezosSize="regular"
+                        />
+                      </td>
+                      <td className={style['td-price']}>
+                        <FloorDifference
+                          price={offer.price}
+                          floor={offer.objkt.issuer.marketStats!.floor}
                         />
                       </td>
                       <td className={style['td-user']}>
