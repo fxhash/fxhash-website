@@ -42,6 +42,7 @@ export function ObjktTabs({
               <ListOffers
                 objkt={objkt}
                 offers={objkt.offers!}
+                floor={objkt.issuer.marketStats!.floor}
                 className={cs(style.activity)}
               />
             </SectionWrapper>
