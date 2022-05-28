@@ -1,4 +1,4 @@
-import style from "./GenerativeOffersMarketplace.module.scss"
+import style from "./GenerativeListings.module.scss"
 import cs from "classnames"
 import { useQuery } from '@apollo/client'
 import { CardsContainer } from '../../components/Card/CardsContainer'
@@ -46,7 +46,7 @@ interface Props {
   token: GenerativeToken
 }
 
-export const GenerativeOffersMarketplace = ({ 
+export const GenerativeListings = ({ 
   token,
 }: Props) => {
   const [sortValue, setSortValue] = useState<string>("listingCreatedAt-desc")

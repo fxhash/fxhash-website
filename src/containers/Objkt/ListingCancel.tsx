@@ -1,12 +1,6 @@
-import style from "./OfferControl.module.scss"
-import { useContext, useState } from "react"
+import { useContext } from "react"
 import { Button } from "../../components/Button"
-import { InputTextUnit } from "../../components/Input/InputTextUnit"
 import { Objkt } from "../../types/entities/Objkt"
-import cs from "classnames"
-import { useContractCall } from "../../utils/hookts"
-import { UserContext } from "../UserProvider"
-import { CancelOfferCall, PlaceOfferCall } from "../../types/ContractCalls"
 import { ContractFeedback } from "../../components/Feedback/ContractFeedback"
 import { Listing } from "../../types/entities/Listing"
 import { displayMutez } from "../../utils/units"
@@ -18,9 +12,7 @@ interface Props {
   objkt: Objkt
 }
 
-export function CancelOffer({ listing, objkt }: Props) {
-  const userCtx = useContext(UserContext)
-
+export function ListingCancel({ listing, objkt }: Props) {
   const { state, loading: contractLoading, error: contractError, success, call, clear } = 
     useContractOperation<TListingCancelOperationParams>(ListingCancelOperation)
 

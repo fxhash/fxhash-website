@@ -63,3 +63,7 @@
   font-weight: bold;
   color: var(--color-warning);
 }
+
+.bold {
+  font-weight: bold !important;
+}

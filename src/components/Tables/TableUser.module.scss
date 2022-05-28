@@ -3,14 +3,9 @@
 .wrapper {
   display: block;
   width: 100%;
-  height: 500px;
+  max-height: 500px;
   overflow-y: scroll;
   overscroll-behavior: contain;
-  border: 1px solid var(--color-gray-vlight);
-}
-
-.container-button {
-  display: none;
 }
 
 .table {
@@ -25,14 +20,14 @@
     position: sticky;
     z-index: 10;
     top: 0;
-    background: var(--color-gray-vvlight)
+    background: var(--color-black);
+    color: var(--color-white);
   }
 
   th {
     padding: 12px 4px;
     font-weight: 600;
     text-align: left;
-    border-bottom: 1px solid var(--color-gray-vlight);
 
     &:first-child {
       padding-left: 8px;
@@ -43,11 +38,18 @@
     vertical-align: middle;
     padding: 4px;
     height: 50px;
-    border-bottom: 1px solid var(--color-gray-vlight);
 
     &>* {
       vertical-align: middle;
     }
+  }
+
+  tbody tr {
+    border: 1px solid var(--color-gray-vlight);
+  }
+
+  thead tr {
+    border: 1px solid var(--color-black);
   }
 }
 
@@ -63,11 +65,19 @@
   width: 120px;
 }
 
+.th-action {
+  width: 80px;
+}
+
 .th-time {
   width: 180px;
 }
 
-.td-gentk {}
+.td-gentk {
+  .link_wrapper {
+    display: flex;
+  }
+}
 
 .td-user {
   overflow-wrap: break-word;
@@ -88,6 +98,11 @@
   font-weight: bold;
 }
 
+.date {
+  font-size: var(--font-size-vsmall);
+  color: var(--color-gray);
+}
+
 .skeleton-wrapper {
   display: flex;
   flex-direction: row;
@@ -104,17 +119,24 @@
   text-align: center;
 }
 
-@media (max-width: $breakpoint-sm) {
-  .hide {
-    display: none;
-  }
-  .container-button {
-    display: flex;
-    margin-bottom: 8px;
-    flex-direction: row;
-    justify-content: flex-end;
-  }
+.contract_feedback {
+  text-align: center;
 
+  td {
+    height: auto;
+    padding: 0;
+    padding-top: 10px;
+
+    .feedback_wrapper {
+      background-color: var(--color-gray-vvlight);
+      border-top: 1px solid var(--color-gray-vlight);
+      padding: 8px;
+    }
+  }
+}
+
+
+@media (max-width: $breakpoint-sm) {
   .wrapper {
     height: auto;
     max-height: 400px;

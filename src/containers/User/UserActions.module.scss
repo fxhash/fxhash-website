@@ -1,9 +1,6 @@
+@import "../../styles/Variables";
+
 .activity {
-  width: calc(min(100%, 900px));
-  margin: auto;
+  margin-top: $spacing;
 }
 
-.title {
-  text-align: center;
-  margin-bottom: 32px;
-}

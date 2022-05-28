@@ -5,34 +5,39 @@ import Link from "next/link";
 import Image from "next/image";
 import { ipfsGatewayUrl } from "../../services/Ipfs";
 
-interface ObjtkImageAndNameProps {
+interface Props {
   objkt: Objkt,
   imagePriority?: boolean
+  shortName?: boolean
+  size?: number
 }
 
-const _ObjtkImageAndName = ({ objkt, imagePriority }: ObjtkImageAndNameProps) => {
+const _ObjtkImageAndName = ({ 
+  objkt,
+  imagePriority,
+  shortName,
+  size = 40,
+}: Props) => {
   const thumbnailUrl = useMemo(() => ipfsGatewayUrl(objkt.metadata?.thumbnailUri), [objkt])
   return (
     <Link href={`/gentk/${objkt.id}`}>
-      <div className={style.container}>
-        <div className={style.image}>
-          {thumbnailUrl &&
-            <Image
-              width={40}
-              height={40}
-              placeholder="blur"
-              layout="fixed"
-              src={thumbnailUrl}
-              blurDataURL={thumbnailUrl}
-              alt={`thumbnail of ${objkt.name}`}
-              priority={imagePriority}
-            />
-          }
-        </div>
+      <a className={style.container}>
+        {thumbnailUrl &&
+          <Image
+            width={size}
+            height={size}
+            placeholder="blur"
+            layout="fixed"
+            src={thumbnailUrl}
+            blurDataURL={thumbnailUrl}
+            alt={`thumbnail of ${objkt.name}`}
+            priority={imagePriority}
+          />
+        }
         <span className={style.name}>
-          {objkt.name}
+          {shortName ? `#${objkt.iteration}` : objkt.name}
         </span>
-      </div>
+      </a>
     </Link>
   );
 };
