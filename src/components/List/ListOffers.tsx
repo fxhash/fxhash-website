@@ -14,6 +14,7 @@ import { ContractFeedback } from "../Feedback/ContractFeedback"
 import { OfferAcceptOperation } from "../../services/contract-operations/OfferAccept"
 import { ObjktImageAndName } from "../Objkt/ObjktImageAndName"
 import Skeleton from "../Skeleton"
+import { FloorDifference } from "../Display/FloorDifference"
 
 interface Props {
   objkt?: Objkt
@@ -21,6 +22,7 @@ interface Props {
   className?: string
   showObjkt?: boolean
   loading?: boolean
+  floor: number|null
 }
 export function ListOffers({
   objkt,
@@ -28,6 +30,7 @@ export function ListOffers({
   className,
   showObjkt = false,
   loading = false,
+  floor,
 }: Props) {
   const { user } = useContext(UserContext)
 
@@ -114,6 +117,11 @@ export function ListOffers({
               mutez={offer.price}
               formatBig={false}
               className={cs(style.price)}
+            />
+            <FloorDifference
+              price={offer.price}
+              floor={floor}
+              append="floor"
             />
             <div className={cs(style.call_btn)}>
               {offer.buyer.id === user?.id ? (
