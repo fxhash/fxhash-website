@@ -25,6 +25,7 @@ export function GenerativeOffers({
       <ListOffers
         offers={offers}
         loading={loading}
+        floor={token.marketStats!.floor}
         showObjkt
       />
     </SectionWrapper>

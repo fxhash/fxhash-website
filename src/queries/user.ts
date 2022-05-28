@@ -294,6 +294,11 @@ export const Qu_userOffersReceived = gql`
           owner {
             id
           }
+          issuer {
+            marketStats {
+              floor
+            }
+          }
         }
       }
     }

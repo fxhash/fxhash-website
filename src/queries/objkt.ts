@@ -34,6 +34,9 @@ export const Qu_objkt = gql`
         slug
         labels
         generativeUri
+        marketStats {
+          floor
+        }
         ...Author
       }
       metadata
