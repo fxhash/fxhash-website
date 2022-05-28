@@ -1,0 +1,69 @@
+@import "../../styles/Variables.scss";
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: calc(100vw - 16px);
+
+  header {
+    background: var(--color-black);
+    color: var(--color-white);
+    font-weight: bold;
+    margin-left: 0 !important;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    
+    span {
+      padding: 10px 15px;
+    }
+  }
+
+  main {
+    background: var(--color-white);
+    border: 3px solid var(--color-black);
+    border-top: none;
+    margin-top: 0;
+    padding: 10px;
+  }
+}
+
+.btn_close {
+  width: 40px;
+  height: 32px;
+  color: var(--color-white);
+  background: transparent;
+  border: none;
+  font-family: inherit;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  margin-right: 3px;
+  opacity: 0.5;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .modal {
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    transform: none;
+    max-width: none;
+    display: flex;
+    flex-direction: column;
+
+    main {
+      flex-grow: 2;
+    }
+  }
+}
