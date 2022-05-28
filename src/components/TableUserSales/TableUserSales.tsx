@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useContext, useEffect, useRef, useState } from 'react';
+import React, { memo, useContext, useRef } from 'react';
 import style from "./TableUserSales.module.scss";
 import text from "../../styles/Text.module.css"
 import { Action } from "../../types/entities/Action";
@@ -7,38 +7,26 @@ import { DisplayTezos } from "../Display/DisplayTezos";
 import { UserBadge } from "../User/UserBadge";
 import { ObjktImageAndName } from "../Objkt/ObjktImageAndName";
 import Skeleton from "../Skeleton";
-import { User } from '../../types/entities/User';
-import { Button } from "../Button";
 import cs from "classnames";
 import useHasScrolledToBottom from "../../hooks/useHasScrolledToBottom";
 import { UserContext } from '../../containers/UserProvider';
 import { getActionBuyer, getActionSeller } from '../../utils/entities/actions';
 
 interface TableUserSalesProps {
-  user: User,
   sales: Action[],
   loading?: boolean,
   onScrollToBottom?: () => void,
 }
-const _TableUserSales = ({ user, sales, loading, onScrollToBottom }: TableUserSalesProps) => {
+const _TableUserSales = ({ sales, loading, onScrollToBottom }: TableUserSalesProps) => {
   const { user: userInCtx } = useContext(UserContext)
   const refWrapper = useRef<HTMLDivElement>(null);
-  const [hideTable, setHideTable] = useState<boolean>(false);
   useHasScrolledToBottom(refWrapper, {
     onScrollToBottom,
     offsetBottom: 100
   });
-  const handleToggleTableVisibility = useCallback(() => setHideTable(state => !state), []);
   return (
     <>
-      <div className={style['container-button']}>
-        <Button color="black" size="very-small" onClick={handleToggleTableVisibility}>
-          {hideTable ? 'Show' : 'Hide'}
-        </Button>
-      </div>
-      <div ref={refWrapper} className={cs(style.wrapper, {
-        [style.hide]: hideTable
-      })}>
+      <div ref={refWrapper} className={cs(style.wrapper)}>
         <table className={style.table}>
           <thead>
           <tr>

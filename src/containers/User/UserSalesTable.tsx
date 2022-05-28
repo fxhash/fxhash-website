@@ -33,9 +33,7 @@ const _UserSalesTable = ({ user }: UserSalesTableProps) => {
   }, [loading, fetchMore, sales.length])
   return (
     <div className={cs(style.sales)}>
-      <h5 className={cs(style.title)}>Sales</h5>
       <TableUserSales
-        user={user}
         loading={loading}
         sales={sales}
         onScrollToBottom={handleFetchMore}
