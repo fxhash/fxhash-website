@@ -11,6 +11,7 @@
       justify-content: center;
     }
   }
+
   &.layout-subtabs {
     nav {
       border-bottom: 3px solid var(--color-black);
@@ -43,13 +44,16 @@
 }
 
 .tab-subtabs {
-  padding: 8px 32px;
+  padding: 8px 16px;
   background: var(--color-gray-vvlight);
   margin-bottom: 0;
   border: none;
-  & + & {
+  font-size: var(--font-size-small);
+
+  &+& {
     margin-left: $spacing-2x-small;
   }
+
   &.active {
     background: var(--color-black);
     color: var(--color-white);
@@ -83,6 +87,7 @@
     border-left: 3px solid var(--color-gray-light);
     padding: 3px 0;
   }
+
   .container.layout-subtabs nav {
     display: grid;
     align-items: stretch;
@@ -112,7 +117,8 @@
     align-items: center;
     justify-content: center;
     text-align: center;
-    & + & {
+
+    &+& {
       margin-left: 0;
     }
   }
