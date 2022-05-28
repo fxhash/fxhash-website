@@ -2,6 +2,7 @@ import { ObjktMetadata, TokenFeature } from "../Metadata"
 import { Action } from "./Action"
 import { GenerativeToken } from "./GenerativeToken"
 import { Listing } from "./Listing"
+import { Offer } from "./Offer"
 import { Split } from "./Split"
 import { User } from "./User"
 
@@ -24,6 +25,7 @@ export interface Objkt {
   royalties: number
   royaltiesSplit: Split[]
   activeListing?: Listing|null
+  offers?: Offer[]
   actions: Action[]
   createdAt: string
   updatedAt: string

@@ -1,12 +1,10 @@
-import style from "./OfferControl.module.scss"
+import style from "./MarketplaceActions.module.scss"
+import cs from "classnames"
 import { useContext, useState } from "react"
 import { Button } from "../../components/Button"
 import { InputTextUnit } from "../../components/Input/InputTextUnit"
 import { Objkt } from "../../types/entities/Objkt"
-import cs from "classnames"
-import { useContractCall } from "../../utils/hookts"
 import { UserContext } from "../UserProvider"
-import { PlaceOfferCall } from "../../types/ContractCalls"
 import { ContractFeedback } from "../../components/Feedback/ContractFeedback"
 import { useContractOperation } from "../../hooks/useContractOperation"
 import { ListingOperation, TListingOperationParams } from "../../services/contract-operations/Listing"
@@ -15,7 +13,7 @@ interface Props {
   objkt: Objkt
 }
 
-export function PlaceOffer({ objkt }: Props) {
+export function ListingCreate({ objkt }: Props) {
   const userCtx = useContext(UserContext)
   const user = userCtx.user!
   

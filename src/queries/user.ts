@@ -270,6 +270,57 @@ export const Qu_userSales = gql`
   }
 `
 
+export const Qu_userOffersReceived = gql`
+  query UserOffersReceived($id: String!, $filters: OfferFilter) {
+    user(id: $id) {
+      id
+      offersReceived(filters: $filters) {
+        id
+        price
+        createdAt
+        buyer {
+          id
+          name
+        }
+        objkt {
+          id
+          name
+          metadata
+          activeListing {
+            id
+            version
+          }
+          owner {
+            id
+          }
+        }
+      }
+    }
+  }
+`
+
+export const Qu_userOffersSent = gql`
+  query UserOffersSent($id: String!, $filters: OfferFilter) {
+    user(id: $id) {
+      id
+      offersSent(filters: $filters) {
+        id
+        price
+        createdAt
+        objkt {
+          id
+          name
+          metadata
+          owner {
+            id
+            name
+          }
+        }
+      }
+    }
+  }
+`
+
 export const Qu_userCollaborations = gql`
   query Query($id: String!) {
     user(id: $id) {

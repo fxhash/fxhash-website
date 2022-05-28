@@ -21,11 +21,13 @@ import { GenerativeFlagBanner } from '../../../containers/Generative/FlagBanner'
 import { ArtworkPreview } from '../../../components/Artwork/Preview'
 import { getGenerativeTokenUrl } from '../../../utils/generative-token'
 import { TabDefinition, Tabs } from '../../../components/Layout/Tabs'
-import { GenerativeOffersMarketplace } from '../../../containers/Marketplace/GenerativeOffersMarketplace'
 import { DisplayTezos } from '../../../components/Display/DisplayTezos'
 import { GenerativeStatsMarketplace } from '../../../containers/Marketplace/GenerativeStatsMarketplace'
 import { TokenActionType } from '../../../types/entities/Action'
 import { EntityBadge } from '../../../components/User/EntityBadge'
+import { TabsContainer } from '../../../components/Layout/TabsContainer'
+import { GenerativeListings } from '../../../containers/Marketplace/GenerativeListings'
+import { GenerativeOffers } from '../../../containers/Marketplace/GenerativeOffers'
 
 
 interface Props {
@@ -35,6 +37,9 @@ interface Props {
 const tabs: TabDefinition[] = [
   {
     name: "listed"
+  },
+  {
+    name: "offers"
   },
   {
     name: "stats"
@@ -161,37 +166,44 @@ const GenerativeTokenMarketplace: NextPage<Props> = ({ token }) => {
 
       <Spacing size="4x-large" />
 
-      <Tabs
-        activeIdx={tabActive}
+      <TabsContainer
         tabDefinitions={tabs}
         tabsLayout="fixed-size"
-        onClickTab={setTabActive}
-      />
-
-      <section className={cs(layout['padding-big'])}>
-        <Spacing size="3x-large" />
-        {tabActive === 0 ? (
-          <ClientOnlyEmpty>
-            <GenerativeOffersMarketplace
-              token={token}
-            />
-          </ClientOnlyEmpty>
-        ):tabActive === 1 ? (
-          <ClientOnlyEmpty>
-            <GenerativeStatsMarketplace
-              token={token}
-            />
-          </ClientOnlyEmpty>
-        ):(
-          <ClientOnlyEmpty>
-            <GenerativeActions
-              token={token}
-              filters={actionFilters}
-              className={cs(styleActivity.activity)}
-            />
-          </ClientOnlyEmpty>
+      >
+        {({ tabIndex }) => (
+          <section className={cs(layout['padding-big'])}>    
+            <Spacing size="3x-large" />
+            {tabIndex === 0 ? (
+              <ClientOnlyEmpty>
+                <GenerativeListings
+                  token={token}
+                />
+              </ClientOnlyEmpty>
+            ):tabIndex === 1 ? (
+              <ClientOnlyEmpty>
+                <GenerativeOffers
+                  token={token}
+                />
+              </ClientOnlyEmpty>
+            ):tabIndex === 2 ? (
+              <ClientOnlyEmpty>
+                <GenerativeStatsMarketplace
+                  token={token}
+                />
+              </ClientOnlyEmpty>
+            ):(
+              <ClientOnlyEmpty>
+                <GenerativeActions
+                  token={token}
+                  filters={actionFilters}
+                  className={cs(styleActivity.activity)}
+                />
+              </ClientOnlyEmpty>
+            )}
+          </section>
         )}
-      </section>
+      </TabsContainer>
+
 
       {/* TODO: add some tabs for toggling between these 2 */}
       {/* TODO: add the available offers for the token */}

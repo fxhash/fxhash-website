@@ -1,40 +1,32 @@
-import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
-import style from "./TableUserSales.module.scss";
+import React, { memo, useContext, useRef } from 'react';
+import style from "./TableUser.module.scss";
+import text from "../../styles/Text.module.css"
 import { Action } from "../../types/entities/Action";
 import { ActionReference } from "../Activity/Action";
 import { DisplayTezos } from "../Display/DisplayTezos";
 import { UserBadge } from "../User/UserBadge";
 import { ObjktImageAndName } from "../Objkt/ObjktImageAndName";
 import Skeleton from "../Skeleton";
-import { User } from '../../types/entities/User';
-import { Button } from "../Button";
 import cs from "classnames";
 import useHasScrolledToBottom from "../../hooks/useHasScrolledToBottom";
+import { UserContext } from '../../containers/UserProvider';
+import { getActionBuyer, getActionSeller } from '../../utils/entities/actions';
 
 interface TableUserSalesProps {
-  user: User,
   sales: Action[],
   loading?: boolean,
   onScrollToBottom?: () => void,
 }
-const _TableUserSales = ({ user, sales, loading, onScrollToBottom }: TableUserSalesProps) => {
+const _TableUserSales = ({ sales, loading, onScrollToBottom }: TableUserSalesProps) => {
+  const { user: userInCtx } = useContext(UserContext)
   const refWrapper = useRef<HTMLDivElement>(null);
-  const [hideTable, setHideTable] = useState<boolean>(false);
   useHasScrolledToBottom(refWrapper, {
     onScrollToBottom,
     offsetBottom: 100
   });
-  const handleToggleTableVisibility = useCallback(() => setHideTable(state => !state), []);
   return (
     <>
-      <div className={style['container-button']}>
-        <Button color="black" size="very-small" onClick={handleToggleTableVisibility}>
-          {hideTable ? 'Show' : 'Hide'}
-        </Button>
-      </div>
-      <div ref={refWrapper} className={cs(style.wrapper, {
-        [style.hide]: hideTable
-      })}>
+      <div ref={refWrapper} className={cs(style.wrapper)}>
         <table className={style.table}>
           <thead>
           <tr>
@@ -49,12 +41,14 @@ const _TableUserSales = ({ user, sales, loading, onScrollToBottom }: TableUserSa
           {(loading || sales.length > 0) ? sales.map(sale => (
               <tr key={sale.id}>
                 <td className={style['td-gentk']}>
-                  {sale.objkt &&
-                    <ObjktImageAndName
-                      objkt={sale.objkt}
-                      imagePriority
-                    />
-                  }
+                  {sale.objkt && (
+                    <div className={cs(style.link_wrapper)}>
+                      <ObjktImageAndName
+                        objkt={sale.objkt}
+                        imagePriority
+                      />
+                    </div>
+                  )}
                 </td>
                 <td className={style['td-price']}>
                   <DisplayTezos
@@ -65,32 +59,26 @@ const _TableUserSales = ({ user, sales, loading, onScrollToBottom }: TableUserSa
                   />
                 </td>
                 <td className={style['td-user']}>
-                  {sale.issuer ? (
-                    user.id === sale.issuer.id
-                      ? <strong>you</strong>
-                      : (
-                        <UserBadge
-                          hasLink
-                          user={sale.issuer}
-                          size="small"
-                          displayAvatar={false}
-                        />
-                      )
-                  ): <span>Unknown</span>}
+                  <UserBadge
+                    hasLink
+                    user={getActionBuyer(sale)}
+                    size="small"
+                    displayAvatar={false}
+                    className={cs({
+                      [text.bold]: userInCtx?.id === getActionBuyer(sale).id
+                    })}
+                  />
                 </td>
                 <td className={style['td-user']}>
-                  {sale.target ? (
-                    user.id === sale.target.id
-                      ? <strong>you</strong>
-                      : (
-                        <UserBadge
-                          hasLink
-                          user={sale.target}
-                          size="small"
-                          displayAvatar={false}
-                        />
-                      )
-                  ): <span>Unknown</span>}
+                  <UserBadge
+                    hasLink
+                    user={getActionSeller(sale)}
+                    size="small"
+                    displayAvatar={false}
+                    className={cs({
+                      [text.bold]: userInCtx?.id === getActionSeller(sale).id
+                    })}
+                  />
                 </td>
                 <td className={style['td-time']}>
                   <ActionReference action={sale} />
