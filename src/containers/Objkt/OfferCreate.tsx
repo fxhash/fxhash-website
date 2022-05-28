@@ -62,7 +62,7 @@ export function OfferCreate({ objkt }: Props) {
             onClick={callContract}
             size="regular"
           >
-            make the offer
+            make offer
           </Button>
         </div>
       ):(
@@ -70,7 +70,7 @@ export function OfferCreate({ objkt }: Props) {
           color={opened ? "primary" : "secondary"}
           onClick={() => setOpened(!opened)}
         >
-          make an offer
+          make offer
         </Button>
       )}
     </>
