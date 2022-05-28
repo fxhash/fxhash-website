@@ -307,6 +307,9 @@ export const Qu_userOffersSent = gql`
         id
         price
         createdAt
+        buyer {
+          id
+        }
         objkt {
           id
           name

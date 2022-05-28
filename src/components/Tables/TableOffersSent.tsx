@@ -1,4 +1,4 @@
-import React, { Fragment, memo, useRef } from 'react';
+import React, { Fragment, memo, useContext, useRef } from 'react';
 import style from "./TableUser.module.scss";
 import { DateDistance } from "../Activity/Action";
 import { DisplayTezos } from "../Display/DisplayTezos";
@@ -8,10 +8,7 @@ import Skeleton from "../Skeleton";
 import cs from "classnames";
 import useHasScrolledToBottom from "../../hooks/useHasScrolledToBottom";
 import { Offer } from "../../types/entities/Offer";
-import { Button } from '../Button';
-import { useContractOperation } from '../../hooks/useContractOperation';
-import { OfferCancelOperation } from '../../services/contract-operations/OfferCancel';
-import { ContractFeedback } from '../Feedback/ContractFeedback';
+import { OfferActions } from '../Offers/OfferActions';
 
 interface TableUserOffersSentProps {
   offers: Offer[],
@@ -24,22 +21,6 @@ const _TableUserOffersSent = ({ offers, loading, onScrollToBottom }: TableUserOf
     onScrollToBottom,
     offsetBottom: 100
   });
-
-  const {
-    state: state,
-    loading: contractLoading,
-    error: error,
-    success: success,
-    call: cancelCall ,
-    params,
-  } = useContractOperation(OfferCancelOperation)
-
-  const cancelOffer = (offer: Offer) => {
-    cancelCall({
-      offer: offer,
-      objkt: offer.objkt,
-    })
-  }
 
   return (
     <>
@@ -56,72 +37,64 @@ const _TableUserOffersSent = ({ offers, loading, onScrollToBottom }: TableUserOf
           </thead>
           <tbody>
             {(loading || offers.length > 0) ? offers.map(offer => (
-              <Fragment key={`${offer.id}-${offer.version}`}>
-                {params?.offer.id === offer.id && (
-                  <tr className={cs(style.contract_feedback)}>
-                    <td colSpan={6}>
-                      <div className={cs(style.feedback_wrapper)}>
-                        <ContractFeedback
-                          state={state}
-                          loading={contractLoading}
-                          success={success}
-                          error={error}
-                          successMessage="You have cancelled your offer"
-                          noSpacing
-                        />
-                      </div>
-                    </td>
-                  </tr>
-                )}
-                <tr key={offer.id}>
-                  <td className={style['td-gentk']}>
-                    {offer.objkt && (
-                      <div className={cs(style.link_wrapper)}>
-                        <ObjktImageAndName
-                          objkt={offer.objkt}
-                          imagePriority
-                        />
-                      </div>
-                    )}
-                  </td>
-                  <td className={style['td-price']}>
-                    <DisplayTezos
-                      className={style.price}
-                      formatBig={false}
-                      mutez={offer.price}
-                      tezosSize="regular"
-                    />
-                  </td>
-                  <td className={style['td-user']}>
-                    {offer.objkt?.owner &&
-                      <UserBadge
-                        hasLink
-                        user={offer.objkt.owner}
-                        size="small"
-                        displayAvatar={false}
-                      />
-                    }
-                  </td>
-                  <td className={style['td-time']}>
-                    <div className={style.date}>
-                      <DateDistance
-                        timestamptz={offer.createdAt}
-                      />
-                    </div>
-                  </td>
-                  <td>
-                    <Button
-                      type="button"
-                      color="primary"
-                      size="very-small"
-                      onClick={() => cancelOffer(offer)}
-                      state={contractLoading && params?.offer.id === offer.id ? "loading" : "default"}
-                    >
-                      cancel
-                    </Button>
-                  </td>
-                </tr>
-              </Fragment>
+               <OfferActions
+                  key={`${offer.id}-${offer.version}`}
+                  offer={offer}
+                >
+                  {({ buttons, feedback }) => (
+                    <>
+                      {feedback && (
+                        <tr className={cs(style.contract_feedback)}>
+                          <td colSpan={6}>
+                            <div className={cs(style.feedback_wrapper)}>
+                              {feedback}
+                            </div>
+                          </td>
+                        </tr>
+                      )}
+                      <tr key={offer.id}>
+                        <td className={style['td-gentk']}>
+                          {offer.objkt && (
+                            <div className={cs(style.link_wrapper)}>
+                              <ObjktImageAndName
+                                objkt={offer.objkt}
+                                imagePriority
+                              />
+                            </div>
+                          )}
+                        </td>
+                        <td className={style['td-price']}>
+                          <DisplayTezos
+                            className={style.price}
+                            formatBig={false}
+                            mutez={offer.price}
+                            tezosSize="regular"
+                          />
+                        </td>
+                        <td className={style['td-user']}>
+                          {offer.objkt?.owner &&
+                            <UserBadge
+                              hasLink
+                              user={offer.objkt.owner}
+                              size="small"
+                              displayAvatar={false}
+                            />
+                          }
+                        </td>
+                        <td className={style['td-time']}>
+                          <div className={style.date}>
+                            <DateDistance
+                              timestamptz={offer.createdAt}
+                            />
+                          </div>
+                        </td>
+                        <td>
+                          {buttons}
+                        </td>
+                      </tr>
+                    </>
+                  )}
+                </OfferActions>
             )) :
             <tr>
               <td className={style.empty} colSpan={5}>
