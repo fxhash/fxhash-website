@@ -70,6 +70,9 @@ export const getServerSidePropsUserById = async (context: GetServerSidePropsCont
         createdAt: now as any,
         updatedAt: now as any,
         collaborationContracts: [],
+        sales: [],
+        offersReceived: [],
+        offersSent: [],
       }
     }
   }
