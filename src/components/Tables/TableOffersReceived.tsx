@@ -1,4 +1,4 @@
-import React, { memo, useRef } from 'react';
+import React, { Fragment, memo, useRef } from 'react';
 import style from "./TableUser.module.scss";
 import { DateDistance } from "../Activity/Action";
 import { DisplayTezos } from "../Display/DisplayTezos";
@@ -8,6 +8,10 @@ import Skeleton from "../Skeleton";
 import cs from "classnames";
 import useHasScrolledToBottom from "../../hooks/useHasScrolledToBottom";
 import { Offer } from "../../types/entities/Offer";
+import { useContractOperation } from '../../hooks/useContractOperation';
+import { OfferAcceptOperation } from '../../services/contract-operations/OfferAccept';
+import { Button } from '../Button';
+import { ContractFeedback } from '../Feedback/ContractFeedback';
 
 interface TableUserOffersReceivedProps {
   offers: Offer[],
@@ -20,6 +24,24 @@ const _TableUserOffersReceived = ({ offers, loading, onScrollToBottom }: TableUs
     onScrollToBottom,
     offsetBottom: 100
   });
+
+  const {
+    state,
+    loading: callLoading,
+    error,
+    success,
+    call,
+    params: acceptParams,
+  } = useContractOperation(OfferAcceptOperation)
+
+  const acceptOffer = (offer: Offer) => {
+    call({
+      offer: offer,
+      token: offer.objkt,
+      price: offer.price
+    })
+  }
+
   return (
     <>
       <div ref={refWrapper} className={cs(style.wrapper)}>
@@ -27,51 +49,81 @@ const _TableUserOffersReceived = ({ offers, loading, onScrollToBottom }: TableUs
           <thead>
           <tr>
             <th className={style['th-gentk']}>Gentk</th>
-            <th className={style['th-user']}>From</th>
             <th className={style['th-price']}>Price</th>
+            <th className={style['th-user']}>From</th>
             <th className={style['th-time']}>Time</th>
+            <th className={style['th-action']}>Action</th>
           </tr>
           </thead>
           <tbody>
-          {(loading || offers.length > 0) ? offers.map(offer => (
-              <tr key={offer.id}>
-                <td className={style['td-gentk']}>
-                  {offer.objkt && (
-                    <div className={cs(style.link_wrapper)}>
-                      <ObjktImageAndName
-                        objkt={offer.objkt}
-                        imagePriority
+            {(loading || offers.length > 0) ? offers.map(offer => (
+              <Fragment key={`${offer.id}-${offer.version}`}>
+                {acceptParams?.offer.id === offer.id && (
+                  <tr className={cs(style.contract_feedback)}>
+                    <td colSpan={6}>
+                      <div className={cs(style.feedback_wrapper)}>
+                        <ContractFeedback
+                          state={state}
+                          loading={callLoading}
+                          success={success}
+                          error={error}
+                          successMessage="You have accepted the offer"
+                          noSpacing
+                        />
+                      </div>
+                    </td>
+                  </tr>
+                )}
+                <tr>
+                  <td className={style['td-gentk']}>
+                    {offer.objkt && (
+                      <div className={cs(style.link_wrapper)}>
+                        <ObjktImageAndName
+                          objkt={offer.objkt}
+                          imagePriority
+                        />
+                      </div>
+                    )}
+                  </td>
+                  <td className={style['td-price']}>
+                    <DisplayTezos
+                      className={style.price}
+                      formatBig={false}
+                      mutez={offer.price}
+                      tezosSize="regular"
+                    />
+                  </td>
+                  <td className={style['td-user']}>
+                    <UserBadge
+                      hasLink
+                      user={offer.buyer}
+                      size="small"
+                      displayAvatar={false}
+                    />
+                  </td>
+                  <td className={style['td-time']}>
+                    <div className={style.date}>
+                      <DateDistance
+                        timestamptz={offer.createdAt}
                       />
                     </div>
-                  )}
-                </td>
-                <td className={style['td-user']}>
-                  <UserBadge
-                    hasLink
-                    user={offer.buyer}
-                    size="small"
-                    displayAvatar={false}
-                  />
-                </td>
-                <td className={style['td-price']}>
-                  <DisplayTezos
-                    className={style.price}
-                    formatBig={false}
-                    mutez={offer.price}
-                    tezosSize="regular"
-                  />
-                </td>
-                <td className={style['td-time']}>
-                  <div className={style.date}>
-                    <DateDistance
-                      timestamptz={offer.createdAt}
-                    />
-                  </div>
-                </td>
-              </tr>
+                  </td>
+                  <td>
+                    <Button
+                      type="button"
+                      color="secondary"
+                      size="very-small"
+                      onClick={() => acceptOffer(offer)}
+                      state={callLoading && acceptParams?.offer.id === offer.id ? "loading" : "default"}
+                    >
+                      accept
+                    </Button>
+                  </td>
+                </tr>
+              </Fragment>
             )) :
             <tr>
-              <td className={style.empty} colSpan={5}>
+              <td className={style.empty} colSpan={6}>
                 No offers found
               </td>
             </tr>

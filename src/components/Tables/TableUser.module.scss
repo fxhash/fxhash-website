@@ -47,6 +47,7 @@
   tbody tr {
     border: 1px solid var(--color-gray-vlight);
   }
+
   thead tr {
     border: 1px solid var(--color-black);
   }
@@ -62,6 +63,10 @@
 
 .th-price {
   width: 120px;
+}
+
+.th-action {
+  width: 80px;
 }
 
 .th-time {
@@ -112,6 +117,22 @@
 .empty {
   padding: 0 8px;
   text-align: center;
+}
+
+.contract_feedback {
+  text-align: center;
+
+  td {
+    height: auto;
+    padding: 0;
+    padding-top: 10px;
+
+    .feedback_wrapper {
+      background-color: var(--color-gray-vvlight);
+      border-top: 1px solid var(--color-gray-vlight);
+      padding: 8px;
+    }
+  }
 }
 
 

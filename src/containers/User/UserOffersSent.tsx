@@ -13,6 +13,9 @@ const _UserOffersSent = ({ user }: UserOffersSentProps) => {
     notifyOnNetworkStatusChange: true,
     variables: {
       id: user.id,
+      filters: {
+        active_eq: true
+      }
     }
   })
   const offers = useMemo(() => data?.user?.offersSent || [], [data?.user?.offersSent])

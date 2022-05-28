@@ -271,10 +271,10 @@ export const Qu_userSales = gql`
 `
 
 export const Qu_userOffersReceived = gql`
-  query UserOffersReceived($id: String!) {
+  query UserOffersReceived($id: String!, $filters: OfferFilter) {
     user(id: $id) {
       id
-      offersReceived {
+      offersReceived(filters: $filters) {
         id
         price
         createdAt
@@ -286,6 +286,13 @@ export const Qu_userOffersReceived = gql`
           id
           name
           metadata
+          activeListing {
+            id
+            version
+          }
+          owner {
+            id
+          }
         }
       }
     }
@@ -293,10 +300,10 @@ export const Qu_userOffersReceived = gql`
 `
 
 export const Qu_userOffersSent = gql`
-  query UserOffersSent($id: String!) {
+  query UserOffersSent($id: String!, $filters: OfferFilter) {
     user(id: $id) {
       id
-      offersSent {
+      offersSent(filters: $filters) {
         id
         price
         createdAt
