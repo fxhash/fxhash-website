@@ -1,15 +1,11 @@
-import style from "./OfferControl.module.scss"
+import style from "./MarketplaceActions.module.scss"
 import { useContext, useState } from "react"
 import { Button } from "../../components/Button"
-import { InputTextUnit } from "../../components/Input/InputTextUnit"
 import { Objkt } from "../../types/entities/Objkt"
 import cs from "classnames"
-import { useContractCall } from "../../utils/hookts"
 import { UserContext } from "../UserProvider"
-import { CancelOfferCall, CollectCall, PlaceOfferCall } from "../../types/ContractCalls"
 import { ContractFeedback } from "../../components/Feedback/ContractFeedback"
 import { Listing } from "../../types/entities/Listing"
-import { displayMutez } from "../../utils/units"
 import { useRouter } from "next/router"
 import { GenTokFlag } from "../../types/entities/GenerativeToken"
 import { Unlock } from "../../components/Utils/Unlock"
@@ -22,7 +18,7 @@ interface Props {
   objkt: Objkt
 }
 
-export function Collect({ listing, objkt }: Props) {
+export function ListingAccept({ listing, objkt }: Props) {
   const userCtx = useContext(UserContext)
   const router = useRouter()
 

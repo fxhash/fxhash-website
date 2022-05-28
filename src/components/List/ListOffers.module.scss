@@ -1,0 +1,65 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: var(--font-size-small);
+}
+
+.offer {
+  width: 100%;
+  padding: 0 12px;
+  border: 1px solid var(--color-gray-vvlight);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  height: 60px;
+
+  &.small_padding {
+    padding-left: 4px;
+  }
+
+  &>* {
+    flex: 1 1 0;
+  }
+
+  .user_badge_wrapper {
+    display: flex;
+    align-items: center;
+  }
+
+  .price {
+    font-weight: bold;
+    color: var(--color-secondary);
+    flex-grow: 0.6;
+    font-size: var(--font-size-regular);
+  }
+
+  .date {
+    font-size: var(--font-size-vsmall);
+    color: var(--color-gray);
+    flex-grow: 0.7;
+    text-align: right;
+  }
+
+  .call_btn {
+    flex-grow: 0;
+    flex-basis: 80px;
+  }
+
+  .objkt {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
+.contract_feedback {
+  border: 1px solid var(--color-gray-vvlight);
+  background-color: var(--color-gray-vvlight);
+  display: flex;
+  justify-content: center;
+  margin-bottom: -8px;
+  padding: 8px;
+}

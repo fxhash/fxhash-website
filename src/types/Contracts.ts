@@ -53,6 +53,7 @@ export type TContractOperationHookReturn<Params> = {
   error: boolean,
   opHash: string|null,
   operation: WalletOperation|null
+  params: Params|null,
   call: (data: Params) => void,
   clear: () => void
 }

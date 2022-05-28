@@ -20,6 +20,7 @@ export function useContractOperation<Params>(
   const [error, setError] = useState<boolean>(false)
   const [opHash, setOpHash] = useState<string|null>(null)
   const [operation, setOperation] = useState<WalletOperation|null>(null)
+  const [params, setParams] = useState<Params|null>(null)
   const counter = useRef<number>(0)
   const isMounted = useIsMounted()
   const userContext = useContext(UserContext)
@@ -32,6 +33,7 @@ export function useContractOperation<Params>(
     setError(false)
     setOpHash(null)
     setOperation(null)
+    setParams(null)
     setState(ContractOperationStatus.NONE)
   }
 
@@ -42,6 +44,7 @@ export function useContractOperation<Params>(
     setError(false)
     setOpHash(null)
     setOperation(null)
+    setParams(params)
     setState(ContractOperationStatus.NONE)
     
     // assign the ID to this call and increment it to prevent overlaps
@@ -119,6 +122,7 @@ export function useContractOperation<Params>(
 
   return {
     state,
+    params,
     opHash,
     operation,
     loading,

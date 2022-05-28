@@ -148,3 +148,31 @@ export const Qu_genTokOwners = gql`
     }
   }
 `
+
+export const Qu_genTokOffers = gql`
+  query GetGenTokOffers($id: Float) {
+    generativeToken(id: $id) {
+      id
+      offers(filters: { active_eq: true }) {
+        id
+        price
+        version
+        createdAt
+        cancelledAt
+        acceptedAt
+        buyer {
+          id
+          name
+        }
+        objkt {
+          id
+          iteration
+          metadata
+          owner {
+            id
+          }
+        }
+      }
+    }
+  }
+`

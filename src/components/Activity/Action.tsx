@@ -19,9 +19,7 @@ interface Props {
 
 type TActionComp = FunctionComponent<Props>
 
-const getTokenIdx = (name: string) => '#' + name.split("#").pop()
-
-const DateDistance = ({ timestamptz, append = false }: { timestamptz: string, append?: boolean }) => {
+export const DateDistance = ({ timestamptz, append = false }: { timestamptz: string, append?: boolean }) => {
   const dist = useMemo(() => formatDistance(new Date(timestamptz), new Date(), { addSuffix: true,  }), [])
   return <span>{ dist }</span>
 }
@@ -381,7 +379,54 @@ const ActionOffer: FunctionComponent<Props> = ({ action, verbose }) => (
         tezosSize="regular"
       />
     </span>
-    <span>for {verbose ? action.objkt!.name : `#${action.objkt!.iteration}`}</span>
+    <span>for <strong>{verbose ? action.objkt!.name : `#${action.objkt!.iteration}`}</strong></span>
+  </>
+)
+
+const ActionOfferAccepted: FunctionComponent<Props> = ({ action, verbose }) => (
+  <>
+    <UserBadge
+      className={cs(style.user)}
+      hasLink={true}
+      user={action.target!}
+      size="small"
+      />
+    <span>offer of</span>
+    <span className={cs(style.price)}>
+      <DisplayTezos
+        formatBig={false}
+        mutez={action.numericValue}
+        tezosSize="regular"
+      />
+    </span>
+    <span>on <strong>{verbose ? action.objkt!.name : `#${action.objkt!.iteration}`}</strong></span>
+    <span>accepted by</span>
+    <UserBadge
+      className={cs(style.user)}
+      hasLink={true}
+      user={action.issuer!}
+      size="small"
+      />
+  </>
+)
+
+const ActionOfferCancelled: FunctionComponent<Props> = ({ action, verbose }) => (
+  <>
+    <UserBadge
+      className={cs(style.user)}
+      hasLink={true}
+      user={action.issuer!}
+      size="small"
+    />
+    <span>cancelled</span>
+    <span className={cs(style.price)}>
+      <DisplayTezos
+        formatBig={false}
+        mutez={action.numericValue}
+        tezosSize="regular"
+      />
+    </span>
+    <span>offer for <strong>{verbose ? action.objkt!.name : `#${action.objkt!.iteration}`}</strong></span>
   </>
 )
 
@@ -410,6 +455,8 @@ const ActionMapComponent: Record<TokenActionType, FunctionComponent<Props>> = {
   LISTING_V2_CANCELLED:           ActionListingCancelled,
 
   OFFER:                          ActionOffer,
+  OFFER_ACCEPTED:                 ActionOfferAccepted,
+  OFFER_CANCELLED:                ActionOfferCancelled,
 
   UPDATE_PRICING:                 ActionUpdatePrice,
   UPDATE_STATE:                   ActionUpdateState,
@@ -419,8 +466,6 @@ const ActionMapComponent: Record<TokenActionType, FunctionComponent<Props>> = {
 
   // TODO
   NONE:                           ActionTODO,
-  OFFER_CANCELLED:                ActionTODO,
-  OFFER_ACCEPTED:                 ActionTODO,
   COLLECTION_OFFER:               ActionTODO,
   COLLECTION_OFFER_CANCELLED:     ActionTODO,
   COLLECTION_OFFER_ACCEPTED:      ActionTODO,
