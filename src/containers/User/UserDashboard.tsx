@@ -1,7 +1,7 @@
 import React, { memo, useMemo } from 'react';
 import { checkIsTabKeyActive, LinkTabWrapper, Tabs } from "../../components/Layout/Tabs";
 import style from "./UserDashboard.module.scss";
-import { UserSalesTable } from "./UserSalesTable";
+import { UserSales } from "./UserSales";
 import { UserActions } from "./UserActions";
 import { getUserProfileLink } from "../../utils/user";
 import { User } from "../../types/entities/User";
@@ -9,7 +9,7 @@ import { UserOffersReceived } from "./UserOffersReceived";
 import { UserOffersSent } from "./UserOffersSent";
 
 const userDashboardComponents = {
-  sales: UserSalesTable,
+  sales: UserSales,
   ['offers-received']: UserOffersReceived,
   ['offers-sent']: UserOffersSent,
   activity: UserActions,

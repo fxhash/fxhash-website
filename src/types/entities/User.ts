@@ -2,6 +2,7 @@ import { Action } from "./Action"
 import { GenerativeToken } from "./GenerativeToken"
 import { Objkt } from "./Objkt"
 import { Listing } from "./Listing"
+import { Offer } from "./Offer";
 
 export interface UserItems {
   generativeTokens?: GenerativeToken[]
@@ -48,10 +49,13 @@ export interface User {
   description?: string
   avatarUri?: string
   generativeTokens?: GenerativeToken[]
+  sales: Action[]
   actionsAsIssuer: Action[]
   actionsAsTarget: Action[]
   objkts: Objkt[]
   offers: Listing[]
+  offersReceived: Offer[]
+  offersSent: Offer[]
   createdAt: Date
   updatedAt: Date
   // can be populated to merge the actions, however not returned by api
