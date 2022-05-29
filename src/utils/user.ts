@@ -20,7 +20,7 @@ export function getUserProfileLink(user: ConnectedUser): string {
  */
 export function getUserName(user: User, truncateLength?: number): string {
   return userHasName(user) 
-    ? user.name! 
+    ? user.name!.length > 64 ? user.name!.substring(0, 64) : user.name!
     : (truncateLength ? truncateMiddle(user.id, truncateLength) : user.id)
 }
 
