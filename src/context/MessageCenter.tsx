@@ -39,7 +39,7 @@ export function MessageCenterProvider({ children }: PropsWithChildren<{}>) {
   const [context, setContext] = useState<IMessageCenterContext>(defaultCtx)
   
   // memoize to prevent rerendering JIC
-  const withAddMessage = useMemo<IMessageCenterContext>(() => {
+  const memoizedContext = useMemo<IMessageCenterContext>(() => {
     // adds a message to the list of messages to display
     const addMessage = (message: IMessageSent) => {
       const toAdd: IMessage = {
@@ -88,11 +88,11 @@ export function MessageCenterProvider({ children }: PropsWithChildren<{}>) {
   }, [context])
 
   return (
-    <MessageCenterContext.Provider value={withAddMessage}>
+    <MessageCenterContext.Provider value={memoizedContext}>
       {children}
       <MessageCenterContainer
-        messages={context.messages}
-        removeMessage={context.removeMessage}
+        messages={memoizedContext.messages}
+        removeMessage={memoizedContext.removeMessage}
       />
     </MessageCenterContext.Provider>
   )
