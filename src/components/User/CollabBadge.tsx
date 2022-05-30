@@ -11,12 +11,14 @@ import { getUserName, isUserVerified } from "../../utils/user"
 
 interface Props extends IEntityBadgeProps {
   user: Collaboration
+  centered: boolean 
 }
 export function CollabBadge(props: Props) {
   const {
     user,
     size,
     toggeable = false,
+    centered = false, 
     avatarSide,
   } = props
   const [collaborators, setCollaborators] = useState(user.collaborators);
@@ -34,7 +36,8 @@ export function CollabBadge(props: Props) {
       style[`side_${avatarSide}`], {
         [style.opened]: opened,
         [style.toggeable]: toggeable,
-        [style.hide]: !isInitialized,
+	[style.hide]: !isInitialized,
+	[style.centered]: centered,
       }
     )}>
       <button
