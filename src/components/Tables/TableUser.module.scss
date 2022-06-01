@@ -13,9 +13,9 @@
   min-width: 940px;
   width: 100%;
   table-layout: fixed;
-  border-collapse: collapse;
+  border-collapse: separate;
   font-size: var(--font-size-small);
-
+  border-spacing: 0;
   thead {
     position: sticky;
     z-index: 10;
@@ -28,7 +28,7 @@
     padding: 12px 4px;
     font-weight: 600;
     text-align: left;
-
+    border-bottom: 1px solid var(--color-black);
     &:first-child {
       padding-left: 8px;
     }
@@ -38,19 +38,15 @@
     vertical-align: middle;
     padding: 4px;
     height: 50px;
-
+    border-bottom: 1px solid var(--color-gray-vlight);
+    &:first-child {
+      border-left: 1px solid var(--color-gray-vlight);
+    }
     &>* {
       vertical-align: middle;
     }
   }
 
-  tbody tr {
-    border: 1px solid var(--color-gray-vlight);
-  }
-
-  thead tr {
-    border: none;
-  }
 }
 
 .th-gentk {
