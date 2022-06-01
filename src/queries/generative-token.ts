@@ -38,6 +38,7 @@ export const Qu_genToken = gql`
 
 export const Qu_genTokenMarketplace = gql`
   ${Frag_GenAuthor}
+  ${Frag_GenReserves}
   query Query($id: Float, $slug: String) {
     generativeToken(id: $id, slug: $slug) {
       id
@@ -69,6 +70,7 @@ export const Qu_genTokenMarketplace = gql`
       }
       createdAt
       ...Author
+      ...Reserves
     }
   }
 `
