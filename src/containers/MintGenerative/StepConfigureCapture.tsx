@@ -29,7 +29,6 @@ export const StepConfigureCapture: StepComponent = ({ onNext, state }) => {
       gpu: false,
     }
   )
-
   const { data, loading, error, post } = 
     useFetch<TestPreviewResponse|TestPreviewErrorResponse>(
       `${process.env.NEXT_PUBLIC_API_EXTRACT}/extract`, { 
@@ -37,11 +36,12 @@ export const StepConfigureCapture: StepComponent = ({ onNext, state }) => {
         responseType: "json"
       }
     )
-
-  // extracts the test image base64 data from the response if any
-  const testImage = useMemo<string|null>(() => {
-    return (data && !loading && !error) ? (data as TestPreviewResponse).captureBase64 : null
-  }, [data])
+  
+  // extract the presigned URL from the response, if there's one
+  const testImage = useMemo(
+    () => (data && !error) ? (data as TestPreviewResponse).capture : null,
+    [data, error]
+  )
 
   const { data: previewData, loading: previewLoading, error: previewError, post: previewPost } = 
     useFetch<PreviewResponse|PreviewErrorResponse>(`${process.env.NEXT_PUBLIC_API_FILE_ROOT}/preview`,
