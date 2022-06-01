@@ -11,7 +11,7 @@ import { getUserName, isUserVerified } from "../../utils/user"
 
 interface Props extends IEntityBadgeProps {
   user: Collaboration
-  centered: boolean 
+  centered?: boolean
 }
 export function CollabBadge(props: Props) {
   const {
