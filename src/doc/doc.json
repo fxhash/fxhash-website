@@ -88,6 +88,10 @@
         {
           "title": "Changelog",
           "link": "changelog"
+        },
+        {
+          "title": "Press kit",
+          "link": "press"
         }
       ]
     },
@@ -110,5 +114,5 @@
         }
       ]
     }
-  ] 
+  ]
 }
