@@ -13,10 +13,12 @@ interface TezosStorageProps {
 const TezosStorage = memo(({ address, type, metadataSpec, pKey, children }: TezosStorageProps) => {
   return (
     <div>
-      <div>{address}</div>
-      <div>{type}</div>
-      <div>{metadataSpec}</div>
-      <div>{pKey}</div>
+      <div contentEditable={false}>
+        <div>{address}</div>
+        <div>{type}</div>
+        <div>{metadataSpec}</div>
+	<div>{pKey}</div>
+      </div>
       <div>{children}</div>
     </div>
   );
