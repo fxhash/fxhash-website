@@ -16,6 +16,7 @@ import { SharedOptions } from "rehype-react/lib";
 import TezosStorage from "./elements/TezosStorage";
 import rehypeHighlight from "rehype-highlight";
 import rehypeMathJaxBrowser from "rehype-mathjax/browser";
+import {remarkToSlate} from "remark-slate-transformer"
 
 declare module "rehype-react" {
   interface CustomComponentsOptions {
@@ -90,5 +91,37 @@ export async function getNFTArticleComponentsFromMarkdown(markdown: string) {
   }
   catch {
     return null
+  }
+}
+
+
+export async function getSlateEditorStateFromMarkdown(markdown: string) {
+  try {
+    const createDirectiveNode = node => {
+      return {
+	type: node.name,
+	children: [{text:node.children[0].value}]
+      };
+    }
+    const matterResult = matter(markdown)
+    const processed = await unified()
+      .use(remarkParse)
+      .use(remarkDirective)
+      .use(remarkFxHashCustom)
+      .use(remarkToSlate, {
+	overrides: {
+	  textDirective:  createDirectiveNode, 
+	  leafDirective:  createDirectiveNode, 
+	  containerDirective:  createDirectiveNode, 
+	},
+      })
+      .process(matterResult.content)
+
+    return {
+      ...matterResult.data, 
+      editorState: processed.result
+    };
+  } catch {
+    return null;
   }
 }
