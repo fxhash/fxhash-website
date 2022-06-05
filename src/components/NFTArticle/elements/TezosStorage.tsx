@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, forwardRef } from 'react';
 
 interface TezosStorageProps {
   address: string
@@ -10,9 +10,9 @@ interface TezosStorageProps {
   children: string
 }
 
-const TezosStorage = memo(({ address, type, metadataSpec, pKey, children }: TezosStorageProps) => {
+const TezosStorage = memo(forwardRef(({ address, type, metadataSpec, pKey, children }: TezosStorageProps, ref) => {
   return (
-    <div>
+    <div ref={ref}>
       <div contentEditable={false}>
         <div>{address}</div>
         <div>{type}</div>
@@ -22,7 +22,7 @@ const TezosStorage = memo(({ address, type, metadataSpec, pKey, children }: Tezo
       <div>{children}</div>
     </div>
   );
-});
+}));
 TezosStorage.displayName = 'TezosStorage';
 TezosStorage.defaultProps = {
   type: 'TZIP-012',
