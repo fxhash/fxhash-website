@@ -12,6 +12,7 @@ import { getDataFromCsvFile, hasCsvMissedColumns } from "../../utils/csv";
 import { ErrorBlock } from "../Error/ErrorBlock";
 import { Loader } from "../Utils/Loader";
 import { isTezosAddress } from "../../utils/strings";
+import { Spacing } from '../Layout/Spacing';
 
 type FormatCsvDataToSplits = (data: any[]) => { errors: string[], splits: ISplit[] }
 interface ModalImportCsvReserveProps {
@@ -98,6 +99,7 @@ const _ModalImportCsvReserve = ({ onClose, onImport }: ModalImportCsvReserveProp
           tz1PoDdN2oyRyF6DA73zTWAWYhNL4UGr3Egj, 4<br/>
         </code>
       </pre>
+      <Spacing size="large"/>
       <Dropzone
         textDefault="Drop your .csv file here (or click to browse)"
         accepted={'text/csv'}
@@ -105,6 +107,7 @@ const _ModalImportCsvReserve = ({ onClose, onImport }: ModalImportCsvReserveProp
         onChange={handleDropzoneChange}
         className={style.dropzone}
       />
+      <Spacing size="large"/>
       {error &&
         <ErrorBlock align="left" title="Import error">
           <div className={style.error}>{error}</div>

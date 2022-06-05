@@ -1,13 +1,13 @@
 @import "../../styles/Variables";
+
 .modal {
   width: 100%;
   max-width: 800px;
 }
 
 .dropzone {
-  margin: $spacing 0;
-  width: 100%;
-  min-height: 0 !important;
+  margin: 0 auto;
+  width: 80%;
 }
 
 .csv_example {
