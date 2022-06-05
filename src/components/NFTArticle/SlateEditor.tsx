@@ -8,7 +8,7 @@ import {
   RenderLeafProps,
 } from "slate-react";
 import { withHistory } from 'slate-history'
-
+import TezosStorage from './elements/TezosStorage';
 const style: React.CSSProperties = {
   flex: 1,
   margin: 10,
@@ -19,15 +19,6 @@ type Props = {
 };
 
 
-const TezosElement = React.forwardRef((props, ref) => {
-
-  return <div ref={ref}>
-    <div contentEditable={false}>TezosStorage</div>
-      <code>{props.children}</code>
-  </div>
-})
-
-
 const renderElement = ({
   attributes,
   children,
@@ -35,7 +26,7 @@ const renderElement = ({
 }: RenderElementProps) => {
   switch (element.type) {
     case "tezos-storage": 
-      return <TezosElement {...attributes} children={children}/>
+      return <TezosStorage {...attributes} children={children}/>
     case "paragraph":
       return <p {...attributes}>{children}</p>;
     case "heading": {
