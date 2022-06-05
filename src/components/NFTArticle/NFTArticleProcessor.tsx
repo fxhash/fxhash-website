@@ -98,9 +98,18 @@ export async function getNFTArticleComponentsFromMarkdown(markdown: string) {
 export async function getSlateEditorStateFromMarkdown(markdown: string) {
   try {
     const createDirectiveNode = node => {
+      // extract only defined props to avoid error serialization of undefined
+      const props = Object.keys(node.data.hProperties).reduce((acc, key) =>{
+	const value = node.data.hProperties[key];
+	if (value) {
+	  acc[key] = value;
+	}
+	return acc;
+      }, {});
       return {
 	type: node.name,
-	children: [{text:node.children[0].value}]
+	children: [{text:node.children[0].value}],
+        props,  
       };
     }
     const matterResult = matter(markdown)

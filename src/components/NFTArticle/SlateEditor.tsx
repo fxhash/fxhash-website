@@ -26,7 +26,7 @@ const renderElement = ({
 }: RenderElementProps) => {
   switch (element.type) {
     case "tezos-storage": 
-      return <TezosStorage {...attributes} children={children}/>
+      return <TezosStorage {...attributes} {...element.props} children={children}/>
     case "paragraph":
       return <p {...attributes}>{children}</p>;
     case "heading": {
@@ -162,8 +162,7 @@ const renderLeaf = ({ attributes, children, leaf }: RenderLeafProps) => {
   return <span {...attributes}>{children}</span>;
 };
 
-export const SlateEditor =forwardRef(
-  ({ initialValue }: Props, ref: React.MutableRefObject<Node[]>) => {
+export const SlateEditor = forwardRef(({ initialValue }: Props, ref: React.MutableRefObject<Node[]>) => {
     const editor = useMemo(() => {
       const e = withHistory(withReact(createEditor()));
       e.isInline = (element) => {
@@ -191,3 +190,5 @@ export const SlateEditor =forwardRef(
     );
   }
 );
+
+SlateEditor.displayName = "SlateEditor"
