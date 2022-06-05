@@ -1,19 +1,23 @@
 import type { NextPage } from 'next'
-import layout from '../styles/Layout.module.scss'
+import  { useRef, } from "react";
+import { Node, Descendant } from "slate"
+import layout from '../../styles/Layout.module.scss'
 import cs from 'classnames'
-import { Spacing } from '../components/Layout/Spacing'
-import { SectionHeader } from '../components/Layout/SectionHeader'
+import { Spacing } from '../../components/Layout/Spacing'
+import { SectionHeader } from '../../components/Layout/SectionHeader'
 import Head from 'next/head'
-import { TitleHyphen } from '../components/Layout/TitleHyphen'
+import { TitleHyphen } from '../../components/Layout/TitleHyphen'
 import path from "path";
 import fs from "fs"
-import { NftArticle } from "../components/NFTArticle/NFTArticle";
 import { GetStaticProps } from "next";
+import {SlateEditor} from '../../components/NFTArticle/SlateEditor';
+import {getSlateEditorStateFromMarkdown} from '../../components/NFTArticle/NFTArticleProcessor';
 
 interface EditorPageProps {
-  markdown: string
+  editorState: Descendant[]
 }
-const EditorPage: NextPage<EditorPageProps> = ({ markdown }) => {
+const EditorPage: NextPage<EditorPageProps> = ({ editorState }) => {
+  const ref = useRef<Node[]>(null);
   return (
     <>
       <Head>
@@ -33,7 +37,7 @@ const EditorPage: NextPage<EditorPageProps> = ({ markdown }) => {
         <Spacing size="x-large"/>
 
         <main className={cs(layout['padding-big'])}>
-          <NftArticle markdown={markdown} />
+	  <SlateEditor ref={ref} initialValue={editorState} />
         </main>
       </section>
 
@@ -49,9 +53,10 @@ export default EditorPage
 export const getStaticProps: GetStaticProps<EditorPageProps> = async ({ params }) => {
   const filePath = path.join(process.cwd(), "src", "articles",`nft-article-test.md`)
   const nftArticleMd = fs.readFileSync(filePath, 'utf8');
+  const {editorState}= await getSlateEditorStateFromMarkdown(nftArticleMd);
   return {
     props: {
-      markdown: nftArticleMd,
+      editorState,
     },
   }
 }
