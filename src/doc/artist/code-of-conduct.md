@@ -25,7 +25,6 @@ Copyminting of any sort will not be tolerated. Immediately provable copymints an
 
 If your work is abusive or includes harmful or damaging narratives, it will be rejected. We believe in freedom of expression, however, if your artwork promotes hatred of a group of people, this constitutes a damaging narrative and your work will be rejected.
 
-
 # The soft
 
 ## Generative work
@@ -39,6 +38,34 @@ If a mint of your generative token produces a different result on reload or redr
 ## Effort in art
 
 Art is the core of fxhash, some of us are artists, some of us collectors. We all share the love for art and with it the same values. Everybody plays their role in this ecosystem, be it creation, collection, talking, or even flipping. If you cannot identify with a role, try to tolerate it. It is the diversity that we love, and that will ultimately lead us to create the best inclusive generative art platform for everybody
+# Images and layered PNG artwork (PFP)
+
+Generative projects can use textures and images in a number of different ways, the simplest of these being layering randomly selected PNGs on top of each other, most commonly seen in PFP projects.
+
+These projects are welcomed on fxhash but must be categroised using the `Image Composition` categoru and some communication guidelines must be followed to ensure that collectors know what they’re getting when they collect your token.
+
+## What is acceptable
+
+- Projects where javascript is used to layer multiple static images on top of each other or as a collage (ie. illustrations, pfps, etc.)
+- Projects where javascript is used to manipulate or draw on top of a static image
+
+## What is not acceptable
+
+- Projects that are simply a collection generated static image
+- Projects that are layered multiple static images on top of each other but not categorised appropriately using the `Image Composition` category.
+- Projects that involve static images with javascript being used to manipulate the image further but not described as such in the project description.
+
+## Project descriptions
+
+The methods used to generate these projects must be described thoroughly in the description section of the project and the appropriate tags must be used (ex. PNG, layered PNG, etc.). Labeling them simply as “generative” or “created with p5js/js/etc.” is not acceptable and will be considered misleading language. The language for these projects must include a reference to them being “generative layered pngs” or something similar. 
+
+A good rule of thumb when putting together a description of your token is that there is no such thing as too much communication of the core ideas and methodologies involved in your token. The more a collector knows about the underlying principles of your token the more comfortable they’re going to feel collecting it.
+
+# Rescheduling
+
+The scheduling feature is provided as a means to refresh your project's settings and have it appear back at the top of the list. When using this feature, please make sure that you are significantly updating the projects settings before rescheduling it. This means removing an allow-list, significantly updating the price, or buning a lot of the supply.
+
+Rescheduling a project without changing it is considered an exploit of this feature and your token will be moderated accordingly.
 
 ## Last but not least
 
