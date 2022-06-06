@@ -1,6 +1,6 @@
 import React, { memo, forwardRef } from 'react';
 
-interface TezosStorageProps {
+export interface TezosStorageProps {
   address: string
   pKey: string
   type?: string

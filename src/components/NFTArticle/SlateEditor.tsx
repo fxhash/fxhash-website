@@ -1,22 +1,52 @@
 import React, { forwardRef, useEffect, useMemo, useState } from "react";
-import { createEditor, Node } from "slate";
+import { BaseEditor, BaseElement,  createEditor, Node, Descendant } from "slate";
 import {
   Slate,
   Editable,
   withReact,
   RenderElementProps,
   RenderLeafProps,
+  ReactEditor
 } from "slate-react";
-import { withHistory } from 'slate-history'
-import TezosStorage from './elements/TezosStorage';
-const style: React.CSSProperties = {
-  flex: 1,
-  margin: 10,
-};
+import { withHistory, HistoryEditor } from "slate-history";
+import TezosStorage, {TezosStorageProps} from "./elements/TezosStorage";
 
-type Props = {
-  initialValue: Node[];
-};
+type TypeElement = BaseElement & { 
+  type: string
+  children: any 
+}
+
+type HeadlineElement = TypeElement & {
+  depth: number
+}
+
+type ImageElement = TypeElement & {
+  title: string   
+  url: string
+  alt?: string
+}
+
+type TezosStorageElement = TypeElement & TezosStorageProps
+
+type CustomElement =  HeadlineElement | TezosStorageElement | ImageElement;
+
+type FormattedText = { 
+  text: string
+  strong?: boolean
+  emphasis?: boolean 
+  delete?: boolean
+  inlineCode?: boolean
+}
+
+type CustomText = FormattedText
+
+declare module 'slate' {
+  interface CustomTypes {
+    Editor: BaseEditor & ReactEditor & HistoryEditor
+    Element: CustomElement
+    Text: CustomText
+  }
+}
 
 
 const renderElement = ({
@@ -25,8 +55,19 @@ const renderElement = ({
   element,
 }: RenderElementProps) => {
   switch (element.type) {
-    case "tezos-storage": 
-      return <TezosStorage {...attributes} {...element.props} children={children}/>
+    case "tezos-storage":
+      return (
+	<TezosStorage
+	  {...attributes}
+	  pKey={element.pKey}
+	  address={element.address}
+	  metadataSpec={element.metadataSpec}
+	  bigmap={element.bigmap}
+	  value={element.value}
+	>
+	  {children}
+	</TezosStorage>
+      );
     case "paragraph":
       return <p {...attributes}>{children}</p>;
     case "heading": {
@@ -90,10 +131,7 @@ const renderElement = ({
       );
     case "code":
       return (
-        <div
-          {...attributes}
-          language={element.lang as string}
-        >
+        <div {...attributes}>
           {element.children[0].text}
         </div>
       );
@@ -162,7 +200,12 @@ const renderLeaf = ({ attributes, children, leaf }: RenderLeafProps) => {
   return <span {...attributes}>{children}</span>;
 };
 
-export const SlateEditor = forwardRef(({ initialValue }: Props, ref: React.MutableRefObject<Node[]>) => {
+interface SlateEditorProps {
+  initialValue: Descendant[]
+};
+
+export const SlateEditor = forwardRef<Node[], SlateEditorProps>(
+  ({ initialValue }: SlateEditorProps, ref: React.ForwardedRef<Node[]>) => {
     const editor = useMemo(() => {
       const e = withHistory(withReact(createEditor()));
       e.isInline = (element) => {
@@ -176,13 +219,14 @@ export const SlateEditor = forwardRef(({ initialValue }: Props, ref: React.Mutab
     }, []);
 
     const [value, setValue] = useState<Node[]>(initialValue);
-    ref.current = value;
+    (ref as React.MutableRefObject<Node[]>).current = value;
+
     useEffect(() => {
       setValue(initialValue);
     }, [initialValue]);
 
     return (
-      <div className="markdown-body" style={style}>
+      <div className="markdown-body" style={{flex:1 , margin: 10}}>
         <Slate editor={editor} value={value} onChange={setValue}>
           <Editable renderElement={renderElement} renderLeaf={renderLeaf} />
         </Slate>
@@ -191,4 +235,6 @@ export const SlateEditor = forwardRef(({ initialValue }: Props, ref: React.Mutab
   }
 );
 
-SlateEditor.displayName = "SlateEditor"
+SlateEditor.displayName = "SlateEditor";
+
+

@@ -11,12 +11,12 @@ import { visit } from "unist-util-visit";
 import { h } from 'hastscript'
 import rehypeReact  from "rehype-react";
 import { createElement, Fragment } from "react";
-import { Root } from "mdast";
+import { Root, } from "mdast";
 import { SharedOptions } from "rehype-react/lib";
 import TezosStorage from "./elements/TezosStorage";
 import rehypeHighlight from "rehype-highlight";
 import rehypeMathJaxBrowser from "rehype-mathjax/browser";
-import {remarkToSlate} from "remark-slate-transformer"
+import {remarkToSlate, } from "remark-slate-transformer"
 
 declare module "rehype-react" {
   interface CustomComponentsOptions {
@@ -94,22 +94,26 @@ export async function getNFTArticleComponentsFromMarkdown(markdown: string) {
   }
 }
 
+interface DirectiveNodeProps { [key: string]: any }
 
 export async function getSlateEditorStateFromMarkdown(markdown: string) {
   try {
-    const createDirectiveNode = node => {
+    const createDirectiveNode = (node: Root,) => {
+      const data = node.data || {}
+      const hProperties = data.hProperties || {}
       // extract only defined props to avoid error serialization of undefined
-      const props = Object.keys(node.data.hProperties).reduce((acc, key) =>{
-	const value = node.data.hProperties[key];
-	if (value) {
-	  acc[key] = value;
-	}
-	return acc;
-      }, {});
+      const propertiesWithoutUndefined: DirectiveNodeProps = Object.keys(hProperties)
+	.reduce((acc: DirectiveNodeProps, key: string) =>{
+	  const value = hProperties[key];
+	  if (value) {
+	    acc[key] = value;
+	  }
+	  return acc;
+	}, {});
       return {
-	type: node.name,
+	type: data.hName,
 	children: [{text:node.children[0].value}],
-        props,  
+	...propertiesWithoutUndefined
       };
     }
     const matterResult = matter(markdown)
