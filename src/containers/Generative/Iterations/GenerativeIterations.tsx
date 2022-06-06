@@ -3,7 +3,7 @@ import cs from "classnames"
 import { GenerativeToken } from "../../../types/entities/GenerativeToken"
 import { useQuery } from "@apollo/client"
 import { Qu_genTokenIterations } from "../../../queries/generative-token"
-import { CardsContainer } from "../../../components/Card/CardsContainer"
+import { MasonryCardsContainer } from "../../../components/Card/MasonryCardsContainer"
 import { IObjktFeatureFilter, Objkt, ObjktFilters } from "../../../types/entities/Objkt"
 import { CardsLoading } from "../../../components/Card/CardsLoading"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
@@ -250,22 +250,21 @@ export function GenerativeIterations({
                 onTrigger={infiniteScrollFetch}
                 canTrigger={!!data && !loading}
               >
-                <CardsContainer ref={refCardsContainer}>
-                  {tokens?.map(gentk => (
+                <MasonryCardsContainer cardSize={cardSize}>
+                  {tokens?.map(gentk => ( 
                     <LargeGentkCard
                       key={gentk.id}
                       objkt={gentk}
                       showRarity={sort.rarity != null}
                     />
                   ))}
-
-                  {loading && (
-                    <CardsLoading
-                      type="large"
-                      number={ITEMS_PER_PAGE}
-                    />
-                  )}
-                </CardsContainer>
+                </MasonryCardsContainer>
+                {loading && (
+                  <CardsLoading
+                    type="large"
+                    number={ITEMS_PER_PAGE}
+                  />
+                )}
               </InfiniteScrollTrigger>
             </div>
           </section>
