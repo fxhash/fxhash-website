@@ -96,26 +96,27 @@ export async function getNFTArticleComponentsFromMarkdown(markdown: string) {
 
 interface DirectiveNodeProps { [key: string]: any }
 
+function createDirectiveNode(node: Root, next: (children: any[]) => any) {
+  const data = node.data || {}
+  const hProperties: {[key:string]: any} = (data.hProperties || {}) as {[key:string]: any}
+  // extract only defined props to avoid error serialization of undefined
+  const propertiesWithoutUndefined: DirectiveNodeProps = Object.keys(hProperties)
+    .reduce((acc: DirectiveNodeProps, key: string) =>{
+      const value = hProperties[key];
+      if (value) {
+	acc[key] = value;
+      }
+      return acc;
+    }, {});
+  return {
+    type: data.hName,
+    children:  next(node.children), 
+    ...propertiesWithoutUndefined
+  };
+}
+
 export async function getSlateEditorStateFromMarkdown(markdown: string) {
   try {
-    const createDirectiveNode = (node: Root,) => {
-      const data = node.data || {}
-      const hProperties = data.hProperties || {}
-      // extract only defined props to avoid error serialization of undefined
-      const propertiesWithoutUndefined: DirectiveNodeProps = Object.keys(hProperties)
-	.reduce((acc: DirectiveNodeProps, key: string) =>{
-	  const value = hProperties[key];
-	  if (value) {
-	    acc[key] = value;
-	  }
-	  return acc;
-	}, {});
-      return {
-	type: data.hName,
-	children: [{text:node.children[0].value}],
-	...propertiesWithoutUndefined
-      };
-    }
     const matterResult = matter(markdown)
     const processed = await unified()
       .use(remarkParse)
