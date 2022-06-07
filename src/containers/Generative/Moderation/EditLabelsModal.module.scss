@@ -1,0 +1,11 @@
+.labels {
+  border: 3px solid var(--color-gray-light);
+  padding: 3px;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 50px;
+}
