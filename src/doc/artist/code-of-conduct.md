@@ -38,11 +38,13 @@ If a mint of your generative token produces a different result on reload or redr
 ## Effort in art
 
 Art is the core of fxhash, some of us are artists, some of us collectors. We all share the love for art and with it the same values. Everybody plays their role in this ecosystem, be it creation, collection, talking, or even flipping. If you cannot identify with a role, try to tolerate it. It is the diversity that we love, and that will ultimately lead us to create the best inclusive generative art platform for everybody
+
+
 # Images and layered PNG artwork (PFP)
 
 Generative projects can use textures and images in a number of different ways, the simplest of these being layering randomly selected PNGs on top of each other, most commonly seen in PFP projects.
 
-These projects are welcomed on fxhash but must be categroised using the `Image Composition` categoru and some communication guidelines must be followed to ensure that collectors know what they’re getting when they collect your token.
+These projects are welcomed on fxhash but must be categorised using the `Image Composition` label and some communication guidelines must be followed to ensure that collectors know what they’re getting when they collect your token.
 
 ## What is acceptable
 
