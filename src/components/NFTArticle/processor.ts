@@ -9,14 +9,14 @@ import rehypeFormat from "rehype-format"
 import rehypeStringify from "rehype-stringify"
 import { visit } from "unist-util-visit";
 import { h } from 'hastscript'
-import rehypeReact, { CustomComponentsWithNodeOptions, Options } from "rehype-react";
 import { createElement, Fragment } from "react";
 import { Root } from "mdast";
+import rehypeReact, { Options } from "rehype-react";
 import { SharedOptions } from "rehype-react/lib";
-import TezosStorage from "./elements/TezosStorage";
 import rehypeHighlight from "rehype-highlight";
 import type { ComponentsWithNodeOptions, ComponentsWithoutNodeOptions } from "rehype-react/lib/complex-types";
 import { NFTArticleElementComponent } from "../../types/Article";
+import TezosStorage from "./elements/TezosStorage";
 import Embed from "./elements/Embed";
 import type {Element} from 'hast'
 import rehypeKatex from "rehype-katex";
@@ -28,14 +28,14 @@ declare module "rehype-react" {
   interface CustomComponentsOptions {
     [key: string]: NFTArticleElementComponent<any>
   }
-  interface CustomComponentsWithNodeOptions extends Omit<ComponentsWithNodeOptions, 'components'> {
+  interface CustomComponentsWithoutNodeOptions extends Omit<ComponentsWithoutNodeOptions, 'components'> {
     components?: CustomComponentsOptions
   }
   export type Options = SharedOptions &
     (
       | ComponentsWithNodeOptions
       | ComponentsWithoutNodeOptions
-      | CustomComponentsWithNodeOptions
+      | CustomComponentsWithoutNodeOptions
     );
 }
 
@@ -90,7 +90,11 @@ const settingsRehypeReact: Options = {
     'embed-media': Embed,
   }
 }
-export async function getNFTArticleComponentsFromMarkdown(markdown: string) {
+interface PayloadNFTArticleComponentsFromMarkdown {
+  [p: string]: any
+  content: void
+}
+export async function getNFTArticleComponentsFromMarkdown(markdown: string): Promise<PayloadNFTArticleComponentsFromMarkdown> {
   try {
     const matterResult = matter(markdown)
     const processed = await unified()
