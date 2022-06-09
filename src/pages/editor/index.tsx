@@ -21,6 +21,8 @@ const EditorPage: NextPage<EditorPageProps> = ({ markdown }) => {
         <meta key="og:title" property="og:title" content="fxhash — NFT article editor"/>
         <meta key="description" name="description" content="Experiment and test your NFT articles in the editor environment"/>
         <meta key="og:description" property="og:description" content="Experiment and test your NFT articles in the editor environment"/>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.0/dist/katex.min.css" crossOrigin="anonymous" />
+        <link rel="stylesheet" href="/highlight/dracula.css"/>
       </Head>
 
       <Spacing size="6x-large" sm="3x-large" />

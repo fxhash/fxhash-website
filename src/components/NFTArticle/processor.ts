@@ -9,34 +9,54 @@ import rehypeFormat from "rehype-format"
 import rehypeStringify from "rehype-stringify"
 import { visit } from "unist-util-visit";
 import { h } from 'hastscript'
-import rehypeReact  from "rehype-react";
 import { createElement, Fragment } from "react";
-import { Root, } from "mdast";
+import rehypeReact, { Options } from "rehype-react";
 import { SharedOptions } from "rehype-react/lib";
-import TezosStorage from "./elements/TezosStorage";
 import rehypeHighlight from "rehype-highlight";
-import rehypeMathJaxBrowser from "rehype-mathjax/browser";
 import {remarkToSlate, } from "remark-slate-transformer"
+import type { ComponentsWithNodeOptions, ComponentsWithoutNodeOptions } from "rehype-react/lib/complex-types";
+import { NFTArticleElementComponent } from "../../types/Article";
+import TezosStorage from "./elements/TezosStorage";
+import Embed from "./elements/Embed";
+import type {Element} from 'hast'
+import rehypeKatex from "rehype-katex";
 
 declare module "rehype-react" {
-  interface CustomComponentsOptions {
-    passNode?: false | undefined
-    components?: {
-      'tezos-storage': JSX.Element
-    }
+  interface WithNode {
+    node: Element
   }
-  type Options = SharedOptions &
+  interface CustomComponentsOptions {
+    [key: string]: NFTArticleElementComponent<any>
+  }
+  interface CustomComponentsWithoutNodeOptions extends Omit<ComponentsWithoutNodeOptions, 'components'> {
+    components?: CustomComponentsOptions
+  }
+  export type Options = SharedOptions &
     (
-      | import('rehype-react/lib/complex-types').ComponentsWithNodeOptions
-      | import('rehype-react/lib/complex-types').ComponentsWithoutNodeOptions
-      | CustomComponentsOptions
-    )
+      | ComponentsWithNodeOptions
+      | ComponentsWithoutNodeOptions
+      | CustomComponentsWithoutNodeOptions
+    );
 }
 
-const customNodes = {
+interface CustomArticleElementsByType {
   leafDirective: {
-    'tezos-storage': TezosStorage.getPropsFromNode
-  }
+    [key: string]: NFTArticleElementComponent<any>
+  },
+  textDirective: {
+    [key: string]: NFTArticleElementComponent<any>
+  },
+  containerDirective: {
+    [key: string]: NFTArticleElementComponent<any>
+  },
+}
+const customNodes: CustomArticleElementsByType = {
+  leafDirective: {
+    'tezos-storage': TezosStorage,
+    embed: Embed
+  },
+  textDirective: {},
+  containerDirective: {},
 }
 
 function remarkFxHashCustom(): import('unified').Transformer<import('mdast').Root, import('mdast').Root> {
@@ -47,27 +67,34 @@ function remarkFxHashCustom(): import('unified').Transformer<import('mdast').Roo
         node.type === 'leafDirective' ||
         node.type === 'containerDirective'
       ) {
-        const getPropsFromNode = customNodes[node.type]?.[node.name]
-        if (getPropsFromNode) {
+        const component = customNodes[node.type]?.[node.name]
+        if (component.getPropsFromNode) {
           const hast: any = h(node.name, node.attributes)
-          const props = getPropsFromNode(node, hast.properties);
-          const data = node.data || (node.data = {})
-          data.hName = hast.tagName
-          data.hProperties = props;
+          const props = component.getPropsFromNode(node, hast.properties);
+          if (props) {
+            const data = node.data || (node.data = {})
+            data.hName = component.htmlTagName || hast.tagName
+            data.hProperties = props;
+          }
         }
       }
     })
   }
 }
 
-const settingsRehypeReact = {
+const settingsRehypeReact: Options = {
   createElement,
   Fragment,
   components: {
     'tezos-storage': TezosStorage,
+    'embed-media': Embed,
   }
 }
-export async function getNFTArticleComponentsFromMarkdown(markdown: string) {
+interface PayloadNFTArticleComponentsFromMarkdown {
+  [p: string]: any
+  content: any
+}
+export async function getNFTArticleComponentsFromMarkdown(markdown: string): Promise<PayloadNFTArticleComponentsFromMarkdown | null> {
   try {
     const matterResult = matter(markdown)
     const processed = await unified()
@@ -77,7 +104,7 @@ export async function getNFTArticleComponentsFromMarkdown(markdown: string) {
       .use(remarkDirective)
       .use(remarkFxHashCustom)
       .use(remarkRehype)
-      .use(rehypeMathJaxBrowser)
+      .use(rehypeKatex)
       .use(rehypeHighlight)
       .use(rehypeFormat)
       .use(rehypeStringify)

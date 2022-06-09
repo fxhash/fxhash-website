@@ -11,6 +11,18 @@ description: 'What is fxhash ?'
 When $a \ne 0$, there are two solutions to $(ax^2 + bx + c = 0)$ and they are
 $$ x = {-b \pm \sqrt{b^2-4ac} \over 2a} $$
 
+Go to [Duck Duck Go](https://duckduckgo.com)
+
+<https://www.youtube.com/watch?v=0pDp8erQM_0>
+
+<https://open.spotify.com/track/6cnfseLPZpaPq53XYw6NIv?si=82d2a4523f71470c>
+
+::embed[caption]{href="https://open.spotify.com/track/05NcFvbmsIEHSSiu0YN8HU?si=78764c3a8bc743fa"}
+
+::embed[caption]{href="https://open.spotify.com/playlist/37i9dQZF1DWU4EQPjP9ZpS?si=ff161188db8c452c"}
+
+::embed{href="https://www.youtube.com/watch?v=hmn1qFwtNl8&ab_channel=INASoci%C3%A9t%C3%A9"}
+
 
 # Table of Contents
 
