@@ -11,6 +11,7 @@ import {
 import { withHistory, HistoryEditor } from "slate-history";
 import TezosStorage, {TezosStorageProps} from "../elements/TezosStorage";
 import {withAutoFormat} from './AutoFormatPlugin';
+import Embed from "../elements/Embed";
 
 type TypeElement = BaseElement & { 
   type: string
@@ -55,7 +56,12 @@ const renderElement = ({
   children,
   element,
 }: RenderElementProps) => {
+  console.log(element.type, element)
   switch (element.type) {
+    case 'embed-media': 
+      return (
+	<Embed{...attributes} href={element.href} />
+      );
     case "tezos-storage":
       return (
 	<TezosStorage

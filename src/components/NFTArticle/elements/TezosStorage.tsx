@@ -1,10 +1,6 @@
-<<<<<<< HEAD
 import React, { memo, forwardRef } from 'react';
-=======
-import React, { memo } from 'react';
 import { NFTArticleElementComponent } from "../../../types/Article";
 import style from "./TezosStorage.module.scss"
->>>>>>> feat/gfm-extended-parser
 
 export interface TezosStorageProps {
   address: string
@@ -23,7 +19,7 @@ const TezosStorage: NFTArticleElementComponent<TezosStorageProps> = memo(forward
       <div className={style.tab}>
         <div contentEditable={false}><span className={style.property}>{'"address"'}</span><span>{`: "${address}"`}</span></div>
         <div contentEditable={false}><span className={style.property}>{'"key"'}</span><span>{`: "${pKey}"`}</span></div>
-        <div><span className={style.property}>{'"annotation"'}</span><span>{`: "${children}"`}</span></div>
+	<div><span contentEditable={false} className={style.property}>{'"annotation: "'}</span><span>{children}</span></div>
       </div>
       <div contentEditable={false}>{`\}`}</div>
     </div>

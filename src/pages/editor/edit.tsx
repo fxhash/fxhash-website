@@ -11,7 +11,7 @@ import path from "path";
 import fs from "fs"
 import { GetStaticProps } from "next";
 import {SlateEditor} from '../../components/NFTArticle/SlateEditor';
-import {getSlateEditorStateFromMarkdown} from '../../components/NFTArticle/NFTArticleProcessor';
+import {getSlateEditorStateFromMarkdown} from '../../components/NFTArticle/processor';
 
 interface EditorPageProps {
   editorState: Descendant[]
