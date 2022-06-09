@@ -92,9 +92,9 @@ const settingsRehypeReact: Options = {
 }
 interface PayloadNFTArticleComponentsFromMarkdown {
   [p: string]: any
-  content: void
+  content: any
 }
-export async function getNFTArticleComponentsFromMarkdown(markdown: string): Promise<PayloadNFTArticleComponentsFromMarkdown> {
+export async function getNFTArticleComponentsFromMarkdown(markdown: string): Promise<PayloadNFTArticleComponentsFromMarkdown | null> {
   try {
     const matterResult = matter(markdown)
     const processed = await unified()
