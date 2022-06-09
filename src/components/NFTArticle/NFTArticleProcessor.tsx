@@ -16,6 +16,8 @@ import { SharedOptions } from "rehype-react/lib";
 import TezosStorage from "./elements/TezosStorage";
 import rehypeHighlight from "rehype-highlight";
 import rehypeMathJaxBrowser from "rehype-mathjax/browser";
+import type { ComponentsWithNodeOptions, ComponentsWithoutNodeOptions } from "rehype-react/lib/complex-types";
+import { getPropsFromNode } from "../../types/Article";
 
 declare module "rehype-react" {
   interface CustomComponentsOptions {
@@ -26,16 +28,29 @@ declare module "rehype-react" {
   }
   type Options = SharedOptions &
     (
-      | import('rehype-react/lib/complex-types').ComponentsWithNodeOptions
-      | import('rehype-react/lib/complex-types').ComponentsWithoutNodeOptions
+      | ComponentsWithNodeOptions
+      | ComponentsWithoutNodeOptions
       | CustomComponentsOptions
     )
 }
 
-const customNodes = {
+interface CustomArticleElementsByType {
+  leafDirective: {
+    [key: string]: getPropsFromNode<any> | undefined
+  },
+  textDirective: {
+    [key: string]: getPropsFromNode<any> | undefined
+  },
+  containerDirective: {
+    [key: string]: getPropsFromNode<any> | undefined
+  },
+}
+const customNodes: CustomArticleElementsByType = {
   leafDirective: {
     'tezos-storage': TezosStorage.getPropsFromNode
-  }
+  },
+  textDirective: {},
+  containerDirective: {},
 }
 
 function remarkFxHashCustom(): import('unified').Transformer<import('mdast').Root, import('mdast').Root> {

@@ -1,4 +1,5 @@
 import React, { memo } from 'react';
+import { NFTArticleElementComponent } from "../../../types/Article";
 
 interface TezosStorageProps {
   address: string
@@ -7,10 +8,10 @@ interface TezosStorageProps {
   metadataSpec?: string
   bigmap?: string
   value?: string
-  children: string
+  children?: string
 }
 
-const TezosStorage = memo(({ address, type, metadataSpec, pKey, children }: TezosStorageProps) => {
+const TezosStorage: NFTArticleElementComponent<TezosStorageProps> = memo(({ address, type, metadataSpec, pKey, children }: TezosStorageProps) => {
   return (
     <div>
       <div>{address}</div>
@@ -30,7 +31,7 @@ TezosStorage.defaultProps = {
 }
 export default TezosStorage;
 
-TezosStorage.getPropsFromNode = (node: Node, properties) => {
+TezosStorage.getPropsFromNode = (node, properties) => {
   return {
     address: properties.address,
     pKey: properties.key,
