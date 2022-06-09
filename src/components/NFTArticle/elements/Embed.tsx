@@ -33,7 +33,7 @@ const Embed: NFTArticleElementComponent<EmbedProps> = memo(({ children, href }) 
   const EmbedElement = useMemo(() => {
     const player = Object.values(urlPlayers).find(player => {
       return player.check(href);
-    }, []);
+    });
     return player?.component;
   }, [href]);
   if (EmbedElement) {
