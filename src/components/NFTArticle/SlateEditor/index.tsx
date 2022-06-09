@@ -9,7 +9,8 @@ import {
   ReactEditor
 } from "slate-react";
 import { withHistory, HistoryEditor } from "slate-history";
-import TezosStorage, {TezosStorageProps} from "./elements/TezosStorage";
+import TezosStorage, {TezosStorageProps} from "../elements/TezosStorage";
+import {withAutoFormat} from './AutoFormatPlugin';
 
 type TypeElement = BaseElement & { 
   type: string
@@ -207,14 +208,7 @@ interface SlateEditorProps {
 export const SlateEditor = forwardRef<Node[], SlateEditorProps>(
   ({ initialValue }: SlateEditorProps, ref: React.ForwardedRef<Node[]>) => {
     const editor = useMemo(() => {
-      const e = withHistory(withReact(createEditor()));
-      e.isInline = (element) => {
-        const { type } = element;
-        return type === "link" || type === "image";
-      };
-      e.isVoid = (element) => {
-        return element.type === "image";
-      };
+      const e = withReact(withAutoFormat(withHistory(createEditor())));
       return e;
     }, []);
 
@@ -224,7 +218,7 @@ export const SlateEditor = forwardRef<Node[], SlateEditorProps>(
     useEffect(() => {
       setValue(initialValue);
     }, [initialValue]);
-
+  console.log(initialValue)
     return (
       <div className="markdown-body" style={{flex:1 , margin: 10}}>
         <Slate editor={editor} value={value} onChange={setValue}>
