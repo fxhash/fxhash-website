@@ -9,17 +9,17 @@ import rehypeFormat from "rehype-format"
 import rehypeStringify from "rehype-stringify"
 import { visit } from "unist-util-visit";
 import { h } from 'hastscript'
-import rehypeReact  from "rehype-react";
-import { ComponentType, createElement, Fragment } from "react";
+import rehypeReact, { CustomComponentsWithNodeOptions, Options } from "rehype-react";
+import { createElement, Fragment } from "react";
 import { Root } from "mdast";
 import { SharedOptions } from "rehype-react/lib";
 import TezosStorage from "./elements/TezosStorage";
 import rehypeHighlight from "rehype-highlight";
-import rehypeMathJaxBrowser from "rehype-mathjax/browser";
 import type { ComponentsWithNodeOptions, ComponentsWithoutNodeOptions } from "rehype-react/lib/complex-types";
-import { getPropsFromNode, NFTArticleElementComponent } from "../../types/Article";
+import { NFTArticleElementComponent } from "../../types/Article";
 import Embed from "./elements/Embed";
 import type {Element} from 'hast'
+import rehypeKatex from "rehype-katex";
 
 declare module "rehype-react" {
   interface WithNode {
@@ -29,34 +29,31 @@ declare module "rehype-react" {
     [key: string]: NFTArticleElementComponent<any>
   }
   interface CustomComponentsWithNodeOptions extends Omit<ComponentsWithNodeOptions, 'components'> {
-    components?: Partial<{
-      [TagName in keyof JSX.IntrinsicElements]:
-      | keyof JSX.IntrinsicElements
-      | ComponentType<WithNode & JSX.IntrinsicElements[TagName]>
-    }> | CustomComponentsOptions
+    components?: CustomComponentsOptions
   }
-  type Options = SharedOptions &
+  export type Options = SharedOptions &
     (
-      | CustomComponentsWithNodeOptions
+      | ComponentsWithNodeOptions
       | ComponentsWithoutNodeOptions
+      | CustomComponentsWithNodeOptions
     );
 }
 
 interface CustomArticleElementsByType {
   leafDirective: {
-    [key: string]: getPropsFromNode<any> | undefined
+    [key: string]: NFTArticleElementComponent<any>
   },
   textDirective: {
-    [key: string]: getPropsFromNode<any> | undefined
+    [key: string]: NFTArticleElementComponent<any>
   },
   containerDirective: {
-    [key: string]: getPropsFromNode<any> | undefined
+    [key: string]: NFTArticleElementComponent<any>
   },
 }
 const customNodes: CustomArticleElementsByType = {
   leafDirective: {
-    'tezos-storage': TezosStorage.getPropsFromNode,
-    embed: Embed.getPropsFromNode
+    'tezos-storage': TezosStorage,
+    embed: Embed
   },
   textDirective: {},
   containerDirective: {},
@@ -70,25 +67,27 @@ function remarkFxHashCustom(): import('unified').Transformer<import('mdast').Roo
         node.type === 'leafDirective' ||
         node.type === 'containerDirective'
       ) {
-        const getPropsFromNode = customNodes[node.type]?.[node.name]
-        if (getPropsFromNode) {
+        const component = customNodes[node.type]?.[node.name]
+        if (component.getPropsFromNode) {
           const hast: any = h(node.name, node.attributes)
-          const props = getPropsFromNode(node, hast.properties);
-          const data = node.data || (node.data = {})
-          data.hName = hast.tagName
-          data.hProperties = props;
+          const props = component.getPropsFromNode(node, hast.properties);
+          if (props) {
+            const data = node.data || (node.data = {})
+            data.hName = component.htmlTagName || hast.tagName
+            data.hProperties = props;
+          }
         }
       }
     })
   }
 }
 
-const settingsRehypeReact = {
+const settingsRehypeReact: Options = {
   createElement,
   Fragment,
   components: {
     'tezos-storage': TezosStorage,
-    'embed': Embed,
+    'embed-media': Embed,
   }
 }
 export async function getNFTArticleComponentsFromMarkdown(markdown: string) {
@@ -101,11 +100,11 @@ export async function getNFTArticleComponentsFromMarkdown(markdown: string) {
       .use(remarkDirective)
       .use(remarkFxHashCustom)
       .use(remarkRehype)
-      .use(rehypeMathJaxBrowser)
+      .use(rehypeKatex)
+      .use(rehypeHighlight)
       .use(rehypeFormat)
       .use(rehypeStringify)
       .use(rehypeReact, settingsRehypeReact)
-      .use(rehypeHighlight)
       .process(matterResult.content)
 
     return {

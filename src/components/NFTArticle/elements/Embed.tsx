@@ -14,7 +14,6 @@ interface UrlPlayers {
     component: NamedExoticComponent<EmbedElementProps>,
   }
 }
-
 const urlPlayers: UrlPlayers = {
   spotify: {
     check: (href) => href.startsWith('https://open.spotify.com/'),
@@ -26,9 +25,10 @@ const urlPlayers: UrlPlayers = {
   }
 }
 interface EmbedProps {
-  href: string
-  children?: string
+  href: string,
+  children?: any
 }
+
 const Embed: NFTArticleElementComponent<EmbedProps> = memo(({ children, href }) => {
   const EmbedElement = useMemo(() => {
     const player = Object.values(urlPlayers).find(player => {
@@ -44,7 +44,12 @@ const Embed: NFTArticleElementComponent<EmbedProps> = memo(({ children, href }) 
   );
 });
 Embed.displayName = 'Embed';
-Embed.getPropsFromNode = (node, properties) => ({
-  href: properties.href
-})
 export default Embed;
+
+Embed.getPropsFromNode = (node, properties) => {
+  if (!properties.href) return null;
+  return ({
+    href: properties.href
+  })
+}
+Embed.htmlTagName = 'embed-media';

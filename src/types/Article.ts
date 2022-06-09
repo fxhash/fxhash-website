@@ -9,10 +9,11 @@ export interface Article {
   description: string
 }
 
-export type getPropsFromNode<T> = (node: Node, properties: any) => Omit<T, "children">
+export type getPropsFromNode<T> = (node: Node, properties: any) => Omit<T, "children"> | null
 export interface NFTArticleElementComponent<T> extends NamedExoticComponent<T> {
   defaultProps?: {
     [key: string]: any
   }
   getPropsFromNode?: getPropsFromNode<T>
+  htmlTagName?: string
 }

@@ -9,18 +9,20 @@ const _NftArticle = ({ markdown }: NftArticleProps) => {
   const [content, setContent] = useState<React.FunctionComponent | null>(null);
   useEffect(() => {
     const getNFTArticle = async () => {
-      const { content }: any = await getNFTArticleComponentsFromMarkdown(markdown);
-      if (content) {
-        setContent(content);
+      const data: any = await getNFTArticleComponentsFromMarkdown(markdown);
+      if (data?.content) {
+        setContent(data.content);
       }
     };
     getNFTArticle();
   }, [markdown])
   return (
-    <div>
-      <div>article</div>
-      {content}
-    </div>
+    <>
+      <div>
+        <div>article</div>
+        {content}
+      </div>
+    </>
   );
 };
 

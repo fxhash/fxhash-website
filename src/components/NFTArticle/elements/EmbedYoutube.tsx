@@ -14,8 +14,7 @@ const EmbedYoutube = memo<EmbedElementProps>(({ href }) => {
         src={embedUrl}
         title="YouTube video player"
         frameBorder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowFullScreen
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
       >
       </iframe>
     </div>
