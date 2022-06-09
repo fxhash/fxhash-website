@@ -1,5 +1,6 @@
 import React, { memo } from 'react';
 import { NFTArticleElementComponent } from "../../../types/Article";
+import style from "./TezosStorage.module.scss"
 
 interface TezosStorageProps {
   address: string
@@ -11,14 +12,16 @@ interface TezosStorageProps {
   children?: string
 }
 
-const TezosStorage: NFTArticleElementComponent<TezosStorageProps> = memo(({ address, type, metadataSpec, pKey, children }: TezosStorageProps) => {
+const TezosStorage: NFTArticleElementComponent<TezosStorageProps> = memo(({ address, pKey, children }: TezosStorageProps) => {
   return (
-    <div>
-      <div>{address}</div>
-      <div>{type}</div>
-      <div>{metadataSpec}</div>
-      <div>{pKey}</div>
-      <div>{children}</div>
+    <div className={style.bg}>
+      <div>{`\{`}</div>
+      <div className={style.tab}>
+        <div><span className={style.property}>{'"address"'}</span><span>{`: "${address}"`}</span></div>
+        <div><span className={style.property}>{'"key"'}</span><span>{`: "${pKey}"`}</span></div>
+        <div><span className={style.property}>{'"annotation"'}</span><span>{`: "${children}"`}</span></div>
+      </div>
+      <div>{`\}`}</div>
     </div>
   );
 });

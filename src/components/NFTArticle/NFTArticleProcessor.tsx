@@ -10,28 +10,36 @@ import rehypeStringify from "rehype-stringify"
 import { visit } from "unist-util-visit";
 import { h } from 'hastscript'
 import rehypeReact  from "rehype-react";
-import { createElement, Fragment } from "react";
+import { ComponentType, createElement, Fragment } from "react";
 import { Root } from "mdast";
 import { SharedOptions } from "rehype-react/lib";
 import TezosStorage from "./elements/TezosStorage";
 import rehypeHighlight from "rehype-highlight";
 import rehypeMathJaxBrowser from "rehype-mathjax/browser";
 import type { ComponentsWithNodeOptions, ComponentsWithoutNodeOptions } from "rehype-react/lib/complex-types";
-import { getPropsFromNode } from "../../types/Article";
+import { getPropsFromNode, NFTArticleElementComponent } from "../../types/Article";
+import Embed from "./elements/Embed";
+import type {Element} from 'hast'
 
 declare module "rehype-react" {
+  interface WithNode {
+    node: Element
+  }
   interface CustomComponentsOptions {
-    passNode?: false | undefined
-    components?: {
-      'tezos-storage': JSX.Element
-    }
+    [key: string]: NFTArticleElementComponent<any>
+  }
+  interface CustomComponentsWithNodeOptions extends Omit<ComponentsWithNodeOptions, 'components'> {
+    components?: Partial<{
+      [TagName in keyof JSX.IntrinsicElements]:
+      | keyof JSX.IntrinsicElements
+      | ComponentType<WithNode & JSX.IntrinsicElements[TagName]>
+    }> | CustomComponentsOptions
   }
   type Options = SharedOptions &
     (
-      | ComponentsWithNodeOptions
+      | CustomComponentsWithNodeOptions
       | ComponentsWithoutNodeOptions
-      | CustomComponentsOptions
-    )
+    );
 }
 
 interface CustomArticleElementsByType {
@@ -47,7 +55,8 @@ interface CustomArticleElementsByType {
 }
 const customNodes: CustomArticleElementsByType = {
   leafDirective: {
-    'tezos-storage': TezosStorage.getPropsFromNode
+    'tezos-storage': TezosStorage.getPropsFromNode,
+    embed: Embed.getPropsFromNode
   },
   textDirective: {},
   containerDirective: {},
@@ -79,6 +88,7 @@ const settingsRehypeReact = {
   Fragment,
   components: {
     'tezos-storage': TezosStorage,
+    'embed': Embed,
   }
 }
 export async function getNFTArticleComponentsFromMarkdown(markdown: string) {
@@ -92,10 +102,10 @@ export async function getNFTArticleComponentsFromMarkdown(markdown: string) {
       .use(remarkFxHashCustom)
       .use(remarkRehype)
       .use(rehypeMathJaxBrowser)
-      .use(rehypeHighlight)
       .use(rehypeFormat)
       .use(rehypeStringify)
       .use(rehypeReact, settingsRehypeReact)
+      .use(rehypeHighlight)
       .process(matterResult.content)
 
     return {
