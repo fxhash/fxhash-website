@@ -19,7 +19,7 @@ const TezosStorage: NFTArticleElementComponent<TezosStorageProps> = memo(forward
       <div className={style.tab}>
         <div contentEditable={false}><span className={style.property}>{'"address"'}</span><span>{`: "${address}"`}</span></div>
         <div contentEditable={false}><span className={style.property}>{'"key"'}</span><span>{`: "${pKey}"`}</span></div>
-	<div><span contentEditable={false} className={style.property}>{'"annotation: "'}</span><span>{children}</span></div>
+	<div><span contentEditable={false} className={style.property}>{'"annotation"'}</span><span contentEditable={false}>{`: `}</span><span>{children}</span></div>
       </div>
       <div contentEditable={false}>{`\}`}</div>
     </div>
