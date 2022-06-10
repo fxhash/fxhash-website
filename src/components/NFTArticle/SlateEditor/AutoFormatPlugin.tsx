@@ -1,8 +1,11 @@
 import {Range,Text,  Editor,Transforms} from 'slate'; 
 
 export const withAutoFormat = editor => {
-  const {insertText} = editor;
-  editor.insertText = text => {
+  const {insertText, isInline} = editor;
+
+  // editor.isInline = e => e.type === 'inlineMath' ? true : isInline(e) 
+  
+  editor._insertText = text => {
     const { selection } = editor
 
     if (text === ' ' && selection && Range.isCollapsed(selection)) {

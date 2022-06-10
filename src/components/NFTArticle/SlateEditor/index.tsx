@@ -56,7 +56,6 @@ const renderElement = ({
   children,
   element,
 }: RenderElementProps) => {
-  console.log(element.type, element)
   switch (element.type) {
     case 'embed-media': 
       return (
@@ -137,10 +136,11 @@ const renderElement = ({
         />
       );
     case "code":
+    case "inlineMath":
       return (
-        <div {...attributes}>
-          {element.children[0].text}
-        </div>
+        <code {...attributes}>
+	  {children}
+	</code>
       );
     case "yaml":
     case "toml":
@@ -211,10 +211,20 @@ interface SlateEditorProps {
   initialValue: Descendant[]
 };
 
+const INLINE_ELEMENTS = ['inlineMath']
+
 export const SlateEditor = forwardRef<Node[], SlateEditorProps>(
   ({ initialValue }: SlateEditorProps, ref: React.ForwardedRef<Node[]>) => {
     const editor = useMemo(() => {
-      const e = withReact(withAutoFormat(withHistory(createEditor())));
+      const e = withReact(
+	withAutoFormat(
+	  withHistory(
+	    createEditor()
+	  )
+	)
+      );
+      const { isInline } = e;
+      e.isInline = element => INLINE_ELEMENTS.includes(element.type) || isInline(element)
       return e;
     }, []);
 
@@ -224,7 +234,7 @@ export const SlateEditor = forwardRef<Node[], SlateEditorProps>(
     useEffect(() => {
       setValue(initialValue);
     }, [initialValue]);
-  console.log(initialValue)
+    
     return (
       <div className="markdown-body" style={{flex:1 , margin: 10}}>
         <Slate editor={editor} value={value} onChange={setValue}>

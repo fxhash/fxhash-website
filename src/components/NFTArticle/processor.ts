@@ -147,6 +147,8 @@ export async function getSlateEditorStateFromMarkdown(markdown: string) {
     const matterResult = matter(markdown)
     const processed = await unified()
       .use(remarkParse)
+      .use(remarkMath)
+      .use(rehypeKatex)
       .use(remarkDirective)
       .use(remarkFxHashCustom)
       .use(remarkToSlate, {
