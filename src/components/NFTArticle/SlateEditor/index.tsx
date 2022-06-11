@@ -246,9 +246,20 @@ export const SlateEditor = forwardRef<Node[], SlateEditorProps>(
     }, [initialValue]);
     
     return (
-      <div className="markdown-body" style={{flex:1 , margin: 10}}>
-        <Slate editor={editor} value={value} onChange={setValue}>
-          <Editable renderElement={renderElement} renderLeaf={renderLeaf} />
+      <div
+	className="markdown-body"
+	style={{flex:1 , margin: 10}}
+      >
+	<Slate
+	  editor={editor} 
+	  value={value} 
+	  onChange={setValue}
+	>
+	  <Editable
+	    renderElement={renderElement}
+	    renderLeaf={renderLeaf}
+	    style={{whiteSpace: 'normal'}} 
+	  />
         </Slate>
       </div>
     );
