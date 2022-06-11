@@ -20,6 +20,10 @@ import TezosStorage from "./elements/TezosStorage";
 import Embed from "./elements/Embed";
 import type {Element} from 'hast'
 import rehypeKatex from "rehype-katex";
+import { MdastBuilder, OverridedMdastBuilders} from "remark-slate-transformer/lib/transformers/mdast-to-slate"
+import { Content } from "remark-slate/transformer/lib/models/mdast";
+import { Root } from 'mdast'
+
 
 declare module "rehype-react" {
   interface WithNode {
@@ -142,6 +146,24 @@ function createDirectiveNode(node: Root, next: (children: any[]) => any) {
   };
 }
 
+function createInlineMathNode(node: Root, next: (children: any[]) => any)  {
+  return {
+    type: node.type, 
+    children: [{text: ''}], 
+    data : {
+      ...node.data,
+      math: node.value, 
+    }
+  }
+}
+
+const remarkSlateTransformerOverrides: OverridedMdastBuilders = {
+  textDirective:  createDirectiveNode, 
+  leafDirective:  createDirectiveNode, 
+  containerDirective:  createDirectiveNode,
+  inlineMath: createInlineMathNode, 
+}
+
 export async function getSlateEditorStateFromMarkdown(markdown: string) {
   try {
     const matterResult = matter(markdown)
@@ -152,11 +174,7 @@ export async function getSlateEditorStateFromMarkdown(markdown: string) {
       .use(remarkDirective)
       .use(remarkFxHashCustom)
       .use(remarkToSlate, {
-	overrides: {
-	  textDirective:  createDirectiveNode, 
-	  leafDirective:  createDirectiveNode, 
-	  containerDirective:  createDirectiveNode, 
-	},
+	overrides: remarkSlateTransformerOverrides
       })
       .process(matterResult.content)
 

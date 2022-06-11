@@ -12,6 +12,8 @@ import { withHistory, HistoryEditor } from "slate-history";
 import TezosStorage, {TezosStorageProps} from "../elements/TezosStorage";
 import {withAutoFormat} from './AutoFormatPlugin';
 import Embed from "../elements/Embed";
+import 'katex/dist/katex.min.css';
+import { InlineMath, BlockMath } from 'react-katex';
 
 type TypeElement = BaseElement & { 
   type: string
@@ -135,8 +137,14 @@ const renderElement = ({
           }}
         />
       );
-    case "code":
     case "inlineMath":
+      return (
+	<span contentEditable={false}>
+	  <InlineMath math={element.data.math}/>
+	  {children}
+	</span>
+      );
+    case "code":
       return (
         <code {...attributes}>
 	  {children}
@@ -212,6 +220,7 @@ interface SlateEditorProps {
 };
 
 const INLINE_ELEMENTS = ['inlineMath']
+const VOID_ELEMENTS = ['inlineMath']
 
 export const SlateEditor = forwardRef<Node[], SlateEditorProps>(
   ({ initialValue }: SlateEditorProps, ref: React.ForwardedRef<Node[]>) => {
@@ -223,8 +232,9 @@ export const SlateEditor = forwardRef<Node[], SlateEditorProps>(
 	  )
 	)
       );
-      const { isInline } = e;
+      const { isInline, isVoid } = e;
       e.isInline = element => INLINE_ELEMENTS.includes(element.type) || isInline(element)
+      e.isVoid = element => VOID_ELEMENTS.includes(element.type) || isVoid(element)
       return e;
     }, []);
 
