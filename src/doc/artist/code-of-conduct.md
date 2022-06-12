@@ -65,9 +65,14 @@ A good rule of thumb when putting together a description of your token is that t
 
 # Rescheduling
 
-The scheduling feature is provided as a means to refresh your project's settings and have it appear back at the top of the list. When using this feature, please make sure that you are significantly updating the projects settings before rescheduling it. This means removing an allow-list, significantly updating the price, or buning a lot of the supply.
+The scheduling feature is provided as a means to refresh your project's settings and have it appear back at the top of the list. Resheduling can only be used under the following circumstances:
+- Something has gone wrong with your launch - a mistake or issue with the drop that caused the launch to be broken; or
+- A significant change to the allow list; and
+- You have not rescheduled this token already.
 
-Rescheduling a project without changing it is considered an exploit of this feature and your token will be moderated accordingly.
+If you're unsure of whether you meet these requirements and want to reschedule your token, please reach out to @fxhash team on Discord.
+
+Abuse of the reshcheduling system will result in the moderation of your token, repeated abuses will result in your profile being moderated.
 
 ## Last but not least
 
