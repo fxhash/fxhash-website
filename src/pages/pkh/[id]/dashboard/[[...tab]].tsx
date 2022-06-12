@@ -34,7 +34,7 @@ UserPageDashboardTab.getLayout = function getLayout(page: ReactElement) {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const tab = typeof context.params?.tab === 'string' ? context.params.tab : 'sales';
+  const tab = context.params?.tab?.[0] || "sales"
   const isExistingTab = userDashboardComponentsKeys.indexOf(tab) > -1;
   const propsUser = await getServerSidePropsUserById(context);
   if (propsUser.notFound) {
