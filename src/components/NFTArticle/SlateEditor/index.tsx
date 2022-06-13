@@ -1,12 +1,12 @@
 import React, { forwardRef, useEffect, useMemo, useState } from "react";
-import { BaseEditor, BaseElement,  createEditor, Node, Descendant } from "slate";
+import { Transforms,Text,  BaseEditor, BaseElement,  createEditor, Node, Descendant } from "slate";
 import {
   Slate,
   Editable,
   withReact,
   RenderElementProps,
   RenderLeafProps,
-  ReactEditor
+  ReactEditor,
 } from "slate-react";
 import { withHistory, HistoryEditor } from "slate-history";
 import TezosStorage, {TezosStorageProps} from "../elements/TezosStorage";
@@ -258,7 +258,27 @@ export const SlateEditor = forwardRef<Node[], SlateEditorProps>(
 	  <Editable
 	    renderElement={renderElement}
 	    renderLeaf={renderLeaf}
-	    style={{whiteSpace: 'normal'}} 
+	    onKeyDown={event => {
+          if (!event.ctrlKey) {
+            return
+          }
+
+          switch (event.key) {
+            // When "B" is pressed, bold the text in the selection.
+	    case 'b': {
+	      console.log(editor)
+              event.preventDefault()
+              Transforms.setNodes(
+                editor,
+                { strong: true },
+                // Apply it to text nodes, and split the text node up if the
+                // selection is overlapping only part of it.
+                { match: n => Text.isText(n), split: true }
+              )
+              break
+            }
+          }
+        }}
 	  />
         </Slate>
       </div>
