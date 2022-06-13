@@ -1,46 +1,57 @@
 import {Range, Path, Text, Node,  Editor,Transforms, Location} from 'slate'; 
 
-type AutoFormatChangeType = "BlockTypeChange" | "InlineTypeChange";
+type AutoFormatChangeType = "BlockTypeChange" | "InlineTypeChange" | "CustomDirectiveChange";
 type ChangeData = {[key: string]: number | string | boolean}
 
-interface IInlineTypeChange {
+type AutoFormatChange = {
   shortcut: string
   type: AutoFormatChangeType
   data: ChangeData
 }
 
-class InlineTypeChange implements IInlineTypeChange {
+class InlineTypeChange implements AutoFormatChange {
   shortcut: string
   type: AutoFormatChangeType
   data: ChangeData
 
   constructor(shortcut:string, data: ChangeData) {
-    this.shortcut = shortcut;
-    this.data = data;
+    this.shortcut = shortcut
+    this.data = data
     this.type = 'InlineTypeChange' 
   }
 }
 
 
-interface IBlockTypeChange {
-  shortcut: string
-  type: AutoFormatChangeType
-  data: ChangeData
-}
-
-class BlockTypeChange implements IBlockTypeChange {
+class BlockTypeChange implements AutoFormatChange {
   shortcut: string 
   type: AutoFormatChangeType
   data: ChangeData
   
   constructor(shortcut:string, data: ChangeData) {
-    this.shortcut = shortcut;
-    this.data = data;
+    this.shortcut = shortcut
+    this.data = data
     this.type = 'BlockTypeChange' 
   }
 }
 
-function createChangeTypeHeading():IBlockTypeChange[] {
+class CustomDirectiveChange implements AutoFormatChange {
+  shortcut: string 
+  type: AutoFormatChangeType
+  data: ChangeData
+  
+  constructor(shortcut:string, data: ChangeData) {
+    this.shortcut = shortcut
+    this.data = data
+    this.type = 'CustomDirectiveChange'
+  }
+
+
+  apply(editor: Editor) {
+    
+  }
+}
+
+function createChangeTypeHeading():AutoFormatChange[] {
   const changes = [];
   for(let i = 1; i < 6; i++) {
     changes.push(new BlockTypeChange(
@@ -54,7 +65,8 @@ function createChangeTypeHeading():IBlockTypeChange[] {
   return changes;
 }
 
-const config: IBlockTypeChange[] = [ 
+
+const config: AutoFormatChange[] = [ 
   ...createChangeTypeHeading(),
   new BlockTypeChange('p',   {type: 'paragraph',} ), 
   new InlineTypeChange('__', {strong: true}), 
@@ -63,7 +75,7 @@ const config: IBlockTypeChange[] = [
 
 function applyChangeBlockType(
   editor: Editor, 
-  change:IBlockTypeChange): void {
+  change:AutoFormatChange): void {
   Transforms.delete(editor, {
     at: getRangeBeforeCursor(editor),
   })
@@ -71,14 +83,14 @@ function applyChangeBlockType(
     editor,
     { ...change.data },
   )
-}
+  }
 
-const getSelectionAccrossNodes = (
+function getSelectionAccrossNodes(
   editor: Editor, 
   startOffset:number,
   endOffset:number, 
   shortcut: string
-) => {  
+): Range {  
   const block = Editor.above(editor, {
     match: n => Editor.isBlock(editor, n),
   })
@@ -105,15 +117,14 @@ const getSelectionAccrossNodes = (
 
 function applyChangeInlineType(
   editor: Editor, 
-  change: IInlineTypeChange,
+  change: AutoFormatChange,
   beforeText: string
-) {
+): void {
   // retreive the matches based on usual markdown pattern, e.g.
   // __bold__, _italic_, etc.
   const matcher = RegExp(`${change.shortcut}(.*?)${change.shortcut}`, 'g')
   const matches = beforeText.match(matcher);
   if (!matches) return;
-
   // We need to get a slate Point for the matched string inside the 
   // editor state. Since the text can be split up into multiple nodes
   // and the selection can go across them, we need to retrieve the
@@ -133,7 +144,6 @@ function applyChangeInlineType(
     editor.addMark(key, value);
   })
   Transforms.collapse(editor, {edge: 'anchor'})
-
   // Now lets cleanup the md shortcuts from the text.
   // Setting the marks on text nodes can result in a new structure
   // because elements might be split up to apply the styles.
