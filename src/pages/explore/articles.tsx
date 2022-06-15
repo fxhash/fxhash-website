@@ -9,6 +9,7 @@ import { TitleHyphen } from '../../components/Layout/TitleHyphen'
 import { ExploreTabs } from '../../containers/Explore/ExploreTabs'
 import { LiveFeed } from '../../containers/Explore/LiveFeed'
 import { SectionTitle } from '../../components/Layout/SectionTitle'
+import { ExploreArticles } from "../../containers/Explore/ExploreArticles";
 
 
 
@@ -37,9 +38,7 @@ const ExploreRevealFeed: NextPage = () => {
         <Spacing size="x-large"/>
 
         <main className={cs(layout['padding-big'])}>
-          <div>
-            explore articles
-          </div>
+          <ExploreArticles />
         </main>
       </section>
 
