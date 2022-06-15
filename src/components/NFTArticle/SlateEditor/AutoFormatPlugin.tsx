@@ -1,4 +1,4 @@
-import {Range, Path, Text, Node,  Editor,Transforms, Location} from 'slate'; 
+import { Range, Node,  Editor, Transforms } from 'slate'; 
 
 type AutoFormatChangeType = "BlockTypeChange" | "InlineTypeChange" | "CustomDirectiveChange";
 type ChangeData = {[key: string]: number | string | boolean}
@@ -13,11 +13,10 @@ class InlineTypeChange implements AutoFormatChange {
   shortcut: string
   type: AutoFormatChangeType
   data: ChangeData
-
   constructor(shortcut:string, data: ChangeData) {
     this.shortcut = shortcut
     this.data = data
-    this.type = 'InlineTypeChange' 
+    this.type = 'InlineTypeChange'
   }
 }
 
@@ -26,25 +25,24 @@ class BlockTypeChange implements AutoFormatChange {
   shortcut: string 
   type: AutoFormatChangeType
   data: ChangeData
-  
   constructor(shortcut:string, data: ChangeData) {
     this.shortcut = shortcut
     this.data = data
-    this.type = 'BlockTypeChange' 
+    this.type = 'BlockTypeChange'
   }
 }
+
+const matchDirective = new RegExp('(^:\\s*(?<type>[^\\s]*)\\s*\\[(?<text>.+)]\\s*{(?<attributes>.*)})', 'gm')
 
 class CustomDirectiveChange implements AutoFormatChange {
   shortcut: string 
   type: AutoFormatChangeType
   data: ChangeData
-  
   constructor(shortcut:string, data: ChangeData) {
     this.shortcut = shortcut
     this.data = data
     this.type = 'CustomDirectiveChange'
   }
-
 
   apply(editor: Editor) {
     
@@ -83,12 +81,13 @@ function applyChangeBlockType(
     editor,
     { ...change.data },
   )
-  }
+  return true;
+}
 
 function getSelectionAccrossNodes(
   editor: Editor, 
-  startOffset:number,
-  endOffset:number, 
+  startOffset: number,
+  endOffset: number, 
   shortcut: string
 ): Range {  
   const block = Editor.above(editor, {
@@ -104,7 +103,7 @@ function getSelectionAccrossNodes(
 	offset: node.text?.indexOf(shortcut)
       };
     }
-    if(acc.sum >= endOffset && !acc.focus&& node.text?.indexOf(shortcut) > -1) {
+    if(acc.sum >= endOffset && !acc.focus && node.text?.indexOf(shortcut) > -1) {
       acc.focus = {
 	path: [anchor.path[0], index], 
 	offset: node.text?.lastIndexOf(shortcut) + shortcut.length
@@ -119,12 +118,13 @@ function applyChangeInlineType(
   editor: Editor, 
   change: AutoFormatChange,
   beforeText: string
-): void {
+): boolean {
   // retreive the matches based on usual markdown pattern, e.g.
   // __bold__, _italic_, etc.
-  const matcher = RegExp(`${change.shortcut}(.*?)${change.shortcut}`, 'g')
+  // (?<!__)__(?!__).+?__
+  const matcher = RegExp(`(?<!${change.shortcut})${change.shortcut}(?!${change.shortcut}).+?${change.shortcut}`, 'g')
   const matches = beforeText.match(matcher);
-  if (!matches) return;
+  if (!matches) return false;
   // We need to get a slate Point for the matched string inside the 
   // editor state. Since the text can be split up into multiple nodes
   // and the selection can go across them, we need to retrieve the
@@ -147,8 +147,8 @@ function applyChangeInlineType(
   // Now lets cleanup the md shortcuts from the text.
   // Setting the marks on text nodes can result in a new structure
   // because elements might be split up to apply the styles.
-  // Therefore we retrieve the updated selection of the matched string.
-  const inlineRangeCleanup = getSelectionAccrossNodes(
+  // Therefore we retrieve the updated selection of the matched string. 
+  const selectionBeforeMatch = getSelectionAccrossNodes(
     editor, 
     matchStartIndex, 
     matchEndIndex,
@@ -157,10 +157,10 @@ function applyChangeInlineType(
   // Create a range that matches the md shortcut 
   // before the search string (anchor)
   const rangeBefore = {
-    anchor: inlineRangeCleanup.anchor,
+    anchor: selectionBeforeMatch.anchor,
     focus: {
-      ...inlineRangeCleanup.anchor, 
-      offset: inlineRangeCleanup.anchor.offset + change.shortcut.length
+      ...selectionBeforeMatch.anchor, 
+      offset: selectionBeforeMatch.anchor.offset + change.shortcut.length
     }
   }
   Transforms.delete(
@@ -169,27 +169,19 @@ function applyChangeInlineType(
       at: rangeBefore
     }
   )
-  // If the whole matched string is only contained in one text node
-  // instead of covering multiple nodes the,
-  const inSameNode = Path.equals(
-    inlineRangeCleanup.focus.path,
-    inlineRangeCleanup.anchor.path
+  const selectionAfterMatch = getSelectionAccrossNodes(
+    editor, 
+    matchStartIndex, 
+    matchEndIndex,
+    change.shortcut
   )
-  // the range after the matched string needs to be offset
-  // by an addtional md shortcut length, as it was already substracted
-  // in the previous step
-  const focusOffset = inlineRangeCleanup.focus.offset - (change.shortcut.length * (inSameNode ? 1 :0))
-  const anchorOffset = focusOffset - change.shortcut.length  
   // Create a range that matches the md shortcut 
-  // fater the search string (focus)
+  // after the search string (focus) 
   const rangeAfter  = {
-    anchor: {
-      ...inlineRangeCleanup.focus,
-      offset: anchorOffset, 
-    }, 
+    anchor: selectionAfterMatch.anchor,
     focus: {
-      ...inlineRangeCleanup.focus, 
-      offset: focusOffset, 
+      ...selectionAfterMatch.anchor, 
+      offset: selectionAfterMatch.anchor.offset + change.shortcut.length
     },
   }
   Transforms.delete(
@@ -198,6 +190,7 @@ function applyChangeInlineType(
       at: rangeAfter, 
     }
   )
+  return true;
 }
 
 function getRangeBeforeCursor(editor: Editor): Range {
@@ -215,26 +208,23 @@ export const withAutoFormat = (editor: Editor) => {
   const {insertText } = editor;
  
   editor.insertText = text => {
-    const { selection } = editor
+    const { selection } = editor;
     if (text === ' ' && selection && Range.isCollapsed(selection)) {
       const range = getRangeBeforeCursor(editor)
       const beforeText = `${Editor.string(editor, range)} `
-      const change = config.find(change =>  {
+      const handled = config.some(change =>  {
 	if(change.type === 'BlockTypeChange') {
-	  return beforeText.startsWith(`${change.shortcut} `)
-	} else if (change.type === 'InlineTypeChange') {
-	  const matcher = RegExp(`${change.shortcut}(.*?)${change.shortcut}`, 'g')
-	  const matches = beforeText.match(matcher);
-	  return matches?.length > 0;
+	  if(beforeText.startsWith(`${change.shortcut} `)) {
+	    return applyChangeBlockType(editor, change)
+	  }
+	} else if (change.type === 'InlineTypeChange' && beforeText.endsWith(`${change.shortcut} `)) {
+	    return applyChangeInlineType(editor, change, beforeText)
+	} else if(change.type === 'CustomDirectiveChange') {
+      
 	}
 	return false;
       });
-      switch(change?.type) { 
-	case 'BlockTypeChange':
-	  return applyChangeBlockType(editor, change)
-	case 'InlineTypeChange': 
-	  return applyChangeInlineType(editor, change, beforeText)
-      }
+      if (handled) return;
     }
     insertText(text)
   }
