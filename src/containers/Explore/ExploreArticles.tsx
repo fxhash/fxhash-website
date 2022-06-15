@@ -42,7 +42,7 @@ const _ExploreArticles = () => {
         {data?.articles.map((article, index) =>
           <CardNftArticle className={style.article} key={article.slug} article={article} imagePriority={index < 4} />
         )}
-        {loading || true &&
+        {loading &&
           [...Array(20)].map((_, idx) =>
             <CardNftArticleSkeleton className={style.article} key={idx} />
           )
