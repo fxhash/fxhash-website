@@ -43,12 +43,15 @@
 }
 .description {
   flex: 1;
-  font-size: var(--font-size-big);
-  display: -webkit-box;
-  -webkit-line-clamp: 4;
   margin: $spacing 0;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  p {
+    font-size: var(--font-size-big);
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    margin: 0;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
 }
 .tags {
   display: flex;

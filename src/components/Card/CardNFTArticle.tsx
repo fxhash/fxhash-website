@@ -8,6 +8,7 @@ import cs from "classnames";
 import { SettingsContext } from "../../context/Theme";
 import { format } from "date-fns";
 import Link from 'next/link';
+import { Tags } from "../Tags/Tags";
 
 interface CardNftArticleProps {
   className: string,
@@ -53,7 +54,11 @@ const _CardNftArticle = ({ article: { title, slug, thumbnailUri, description, ta
             <h4>{title}</h4>
           </a>
         </Link>
-        <p className={style.description}>{description}</p>
+        <div className={style.description}>
+          <p>
+            {description}
+          </p>
+        </div>
         <div className={style.tags}>
           {tags.map(tag => <span key={tag}>{tag}</span>)}
         </div>
