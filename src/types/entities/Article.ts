@@ -31,7 +31,7 @@ export interface NFTArticle {
   ledgers: NTFArticleLedger[]
   generativeTokenJointures: NFTArticleGenerativeToken[]
   revisions: NFTArticleRevision[]
-  royaltiesSplit: Split[]
+  royaltiesSplits: Split[]
   actions: Action[]
   title: string
   description: string

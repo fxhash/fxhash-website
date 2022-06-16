@@ -8,7 +8,7 @@ import cs from "classnames";
 import { SettingsContext } from "../../context/Theme";
 import { format } from "date-fns";
 import Link from 'next/link';
-import { Tags } from "../Tags/Tags";
+import { Tags } from '../Tags/Tags';
 
 interface CardNftArticleProps {
   className: string,

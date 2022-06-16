@@ -3,7 +3,7 @@ import { GetServerSideProps, NextPage } from "next";
 import client from "../../../services/ApolloClient";
 import { ParsedUrlQuery } from "querystring";
 import { Qu_articleById } from "../../../queries/articles";
-import { NFTArticle } from "../../../types/Article";
+import { NFTArticle } from "../../../types/entities/Article";
 import { Error } from "../../../components/Error/Error";
 import { getAbsoluteUrl } from "../../../utils/host";
 

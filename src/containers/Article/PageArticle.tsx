@@ -1,6 +1,6 @@
 import React, { memo, useMemo } from 'react';
 import style from "./PageArticle.module.scss";
-import { NFTArticle } from "../../types/Article";
+import { NFTArticle } from "../../types/entities/Article";
 import { UserBadge } from "../../components/User/UserBadge";
 import { format } from "date-fns";
 import { ArticleInfos } from "./ArticleInfos";

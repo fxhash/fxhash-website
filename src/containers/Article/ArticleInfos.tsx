@@ -2,7 +2,7 @@ import style from "./ArticleInfos.module.scss"
 import layout from "../../styles/Layout.module.scss"
 import text from "../../styles/Text.module.css"
 import cs from "classnames"
-import { NFTArticle } from "../../types/Article";
+import { NFTArticle } from "../../types/entities/Article";
 import { EntityBadge } from "../../components/User/EntityBadge";
 import { displayRoyalties } from "../../utils/units";
 import { ListSplits } from "../../components/List/ListSplits";
