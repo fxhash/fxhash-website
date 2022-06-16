@@ -34,6 +34,13 @@
   font-size: 0.8rem;
 }
 
+.small_title {
+  text-transform: uppercase;
+  color: var(--color-gray);
+  font-weight: 300;
+  font-size: var(--font-size-small);
+}
+
 .info {
   font-size: var(--font-size-small);
   color: var(--color-gray);
