@@ -219,7 +219,7 @@ interface SlateEditorProps {
   initialValue: Descendant[]
 };
 
-const INLINE_ELEMENTS = ['inlineMath']
+const INLINE_ELEMENTS = ['inlineMath', 'link']
 const VOID_ELEMENTS = ['inlineMath']
 
 export const SlateEditor = forwardRef<Node[], SlateEditorProps>(
