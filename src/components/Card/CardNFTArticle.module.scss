@@ -6,6 +6,16 @@
   width: 100%;
   display: flex;
   flex-direction: row;
+  position: relative;
+}
+
+.link_wrapper {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 20;
 }
 
 .img-wrapper {
@@ -14,12 +24,6 @@
   width: 350px;
   min-height: 284px;
   border-right: 3px solid var(--color-border);
-
-  &:hover+div {
-    .title {
-      text-decoration: underline;
-    }
-  }
 }
 
 .infos {
@@ -37,8 +41,14 @@
   margin-bottom: $spacing;
 }
 
+.author {
+  position: relative;
+  z-index: 50;
+}
+
 .date {
   color: var(--color-gray);
+  margin-left: 10px;
 }
 
 .title {
@@ -81,8 +91,6 @@
   }
 
   .infos_header {
-    flex-direction: column;
-    align-items: flex-start;
     gap: $spacing-x-small;
   }
 

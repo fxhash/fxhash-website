@@ -26,22 +26,24 @@ const _CardNftArticle = ({ article: { title, slug, thumbnailUri, description, ta
       [style.hover_effect]: settings.hoverEffectCard,
     })}>
       <Link href={urlArticle}>
-        <a className={style['img-wrapper']}>
-          <Image
-            src={thumbnailUrl}
-            layout="fill"
-            objectFit="cover"
-            objectPosition="top"
-            priority={imagePriority}
-          />
-        </a>
+        <a className={cs(style.link_wrapper)}/>
       </Link>
+      <div className={style['img-wrapper']}>
+        <Image
+          src={thumbnailUrl}
+          layout="fill"
+          objectFit="cover"
+          objectPosition="top"
+          priority={imagePriority}
+        />
+      </div>
       <div className={style.infos}>
         <div className={style.infos_header}>
           <UserBadge
             hasLink
             user={author}
             size="regular"
+            className={cs(style.author)}
           />
           <div className={style.date}>
             <time dateTime={format(dateCreatedAt, 'yyyy/MM/dd')}>
