@@ -30,10 +30,16 @@
   }
 }
 .related-articles_list {
-  margin-top: $spacing;
-  background: gray;
-  height: 400px;
-  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: $spacing-x-large;
+  max-width: 1920px;
+  margin: $spacing-x-large auto 0;
+}
+@media (max-width: $breakpoint-lg) {
+  .related-articles_list {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 @media (max-width: $breakpoint-sm) {
   .infos {
@@ -44,5 +50,8 @@
   }
   .title {
     font-size: var(--font-size-h4);
+  }
+  .related-articles_list {
+    grid-template-columns: repeat(1, 1fr);
   }
 }

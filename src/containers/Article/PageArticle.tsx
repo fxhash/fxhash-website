@@ -10,6 +10,7 @@ import { ipfsGatewayUrl } from "../../services/Ipfs";
 import cs from "classnames";
 import layout from "../../styles/Layout.module.scss";
 import text from "../../styles/Text.module.css";
+import { CardSmallNftArticle } from "../../components/Card/CardSmallNFTArticle";
 
 interface PageArticleProps {
   article: NFTArticle
@@ -56,7 +57,14 @@ const _PageArticle = ({ article }: PageArticleProps) => {
         </div>
         <div className={style['related-articles']}>
           <h2 className={text.small_title}>Related articles</h2>
-          <div className={style['related-articles_list']}>replace by related articles components</div>
+          <div className={style['related-articles_list']}>
+            {
+              // REPLACE BY RELATED ARTICLES
+            }
+            {[article, article, article, article].map((a, index) =>
+              <CardSmallNftArticle key={index} article={a} />
+            )}
+          </div>
         </div>
       </main>
       <Spacing size="6x-large" />
