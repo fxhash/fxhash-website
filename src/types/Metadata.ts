@@ -85,3 +85,25 @@ export interface GenerativeTokenMetadata {
 export interface ObjktMetadata extends GenerativeTokenMetadata {
   features?: TokenMetadataFeature[] | null
 }
+
+
+//
+// Articles
+//
+
+export interface ArticleMetadata {
+  decimals: number
+  symbol: "ARTKL"
+  name: string
+  description: string
+  minter: string
+  creators?: string[]
+  contributors?: string[]
+  type: "article"
+  tags: string[]
+  language: string
+  artifactUri: string
+  displayUri: string
+  thumbnailUri: string
+  platforms?: string[]
+}

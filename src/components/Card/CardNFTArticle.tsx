@@ -1,7 +1,7 @@
 import React, { memo, useContext, useMemo } from 'react';
 import style from "./CardNFTArticle.module.scss";
 import Image from "next/image";
-import { NFTArticle } from "../../types/Article";
+import { NFTArticle } from "../../types/entities/Article";
 import { UserBadge } from "../User/UserBadge";
 import { ipfsGatewayUrl } from "../../services/Ipfs";
 import cs from "classnames";
