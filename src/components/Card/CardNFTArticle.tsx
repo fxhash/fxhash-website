@@ -59,9 +59,7 @@ const _CardNftArticle = ({ article: { title, slug, thumbnailUri, description, ta
             {description}
           </p>
         </div>
-        <div className={style.tags}>
-          {tags.map(tag => <span key={tag}>{tag}</span>)}
-        </div>
+        <Tags tags={tags}/>
       </div>
     </div>
   );

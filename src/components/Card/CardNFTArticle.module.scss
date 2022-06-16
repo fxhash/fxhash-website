@@ -63,19 +63,6 @@
   }
 }
 
-.tags {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: $spacing-x-small;
-
-  span {
-    padding: $spacing-2x-small $spacing-x-small;
-    background: var(--color-gray-vvlight);
-    color: var(--color-gray);
-  }
-}
-
 @media (max-width: $breakpoint-md) {
   .img-wrapper {
     width: 40%;
