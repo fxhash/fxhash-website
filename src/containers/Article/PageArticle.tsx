@@ -13,9 +13,10 @@ import text from "../../styles/Text.module.css";
 
 interface PageArticleProps {
   article: NFTArticle
+  originUrl: string
 }
 
-const _PageArticle = ({ article }: PageArticleProps) => {
+const _PageArticle = ({ article, originUrl }: PageArticleProps) => {
   const { title, author, createdAt, body, thumbnailUri, language } = article;
   const dateCreatedAt = useMemo(() => new Date(createdAt), [createdAt]);
   const ogImage = useMemo(() => ipfsGatewayUrl(thumbnailUri), [thumbnailUri])
@@ -52,7 +53,7 @@ const _PageArticle = ({ article }: PageArticleProps) => {
           </p>
         </article>
         <div className={style.infos}>
-          <ArticleInfos article={article} />
+          <ArticleInfos article={article} originUrl={originUrl} />
         </div>
         <div className={style['related-articles']}>
           <h2 className={text.small_title}>Related articles</h2>

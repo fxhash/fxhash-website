@@ -13,15 +13,16 @@ import SocialMediaShare from "../../components/SocialMediaShare/SocialMediaShare
 
 interface ArticleInfosProps {
   article: NFTArticle
+  originUrl: string
 }
 export function ArticleInfos({
   article,
+  originUrl
 }: ArticleInfosProps) {
   const urlIpfs = useMemo(() => ipfsGatewayUrl(article.metadataUri), [])
   const urlShare = useMemo(() => {
-    const origin = typeof window !== 'undefined' ? window.location.origin : '';
-    return `${origin}/article/${article.slug}`;
-  }, [article.slug])
+    return `${originUrl}/article/${article.slug}`;
+  }, [article.slug, originUrl])
   return (
     <div className={cs(style.presentation_details)}>
       <div className={style.base}>
