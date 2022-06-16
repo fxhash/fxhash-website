@@ -92,6 +92,10 @@ export const clientSideClient = new ApolloClient({
             keyArgs: ["sort", "filters"],
             merge: cacheMergePaginatedField,
           },
+          articles: {
+            keyArgs: ["sort", "filters"],
+            merge: cacheMergePaginatedField,
+          },
           listings: {
             keyArgs: ["sort", "filters"],
             merge: cacheMergePaginatedField,
