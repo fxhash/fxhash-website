@@ -54,7 +54,7 @@ interface CustomArticleElementsByType {
     [key: string]: NFTArticleElementComponent<any>
   },
 }
-const customNodes: CustomArticleElementsByType = {
+export const customNodes: CustomArticleElementsByType = {
   leafDirective: {
     'tezos-storage': TezosStorage,
     embed: Embed
