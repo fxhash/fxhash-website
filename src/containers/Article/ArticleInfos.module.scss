@@ -1,0 +1,73 @@
+@import "../../styles/Variables.scss";
+
+.base {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $spacing;
+  h6 {
+    margin-bottom: $spacing-2x-small;
+  }
+}
+.base_left, .base_center, .base_right {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+.base_left {
+  align-items: flex-start;
+}
+.base_center {
+  align-items: center;
+}
+.base_right {
+  align-items: flex-end;
+}
+.editions {
+  margin: 0;
+  font-size: var(--font-size-h4);
+  line-height: 1;
+  font-weight: bold;
+}
+
+.presentation_details {
+  overflow-wrap: break-word;
+  word-break: break-word;
+
+  .presentation_title {
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+}
+
+.multilines {
+  display: flex;
+  flex-direction: column;
+  gap: var(--layout-margin-small-sm);
+  align-items: flex-start;
+  width: 100%;
+}
+
+.details {
+  margin-top: $spacing-4x-large;
+}
+.details_list {
+  margin-top: $spacing;
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  align-items: baseline;
+  gap: 12px 5px;
+  /* prevents children elements from streching */
+  justify-items: start;
+  // & > *:nth-child(2n):not(a) {
+  //   opacity: 0.6;
+  // }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .base {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .base_left, .base_center, .base_right {
+    align-items: flex-start;
+  }
+}

@@ -1,5 +1,5 @@
 import { gql } from "@apollo/client";
-import { Frag_ArticleInfos } from "./fragments/article";
+import { Frag_ArticleFull, Frag_ArticleInfos } from "./fragments/article";
 
 export const Qu_articles = gql`
   query Articles($skip: Int, $take: Int) {
@@ -8,4 +8,20 @@ export const Qu_articles = gql`
     }
   }
   ${Frag_ArticleInfos}
+`;
+export const Qu_articleBySlug = gql`
+  query ArticleBySlug($slug: String!) {
+    article(slug: $slug) {
+      ...ArticleFull
+    }
+  }
+  ${Frag_ArticleFull}
+`;
+export const Qu_articleById = gql`
+  query ArticleById($id: Int!) {
+    article(id: $id) {
+      ...ArticleFull
+    }
+  }
+  ${Frag_ArticleFull}
 `;
