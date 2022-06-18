@@ -50,18 +50,13 @@ export const withAutoFormat = (editor: Editor) => {
   editor.insertText = text => {
     const { selection } = editor;
     if (text === ' ' && selection && Range.isCollapsed(selection)) {
-      const textBeforeCursor = getTextFromBlockStartToCursor(editor);
-      const beforeTextWithSpace= `${textBeforeCursor} `
       const handled = config.some(change =>  {
 	if(change.type === 'BlockTypeChange') {
 	  return (change as BlockTypeChange).apply(editor)
-	} else if (
-	  change.type === 'InlineTypeChange' && 
-	  beforeTextWithSpace.endsWith(`${change.shortcut} `)
-	) {
-	    return (change as InlineTypeChange).apply(editor)
+	} else if (change.type === 'InlineTypeChange') {
+	  return (change as InlineTypeChange).apply(editor)
 	} else if(change.type === 'CustomDirectiveChange') {
-	    return (change as CustomDirectiveChange).apply(editor)     
+	  return (change as CustomDirectiveChange).apply(editor)
 	}
 	return false;
       });
