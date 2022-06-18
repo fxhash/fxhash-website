@@ -2,7 +2,6 @@ import { Range, Editor  } from 'slate';
 import { BlockTypeChange } from './BlockTypeChange'
 import { InlineTypeChange } from './InlineTypeChange'
 import { CustomDirectiveChange } from './CustomDirectiveChange'
-import { getTextFromBlockStartToCursor } from '../utils'
 export type AutoFormatChangeType = "BlockTypeChange" | "InlineTypeChange" | "CustomDirectiveChange";
 export type ChangeData = {[key: string]: number | string | boolean}
 
@@ -24,17 +23,6 @@ function createChangeTypeHeading():AutoFormatChange[] {
     ));
   }
   return changes;
-}
-
-function getRangeBeforeCursor(editor: Editor): Range {
-  const { anchor } = editor.selection as Range
-  const block = Editor.above(editor, {
-    match: n => Editor.isBlock(editor, n),
-  })
-  const path = block ? block[1] : []
-  const start = Editor.start(editor, path)
-  const range = { anchor, focus: start }
-  return range;
 }
 
 const config: AutoFormatChange[] = [ 
