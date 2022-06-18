@@ -10,7 +10,7 @@ import {
 } from "slate-react";
 import { withHistory, HistoryEditor } from "slate-history";
 import TezosStorage, {TezosStorageProps} from "../elements/TezosStorage";
-import {withAutoFormat} from './AutoFormatPlugin';
+import {withAutoFormat} from './AutoFormatPlugin/';
 import Embed from "../elements/Embed";
 import 'katex/dist/katex.min.css';
 import { InlineMath, BlockMath } from 'react-katex';
