@@ -1,16 +1,6 @@
 import { Range, Point,  Node,  Editor, Transforms, Ancestor, NodeEntry } from 'slate'; 
 import { AutoFormatChangeType, ChangeData, AutoFormatChange } from './index'; 
-
-function getRangeBeforeCursor(editor: Editor): Range {
-  const { anchor } = editor.selection as Range
-  const block = Editor.above(editor, {
-    match: n => Editor.isBlock(editor, n),
-  })
-  const path = block ? block[1] : []
-  const start = Editor.start(editor, path)
-  const range = { anchor, focus: start }
-  return range;
-}
+import { getRangeFromBlockStartToCursor, getTextFromBlockStartToCursor } from '../utils';
 
 export class BlockTypeChange implements AutoFormatChange {
   shortcut: string 
@@ -22,9 +12,12 @@ export class BlockTypeChange implements AutoFormatChange {
     this.type = 'BlockTypeChange'
   }
 
-  apply = (editor: Editor): boolean => {
+  apply = (editor: Editor): boolean => { 
+    const textBeforeCursor = `${getTextFromBlockStartToCursor(editor)} `;
+    if (!textBeforeCursor.startsWith(`${this.shortcut} `)) return false;
+
     Transforms.delete(editor, {
-      at: getRangeBeforeCursor(editor),
+      at: getRangeFromBlockStartToCursor(editor),
     })
     Transforms.setNodes(
       editor,

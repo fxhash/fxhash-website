@@ -54,9 +54,7 @@ export const withAutoFormat = (editor: Editor) => {
       const beforeTextWithSpace= `${textBeforeCursor} `
       const handled = config.some(change =>  {
 	if(change.type === 'BlockTypeChange') {
-	  if(beforeTextWithSpace.startsWith(`${change.shortcut} `)) {
-	    return (change as BlockTypeChange).apply(editor)
-	  }
+	  return (change as BlockTypeChange).apply(editor)
 	} else if (
 	  change.type === 'InlineTypeChange' && 
 	  beforeTextWithSpace.endsWith(`${change.shortcut} `)
