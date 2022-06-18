@@ -68,7 +68,7 @@ export class CustomDirectiveChange implements AutoFormatChange {
     const charBefore = Editor.before(editor, start, {
       unit: 'character',
       distance: matches[0].length, 
-    });
+    }) as Point;
     Transforms.delete(editor, {
       at: {
 	anchor: charBefore, 
