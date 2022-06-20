@@ -152,7 +152,7 @@ interface IRemarkRoot extends Root {
   value: any, 
 }
 
-function createInlineMathNode(node: IRemarkRoot, next: (children: any[]) => any)  {
+function createMathNode(node: IRemarkRoot, next: (children: any[]) => any)  {
   return {
     type: node.type, 
     children: [{text: ''}], 
@@ -162,12 +162,12 @@ function createInlineMathNode(node: IRemarkRoot, next: (children: any[]) => any)
     }
   }
 }
-
 const remarkSlateTransformerOverrides: OverridedMdastBuilders = {
   textDirective:  createDirectiveNode, 
   leafDirective:  createDirectiveNode, 
   containerDirective:  createDirectiveNode,
-  inlineMath: createInlineMathNode, 
+  inlineMath: createMathNode, 
+  math: createMathNode, 
 }
 
 export async function getSlateEditorStateFromMarkdown(markdown: string) {
@@ -213,6 +213,11 @@ const slateToRemarkTransformerOverrides: OverridedSlateBuilders = {
   'tezos-storage': convertSlateLeafDirectiveToMarkdown,
   'embed-media': convertSlateLeafDirectiveToMarkdown, 
   inlineMath: (node: Root) => ({ 
+    type: node.type, 
+    value: node?.data?.math, 
+    data: { ...node.data} 
+  }),	  
+  math: (node: Root) => ({ 
     type: node.type, 
     value: node?.data?.math, 
     data: { ...node.data} 

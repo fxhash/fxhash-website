@@ -13,7 +13,7 @@ import TezosStorage, {TezosStorageProps} from "../elements/TezosStorage";
 import {withAutoFormat} from './AutoFormatPlugin/';
 import Embed from "../elements/Embed";
 import 'katex/dist/katex.min.css';
-import { InlineMath } from 'react-katex';
+import { InlineMath, BlockMath } from 'react-katex';
 import {getMarkdownFromSlateEditorState} from '../processor';
   
   type TypeElement = BaseElement & { 
@@ -145,6 +145,13 @@ const renderElement = ({
 	  {children}
 	</span>
       );
+    case "math":
+      return (
+	<span contentEditable={false}>
+	  <BlockMath math={element.data.math}/>
+	  {children}
+	</span>
+      );
     case "code":
       return (
         <code {...attributes}>
@@ -220,8 +227,8 @@ interface SlateEditorProps {
   initialValue: Descendant[]
 };
 
-const INLINE_ELEMENTS = ['inlineMath', 'link']
-const VOID_ELEMENTS = ['inlineMath']
+const INLINE_ELEMENTS = ['inlineMath', 'math',  'link']
+const VOID_ELEMENTS = ['inlineMath', 'math']
 
 export const SlateEditor = forwardRef<Node[], SlateEditorProps>(
   ({ initialValue }: SlateEditorProps, ref: React.ForwardedRef<Node[]>) => {
