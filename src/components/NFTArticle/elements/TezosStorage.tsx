@@ -45,3 +45,14 @@ TezosStorage.getPropsFromNode = (node, properties) => {
     value: properties.value,
   }
 }
+
+TezosStorage.fromSlateToMarkdown = (properties) => {
+  return {
+    address: properties.address,
+    key: properties.pKey,
+    type: properties.type,
+    metadata_spec: properties.metadataSpec,
+    bigmap: properties.bigmap,
+    value: properties.value,
+  }
+}

@@ -13,9 +13,10 @@ import TezosStorage, {TezosStorageProps} from "../elements/TezosStorage";
 import {withAutoFormat} from './AutoFormatPlugin/';
 import Embed from "../elements/Embed";
 import 'katex/dist/katex.min.css';
-import { InlineMath, BlockMath } from 'react-katex';
-
-type TypeElement = BaseElement & { 
+import { InlineMath } from 'react-katex';
+import {getMarkdownFromSlateEditorState} from '../processor';
+  
+  type TypeElement = BaseElement & { 
   type: string
   children: any 
 }
@@ -244,44 +245,32 @@ export const SlateEditor = forwardRef<Node[], SlateEditorProps>(
     useEffect(() => {
       setValue(initialValue);
     }, [initialValue]);
-    
-    return (
-      <div
-	className="markdown-body"
-	style={{flex:1 , margin: 10}}
-      >
-	<Slate
-	  editor={editor} 
-	  value={value} 
-	  onChange={setValue}
-	>
-	  <Editable
-	    renderElement={renderElement}
-	    renderLeaf={renderLeaf}
-	    onKeyDown={event => {
-          if (!event.ctrlKey) {
-            return
-          }
 
-          switch (event.key) {
-            // When "B" is pressed, bold the text in the selection.
-	    case 'b': {
-	      console.log(editor)
-              event.preventDefault()
-              Transforms.setNodes(
-                editor,
-                { strong: true },
-                // Apply it to text nodes, and split the text node up if the
-                // selection is overlapping only part of it.
-                { match: n => Text.isText(n), split: true }
-              )
-              break
-            }
-          }
-        }}
-	  />
-        </Slate>
-      </div>
+
+    const getMarkdown = async () => {
+      const md = await getMarkdownFromSlateEditorState(editor.children);
+      console.log(md)
+    }
+
+    return (
+      <>
+	<button onClick={getMarkdown}>markdown</button>
+	<div
+	  className="markdown-body"
+	  style={{flex:1 , margin: 10}}
+	>
+	  <Slate
+	    editor={editor} 
+	    value={value} 
+	    onChange={setValue}
+	  >
+	    <Editable
+	      renderElement={renderElement}
+	      renderLeaf={renderLeaf}
+	    />
+	  </Slate>
+	</div>
+      </>
     );
   }
 );

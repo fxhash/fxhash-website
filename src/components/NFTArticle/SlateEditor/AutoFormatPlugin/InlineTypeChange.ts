@@ -51,7 +51,6 @@ export class InlineTypeChange implements AutoFormatChange {
     if (!beforeTextWithSpace.endsWith(`${this.shortcut} `)) { return false }
     // retreive the matches based on usual markdown pattern, e.g.
     // __bold__, _italic_, etc.
-    // (?<!__)__(?!__).+?__
     const matcher = RegExp(`(?<!${this.shortcut})${this.shortcut}(?!${this.shortcut}).+?${this.shortcut}`, 'g')
     const matches = textBeforeCursor.match(matcher);
     if (!matches) return false;

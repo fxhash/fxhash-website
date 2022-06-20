@@ -4376,6 +4376,15 @@ remark-slate-transformer@^0.6.7:
   resolved "https://registry.npmjs.org/remark-slate-transformer/-/remark-slate-transformer-0.6.7.tgz"
   integrity sha512-Vfhgv8Gg/HOibqLmAX2Rzmrautovkq7TfzbtiseQPFQ52azDv8kfvWpZgO4NHqqv/pg34wkLfYu+bEOq36/T9w==
 
+remark-stringify@^10.0.2:
+  version "10.0.2"
+  resolved "https://registry.yarnpkg.com/remark-stringify/-/remark-stringify-10.0.2.tgz#50414a6983f5008eb9e72eed05f980582d1f69d7"
+  integrity sha512-6wV3pvbPvHkbNnWB0wdDvVFHOe1hBRAx1Q/5g/EpH4RppAII6J8Gnwe7VbHuXaoKIF6LAg6ExTel/+kNqSQ7lw==
+  dependencies:
+    "@types/mdast" "^3.0.0"
+    mdast-util-to-markdown "^1.0.0"
+    unified "^10.0.0"
+
 remark-toc@^8.0.0:
   version "8.0.1"
   resolved "https://registry.npmjs.org/remark-toc/-/remark-toc-8.0.1.tgz"

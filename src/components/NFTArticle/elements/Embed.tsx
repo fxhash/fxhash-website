@@ -53,3 +53,10 @@ Embed.getPropsFromNode = (node, properties) => {
   })
 }
 Embed.htmlTagName = 'embed-media';
+
+Embed.fromSlateToMarkdown = propeties => {
+  if (!properties.href) return null;
+  return ({
+    href: properties.href
+  })
+}

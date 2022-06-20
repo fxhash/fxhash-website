@@ -1,5 +1,6 @@
 import matter from "gray-matter"
 import remarkDirective from "remark-directive"
+import stringify from "remark-stringify";
 import remarkParse from "remark-parse"
 import remarkGfm from "remark-gfm"
 import { unified } from "unified"
@@ -13,15 +14,16 @@ import { createElement, Fragment } from "react";
 import rehypeReact, { Options } from "rehype-react";
 import { SharedOptions } from "rehype-react/lib";
 import rehypeHighlight from "rehype-highlight";
-import {remarkToSlate, } from "remark-slate-transformer"
 import type { ComponentsWithNodeOptions, ComponentsWithoutNodeOptions } from "rehype-react/lib/complex-types";
 import { NFTArticleElementComponent } from "../../types/Article";
 import TezosStorage from "./elements/TezosStorage";
 import Embed from "./elements/Embed";
 import type {Element} from 'hast'
 import rehypeKatex from "rehype-katex";
-import { MdastBuilder, OverridedMdastBuilders} from "remark-slate-transformer/lib/transformers/mdast-to-slate"
-import { Content } from "remark-slate/transformer/lib/models/mdast";
+import { OverridedMdastBuilders } from "remark-slate-transformer/lib/transformers/mdast-to-slate"
+import { OverridedSlateBuilders } from "remark-slate-transformer/lib/transformers/slate-to-mdast"
+import { remarkToSlate, slateToRemark } from "remark-slate-transformer"
+import { Descendant } from "slate";
 import { Root } from 'mdast'
 
 
@@ -146,7 +148,11 @@ function createDirectiveNode(node: Root, next: (children: any[]) => any) {
   };
 }
 
-function createInlineMathNode(node: Root, next: (children: any[]) => any)  {
+interface IRemarkRoot extends Root {
+  value: any, 
+}
+
+function createInlineMathNode(node: IRemarkRoot, next: (children: any[]) => any)  {
   return {
     type: node.type, 
     children: [{text: ''}], 
@@ -183,6 +189,57 @@ export async function getSlateEditorStateFromMarkdown(markdown: string) {
       editorState: processed.result
     };
   } catch {
+    return null;
+  }
+}
+
+function convertSlateLeafDirectiveToMarkdown(node: Root, next: (children: any[]) => any)  { 
+  const { children, type, ...attributes} = node
+  return { 
+    type: 'leafDirective',
+    name: type, 
+    children: [
+      {
+	type: 'text',
+	value: children[0].text,
+      }
+    ],
+    attributes, 
+  }
+}
+
+
+const slateToRemarkTransformerOverrides: OverridedSlateBuilders = {
+  'tezos-storage': convertSlateLeafDirectiveToMarkdown,
+  'embed-media': convertSlateLeafDirectiveToMarkdown, 
+  inlineMath: (node: Root) => ({ 
+    type: node.type, 
+    value: node?.data?.math, 
+    data: { ...node.data} 
+  }),	  
+}
+
+export async function getMarkdownFromSlateEditorState(slate: Descendant[] ) {
+  try {
+    const markdown = await new Promise((resolve) => {
+      const processor = unified()
+      .use(remarkMath)
+      .use(remarkDirective)
+      .use(remarkFxHashCustom)
+      .use(slateToRemark, {
+	overrides: slateToRemarkTransformerOverrides, 
+      })
+      .use(stringify)
+      const ast = processor.runSync({
+	type: "root",
+	children: slate,
+      })
+      const text = processor.stringify(ast)
+      resolve(text)
+    })
+    return markdown
+  } catch(e) {
+    console.error(e)
     return null;
   }
 }
