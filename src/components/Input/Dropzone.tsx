@@ -4,7 +4,6 @@ import { useCallback, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { prettyPrintBytes } from "../../utils/units"
 
-
 interface Props {
   accepted?: string | string[]
   files?: File[] | null
@@ -14,11 +13,11 @@ interface Props {
   className?: string
 }
 
-export function Dropzone({ 
+export function Dropzone({
   textDefault = "Drag 'n' drop some files here, or click to select files",
   textDrag = "Drop the files here ...",
-  accepted, 
-  files, 
+  accepted,
+  files,
   onChange,
   className
 }: Props) {

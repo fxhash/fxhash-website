@@ -20,6 +20,13 @@ export const YupReserves = (
               return sum >= amount
             }
           )
+          .test(
+            "maxEntries",
+            "At most 500 different addresses",
+            (value, context) => {
+              return (value?.length || 0) < 500
+            }
+          )
       })
   })
 ).test(

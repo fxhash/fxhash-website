@@ -280,7 +280,12 @@ export const genTokLabelDefinitions: Record<GenTokLabel, GenTokLabelDefinition> 
     label: "Interactive",
     shortLabel: "Interactive",
     group: GenTokLabelGroup.DETAILS,
-  }
+  },
+  103: {
+    label: "Profile Picture (PFP)",
+    shortLabel: "PFP",
+    group: GenTokLabelGroup.DETAILS,
+  },
 }
 
 export const getGenTokLabelDefinition = (label: number): GenTokLabelDefinition => 

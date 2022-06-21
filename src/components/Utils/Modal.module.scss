@@ -6,6 +6,9 @@
   left: 50%;
   transform: translate(-50%, -50%);
   max-width: calc(100vw - 16px);
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
 
   header {
     background: var(--color-black);
@@ -15,13 +18,15 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    
+
     span {
       padding: 10px 15px;
     }
   }
 
   main {
+    flex: 1;
+    overscroll-behavior: contain;
     background: var(--color-white);
     border: 3px solid var(--color-black);
     border-top: none;
@@ -61,6 +66,7 @@
     max-width: none;
     display: flex;
     flex-direction: column;
+    max-height: 100%;
 
     main {
       flex-grow: 2;
