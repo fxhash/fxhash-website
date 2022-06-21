@@ -4,11 +4,10 @@ import colors from "../../styles/Colors.module.css"
 import cs from "classnames"
 import { Action as ActionType, TokenActionType } from "../../types/entities/Action"
 import { UserBadge } from "../User/UserBadge"
-import { FunctionComponent, useMemo } from "react"
+import { FunctionComponent, useMemo, PropsWithChildren } from "react"
 import { format, formatDistance, formatRelative, subDays } from 'date-fns'
 import { displayMutez, displayRoyalties } from "../../utils/units"
 import Link from "next/link"
-import { PropsWithChildren } from "react-router/node_modules/@types/react"
 import { DisplayTezos } from "../Display/DisplayTezos"
 
 
