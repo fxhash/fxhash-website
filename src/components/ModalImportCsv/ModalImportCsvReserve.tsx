@@ -66,7 +66,7 @@ const _ModalImportCsvReserve = ({ onClose, onImport }: ModalImportCsvReserveProp
       const res = await getDataFromCsvFile(file);
       setLoading(false);
       if (res.errors.length > 0) {
-        throw new Error(res.errors.map(err => err.message).join('\n'))
+	throw new Error(res.errors.map((err: Error) => err.message).join('\n'))
       }
       const missedColumns = hasCsvMissedColumns(res, cols);
       if (missedColumns) {
