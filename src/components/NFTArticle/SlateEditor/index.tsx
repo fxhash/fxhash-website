@@ -13,9 +13,10 @@ import TezosStorage, {TezosStorageProps} from "../elements/TezosStorage";
 import {withAutoFormat} from './AutoFormatPlugin/';
 import Embed from "../elements/Embed";
 import 'katex/dist/katex.min.css';
+// @ts-ignore
 import { InlineMath, BlockMath } from 'react-katex';
   
-  type TypeElement = BaseElement & { 
+type TypeElement = BaseElement & { 
   type: string
   children: any 
 }
