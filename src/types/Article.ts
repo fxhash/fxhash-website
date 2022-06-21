@@ -15,5 +15,6 @@ export interface NFTArticleElementComponent<T> extends NamedExoticComponent<T> {
     [key: string]: any
   }
   getPropsFromNode?: getPropsFromNode<T>
+  fromSlateToMarkdown?: (properties: any) => any
   htmlTagName?: string
 }
