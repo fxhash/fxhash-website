@@ -23,7 +23,7 @@ import rehypeKatex from "rehype-katex";
 import { OverridedMdastBuilders } from "remark-slate-transformer/lib/transformers/mdast-to-slate"
 import { OverridedSlateBuilders } from "remark-slate-transformer/lib/transformers/slate-to-mdast"
 import { remarkToSlate, slateToRemark } from "remark-slate-transformer"
-import { Descendant } from "slate";
+import { Node } from "slate";
 import { Root } from 'mdast'
 
 
@@ -224,7 +224,7 @@ const slateToRemarkTransformerOverrides: OverridedSlateBuilders = {
   }),	  
 }
 
-export async function getMarkdownFromSlateEditorState(slate: Descendant[] ) {
+export async function getMarkdownFromSlateEditorState(slate: Node[] ) {
   try {
     const markdown = await new Promise((resolve) => {
       const processor = unified()

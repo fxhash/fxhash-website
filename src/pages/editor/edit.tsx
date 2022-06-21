@@ -17,11 +17,10 @@ interface EditorPageProps {
   initialEditorState: Descendant[]
 }
 const EditorPage: NextPage<EditorPageProps> = ({ initialEditorState }) => {
-  const ref = useRef<Node[]>(null);
-  const [editorState, setEditorState] = useState(null);
+  const editorStateRef = useRef<Node[]>(null);
 
   const handleClick = async () => {
-    const markdown = await getMarkdownFromSlateEditorState(editorState)
+    const markdown = await getMarkdownFromSlateEditorState(editorStateRef.current)
     console.log(markdown)
   }
 
@@ -44,9 +43,8 @@ const EditorPage: NextPage<EditorPageProps> = ({ initialEditorState }) => {
         <Spacing size="x-large"/>
         <main className={cs(layout['padding-big'])}>
 	  <SlateEditor 
-	    ref={ref} 
+	    ref={editorStateRef} 
 	    initialValue={initialEditorState} 
-	    onChange={setEditorState}
 	  />
         </main>
       </section>

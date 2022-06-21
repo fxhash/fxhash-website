@@ -224,14 +224,13 @@ const renderLeaf = ({ attributes, children, leaf }: RenderLeafProps) => {
 
 interface SlateEditorProps {
   initialValue: Descendant[]
-  onChange?: (editor: Node[]) => void
 };
 
 const INLINE_ELEMENTS = ['inlineMath', 'link']
 const VOID_ELEMENTS = ['inlineMath', 'math']
 
 export const SlateEditor = forwardRef<Node[], SlateEditorProps>(
-  ({ initialValue, onChange }: SlateEditorProps, ref: React.ForwardedRef<Node[]>) => {
+  ({ initialValue }: SlateEditorProps, ref: React.ForwardedRef<Node[]>) => {
     const editor = useMemo(() => {
       const e = withReact(
 	withAutoFormat(
@@ -247,15 +246,10 @@ export const SlateEditor = forwardRef<Node[], SlateEditorProps>(
     }, []);
 
     const [value, setValue] = useState<Node[]>(initialValue);
-    
-    const handleChange = (editor: Node[]) => {
-      setValue(editor);
-      if (onChange) onChange(editor)
-    }
     (ref as React.MutableRefObject<Node[]>).current = value;
 
     useEffect(() => {
-      handleChange(initialValue);
+      setValue(initialValue);
     }, [initialValue]);
 
     return (
@@ -267,7 +261,7 @@ export const SlateEditor = forwardRef<Node[], SlateEditorProps>(
 	  <Slate
 	    editor={editor} 
 	    value={value} 
-	    onChange={handleChange}
+	    onChange={setValue}
 	  >
 	    <Editable
 	      renderElement={renderElement}
