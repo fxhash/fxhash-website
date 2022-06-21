@@ -9,7 +9,7 @@ const EmbedYoutube = memo<EmbedElementProps>(({ href }) => {
     return `https://www.youtube.com/embed/${code}`;
   }, [href]);
   return (
-    <div className={style.youtube}>
+    <div className={style.youtube} contentEditable={false}>
       <iframe
         src={embedUrl}
         title="YouTube video player"

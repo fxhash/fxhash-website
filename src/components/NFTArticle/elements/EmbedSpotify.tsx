@@ -8,7 +8,7 @@ const EmbedSpotify = memo<EmbedElementProps>(({ href }) => {
     return path.startsWith('embed') ? href : `https://open.spotify.com/embed/${path}`
   }, [href])
   return (
-    <div>
+    <div contentEditable={false}>
       <iframe
         className={style.spotify}
         src={src} width="660px"

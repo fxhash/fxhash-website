@@ -1,8 +1,8 @@
-import React, { memo } from 'react';
+import React, { memo, forwardRef } from 'react';
 import { NFTArticleElementComponent } from "../../../types/Article";
 import style from "./TezosStorage.module.scss"
 
-interface TezosStorageProps {
+export interface TezosStorageProps {
   address: string
   pKey: string
   type?: string
@@ -12,19 +12,20 @@ interface TezosStorageProps {
   children?: string
 }
 
-const TezosStorage: NFTArticleElementComponent<TezosStorageProps> = memo(({ address, pKey, children }: TezosStorageProps) => {
+const TezosStorage: NFTArticleElementComponent<TezosStorageProps> = memo(forwardRef(({ address, pKey, children }: TezosStorageProps, ref) => {
   return (
-    <div className={style.bg}>
-      <div>{`\{`}</div>
+    <div ref={ref} className={style.bg}>
+      <div contentEditable={false}>{`\{`}</div>
       <div className={style.tab}>
-        <div><span className={style.property}>{'"address"'}</span><span>{`: "${address}"`}</span></div>
-        <div><span className={style.property}>{'"key"'}</span><span>{`: "${pKey}"`}</span></div>
-        <div><span className={style.property}>{'"annotation"'}</span><span>{`: "${children}"`}</span></div>
+        <div contentEditable={false}><span className={style.property}>{'"address"'}</span><span>{`: "${address}"`}</span></div>
+        <div contentEditable={false}><span className={style.property}>{'"key"'}</span><span>{`: "${pKey}"`}</span></div>
+	<div><span contentEditable={false} className={style.property}>{'"annotation"'}</span><span contentEditable={false}>{`: `}</span><span>{children}</span></div>
       </div>
-      <div>{`\}`}</div>
+      <div contentEditable={false}>{`\}`}</div>
     </div>
   );
-});
+}));
+
 TezosStorage.displayName = 'TezosStorage';
 TezosStorage.defaultProps = {
   type: 'TZIP-012',
@@ -40,6 +41,17 @@ TezosStorage.getPropsFromNode = (node, properties) => {
     pKey: properties.key,
     type: properties.type,
     metadataSpec: properties.metadata_spec,
+    bigmap: properties.bigmap,
+    value: properties.value,
+  }
+}
+
+TezosStorage.fromSlateToMarkdown = (properties) => {
+  return {
+    address: properties.address,
+    key: properties.pKey,
+    type: properties.type,
+    metadata_spec: properties.metadataSpec,
     bigmap: properties.bigmap,
     value: properties.value,
   }

@@ -1,5 +1,6 @@
 import matter from "gray-matter"
 import remarkDirective from "remark-directive"
+import stringify from "remark-stringify";
 import remarkParse from "remark-parse"
 import remarkGfm from "remark-gfm"
 import { unified } from "unified"
@@ -10,7 +11,6 @@ import rehypeStringify from "rehype-stringify"
 import { visit } from "unist-util-visit";
 import { h } from 'hastscript'
 import { createElement, Fragment } from "react";
-import { Root } from "mdast";
 import rehypeReact, { Options } from "rehype-react";
 import { SharedOptions } from "rehype-react/lib";
 import rehypeHighlight from "rehype-highlight";
@@ -20,6 +20,12 @@ import TezosStorage from "./elements/TezosStorage";
 import Embed from "./elements/Embed";
 import type {Element} from 'hast'
 import rehypeKatex from "rehype-katex";
+import { OverridedMdastBuilders } from "remark-slate-transformer/lib/transformers/mdast-to-slate"
+import { OverridedSlateBuilders } from "remark-slate-transformer/lib/transformers/slate-to-mdast"
+import { remarkToSlate, slateToRemark } from "remark-slate-transformer"
+import { Node } from "slate";
+import { Root } from 'mdast'
+
 
 declare module "rehype-react" {
   interface WithNode {
@@ -50,7 +56,7 @@ interface CustomArticleElementsByType {
     [key: string]: NFTArticleElementComponent<any>
   },
 }
-const customNodes: CustomArticleElementsByType = {
+export const customNodes: CustomArticleElementsByType = {
   leafDirective: {
     'tezos-storage': TezosStorage,
     embed: Embed
@@ -118,5 +124,127 @@ export async function getNFTArticleComponentsFromMarkdown(markdown: string): Pro
   }
   catch {
     return null
+  }
+}
+
+interface DirectiveNodeProps { [key: string]: any }
+
+function createDirectiveNode(node: Root, next: (children: any[]) => any) {
+  const data = node.data || {}
+  const hProperties: {[key:string]: any} = (data.hProperties || {}) as {[key:string]: any}
+  // extract only defined props to avoid error serialization of undefined
+  const propertiesWithoutUndefined: DirectiveNodeProps = Object.keys(hProperties)
+    .reduce((acc: DirectiveNodeProps, key: string) =>{
+      const value = hProperties[key];
+      if (value) {
+	acc[key] = value;
+      }
+      return acc;
+    }, {});
+  return {
+    type: data.hName,
+    children:  next(node.children), 
+    ...propertiesWithoutUndefined
+  };
+}
+
+interface IRemarkRoot extends Root {
+  value: any, 
+}
+
+function createMathNode(node: IRemarkRoot, next: (children: any[]) => any)  {
+  return {
+    type: node.type, 
+    children: [{text: ''}], 
+    data : {
+      ...node.data,
+      math: node.value, 
+    }
+  }
+}
+const remarkSlateTransformerOverrides: OverridedMdastBuilders = {
+  textDirective:  createDirectiveNode, 
+  leafDirective:  createDirectiveNode, 
+  containerDirective:  createDirectiveNode,
+  inlineMath: createMathNode, 
+  math: createMathNode, 
+}
+
+export async function getSlateEditorStateFromMarkdown(markdown: string) {
+  try {
+    const matterResult = matter(markdown)
+    const processed = await unified()
+      .use(remarkParse)
+      .use(remarkMath)
+      .use(rehypeKatex)
+      .use(remarkDirective)
+      .use(remarkFxHashCustom)
+      .use(remarkToSlate, {
+	overrides: remarkSlateTransformerOverrides
+      })
+      .process(matterResult.content)
+
+    return {
+      ...matterResult.data, 
+      editorState: processed.result
+    };
+  } catch {
+    return null;
+  }
+}
+
+function convertSlateLeafDirectiveToMarkdown(node: Root, next: (children: any[]) => any)  { 
+  const { children, type, ...attributes} = node
+  return { 
+    type: 'leafDirective',
+    name: type, 
+    children: [
+      {
+	type: 'text',
+	value: children[0].text,
+      }
+    ],
+    attributes, 
+  }
+}
+
+
+const slateToRemarkTransformerOverrides: OverridedSlateBuilders = {
+  'tezos-storage': convertSlateLeafDirectiveToMarkdown,
+  'embed-media': convertSlateLeafDirectiveToMarkdown, 
+  inlineMath: (node: Root) => ({ 
+    type: node.type, 
+    value: node?.data?.math, 
+    data: { ...node.data} 
+  }),	  
+  math: (node: Root) => ({ 
+    type: node.type, 
+    value: node?.data?.math, 
+    data: { ...node.data} 
+  }),	  
+}
+
+export async function getMarkdownFromSlateEditorState(slate: Node[] ) {
+  try {
+    const markdown = await new Promise((resolve) => {
+      const processor = unified()
+      .use(remarkMath)
+      .use(remarkDirective)
+      .use(remarkFxHashCustom)
+      .use(slateToRemark, {
+	overrides: slateToRemarkTransformerOverrides, 
+      })
+      .use(stringify)
+      const ast = processor.runSync({
+	type: "root",
+	children: slate,
+      })
+      const text = processor.stringify(ast)
+      resolve(text)
+    })
+    return markdown
+  } catch(e) {
+    console.error(e)
+    return null;
   }
 }
