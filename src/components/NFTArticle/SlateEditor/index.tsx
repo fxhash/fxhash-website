@@ -14,7 +14,6 @@ import {withAutoFormat} from './AutoFormatPlugin/';
 import Embed from "../elements/Embed";
 import 'katex/dist/katex.min.css';
 import { InlineMath, BlockMath } from 'react-katex';
-import {getMarkdownFromSlateEditorState} from '../processor';
   
   type TypeElement = BaseElement & { 
   type: string
@@ -225,13 +224,14 @@ const renderLeaf = ({ attributes, children, leaf }: RenderLeafProps) => {
 
 interface SlateEditorProps {
   initialValue: Descendant[]
+  onChange?: (editor: Node[]) => void
 };
 
 const INLINE_ELEMENTS = ['inlineMath', 'link']
 const VOID_ELEMENTS = ['inlineMath', 'math']
 
 export const SlateEditor = forwardRef<Node[], SlateEditorProps>(
-  ({ initialValue }: SlateEditorProps, ref: React.ForwardedRef<Node[]>) => {
+  ({ initialValue, onChange }: SlateEditorProps, ref: React.ForwardedRef<Node[]>) => {
     const editor = useMemo(() => {
       const e = withReact(
 	withAutoFormat(
@@ -247,21 +247,19 @@ export const SlateEditor = forwardRef<Node[], SlateEditorProps>(
     }, []);
 
     const [value, setValue] = useState<Node[]>(initialValue);
+    
+    const handleChange = (editor: Node[]) => {
+      setValue(editor);
+      if (onChange) onChange(editor)
+    }
     (ref as React.MutableRefObject<Node[]>).current = value;
 
     useEffect(() => {
-      setValue(initialValue);
+      handleChange(initialValue);
     }, [initialValue]);
-
-
-    const getMarkdown = async () => {
-      const md = await getMarkdownFromSlateEditorState(editor.children);
-      console.log(md)
-    }
 
     return (
       <>
-	<button onClick={getMarkdown}>markdown</button>
 	<div
 	  className="markdown-body"
 	  style={{flex:1 , margin: 10}}
@@ -269,7 +267,7 @@ export const SlateEditor = forwardRef<Node[], SlateEditorProps>(
 	  <Slate
 	    editor={editor} 
 	    value={value} 
-	    onChange={setValue}
+	    onChange={handleChange}
 	  >
 	    <Editable
 	      renderElement={renderElement}

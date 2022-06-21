@@ -1,5 +1,5 @@
 import type { NextPage } from 'next'
-import  { useRef, } from "react";
+import  { useRef, useState, useEffect } from "react";
 import { Node, Descendant } from "slate"
 import layout from '../../styles/Layout.module.scss'
 import cs from 'classnames'
@@ -11,13 +11,20 @@ import path from "path";
 import fs from "fs"
 import { GetStaticProps } from "next";
 import {SlateEditor} from '../../components/NFTArticle/SlateEditor';
-import {getSlateEditorStateFromMarkdown} from '../../components/NFTArticle/processor';
+import {getSlateEditorStateFromMarkdown, getMarkdownFromSlateEditorState} from '../../components/NFTArticle/processor';
 
 interface EditorPageProps {
-  editorState: Descendant[]
+  initialEditorState: Descendant[]
 }
-const EditorPage: NextPage<EditorPageProps> = ({ editorState }) => {
+const EditorPage: NextPage<EditorPageProps> = ({ initialEditorState }) => {
   const ref = useRef<Node[]>(null);
+  const [editorState, setEditorState] = useState(null);
+
+  const handleClick = async () => {
+    const markdown = await getMarkdownFromSlateEditorState(editorState)
+    console.log(markdown)
+  }
+
   return (
     <>
       <Head>
@@ -27,17 +34,20 @@ const EditorPage: NextPage<EditorPageProps> = ({ editorState }) => {
         <meta key="og:description" property="og:description" content="Experiment and test your NFT articles in the editor environment"/>
       </Head>
 
+      <button onClick={handleClick}>print markdown</button>
       <Spacing size="6x-large" sm="3x-large" />
-
       <section>
         <SectionHeader>
           <TitleHyphen>NFT article editor</TitleHyphen>
         </SectionHeader>
 
         <Spacing size="x-large"/>
-
         <main className={cs(layout['padding-big'])}>
-	  <SlateEditor ref={ref} initialValue={editorState} />
+	  <SlateEditor 
+	    ref={ref} 
+	    initialValue={initialEditorState} 
+	    onChange={setEditorState}
+	  />
         </main>
       </section>
 
@@ -53,10 +63,10 @@ export default EditorPage
 export const getStaticProps: GetStaticProps<EditorPageProps> = async ({ params }) => {
   const filePath = path.join(process.cwd(), "src", "articles",`nft-article-test.md`)
   const nftArticleMd = fs.readFileSync(filePath, 'utf8');
-  const {editorState}= await getSlateEditorStateFromMarkdown(nftArticleMd);
+  const { editorState }= await getSlateEditorStateFromMarkdown(nftArticleMd);
   return {
     props: {
-      editorState,
+      initialEditorState: editorState,
     },
   }
 }
