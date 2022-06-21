@@ -23,10 +23,13 @@ const ArticleEditorPage: NextPage<Props> = ({
       </Head>
 
       <Spacing size="3x-large"/>
-      
+
       <main className={cs(layout['padding-small'])}>
         <ArticleEditor/>
       </main>
+
+      <Spacing size="6x-large"/>
+      <Spacing size="6x-large"/>
     </>
   )
 }

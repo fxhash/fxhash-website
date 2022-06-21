@@ -24,19 +24,19 @@
 }
 
 .w900 {
-  max-width: 900px;
+  width: min(900px, 100%);
   margin: 0 auto;
 }
 
 .input_title {
-  width: 900px;
+  width: min(900px, 100%);
   margin: 0 auto;
   max-width: 100%;
   font-size: var(--font-size-h1);
 }
 
 .input_abstract {
-  width: 900px;
+  width: min(900px, 100%);
   font-size: var(--font-size-regular);
   line-height: 166%;
 }
