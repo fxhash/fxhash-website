@@ -20,7 +20,7 @@ const EditorPage: NextPage<EditorPageProps> = ({ initialEditorState }) => {
   const editorStateRef = useRef<Node[]>(null);
 
   const handleClick = async () => {
-    const markdown = await getMarkdownFromSlateEditorState(editorStateRef.current)
+    const markdown = await getMarkdownFromSlateEditorState(editorStateRef.current as Node[])
     console.log(markdown)
   }
 
