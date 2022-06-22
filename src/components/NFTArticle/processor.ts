@@ -20,11 +20,11 @@ import TezosStorage from "./elements/TezosStorage";
 import Embed from "./elements/Embed";
 import type {Element} from 'hast'
 import rehypeKatex from "rehype-katex";
-import { OverridedMdastBuilders } from "remark-slate-transformer/lib/transformers/mdast-to-slate"
+import { MdastBuilder, OverridedMdastBuilders } from "remark-slate-transformer/lib/transformers/mdast-to-slate"
 import { OverridedSlateBuilders } from "remark-slate-transformer/lib/transformers/slate-to-mdast"
 import { remarkToSlate, slateToRemark } from "remark-slate-transformer"
 import { Node } from "slate";
-import { Root } from 'mdast'
+import { Root, Content } from 'mdast'
 
 
 declare module "rehype-react" {
@@ -129,7 +129,7 @@ export async function getNFTArticleComponentsFromMarkdown(markdown: string): Pro
 
 interface DirectiveNodeProps { [key: string]: any }
 
-function createDirectiveNode(node: Root, next: (children: any[]) => any) {
+function createDirectiveNode(node: any, next: (children: any[]) => any): object {
   const data = node.data || {}
   const hProperties: {[key:string]: any} = (data.hProperties || {}) as {[key:string]: any}
   // extract only defined props to avoid error serialization of undefined
@@ -148,11 +148,7 @@ function createDirectiveNode(node: Root, next: (children: any[]) => any) {
   };
 }
 
-interface IRemarkRoot extends Root {
-  value: any, 
-}
-
-function createMathNode(node: IRemarkRoot, next: (children: any[]) => any)  {
+function createMathNode(node: any) {
   return {
     type: node.type, 
     children: [{text: ''}], 
@@ -162,12 +158,13 @@ function createMathNode(node: IRemarkRoot, next: (children: any[]) => any)  {
     }
   }
 }
+
 const remarkSlateTransformerOverrides: OverridedMdastBuilders = {
   textDirective:  createDirectiveNode, 
   leafDirective:  createDirectiveNode, 
   containerDirective:  createDirectiveNode,
-  inlineMath: createMathNode, 
-  math: createMathNode, 
+  "inlineMath": createMathNode, 
+  "math": createMathNode, 
 }
 
 export async function getSlateEditorStateFromMarkdown(markdown: string) {
@@ -193,7 +190,9 @@ export async function getSlateEditorStateFromMarkdown(markdown: string) {
   }
 }
 
-function convertSlateLeafDirectiveToMarkdown(node: Root, next: (children: any[]) => any)  { 
+function convertSlateLeafDirectiveToMarkdown(
+  node: any, 
+) { 
   const { children, type, ...attributes} = node
   return { 
     type: 'leafDirective',
@@ -212,12 +211,12 @@ function convertSlateLeafDirectiveToMarkdown(node: Root, next: (children: any[])
 const slateToRemarkTransformerOverrides: OverridedSlateBuilders = {
   'tezos-storage': convertSlateLeafDirectiveToMarkdown,
   'embed-media': convertSlateLeafDirectiveToMarkdown, 
-  inlineMath: (node: Root) => ({ 
+  inlineMath: (node: any) => ({ 
     type: node.type, 
     value: node?.data?.math, 
     data: { ...node.data} 
   }),	  
-  math: (node: Root) => ({ 
+  math: (node: any) => ({ 
     type: node.type, 
     value: node?.data?.math, 
     data: { ...node.data} 
