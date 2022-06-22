@@ -3,6 +3,7 @@ import { GenerativeToken } from "./GenerativeToken"
 import { Objkt } from "./Objkt"
 import { Listing } from "./Listing"
 import { Offer } from "./Offer";
+import { NFTArticle } from "./Article";
 
 export interface UserItems {
   generativeTokens?: GenerativeToken[]
@@ -69,6 +70,7 @@ export interface User {
   // as a regular user, it can have collaboration contracts
   collaborationContracts: Collaboration[]
   moderationReason?: string|null
+  articles: NFTArticle[]
 }
 
 export interface ConnectedUser extends Partial<User> {
