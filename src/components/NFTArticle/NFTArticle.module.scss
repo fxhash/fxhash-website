@@ -1,0 +1,13 @@
+.article_wrapper {
+  p {
+    width: min(900px, 100%);
+    margin: 0 auto;
+  }
+
+  span[data-slate-placeholder="true"] {
+    width: min(900px, 100%) !important;
+    margin: 0 auto;
+    color: var(--color-gray-light);
+    opacity: 1 !important;
+  }
+}
