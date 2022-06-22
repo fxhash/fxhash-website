@@ -155,7 +155,7 @@ export function ListOffers({
         </Fragment>
       ))}
       {loading && [...Array(10)].map((_, idx) => (
-        <Skeleton height="60px"/>
+        <Skeleton key={idx} height="60px"/>
       ))}
       {!loading && offers?.length === 0 && (
         <span>There are no offers on any iteration of this collection.</span>

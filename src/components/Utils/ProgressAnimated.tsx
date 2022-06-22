@@ -26,7 +26,7 @@ export const ProgressAnimated = forwardRef<ProgressAnimatedRef, Props>(({
   }))
 
   return (
-    <div 
+    <div
       ref={divRef}
       className={cs(style.container)}
       style={{
@@ -37,3 +37,4 @@ export const ProgressAnimated = forwardRef<ProgressAnimatedRef, Props>(({
     </div>
   )
 })
+ProgressAnimated.displayName = 'ProgressAnimated'

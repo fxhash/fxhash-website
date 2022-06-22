@@ -11,7 +11,7 @@ import rehypeStringify from "rehype-stringify"
 import { visit } from "unist-util-visit";
 import { h } from 'hastscript'
 import { createElement, Fragment } from "react";
-import rehypeReact, { Options } from "rehype-react";
+import rehypeReact from "rehype-react";
 import { SharedOptions } from "rehype-react/lib";
 import rehypeHighlight from "rehype-highlight";
 import type { ComponentsWithNodeOptions, ComponentsWithoutNodeOptions } from "rehype-react/lib/complex-types";
@@ -20,11 +20,11 @@ import TezosStorage from "./elements/TezosStorage";
 import Embed from "./elements/Embed";
 import type {Element} from 'hast'
 import rehypeKatex from "rehype-katex";
-import { MdastBuilder, OverridedMdastBuilders } from "remark-slate-transformer/lib/transformers/mdast-to-slate"
+import { OverridedMdastBuilders } from "remark-slate-transformer/lib/transformers/mdast-to-slate"
 import { OverridedSlateBuilders } from "remark-slate-transformer/lib/transformers/slate-to-mdast"
 import { remarkToSlate, slateToRemark } from "remark-slate-transformer"
 import { Node, Descendant } from "slate";
-import { Root, Content } from 'mdast'
+import { Root } from 'mdast'
 
 
 declare module "rehype-react" {
@@ -88,7 +88,7 @@ function remarkFxHashCustom(): import('unified').Transformer<import('mdast').Roo
   }
 }
 
-const settingsRehypeReact: Options = {
+const settingsRehypeReact = {
   createElement,
   Fragment,
   components: {
@@ -143,28 +143,28 @@ function createDirectiveNode(node: any, next: (children: any[]) => any): object 
     }, {});
   return {
     type: data.hName,
-    children:  next(node.children), 
+    children:  next(node.children),
     ...propertiesWithoutUndefined
   };
 }
 
 function createMathNode(node: any) {
   return {
-    type: node.type, 
-    children: [{text: ''}], 
+    type: node.type,
+    children: [{text: ''}],
     data : {
       ...node.data,
-      math: node.value, 
+      math: node.value,
     }
   }
 }
 
 const remarkSlateTransformerOverrides: OverridedMdastBuilders = {
-  textDirective:  createDirectiveNode, 
-  leafDirective:  createDirectiveNode, 
+  textDirective:  createDirectiveNode,
+  leafDirective:  createDirectiveNode,
   containerDirective:  createDirectiveNode,
-  "inlineMath": createMathNode, 
-  "math": createMathNode, 
+  "inlineMath": createMathNode,
+  "math": createMathNode,
 }
 
 interface PayloadSlateEditorStateFromMarkdown {
@@ -187,7 +187,7 @@ export async function getSlateEditorStateFromMarkdown(markdown: string): Promise
       .process(matterResult.content)
 
     return {
-      ...matterResult.data, 
+      ...matterResult.data,
       editorState: processed.result as Descendant[]
     };
   } catch {
@@ -196,36 +196,36 @@ export async function getSlateEditorStateFromMarkdown(markdown: string): Promise
 }
 
 function convertSlateLeafDirectiveToMarkdown(
-  node: any, 
-) { 
+  node: any,
+) {
   const { children, type, ...attributes} = node
-  return { 
+  return {
     type: 'leafDirective',
-    name: type, 
+    name: type,
     children: [
       {
 	type: 'text',
 	value: children[0].text,
       }
     ],
-    attributes, 
+    attributes,
   }
 }
 
 
 const slateToRemarkTransformerOverrides: OverridedSlateBuilders = {
   'tezos-storage': convertSlateLeafDirectiveToMarkdown,
-  'embed-media': convertSlateLeafDirectiveToMarkdown, 
-  inlineMath: (node: any) => ({ 
-    type: node.type, 
-    value: node?.data?.math, 
-    data: { ...node.data} 
-  }),	  
-  math: (node: any) => ({ 
-    type: node.type, 
-    value: node?.data?.math, 
-    data: { ...node.data} 
-  }),	  
+  'embed-media': convertSlateLeafDirectiveToMarkdown,
+  inlineMath: (node: any) => ({
+    type: node.type,
+    value: node?.data?.math,
+    data: { ...node.data}
+  }),
+  math: (node: any) => ({
+    type: node.type,
+    value: node?.data?.math,
+    data: { ...node.data}
+  }),
 }
 
 export async function getMarkdownFromSlateEditorState(slate: Node[] ) {
@@ -236,7 +236,7 @@ export async function getMarkdownFromSlateEditorState(slate: Node[] ) {
       .use(remarkDirective)
       .use(remarkFxHashCustom)
       .use(slateToRemark, {
-	overrides: slateToRemarkTransformerOverrides, 
+	overrides: slateToRemarkTransformerOverrides,
       })
       .use(stringify)
       const ast = processor.runSync({

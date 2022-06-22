@@ -28,7 +28,7 @@ export function HashTest({
     if (autoGenerate) {
       onHashUpdate(generateFxHash())
     }
-  }, [])
+  }, [autoGenerate, onHashUpdate])
 
   const newHash = () => {
     setError(undefined)
@@ -49,9 +49,9 @@ export function HashTest({
     <div className={cs(style.container)}>
       <Field error={error}>
         <small>Current hash</small>
-        <InputText 
+        <InputText
           ref={hashInputRef}
-          value={value || ""} 
+          value={value || ""}
           onChange={evt => manualHashUpdate(evt.target.value)}
           onFocus={() => hashInputRef.current && hashInputRef.current.select()}
           onClick={() => hashInputRef.current && hashInputRef.current.select()}

@@ -24,7 +24,7 @@ export function InfiniteScrollTrigger({
         onTrigger()
       }
     }
-  }, [inView, canTrigger])
+  }, [inView, canTrigger, onTrigger])
 
   return (
     <div className={cs(style.container, className)}>

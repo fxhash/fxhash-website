@@ -29,6 +29,7 @@ export const ActionReference = ({ action }: { action: ActionType }) => {
       className={cs(style.date)}
       href={`https://tzkt.io/${action.opHash}`}
       target="_blank"
+      rel="noreferrer"
     >
       <DateDistance timestamptz={action.createdAt}/>
       <i aria-hidden className="fas fa-external-link-square"/>

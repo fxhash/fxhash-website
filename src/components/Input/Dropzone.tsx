@@ -33,7 +33,7 @@ export function Dropzone({
       onChange(null)
       setError("Format is not supported")
     }
-  }, [])
+  }, [onChange])
 
   const { getRootProps, getInputProps, isDragActive, acceptedFiles } = useDropzone({
     onDrop,
