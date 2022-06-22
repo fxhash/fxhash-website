@@ -1,13 +1,14 @@
 import React, { memo, useContext, useMemo } from 'react';
 import style from "./CardNFTArticle.module.scss";
 import Image from "next/image";
-import { NFTArticle } from "../../types/Article";
+import { NFTArticle } from "../../types/entities/Article";
 import { UserBadge } from "../User/UserBadge";
 import { ipfsGatewayUrl } from "../../services/Ipfs";
 import cs from "classnames";
 import { SettingsContext } from "../../context/Theme";
 import { format } from "date-fns";
 import Link from 'next/link';
+import { Tags } from '../Tags/Tags';
 
 interface CardNftArticleProps {
   className: string,
@@ -25,22 +26,24 @@ const _CardNftArticle = ({ article: { title, slug, thumbnailUri, description, ta
       [style.hover_effect]: settings.hoverEffectCard,
     })}>
       <Link href={urlArticle}>
-        <a className={style['img-wrapper']}>
-          <Image
-            src={thumbnailUrl}
-            layout="fill"
-            objectFit="cover"
-            objectPosition="top"
-            priority={imagePriority}
-          />
-        </a>
+        <a className={cs(style.link_wrapper)}/>
       </Link>
+      <div className={style['img-wrapper']}>
+        <Image
+          src={thumbnailUrl}
+          layout="fill"
+          objectFit="cover"
+          objectPosition="top"
+          priority={imagePriority}
+        />
+      </div>
       <div className={style.infos}>
         <div className={style.infos_header}>
           <UserBadge
             hasLink
             user={author}
             size="regular"
+            className={cs(style.author)}
           />
           <div className={style.date}>
             <time dateTime={format(dateCreatedAt, 'yyyy/MM/dd')}>
@@ -58,9 +61,7 @@ const _CardNftArticle = ({ article: { title, slug, thumbnailUri, description, ta
             {description}
           </p>
         </div>
-        <div className={style.tags}>
-          {tags.map(tag => <span key={tag}>{tag}</span>)}
-        </div>
+        <Tags tags={tags}/>
       </div>
     </div>
   );

@@ -2,7 +2,7 @@ import React, { memo, useCallback, useMemo, useState } from 'react';
 import style from "./ExploreArticles.module.scss";
 import { useQuery } from "@apollo/client";
 import { Qu_articles } from "../../queries/articles";
-import { NFTArticle } from "../../types/Article";
+import { NFTArticle } from "../../types/entities/Article";
 import { CardNftArticle } from "../../components/Card/CardNFTArticle";
 import { CardNftArticleSkeleton } from "../../components/Card/CardNFTArticleSkeleton";
 import { InfiniteScrollTrigger } from "../../components/Utils/InfiniteScrollTrigger";

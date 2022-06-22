@@ -6,24 +6,33 @@
   width: 100%;
   display: flex;
   flex-direction: row;
+  position: relative;
 }
+
+.link_wrapper {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 20;
+}
+
 .img-wrapper {
   position: relative;
   display: block;
   width: 350px;
-  min-height: 335px;
-  &:hover + div {
-    .title {
-      text-decoration: underline;
-    }
-  }
+  min-height: 284px;
+  border-right: 3px solid var(--color-border);
 }
+
 .infos {
   flex: 1;
   padding: $spacing;
   display: flex;
   flex-direction: column;
 }
+
 .infos_header {
   display: flex;
   flex-direction: row;
@@ -31,9 +40,17 @@
   gap: $spacing;
   margin-bottom: $spacing;
 }
+
+.author {
+  position: relative;
+  z-index: 50;
+}
+
 .date {
   color: var(--color-gray);
+  margin-left: 10px;
 }
+
 .title {
   color: var(--color-black);
   display: -webkit-box;
@@ -41,9 +58,11 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
 .description {
   flex: 1;
   margin: $spacing 0;
+
   p {
     font-size: var(--font-size-big);
     display: -webkit-box;
@@ -53,17 +72,7 @@
     overflow: hidden;
   }
 }
-.tags {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: $spacing-x-small;
-  span {
-    padding: $spacing-2x-small $spacing-x-small;
-    background: var(--color-gray-vvlight);
-    color: var(--color-gray);
-  }
-}
+
 @media (max-width: $breakpoint-md) {
   .img-wrapper {
     width: 40%;
@@ -74,19 +83,21 @@
   .container {
     flex-direction: column;
   }
+
   .img-wrapper {
     width: 100%;
     min-height: 150px;
     height: 150px;
   }
+
   .infos_header {
-    flex-direction: column;
-    align-items: flex-start;
     gap: $spacing-x-small;
   }
+
   .title {
     -webkit-line-clamp: 3;
   }
+
   .description {
     font-size: var(--font-size-regular);
   }
