@@ -16,6 +16,7 @@ import { Donations } from "../../Input/Donations"
 import { Submit } from "../../../components/Form/Submit"
 import { Button } from "../../../components/Button"
 import { InputTextUnit } from "../../../components/Input/InputTextUnit"
+import { getMarkdownFromSlateEditorState } from "../../../components/NFTArticle/processor"
 
 const editorInitialValue = [
   {
@@ -48,6 +49,11 @@ interface Props {
 export function ArticleEditor({
 }: Props) {
   const editorStateRef = useRef<Node[]>(null)
+
+  const handleClick = async () => {
+    const markdown = await getMarkdownFromSlateEditorState(editorStateRef.current as Node[])
+    console.log(markdown)
+  }
 
   // TODO: move state to object
   const [thumbnail, setThumbnail] = useState<File|null>(null)
@@ -226,6 +232,7 @@ export function ArticleEditor({
                 type="button"
                 size="large"
                 color="secondary"
+                onClick={() => handleClick()}
               >
                 preview &amp; mint
               </Button>

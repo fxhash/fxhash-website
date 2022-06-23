@@ -1,5 +1,5 @@
 import React, { forwardRef, useEffect, useMemo, useState } from "react";
-import { Transforms, Text, BaseEditor, BaseElement,  createEditor, Node, Descendant } from "slate";
+import { Transforms, Text, BaseEditor, BaseElement, createEditor, Node, Descendant } from "slate";
 import {
   Slate,
   Editable,
@@ -10,10 +10,14 @@ import {
 } from "slate-react";
 import { withHistory, HistoryEditor } from "slate-history";
 import TezosStorage, {TezosStorageProps} from "../elements/TezosStorage";
-import {withAutoFormat} from './AutoFormatPlugin/';
+import { withAutoFormat } from './AutoFormatPlugin/';
 import Embed from "../elements/Embed";
 import 'katex/dist/katex.min.css';
 import { InlineMath, BlockMath } from 'react-katex';
+import { withImages } from "./ImagePlugin/SlateImagePlugin";
+import { ImageElement } from "../elements/ImageElement";
+import { FigcaptionElement } from "../elements/Figcaption";
+import { FigureElement } from "../elements/Figure";
   
   type TypeElement = BaseElement & { 
   type: string
@@ -180,17 +184,32 @@ const renderElement = ({
           {children}
         </a>
       );
+    case "figure":
+      return (
+        <FigureElement
+          attributes={attributes}
+          element={element}
+        >
+          {children}
+        </FigureElement>
+      )
+    case "figcaption":
+      return (
+        <FigcaptionElement
+          attributes={attributes}
+          element={element}
+        >
+          {children}
+        </FigcaptionElement>
+      )
     case "image":
       return (
-        <>
-          <img
-            {...attributes}
-            src={element.url as string}
-            title={element.title as string}
-            alt={element.alt as string}
-          />
+        <ImageElement
+          attributes={attributes}
+          element={element}
+        >
           {children}
-        </>
+        </ImageElement>
       );
     case "linkReference":
       break;
@@ -235,10 +254,12 @@ export const SlateEditor = forwardRef<Node[], SlateEditorProps>(({
   placeholder,
 }, ref) => {
     const editor = useMemo(() => {
-      const e = withReact(
+      const e = withImages(
         withAutoFormat(
           withHistory(
-            createEditor()
+            withReact(
+              createEditor()
+            )
           )
         )
       );
