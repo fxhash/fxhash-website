@@ -1,6 +1,6 @@
 import style from "./Dropzone.module.scss"
 import cs from "classnames"
-import { useCallback, useState } from 'react'
+import { ReactNode, useCallback, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { prettyPrintBytes } from "../../utils/units"
 
@@ -8,8 +8,8 @@ interface Props {
   accepted?: string | string[]
   files?: File[] | null
   onChange: (files: File[]|null) => void
-  textDefault?: string
-  textDrag?: string
+  textDefault?: ReactNode
+  textDrag?: ReactNode
   className?: string
 }
 

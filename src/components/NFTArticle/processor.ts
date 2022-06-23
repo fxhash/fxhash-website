@@ -212,42 +212,72 @@ function convertSlateLeafDirectiveToMarkdown(
   }
 }
 
+/**
+ * Turns a figcaption element into an element which will be turned into an
+ * image in proper markdown
+ */
+function figureToMarkdown(node: Root, next: (children: any[]) => any) {
+  // create a regular image node
+  const imageNode: any = {
+    type: "image"
+  }
+
+  // find if there's a caption
+  const caption: Node|null = node.children.find(
+    node => node.type === ("figcaption" as any)
+  )
+  if (caption && caption.children?.length > 0) {
+    imageNode.alt = caption.children[0].text
+  }
+  // now do the same for the image element
+  const image: Node|null = node.children.find(
+    node => node.type === "image"
+  )
+  if (image) {
+    imageNode.url = image.url
+  }
+
+  return imageNode
+}
+
 
 const slateToRemarkTransformerOverrides: OverridedSlateBuilders = {
   'tezos-storage': convertSlateLeafDirectiveToMarkdown,
   'embed-media': convertSlateLeafDirectiveToMarkdown,
-  inlineMath: (node: any) => ({
-    type: node.type,
-    value: node?.data?.math,
-    data: { ...node.data}
-  }),
-  math: (node: any) => ({
-    type: node.type,
-    value: node?.data?.math,
-    data: { ...node.data}
-  }),
+  figure: figureToMarkdown,
+  inlineMath: (node: Root) => ({ 
+    type: node.type, 
+    value: node?.data?.math, 
+    data: { ...node.data} 
+  }),	  
+  math: (node: Root) => ({ 
+    type: node.type, 
+    value: node?.data?.math, 
+    data: { ...node.data} 
+  }),	  
 }
 
 export async function getMarkdownFromSlateEditorState(slate: Node[] ) {
   try {
     const markdown = await new Promise((resolve) => {
       const processor = unified()
-      .use(remarkMath)
-      .use(remarkDirective)
-      .use(remarkFxHashCustom)
-      .use(slateToRemark, {
-	overrides: slateToRemarkTransformerOverrides,
-      })
-      .use(stringify)
+        .use(remarkMath)
+        .use(remarkDirective)
+        .use(remarkFxHashCustom)
+        .use(slateToRemark, {
+          overrides: slateToRemarkTransformerOverrides, 
+        })
+        .use(stringify)
       const ast = processor.runSync({
-	type: "root",
-	children: slate,
+        type: "root",
+        children: slate,
       })
       const text = processor.stringify(ast)
       resolve(text)
     })
     return markdown
-  } catch(e) {
+  }
+  catch(e) {
     console.error(e)
     return null;
   }

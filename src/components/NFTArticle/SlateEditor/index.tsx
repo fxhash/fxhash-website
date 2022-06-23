@@ -1,5 +1,5 @@
 import React, { forwardRef, useEffect, useMemo, useState } from "react";
-import { Transforms,Text,  BaseEditor, BaseElement,  createEditor, Node, Descendant } from "slate";
+import { Transforms, Text, BaseEditor, BaseElement, createEditor, Node, Descendant } from "slate";
 import {
   Slate,
   Editable,
@@ -10,11 +10,15 @@ import {
 } from "slate-react";
 import { withHistory, HistoryEditor } from "slate-history";
 import TezosStorage, {TezosStorageProps} from "../elements/TezosStorage";
-import {withAutoFormat} from './AutoFormatPlugin/';
+import { withAutoFormat } from './AutoFormatPlugin/';
 import Embed from "../elements/Embed";
 import 'katex/dist/katex.min.css';
 // @ts-ignore
 import { InlineMath, BlockMath } from 'react-katex';
+import { withImages } from "./ImagePlugin/SlateImagePlugin";
+import { ImageElement } from "../elements/ImageElement";
+import { FigcaptionElement } from "../elements/Figcaption";
+import { FigureElement } from "../elements/Figure";
   
 type TypeElement = BaseElement & { 
   type: string
@@ -62,20 +66,20 @@ const renderElement = ({
   switch (element.type) {
     case 'embed-media': 
       return (
-	<Embed{...attributes} href={element.href} />
+	      <Embed {...attributes} href={element.href} />
       );
     case "tezos-storage":
       return (
-	<TezosStorage
-	  {...attributes}
-	  pKey={element.pKey}
-	  address={element.address}
-	  metadataSpec={element.metadataSpec}
-	  bigmap={element.bigmap}
-	  value={element.value}
-	>
-	  {children}
-	</TezosStorage>
+        <TezosStorage
+          {...attributes}
+          pKey={element.pKey}
+          address={element.address}
+          metadataSpec={element.metadataSpec}
+          bigmap={element.bigmap}
+          value={element.value}
+        >
+          {children}
+        </TezosStorage>
       );
     case "paragraph":
       return <p {...attributes}>{children}</p>;
@@ -140,23 +144,23 @@ const renderElement = ({
       );
     case "inlineMath":
       return (
-	<span contentEditable={false}>
-	  <InlineMath math={element.data.math}/>
-	  {children}
-	</span>
+        <span contentEditable={false}>
+          <InlineMath math={element.data.math}/>
+          {children}
+        </span>
       );
     case "math":
       return (
-	<span contentEditable={false}>
-	  <BlockMath math={element.data.math}/>
-	  {children}
-	</span>
+        <span contentEditable={false}>
+          <BlockMath math={element.data.math}/>
+          {children}
+        </span>
       );
     case "code":
       return (
         <code {...attributes}>
-	  {children}
-	</code>
+          {children}
+        </code>
       );
     case "yaml":
     case "toml":
@@ -181,17 +185,32 @@ const renderElement = ({
           {children}
         </a>
       );
+    case "figure":
+      return (
+        <FigureElement
+          attributes={attributes}
+          element={element}
+        >
+          {children}
+        </FigureElement>
+      )
+    case "figcaption":
+      return (
+        <FigcaptionElement
+          attributes={attributes}
+          element={element}
+        >
+          {children}
+        </FigcaptionElement>
+      )
     case "image":
       return (
-        <>
-          <img
-            {...attributes}
-            src={element.url as string}
-            title={element.title as string}
-            alt={element.alt as string}
-          />
+        <ImageElement
+          attributes={attributes}
+          element={element}
+        >
           {children}
-        </>
+        </ImageElement>
       );
     case "linkReference":
       break;
@@ -225,20 +244,25 @@ const renderLeaf = ({ attributes, children, leaf }: RenderLeafProps) => {
 
 interface SlateEditorProps {
   initialValue: Descendant[]
+  placeholder?: string
 };
 
 const INLINE_ELEMENTS = ['inlineMath', 'link']
 const VOID_ELEMENTS = ['inlineMath', 'math']
 
-export const SlateEditor = forwardRef<Node[], SlateEditorProps>(
-  ({ initialValue }: SlateEditorProps, ref: React.ForwardedRef<Node[]>) => {
+export const SlateEditor = forwardRef<Node[], SlateEditorProps>(({
+  initialValue,
+  placeholder,
+}, ref) => {
     const editor = useMemo(() => {
-      const e = withReact(
-	withAutoFormat(
-	  withHistory(
-	    createEditor()
-	  )
-	)
+      const e = withImages(
+        withAutoFormat(
+          withHistory(
+            withReact(
+              createEditor()
+            )
+          )
+        )
       );
       const { isInline, isVoid } = e;
       e.isInline = element => INLINE_ELEMENTS.includes(element.type) || isInline(element)
@@ -255,21 +279,22 @@ export const SlateEditor = forwardRef<Node[], SlateEditorProps>(
 
     return (
       <>
-	<div
-	  className="markdown-body"
-	  style={{flex:1 , margin: 10}}
-	>
-	  <Slate
-	    editor={editor} 
-	    value={value} 
-	    onChange={setValue}
-	  >
-	    <Editable
-	      renderElement={renderElement}
-	      renderLeaf={renderLeaf}
-	    />
-	  </Slate>
-	</div>
+        <div
+          className="markdown-body"
+          style={{flex:1}}
+        >
+          <Slate
+            editor={editor} 
+            value={value} 
+            onChange={setValue}
+          >
+            <Editable
+              renderElement={renderElement}
+              renderLeaf={renderLeaf}
+              placeholder={placeholder}
+            />
+          </Slate>
+        </div>
       </>
     );
   }

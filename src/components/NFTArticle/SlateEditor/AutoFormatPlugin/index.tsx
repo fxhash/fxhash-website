@@ -13,12 +13,12 @@ export type AutoFormatChange = {
 
 function createChangeTypeHeading():AutoFormatChange[] {
   const changes = [];
-  for(let i = 1; i < 6; i++) {
+  for (let i = 1; i < 6; i++) {
     changes.push(new BlockTypeChange(
       Array(i).fill('#').join(''), 
       {
-	type: 'heading', 
-	depth: i,
+        type: 'heading', 
+        depth: i,
       }
     ));
   }
@@ -39,14 +39,14 @@ export const withAutoFormat = (editor: Editor) => {
     const { selection } = editor;
     if (text === ' ' && selection && Range.isCollapsed(selection)) {
       const handled = config.some(change =>  {
-	if(change.type === 'BlockTypeChange') {
-	  return (change as BlockTypeChange).apply(editor)
-	} else if (change.type === 'InlineTypeChange') {
-	  return (change as InlineTypeChange).apply(editor)
-	} else if(change.type === 'CustomDirectiveChange') {
-	  return (change as CustomDirectiveChange).apply(editor)
-	}
-	return false;
+        if(change.type === 'BlockTypeChange') {
+          return (change as BlockTypeChange).apply(editor)
+        } else if (change.type === 'InlineTypeChange') {
+          return (change as InlineTypeChange).apply(editor)
+        } else if(change.type === 'CustomDirectiveChange') {
+          return (change as CustomDirectiveChange).apply(editor)
+        }
+        return false;
       });
       if (handled) return true;
     }

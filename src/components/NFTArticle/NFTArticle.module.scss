@@ -1,0 +1,29 @@
+.article_wrapper {
+  p {
+    width: min(900px, 100%);
+    margin: 0 auto;
+  }
+
+  figure {
+    max-width: 100%;
+
+    img {
+      max-width: 100%;
+      margin: 0 auto;
+      display: block;
+    }
+
+    figcaption {
+      font-size: var(--font-size-small);
+      font-weight: bold;
+      text-align: center;
+    }
+  }
+
+  span[data-slate-placeholder="true"] {
+    width: min(900px, 100%) !important;
+    margin: 0 auto;
+    color: var(--color-gray-light);
+    opacity: 1 !important;
+  }
+}
