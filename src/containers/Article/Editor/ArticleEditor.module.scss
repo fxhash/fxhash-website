@@ -51,6 +51,8 @@
   padding: 0;
   overflow: hidden;
   padding-bottom: 8px;
+  background: transparent;
+  color: var(--color-black);
 
   &::placeholder {
     color: var(--color-gray-light);
