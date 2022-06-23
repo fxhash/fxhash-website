@@ -1,0 +1,22 @@
+.root {
+  button {
+    width: 150px;
+  }
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding: 20px 10px;
+  gap: 8px;
+
+  i {
+    font-size: 32px;
+  }
+
+  &.active {
+    background-color: var(--color-secondary);
+    color: var(--color-white);
+  }
+}

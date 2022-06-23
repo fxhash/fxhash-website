@@ -1,0 +1,31 @@
+.reports {
+  display: flex;
+  flex-direction: column;
+
+  & > *+* {
+    margin-top: 20px;
+  }
+}
+
+.report {
+  display: flex;
+  align-items: center;
+
+  & > *+* {
+    margin-left: 30px;
+  }
+}
+
+.token {
+  width: 300px;
+  display: block;
+
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+.chart {
+  height: 250px;
+  width: 500px;
+}

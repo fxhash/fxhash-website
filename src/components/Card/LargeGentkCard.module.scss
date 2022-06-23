@@ -1,0 +1,27 @@
+.topper {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--font-size-small);
+  font-weight: normal;
+  color: var(--color-gray);
+}
+
+.bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: var(--font-size-small);
+  gap: 10px;
+}
+
+.tezos {
+  color: var(--color-secondary);
+  font-size: var(--font-size-regular);
+}
+
+.badge {
+  color: var(--color-gray) !important;
+  font-weight: normal !important;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}

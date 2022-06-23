@@ -1,0 +1,37 @@
+.buttons_container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  
+  button {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    color: inherit;
+    border: none;
+    text-align: left;
+    background: none;
+    padding: 8px;
+    gap: 12px;
+    cursor: pointer;
+    
+    &:hover {
+      background-color: var(--color-gray-vvlight);
+    }
+
+    img {
+      width: 50px;
+      height: 50px;
+    }
+  }
+}
+
+.donation_content {
+  display: flex;
+  flex-direction: column;
+}
+
+.donation_description {
+  font-size: var(--font-size-small);
+  margin-top: 4px;
+}

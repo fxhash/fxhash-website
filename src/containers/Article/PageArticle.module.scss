@@ -1,0 +1,48 @@
+@import "../../styles/Variables";
+.infos {
+  max-width: 900px;
+  margin: $spacing-6x-large auto 0;
+  width: 100%;
+}
+.body {
+  max-width: 900px;
+  margin: $spacing-2x-large auto 0;
+  width: 100%;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+.header {
+  text-align: center;
+}
+.date {
+  margin-top: $spacing;
+  color: var(--color-gray);
+}
+.title {
+  margin-top: $spacing-x-large;
+}
+.related-articles {
+  margin-top: $spacing-5x-large;
+  h2 {
+    max-width: 900px;
+    width: 100%;
+    margin: auto;
+  }
+}
+.related-articles_list {
+  margin-top: $spacing;
+  background: gray;
+  height: 400px;
+  width: 100%;
+}
+@media (max-width: $breakpoint-sm) {
+  .infos {
+    margin-top: $spacing-2x-large;
+  }
+  .header {
+    text-align: left;
+  }
+  .title {
+    font-size: var(--font-size-h4);
+  }
+}

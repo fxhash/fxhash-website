@@ -1,0 +1,26 @@
+.wrapper {
+  position: relative;
+
+  .hover_message {
+    background: black;
+    color: white;
+    position: absolute;
+    width: 300px;
+    text-align: center;
+    font-size: var(--font-size-small);
+    padding: 4px;
+    left: 50%;
+    bottom: 50%;
+    transform: translateX(-50%);
+    pointer-events: none;
+    opacity: 0;
+    transition: all 0.15s ease-out;
+  }
+
+  &.hover_enabled:hover {
+    .hover_message {
+      bottom: calc(100% + 4px);
+      opacity: 1;
+    }
+  }
+}

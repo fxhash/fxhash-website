@@ -1,0 +1,46 @@
+.container {
+  border-radius: 999px;
+  overflow: hidden;
+  background-color: var(--color-border);
+  background-size: cover;
+  background-position: center;
+}
+
+.avatar-upload {
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+  padding: 0;
+  border: 3px solid var(--color-border);
+  transition: all 0.2s ease-out;
+
+  span {
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+    border: none;
+    background-color: black;
+    font-weight: bold;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease-out;
+    opacity: 0;
+    border-radius: 999px;
+  }
+
+  &:hover {
+    border-color: var(--color-secondary);
+
+    span {
+      opacity: 0.92;
+    }
+  }
+
+  &.no-image {
+    span {
+      opacity: 1;
+    }
+  }
+}

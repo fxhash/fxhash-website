@@ -1,0 +1,19 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.select_method_root {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+
+  .select {
+    flex-grow: 2;
+
+    .select_btn {
+      width: 100%;
+    }
+  }
+}
