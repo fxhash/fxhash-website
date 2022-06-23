@@ -26,7 +26,7 @@ export function UserGuard({
         router.push(`/`)
       }
     }
-  }, [userCtx])
+  }, [allowed, forceRedirect, router, userCtx])
 
   return userCtx.user ? <>{children}</> : null
 }

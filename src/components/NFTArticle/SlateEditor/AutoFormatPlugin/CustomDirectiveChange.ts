@@ -63,7 +63,7 @@ export class CustomDirectiveChange implements AutoFormatChange {
       type,
       ...parsedAttributes.attributes
     }
-    const props = customNodes.leafDirective[type]?.getPropsFromNode?.(null, nodeAttributes) || nodeAttributes;
+    const props = customNodes.leafDirective[type]?.getPropsFromNode?.(null as any, nodeAttributes) || nodeAttributes;
     const [start] = Range.edges(editor.selection as Range);
     const charBefore = Editor.before(editor, start, {
       unit: 'character',

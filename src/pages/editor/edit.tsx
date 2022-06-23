@@ -58,14 +58,15 @@ const EditorPage: NextPage<EditorPageProps> = ({ initialEditorState }) => {
 
 export default EditorPage
 
-export const getStaticProps: GetStaticProps<EditorPageProps> = async ({ params }) => {
+export const getStaticProps: GetStaticProps = async ({ params }) => {
   const filePath = path.join(process.cwd(), "src", "articles",`nft-article-test.md`)
   const nftArticleMd = fs.readFileSync(filePath, 'utf8');
-  const { editorState }= await getSlateEditorStateFromMarkdown(nftArticleMd);
+  const res = await getSlateEditorStateFromMarkdown(nftArticleMd);
   return {
     props: {
-      initialEditorState: editorState,
+      initialEditorState: res?.editorState,
     },
+    notFound: !res
   }
 }
 

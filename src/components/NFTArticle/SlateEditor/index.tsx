@@ -13,13 +13,14 @@ import TezosStorage, {TezosStorageProps} from "../elements/TezosStorage";
 import { withAutoFormat } from './AutoFormatPlugin/';
 import Embed from "../elements/Embed";
 import 'katex/dist/katex.min.css';
+// @ts-ignore
 import { InlineMath, BlockMath } from 'react-katex';
 import { withImages } from "./ImagePlugin/SlateImagePlugin";
 import { ImageElement } from "../elements/ImageElement";
 import { FigcaptionElement } from "../elements/Figcaption";
 import { FigureElement } from "../elements/Figure";
   
-  type TypeElement = BaseElement & { 
+type TypeElement = BaseElement & { 
   type: string
   children: any 
 }

@@ -12,7 +12,7 @@ export interface TezosStorageProps {
   children?: string
 }
 
-const TezosStorage: NFTArticleElementComponent<TezosStorageProps> = memo(forwardRef(({ address, pKey, children }: TezosStorageProps, ref) => {
+const TezosStorage: NFTArticleElementComponent<TezosStorageProps> = memo(forwardRef<HTMLDivElement, TezosStorageProps>(({ address, pKey, children }, ref) => {
   return (
     <div ref={ref} className={style.bg}>
       <div contentEditable={false}>{`\{`}</div>

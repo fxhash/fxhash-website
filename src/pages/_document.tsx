@@ -5,11 +5,11 @@ export default class MyDocument extends Document {
     return (
       <Html lang="en">
         <Head>
-          <link 
+          <link
             href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap"
             rel="stylesheet"
-          />          
-          <script src="https://kit.fontawesome.com/bf487ca473.js" crossOrigin="anonymous"></script>
+          />
+          <script src="https://kit.fontawesome.com/bf487ca473.js" defer crossOrigin="anonymous"></script>
         </Head>
 
         <body>

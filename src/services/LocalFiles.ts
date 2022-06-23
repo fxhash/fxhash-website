@@ -150,11 +150,11 @@ export async function getArticle(category: string, article: string) {
   try {
     const filePath = path.join(docDir, category, `${article}.md`)
     const fileContents = fs.readFileSync(filePath, 'utf8')
-  
+
     // Use gray-matter to parse the post metadata section
     const matterResult = matter(fileContents)
     const processed = await unified()
-      .use(retextEnvVariables as any) 
+      .use(retextEnvVariables as any)
       .use(remarkParse)
     .use(remarkDirective)
     .use(myRemarkPlugin)
@@ -168,9 +168,9 @@ export async function getArticle(category: string, article: string) {
       .use(rehypeFormat)
       .use(rehypeStringify)
       .process(matterResult.content)
-  
+
     const contentHtml = processed.toString()
-  
+
     return {
       id: `/${category}/${article}`,
       ...matterResult.data,
@@ -208,7 +208,7 @@ export async function getSlateArticle(category: string, article: string) {
   // Use gray-matter to parse the post metadata section
   const matterResult = matter(fileContents)
 
-  const createDirectiveNode = node => {
+  const createDirectiveNode = (node: any) => {
     return ({type: node.name, children: [{text:node.children[0].value}] })
 
   }
@@ -218,9 +218,9 @@ export async function getSlateArticle(category: string, article: string) {
     .use(myRemarkPlugin)
     .use(remarkToSlate, {
       overrides: {
-	textDirective:  createDirectiveNode, 
-	leafDirective:  createDirectiveNode, 
-	containerDirective:  createDirectiveNode, 
+	textDirective:  createDirectiveNode,
+	leafDirective:  createDirectiveNode,
+	containerDirective:  createDirectiveNode,
       },
     })
     .process(matterResult.content)

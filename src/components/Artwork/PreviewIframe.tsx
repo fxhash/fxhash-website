@@ -88,3 +88,4 @@ export const ArtworkIframe = forwardRef<ArtworkIframeRef, Props>(({
     </div>
   );
 })
+ArtworkIframe.displayName = 'ArtworkIframe'

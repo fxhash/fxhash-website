@@ -25,7 +25,7 @@ export function Card({
 }: PropsWithChildren<Props>) {
   const [loaded, setLoaded] = useState<string|null>(null)
   const [error, setError] = useState<boolean>(false)
-  const url = useMemo(() => thumbnailUri && ipfsGatewayUrl(thumbnailUri), [])
+  const url = useMemo(() => thumbnailUri && ipfsGatewayUrl(thumbnailUri), [thumbnailUri])
   const { ref, inView } = useInView()
   const settings = useContext(SettingsContext)
 
