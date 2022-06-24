@@ -10,6 +10,9 @@ import { FigcaptionElement } from "../../elements/Figcaption"
 import { ImageElement } from "../../elements/ImageElement"
 import { Element } from "slate"
 import { ContextualMenuItems } from "../../../Menus/ContextualMenuItems"
+import { HeadingAttributeSettings } from "./AttributeSettings/HeadingAttributeSettings"
+import { ListAttributeSettings } from "./AttributeSettings/ListAttributeSettings"
+import { BlockquoteElement } from "../../elements/Blockquote"
 
 export enum EArticleBlocks {
   "embed-media" = "embed-media",
@@ -167,27 +170,7 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
         text: ""
       }]
     }),
-    editAttributeComp: ({ element, onEdit }) => {
-      return (
-        <ContextualMenuItems>
-          {[...Array(6)].map((_, idx) => (
-            <button
-              key={idx}
-              type="button"
-              onClick={() => onEdit({
-                depth: idx+1
-              })}
-              className={cs({
-                selected: element.depth === idx+1
-              })}
-            >
-              <i className={`fa-regular fa-h${idx+1}`} aria-hidden/>
-              <span>Heading {idx+1}</span>
-            </button>
-          ))}
-        </ContextualMenuItems>
-      )
-    }
+    editAttributeComp: HeadingAttributeSettings,
   },
   "thematicBreak": {
     name: "Horizontal break",
@@ -201,9 +184,7 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
     name: "Quote",
     icon: <i className="fa-solid fa-quotes" aria-hidden/>,
     buttonInstantiable: true,
-    render: ({ attributes, element, children }) => (
-      <blockquote {...attributes}>{children}</blockquote>
-    ),
+    render: BlockquoteElement,
     hasUtilityWrapper: true,
     instanciateElement: () => ({
       type: "blockquote",
@@ -233,7 +214,8 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
           text: ""
         }]
       }]
-    })
+    }),
+    editAttributeComp: ListAttributeSettings,
   },
   "listItem": {
     name: "List Item",

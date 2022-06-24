@@ -32,28 +32,11 @@
 .figure {
   position: relative;
 
-  .delete {
-    position: absolute;
-    top: 0;
-    right: 0;
-    background-color: var(--color-secondary);
-    border: none;
-    width: 50px;
-    height: 50px;
-    cursor: pointer;
-    display: none;
-    color: var(--color-white);
-  }
-
   .figcaption.empty {
     display: none;
   }
 
   &.selected {
-    img {
-      box-shadow: 0 0 0 3px var(--color-secondary);
-    }
-
     .figcaption {
       display: block;
     }
