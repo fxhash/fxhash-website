@@ -39,13 +39,13 @@ type TezosStorageElement = TypeElement & TezosStorageProps
 
 type CustomElement =  HeadlineElement | TezosStorageElement | ImageElement;
 
-type FormattedText = { 
+export type TextFormatKey = 'strong' | 'emphasis' | 'delete' | 'inlineCode';
+
+export type TextFormats = {[key in TextFormatKey]: boolean}
+
+export type FormattedText = { 
   text: string
-  strong?: boolean
-  emphasis?: boolean 
-  delete?: boolean
-  inlineCode?: boolean
-}
+} | TextFormats
 
 type CustomText = FormattedText
 
