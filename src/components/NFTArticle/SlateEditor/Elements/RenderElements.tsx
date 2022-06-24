@@ -5,6 +5,7 @@ import React, { PropsWithChildren, useMemo, useState } from "react"
 import { AddBlock } from "../Utils/AddBlock"
 import { getArticleBlockDefinition } from "./Blocks"
 import { Path, Transforms } from "slate"
+import { BlockExtraMenu } from "../Utils/BlockExtraMenu"
 
 
 interface IEditableElementWrapperProps {
@@ -20,6 +21,7 @@ function EditableElementWrapper({
   children,
 }: PropsWithChildren<IEditableElementWrapperProps>) {
   const [showAddBlock, setShowAddBlock] = useState<boolean>(false)
+  const [showExtraMenu, setShowExtraMenu] = useState<boolean>(false)
 
   const editor = useSlateStatic()
   const path = ReactEditor.findPath(editor, element)
@@ -32,6 +34,12 @@ function EditableElementWrapper({
     setShowAddBlock(false)
   }
 
+  const deleteNode = () => {
+    Transforms.removeNodes(editor, {
+      at: path
+    })
+  }
+
   return (
     <div
       className={cs(style.element_wrapper, {
@@ -39,15 +47,24 @@ function EditableElementWrapper({
       })}
     >
       {children}
-      <button
-        type="button"
-        contentEditable={false}
-        className={cs(style.btn_add)}
-        onClick={() => setShowAddBlock(!showAddBlock)}
-        tabIndex={-1}
-      >
-        <i className="fa-solid fa-plus" aria-hidden/>
-      </button>
+      <div className={cs(style.buttons)}>
+        <button
+          type="button"
+          contentEditable={false}
+          onClick={() => setShowAddBlock(true)}
+          tabIndex={-1}
+        >
+          <i className="fa-solid fa-plus" aria-hidden/>
+        </button>
+        <button
+          type="button"
+          contentEditable={false}
+          onClick={() => setShowExtraMenu(true)}
+          tabIndex={-1}
+        >
+          <i className="fa-solid fa-ellipsis" aria-hidden/>
+        </button>
+      </div>
       {showAddBlock && (
         <>
           <div 
@@ -65,6 +82,18 @@ function EditableElementWrapper({
             className={cs(style.sep)}
           />
         </>
+      )}
+      {showExtraMenu && (
+        <div 
+          className={cs(style.add_block_wrapper)}
+          contentEditable={false}
+        >
+          <BlockExtraMenu
+            onClose={() => setShowExtraMenu(false)}
+            onDeleteNode={deleteNode}
+            className={cs(style.add_block)}
+          />
+        </div>
       )}
     </div>
   )

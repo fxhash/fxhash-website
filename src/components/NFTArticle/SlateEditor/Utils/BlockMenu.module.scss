@@ -1,0 +1,11 @@
+.root {
+  position: absolute;
+
+  &.pos-up {
+    bottom: 0;
+  }
+
+  &.pos-down {
+    top: -3px;
+  }
+}

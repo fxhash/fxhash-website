@@ -2,13 +2,26 @@
   position: relative;
   padding-bottom: 30px;
 
-  .btn_add {
+  .buttons {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 4px;
     position: absolute;
     bottom: 0;
     left: 50%;
     transform: translate(-50%, 0);
     pointer-events: none;
     opacity: 0;
+
+    &>button {
+      cursor: pointer;
+      border: none;
+      background-color: var(--color-secondary);
+      width: 30px;
+      height: 30px;
+      color: var(--color-white);
+    }
   }
 
   .sep {
@@ -22,15 +35,9 @@
   }
 
   &:not(.opened):hover {
-    .btn_add {
+    .buttons {
       opacity: 1;
       pointer-events: all;
-      cursor: pointer;
-      border: none;
-      background-color: var(--color-secondary);
-      width: 30px;
-      height: 30px;
-      color: var(--color-white);
     }
   }
 }
