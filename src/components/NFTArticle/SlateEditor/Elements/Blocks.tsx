@@ -1,4 +1,4 @@
-import { ReactNode } from "react"
+import { FunctionComponent, ReactNode } from "react"
 import { RenderElementProps } from "slate-react"
 import Embed from "../../elements/Embed"
 import TezosStorage from "../../elements/TezosStorage"
@@ -7,6 +7,7 @@ import { InlineMath, BlockMath } from 'react-katex'
 import { FigureElement } from "../../elements/Figure"
 import { FigcaptionElement } from "../../elements/Figcaption"
 import { ImageElement } from "../../elements/ImageElement"
+import { Element } from "slate"
 
 export enum EArticleBlocks {
   "embed-media" = "embed-media",
@@ -26,26 +27,55 @@ export enum EArticleBlocks {
   "code" = "code",
   "yaml" = "yaml",
   "toml" = "toml",
-  "definition" = "definition",
-  "footnoteDefinition" = "footnoteDefinition",
   "break" = "break",
   "link" = "link",
   "figure" = "figure",
   "figcaption" = "figcaption",
   "image" = "image",
-  "linkReference" = "linkReference",
-  "imageReference" = "imageReference",
-  "footnote" = "footnote",
-  "footnoteReference" = "footnoteReference"
 }
 
-interface IArticleBlockDefinition {
+export const ArticleBlocksList: (keyof EArticleBlocks)[] = Object.keys(
+  EArticleBlocks
+) as (keyof EArticleBlocks)[]
+
+export const InstantiableArticleBlocksList: EArticleBlocks[] = [
+  EArticleBlocks.paragraph,
+  EArticleBlocks.heading,
+  EArticleBlocks["tezos-storage"],
+  EArticleBlocks.figure,
+  EArticleBlocks.list,
+  EArticleBlocks["embed-media"],
+  EArticleBlocks.math,
+  EArticleBlocks.table,
+  EArticleBlocks.code,
+  EArticleBlocks.blockquote,
+]
+
+/**
+ * The Instanciation Component can be displayed to enter informations about a
+ * block, so that non-empty blocks aren't inserted by default
+ */
+export interface IInstanciateComponentProps {
+  element: any
+  onInstanciate: (element: any) => void
+}
+export type TInstanciateComponent = FunctionComponent<IInstanciateComponentProps>
+
+export interface IArticleBlockDefinition {
+  name: string
+  icon: ReactNode
+  buttonInstantiable?: boolean
   render: (props: RenderElementProps) => ReactNode
   hasUtilityWrapper: boolean
+  instanciateElement?: () => Element
+  instanciateComponent?: TInstanciateComponent
 }
 
 export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> = {
   "embed-media": {
+    name: "Embed media",
+    icon: <i className="fa-brands fa-youtube" aria-hidden/>,
+    buttonInstantiable: true,
     render: ({ attributes, element, children }) => (
       <Embed 
         {...attributes}
@@ -53,8 +83,18 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
       />
     ),
     hasUtilityWrapper: true,
+    instanciateElement: () => ({
+      type: "embed-media",
+      href: "",
+      children: [{
+        text: ""
+      }],
+    })
   },
   "tezos-storage": {
+    name: "Tezos content",
+    icon: <i className="fa-solid fa-hexagon-vertical-nft" aria-hidden/>,
+    buttonInstantiable: true,
     render: ({ attributes, element, children }) => (
       <TezosStorage
         {...attributes}
@@ -68,14 +108,37 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
       </TezosStorage>
     ),
     hasUtilityWrapper: true,
+    instanciateElement: () => ({
+      type: "tezos-storage",
+      pKey: "",
+      address: "",
+      metadataSpec: "",
+      bigmap: "",
+      value: "",
+      children: [{
+        text: ""
+      }]
+    })
   },
   "paragraph": {
+    name: "Paragraph",
+    icon: <i className="fa-solid fa-paragraph" aria-hidden/>,
+    buttonInstantiable: true,
     render: ({ attributes, element, children }) => (
       <p {...attributes}>{children}</p>
     ),
     hasUtilityWrapper: true,
+    instanciateElement: () => ({
+      type: "paragraph",
+      children: [{
+        text: ""
+      }]
+    })
   },
   "heading": {
+    name: "Heading",
+    icon: <i className="fa-solid fa-heading" aria-hidden/>,
+    buttonInstantiable: true,
     render: ({ attributes, element, children }) => {
       switch (element.depth) {
         case 1:
@@ -95,20 +158,41 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
       }
     },
     hasUtilityWrapper: true,
+    instanciateElement: () => ({
+      type: "heading",
+      depth: 1,
+      children: [{
+        text: ""
+      }]
+    })
   },
   "thematicBreak": {
+    name: "Horizontal break",
+    icon: <i className="fa-solid fa-horizontal-rule" aria-hidden/>,
     render: ({ attributes, element, children }) => (
       <hr {...attributes}/>
     ),
     hasUtilityWrapper: false,
   },
   "blockquote": {
+    name: "Quote",
+    icon: <i className="fa-solid fa-quotes" aria-hidden/>,
+    buttonInstantiable: true,
     render: ({ attributes, element, children }) => (
       <blockquote {...attributes}>{children}</blockquote>
     ),
     hasUtilityWrapper: true,
+    instanciateElement: () => ({
+      type: "blockquote",
+      children: [{
+        text: ""
+      }]
+    })
   },
   "list": {
+    name: "List",
+    icon: <i className="fa-solid fa-list" aria-hidden/>,
+    buttonInstantiable: true,
     render: ({ attributes, element, children }) => (
       element.ordered ? (
         <ol {...attributes}>{children}</ol>
@@ -117,8 +201,20 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
       )
     ),
     hasUtilityWrapper: true,
+    instanciateElement: () => ({
+      type: "list",
+      ordered: false,
+      children: [{
+        type: "listItem",
+        children: [{
+          text: ""
+        }]
+      }]
+    })
   },
   "listItem": {
+    name: "List Item",
+    icon: <i className="fa-solid fa-list" aria-hidden/>,
     render: ({ attributes, element, children }) => (
       <li {...attributes}>
         {element.checked === true ? (
@@ -132,26 +228,52 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
     hasUtilityWrapper: false,
   },
   "table": {
+    name: "Table",
+    icon: <i className="fa-regular fa-table" aria-hidden/>,
+    buttonInstantiable: true,
     render: ({ attributes, element, children }) => (
       <table>
         <tbody {...attributes}>{children}</tbody>
       </table>
     ),
     hasUtilityWrapper: true,
+    instanciateElement: () => ({
+      type: "table",
+      children: [{
+        type: "tableRow",
+        children: [{
+          type: "tableCell",
+          children: [{
+            text: ""
+          }]
+        }, {
+          type: "tableCell",
+          children: [{
+            text: ""
+          }]
+        }]
+      }]
+    })
   },
   "tableRow": {
+    name: "Table row",
+    icon: <i className="fa-regular fa-table" aria-hidden/>,
     render: ({ attributes, element, children }) => (
       <tr {...attributes}>{children}</tr>
     ),
     hasUtilityWrapper: false,
   },
   "tableCell": {
+    name: "Table cell",
+    icon: <i className="fa-regular fa-table" aria-hidden/>,
     render: ({ attributes, element, children }) => (
       <td {...attributes}>{children}</td>
     ),
     hasUtilityWrapper: false,
   },
   "html": {
+    name: "HTML",
+    icon: <i className="fa-brands fa-html5" aria-hidden/>,
     render: ({ attributes, element, children }) => (
       <div
         {...attributes}
@@ -163,6 +285,8 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
     hasUtilityWrapper: true,
   },
   "inlineMath": {
+    name: "Math",
+    icon: <i className="fa-solid fa-function" aria-hidden/>,
     render: ({ attributes, element, children }) => (
       <span contentEditable={false}>
         <InlineMath math={element.data.math}/>
@@ -172,6 +296,9 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
     hasUtilityWrapper: false,
   },
   "math": {
+    name: "Math",
+    icon: <i className="fa-solid fa-function" aria-hidden/>,
+    buttonInstantiable: true,
     render: ({ attributes, element, children }) => (
       <span contentEditable={false}>
         <BlockMath math={element.data.math}/>
@@ -179,16 +306,38 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
       </span>
     ),
     hasUtilityWrapper: true,
+    // todo: void math element
+    instanciateElement: () => ({
+      type: "math",
+      data: {
+        math: ""
+      },
+      children: [{
+        text: ""
+      }]
+    })
   },
   "code": {
+    name: "Code",
+    icon: <i className="fa-solid fa-code" aria-hidden/>,
+    buttonInstantiable: true,
     render: ({ attributes, element, children }) => (
       <code {...attributes}>
         {children}
       </code>
     ),
     hasUtilityWrapper: true,
+    instanciateElement: () => ({
+      type: "code",
+      language: "js",
+      children: [{
+        text: ""
+      }]
+    }),
   },
   "yaml": {
+    name: "YAML",
+    icon: <i className="fa-solid fa-code" aria-hidden/>,
     render: ({ attributes, element, children }) => (
       <pre>
         <code {...attributes}>{children}</code>
@@ -197,6 +346,8 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
     hasUtilityWrapper: true,
   },
   "toml": {
+    name: "TOML",
+    icon: <i className="fa-solid fa-code" aria-hidden/>,
     render: ({ attributes, element, children }) => (
       <pre>
         <code {...attributes}>{children}</code>
@@ -204,21 +355,17 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
     ),
     hasUtilityWrapper: true,
   },
-  "definition": {
-    render: ({ attributes, element, children }) => null,
-    hasUtilityWrapper: true,
-  },
-  "footnoteDefinition": {
-    render: ({ attributes, element, children }) => null,
-    hasUtilityWrapper: true,
-  },
   "break": {
+    name: "Break",
+    icon: null,
     render: ({ attributes, element, children }) => (
       <br/>
     ),
     hasUtilityWrapper: false,
   },
   "link": {
+    name: "Link",
+    icon: <i className="fa-solid fa-link" aria-hidden/>,
     render: ({ attributes, element, children }) => (
       <a
         {...attributes}
@@ -231,36 +378,45 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
     hasUtilityWrapper: true,
   },
   "figure": {
+    name: "Image",
+    icon: <i className="fa-solid fa-image" aria-hidden/>,
+    buttonInstantiable: true,
     render: FigureElement,
     hasUtilityWrapper: true,
+    // todo: set a TEMP image
+    instanciateElement: () => ({
+      type: "figure",
+      children: [{
+        type: "image",
+        url: "https://google.com",
+        children: [{
+          text: ""
+        }]
+      }, {
+        type: "figcaption",
+        children: [{
+          text: ""
+        }]
+      }]
+    }),
   },
   "figcaption": {
+    name: "Caption",
+    icon: null,
     render: FigcaptionElement,
     hasUtilityWrapper: false,
   },
   "image": {
+    name: "Image",
+    icon: null,
     render: ImageElement,
     hasUtilityWrapper: false,
-  },
-  "linkReference": {
-    render: ({ attributes, element, children }) => null,
-    hasUtilityWrapper: true,
-  },
-  "imageReference": {
-    render: ({ attributes, element, children }) => null,
-    hasUtilityWrapper: true,
-  },
-  "footnote": {
-    render: ({ attributes, element, children }) => null,
-    hasUtilityWrapper: true,
-  },
-  "footnoteReference": {
-    render: ({ attributes, element, children }) => null,
-    hasUtilityWrapper: true
   },
 }
 
 export const DefaultBlockDefinition: IArticleBlockDefinition = {
+  name: "NONE",
+  icon: null,
   render: ({ attributes, element, children }) => (
     <div {...attributes}>{children}</div>
   ),

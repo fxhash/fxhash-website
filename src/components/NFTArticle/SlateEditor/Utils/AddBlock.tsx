@@ -1,16 +1,20 @@
 import style from "./AddBlock.module.scss"
 import cs from "classnames"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import effects from "../../../../styles/Effects.module.scss"
+import { BlockDefinitions, EArticleBlocks, InstantiableArticleBlocksList } from "../Elements/Blocks"
 
 interface Props {
   onClose: () => void
+  onAddBlock: (element: any) => void
   className?: string
 }
 export function AddBlock({
   onClose,
+  onAddBlock,
   className,
 }: Props) {
+  const markerRef = useRef<HTMLDivElement>(null)
   const rootRef = useRef<HTMLDivElement>(null)
   const [position, setPosition] = useState<"up"|"down">("up")
   const positionRef = useRef<"up"|"down">("up")
@@ -27,10 +31,9 @@ export function AddBlock({
     }
 
     const onScroll = () => {
-      if (rootRef.current) {
-        const bounds = rootRef.current.getBoundingClientRect()
-        const Y = bounds.y + bounds.height * 0.5
-        const pos = Y > window.innerHeight * 0.5 ? "up" : "down"
+      if (markerRef.current) {
+        const bounds = markerRef.current.getBoundingClientRect()
+        const pos = bounds.y > window.innerHeight * 0.5 ? "up" : "down"
         if (pos !== positionRef.current) {
           positionRef.current = pos
           setPosition(pos)
@@ -49,15 +52,42 @@ export function AddBlock({
     }
   }, [])
 
+  // a list of the button-instantiable elements
+  const instantiable = useMemo(() => {
+    return InstantiableArticleBlocksList.map(
+      type => BlockDefinitions[type as EArticleBlocks]
+    ).filter(
+      definition => !!definition.buttonInstantiable
+    )
+  }, [])
+
   return (
     <>
-      <div ref={rootRef}/>
+      <div ref={markerRef}/>
       <div 
-        className={cs(style.root, style[`pos-${position}`], className, effects['drop-shadow-big'])}
+        ref={rootRef}
+        className={cs(
+          style.root,
+          style[`pos-${position}`],
+          className,
+          effects['drop-shadow-small']
+        )}
         contentEditable={false}
       >
-        add blocks !
-        <p>more content</p>
+        <div className={cs(style.buttons)}>
+          {instantiable.map((def) => (
+            <button
+              key={def.name}
+              type="button"
+              onClick={() => {
+                onAddBlock(def.instanciateElement!())
+              }}
+            >
+              {def.icon}
+              <span>{def.name}</span>
+            </button>
+          ))}
+        </div>
       </div>
     </>
   )

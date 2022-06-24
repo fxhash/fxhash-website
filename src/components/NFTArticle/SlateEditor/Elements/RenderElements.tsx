@@ -1,19 +1,36 @@
 import style from "./RenderElements.module.scss"
 import cs from "classnames"
-import { RenderElementProps } from "slate-react"
+import { ReactEditor, RenderElementProps, useSlateStatic } from "slate-react"
 import React, { PropsWithChildren, useMemo, useState } from "react"
 import { AddBlock } from "../Utils/AddBlock"
 import { getArticleBlockDefinition } from "./Blocks"
+import { Path, Transforms } from "slate"
 
+
+interface IEditableElementWrapperProps {
+  element: any
+}
 
 /**
  * A generic wrapper which adds some utility components on top of the 
  * Editable Blocks. 
  */
 function EditableElementWrapper({
-  children
-}: PropsWithChildren<any>) {
+  element,
+  children,
+}: PropsWithChildren<IEditableElementWrapperProps>) {
   const [showAddBlock, setShowAddBlock] = useState<boolean>(false)
+
+  const editor = useSlateStatic()
+  const path = ReactEditor.findPath(editor, element)
+
+  const addBlock = (element: any) => {
+    const target = Path.next(path)
+    Transforms.insertNodes(editor, element, {
+      at: target
+    })
+    setShowAddBlock(false)
+  }
 
   return (
     <div
@@ -39,6 +56,7 @@ function EditableElementWrapper({
           >
             <AddBlock
               onClose={() => setShowAddBlock(false)}
+              onAddBlock={addBlock}
               className={cs(style.add_block)}
             />
           </div>
@@ -69,7 +87,7 @@ export function renderElements(props: RenderElementProps) {
   )
 
   return (
-    <Wrapper>
+    <Wrapper element={props.element}>
       {definition.render(props)}
     </Wrapper>
   )

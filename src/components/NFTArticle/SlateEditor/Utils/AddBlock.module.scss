@@ -1,9 +1,9 @@
 .root {
   position: absolute;
-  border: 3px solid var(--color-border);
-  padding: 8px;
+  border: 1px solid var(--color-gray-vlight);
   background-color: var(--color-white);
   width: 300px;
+  border-radius: 4px;
 
   &.pos-up {
     bottom: 0;
@@ -11,5 +11,46 @@
 
   &.pos-down {
     top: -3px;
+  }
+
+  .buttons {
+    display: flex;
+    flex-direction: column;
+    font-size: var(--font-size-small);
+    padding: 2px;
+
+    button {
+      display: flex;
+      flex-direction: row;
+      align-items: baseline;
+      cursor: pointer;
+      border: none;
+      background-color: var(--color-white);
+      padding: 4px;
+      border-radius: 3px;
+
+      &:hover {
+        background-color: var(--color-gray-vvlight);
+
+        i {
+          background-color: var(--color-white);
+          color: var(--color-black);
+        }
+      }
+
+      i {
+        width: 24px;
+        height: 24px;
+        text-align: left;
+        font-size: 14px;
+        background-color: var(--color-gray-vvlight);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 3px;
+        margin-right: 6px;
+        color: var(--color-gray-dark);
+      }
+    }
   }
 }
