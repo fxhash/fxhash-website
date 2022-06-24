@@ -13,6 +13,7 @@ import { withAutoFormat } from './AutoFormatPlugin/'
 import { withImages } from "./ImagePlugin/SlateImagePlugin"
 import { ImageElement } from "../elements/ImageElement"
 import { renderElements } from "./Elements/RenderElements"
+import { onKeyDownHotkeyPlugin } from "./HotkeyPlugin/HotkeyPlugin";
 import 'katex/dist/katex.min.css'
   
 type TypeElement = BaseElement & { 
