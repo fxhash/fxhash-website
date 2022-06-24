@@ -1,4 +1,5 @@
 import { FunctionComponent, ReactNode } from "react"
+import cs from "classnames"
 import { RenderElementProps } from "slate-react"
 import Embed from "../../elements/Embed"
 import TezosStorage from "../../elements/TezosStorage"
@@ -8,6 +9,7 @@ import { FigureElement } from "../../elements/Figure"
 import { FigcaptionElement } from "../../elements/Figcaption"
 import { ImageElement } from "../../elements/ImageElement"
 import { Element } from "slate"
+import { ContextualMenuItems } from "../../../Menus/ContextualMenuItems"
 
 export enum EArticleBlocks {
   "embed-media" = "embed-media",
@@ -55,11 +57,11 @@ export const InstantiableArticleBlocksList: EArticleBlocks[] = [
  * The Instanciation Component can be displayed to enter informations about a
  * block, so that non-empty blocks aren't inserted by default
  */
-export interface IInstanciateComponentProps {
+export interface IEditAttributeProps {
   element: any
-  onInstanciate: (element: any) => void
+  onEdit: (element: any) => void
 }
-export type TInstanciateComponent = FunctionComponent<IInstanciateComponentProps>
+export type TEditAttributeComp = FunctionComponent<IEditAttributeProps>
 
 export interface IArticleBlockDefinition {
   name: string
@@ -68,7 +70,7 @@ export interface IArticleBlockDefinition {
   render: (props: RenderElementProps) => ReactNode
   hasUtilityWrapper: boolean
   instanciateElement?: () => Element
-  instanciateComponent?: TInstanciateComponent
+  editAttributeComp?: TEditAttributeComp
 }
 
 export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> = {
@@ -133,7 +135,7 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
       children: [{
         text: ""
       }]
-    })
+    }),
   },
   "heading": {
     name: "Heading",
@@ -143,19 +145,19 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
       switch (element.depth) {
         case 1:
           return <h1 {...attributes}>{children}</h1>;
-        case 2:
-          return <h2 {...attributes}>{children}</h2>;
+          case 2:
+            return <h2 {...attributes}>{children}</h2>;
         case 3:
           return <h3 {...attributes}>{children}</h3>;
-        case 4:
-          return <h4 {...attributes}>{children}</h4>;
+          case 4:
+            return <h4 {...attributes}>{children}</h4>;
         case 5:
           return <h5 {...attributes}>{children}</h5>;
-        case 6:
+          case 6:
           return <h6 {...attributes}>{children}</h6>;
-        default:
-          break;
-      }
+          default:
+            break;
+          }
     },
     hasUtilityWrapper: true,
     instanciateElement: () => ({
@@ -164,7 +166,28 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
       children: [{
         text: ""
       }]
-    })
+    }),
+    editAttributeComp: ({ element, onEdit }) => {
+      return (
+        <ContextualMenuItems>
+          {[...Array(6)].map((_, idx) => (
+            <button
+              key={idx}
+              type="button"
+              onClick={() => onEdit({
+                depth: idx+1
+              })}
+              className={cs({
+                selected: element.depth === idx+1
+              })}
+            >
+              <i className={`fa-regular fa-h${idx+1}`} aria-hidden/>
+              <span>Heading {idx+1}</span>
+            </button>
+          ))}
+        </ContextualMenuItems>
+      )
+    }
   },
   "thematicBreak": {
     name: "Horizontal break",

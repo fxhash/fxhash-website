@@ -39,14 +39,22 @@ export function BlockMenu({
       }
     }
 
+    const onKeyPressed = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        onClose()
+      }
+    }
+
     onScroll()
 
     document.addEventListener("click", onClick)
     document.addEventListener("scroll", onScroll)
+    document.addEventListener("keydown", onKeyPressed)
 
     return () => {
       document.removeEventListener("click", onClick)
       document.removeEventListener("scroll", onScroll)
+      document.removeEventListener("keydown", onKeyPressed)
     }
   }, [])
 

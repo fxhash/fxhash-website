@@ -20,6 +20,7 @@
     background-color: var(--color-white);
     padding: 4px;
     border-radius: 3px;
+    color: var(--color-black);
 
     &:hover {
       background-color: var(--color-gray-vvlight);
@@ -43,5 +44,10 @@
       margin-right: 6px;
       color: var(--color-gray-dark);
     }
+  }
+
+  &>button:global(.selected) {
+    background-color: var(--color-gray);
+    color: var(--color-white);
   }
 }
