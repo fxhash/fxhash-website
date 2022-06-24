@@ -1,0 +1,15 @@
+.root {
+  position: absolute;
+  border: 3px solid var(--color-border);
+  padding: 8px;
+  background-color: var(--color-white);
+  width: 300px;
+
+  &.pos-up {
+    bottom: 0;
+  }
+
+  &.pos-down {
+    top: -3px;
+  }
+}
