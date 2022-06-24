@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect, useMemo, useState } from "react";
+import React, { forwardRef, useEffect, useMemo, useState, KeyBoardEvent } from "react";
 import { Transforms, Text, BaseEditor, BaseElement, createEditor, Node, Descendant } from "slate";
 import {
   Slate,
@@ -19,7 +19,8 @@ import { withImages } from "./ImagePlugin/SlateImagePlugin";
 import { ImageElement } from "../elements/ImageElement";
 import { FigcaptionElement } from "../elements/Figcaption";
 import { FigureElement } from "../elements/Figure";
-  
+import { onKeyDownHotkeyPlugin } from './HotkeyPlugin/HotkeyPlugin';
+
 type TypeElement = BaseElement & { 
   type: string
   children: any 
@@ -291,7 +292,10 @@ export const SlateEditor = forwardRef<Node[], SlateEditorProps>(({
             <Editable
               renderElement={renderElement}
               renderLeaf={renderLeaf}
-              placeholder={placeholder}
+	      placeholder={placeholder}
+	      onKeyDown={(event: KeyBoardEvent<HTMLDivElement>) => {
+		onKeyDownHotkeyPlugin(editor, event)
+	      }}
             />
           </Slate>
         </div>
