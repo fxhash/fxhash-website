@@ -12,9 +12,10 @@ import { TezosStorageProps } from "../elements/TezosStorage"
 import { withAutoFormat } from './AutoFormatPlugin/'
 import { withImages } from "./Plugins/SlateImagePlugin"
 import { ImageElement } from "../elements/ImageElement"
+import { onKeyDownHotkeyPlugin } from "./HotkeyPlugin/HotkeyPlugin"
 import { RenderElements } from "./Elements/RenderElements"
 import 'katex/dist/katex.min.css'
-import { withConstraints } from "./Plugins/SlateConstraintsPlugin";
+import { withConstraints } from "./Plugins/SlateConstraintsPlugin"
   
 type TypeElement = BaseElement & { 
   type: string
@@ -35,13 +36,13 @@ type TezosStorageElement = TypeElement & TezosStorageProps
 
 type CustomElement =  HeadlineElement | TezosStorageElement | ImageElement;
 
-type FormattedText = { 
+export type TextFormatKey = 'strong' | 'emphasis' | 'underline' | 'inlineCode';
+
+export type TextFormats = {[key in TextFormatKey]: boolean}
+
+export type FormattedText = { 
   text: string
-  strong?: boolean
-  emphasis?: boolean 
-  delete?: boolean
-  inlineCode?: boolean
-}
+} & TextFormats
 
 type CustomText = FormattedText
 
@@ -60,8 +61,8 @@ const renderLeaf = ({ attributes, children, leaf }: RenderLeafProps) => {
   if (leaf.emphasis) {
     children = <em>{children}</em>;
   }
-  if (leaf.delete) {
-    children = <del>{children}</del>;
+  if (leaf.underline) {
+    children = <u>{children}</u>;
   }
   if (leaf.inlineCode) {
     children = <code>{children}</code>;
@@ -120,7 +121,10 @@ export const SlateEditor = forwardRef<Node[], SlateEditorProps>(({
             <Editable
               renderElement={RenderElements}
               renderLeaf={renderLeaf}
-              placeholder={placeholder}
+	      placeholder={placeholder}
+	      onKeyDown={(event: KeyBoardEvent<HTMLDivElement>) => {
+		onKeyDownHotkeyPlugin(editor, event)
+	      }}
             />
           </Slate>
         </div>
