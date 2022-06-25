@@ -1,6 +1,10 @@
 import React, { useCallback,useEffect } from 'react';
 
-const useClickOutside = (ref: React.RefObject<HTMLElement>, onClickOutside: Function, skip: boolean) => {
+const useClickOutside = (
+  ref: React.RefObject<HTMLElement>,
+  onClickOutside: Function,
+  skip: boolean
+) => {
   const handleClick = useCallback((e) => {
     if (!ref?.current || ref.current.contains(e.target)) {
       // inside click

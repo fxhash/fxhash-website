@@ -216,7 +216,7 @@ function convertSlateLeafDirectiveToMarkdown(
  * Turns a figcaption element into an element which will be turned into an
  * image in proper markdown
  */
-function figureToMarkdown(node: Root, next: (children: any[]) => any) {
+function figureToMarkdown(node: any, next: (children: any[]) => any) {
   // create a regular image node
   const imageNode: any = {
     type: "image"
@@ -224,14 +224,14 @@ function figureToMarkdown(node: Root, next: (children: any[]) => any) {
 
   // find if there's a caption
   const caption: Node|null = node.children.find(
-    node => node.type === ("figcaption" as any)
+    (node: Node) => node.type === ("figcaption" as any)
   )
   if (caption && caption.children?.length > 0) {
     imageNode.alt = caption.children[0].text
   }
   // now do the same for the image element
   const image: Node|null = node.children.find(
-    node => node.type === "image"
+    (node: Node) => node.type === "image"
   )
   if (image) {
     imageNode.url = image.url
@@ -245,12 +245,12 @@ const slateToRemarkTransformerOverrides: OverridedSlateBuilders = {
   'tezos-storage': convertSlateLeafDirectiveToMarkdown,
   'embed-media': convertSlateLeafDirectiveToMarkdown,
   figure: figureToMarkdown,
-  inlineMath: (node: Root) => ({ 
+  inlineMath: (node: any) => ({ 
     type: node.type, 
     value: node?.data?.math, 
     data: { ...node.data} 
   }),	  
-  math: (node: Root) => ({ 
+  math: (node: any) => ({ 
     type: node.type, 
     value: node?.data?.math, 
     data: { ...node.data} 
