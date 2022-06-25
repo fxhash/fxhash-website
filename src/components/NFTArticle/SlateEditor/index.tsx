@@ -12,7 +12,7 @@ import { TezosStorageProps } from "../elements/TezosStorage"
 import { withAutoFormat } from './AutoFormatPlugin/'
 import { withImages } from "./Plugins/SlateImagePlugin"
 import { ImageElement } from "../elements/ImageElement"
-import { renderElements } from "./Elements/RenderElements"
+import { RenderElements } from "./Elements/RenderElements"
 import 'katex/dist/katex.min.css'
 import { withConstraints } from "./Plugins/SlateConstraintsPlugin";
   
@@ -118,7 +118,7 @@ export const SlateEditor = forwardRef<Node[], SlateEditorProps>(({
             onChange={setValue}
           >
             <Editable
-              renderElement={renderElements}
+              renderElement={RenderElements}
               renderLeaf={renderLeaf}
               placeholder={placeholder}
             />

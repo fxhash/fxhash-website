@@ -20,3 +20,5 @@ export const ContextualMenu = forwardRef<HTMLDivElement, PropsWithChildren<Props
     </div>
   )
 })
+
+ContextualMenu.displayName = "ContextualMenu"

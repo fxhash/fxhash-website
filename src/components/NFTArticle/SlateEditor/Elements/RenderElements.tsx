@@ -167,7 +167,7 @@ function EditableElementWrapper({
  * Acts as a wrapper around the <EditableElement> component and augments it with
  * some utilities.
  */
-export function renderElements(props: RenderElementProps) {
+export function RenderElements(props: RenderElementProps) {
   const definition = useMemo(
     () => getArticleBlockDefinition(props.element.type),
     [props.element.type]
