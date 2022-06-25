@@ -7,10 +7,20 @@ import { getArticleBlockDefinition } from "./Blocks"
 import { Path, Transforms } from "slate"
 import { BlockExtraMenu } from "../Utils/BlockExtraMenu"
 import { BlockMenu } from "../Utils/BlockMenu"
+import { TAttributesEditorWrapper } from "../../../../types/ArticleEditor/ArticleEditorBlocks"
+import { TEditNodeFn, TEditNodeFnFactory } from "../../../../types/ArticleEditor/Transforms"
 
 
 interface IEditableElementWrapperProps {
   element: any
+}
+
+// default function to create an edit node function
+const defaultEditNodeFactory: TEditNodeFnFactory = (editor, element, path) =>
+(update) => {
+  Transforms.setNodes(editor, update, {
+    at: path
+  })
 }
 
 /**
@@ -42,16 +52,23 @@ function EditableElementWrapper({
     })
   }
 
-  const editNode = (element: any) => {
-    Transforms.setNodes(editor, element, {
-      at: path
-    })
-  }
-
+  // get the definition corresponding to the element type
   const definition = useMemo(
     () => getArticleBlockDefinition(element.type),
     [element.type]
   )
+
+  const ParametersWrapper = useMemo<TAttributesEditorWrapper>(
+    () => definition.editAttributeWrapper || BlockMenu,
+    [definition]
+  )
+
+  // create the edit node function based on the element definition
+  // (use the definition's one or the default one if none is given)
+  const editNode = useMemo<TEditNodeFn>(() => {
+    const factory = definition.onEditNodeFactory || defaultEditNodeFactory
+    return factory(editor, element, path)
+  }, [definition, editor, element, path])
 
   return (
     <div
@@ -125,15 +142,21 @@ function EditableElementWrapper({
           className={cs(style.add_block_wrapper)}
           contentEditable={false}
         >
-          <BlockMenu
+          <ParametersWrapper
             onClose={() => setShowSettings(false)}
             className={cs(style.add_block)}
           >
-            {definition.editAttributeComp({
-              element: element,
-              onEdit: editNode,
-            })}
-          </BlockMenu>
+            <definition.editAttributeComp
+              element={element}
+              onEdit={!definition.hideSettingsAfterUpdate 
+                ? editNode 
+                : (update) => {
+                  editNode(update)
+                  setShowSettings(false)
+                }
+              }
+            />
+          </ParametersWrapper>
         </div>
       )}
     </div>
@@ -151,13 +174,16 @@ export function renderElements(props: RenderElementProps) {
   )
   const Wrapper = useMemo(
     () => definition.hasUtilityWrapper 
-      ? EditableElementWrapper 
-      : React.Fragment, 
+      ? ({ children }: PropsWithChildren<any>) => (
+        <EditableElementWrapper element={props.element}>
+          {children}
+        </EditableElementWrapper>
+      ): React.Fragment, 
     [definition]
   )
-
+  
   return (
-    <Wrapper element={props.element}>
+    <Wrapper>
       {definition.render(props)}
     </Wrapper>
   )

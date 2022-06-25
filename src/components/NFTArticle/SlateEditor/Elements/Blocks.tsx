@@ -8,11 +8,15 @@ import { InlineMath, BlockMath } from 'react-katex'
 import { FigureElement } from "../../elements/Figure"
 import { FigcaptionElement } from "../../elements/Figcaption"
 import { ImageElement } from "../../elements/ImageElement"
-import { Element } from "slate"
+import { Editor, Element, Node, Path, Transforms } from "slate"
 import { ContextualMenuItems } from "../../../Menus/ContextualMenuItems"
 import { HeadingAttributeSettings } from "./AttributeSettings/HeadingAttributeSettings"
 import { ListAttributeSettings } from "./AttributeSettings/ListAttributeSettings"
 import { BlockquoteElement } from "../../elements/Blockquote"
+import { ImageAttributeSettings } from "./AttributeSettings/ImageAttributeSettings"
+import { TAttributesEditorWrapper } from "../../../../types/ArticleEditor/ArticleEditorBlocks"
+import { BlockParamsModal } from "../Utils/BlockParamsModal"
+import { TEditNodeFnFactory } from "../../../../types/ArticleEditor/Transforms"
 
 export enum EArticleBlocks {
   "embed-media" = "embed-media",
@@ -74,6 +78,13 @@ export interface IArticleBlockDefinition {
   hasUtilityWrapper: boolean
   instanciateElement?: () => Element
   editAttributeComp?: TEditAttributeComp
+  editAttributeWrapper?: TAttributesEditorWrapper
+  // the definition can specify a function which can be called to output a 
+  // function which will be called to update a node. This is useful if the 
+  // default editNode function doesn't support certain edge cases 
+  onEditNodeFactory?: TEditNodeFnFactory
+  // should the settings menu be hidden after node is update
+  hideSettingsAfterUpdate?: boolean
 }
 
 export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> = {
@@ -388,12 +399,11 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
     buttonInstantiable: true,
     render: FigureElement,
     hasUtilityWrapper: true,
-    // todo: set a TEMP image
     instanciateElement: () => ({
       type: "figure",
       children: [{
         type: "image",
-        url: "https://google.com",
+        url: "",  // if "", will display the "add image" component
         children: [{
           text: ""
         }]
@@ -404,6 +414,22 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
         }]
       }]
     }),
+    editAttributeComp: ImageAttributeSettings,
+    editAttributeWrapper: BlockParamsModal,
+    // when the ImageAttributeSettings fires onEdit, we need to update the Image
+    // child component instead of the figure element
+    onEditNodeFactory: (editor, element, path) => (update) => {
+      const children = Node.elements(element)
+      for (const [child, childPath] of children) {
+        if (child.type === "image") {
+          Transforms.setNodes(editor, update, {
+            at: path.concat(childPath)
+          })
+          return
+        }
+      }
+    },
+    hideSettingsAfterUpdate: true,
   },
   "figcaption": {
     name: "Caption",
