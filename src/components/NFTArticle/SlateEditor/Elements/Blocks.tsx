@@ -1,4 +1,5 @@
 import { FunctionComponent, ReactNode } from "react"
+import cs from "classnames"
 import { RenderElementProps } from "slate-react"
 import Embed from "../../elements/Embed"
 import TezosStorage from "../../elements/TezosStorage"
@@ -7,7 +8,15 @@ import { InlineMath, BlockMath } from 'react-katex'
 import { FigureElement } from "../../elements/Figure"
 import { FigcaptionElement } from "../../elements/Figcaption"
 import { ImageElement } from "../../elements/ImageElement"
-import { Element } from "slate"
+import { Editor, Element, Node, Path, Transforms } from "slate"
+import { ContextualMenuItems } from "../../../Menus/ContextualMenuItems"
+import { HeadingAttributeSettings } from "./AttributeSettings/HeadingAttributeSettings"
+import { ListAttributeSettings } from "./AttributeSettings/ListAttributeSettings"
+import { BlockquoteElement } from "../../elements/Blockquote"
+import { ImageAttributeSettings } from "./AttributeSettings/ImageAttributeSettings"
+import { TAttributesEditorWrapper } from "../../../../types/ArticleEditor/ArticleEditorBlocks"
+import { BlockParamsModal } from "../Utils/BlockParamsModal"
+import { TEditNodeFnFactory } from "../../../../types/ArticleEditor/Transforms"
 
 export enum EArticleBlocks {
   "embed-media" = "embed-media",
@@ -55,11 +64,11 @@ export const InstantiableArticleBlocksList: EArticleBlocks[] = [
  * The Instanciation Component can be displayed to enter informations about a
  * block, so that non-empty blocks aren't inserted by default
  */
-export interface IInstanciateComponentProps {
+export interface IEditAttributeProps {
   element: any
-  onInstanciate: (element: any) => void
+  onEdit: (element: any) => void
 }
-export type TInstanciateComponent = FunctionComponent<IInstanciateComponentProps>
+export type TEditAttributeComp = FunctionComponent<IEditAttributeProps>
 
 export interface IArticleBlockDefinition {
   name: string
@@ -68,7 +77,14 @@ export interface IArticleBlockDefinition {
   render: (props: RenderElementProps) => ReactNode
   hasUtilityWrapper: boolean
   instanciateElement?: () => Element
-  instanciateComponent?: TInstanciateComponent
+  editAttributeComp?: TEditAttributeComp
+  editAttributeWrapper?: TAttributesEditorWrapper
+  // the definition can specify a function which can be called to output a 
+  // function which will be called to update a node. This is useful if the 
+  // default editNode function doesn't support certain edge cases 
+  onEditNodeFactory?: TEditNodeFnFactory
+  // should the settings menu be hidden after node is update
+  hideSettingsAfterUpdate?: boolean
 }
 
 export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> = {
@@ -133,7 +149,7 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
       children: [{
         text: ""
       }]
-    })
+    }),
   },
   "heading": {
     name: "Heading",
@@ -143,19 +159,19 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
       switch (element.depth) {
         case 1:
           return <h1 {...attributes}>{children}</h1>;
-        case 2:
-          return <h2 {...attributes}>{children}</h2>;
+          case 2:
+            return <h2 {...attributes}>{children}</h2>;
         case 3:
           return <h3 {...attributes}>{children}</h3>;
-        case 4:
-          return <h4 {...attributes}>{children}</h4>;
+          case 4:
+            return <h4 {...attributes}>{children}</h4>;
         case 5:
           return <h5 {...attributes}>{children}</h5>;
-        case 6:
+          case 6:
           return <h6 {...attributes}>{children}</h6>;
-        default:
-          break;
-      }
+          default:
+            break;
+          }
     },
     hasUtilityWrapper: true,
     instanciateElement: () => ({
@@ -164,7 +180,8 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
       children: [{
         text: ""
       }]
-    })
+    }),
+    editAttributeComp: HeadingAttributeSettings,
   },
   "thematicBreak": {
     name: "Horizontal break",
@@ -178,9 +195,7 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
     name: "Quote",
     icon: <i className="fa-solid fa-quotes" aria-hidden/>,
     buttonInstantiable: true,
-    render: ({ attributes, element, children }) => (
-      <blockquote {...attributes}>{children}</blockquote>
-    ),
+    render: BlockquoteElement,
     hasUtilityWrapper: true,
     instanciateElement: () => ({
       type: "blockquote",
@@ -210,7 +225,8 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
           text: ""
         }]
       }]
-    })
+    }),
+    editAttributeComp: ListAttributeSettings,
   },
   "listItem": {
     name: "List Item",
@@ -383,12 +399,11 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
     buttonInstantiable: true,
     render: FigureElement,
     hasUtilityWrapper: true,
-    // todo: set a TEMP image
     instanciateElement: () => ({
       type: "figure",
       children: [{
         type: "image",
-        url: "https://google.com",
+        url: "",  // if "", will display the "add image" component
         children: [{
           text: ""
         }]
@@ -399,6 +414,22 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
         }]
       }]
     }),
+    editAttributeComp: ImageAttributeSettings,
+    editAttributeWrapper: BlockParamsModal,
+    // when the ImageAttributeSettings fires onEdit, we need to update the Image
+    // child component instead of the figure element
+    onEditNodeFactory: (editor, element, path) => (update) => {
+      const children = Node.elements(element)
+      for (const [child, childPath] of children) {
+        if (child.type === "image") {
+          Transforms.setNodes(editor, update, {
+            at: path.concat(childPath)
+          })
+          return
+        }
+      }
+    },
+    hideSettingsAfterUpdate: true,
   },
   "figcaption": {
     name: "Caption",

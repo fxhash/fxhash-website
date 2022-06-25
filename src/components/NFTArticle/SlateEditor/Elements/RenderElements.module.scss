@@ -1,19 +1,41 @@
 .element_wrapper {
   position: relative;
-  padding-bottom: 30px;
+  padding-bottom: 15px;
+  padding-top: 15px;
 
-  .btn_add {
+  &:hover {
+    background-color: var(--color-gray-vvvlight);
+  }
+
+  .buttons {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 4px;
     position: absolute;
-    bottom: 0;
+    bottom: -15px;
     left: 50%;
     transform: translate(-50%, 0);
     pointer-events: none;
     opacity: 0;
+
+    &>button {
+      cursor: pointer;
+      border: none;
+      background-color: var(--color-secondary);
+      width: 30px;
+      height: 30px;
+      color: var(--color-white);
+    }
+
+    &>div {
+      width: 30px;
+    }
   }
 
   .sep {
     position: absolute;
-    bottom: 14px;
+    bottom: 0;
     left: 0;
     width: 100%;
     height: 3px;
@@ -22,15 +44,9 @@
   }
 
   &:not(.opened):hover {
-    .btn_add {
+    .buttons {
       opacity: 1;
       pointer-events: all;
-      cursor: pointer;
-      border: none;
-      background-color: var(--color-secondary);
-      width: 30px;
-      height: 30px;
-      color: var(--color-white);
     }
   }
 }
