@@ -9,6 +9,7 @@ import { BlockExtraMenu } from "../Utils/BlockExtraMenu"
 import { BlockMenu } from "../Utils/BlockMenu"
 import { TAttributesEditorWrapper } from "../../../../types/ArticleEditor/ArticleEditorBlocks"
 import { TEditNodeFn, TEditNodeFnFactory } from "../../../../types/ArticleEditor/Transforms"
+import { withStopPropagation } from "../../../../utils/events"
 
 
 interface IEditableElementWrapperProps {
@@ -82,7 +83,9 @@ function EditableElementWrapper({
           <button
             type="button"
             contentEditable={false}
-            onClick={() => setShowSettings(true)}
+            onClick={withStopPropagation(
+              () => setShowSettings(true)
+            )}
             tabIndex={-1}
           >
             <i className="fa-solid fa-gear" aria-hidden/>
@@ -93,7 +96,9 @@ function EditableElementWrapper({
         <button
           type="button"
           contentEditable={false}
-          onClick={() => setShowAddBlock(true)}
+          onClick={withStopPropagation(
+            () => setShowAddBlock(true)
+          )}
           tabIndex={-1}
         >
           <i className="fa-solid fa-plus" aria-hidden/>
@@ -101,7 +106,9 @@ function EditableElementWrapper({
         <button
           type="button"
           contentEditable={false}
-          onClick={() => setShowExtraMenu(true)}
+          onClick={withStopPropagation(
+            () => setShowExtraMenu(true)
+          )}
           tabIndex={-1}
         >
           <i className="fa-solid fa-ellipsis" aria-hidden/>
