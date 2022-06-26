@@ -13,7 +13,7 @@ import { withAutoFormat } from './AutoFormatPlugin/'
 import { withImages } from "./Plugins/SlateImagePlugin"
 import { ImageElement } from "../elements/ImageElement"
 import { onKeyDownHotkeyPlugin } from "./HotkeyPlugin/HotkeyPlugin"
-import { renderElements } from "./Elements/RenderElements"
+import { RenderElements } from "./Elements/RenderElements"
 import 'katex/dist/katex.min.css'
 import { withConstraints } from "./Plugins/SlateConstraintsPlugin"
 import dynamic from 'next/dynamic'
