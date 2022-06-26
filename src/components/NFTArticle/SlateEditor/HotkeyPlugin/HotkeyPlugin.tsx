@@ -6,7 +6,6 @@ import { TextFormatKey } from '../index';
 const HOTKEYS: {[key: string]: TextFormatKey} = {
   'mod+b': 'strong',
   'mod+i': 'emphasis',
-  'mod+u': 'underline',
   'mod+`': 'inlineCode',
 }
 

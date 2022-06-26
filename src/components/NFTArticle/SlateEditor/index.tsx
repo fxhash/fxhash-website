@@ -40,7 +40,7 @@ type TezosStorageElement = TypeElement & TezosStorageProps
 
 type CustomElement =  HeadlineElement | TezosStorageElement | ImageElement;
 
-export type TextFormatKey = 'strong' | 'emphasis' | 'underline' | 'inlineCode';
+export type TextFormatKey = 'strong' | 'emphasis' | 'inlineCode';
 
 export type TextFormats = {[key in TextFormatKey]: boolean}
 
@@ -64,9 +64,6 @@ const renderLeaf = ({ attributes, children, leaf }: RenderLeafProps) => {
   }
   if (leaf.emphasis) {
     children = <em>{children}</em>;
-  }
-  if (leaf.underline) {
-    children = <u>{children}</u>;
   }
   if (leaf.inlineCode) {
     children = <code>{children}</code>;
