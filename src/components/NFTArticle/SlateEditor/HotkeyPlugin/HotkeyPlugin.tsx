@@ -9,7 +9,7 @@ const HOTKEYS: {[key: string]: TextFormatKey} = {
   'mod+`': 'inlineCode',
 }
 
-export function onKeyDownHotkeyPlugin(editor: Editor, event: KeyboardEvent): void{
+export function onKeyDownHotkeyPlugin(editor: Editor, event: React.KeyboardEvent): void{
   for (const hotkey in HOTKEYS) {
     if (isHotkey(hotkey, event as any)) {
       event.preventDefault()

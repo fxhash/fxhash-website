@@ -119,15 +119,15 @@ export const SlateEditor = forwardRef<Node[], SlateEditorProps>(({
             value={value} 
             onChange={setValue}
 	  >
-	    <FloatingInlineMenu />
             <Editable
               renderElement={RenderElements}
               renderLeaf={renderLeaf}
 	      placeholder={placeholder}
-	      onKeyDown={(event: KeyBoardEvent<HTMLDivElement>) => {
+	      onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => {
 		onKeyDownHotkeyPlugin(editor, event)
 	      }}
             />
+	    <FloatingInlineMenu />
           </Slate>
         </div>
       </>
