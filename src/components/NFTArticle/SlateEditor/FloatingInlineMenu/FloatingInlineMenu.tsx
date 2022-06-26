@@ -1,5 +1,7 @@
 import React, { useMemo, useRef, useEffect } from 'react'
 import style from "./FloatingInlineMenu.module.scss"
+import effects from "../../../../styles/Effects.module.scss"
+import cs from "classnames"
 import ReactDOM from 'react-dom'
 import { Slate, Editable, withReact, useSlate, useFocused } from 'slate-react'
 import {
@@ -46,20 +48,20 @@ const FloatingInlineMenu = () => {
   return ReactDOM.createPortal(
     <div
       ref={ref}
-      className={style.menu}
+      className={cs(style.menu, effects['drop-shadow-small'])}
       onMouseDown={e => {
-	// prevent toolbar from taking focus away from editor
-	e.preventDefault()
+        // prevent toolbar from taking focus away from editor
+        e.preventDefault()
       }}
     >
       <TextFormatButton format="strong">
-	<i className="fa-solid fa-bold"/>
+	      <i className="fa-solid fa-bold"/>
       </TextFormatButton>
       <TextFormatButton format="emphasis" >
-	<i className="fa-solid fa-italic"/>
+        <i className="fa-solid fa-italic"/>
       </TextFormatButton>
       <TextFormatButton format="inlineCode">
-	<i className="fa-solid fa-code" />
+        <i className="fa-solid fa-code" />
       </TextFormatButton>
     </div>,
     document.body
