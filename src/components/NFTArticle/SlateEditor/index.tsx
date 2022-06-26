@@ -10,17 +10,17 @@ import {
 import { withHistory, HistoryEditor } from "slate-history"
 import { TezosStorageProps } from "../elements/TezosStorage"
 import { withAutoFormat } from './AutoFormatPlugin/'
-import { withImages } from "./ImagePlugin/SlateImagePlugin"
+import { withImages } from "./Plugins/SlateImagePlugin"
 import { ImageElement } from "../elements/ImageElement"
+import { onKeyDownHotkeyPlugin } from "./HotkeyPlugin/HotkeyPlugin"
 import { renderElements } from "./Elements/RenderElements"
-import { onKeyDownHotkeyPlugin } from "./HotkeyPlugin/HotkeyPlugin";
-import dynamic from 'next/dynamic'
 import 'katex/dist/katex.min.css'
+import { withConstraints } from "./Plugins/SlateConstraintsPlugin"
+import dynamic from 'next/dynamic'
 
 const FloatingInlineMenu = dynamic(() => import('./FloatingInlineMenu/FloatingInlineMenu'), {
   ssr: false,
 })
-
 type TypeElement = BaseElement & { 
   type: string
   children: any 
@@ -84,15 +84,17 @@ export const SlateEditor = forwardRef<Node[], SlateEditorProps>(({
   placeholder,
 }, ref) => {
     const editor = useMemo(() => {
-      const e = withImages(
-        withAutoFormat(
-          withHistory(
-            withReact(
-              createEditor()
+      const e = withConstraints(
+        withImages(
+          withAutoFormat(
+            withHistory(
+              withReact(
+                createEditor()
+              )
             )
           )
         )
-      );
+      )
       const { isInline, isVoid } = e;
       e.isInline = element => INLINE_ELEMENTS.includes(element.type) || isInline(element)
       e.isVoid = element => VOID_ELEMENTS.includes(element.type) || isVoid(element)
@@ -119,7 +121,7 @@ export const SlateEditor = forwardRef<Node[], SlateEditorProps>(({
 	  >
 	    <FloatingInlineMenu />
             <Editable
-              renderElement={renderElements}
+              renderElement={RenderElements}
               renderLeaf={renderLeaf}
 	      placeholder={placeholder}
 	      onKeyDown={(event: KeyBoardEvent<HTMLDivElement>) => {
