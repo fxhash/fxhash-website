@@ -1,6 +1,6 @@
 import isHotkey from 'is-hotkey'
 import { Editor } from 'slate'; 
-import { toggleMark } from '../utils';
+import { toggleFormat } from '../utils';
 import { TextFormatKey } from '../index';
 
 const HOTKEYS: {[key: string]: TextFormatKey} = {
@@ -15,7 +15,7 @@ export function onKeyDownHotkeyPlugin(editor: Editor, event: KeyboardEvent): voi
     if (isHotkey(hotkey, event as any)) {
       event.preventDefault()
       const mark = HOTKEYS[hotkey]
-      toggleMark(editor, mark)
+      toggleFormat(editor, mark)
     }
   }
 }

@@ -14,8 +14,13 @@ import { withImages } from "./ImagePlugin/SlateImagePlugin"
 import { ImageElement } from "../elements/ImageElement"
 import { renderElements } from "./Elements/RenderElements"
 import { onKeyDownHotkeyPlugin } from "./HotkeyPlugin/HotkeyPlugin";
+import dynamic from 'next/dynamic'
 import 'katex/dist/katex.min.css'
-  
+
+const FloatingInlineMenu = dynamic(() => import('./FloatingInlineMenu/FloatingInlineMenu'), {
+  ssr: false,
+})
+
 type TypeElement = BaseElement & { 
   type: string
   children: any 
@@ -114,7 +119,8 @@ export const SlateEditor = forwardRef<Node[], SlateEditorProps>(({
             editor={editor} 
             value={value} 
             onChange={setValue}
-          >
+	  >
+	    <FloatingInlineMenu />
             <Editable
               renderElement={renderElements}
               renderLeaf={renderLeaf}
