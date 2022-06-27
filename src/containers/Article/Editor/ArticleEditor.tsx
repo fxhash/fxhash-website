@@ -35,6 +35,7 @@ const editorInitialValue = [
 // todo: refacto, move out of there
 interface IInput {
   title: string
+  thumbnailCaption: string
   abstract: string
   editions: string
   royalties: string
@@ -43,6 +44,7 @@ interface IInput {
 
 const initialValues: IInput = {
   title: "",
+  thumbnailCaption: "",
   abstract: "",
   editions: "",
   royalties: "",
@@ -175,6 +177,13 @@ export function ArticleEditor({
               )
             }
             accepted={["image/jpeg", "image/png", "image/gif"]}
+          />
+          <TextareaAutosize
+            value={values.thumbnailCaption}
+            onChange={evt => setFieldValue("thumbnailCaption", evt.target.value)}
+            className={cs(style.input_caption)}
+            minRows={1}
+            placeholder="Thumbnail caption..."
           />
 
           <div className={cs(style.section_title)}>
