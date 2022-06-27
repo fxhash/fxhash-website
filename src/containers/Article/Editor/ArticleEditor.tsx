@@ -20,6 +20,8 @@ import { getMarkdownFromSlateEditorState } from "../../../components/NFTArticle/
 import { IEditorMediaFile } from "../../../types/ArticleEditor/Image"
 import { FxEditor } from "../../../types/ArticleEditor/Editor"
 import { EditorMedias } from "./EditorMedias"
+import { ImagePolymorphic } from "../../../components/Medias/ImagePolymorphic"
+import { arrayRemoveDuplicates } from "../../../utils/array"
 
 const editorInitialValue = [
   {
@@ -58,30 +60,45 @@ export function ArticleEditor({
     console.log(markdown)
   }
 
-  // TODO: move state to object
-  const [thumbnail, setThumbnail] = useState<File|null>(null)
-  const thumbnailUrl = useMemo(() => {
-    console.log(thumbnail)
-    if (!thumbnail) return null
-    return URL.createObjectURL(thumbnail)
-  }, [thumbnail])
+  const [thumbnail, setThumbnail] = useState<string|null>(null)
+
+  // update the thumbnail by creating a local URL from a given file
+  const updateThumbnail = useCallback((file: File|null) => {
+    setThumbnail(
+      file ? URL.createObjectURL(file) : null
+    )
+  }, [])
 
   // keeps track of the medias added in editor (and their local/uploaded vers)
   const [medias, setMedias] = useState<IEditorMediaFile[]>([])
 
-  console.log({medias})
+  // add the thumbnail to the list of medias
+  const mediasWithThumbnail = useMemo(
+    () => thumbnail ? 
+      arrayRemoveDuplicates([
+        {
+          uri: thumbnail,
+          type: "image"
+        } as IEditorMediaFile,
+        ...medias
+      ],
+      (a, b) => a.uri === b.uri
+      ) : medias,
+    [thumbnail, medias]
+  )
 
   // when a media uri is updated (via IPFS upload)
   const onMediaUriUpdate = useCallback((target: IEditorMediaFile, uri: string) => {
+    // should the thumbnail be updated ?
+    if (thumbnail === target.uri) {
+      setThumbnail(uri)
+    }
+    // update the medias in the editor
     editorStateRef.current?.updateMediaUrl(
       target,
       uri
     )
   }, [])
-
-  // TODO
-  // * display medias in a component
-  // * upload medias -> calls updateMedia
 
   return (
     <Formik
@@ -126,12 +143,14 @@ export function ArticleEditor({
           </div>
           <Dropzone
             className={cs(style.thumbnail_dropzone, {
-              [style.image_loaded]: !!thumbnailUrl
+              [style.image_loaded]: !!thumbnail
             })}
-            onChange={(files) => setThumbnail(files?.[0] || null)}
+            onChange={(files) => updateThumbnail(files?.[0] || null)}
             textDefault={
-              thumbnailUrl ? (
-                <img src={thumbnailUrl} alt="thumbnail image"/>
+              thumbnail ? (
+                <ImagePolymorphic
+                  uri={thumbnail}
+                />
               ):(
                 <div className={cs(style.placeholder_wrapper)}>
                   <i className="fa-solid fa-image" aria-hidden/>
@@ -142,8 +161,10 @@ export function ArticleEditor({
               )
             }
             textDrag={
-              thumbnailUrl ? (
-                <img src={thumbnailUrl} alt="thumbnail image"/>
+              thumbnail ? (
+                <ImagePolymorphic
+                  uri={thumbnail}
+                />
               ):(
                 <div className={cs(style.placeholder_wrapper)}>
                   <i className="fa-solid fa-image" aria-hidden/>
@@ -183,7 +204,7 @@ export function ArticleEditor({
                 <small>Before the article can be published, all the medias within the article must be uploaded to IPFS</small>
               </label>
               <EditorMedias
-                medias={medias}
+                medias={mediasWithThumbnail}
                 onMediaUriUpdate={onMediaUriUpdate}
               />
             </Field>
