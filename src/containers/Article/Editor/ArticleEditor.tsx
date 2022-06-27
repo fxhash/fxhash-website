@@ -209,7 +209,7 @@ export function ArticleEditor({
           <div className={cs(style.w900)}>
             <Field>
               <label>
-                Medias
+                Medias ({mediasWithThumbnail.length})
                 <small>Before the article can be published, all the medias within the article must be uploaded to IPFS</small>
               </label>
               <EditorMedias
