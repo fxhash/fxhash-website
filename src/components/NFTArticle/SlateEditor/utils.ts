@@ -1,5 +1,4 @@
-import { Range, Editor, Text, Transforms  } from 'slate'; 
-import { FormattedText } from './index';
+import { Range, Editor, Text, Transforms, Element, NodeEntry } from 'slate'; 
 
 export function getRangeFromBlockStartToCursor(editor: Editor): Range {
   const { anchor } = editor.selection as Range;
@@ -39,6 +38,7 @@ export function isFormatActive(editor: Editor, format: string):boolean {
   })
   return !!match
 }
+
 export function toggleFormat(editor: Editor, format: string): void {
   const isActive = isFormatActive(editor, format)
   Transforms.setNodes(
@@ -46,4 +46,12 @@ export function toggleFormat(editor: Editor, format: string): void {
     { [format]: isActive ? null : true },
     { match: Text.isText, split: true }
   )
+}
+
+export function lookupElementByType(editor:Editor, type: string): NodeEntry {
+  const [element] = Editor.nodes(editor, {
+    match: n =>
+      !Editor.isEditor(n) && Element.isElement(n) && n.type === type, 
+  })
+  return element
 }

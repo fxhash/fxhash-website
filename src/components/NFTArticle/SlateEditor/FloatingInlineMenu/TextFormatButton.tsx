@@ -14,7 +14,7 @@ export const TextFormatButton = ({ format, children }: PropsWithChildren<ITextFo
   return (
     <button
       className={cx(
-	style.textFormatButton, 
+	style.button, 
         {[style.active]: isFormatActive(editor, format)}
       )}
       onClick={() => toggleFormat(editor, format)}

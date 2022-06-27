@@ -1,50 +1,57 @@
-import React, { useMemo, useRef, useEffect } from 'react'
+import React, { useRef, useState } from 'react'
 import style from "./FloatingInlineMenu.module.scss"
 import effects from "../../../../styles/Effects.module.scss"
 import cs from "classnames"
 import ReactDOM from 'react-dom'
-import { Slate, Editable, withReact, useSlate, useFocused } from 'slate-react'
+import { useSlate,  useFocused } from 'slate-react'
 import {
-  Editor,
-  Transforms,
-  Text,
-  createEditor,
-  Descendant,
   Range,
+  NodeEntry, 
 } from 'slate'
 import {TextFormatButton} from './TextFormatButton';
 import {useClientEffect} from '../../../../utils/hookts'
+import { lookupElementByType } from '../utils'; 
+import { LinkButton } from './LinkButton';
 
 const FloatingInlineMenu = () => {
   const ref = useRef<HTMLDivElement>(null)
   const editor = useSlate()
   const inFocus = useFocused()
+  const [overrideContent, setOverrideContent] = useState(null)
 
-  useClientEffect(() => {
-    const el = ref.current
-    const { selection } = editor
-
-    if (!el) {
-      return
-    }
-
-    if (!selection || !inFocus || Range.isCollapsed(selection) || Editor.string(editor, selection) === '') {
-      el.removeAttribute('style')
-      return
-    }
-
-    const domSelection = window.getSelection()
-    if (!domSelection) return
-    const domRange = domSelection.getRangeAt(0)
-    const rect = domRange.getBoundingClientRect()
+  const activeElement = lookupElementByType(editor, 'link') as NodeEntry;
   
-    el.style.opacity = "1"
-    el.style.top = `${rect.top + window.pageYOffset - el.offsetHeight}px`
-    el.style.left = `${rect.left + window.pageXOffset - el.offsetWidth / 2 + rect.width / 2}px`
+  useClientEffect(() => {
+    const menuElement = ref.current
+
+    if (!menuElement || !inFocus || (overrideContent && !activeElement)) return;
+    
+    const domSelection = window.getSelection()
+    const domRange = domSelection?.getRangeAt(0)
+    const rect = domRange?.getBoundingClientRect()
+    if (!menuElement || !rect) return;
+    menuElement.style.top = `${rect.top + window.pageYOffset - menuElement.offsetHeight}px`
+    menuElement.style.left = `${rect.left + window.pageXOffset - menuElement.offsetWidth / 2 + rect.width / 2}px`
   })
 
-  if (typeof window === "undefined") return null
+  useClientEffect(() => {
+    if(!activeElement) 
+      setOverrideContent(null)
+  }, [activeElement]);
 
+  useClientEffect(() => {
+    const menuElement = ref.current
+    const { selection } = editor;
+    if (!menuElement) return;
+    if (activeElement || overrideContent || (selection && !Range.isCollapsed(selection))) {
+      menuElement.classList.add(style.visible)
+    } else {
+      menuElement.classList.remove(style.visible)
+    }
+  }, [editor.selection, overrideContent])
+
+  if (typeof window === "undefined") return null
+  
   return ReactDOM.createPortal(
     <div
       ref={ref}
@@ -54,15 +61,20 @@ const FloatingInlineMenu = () => {
         e.preventDefault()
       }}
     >
-      <TextFormatButton format="strong">
-	      <i className="fa-solid fa-bold"/>
-      </TextFormatButton>
-      <TextFormatButton format="emphasis" >
-        <i className="fa-solid fa-italic"/>
-      </TextFormatButton>
-      <TextFormatButton format="inlineCode">
-        <i className="fa-solid fa-code" />
-      </TextFormatButton>
+      {(overrideContent && React.cloneElement(overrideContent, {activeElement: activeElement?.[0]})) || 
+	<>
+	  <TextFormatButton format="strong">
+	    <i className="fa-solid fa-bold"/>
+	  </TextFormatButton>
+	  <TextFormatButton format="emphasis" >
+	    <i className="fa-solid fa-italic"/>
+	  </TextFormatButton>
+	  <TextFormatButton format="inlineCode">
+	    <i className="fa-solid fa-code" />
+	  </TextFormatButton>
+	  <LinkButton setOverrideContent={setOverrideContent} />
+	</>
+      }
     </div>,
     document.body
   )
