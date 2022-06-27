@@ -100,7 +100,7 @@ export function ArticleEditor({
       target,
       uri
     )
-  }, [])
+  }, [thumbnail])
 
   return (
     <Formik
