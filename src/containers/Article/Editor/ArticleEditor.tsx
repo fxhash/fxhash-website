@@ -2,7 +2,7 @@ import style from "./ArticleEditor.module.scss"
 import articleStyle from "../../../components/NFTArticle/NFTArticle.module.scss"
 import cs from "classnames"
 import TextareaAutosize from "react-textarea-autosize"
-import { useMemo, useRef, useState } from "react"
+import { useCallback, useMemo, useRef, useState } from "react"
 import { Node } from "slate"
 import { SlateEditor } from "../../../components/NFTArticle/SlateEditor"
 import { Dropzone } from "../../../components/Input/Dropzone"
@@ -17,6 +17,9 @@ import { Submit } from "../../../components/Form/Submit"
 import { Button } from "../../../components/Button"
 import { InputTextUnit } from "../../../components/Input/InputTextUnit"
 import { getMarkdownFromSlateEditorState } from "../../../components/NFTArticle/processor"
+import { IEditorMediaFile } from "../../../types/ArticleEditor/Image"
+import { FxEditor } from "../../../types/ArticleEditor/Editor"
+import { EditorMedias } from "./EditorMedias"
 
 const editorInitialValue = [
   {
@@ -48,10 +51,10 @@ interface Props {
 }
 export function ArticleEditor({
 }: Props) {
-  const editorStateRef = useRef<Node[]>(null)
+  const editorStateRef = useRef<FxEditor>(null)
 
   const handleClick = async () => {
-    const markdown = await getMarkdownFromSlateEditorState(editorStateRef.current as Node[])
+    const markdown = await getMarkdownFromSlateEditorState(editorStateRef.current!.children)
     console.log(markdown)
   }
 
@@ -62,6 +65,23 @@ export function ArticleEditor({
     if (!thumbnail) return null
     return URL.createObjectURL(thumbnail)
   }, [thumbnail])
+
+  // keeps track of the medias added in editor (and their local/uploaded vers)
+  const [medias, setMedias] = useState<IEditorMediaFile[]>([])
+
+  console.log({medias})
+
+  // when a media uri is updated (via IPFS upload)
+  const onMediaUriUpdate = useCallback((target: IEditorMediaFile, uri: string) => {
+    editorStateRef.current?.updateMediaUrl(
+      target,
+      uri
+    )
+  }, [])
+
+  // TODO
+  // * display medias in a component
+  // * upload medias -> calls updateMedia
 
   return (
     <Formik
@@ -146,6 +166,7 @@ export function ArticleEditor({
               ref={editorStateRef}
               initialValue={editorInitialValue}
               placeholder="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ut magna eu sapien placerat auctor. Phasellus vel erat a mi cursus posuere nec et diam. Maecenas quis nisl ligula. Sed velit sapien, accumsan eget cursus sit amet, egestas sit amet odio. Cras vitae urna sodales, suscipit ipsum a, aliquam ex. Pellentesque ut placerat arcu, a fringilla ante. Sed varius sem mi, sed interdum nunc consectetur ut. Nulla consectetur diam purus, quis volutpat nunc ultrices eget. Nam vel consectetur lacus, vel auctor dolor."
+              onMediasUpdate={setMedias}
             />
           </div>
 
@@ -161,7 +182,10 @@ export function ArticleEditor({
                 Medias
                 <small>Before the article can be published, all the medias within the article must be uploaded to IPFS</small>
               </label>
-              <div>HERE MEDIAS</div>
+              <EditorMedias
+                medias={medias}
+                onMediaUriUpdate={onMediaUriUpdate}
+              />
             </Field>
           
             <Field>

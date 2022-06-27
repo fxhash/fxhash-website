@@ -1,5 +1,5 @@
 import { Editor, Transforms, Element, Node } from "slate";
-
+import { FxEditor } from "../../../../types/ArticleEditor/Editor";
 
 function insertImage(editor: Editor, url: string) {
   Transforms.insertNodes(editor, {
@@ -22,7 +22,9 @@ function insertImage(editor: Editor, url: string) {
 /**
  * Wraps the `insertData` method to add support for processing image files
  */
-export const withImages = (editor: Editor) => {
+export const withImages = (
+  editor: FxEditor
+) => {
   const { insertData, isVoid, normalizeNode } = editor
 
   // make image nodes void nodes
