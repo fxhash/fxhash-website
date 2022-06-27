@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect, useMemo, useState } from "react";
+import React, { forwardRef, KeyboardEvent, useEffect, useImperativeHandle, useMemo, useState } from "react";
 import { BaseEditor, BaseElement, createEditor, Node, Descendant } from "slate";
 import {
   Slate,
@@ -16,6 +16,9 @@ import { onKeyDownHotkeyPlugin } from "./HotkeyPlugin/HotkeyPlugin"
 import { RenderElements } from "./Elements/RenderElements"
 import 'katex/dist/katex.min.css'
 import { withConstraints } from "./Plugins/SlateConstraintsPlugin"
+import { IEditorMediaFile } from "../../../types/ArticleEditor/Image";
+import { withMediaSupport } from "./Plugins/SlateMediaPlugin";
+import { FxEditor } from "../../../types/ArticleEditor/Editor";
   
 type TypeElement = BaseElement & { 
   type: string
@@ -48,7 +51,7 @@ type CustomText = FormattedText
 
 declare module 'slate' {
   interface CustomTypes {
-    Editor: BaseEditor & ReactEditor & HistoryEditor
+    Editor: FxEditor
     Element: CustomElement
     Text: CustomText
   }
@@ -73,24 +76,29 @@ const renderLeaf = ({ attributes, children, leaf }: RenderLeafProps) => {
 interface SlateEditorProps {
   initialValue: Descendant[]
   placeholder?: string
+  onMediasUpdate: (medias: IEditorMediaFile[]) => void
 };
 
 const INLINE_ELEMENTS = ['inlineMath', 'link']
 const VOID_ELEMENTS = ['inlineMath', 'math']
 
-export const SlateEditor = forwardRef<Node[], SlateEditorProps>(({
+export const SlateEditor = forwardRef<FxEditor, SlateEditorProps>(({
   initialValue,
   placeholder,
+  onMediasUpdate,
 }, ref) => {
     const editor = useMemo(() => {
       const e = withConstraints(
         withImages(
-          withAutoFormat(
-            withHistory(
-              withReact(
-                createEditor()
+          withMediaSupport(
+            withAutoFormat(
+              withHistory(
+                withReact(
+                  createEditor()
+                )
               )
-            )
+            ),
+            onMediasUpdate
           )
         )
       )
@@ -101,11 +109,9 @@ export const SlateEditor = forwardRef<Node[], SlateEditorProps>(({
     }, []);
 
     const [value, setValue] = useState<Node[]>(initialValue);
-    (ref as React.MutableRefObject<Node[]>).current = value;
-
-    useEffect(() => {
-      setValue(initialValue);
-    }, [initialValue]);
+    
+    // mutate ref to editor whenever editor ref changes
+    useImperativeHandle(ref, () => editor, [editor])
 
     return (
       <>
@@ -121,10 +127,10 @@ export const SlateEditor = forwardRef<Node[], SlateEditorProps>(({
             <Editable
               renderElement={RenderElements}
               renderLeaf={renderLeaf}
-	      placeholder={placeholder}
-	      onKeyDown={(event: KeyBoardEvent<HTMLDivElement>) => {
-		onKeyDownHotkeyPlugin(editor, event)
-	      }}
+              placeholder={placeholder}
+              onKeyDown={(event: KeyboardEvent<HTMLDivElement>) => {
+                onKeyDownHotkeyPlugin(editor, event)
+              }}
             />
           </Slate>
         </div>
@@ -134,5 +140,3 @@ export const SlateEditor = forwardRef<Node[], SlateEditorProps>(({
 )
 
 SlateEditor.displayName = "SlateEditor"
-
-
