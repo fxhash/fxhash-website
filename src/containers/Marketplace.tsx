@@ -20,6 +20,7 @@ import { SearchInputControlled } from "../components/Input/SearchInputControlled
 import { Qu_listings } from "../queries/listing"
 import { useRouter } from "next/router"
 import styleCardsExplorer from "../components/Exploration/CardsExplorer.module.scss";
+import { getTagsFromFiltersObject } from "../utils/filters"
 
 
 const ITEMS_PER_PAGE = 40
@@ -67,8 +68,8 @@ interface Props {
 // to turn the query parameters into gql-ready variables
 type TQueryFilterHandler = {
   param: string,
-  transform: (param?: string) => any|undefined,
-  encode: (value?: any) => string|undefined
+  transform: (param?: string) => any | undefined,
+  encode: (value?: any) => string | undefined
 }
 const queryListingFilterHandlers: Record<
   keyof ListingFilters, TQueryFilterHandler
@@ -279,53 +280,12 @@ export const Marketplace = ({ urlQuery }: Props) => {
   }
 
   // build the list of filters
-  const filterTags = useMemo<ExploreTagDef[]>(() => {
-
-    const tags: ExploreTagDef[] = []
-    for (const key in filters) {
-      let value: string | null = null
-      // @ts-ignore
-      if (filters[key] !== undefined) {
-        switch (key) {
-          case "price_gte":
-            //@ts-ignore
-            value = `price >= ${displayMutez(filters[key])} tez`
-            break
-          case "price_lte":
-            //@ts-ignore
-            value = `price <= ${displayMutez(filters[key])} tez`
-            break
-          case "tokenSupply_gte":
-            //@ts-ignore
-            value = `editions >= ${filters[key]}`
-            break
-          case "tokenSupply_lte":
-            //@ts-ignore
-            value = `editions <= ${filters[key]}`
-            break
-          case "authorVerified_eq":
-            //@ts-ignore
-            value = `artist: ${filters[key] ? "verified" : "un-verified"}`
-            break
-          case "fullyMinted_eq":
-            //@ts-ignore
-            value = `mint: ${filters[key] ? "completed" : "on-going"}`
-            break
-          case "searchQuery_eq":
-            //@ts-ignore
-            value = `search: ${filters[key]}`
-            break
-        }
-        if (value) {
-          tags.push({
-            value,
-            onClear: () => removeFilter(key)
-          })
-        }
-      }
-    }
-    return tags
-  }, [filters])
+  const filterTags = useMemo<ExploreTagDef[]>(() =>
+    getTagsFromFiltersObject<ListingFilters, ExploreTagDef>(filters, ({ label, key }) => ({
+      value: label,
+      onClear: () => removeFilter(key)
+    }))
+    , [filters, removeFilter])
 
   return (
     <CardsExplorer>
