@@ -17,6 +17,7 @@ import { ImageAttributeSettings } from "./AttributeSettings/ImageAttributeSettin
 import { TAttributesEditorWrapper } from "../../../../types/ArticleEditor/ArticleEditorBlocks"
 import { BlockParamsModal } from "../Utils/BlockParamsModal"
 import { TEditNodeFnFactory } from "../../../../types/ArticleEditor/Transforms"
+import { TezosStorageSettings } from "./AttributeSettings/TezosStorageSettings"
 
 export enum EArticleBlocks {
   "embed-media" = "embed-media",
@@ -115,6 +116,7 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
       <TezosStorage
         {...attributes}
         pKey={element.pKey}
+        pType={element.pType}
         address={element.address}
         metadataSpec={element.metadataSpec}
         bigmap={element.bigmap}
@@ -127,6 +129,7 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
     instanciateElement: () => ({
       type: "tezos-storage",
       pKey: "",
+      pType: "",
       address: "",
       metadataSpec: "",
       bigmap: "",
@@ -134,7 +137,9 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
       children: [{
         text: ""
       }]
-    })
+    }),
+    editAttributeComp: TezosStorageSettings,
+    editAttributeWrapper: BlockParamsModal,
   },
   "paragraph": {
     name: "Paragraph",

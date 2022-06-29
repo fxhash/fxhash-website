@@ -6,24 +6,45 @@ import { InputText } from "./InputText"
 import { Cover } from "../Utils/Cover"
 import { LoaderBlock } from "../Layout/LoaderBlock"
 
-
-
-interface Props<ObjectType> {
-  placeholder?: string
-  className?: string
+// props passed down to renderer components
+interface PassedDownProps<ObjectType> {
   classNameResults?: string
   value: string
   onChange: (val: string, autofill: boolean) => void
+  // given an object, outputs the string to set in the field
+  valueFromResult: (result: ObjectType) => string
+}
+
+// props of the Results renderer component
+export interface InputReactSearchResultsRendererProps<ObjectType> extends PassedDownProps<ObjectType> {
+  results: ObjectType[] | null
+  hideResults: boolean
+  onChangeHideResults: (hide: boolean) => void
+  selectedValue?: string
+  onChangeSelectedValue: (value: string) => void
+  children?: FunctionComponent<PropsChildren<ObjectType>>
+}
+// the Results renderer component
+type InputReactiveSearchResultsRenderer<ObjectType> = FunctionComponent<InputReactSearchResultsRendererProps<ObjectType>>
+
+// the minimum implementation for the items in the results
+interface BaseResultItem {
+  id: any
+}
+
+interface Props<ObjectType> extends PassedDownProps<ObjectType> {
+  placeholder?: string
+  className?: string
   // should perform a search given an input
   searchFn: (searchInput: string) => Promise<any>
   // given the output of the searchFn, outputs a list of objects
   transformSearchResults: (results: any) => ObjectType[]
-  // given an object, outputs the string to set in the field
-  valueFromResult: (result: ObjectType) => string
   // duration of the debounce, in ms
   debounceDuration?: number
   // the children, used to render each item
   children: FunctionComponent<PropsChildren<ObjectType>>
+  // the component used to render the results
+  RenderResults?: FunctionComponent<InputReactSearchResultsRendererProps<ObjectType>>
 }
 
 interface PropsChildren<ObjectType> {
@@ -41,7 +62,7 @@ interface PropsChildren<ObjectType> {
  *  - display the items in a scrollable area, with each item passed as a prop
  *    to the child of the component using the render props pattern
  */
-export function InputReactiveSearch<ObjectType extends { id: any }>({
+export function InputReactiveSearch<ObjectType extends BaseResultItem>({
   value,
   onChange,
   placeholder,
@@ -51,6 +72,7 @@ export function InputReactiveSearch<ObjectType extends { id: any }>({
   debounceDuration = 250,
   className,
   classNameResults,
+  RenderResults = DefaultResultsRenderer,
   children,
 }: Props<ObjectType>) {
   // keeps the last setTimeout in memory
@@ -100,48 +122,77 @@ export function InputReactiveSearch<ObjectType extends { id: any }>({
   }, [value])
 
   return (
-    <>
-      <div className={cs(style.root, className)}>
-        <InputText
-          value={value}
-          onChange={evt => onChange(evt.target.value, false)}
-          placeholder={placeholder}
-          className={style.input_search}
-          onFocus={() => hideResults && setHideResults(false)}
-        />
-        {results && results.length > 0 && !hideResults && (
-          <>
-            <div className={cs(style.results_wrapper)}>
-              <div className={cs(style.results, classNameResults)}>
-                {results.map(result => (
-                  <button
-                    key={result.id}
-                    type="button"
-                    className={cs(style.result)}
-                    onClick={() => {
-                      const nval = valueFromResult(result)
-                      setSelectedValue(nval)
-                      onChange(nval, true)
-                      if (value === nval) {
-                        setHideResults(true)
-                      }
-                    }}
-                  >
-                    {children({
-                      item: result
-                    })}
-                  </button>
-                ))}
-              </div>
-            </div>
-            <Cover
-              index={1}
-              opacity={0}
-              onClick={() => setHideResults(true)}
-            />
-          </>
-        )}
-      </div>
-    </>
+    <div className={cs(style.root, className)}>
+      <InputText
+        value={value}
+        onChange={evt => onChange(evt.target.value, false)}
+        placeholder={placeholder}
+        className={style.input_search}
+        onFocus={() => hideResults && setHideResults(false)}
+      />
+      <RenderResults
+        results={results}
+        value={value}
+        onChange={onChange}
+        hideResults={hideResults}
+        onChangeHideResults={setHideResults}
+        classNameResults={classNameResults}
+        valueFromResult={valueFromResult}
+        selectedValue={selectedValue}
+        onChangeSelectedValue={setSelectedValue}
+      >
+        {children}
+      </RenderResults>
+    </div>
   )
+}
+
+/**
+ * Some default dropdown renderer for the results.
+ * Any component can be used to render the items.
+ */
+function DefaultResultsRenderer<ObjectType extends BaseResultItem>({
+  results,
+  value,
+  onChange,
+  hideResults,
+  onChangeHideResults,
+  classNameResults,
+  valueFromResult,
+  selectedValue,
+  onChangeSelectedValue,
+  children,
+}: InputReactSearchResultsRendererProps<ObjectType>) {
+  return results && results.length > 0 && !hideResults ? (
+    <>
+      <div className={cs(style.results_wrapper)}>
+        <div className={cs(style.results, classNameResults)}>
+          {results.map(result => (
+            <button
+              key={result.id}
+              type="button"
+              className={cs(style.result)}
+              onClick={() => {
+                const nval = valueFromResult(result)
+                onChangeSelectedValue(nval)
+                onChange(nval, true)
+                if (value === nval) {
+                  onChangeHideResults(true)
+                }
+              }}
+            >
+              {children?.({
+                item: result
+              })}
+            </button>
+          ))}
+        </div>
+      </div>
+      <Cover
+        index={1}
+        opacity={0}
+        onClick={() => onChangeHideResults(true)}
+      />
+    </>
+  ):null
 }

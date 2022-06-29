@@ -178,3 +178,26 @@ export const Qu_genTokOffers = gql`
     }
   }
 `
+
+export const Qu_searchGenTok = gql`
+  ${Frag_GenAuthor}
+
+  query SearchGenerativeToken(
+    $skip: Int,
+    $take: Int,
+    $sort: GenerativeSortInput,
+    $filters: GenerativeTokenFilter
+  ) {
+    generativeTokens(
+      skip: $skip,
+      take: $take, 
+      sort: $sort, 
+      filters: $filters
+    ) {
+      id
+      name
+      thumbnailUri
+      ...Author
+    }
+  }
+`
