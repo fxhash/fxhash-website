@@ -18,7 +18,7 @@ interface PageArticleProps {
 }
 
 const _PageArticle = ({ article }: PageArticleProps) => {
-  const { title, author, createdAt, body, thumbnailUri, language } = article;
+  const { title, author, createdAt, body, thumbnailUri, language, relatedArticles } = article;
   const dateCreatedAt = useMemo(() => new Date(createdAt), [createdAt]);
   const ogImage = useMemo(() => ipfsGatewayUrl(thumbnailUri), [thumbnailUri])
 
@@ -57,14 +57,16 @@ const _PageArticle = ({ article }: PageArticleProps) => {
         <div className={style.infos}>
           <ArticleInfos article={article} />
         </div>
-        <div className={style['related-articles']}>
-          <h2 className={text.small_title}>Related articles</h2>
-          <div className={style['related-articles_list']}>
-            {[article, article, article, article].map((a, index) =>
-              <CardSmallNftArticle key={index} article={a} />
-            )}
+        {relatedArticles?.length > 0 &&
+          <div className={style['related-articles']}>
+            <h2 className={text.small_title}>Related articles</h2>
+            <div className={style['related-articles_list']}>
+              {relatedArticles.map((a, index) =>
+                <CardSmallNftArticle key={index} article={a}/>
+              )}
+            </div>
           </div>
-        </div>
+        }
       </main>
       <Spacing size="6x-large" />
       <Spacing size="6x-large" sm="none" />
