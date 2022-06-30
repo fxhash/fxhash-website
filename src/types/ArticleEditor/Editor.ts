@@ -15,7 +15,9 @@ export type FxEditor = BaseEditor & ReactEditor & HistoryEditor & FxEditorExtens
 
 export interface NFTArticleForm {
   title: string
+  thumbnailUri: string | null
   thumbnailCaption: string
+  body: string,
   abstract: string
   editions: string
   royalties: string

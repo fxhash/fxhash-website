@@ -2,7 +2,6 @@ import React, { memo, useCallback, useContext, useEffect, useMemo, useState } fr
 import style from "./AutosaveArticle.module.scss";
 import { LoaderBlock } from "../../../components/Layout/LoaderBlock";
 import cs from "classnames";
-import { useFormikContext } from "formik";
 import { ArticlesContext } from "../../../context/Articles";
 import { debounce } from "../../../utils/debounce";
 import { NFTArticleForm } from "../../../types/ArticleEditor/Editor";
@@ -10,9 +9,9 @@ import { formatDistance } from "date-fns";
 
 interface AutosaveArticleProps {
   id: string,
+  formValues: NFTArticleForm
 }
-const _AutosaveArticle = ({ id }: AutosaveArticleProps) => {
-  const formik = useFormikContext<NFTArticleForm>();
+const _AutosaveArticle = ({ id, formValues }: AutosaveArticleProps) => {
   const { state, dispatch } = useContext(ArticlesContext);
   const [status, setStatus] = useState<'unsaved'|'saving'|'saved'>('saved');
 
@@ -28,12 +27,12 @@ const _AutosaveArticle = ({ id }: AutosaveArticleProps) => {
   const savedArticle = state.articles[id];
   useEffect(() => {
     const serializedSavedArticle = savedArticle && JSON.stringify(savedArticle.form);
-    const serializedUnsavedArticle = savedArticle && JSON.stringify(formik.values);
+    const serializedUnsavedArticle = savedArticle && JSON.stringify(formValues);
     if (serializedSavedArticle !== serializedUnsavedArticle) {
       setStatus('unsaved');
-      debouncedSave(formik.values);
+      debouncedSave(formValues);
     }
-  }, [debouncedSave, formik.values, savedArticle])
+  }, [debouncedSave, formValues, savedArticle])
   const savedAt = savedArticle?.lastSavedAt && formatDistance(new Date(savedArticle.lastSavedAt), new Date(),
     { addSuffix: true });
   return (

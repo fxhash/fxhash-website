@@ -1,4 +1,12 @@
-import React, { forwardRef, KeyboardEvent, useEffect, useImperativeHandle, useMemo, useState } from "react";
+import React, {
+  forwardRef,
+  KeyboardEvent,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useState
+} from "react";
 import { BaseEditor, BaseElement, createEditor, Node, Descendant } from "slate";
 import {
   Slate,
@@ -19,10 +27,10 @@ import { withConstraints } from "./Plugins/SlateConstraintsPlugin"
 import { IEditorMediaFile } from "../../../types/ArticleEditor/Image";
 import { withMediaSupport } from "./Plugins/SlateMediaPlugin";
 import { FxEditor } from "../../../types/ArticleEditor/Editor";
-  
-type TypeElement = BaseElement & { 
+
+type TypeElement = BaseElement & {
   type: string
-  children: any 
+  children: any
 }
 
 type HeadlineElement = TypeElement & {
@@ -30,7 +38,7 @@ type HeadlineElement = TypeElement & {
 }
 
 type ImageElement = TypeElement & {
-  title: string   
+  title: string
   url: string
   alt?: string
 }
@@ -43,7 +51,7 @@ export type TextFormatKey = 'strong' | 'emphasis' | 'underline' | 'inlineCode';
 
 export type TextFormats = {[key in TextFormatKey]: boolean}
 
-export type FormattedText = { 
+export type FormattedText = {
   text: string
 } & TextFormats
 
@@ -77,7 +85,8 @@ interface SlateEditorProps {
   initialValue: Descendant[]
   placeholder?: string
   onMediasUpdate: (medias: IEditorMediaFile[]) => void
-};
+  onChange?: (nodes: Descendant[]) => void
+}
 
 const INLINE_ELEMENTS = ['inlineMath', 'link']
 const VOID_ELEMENTS = ['inlineMath', 'math']
@@ -86,6 +95,7 @@ export const SlateEditor = forwardRef<FxEditor, SlateEditorProps>(({
   initialValue,
   placeholder,
   onMediasUpdate,
+  onChange,
 }, ref) => {
     const editor = useMemo(() => {
       const e = withConstraints(
@@ -106,10 +116,15 @@ export const SlateEditor = forwardRef<FxEditor, SlateEditorProps>(({
       e.isInline = element => INLINE_ELEMENTS.includes(element.type) || isInline(element)
       e.isVoid = element => VOID_ELEMENTS.includes(element.type) || isVoid(element)
       return e;
-    }, []);
+    }, [onMediasUpdate]);
 
     const [value, setValue] = useState<Node[]>(initialValue);
-    
+    const handleChange = useCallback((newValue) => {
+      setValue(newValue)
+      if (onChange) {
+        onChange(newValue);
+      }
+    }, [onChange])
     // mutate ref to editor whenever editor ref changes
     useImperativeHandle(ref, () => editor, [editor])
 
@@ -120,9 +135,9 @@ export const SlateEditor = forwardRef<FxEditor, SlateEditorProps>(({
           style={{flex:1}}
         >
           <Slate
-            editor={editor} 
-            value={value} 
-            onChange={setValue}
+            editor={editor}
+            value={value}
+            onChange={handleChange}
           >
             <Editable
               renderElement={RenderElements}
