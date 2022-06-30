@@ -41,8 +41,22 @@
   line-height: 166%;
 }
 
+.input_caption {
+  text-align: center;
+  width: min(900px, 100%);
+  margin: 0 auto;
+  margin-top: 8px;
+  font-size: var(--font-size-small);
+  font-weight: bold;
+
+  &::placeholder {
+    font-weight: normal;
+  }
+}
+
 .input_title,
-.input_abstract {
+.input_abstract,
+.input_caption {
   display: block;
   font-family: inherit;
   border: none;
@@ -51,6 +65,8 @@
   padding: 0;
   overflow: hidden;
   padding-bottom: 8px;
+  background: transparent;
+  color: var(--color-black);
 
   &::placeholder {
     color: var(--color-gray-light);

@@ -21,7 +21,7 @@ export function Features({
     </div>
   ):(
     <em className={cs(style.no_features)}>
-      The token does not implement features (features are not mandatory, it's up to you to decide if you want your Tokens to have features)
+      The token does not implement features (features are not mandatory, it&apos;s up to you to decide if you want your Tokens to have features)
     </em>
   )
 }

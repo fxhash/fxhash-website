@@ -2,7 +2,7 @@ import style from "./ArticleEditor.module.scss"
 import articleStyle from "../../../components/NFTArticle/NFTArticle.module.scss"
 import cs from "classnames"
 import TextareaAutosize from "react-textarea-autosize"
-import { useMemo, useRef, useState } from "react"
+import { useCallback, useMemo, useRef, useState } from "react"
 import { Node } from "slate"
 import { SlateEditor } from "../../../components/NFTArticle/SlateEditor"
 import { Dropzone } from "../../../components/Input/Dropzone"
@@ -16,6 +16,12 @@ import { Donations } from "../../Input/Donations"
 import { Submit } from "../../../components/Form/Submit"
 import { Button } from "../../../components/Button"
 import { InputTextUnit } from "../../../components/Input/InputTextUnit"
+import { getMarkdownFromSlateEditorState } from "../../../components/NFTArticle/processor"
+import { IEditorMediaFile } from "../../../types/ArticleEditor/Image"
+import { FxEditor } from "../../../types/ArticleEditor/Editor"
+import { EditorMedias } from "./EditorMedias"
+import { ImagePolymorphic } from "../../../components/Medias/ImagePolymorphic"
+import { arrayRemoveDuplicates } from "../../../utils/array"
 
 const editorInitialValue = [
   {
@@ -29,6 +35,7 @@ const editorInitialValue = [
 // todo: refacto, move out of there
 interface IInput {
   title: string
+  thumbnailCaption: string
   abstract: string
   editions: string
   royalties: string
@@ -37,6 +44,7 @@ interface IInput {
 
 const initialValues: IInput = {
   title: "",
+  thumbnailCaption: "",
   abstract: "",
   editions: "",
   royalties: "",
@@ -47,14 +55,51 @@ interface Props {
 }
 export function ArticleEditor({
 }: Props) {
-  const editorStateRef = useRef<Node[]>(null)
+  const editorStateRef = useRef<FxEditor>(null)
 
-  // TODO: move state to object
-  const [thumbnail, setThumbnail] = useState<File|null>(null)
-  const thumbnailUrl = useMemo(() => {
-    console.log(thumbnail)
-    if (!thumbnail) return null
-    return URL.createObjectURL(thumbnail)
+  const handleClick = async () => {
+    const markdown = await getMarkdownFromSlateEditorState(editorStateRef.current!.children)
+    console.log(markdown)
+  }
+
+  const [thumbnail, setThumbnail] = useState<string|null>(null)
+
+  // update the thumbnail by creating a local URL from a given file
+  const updateThumbnail = useCallback((file: File|null) => {
+    setThumbnail(
+      file ? URL.createObjectURL(file) : null
+    )
+  }, [])
+
+  // keeps track of the medias added in editor (and their local/uploaded vers)
+  const [medias, setMedias] = useState<IEditorMediaFile[]>([])
+
+  // add the thumbnail to the list of medias
+  const mediasWithThumbnail = useMemo(
+    () => thumbnail ? 
+      arrayRemoveDuplicates([
+        {
+          uri: thumbnail,
+          type: "image"
+        } as IEditorMediaFile,
+        ...medias
+      ],
+      (a, b) => a.uri === b.uri
+      ) : medias,
+    [thumbnail, medias]
+  )
+
+  // when a media uri is updated (via IPFS upload)
+  const onMediaUriUpdate = useCallback((target: IEditorMediaFile, uri: string) => {
+    // should the thumbnail be updated ?
+    if (thumbnail === target.uri) {
+      setThumbnail(uri)
+    }
+    // update the medias in the editor
+    editorStateRef.current?.updateMediaUrl(
+      target,
+      uri
+    )
   }, [thumbnail])
 
   return (
@@ -100,12 +145,14 @@ export function ArticleEditor({
           </div>
           <Dropzone
             className={cs(style.thumbnail_dropzone, {
-              [style.image_loaded]: !!thumbnailUrl
+              [style.image_loaded]: !!thumbnail
             })}
-            onChange={(files) => setThumbnail(files?.[0] || null)}
+            onChange={(files) => updateThumbnail(files?.[0] || null)}
             textDefault={
-              thumbnailUrl ? (
-                <img src={thumbnailUrl} alt="thumbnail image"/>
+              thumbnail ? (
+                <ImagePolymorphic
+                  uri={thumbnail}
+                />
               ):(
                 <div className={cs(style.placeholder_wrapper)}>
                   <i className="fa-solid fa-image" aria-hidden/>
@@ -116,8 +163,10 @@ export function ArticleEditor({
               )
             }
             textDrag={
-              thumbnailUrl ? (
-                <img src={thumbnailUrl} alt="thumbnail image"/>
+              thumbnail ? (
+                <ImagePolymorphic
+                  uri={thumbnail}
+                />
               ):(
                 <div className={cs(style.placeholder_wrapper)}>
                   <i className="fa-solid fa-image" aria-hidden/>
@@ -128,6 +177,13 @@ export function ArticleEditor({
               )
             }
             accepted={["image/jpeg", "image/png", "image/gif"]}
+          />
+          <TextareaAutosize
+            value={values.thumbnailCaption}
+            onChange={evt => setFieldValue("thumbnailCaption", evt.target.value)}
+            className={cs(style.input_caption)}
+            minRows={1}
+            placeholder="Thumbnail caption..."
           />
 
           <div className={cs(style.section_title)}>
@@ -140,6 +196,7 @@ export function ArticleEditor({
               ref={editorStateRef}
               initialValue={editorInitialValue}
               placeholder="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ut magna eu sapien placerat auctor. Phasellus vel erat a mi cursus posuere nec et diam. Maecenas quis nisl ligula. Sed velit sapien, accumsan eget cursus sit amet, egestas sit amet odio. Cras vitae urna sodales, suscipit ipsum a, aliquam ex. Pellentesque ut placerat arcu, a fringilla ante. Sed varius sem mi, sed interdum nunc consectetur ut. Nulla consectetur diam purus, quis volutpat nunc ultrices eget. Nam vel consectetur lacus, vel auctor dolor."
+              onMediasUpdate={setMedias}
             />
           </div>
 
@@ -152,10 +209,13 @@ export function ArticleEditor({
           <div className={cs(style.w900)}>
             <Field>
               <label>
-                Medias
+                Medias ({mediasWithThumbnail.length})
                 <small>Before the article can be published, all the medias within the article must be uploaded to IPFS</small>
               </label>
-              <div>HERE MEDIAS</div>
+              <EditorMedias
+                medias={mediasWithThumbnail}
+                onMediaUriUpdate={onMediaUriUpdate}
+              />
             </Field>
           
             <Field>
@@ -226,6 +286,7 @@ export function ArticleEditor({
                 type="button"
                 size="large"
                 color="secondary"
+                onClick={() => handleClick()}
               >
                 preview &amp; mint
               </Button>

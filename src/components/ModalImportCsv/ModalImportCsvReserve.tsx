@@ -13,6 +13,7 @@ import { ErrorBlock } from "../Error/ErrorBlock";
 import { Loader } from "../Utils/Loader";
 import { isTezosAddress } from "../../utils/strings";
 import { Spacing } from '../Layout/Spacing';
+import { ParseError } from "papaparse";
 
 type FormatCsvDataToSplits = (data: any[]) => { errors: string[], splits: ISplit[] }
 interface ModalImportCsvReserveProps {
@@ -66,7 +67,7 @@ const _ModalImportCsvReserve = ({ onClose, onImport }: ModalImportCsvReserveProp
       const res = await getDataFromCsvFile(file);
       setLoading(false);
       if (res.errors.length > 0) {
-        throw new Error(res.errors.map(err => err.message).join('\n'))
+	      throw new Error(res.errors.map((err: ParseError) => err.message).join('\n'))
       }
       const missedColumns = hasCsvMissedColumns(res, cols);
       if (missedColumns) {

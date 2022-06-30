@@ -11,7 +11,7 @@ import rehypeStringify from "rehype-stringify"
 import { visit } from "unist-util-visit";
 import { h } from 'hastscript'
 import { createElement, Fragment } from "react";
-import rehypeReact, { Options } from "rehype-react";
+import rehypeReact from "rehype-react";
 import { SharedOptions } from "rehype-react/lib";
 import rehypeHighlight from "rehype-highlight";
 import type { ComponentsWithNodeOptions, ComponentsWithoutNodeOptions } from "rehype-react/lib/complex-types";
@@ -23,7 +23,7 @@ import rehypeKatex from "rehype-katex";
 import { OverridedMdastBuilders } from "remark-slate-transformer/lib/transformers/mdast-to-slate"
 import { OverridedSlateBuilders } from "remark-slate-transformer/lib/transformers/slate-to-mdast"
 import { remarkToSlate, slateToRemark } from "remark-slate-transformer"
-import { Node } from "slate";
+import { Node, Descendant } from "slate";
 import { Root } from 'mdast'
 
 
@@ -88,7 +88,7 @@ function remarkFxHashCustom(): import('unified').Transformer<import('mdast').Roo
   }
 }
 
-const settingsRehypeReact: Options = {
+const settingsRehypeReact = {
   createElement,
   Fragment,
   components: {
@@ -129,7 +129,7 @@ export async function getNFTArticleComponentsFromMarkdown(markdown: string): Pro
 
 interface DirectiveNodeProps { [key: string]: any }
 
-function createDirectiveNode(node: Root, next: (children: any[]) => any) {
+function createDirectiveNode(node: any, next: (children: any[]) => any): object {
   const data = node.data || {}
   const hProperties: {[key:string]: any} = (data.hProperties || {}) as {[key:string]: any}
   // extract only defined props to avoid error serialization of undefined
@@ -143,34 +143,36 @@ function createDirectiveNode(node: Root, next: (children: any[]) => any) {
     }, {});
   return {
     type: data.hName,
-    children:  next(node.children), 
+    children:  next(node.children),
     ...propertiesWithoutUndefined
   };
 }
 
-interface IRemarkRoot extends Root {
-  value: any, 
-}
-
-function createMathNode(node: IRemarkRoot, next: (children: any[]) => any)  {
+function createMathNode(node: any) {
   return {
-    type: node.type, 
-    children: [{text: ''}], 
+    type: node.type,
+    children: [{text: ''}],
     data : {
       ...node.data,
-      math: node.value, 
+      math: node.value,
     }
   }
 }
+
 const remarkSlateTransformerOverrides: OverridedMdastBuilders = {
-  textDirective:  createDirectiveNode, 
-  leafDirective:  createDirectiveNode, 
+  textDirective:  createDirectiveNode,
+  leafDirective:  createDirectiveNode,
   containerDirective:  createDirectiveNode,
-  inlineMath: createMathNode, 
-  math: createMathNode, 
+  "inlineMath": createMathNode,
+  "math": createMathNode,
 }
 
-export async function getSlateEditorStateFromMarkdown(markdown: string) {
+interface PayloadSlateEditorStateFromMarkdown {
+  [p: string]: any
+  editorState: Descendant[]
+}
+
+export async function getSlateEditorStateFromMarkdown(markdown: string): Promise<PayloadSlateEditorStateFromMarkdown | null>  {
   try {
     const matterResult = matter(markdown)
     const processed = await unified()
@@ -185,39 +187,70 @@ export async function getSlateEditorStateFromMarkdown(markdown: string) {
       .process(matterResult.content)
 
     return {
-      ...matterResult.data, 
-      editorState: processed.result
+      ...matterResult.data,
+      editorState: processed.result as Descendant[]
     };
   } catch {
     return null;
   }
 }
 
-function convertSlateLeafDirectiveToMarkdown(node: Root, next: (children: any[]) => any)  { 
+function convertSlateLeafDirectiveToMarkdown(
+  node: any,
+) {
   const { children, type, ...attributes} = node
-  return { 
+  return {
     type: 'leafDirective',
-    name: type, 
+    name: type,
     children: [
       {
 	type: 'text',
 	value: children[0].text,
       }
     ],
-    attributes, 
+    attributes,
   }
+}
+
+/**
+ * Turns a figcaption element into an element which will be turned into an
+ * image in proper markdown
+ */
+function figureToMarkdown(node: any, next: (children: any[]) => any) {
+  // create a regular image node
+  const imageNode: any = {
+    type: "image"
+  }
+
+  // find if there's a caption
+  const caption: Node|null = node.children.find(
+    (node: Node) => node.type === ("figcaption" as any)
+  )
+  if (caption && caption.children?.length > 0) {
+    imageNode.alt = caption.children[0].text
+  }
+  // now do the same for the image element
+  const image: Node|null = node.children.find(
+    (node: Node) => node.type === "image"
+  )
+  if (image) {
+    imageNode.url = image.url
+  }
+
+  return imageNode
 }
 
 
 const slateToRemarkTransformerOverrides: OverridedSlateBuilders = {
   'tezos-storage': convertSlateLeafDirectiveToMarkdown,
-  'embed-media': convertSlateLeafDirectiveToMarkdown, 
-  inlineMath: (node: Root) => ({ 
+  'embed-media': convertSlateLeafDirectiveToMarkdown,
+  figure: figureToMarkdown,
+  inlineMath: (node: any) => ({ 
     type: node.type, 
     value: node?.data?.math, 
     data: { ...node.data} 
   }),	  
-  math: (node: Root) => ({ 
+  math: (node: any) => ({ 
     type: node.type, 
     value: node?.data?.math, 
     data: { ...node.data} 
@@ -228,22 +261,23 @@ export async function getMarkdownFromSlateEditorState(slate: Node[] ) {
   try {
     const markdown = await new Promise((resolve) => {
       const processor = unified()
-      .use(remarkMath)
-      .use(remarkDirective)
-      .use(remarkFxHashCustom)
-      .use(slateToRemark, {
-	overrides: slateToRemarkTransformerOverrides, 
-      })
-      .use(stringify)
+        .use(remarkMath)
+        .use(remarkDirective)
+        .use(remarkFxHashCustom)
+        .use(slateToRemark, {
+          overrides: slateToRemarkTransformerOverrides, 
+        })
+        .use(stringify)
       const ast = processor.runSync({
-	type: "root",
-	children: slate,
+        type: "root",
+        children: slate,
       })
       const text = processor.stringify(ast)
       resolve(text)
     })
     return markdown
-  } catch(e) {
+  }
+  catch(e) {
     console.error(e)
     return null;
   }

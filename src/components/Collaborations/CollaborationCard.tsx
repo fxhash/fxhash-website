@@ -21,7 +21,7 @@ export function CollaborationCard({
     return [...collaboration.collaborators].sort(
       (a, b) => a.id === user.id ? -1 : 1
     )
-  }, [collaboration.collaborators])
+  }, [user.id, collaboration.collaborators])
 
   const genToks = collaboration.generativeTokens
 

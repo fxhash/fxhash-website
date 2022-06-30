@@ -12,15 +12,16 @@ import fs from "fs"
 import { GetStaticProps } from "next";
 import {SlateEditor} from '../../components/NFTArticle/SlateEditor';
 import {getSlateEditorStateFromMarkdown, getMarkdownFromSlateEditorState} from '../../components/NFTArticle/processor';
+import { FxEditor } from '../../types/ArticleEditor/Editor';
 
 interface EditorPageProps {
   initialEditorState: Descendant[]
 }
 const EditorPage: NextPage<EditorPageProps> = ({ initialEditorState }) => {
-  const editorStateRef = useRef<Node[]>(null);
+  const editorStateRef = useRef<FxEditor>(null)
 
   const handleClick = async () => {
-    const markdown = await getMarkdownFromSlateEditorState(editorStateRef.current as Node[])
+    const markdown = await getMarkdownFromSlateEditorState(editorStateRef.current!.children)
     console.log(markdown)
   }
 
@@ -58,14 +59,15 @@ const EditorPage: NextPage<EditorPageProps> = ({ initialEditorState }) => {
 
 export default EditorPage
 
-export const getStaticProps: GetStaticProps<EditorPageProps> = async ({ params }) => {
+export const getStaticProps: GetStaticProps = async ({ params }) => {
   const filePath = path.join(process.cwd(), "src", "articles",`nft-article-test.md`)
   const nftArticleMd = fs.readFileSync(filePath, 'utf8');
-  const { editorState }= await getSlateEditorStateFromMarkdown(nftArticleMd);
+  const res = await getSlateEditorStateFromMarkdown(nftArticleMd);
   return {
     props: {
-      initialEditorState: editorState,
+      initialEditorState: res?.editorState,
     },
+    notFound: !res
   }
 }
 
