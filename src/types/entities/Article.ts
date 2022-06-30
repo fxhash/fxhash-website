@@ -50,3 +50,4 @@ export interface NFTArticle {
   royalties: number
   mintOpHash: string
 }
+

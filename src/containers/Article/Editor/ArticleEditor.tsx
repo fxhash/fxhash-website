@@ -3,7 +3,6 @@ import articleStyle from "../../../components/NFTArticle/NFTArticle.module.scss"
 import cs from "classnames"
 import TextareaAutosize from "react-textarea-autosize"
 import { useCallback, useMemo, useRef, useState } from "react"
-import { Node } from "slate"
 import { SlateEditor } from "../../../components/NFTArticle/SlateEditor"
 import { Dropzone } from "../../../components/Input/Dropzone"
 import { Spacing } from "../../../components/Layout/Spacing"
@@ -18,10 +17,11 @@ import { Button } from "../../../components/Button"
 import { InputTextUnit } from "../../../components/Input/InputTextUnit"
 import { getMarkdownFromSlateEditorState } from "../../../components/NFTArticle/processor"
 import { IEditorMediaFile } from "../../../types/ArticleEditor/Image"
-import { FxEditor } from "../../../types/ArticleEditor/Editor"
+import { FxEditor, NFTArticleForm } from "../../../types/ArticleEditor/Editor"
 import { EditorMedias } from "./EditorMedias"
 import { ImagePolymorphic } from "../../../components/Medias/ImagePolymorphic"
 import { arrayRemoveDuplicates } from "../../../utils/array"
+import { AutosaveArticle } from "./AutosaveArticle";
 
 const editorInitialValue = [
   {
@@ -32,17 +32,7 @@ const editorInitialValue = [
   }
 ]
 
-// todo: refacto, move out of there
-interface IInput {
-  title: string
-  thumbnailCaption: string
-  abstract: string
-  editions: string
-  royalties: string
-  royaltiesSplit: ISplit[]
-}
-
-const initialValues: IInput = {
+const defaultValues: NFTArticleForm = {
   title: "",
   thumbnailCaption: "",
   abstract: "",
@@ -51,10 +41,16 @@ const initialValues: IInput = {
   royaltiesSplit: []
 }
 
-interface Props {
+interface ArticleEditorProps {
+  localId?: string,
+  hasLocalAutosave?: boolean
+  initialValues?: NFTArticleForm,
 }
 export function ArticleEditor({
-}: Props) {
+  localId,
+  hasLocalAutosave,
+  initialValues,
+}: ArticleEditorProps) {
   const editorStateRef = useRef<FxEditor>(null)
 
   const handleClick = async () => {
@@ -76,7 +72,7 @@ export function ArticleEditor({
 
   // add the thumbnail to the list of medias
   const mediasWithThumbnail = useMemo(
-    () => thumbnail ? 
+    () => thumbnail ?
       arrayRemoveDuplicates([
         {
           uri: thumbnail,
@@ -104,7 +100,7 @@ export function ArticleEditor({
 
   return (
     <Formik
-      initialValues={initialValues}
+      initialValues={initialValues || defaultValues}
       // validationSchema={validation}
       onSubmit={(values) => {
         console.log(values)
@@ -112,6 +108,7 @@ export function ArticleEditor({
     >
       {({ values, handleChange, setFieldValue, handleBlur, handleSubmit, errors }) => (
         <>
+          {hasLocalAutosave && localId && <AutosaveArticle id={localId} />}
           <div className={cs(style.section_title)}>
             <span>
               TITLE
@@ -217,7 +214,7 @@ export function ArticleEditor({
                 onMediaUriUpdate={onMediaUriUpdate}
               />
             </Field>
-          
+
             <Field>
               <label htmlFor="editions">
                 Number of editions
@@ -251,7 +248,7 @@ export function ArticleEditor({
             </Field>
 
             <Field
-              error={typeof errors.royaltiesSplit === "string" 
+              error={typeof errors.royaltiesSplit === "string"
                 ? errors.royaltiesSplit
                 : undefined
               }
