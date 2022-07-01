@@ -28,7 +28,7 @@ const _AutosaveArticle = ({ id, formValues, hasUnsavedMedias }: AutosaveArticleP
   const savedArticle = state.articles[id];
   useEffect(() => {
     const serializedSavedArticle = savedArticle && JSON.stringify(savedArticle.form);
-    const serializedUnsavedArticle = savedArticle && JSON.stringify(formValues);
+    const serializedUnsavedArticle = formValues && JSON.stringify(formValues);
     if (serializedSavedArticle !== serializedUnsavedArticle) {
       setStatus('unsaved');
       debouncedSave(formValues);

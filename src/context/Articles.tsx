@@ -29,7 +29,7 @@ const articlesReducer = (state: ArticlesState, action: ArticlesAction): Articles
     case "loadAll":
       return loadAllLocalArticles();
     case "save": {
-      const newState = { ...state };
+      const newState = loadAllLocalArticles();
       newState.articles[action.payload.id] = {
         form: action.payload.articleForm,
         lastSavedAt: new Date().toUTCString(),
@@ -38,7 +38,7 @@ const articlesReducer = (state: ArticlesState, action: ArticlesAction): Articles
       return newState;
     }
     case "delete": {
-      const newState = { ...state };
+      const newState = loadAllLocalArticles();
       delete newState.articles[action.payload.id];
       localStorage.setItem(localStorageKey, JSON.stringify(newState));
       return newState;
