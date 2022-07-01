@@ -10,6 +10,7 @@ import { ipfsGatewayUrl } from "../../services/Ipfs";
 import cs from "classnames";
 import layout from "../../styles/Layout.module.scss";
 import text from "../../styles/Text.module.css";
+import { NftArticle } from '../../components/NFTArticle/NFTArticle';
 
 interface PageArticleProps {
   article: NFTArticle
@@ -20,6 +21,7 @@ const _PageArticle = ({ article, originUrl }: PageArticleProps) => {
   const { title, author, createdAt, body, thumbnailUri, language } = article;
   const dateCreatedAt = useMemo(() => new Date(createdAt), [createdAt]);
   const ogImage = useMemo(() => ipfsGatewayUrl(thumbnailUri), [thumbnailUri])
+
   return (
     <>
       <Head>
@@ -29,6 +31,8 @@ const _PageArticle = ({ article, originUrl }: PageArticleProps) => {
         <meta key="og:description" property="og:description" content={article.description} />
         <meta key="og:type" property="og:type" content="website"/>
         <meta key="og:image" property="og:image" content={ogImage} />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.0/dist/katex.min.css" crossOrigin="anonymous" />
+        <link rel="stylesheet" href="/highlight/dracula.css"/>
       </Head>
       <Spacing size="small" />
       <main className={cs(layout['padding-big'])}>
@@ -46,11 +50,9 @@ const _PageArticle = ({ article, originUrl }: PageArticleProps) => {
           <h1 className={style.title}>{title}</h1>
         </div>
         <article lang={language} className={style.body}>
-          <p>{'========== TO REPLACE BY MARKDOWN PARSER ================'}</p>
-          {body}
-          <p>
-            {'========== TO REPLACE BY MARKDOWN PARSER ================'}
-          </p>
+          <NftArticle 
+            markdown={body}
+          />
         </article>
         <div className={style.infos}>
           <ArticleInfos article={article} originUrl={originUrl} />

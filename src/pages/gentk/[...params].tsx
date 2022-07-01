@@ -189,6 +189,7 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
               <strong>Operation hash</strong>
               <a
                 target="_blank"
+                rel="noreferrer"
                 referrerPolicy="no-referrer"
                 href={`https://tzkt.io/${objkt.generationHash}`}
                 className={cs(text.very_small)}
@@ -200,7 +201,7 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
                 <a
                   target="_blank"
                   referrerPolicy="no-referrer"
-                  href={ipfsGatewayUrl(objkt.metadataUri)}
+                  href={ipfsGatewayUrl(objkt.metadataUri)} rel="noreferrer"
                 >
                   view on IPFS <i className="fas fa-external-link-square" aria-hidden/>
                 </a>

@@ -57,7 +57,7 @@ export function ProposalDetailsBurnExpanded({
         <>
           <h5>Preview</h5>
           <Spacing size="small"/>
-          
+
           {token ? (
             <>
               <strong>Token: </strong>
@@ -78,7 +78,7 @@ export function ProposalDetailsBurnExpanded({
           ):(
             !showOldSettings && (
               <strong className={cs(colors.error)}>
-                This token isn't visible anymore as it was burnt.
+                This token isn&apos;t visible anymore as it was burnt.
               </strong>
             )
           )}
