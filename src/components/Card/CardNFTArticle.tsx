@@ -1,7 +1,7 @@
 import React, { memo, useContext, useMemo } from 'react';
 import style from "./CardNFTArticle.module.scss";
 import Image from "next/image";
-import { NFTArticle } from "../../types/entities/Article";
+import { NFTArticleInfos } from "../../types/entities/Article";
 import { UserBadge } from "../User/UserBadge";
 import { ipfsGatewayUrl } from "../../services/Ipfs";
 import cs from "classnames";
@@ -11,10 +11,10 @@ import Link from 'next/link';
 import { Tags } from '../Tags/Tags';
 
 interface CardNftArticleProps {
-  className: string,
-  article: NFTArticle
+  className?: string,
   imagePriority?: boolean,
   isDraft?: boolean,
+  article: NFTArticleInfos
 }
 
 const _CardNftArticle = ({ article: { id, title, slug, thumbnailUri, description, tags, author, createdAt }, isDraft, imagePriority, className }: CardNftArticleProps) => {
@@ -35,13 +35,15 @@ const _CardNftArticle = ({ article: { id, title, slug, thumbnailUri, description
         <div className={cs(style['img-wrapper'], {
           [style['draft_img-wrapper']]: isDraft,
         })}>
-          <Image
-            src={thumbnailUrl}
-            layout="fill"
-            objectFit="cover"
-            objectPosition="top"
-            priority={imagePriority}
-          />
+          {thumbnailUrl &&
+            <Image
+              src={thumbnailUrl}
+              layout="fill"
+              objectFit="cover"
+              objectPosition="top"
+              priority={imagePriority}
+            />
+          }
         </div>
         <div className={style.infos}>
           {!isDraft &&

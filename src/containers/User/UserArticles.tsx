@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useMemo, useState } from 'react';
+import React, { memo, useCallback, useContext, useMemo, useState } from 'react';
 import { User } from "../../types/entities/User";
 import { useQuery } from "@apollo/client";
 import style from "./UserArticles.module.scss";
@@ -8,13 +8,15 @@ import { CardNftArticleSkeleton } from "../../components/Card/CardNFTArticleSkel
 import { Qu_userArticles } from "../../queries/user";
 import cs from "classnames";
 import layout from "../../styles/Layout.module.scss";
+import { LocalArticles } from "../Article/LocalArticles";
 
 interface UserArticlesProps {
   user: User
+  showLocalDrafts?: boolean
 }
 
 const ITEMS_PER_PAGE = 20
-const _UserArticles = ({ user }: UserArticlesProps) => {
+const _UserArticles = ({ user, showLocalDrafts }: UserArticlesProps) => {
   const [hasNothingToFetch, setHasNothingToFetch] = useState(false);
 
   const { data, loading, fetchMore } = useQuery<{ user: User }>(Qu_userArticles, {
@@ -46,6 +48,7 @@ const _UserArticles = ({ user }: UserArticlesProps) => {
         onTrigger={handleFetchMore}
         canTrigger={!!data && !loading}
       >
+        {showLocalDrafts && <LocalArticles classNameArticle={style.article} user={user} />}
         {articles.map((article, index) =>
           <CardNftArticle className={style.article} key={article.slug} article={article} imagePriority={index < 4} />
         )}

@@ -3,20 +3,23 @@ import { UserProfileLayout } from "../../../containers/User/UserProfileLayout"
 import {
   getServerSidePropsUserById,
 } from "../../../services/ServerSideProps/ServerSidePropsUser"
-import { ReactElement } from "react"
+import { ReactElement, useContext, useMemo } from "react"
 import { UserArticles } from '../../../containers/User/UserArticles';
+import { UserContext } from "../../../containers/UserProvider";
 
 interface UserArticlesProps {
   user: User
 }
 
-const UserArticles = ({ user }: UserArticlesProps) => {
+const UserPageArticles = ({ user }: UserArticlesProps) => {
+  const { user: userConnected } = useContext(UserContext);
+  const isConnectedUser = useMemo(() => !!(userConnected && (userConnected.id === user.id)), [user.id, userConnected]);
   return (
-    <UserArticles user={user} />
+    <UserArticles user={user} showLocalDrafts={isConnectedUser} />
   )
 }
 
-UserArticles.getLayout = function getLayout(page: ReactElement) {
+UserPageArticles.getLayout = function getLayout(page: ReactElement) {
   return (
     <UserProfileLayout
       user={page.props.user}
@@ -29,4 +32,4 @@ UserArticles.getLayout = function getLayout(page: ReactElement) {
 
 export const getServerSideProps = getServerSidePropsUserById
 
-export default UserArticles
+export default UserPageArticles

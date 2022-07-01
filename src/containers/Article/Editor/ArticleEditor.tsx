@@ -49,6 +49,7 @@ const defaultValues: NFTArticleForm = {
   editions: "",
   royalties: "",
   royaltiesSplit: [],
+  tags: []
 }
 
 interface ArticleEditorProps {

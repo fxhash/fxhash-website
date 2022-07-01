@@ -105,6 +105,8 @@
     width: 100%;
     min-height: 150px;
     height: 150px;
+    border-right: none;
+    border-bottom: var(--cards-border-width) solid var(--color-border);
   }
 
   .infos_header {
