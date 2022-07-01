@@ -5,13 +5,14 @@ import cs from "classnames";
 import { ArticlesContext } from "../../../context/Articles";
 import { debounce } from "../../../utils/debounce";
 import { NFTArticleForm } from "../../../types/ArticleEditor/Editor";
-import { formatDistance } from "date-fns";
+import { formatRelative } from "date-fns";
 
 interface AutosaveArticleProps {
   id: string,
   formValues: NFTArticleForm
+  hasUnsavedMedias?: boolean
 }
-const _AutosaveArticle = ({ id, formValues }: AutosaveArticleProps) => {
+const _AutosaveArticle = ({ id, formValues, hasUnsavedMedias }: AutosaveArticleProps) => {
   const { state, dispatch } = useContext(ArticlesContext);
   const [status, setStatus] = useState<'unsaved'|'saving'|'saved'>('saved');
 
@@ -33,8 +34,7 @@ const _AutosaveArticle = ({ id, formValues }: AutosaveArticleProps) => {
       debouncedSave(formValues);
     }
   }, [debouncedSave, formValues, savedArticle])
-  const savedAt = savedArticle?.lastSavedAt && formatDistance(new Date(savedArticle.lastSavedAt), new Date(),
-    { addSuffix: true });
+  const savedAt = savedArticle?.lastSavedAt && formatRelative(new Date(savedArticle.lastSavedAt), new Date());
   return (
     <div className={style.wrapper}>
       <div className={style.container}>
@@ -50,11 +50,12 @@ const _AutosaveArticle = ({ id, formValues }: AutosaveArticleProps) => {
           </>
           :
           <>
-            {status === 'saved' && <i className={cs("fa-solid fa-check", style.icon)} /> }
+            {status === 'saved' && !hasUnsavedMedias && <i className={cs("fa-solid fa-check", style.icon)} />}
+            {hasUnsavedMedias && <span>{'[MEDIAS UNSAVED]'}</span>}
             {status === 'unsaved' && <span>{'[CHANGES UNSAVED]'}</span>}
             {savedAt &&
               <span className={style.text}>
-                last saved {savedAt}
+                saved {savedAt}
               </span>
             }
           </>

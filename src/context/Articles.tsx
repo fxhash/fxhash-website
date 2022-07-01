@@ -1,6 +1,6 @@
 import React, { useMemo, useReducer } from "react"
-import { useClientAsyncEffect } from "../utils/hookts"
 import { DraftNFTArticle, NFTArticleForm } from "../types/ArticleEditor/Editor";
+import useAsyncEffect from "use-async-effect";
 
 interface ArticlesState {
   articles: {
@@ -59,7 +59,7 @@ export const ArticlesProvider = ({ children }: ArticlesProviderProps) => {
     }),
     [state, dispatch],
   );
-  useClientAsyncEffect(() => {
+  useAsyncEffect(() => {
     dispatch({ type: "loadAll" });
   }, [dispatch]);
   return <ArticlesContext.Provider value={providerValue}>{children}</ArticlesContext.Provider>;

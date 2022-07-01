@@ -5,21 +5,21 @@ import Head from "next/head"
 import { ArticleEditor } from "../../../../containers/Article/Editor/ArticleEditor"
 import { Spacing } from "../../../../components/Layout/Spacing"
 import React, { useContext, useState } from "react";
-import { useClientEffect } from "../../../../utils/hookts";
 import { ArticlesContext } from "../../../../context/Articles";
 import { useRouter } from "next/router";
 import { LoaderBlock } from "../../../../components/Layout/LoaderBlock";
 import { Error } from "../../../../components/Error/Error";
+import useInit from "../../../../hooks/useInit";
 
 const ArticleEditorPage: NextPage = () => {
   const [hasLoadUpToDate, setHasLoadUpToDate] = useState(false);
   const router = useRouter();
   const { state, dispatch } = useContext(ArticlesContext);
   const localId = typeof router.query.id === 'string' ? router.query.id : null;
-  useClientEffect(() => {
+  useInit(() => {
     dispatch({ type: 'loadAll' });
     setHasLoadUpToDate(true);
-  }, []);
+  });
   const article = localId ? state.articles[localId] : null;
   return (
     <>

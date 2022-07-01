@@ -9,6 +9,7 @@ export interface FxEditorExtension {
     target: IEditorMediaFile,
     uri: string
   ) => void
+  getUploadedMedias: () => IEditorMediaFile[]
 }
 
 export type FxEditor = BaseEditor & ReactEditor & HistoryEditor & FxEditorExtension

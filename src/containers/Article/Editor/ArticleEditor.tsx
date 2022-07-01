@@ -2,7 +2,7 @@ import style from "./ArticleEditor.module.scss"
 import articleStyle from "../../../components/NFTArticle/NFTArticle.module.scss"
 import cs from "classnames"
 import TextareaAutosize from "react-textarea-autosize"
-import { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { useCallback, useMemo, useRef, useState } from "react"
 import { SlateEditor } from "../../../components/NFTArticle/SlateEditor"
 import { Dropzone } from "../../../components/Input/Dropzone"
 import { Spacing } from "../../../components/Layout/Spacing"
@@ -28,6 +28,8 @@ import { debounce } from "../../../utils/debounce";
 import { Descendant } from "slate";
 import { LoaderBlock } from "../../../components/Layout/LoaderBlock";
 import useInit from "../../../hooks/useInit";
+import { isUrlLocal } from "../../../utils/files";
+import useConfirmLeavingPage from "../../../hooks/useConfirmLeavingPage";
 
 const editorDefaultValue = [
   {
@@ -46,7 +48,7 @@ const defaultValues: NFTArticleForm = {
   abstract: "",
   editions: "",
   royalties: "",
-  royaltiesSplit: []
+  royaltiesSplit: [],
 }
 
 interface ArticleEditorProps {
@@ -66,6 +68,7 @@ export function ArticleEditor({
   });
   const { values, errors, setFieldValue } = formik;
   const [thumbnail, setThumbnail] = useState<string|null>(values.thumbnailUri)
+  const [medias, setMedias] = useState<IEditorMediaFile[]>([])
   const [initialBody, setInitialBody] = useState<Descendant[] | null>(null)
 
   const handleClickPreviewMint = useCallback(async () => {
@@ -77,6 +80,9 @@ export function ArticleEditor({
     await setFieldValue('body', markdown);
   }, [setFieldValue])
   const debouncedChangeBody = useMemo(() => debounce(handleChangeBody, 800), [handleChangeBody])
+  const handleInitEditor = useCallback((editor) => {
+    setMedias(editor.getUploadedMedias() || []);
+  }, [])
 
   // update the thumbnail by creating a local URL from a given file
   const updateThumbnail = useCallback((file: File|null) => {
@@ -84,9 +90,6 @@ export function ArticleEditor({
       file ? URL.createObjectURL(file) : null
     )
   }, [])
-
-  // keeps track of the medias added in editor (and their local/uploaded vers)
-  const [medias, setMedias] = useState<IEditorMediaFile[]>([])
 
   // add the thumbnail to the list of medias
   const mediasWithThumbnail = useMemo(
@@ -119,11 +122,20 @@ export function ArticleEditor({
 
   useInit(async () => {
     const editorFromMd = values.body ? await getSlateEditorStateFromMarkdown(values.body) : null;
-    setInitialBody(editorFromMd ? editorFromMd.editorState : editorDefaultValue)
+    setInitialBody(editorFromMd ? editorFromMd.editorState : editorDefaultValue);
   })
+
+  const hasLocalMedias = useMemo(() => mediasWithThumbnail.some(media => isUrlLocal(media.uri)), [mediasWithThumbnail]);
+  useConfirmLeavingPage(hasLocalMedias, 'You have unsaved medias, please ensure you upload everything before leaving the page. Are you sure you want to leave?');
   return (
     <form onSubmit={formik.handleSubmit}>
-      {hasLocalAutosave && localId && <AutosaveArticle id={localId} formValues={values} />}
+      {hasLocalAutosave && localId &&
+        <AutosaveArticle
+          id={localId}
+          formValues={values}
+          hasUnsavedMedias={hasLocalMedias}
+        />
+      }
       <div className={cs(style.section_title)}>
         <span>
           TITLE
@@ -211,6 +223,7 @@ export function ArticleEditor({
             placeholder="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ut magna eu sapien placerat auctor. Phasellus vel erat a mi cursus posuere nec et diam. Maecenas quis nisl ligula. Sed velit sapien, accumsan eget cursus sit amet, egestas sit amet odio. Cras vitae urna sodales, suscipit ipsum a, aliquam ex. Pellentesque ut placerat arcu, a fringilla ante. Sed varius sem mi, sed interdum nunc consectetur ut. Nulla consectetur diam purus, quis volutpat nunc ultrices eget. Nam vel consectetur lacus, vel auctor dolor."
             onMediasUpdate={setMedias}
             onChange={debouncedChangeBody}
+            onInit={handleInitEditor}
           />
           : <LoaderBlock size="small" height="20px" />
         }

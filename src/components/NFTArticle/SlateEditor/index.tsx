@@ -27,6 +27,7 @@ import { withConstraints } from "./Plugins/SlateConstraintsPlugin"
 import { IEditorMediaFile } from "../../../types/ArticleEditor/Image";
 import { withMediaSupport } from "./Plugins/SlateMediaPlugin";
 import { FxEditor } from "../../../types/ArticleEditor/Editor";
+import useInit from "../../../hooks/useInit";
 
 type TypeElement = BaseElement & {
   type: string
@@ -86,6 +87,7 @@ interface SlateEditorProps {
   placeholder?: string
   onMediasUpdate: (medias: IEditorMediaFile[]) => void
   onChange?: (nodes: Descendant[]) => void
+  onInit?: (editor: FxEditor) => void
 }
 
 const INLINE_ELEMENTS = ['inlineMath', 'link']
@@ -96,6 +98,7 @@ export const SlateEditor = forwardRef<FxEditor, SlateEditorProps>(({
   placeholder,
   onMediasUpdate,
   onChange,
+  onInit,
 }, ref) => {
     const editor = useMemo(() => {
       const e = withConstraints(
@@ -127,7 +130,9 @@ export const SlateEditor = forwardRef<FxEditor, SlateEditorProps>(({
     }, [onChange])
     // mutate ref to editor whenever editor ref changes
     useImperativeHandle(ref, () => editor, [editor])
-
+    useInit(() => {
+      if (onInit) onInit(editor)
+    })
     return (
       <>
         <div
