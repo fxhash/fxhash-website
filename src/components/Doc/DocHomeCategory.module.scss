@@ -1,0 +1,41 @@
+@import "../../styles/Variables.scss";
+
+.root {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+
+  i {
+    font-size: 32px;
+    margin-top: 2px;
+  }
+
+  h4 {
+    margin-bottom: 5px;
+  }
+}
+
+.icon-wrapper {
+  width: 40px;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+
+  .item {
+    margin-top: 8px;
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .root {
+    i {
+      font-size: 24px;
+    }
+  }
+
+  .icon-wrapper {
+    width: 24px;
+  }
+}
