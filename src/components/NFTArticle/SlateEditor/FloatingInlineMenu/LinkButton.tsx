@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState, FormEvent, useCallback } from 'react'
 import style from "./FloatingInlineMenu.module.scss"
+import effects from "../../../../styles/Effects.module.scss"
 import { useSlateStatic } from 'slate-react'
 import {
   Transforms,
@@ -8,7 +9,7 @@ import {
   Editor, 
 } from 'slate'
 import { lookupElementByType } from '../utils'; 
-import cx from 'classnames'
+import cs from 'classnames'
 
 type OverrideContentHandler = (form: any) => void
 type ResetOverrideContentHandler = () => void
@@ -76,7 +77,7 @@ export const LinkButtonForm = ({ resetOverrideContent,  activeElement }: LinkBut
   
   return (
     <form
-      className={style.linkForm}
+      className={cs(style.linkForm)}
       autoComplete="off"
       onSubmit={handleSubmit}
       onMouseDown={(e) => {
@@ -86,15 +87,15 @@ export const LinkButtonForm = ({ resetOverrideContent,  activeElement }: LinkBut
       }}
     >
       <input 
-	ref={inputRef}
-	type="text"
-	id="fname"
-	name="fname"
-	value={href}
-	autoFocus={!activeElement?.url}
-	onChange={handleChangeInput}
-	onBlur={resetOverrideContent}
-	placeholder="https://"
+        ref={inputRef}
+        type="text"
+        id="fname"
+        name="fname"
+        value={href}
+        autoFocus={!activeElement?.url}
+        onChange={handleChangeInput}
+        onBlur={resetOverrideContent}
+        placeholder="https://"
       />
       <button type="submit">
 	<i className="fa-solid fa-check"/>
@@ -128,7 +129,7 @@ export const LinkButton = ({ setOverrideContent }: LinkButtonProps) => {
 
   return (
     <button
-      className={cx(
+      className={cs(
 	style.button, 
 	{[style.active]: isActive},
       )}
