@@ -17,7 +17,7 @@ import rehypeHighlight from "rehype-highlight";
 import type { ComponentsWithNodeOptions, ComponentsWithoutNodeOptions } from "rehype-react/lib/complex-types";
 import { NFTArticleElementComponent } from "../../types/Article";
 import TezosStorage from "./elements/TezosStorage";
-import Embed from "./elements/Embed";
+import Embed from "./elements/Embed/Embed";
 import type {Element} from 'hast'
 import rehypeKatex from "rehype-katex";
 import { OverridedMdastBuilders } from "remark-slate-transformer/lib/transformers/mdast-to-slate"
@@ -59,7 +59,7 @@ interface CustomArticleElementsByType {
 export const customNodes: CustomArticleElementsByType = {
   leafDirective: {
     'tezos-storage': TezosStorage,
-    embed: Embed
+    'embed-media': Embed
   },
   textDirective: {},
   containerDirective: {},
@@ -204,8 +204,8 @@ function convertSlateLeafDirectiveToMarkdown(
     name: type,
     children: [
       {
-	type: 'text',
-	value: children[0].text,
+        type: 'text',
+        value: children[0].text,
       }
     ],
     attributes,
@@ -245,16 +245,16 @@ const slateToRemarkTransformerOverrides: OverridedSlateBuilders = {
   'tezos-storage': convertSlateLeafDirectiveToMarkdown,
   'embed-media': convertSlateLeafDirectiveToMarkdown,
   figure: figureToMarkdown,
-  inlineMath: (node: any) => ({ 
-    type: node.type, 
-    value: node?.data?.math, 
-    data: { ...node.data} 
-  }),	  
-  math: (node: any) => ({ 
-    type: node.type, 
-    value: node?.data?.math, 
-    data: { ...node.data} 
-  }),	  
+  inlineMath: (node: any) => ({
+    type: node.type,
+    value: node?.data?.math,
+    data: { ...node.data}
+  }),
+  math: (node: any) => ({
+    type: node.type,
+    value: node?.data?.math,
+    data: { ...node.data}
+  }),
 }
 
 export async function getMarkdownFromSlateEditorState(slate: Node[] ) {
@@ -265,7 +265,7 @@ export async function getMarkdownFromSlateEditorState(slate: Node[] ) {
         .use(remarkDirective)
         .use(remarkFxHashCustom)
         .use(slateToRemark, {
-          overrides: slateToRemarkTransformerOverrides, 
+          overrides: slateToRemarkTransformerOverrides,
         })
         .use(stringify)
       const ast = processor.runSync({

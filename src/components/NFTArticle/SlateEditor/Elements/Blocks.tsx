@@ -1,7 +1,8 @@
 import { FunctionComponent, ReactNode } from "react"
+import style from "./../../NFTArticle.module.scss";
 import cs from "classnames"
 import { RenderElementProps } from "slate-react"
-import Embed from "../../elements/Embed"
+import Embed from "../../elements/Embed/Embed"
 import TezosStorage from "../../elements/TezosStorage"
 // @ts-ignore
 import { InlineMath, BlockMath } from 'react-katex'
@@ -79,9 +80,9 @@ export interface IArticleBlockDefinition {
   instanciateElement?: () => Element
   editAttributeComp?: TEditAttributeComp
   editAttributeWrapper?: TAttributesEditorWrapper
-  // the definition can specify a function which can be called to output a 
-  // function which will be called to update a node. This is useful if the 
-  // default editNode function doesn't support certain edge cases 
+  // the definition can specify a function which can be called to output a
+  // function which will be called to update a node. This is useful if the
+  // default editNode function doesn't support certain edge cases
   onEditNodeFactory?: TEditNodeFnFactory
   // should the settings menu be hidden after node is update
   hideSettingsAfterUpdate?: boolean
@@ -93,10 +94,16 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
     icon: <i className="fa-brands fa-youtube" aria-hidden/>,
     buttonInstantiable: true,
     render: ({ attributes, element, children }) => (
-      <Embed 
-        {...attributes}
-        href={element.href}
-      />
+      <div className={style.article_wrapper_container}>
+        <Embed
+          slateElement={element}
+          slateAttributes={attributes}
+          href={element.href}
+          editable
+        >
+          {children}
+        </Embed>
+      </div>
     ),
     hasUtilityWrapper: true,
     instanciateElement: () => ({

@@ -1,5 +1,13 @@
+@import "../../../../styles/Variables";
+.input {
+  width: 100%;
+}
+p.not_found {
+  margin-top: $spacing;
+}
 
 .spotify {
+  width: 100%;
   border-radius: 12px;
   margin: var(--layout-margin-small-sm) 0;
 }
@@ -8,7 +16,7 @@
   overflow: hidden;
   position: relative;
   width:100%;
-  max-width: 660px;
+//  max-width: 660px;
   margin: var(--layout-margin-small-sm) 0;
 
   &:after {
