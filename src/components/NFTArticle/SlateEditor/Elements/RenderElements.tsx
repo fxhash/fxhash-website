@@ -4,7 +4,7 @@ import { ReactEditor, RenderElementProps, useSlateStatic } from "slate-react"
 import React, { PropsWithChildren, useMemo, useState } from "react"
 import { AddBlock } from "../Utils/AddBlock"
 import { getArticleBlockDefinition } from "./Blocks"
-import { Path, Transforms } from "slate"
+import { Path, Transforms, Editor } from "slate"
 import { BlockExtraMenu } from "../Utils/BlockExtraMenu"
 import { BlockMenu } from "../Utils/BlockMenu"
 import { TAttributesEditorWrapper } from "../../../../types/ArticleEditor/ArticleEditorBlocks"
@@ -43,6 +43,7 @@ function EditableElementWrapper({
     Transforms.insertNodes(editor, element, {
       at: target
     })
+    Transforms.select(editor, target)
     setShowAddBlock(false)
   }
 
@@ -77,12 +78,16 @@ function EditableElementWrapper({
       })}
     >
       {children}
-      <div className={cs(style.buttons)}>
+      <div contentEditable={false} className={cs(style.buttons)}>
         {definition.editAttributeComp ? (
           <button
             type="button"
             contentEditable={false}
-            onClick={() => setShowSettings(true)}
+	    onPointerDown={(e) => {
+	      e.preventDefault()
+	      e.stopPropagation()
+	      setShowSettings(true)
+	    }}
             tabIndex={-1}
           >
             <i className="fa-solid fa-gear" aria-hidden/>
@@ -93,7 +98,11 @@ function EditableElementWrapper({
         <button
           type="button"
           contentEditable={false}
-          onClick={() => setShowAddBlock(true)}
+	  onPointerDown={(e) =>{
+	    e.preventDefault()
+	    e.stopPropagation()
+	    setShowAddBlock(true)
+	  }}
           tabIndex={-1}
         >
           <i className="fa-solid fa-plus" aria-hidden/>
@@ -101,7 +110,11 @@ function EditableElementWrapper({
         <button
           type="button"
           contentEditable={false}
-          onClick={() => setShowExtraMenu(true)}
+	  onPointerDown={(e) => {
+	    e.preventDefault()
+	    e.stopPropagation()
+	    setShowExtraMenu(true)
+	  }}
           tabIndex={-1}
         >
           <i className="fa-solid fa-ellipsis" aria-hidden/>
@@ -179,7 +192,7 @@ export function RenderElements(props: RenderElementProps) {
           {children}
         </EditableElementWrapper>
       ): React.Fragment, 
-    [definition]
+    [definition, props.element]
   )
   
   return (

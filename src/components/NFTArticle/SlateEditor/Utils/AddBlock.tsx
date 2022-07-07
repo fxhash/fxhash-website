@@ -33,7 +33,9 @@ export function AddBlock({
           <button
             key={def.name}
             type="button"
-            onClick={() => {
+	    onPointerDown={(e) => {
+	      e.preventDefault();
+	      e.stopPropagation();
               onAddBlock(def.instanciateElement!())
             }}
           >
