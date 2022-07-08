@@ -1,0 +1,17 @@
+.input {
+  width: 100%;
+  font-size: var(--font-size-regular);
+  display: block;
+  font-family: inherit;
+  border: none;
+  outline: none;
+  resize: none;
+  padding: 0 0 8px 0;
+  overflow: hidden;
+  background: transparent;
+  color: var(--color-black);
+
+  &::placeholder {
+    color: var(--color-gray-light);
+  }
+}

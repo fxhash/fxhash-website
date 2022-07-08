@@ -1,3 +1,4 @@
+import 'katex/dist/katex.min.css'
 import React, {
   forwardRef,
   KeyboardEvent,
@@ -22,12 +23,12 @@ import { withImages } from "./Plugins/SlateImagePlugin"
 import { ImageElement } from "../elements/ImageElement"
 import { onKeyDownHotkeyPlugin } from "./HotkeyPlugin/HotkeyPlugin"
 import { RenderElements } from "./Elements/RenderElements"
-import 'katex/dist/katex.min.css'
 import { withConstraints } from "./Plugins/SlateConstraintsPlugin"
 import { IEditorMediaFile } from "../../../types/ArticleEditor/Image";
 import { withMediaSupport } from "./Plugins/SlateMediaPlugin";
 import { FxEditor } from "../../../types/ArticleEditor/Editor";
 import useInit from "../../../hooks/useInit";
+
 
 type TypeElement = BaseElement & {
   type: string

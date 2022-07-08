@@ -43,10 +43,10 @@ const EditorPage: NextPage<EditorPageProps> = ({ initialEditorState }) => {
 
         <Spacing size="x-large"/>
         <main className={cs(layout['padding-big'])}>
-	  <SlateEditor 
-	    ref={editorStateRef} 
-	    initialValue={initialEditorState} 
-	  />
+          <SlateEditor
+            ref={editorStateRef}
+            initialValue={initialEditorState}
+          />
         </main>
       </section>
 

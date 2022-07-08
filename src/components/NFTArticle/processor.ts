@@ -152,10 +152,7 @@ function createMathNode(node: any) {
   return {
     type: node.type,
     children: [{text: ''}],
-    data : {
-      ...node.data,
-      math: node.value,
-    }
+    math: node.value,
   }
 }
 
@@ -204,8 +201,8 @@ function convertSlateLeafDirectiveToMarkdown(
     name: type,
     children: [
       {
-	type: 'text',
-	value: children[0].text,
+        type: 'text',
+        value: children[0].text,
       }
     ],
     attributes,
@@ -245,16 +242,14 @@ const slateToRemarkTransformerOverrides: OverridedSlateBuilders = {
   'tezos-storage': convertSlateLeafDirectiveToMarkdown,
   'embed-media': convertSlateLeafDirectiveToMarkdown,
   figure: figureToMarkdown,
-  inlineMath: (node: any) => ({ 
-    type: node.type, 
-    value: node?.data?.math, 
-    data: { ...node.data} 
-  }),	  
-  math: (node: any) => ({ 
-    type: node.type, 
-    value: node?.data?.math, 
-    data: { ...node.data} 
-  }),	  
+  inlineMath: (node: any) => ({
+    type: node.type,
+    value: node.math,
+  }),
+  math: (node: any) => ({
+    type: node.type,
+    value: node.math,
+  }),
 }
 
 export async function getMarkdownFromSlateEditorState(slate: Node[] ) {
@@ -265,7 +260,7 @@ export async function getMarkdownFromSlateEditorState(slate: Node[] ) {
         .use(remarkDirective)
         .use(remarkFxHashCustom)
         .use(slateToRemark, {
-          overrides: slateToRemarkTransformerOverrides, 
+          overrides: slateToRemarkTransformerOverrides,
         })
         .use(stringify)
       const ast = processor.runSync({
