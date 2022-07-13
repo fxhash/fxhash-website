@@ -15,7 +15,7 @@ import { ipfsGatewayUrl } from '../../services/Ipfs'
 import { SectionHeader } from '../../components/Layout/SectionHeader'
 import { Activity } from '../../components/Activity/Activity'
 import { Objkt } from '../../types/entities/Objkt'
-import { User } from '../../types/entities/User'
+import { User, UserFlag } from '../../types/entities/User'
 import { ClientOnlyEmpty } from '../../components/Utils/ClientOnly'
 import { UserGuard } from '../../components/Guards/UserGuard'
 import { truncateEnd } from '../../utils/strings'
@@ -38,7 +38,7 @@ import { ObjktTabs } from "../../containers/Objkt/ObjktTabs"
 import { Labels } from '../../components/GenerativeToken/Label/Labels'
 import { MarketplaceActions } from '../../containers/Objkt/MarketplaceActions'
 import { ListingAccept } from '../../containers/Objkt/ListingAccept'
-
+import { UserFlagBanner } from "../../containers/User/FlagBanner"
 
 interface Props {
   objkt: Objkt
@@ -77,7 +77,7 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
         <meta name="twitter:image" content={displayUrl || "https://www.fxhash.xyz/images/og/og1.jpg"}/>
       </Head>
 
-      <GenerativeFlagBanner token={objkt.issuer} />
+      {[UserFlag.MALICIOUS, UserFlag.REVIEW, UserFlag.SUSPICIOUS].includes(objkt.issuer.author.flag) ? <UserFlagBanner user={objkt.issuer.author}/> : <GenerativeFlagBanner token={objkt.issuer}/>}
 
       <Spacing size="3x-large" />
 
