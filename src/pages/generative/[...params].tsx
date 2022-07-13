@@ -15,7 +15,8 @@ import { GenerativeFlagBanner } from '../../containers/Generative/FlagBanner'
 import { TabDefinition, Tabs } from '../../components/Layout/Tabs'
 import { GenerativeIterations } from '../../containers/Generative/Iterations/GenerativeIterations'
 import { GenerativeDisplay } from '../../containers/Generative/Display/GenerativeDisplay'
-
+import { UserFlagBanner } from "../../containers/User/FlagBanner"
+import { UserFlag } from "../../types/entities/User"
 
 const tabs: TabDefinition[] = [
   {
@@ -53,7 +54,7 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
         <meta name="twitter:image" content={displayUrl || "https://www.fxhash.xyz/images/og/og1.jpg"}/>
       </Head>
 
-      <GenerativeFlagBanner token={token}/>
+      {[UserFlag.MALICIOUS, UserFlag.REVIEW, UserFlag.SUSPICIOUS].includes(token.author.flag) ? <UserFlagBanner user={token.author}/> : <GenerativeFlagBanner token={token}/>}
 
       <Spacing size="3x-large" />
 
