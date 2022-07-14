@@ -15,9 +15,10 @@ import { NftArticle } from '../../components/NFTArticle/NFTArticle';
 
 interface PageArticleProps {
   article: NFTArticle
+  originUrl: string
 }
 
-const _PageArticle = ({ article }: PageArticleProps) => {
+const _PageArticle = ({ article, originUrl }: PageArticleProps) => {
   const { title, author, createdAt, body, thumbnailUri, language, relatedArticles } = article;
   const dateCreatedAt = useMemo(() => new Date(createdAt), [createdAt]);
   const ogImage = useMemo(() => ipfsGatewayUrl(thumbnailUri), [thumbnailUri])
@@ -55,7 +56,7 @@ const _PageArticle = ({ article }: PageArticleProps) => {
           />
         </article>
         <div className={style.infos}>
-          <ArticleInfos article={article} />
+          <ArticleInfos article={article} originUrl={originUrl} />
         </div>
         {relatedArticles?.length > 0 &&
           <div className={style['related-articles']}>
