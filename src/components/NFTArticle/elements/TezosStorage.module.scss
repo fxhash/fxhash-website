@@ -1,0 +1,12 @@
+@import "../../../styles/Variables";
+
+.bg {
+  padding: $spacing-small;
+  background: var(--color-gray-vvlight);
+}
+.tab {
+  padding-left: $spacing;
+}
+.property {
+  color: var(--color-secondary-light);
+}
