@@ -1,0 +1,43 @@
+@import "../../styles/Variables";
+
+.settings_card {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 470px;
+
+  .settings_controls {
+    flex-grow: 2;
+
+    & > * {
+      min-height: 34px;
+    }
+
+    & > *+* {
+      margin-top: 12px;
+    }
+  }
+
+  .card_wrapper {
+    font-size: var(--font-size-regular);
+    max-width: 320px;
+    width: 100%;
+    pointer-events: none;
+  }
+}
+
+.slider {
+  width: auto !important;
+}
+
+@media (max-width: $breakpoint-sm) {
+  .settings_controls {
+    width: 100%;
+  }
+  .settings_card {
+    flex-direction: column;
+  }
+  .card_wrapper {
+    margin-top: 16px;
+  }
+}
