@@ -16,9 +16,14 @@ import { onKeyDownHotkeyPlugin } from "./HotkeyPlugin/HotkeyPlugin"
 import { RenderElements } from "./Elements/RenderElements"
 import 'katex/dist/katex.min.css'
 import { withConstraints } from "./Plugins/SlateConstraintsPlugin"
-import { IEditorMediaFile } from "../../../types/ArticleEditor/Image";
-import { withMediaSupport } from "./Plugins/SlateMediaPlugin";
-import { FxEditor } from "../../../types/ArticleEditor/Editor";
+import dynamic from 'next/dynamic'
+import { IEditorMediaFile } from "../../../types/ArticleEditor/Image"
+import { withMediaSupport } from "./Plugins/SlateMediaPlugin"
+import { FxEditor } from "../../../types/ArticleEditor/Editor"
+
+const FloatingInlineMenu = dynamic(() => import('./FloatingInlineMenu/FloatingInlineMenu'), {
+  ssr: false,
+})
   
 type TypeElement = BaseElement & { 
   type: string
@@ -39,7 +44,7 @@ type TezosStorageElement = TypeElement & TezosStorageProps
 
 type CustomElement =  HeadlineElement | TezosStorageElement | ImageElement;
 
-export type TextFormatKey = 'strong' | 'emphasis' | 'underline' | 'inlineCode';
+export type TextFormatKey = 'strong' | 'emphasis' | 'inlineCode';
 
 export type TextFormats = {[key in TextFormatKey]: boolean}
 
@@ -63,9 +68,6 @@ const renderLeaf = ({ attributes, children, leaf }: RenderLeafProps) => {
   }
   if (leaf.emphasis) {
     children = <em>{children}</em>;
-  }
-  if (leaf.underline) {
-    children = <u>{children}</u>;
   }
   if (leaf.inlineCode) {
     children = <code>{children}</code>;
@@ -123,7 +125,7 @@ export const SlateEditor = forwardRef<FxEditor, SlateEditorProps>(({
             editor={editor} 
             value={value} 
             onChange={setValue}
-          >
+	        >
             <Editable
               renderElement={RenderElements}
               renderLeaf={renderLeaf}
@@ -132,6 +134,7 @@ export const SlateEditor = forwardRef<FxEditor, SlateEditorProps>(({
                 onKeyDownHotkeyPlugin(editor, event)
               }}
             />
+	          <FloatingInlineMenu />
           </Slate>
         </div>
       </>
