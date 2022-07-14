@@ -1,10 +1,11 @@
 import { Editor, Transforms } from "slate";
+import { FxEditor } from "../../../../types/ArticleEditor/Editor";
 
 /**
  * Adds some constraints to the editor to prevent running into unprocesseable
  * states
  */
-export const withConstraints = (editor: Editor) => {
+export const withConstraints = (editor: FxEditor) => {
   const { normalizeNode } = editor
 
   editor.normalizeNode = (entry) => {

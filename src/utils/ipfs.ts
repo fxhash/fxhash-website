@@ -16,3 +16,10 @@ export function ipfsUrlWithHash(
 ) {
   return `${transform(cid)}/?fxhash=${hash}`
 }
+
+/**
+ * Is an URI an IPFS uri ?
+ */
+export function isUriIpfs(uri: string) {
+  return uri.startsWith("ipfs://")
+}

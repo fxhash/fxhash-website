@@ -22,7 +22,7 @@ const TabWrapper = ({ children, ...props }: TabWrapperProps) => (
 
 interface Props {
   user: User
-  activeTab: 'creations' | 'collection' | 'on-sale' | 'dashboard'
+  activeTab: 'creations' | 'articles' | 'collection' | 'on-sale' | 'dashboard'
 }
 export function UserProfileLayout({
   user,
@@ -49,6 +49,14 @@ export function UserProfileLayout({
       props: {
         scroll: false,
         href: `${getUserProfileLink(user)}/creations`
+      }
+    },
+    {
+      key: "articles",
+      name: "articles",
+      props: {
+        scroll: false,
+        href: `${getUserProfileLink(user)}/articles`
       }
     },
     {

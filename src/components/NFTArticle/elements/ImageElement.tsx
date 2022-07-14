@@ -6,6 +6,7 @@ import style from "./ImageElement.module.scss"
 import cs from "classnames"
 import { BlockParamsModal } from "../SlateEditor/Utils/BlockParamsModal"
 import { ImageAttributeSettings } from "../SlateEditor/Elements/AttributeSettings/ImageAttributeSettings"
+import { ImagePolymorphic } from "../../Medias/ImagePolymorphic"
 
 
 interface Props {
@@ -22,12 +23,7 @@ export function ImageElement({
 
   const [showAddImage, setShowAddImage] = useState<boolean>(false)
 
-  // todo: handle IPFS
-  const url = useMemo(
-    () => element.url,
-    [element.url]
-  )
-  const hasUrl = url !== ""
+  const hasUrl = element.url !== ""
 
   const setImage = (element: any) => {
     Transforms.setNodes(editor, element, {
@@ -41,7 +37,9 @@ export function ImageElement({
         {children}
         <div contentEditable={false}>
           {hasUrl ? (
-            <img src={url} alt="thumbnail image"/>
+            <ImagePolymorphic
+              uri={element.url}
+            />
           ):(
             <button
               type="button"

@@ -2,6 +2,7 @@ import isHotkey from 'is-hotkey'
 import { Editor } from 'slate'; 
 import { toggleFormat } from '../utils';
 import { TextFormatKey } from '../index';
+import { KeyboardEvent } from 'react';
 
 const HOTKEYS: {[key: string]: TextFormatKey} = {
   'mod+b': 'strong',
