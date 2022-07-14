@@ -5,6 +5,13 @@ export const stopEvent: MouseEventHandler = (event) => {
   event.preventDefault()
 }
 
+export function withStopPropagation(fn: (event: any) => void) {
+  return (event: any) => {
+    event.stopPropagation()
+    fn(event)
+  }
+}
+
 export function on<T extends Window | Document | HTMLElement | EventTarget>(
   obj: T | null,
   ...args: Parameters<T['addEventListener']> | [string, Function | null, ...any]
