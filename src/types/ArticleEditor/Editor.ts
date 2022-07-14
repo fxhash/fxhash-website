@@ -23,6 +23,7 @@ export interface NFTArticleForm {
   editions: string
   royalties: string
   royaltiesSplit: ISplit[]
+  tags: string[]
 }
 
 export interface DraftNFTArticle {
