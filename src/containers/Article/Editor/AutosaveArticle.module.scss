@@ -1,0 +1,29 @@
+@import "../../../styles/Variables";
+.wrapper {
+  position: fixed;
+  bottom: $spacing;
+  left: 0;
+  right: 0;
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  text-align: center;
+  z-index: 20;
+}
+.container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background: var(--color-white);
+  max-width: 600px;
+  padding: $spacing-small $spacing;
+  margin: auto;
+  font-size: var(--font-size-small);
+  border: 3px solid var(--color-black);
+}
+.text {
+  margin-left: $spacing-small;
+}
+.icon {
+  font-size: var(--font-size-big);
+}
