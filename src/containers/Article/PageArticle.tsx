@@ -10,6 +10,7 @@ import { ipfsGatewayUrl } from "../../services/Ipfs";
 import cs from "classnames";
 import layout from "../../styles/Layout.module.scss";
 import text from "../../styles/Text.module.css";
+import { CardSmallNftArticle } from "../../components/Card/CardSmallNFTArticle";
 import { NftArticle } from '../../components/NFTArticle/NFTArticle';
 
 interface PageArticleProps {
@@ -18,7 +19,7 @@ interface PageArticleProps {
 }
 
 const _PageArticle = ({ article, originUrl }: PageArticleProps) => {
-  const { title, author, createdAt, body, thumbnailUri, language } = article;
+  const { title, author, createdAt, body, thumbnailUri, language, relatedArticles } = article;
   const dateCreatedAt = useMemo(() => new Date(createdAt), [createdAt]);
   const ogImage = useMemo(() => ipfsGatewayUrl(thumbnailUri), [thumbnailUri])
 
@@ -50,17 +51,23 @@ const _PageArticle = ({ article, originUrl }: PageArticleProps) => {
           <h1 className={style.title}>{title}</h1>
         </div>
         <article lang={language} className={style.body}>
-          <NftArticle 
+          <NftArticle
             markdown={body}
           />
         </article>
         <div className={style.infos}>
           <ArticleInfos article={article} originUrl={originUrl} />
         </div>
-        <div className={style['related-articles']}>
-          <h2 className={text.small_title}>Related articles</h2>
-          <div className={style['related-articles_list']}>replace by related articles components</div>
-        </div>
+        {relatedArticles?.length > 0 &&
+          <div className={style['related-articles']}>
+            <h2 className={text.small_title}>Related articles</h2>
+            <div className={style['related-articles_list']}>
+              {relatedArticles.map((a, index) =>
+                <CardSmallNftArticle key={index} article={a}/>
+              )}
+            </div>
+          </div>
+        }
       </main>
       <Spacing size="6x-large" />
       <Spacing size="6x-large" sm="none" />

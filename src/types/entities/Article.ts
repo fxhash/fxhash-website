@@ -49,4 +49,5 @@ export interface NFTArticle {
   editions: number
   royalties: number
   mintOpHash: string
+  relatedArticles: NFTArticle[]
 }
