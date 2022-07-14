@@ -17,7 +17,7 @@ import rehypeHighlight from "rehype-highlight";
 import type { ComponentsWithNodeOptions, ComponentsWithoutNodeOptions } from "rehype-react/lib/complex-types";
 import { NFTArticleElementComponent } from "../../types/Article";
 import TezosStorage from "./elements/TezosStorage";
-import Embed from "./elements/Embed";
+import Embed from "./elements/Embed/Embed";
 import remarkUnwrapImages from 'remark-unwrap-images'
 import type {Element} from 'hast'
 import rehypeKatex from "rehype-katex";
