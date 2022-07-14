@@ -1,9 +1,11 @@
 @import "../../../../styles/Variables";
+
 .input {
   width: 100%;
 }
+
 p.not_found {
-  margin-top: $spacing;
+  margin-top: 8px;
 }
 
 .spotify {
@@ -15,8 +17,8 @@ p.not_found {
 .youtube {
   overflow: hidden;
   position: relative;
-  width:100%;
-//  max-width: 660px;
+  width: 100%;
+  //  max-width: 660px;
   margin: var(--layout-margin-small-sm) 0;
 
   &:after {
@@ -24,6 +26,7 @@ p.not_found {
     display: block;
     content: '';
   }
+
   iframe {
     position: absolute;
     top: 0;

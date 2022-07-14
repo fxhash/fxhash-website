@@ -1,7 +1,9 @@
 import React, { memo, NamedExoticComponent, useMemo } from 'react';
+import cs from "classnames"
 import EmbedSpotify from "./EmbedSpotify";
 import EmbedYoutube from "./EmbedYoutube";
 import style from "./Embed.module.scss";
+import text from "../../../../styles/Text.module.css"
 import { getYoutubeCodeFromUrl } from "../../../../utils/embed";
 
 export interface EmbedElementProps {
@@ -41,7 +43,7 @@ const _EmbedMedia = ({ href, children, showNotFound }: EmbedMediaProps) => {
     <EmbedMediaElement href={href} caption={children} />
     : <>
         {showNotFound ?
-          <p contentEditable={false} className={style.not_found}>
+          <p contentEditable={false} className={cs(style.not_found, text.info)}>
             No embed player found for <a href={href} target="_blank" rel="noreferrer noopener">{href}</a>
           </p>
 
