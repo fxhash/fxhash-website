@@ -62,6 +62,7 @@
     "remark-slate-transformer": "^0.6.7",
     "remark-stringify": "^10.0.2",
     "remark-toc": "^8.0.0",
+    "remark-unwrap-images": "^3.0.1",
     "sass": "^1.42.1",
     "slate": "^0.81.0",
     "slate-history": "^0.66.0",
