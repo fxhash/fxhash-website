@@ -9,6 +9,7 @@ import { BlockExtraMenu } from "../Utils/BlockExtraMenu"
 import { BlockMenu } from "../Utils/BlockMenu"
 import { TAttributesEditorWrapper } from "../../../../types/ArticleEditor/ArticleEditorBlocks"
 import { TEditNodeFn, TEditNodeFnFactory } from "../../../../types/ArticleEditor/Transforms"
+import { withStopPropagation } from "../../../../utils/events"
 
 
 interface IEditableElementWrapperProps {
@@ -43,6 +44,8 @@ function EditableElementWrapper({
     Transforms.insertNodes(editor, element, {
       at: target
     })
+    ReactEditor.focus(editor)
+    console.log(ReactEditor.toDOMNode(editor, element))
     Transforms.select(editor, target)
     setShowAddBlock(false)
   }
@@ -83,11 +86,9 @@ function EditableElementWrapper({
           <button
             type="button"
             contentEditable={false}
-	    onPointerDown={(e) => {
-	      e.preventDefault()
-	      e.stopPropagation()
-	      setShowSettings(true)
-	    }}
+            onClick={withStopPropagation(
+              () => setShowSettings(true)
+            )}
             tabIndex={-1}
           >
             <i className="fa-solid fa-gear" aria-hidden/>
@@ -98,23 +99,18 @@ function EditableElementWrapper({
         <button
           type="button"
           contentEditable={false}
-	  onPointerDown={(e) =>{
-	    e.preventDefault()
-	    e.stopPropagation()
-	    setShowAddBlock(true)
-	  }}
-          tabIndex={-1}
+          onClick={withStopPropagation(
+            () => setShowAddBlock(true)
+          )}
         >
           <i className="fa-solid fa-plus" aria-hidden/>
         </button>
         <button
           type="button"
           contentEditable={false}
-	  onPointerDown={(e) => {
-	    e.preventDefault()
-	    e.stopPropagation()
-	    setShowExtraMenu(true)
-	  }}
+          onClick={withStopPropagation(
+            () => setShowExtraMenu(true)
+          )}
           tabIndex={-1}
         >
           <i className="fa-solid fa-ellipsis" aria-hidden/>

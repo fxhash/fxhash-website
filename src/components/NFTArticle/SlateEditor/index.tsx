@@ -1,4 +1,12 @@
-import React, { forwardRef, KeyboardEvent, useEffect, useImperativeHandle, useMemo, useState } from "react";
+import React, {
+  forwardRef,
+  KeyboardEvent,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useState
+} from "react";
 import { BaseEditor, BaseElement, createEditor, Node, Descendant } from "slate";
 import {
   Slate,
@@ -19,10 +27,17 @@ import { withConstraints } from "./Plugins/SlateConstraintsPlugin"
 import { IEditorMediaFile } from "../../../types/ArticleEditor/Image";
 import { withMediaSupport } from "./Plugins/SlateMediaPlugin";
 import { FxEditor } from "../../../types/ArticleEditor/Editor";
+import useInit from "../../../hooks/useInit";
+import dynamic from 'next/dynamic'
+
+
+const FloatingInlineMenu = dynamic(() => import('./FloatingInlineMenu/FloatingInlineMenu'), {
+  ssr: false,
+})
   
 type TypeElement = BaseElement & { 
   type: string
-  children: any 
+  children: any
 }
 
 type HeadlineElement = TypeElement & {
@@ -30,7 +45,7 @@ type HeadlineElement = TypeElement & {
 }
 
 type ImageElement = TypeElement & {
-  title: string   
+  title: string
   url: string
   alt?: string
 }
@@ -39,11 +54,11 @@ type TezosStorageElement = TypeElement & TezosStorageProps
 
 type CustomElement =  HeadlineElement | TezosStorageElement | ImageElement;
 
-export type TextFormatKey = 'strong' | 'emphasis' | 'underline' | 'inlineCode';
+export type TextFormatKey = 'strong' | 'emphasis' | 'inlineCode';
 
 export type TextFormats = {[key in TextFormatKey]: boolean}
 
-export type FormattedText = { 
+export type FormattedText = {
   text: string
 } & TextFormats
 
@@ -64,9 +79,6 @@ const renderLeaf = ({ attributes, children, leaf }: RenderLeafProps) => {
   if (leaf.emphasis) {
     children = <em>{children}</em>;
   }
-  if (leaf.underline) {
-    children = <u>{children}</u>;
-  }
   if (leaf.inlineCode) {
     children = <code>{children}</code>;
   }
@@ -77,7 +89,9 @@ interface SlateEditorProps {
   initialValue: Descendant[]
   placeholder?: string
   onMediasUpdate: (medias: IEditorMediaFile[]) => void
-};
+  onChange?: (nodes: Descendant[]) => void
+  onInit?: (editor: FxEditor) => void
+}
 
 const INLINE_ELEMENTS = ['inlineMath', 'link']
 const VOID_ELEMENTS = ['inlineMath', 'math']
@@ -86,6 +100,8 @@ export const SlateEditor = forwardRef<FxEditor, SlateEditorProps>(({
   initialValue,
   placeholder,
   onMediasUpdate,
+  onChange,
+  onInit,
 }, ref) => {
     const editor = useMemo(() => {
       const e = withConstraints(
@@ -106,13 +122,18 @@ export const SlateEditor = forwardRef<FxEditor, SlateEditorProps>(({
       e.isInline = element => INLINE_ELEMENTS.includes(element.type) || isInline(element)
       e.isVoid = element => VOID_ELEMENTS.includes(element.type) || isVoid(element)
       return e;
-    }, []);
+    }, [onMediasUpdate]);
 
     const [value, setValue] = useState<Node[]>(initialValue);
-    
+    const handleChange = useCallback((newValue) => {
+      setValue(newValue)
+      onChange?.(value)
+    }, [onChange])
     // mutate ref to editor whenever editor ref changes
     useImperativeHandle(ref, () => editor, [editor])
-
+    useInit(() => {
+      if (onInit) onInit(editor)
+    })
     return (
       <>
         <div
@@ -120,9 +141,9 @@ export const SlateEditor = forwardRef<FxEditor, SlateEditorProps>(({
           style={{flex:1}}
         >
           <Slate
-            editor={editor} 
-            value={value} 
-            onChange={setValue}
+            editor={editor}
+            value={value}
+            onChange={handleChange}
           >
             <Editable
               renderElement={RenderElements}
@@ -132,6 +153,7 @@ export const SlateEditor = forwardRef<FxEditor, SlateEditorProps>(({
                 onKeyDownHotkeyPlugin(editor, event)
               }}
             />
+	          <FloatingInlineMenu />
           </Slate>
         </div>
       </>

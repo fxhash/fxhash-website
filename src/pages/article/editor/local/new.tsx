@@ -10,44 +10,31 @@ import { useRouter } from "next/router";
 import { LoaderBlock } from "../../../../components/Layout/LoaderBlock";
 import { Error } from "../../../../components/Error/Error";
 import useInit from "../../../../hooks/useInit";
+import { nanoid } from "nanoid";
 
 const ArticleEditorPage: NextPage = () => {
-  const [hasLoadUpToDate, setHasLoadUpToDate] = useState(false);
-  const router = useRouter();
-  const { state, dispatch } = useContext(ArticlesContext);
-  const localId = typeof router.query.id === 'string' ? router.query.id : null;
+  const [localId, setLocalId] = useState<string|null>(null);
+  const { state } = useContext(ArticlesContext);
   useInit(() => {
-    dispatch({ type: 'loadAll' });
-    setHasLoadUpToDate(true);
+    const generateId = nanoid(11);
+    setLocalId(generateId);
+    window.history.replaceState(null, '', `/article/editor/local/${generateId}`);
   });
   const article = localId ? state.articles[localId] : null;
   return (
     <>
       <Head>
-        <title>Draft {article && `- ${article.form.title}`}</title>
+        <title>Draft {article?.form.title && `- ${article.form.title}`}</title>
       </Head>
 
       <Spacing size="3x-large"/>
 
       <main className={cs(layout['padding-small'])}>
-        {hasLoadUpToDate && router.isReady ?
-          <>
-            {(localId && article) ?
-              <ArticleEditor
-                initialValues={article.form}
-                hasLocalAutosave
-                localId={localId}
-              />
-              : <Error>This article draft does not exist or has been deleted</Error>
-            }
-          </>
-          :
-          <>
-            <LoaderBlock
-              size="small"
-              height="20px"
-            />
-          </>
+        {localId &&
+          <ArticleEditor
+            hasLocalAutosave
+            localId={localId}
+          />
         }
       </main>
 

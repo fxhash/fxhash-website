@@ -391,7 +391,7 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
         {children}
       </a>
     ),
-    hasUtilityWrapper: true,
+    hasUtilityWrapper: false,
   },
   "figure": {
     name: "Image",
