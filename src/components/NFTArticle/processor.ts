@@ -26,6 +26,8 @@ import { OverridedSlateBuilders } from "remark-slate-transformer/lib/transformer
 import { remarkToSlate, slateToRemark } from "remark-slate-transformer"
 import { Node, Descendant } from "slate";
 import { Root } from 'mdast'
+import { toMarkdown } from 'mdast-util-to-markdown'
+import { fromMarkdown } from 'mdast-util-from-markdown'
 
 
 declare module "rehype-react" {
@@ -69,6 +71,9 @@ export const customNodes: CustomArticleElementsByType = {
 function remarkFxHashCustom(): import('unified').Transformer<import('mdast').Root, import('mdast').Root> {
   return (tree: Root) => {
     visit(tree, (node) => {
+      if(node.type === 'image') {
+	console.log(node)
+      }
       if (
         node.type === 'textDirective' ||
         node.type === 'leafDirective' ||
@@ -162,6 +167,7 @@ function createMathNode(node: any) {
 }
 
 function markdownImageToFigure(node: any) {
+  console.log('->', node, fromMarkdown(node.title))
   return { 
     type: "figure",
     children: [{
@@ -235,11 +241,13 @@ function convertSlateLeafDirectiveToMarkdown(
   }
 }
 
+
 /**
  * Turns a figcaption element into an element which will be turned into an
  * image in proper markdown
  */
 function figureToMarkdown(node: any, next: (children: any[]) => any) {
+  console.log(node)
   // create a regular image node
   const imageNode: any = {
     type: "image"
@@ -250,7 +258,14 @@ function figureToMarkdown(node: any, next: (children: any[]) => any) {
     (node: Node) => node.type === ("figcaption" as any)
   )
   if (caption && caption.children?.length > 0) {
-    imageNode.alt = caption.children[0].text
+    const mdastCaption = next(caption.children);
+    const mdCaption = toMarkdown({
+      type: 'paragraph', 
+      children: mdastCaption
+    }, {strong: '_', emphasis: '_'});
+    console.log(mdCaption)
+    imageNode.alt = mdCaption.trim();
+    imageNode.title = mdCaption.trim();
   }
   // now do the same for the image element
   const image: Node|null = node.children.find(
