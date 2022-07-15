@@ -6,7 +6,7 @@
   border: none;
   outline: none;
   resize: none;
-  padding: 0 0 8px 0;
+  padding: 0;
   overflow: hidden;
   background: transparent;
   color: var(--color-black);
@@ -15,3 +15,14 @@
     color: var(--color-gray-light);
   }
 }
+
+.hide {
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.container_katex_margin {
+  margin-top: 8px;
+}
+

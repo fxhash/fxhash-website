@@ -28,7 +28,12 @@ import { IEditorMediaFile } from "../../../types/ArticleEditor/Image";
 import { withMediaSupport } from "./Plugins/SlateMediaPlugin";
 import { FxEditor } from "../../../types/ArticleEditor/Editor";
 import useInit from "../../../hooks/useInit";
+import dynamic from 'next/dynamic'
 
+
+const FloatingInlineMenu = dynamic(() => import('./FloatingInlineMenu/FloatingInlineMenu'), {
+  ssr: false,
+})
 
 type TypeElement = BaseElement & {
   type: string
@@ -49,7 +54,7 @@ type TezosStorageElement = TypeElement & TezosStorageProps
 
 type CustomElement =  HeadlineElement | TezosStorageElement | ImageElement;
 
-export type TextFormatKey = 'strong' | 'emphasis' | 'underline' | 'inlineCode';
+export type TextFormatKey = 'strong' | 'emphasis' | 'inlineCode';
 
 export type TextFormats = {[key in TextFormatKey]: boolean}
 
@@ -73,9 +78,6 @@ const renderLeaf = ({ attributes, children, leaf }: RenderLeafProps) => {
   }
   if (leaf.emphasis) {
     children = <em>{children}</em>;
-  }
-  if (leaf.underline) {
-    children = <u>{children}</u>;
   }
   if (leaf.inlineCode) {
     children = <code>{children}</code>;
@@ -125,9 +127,7 @@ export const SlateEditor = forwardRef<FxEditor, SlateEditorProps>(({
     const [value, setValue] = useState<Node[]>(initialValue);
     const handleChange = useCallback((newValue) => {
       setValue(newValue)
-      if (onChange) {
-        onChange(newValue);
-      }
+      onChange?.(newValue)
     }, [onChange])
     // mutate ref to editor whenever editor ref changes
     useImperativeHandle(ref, () => editor, [editor])
@@ -153,6 +153,7 @@ export const SlateEditor = forwardRef<FxEditor, SlateEditorProps>(({
                 onKeyDownHotkeyPlugin(editor, event)
               }}
             />
+	          <FloatingInlineMenu />
           </Slate>
         </div>
       </>

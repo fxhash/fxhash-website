@@ -38,7 +38,11 @@ export const Frag_ArticleFull = gql`
     royaltiesSplits {
       ...RoyaltySplit
     }
+    relatedArticles(take: 4) {
+      ...ArticleInfos
+    }
   }
+  ${Frag_ArticleInfos}
   ${Frag_UserBadge}
   ${Frag_RoyaltySplit}
 `;

@@ -18,6 +18,7 @@ import type { ComponentsWithNodeOptions, ComponentsWithoutNodeOptions } from "re
 import { NFTArticleElementComponent } from "../../types/Article";
 import TezosStorage from "./elements/TezosStorage";
 import Embed from "./elements/Embed";
+import remarkUnwrapImages from 'remark-unwrap-images'
 import type {Element} from 'hast'
 import rehypeKatex from "rehype-katex";
 import { OverridedMdastBuilders } from "remark-slate-transformer/lib/transformers/mdast-to-slate"
@@ -107,6 +108,7 @@ export async function getNFTArticleComponentsFromMarkdown(markdown: string): Pro
       .use(remarkParse)
       .use(remarkMath)
       .use(remarkGfm)
+      .use(remarkUnwrapImages)
       .use(remarkDirective)
       .use(remarkFxHashCustom)
       .use(remarkRehype)
@@ -156,12 +158,31 @@ function createMathNode(node: any) {
   }
 }
 
+function markdownImageToFigure(node: any) {
+  return { 
+    type: "figure",
+    children: [{
+      type: "image",
+      url: node.url,
+      children: [{
+        text: ""
+      }],
+    }, {
+      type: "figcaption",
+      children: [{
+        text: node.alt
+      }]
+    }]
+  }
+}
+
 const remarkSlateTransformerOverrides: OverridedMdastBuilders = {
   textDirective:  createDirectiveNode,
   leafDirective:  createDirectiveNode,
   containerDirective:  createDirectiveNode,
   "inlineMath": createMathNode,
   "math": createMathNode,
+  image: markdownImageToFigure, 
 }
 
 interface PayloadSlateEditorStateFromMarkdown {
@@ -175,6 +196,7 @@ export async function getSlateEditorStateFromMarkdown(markdown: string): Promise
     const processed = await unified()
       .use(remarkParse)
       .use(remarkMath)
+      .use(remarkUnwrapImages)
       .use(rehypeKatex)
       .use(remarkDirective)
       .use(remarkFxHashCustom)
@@ -187,7 +209,8 @@ export async function getSlateEditorStateFromMarkdown(markdown: string): Promise
       ...matterResult.data,
       editorState: processed.result as Descendant[]
     };
-  } catch {
+  } catch(e)  {
+    console.error(e)
     return null;
   }
 }
@@ -258,6 +281,7 @@ export async function getMarkdownFromSlateEditorState(slate: Node[] ) {
       const processor = unified()
         .use(remarkMath)
         .use(remarkDirective)
+        .use(remarkUnwrapImages)
         .use(remarkFxHashCustom)
         .use(slateToRemark, {
           overrides: slateToRemarkTransformerOverrides,
