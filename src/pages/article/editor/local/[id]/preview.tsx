@@ -30,8 +30,10 @@ const ArticlePreviewPage: NextPage<ArticlePreviewPageProps> = ({ origin }) => {
 
   useInit(() => {
     dispatch({ type: 'loadAll' });
+    setHasLoadUpToDate(true);
   });
   const draftArticle = localId ? state.articles[localId] : null;
+
   useEffect(() => {
     const fetchUsers = async (article: DraftNFTArticle) => {
       try {
@@ -56,7 +58,6 @@ const ArticlePreviewPage: NextPage<ArticlePreviewPageProps> = ({ origin }) => {
           }, [] as Split[])
         }
         setArticle(newArticle);
-        setHasLoadUpToDate(true)
       } catch (e) {
         console.error(e);
       }
@@ -68,19 +69,16 @@ const ArticlePreviewPage: NextPage<ArticlePreviewPageProps> = ({ origin }) => {
 
   return (
     <>
-      {hasLoadUpToDate && router.isReady ?
-        <>
+      {(!hasLoadUpToDate || !router.isReady || (draftArticle && !article)) ?
+        <LoaderBlock
+          size="small"
+          height="20px"
+        />
+      : <>
           {(localId && article) ?
             <PageArticle article={article} isPreview originUrl={origin} />
             : <Error>This article draft does not exist or has been deleted</Error>
           }
-        </>
-        :
-        <>
-          <LoaderBlock
-            size="small"
-            height="20px"
-          />
         </>
       }
     </>

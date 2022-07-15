@@ -41,11 +41,13 @@ const _PageArticle = ({ article, originUrl, isPreview }: PageArticleProps) => {
       <Spacing size="small" />
       <main className={cs(layout['padding-big'])}>
         <div className={style.header}>
-          <UserBadge
-            user={author}
-            hasLink
-            size="big"
-          />
+          {author &&
+            <UserBadge
+              user={author}
+              hasLink
+              size="big"
+            />
+          }
           <div className={style.date}>
             <time dateTime={format(dateCreatedAt, 'yyyy/MM/dd')}>
               {format(dateCreatedAt, 'MMMM d, yyyy')}

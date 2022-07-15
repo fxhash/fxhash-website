@@ -29,11 +29,13 @@ export function ArticleInfos({
         <div className={style.base_left}>
           <div>
             <h6 className={text.small_title}>Written by</h6>
-            <EntityBadge
-              user={article.author}
-              size="big"
-              toggeable
-            />
+            {article.author &&
+              <EntityBadge
+                user={article.author}
+                size="big"
+                toggeable
+              />
+            }
           </div>
         </div>
         <div className={style.base_center}>

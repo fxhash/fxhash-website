@@ -2,7 +2,7 @@ import { NFTArticle } from "../types/entities/Article";
 import { DraftNFTArticle } from "../types/ArticleEditor/Editor";
 import { User } from "../types/entities/User";
 
-type GenerateNftArticleFromDraft = (id: string, draft: DraftNFTArticle, user: User) => NFTArticle;
+type GenerateNftArticleFromDraft = (id: string, draft: DraftNFTArticle, user?: User) => NFTArticle;
 export const generateNftArticleFromDraft: GenerateNftArticleFromDraft = (id, draft, user) => {
   return ({
     id,
@@ -19,12 +19,13 @@ export const generateNftArticleFromDraft: GenerateNftArticleFromDraft = (id, dra
     tags: draft.form.tags,
     language: 'en',
     metadataUri: '',
+    relatedArticles: [],
     metadata: {
       decimals: 0,
       symbol: "ARTKL",
       name: draft.form.title,
       description: draft.form.abstract,
-      minter: user.id,
+      minter: user?.id,
       creators: [],
       contributors: [],
       type: "article",
