@@ -11,25 +11,28 @@ import cs from "classnames";
 import layout from "../../styles/Layout.module.scss";
 import text from "../../styles/Text.module.css";
 import { NftArticle } from '../../components/NFTArticle/NFTArticle';
+import { ButtonsArticlePreview } from "./ButtonsArticlePreview";
+import Image from "next/image";
 
 interface PageArticleProps {
   article: NFTArticle
+  isPreview?: boolean,
 }
 
-const _PageArticle = ({ article }: PageArticleProps) => {
-  const { title, author, createdAt, body, thumbnailUri, language } = article;
+const _PageArticle = ({ article, isPreview }: PageArticleProps) => {
+  const { title, author, description, createdAt, body, thumbnailUri, language } = article;
   const dateCreatedAt = useMemo(() => new Date(createdAt), [createdAt]);
-  const ogImage = useMemo(() => ipfsGatewayUrl(thumbnailUri), [thumbnailUri])
+  const thumbnailUrl = useMemo(() => ipfsGatewayUrl(thumbnailUri), [thumbnailUri])
 
   return (
     <>
       <Head>
-        <title>fxhash — {title}</title>
+        <title>fxhash — {isPreview ? '[Preview] - ' : ''}{title}</title>
         <meta key="og:title" property="og:title" content={`fxhash - ${title}`} />
         <meta key="description" name="description" content={article.description} />
         <meta key="og:description" property="og:description" content={article.description} />
         <meta key="og:type" property="og:type" content="website"/>
-        <meta key="og:image" property="og:image" content={ogImage} />
+        <meta key="og:image" property="og:image" content={thumbnailUrl} />
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.0/dist/katex.min.css" crossOrigin="anonymous" />
         <link rel="stylesheet" href="/highlight/dracula.css"/>
       </Head>
@@ -47,9 +50,18 @@ const _PageArticle = ({ article }: PageArticleProps) => {
             </time>
           </div>
           <h1 className={style.title}>{title}</h1>
+          <p className={style.description}>{description}</p>
+          <div className={style.thumbnail}>
+            <Image
+              src={thumbnailUrl}
+              layout="fill"
+              objectFit="contain"
+              priority
+            />
+          </div>
         </div>
         <article lang={language} className={style.body}>
-          <NftArticle 
+          <NftArticle
             markdown={body}
           />
         </article>
@@ -60,6 +72,12 @@ const _PageArticle = ({ article }: PageArticleProps) => {
           <h2 className={text.small_title}>Related articles</h2>
           <div className={style['related-articles_list']}>replace by related articles components</div>
         </div>
+        {isPreview &&
+          <>
+            <Spacing size="6x-large" />
+            <ButtonsArticlePreview id={article.id} article={article} />
+          </>
+        }
       </main>
       <Spacing size="6x-large" />
       <Spacing size="6x-large" sm="none" />

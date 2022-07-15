@@ -105,5 +105,6 @@ export interface ArticleMetadata {
   artifactUri: string
   displayUri: string
   thumbnailUri: string
+  thumbnailCaption?: string
   platforms?: string[]
 }

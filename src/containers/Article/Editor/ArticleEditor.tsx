@@ -7,7 +7,7 @@ import { SlateEditor } from "../../../components/NFTArticle/SlateEditor"
 import { Dropzone } from "../../../components/Input/Dropzone"
 import { Spacing } from "../../../components/Layout/Spacing"
 import { Field } from "../../../components/Form/Field"
-import { useFormik } from "formik"
+import { FormikHelpers, useFormik } from "formik"
 import { InputSplits } from "../../../components/Input/InputSplits"
 import { transformSplitsSum1000 } from "../../../utils/transformers/splits"
 import { Donations } from "../../Input/Donations"
@@ -30,6 +30,8 @@ import { LoaderBlock } from "../../../components/Layout/LoaderBlock";
 import useInit from "../../../hooks/useInit";
 import { isUrlLocal } from "../../../utils/files";
 import useConfirmLeavingPage from "../../../hooks/useConfirmLeavingPage";
+import * as Yup from "yup";
+import { countWords } from "../../../utils/strings";
 
 const editorDefaultValue = [
   {
@@ -52,34 +54,61 @@ const defaultValues: NFTArticleForm = {
   tags: []
 }
 
+const schemaNftArticleForm = Yup.object().shape({
+  title: Yup.string().required('Required'),
+  abstract: Yup.string()
+    .required('Required')
+    .test('nbWords', 'Max 500 words', val => countWords(val || '') <= 500),
+  body: Yup.string().required('Required'),
+  thumbnailUri: Yup.string(),
+  thumbnailCaption: Yup.string(),
+  editions: Yup.number()
+    .required('Min 1 edition')
+    .min(1, "Min 1 edition"),
+  royalties: Yup.number()
+    .required('Required')
+    .min(1, "Min 1%")
+    .max(25, "Max 25%"),
+  royaltiesSplit: Yup.array()
+    .of(Yup.object().shape({
+      address: Yup.string(),
+      pct: Yup.number()
+    }))
+    .required("Req At least 1 address")
+    .min(1, "At least 1 address"),
+  tags: Yup.array().of(Yup.string())
+})
+
 interface ArticleEditorProps {
   localId?: string,
   hasLocalAutosave?: boolean
   initialValues?: NFTArticleForm,
+  onSubmit: (values: NFTArticleForm, formikHelpers: FormikHelpers<NFTArticleForm>) => (void | Promise<any>)
 }
 export function ArticleEditor({
   localId,
   hasLocalAutosave,
   initialValues,
+  onSubmit,
 }: ArticleEditorProps) {
+  const [immutableInitialValues] = useState(initialValues)
   const editorStateRef = useRef<FxEditor>(null)
   const formik = useFormik({
-    initialValues: initialValues || defaultValues,
-    onSubmit: (submittedValues) => console.log(submittedValues)
+    initialValues: immutableInitialValues || defaultValues,
+    onSubmit,
+    validationSchema: schemaNftArticleForm,
+    validateOnMount: true,
   });
-  const { values, errors, setFieldValue } = formik;
+  const { values, errors, touched, setFieldValue, setFieldTouched } = formik;
   const [thumbnail, setThumbnail] = useState<string|null>(values.thumbnailUri)
   const [medias, setMedias] = useState<IEditorMediaFile[]>([])
   const [initialBody, setInitialBody] = useState<Descendant[] | null>(null)
 
-  const handleClickPreviewMint = useCallback(async () => {
-    const markdown = await getMarkdownFromSlateEditorState(editorStateRef.current!.children)
-    console.log(markdown)
-  }, [])
   const handleChangeBody = useCallback(async (nodes: Descendant[]) => {
-    const markdown = await getMarkdownFromSlateEditorState(nodes)
+    const markdown = await getMarkdownFromSlateEditorState(nodes);
+    setFieldTouched('body');
     await setFieldValue('body', markdown);
-  }, [setFieldValue])
+  }, [setFieldTouched, setFieldValue])
   const debouncedChangeBody = useMemo(() => debounce(handleChangeBody, 800), [handleChangeBody])
   const handleInitEditor = useCallback((editor) => {
     setMedias(editor.getUploadedMedias() || []);
@@ -128,6 +157,26 @@ export function ArticleEditor({
 
   const hasLocalMedias = useMemo(() => mediasWithThumbnail.some(media => isUrlLocal(media.uri)), [mediasWithThumbnail]);
   useConfirmLeavingPage(hasLocalMedias, 'You have unsaved medias, please ensure you upload everything before leaving the page. Are you sure you want to leave?');
+
+  const canMintArticle = useMemo<{ enabled: boolean, reason?: string }>(() => {
+    const requiredActions: string[] = [];
+
+    if (hasLocalMedias) {
+      requiredActions.push('- upload or delete medias to IPFS')
+    }
+    const errorsEntries = Object.entries(errors);
+    if (errorsEntries.length > 0) {
+      errorsEntries.forEach(([key, value]) => {
+        requiredActions.push(`- fix error in ${key}: ${value}`);
+      });
+    }
+    if (requiredActions.length > 0) {
+      requiredActions.unshift('Before minting your article, you need to:')
+      return { enabled: false, reason: requiredActions.join('\n')}
+    }
+    return { enabled: true };
+  }, [errors, hasLocalMedias])
+
   return (
     <form onSubmit={formik.handleSubmit}>
       {hasLocalAutosave && localId &&
@@ -137,98 +186,116 @@ export function ArticleEditor({
           hasUnsavedMedias={hasLocalMedias}
         />
       }
-      <div className={cs(style.section_title)}>
-        <span>
-          TITLE
-        </span>
-      </div>
-      <TextareaAutosize
-        value={values.title}
-        onChange={evt => setFieldValue("title", evt.target.value)}
-        className={cs(style.input_title)}
-        minRows={1}
-        placeholder="Title of the article"
-      />
+      <Field
+        className={style.field}
+        classNameError={style.field_error}
+        error={touched.title && errors.title}
+      >
+        <div className={cs(style.section_title)}>
+          <span>
+            TITLE
+          </span>
+        </div>
+        <TextareaAutosize
+          value={values.title}
+          name="title"
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          className={cs(style.input_title)}
+          minRows={1}
+          placeholder="Title of the article"
+        />
+      </Field>
 
-      <div className={cs(style.section_title)}>
-        <span>
-          ABSTRACT
-        </span>
-      </div>
-      <TextareaAutosize
-        value={values.abstract}
-        onChange={evt => setFieldValue("abstract", evt.target.value)}
-        className={cs(style.input_abstract, style.w900)}
-        minRows={1}
-        placeholder="A short description (max 500 words) about the content of the article. The abstract is by default displayed at the top of the article on fxhash and is being used to introduce articles when space is limited."
-      />
+      <Field className={style.field} classNameError={style.field_error} error={touched.abstract && errors.abstract}>
+        <div className={cs(style.section_title)}>
+          <span>
+            ABSTRACT
+          </span>
+        </div>
+        <TextareaAutosize
+          name="abstract"
+          value={values.abstract}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          className={cs(style.input_abstract, style.w900)}
+          minRows={1}
+          placeholder="A short description (max 500 words) about the content of the article. The abstract is by default displayed at the top of the article on fxhash and is being used to introduce articles when space is limited."
+        />
+      </Field>
 
-      <div className={cs(style.section_title)}>
-        <span>
-          THUMBNAIL
-        </span>
-      </div>
-      <Dropzone
-        className={cs(style.thumbnail_dropzone, {
-          [style.image_loaded]: !!thumbnail
-        })}
-        onChange={(files) => updateThumbnail(files?.[0] || null)}
-        textDefault={
-          thumbnail ? (
-            <ImagePolymorphic
-              uri={thumbnail}
+      <Field className={style.field} classNameError={style.field_error} error={touched.thumbnailUri && errors.thumbnailUri}>
+        <div className={cs(style.section_title)}>
+          <span>
+            THUMBNAIL
+          </span>
+        </div>
+        <Dropzone
+          className={cs(style.thumbnail_dropzone, {
+            [style.image_loaded]: !!thumbnail
+          })}
+          onChange={(files) => updateThumbnail(files?.[0] || null)}
+          textDefault={
+            thumbnail ? (
+              <ImagePolymorphic
+                uri={thumbnail}
+              />
+            ):(
+              <div className={cs(style.placeholder_wrapper)}>
+                <i className="fa-solid fa-image" aria-hidden/>
+                <span>
+                  Select a thumbnail
+                </span>
+              </div>
+            )
+          }
+          textDrag={
+            thumbnail ? (
+              <ImagePolymorphic
+                uri={thumbnail}
+              />
+            ):(
+              <div className={cs(style.placeholder_wrapper)}>
+                <i className="fa-solid fa-image" aria-hidden/>
+                <span>
+                  Drop your image
+                </span>
+              </div>
+            )
+          }
+          accepted={["image/jpeg", "image/png", "image/gif"]}
+        />
+        <TextareaAutosize
+          value={values.thumbnailCaption}
+          className={cs(style.input_caption)}
+          minRows={1}
+          name="thumbnailCaption"
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          placeholder="Thumbnail caption..."
+        />
+      </Field>
+
+      <Field className={style.field} classNameError={style.field_error} error={touched.body && errors.body}>
+        <div className={cs(style.section_title)}>
+          <span>
+            BODY
+          </span>
+        </div>
+        <div className={cs(articleStyle.article_wrapper)}>
+          {initialBody ?
+            <SlateEditor
+              ref={editorStateRef}
+              initialValue={initialBody}
+              placeholder="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ut magna eu sapien placerat auctor. Phasellus vel erat a mi cursus posuere nec et diam. Maecenas quis nisl ligula. Sed velit sapien, accumsan eget cursus sit amet, egestas sit amet odio. Cras vitae urna sodales, suscipit ipsum a, aliquam ex. Pellentesque ut placerat arcu, a fringilla ante. Sed varius sem mi, sed interdum nunc consectetur ut. Nulla consectetur diam purus, quis volutpat nunc ultrices eget. Nam vel consectetur lacus, vel auctor dolor."
+              onMediasUpdate={setMedias}
+              onChange={debouncedChangeBody}
+              onInit={handleInitEditor}
             />
-          ):(
-            <div className={cs(style.placeholder_wrapper)}>
-              <i className="fa-solid fa-image" aria-hidden/>
-              <span>
-                Select a thumbnail
-              </span>
-            </div>
-          )
-        }
-        textDrag={
-          thumbnail ? (
-            <ImagePolymorphic
-              uri={thumbnail}
-            />
-          ):(
-            <div className={cs(style.placeholder_wrapper)}>
-              <i className="fa-solid fa-image" aria-hidden/>
-              <span>
-                Drop your image
-              </span>
-            </div>
-          )
-        }
-        accepted={["image/jpeg", "image/png", "image/gif"]}
-      />
-      <TextareaAutosize
-        value={values.thumbnailCaption}
-        onChange={evt => setFieldValue("thumbnailCaption", evt.target.value)}
-        className={cs(style.input_caption)}
-        minRows={1}
-        placeholder="Thumbnail caption..."
-      />
-
-      <div className={cs(style.section_title)}>
-        <span>
-          BODY
-        </span>
-      </div>
-      <div className={cs(articleStyle.article_wrapper)}>
-        {initialBody ?
-          <SlateEditor
-            ref={editorStateRef}
-            initialValue={initialBody}
-            placeholder="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ut magna eu sapien placerat auctor. Phasellus vel erat a mi cursus posuere nec et diam. Maecenas quis nisl ligula. Sed velit sapien, accumsan eget cursus sit amet, egestas sit amet odio. Cras vitae urna sodales, suscipit ipsum a, aliquam ex. Pellentesque ut placerat arcu, a fringilla ante. Sed varius sem mi, sed interdum nunc consectetur ut. Nulla consectetur diam purus, quis volutpat nunc ultrices eget. Nam vel consectetur lacus, vel auctor dolor."
-            onMediasUpdate={setMedias}
-            onChange={debouncedChangeBody}
-            onInit={handleInitEditor}
-          />
-          : <LoaderBlock size="small" height="20px" />
-        }
-      </div>
+            : <LoaderBlock size="small" height="20px" />
+          }
+        </div>
+      </Field>
 
       <Spacing size="6x-large"/>
 
@@ -248,14 +315,14 @@ export function ArticleEditor({
           />
         </Field>
 
-        <Field>
+        <Field error={errors.editions}>
           <label htmlFor="editions">
             Number of editions
             <small>How many collectible fungible editions of the article</small>
           </label>
           <InputTextUnit
             unit=""
-            type="text"
+            type="number"
             name="editions"
             value={values.editions}
             onChange={formik.handleChange}
@@ -264,15 +331,18 @@ export function ArticleEditor({
           />
         </Field>
 
-        <Field>
+        <Field error={errors.royalties}>
           <label htmlFor="royalties">
             Royalties
             <small>Between 0% and 25%</small>
           </label>
           <InputTextUnit
             unit="%"
-            type="text"
+            type="number"
             name="royalties"
+            min={0.1}
+            step={0.1}
+            max={25}
             value={values.royalties}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
@@ -311,12 +381,17 @@ export function ArticleEditor({
 
         <Spacing size="3x-large"/>
 
+        {canMintArticle.reason &&
+          <div className={style.errors_list}>
+            {canMintArticle.reason}
+          </div>
+        }
         <Submit layout="center">
           <Button
-            type="button"
+            type="submit"
             size="large"
             color="secondary"
-            onClick={handleClickPreviewMint}
+            disabled={!canMintArticle.enabled}
           >
             preview &amp; mint
           </Button>

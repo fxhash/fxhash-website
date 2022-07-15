@@ -1,21 +1,29 @@
-import layout from "../../../../styles/Layout.module.scss"
+import layout from "../../../../../styles/Layout.module.scss"
 import cs from "classnames"
 import { NextPage } from "next"
 import Head from "next/head"
-import { ArticleEditor } from "../../../../containers/Article/Editor/ArticleEditor"
-import { Spacing } from "../../../../components/Layout/Spacing"
-import React, { useContext, useState } from "react";
-import { ArticlesContext } from "../../../../context/Articles";
+import { ArticleEditor } from "../../../../../containers/Article/Editor/ArticleEditor"
+import { Spacing } from "../../../../../components/Layout/Spacing"
+import React, { useCallback, useContext, useState } from "react";
+import { ArticlesContext } from "../../../../../context/Articles";
 import { useRouter } from "next/router";
-import { LoaderBlock } from "../../../../components/Layout/LoaderBlock";
-import { Error } from "../../../../components/Error/Error";
-import useInit from "../../../../hooks/useInit";
+import { LoaderBlock } from "../../../../../components/Layout/LoaderBlock";
+import { Error } from "../../../../../components/Error/Error";
+import useInit from "../../../../../hooks/useInit";
 
 const ArticleEditorPage: NextPage = () => {
   const [hasLoadUpToDate, setHasLoadUpToDate] = useState(false);
   const router = useRouter();
   const { state, dispatch } = useContext(ArticlesContext);
   const localId = typeof router.query.id === 'string' ? router.query.id : null;
+
+  const handleSubmit = useCallback((values) => {
+    dispatch({
+      type: 'save',
+      payload: { id: localId!, articleForm: values }
+    })
+    router.push(`/article/editor/local/${localId}/preview`);
+  }, [dispatch, localId, router])
   useInit(() => {
     dispatch({ type: 'loadAll' });
     setHasLoadUpToDate(true);
@@ -37,6 +45,7 @@ const ArticleEditorPage: NextPage = () => {
                 initialValues={article.form}
                 hasLocalAutosave
                 localId={localId}
+                onSubmit={handleSubmit}
               />
               : <Error>This article draft does not exist or has been deleted</Error>
             }
