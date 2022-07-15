@@ -3,6 +3,7 @@ import { BlockDefinitions, EArticleBlocks, InstantiableArticleBlocksList } from 
 import { ContextualMenu } from "../../../Menus/ContextualMenu"
 import { BlockMenu } from "./BlockMenu"
 import { ContextualMenuItems } from "../../../Menus/ContextualMenuItems"
+import { withStopPropagation } from "../../../../utils/events"
 
 interface Props {
   onClose: () => void
@@ -33,11 +34,9 @@ export function AddBlock({
           <button
             key={def.name}
             type="button"
-	    onPointerDown={(e) => {
-	      e.preventDefault();
-	      e.stopPropagation();
-              onAddBlock(def.instanciateElement!())
-            }}
+	    onClick={withStopPropagation(
+	      () => onAddBlock(def.instanciateElement!())
+	    )}
           >
             {def.icon}
             <span>{def.name}</span>
