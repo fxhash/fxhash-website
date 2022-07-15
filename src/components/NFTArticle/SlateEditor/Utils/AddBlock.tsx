@@ -34,9 +34,7 @@ export function AddBlock({
           <button
             key={def.name}
             type="button"
-	    onClick={withStopPropagation(
-	      () => onAddBlock(def.instanciateElement!())
-	    )}
+	    onClick={() => onAddBlock(def.instanciateElement!())}
           >
             {def.icon}
             <span>{def.name}</span>

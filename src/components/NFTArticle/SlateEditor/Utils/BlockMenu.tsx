@@ -19,7 +19,7 @@ export function BlockMenu({
 
   // add an event listener to the document to know if a click outside was made
   useEffect(() => {
-    const onPointerDown = (event: MouseEvent) => {
+    const onClick = (event: MouseEvent) => {
       const path = (event as any).path
       if (path && path.length > 0 && rootRef.current) {
         if (!path.includes(rootRef.current)) {
@@ -47,12 +47,12 @@ export function BlockMenu({
   
     onScroll();
 
-    document.addEventListener("pointerdown", onPointerDown)
+    document.addEventListener("click", onClick)
     document.addEventListener("scroll", onScroll)
     document.addEventListener("keydown", onKeyPressed)
 
     return () => {
-      document.removeEventListener("pointerdown", onPointerDown)
+      document.removeEventListener("click", onClick)
       document.removeEventListener("scroll", onScroll)
       document.removeEventListener("keydown", onKeyPressed)
     }
