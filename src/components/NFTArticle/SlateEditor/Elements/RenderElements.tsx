@@ -4,7 +4,7 @@ import { ReactEditor, RenderElementProps, useSlateStatic } from "slate-react"
 import React, { PropsWithChildren, useMemo, useState } from "react"
 import { AddBlock } from "../Utils/AddBlock"
 import { getArticleBlockDefinition } from "./Blocks"
-import { Path, Transforms, Editor } from "slate"
+import { Path, Transforms, Editor, Node } from "slate"
 import { BlockExtraMenu } from "../Utils/BlockExtraMenu"
 import { BlockMenu } from "../Utils/BlockMenu"
 import { TAttributesEditorWrapper } from "../../../../types/ArticleEditor/ArticleEditorBlocks"
@@ -44,10 +44,20 @@ function EditableElementWrapper({
     Transforms.insertNodes(editor, element, {
       at: target
     })
-    ReactEditor.focus(editor)
-    console.log(ReactEditor.toDOMNode(editor, element))
-    Transforms.select(editor, target)
     setShowAddBlock(false)
+    // in order to retrieve the DOMNode and restore
+    // the selection correctly, we have to wait
+    setTimeout(() => {
+      const node = Node.get(editor, target)
+      const domNode = ReactEditor.toDOMNode(editor, node)
+      function setSelectionToNewBlock() {
+	ReactEditor.focus(editor)
+	const path = ReactEditor.findPath(editor, node)
+	const [lastLeaf, lastLeafPath] = Node.last(editor, path);
+	Transforms.select(editor, lastLeafPath)
+      }
+      domNode.tabIndex > -1 ? domNode.focus?.() : setSelectionToNewBlock()
+    })
   }
 
   const deleteNode = () => {
