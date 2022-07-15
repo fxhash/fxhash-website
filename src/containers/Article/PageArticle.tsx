@@ -10,6 +10,7 @@ import { ipfsGatewayUrl } from "../../services/Ipfs";
 import cs from "classnames";
 import layout from "../../styles/Layout.module.scss";
 import text from "../../styles/Text.module.css";
+import { CardSmallNftArticle } from "../../components/Card/CardSmallNFTArticle";
 import { NftArticle } from '../../components/NFTArticle/NFTArticle';
 import { ButtonsArticlePreview } from "./ButtonsArticlePreview";
 import Image from "next/image";
@@ -17,10 +18,11 @@ import Image from "next/image";
 interface PageArticleProps {
   article: NFTArticle
   isPreview?: boolean,
+  originUrl: string
 }
 
-const _PageArticle = ({ article, isPreview }: PageArticleProps) => {
-  const { title, author, description, createdAt, body, thumbnailUri, language } = article;
+const _PageArticle = ({ article, originUrl, isPreview }: PageArticleProps) => {
+  const { title, description, author, createdAt, body, thumbnailUri, language, relatedArticles } = article;
   const dateCreatedAt = useMemo(() => new Date(createdAt), [createdAt]);
   const thumbnailUrl = useMemo(() => ipfsGatewayUrl(thumbnailUri), [thumbnailUri])
 
@@ -66,12 +68,18 @@ const _PageArticle = ({ article, isPreview }: PageArticleProps) => {
           />
         </article>
         <div className={style.infos}>
-          <ArticleInfos article={article} />
+          <ArticleInfos article={article} originUrl={originUrl} />
         </div>
-        <div className={style['related-articles']}>
-          <h2 className={text.small_title}>Related articles</h2>
-          <div className={style['related-articles_list']}>replace by related articles components</div>
-        </div>
+        {relatedArticles?.length > 0 &&
+          <div className={style['related-articles']}>
+            <h2 className={text.small_title}>Related articles</h2>
+            <div className={style['related-articles_list']}>
+              {relatedArticles.map((a, index) =>
+                <CardSmallNftArticle key={index} article={a}/>
+              )}
+            </div>
+          </div>
+        }
         {isPreview &&
           <>
             <Spacing size="6x-large" />

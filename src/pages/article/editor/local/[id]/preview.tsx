@@ -1,4 +1,4 @@
-import { NextPage } from "next"
+import { GetServerSideProps, NextPage } from "next"
 import React, { useContext, useEffect, useState } from "react";
 import { ArticlesContext } from "../../../../../context/Articles";
 import { useRouter } from "next/router";
@@ -14,8 +14,12 @@ import { Qu_users } from "../../../../../queries/user";
 import { DraftNFTArticle } from "../../../../../types/ArticleEditor/Editor";
 import { NFTArticle } from "../../../../../types/entities/Article";
 import { Split } from "../../../../../types/entities/Split";
+import { getAbsoluteUrl } from "../../../../../utils/host";
 
-const ArticlePreviewPage: NextPage = () => {
+interface ArticlePreviewPageProps {
+  origin: string
+}
+const ArticlePreviewPage: NextPage<ArticlePreviewPageProps> = ({ origin }) => {
   const [hasLoadUpToDate, setHasLoadUpToDate] = useState(false);
   const [article, setArticle] = useState<NFTArticle | null>(null);
   const router = useRouter();
@@ -67,7 +71,7 @@ const ArticlePreviewPage: NextPage = () => {
       {hasLoadUpToDate && router.isReady ?
         <>
           {(localId && article) ?
-            <PageArticle article={article} isPreview />
+            <PageArticle article={article} isPreview originUrl={origin} />
             : <Error>This article draft does not exist or has been deleted</Error>
           }
         </>
@@ -84,3 +88,12 @@ const ArticlePreviewPage: NextPage = () => {
 }
 
 export default ArticlePreviewPage
+
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+  const { origin } = getAbsoluteUrl(req);
+  return ({
+    props: {
+      origin,
+    }
+  })
+}
