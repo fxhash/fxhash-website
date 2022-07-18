@@ -166,8 +166,9 @@ function createMathNode(node: any) {
   }
 }
 
-function markdownImageToFigure(node: any) {
-  console.log('->', node, fromMarkdown(node.title))
+function markdownImageToFigure(node: any, next: (children: any[]) => any) {
+  // covert md image title to caption md ast for figcaption
+  const captionMDast = fromMarkdown(node.title)?.children?.[0] as Node
   return { 
     type: "figure",
     children: [{
@@ -178,9 +179,7 @@ function markdownImageToFigure(node: any) {
       }],
     }, {
       type: "figcaption",
-      children: [{
-        text: node.alt
-      }]
+      children: next(captionMDast.children)
     }]
   }
 }
@@ -247,7 +246,6 @@ function convertSlateLeafDirectiveToMarkdown(
  * image in proper markdown
  */
 function figureToMarkdown(node: any, next: (children: any[]) => any) {
-  console.log(node)
   // create a regular image node
   const imageNode: any = {
     type: "image"
@@ -263,8 +261,6 @@ function figureToMarkdown(node: any, next: (children: any[]) => any) {
       type: 'paragraph', 
       children: mdastCaption
     }, {strong: '_', emphasis: '_'});
-    console.log(mdCaption)
-    imageNode.alt = mdCaption.trim();
     imageNode.title = mdCaption.trim();
   }
   // now do the same for the image element
