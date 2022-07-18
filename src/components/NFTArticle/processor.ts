@@ -71,9 +71,6 @@ export const customNodes: CustomArticleElementsByType = {
 function remarkFxHashCustom(): import('unified').Transformer<import('mdast').Root, import('mdast').Root> {
   return (tree: Root) => {
     visit(tree, (node) => {
-      if(node.type === 'image') {
-	console.log(node)
-      }
       if (
         node.type === 'textDirective' ||
         node.type === 'leafDirective' ||
