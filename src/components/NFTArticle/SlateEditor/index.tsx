@@ -1,3 +1,4 @@
+import 'katex/dist/katex.min.css'
 import React, {
   forwardRef,
   KeyboardEvent,
@@ -22,7 +23,6 @@ import { withImages } from "./Plugins/SlateImagePlugin"
 import { ImageElement } from "../elements/ImageElement"
 import { onKeyDownHotkeyPlugin } from "./HotkeyPlugin/HotkeyPlugin"
 import { RenderElements } from "./Elements/RenderElements"
-import 'katex/dist/katex.min.css'
 import { withConstraints } from "./Plugins/SlateConstraintsPlugin"
 import { IEditorMediaFile } from "../../../types/ArticleEditor/Image";
 import { withMediaSupport } from "./Plugins/SlateMediaPlugin";
@@ -34,8 +34,8 @@ import dynamic from 'next/dynamic'
 const FloatingInlineMenu = dynamic(() => import('./FloatingInlineMenu/FloatingInlineMenu'), {
   ssr: false,
 })
-  
-type TypeElement = BaseElement & { 
+
+type TypeElement = BaseElement & {
   type: string
   children: any
 }
@@ -127,7 +127,7 @@ export const SlateEditor = forwardRef<FxEditor, SlateEditorProps>(({
     const [value, setValue] = useState<Node[]>(initialValue);
     const handleChange = useCallback((newValue) => {
       setValue(newValue)
-      onChange?.(value)
+      onChange?.(newValue)
     }, [onChange])
     // mutate ref to editor whenever editor ref changes
     useImperativeHandle(ref, () => editor, [editor])

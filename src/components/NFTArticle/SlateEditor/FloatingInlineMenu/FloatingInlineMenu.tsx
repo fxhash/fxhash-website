@@ -6,11 +6,11 @@ import ReactDOM from 'react-dom'
 import { useSlate,  useFocused } from 'slate-react'
 import {
   Range,
-  NodeEntry, 
+  NodeEntry,
 } from 'slate'
 import {TextFormatButton} from './TextFormatButton';
 import {useClientEffect} from '../../../../utils/hookts'
-import { lookupElementByType } from '../utils'; 
+import { lookupElementByType } from '../utils';
 import { LinkButton } from './LinkButton';
 
 const FloatingInlineMenu = () => {
@@ -20,22 +20,27 @@ const FloatingInlineMenu = () => {
   const [overrideContent, setOverrideContent] = useState(null)
 
   const activeElement = lookupElementByType(editor, 'link') as NodeEntry;
-  
+
   useClientEffect(() => {
     const menuElement = ref.current
 
     if (!menuElement || !inFocus || (overrideContent && !activeElement)) return;
-    
-    const domSelection = window.getSelection()
-    const domRange = domSelection?.getRangeAt(0)
-    const rect = domRange?.getBoundingClientRect()
-    if (!menuElement || !rect) return;
-    menuElement.style.top = `${rect.top + window.pageYOffset - menuElement.offsetHeight}px`
-    menuElement.style.left = `${rect.left + window.pageXOffset - menuElement.offsetWidth / 2 + rect.width / 2}px`
+
+    try {
+      const domSelection = window.getSelection()
+      const domRange = domSelection && domSelection.getRangeAt(0)
+      const rect = domRange && domRange.getBoundingClientRect()
+      if (!menuElement || !rect) return;
+      menuElement.style.top = `${rect.top + window.pageYOffset - menuElement.offsetHeight}px`
+      menuElement.style.left = `${rect.left + window.pageXOffset - menuElement.offsetWidth / 2 + rect.width / 2}px`
+    } catch (e) {
+      // silent
+    }
+    return;
   })
 
   useClientEffect(() => {
-    if(!activeElement) 
+    if(!activeElement)
       setOverrideContent(null)
   }, [activeElement]);
 
@@ -51,7 +56,7 @@ const FloatingInlineMenu = () => {
   }, [editor.selection, overrideContent])
 
   if (typeof window === "undefined") return null
-  
+
   return ReactDOM.createPortal(
     <div
       ref={ref}
@@ -61,7 +66,7 @@ const FloatingInlineMenu = () => {
         e.preventDefault()
       }}
     >
-      {(overrideContent && React.cloneElement(overrideContent, {activeElement: activeElement?.[0]})) || 
+      {(overrideContent && React.cloneElement(overrideContent, {activeElement: activeElement?.[0]})) ||
 	<>
 	  <TextFormatButton format="strong">
 	    <i className="fa-solid fa-bold"/>
