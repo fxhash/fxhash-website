@@ -186,7 +186,7 @@ export function RenderElements(props: RenderElementProps) {
           {children}
         </EditableElementWrapper>
       ): React.Fragment, 
-    [definition]
+    [definition, props.element]
   )
   
   return (

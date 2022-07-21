@@ -1,16 +1,12 @@
 import { FunctionComponent, ReactNode } from "react"
-import style from "./../../NFTArticle.module.scss";
-import cs from "classnames"
 import { RenderElementProps } from "slate-react"
 import Embed from "../../elements/Embed/Embed"
 import TezosStorage from "../../elements/TezosStorage"
-// @ts-ignore
-import { InlineMath, BlockMath } from 'react-katex'
+import style from '../../NFTArticle.module.scss';
 import { FigureElement } from "../../elements/Figure"
 import { FigcaptionElement } from "../../elements/Figcaption"
 import { ImageElement } from "../../elements/ImageElement"
-import { Editor, Element, Node, Path, Transforms } from "slate"
-import { ContextualMenuItems } from "../../../Menus/ContextualMenuItems"
+import { Element, Node, Transforms } from "slate"
 import { HeadingAttributeSettings } from "./AttributeSettings/HeadingAttributeSettings"
 import { ListAttributeSettings } from "./AttributeSettings/ListAttributeSettings"
 import { BlockquoteElement } from "../../elements/Blockquote"
@@ -18,6 +14,7 @@ import { ImageAttributeSettings } from "./AttributeSettings/ImageAttributeSettin
 import { TAttributesEditorWrapper } from "../../../../types/ArticleEditor/ArticleEditorBlocks"
 import { BlockParamsModal } from "../Utils/BlockParamsModal"
 import { TEditNodeFnFactory } from "../../../../types/ArticleEditor/Transforms"
+import { BlockKatexEditor } from "../../elements/BlockKatex/BlockKatexEditor";
 
 export enum EArticleBlocks {
   "embed-media" = "embed-media",
@@ -312,8 +309,7 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
     icon: <i className="fa-solid fa-function" aria-hidden/>,
     render: ({ attributes, element, children }) => (
       <span contentEditable={false}>
-        <InlineMath math={element.data.math}/>
-        {children}
+        inline math
       </span>
     ),
     hasUtilityWrapper: false,
@@ -323,18 +319,16 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
     icon: <i className="fa-solid fa-function" aria-hidden/>,
     buttonInstantiable: true,
     render: ({ attributes, element, children }) => (
-      <span contentEditable={false}>
-        <BlockMath math={element.data.math}/>
-        {children}
-      </span>
+      <div className={style.article_wrapper_container}>
+        <BlockKatexEditor slateAttributes={attributes} slateElement={element}>
+          {children}
+        </BlockKatexEditor>
+      </div>
     ),
     hasUtilityWrapper: true,
-    // todo: void math element
     instanciateElement: () => ({
       type: "math",
-      data: {
-        math: ""
-      },
+      math: "",
       children: [{
         text: ""
       }]

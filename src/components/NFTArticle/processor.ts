@@ -154,15 +154,12 @@ function createMathNode(node: any) {
   return {
     type: node.type,
     children: [{text: ''}],
-    data : {
-      ...node.data,
-      math: node.value,
-    }
+    math: node.value,
   }
 }
 
 function markdownImageToFigure(node: any) {
-  return { 
+  return {
     type: "figure",
     children: [{
       type: "image",
@@ -185,7 +182,7 @@ const remarkSlateTransformerOverrides: OverridedMdastBuilders = {
   containerDirective:  createDirectiveNode,
   "inlineMath": createMathNode,
   "math": createMathNode,
-  image: markdownImageToFigure, 
+  image: markdownImageToFigure,
 }
 
 interface PayloadSlateEditorStateFromMarkdown {
@@ -270,13 +267,11 @@ const slateToRemarkTransformerOverrides: OverridedSlateBuilders = {
   figure: figureToMarkdown,
   inlineMath: (node: any) => ({
     type: node.type,
-    value: node?.data?.math,
-    data: { ...node.data}
+    value: node.math,
   }),
   math: (node: any) => ({
     type: node.type,
-    value: node?.data?.math,
-    data: { ...node.data}
+    value: node.math,
   }),
 }
 
