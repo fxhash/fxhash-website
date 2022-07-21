@@ -1,6 +1,6 @@
 import { Range, Point,  Node,  Editor, Transforms, Ancestor, NodeEntry } from 'slate';
 import { AutoFormatChangeType, ChangeData, AutoFormatChange } from './index';
-import { customNodes } from '../../processor/processor';
+import { customNodes } from '../../processor/plugins';
 import { getTextFromBlockStartToCursor } from '../utils';
 
 function parseAttributes(attributes:string|undefined): {[key: string]: any} {

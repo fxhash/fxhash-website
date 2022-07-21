@@ -17,7 +17,7 @@ import { InputTextUnit } from "../../../components/Input/InputTextUnit"
 import {
   getMarkdownFromSlateEditorState,
   getSlateEditorStateFromMarkdown
-} from "../../../components/NFTArticle/processor/processor"
+} from "../../../components/NFTArticle/processor"
 import { IEditorMediaFile } from "../../../types/ArticleEditor/Image"
 import { FxEditor, NFTArticleForm } from "../../../types/ArticleEditor/Editor"
 import { EditorMedias } from "./EditorMedias"
