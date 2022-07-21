@@ -184,5 +184,5 @@ export function RenderElements(props: RenderElementProps) {
     <EditableElementWrapper element={props.element}>
       {definition.render(props)}
     </EditableElementWrapper>
-    : <>definition.render(props)</>
+    : <>{definition.render(props)}</>
 }

@@ -11,7 +11,7 @@ import path from "path";
 import fs from "fs"
 import { GetStaticProps } from "next";
 import {SlateEditor} from '../../components/NFTArticle/SlateEditor';
-import {getSlateEditorStateFromMarkdown, getMarkdownFromSlateEditorState} from '../../components/NFTArticle/processor';
+import {getSlateEditorStateFromMarkdown, getMarkdownFromSlateEditorState} from '../../components/NFTArticle/processor/processor';
 import { FxEditor } from '../../types/ArticleEditor/Editor';
 
 interface EditorPageProps {
@@ -46,6 +46,7 @@ const EditorPage: NextPage<EditorPageProps> = ({ initialEditorState }) => {
           <SlateEditor
             ref={editorStateRef}
             initialValue={initialEditorState}
+            onMediasUpdate={() => {}}
           />
         </main>
       </section>

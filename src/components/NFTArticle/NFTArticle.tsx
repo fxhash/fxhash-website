@@ -1,5 +1,5 @@
 import React, { memo, useEffect, useState } from 'react';
-import { getNFTArticleComponentsFromMarkdown } from "./processor";
+import { getNFTArticleComponentsFromMarkdown } from "./processor/processor";
 
 interface NftArticleProps {
   markdown: string,

@@ -1,6 +1,6 @@
-import { Range, Point,  Node,  Editor, Transforms, Ancestor, NodeEntry } from 'slate'; 
-import { AutoFormatChangeType, ChangeData, AutoFormatChange } from './index'; 
-import { customNodes } from '../../processor';
+import { Range, Point,  Node,  Editor, Transforms, Ancestor, NodeEntry } from 'slate';
+import { AutoFormatChangeType, ChangeData, AutoFormatChange } from './index';
+import { customNodes } from '../../processor/processor';
 import { getTextFromBlockStartToCursor } from '../utils';
 
 function parseAttributes(attributes:string|undefined): {[key: string]: any} {
@@ -10,19 +10,19 @@ function parseAttributes(attributes:string|undefined): {[key: string]: any} {
   const entries = decodeURI(attributes).split(' ');
   entries.forEach(entry => {
     if(entry.startsWith('#')) {
-      parsed.id = entry.substring(1)  
+      parsed.id = entry.substring(1)
       return;
     } else if(entry.startsWith('.')) {
       classNames.push(entry.substring(1))
       return;
-    } else { 
+    } else {
       const keyValueMatcher = new RegExp('"*(?<key>.*)"*="*(?<value>[^"]*)"*', 'mg')
       const keyValueMatches = keyValueMatcher.exec(entry)
       if(keyValueMatches) {
 	const key = keyValueMatches.groups?.['key']
 	const value = keyValueMatches.groups?.['value']
 	if(!parsed.attributes)  {
-	  parsed.attributes = {} as {[key:string]: any} 
+	  parsed.attributes = {} as {[key:string]: any}
 	}
 	if(key && value) {
 	  parsed.attributes[key] = value
@@ -38,7 +38,7 @@ function parseAttributes(attributes:string|undefined): {[key: string]: any} {
 
 
 export class CustomDirectiveChange implements AutoFormatChange {
-  shortcut: string 
+  shortcut: string
   type: AutoFormatChangeType
   data?: ChangeData
 
@@ -67,22 +67,22 @@ export class CustomDirectiveChange implements AutoFormatChange {
     const [start] = Range.edges(editor.selection as Range);
     const charBefore = Editor.before(editor, start, {
       unit: 'character',
-      distance: matches[0].length, 
+      distance: matches[0].length,
     }) as Point;
     Transforms.delete(editor, {
       at: {
-	anchor: charBefore, 
+	anchor: charBefore,
 	focus: start
-      } 
+      }
     })
     Transforms.insertNodes(
-      editor, 
-      { 
+      editor,
+      {
 	...props,
-	type:props.type, 
+	type:props.type,
 	children: [{text: props.value}],
       }
     )
-    return true; 
+    return true;
   }
 }
