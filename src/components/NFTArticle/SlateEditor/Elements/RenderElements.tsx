@@ -1,7 +1,7 @@
 import style from "./RenderElements.module.scss"
 import cs from "classnames"
 import { ReactEditor, RenderElementProps, useSlateStatic } from "slate-react"
-import React, { PropsWithChildren, useMemo, useState } from "react"
+import React, { PropsWithChildren, useEffect, useMemo, useState } from "react"
 import { AddBlock } from "../Utils/AddBlock"
 import { getArticleBlockDefinition } from "./Blocks"
 import { Path, Transforms, Editor, Node } from "slate"
@@ -25,8 +25,8 @@ const defaultEditNodeFactory: TEditNodeFnFactory = (editor, element, path) =>
 }
 
 /**
- * A generic wrapper which adds some utility components on top of the 
- * Editable Blocks. 
+ * A generic wrapper which adds some utility components on top of the
+ * Editable Blocks.
  */
 function EditableElementWrapper({
   element,
@@ -128,7 +128,7 @@ function EditableElementWrapper({
       </div>
       {showAddBlock && (
         <>
-          <div 
+          <div
             className={cs(style.add_block_wrapper)}
             contentEditable={false}
           >
@@ -145,7 +145,7 @@ function EditableElementWrapper({
         </>
       )}
       {showExtraMenu && (
-        <div 
+        <div
           className={cs(style.add_block_wrapper)}
           contentEditable={false}
         >
@@ -157,7 +157,7 @@ function EditableElementWrapper({
         </div>
       )}
       {definition.editAttributeComp && showSettings && (
-        <div 
+        <div
           className={cs(style.add_block_wrapper)}
           contentEditable={false}
         >
@@ -167,8 +167,8 @@ function EditableElementWrapper({
           >
             <definition.editAttributeComp
               element={element}
-              onEdit={!definition.hideSettingsAfterUpdate 
-                ? editNode 
+              onEdit={!definition.hideSettingsAfterUpdate
+                ? editNode
                 : (update) => {
                   editNode(update)
                   setShowSettings(false)
@@ -191,19 +191,10 @@ export function RenderElements(props: RenderElementProps) {
     () => getArticleBlockDefinition(props.element.type),
     [props.element.type]
   )
-  const Wrapper = useMemo(
-    () => definition.hasUtilityWrapper 
-      ? ({ children }: PropsWithChildren<any>) => (
-        <EditableElementWrapper element={props.element}>
-          {children}
-        </EditableElementWrapper>
-      ): React.Fragment, 
-    [definition, props.element]
-  )
-  
-  return (
-    <Wrapper>
+
+  return definition.hasUtilityWrapper ?
+    <EditableElementWrapper element={props.element}>
       {definition.render(props)}
-    </Wrapper>
-  )
+    </EditableElementWrapper>
+    : <>{definition.render(props)}</>
 }

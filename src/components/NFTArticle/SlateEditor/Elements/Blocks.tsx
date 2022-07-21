@@ -3,8 +3,7 @@ import cs from "classnames"
 import { RenderElementProps } from "slate-react"
 import Embed from "../../elements/Embed"
 import TezosStorage from "../../elements/TezosStorage"
-// @ts-ignore
-import { InlineMath, BlockMath } from 'react-katex'
+import style from '../../NFTArticle.module.scss';
 import { FigureElement } from "../../elements/Figure"
 import { FigcaptionElement } from "../../elements/Figcaption"
 import { ImageElement } from "../../elements/ImageElement"
@@ -17,6 +16,8 @@ import { ImageAttributeSettings } from "./AttributeSettings/ImageAttributeSettin
 import { TAttributesEditorWrapper } from "../../../../types/ArticleEditor/ArticleEditorBlocks"
 import { BlockParamsModal } from "../Utils/BlockParamsModal"
 import { TEditNodeFnFactory } from "../../../../types/ArticleEditor/Transforms"
+import { BlockKatexEditor } from "../../elements/BlockKatex/BlockKatexEditor";
+import { Katex } from "../../elements/BlockKatex/Katex";
 
 export enum EArticleBlocks {
   "embed-media" = "embed-media",
@@ -79,9 +80,9 @@ export interface IArticleBlockDefinition {
   instanciateElement?: () => Element
   editAttributeComp?: TEditAttributeComp
   editAttributeWrapper?: TAttributesEditorWrapper
-  // the definition can specify a function which can be called to output a 
-  // function which will be called to update a node. This is useful if the 
-  // default editNode function doesn't support certain edge cases 
+  // the definition can specify a function which can be called to output a
+  // function which will be called to update a node. This is useful if the
+  // default editNode function doesn't support certain edge cases
   onEditNodeFactory?: TEditNodeFnFactory
   // should the settings menu be hidden after node is update
   hideSettingsAfterUpdate?: boolean
@@ -93,7 +94,7 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
     icon: <i className="fa-brands fa-youtube" aria-hidden/>,
     buttonInstantiable: true,
     render: ({ attributes, element, children }) => (
-      <Embed 
+      <Embed
         {...attributes}
         href={element.href}
       />
@@ -305,8 +306,7 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
     icon: <i className="fa-solid fa-function" aria-hidden/>,
     render: ({ attributes, element, children }) => (
       <span contentEditable={false}>
-        <InlineMath math={element.data.math}/>
-        {children}
+        inline math
       </span>
     ),
     hasUtilityWrapper: false,
@@ -316,18 +316,16 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
     icon: <i className="fa-solid fa-function" aria-hidden/>,
     buttonInstantiable: true,
     render: ({ attributes, element, children }) => (
-      <span contentEditable={false}>
-        <BlockMath math={element.data.math}/>
-        {children}
-      </span>
+      <div className={style.article_wrapper_container}>
+        <BlockKatexEditor slateAttributes={attributes} slateElement={element}>
+          {children}
+        </BlockKatexEditor>
+      </div>
     ),
     hasUtilityWrapper: true,
-    // todo: void math element
     instanciateElement: () => ({
       type: "math",
-      data: {
-        math: ""
-      },
+      math: "",
       children: [{
         text: ""
       }]
