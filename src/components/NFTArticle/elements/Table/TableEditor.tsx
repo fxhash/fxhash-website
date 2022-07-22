@@ -1,8 +1,9 @@
 import React, { memo, useCallback } from 'react';
 import style from "./TableEditor.module.scss"
-import { RenderElementProps, useSelected, useSlateStatic } from "slate-react";
+import { RenderElementProps, useSelected, useSlate } from "slate-react";
 import Slate from "slate";
 import { SlateTable } from "../../SlateEditor/Plugins/SlateTablePlugin";
+import { TableColToolbar } from "./TableColToolbar";
 
 interface TableEditorProps {
   slateAttributes: RenderElementProps["attributes"]
@@ -11,7 +12,7 @@ interface TableEditorProps {
 }
 
 const _TableEditor = ({ slateAttributes, slateElement, children }: TableEditorProps) => {
-  const editor = useSlateStatic();
+  const editor = useSlate();
   const [head, ...body] = children;
   const isSelected = useSelected();
   const handleClickAddCol = useCallback(() => {
@@ -20,6 +21,7 @@ const _TableEditor = ({ slateAttributes, slateElement, children }: TableEditorPr
   const handleClickAddRow = useCallback(() =>
     SlateTable.addRow(editor, slateElement),
     [editor, slateElement]);
+  const selectedPos = isSelected && SlateTable.getSelectedPos(editor, slateElement);
   return (
     <div className={style.wrapper}>
       <div className={style.table_container}>
@@ -31,6 +33,15 @@ const _TableEditor = ({ slateAttributes, slateElement, children }: TableEditorPr
             {body}
           </tbody>
         </table>
+        {selectedPos &&
+          <>
+            <TableColToolbar
+              col={selectedPos.col}
+              editor={editor}
+              tableElement={slateElement}
+            />
+          </>
+        }
         {isSelected &&
           <>
             <button
@@ -38,14 +49,14 @@ const _TableEditor = ({ slateAttributes, slateElement, children }: TableEditorPr
               className={style.add_col}
               onClick={handleClickAddCol}
             >
-              +
+              <i aria-hidden className="fa-solid fa-plus"/>
             </button>
             <button
               contentEditable={false}
               className={style.add_row}
               onClick={handleClickAddRow}
             >
-              +
+              <i aria-hidden className="fa-solid fa-plus"/>
             </button>
           </>
         }

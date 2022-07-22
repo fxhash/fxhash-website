@@ -8,6 +8,7 @@
 }
 .add_col, .add_row {
   border: none;
+  padding: 0;
   background: var(--color-gray-vlight);
   color: var(--color-black);
   cursor: pointer;
@@ -37,6 +38,7 @@
 .table {
   width: 100%;
   border: 2px solid var(--color-black);
+  background-color: var(--color-white);
   border-collapse: collapse;
   table-layout: fixed;
   th, td {
@@ -47,4 +49,29 @@
 
 .is_selected {
   outline: 2px solid var(--color-secondary);
+}
+
+.toolbar_col {
+  position: absolute;
+  bottom: 100%;
+  margin-bottom: $spacing-2x-small;
+  padding: $spacing-2x-small;
+  border: 2px solid var(--color-gray-vlight);
+  border-radius: 4px;
+  background: var(--color-white);
+
+  button {
+    border: none;
+    background: none;
+    font-size: var(--font-size-big);
+    color: var(--color-gray);
+    cursor: pointer;
+    transition: color 0.3s ease-out;
+    &:hover {
+      color: var(--color-secondary);
+    }
+    &.active {
+      color: var(--color-black);
+    }
+  }
 }

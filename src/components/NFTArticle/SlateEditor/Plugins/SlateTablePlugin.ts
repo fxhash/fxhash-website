@@ -53,15 +53,22 @@ export const SlateTable = {
     }
     return SlateTable.getPrevRowCellPath(editor, pathCell, 'last')
   },
-  getTableInfos(element: Element): { rows: number, cols: number } {
-    const rows = element.children.length;
+  getTableInfos(tableElement: Element): { rows: number, cols: number } {
+    const rows = tableElement.children.length;
     let cols = 0;
-    for (const tr of element.children) {
+    for (const tr of tableElement.children) {
       if (tr.children.length > cols) {
         cols = tr.children.length
       }
     }
     return { rows, cols };
+  },
+  getSelectedPos(editor: Editor, tableElement: Element): {row: number, col: number} | null {
+    const pathTable = ReactEditor.findPath(editor, tableElement)
+    const { selection } = editor;
+    if (!selection || !Path.isAncestor(pathTable, selection.anchor.path)) return null;
+    const [row, col] = Path.relative(selection.anchor.path, pathTable);
+    return { row, col };
   },
   createTableCell(): Node {
     return {
@@ -122,6 +129,14 @@ export const SlateTable = {
         at: Path.next(pathPrevCell)
       });
     }
+  },
+  setColAlignment(editor: Editor, tableElement: Element, colIndex: number, newAlign: 'left'|'center'|'right') {
+    const align = [...tableElement.align];
+    align[colIndex] = newAlign;
+    const pathTable = ReactEditor.findPath(editor, tableElement);
+    Transforms.setNodes(editor, { align }, {
+      at: pathTable
+    });
   }
 }
 

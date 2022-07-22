@@ -1,14 +1,13 @@
 import React, { useMemo } from 'react';
 import style from "./TableEditor.module.scss"
-import { ReactEditor, RenderElementProps, useFocused, useSelected, useSlateStatic } from "slate-react";
+import { ReactEditor, RenderElementProps, useSelected, useSlate } from "slate-react";
 import cs from "classnames";
 import { Path, Node } from "slate";
 
 export const TableCell = ({ attributes, element, children }: RenderElementProps) => {
-  const editor = useSlateStatic();
+  const editor = useSlate();
   const path = ReactEditor.findPath(editor, element);
   const isSelected = useSelected();
-  const isFocused = useFocused();
   const align = useMemo<'left'|'center'|'right'>(() => {
     const row = path[path.length - 1];
     const table = Path.parent(Path.parent(path));
@@ -24,7 +23,7 @@ export const TableCell = ({ attributes, element, children }: RenderElementProps)
   const Cell = isHeader ? 'th' : 'td';
   return (
     <Cell {...attributes} align={align} className={cs({
-      [style.is_selected]: isSelected && isFocused
+      [style.is_selected]: isSelected
     })}>
       {children}
     </Cell>
