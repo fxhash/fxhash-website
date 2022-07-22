@@ -16,11 +16,10 @@ export function FigureElement({
   children,
 }: PropsWithChildren<Props>) {
   const selected = useSelected()
-  const focused = useFocused()
   
   return (
     <figure {...attributes} className={cs(style.figure, {
-      [style.selected]: selected && focused
+      [style.selected]: selected
     })}>
       {children}
     </figure>
