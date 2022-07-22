@@ -48,14 +48,10 @@ function EditableElementWrapper({
     // in order to retrieve the DOMNode and restore
     // the selection correctly, we have to wait
     setTimeout(() => {
-      const domNode = ReactEditor.toDOMNode(editor, element)
-      function setSelectionToNewBlock() {
-	ReactEditor.focus(editor)
-	const path = ReactEditor.findPath(editor, element)
-	const [lastLeaf, lastLeafPath] = Node.last(editor, path);
-	Transforms.select(editor, lastLeafPath)
-      }
-      domNode.tabIndex > -1 ? domNode.focus?.() : setSelectionToNewBlock()
+      ReactEditor.focus(editor)
+      const path = ReactEditor.findPath(editor, element)
+      const [, lastLeafPath] = Node.last(editor, path);
+      Transforms.select(editor, lastLeafPath)
     })
   }
 
