@@ -1,7 +1,8 @@
-import { Editor, Range, Point, Transforms, Path, Node } from "slate";
+import { Editor, Range, Point, Transforms, Path, Node, Element } from "slate";
 import { EnhanceEditorWith } from "../../../../types/ArticleEditor/Editor";
 import { lookupElementByType } from "../utils";
 import React from "react";
+import { ReactEditor } from "slate-react";
 
 export const SlateTable = {
   getNextRowCellPath(editor: Editor, pathCell: Path, colIndex?: number | 'keep' | 'last'): Path | null {
@@ -51,6 +52,64 @@ export const SlateTable = {
       return Path.previous(pathCell);
     }
     return SlateTable.getPrevRowCellPath(editor, pathCell, 'last')
+  },
+  getTableInfos(element: Element): { rows: number, cols: number } {
+    const rows = element.children.length;
+    let cols = 0;
+    for (const tr of element.children) {
+      if (tr.children.length > cols) {
+        cols = tr.children.length
+      }
+    }
+    return { rows, cols };
+  },
+  createTableCell(): Node {
+    return {
+      type: 'tableCell',
+      children: [
+        { text: '' }
+      ]
+    }
+  },
+  createTableRow(nbCols: number): Node {
+    const tableRow = {
+      type: 'tableRow',
+      children: [] as Node[]
+    };
+    for (let i = 0; i < nbCols; i++) {
+      tableRow.children.push(SlateTable.createTableCell())
+    }
+    return tableRow
+  },
+  addRow(editor: Editor, tableElement: Element, atIndex?: number): void {
+    const { cols } = SlateTable.getTableInfos(tableElement);
+    const newRow = SlateTable.createTableRow(cols);
+    const indexRow = atIndex ?? tableElement.children.length - 1
+    const prevRow = tableElement.children[indexRow];
+    const pathPrevRow = ReactEditor.findPath(editor, prevRow)
+    Transforms.insertNodes(editor, newRow, {
+      at: Path.next(pathPrevRow)
+    });
+  },
+  addCol(editor: Editor, tableElement: Element, atIndex?: number) {
+    const { cols } = SlateTable.getTableInfos(tableElement);
+    const pathTable = ReactEditor.findPath(editor, tableElement);
+    const indexCol = atIndex ?? cols - 1;
+    const align = [...tableElement.align];
+    align.splice(indexCol + 1, 0, 'left');
+    Transforms.setNodes(editor, { align }, {
+      at: pathTable
+    });
+    for (const tr of tableElement.children) {
+      const newCell = SlateTable.createTableCell();
+      const lastCellIdx = tr.children.length - 1
+      const nonOverflowingIdx = indexCol > lastCellIdx ? lastCellIdx : indexCol;
+      const prevCell = tr.children[nonOverflowingIdx];
+      const pathPrevCell = ReactEditor.findPath(editor, prevCell)
+      Transforms.insertNodes(editor, newCell, {
+        at: Path.next(pathPrevCell)
+      });
+    }
   }
 }
 

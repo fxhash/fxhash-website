@@ -1,5 +1,38 @@
 @import "../../../../styles/Variables";
 
+.wrapper {
+  margin-bottom: $spacing-large;
+}
+.table_container {
+  position: relative;
+}
+.add_col, .add_row {
+  border: none;
+  background: var(--color-gray-vlight);
+  cursor: pointer;
+  transition: background-color ease-out 0.3s;
+  &:hover {
+    background: var(--color-gray-light);
+  }
+}
+.add_row {
+  height: 20px;
+  position: absolute;
+  top: 100%;
+  width: 100%;
+  left: 0;
+  bottom: 0;
+  z-index: 10;
+}
+.add_col {
+  width: 20px;
+  position: absolute;
+  top: 0;
+  left: 100%;
+  bottom: 0;
+  z-index: 10;
+}
+
 .table {
   width: 100%;
   border: 2px solid var(--color-black);
