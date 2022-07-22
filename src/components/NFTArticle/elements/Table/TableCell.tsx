@@ -16,11 +16,17 @@ export const TableCell = ({ attributes, element, children }: RenderElementProps)
     if (nodeTable.align) return nodeTable.align[row];
     return 'left';
   }, [editor, path])
+  const isHeader = useMemo(() => {
+    const pathParent = Path.parent(path);
+    const trIdx = pathParent[pathParent.length - 1];
+    return trIdx === 0;
+  }, [path])
+  const Cell = isHeader ? 'th' : 'td';
   return (
-    <td {...attributes} align={align} className={cs({
+    <Cell {...attributes} align={align} className={cs({
       [style.is_selected]: isSelected && isFocused
     })}>
       {children}
-    </td>
+    </Cell>
   )
 }
