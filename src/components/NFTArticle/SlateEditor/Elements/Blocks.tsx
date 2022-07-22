@@ -316,10 +316,9 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
     icon: <i className="fa-solid fa-function" aria-hidden/>,
     buttonInstantiable: true,
     render: ({ attributes, element, children }) => (
-      <div className={style.article_wrapper_container}>
-        <BlockKatexEditor slateAttributes={attributes} slateElement={element}>
-          {children}
-        </BlockKatexEditor>
+      <div className={style.article_wrapper_container} {...attributes}>
+	{children}
+        <BlockKatexEditor slateElement={element}/>
       </div>
     ),
     hasUtilityWrapper: true,
