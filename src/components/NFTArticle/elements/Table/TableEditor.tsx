@@ -37,6 +37,7 @@ const _TableEditor = ({ slateAttributes, slateElement, children }: TableEditorPr
           <>
             <TableColToolbar
               col={selectedPos.col}
+              row={selectedPos.row}
               editor={editor}
               tableElement={slateElement}
             />

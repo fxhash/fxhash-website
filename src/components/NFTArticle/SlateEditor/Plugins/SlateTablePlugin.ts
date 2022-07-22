@@ -137,7 +137,32 @@ export const SlateTable = {
     Transforms.setNodes(editor, { align }, {
       at: pathTable
     });
-  }
+  },
+  deleteCol(editor: Editor, tableElement: Element, atIndex: number) {
+    const align = [...tableElement.align];
+    align.splice(atIndex, 1);
+    const pathTable = ReactEditor.findPath(editor, tableElement);
+    Transforms.setNodes(editor, { align }, {
+      at: pathTable
+    });
+    for (const tr of tableElement.children) {
+      if (atIndex > tr.children.length - 1) {
+        continue;
+      }
+      const cell = tr.children[atIndex];
+      const pathCell = ReactEditor.findPath(editor, cell);
+      Transforms.removeNodes(editor, {
+        at: pathCell
+      });
+    }
+  },
+  deleteRow(editor: Editor, tableElement: Element, atIndex: number): void {
+    const row = tableElement.children[atIndex];
+    const pathRow = ReactEditor.findPath(editor, row)
+    Transforms.removeNodes(editor, {
+      at: pathRow
+    });
+  },
 }
 
 export const onKeyDownTablePlugin = (editor: Editor, event: React.KeyboardEvent) => {
