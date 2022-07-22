@@ -4,11 +4,11 @@ import { unified } from "unified";
 import remarkParse from "remark-parse";
 import remarkMath from "remark-math";
 import remarkUnwrapImages from "remark-unwrap-images";
-import rehypeKatex from "rehype-katex";
 import remarkDirective from "remark-directive";
 import { remarkToSlate } from "remark-slate-transformer";
 import { OverridedMdastBuilders } from "remark-slate-transformer/lib/transformers/mdast-to-slate";
 import { remarkFxHashCustom } from "./plugins";
+import remarkGfm from "remark-gfm";
 
 interface DirectiveNodeProps { [key: string]: any }
 
@@ -26,7 +26,7 @@ function createDirectiveNode(node: any, next: (children: any[]) => any): object 
     }, {});
   return {
     type: data.hName,
-    children:  next(node.children),
+    children: next(node.children),
     ...propertiesWithoutUndefined
   };
 }
@@ -76,8 +76,8 @@ export default async function getSlateEditorStateFromMarkdown(markdown: string):
     const processed = await unified()
       .use(remarkParse)
       .use(remarkMath)
+      .use(remarkGfm)
       .use(remarkUnwrapImages)
-      .use(rehypeKatex)
       .use(remarkDirective)
       .use(remarkFxHashCustom)
       .use(remarkToSlate, {

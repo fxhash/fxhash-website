@@ -1,0 +1,16 @@
+@import "../../../../styles/Variables";
+
+.table {
+  width: 100%;
+  border: 2px solid var(--color-black);
+  border-collapse: collapse;
+  table-layout: fixed;
+  th, td {
+    padding: $spacing-small;
+    border: 2px solid var(--color-black);
+  }
+}
+
+.is_selected {
+  outline: 2px solid var(--color-secondary);
+}

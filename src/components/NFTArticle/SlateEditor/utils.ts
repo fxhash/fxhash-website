@@ -1,4 +1,4 @@
-import { Range, Editor, Text, Transforms, Element, NodeEntry } from 'slate'; 
+import { Range, Editor, Text, Transforms, Element, NodeEntry } from 'slate';
 
 export function getRangeFromBlockStartToCursor(editor: Editor): Range {
   const { anchor } = editor.selection as Range;
@@ -51,7 +51,8 @@ export function toggleFormat(editor: Editor, format: string): void {
 export function lookupElementByType(editor:Editor, type: string): NodeEntry {
   const [element] = Editor.nodes(editor, {
     match: n =>
-      !Editor.isEditor(n) && Element.isElement(n) && n.type === type, 
+      !Editor.isEditor(n) && Element.isElement(n) && n.type === type,
   })
   return element
 }
+

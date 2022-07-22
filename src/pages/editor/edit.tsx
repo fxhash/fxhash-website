@@ -61,7 +61,7 @@ const EditorPage: NextPage<EditorPageProps> = ({ initialEditorState }) => {
 export default EditorPage
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const filePath = path.join(process.cwd(), "src", "articles",`nft-article-test.md`)
+  const filePath = path.join(process.cwd(), "src", "articles",`nft-article-test2.md`)
   const nftArticleMd = fs.readFileSync(filePath, 'utf8');
   const res = await getSlateEditorStateFromMarkdown(nftArticleMd);
   return {

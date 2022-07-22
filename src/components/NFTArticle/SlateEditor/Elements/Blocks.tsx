@@ -18,6 +18,8 @@ import { BlockParamsModal } from "../Utils/BlockParamsModal"
 import { TEditNodeFnFactory } from "../../../../types/ArticleEditor/Transforms"
 import { BlockKatexEditor } from "../../elements/BlockKatex/BlockKatexEditor";
 import { Katex } from "../../elements/BlockKatex/Katex";
+import { TableEditor } from "../../elements/Table/TableEditor";
+import { TableCell } from "../../elements/Table/TableCell";
 
 export enum EArticleBlocks {
   "embed-media" = "embed-media",
@@ -249,9 +251,9 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
     icon: <i className="fa-regular fa-table" aria-hidden/>,
     buttonInstantiable: true,
     render: ({ attributes, element, children }) => (
-      <table>
-        <tbody {...attributes}>{children}</tbody>
-      </table>
+      <TableEditor slateAttributes={attributes} slateElement={element}>
+        {children}
+      </TableEditor>
     ),
     hasUtilityWrapper: true,
     instanciateElement: () => ({
@@ -275,17 +277,17 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
   "tableRow": {
     name: "Table row",
     icon: <i className="fa-regular fa-table" aria-hidden/>,
-    render: ({ attributes, element, children }) => (
-      <tr {...attributes}>{children}</tr>
-    ),
+    render: ({ attributes, element, children }) => {
+      return (
+        <tr {...attributes}>{children}</tr>
+      );
+    },
     hasUtilityWrapper: false,
   },
   "tableCell": {
     name: "Table cell",
     icon: <i className="fa-regular fa-table" aria-hidden/>,
-    render: ({ attributes, element, children }) => (
-      <td {...attributes}>{children}</td>
-    ),
+    render: TableCell,
     hasUtilityWrapper: false,
   },
   "html": {

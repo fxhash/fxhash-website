@@ -7,6 +7,7 @@ import { slateToRemark } from "remark-slate-transformer";
 import stringify from "remark-stringify";
 import { OverridedSlateBuilders } from "remark-slate-transformer/lib/transformers/slate-to-mdast";
 import { remarkFxHashCustom } from "./plugins";
+import remarkGfm from "remark-gfm";
 
 function convertSlateLeafDirectiveToMarkdown(
   node: any,
@@ -71,6 +72,7 @@ export default async function getMarkdownFromSlateEditorState(slate: Node[] ) {
     const markdown = await new Promise((resolve) => {
       const processor = unified()
         .use(remarkMath)
+        .use(remarkGfm)
         .use(remarkDirective)
         .use(remarkUnwrapImages)
         .use(remarkFxHashCustom)
