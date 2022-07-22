@@ -9,6 +9,7 @@
 .add_col, .add_row {
   border: none;
   background: var(--color-gray-vlight);
+  color: var(--color-black);
   cursor: pointer;
   transition: background-color ease-out 0.3s;
   &:hover {

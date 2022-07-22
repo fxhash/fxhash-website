@@ -1,7 +1,7 @@
 import React, { memo, useCallback } from 'react';
 import style from "./TableEditor.module.scss"
-import { ReactEditor, RenderElementProps, useSelected, useSlateStatic } from "slate-react";
-import Slate, { Path, Transforms } from "slate";
+import { RenderElementProps, useSelected, useSlateStatic } from "slate-react";
+import Slate from "slate";
 import { SlateTable } from "../../SlateEditor/Plugins/SlateTablePlugin";
 
 interface TableEditorProps {

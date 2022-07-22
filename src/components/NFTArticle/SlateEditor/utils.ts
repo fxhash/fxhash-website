@@ -11,8 +11,23 @@ export function getRangeFromBlockStartToCursor(editor: Editor): Range {
   return range;
 }
 
+export function getRangeFromCursorToBlockEnd(editor: Editor): Range {
+  const { anchor } = editor.selection as Range;
+  const block = Editor.above(editor, {
+    match: n => Editor.isBlock(editor, n),
+  })
+  const path = block ? block[1] : []
+  const end = Editor.end(editor, path)
+  const range = { anchor, focus: end }
+  return range;
+}
+
 export function getTextFromBlockStartToCursor(editor: Editor): string {
   const range = getRangeFromBlockStartToCursor(editor)
+  return Editor.string(editor, range)
+}
+export function getTextFromCursorToBlockEnd(editor: Editor): string {
+  const range = getRangeFromCursorToBlockEnd(editor)
   return Editor.string(editor, range)
 }
 

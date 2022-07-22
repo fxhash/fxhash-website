@@ -1,6 +1,6 @@
 import { Editor, Range, Point, Transforms, Path, Node, Element } from "slate";
 import { EnhanceEditorWith } from "../../../../types/ArticleEditor/Editor";
-import { lookupElementByType } from "../utils";
+import { getTextFromBlockStartToCursor, getTextFromCursorToBlockEnd, lookupElementByType } from "../utils";
 import React from "react";
 import { ReactEditor } from "slate-react";
 
@@ -81,6 +81,18 @@ export const SlateTable = {
     }
     return tableRow
   },
+  createTable(nbCols: number, nbRows: number): Node {
+    const table = {
+      type: "table",
+      align: [] as string[],
+      children: [] as Node[]
+    }
+    for (let i = 0; i < nbRows; i++) {
+      table.align.push('left');
+      table.children.push(SlateTable.createTableRow(nbCols));
+    }
+    return table;
+  },
   addRow(editor: Editor, tableElement: Element, atIndex?: number): void {
     const { cols } = SlateTable.getTableInfos(tableElement);
     const newRow = SlateTable.createTableRow(cols);
@@ -139,8 +151,9 @@ export const onKeyDownTablePlugin = (editor: Editor, event: React.KeyboardEvent)
     case 'ArrowUp': {
       const cell = lookupElementByType(editor, 'tableCell');
       if (!cell) return;
-      const [nodeCell, pathCell] = cell;
-      // todo CHECK IF WE HAVE A \n BEFORE SELECTED POINT
+      const [, pathCell] = cell;
+      const text = getTextFromBlockStartToCursor(editor);
+      if (text.indexOf('\n') > -1) return;
       event.preventDefault();
       const pathPrevRowCell = SlateTable.getPrevRowCellPath(editor, pathCell, 'keep');
       if (!pathPrevRowCell) return;
@@ -154,9 +167,9 @@ export const onKeyDownTablePlugin = (editor: Editor, event: React.KeyboardEvent)
     case 'ArrowDown': {
       const cell = lookupElementByType(editor, 'tableCell');
       if (!cell) return;
-      const [nodeCell, pathCell] = cell;
-      console.log(Node.string(nodeCell));
-      // todo CHECK IF WE HAVE A \n AFTER SELECTED POINT
+      const [, pathCell] = cell;
+      const text = getTextFromCursorToBlockEnd(editor);
+      if (text.indexOf('\n') > -1) return;
       event.preventDefault();
       const pathNextRowCell = SlateTable.getNextRowCellPath(editor, pathCell, 'keep')
       if (!pathNextRowCell) return;
@@ -217,9 +230,7 @@ export const withTables: EnhanceEditorWith = (editor) => {
     if (selection) {
       const cell = lookupElementByType(editor, 'tableCell');
       if (cell) {
-        const [, cellPath] = cell
-        const end = Editor.end(editor, cellPath)
-        Transforms.insertText(editor, '\n', { at: end })
+        Transforms.insertText(editor, '\n', { at: selection })
         return
       }
     }

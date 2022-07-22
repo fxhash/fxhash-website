@@ -20,6 +20,7 @@ import { BlockKatexEditor } from "../../elements/BlockKatex/BlockKatexEditor";
 import { Katex } from "../../elements/BlockKatex/Katex";
 import { TableEditor } from "../../elements/Table/TableEditor";
 import { TableCell } from "../../elements/Table/TableCell";
+import { SlateTable } from "../Plugins/SlateTablePlugin";
 
 export enum EArticleBlocks {
   "embed-media" = "embed-media",
@@ -256,23 +257,7 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
       </TableEditor>
     ),
     hasUtilityWrapper: true,
-    instanciateElement: () => ({
-      type: "table",
-      children: [{
-        type: "tableRow",
-        children: [{
-          type: "tableCell",
-          children: [{
-            text: ""
-          }]
-        }, {
-          type: "tableCell",
-          children: [{
-            text: ""
-          }]
-        }]
-      }]
-    })
+    instanciateElement: () => SlateTable.createTable(2, 2),
   },
   "tableRow": {
     name: "Table row",
