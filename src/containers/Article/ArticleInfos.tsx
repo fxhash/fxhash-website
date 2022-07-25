@@ -14,10 +14,12 @@ import SocialMediaShare from "../../components/SocialMediaShare/SocialMediaShare
 interface ArticleInfosProps {
   article: NFTArticle
   originUrl: string
+  isPreview?: boolean
 }
 export function ArticleInfos({
   article,
-  originUrl
+  isPreview,
+  originUrl,
 }: ArticleInfosProps) {
   const urlIpfs = useMemo(() => ipfsGatewayUrl(article.metadataUri), [])
   const urlShare = useMemo(() => {
@@ -47,7 +49,10 @@ export function ArticleInfos({
         <div className={style.base_right}>
           <div>
             <h6 className={text.small_title}>Share</h6>
-            <SocialMediaShare url={urlShare} />
+            <SocialMediaShare
+              url={urlShare}
+              disabled={isPreview}
+            />
           </div>
         </div>
       </div>

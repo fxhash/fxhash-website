@@ -70,7 +70,11 @@ const _PageArticle = ({ article, originUrl, isPreview }: PageArticleProps) => {
           />
         </article>
         <div className={style.infos}>
-          <ArticleInfos article={article} originUrl={originUrl} />
+          <ArticleInfos
+            article={article}
+            originUrl={originUrl}
+            isPreview={isPreview}
+          />
         </div>
         {relatedArticles?.length > 0 &&
           <div className={style['related-articles']}>

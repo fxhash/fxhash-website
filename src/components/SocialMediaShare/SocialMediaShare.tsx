@@ -1,11 +1,16 @@
-import React, { memo, useMemo } from 'react';
-import style from "./SocialMediaShare.module.scss";
+import React, { memo, useMemo } from 'react'
+import cs from "classnames"
+import style from "./SocialMediaShare.module.scss"
 
 type SocialMediaShareProps = {
   url: string
+  disabled?: boolean
 }
 
-const SocialMediaShare = ({ url }: SocialMediaShareProps) => {
+const SocialMediaShare = ({ 
+  url, 
+  disabled,
+}: SocialMediaShareProps) => {
   const socialMedias = useMemo(() => {
     const sharingUrl = encodeURIComponent(url);
     const fbUrl = `https://www.facebook.com/sharer/sharer.php?u=${sharingUrl}`;
@@ -17,15 +22,19 @@ const SocialMediaShare = ({ url }: SocialMediaShareProps) => {
       { key: 'fb', url: fbUrl, icon: 'fa-brands fa-facebook' },
       { key: 'linkedin', url: lnUrl, icon: 'fa-brands fa-linkedin' },
     ];
-  }, [url]);
+  }, [url])
+
   return (
-      <div className={style.container}>
+      <div className={cs(style.container, {
+        [style.disabled]: disabled
+      })}>
         {socialMedias.map((media) => (
           <a
             key={media.key}
             href={media.url}
             target="_blank"
             rel="noopener noreferrer"
+            tabIndex={disabled ? -1 : 0}
           >
             <i aria-hidden className={media.icon} />
           </a>
