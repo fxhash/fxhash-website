@@ -4,6 +4,7 @@ import { RenderElementProps, useSelected, useSlate } from "slate-react";
 import Slate from "slate";
 import { SlateTable } from "../../SlateEditor/Plugins/SlateTablePlugin";
 import { TableColToolbar } from "./TableColToolbar";
+import cs from "classnames"
 
 interface TableEditorProps {
   slateAttributes: RenderElementProps["attributes"]
@@ -23,7 +24,9 @@ const _TableEditor = ({ slateAttributes, slateElement, children }: TableEditorPr
     [editor, slateElement]);
   const selectedPos = isSelected && SlateTable.getSelectedPos(editor, slateElement);
   return (
-    <div className={style.wrapper}>
+    <div className={cs({
+      [style.wrapper_selected]: isSelected
+    })}>
       <div className={style.table_container}>
         <table {...slateAttributes} className={style.table}>
           <thead>

@@ -1,24 +1,29 @@
 @import "../../../../styles/Variables";
 
-.wrapper {
-  margin-bottom: $spacing-large;
+.wrapper_selected {
+  margin-bottom: 30px;
 }
+
 .table_container {
   position: relative;
 }
-.add_col, .add_row {
+
+.add_col,
+.add_row {
   border: none;
   padding: 0;
   background: var(--color-gray-vlight);
   color: var(--color-black);
   cursor: pointer;
   transition: background-color ease-out 0.3s;
+
   &:hover {
     background: var(--color-gray-light);
   }
 }
+
 .add_row {
-  height: 20px;
+  height: 28px;
   position: absolute;
   top: 100%;
   width: 100%;
@@ -26,8 +31,9 @@
   bottom: 0;
   z-index: 10;
 }
+
 .add_col {
-  width: 20px;
+  width: 28px;
   position: absolute;
   top: 0;
   left: 100%;
@@ -41,7 +47,9 @@
   background-color: var(--color-white);
   border-collapse: collapse;
   table-layout: fixed;
-  th, td {
+
+  th,
+  td {
     padding: $spacing-small;
     border: 2px solid var(--color-black);
   }
@@ -56,20 +64,34 @@
   bottom: 100%;
   margin-bottom: $spacing-2x-small;
   padding: $spacing-2x-small;
-  border: 2px solid var(--color-gray-vlight);
+  border: 1px solid var(--color-gray-vlight);
   border-radius: 4px;
   background: var(--color-white);
+  display: flex;
+  align-items: center;
 
   button {
     border: none;
     background: none;
-    font-size: var(--font-size-big);
     color: var(--color-gray);
     cursor: pointer;
     transition: color 0.3s ease-out;
+    font-size: var(--font-size-small);
+    display: flex;
+    align-items: center;
+
+    i {
+      font-size: var(--font-size-big);
+    }
+
+    span {
+      margin-left: 4px;
+    }
+
     &:hover {
       color: var(--color-secondary);
     }
+
     &.active {
       color: var(--color-black);
     }

@@ -1,5 +1,6 @@
 import React, { memo, MouseEventHandler, useCallback } from 'react';
 import style from "./TableEditor.module.scss";
+import effects from "../../../../styles/Effects.module.scss"
 import Slate, { Editor } from "slate";
 import { SlateTable } from "../../SlateEditor/Plugins/SlateTablePlugin";
 import cs from "classnames";
@@ -35,7 +36,11 @@ const _TableColToolbar = ({ col, row, editor, tableElement }: TableColToolbarPro
     }
   }, [editor, row, rows, tableElement])
   return (
-    <div contentEditable={false} className={style.toolbar_col} style={styleContainer}>
+    <div
+      contentEditable={false}
+      className={cs(style.toolbar_col, effects['drop-shadow-small'])}
+      style={styleContainer}
+    >
       {alignments.map((alignment) =>
         <button
           key={alignment}
@@ -53,7 +58,8 @@ const _TableColToolbar = ({ col, row, editor, tableElement }: TableColToolbarPro
           contentEditable={false}
           onMouseDown={handleDeleteCol}
         >
-          <i className="fa-solid fa-trash" /> Col
+          <i className="fa-solid fa-trash" />
+          <span>Col</span>
         </button>
       }
       {rows > 1 &&
@@ -61,7 +67,8 @@ const _TableColToolbar = ({ col, row, editor, tableElement }: TableColToolbarPro
           contentEditable={false}
           onMouseDown={handleDeleteRow}
         >
-          <i className="fa-solid fa-trash" /> Row
+          <i className="fa-solid fa-trash" />
+          <span>Row</span>
         </button>
       }
     </div>
