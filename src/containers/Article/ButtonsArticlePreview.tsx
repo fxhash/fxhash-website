@@ -77,7 +77,6 @@ const _ButtonsArticlePreview = ({ id, article }: ButtonsArticlePreviewProps) => 
   }, [dispatch, id, success, router, user])
 
   const canMintArticle = useMemo<boolean>(() => {
-    console.log(article)
     if (!article.body
       || !article.metadata.name
       || (!article.metadata.description || countWords(article.metadata.description) > 500)
