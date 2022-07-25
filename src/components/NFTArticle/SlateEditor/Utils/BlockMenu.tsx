@@ -44,8 +44,8 @@ export function BlockMenu({
         onClose()
       }
     }
-
-    onScroll()
+  
+    onScroll();
 
     document.addEventListener("click", onClick)
     document.addEventListener("scroll", onScroll)

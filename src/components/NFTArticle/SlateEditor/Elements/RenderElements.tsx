@@ -4,7 +4,7 @@ import { ReactEditor, RenderElementProps, useSlateStatic } from "slate-react"
 import React, { PropsWithChildren, useEffect, useMemo, useState } from "react"
 import { AddBlock } from "../Utils/AddBlock"
 import { getArticleBlockDefinition } from "./Blocks"
-import { Path, Transforms } from "slate"
+import { Path, Transforms, Editor, Node } from "slate"
 import { BlockExtraMenu } from "../Utils/BlockExtraMenu"
 import { BlockMenu } from "../Utils/BlockMenu"
 import { TAttributesEditorWrapper } from "../../../../types/ArticleEditor/ArticleEditorBlocks"
@@ -45,6 +45,14 @@ function EditableElementWrapper({
       at: target
     })
     setShowAddBlock(false)
+    // in order to retrieve the DOMNode and restore
+    // the selection correctly, we have to wait
+    setTimeout(() => {
+      ReactEditor.focus(editor)
+      const path = ReactEditor.findPath(editor, element)
+      const [, lastLeafPath] = Node.last(editor, path);
+      Transforms.select(editor, lastLeafPath)
+    })
   }
 
   const deleteNode = () => {
@@ -78,7 +86,7 @@ function EditableElementWrapper({
       })}
     >
       {children}
-      <div className={cs(style.buttons)}>
+      <div contentEditable={false} className={cs(style.buttons)}>
         {definition.editAttributeComp ? (
           <button
             type="button"
@@ -99,7 +107,6 @@ function EditableElementWrapper({
           onClick={withStopPropagation(
             () => setShowAddBlock(true)
           )}
-          tabIndex={-1}
         >
           <i className="fa-solid fa-plus" aria-hidden/>
         </button>

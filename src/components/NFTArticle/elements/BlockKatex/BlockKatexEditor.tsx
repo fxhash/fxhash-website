@@ -1,7 +1,7 @@
-import React, { memo, useCallback, useRef, useState } from 'react';
+import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
 import Slate, { Transforms } from 'slate';
 import style from "./BlockKatex.module.scss";
-import { ReactEditor, RenderElementProps, useSlateStatic } from "slate-react";
+import { ReactEditor, RenderElementProps, useSlateStatic, useSelected } from "slate-react";
 import { Katex } from "./Katex";
 import TextareaAutosize from "react-textarea-autosize";
 import cs from "classnames";
@@ -18,6 +18,7 @@ const _BlockKatexEditor = ({ slateElement }: BlockKatexEditorProps) => {
   const [isFocused, setIsFocused] = useState(false);
   const editor = useSlateStatic();
   const path = ReactEditor.findPath(editor, slateElement);
+  const selected = useSelected();
 
   const handleClickKatex = useCallback(() => {
     if (isFocused) return;
@@ -40,6 +41,15 @@ const _BlockKatexEditor = ({ slateElement }: BlockKatexEditorProps) => {
       setIsFocused(false);
     }, 100)
   }, !isFocused)
+  
+  useEffect(() => {
+    if(selected) {
+      const end = refTextArea.current.value.length;
+      refTextArea.current.setSelectionRange(end, end);
+      refTextArea.current.focus();
+    }
+  }, [selected])
+  
 
   const { math } = slateElement;
   return (
@@ -47,7 +57,7 @@ const _BlockKatexEditor = ({ slateElement }: BlockKatexEditorProps) => {
       <div
         contentEditable={false}
         className={cs({
-          [style.hide]: math && !isFocused,
+          [style.hide]: math && !selected,
         })}
       >
         <TextareaAutosize
