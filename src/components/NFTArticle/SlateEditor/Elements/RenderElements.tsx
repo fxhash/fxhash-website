@@ -1,10 +1,10 @@
 import style from "./RenderElements.module.scss"
 import cs from "classnames"
 import { ReactEditor, RenderElementProps, useSlateStatic } from "slate-react"
-import React, { PropsWithChildren, useMemo, useState } from "react"
+import React, { PropsWithChildren, useEffect, useMemo, useState } from "react"
 import { AddBlock } from "../Utils/AddBlock"
 import { getArticleBlockDefinition } from "./Blocks"
-import { Path, Transforms } from "slate"
+import { Path, Transforms, Editor, Node } from "slate"
 import { BlockExtraMenu } from "../Utils/BlockExtraMenu"
 import { BlockMenu } from "../Utils/BlockMenu"
 import { TAttributesEditorWrapper } from "../../../../types/ArticleEditor/ArticleEditorBlocks"
@@ -25,8 +25,8 @@ const defaultEditNodeFactory: TEditNodeFnFactory = (editor, element, path) =>
 }
 
 /**
- * A generic wrapper which adds some utility components on top of the 
- * Editable Blocks. 
+ * A generic wrapper which adds some utility components on top of the
+ * Editable Blocks.
  */
 function EditableElementWrapper({
   element,
@@ -45,6 +45,14 @@ function EditableElementWrapper({
       at: target
     })
     setShowAddBlock(false)
+    // in order to retrieve the DOMNode and restore
+    // the selection correctly, we have to wait
+    setTimeout(() => {
+      ReactEditor.focus(editor)
+      const path = ReactEditor.findPath(editor, element)
+      const [, lastLeafPath] = Node.last(editor, path);
+      Transforms.select(editor, lastLeafPath)
+    })
   }
 
   const deleteNode = () => {
@@ -78,7 +86,7 @@ function EditableElementWrapper({
       })}
     >
       {children}
-      <div className={cs(style.buttons)}>
+      <div contentEditable={false} className={cs(style.buttons)}>
         {definition.editAttributeComp ? (
           <button
             type="button"
@@ -99,7 +107,6 @@ function EditableElementWrapper({
           onClick={withStopPropagation(
             () => setShowAddBlock(true)
           )}
-          tabIndex={-1}
         >
           <i className="fa-solid fa-plus" aria-hidden/>
         </button>
@@ -116,7 +123,7 @@ function EditableElementWrapper({
       </div>
       {showAddBlock && (
         <>
-          <div 
+          <div
             className={cs(style.add_block_wrapper)}
             contentEditable={false}
           >
@@ -133,7 +140,7 @@ function EditableElementWrapper({
         </>
       )}
       {showExtraMenu && (
-        <div 
+        <div
           className={cs(style.add_block_wrapper)}
           contentEditable={false}
         >
@@ -145,7 +152,7 @@ function EditableElementWrapper({
         </div>
       )}
       {definition.editAttributeComp && showSettings && (
-        <div 
+        <div
           className={cs(style.add_block_wrapper)}
           contentEditable={false}
         >
@@ -155,8 +162,8 @@ function EditableElementWrapper({
           >
             <definition.editAttributeComp
               element={element}
-              onEdit={!definition.hideSettingsAfterUpdate 
-                ? editNode 
+              onEdit={!definition.hideSettingsAfterUpdate
+                ? editNode
                 : (update) => {
                   editNode(update)
                   setShowSettings(false)
@@ -179,19 +186,10 @@ export function RenderElements(props: RenderElementProps) {
     () => getArticleBlockDefinition(props.element.type),
     [props.element.type]
   )
-  const Wrapper = useMemo(
-    () => definition.hasUtilityWrapper 
-      ? ({ children }: PropsWithChildren<any>) => (
-        <EditableElementWrapper element={props.element}>
-          {children}
-        </EditableElementWrapper>
-      ): React.Fragment, 
-    [definition]
-  )
-  
-  return (
-    <Wrapper>
+
+  return definition.hasUtilityWrapper ?
+    <EditableElementWrapper element={props.element}>
       {definition.render(props)}
-    </Wrapper>
-  )
+    </EditableElementWrapper>
+    : <>{definition.render(props)}</>
 }

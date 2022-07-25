@@ -1,5 +1,5 @@
 import { Editor, Transforms, Element, Node } from "slate";
-import { FxEditor } from "../../../../types/ArticleEditor/Editor";
+import { EnhanceEditorWith, FxEditor } from "../../../../types/ArticleEditor/Editor";
 
 function insertImage(editor: Editor, url: string) {
   Transforms.insertNodes(editor, {
@@ -22,13 +22,13 @@ function insertImage(editor: Editor, url: string) {
 /**
  * Wraps the `insertData` method to add support for processing image files
  */
-export const withImages = (
-  editor: FxEditor
+export const withImages: EnhanceEditorWith = (
+  editor
 ) => {
   const { insertData, isVoid, normalizeNode } = editor
 
   // make image nodes void nodes
-  editor.isVoid = element => 
+  editor.isVoid = element =>
     element.type === "image" ? true : isVoid(element)
 
   // when some content is inserted (including drag & drop, we check if the

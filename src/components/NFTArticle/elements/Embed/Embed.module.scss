@@ -1,5 +1,15 @@
+@import "../../../../styles/Variables";
+
+.input {
+  width: 100%;
+}
+
+p.not_found {
+  margin-top: 8px;
+}
 
 .spotify {
+  width: 100%;
   border-radius: 12px;
   margin: var(--layout-margin-small-sm) 0;
 }
@@ -7,8 +17,8 @@
 .youtube {
   overflow: hidden;
   position: relative;
-  width:100%;
-  max-width: 660px;
+  width: 100%;
+  //  max-width: 660px;
   margin: var(--layout-margin-small-sm) 0;
 
   &:after {
@@ -16,6 +26,7 @@
     display: block;
     content: '';
   }
+
   iframe {
     position: absolute;
     top: 0;
