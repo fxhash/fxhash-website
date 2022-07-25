@@ -1,14 +1,12 @@
 import { FunctionComponent, ReactNode } from "react"
-import cs from "classnames"
 import { RenderElementProps } from "slate-react"
-import Embed from "../../elements/Embed"
+import Embed from "../../elements/Embed/Embed"
 import TezosStorage from "../../elements/TezosStorage"
 import style from '../../NFTArticle.module.scss';
 import { FigureElement } from "../../elements/Figure"
 import { FigcaptionElement } from "../../elements/Figcaption"
 import { ImageElement } from "../../elements/ImageElement"
-import { Editor, Element, Node, Path, Transforms } from "slate"
-import { ContextualMenuItems } from "../../../Menus/ContextualMenuItems"
+import { Element, Node, Transforms } from "slate"
 import { HeadingAttributeSettings } from "./AttributeSettings/HeadingAttributeSettings"
 import { ListAttributeSettings } from "./AttributeSettings/ListAttributeSettings"
 import { BlockquoteElement } from "../../elements/Blockquote"
@@ -17,7 +15,6 @@ import { TAttributesEditorWrapper } from "../../../../types/ArticleEditor/Articl
 import { BlockParamsModal } from "../Utils/BlockParamsModal"
 import { TEditNodeFnFactory } from "../../../../types/ArticleEditor/Transforms"
 import { BlockKatexEditor } from "../../elements/BlockKatex/BlockKatexEditor";
-import { Katex } from "../../elements/BlockKatex/Katex";
 
 export enum EArticleBlocks {
   "embed-media" = "embed-media",
@@ -94,10 +91,16 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
     icon: <i className="fa-brands fa-youtube" aria-hidden/>,
     buttonInstantiable: true,
     render: ({ attributes, element, children }) => (
-      <Embed
-        {...attributes}
-        href={element.href}
-      />
+      <div className={style.article_wrapper_container}>
+        <Embed
+          slateElement={element}
+          slateAttributes={attributes}
+          href={element.href}
+          editable
+        >
+          {children}
+        </Embed>
+      </div>
     ),
     hasUtilityWrapper: true,
     instanciateElement: () => ({

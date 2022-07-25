@@ -1,7 +1,7 @@
 import React, { memo, useMemo } from 'react';
 import style from "./Embed.module.scss";
-import { getYoutubeCodeFromUrl } from "../../../utils/embed";
-import { EmbedElementProps } from "./Embed";
+import { getYoutubeCodeFromUrl } from "../../../../utils/embed";
+import { EmbedElementProps } from "./EmbedMedia";
 
 const EmbedYoutube = memo<EmbedElementProps>(({ href }) => {
   const embedUrl = useMemo(() => {

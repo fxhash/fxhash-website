@@ -17,7 +17,7 @@ import rehypeHighlight from "rehype-highlight";
 import type { ComponentsWithNodeOptions, ComponentsWithoutNodeOptions } from "rehype-react/lib/complex-types";
 import { NFTArticleElementComponent } from "../../types/Article";
 import TezosStorage from "./elements/TezosStorage";
-import Embed from "./elements/Embed";
+import Embed from "./elements/Embed/Embed";
 import remarkUnwrapImages from 'remark-unwrap-images'
 import type {Element} from 'hast'
 import rehypeKatex from "rehype-katex";
@@ -60,7 +60,7 @@ interface CustomArticleElementsByType {
 export const customNodes: CustomArticleElementsByType = {
   leafDirective: {
     'tezos-storage': TezosStorage,
-    embed: Embed
+    'embed-media': Embed
   },
   textDirective: {},
   containerDirective: {},
@@ -159,7 +159,7 @@ function createMathNode(node: any) {
 }
 
 function markdownImageToFigure(node: any) {
-  return { 
+  return {
     type: "figure",
     children: [{
       type: "image",
@@ -182,7 +182,7 @@ const remarkSlateTransformerOverrides: OverridedMdastBuilders = {
   containerDirective:  createDirectiveNode,
   "inlineMath": createMathNode,
   "math": createMathNode,
-  image: markdownImageToFigure, 
+  image: markdownImageToFigure,
 }
 
 interface PayloadSlateEditorStateFromMarkdown {
