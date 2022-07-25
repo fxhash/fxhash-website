@@ -1,5 +1,5 @@
 import { BaseOperation, Descendant, Editor, Node, Transforms } from "slate"
-import { FxEditor } from "../../../../types/ArticleEditor/Editor";
+import { EnhanceEditorWith, FxEditor } from "../../../../types/ArticleEditor/Editor";
 import { IEditorMediaFile } from "../../../../types/ArticleEditor/Image";
 import { arrayRemoveDuplicates } from "../../../../utils/array";
 
@@ -38,10 +38,10 @@ function getEditorMedias(editor: FxEditor): IEditorMediaFile[] {
  * Add utility functions to the editor to support the propagation of medias
  * manipulation to the higher order components.
  */
-export function withMediaSupport(
+export const withMediaSupport: EnhanceEditorWith = (
   editor: Editor,
   onMediasUpdate: (medias: IEditorMediaFile[]) => void
-): FxEditor {
+): FxEditor => {
   const mediaTypes = ["image", "figure"];
   const { apply } = editor
 

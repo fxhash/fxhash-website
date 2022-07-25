@@ -8,6 +8,14 @@ description: 'What is fxhash ?'
 ::tezos-storage[optional descriptive text]{address="KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton" key="741172"}
 
 
+| Syntax       |    Description |      Test Text |
+|:-------------|---------------:|---------------:|
+| Header       |          Title |    Here's this |
+| Paragraph    |           Text |       And more |
+
+| Bad       |          Table |    How does it work |
+| Paragraph    |           Text |       And more |
+
 When $a \ne 0$, there are two solutions to $(ax^2 + bx + c = 0)$ and they are
 $$ x = {-b \pm \sqrt{b^2-4ac} \over 2a} $$
 
