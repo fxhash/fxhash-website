@@ -16,12 +16,13 @@ const _AutosaveArticle = ({ id, formValues, hasUnsavedMedias }: AutosaveArticleP
   const { state, dispatch } = useContext(ArticlesContext);
   const [status, setStatus] = useState<'unsaved'|'saving'|'saved'>('saved');
 
-  const handleSaveDraft = useCallback((articleFormState) => {
+  const handleSaveDraft = useCallback((articleFormState: NFTArticleForm) => {
     setStatus('saving');
     dispatch({
       type: 'save',
       payload: { id, articleForm: articleFormState }
     })
+    console.log(articleFormState?.body);
     setStatus('saved');
   }, [dispatch, id])
   const debouncedSave = useMemo<typeof handleSaveDraft>(() => debounce(handleSaveDraft, 800), [handleSaveDraft]);
