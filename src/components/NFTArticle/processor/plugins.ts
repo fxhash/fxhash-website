@@ -3,7 +3,7 @@ import { visit } from "unist-util-visit";
 import { h } from "hastscript";
 import { NFTArticleElementComponent } from "../../../types/Article";
 import TezosStorage from "../elements/TezosStorage";
-import Embed from "../elements/Embed";
+import Embed from "../elements/Embed/Embed";
 
 interface CustomArticleElementsByType {
   leafDirective: {

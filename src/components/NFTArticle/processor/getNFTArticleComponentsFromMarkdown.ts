@@ -1,6 +1,6 @@
 import { createElement, Fragment } from "react";
 import TezosStorage from "../elements/TezosStorage";
-import Embed from "../elements/Embed";
+import Embed from "../elements/Embed/Embed";
 import matter from "gray-matter";
 import { unified } from "unified";
 import remarkParse from "remark-parse";
