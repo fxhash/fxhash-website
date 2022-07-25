@@ -4,24 +4,32 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: $spacing;
+
   h6 {
     margin-bottom: $spacing-2x-small;
   }
 }
-.base_left, .base_center, .base_right {
+
+.base_left,
+.base_center,
+.base_right {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
 }
+
 .base_left {
   align-items: flex-start;
 }
+
 .base_center {
   align-items: center;
 }
+
 .base_right {
   align-items: flex-end;
 }
+
 .editions {
   margin: 0;
   font-size: var(--font-size-h4);
@@ -50,6 +58,7 @@
 .details {
   margin-top: $spacing-4x-large;
 }
+
 .details_list {
   margin-top: $spacing;
   display: grid;
@@ -67,7 +76,14 @@
   .base {
     grid-template-columns: repeat(2, 1fr);
   }
-  .base_left, .base_center, .base_right {
+
+  .base_left,
+  .base_center,
+  .base_right {
     align-items: flex-start;
   }
+}
+
+.disabled {
+  pointer-events: none;
 }
