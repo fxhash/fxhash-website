@@ -1,5 +1,7 @@
 import React, { memo, useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import style from "./ButtonsArticlePreview.module.scss";
+import cs from "classnames"
+import style from "./ButtonsArticlePreview.module.scss"
+import text from "../../styles/Text.module.css"
 import { Button } from "../../components/Button";
 import Link from 'next/link';
 import useFetch, { CachePolicies } from "use-http";
@@ -12,9 +14,11 @@ import { MintArticleOperation, TMintArticleOperationParams } from "../../service
 import { ContractFeedback } from "../../components/Feedback/ContractFeedback";
 import { ArticlesContext } from "../../context/Articles";
 import { UserContext } from "../UserProvider";
-import { getUserProfileLink } from "../../utils/user";
 import { Error } from "../../components/Error/Error";
 import { countWords } from "../../utils/strings";
+import { getUserProfileLink } from '../../utils/user';
+import { User } from '../../types/entities/User';
+import { Submit } from '../../components/Form/Submit';
 
 interface ButtonsArticlePreviewProps {
   id: string | number
@@ -22,18 +26,21 @@ interface ButtonsArticlePreviewProps {
 }
 
 const _ButtonsArticlePreview = ({ id, article }: ButtonsArticlePreviewProps) => {
-  const { user } = useContext(UserContext);
-  const [isLoading, setIsLoading] = useState(false);
-  const { dispatch } = useContext(ArticlesContext);
+  const { user } = useContext(UserContext)
+  const { dispatch } = useContext(ArticlesContext)
   const router = useRouter();
-  const { post: uploadMetadata } = useFetch<any>(API_FILE__ARTICLE_UPLOAD_METADATA, {
+  const { 
+    post: uploadMetadata,
+    loading: postMetadataLoading
+  } = useFetch<any>(API_FILE__ARTICLE_UPLOAD_METADATA, {
     cachePolicy: CachePolicies.NO_CACHE,
   })
 
-  const { state, success, call: mintArticle, error, loading } = useContractOperation<TMintArticleOperationParams>(MintArticleOperation)
+  const { 
+    state, success, call: mintArticle, error, loading: mintLoading
+  } = useContractOperation<TMintArticleOperationParams>(MintArticleOperation)
 
   const handleClickMint = useCallback(async () => {
-    setIsLoading(true);
     const metadata = {
       thumbnailCid: article.thumbnailUri && ipfsCidFromUriOrCid(article.thumbnailUri),
       articleBody: article.body,
@@ -47,6 +54,7 @@ const _ButtonsArticlePreview = ({ id, article }: ButtonsArticlePreviewProps) => 
     }
     try {
       const { metadataCID } = await uploadMetadata(metadata);
+      console.log({metadataCID})
       mintArticle({
         data: {
           metadataCid: metadataCID,
@@ -58,32 +66,31 @@ const _ButtonsArticlePreview = ({ id, article }: ButtonsArticlePreviewProps) => 
         }
       });
     } catch (e) {
-      console.error(e);
-      setIsLoading(false);
+      console.error(e)
     }
   }, [article, uploadMetadata, mintArticle])
 
   useEffect(() => {
     if (success) {
       dispatch({ type: 'delete', payload: { id: id.toString() }})
-      // todo redirect to article id instead
-      // router.push(`/article/id/${idArticle}`);
-      if (user) {
-        router.push(`${getUserProfileLink(user)}/articles`);
-      }
     }
   }, [dispatch, id, success, router, user])
 
   const canMintArticle = useMemo<boolean>(() => {
+    console.log(article)
     if (!article.body
       || !article.metadata.name
       || (!article.metadata.description || countWords(article.metadata.description) > 500)
       || article.royaltiesSplits.length < 1
-      || (article.royalties < 0.1 || article.royalties > 25)
+      || (article.royalties < 0 || article.royalties > 250)
       || article.editions < 1
     ) return false;
     return true;
   }, [article])
+
+  // any async loading loading
+  const loading = postMetadataLoading || mintLoading
+
   return (
     <div className={style.container}>
       {!canMintArticle &&
@@ -91,39 +98,58 @@ const _ButtonsArticlePreview = ({ id, article }: ButtonsArticlePreviewProps) => 
           Before minting your article, you need to fix remaining errors in the editor
         </Error>
       }
-      <div className={style.buttons}>
-        <Link href={`/article/editor/local/${id}`} passHref>
-          <Button
-            isLink
-            type="submit"
-            size="very-large"
-            color="transparent"
-          >
-            {'< edit'}
-          </Button>
-        </Link>
-        <Button
-          type="submit"
-          size="very-large"
-          color="secondary"
-          state={isLoading ? 'loading' : 'default'}
-          onClick={handleClickMint}
-          disabled={!canMintArticle}
-        >
-          mint
-        </Button>
-      </div>
+      <p className={cs(text.info)}>
+        Note: articles can be edited even after they&apos;re minted
+      </p>
       <ContractFeedback
         className={style.feedback}
         state={state}
         success={success}
         error={error}
-        loading={loading}
+        loading={mintLoading}
         successMessage={`Your article was successfully minted.`}
       />
-      <p>
-        Articles can be edited even after they&apos;re minted
-      </p>
+      {!success ? (
+        <div className={style.buttons}>
+          {!loading && (
+            <Link href={`/article/editor/local/${id}`} passHref>
+              <Button
+                isLink
+                type="button"
+                size="large"
+                color="transparent"
+              >
+                {'< edit'}
+              </Button>
+            </Link>
+          )}
+          <Button
+            type="submit"
+            size="large-x"
+            color="secondary"
+            state={loading ? 'loading' : 'default'}
+            onClick={handleClickMint}
+            disabled={!canMintArticle}
+          >
+            mint
+          </Button>
+        </div>
+      ):(
+        <Submit layout="center">
+          <Link href={`${getUserProfileLink(user as User)}/articles`}>
+            <Button
+              isLink
+              type="button"
+              size="large"
+              color="secondary"
+              iconComp={<i aria-hidden className="fas fa-arrow-right"/>}
+              iconSide="right"
+            >
+              open your profile
+            </Button>
+          </Link>
+        </Submit>
+      )}
     </div>
   );
 };

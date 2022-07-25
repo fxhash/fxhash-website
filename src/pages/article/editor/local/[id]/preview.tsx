@@ -15,6 +15,8 @@ import { DraftNFTArticle } from "../../../../../types/ArticleEditor/Editor";
 import { NFTArticle } from "../../../../../types/entities/Article";
 import { Split } from "../../../../../types/entities/Split";
 import { getAbsoluteUrl } from "../../../../../utils/host";
+import { ButtonsArticlePreview } from "../../../../../containers/Article/ButtonsArticlePreview";
+import { Spacing } from "../../../../../components/Layout/Spacing";
 
 interface ArticlePreviewPageProps {
   origin: string
@@ -75,9 +77,22 @@ const ArticlePreviewPage: NextPage<ArticlePreviewPageProps> = ({ origin }) => {
           height="20px"
         />
       : <>
-          {(localId && article) ?
-            <PageArticle article={article} isPreview originUrl={origin} />
-            : <Error>This article draft does not exist or has been deleted</Error>
+          {(localId && article) ? (
+            <>
+              <PageArticle
+                article={article}
+                isPreview
+                originUrl={origin}
+              />
+              <ButtonsArticlePreview
+                id={article.id}
+                article={article}
+              />
+              <Spacing size="6x-large" />
+            </>
+          ):(
+            <Error>This article draft does not exist or has been deleted</Error>
+          )
           }
         </>
       }

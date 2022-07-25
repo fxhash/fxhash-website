@@ -86,15 +86,8 @@ const _PageArticle = ({ article, originUrl, isPreview }: PageArticleProps) => {
             </div>
           </div>
         }
-        {isPreview &&
-          <>
-            <Spacing size="6x-large" />
-            <ButtonsArticlePreview id={article.id} article={article} />
-          </>
-        }
       </main>
       <Spacing size="6x-large" />
-      <Spacing size="6x-large" sm="none" />
     </>
   );
 };
