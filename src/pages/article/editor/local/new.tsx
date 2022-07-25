@@ -4,17 +4,23 @@ import { NextPage } from "next"
 import Head from "next/head"
 import { ArticleEditor } from "../../../../containers/Article/Editor/ArticleEditor"
 import { Spacing } from "../../../../components/Layout/Spacing"
-import React, { useContext, useState } from "react";
+import React, { useCallback, useContext, useState } from "react";
 import { ArticlesContext } from "../../../../context/Articles";
-import { useRouter } from "next/router";
-import { LoaderBlock } from "../../../../components/Layout/LoaderBlock";
-import { Error } from "../../../../components/Error/Error";
 import useInit from "../../../../hooks/useInit";
 import { nanoid } from "nanoid";
+import { router } from "next/client";
 
 const ArticleEditorPage: NextPage = () => {
   const [localId, setLocalId] = useState<string|null>(null);
-  const { state } = useContext(ArticlesContext);
+  const { state, dispatch } = useContext(ArticlesContext);
+
+  const handleSubmit = useCallback((values) => {
+    dispatch({
+      type: 'save',
+      payload: { id: localId!, articleForm: values }
+    })
+    router.push(`/article/local/${localId}/preview`);
+  }, [dispatch, localId])
   useInit(() => {
     const generateId = nanoid(11);
     setLocalId(generateId);
@@ -34,6 +40,7 @@ const ArticleEditorPage: NextPage = () => {
           <ArticleEditor
             hasLocalAutosave
             localId={localId}
+            onSubmit={handleSubmit}
           />
         }
       </main>
