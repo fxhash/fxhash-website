@@ -34,6 +34,7 @@ import * as Yup from "yup";
 import { countWords } from "../../../utils/strings";
 import { UserContext } from "../../UserProvider"
 import { ErrorBlock } from "../../../components/Error/ErrorBlock"
+import { YupSplits } from "../../../utils/yup/splits"
 
 const editorDefaultValue = [
   {
@@ -69,19 +70,13 @@ const schemaNftArticleForm = Yup.object().shape({
     }),
   thumbnailCaption: Yup.string(),
   editions: Yup.number()
-    .required('Min 1 edition')
+    .required('Required')
     .min(1, "Min 1 edition"),
   royalties: Yup.number()
     .required('Required')
-    .min(1, "Min 1%")
+    .min(0, "Min 0%")
     .max(25, "Max 25%"),
-  royaltiesSplit: Yup.array()
-    .of(Yup.object().shape({
-      address: Yup.string(),
-      pct: Yup.number()
-    }))
-    .required("Req At least 1 address")
-    .min(1, "At least 1 address"),
+  royaltiesSplit: YupSplits,
   tags: Yup.array().of(Yup.string())
 })
 
@@ -114,8 +109,6 @@ export function ArticleEditor({
     validateOnMount: true,
   });
   const { values, errors, touched, setFieldValue, setFieldTouched } = formik
-  console.log(values)
-  const [thumbnail, setThumbnail] = useState<string|null>(values.thumbnailUri)
   const [medias, setMedias] = useState<IEditorMediaFile[]>([])
   const [initialBody, setInitialBody] = useState<Descendant[] | null>(null)
 
@@ -129,9 +122,13 @@ export function ArticleEditor({
     setMedias(editor.getUploadedMedias() || []);
   }, [])
 
+  // shortcut to the thumbnail uri
+  const thumbnail = values.thumbnailUri
+
   // update the thumbnail by creating a local URL from a given file
   const updateThumbnail = useCallback((file: File|null) => {
-    setThumbnail(
+    setFieldValue(
+      "thumbnailUri",
       file ? URL.createObjectURL(file) : null
     )
   }, [])
@@ -155,7 +152,6 @@ export function ArticleEditor({
   const onMediaUriUpdate = useCallback((target: IEditorMediaFile, uri: string) => {
     // should the thumbnail be updated ?
     if (thumbnail === target.uri) {
-      setThumbnail(uri)
       setFieldValue("thumbnailUri", uri);
     }
     // update the medias in the editor
