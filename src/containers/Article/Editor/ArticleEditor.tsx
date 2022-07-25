@@ -2,7 +2,7 @@ import style from "./ArticleEditor.module.scss"
 import articleStyle from "../../../components/NFTArticle/NFTArticle.module.scss"
 import cs from "classnames"
 import TextareaAutosize from "react-textarea-autosize"
-import { useCallback, useMemo, useRef, useState } from "react"
+import { useCallback, useContext, useMemo, useRef, useState } from "react"
 import { SlateEditor } from "../../../components/NFTArticle/SlateEditor"
 import { Dropzone } from "../../../components/Input/Dropzone"
 import { Spacing } from "../../../components/Layout/Spacing"
@@ -32,6 +32,8 @@ import { isUrlLocal } from "../../../utils/files";
 import useConfirmLeavingPage from "../../../hooks/useConfirmLeavingPage";
 import * as Yup from "yup";
 import { countWords } from "../../../utils/strings";
+import { UserContext } from "../../UserProvider"
+import { ErrorBlock } from "../../../components/Error/ErrorBlock"
 
 const editorDefaultValue = [
   {
@@ -60,7 +62,11 @@ const schemaNftArticleForm = Yup.object().shape({
     .required('Required')
     .test('nbWords', 'Max 500 words', val => countWords(val || '') <= 500),
   body: Yup.string().required('Required'),
-  thumbnailUri: Yup.string(),
+  thumbnailUri: Yup.mixed()
+    .required("Required")
+    .test("thumbnail", "Invalid type", (value) => {
+      return typeof value === "string"
+    }),
   thumbnailCaption: Yup.string(),
   editions: Yup.number()
     .required('Min 1 edition')
@@ -91,15 +97,24 @@ export function ArticleEditor({
   initialValues,
   onSubmit,
 }: ArticleEditorProps) {
+  const { user } = useContext(UserContext)
   const [immutableInitialValues] = useState(initialValues)
   const editorStateRef = useRef<FxEditor>(null)
   const formik = useFormik({
-    initialValues: immutableInitialValues || defaultValues,
+    initialValues: immutableInitialValues || {
+      ...defaultValues,
+      // we add the user as default target to royalties split
+      royaltiesSplit: user ? [{
+        address: user.id,
+        pct: 1000,
+      }]:[]
+    },
     onSubmit,
     validationSchema: schemaNftArticleForm,
     validateOnMount: true,
   });
-  const { values, errors, touched, setFieldValue, setFieldTouched } = formik;
+  const { values, errors, touched, setFieldValue, setFieldTouched } = formik
+  console.log(values)
   const [thumbnail, setThumbnail] = useState<string|null>(values.thumbnailUri)
   const [medias, setMedias] = useState<IEditorMediaFile[]>([])
   const [initialBody, setInitialBody] = useState<Descendant[] | null>(null)
@@ -158,24 +173,25 @@ export function ArticleEditor({
   const hasLocalMedias = useMemo(() => mediasWithThumbnail.some(media => isUrlLocal(media.uri)), [mediasWithThumbnail]);
   useConfirmLeavingPage(hasLocalMedias, 'You have unsaved medias, please ensure you upload everything before leaving the page. Are you sure you want to leave?');
 
-  const canMintArticle = useMemo<{ enabled: boolean, reason?: string }>(() => {
+  // create a list of errors
+  const errorsList = useMemo<string[]>(() => {
     const requiredActions: string[] = [];
 
     if (hasLocalMedias) {
-      requiredActions.push('- upload or delete medias to IPFS')
+      requiredActions.push("there are medias not uploaded to IPFS")
     }
     const errorsEntries = Object.entries(errors);
     if (errorsEntries.length > 0) {
       errorsEntries.forEach(([key, value]) => {
-        requiredActions.push(`- fix error in ${key}: ${value}`);
-      });
+        requiredActions.push(`${key}: ${value}`)
+      })
     }
-    if (requiredActions.length > 0) {
-      requiredActions.unshift('Before minting your article, you need to:')
-      return { enabled: false, reason: requiredActions.join('\n')}
-    }
-    return { enabled: true };
+    
+    return requiredActions
   }, [errors, hasLocalMedias])
+
+  // article can be minted if no errors
+  const hasErrors = errorsList.length > 0
 
   return (
     <form onSubmit={formik.handleSubmit}>
@@ -189,7 +205,7 @@ export function ArticleEditor({
       <Field
         className={style.field}
         classNameError={style.field_error}
-        error={touched.title && errors.title}
+        error={touched.title ? errors.title : undefined}
       >
         <div className={cs(style.section_title)}>
           <span>
@@ -224,7 +240,7 @@ export function ArticleEditor({
         />
       </Field>
 
-      <Field className={style.field} classNameError={style.field_error} error={touched.thumbnailUri && errors.thumbnailUri}>
+      <Field className={style.field} classNameError={style.field_error} error={errors.thumbnailUri}>
         <div className={cs(style.section_title)}>
           <span>
             THUMBNAIL
@@ -318,7 +334,7 @@ export function ArticleEditor({
         <Field error={errors.editions}>
           <label htmlFor="editions">
             Number of editions
-            <small>How many collectible fungible editions of the article</small>
+            <small>How many collectible editions <strong>(soon collectible on fxhash)</strong></small>
           </label>
           <InputTextUnit
             unit=""
@@ -381,17 +397,26 @@ export function ArticleEditor({
 
         <Spacing size="3x-large"/>
 
-        {canMintArticle.reason &&
-          <div className={style.errors_list}>
-            {canMintArticle.reason}
-          </div>
+        {hasErrors &&
+          <ErrorBlock
+            title="You need to resolve the following errors before you can mint:"
+            align="left"
+          >
+            <ul>
+              {errorsList.map((err, idx) => (
+                <li key={idx}>
+                  {err}
+                </li>
+              ))}
+            </ul>
+          </ErrorBlock>
         }
         <Submit layout="center">
           <Button
             type="submit"
             size="large"
             color="secondary"
-            disabled={!canMintArticle.enabled}
+            disabled={hasErrors}
           >
             preview &amp; mint
           </Button>
