@@ -9,13 +9,14 @@ import { Spacing } from "../Layout/Spacing"
 import { ButtonVariations } from "../Button/ButtonVariations"
 import { Button } from "../Button"
 import Link from "next/link"
-import { useContext, useMemo, useRef, useState } from "react"
+import { useContext, useEffect, useMemo, useRef, useState } from "react"
 import { SettingsContext } from "../../context/Theme"
 import { ipfsGatewayUrl } from "../../services/Ipfs"
 
 interface Props {
   token: GenerativeToken
   forceImageDisplay?: boolean
+  canStop?: boolean
 }
 export function GenerativeArtwork({
   token,
@@ -28,8 +29,17 @@ export function GenerativeArtwork({
   const [previewHash, setPreviewHash] = useState<string|null>(
     token.metadata.previewHash || null
   )
-  // are we exploring variations ? use to force quality = 1
-  const [exploreVariations, setExploreVariations] = useState<boolean>(false)
+  // forcing image display as a state
+  const [displayImage, setDisplayImage] = useState(
+    settings.quality === 0 || forceImageDisplay
+  )
+
+  // update the state of display image if we record a change in settings
+  useEffect(() => {
+    setDisplayImage(
+      settings.quality === 0 || forceImageDisplay
+    )
+  }, [settings.quality])
 
   const reload = () => {
     if (iframeRef.current) {
@@ -54,14 +64,11 @@ export function GenerativeArtwork({
     }
   }, [previewHash])
 
-  // should we display the image instead of the live code ?
-  const displayImage = settings.quality === 0 || forceImageDisplay
-
   return (
     <>
       <SquareContainer>
         <ArtworkFrame>
-          {settings.quality === 0 && !exploreVariations ? (
+          {displayImage ? (
             <img src={displayUrl} alt={`${token.name} preview`}/>
           ):(
             <ArtworkIframe 
@@ -80,30 +87,47 @@ export function GenerativeArtwork({
           token={token}
           previewHash={previewHash}
           onChangeHash={(hash) => {
-            setExploreVariations(true)
+            setDisplayImage(false)
             setPreviewHash(hash)
           }}
         />
-        {displayImage && !exploreVariations ? (
+        {displayImage ? (
           <Button
+            type="button"
             size="small"
             color="transparent"
             iconComp={<i aria-hidden className="fas fa-play"/>}
             iconSide="right"
-            onClick={() => setExploreVariations(true)}
+            onClick={() => {
+              setPreviewHash(token.metadata.previewHash || null)
+              setDisplayImage(false)
+            }}
           >
             run
           </Button>
         ):(
-          <Button
-            size="small"
-            color="transparent"
-            iconComp={<i aria-hidden className="fas fa-redo"/>}
-            iconSide="right"
-            onClick={reload}
-          >
-            reload
-          </Button>
+          <>
+            <Button
+              type="button"
+              size="small"
+              color="transparent"
+              iconComp={<i aria-hidden className="fas fa-stop"/>}
+              iconSide="right"
+              onClick={() => setDisplayImage(true)}
+            >
+              stop
+            </Button>
+            <Button
+              type="button"
+              size="small"
+              color="transparent"
+              iconComp={<i aria-hidden className="fas fa-redo"/>}
+              iconSide="right"
+              onClick={reload}
+            >
+              reload
+            </Button>
+          </>
         )}
         <Link href={artifactUrl} passHref>
           <Button
