@@ -8,15 +8,14 @@ import React, {
   useMemo,
   useState
 } from "react";
-import { BaseEditor, BaseElement, createEditor, Node, Descendant } from "slate";
+import { BaseElement, createEditor, Node, Descendant } from "slate";
 import {
   Slate,
   Editable,
   withReact,
   RenderLeafProps,
-  ReactEditor,
 } from "slate-react"
-import { withHistory, HistoryEditor } from "slate-history"
+import { withHistory } from "slate-history"
 import { TezosStorageProps } from "../elements/TezosStorage"
 import { withAutoFormat } from './AutoFormatPlugin/'
 import { withImages } from "./Plugins/SlateImagePlugin"
@@ -26,9 +25,10 @@ import { RenderElements } from "./Elements/RenderElements"
 import { withConstraints } from "./Plugins/SlateConstraintsPlugin"
 import { IEditorMediaFile } from "../../../types/ArticleEditor/Image";
 import { withMediaSupport } from "./Plugins/SlateMediaPlugin";
-import { FxEditor } from "../../../types/ArticleEditor/Editor";
+import { EnhanceEditorWith, FxEditor } from "../../../types/ArticleEditor/Editor";
 import useInit from "../../../hooks/useInit";
 import dynamic from 'next/dynamic'
+import { onKeyDownTablePlugin, withTables } from "./Plugins/SlateTablePlugin";
 
 
 const FloatingInlineMenu = dynamic(() => import('./FloatingInlineMenu/FloatingInlineMenu'), {
@@ -106,62 +106,62 @@ export const SlateEditor = forwardRef<FxEditor, SlateEditorProps>(({
   onChange,
   onInit,
 }, ref) => {
-    const editor = useMemo(() => {
-      const e = withConstraints(
-        withImages(
-          withMediaSupport(
-            withAutoFormat(
-              withHistory(
-                withReact(
-                  createEditor()
-                )
-              )
-            ),
-            onMediasUpdate
-          )
-        )
-      )
-      const { isInline, isVoid } = e;
-      e.isInline = element => INLINE_ELEMENTS.includes(element.type) || isInline(element)
-      e.isVoid = element => VOID_ELEMENTS.includes(element.type) || isVoid(element)
-      return e;
-    }, [onMediasUpdate]);
+  const editor = useMemo(() => {
+    const withs: Array<{ f: EnhanceEditorWith, args?: any }> = [
+      { f: withReact },
+      { f: withHistory },
+      { f: withAutoFormat },
+      { f: withMediaSupport, args: { onMediasUpdate } },
+      { f: withImages },
+      { f: withTables },
+      { f: withConstraints },
+    ]
+    const enhancedEditor = withs.reduce((e, enhanceWith) => {
+      return enhanceWith.f(e, ...Object.values(enhanceWith.args || {}));
+    }, createEditor());
+    const { isInline, isVoid } = enhancedEditor;
+    enhancedEditor.isInline = element => INLINE_ELEMENTS.includes(element.type) || isInline(element)
+    enhancedEditor.isVoid = element => VOID_ELEMENTS.includes(element.type) || isVoid(element)
+    return enhancedEditor;
+  }, [onMediasUpdate]);
 
-    const [value, setValue] = useState<Node[]>(initialValue);
-    const handleChange = useCallback((newValue) => {
-      setValue(newValue)
-      onChange?.(newValue)
-    }, [onChange])
-    // mutate ref to editor whenever editor ref changes
-    useImperativeHandle(ref, () => editor, [editor])
-    useInit(() => {
-      if (onInit) onInit(editor)
-    })
-    return (
-      <>
-        <div
-          className="markdown-body"
-          style={{flex:1}}
+  const [value, setValue] = useState<Node[]>(initialValue);
+  const handleChange = useCallback((newValue) => {
+    setValue(newValue)
+    onChange?.(newValue)
+  }, [onChange])
+  const handleKeyDown = useCallback((event: KeyboardEvent<HTMLDivElement>) => {
+    onKeyDownHotkeyPlugin(editor, event)
+    onKeyDownTablePlugin(editor, event)
+  }, [editor])
+
+  // mutate ref to editor whenever editor ref changes
+  useImperativeHandle(ref, () => editor, [editor])
+  useInit(() => {
+    if (onInit) onInit(editor)
+  })
+  return (
+    <>
+      <div
+        className="markdown-body"
+        style={{flex:1}}
+      >
+        <Slate
+          editor={editor}
+          value={value}
+          onChange={handleChange}
         >
-          <Slate
-            editor={editor}
-            value={value}
-            onChange={handleChange}
-          >
-            <Editable
-              renderElement={RenderElements}
-              renderLeaf={renderLeaf}
-              placeholder={placeholder}
-              onKeyDown={(event: KeyboardEvent<HTMLDivElement>) => {
-                onKeyDownHotkeyPlugin(editor, event)
-              }}
-            />
-	          <FloatingInlineMenu />
-          </Slate>
-        </div>
-      </>
-    )
-  }
-)
+          <Editable
+            renderElement={RenderElements}
+            renderLeaf={renderLeaf}
+            placeholder={placeholder}
+            onKeyDown={handleKeyDown}
+          />
+          <FloatingInlineMenu />
+        </Slate>
+      </div>
+    </>
+  )
+})
 
 SlateEditor.displayName = "SlateEditor"

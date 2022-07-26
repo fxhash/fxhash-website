@@ -1,6 +1,6 @@
 import React, { memo, useMemo } from 'react';
 import style from "./Embed.module.scss";
-import { EmbedElementProps } from "./Embed";
+import { EmbedElementProps } from "./EmbedMedia";
 
 const EmbedSpotify = memo<EmbedElementProps>(({ href }) => {
   const src = useMemo(() => {

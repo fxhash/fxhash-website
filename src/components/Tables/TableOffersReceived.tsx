@@ -25,9 +25,7 @@ const _TableUserOffersReceived = ({
   useHasScrolledToBottom(refWrapper, {
     onScrollToBottom,
     offsetBottom: 100
-  });
-
-  console.log(offers)
+  })
 
   return (
     <>

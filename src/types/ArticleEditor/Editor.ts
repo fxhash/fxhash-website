@@ -1,4 +1,4 @@
-import { BaseEditor } from "slate"
+import { BaseEditor, Editor } from "slate"
 import { HistoryEditor } from "slate-history"
 import { ReactEditor } from "slate-react"
 import { IEditorMediaFile } from "./Image"
@@ -13,6 +13,7 @@ export interface FxEditorExtension {
 }
 
 export type FxEditor = BaseEditor & ReactEditor & HistoryEditor & FxEditorExtension
+export type EnhanceEditorWith = (editor: FxEditor, ...args: any[]) => any
 
 export interface NFTArticleForm {
   title: string
