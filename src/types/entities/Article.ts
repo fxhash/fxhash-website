@@ -24,10 +24,11 @@ export interface NFTArticleGenerativeToken {
   line: number
 }
 
+export type NFTArticleInfos = Pick<NFTArticle, 'id' | 'title' | 'slug' | 'thumbnailUri' | 'description' | 'tags' | 'author' | 'createdAt'>
 export interface NFTArticle {
-  id: number
+  id: number | string
   slug: string
-  author: User
+  author?: User
   ledgers: NTFArticleLedger[]
   generativeTokenJointures: NFTArticleGenerativeToken[]
   revisions: NFTArticleRevision[]
@@ -49,4 +50,5 @@ export interface NFTArticle {
   editions: number
   royalties: number
   mintOpHash: string
+  relatedArticles: NFTArticle[]
 }

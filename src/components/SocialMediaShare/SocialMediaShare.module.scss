@@ -1,14 +1,21 @@
 @import "../../styles/Variables";
+
 .container {
   display: flex;
   flex-direction: row;
   gap: $spacing-x-small;
+
   a {
     transition: 0.2s color ease-in;
     font-size: var(--font-size-h4);
     color: var(--color-gray);
+
     &:hover {
       color: var(--color-secondary);
     }
+  }
+
+  &.disabled {
+    pointer-events: none;
   }
 }

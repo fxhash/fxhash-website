@@ -91,6 +91,9 @@ export function Navigation() {
               <Link href={`${getUserProfileLink(userCtx.user)}`}>
                 <a>creations</a>
               </Link>
+              <Link href={`${getUserProfileLink(userCtx.user)}/articles`}>
+                <a>articles</a>
+              </Link>
               <Link href={`${getUserProfileLink(userCtx.user)}/collection`}>
                 <a>collection</a>
               </Link>

@@ -1,11 +1,11 @@
-import { Editor, Transforms } from "slate";
-import { FxEditor } from "../../../../types/ArticleEditor/Editor";
+import { Transforms } from "slate";
+import { EnhanceEditorWith } from "../../../../types/ArticleEditor/Editor";
 
 /**
  * Adds some constraints to the editor to prevent running into unprocesseable
  * states
  */
-export const withConstraints = (editor: FxEditor) => {
+export const withConstraints: EnhanceEditorWith = (editor) => {
   const { normalizeNode } = editor
 
   editor.normalizeNode = (entry) => {

@@ -1,5 +1,5 @@
-import { BaseOperation, Editor, Node, Transforms } from "slate"
-import { FxEditor } from "../../../../types/ArticleEditor/Editor";
+import { BaseOperation, Descendant, Editor, Node, Transforms } from "slate"
+import { EnhanceEditorWith, FxEditor } from "../../../../types/ArticleEditor/Editor";
 import { IEditorMediaFile } from "../../../../types/ArticleEditor/Image";
 import { arrayRemoveDuplicates } from "../../../../utils/array";
 
@@ -38,10 +38,11 @@ function getEditorMedias(editor: FxEditor): IEditorMediaFile[] {
  * Add utility functions to the editor to support the propagation of medias
  * manipulation to the higher order components.
  */
-export function withMediaSupport(
+export const withMediaSupport: EnhanceEditorWith = (
   editor: Editor,
   onMediasUpdate: (medias: IEditorMediaFile[]) => void
-): FxEditor {
+): FxEditor => {
+  const mediaTypes = ["image", "figure"];
   const { apply } = editor
 
   // when an operation is triggered, we check if the operation may have resulted
@@ -53,11 +54,11 @@ export function withMediaSupport(
     // if the operation may have resulted in the change on the media list
     if (mediaMutableOperations.includes(operation.type)) {
       // locate the node
-      const node = (operation as any).node 
+      const node = (operation as any).node
         || Editor.node(editor, (operation as any).path)[0]
-      
+
       // if the node is eventually holding a media object
-      if (["image", "figure"].includes(node.type)) {
+      if (mediaTypes.includes(node.type)) {
         // we parse the whole editor to find the whole media list
         const medias = getEditorMedias(editor)
         // propagate the media update
@@ -67,7 +68,7 @@ export function withMediaSupport(
   }
 
   // can be called to replace the URI of a media by another URI
-  // this is useful for replacing local files by their IPFS uri 
+  // this is useful for replacing local files by their IPFS uri
   editor.updateMediaUrl = (target, uri) => {
     // go through each node to find the one to replace
     const nodes = Node.descendants(editor)
@@ -82,6 +83,9 @@ export function withMediaSupport(
       }
     }
   }
+
+  // collect all medias uploaded
+  editor.getUploadedMedias = () => getEditorMedias(editor)
 
   return editor
 }

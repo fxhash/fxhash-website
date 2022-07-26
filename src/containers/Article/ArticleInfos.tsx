@@ -13,26 +13,31 @@ import SocialMediaShare from "../../components/SocialMediaShare/SocialMediaShare
 
 interface ArticleInfosProps {
   article: NFTArticle
+  originUrl: string
+  isPreview?: boolean
 }
 export function ArticleInfos({
   article,
+  isPreview,
+  originUrl,
 }: ArticleInfosProps) {
   const urlIpfs = useMemo(() => ipfsGatewayUrl(article.metadataUri), [])
   const urlShare = useMemo(() => {
-    const origin = typeof window !== 'undefined' ? window.location.origin : '';
-    return `${origin}/article/${article.slug}`;
-  }, [article.slug])
+    return `${originUrl}/article/${article.slug}`;
+  }, [article.slug, originUrl])
   return (
     <div className={cs(style.presentation_details)}>
       <div className={style.base}>
         <div className={style.base_left}>
           <div>
             <h6 className={text.small_title}>Written by</h6>
-            <EntityBadge
-              user={article.author}
-              size="big"
-              toggeable
-            />
+            {article.author &&
+              <EntityBadge
+                user={article.author}
+                size="big"
+                toggeable
+              />
+            }
           </div>
         </div>
         <div className={style.base_center}>
@@ -44,7 +49,10 @@ export function ArticleInfos({
         <div className={style.base_right}>
           <div>
             <h6 className={text.small_title}>Share</h6>
-            <SocialMediaShare url={urlShare} />
+            <SocialMediaShare
+              url={urlShare}
+              disabled={isPreview}
+            />
           </div>
         </div>
       </div>
@@ -73,8 +81,12 @@ export function ArticleInfos({
           <a
             target="_blank"
             referrerPolicy="no-referrer"
+            rel="noreferrer"
             href={urlIpfs}
-            className={cs(text.info_link)} rel="noreferrer"
+            className={cs(text.info_link, {
+              [style.disabled]: isPreview
+            })}
+            tabIndex={isPreview ? -1 : 0}
           >
             view on IPFS <i className="fas fa-external-link-square" aria-hidden/>
           </a>

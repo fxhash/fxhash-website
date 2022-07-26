@@ -1,28 +1,43 @@
-import React, { forwardRef, KeyboardEvent, useEffect, useImperativeHandle, useMemo, useState } from "react";
-import { BaseEditor, BaseElement, createEditor, Node, Descendant } from "slate";
+import 'katex/dist/katex.min.css'
+import React, {
+  forwardRef,
+  KeyboardEvent,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useState
+} from "react";
+import { BaseElement, createEditor, Node, Descendant } from "slate";
 import {
   Slate,
   Editable,
   withReact,
   RenderLeafProps,
-  ReactEditor,
 } from "slate-react"
-import { withHistory, HistoryEditor } from "slate-history"
+import { withHistory } from "slate-history"
 import { TezosStorageProps } from "../elements/TezosStorage"
 import { withAutoFormat } from './AutoFormatPlugin/'
 import { withImages } from "./Plugins/SlateImagePlugin"
 import { ImageElement } from "../elements/ImageElement"
 import { onKeyDownHotkeyPlugin } from "./HotkeyPlugin/HotkeyPlugin"
 import { RenderElements } from "./Elements/RenderElements"
-import 'katex/dist/katex.min.css'
 import { withConstraints } from "./Plugins/SlateConstraintsPlugin"
 import { IEditorMediaFile } from "../../../types/ArticleEditor/Image";
 import { withMediaSupport } from "./Plugins/SlateMediaPlugin";
-import { FxEditor } from "../../../types/ArticleEditor/Editor";
-  
-type TypeElement = BaseElement & { 
+import { EnhanceEditorWith, FxEditor } from "../../../types/ArticleEditor/Editor";
+import useInit from "../../../hooks/useInit";
+import dynamic from 'next/dynamic'
+import { onKeyDownTablePlugin, withTables } from "./Plugins/SlateTablePlugin";
+
+
+const FloatingInlineMenu = dynamic(() => import('./FloatingInlineMenu/FloatingInlineMenu'), {
+  ssr: false,
+})
+
+type TypeElement = BaseElement & {
   type: string
-  children: any 
+  children: any
 }
 
 type HeadlineElement = TypeElement & {
@@ -30,7 +45,7 @@ type HeadlineElement = TypeElement & {
 }
 
 type ImageElement = TypeElement & {
-  title: string   
+  title: string
   url: string
   alt?: string
 }
@@ -39,11 +54,11 @@ type TezosStorageElement = TypeElement & TezosStorageProps
 
 type CustomElement =  HeadlineElement | TezosStorageElement | ImageElement;
 
-export type TextFormatKey = 'strong' | 'emphasis' | 'underline' | 'inlineCode';
+export type TextFormatKey = 'strong' | 'emphasis' | 'inlineCode';
 
 export type TextFormats = {[key in TextFormatKey]: boolean}
 
-export type FormattedText = { 
+export type FormattedText = {
   text: string
 } & TextFormats
 
@@ -64,9 +79,6 @@ const renderLeaf = ({ attributes, children, leaf }: RenderLeafProps) => {
   if (leaf.emphasis) {
     children = <em>{children}</em>;
   }
-  if (leaf.underline) {
-    children = <u>{children}</u>;
-  }
   if (leaf.inlineCode) {
     children = <code>{children}</code>;
   }
@@ -77,7 +89,9 @@ interface SlateEditorProps {
   initialValue: Descendant[]
   placeholder?: string
   onMediasUpdate: (medias: IEditorMediaFile[]) => void
-};
+  onChange?: (nodes: Descendant[]) => void
+  onInit?: (editor: FxEditor) => void
+}
 
 const INLINE_ELEMENTS = ['inlineMath', 'link']
 const VOID_ELEMENTS = ['inlineMath', 'math']
@@ -86,57 +100,65 @@ export const SlateEditor = forwardRef<FxEditor, SlateEditorProps>(({
   initialValue,
   placeholder,
   onMediasUpdate,
+  onChange,
+  onInit,
 }, ref) => {
-    const editor = useMemo(() => {
-      const e = withConstraints(
-        withImages(
-          withMediaSupport(
-            withAutoFormat(
-              withHistory(
-                withReact(
-                  createEditor()
-                )
-              )
-            ),
-            onMediasUpdate
-          )
-        )
-      )
-      const { isInline, isVoid } = e;
-      e.isInline = element => INLINE_ELEMENTS.includes(element.type) || isInline(element)
-      e.isVoid = element => VOID_ELEMENTS.includes(element.type) || isVoid(element)
-      return e;
-    }, []);
+  const editor = useMemo(() => {
+    const withs: Array<{ f: EnhanceEditorWith, args?: any }> = [
+      { f: withReact },
+      { f: withHistory },
+      { f: withAutoFormat },
+      { f: withMediaSupport, args: { onMediasUpdate } },
+      { f: withImages },
+      { f: withTables },
+      { f: withConstraints },
+    ]
+    const enhancedEditor = withs.reduce((e, enhanceWith) => {
+      return enhanceWith.f(e, ...Object.values(enhanceWith.args || {}));
+    }, createEditor());
+    const { isInline, isVoid } = enhancedEditor;
+    enhancedEditor.isInline = element => INLINE_ELEMENTS.includes(element.type) || isInline(element)
+    enhancedEditor.isVoid = element => VOID_ELEMENTS.includes(element.type) || isVoid(element)
+    return enhancedEditor;
+  }, [onMediasUpdate]);
 
-    const [value, setValue] = useState<Node[]>(initialValue);
-    
-    // mutate ref to editor whenever editor ref changes
-    useImperativeHandle(ref, () => editor, [editor])
+  const [value, setValue] = useState<Node[]>(initialValue);
+  const handleChange = useCallback((newValue) => {
+    setValue(newValue)
+    onChange?.(newValue)
+  }, [onChange])
+  const handleKeyDown = useCallback((event: KeyboardEvent<HTMLDivElement>) => {
+    onKeyDownHotkeyPlugin(editor, event)
+    onKeyDownTablePlugin(editor, event)
+  }, [editor])
 
-    return (
-      <>
-        <div
-          className="markdown-body"
-          style={{flex:1}}
+  // mutate ref to editor whenever editor ref changes
+  useImperativeHandle(ref, () => editor, [editor])
+  useInit(() => {
+    if (onInit) onInit(editor)
+  })
+  return (
+    <>
+      <div
+        className="markdown-body"
+        style={{flex:1}}
+      >
+        <Slate
+          editor={editor}
+          value={value}
+          onChange={handleChange}
         >
-          <Slate
-            editor={editor} 
-            value={value} 
-            onChange={setValue}
-          >
-            <Editable
-              renderElement={RenderElements}
-              renderLeaf={renderLeaf}
-              placeholder={placeholder}
-              onKeyDown={(event: KeyboardEvent<HTMLDivElement>) => {
-                onKeyDownHotkeyPlugin(editor, event)
-              }}
-            />
-          </Slate>
-        </div>
-      </>
-    )
-  }
-)
+          <Editable
+            renderElement={RenderElements}
+            renderLeaf={renderLeaf}
+            placeholder={placeholder}
+            onKeyDown={handleKeyDown}
+          />
+          <FloatingInlineMenu />
+        </Slate>
+      </div>
+    </>
+  )
+})
 
 SlateEditor.displayName = "SlateEditor"

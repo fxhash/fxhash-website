@@ -1,15 +1,12 @@
 import { FunctionComponent, ReactNode } from "react"
-import cs from "classnames"
 import { RenderElementProps } from "slate-react"
-import Embed from "../../elements/Embed"
+import Embed from "../../elements/Embed/Embed"
 import TezosStorage from "../../elements/TezosStorage"
-// @ts-ignore
-import { InlineMath, BlockMath } from 'react-katex'
+import style from '../../NFTArticle.module.scss';
 import { FigureElement } from "../../elements/Figure"
 import { FigcaptionElement } from "../../elements/Figcaption"
 import { ImageElement } from "../../elements/ImageElement"
-import { Editor, Element, Node, Path, Transforms } from "slate"
-import { ContextualMenuItems } from "../../../Menus/ContextualMenuItems"
+import { Element, Node, Transforms } from "slate"
 import { HeadingAttributeSettings } from "./AttributeSettings/HeadingAttributeSettings"
 import { ListAttributeSettings } from "./AttributeSettings/ListAttributeSettings"
 import { BlockquoteElement } from "../../elements/Blockquote"
@@ -18,6 +15,10 @@ import { TAttributesEditorWrapper } from "../../../../types/ArticleEditor/Articl
 import { BlockParamsModal } from "../Utils/BlockParamsModal"
 import { TEditNodeFnFactory } from "../../../../types/ArticleEditor/Transforms"
 import { TezosStorageSettings } from "./AttributeSettings/TezosStorageSettings"
+import { BlockKatexEditor } from "../../elements/BlockKatex/BlockKatexEditor";
+import { TableEditor } from "../../elements/Table/TableEditor";
+import { TableCell } from "../../elements/Table/TableCell";
+import { SlateTable } from "../Plugins/SlateTablePlugin";
 
 export enum EArticleBlocks {
   "embed-media" = "embed-media",
@@ -80,9 +81,9 @@ export interface IArticleBlockDefinition {
   instanciateElement?: () => Element
   editAttributeComp?: TEditAttributeComp
   editAttributeWrapper?: TAttributesEditorWrapper
-  // the definition can specify a function which can be called to output a 
-  // function which will be called to update a node. This is useful if the 
-  // default editNode function doesn't support certain edge cases 
+  // the definition can specify a function which can be called to output a
+  // function which will be called to update a node. This is useful if the
+  // default editNode function doesn't support certain edge cases
   onEditNodeFactory?: TEditNodeFnFactory
   // should the settings menu be hidden after node is update
   hideSettingsAfterUpdate?: boolean
@@ -94,10 +95,16 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
     icon: <i className="fa-brands fa-youtube" aria-hidden/>,
     buttonInstantiable: true,
     render: ({ attributes, element, children }) => (
-      <Embed 
-        {...attributes}
-        href={element.href}
-      />
+      <div className={style.article_wrapper_container}>
+        <Embed
+          slateElement={element}
+          slateAttributes={attributes}
+          href={element.href}
+          editable
+        >
+          {children}
+        </Embed>
+      </div>
     ),
     hasUtilityWrapper: true,
     instanciateElement: () => ({
@@ -253,43 +260,27 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
     icon: <i className="fa-regular fa-table" aria-hidden/>,
     buttonInstantiable: true,
     render: ({ attributes, element, children }) => (
-      <table>
-        <tbody {...attributes}>{children}</tbody>
-      </table>
+      <TableEditor slateAttributes={attributes} slateElement={element}>
+        {children}
+      </TableEditor>
     ),
     hasUtilityWrapper: true,
-    instanciateElement: () => ({
-      type: "table",
-      children: [{
-        type: "tableRow",
-        children: [{
-          type: "tableCell",
-          children: [{
-            text: ""
-          }]
-        }, {
-          type: "tableCell",
-          children: [{
-            text: ""
-          }]
-        }]
-      }]
-    })
+    instanciateElement: () => SlateTable.createTable(2, 2),
   },
   "tableRow": {
     name: "Table row",
     icon: <i className="fa-regular fa-table" aria-hidden/>,
-    render: ({ attributes, element, children }) => (
-      <tr {...attributes}>{children}</tr>
-    ),
+    render: ({ attributes, element, children }) => {
+      return (
+        <tr {...attributes}>{children}</tr>
+      );
+    },
     hasUtilityWrapper: false,
   },
   "tableCell": {
     name: "Table cell",
     icon: <i className="fa-regular fa-table" aria-hidden/>,
-    render: ({ attributes, element, children }) => (
-      <td {...attributes}>{children}</td>
-    ),
+    render: TableCell,
     hasUtilityWrapper: false,
   },
   "html": {
@@ -310,8 +301,7 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
     icon: <i className="fa-solid fa-function" aria-hidden/>,
     render: ({ attributes, element, children }) => (
       <span contentEditable={false}>
-        <InlineMath math={element.data.math}/>
-        {children}
+        inline math
       </span>
     ),
     hasUtilityWrapper: false,
@@ -321,18 +311,15 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
     icon: <i className="fa-solid fa-function" aria-hidden/>,
     buttonInstantiable: true,
     render: ({ attributes, element, children }) => (
-      <span contentEditable={false}>
-        <BlockMath math={element.data.math}/>
-        {children}
-      </span>
+      <div className={style.article_wrapper_container} {...attributes}>
+	{children}
+        <BlockKatexEditor slateElement={element}/>
+      </div>
     ),
     hasUtilityWrapper: true,
-    // todo: void math element
     instanciateElement: () => ({
       type: "math",
-      data: {
-        math: ""
-      },
+      math: "",
       children: [{
         text: ""
       }]
@@ -396,7 +383,7 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
         {children}
       </a>
     ),
-    hasUtilityWrapper: true,
+    hasUtilityWrapper: false,
   },
   "figure": {
     name: "Image",
