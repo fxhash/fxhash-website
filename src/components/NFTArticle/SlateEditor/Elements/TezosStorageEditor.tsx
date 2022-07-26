@@ -116,4 +116,4 @@ TezosStorageEditor.fromSlateToMarkdown = (properties) => {
   return props as any
 }
 
-export default memo(TezosStorageEditor)
+export default TezosStorageEditor
