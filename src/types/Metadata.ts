@@ -96,7 +96,7 @@ export interface ArticleMetadata {
   symbol: "ARTKL"
   name: string
   description: string
-  minter: string
+  minter?: string
   creators?: string[]
   contributors?: string[]
   type: "article"
@@ -105,5 +105,6 @@ export interface ArticleMetadata {
   artifactUri: string
   displayUri: string
   thumbnailUri: string
+  thumbnailCaption?: string
   platforms?: string[]
 }

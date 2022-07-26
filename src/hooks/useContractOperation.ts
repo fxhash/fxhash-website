@@ -75,7 +75,6 @@ export function useContractOperation<Params>(
 
       // even if not mounted anymore we push the messages to message center
       if (status === ContractOperationStatus.INJECTED) {
-        console.log("op injected !")
         messageCenter.addMessages([
           {
             type: "warning",

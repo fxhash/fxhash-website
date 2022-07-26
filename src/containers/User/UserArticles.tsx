@@ -25,6 +25,9 @@ const _UserArticles = ({ user, showLocalDrafts }: UserArticlesProps) => {
       id: user.id,
       skip: 0,
       take: ITEMS_PER_PAGE,
+      sort: {
+        createdAt: "DESC"
+      }
     },
     fetchPolicy: "network-only",
     nextFetchPolicy: "cache-and-network",

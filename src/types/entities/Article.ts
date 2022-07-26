@@ -28,7 +28,7 @@ export type NFTArticleInfos = Pick<NFTArticle, 'id' | 'title' | 'slug' | 'thumbn
 export interface NFTArticle {
   id: number | string
   slug: string
-  author: User
+  author?: User
   ledgers: NTFArticleLedger[]
   generativeTokenJointures: NFTArticleGenerativeToken[]
   revisions: NFTArticleRevision[]

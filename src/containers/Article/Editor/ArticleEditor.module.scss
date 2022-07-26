@@ -1,8 +1,22 @@
-.section_title {
-  max-width: 900px;
-  margin: 0 auto;
+.field {
   margin-top: 2em;
-  margin-bottom: 0.5em;
+}
+.field_error {
+  left: 0;
+  right: 0;
+  text-align: right;
+  width: 100%;
+  max-width: 900px;
+  margin: auto;
+}
+.errors_list {
+  white-space: pre-line;
+}
+
+.section_title {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto 0.5em;
 
   span {
     text-transform: uppercase;
@@ -79,7 +93,8 @@
   box-shadow: none;
   border: 3px solid var(--color-border);
   height: 450px;
-  width: min(900px, 100%);
+  width: 100%;
+  max-width: 900px;
   margin: 0 auto;
 
   .placeholder_wrapper {
