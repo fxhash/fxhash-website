@@ -108,6 +108,23 @@ export const Qu_genTokenIterations = gql`
   }
 `
 
+export const Qu_genTokenAllIterations = gql`
+  query GenerativeTokenIterations(
+    $id: Float!
+  ) {
+    generativeToken(id: $id) {
+      id
+      entireCollection {
+        id
+        version
+        iteration
+        name
+        metadata
+      }
+    }
+  }
+`
+
 export const Qu_genTokenFeatures = gql`
   query GenerativeTokenFeatures($id: Float) {
     generativeToken(id: $id) {
