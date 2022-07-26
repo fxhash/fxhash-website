@@ -79,7 +79,7 @@ export const withImages = (
 	if (child.type === "figcaption") {
 	  C++
 	  if(C == 1) {
-	    // for the fitst node we want to remove any formatting from the string
+	    // for the first node we want to remove any formatting from the string
 	    if (ALL_TEXT_FORMATS.some(format => isFormatActive(editor, format, {at: childPath}))) {
 	      Transforms.unsetNodes(
 		editor,
@@ -103,7 +103,13 @@ export const withImages = (
               at: childPath
             })
           }
-        }
+	} else {
+	  // any child that is not the first image in the figure moved after the figure
+	  if (!(child.type === 'image' && childPath[childPath.length - 1] === 0)) {
+	    Transforms.liftNodes(editor, {at: childPath})
+	    return;
+	  }
+	}
       }
     }
 
