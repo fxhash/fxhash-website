@@ -219,6 +219,7 @@ function TezosStorageLoadProject({
         >
           {({ item }) => (
             <button
+              type="button"
               className={cs(style.search_result)}
               onClick={() => {
                 onChange(item)

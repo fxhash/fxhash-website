@@ -17,10 +17,14 @@ interface Props {
   token: GenerativeToken
   forceImageDisplay?: boolean
   canStop?: boolean
+  openUrl?: string
+  openText?: string
 }
 export function GenerativeArtwork({
   token,
   forceImageDisplay = false,
+  openUrl,
+  openText = "open",
 }: Props) {
   const settings = useContext(SettingsContext)
   const iframeRef = useRef<ArtworkIframeRef>(null)
@@ -129,7 +133,7 @@ export function GenerativeArtwork({
             </Button>
           </>
         )}
-        <Link href={artifactUrl} passHref>
+        <Link href={openUrl || artifactUrl} passHref>
           <Button
             isLink={true}
             size="small"
@@ -139,7 +143,7 @@ export function GenerativeArtwork({
             target="_blank"
             iconSide="right"
           >
-            open
+            {openText}
           </Button>
         </Link>
       </div>

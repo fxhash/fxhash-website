@@ -40,8 +40,8 @@ const TezosStorageEditor: NFTArticleElementComponent<TezosStorageProps> = forwar
 
   return (
     <div ref={ref}>
-      {empty ? (
-        <div contentEditable={false}>
+      <div contentEditable={false}>
+        {empty ? (
           <button
             type="button"
             className={cs(editorStyle.import_btn)}
@@ -56,17 +56,17 @@ const TezosStorageEditor: NFTArticleElementComponent<TezosStorageProps> = forwar
               Insert fxhash content
             </span>
           </button>
-        </div>
-      ):(
-        <TezosStorage
-          contract={contract}
-          path={path}
-          storage_type={storage_type}
-          spec={spec}
-          data_spec={data_spec}
-          value_path={value_path}
-        />
-      )}
+        ):(
+          <TezosStorage
+            contract={contract}
+            path={path}
+            storage_type={storage_type}
+            spec={spec}
+            data_spec={data_spec}
+            value_path={value_path}
+          />
+        )}
+      </div>
 
       {showModal && (
         <BlockParamsModal
@@ -81,7 +81,9 @@ const TezosStorageEditor: NFTArticleElementComponent<TezosStorageProps> = forwar
           />
         </BlockParamsModal>
       )}
-      {children}
+      <div style={{ display: "none" }}>
+        {children}
+      </div>
     </div>
   )
 })

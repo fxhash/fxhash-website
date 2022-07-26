@@ -120,9 +120,7 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
     name: "Tezos content",
     icon: <i className="fa-solid fa-hexagon-vertical-nft" aria-hidden/>,
     buttonInstantiable: true,
-    render: ({ attributes, element, children }) => {
-      console.log(element)
-      return (
+    render: ({ attributes, element, children }) => (
       <TezosStorageEditor
         {...attributes}
         element={element}
@@ -135,7 +133,7 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
       >
         {children}
       </TezosStorageEditor>
-    )},
+    ),
     hasUtilityWrapper: true,
     instanciateElement: () => ({
       type: "tezos-storage",
