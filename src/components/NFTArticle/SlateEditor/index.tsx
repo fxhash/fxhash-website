@@ -21,7 +21,6 @@ import { TezosStorageProps } from "../elements/TezosStorage"
 import { withAutoFormat } from './AutoFormatPlugin/'
 import { withImages } from "./Plugins/SlateImagePlugin"
 import { ImageElement } from "../elements/ImageElement"
-import { onKeyDownHotkeyPlugin } from "./HotkeyPlugin/HotkeyPlugin"
 import { RenderElements } from "./Elements/RenderElements"
 import { withConstraints } from "./Plugins/SlateConstraintsPlugin"
 import { IEditorMediaFile } from "../../../types/ArticleEditor/Image";
@@ -152,9 +151,6 @@ export const SlateEditor = forwardRef<FxEditor, SlateEditorProps>(({
               renderElement={RenderElements}
               renderLeaf={renderLeaf}
               placeholder={placeholder}
-              onKeyDown={(event: KeyboardEvent<HTMLDivElement>) => {
-                onKeyDownHotkeyPlugin(editor, event)
-              }}
             />
 	          <FloatingInlineMenu />
           </Slate>

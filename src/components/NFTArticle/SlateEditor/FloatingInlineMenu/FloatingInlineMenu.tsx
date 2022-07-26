@@ -14,7 +14,7 @@ import {TextFormatButton} from './TextFormatButton'
 import {useClientEffect} from '../../../../utils/hookts'
 import { lookupElementAtSelection, lookupElementByType } from '../utils'
 import { LinkButton } from './LinkButton'
-import { BlockDefinitions } from '../Elements/Blocks'
+import { BlockDefinitions, EArticleBlocks } from '../Elements/Blocks'
 
 const FloatingInlineMenu = () => {
   const ref = useRef<HTMLDivElement>(null)
@@ -23,7 +23,8 @@ const FloatingInlineMenu = () => {
   const [overrideContent, setOverrideContent] = useState(null)
 
   const [elementUnderCursor] = lookupElementAtSelection(editor, editor.selection as Location) || []
-  const { hideFloatingInlineMenu } = BlockDefinitions[elementUnderCursor?.type] || {};
+  const elementType = elementUnderCursor?.type;
+  const { hideFloatingInlineMenu } = BlockDefinitions[elementType as EArticleBlocks] || {};
 
   const activeElement = lookupElementByType(editor, 'link') as NodeEntry;
 
@@ -74,13 +75,13 @@ const FloatingInlineMenu = () => {
     >
       {(overrideContent && React.cloneElement(overrideContent, {activeElement: activeElement?.[0]})) ||
 	<>
-	  <TextFormatButton format="strong">
+	  <TextFormatButton format="strong" hotkey="cmd+b">
 	    <i className="fa-solid fa-bold"/>
 	  </TextFormatButton>
-	  <TextFormatButton format="emphasis" >
+	  <TextFormatButton format="emphasis" hotkey="mod+i" >
 	    <i className="fa-solid fa-italic"/>
 	  </TextFormatButton>
-	  <TextFormatButton format="inlineCode">
+	  <TextFormatButton format="inlineCode" hotkey="mod+`">
 	    <i className="fa-solid fa-code" />
 	  </TextFormatButton>
 	  <LinkButton setOverrideContent={setOverrideContent} />
