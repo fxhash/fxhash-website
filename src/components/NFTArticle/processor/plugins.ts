@@ -1,9 +1,9 @@
-import { Root } from "mdast";
-import { visit } from "unist-util-visit";
-import { h } from "hastscript";
-import { NFTArticleElementComponent } from "../../../types/Article";
-import TezosStorage from "../elements/TezosStorage";
-import Embed from "../elements/Embed/Embed";
+import { Root } from "mdast"
+import { visit } from "unist-util-visit"
+import { h } from "hastscript"
+import { NFTArticleElementComponent } from "../../../types/Article"
+import Embed from "../elements/Embed/Embed"
+import TezosStorageEditor from "../SlateEditor/Elements/TezosStorageEditor"
 
 interface CustomArticleElementsByType {
   leafDirective: {
@@ -18,7 +18,7 @@ interface CustomArticleElementsByType {
 }
 export const customNodes: CustomArticleElementsByType = {
   leafDirective: {
-    'tezos-storage': TezosStorage,
+    'tezos-storage': TezosStorageEditor,
     embed: Embed
   },
   textDirective: {},

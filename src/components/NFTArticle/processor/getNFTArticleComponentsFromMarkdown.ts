@@ -1,5 +1,4 @@
 import { createElement, Fragment } from "react";
-import TezosStorage from "../elements/TezosStorage";
 import Embed from "../elements/Embed/Embed";
 import matter from "gray-matter";
 import { unified } from "unified";
@@ -19,6 +18,7 @@ import { NFTArticleElementComponent } from "../../../types/Article";
 import { ComponentsWithNodeOptions, ComponentsWithoutNodeOptions } from "rehype-react/lib/complex-types";
 import { SharedOptions } from "rehype-react/lib";
 import { remarkFxHashCustom } from "./plugins";
+import TezosStorageEditor from "../SlateEditor/Elements/TezosStorageEditor";
 
 declare module "rehype-react" {
   interface WithNode {
@@ -42,7 +42,7 @@ const settingsRehypeReact = {
   createElement,
   Fragment,
   components: {
-    'tezos-storage': TezosStorage,
+    'tezos-storage': TezosStorageEditor,
     'embed-media': Embed,
   }
 }

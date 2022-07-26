@@ -2,8 +2,6 @@ import style from "./TezosStorageSettings.module.scss"
 import text from "../../../../../styles/Text.module.css"
 import cs from "classnames"
 import { TEditAttributeComp } from "../Blocks"
-import { TabsContainer } from "../../../../Layout/TabsContainer"
-import { TabDefinition } from "../../../../Layout/Tabs"
 import { Submit } from "../../../../Form/Submit"
 import { Button } from "../../../../Button"
 import { Field } from "../../../../Form/Field"
@@ -14,17 +12,13 @@ import { useApolloClient, useQuery } from "@apollo/client"
 import { Qu_genTokenAllIterations, Qu_searchGenTok } from "../../../../../queries/generative-token"
 import { ipfsGatewayUrl } from "../../../../../services/Ipfs"
 import { EntityBadge } from "../../../../User/EntityBadge"
-import { FxhashContracts } from "../../../../../types/Contracts"
 import { Spacing } from "../../../../Layout/Spacing"
 import { ModalTitle } from "../../Utils/ModalTitle"
 import { Objkt } from "../../../../../types/entities/Objkt"
 import { LoaderBlock } from "../../../../Layout/LoaderBlock"
 import { ImageIpfs } from "../../../../Medias/ImageIpfs"
+import { generativeTokenTezosStoragePointer, gentkTezosStoragePointer } from "../../../../../utils/tezos-storage"
 
-const tabs: TabDefinition[] = [
-  { name: "Project" },
-  { name: "Iteration" },
-]
 
 export const TezosStorageSettings: TEditAttributeComp = ({
   element,
@@ -41,6 +35,15 @@ export const TezosStorageSettings: TEditAttributeComp = ({
     setIteration(null)
     setProject(null)
   }, [])
+
+  const importSelection = useCallback(() => {
+    if (iteration) {
+      onEdit(gentkTezosStoragePointer(iteration))
+    }
+    else if (project) {
+      onEdit(generativeTokenTezosStoragePointer(project))
+    }
+  }, [onEdit, project, iteration])
 
   return (
     <div className={cs(style.root)}>
@@ -122,8 +125,8 @@ export const TezosStorageSettings: TEditAttributeComp = ({
           type="button"
           size="regular"
           color="secondary"
-          disabled={!(project)}
-          onClick={() => {}}
+          disabled={!project}
+          onClick={importSelection}
         >
           insert {iteration ? `iteration #${iteration.iteration}` : "project"}
         </Button>
@@ -200,21 +203,6 @@ function TezosStorageLoadProject({
   const updateValue = useCallback((value: string) => {
     setValue(value)
   }, [])
-
-  // import the selected token, if any
-  // const importSelected = useCallback(() => {
-  //   if (selected) {
-  //     onImport({
-  //       address: FxhashContracts.ISSUER,
-  //       pKey: selected.id,
-  //       pType: "FX-ISSUER-03",
-  //       // todo: points to the spec based on version
-  //       metadataSpec: "FX-GENERATIVE-02",
-  //       bigmap: "ledger",
-  //       value: "metadata",
-  //     })
-  //   }
-  // }, [selected])
 
   return (
     <div>

@@ -73,6 +73,7 @@ interface PayloadSlateEditorStateFromMarkdown {
 export default async function getSlateEditorStateFromMarkdown(markdown: string): Promise<PayloadSlateEditorStateFromMarkdown | null>  {
   try {
     const matterResult = matter(markdown)
+    console.log(markdown)
     const processed = await unified()
       .use(remarkParse)
       .use(remarkMath)
