@@ -1,5 +1,6 @@
-import React, { memo, useMemo } from 'react';
-import style from "./Embed.module.scss";
+import React, { memo, useMemo } from 'react'
+import style from "./Embed.module.scss"
+import cs from "classnames"
 import { getYoutubeCodeFromUrl } from "../../../../utils/embed";
 import { EmbedElementProps } from "./EmbedMedia";
 
@@ -9,7 +10,10 @@ const EmbedYoutube = memo<EmbedElementProps>(({ href }) => {
     return `https://www.youtube.com/embed/${code}`;
   }, [href]);
   return (
-    <div className={style.youtube} contentEditable={false}>
+    <div
+      className={cs(style.youtube, "embed_media")}
+      contentEditable={false}
+    >
       <iframe
         src={embedUrl}
         title="YouTube video player"

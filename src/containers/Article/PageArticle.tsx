@@ -14,6 +14,8 @@ import { CardSmallNftArticle } from "../../components/Card/CardSmallNFTArticle";
 import { NftArticle } from '../../components/NFTArticle/NFTArticle';
 import { ButtonsArticlePreview } from "./ButtonsArticlePreview";
 import Image from "next/image";
+import { ImageIpfs } from '../../components/Medias/ImageIpfs';
+import { ImagePolymorphic } from '../../components/Medias/ImagePolymorphic';
 
 interface PageArticleProps {
   article: NFTArticle
@@ -22,9 +24,8 @@ interface PageArticleProps {
 }
 
 const _PageArticle = ({ article, originUrl, isPreview }: PageArticleProps) => {
-  const { title, description, author, createdAt, body, thumbnailUri, language, relatedArticles } = article;
-  const dateCreatedAt = useMemo(() => new Date(createdAt), [createdAt]);
-  const thumbnailUrl = useMemo(() => ipfsGatewayUrl(thumbnailUri), [thumbnailUri])
+  const { title, description, author, createdAt, body, language, relatedArticles } = article
+  const dateCreatedAt = useMemo(() => new Date(createdAt), [createdAt])
 
   return (
     <>
@@ -34,11 +35,13 @@ const _PageArticle = ({ article, originUrl, isPreview }: PageArticleProps) => {
         <meta key="description" name="description" content={article.description} />
         <meta key="og:description" property="og:description" content={article.description} />
         <meta key="og:type" property="og:type" content="website"/>
-        <meta key="og:image" property="og:image" content={thumbnailUrl} />
+        <meta key="og:image" property="og:image" content={article.displayUri} />
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.0/dist/katex.min.css" crossOrigin="anonymous" />
         <link rel="stylesheet" href="/highlight/dracula.css"/>
       </Head>
+
       <Spacing size="small" />
+
       <main className={cs(layout['padding-big'])}>
         <div className={style.header}>
           {author &&
@@ -53,16 +56,14 @@ const _PageArticle = ({ article, originUrl, isPreview }: PageArticleProps) => {
               {format(dateCreatedAt, 'MMMM d, yyyy')}
             </time>
           </div>
-          <h1 className={style.title}>{title}</h1>
-          <p className={style.description}>{description}</p>
-          <div className={style.thumbnail}>
-            <Image
-              src={thumbnailUrl}
-              layout="fill"
-              objectFit="contain"
-              priority
-            />
-          </div>
+          <h1 className={cs(style.title)}>{title}</h1>
+          <p className={cs(style.description, style.awidth)}>
+            {description}
+          </p>
+          <ImagePolymorphic
+            uri={article.displayUri}
+            className={cs(style.thumbnail)}
+          />
         </div>
         <article lang={language} className={style.body}>
           <NftArticle
