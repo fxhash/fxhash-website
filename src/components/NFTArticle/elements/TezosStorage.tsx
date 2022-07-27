@@ -31,7 +31,7 @@ export function TezosStorage({
   }, [contract, path])
 
   return (
-    <div className={cs(style.root)}>
+    <div className={cs(style.root, "tezos_storage")}>
       <TezosRenderer/>
     </div>
   )

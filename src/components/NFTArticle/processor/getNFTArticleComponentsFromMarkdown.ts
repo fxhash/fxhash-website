@@ -19,6 +19,7 @@ import { ComponentsWithNodeOptions, ComponentsWithoutNodeOptions } from "rehype-
 import { SharedOptions } from "rehype-react/lib";
 import { remarkFxHashCustom } from "./plugins"
 import { TezosStorage } from "../elements/TezosStorage"
+import { NFTArticleImage } from "../elements/Medias/NFTArticleImage";
 
 declare module "rehype-react" {
   interface WithNode {
@@ -44,6 +45,7 @@ const settingsRehypeReact = {
   components: {
     'tezos-storage': TezosStorage,
     'embed-media': Embed,
+    'img': NFTArticleImage,
   }
 }
 interface PayloadNFTArticleComponentsFromMarkdown {
@@ -65,6 +67,8 @@ export default async function getNFTArticleComponentsFromMarkdown(markdown: stri
       .use(rehypeHighlight)
       .use(rehypeFormat)
       .use(rehypeStringify)
+      // todo: fix this, because of image component for some reason
+      // @ts-ignore
       .use(rehypeReact, settingsRehypeReact)
       .process(matterResult.content)
 
