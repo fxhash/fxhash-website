@@ -319,7 +319,7 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
     buttonInstantiable: true,
     render: ({ attributes, element, children }) => (
       <div className={style.article_wrapper_container} {...attributes}>
-	{children}
+	      {children}
         <BlockKatexEditor slateElement={element}/>
       </div>
     ),

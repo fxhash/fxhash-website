@@ -25,6 +25,7 @@ export function TezosStorage({
     }
     const Comp = TezosStorageFactory(pointer)
     const props = Comp.getPropsFromPointer(pointer)
+    /* eslint-disable react/display-name */
     return () => (
       <Comp {...props}/>
     )
