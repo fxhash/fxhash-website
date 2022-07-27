@@ -13,8 +13,8 @@ interface CustomArticleElementsByType {
 }
 export const customNodes: CustomArticleElementsByType = {
   leafDirective: {
-    'tezos-storage': TezosStorageEditor,
-    embed: Embed
+    "tezos-storage": TezosStorageEditor,
+    "embed-media": Embed,
   },
   textDirective: {},
   containerDirective: {},

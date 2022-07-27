@@ -14,17 +14,6 @@ function convertSlateLeafDirectiveToMarkdown(
 ) {
   const { children, type, ...attributes} = node
 
-  console.log({
-    type: 'leafDirective',
-    name: type,
-    children: [
-      {
-        type: 'text',
-        value: children[0].text,
-      }
-    ],
-    attributes,
-  })
   return {
     type: 'leafDirective',
     name: type,

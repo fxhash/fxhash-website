@@ -1,7 +1,6 @@
 import { FunctionComponent, ReactNode } from "react"
 import { RenderElementProps } from "slate-react"
 import Embed from "../../elements/Embed/Embed"
-import TezosStorage from "../../elements/TezosStorage"
 import style from '../../NFTArticle.module.scss';
 import { FigureElement } from "../../elements/Figure"
 import { FigcaptionElement } from "../../elements/Figcaption"
@@ -88,6 +87,8 @@ export interface IArticleBlockDefinition {
   onEditNodeFactory?: TEditNodeFnFactory
   // should the settings menu be hidden after node is update
   hideSettingsAfterUpdate?: boolean
+  // prevent the auto-focus trigger when creating the element
+  preventAutofocusTrigger?: boolean
 }
 
 export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> = {
@@ -114,7 +115,8 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
       children: [{
         text: ""
       }],
-    })
+    }),
+    preventAutofocusTrigger: true,
   },
   "tezos-storage": {
     name: "Tezos content",
@@ -149,6 +151,8 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
     }),
     editAttributeComp: TezosStorageSettings,
     editAttributeWrapper: BlockParamsModal,
+    hideSettingsAfterUpdate: true,
+    preventAutofocusTrigger: true,
   },
   "paragraph": {
     name: "Paragraph",
@@ -268,6 +272,7 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
     ),
     hasUtilityWrapper: true,
     instanciateElement: () => SlateTable.createTable(2, 2),
+    preventAutofocusTrigger: true,
   },
   "tableRow": {
     name: "Table row",
@@ -424,6 +429,7 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
       }
     },
     hideSettingsAfterUpdate: true,
+    preventAutofocusTrigger: true,
   },
   "figcaption": {
     name: "Caption",
