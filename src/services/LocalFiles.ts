@@ -196,6 +196,10 @@ function myRemarkPlugin(): import('unified').Transformer<import('mdast').Root, i
           hast.properties.pKey = hast.properties.key;
           delete hast.properties.key;
         }
+        if (hast.properties.type) {
+          hast.properties.pType = hast.properties.type;
+          delete hast.properties.type;
+        }
         data.hName = hast.tagName
 	data.hProperties = hast.properties
       }

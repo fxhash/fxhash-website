@@ -46,22 +46,3 @@
     }
   }
 }
-
-.import_image {
-  width: min(100%, 900px);
-  margin: 0 auto;
-  display: block;
-  cursor: pointer;
-  padding: 10px;
-  background-color: var(--color-gray-vvlight);
-  border-radius: 4px;
-  border: none;
-
-  i {
-    margin-right: 8px;
-  }
-
-  &:hover {
-    background-color: var(--color-gray-vlight);
-  }
-}

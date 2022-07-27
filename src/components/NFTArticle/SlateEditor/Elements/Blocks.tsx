@@ -14,10 +14,12 @@ import { ImageAttributeSettings } from "./AttributeSettings/ImageAttributeSettin
 import { TAttributesEditorWrapper } from "../../../../types/ArticleEditor/ArticleEditorBlocks"
 import { BlockParamsModal } from "../Utils/BlockParamsModal"
 import { TEditNodeFnFactory } from "../../../../types/ArticleEditor/Transforms"
+import { TezosStorageSettings } from "./AttributeSettings/TezosStorageSettings"
 import { BlockKatexEditor } from "../../elements/BlockKatex/BlockKatexEditor";
 import { TableEditor } from "../../elements/Table/TableEditor";
 import { TableCell } from "../../elements/Table/TableCell";
 import { SlateTable } from "../Plugins/SlateTablePlugin";
+import TezosStorageEditor from "./TezosStorageEditor";
 
 export enum EArticleBlocks {
   "embed-media" = "embed-media",
@@ -119,29 +121,34 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
     icon: <i className="fa-solid fa-hexagon-vertical-nft" aria-hidden/>,
     buttonInstantiable: true,
     render: ({ attributes, element, children }) => (
-      <TezosStorage
+      <TezosStorageEditor
         {...attributes}
-        pKey={element.pKey}
-        address={element.address}
-        metadataSpec={element.metadataSpec}
-        bigmap={element.bigmap}
-        value={element.value}
+        element={element}
+        contract={element.contract}
+        path={element.path}
+        storage_type={element.storage_type}
+        spec={element.spec}
+        data_spec={element.data_spec}
+        value_path={element.value_path}
       >
         {children}
-      </TezosStorage>
+      </TezosStorageEditor>
     ),
     hasUtilityWrapper: true,
     instanciateElement: () => ({
       type: "tezos-storage",
-      pKey: "",
-      address: "",
-      metadataSpec: "",
-      bigmap: "",
-      value: "",
+      contract: undefined,
+      path: undefined,
+      storage_type: undefined,
+      spec: undefined,
+      data_spec: undefined,
+      value_path: undefined,
       children: [{
         text: ""
       }]
-    })
+    }),
+    editAttributeComp: TezosStorageSettings,
+    editAttributeWrapper: BlockParamsModal,
   },
   "paragraph": {
     name: "Paragraph",

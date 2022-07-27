@@ -15,16 +15,21 @@ export interface Props extends IEntityBadgeProps {
 interface WrapperProps {
   className: string
   user: User
+  newTab?: boolean
   children: ReactNode
 }
 
 const WrapperLink = ({
   className,
   user,
+  newTab,
   children,
 }: WrapperProps) => (
   <Link href={getUserProfileLink(user)}>
-    <a className={cs(style.link, style.default_font_styles, className)}>
+    <a 
+      className={cs(style.link, style.default_font_styles, className)}
+      target={newTab ? "_blank" : "_self"}
+    >
       <div className={style.container}>
 	      {children}
       </div>
@@ -50,6 +55,7 @@ export function UserBadge({
   avatarSide = "left",
   displayAddress = false,
   displayAvatar = true,
+  newTab = false,
   className
 }: Props) {
   // the user goes through an aliases check
@@ -70,6 +76,7 @@ export function UserBadge({
         className
       )}
       user={userAlias}
+      newTab={newTab}
     >
       {displayAvatar && (
         <Avatar

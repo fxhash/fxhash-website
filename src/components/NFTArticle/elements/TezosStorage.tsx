@@ -1,58 +1,38 @@
-import React, { memo, forwardRef } from 'react';
-import { NFTArticleElementComponent } from "../../../types/Article";
+import React, { useMemo, FunctionComponent } from 'react'
+import { ITezosStoragePointer } from '../../../types/TezosStorage';
 import style from "./TezosStorage.module.scss"
+import cs from "classnames"
+import { TezosStorageFactory } from './TezosStorage/TezosStorageFactory'
 
-export interface TezosStorageProps {
-  address: string
-  pKey: string
-  type?: string
-  metadataSpec?: string
-  bigmap?: string
-  value?: string
-  children?: string
+type TStorageBlock = "project" | "gentk" | "unknown"
+
+export interface TezosStorageProps extends ITezosStoragePointer {
 }
 
-const TezosStorage: NFTArticleElementComponent<TezosStorageProps> = memo(forwardRef<HTMLDivElement, TezosStorageProps>(({ address, pKey, children }, ref) => {
+export function TezosStorage({ 
+  contract,
+  path,
+  storage_type,
+  spec,
+  data_spec,
+  value_path,
+}: TezosStorageProps) {
+  // we use the factory to instanciate the rendering component
+  const TezosRenderer = useMemo<FunctionComponent>(() => {
+    const pointer: ITezosStoragePointer = {
+      contract,
+      path,
+    }
+    const Comp = TezosStorageFactory(pointer)
+    const props = Comp.getPropsFromPointer(pointer)
+    return () => (
+      <Comp {...props}/>
+    )
+  }, [contract, path])
+
   return (
-    <div ref={ref} className={style.bg}>
-      <div contentEditable={false}>{`\{`}</div>
-      <div className={style.tab}>
-        <div contentEditable={false}><span className={style.property}>{'"address"'}</span><span>{`: "${address}"`}</span></div>
-        <div contentEditable={false}><span className={style.property}>{'"key"'}</span><span>{`: "${pKey}"`}</span></div>
-	<div><span contentEditable={false} className={style.property}>{'"annotation"'}</span><span contentEditable={false}>{`: `}</span><span>{children}</span></div>
-      </div>
-      <div contentEditable={false}>{`\}`}</div>
+    <div className={cs(style.root)}>
+      <TezosRenderer/>
     </div>
-  );
-}));
-
-TezosStorage.displayName = 'TezosStorage';
-TezosStorage.defaultProps = {
-  type: 'TZIP-012',
-  metadataSpec: 'TZIP-021',
-  bigmap: 'token_metadata',
-  value: 'token_info'
-}
-export default TezosStorage;
-
-TezosStorage.getPropsFromNode = (node, properties) => {
-  return {
-    address: properties.address,
-    pKey: properties.key,
-    type: properties.type,
-    metadataSpec: properties.metadata_spec,
-    bigmap: properties.bigmap,
-    value: properties.value,
-  }
-}
-
-TezosStorage.fromSlateToMarkdown = (properties) => {
-  return {
-    address: properties.address,
-    key: properties.pKey,
-    type: properties.type,
-    metadata_spec: properties.metadataSpec,
-    bigmap: properties.bigmap,
-    value: properties.value,
-  }
+  )
 }
