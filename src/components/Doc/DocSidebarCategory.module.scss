@@ -1,0 +1,65 @@
+.root {
+  .content {
+    display: flex;
+    flex-direction: column;
+    padding-left: 31px;
+    margin-top: 3px;
+    margin-bottom: 6px;
+  
+    a {
+      padding: 6px 8px;
+      font-weight: normal;
+      text-decoration: none;
+      color: var(--color-black);
+
+      &:hover {
+        background: var(--color-gray-vvlight);
+      }
+
+      &.active {
+        color: var(--color-secondary);
+        font-weight: bold;
+      }
+    }
+  }
+  
+  .title {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 8px 8px;
+    width: 100%;
+    text-align: left;
+    border: none;
+    background: transparent;
+    color: inherit;
+  
+    i:first-child {
+      width: 30px;
+    }
+  
+    i:last-child {
+      opacity: 0.3;
+      display: none;
+    }
+  
+    span {
+      flex-grow: 2;
+    }
+  
+    &:hover {
+      cursor: pointer;
+      background: var(--color-gray-vvlight);
+  
+      i:last-child {
+        display: block;
+      }
+    }
+  }
+
+  &.opened {
+    .title {
+      font-weight: bold;
+    }
+  }
+}
