@@ -57,6 +57,7 @@ export const TezosStorageGentk: TezosStorageRenderer<Props> = ({
             user={token.issuer!.author}
             className={cs(style.user)}
             avatarSide="right"
+            newTab
           />
         </div>
       )}

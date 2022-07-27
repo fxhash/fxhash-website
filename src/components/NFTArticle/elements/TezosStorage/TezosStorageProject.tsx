@@ -53,6 +53,7 @@ export const TezosStorageProject: TezosStorageRenderer<Props> = ({
             user={token.author}
             className={cs(style.user)}
             avatarSide="right"
+            newTab
           />
         </div>
       )}
