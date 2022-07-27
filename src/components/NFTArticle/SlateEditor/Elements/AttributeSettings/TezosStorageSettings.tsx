@@ -295,6 +295,11 @@ function ProjectIterationPicker({
 
   return (
     <div className={cs(style.iterations_wrapper)}>
+      {iterations?.length === 0 && (
+        <span className={cs(text.info)}>
+          No iteration for this project found
+        </span>
+      )}
       {iterations ? (
         <div className={cs(style.iterations_container)}>
           {iterations.map((item) => (

@@ -1,4 +1,5 @@
 import style from "./InputReactiveSearch.module.scss"
+import text from "../../styles/Text.module.css"
 import cs from "classnames"
 import { FunctionComponent, useRef, useState } from "react"
 import useAsyncEffect from "use-async-effect"
@@ -130,6 +131,11 @@ export function InputReactiveSearch<ObjectType extends BaseResultItem>({
         className={style.input_search}
         onFocus={() => hideResults && setHideResults(false)}
       />
+      {!loading && results?.length === 0 && (
+        <div className={cs(style.no_results)}>
+          This search yielded 0 result <i className="fa-solid fa-face-frown-open" aria-hidden/>
+        </div>
+      )}
       <RenderResults
         results={results}
         value={value}
