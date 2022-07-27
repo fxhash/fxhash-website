@@ -28,11 +28,11 @@ export function ObjktTabs({
       tabsLayout="fixed-size"
     >
       {({ tabIndex }) => (
-        <section className={cs(layout['padding-big'])}>    
+        <section className={cs(layout['padding-big'])}>
           <Spacing size="3x-large" />
           {tabIndex === 0 ? (
             <SectionWrapper layout="fixed-width-centered">
-              <Activity 
+              <Activity
                 actions={objkt.actions}
                 className={cs(style.activity)}
               />
@@ -42,7 +42,7 @@ export function ObjktTabs({
               <ListOffers
                 objkt={objkt}
                 offers={objkt.offers!}
-                floor={objkt.issuer.marketStats!.floor}
+                floor={objkt.issuer.marketStats?.floor || null}
                 className={cs(style.activity)}
               />
             </SectionWrapper>

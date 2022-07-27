@@ -80,7 +80,7 @@ const _TableUserOffersReceived = ({
                       <td className={style['td-price']}>
                         <FloorDifference
                           price={offer.price}
-                          floor={offer.objkt.issuer.marketStats!.floor}
+                          floor={offer.objkt.issuer.marketStats?.floor || null}
                         />
                       </td>
                       <td className={style['td-user']}>
