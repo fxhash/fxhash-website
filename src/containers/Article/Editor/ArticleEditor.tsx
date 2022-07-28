@@ -182,7 +182,7 @@ export function ArticleEditor({
         requiredActions.push(`${key}: ${value}`)
       })
     }
-    
+
     return requiredActions
   }, [errors, hasLocalMedias])
 
