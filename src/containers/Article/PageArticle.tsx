@@ -60,10 +60,14 @@ const _PageArticle = ({ article, originUrl, isPreview }: PageArticleProps) => {
           <p className={cs(style.description, style.awidth)}>
             {description}
           </p>
-          <ImagePolymorphic
-            uri={article.displayUri}
-            className={cs(style.thumbnail)}
-          />
+          <figure className={cs(style.thumbnail)}>
+            <ImagePolymorphic
+              uri={article.displayUri}
+            />
+            {false && (
+              <figcaption></figcaption>
+            )}
+          </figure>
         </div>
         <article lang={language} className={style.body}>
           <NftArticle
