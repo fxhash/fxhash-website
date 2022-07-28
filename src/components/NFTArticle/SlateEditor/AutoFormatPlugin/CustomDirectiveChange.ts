@@ -57,13 +57,8 @@ export class CustomDirectiveChange implements AutoFormatChange {
     const text = matches.groups?.['text']
     const attributes = matches.groups?.['attributes']
     if (!type) return false;
-    const parsedAttributes = parseAttributes(attributes)
-    const nodeAttributes = {
-      value: text,
-      type,
-      ...parsedAttributes.attributes
-    }
-    const props = customNodes.leafDirective[type]?.getPropsFromNode?.(null as any, nodeAttributes) || nodeAttributes;
+    const { attributes: parsedAttributes } = parseAttributes(attributes) || {}
+    const props = customNodes.leafDirective[type]?.getPropsFromNode?.(null as any, parsedAttributes) || parsedAttributes;
     const [start] = Range.edges(editor.selection as Range);
     const charBefore = Editor.before(editor, start, {
       unit: 'character',
@@ -79,8 +74,8 @@ export class CustomDirectiveChange implements AutoFormatChange {
       editor,
       {
 	...props,
-	type:props.type,
-	children: [{text: props.value}],
+	type,
+	children: [{text: ''}],
       }
     )
     return true;
