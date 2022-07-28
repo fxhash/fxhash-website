@@ -51,7 +51,7 @@
 
 .date {
   color: var(--color-gray);
-  margin-left: 10px;
+  margin-left: 20px;
 }
 
 .title {
@@ -65,6 +65,8 @@
 .description {
   flex: 1;
   margin: $spacing 0;
+  font-family: "Noto Serif", serif !important;
+  font-size: 1.2rem;
 
   p {
     font-size: var(--font-size-big);
@@ -83,9 +85,11 @@
   color: var(--color-white);
   background: var(--color-gray);
 }
+
 .draft_container {
   border-color: var(--color-gray);
 }
+
 .draft_img-wrapper {
   border-color: var(--color-gray);
 }

@@ -103,6 +103,7 @@
 
     p,
     ul,
+    ol,
     blockquote,
     table,
     figcaption {
@@ -232,10 +233,6 @@
 }
 
 @media (max-width: $breakpoint-sm) {
-  .infos {
-    margin-top: $spacing-2x-large;
-  }
-
   .header {
     text-align: left;
   }
