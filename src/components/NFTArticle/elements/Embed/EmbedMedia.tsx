@@ -2,21 +2,20 @@ import React, { memo, NamedExoticComponent, useMemo } from 'react';
 import cs from "classnames"
 import EmbedSpotify from "./EmbedSpotify";
 import EmbedYoutube from "./EmbedYoutube";
+import EmbedTwitter from "./EmbedTwitter";
 import style from "./Embed.module.scss";
 import text from "../../../../styles/Text.module.css"
-import { getYoutubeCodeFromUrl } from "../../../../utils/embed";
+import { getTweetIdFromUrl, getYoutubeCodeFromUrl } from "../../../../utils/embed";
 
 export interface EmbedElementProps {
   href: string
   caption?: string
 }
-interface UrlPlayers {
-  [key: string]: {
-    check: (href: string) => boolean,
-    component: NamedExoticComponent<EmbedElementProps>,
-  }
+interface UrlPlayer {
+  check: (href: string) => boolean,
+  component: NamedExoticComponent<EmbedElementProps>,
 }
-export const mediaPlayers: UrlPlayers = {
+export const mediaPlayers: Record<string, UrlPlayer> = {
   spotify: {
     check: (href) => href.startsWith('https://open.spotify.com/'),
     component: EmbedSpotify,
@@ -24,8 +23,13 @@ export const mediaPlayers: UrlPlayers = {
   youtube: {
     check: (href) => !!getYoutubeCodeFromUrl(href),
     component: EmbedYoutube,
+  },
+  twitter: {
+    check: (href) => !!getTweetIdFromUrl(href),
+    component: EmbedTwitter,
   }
 }
+
 
 interface EmbedMediaProps {
   href: string,
