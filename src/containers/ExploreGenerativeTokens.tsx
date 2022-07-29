@@ -161,36 +161,38 @@ export const ExploreGenerativeTokens = ({ }: Props) => {
   }
 
   return (
-    <SortAndFilters
-      sort={sort}
-      filterTags={filterTags}
-      onClearAllTags={handleClearTags}
-      onSearch={handleSearch}
-      noResults={!loading && generativeTokens?.length === 0}
-      renderFilters={() =>
-        <GenerativeFilters
-          filters={filters}
-          setFilters={setFilters}
-        />
-      }
-    >
-      {({ refCardsContainer }) =>
-        <InfiniteScrollTrigger onTrigger={infiniteScrollFetch} canTrigger={!!data && !loading}>
-          <CardsContainer ref={refCardsContainer}>
-            {generativeTokens?.length > 0 && generativeTokens.map(token => (
-              <GenerativeTokenCard
-                key={token.id}
-                token={token}
-                displayPrice={settingsCtx.displayPricesCard}
-                displayDetails={settingsCtx.displayInfosGenerativeCard}
-              />
-            ))}
-            {loading && (
-              <CardsLoading number={ITEMS_PER_PAGE}/>
-            )}
-          </CardsContainer>
-        </InfiniteScrollTrigger>
-      }
-    </SortAndFilters>
+    <div ref={topMarkerRef}>
+      <SortAndFilters
+        sort={sort}
+        filterTags={filterTags}
+        onClearAllTags={handleClearTags}
+        onSearch={handleSearch}
+        noResults={!loading && generativeTokens?.length === 0}
+        renderFilters={() =>
+          <GenerativeFilters
+            filters={filters}
+            setFilters={setFilters}
+          />
+        }
+      >
+        {({ refCardsContainer }) =>
+          <InfiniteScrollTrigger onTrigger={infiniteScrollFetch} canTrigger={!!data && !loading}>
+            <CardsContainer ref={refCardsContainer}>
+              {generativeTokens?.length > 0 && generativeTokens.map(token => (
+                <GenerativeTokenCard
+                  key={token.id}
+                  token={token}
+                  displayPrice={settingsCtx.displayPricesCard}
+                  displayDetails={settingsCtx.displayInfosGenerativeCard}
+                />
+              ))}
+              {loading && (
+                <CardsLoading number={ITEMS_PER_PAGE}/>
+              )}
+            </CardsContainer>
+          </InfiniteScrollTrigger>
+        }
+      </SortAndFilters>
+    </div>
   );
 }
