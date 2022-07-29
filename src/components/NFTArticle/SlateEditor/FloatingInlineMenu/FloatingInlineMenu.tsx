@@ -5,19 +5,26 @@ import cs from "classnames"
 import ReactDOM from 'react-dom'
 import { useSlate,  useFocused } from 'slate-react'
 import {
+  Editor, 
   Range,
   NodeEntry,
+  Location
 } from 'slate'
-import {TextFormatButton} from './TextFormatButton';
+import {TextFormatButton} from './TextFormatButton'
 import {useClientEffect} from '../../../../utils/hookts'
-import { lookupElementByType } from '../utils';
-import { LinkButton } from './LinkButton';
+import { lookupElementAtSelection, lookupElementByType } from '../utils'
+import { LinkButton } from './LinkButton'
+import { BlockDefinitions, EArticleBlocks } from '../Elements/Blocks'
 
 const FloatingInlineMenu = () => {
   const ref = useRef<HTMLDivElement>(null)
   const editor = useSlate()
   const inFocus = useFocused()
   const [overrideContent, setOverrideContent] = useState(null)
+
+  const [elementUnderCursor] = lookupElementAtSelection(editor, editor.selection as Location) || []
+  const elementType = elementUnderCursor?.type;
+  const { hideFloatingInlineMenu } = BlockDefinitions[elementType as EArticleBlocks] || {};
 
   const activeElement = lookupElementByType(editor, 'link') as NodeEntry;
 
@@ -48,7 +55,7 @@ const FloatingInlineMenu = () => {
     const menuElement = ref.current
     const { selection } = editor;
     if (!menuElement) return;
-    if (activeElement || overrideContent || (selection && !Range.isCollapsed(selection))) {
+    if (!hideFloatingInlineMenu && (activeElement || overrideContent || (selection && !Range.isCollapsed(selection)))) {
       menuElement.classList.add(style.visible)
     } else {
       menuElement.classList.remove(style.visible)
@@ -68,13 +75,13 @@ const FloatingInlineMenu = () => {
     >
       {(overrideContent && React.cloneElement(overrideContent, {activeElement: activeElement?.[0]})) ||
 	<>
-	  <TextFormatButton format="strong">
+	  <TextFormatButton format="strong" hotkey="cmd+b">
 	    <i className="fa-solid fa-bold"/>
 	  </TextFormatButton>
-	  <TextFormatButton format="emphasis" >
+	  <TextFormatButton format="emphasis" hotkey="mod+i" >
 	    <i className="fa-solid fa-italic"/>
 	  </TextFormatButton>
-	  <TextFormatButton format="inlineCode">
+	  <TextFormatButton format="inlineCode" hotkey="mod+`">
 	    <i className="fa-solid fa-code" />
 	  </TextFormatButton>
 	  <LinkButton setOverrideContent={setOverrideContent} />

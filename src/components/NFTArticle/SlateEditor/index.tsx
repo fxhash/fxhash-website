@@ -3,7 +3,6 @@ import React, {
   forwardRef,
   KeyboardEvent,
   useCallback,
-  useEffect,
   useImperativeHandle,
   useMemo,
   useState
@@ -20,7 +19,6 @@ import { TezosStorageProps } from "../elements/TezosStorage"
 import { withAutoFormat } from './AutoFormatPlugin/'
 import { withImages } from "./Plugins/SlateImagePlugin"
 import { ImageElement } from "../elements/ImageElement"
-import { onKeyDownHotkeyPlugin } from "./HotkeyPlugin/HotkeyPlugin"
 import { RenderElements } from "./Elements/RenderElements"
 import { withConstraints } from "./Plugins/SlateConstraintsPlugin"
 import { IEditorMediaFile } from "../../../types/ArticleEditor/Image";
@@ -54,7 +52,10 @@ type TezosStorageElement = TypeElement & TezosStorageProps
 
 type CustomElement =  HeadlineElement | TezosStorageElement | ImageElement;
 
-export type TextFormatKey = 'strong' | 'emphasis' | 'inlineCode';
+
+
+export const ALL_TEXT_FORMATS  = ['strong', 'emphasis', 'inlineCode'] as const
+export type TextFormatKey = typeof ALL_TEXT_FORMATS[number]
 
 export type TextFormats = {[key in TextFormatKey]: boolean}
 
@@ -128,7 +129,6 @@ export const SlateEditor = forwardRef<FxEditor, SlateEditorProps>(({
     onChange?.(newValue)
   }, [onChange])
   const handleKeyDown = useCallback((event: KeyboardEvent<HTMLDivElement>) => {
-    onKeyDownHotkeyPlugin(editor, event)
     onKeyDownTablePlugin(editor, event)
   }, [editor])
 

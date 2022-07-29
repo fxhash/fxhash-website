@@ -1,4 +1,6 @@
-import { Range, Editor, Text, Transforms, Element, NodeEntry } from 'slate';
+import { Range, Editor, Text, Transforms, Element, NodeEntry, Location } from 'slate'; 
+import { useEffect } from 'react';
+import isHotkey from 'is-hotkey'
 
 export function getRangeFromBlockStartToCursor(editor: Editor): Range {
   const { anchor } = editor.selection as Range;
@@ -46,21 +48,18 @@ export function toggleMark(editor: Editor, format: string): void {
   }
 }
 
-export function isFormatActive(editor: Editor, format: string):boolean {
+export function isFormatActive(editor: Editor, format: string, options={}):boolean {
   const [match] = Editor.nodes(editor, {
     match: n => n[format] === true,
     mode: 'all',
+    ...options
   })
   return !!match
 }
 
 export function toggleFormat(editor: Editor, format: string): void {
-  const isActive = isFormatActive(editor, format)
-  Transforms.setNodes(
-    editor,
-    { [format]: isActive ? null : true },
-    { match: Text.isText, split: true }
-  )
+  const isActive = isFormatActive(editor, format);
+  editor.addMark(format, !isActive)
 }
 
 export function lookupElementByType(editor:Editor, type: string): NodeEntry {
@@ -71,3 +70,29 @@ export function lookupElementByType(editor:Editor, type: string): NodeEntry {
   return element
 }
 
+export function lookupElementAtSelection(
+  editor: Editor,
+  selection: Location
+): NodeEntry | null {
+  if (!selection) return null;
+  const [, nodePath] = Editor.last(editor, selection)
+  return Editor.parent(editor, nodePath)
+}
+
+
+export function useHotkey(hotkey:string|undefined, handler:() => void, skip?: boolean|null) {
+  useEffect(() => {
+    if (!hotkey || skip) return;
+    const handleHotKey = (event:KeyboardEvent) => {
+      if (isHotkey(hotkey, event)) {
+	event.preventDefault()
+	handler();
+      }
+    }
+    
+    document.addEventListener("keydown", handleHotKey)
+    return () => {
+      document.removeEventListener("keydown", handleHotKey)
+    } 
+  }, [hotkey, handler, skip]);
+}
