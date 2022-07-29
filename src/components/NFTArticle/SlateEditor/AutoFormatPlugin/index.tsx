@@ -30,7 +30,10 @@ const config: AutoFormatChange[] = [
   new BlockTypeChange('p',   {type: 'paragraph',} ), 
   new BlockTypeChange('>',   {type: 'blockquote',} ), 
   new InlineTypeChange('__', {strong: true}), 
+  new InlineTypeChange('**', {strong: true}), 
   new InlineTypeChange('_', {emphasis: true}), 
+  new InlineTypeChange('*', {emphasis: true}), 
+  new InlineTypeChange('`', {inlineCode: true}), 
   new CustomDirectiveChange('tezos-storage'), 
 ]
 
