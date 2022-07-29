@@ -48,11 +48,13 @@ export class InlineTypeChange implements AutoFormatChange {
    ): boolean => {
     const textBeforeCursor = getTextFromBlockStartToCursor(editor)
     const beforeTextWithSpace = `${textBeforeCursor} `
+    console.log('?', beforeTextWithSpace)
     if (!beforeTextWithSpace.endsWith(`${this.shortcut} `)) { return false }
     // retreive the matches based on usual markdown pattern, e.g.
     // __bold__, _italic_, etc.
-    const matcher = RegExp(`(?<!${this.shortcut})${this.shortcut}(?!${this.shortcut}).+?${this.shortcut}`, 'g')
-    const matches = textBeforeCursor.match(matcher);
+    const matcher = RegExp(`(?<!\\${this.shortcut})\\${this.shortcut}(?!\\${this.shortcut}).+?\\${this.shortcut}`, 'g')
+     const matches = textBeforeCursor.match(matcher);
+     console.log(textBeforeCursor)
     if (!matches) return false;
     // We need to get a slate Point for the matched string inside the 
     // editor state. Since the text can be split up into multiple nodes
