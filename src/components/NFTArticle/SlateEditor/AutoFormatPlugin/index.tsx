@@ -28,6 +28,7 @@ function createChangeTypeHeading():AutoFormatChange[] {
 const config: AutoFormatChange[] = [ 
   ...createChangeTypeHeading(),
   new BlockTypeChange('p',   {type: 'paragraph',} ), 
+  new BlockTypeChange('>',   {type: 'blockquote',} ), 
   new InlineTypeChange('__', {strong: true}), 
   new InlineTypeChange('_', {emphasis: true}), 
   new CustomDirectiveChange('tezos-storage'), 
