@@ -29,14 +29,14 @@ const _ButtonsArticlePreview = ({ id, article }: ButtonsArticlePreviewProps) => 
   const { user } = useContext(UserContext)
   const { dispatch } = useContext(ArticlesContext)
   const router = useRouter();
-  const { 
+  const {
     post: uploadMetadata,
     loading: postMetadataLoading
   } = useFetch<any>(API_FILE__ARTICLE_UPLOAD_METADATA, {
     cachePolicy: CachePolicies.NO_CACHE,
   })
 
-  const { 
+  const {
     state, success, call: mintArticle, error, loading: mintLoading
   } = useContractOperation<TMintArticleOperationParams>(MintArticleOperation)
 
