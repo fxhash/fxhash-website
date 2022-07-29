@@ -13,7 +13,7 @@ export type AutoFormatChange = {
 
 function createChangeTypeHeading():AutoFormatChange[] {
   const changes = [];
-  for (let i = 1; i < 6; i++) {
+  for (let i = 1; i <= 6; i++) {
     changes.push(new BlockTypeChange(
       Array(i).fill('#').join(''), 
       {
