@@ -237,6 +237,7 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
     instanciateElement: () => ({
       type: "list",
       ordered: false,
+      spread: false,
       children: [{
         type: "listItem",
         children: [{
