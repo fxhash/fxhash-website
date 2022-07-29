@@ -60,7 +60,7 @@ export const sortOptions: Record<SortValue, IOptions> = {
   },
   'createdAt-asc': {
     label: "oldest",
-    value: "createdAt-desc"
+    value: "createdAt-asc"
   }
 }
 
