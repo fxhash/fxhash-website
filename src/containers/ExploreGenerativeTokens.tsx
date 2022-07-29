@@ -1,28 +1,19 @@
 import { gql, useQuery } from '@apollo/client'
-import cs from "classnames"
-import layout from "../styles/Layout.module.scss"
-import styleSearch from "../components/Input/SearchInput.module.scss"
 import { GenerativeToken, GenerativeTokenFilters, GenTokFlag } from '../types/entities/GenerativeToken'
 import { CardsContainer } from '../components/Card/CardsContainer'
 import { GenerativeTokenCard } from '../components/Card/GenerativeTokenCard'
 import { InfiniteScrollTrigger } from '../components/Utils/InfiniteScrollTrigger'
 import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
-import { Spacing } from '../components/Layout/Spacing'
 import { CardsLoading } from '../components/Card/CardsLoading'
 import { SettingsContext } from '../context/Theme'
-import { Select } from '../components/Input/Select'
 import { ExploreTagDef, ExploreTags } from '../components/Exploration/ExploreTags'
-import { CardsExplorer } from '../components/Exploration/CardsExplorer'
-import { FiltersPanel } from '../components/Exploration/FiltersPanel'
-import { SearchHeader } from '../components/Search/SearchHeader'
-import { SearchInputControlled } from '../components/Input/SearchInputControlled'
 import { GenerativeFilters } from './Generative/GenerativeFilters'
 import { Frag_GenAuthor, Frag_GenPricing } from '../queries/fragments/generative-token'
 import { getTagsFromFiltersObject } from "../utils/filters";
-import styleCardsExplorer from "../components/Exploration/CardsExplorer.module.scss";
 import useSort from "../hooks/useSort";
 import { sortOptionsGenerativeTokens } from "../utils/sort";
 import useFilters from "../hooks/useFilters";
+import { SortAndFilters } from "../components/SortAndFilters/SortAndFilters";
 
 const ITEMS_PER_PAGE = 20
 
@@ -163,86 +154,43 @@ export const ExploreGenerativeTokens = ({ }: Props) => {
     }))
   , [filters, removeFilter])
 
+  const sort = {
+    value: sortValue,
+    options: sortOptions,
+    onChange: setSortValue,
+  }
+
   return (
-    <CardsExplorer>
-      {({
-        filtersVisible,
-        setFiltersVisible,
-        inViewCardsContainer,
-        refCardsContainer,
-        isSearchMinimized,
-        setIsSearchMinimized
-      }) => (
-        <>
-          <div ref={topMarkerRef} />
-          <SearchHeader
-            hasFilters
-            showFiltersOnMobile={inViewCardsContainer}
-            filtersOpened={filtersVisible}
-            onToggleFilters={() => setFiltersVisible(!filtersVisible)}
-            sortSelectComp={
-              <Select
-                classNameRoot={cs({
-                  [styleCardsExplorer['hide-sort']]: !isSearchMinimized
-                })}
-                value={sortValue}
-                options={sortOptions}
-                onChange={setSortValue}
+    <SortAndFilters
+      sort={sort}
+      filterTags={filterTags}
+      onClearAllTags={handleClearTags}
+      onSearch={handleSearch}
+      noResults={!loading && generativeTokens?.length === 0}
+      renderFilters={() =>
+        <GenerativeFilters
+          filters={filters}
+          setFilters={setFilters}
+        />
+      }
+    >
+      {({ refCardsContainer }) =>
+        <InfiniteScrollTrigger onTrigger={infiniteScrollFetch} canTrigger={!!data && !loading}>
+          <CardsContainer ref={refCardsContainer}>
+            {generativeTokens?.length > 0 && generativeTokens.map(token => (
+              <GenerativeTokenCard
+                key={token.id}
+                token={token}
+                displayPrice={settingsCtx.displayPricesCard}
+                displayDetails={settingsCtx.displayInfosGenerativeCard}
               />
-            }
-          >
-            <SearchInputControlled
-              minimizeOnMobile
-              onMinimize={setIsSearchMinimized}
-              onSearch={handleSearch}
-              className={styleSearch.large_search}
-            />
-          </SearchHeader>
-
-          <div className={cs(layout.cards_explorer, layout['padding-big'])}>
-            {filtersVisible && (
-              <FiltersPanel onClose={() => setFiltersVisible(false)}>
-                <GenerativeFilters
-                  filters={filters}
-                  setFilters={setFilters}
-                />
-              </FiltersPanel>
+            ))}
+            {loading && (
+              <CardsLoading number={ITEMS_PER_PAGE}/>
             )}
-
-            <div style={{ width: "100%" }}>
-              {filterTags.length > 0 && (
-                <>
-                  <ExploreTags
-                    terms={filterTags}
-                    onClearAll={handleClearTags}
-                  />
-                  <Spacing size="regular" />
-                </>
-              )}
-
-              {!loading && generativeTokens?.length === 0 && (
-                <span>No results</span>
-              )}
-
-              <InfiniteScrollTrigger onTrigger={infiniteScrollFetch} canTrigger={!!data && !loading}>
-                <CardsContainer ref={refCardsContainer}>
-                  {generativeTokens?.length > 0 && generativeTokens.map(token => (
-                    <GenerativeTokenCard
-                      key={token.id}
-                      token={token}
-                      displayPrice={settingsCtx.displayPricesCard}
-                      displayDetails={settingsCtx.displayInfosGenerativeCard}
-                    />
-                  ))}
-                  {loading && (
-                    <CardsLoading number={ITEMS_PER_PAGE} />
-                  )}
-                </CardsContainer>
-              </InfiniteScrollTrigger>
-            </div>
-          </div>
-        </>
-      )}
-    </CardsExplorer>
-  )
+          </CardsContainer>
+        </InfiniteScrollTrigger>
+      }
+    </SortAndFilters>
+  );
 }

@@ -68,7 +68,7 @@ const _SortAndFilters = ({ children, sort, renderFilters, onSearch, noResults, f
           <div className={cs(layout.cards_explorer, layout['padding-big'])}>
             {filtersVisible && (
               <FiltersPanel onClose={() => setFiltersVisible(false)}>
-                {renderFilters}
+                {renderFilters?.()}
               </FiltersPanel>
             )}
 
