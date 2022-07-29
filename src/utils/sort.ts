@@ -1,6 +1,6 @@
 import { IOptions } from "../components/Input/Select";
 
-export function sortValueToSortVariable(val: string) {
+export function sortValueToSortVariable(val: string): Record<string, string> {
   if (val === "pertinence") return {}
   const split = val.split("-")
   return {
@@ -8,10 +8,16 @@ export function sortValueToSortVariable(val: string) {
   }
 }
 
-interface ISortOptions {
-  [key: string]: IOptions,
-}
-export const sortOptions: ISortOptions = {
+type SortValue =
+  'mintOpensAt-desc' | 'mintOpensAt-asc'
+  | 'price-asc' | 'price-desc'
+  | 'supply-asc' | 'supply-desc'
+  | 'balance-asc' | 'balance-desc'
+  | 'createdAt-asc' | 'createdAt-desc'
+  | 'relevance-desc'
+  ;
+
+export const sortOptions: Record<SortValue, IOptions> = {
   'mintOpensAt-desc': {
     label: "recently minted",
     value: "mintOpensAt-desc"
@@ -48,9 +54,33 @@ export const sortOptions: ISortOptions = {
     label: "search relevance",
     value: "relevance-desc",
   },
+  'createdAt-desc': {
+    label: "recent",
+    value: "createdAt-desc"
+  },
+  'createdAt-asc': {
+    label: "oldest",
+    value: "createdAt-desc"
+  }
 }
 
 export const sortOptionsCollections: IOptions[] = [
+  sortOptions['mintOpensAt-desc'],
+  sortOptions['mintOpensAt-asc'],
+  sortOptions['price-asc'],
+  sortOptions['price-desc'],
+  sortOptions['supply-asc'],
+  sortOptions['supply-desc'],
+  sortOptions['balance-asc'],
+  sortOptions['balance-desc'],
+]
+
+export const sortOptionsArticles: IOptions[] = [
+  sortOptions['createdAt-desc'],
+  sortOptions['createdAt-asc'],
+]
+
+export const sortOptionsGenerativeTokens: IOptions[] = [
   sortOptions['mintOpensAt-desc'],
   sortOptions['mintOpensAt-asc'],
   sortOptions['price-asc'],
