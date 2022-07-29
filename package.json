@@ -63,6 +63,7 @@
     "remark-toc": "^8.0.0",
     "remark-unwrap-images": "^3.0.1",
     "sass": "^1.42.1",
+    "scriptjs": "^2.5.9",
     "slate": "^0.81.0",
     "slate-history": "^0.66.0",
     "slate-react": "^0.81.0",
