@@ -31,7 +31,7 @@ import useInit from "../../../hooks/useInit";
 import { isUrlLocal } from "../../../utils/files";
 import useConfirmLeavingPage from "../../../hooks/useConfirmLeavingPage";
 import * as Yup from "yup";
-import { countWords } from "../../../utils/strings";
+import { countWords, tagsFromString } from "../../../utils/strings";
 import { UserContext } from "../../UserProvider"
 import { ErrorBlock } from "../../../components/Error/ErrorBlock"
 import { YupSplits } from "../../../utils/yup/splits"
@@ -123,8 +123,7 @@ export function ArticleEditor({
     setMedias(editor.getUploadedMedias() || []);
   }, [])
   const handleChangeTags = useCallback((e) => {
-    const newTags = e.target.value.split(',');
-    setFieldValue('tags', newTags);
+    setFieldValue("tags", tagsFromString(e.target.value))
   }, [setFieldValue])
 
   // shortcut to the thumbnail uri
