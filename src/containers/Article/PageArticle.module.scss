@@ -86,6 +86,27 @@
       margin-bottom: 0 !important;
     }
 
+    p,
+    ul,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    blockquote,
+    ul,
+    ol,
+    table {
+      &>code {
+        font-family: inherit;
+        background-color: var(--color-gray-vvlight);
+        border: 1px solid var(--color-gray-vlight);
+        padding: 0 4px;
+        border-radius: 4px;
+      }
+    }
+
     h1,
     h2,
     h3,
