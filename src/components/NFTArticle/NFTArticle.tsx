@@ -16,10 +16,11 @@ const _NftArticle = ({ markdown }: NftArticleProps) => {
     };
     getNFTArticle();
   }, [markdown])
+
   return (
-    <div>
+    <>
       {content}
-    </div>
+    </>
   );
 };
 

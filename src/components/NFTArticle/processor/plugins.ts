@@ -41,3 +41,19 @@ export function remarkFxHashCustom(): Transformer<Root, Root> {
     })
   }
 }
+
+export function mdastFlattenListItemParagraphs(): Transformer<Root, Root> {
+  return (ast) => {
+    visit<any, any>(ast, 'listItem', (listItem: any) => {
+      if (
+        listItem.children.length === 1 &&
+        listItem.children[0].type === 'paragraph'
+      ) {
+        listItem.children = listItem.children[0].children;
+      }
+      return listItem;
+    });
+    return ast;
+  };
+}
+

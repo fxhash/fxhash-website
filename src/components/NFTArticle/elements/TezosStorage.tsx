@@ -25,13 +25,14 @@ export function TezosStorage({
     }
     const Comp = TezosStorageFactory(pointer)
     const props = Comp.getPropsFromPointer(pointer)
+    /* eslint-disable react/display-name */
     return () => (
       <Comp {...props}/>
     )
   }, [contract, path])
 
   return (
-    <div className={cs(style.root)}>
+    <div className={cs(style.root, "tezos_storage")}>
       <TezosRenderer/>
     </div>
   )

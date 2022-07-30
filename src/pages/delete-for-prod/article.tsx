@@ -1,6 +1,4 @@
 import type { NextPage } from 'next'
-import  { useRef, useState, useEffect } from "react";
-import { Node, Descendant } from "slate"
 import layout from '../../styles/Layout.module.scss'
 import cs from 'classnames'
 import { Spacing } from '../../components/Layout/Spacing'
@@ -9,22 +7,13 @@ import Head from 'next/head'
 import { TitleHyphen } from '../../components/Layout/TitleHyphen'
 import path from "path";
 import fs from "fs"
+import { NftArticle } from "../../components/NFTArticle/NFTArticle";
 import { GetStaticProps } from "next";
-import {SlateEditor} from '../../components/NFTArticle/SlateEditor';
-import {getSlateEditorStateFromMarkdown, getMarkdownFromSlateEditorState} from '../../components/NFTArticle/processor';
-import { FxEditor } from '../../types/ArticleEditor/Editor';
 
 interface EditorPageProps {
-  initialEditorState: Descendant[]
+  markdown: string
 }
-const EditorPage: NextPage<EditorPageProps> = ({ initialEditorState }) => {
-  const editorStateRef = useRef<FxEditor>(null)
-
-  const handleClick = async () => {
-    const markdown = await getMarkdownFromSlateEditorState(editorStateRef.current!.children)
-    console.log(markdown)
-  }
-
+const EditorPage: NextPage<EditorPageProps> = ({ markdown }) => {
   return (
     <>
       <Head>
@@ -32,22 +21,21 @@ const EditorPage: NextPage<EditorPageProps> = ({ initialEditorState }) => {
         <meta key="og:title" property="og:title" content="fxhash — NFT article editor"/>
         <meta key="description" name="description" content="Experiment and test your NFT articles in the editor environment"/>
         <meta key="og:description" property="og:description" content="Experiment and test your NFT articles in the editor environment"/>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.0/dist/katex.min.css" crossOrigin="anonymous" />
+        <link rel="stylesheet" href="/highlight/dracula.css"/>
       </Head>
 
-      <button onClick={handleClick}>print markdown</button>
       <Spacing size="6x-large" sm="3x-large" />
+
       <section>
         <SectionHeader>
           <TitleHyphen>NFT article editor</TitleHyphen>
         </SectionHeader>
 
         <Spacing size="x-large"/>
+
         <main className={cs(layout['padding-big'])}>
-          <SlateEditor
-            ref={editorStateRef}
-            initialValue={initialEditorState}
-            onMediasUpdate={() => {}}
-          />
+          <NftArticle markdown={markdown} />
         </main>
       </section>
 
@@ -60,15 +48,12 @@ const EditorPage: NextPage<EditorPageProps> = ({ initialEditorState }) => {
 
 export default EditorPage
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
+export const getStaticProps: GetStaticProps<EditorPageProps> = async ({ params }) => {
   const filePath = path.join(process.cwd(), "src", "articles",`nft-article-test2.md`)
   const nftArticleMd = fs.readFileSync(filePath, 'utf8');
-  const res = await getSlateEditorStateFromMarkdown(nftArticleMd);
   return {
     props: {
-      initialEditorState: res?.editorState,
+      markdown: nftArticleMd,
     },
-    notFound: !res
   }
 }
-

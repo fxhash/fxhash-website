@@ -50,7 +50,7 @@ const _CardNftArticle = ({ article: { id, title, slug, thumbnailUri, description
             <div className={style.infos_header}>
               <UserBadge
                 hasLink
-                user={author}
+                user={author!}
                 size="regular"
                 className={cs(style.author)}
               />

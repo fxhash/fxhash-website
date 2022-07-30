@@ -1,6 +1,6 @@
 import { ArticleMetadata } from "../Metadata"
 import { Action } from "./Action"
-import { GenerativeToken } from "./GenerativeToken"
+import { GenerativeToken, GenTokFlag, GenTokPricing } from "./GenerativeToken"
 import { Split } from "./Split"
 import { User } from "./User"
 
@@ -51,4 +51,14 @@ export interface NFTArticle {
   royalties: number
   mintOpHash: string
   relatedArticles: NFTArticle[]
+}
+
+export interface NFTArticleFilters {
+  author_eq?: string
+  metadataLocked_eq?: string
+  editions_lte?: string
+  editions_gte?: string
+  royalties_lte?: string
+  royalties_gte?: string
+  searchQuery_eq?: string
 }

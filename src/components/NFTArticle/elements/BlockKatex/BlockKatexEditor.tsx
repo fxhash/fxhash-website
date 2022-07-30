@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
+import React, { memo, PropsWithChildren, useCallback, useEffect, useRef, useState } from 'react';
 import Slate, { Transforms } from 'slate';
 import style from "./BlockKatex.module.scss";
 import { ReactEditor, RenderElementProps, useSlateStatic, useSelected } from "slate-react";
@@ -8,11 +8,10 @@ import cs from "classnames";
 import useClickOutside from "../../../../hooks/useClickOutside";
 
 interface BlockKatexEditorProps {
-  slateAttributes: RenderElementProps["attributes"]
+  slateAttributes?: RenderElementProps["attributes"]
   slateElement: Slate.Element
-  children: any
 }
-const _BlockKatexEditor = ({ slateElement }: BlockKatexEditorProps) => {
+const _BlockKatexEditor = ({ slateElement }: PropsWithChildren<BlockKatexEditorProps>) => {
   const refTextArea = useRef<HTMLTextAreaElement>(null);
   const refContainer = useRef<HTMLDivElement>(null);
   const [isFocused, setIsFocused] = useState(false);
@@ -43,7 +42,7 @@ const _BlockKatexEditor = ({ slateElement }: BlockKatexEditorProps) => {
   }, !isFocused)
   
   useEffect(() => {
-    if(selected) {
+    if (selected && refTextArea.current) {
       const end = refTextArea.current.value.length;
       refTextArea.current.setSelectionRange(end, end);
       refTextArea.current.focus();
