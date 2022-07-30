@@ -52,8 +52,7 @@ export class InlineTypeChange implements AutoFormatChange {
     // retreive the matches based on usual markdown pattern, e.g.
     // __bold__, _italic_, etc.
     const matcher = RegExp(`(?<!\\${this.shortcut})\\${this.shortcut}(?!\\${this.shortcut}).+?\\${this.shortcut}`, 'g')
-     const matches = textBeforeCursor.match(matcher);
-     console.log(textBeforeCursor)
+    const matches = textBeforeCursor.match(matcher);
     if (!matches) return false;
     // We need to get a slate Point for the matched string inside the 
     // editor state. Since the text can be split up into multiple nodes

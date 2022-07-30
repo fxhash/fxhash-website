@@ -78,7 +78,7 @@ export interface IArticleBlockDefinition {
   buttonInstantiable?: boolean
   render: (props: RenderElementProps) => ReactNode
   hasUtilityWrapper: boolean
-  instanciateElement?: () => Element
+  instanciateElement?: (props?: any) => Element
   editAttributeComp?: TEditAttributeComp
   editAttributeWrapper?: TAttributesEditorWrapper
   // the definition can specify a function which can be called to output a
@@ -161,10 +161,10 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
       <p {...attributes}>{children}</p>
     ),
     hasUtilityWrapper: true,
-    instanciateElement: () => ({
+    instanciateElement: ({text=""}) => ({
       type: "paragraph",
       children: [{
-        text: ""
+        text, 
       }]
     }),
   },
@@ -191,11 +191,11 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
           }
     },
     hasUtilityWrapper: true,
-    instanciateElement: () => ({
+    instanciateElement: ({depth=1, text=""}) => ({
       type: "heading",
-      depth: 1,
+      depth,
       children: [{
-        text: ""
+        text
       }]
     }),
     editAttributeComp: HeadingAttributeSettings,
@@ -214,10 +214,10 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
     buttonInstantiable: true,
     render: BlockquoteElement,
     hasUtilityWrapper: true,
-    instanciateElement: () => ({
+    instanciateElement: ({text=""}) => ({
       type: "blockquote",
       children: [{
-        text: ""
+        text
       }]
     })
   },

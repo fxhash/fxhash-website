@@ -3,28 +3,33 @@ import { AutoFormatChangeType, ChangeData, AutoFormatChange } from './index';
 import { getTextFromBlockStartToCursor } from '../utils';
 import { getSlateEditorStateFromMarkdownSync } from '../../processor/getSlateEditorStateFromMarkdown';
 
-const LINK_MATCHER = new RegExp('((?<type>[.]*)s*\\[(?<text>.*)\\]s*[{(]*(?<attributes>.*)[)}]+)', 'gm');
 
 export class LinkChange implements AutoFormatChange {
   shortcut: string
   type: AutoFormatChangeType
   data?: ChangeData
+  trigger: string
 
   constructor(data?: ChangeData) {
     this.shortcut = 'link'
     if (data) this.data = data
     this.type = 'LinkChange'
+    this.trigger = ' '
   }
 
-  apply(editor: Editor): boolean {
+  getMarkdownFromCurrentCursorPosition(editor: Editor) {
     const textBeforeCursor = getTextFromBlockStartToCursor(editor);
-    const matchDirective = LINK_MATCHER;
-    const matches = matchDirective.exec(textBeforeCursor);
-    console.log(matches)
-    if (!matches) return false;
+    const matchLink = new RegExp('((?<type>[.]*)s*\\[(?<text>.*)\\]s*[{(]*(?<attributes>.*)[)}]+)', 'gm');
+    const matches = matchLink.exec(textBeforeCursor);
+    return matches?.[0];
+  }
+
+  apply(editor: Editor, text: string): boolean {
+    const isTrigger = text === this.trigger;
+    const markdownString = isTrigger ? this.getMarkdownFromCurrentCursorPosition(editor) : text;
+    if (!markdownString) return false;
     try {
-      const parsed = getSlateEditorStateFromMarkdownSync(matches[0])
-      console.log(parsed)
+      const parsed = getSlateEditorStateFromMarkdownSync(markdownString)
       if (!parsed) return false;
       const {editorState: [parsedNode]} = parsed;
       const linkNode = parsedNode?.children?.[0];
@@ -32,14 +37,16 @@ export class LinkChange implements AutoFormatChange {
       const [start] = Range.edges(editor.selection as Range);
       const charBefore = Editor.before(editor, start, {
 	unit: 'character',
-	distance: matches[0].length,
+	distance: markdownString.length,
       }) as Point;
-      Transforms.delete(editor, {
-	at: {
-	  anchor: charBefore,
-	  focus: start
-	}
-      })
+      if(isTrigger) {
+	Transforms.delete(editor, {
+	  at: {
+	    anchor: charBefore,
+	    focus: start
+	  }
+	})
+      }
       Transforms.insertNodes(
 	editor,
 	linkNode

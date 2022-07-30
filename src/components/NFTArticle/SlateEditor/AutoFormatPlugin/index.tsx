@@ -3,7 +3,7 @@ import { BlockTypeChange } from './BlockTypeChange'
 import { InlineTypeChange } from './InlineTypeChange'
 import { CustomDirectiveChange } from './CustomDirectiveChange'
 import { LinkChange } from './LinkChange'
-export type AutoFormatChangeType = "BlockTypeChange" | "InlineTypeChange" | "CustomDirectiveChange";
+export type AutoFormatChangeType = "BlockTypeChange" | "InlineTypeChange" | "CustomDirectiveChange" | "LinkChange";
 export type ChangeData = {[key: string]: number | string | boolean}
 
 export type AutoFormatChange = {
@@ -45,16 +45,16 @@ export const withAutoFormat = (editor: Editor) => {
   const { insertText } = editor;
   editor.insertText = text => {
     const { selection } = editor;
-    if (text === ' ' && selection && Range.isCollapsed(selection)) {
+    if (selection && Range.isCollapsed(selection)) {
       const handled = config.some(change =>  {
         if(change.type === 'BlockTypeChange') {
-          return (change as BlockTypeChange).apply(editor)
+          return (change as BlockTypeChange).apply(editor, text)
         } else if (change.type === 'InlineTypeChange') {
           return (change as InlineTypeChange).apply(editor)
         } else if(change.type === 'CustomDirectiveChange') {
-          return (change as CustomDirectiveChange).apply(editor)
+          return (change as CustomDirectiveChange).apply(editor, text)
         } else if(change.type === 'LinkChange') {
-          return (change as LinkChange).apply(editor)
+          return (change as LinkChange).apply(editor, text)
         }
         return false;
       });
