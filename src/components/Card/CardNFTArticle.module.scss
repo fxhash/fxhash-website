@@ -79,11 +79,34 @@
 }
 
 .draft_banner {
-  padding: 12px;
-  text-align: center;
   font-weight: bold;
   color: var(--color-white);
   background: var(--color-gray);
+  font-size: var(--font-size-small);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+  span {
+    display: block;
+    padding: 8px 12px;
+  }
+
+  button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    z-index: 100;
+    position: relative;
+    color: var(--color-white);
+    height: 32px;
+    padding: 0 10px;
+
+    &:hover {
+      color: var(--color-error);
+    }
+  }
 }
 
 .draft_container {
