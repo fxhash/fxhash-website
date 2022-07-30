@@ -1,7 +1,8 @@
-import { Range, Editor  } from 'slate'; 
+import { Range, Editor, Element, Node} from 'slate'; 
 import { BlockTypeChange } from './BlockTypeChange'
 import { InlineTypeChange } from './InlineTypeChange'
 import { CustomDirectiveChange } from './CustomDirectiveChange'
+import { LinkChange } from './LinkChange'
 export type AutoFormatChangeType = "BlockTypeChange" | "InlineTypeChange" | "CustomDirectiveChange";
 export type ChangeData = {[key: string]: number | string | boolean}
 
@@ -35,10 +36,13 @@ const config: AutoFormatChange[] = [
   new InlineTypeChange('*', {emphasis: true}), 
   new InlineTypeChange('`', {inlineCode: true}), 
   new CustomDirectiveChange('tezos-storage'), 
+  new CustomDirectiveChange('embed-media'), 
+  new CustomDirectiveChange('link'),
+  new LinkChange(), 
 ]
 
 export const withAutoFormat = (editor: Editor) => {
-  const {insertText } = editor;
+  const { insertText } = editor;
   editor.insertText = text => {
     const { selection } = editor;
     if (text === ' ' && selection && Range.isCollapsed(selection)) {
@@ -49,6 +53,8 @@ export const withAutoFormat = (editor: Editor) => {
           return (change as InlineTypeChange).apply(editor)
         } else if(change.type === 'CustomDirectiveChange') {
           return (change as CustomDirectiveChange).apply(editor)
+        } else if(change.type === 'LinkChange') {
+          return (change as LinkChange).apply(editor)
         }
         return false;
       });

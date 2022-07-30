@@ -48,7 +48,6 @@ export class InlineTypeChange implements AutoFormatChange {
    ): boolean => {
     const textBeforeCursor = getTextFromBlockStartToCursor(editor)
     const beforeTextWithSpace = `${textBeforeCursor} `
-    console.log('?', beforeTextWithSpace)
     if (!beforeTextWithSpace.endsWith(`${this.shortcut} `)) { return false }
     // retreive the matches based on usual markdown pattern, e.g.
     // __bold__, _italic_, etc.
