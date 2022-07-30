@@ -12,7 +12,7 @@ export function CodeElement({
 }: PropsWithChildren<Props>) {
   // rehype injects "language-js" as a classname, only way to get the lang
   const lang = useMemo(() => {
-    const L = className.split("-")[1]
+    const L = className?.split("-")[1] || null
     return getCodeEditorLang(L)
   }, [className])
 
