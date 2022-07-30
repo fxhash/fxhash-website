@@ -81,6 +81,32 @@
       @include awidth;
     }
 
+    pre {
+      margin-top: 2.5em !important;
+      margin-bottom: 0 !important;
+    }
+
+    p,
+    ul,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    blockquote,
+    ul,
+    ol,
+    table {
+      &>code {
+        font-family: inherit;
+        background-color: var(--color-gray-vvlight);
+        border: 1px solid var(--color-gray-vlight);
+        padding: 0 4px;
+        border-radius: 4px;
+      }
+    }
+
     h1,
     h2,
     h3,
@@ -109,6 +135,14 @@
     figcaption {
       font-family: "Noto Serif", serif;
       font-size: 1.2rem;
+    }
+
+    pre {
+      font-size: 14px;
+    }
+
+    .katex {
+      font-size: 1.4rem !important;
     }
 
     h1,

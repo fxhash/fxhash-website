@@ -1,5 +1,7 @@
-import React, { memo, useMemo } from 'react';
-import KaTeX from 'katex';
+import React, { memo, useMemo } from 'react'
+import KaTeX from 'katex'
+import style from "./BlockKatex.module.scss"
+import cs from "classnames"
 
 interface KatexProps {
   children: string
@@ -15,7 +17,11 @@ const _Katex = ({ children, inline }: KatexProps) => {
     return { __html: generatedHtml };
   }, [children, inline]);
   return (
-    <span contentEditable={false} dangerouslySetInnerHTML={html} />
+    <span
+      contentEditable={false}
+      dangerouslySetInnerHTML={html}
+      className={cs(style.render)}
+    />
   );
 };
 

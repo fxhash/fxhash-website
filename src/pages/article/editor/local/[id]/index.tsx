@@ -33,6 +33,7 @@ const ArticleEditorPage: NextPage = () => {
     <>
       <Head>
         <title>Draft {article && `- ${article.form.title}`}</title>
+        <link href="/highlight/prism-dracula.css" rel="stylesheet"/>
       </Head>
 
       <Spacing size="3x-large"/>

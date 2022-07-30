@@ -17,6 +17,7 @@ import { Split } from "../../../../../types/entities/Split";
 import { getAbsoluteUrl } from "../../../../../utils/host";
 import { ButtonsArticlePreview } from "../../../../../containers/Article/ButtonsArticlePreview";
 import { Spacing } from "../../../../../components/Layout/Spacing";
+import Head from "next/head";
 
 interface ArticlePreviewPageProps {
   origin: string
