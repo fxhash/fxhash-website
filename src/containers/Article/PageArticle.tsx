@@ -37,6 +37,7 @@ const _PageArticle = ({ article, originUrl, isPreview }: PageArticleProps) => {
         <meta key="og:type" property="og:type" content="website"/>
         <meta key="og:image" property="og:image" content={article.displayUri} />
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.0/dist/katex.min.css" crossOrigin="anonymous" />
+        <link href="/highlight/prism-dracula.css" rel="stylesheet"/>
         <link rel="stylesheet" href="/highlight/dracula.css"/>
       </Head>
 

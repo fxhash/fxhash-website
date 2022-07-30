@@ -19,6 +19,8 @@ import { TableEditor } from "../../elements/Table/TableEditor";
 import { TableCell } from "../../elements/Table/TableCell";
 import { SlateTable } from "../Plugins/SlateTablePlugin";
 import TezosStorageEditor from "./TezosStorageEditor";
+import { CodeAttributeSettings } from "./AttributeSettings/CodeAttributeSettings";
+import { CodeEditorElement } from "./CodeEditorElement";
 
 export enum EArticleBlocks {
   "embed-media" = "embed-media",
@@ -337,19 +339,16 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
     name: "Code",
     icon: <i className="fa-solid fa-code" aria-hidden/>,
     buttonInstantiable: true,
-    render: ({ attributes, element, children }) => (
-      <code {...attributes}>
-        {children}
-      </code>
-    ),
+    render: CodeEditorElement,
     hasUtilityWrapper: true,
     instanciateElement: () => ({
       type: "code",
-      language: "js",
+      lang: "js",
       children: [{
         text: ""
       }]
     }),
+    editAttributeComp: CodeAttributeSettings,
   },
   "yaml": {
     name: "YAML",
