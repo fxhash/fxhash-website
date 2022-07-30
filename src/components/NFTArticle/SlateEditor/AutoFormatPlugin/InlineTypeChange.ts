@@ -120,6 +120,10 @@ export class InlineTypeChange implements AutoFormatChange {
 	at: rangeAfter, 
       }
     )
+    Transforms.move(editor, {
+      distance: selectionAfterMatch.anchor.offset, 
+      unit: 'character'
+    })
     return true;
   }
 }
