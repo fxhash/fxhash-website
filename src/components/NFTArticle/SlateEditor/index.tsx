@@ -94,7 +94,7 @@ interface SlateEditorProps {
 }
 
 const INLINE_ELEMENTS = ['inlineMath', 'link']
-const VOID_ELEMENTS = ['inlineMath', 'math']
+const VOID_ELEMENTS = ['inlineMath', 'math', 'embed-media']
 
 export const SlateEditor = forwardRef<FxEditor, SlateEditorProps>(({
   initialValue,
