@@ -1,0 +1,14 @@
+.hidden {
+  display: none;
+}
+
+.code {
+  background-color: #111111;
+  color: white;
+  font-size: 14px;
+  border-radius: 4px;
+  overflow: hidden;
+  width: min(100%, 1200px);
+  margin-left: auto;
+  margin-right: auto;
+}
