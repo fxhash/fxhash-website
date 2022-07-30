@@ -9,18 +9,42 @@ interface ILanguageEntry {
   icon: ReactNode
 }
 
-const languages: ILanguageEntry[] = [
+export const codeEditorLangs: ILanguageEntry[] = [
   {
     name: "Javascript",
     value: "js",
     icon: <i className="fa-brands fa-square-js" aria-hidden />
   },
   {
+    name: "GLSL",
+    value: "glsl",
+    icon: <i className="fa-regular fa-file-code" aria-hidden />
+  },
+  {
+    name: "HTML",
+    value: "html",
+    icon: <i className="fa-regular fa-file-code" aria-hidden />
+  },
+  {
     name: "CSS",
     value: "css",
     icon: <i className="fa-brands fa-css3-alt" aria-hidden />
   },
+  {
+    name: "JSON",
+    value: "json",
+    icon: <i className="fa-solid fa-brackets-curly" aria-hidden />
+  },
+  {
+    name: "Java",
+    value: "java",
+    icon: <i className="fa-regular fa-file-code" aria-hidden />
+  },
 ]
+
+export function getCodeEditorLang(value: string): ILanguageEntry {
+  return codeEditorLangs.find(entry => entry.value === value) || codeEditorLangs[0]
+}
 
 export const CodeAttributeSettings: TEditAttributeComp = ({
   element,
@@ -28,7 +52,7 @@ export const CodeAttributeSettings: TEditAttributeComp = ({
 }) => {
   return (
     <ContextualMenuItems>
-      {languages.map((language) => (
+      {codeEditorLangs.map((language) => (
         <button
           key={language.value}
           type="button"

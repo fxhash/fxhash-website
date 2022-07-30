@@ -1,12 +1,19 @@
 import style from "./CodeEditorElement.module.scss"
 import cs from "classnames"
-import { PropsWithChildren, useCallback, useRef, useState } from "react"
+import { PropsWithChildren, useCallback, useMemo, useRef, useState } from "react"
 import Editor from "react-simple-code-editor"
 import { highlight, languages } from "prismjs"
-import 'prismjs/components/prism-clike'
-import 'prismjs/components/prism-javascript'
+import "prismjs/components/prism-clike"
+import "prismjs/components/prism-javascript"
+import "prismjs/components/prism-css"
+import "prismjs/components/prism-c"
+import "prismjs/components/prism-glsl"
+import "prismjs/components/prism-markdown"
+import "prismjs/components/prism-json"
+import "prismjs/components/prism-java"
 import { ReactEditor, useSlateStatic } from "slate-react"
 import { Node, Transforms } from "slate"
+import { getCodeEditorLang } from "./AttributeSettings/CodeAttributeSettings"
 
 interface Props {
   attributes: any
@@ -36,19 +43,27 @@ export function CodeEditorElement({
     })
   }
 
+  // the language entry corresponding to the value
+  const lang = useMemo(() => getCodeEditorLang(element.lang), [element.lang])
+
   return (
-    <div {...attributes}>
+    <div {...attributes} className={cs(style.root)}>
       <div className={cs(style.hidden)}>
         {children}
       </div>
-      <div contentEditable={false}>
+      <span contentEditable={false} className={cs(style.lang)}>
+        {lang.name}
+      </span>
+      <div
+        contentEditable={false}
+        className={cs(style.code)}
+      >
         <Editor
           // @ts-ignore
           highlight={code => highlight(code, languages[element.lang || "js"])}
           value={value}
           onValueChange={update}
-          className={cs(style.code)}
-          padding={10}
+          padding={15}
         />
       </div>
     </div>
