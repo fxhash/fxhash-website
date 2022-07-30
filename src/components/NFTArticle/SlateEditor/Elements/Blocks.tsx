@@ -164,7 +164,7 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
       <p {...attributes}>{children}</p>
     ),
     hasUtilityWrapper: true,
-    instanciateElement: ({text=""}) => ({
+    instanciateElement: ({text=""}: {text?: string} = {}) => ({
       type: "paragraph",
       children: [{
         text, 
@@ -194,7 +194,7 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
           }
     },
     hasUtilityWrapper: true,
-    instanciateElement: ({depth=1, text=""}) => ({
+    instanciateElement: ({depth=1, text=""}: {depth?: number, text?:string} = {}) => ({
       type: "heading",
       depth,
       children: [{
@@ -217,7 +217,7 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
     buttonInstantiable: true,
     render: BlockquoteElement,
     hasUtilityWrapper: true,
-    instanciateElement: ({text=""}) => ({
+    instanciateElement: ({text=""}: {text?: string} = {}) => ({
       type: "blockquote",
       children: [{
         text
