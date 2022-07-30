@@ -54,7 +54,10 @@ type TezosStorageElement = TypeElement & TezosStorageProps
 
 type CustomElement =  HeadlineElement | TezosStorageElement | ImageElement;
 
-export type TextFormatKey = 'strong' | 'emphasis' | 'inlineCode';
+
+
+export const ALL_TEXT_FORMATS  = ['strong', 'emphasis', 'inlineCode'] as const
+export type TextFormatKey = typeof ALL_TEXT_FORMATS[number]
 
 export type TextFormats = {[key in TextFormatKey]: boolean}
 
