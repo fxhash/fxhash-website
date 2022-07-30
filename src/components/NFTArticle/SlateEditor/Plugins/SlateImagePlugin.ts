@@ -76,21 +76,21 @@ export const withImages: EnhanceEditorWith = (
       // they get converted to a text node and moved after the <figure>
       let C: number = 0
       for (const [child, childPath] of Node.children(editor, path)) {
-	if (child.type === "figcaption") {
-	  C++
-	  if(C == 1) {
-	    // for the first node we want to remove any formatting from the string
-	    if (ALL_TEXT_FORMATS.some(format => isFormatActive(editor, format, {at: childPath}))) {
-	      Transforms.unsetNodes(
-		editor,
-		['emphasis', 'strong', 'inlineCode'],
-		{
-		  at: childPath,
-		  match: Text.isText
-		}
-	      );
-	    }
-	  }
+	      if (child.type === "figcaption") {
+          C++
+          if(C == 1) {
+            // for the first node we want to remove any formatting from the string
+            if (ALL_TEXT_FORMATS.some(format => isFormatActive(editor, format, {at: childPath}))) {
+              Transforms.unsetNodes(
+                editor,
+                ['emphasis', 'strong', 'inlineCode'],
+                {
+                  at: childPath,
+                  match: Text.isText
+                }
+              );
+            }
+          }
           // if this is not the first figcaption node
           if (C > 1) {
             // move the figcaption after the figure
@@ -103,13 +103,14 @@ export const withImages: EnhanceEditorWith = (
               at: childPath
             })
           }
-	} else {
-	  // any child that is not the first image in the figure moved after the figure
-	  if (!(child.type === 'image' && childPath[childPath.length - 1] === 0)) {
-	    Transforms.liftNodes(editor, {at: childPath})
-	    return;
-	  }
-	}
+        }
+        else {
+          // any child that is not the first image in the figure moved after the figure
+          if (!(child.type === 'image' && childPath[childPath.length - 1] === 0)) {
+            Transforms.liftNodes(editor, {at: childPath})
+            return;
+          }
+        }
       }
     }
 
