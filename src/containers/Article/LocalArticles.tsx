@@ -1,4 +1,4 @@
-import React, { memo, useContext, useMemo } from 'react';
+import React, { memo, useCallback, useContext, useMemo } from 'react';
 import style from "./LocalArticles.module.scss";
 import { ArticlesContext } from "../../context/Articles";
 import {
@@ -14,7 +14,7 @@ interface LocalArticlesProps {
   user: User,
 }
 const _LocalArticles = ({ classNameArticle, user }: LocalArticlesProps) => {
-  const { state: { articles } } = useContext(ArticlesContext)
+  const { state: { articles }, dispatch } = useContext(ArticlesContext)
   const localArticles = useMemo(() => Object
     .entries(articles)
     .reduce((acc, [uid, article]) => {
@@ -32,6 +32,14 @@ const _LocalArticles = ({ classNameArticle, user }: LocalArticlesProps) => {
       return acc;
     }, [] as NFTArticleInfos[])
     .sort((articleA, articleB) => articleA.createdAt > articleB.createdAt ? -1 : 1), [articles, user])
+
+  const deleteArticle = useCallback((id: string) => {
+    dispatch({
+      type: "delete",
+      payload: { id }
+    })
+  }, [dispatch])
+
   return (
     <>
       <div className={style.container_button}>
@@ -50,6 +58,7 @@ const _LocalArticles = ({ classNameArticle, user }: LocalArticlesProps) => {
           key={article.id}
           className={classNameArticle}
           article={article}
+          onDelete={deleteArticle}
           isDraft
         />
       )}
