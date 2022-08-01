@@ -18,6 +18,7 @@ import {
 import { withHistory } from "slate-history"
 import { TezosStorageProps } from "../elements/TezosStorage"
 import { withAutoFormat } from './AutoFormatPlugin/'
+import { withSoftBreak } from './Plugins/SoftBreakPlugin'
 import { withImages } from "./Plugins/SlateImagePlugin"
 import { ImageElement } from "../elements/ImageElement"
 import { onKeyDownHotkeyPlugin } from "./HotkeyPlugin/HotkeyPlugin"
@@ -115,6 +116,7 @@ export const SlateEditor = forwardRef<FxEditor, SlateEditorProps>(({
       { f: withImages },
       { f: withTables },
       { f: withConstraints },
+      { f: withSoftBreak }
     ]
     const enhancedEditor = withs.reduce((e, enhanceWith) => {
       return enhanceWith.f(e, ...Object.values(enhanceWith.args || {}));
