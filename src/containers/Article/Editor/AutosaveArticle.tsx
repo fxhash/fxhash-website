@@ -22,7 +22,6 @@ const _AutosaveArticle = ({ id, formValues, hasUnsavedMedias }: AutosaveArticleP
       type: 'save',
       payload: { id, articleForm: articleFormState }
     })
-    console.log(articleFormState?.body);
     setStatus('saved');
   }, [dispatch, id])
   const debouncedSave = useMemo<typeof handleSaveDraft>(() => debounce(handleSaveDraft, 800), [handleSaveDraft]);

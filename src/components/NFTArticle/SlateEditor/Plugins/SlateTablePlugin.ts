@@ -1,4 +1,4 @@
-import { Editor, Range, Point, Transforms, Path, Node, Element } from "slate";
+import { Editor, Range, Point, Transforms, Path, Node, Element, Text } from "slate";
 import { EnhanceEditorWith } from "../../../../types/ArticleEditor/Editor";
 import { getTextFromBlockStartToCursor, getTextFromCursorToBlockEnd, lookupElementByType } from "../utils";
 import React from "react";
@@ -111,24 +111,26 @@ export const SlateTable = {
     });
   },
   addCol(editor: Editor, tableElement: Element, atIndex?: number) {
-    const { cols } = SlateTable.getTableInfos(tableElement);
-    const pathTable = ReactEditor.findPath(editor, tableElement);
-    const indexCol = atIndex ?? cols - 1;
-    const align = [...tableElement.align];
-    align.splice(indexCol + 1, 0, 'left');
-    Transforms.setNodes(editor, { align }, {
-      at: pathTable
-    });
-    for (const tr of tableElement.children) {
-      const newCell = SlateTable.createTableCell();
-      const lastCellIdx = tr.children.length - 1
-      const nonOverflowingIdx = indexCol > lastCellIdx ? lastCellIdx : indexCol;
-      const prevCell = tr.children[nonOverflowingIdx];
-      const pathPrevCell = ReactEditor.findPath(editor, prevCell)
-      Transforms.insertNodes(editor, newCell, {
-        at: Path.next(pathPrevCell)
+    Editor.withoutNormalizing(editor,() => {
+      const { cols } = SlateTable.getTableInfos(tableElement);
+      const pathTable = ReactEditor.findPath(editor, tableElement);
+      const indexCol = atIndex ?? cols - 1;
+      const align = [...tableElement.align];
+      align.splice(indexCol + 1, 0, 'left');
+      Transforms.setNodes(editor, { align }, {
+        at: pathTable
       });
-    }
+      for (const tr of tableElement.children) {
+        const newCell = SlateTable.createTableCell();
+        const lastCellIdx = tr.children.length - 1
+        const nonOverflowingIdx = indexCol > lastCellIdx ? lastCellIdx : indexCol;
+        const prevCell = tr.children[nonOverflowingIdx];
+        const pathPrevCell = ReactEditor.findPath(editor, prevCell)
+        Transforms.insertNodes(editor, newCell, {
+          at: Path.next(pathPrevCell)
+        });
+      }
+    })
   },
   setColAlignment(editor: Editor, tableElement: Element, colIndex: number, newAlign: 'left'|'center'|'right') {
     const align = [...tableElement.align];
@@ -139,22 +141,24 @@ export const SlateTable = {
     });
   },
   deleteCol(editor: Editor, tableElement: Element, atIndex: number) {
-    const align = [...tableElement.align];
-    align.splice(atIndex, 1);
-    const pathTable = ReactEditor.findPath(editor, tableElement);
-    Transforms.setNodes(editor, { align }, {
-      at: pathTable
-    });
-    for (const tr of tableElement.children) {
-      if (atIndex > tr.children.length - 1) {
-        continue;
-      }
-      const cell = tr.children[atIndex];
-      const pathCell = ReactEditor.findPath(editor, cell);
-      Transforms.removeNodes(editor, {
-        at: pathCell
+    Editor.withoutNormalizing(editor, () => {
+      const align = [...tableElement.align];
+      align.splice(atIndex, 1);
+      const pathTable = ReactEditor.findPath(editor, tableElement);
+      Transforms.setNodes(editor, { align }, {
+        at: pathTable
       });
-    }
+      for (const tr of tableElement.children) {
+        if (atIndex > tr.children.length - 1) {
+          continue;
+        }
+        const cell = tr.children[atIndex];
+        const pathCell = ReactEditor.findPath(editor, cell);
+        Transforms.removeNodes(editor, {
+          at: pathCell
+        });
+      }
+    })
   },
   deleteRow(editor: Editor, tableElement: Element, atIndex: number): void {
     const row = tableElement.children[atIndex];
@@ -224,7 +228,7 @@ export const onKeyDownTablePlugin = (editor: Editor, event: React.KeyboardEvent)
  * Add utility functions to the editor to support manipulation of <table/>
  */
 export const withTables: EnhanceEditorWith = (editor) => {
-  const { deleteBackward, deleteForward, insertBreak } = editor
+  const { deleteBackward, deleteForward, insertBreak, insertSoftBreak, normalizeNode, deleteFragment } = editor
 
   /**
    * Deleting at the start of cell doesn't remove the cell
@@ -265,7 +269,7 @@ export const withTables: EnhanceEditorWith = (editor) => {
   /**
    * Insert line break in table
    */
-  editor.insertBreak = () => {
+  editor.insertSoftBreak = () => {
     const { selection } = editor
     if (selection) {
       const cell = lookupElementByType(editor, 'tableCell');
@@ -274,7 +278,64 @@ export const withTables: EnhanceEditorWith = (editor) => {
         return
       }
     }
+    insertSoftBreak()
+  }
+
+  /**
+   * Go to next row cell in table
+   */
+  editor.insertBreak = () => {
+    const { selection } = editor
+    if (selection) {
+      const cell = lookupElementByType(editor, 'tableCell');
+      if (cell) {
+        const [, pathCell] = cell
+        const pathNextRowCell = SlateTable.getNextRowCellPath(editor, pathCell, 'keep');
+        if (pathNextRowCell) {
+          const end = Editor.end(editor, pathNextRowCell);
+          Transforms.select(editor, end);
+        }
+        return
+      }
+    }
     insertBreak()
+  }
+
+
+  /**
+   * Always format table with the highest number of cols
+   */
+  editor.normalizeNode = entry => {
+    const [node, path] = entry
+
+    if (Element.isElement(node) && node.type === 'table') {
+      const { cols } = SlateTable.getTableInfos(node);
+      for (const [tr, trPath] of Node.children(editor, path)) {
+        let nbTrCells = tr.children.length;
+        if (nbTrCells < cols) {
+          while (nbTrCells < cols) {
+            const [last] = Node.children(editor, trPath, { reverse: true });
+            const [, lastPath] = last;
+            const newCell = Path.next(lastPath)
+            Transforms.insertNodes(editor, SlateTable.createTableCell(), {
+              at: newCell
+            });
+            nbTrCells++
+          }
+        }
+      }
+      if (node.align.length < cols) {
+        const newAlign = [...node.align];
+        for (let i = node.align.length; i < cols; i++) {
+          newAlign.push('left');
+        }
+        Transforms.setNodes(editor, { align: newAlign }, {
+          at: path
+        });
+      }
+    }
+
+    normalizeNode(entry)
   }
 
   return editor
