@@ -4,43 +4,42 @@ import { getTextFromBlockStartToCursor } from '../utils';
 import { getSlateEditorStateFromMarkdownSync } from '../../processor/getSlateEditorStateFromMarkdown';
 
 
-export class CustomDirectiveChange implements AutoFormatChange {
+export class LinkChange implements AutoFormatChange {
   shortcut: string
   type: AutoFormatChangeType
   data?: ChangeData
   trigger: string
 
-  constructor(shortcut:string, data?: ChangeData) {
-    this.shortcut = shortcut
+  constructor(data?: ChangeData) {
+    this.shortcut = 'link'
     if (data) this.data = data
-    this.type = 'CustomDirectiveChange'
+    this.type = 'LinkChange'
     this.trigger = ' '
   }
 
-  getMarkdownFromCurrentCursorPosition(editor: Editor):string|undefined {
+  getMarkdownFromCurrentCursorPosition(editor: Editor) {
     const textBeforeCursor = getTextFromBlockStartToCursor(editor);
-    const matchDirective = new RegExp('(:+(?<type>.*)\\[(?<text>.*)]{(?<attributes>.*)})\\s*$', 'mg')
-    const matches = matchDirective.exec(textBeforeCursor);
-    if (!matches) return null; 
-    const index =  textBeforeCursor.indexOf(matches[0])
-    return matches[0];
+    const matchLink = new RegExp('((?<type>[.]*)s*\\[(?<text>.*)\\]s*[{(]*(?<attributes>.*)[)}]+)', 'gm');
+    const matches = matchLink.exec(textBeforeCursor);
+    return matches?.[0];
   }
 
-  apply(editor: Editor, text:string): boolean {
+  apply(editor: Editor, text: string): boolean {
     const isTrigger = text === this.trigger;
     const markdownString = isTrigger ? this.getMarkdownFromCurrentCursorPosition(editor) : text;
     if (!markdownString) return false;
     try {
       const parsed = getSlateEditorStateFromMarkdownSync(markdownString)
-      if(!parsed) return false;
+      if (!parsed) return false;
       const {editorState: [parsedNode]} = parsed;
-      if (parsedNode.type !== this.shortcut) return false;
+      const linkNode = parsedNode?.children?.[0];
+      if (!linkNode || linkNode.type !== this.shortcut) return false;
       const [start] = Range.edges(editor.selection as Range);
       const charBefore = Editor.before(editor, start, {
 	unit: 'character',
 	distance: markdownString.length,
       }) as Point;
-      if (isTrigger) {
+      if(isTrigger) {
 	Transforms.delete(editor, {
 	  at: {
 	    anchor: charBefore,
@@ -50,7 +49,7 @@ export class CustomDirectiveChange implements AutoFormatChange {
       }
       Transforms.insertNodes(
 	editor,
-	parsedNode
+	linkNode
       )
       return true
     } catch {

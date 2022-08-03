@@ -1,8 +1,9 @@
-import { Range, Editor  } from 'slate'; 
+import { Range, Editor, Element, Node} from 'slate'; 
 import { BlockTypeChange } from './BlockTypeChange'
 import { InlineTypeChange } from './InlineTypeChange'
 import { CustomDirectiveChange } from './CustomDirectiveChange'
-export type AutoFormatChangeType = "BlockTypeChange" | "InlineTypeChange" | "CustomDirectiveChange";
+import { LinkChange } from './LinkChange'
+export type AutoFormatChangeType = "BlockTypeChange" | "InlineTypeChange" | "CustomDirectiveChange" | "LinkChange";
 export type ChangeData = {[key: string]: number | string | boolean}
 
 export type AutoFormatChange = {
@@ -13,7 +14,7 @@ export type AutoFormatChange = {
 
 function createChangeTypeHeading():AutoFormatChange[] {
   const changes = [];
-  for (let i = 1; i < 6; i++) {
+  for (let i = 1; i <= 6; i++) {
     changes.push(new BlockTypeChange(
       Array(i).fill('#').join(''), 
       {
@@ -28,23 +29,32 @@ function createChangeTypeHeading():AutoFormatChange[] {
 const config: AutoFormatChange[] = [ 
   ...createChangeTypeHeading(),
   new BlockTypeChange('p',   {type: 'paragraph',} ), 
+  new BlockTypeChange('>',   {type: 'blockquote',} ), 
   new InlineTypeChange('__', {strong: true}), 
+  new InlineTypeChange('\*\*', {strong: true}), 
   new InlineTypeChange('_', {emphasis: true}), 
+  new InlineTypeChange('\*', {emphasis: true}), 
+  new InlineTypeChange('`', {inlineCode: true}), 
   new CustomDirectiveChange('tezos-storage'), 
+  new CustomDirectiveChange('embed-media'), 
+  new CustomDirectiveChange('link'),
+  new LinkChange(), 
 ]
 
 export const withAutoFormat = (editor: Editor) => {
-  const {insertText } = editor;
+  const { insertText } = editor;
   editor.insertText = text => {
     const { selection } = editor;
-    if (text === ' ' && selection && Range.isCollapsed(selection)) {
+    if (selection && Range.isCollapsed(selection)) {
       const handled = config.some(change =>  {
         if(change.type === 'BlockTypeChange') {
-          return (change as BlockTypeChange).apply(editor)
+          return (change as BlockTypeChange).apply(editor, text)
         } else if (change.type === 'InlineTypeChange') {
           return (change as InlineTypeChange).apply(editor)
         } else if(change.type === 'CustomDirectiveChange') {
-          return (change as CustomDirectiveChange).apply(editor)
+          return (change as CustomDirectiveChange).apply(editor, text)
+        } else if(change.type === 'LinkChange') {
+          return (change as LinkChange).apply(editor, text)
         }
         return false;
       });

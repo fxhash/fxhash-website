@@ -80,8 +80,8 @@ export interface IArticleBlockDefinition {
   buttonInstantiable?: boolean
   render: (props: RenderElementProps) => ReactNode
   hasUtilityWrapper: boolean
+  instanciateElement?: (props?: any) => Element
   hideFloatingInlineMenu?: boolean
-  instanciateElement?: () => Element
   editAttributeComp?: TEditAttributeComp
   editAttributeWrapper?: TAttributesEditorWrapper
   // the definition can specify a function which can be called to output a
@@ -101,14 +101,13 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
     buttonInstantiable: true,
     render: ({ attributes, element, children }) => (
       <div className={style.article_wrapper_container}>
-        <Embed
+	{children}
+	<Embed
           slateElement={element}
           slateAttributes={attributes}
           href={element.href}
           editable
-        >
-          {children}
-        </Embed>
+        />
       </div>
     ),
     hasUtilityWrapper: true,
@@ -165,10 +164,10 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
       <p {...attributes}>{children}</p>
     ),
     hasUtilityWrapper: true,
-    instanciateElement: () => ({
+    instanciateElement: ({text=""}) => ({
       type: "paragraph",
       children: [{
-        text: ""
+        text, 
       }]
     }),
   },
@@ -195,11 +194,11 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
           }
     },
     hasUtilityWrapper: true,
-    instanciateElement: () => ({
+    instanciateElement: ({depth=1, text=""}) => ({
       type: "heading",
-      depth: 1,
+      depth,
       children: [{
-        text: ""
+        text
       }]
     }),
     editAttributeComp: HeadingAttributeSettings,
@@ -218,10 +217,10 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
     buttonInstantiable: true,
     render: BlockquoteElement,
     hasUtilityWrapper: true,
-    instanciateElement: () => ({
+    instanciateElement: ({text=""}) => ({
       type: "blockquote",
       children: [{
-        text: ""
+        text
       }]
     })
   },
