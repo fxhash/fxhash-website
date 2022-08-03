@@ -28,7 +28,8 @@ import { EntityBadge } from '../../../components/User/EntityBadge'
 import { TabsContainer } from '../../../components/Layout/TabsContainer'
 import { GenerativeListings } from '../../../containers/Marketplace/GenerativeListings'
 import { GenerativeOffers } from '../../../containers/Marketplace/GenerativeOffers'
-
+import { UserFlagBanner } from "../../../containers/User/FlagBanner"
+import { UserFlag } from "../../../types/entities/User"
 
 interface Props {
   token: GenerativeToken
@@ -83,7 +84,7 @@ const GenerativeTokenMarketplace: NextPage<Props> = ({ token }) => {
         <meta name="twitter:image" content={displayUrl || "https://www.fxhash.xyz/images/og/og1.jpg"}/>
       </Head>
 
-      <GenerativeFlagBanner token={token}/>
+      {[UserFlag.MALICIOUS, UserFlag.REVIEW, UserFlag.SUSPICIOUS].includes(token.author.flag) ? <UserFlagBanner user={token.author}/> : <GenerativeFlagBanner token={token}/>}
 
       <Spacing size="3x-large" />
 
