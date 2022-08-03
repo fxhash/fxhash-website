@@ -14,7 +14,7 @@ import {TextFormatButton} from './TextFormatButton'
 import {useClientEffect} from '../../../../utils/hookts'
 import { lookupElementAtSelection, lookupElementByType } from '../utils'
 import { LinkButton } from './LinkButton'
-import { BlockDefinitions } from '../Elements/Blocks'
+import { BlockDefinitions, EArticleBlocks } from '../Elements/Blocks'
 
 const FloatingInlineMenu = () => {
   const ref = useRef<HTMLDivElement>(null)
@@ -23,7 +23,7 @@ const FloatingInlineMenu = () => {
   const [overrideContent, setOverrideContent] = useState(null)
 
   const [elementUnderCursor] = lookupElementAtSelection(editor, editor.selection as Location) || []
-  const { hideFloatingInlineMenu } = BlockDefinitions[elementUnderCursor?.type] || {};
+  const { hideFloatingInlineMenu } = BlockDefinitions[elementUnderCursor?.type as any as EArticleBlocks] || {};
 
   const activeElement = lookupElementByType(editor, 'link') as NodeEntry;
 
