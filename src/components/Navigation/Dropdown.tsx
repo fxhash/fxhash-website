@@ -1,6 +1,6 @@
 import style from "./Dropdown.module.scss"
 import cs from "classnames"
-import { PropsWithChildren, useState } from "react"
+import { MouseEventHandler, PropsWithChildren, useCallback, useState } from "react"
 import { DropdownMenu } from "./DropdownMenu"
 import { useClientEffect } from "../../utils/hookts"
 
@@ -23,9 +23,11 @@ export function Dropdown({
 }: PropsWithChildren<Props>) {
   const [opened, setOpened] = useState<boolean>(false)
 
-  const toggle = () => {
+  const toggle: MouseEventHandler = useCallback((evt) => {
+    evt.preventDefault()
+    evt.stopPropagation()
     setOpened(!opened)
-  }
+  }, [opened])
 
   useClientEffect(() => {
     if (opened) {
