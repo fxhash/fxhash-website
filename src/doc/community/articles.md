@@ -26,7 +26,7 @@ We designed articles by thinking of them as interoperable modular blocks. Instea
 
 ## Tezos Storage Pointers
 
-We wanted articles to have the ability to point to NFTs stored in Tezos Smart Contracts. We decided to create a specification to point to any content in the storage of a smart contract, called [TODO!!!! Tezos Storage Pointer](). A Tezos Storage Pointer is a list of key-value properties which points to any data stored in a Smart Contract. This specification was primarly designed to point to some NFT metadata, but it can also be used for other purposes.
+We wanted articles to have the ability to point to NFTs stored in Tezos Smart Contracts. We decided to create a specification to point to any content in the storage of a smart contract, called [Tezos Storage Pointer](https://github.com/fxhash/specifications/blob/main/general/tezos-storage-pointers.md). A Tezos Storage Pointer is a list of key-value properties which points to any data stored in a Smart Contract. This specification was primarly designed to point to some NFT metadata, but it can also be used for other purposes.
 
 ## Extended markdown
 
@@ -48,7 +48,7 @@ Phasellus ut augue in quam facilisis congue consequat ut nibh. In pellentesque e
 
 By using this design, we let the implementation of a viewer to the discretion of application developers. Because these are declarative pointers to some blockchain content, the data can be fetched on-the-fly from the blockchain. This is **dynamic content**. Moreover, pointers are not limited to fxhash, which means that this framework can be used to describe any content on tezos.
 
-[TODO!!!! This is the document describing our markdown specification.]()
+[This is the document describing our markdown specification.](https://github.com/fxhash/specifications/blob/main/articles/fx-markdown.md)
 
 Our specification also supports:
 * embedding youtube, spotify and twitter
