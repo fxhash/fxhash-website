@@ -42,7 +42,7 @@ export const codeEditorLangs: ILanguageEntry[] = [
   },
 ]
 
-export function getCodeEditorLang(value: string): ILanguageEntry {
+export function getCodeEditorLang(value: string|null): ILanguageEntry {
   return codeEditorLangs.find(entry => entry.value === value) || codeEditorLangs[0]
 }
 
