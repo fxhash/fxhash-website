@@ -20,7 +20,7 @@ const ArticleEditorPage: NextPage = () => {
       type: 'save',
       payload: { id: localId!, articleForm: values }
     })
-    router.push(`/article/local/${localId}/preview`);
+    router.push(`/article/editor/local/${localId}/preview`);
   }, [dispatch, localId])
 
   useInit(() => {
