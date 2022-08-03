@@ -51,12 +51,12 @@ const ArticlePreviewPage: NextPage<ArticlePreviewPageProps> = ({ origin }) => {
         if (data?.users) {
           newArticle.royaltiesSplits = article.form.royaltiesSplit.reduce((acc, royalty) => {
             const royaltyUser = data.users.find(user => user.id === royalty.address);
-            if (royaltyUser) {
-              acc.push({
-                pct: royalty.pct,
-                user: royaltyUser,
-              });
-            }
+            acc.push({
+              pct: royalty.pct,
+              user: royaltyUser || {
+                id: royalty.address
+              } as User,
+            })
             return acc;
           }, [] as Split[])
         }
