@@ -1,0 +1,28 @@
+.container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+
+  &.align_left {
+    text-align: left;
+    align-items: flex-start;
+  }
+
+  &.align_center {
+    text-align: center;
+    align-items: center;
+  }
+
+  &.align_right {
+    text-align: right;
+    align-items: flex-end;
+  }
+}
+
+.error {
+  color: var(--color-error);
+  margin-bottom: 20px;
+  font-weight: bold;
+}
