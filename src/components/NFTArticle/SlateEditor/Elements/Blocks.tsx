@@ -5,7 +5,7 @@ import style from '../../NFTArticle.module.scss';
 import { FigureElement } from "../../elements/Figure"
 import { FigcaptionElement } from "../../elements/Figcaption"
 import { ImageElement } from "../../elements/ImageElement"
-import { Element, Node, Transforms } from "slate"
+import { Editor, Element, Node, Path, Transforms } from "slate"
 import { HeadingAttributeSettings } from "./AttributeSettings/HeadingAttributeSettings"
 import { ListAttributeSettings } from "./AttributeSettings/ListAttributeSettings"
 import { BlockquoteElement } from "../../elements/Blockquote"
@@ -21,6 +21,7 @@ import { SlateTable } from "../Plugins/SlateTablePlugin";
 import TezosStorageEditor from "./TezosStorageEditor";
 import { CodeAttributeSettings } from "./AttributeSettings/CodeAttributeSettings";
 import { CodeEditorElement } from "./CodeEditorElement";
+import { breakBehaviors, EBreakBehavior, InsertBreakFunction } from "../Plugins/SlateBreaksPlugin";
 
 export enum EArticleBlocks {
   "embed-media" = "embed-media",
@@ -92,6 +93,7 @@ export interface IArticleBlockDefinition {
   hideSettingsAfterUpdate?: boolean
   // prevent the auto-focus trigger when creating the element
   preventAutofocusTrigger?: boolean
+  insertBreakBehavior?: EBreakBehavior | InsertBreakFunction
 }
 
 export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> = {
@@ -194,6 +196,7 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
             break;
           }
     },
+    insertBreakBehavior: EBreakBehavior.insertParagraph,
     hasUtilityWrapper: true,
     instanciateElement: () => ({
       type: "heading",
@@ -263,6 +266,27 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
         {children}
       </li>
     ),
+    insertBreakBehavior: (editor, element) => {
+      const [nodeListItem, pathListItem] = element;
+      const text = Node.string(nodeListItem);
+      if (text) return true;
+      const parentList = Editor.above(editor, {
+        at: pathListItem,
+        match: n =>
+          !Editor.isEditor(n) && Element.isElement(n) && n.type === 'list',
+        mode: 'lowest',
+      })
+      if (!parentList) return true;
+      const [, pathParentList] = parentList
+      const next = Path.next(pathParentList);
+      Transforms.setNodes(editor, { type: 'paragraph'}, {
+        at: pathListItem,
+      })
+      Transforms.moveNodes(editor, {
+        at: pathListItem,
+        to: next,
+      })
+    },
     hasUtilityWrapper: false,
   },
   "table": {
@@ -453,7 +477,8 @@ export const DefaultBlockDefinition: IArticleBlockDefinition = {
   render: ({ attributes, element, children }) => (
     <div {...attributes}>{children}</div>
   ),
-  hasUtilityWrapper: false
+  hasUtilityWrapper: false,
+  insertBreakBehavior: EBreakBehavior.default,
 }
 
 /**

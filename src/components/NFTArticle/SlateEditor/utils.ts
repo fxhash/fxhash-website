@@ -78,7 +78,7 @@ export function lookupElementByType(editor:Editor, type: string | string[]): Nod
 
 export function lookupElementAtSelection(
   editor: Editor,
-  selection: Location
+  selection: Location | null
 ): NodeEntry | null {
   if (!selection) return null;
   const [, nodePath] = Editor.last(editor, selection)

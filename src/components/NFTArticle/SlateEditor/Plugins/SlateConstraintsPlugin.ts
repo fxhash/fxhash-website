@@ -1,7 +1,5 @@
-import { Transforms, Path } from "slate";
+import { Transforms } from "slate";
 import { EnhanceEditorWith } from "../../../../types/ArticleEditor/Editor";
-import { lookupElementByType } from "../utils";
-import editorConfig from "../editor.config";
 
 /**
  * Adds some constraints to the editor to prevent running into unprocesseable
@@ -52,26 +50,6 @@ export const withConstraints: EnhanceEditorWith = (editor) => {
     }
 
     normalizeNode(entry)
-  }
-
-  /**
-   * Insert paragraph after break
-   */
-  editor.insertBreak = () => {
-    const { selection } = editor;
-    if (selection) {
-      const element = lookupElementByType(editor, editorConfig.typesInsertParagraphAfterBreak);
-      if (element) {
-        const [, pathEl] = element;
-        const pathNextEl = Path.next(pathEl)
-        Transforms.splitNodes(editor, { always: true });
-        Transforms.setNodes(editor, { type: 'paragraph'}, {
-          at: pathNextEl,
-        });
-        return ;
-      }
-    }
-    insertBreak();
   }
 
   return editor
