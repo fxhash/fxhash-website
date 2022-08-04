@@ -23,8 +23,7 @@ const FloatingInlineMenu = () => {
   const [overrideContent, setOverrideContent] = useState(null)
 
   const [elementUnderCursor] = lookupElementAtSelection(editor, editor.selection as Location) || []
-  const elementType = elementUnderCursor?.type;
-  const { hideFloatingInlineMenu } = BlockDefinitions[elementType as EArticleBlocks] || {};
+  const { hideFloatingInlineMenu } = BlockDefinitions[elementUnderCursor?.type as any as EArticleBlocks] || {};
 
   const activeElement = lookupElementByType(editor, 'link') as NodeEntry;
 

@@ -1,6 +1,6 @@
 import React, { memo, useContext, useMemo } from 'react';
 import style from "./CardSmallNFTArticle.module.scss";
-import { NFTArticle } from "../../types/Article";
+import { NFTArticle } from "../../types/entities/Article";
 import Image from "next/image";
 import { ipfsGatewayUrl } from "../../services/Ipfs";
 import { SettingsContext } from "../../context/Theme";
@@ -31,7 +31,7 @@ const _CardSmallNftArticle = ({ article: { title, slug, description, thumbnailUr
         />
       </div>
       <div className={style.infos}>
-        <UserBadge user={author} size="regular" />
+        <UserBadge user={author!} size="regular" />
         <Link href={`/article/${slug}`}>
           <a className={style.title}>
             <h5>{title}</h5>

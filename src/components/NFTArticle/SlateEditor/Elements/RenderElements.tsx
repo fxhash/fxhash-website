@@ -45,14 +45,18 @@ function EditableElementWrapper({
       at: target
     })
     setShowAddBlock(false)
-    // in order to retrieve the DOMNode and restore
-    // the selection correctly, we have to wait
-    setTimeout(() => {
-      ReactEditor.focus(editor)
-      const path = ReactEditor.findPath(editor, element)
-      const [, lastLeafPath] = Node.last(editor, path);
-      Transforms.select(editor, lastLeafPath)
-    })
+    // focus the block except if the definition says otherwise
+    const definition = getArticleBlockDefinition(element.type)
+    if (!definition || !definition.preventAutofocusTrigger) {
+      // in order to retrieve the DOMNode and restore
+      // the selection correctly, we have to wait
+      setTimeout(() => {
+        ReactEditor.focus(editor)
+        const path = ReactEditor.findPath(editor, element)
+        const [, lastLeafPath] = Node.last(editor, path);
+        Transforms.select(editor, lastLeafPath)
+      })
+    }
   }
 
   const deleteNode = () => {

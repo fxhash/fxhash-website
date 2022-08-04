@@ -3,6 +3,7 @@ import ReactTextareaAutosize from "react-textarea-autosize"
 import { Transforms } from "slate"
 import { ReactEditor, useFocused, useSelected, useSlateStatic } from "slate-react"
 import style from "./ImageElement.module.scss"
+import editorStyle from "../SlateEditor/Utils/EditorStyles.module.scss"
 import cs from "classnames"
 import { BlockParamsModal } from "../SlateEditor/Utils/BlockParamsModal"
 import { ImageAttributeSettings } from "../SlateEditor/Elements/AttributeSettings/ImageAttributeSettings"
@@ -43,7 +44,7 @@ export function ImageElement({
           ):(
             <button
               type="button"
-              className={cs(style.import_image)}
+              className={cs(editorStyle.import_btn)}
               onClick={(event) => {
                 setShowAddImage(true)
                 event.preventDefault()

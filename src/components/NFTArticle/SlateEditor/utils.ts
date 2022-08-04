@@ -79,7 +79,6 @@ export function lookupElementAtSelection(
   return Editor.parent(editor, nodePath)
 }
 
-
 export function useHotkey(hotkey:string|undefined, handler:() => void, skip?: boolean|null) {
   useEffect(() => {
     if (!hotkey || skip) return;

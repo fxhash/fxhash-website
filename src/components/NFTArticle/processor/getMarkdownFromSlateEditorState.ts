@@ -13,6 +13,7 @@ function convertSlateLeafDirectiveToMarkdown(
   node: any,
 ) {
   const { children, type, ...attributes} = node
+
   return {
     type: 'leafDirective',
     name: type,
@@ -69,25 +70,55 @@ const slateToRemarkTransformerOverrides: OverridedSlateBuilders = {
 }
 export default async function getMarkdownFromSlateEditorState(slate: Node[] ) {
   try {
-    const markdown = await new Promise((resolve) => {
-      const processor = unified()
-        .use(remarkMath)
-        .use(remarkGfm)
-        .use(remarkDirective)
-        .use(remarkUnwrapImages)
-        .use(remarkFxHashCustom)
-        .use(slateToRemark, {
-          overrides: slateToRemarkTransformerOverrides,
-        })
-        .use(stringify)
-      const ast = processor.runSync({
-        type: "root",
-        children: slate,
+    const processor = unified()
+      .use(remarkMath)
+      .use(remarkGfm)
+      .use(remarkDirective)
+      .use(remarkUnwrapImages)
+      .use(remarkFxHashCustom)
+      .use(slateToRemark, {
+        overrides: slateToRemarkTransformerOverrides,
       })
-      const text = processor.stringify(ast)
-      resolve(text)
+      .use(stringify)
+    const ast = await processor.run({
+      type: "root",
+      children: slate,
     })
-    return markdown
+    const text = processor.stringify(ast)
+
+    // with the current implementation, the remarkDirective middleware is not
+    // properly transforming the empty string attribute value
+    // in: { "contract": "erhrthrthrth", "wrong": "" }
+    // out: ::dir{contract="erhrthrthrth" wrong}
+    // expected: ::dir{contract="erhrthrthrth" wrong=""}
+    // one fix would be to fork the remarkDirective plugin (and eventually the
+    // mdast-util-directive library) to update this behavior, here I believe:
+    // https://github.com/syntax-tree/mdast-util-directive/blob/ca7d8113382727154649cb6bb061d3b4a5282d06/index.js#L351
+    // * fix: regex this fucker
+
+    const directiveAttributesFixed = text.replaceAll(
+      // matches tezos-storage directives & captures the alt text & the attributes
+      /::tezos-storage\[([^\]]*)\]{([^}]*)}/g, 
+      (match, ...captures) => {
+        const alt = captures[0]
+        const attributes: string = captures[1]
+        if (attributes) {
+          // replace the atributes not followed by an equal, add equality
+          const replaced = attributes.replaceAll(
+            /([a-z_A-Z0-9]+)(\s|$)/g,
+            (_, attribute) => {
+              return `${attribute}=""`
+            }
+          )
+          return `::tezos-storage[${alt}]{${replaced}}`
+        }
+        else {
+          return match
+        }
+      }
+    )
+
+    return directiveAttributesFixed
   }
   catch(e) {
     console.error(e)

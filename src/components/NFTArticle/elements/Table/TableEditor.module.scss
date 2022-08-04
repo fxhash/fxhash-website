@@ -43,15 +43,16 @@
 
 .table {
   width: 100%;
-  border: 2px solid var(--color-black);
+  border: 2px solid var(--color-border);
   background-color: var(--color-white);
   border-collapse: collapse;
   table-layout: fixed;
+  font-size: var(--font-size-small);
 
   th,
   td {
     padding: $spacing-small;
-    border: 2px solid var(--color-black);
+    border: 2px solid var(--color-border);
   }
 }
 

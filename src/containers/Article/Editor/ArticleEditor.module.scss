@@ -1,6 +1,7 @@
 .field {
   margin-top: 2em;
 }
+
 .field_error {
   left: 0;
   right: 0;
@@ -9,6 +10,7 @@
   max-width: 900px;
   margin: auto;
 }
+
 .errors_list {
   white-space: pre-line;
 }
@@ -51,8 +53,9 @@
 
 .input_abstract {
   width: min(900px, 100%);
-  font-size: var(--font-size-regular);
   line-height: 166%;
+  font-family: "Noto Serif", serif !important;
+  font-size: 1.2rem;
 }
 
 .input_caption {
@@ -61,6 +64,7 @@
   margin: 0 auto;
   margin-top: 8px;
   font-size: var(--font-size-small);
+  font-family: "Noto Serif", serif !important;
   font-weight: bold;
 
   &::placeholder {

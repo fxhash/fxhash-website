@@ -53,7 +53,7 @@ These projects are welcomed on fxhash but must be categorised using the `Image C
 
 ## What is not acceptable
 
-- Projects that are simply a collection generated static image
+- Projects that are simply a collection of generated static images
 - Projects that are layered multiple static images on top of each other but not categorised appropriately using the `Image Composition` category.
 - Projects that involve static images with javascript being used to manipulate the image further but not described as such in the project description.
 
@@ -72,7 +72,7 @@ The scheduling feature is provided as a means to refresh your project's settings
 
 If you're unsure of whether you meet these requirements and want to reschedule your token, please reach out to @fxhash team on Discord.
 
-Abuse of the reshcheduling system will result in the moderation of your token, repeated abuses will result in your profile being moderated.
+Abuse of the rescheduling system will result in the moderation of your token, repeated abuses will result in your profile being moderated.
 
 ## Last but not least
 

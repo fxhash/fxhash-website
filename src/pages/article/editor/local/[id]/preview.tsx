@@ -17,6 +17,7 @@ import { Split } from "../../../../../types/entities/Split";
 import { getAbsoluteUrl } from "../../../../../utils/host";
 import { ButtonsArticlePreview } from "../../../../../containers/Article/ButtonsArticlePreview";
 import { Spacing } from "../../../../../components/Layout/Spacing";
+import Head from "next/head";
 
 interface ArticlePreviewPageProps {
   origin: string
@@ -50,12 +51,12 @@ const ArticlePreviewPage: NextPage<ArticlePreviewPageProps> = ({ origin }) => {
         if (data?.users) {
           newArticle.royaltiesSplits = article.form.royaltiesSplit.reduce((acc, royalty) => {
             const royaltyUser = data.users.find(user => user.id === royalty.address);
-            if (royaltyUser) {
-              acc.push({
-                pct: royalty.pct,
-                user: royaltyUser,
-              });
-            }
+            acc.push({
+              pct: royalty.pct,
+              user: royaltyUser || {
+                id: royalty.address
+              } as User,
+            })
             return acc;
           }, [] as Split[])
         }

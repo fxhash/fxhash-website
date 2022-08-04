@@ -1,7 +1,6 @@
 import { FunctionComponent, ReactNode } from "react"
 import { RenderElementProps } from "slate-react"
 import Embed from "../../elements/Embed/Embed"
-import TezosStorage from "../../elements/TezosStorage"
 import style from '../../NFTArticle.module.scss';
 import { FigureElement } from "../../elements/Figure"
 import { FigcaptionElement } from "../../elements/Figcaption"
@@ -14,10 +13,14 @@ import { ImageAttributeSettings } from "./AttributeSettings/ImageAttributeSettin
 import { TAttributesEditorWrapper } from "../../../../types/ArticleEditor/ArticleEditorBlocks"
 import { BlockParamsModal } from "../Utils/BlockParamsModal"
 import { TEditNodeFnFactory } from "../../../../types/ArticleEditor/Transforms"
+import { TezosStorageSettings } from "./AttributeSettings/TezosStorageSettings"
 import { BlockKatexEditor } from "../../elements/BlockKatex/BlockKatexEditor";
 import { TableEditor } from "../../elements/Table/TableEditor";
 import { TableCell } from "../../elements/Table/TableCell";
 import { SlateTable } from "../Plugins/SlateTablePlugin";
+import TezosStorageEditor from "./TezosStorageEditor";
+import { CodeAttributeSettings } from "./AttributeSettings/CodeAttributeSettings";
+import { CodeEditorElement } from "./CodeEditorElement";
 
 export enum EArticleBlocks {
   "embed-media" = "embed-media",
@@ -87,6 +90,8 @@ export interface IArticleBlockDefinition {
   onEditNodeFactory?: TEditNodeFnFactory
   // should the settings menu be hidden after node is update
   hideSettingsAfterUpdate?: boolean
+  // prevent the auto-focus trigger when creating the element
+  preventAutofocusTrigger?: boolean
 }
 
 export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> = {
@@ -113,36 +118,44 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
       children: [{
         text: ""
       }],
-    })
+    }),
+    preventAutofocusTrigger: true,
   },
   "tezos-storage": {
     name: "Tezos content",
     icon: <i className="fa-solid fa-hexagon-vertical-nft" aria-hidden/>,
     buttonInstantiable: true,
     render: ({ attributes, element, children }) => (
-      <TezosStorage
+      <TezosStorageEditor
         {...attributes}
-        pKey={element.pKey}
-        address={element.address}
-        metadataSpec={element.metadataSpec}
-        bigmap={element.bigmap}
-        value={element.value}
+        element={element}
+        contract={element.contract}
+        path={element.path}
+        storage_type={element.storage_type}
+        spec={element.spec}
+        data_spec={element.data_spec}
+        value_path={element.value_path}
       >
         {children}
-      </TezosStorage>
+      </TezosStorageEditor>
     ),
     hasUtilityWrapper: true,
     instanciateElement: () => ({
       type: "tezos-storage",
-      pKey: "",
-      address: "",
-      metadataSpec: "",
-      bigmap: "",
-      value: "",
+      contract: undefined,
+      path: undefined,
+      storage_type: undefined,
+      spec: undefined,
+      data_spec: undefined,
+      value_path: undefined,
       children: [{
         text: ""
       }]
-    })
+    }),
+    editAttributeComp: TezosStorageSettings,
+    editAttributeWrapper: BlockParamsModal,
+    hideSettingsAfterUpdate: true,
+    preventAutofocusTrigger: true,
   },
   "paragraph": {
     name: "Paragraph",
@@ -227,6 +240,7 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
     instanciateElement: () => ({
       type: "list",
       ordered: false,
+      spread: false,
       children: [{
         type: "listItem",
         children: [{
@@ -262,6 +276,7 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
     ),
     hasUtilityWrapper: true,
     instanciateElement: () => SlateTable.createTable(2, 2),
+    preventAutofocusTrigger: true,
   },
   "tableRow": {
     name: "Table row",
@@ -308,7 +323,7 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
     buttonInstantiable: true,
     render: ({ attributes, element, children }) => (
       <div className={style.article_wrapper_container} {...attributes}>
-	{children}
+	      {children}
         <BlockKatexEditor slateElement={element}/>
       </div>
     ),
@@ -325,19 +340,16 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
     name: "Code",
     icon: <i className="fa-solid fa-code" aria-hidden/>,
     buttonInstantiable: true,
-    render: ({ attributes, element, children }) => (
-      <code {...attributes}>
-        {children}
-      </code>
-    ),
+    render: CodeEditorElement,
     hasUtilityWrapper: true,
     instanciateElement: () => ({
       type: "code",
-      language: "js",
+      lang: "js",
       children: [{
         text: ""
       }]
     }),
+    editAttributeComp: CodeAttributeSettings,
   },
   "yaml": {
     name: "YAML",
@@ -418,6 +430,7 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
       }
     },
     hideSettingsAfterUpdate: true,
+    preventAutofocusTrigger: true,
   },
   "figcaption": {
     name: "Caption",

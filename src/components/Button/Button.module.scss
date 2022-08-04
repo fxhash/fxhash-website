@@ -164,7 +164,8 @@
 .color-transparent {
   background-color: transparent;
   color: var(--color-black) !important;
-  box-shadow: 0px 2px 8px -4px rgba(0, 0, 0, 0.3);
+  // box-shadow: 0px 2px 8px -4px rgba(0, 0, 0, 0.3);
+  box-shadow: none;
 
   &.size-small {
     padding-left: 8px !important;
@@ -173,7 +174,8 @@
 
   &:hover {
     color: var(--color-secondary) !important;
-    box-shadow: 0px 2px 12px -4px rgba(0, 0, 0, 0.3);
+    box-shadow: none;
+    // box-shadow: 0px 2px 12px -4px rgba(0, 0, 0, 0.3);
     border-color: transparent;
   }
 

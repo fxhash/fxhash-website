@@ -108,6 +108,23 @@ export const Qu_genTokenIterations = gql`
   }
 `
 
+export const Qu_genTokenAllIterations = gql`
+  query GenerativeTokenIterations(
+    $id: Float!
+  ) {
+    generativeToken(id: $id) {
+      id
+      entireCollection {
+        id
+        version
+        iteration
+        name
+        metadata
+      }
+    }
+  }
+`
+
 export const Qu_genTokenFeatures = gql`
   query GenerativeTokenFeatures($id: Float) {
     generativeToken(id: $id) {
@@ -175,6 +192,29 @@ export const Qu_genTokOffers = gql`
           }
         }
       }
+    }
+  }
+`
+
+export const Qu_searchGenTok = gql`
+  ${Frag_GenAuthor}
+
+  query SearchGenerativeToken(
+    $skip: Int,
+    $take: Int,
+    $sort: GenerativeSortInput,
+    $filters: GenerativeTokenFilter
+  ) {
+    generativeTokens(
+      skip: $skip,
+      take: $take, 
+      sort: $sort, 
+      filters: $filters
+    ) {
+      id
+      name
+      thumbnailUri
+      ...Author
     }
   }
 `
