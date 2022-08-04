@@ -3,7 +3,6 @@ import React, {
   forwardRef,
   KeyboardEvent,
   useCallback,
-  useEffect,
   useImperativeHandle,
   useMemo,
   useState

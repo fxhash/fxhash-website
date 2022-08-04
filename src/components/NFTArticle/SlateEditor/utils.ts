@@ -1,4 +1,4 @@
-import { Range, Editor, Text, Transforms, Element, NodeEntry, Location } from 'slate'; 
+import { Range, Editor, Text, Transforms, Element, NodeEntry, Location } from 'slate';
 
 export function getRangeFromBlockStartToCursor(editor: Editor): Range {
   const { anchor } = editor.selection as Range;
@@ -64,10 +64,14 @@ export function toggleFormat(editor: Editor, format: string): void {
   )
 }
 
-export function lookupElementByType(editor:Editor, type: string): NodeEntry {
+const isTypeInArray = (type: string, typesToCheck: string[]) => typesToCheck.indexOf(type) > -1;
+const isTypeEqual = (type: string, typeToCheck: string) => type === typeToCheck;
+export function lookupElementByType(editor:Editor, type: string | string[]): NodeEntry {
+  const checkType = Array.isArray(type) ? isTypeInArray : isTypeEqual
+
   const [element] = Editor.nodes(editor, {
     match: n =>
-      !Editor.isEditor(n) && Element.isElement(n) && n.type === type,
+      !Editor.isEditor(n) && Element.isElement(n) && checkType(n.type, type as any),
   })
   return element
 }
