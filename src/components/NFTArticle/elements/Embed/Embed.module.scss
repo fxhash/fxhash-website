@@ -35,3 +35,12 @@ p.not_found {
     height: 100%;
   }
 }
+
+.twitter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.twitter_loading {
+  margin-top: 16px;
+}

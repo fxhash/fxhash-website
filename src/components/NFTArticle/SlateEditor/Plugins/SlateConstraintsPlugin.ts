@@ -23,6 +23,32 @@ export const withConstraints: EnhanceEditorWith = (editor) => {
       }
     }
 
+    // make sure that the code node has only 1 child
+    if (node.type === "code") {
+      // if the node has less than 1 child, insert a text node
+      if (!node.children || node.children.length === 0) {
+        Transforms.insertNodes(
+          editor, {
+            text: ""
+          }, {
+            at: path
+          }
+        )
+      }
+      // if the node has more than 1 child or children is not text, force text
+      else if (node.children.length > 1 || node.children[0].type) {
+        Transforms.setNodes(
+          editor, {
+            children: [{
+              text: "",
+            }]
+          }, {
+            at: path
+          }
+        )
+      }
+    }
+
     normalizeNode(entry)
   }
 

@@ -1,4 +1,4 @@
-import React, { memo, useContext, useMemo } from 'react';
+import React, { memo, MouseEventHandler, useCallback, useContext, useMemo } from 'react';
 import style from "./CardNFTArticle.module.scss";
 import Image from "next/image";
 import { NFTArticleInfos } from "../../types/entities/Article";
@@ -11,17 +11,42 @@ import Link from 'next/link';
 import { Tags } from '../Tags/Tags';
 
 interface CardNftArticleProps {
-  className?: string,
-  imagePriority?: boolean,
-  isDraft?: boolean,
+  className?: string
+  imagePriority?: boolean
+  isDraft?: boolean
   article: NFTArticleInfos
+  onDelete?: (id: string) => void
 }
 
-const _CardNftArticle = ({ article: { id, title, slug, thumbnailUri, description, tags, author, createdAt }, isDraft, imagePriority, className }: CardNftArticleProps) => {
+const _CardNftArticle = ({ 
+  article: { 
+    id,
+    title,
+    slug,
+    thumbnailUri,
+    description,
+    tags,
+    author,
+    createdAt 
+  },
+  isDraft,
+  imagePriority,
+  onDelete,
+  className 
+}: CardNftArticleProps) => {
   const settings = useContext(SettingsContext)
   const thumbnailUrl = useMemo(() => thumbnailUri && ipfsGatewayUrl(thumbnailUri), [thumbnailUri])
   const dateCreatedAt = useMemo(() => new Date(createdAt), [createdAt]);
   const urlArticle = isDraft ? `/article/editor/local/${id}` : `/article/${slug}`;
+
+  const onClickDelete = useCallback<MouseEventHandler>((event) => {
+    event.preventDefault()
+    event.stopPropagation()
+    if (window.confirm?.("Do you really want to delete this article ? It will be removed from your browser memory.")) {
+      onDelete?.(id as string)
+    }
+  }, [])
+
   return (
     <div className={cs(style.container, className, {
       [style.hover_effect]: settings.hoverEffectCard,
@@ -30,7 +55,17 @@ const _CardNftArticle = ({ article: { id, title, slug, thumbnailUri, description
       <Link href={urlArticle}>
         <a className={cs(style.link_wrapper)}/>
       </Link>
-      {isDraft && <div className={style.draft_banner}>DRAFT (saved locally)</div>}
+      {isDraft && (
+        <div className={style.draft_banner}>
+          <span>DRAFT (saved locally)</span>
+          <button
+            type="button"
+            onClick={onClickDelete}
+          >
+            <i className="fa-solid fa-trash" aria-hidden/>
+          </button>
+        </div>
+      )}
       <div className={style.content}>
         <div className={cs(style['img-wrapper'], {
           [style['draft_img-wrapper']]: isDraft,

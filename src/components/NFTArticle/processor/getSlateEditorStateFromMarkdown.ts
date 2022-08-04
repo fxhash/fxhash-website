@@ -7,7 +7,7 @@ import remarkUnwrapImages from "remark-unwrap-images";
 import remarkDirective from "remark-directive";
 import { remarkToSlate } from "remark-slate-transformer";
 import { OverridedMdastBuilders } from "remark-slate-transformer/lib/transformers/mdast-to-slate";
-import { remarkFxHashCustom } from "./plugins";
+import { mdastFlattenListItemParagraphs, remarkFxHashCustom } from "./plugins";
 import remarkGfm from "remark-gfm";
 
 interface DirectiveNodeProps { [key: string]: any }
@@ -75,6 +75,7 @@ export default async function getSlateEditorStateFromMarkdown(markdown: string):
     const matterResult = matter(markdown)
     const processed = await unified()
       .use(remarkParse)
+      .use(mdastFlattenListItemParagraphs)
       .use(remarkMath)
       .use(remarkGfm)
       .use(remarkUnwrapImages)

@@ -16,12 +16,27 @@
   .description {
     text-align: left;
     margin-top: $spacing-x-large;
+    font-family: "Noto Serif", serif;
+    font-size: 1.2rem;
   }
 
   .thumbnail {
-    margin: auto;
     margin-top: $spacing-x-large;
     max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+
+    img {
+      max-width: 100%;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    figcaption {
+      font-family: "Noto Serif", serif;
+      font-size: var(--font-size-small);
+      font-weight: bold;
+    }
   }
 
   .date {
@@ -66,6 +81,32 @@
       @include awidth;
     }
 
+    pre {
+      margin-top: 2.5em !important;
+      margin-bottom: 0 !important;
+    }
+
+    p,
+    ul,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    blockquote,
+    ul,
+    ol,
+    table {
+      &>code {
+        font-family: inherit;
+        background-color: var(--color-gray-vvlight);
+        border: 1px solid var(--color-gray-vlight);
+        padding: 0 4px;
+        border-radius: 4px;
+      }
+    }
+
     h1,
     h2,
     h3,
@@ -74,6 +115,34 @@
     h6,
     figure {
       margin-top: 2em !important;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      font-family: "Fira Code", sans-serif;
+      line-height: 150%;
+    }
+
+    p,
+    ul,
+    ol,
+    blockquote,
+    table,
+    figcaption {
+      font-family: "Noto Serif", serif;
+      font-size: 1.2rem;
+    }
+
+    pre {
+      font-size: 14px;
+    }
+
+    .katex {
+      font-size: 1.4rem !important;
     }
 
     h1,
@@ -122,7 +191,7 @@
       width: min(100%, 1400px);
       table-layout: fixed;
       border-collapse: collapse;
-      font-size: var(--font-size-small);
+      font-size: 1rem;
       margin-left: auto;
       margin-right: auto;
 
@@ -198,10 +267,6 @@
 }
 
 @media (max-width: $breakpoint-sm) {
-  .infos {
-    margin-top: $spacing-2x-large;
-  }
-
   .header {
     text-align: left;
   }

@@ -35,8 +35,6 @@ const ExploreRevealFeed: NextPage = () => {
 
         <ExploreTabs active={2} />
 
-        <Spacing size="x-large"/>
-
         <main className={cs(layout['padding-big'])}>
           <ExploreArticles />
         </main>

@@ -22,7 +22,7 @@ const EmbedEditor = memo(({ children, href, slateElement }: EmbedEditorProps) =>
       at: path
     })
     setUrl(newUrl);
-  }, [])
+  }, [editor, path])
 
   return (
     <div contentEditable={false}>

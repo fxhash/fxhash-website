@@ -18,7 +18,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: 20;
+  z-index: 2;
 }
 
 .img-wrapper {
@@ -46,12 +46,12 @@
 
 .author {
   position: relative;
-  z-index: 50;
+  z-index: 3;
 }
 
 .date {
   color: var(--color-gray);
-  margin-left: 10px;
+  margin-left: 20px;
 }
 
 .title {
@@ -65,6 +65,8 @@
 .description {
   flex: 1;
   margin: $spacing 0;
+  font-family: "Noto Serif", serif !important;
+  font-size: 1.2rem;
 
   p {
     font-size: var(--font-size-big);
@@ -77,15 +79,40 @@
 }
 
 .draft_banner {
-  padding: 12px;
-  text-align: center;
   font-weight: bold;
   color: var(--color-white);
   background: var(--color-gray);
+  font-size: var(--font-size-small);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+  span {
+    display: block;
+    padding: 8px 12px;
+  }
+
+  button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    z-index: 100;
+    position: relative;
+    color: var(--color-white);
+    height: 32px;
+    padding: 0 10px;
+
+    &:hover {
+      color: var(--color-error);
+    }
+  }
 }
+
 .draft_container {
   border-color: var(--color-gray);
 }
+
 .draft_img-wrapper {
   border-color: var(--color-gray);
 }

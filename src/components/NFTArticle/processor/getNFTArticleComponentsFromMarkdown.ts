@@ -10,6 +10,7 @@ import remarkDirective from "remark-directive";
 import remarkRehype from "remark-rehype";
 import rehypeKatex from "rehype-katex";
 import rehypeHighlight from "rehype-highlight";
+import rehypePrism from "rehype-prism"
 import rehypeFormat from "rehype-format";
 import rehypeStringify from "rehype-stringify";
 import rehypeReact from "rehype-react";
@@ -17,9 +18,10 @@ import { Element } from "hast";
 import { NFTArticleElementComponent } from "../../../types/Article";
 import { ComponentsWithNodeOptions, ComponentsWithoutNodeOptions } from "rehype-react/lib/complex-types";
 import { SharedOptions } from "rehype-react/lib";
-import { remarkFxHashCustom } from "./plugins"
+import { mdastFlattenListItemParagraphs, remarkFxHashCustom } from "./plugins"
 import { TezosStorage } from "../elements/TezosStorage"
 import { NFTArticleImage } from "../elements/Medias/NFTArticleImage";
+import { CodeElement } from "../elements/CodeElement";
 
 declare module "rehype-react" {
   interface WithNode {
@@ -46,6 +48,7 @@ const settingsRehypeReact = {
     'tezos-storage': TezosStorage,
     'embed-media': Embed,
     'img': NFTArticleImage,
+    'pre': CodeElement,
   }
 }
 interface PayloadNFTArticleComponentsFromMarkdown {
@@ -57,14 +60,15 @@ export default async function getNFTArticleComponentsFromMarkdown(markdown: stri
     const matterResult = matter(markdown)
     const processed = await unified()
       .use(remarkParse)
+      .use(mdastFlattenListItemParagraphs)
       .use(remarkMath)
       .use(remarkGfm)
       .use(remarkUnwrapImages)
       .use(remarkDirective)
       .use(remarkFxHashCustom)
       .use(remarkRehype)
+      .use(rehypePrism)
       .use(rehypeKatex)
-      .use(rehypeHighlight)
       .use(rehypeFormat)
       .use(rehypeStringify)
       // todo: fix this, because of image component for some reason

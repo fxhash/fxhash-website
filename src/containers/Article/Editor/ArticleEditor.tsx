@@ -31,10 +31,11 @@ import useInit from "../../../hooks/useInit";
 import { isUrlLocal } from "../../../utils/files";
 import useConfirmLeavingPage from "../../../hooks/useConfirmLeavingPage";
 import * as Yup from "yup";
-import { countWords } from "../../../utils/strings";
+import { countWords, tagsFromString } from "../../../utils/strings";
 import { UserContext } from "../../UserProvider"
 import { ErrorBlock } from "../../../components/Error/ErrorBlock"
 import { YupSplits } from "../../../utils/yup/splits"
+import { InputText } from "../../../components/Input/InputText";
 
 const editorDefaultValue = [
   {
@@ -121,6 +122,9 @@ export function ArticleEditor({
   const handleInitEditor = useCallback((editor) => {
     setMedias(editor.getUploadedMedias() || []);
   }, [])
+  const handleChangeTags = useCallback((e) => {
+    setFieldValue("tags", tagsFromString(e.target.value))
+  }, [setFieldValue])
 
   // shortcut to the thumbnail uri
   const thumbnail = values.thumbnailUri
@@ -131,7 +135,7 @@ export function ArticleEditor({
       "thumbnailUri",
       file ? URL.createObjectURL(file) : null
     )
-  }, [])
+  }, [setFieldValue])
 
   // add the thumbnail to the list of medias
   const mediasWithThumbnail = useMemo(
@@ -165,6 +169,8 @@ export function ArticleEditor({
     const editorFromMd = values.body ? await getSlateEditorStateFromMarkdown(values.body) : null;
     setInitialBody(editorFromMd ? editorFromMd.editorState : editorDefaultValue);
   })
+
+  const tagsAsString = useMemo(() => (values.tags || []).join(','), [values.tags])
 
   const hasLocalMedias = useMemo(() => mediasWithThumbnail.some(media => isUrlLocal(media.uri)), [mediasWithThumbnail]);
   useConfirmLeavingPage(hasLocalMedias, 'You have unsaved medias, please ensure you upload everything before leaving the page. Are you sure you want to leave?');
@@ -324,6 +330,22 @@ export function ArticleEditor({
           <EditorMedias
             medias={mediasWithThumbnail}
             onMediaUriUpdate={onMediaUriUpdate}
+          />
+        </Field>
+
+        <Field>
+          <label htmlFor="tags">
+            Tags
+            <small>
+              A list of comma-separated values
+            </small>
+          </label>
+          <InputText
+            name="tags"
+            defaultValue={tagsAsString}
+            onChange={handleChangeTags}
+            onBlur={formik.handleBlur}
+            error={!!errors.tags}
           />
         </Field>
 
