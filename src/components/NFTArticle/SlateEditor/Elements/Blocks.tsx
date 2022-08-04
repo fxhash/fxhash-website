@@ -5,7 +5,7 @@ import style from '../../NFTArticle.module.scss';
 import { FigureElement } from "../../elements/Figure"
 import { FigcaptionElement } from "../../elements/Figcaption"
 import { ImageElement } from "../../elements/ImageElement"
-import { Editor, Element, Node, Path, Transforms } from "slate"
+import { Editor, Element, Node, Path, Transforms, Range } from "slate"
 import { HeadingAttributeSettings } from "./AttributeSettings/HeadingAttributeSettings"
 import { ListAttributeSettings } from "./AttributeSettings/ListAttributeSettings"
 import { BlockquoteElement } from "../../elements/Blockquote"
@@ -267,6 +267,8 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
       </li>
     ),
     insertBreakBehavior: (editor, element) => {
+      const { selection } = editor;
+      if (selection && !Range.isCollapsed(selection)) return true;
       const [nodeListItem, pathListItem] = element;
       const text = Node.string(nodeListItem);
       if (text) return true;
@@ -279,7 +281,7 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
       if (!parentList) return true;
       const [, pathParentList] = parentList
       const next = Path.next(pathParentList);
-      Transforms.setNodes(editor, { type: 'paragraph'}, {
+      Transforms.setNodes(editor, { type: 'paragraph' }, {
         at: pathListItem,
       })
       Transforms.moveNodes(editor, {

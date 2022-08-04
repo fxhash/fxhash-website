@@ -10,7 +10,8 @@ export enum EBreakBehavior {
   "nothing" = "nothing",
 }
 
-export type InsertBreakFunction = (editor: FxEditor, element: NodeEntry) => true | void
+export type ShouldDefaultInsertBreak = boolean;
+export type InsertBreakFunction = (editor: FxEditor, element: NodeEntry) => ShouldDefaultInsertBreak | void
 export const breakBehaviors: Record<EBreakBehavior, InsertBreakFunction> = {
   default: () => true,
   insertParagraph: (editor, element) => {
