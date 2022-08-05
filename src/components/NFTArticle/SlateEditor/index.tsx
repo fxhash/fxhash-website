@@ -27,6 +27,7 @@ import { EnhanceEditorWith, FxEditor } from "../../../types/ArticleEditor/Editor
 import useInit from "../../../hooks/useInit";
 import dynamic from 'next/dynamic'
 import { onKeyDownTablePlugin, withTables } from "./Plugins/SlateTablePlugin";
+import { withSimpleCopyPaste } from "./Plugins/SlateSimpleCopyPaste";
 
 
 const FloatingInlineMenu = dynamic(() => import('./FloatingInlineMenu/FloatingInlineMenu'), {
@@ -110,6 +111,7 @@ export const SlateEditor = forwardRef<FxEditor, SlateEditorProps>(({
       { f: withHistory },
       { f: withAutoFormat },
       { f: withMediaSupport, args: { onMediasUpdate } },
+//      { f: withSimpleCopyPaste },
       { f: withImages },
       { f: withTables },
       { f: withConstraints },

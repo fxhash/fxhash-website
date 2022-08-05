@@ -228,7 +228,7 @@ export const onKeyDownTablePlugin = (editor: Editor, event: React.KeyboardEvent)
  * Add utility functions to the editor to support manipulation of <table/>
  */
 export const withTables: EnhanceEditorWith = (editor) => {
-  const { deleteBackward, deleteForward, insertBreak, insertSoftBreak, normalizeNode, deleteFragment } = editor
+  const { deleteBackward, deleteForward, insertBreak, insertSoftBreak, normalizeNode, insertFragmentData } = editor
 
   /**
    * Deleting at the start of cell doesn't remove the cell
@@ -303,7 +303,8 @@ export const withTables: EnhanceEditorWith = (editor) => {
 
 
   /**
-   * Always format table with the highest number of cols
+   * - Always format table with the highest number of cols
+   * - Lift block nodes out of the table
    */
   editor.normalizeNode = entry => {
     const [node, path] = entry
@@ -336,6 +337,26 @@ export const withTables: EnhanceEditorWith = (editor) => {
     }
 
     normalizeNode(entry)
+  }
+
+
+  editor.insertFragmentData = (data) => {
+    const { selection } = editor;
+
+    if (selection) {
+      const tableCell = lookupElementByType(editor,'tableCell')
+      if (tableCell) {
+        const fragment = data.getData('application/x-slate-fragment')
+        if (fragment) {
+          const decoded = decodeURIComponent(window.atob(fragment))
+          const parsed = JSON.parse(decoded) as Node[]
+          const str = Node.string({ children: parsed });
+          Transforms.insertText(editor, str);
+          return true;
+        }
+      }
+    }
+    return insertFragmentData(data);
   }
 
   return editor

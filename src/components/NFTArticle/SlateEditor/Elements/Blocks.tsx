@@ -293,6 +293,7 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
     icon: <i className="fa-regular fa-table" aria-hidden/>,
     render: TableCell,
     hasUtilityWrapper: false,
+    inlineMenu: ['strong', 'emphasis'],
   },
   "html": {
     name: "HTML",
