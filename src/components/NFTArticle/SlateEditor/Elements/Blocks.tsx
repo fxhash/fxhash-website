@@ -27,7 +27,6 @@ export enum EArticleBlocks {
   "tezos-storage" = "tezos-storage",
   "paragraph" = "paragraph",
   "heading" = "heading",
-  "thematicBreak" = "thematicBreak",
   "blockquote" = "blockquote",
   "list" = "list",
   "listItem" = "listItem",
@@ -54,7 +53,6 @@ export const ArticleBlocksList: (keyof EArticleBlocks)[] = Object.keys(
 export const InstantiableArticleBlocksList: EArticleBlocks[] = [
   EArticleBlocks.paragraph,
   EArticleBlocks.heading,
-  EArticleBlocks.thematicBreak,
   EArticleBlocks["tezos-storage"],
   EArticleBlocks.figure,
   EArticleBlocks.list,
@@ -209,21 +207,9 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
     name: "Horizontal break",
     icon: <i className="fa-solid fa-horizontal-rule" aria-hidden/>,
     render: ({ attributes, element, children }) => (
-      <div className={style.article_wrapper_container} {...attributes} contentEditable={false}>
-        <div className={style.article_void}>
-          {children}
-        </div>
-        <hr />
-      </div>
+      <hr {...attributes}/>
     ),
-    instanciateElement: () => ({
-      type: "thematicBreak",
-      children: [{
-        text: ""
-      }],
-    }),
-    buttonInstantiable: true,
-    hasUtilityWrapper: true,
+    hasUtilityWrapper: false,
   },
   "blockquote": {
     name: "Quote",
