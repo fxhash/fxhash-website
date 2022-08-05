@@ -118,10 +118,7 @@ export default async function getMarkdownFromSlateEditorState(slate: Node[] ) {
       }
     )
 
-    // we don't want to encode any encoded whitespaces in the final markdown
-    const encodedWhitespacesRemoved = directiveAttributesFixed.replaceAll(/&#x20;/g, '')
-
-    return encodedWhitespacesRemoved
+    return directiveAttributesFixed
   }
   catch(e) {
     console.error(e)
