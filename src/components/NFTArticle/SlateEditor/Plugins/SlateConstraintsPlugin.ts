@@ -6,7 +6,7 @@ import { EnhanceEditorWith } from "../../../../types/ArticleEditor/Editor";
  * states
  */
 export const withConstraints: EnhanceEditorWith = (editor) => {
-  const { normalizeNode } = editor
+  const { normalizeNode, insertBreak } = editor
 
   editor.normalizeNode = (entry) => {
     const [node, path] = entry
