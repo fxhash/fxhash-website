@@ -93,9 +93,13 @@
     },
     {
       "title": "Community",
-      "icon": "far fa-browser",
+      "icon": "fa-solid fa-users",
       "link": "community",
       "articles": [
+        {
+          "title": "Articles",
+          "link": "articles"
+        },
         {
           "title": "FXH token & DAO",
           "link": "token-dao"
@@ -110,5 +114,5 @@
         }
       ]
     }
-  ] 
+  ]
 }

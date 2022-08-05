@@ -79,7 +79,7 @@ export default async function getMarkdownFromSlateEditorState(slate: Node[] ) {
       .use(slateToRemark, {
         overrides: slateToRemarkTransformerOverrides,
       })
-      .use(stringify)
+      .use(stringify, { bulletOther: '-' })
     const ast = await processor.run({
       type: "root",
       children: slate,

@@ -3,7 +3,6 @@ import React, {
   forwardRef,
   KeyboardEvent,
   useCallback,
-  useEffect,
   useImperativeHandle,
   useMemo,
   useState
@@ -30,6 +29,7 @@ import { EnhanceEditorWith, FxEditor } from "../../../types/ArticleEditor/Editor
 import useInit from "../../../hooks/useInit";
 import dynamic from 'next/dynamic'
 import { onKeyDownTablePlugin, withTables } from "./Plugins/SlateTablePlugin";
+import { withBreaks } from "./Plugins/SlateBreaksPlugin";
 
 
 const FloatingInlineMenu = dynamic(() => import('./FloatingInlineMenu/FloatingInlineMenu'), {
@@ -117,6 +117,7 @@ export const SlateEditor = forwardRef<FxEditor, SlateEditorProps>(({
       { f: withTables },
       { f: withConstraints },
       { f: withSoftBreak }
+      { f: withBreaks },
     ]
     const enhancedEditor = withs.reduce((e, enhanceWith) => {
       return enhanceWith.f(e, ...Object.values(enhanceWith.args || {}));
