@@ -113,6 +113,17 @@ export function ArticleEditor({
   const [medias, setMedias] = useState<IEditorMediaFile[]>([])
   const [initialBody, setInitialBody] = useState<Descendant[] | null>(null)
 
+  // ref to medias for scrolling to block
+  const mediasMarkerRef = useRef<HTMLDivElement>(null)
+  const scrollToMediasSave = useCallback(() => {
+    if (mediasMarkerRef.current) {
+      mediasMarkerRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      })
+    }
+  }, [])
+
   const handleChangeBody = useCallback(async (nodes: Descendant[]) => {
     const markdown = await getMarkdownFromSlateEditorState(nodes);
     setFieldTouched('body');
@@ -202,6 +213,7 @@ export function ArticleEditor({
           id={localId}
           formValues={values}
           hasUnsavedMedias={hasLocalMedias}
+          onMediasUnsavedClick={scrollToMediasSave}
         />
       }
       <Field
@@ -323,6 +335,7 @@ export function ArticleEditor({
 
       <div className={cs(style.w900)}>
         <Field>
+          <div ref={mediasMarkerRef} className={cs(style.medias_save_marker)}/>
           <label>
             Medias ({mediasWithThumbnail.length})
             <small>Before the article can be published, all the medias within the article must be uploaded to IPFS</small>
