@@ -61,6 +61,15 @@
     padding: 0 4px;
     border-radius: 4px;
   }
+
+  hr {
+    border: none;
+    height: 2px;
+    background-color: var(--color-gray-vvlight);
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+  }
 }
 
 .article_wrapper_container {

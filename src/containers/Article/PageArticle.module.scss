@@ -187,6 +187,16 @@
       }
     }
 
+    hr {
+      border: none;
+      height: 2px;
+      background-color: var(--color-gray-vvlight);
+      width: 50%;
+      margin-left: auto;
+      margin-right: auto;
+      font-size: 1.2rem;
+    }
+
     table {
       width: min(100%, 1400px);
       table-layout: fixed;
