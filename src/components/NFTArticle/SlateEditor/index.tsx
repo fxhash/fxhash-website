@@ -116,7 +116,7 @@ export const SlateEditor = forwardRef<FxEditor, SlateEditorProps>(({
       { f: withImages },
       { f: withTables },
       { f: withConstraints },
-      { f: withSoftBreak }
+      { f: withSoftBreak },
       { f: withBreaks },
     ]
     const enhancedEditor = withs.reduce((e, enhanceWith) => {
