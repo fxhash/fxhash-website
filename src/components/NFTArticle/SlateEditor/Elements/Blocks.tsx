@@ -27,6 +27,7 @@ export enum EArticleBlocks {
   "tezos-storage" = "tezos-storage",
   "paragraph" = "paragraph",
   "heading" = "heading",
+  "thematicBreak" = "thematicBreak",
   "blockquote" = "blockquote",
   "list" = "list",
   "listItem" = "listItem",
