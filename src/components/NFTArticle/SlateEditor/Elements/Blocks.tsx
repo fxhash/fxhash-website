@@ -54,6 +54,7 @@ export const ArticleBlocksList: (keyof EArticleBlocks)[] = Object.keys(
 export const InstantiableArticleBlocksList: EArticleBlocks[] = [
   EArticleBlocks.paragraph,
   EArticleBlocks.heading,
+  EArticleBlocks.thematicBreak,
   EArticleBlocks["tezos-storage"],
   EArticleBlocks.figure,
   EArticleBlocks.list,
@@ -208,9 +209,21 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
     name: "Horizontal break",
     icon: <i className="fa-solid fa-horizontal-rule" aria-hidden/>,
     render: ({ attributes, element, children }) => (
-      <hr {...attributes}/>
+      <div className={style.article_wrapper_container} {...attributes} contentEditable={false}>
+        <div className={style.article_void}>
+          {children}
+        </div>
+        <hr />
+      </div>
     ),
-    hasUtilityWrapper: false,
+    instanciateElement: () => ({
+      type: "thematicBreak",
+      children: [{
+        text: ""
+      }],
+    }),
+    buttonInstantiable: true,
+    hasUtilityWrapper: true,
   },
   "blockquote": {
     name: "Quote",
