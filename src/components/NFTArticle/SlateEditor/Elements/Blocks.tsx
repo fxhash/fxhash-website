@@ -21,6 +21,7 @@ import { SlateTable } from "../Plugins/SlateTablePlugin";
 import TezosStorageEditor from "./TezosStorageEditor";
 import { CodeAttributeSettings } from "./AttributeSettings/CodeAttributeSettings";
 import { CodeEditorElement } from "./CodeEditorElement";
+import { ThematicBreak } from "../../elements/ThematicBreak";
 
 export enum EArticleBlocks {
   "embed-media" = "embed-media",
@@ -208,14 +209,7 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
   "thematicBreak": {
     name: "Horizontal break",
     icon: <i className="fa-solid fa-horizontal-rule" aria-hidden/>,
-    render: ({ attributes, element, children }) => (
-      <div className={style.article_wrapper_container} {...attributes} contentEditable={false}>
-        <div className={style.article_void}>
-          {children}
-        </div>
-        <hr />
-      </div>
-    ),
+    render: ThematicBreak,
     instanciateElement: () => ({
       type: "thematicBreak",
       children: [{
