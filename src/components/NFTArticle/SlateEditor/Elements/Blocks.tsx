@@ -21,6 +21,7 @@ import { SlateTable } from "../Plugins/SlateTablePlugin";
 import TezosStorageEditor from "./TezosStorageEditor";
 import { CodeAttributeSettings } from "./AttributeSettings/CodeAttributeSettings";
 import { CodeEditorElement } from "./CodeEditorElement";
+import { ThematicBreak } from "../../elements/ThematicBreak";
 import { breakBehaviors, EBreakBehavior, InsertBreakFunction } from "../Plugins/SlateBreaksPlugin";
 
 export enum EArticleBlocks {
@@ -55,6 +56,7 @@ export const ArticleBlocksList: (keyof EArticleBlocks)[] = Object.keys(
 export const InstantiableArticleBlocksList: EArticleBlocks[] = [
   EArticleBlocks.paragraph,
   EArticleBlocks.heading,
+  EArticleBlocks.thematicBreak,
   EArticleBlocks["tezos-storage"],
   EArticleBlocks.figure,
   EArticleBlocks.list,
@@ -210,10 +212,15 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
   "thematicBreak": {
     name: "Horizontal break",
     icon: <i className="fa-solid fa-horizontal-rule" aria-hidden/>,
-    render: ({ attributes, element, children }) => (
-      <hr {...attributes}/>
-    ),
-    hasUtilityWrapper: false,
+    render: ThematicBreak,
+    instanciateElement: () => ({
+      type: "thematicBreak",
+      children: [{
+        text: ""
+      }],
+    }),
+    buttonInstantiable: true,
+    hasUtilityWrapper: true,
   },
   "blockquote": {
     name: "Quote",

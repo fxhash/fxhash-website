@@ -187,6 +187,10 @@
       }
     }
 
+    :global(.hr) {
+      font-size: 1.2rem;
+    }
+
     table {
       width: min(100%, 1400px);
       table-layout: fixed;
