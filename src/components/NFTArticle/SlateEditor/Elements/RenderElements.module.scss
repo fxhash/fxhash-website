@@ -44,10 +44,14 @@
     z-index: 0;
   }
 
-  &:not(.opened):hover {
-    .buttons {
-      opacity: 1;
-      pointer-events: all;
+  &:not(.opened) {
+
+    &:hover,
+    &.buttons_visible {
+      .buttons {
+        opacity: 1;
+        pointer-events: all;
+      }
     }
   }
 }
