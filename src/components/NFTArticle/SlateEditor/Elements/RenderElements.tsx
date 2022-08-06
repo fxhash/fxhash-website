@@ -1,7 +1,7 @@
 import style from "./RenderElements.module.scss"
 import cs from "classnames"
 import { ReactEditor, RenderElementProps, useSlateStatic } from "slate-react"
-import React, { PropsWithChildren, useMemo, useState } from "react"
+import React, { PropsWithChildren, useEffect, useMemo, useState } from "react"
 import { AddBlock } from "../Utils/AddBlock"
 import { getArticleBlockDefinition } from "./Blocks"
 import { Path, Transforms, Node } from "slate"
@@ -38,6 +38,17 @@ function EditableElementWrapper({
 
   const editor = useSlateStatic()
   const path = ReactEditor.findPath(editor, element)
+
+  // when the selection changes, we check if the focus is inside this block
+  const selected = useMemo(() => {
+    if (editor.selection) {
+      // the first element in any path is the top-most element
+      if (editor.selection.focus.path[0] === path[0]) {
+        return true
+      }
+    }
+    return false
+  }, [editor.selection, path])
 
   const addBlock = (element: any) => {
     const target = Path.next(path)
@@ -86,7 +97,8 @@ function EditableElementWrapper({
   return (
     <div
       className={cs(style.element_wrapper, {
-        [style.opened]: showAddBlock || showExtraMenu
+        [style.opened]: showAddBlock || showExtraMenu,
+        [style.buttons_visible]: selected,
       })}
     >
       {children}
