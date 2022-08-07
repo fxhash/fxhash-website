@@ -33,6 +33,7 @@ export const Frag_ArticleFull = gql`
     editions
     royalties
     metadataUri
+    metadata
     author {
       ...UserBadgeInfos
     }

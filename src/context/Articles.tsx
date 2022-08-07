@@ -1,22 +1,28 @@
-import React, { useMemo, useReducer } from "react"
+import React, { useEffect, useMemo, useReducer, useState } from "react"
 import { DraftNFTArticle, NFTArticleForm } from "../types/ArticleEditor/Editor";
-import useAsyncEffect from "use-async-effect";
 
 interface ArticlesState {
   articles: {
     [key: string]: DraftNFTArticle | null,
   }
 }
+interface ISavePayload {
+  id: string
+  articleForm: NFTArticleForm
+  minted?: boolean
+}
 type ArticlesAction =
   | { type: "loadAll" }
-  | { type: "save", payload: { id: string, articleForm: NFTArticleForm } }
+  | { type: "save", payload: ISavePayload }
   | { type: "delete", payload: { id: string } }
 interface Context {
   state: ArticlesState;
   dispatch: React.Dispatch<ArticlesAction>;
 }
 
-const initialState = { articles: {} }
+const initialState: ArticlesState = { 
+  articles: {}
+}
 const localStorageKey = 'local_articles';
 export const ArticlesContext = React.createContext<Context>({} as Context)
 
@@ -29,10 +35,11 @@ const articlesReducer = (state: ArticlesState, action: ArticlesAction): Articles
     case "loadAll":
       return loadAllLocalArticles();
     case "save": {
-      const newState = loadAllLocalArticles();
+      const newState = {...state} || loadAllLocalArticles();
       newState.articles[action.payload.id] = {
         form: action.payload.articleForm,
         lastSavedAt: new Date().toUTCString(),
+        minted: action.payload.minted || false,
       };
       localStorage.setItem(localStorageKey, JSON.stringify(newState));
       return newState;
@@ -51,16 +58,20 @@ interface ArticlesProviderProps {
   children: any;
 }
 export const ArticlesProvider = ({ children }: ArticlesProviderProps) => {
-  const [state, dispatch] = useReducer<React.Reducer<ArticlesState, ArticlesAction>>(articlesReducer, initialState);
+  const [state, dispatch] = useReducer<React.Reducer<ArticlesState, ArticlesAction>>(articlesReducer, initialState)
   const providerValue = useMemo(
     () => ({
       state,
       dispatch,
     }),
     [state, dispatch],
-  );
-  useAsyncEffect(() => {
-    dispatch({ type: "loadAll" });
-  }, [dispatch]);
-  return <ArticlesContext.Provider value={providerValue}>{children}</ArticlesContext.Provider>;
+  )
+
+  useEffect(() => {
+    dispatch({ type: "loadAll" })
+  }, [dispatch])
+
+  return <ArticlesContext.Provider value={providerValue}>
+    {children}
+  </ArticlesContext.Provider>
 }

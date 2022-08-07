@@ -53,9 +53,9 @@ const _PageArticle = ({ article, originUrl, isPreview }: PageArticleProps) => {
 
       <main className={cs(layout['padding-big'])}>
         <div className={style.header}>
-          {isAuthor && (
+          {isAuthor && !isPreview && (
             <div className={cs(style.actions)}>
-              <Link href={`/article/editor/online/${id}`} passHref>
+              <Link href={`/article/editor/${id}`} passHref>
                 <Button
                   isLink
                   size="small"
