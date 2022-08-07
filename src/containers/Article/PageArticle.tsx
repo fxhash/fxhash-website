@@ -1,4 +1,4 @@
-import React, { memo, useMemo } from 'react';
+import React, { memo, useContext, useMemo } from 'react';
 import style from "./PageArticle.module.scss";
 import { NFTArticle } from "../../types/entities/Article";
 import { UserBadge } from "../../components/User/UserBadge";
@@ -6,16 +6,17 @@ import { format } from "date-fns";
 import { ArticleInfos } from "./ArticleInfos";
 import Head from "next/head";
 import { Spacing } from "../../components/Layout/Spacing";
-import { ipfsGatewayUrl } from "../../services/Ipfs";
 import cs from "classnames";
 import layout from "../../styles/Layout.module.scss";
 import text from "../../styles/Text.module.css";
 import { CardSmallNftArticle } from "../../components/Card/CardSmallNFTArticle";
 import { NftArticle } from '../../components/NFTArticle/NFTArticle';
-import { ButtonsArticlePreview } from "./ButtonsArticlePreview";
-import Image from "next/image";
-import { ImageIpfs } from '../../components/Medias/ImageIpfs';
 import { ImagePolymorphic } from '../../components/Medias/ImagePolymorphic';
+import { UserContext } from '../UserProvider';
+import { isUserOrCollaborator } from '../../utils/user';
+import { User } from '../../types/entities/User';
+import Link from 'next/link';
+import { Button } from '../../components/Button';
 
 interface PageArticleProps {
   article: NFTArticle
@@ -24,8 +25,15 @@ interface PageArticleProps {
 }
 
 const _PageArticle = ({ article, originUrl, isPreview }: PageArticleProps) => {
-  const { title, description, author, createdAt, body, language, relatedArticles } = article
+  const { id, title, description, author, createdAt, body, language, relatedArticles } = article
   const dateCreatedAt = useMemo(() => new Date(createdAt), [createdAt])
+  const { user } = useContext(UserContext)
+
+  // is it the author or a collaborator ?
+  const isAuthor = useMemo(
+    () => user && author && isUserOrCollaborator(user as User, author),
+    [user, author]
+  )
 
   return (
     <>
@@ -45,6 +53,20 @@ const _PageArticle = ({ article, originUrl, isPreview }: PageArticleProps) => {
 
       <main className={cs(layout['padding-big'])}>
         <div className={style.header}>
+          {isAuthor && (
+            <div className={cs(style.actions)}>
+              <Link href={`/article/editor/online/${id}`} passHref>
+                <Button
+                  isLink
+                  size="small"
+                  color="black"
+                  iconComp={<i className="fa-solid fa-pen-to-square" aria-hidden/>}
+                >
+                  edit article
+                </Button>
+              </Link>
+            </div>
+          )}
           {author &&
             <UserBadge
               user={author}
