@@ -43,6 +43,12 @@ export const Frag_ArticleFull = gql`
     relatedArticles(take: 4) {
       ...ArticleInfos
     }
+    revisions {
+      iteration
+      metadataUri
+      createdAt
+      opHash
+    }
   }
   ${Frag_ArticleInfos}
   ${Frag_UserBadge}
