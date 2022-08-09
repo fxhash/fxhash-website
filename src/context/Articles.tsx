@@ -16,8 +16,10 @@ type ArticlesAction =
   | { type: "save", payload: ISavePayload }
   | { type: "delete", payload: { id: string } }
 interface Context {
-  state: ArticlesState;
-  dispatch: React.Dispatch<ArticlesAction>;
+  state: ArticlesState
+  dispatch: React.Dispatch<ArticlesAction>
+  // check if an article is being edited
+  isEdited: (id: string) => boolean
 }
 
 const initialState: ArticlesState = { 
@@ -63,6 +65,7 @@ export const ArticlesProvider = ({ children }: ArticlesProviderProps) => {
     () => ({
       state,
       dispatch,
+      isEdited: (id: string) => !!state.articles[id],
     }),
     [state, dispatch],
   )

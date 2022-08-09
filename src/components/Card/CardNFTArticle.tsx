@@ -9,6 +9,7 @@ import { SettingsContext } from "../../context/Theme";
 import { format } from "date-fns";
 import Link from 'next/link';
 import { Tags } from '../Tags/Tags';
+import { ArticlesContext } from '../../context/Articles';
 
 interface CardNftArticleProps {
   className?: string
@@ -36,8 +37,9 @@ const _CardNftArticle = ({
 }: CardNftArticleProps) => {
   const settings = useContext(SettingsContext)
   const thumbnailUrl = useMemo(() => thumbnailUri && ipfsGatewayUrl(thumbnailUri), [thumbnailUri])
-  const dateCreatedAt = useMemo(() => new Date(createdAt), [createdAt]);
-  const urlArticle = isDraft ? `/article/editor/local/${id}` : `/article/${slug}`;
+  const dateCreatedAt = useMemo(() => new Date(createdAt), [createdAt])
+  const urlArticle = isDraft ? `/article/editor/local/${id}` : `/article/${slug}`
+  const { isEdited } = useContext(ArticlesContext)
 
   const onClickDelete = useCallback<MouseEventHandler>((event) => {
     event.preventDefault()
@@ -46,6 +48,8 @@ const _CardNftArticle = ({
       onDelete?.(id as string)
     }
   }, [])
+
+  const edited = useMemo(() => isEdited(id as string), [isEdited, id])
 
   return (
     <div className={cs(style.container, className, {
@@ -56,13 +60,24 @@ const _CardNftArticle = ({
         <a className={cs(style.link_wrapper)}/>
       </Link>
       {isDraft && (
-        <div className={style.draft_banner}>
+        <div className={cs(style.banner, style.banner_draft)}>
           <span>DRAFT (saved locally)</span>
           <button
             type="button"
             onClick={onClickDelete}
           >
             <i className="fa-solid fa-trash" aria-hidden/>
+          </button>
+        </div>
+      )}
+      {!isDraft && edited && (
+        <div className={cs(style.banner, style.banner_edition)}>
+          <span>Unpublished changes</span>
+          <button
+            type="button"
+            onClick={onClickDelete}
+          >
+            <i className="fa-solid fa-pen-to-square" aria-hidden/>
           </button>
         </div>
       )}

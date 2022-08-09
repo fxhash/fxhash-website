@@ -1,22 +1,23 @@
-import React, { memo, useContext, useMemo } from 'react';
-import style from "./PageArticle.module.scss";
-import { NFTArticle } from "../../types/entities/Article";
-import { UserBadge } from "../../components/User/UserBadge";
-import { format } from "date-fns";
-import { ArticleInfos } from "./ArticleInfos";
-import Head from "next/head";
-import { Spacing } from "../../components/Layout/Spacing";
-import cs from "classnames";
-import layout from "../../styles/Layout.module.scss";
-import text from "../../styles/Text.module.css";
-import { CardSmallNftArticle } from "../../components/Card/CardSmallNFTArticle";
-import { NftArticle } from '../../components/NFTArticle/NFTArticle';
-import { ImagePolymorphic } from '../../components/Medias/ImagePolymorphic';
-import { UserContext } from '../UserProvider';
-import { isUserOrCollaborator } from '../../utils/user';
-import { User } from '../../types/entities/User';
-import Link from 'next/link';
-import { Button } from '../../components/Button';
+import React, { memo, useContext, useMemo } from 'react'
+import style from "./PageArticle.module.scss"
+import { NFTArticle } from "../../types/entities/Article"
+import { UserBadge } from "../../components/User/UserBadge"
+import { format } from "date-fns"
+import { ArticleInfos } from "./ArticleInfos"
+import Head from "next/head"
+import { Spacing } from "../../components/Layout/Spacing"
+import cs from "classnames"
+import layout from "../../styles/Layout.module.scss"
+import text from "../../styles/Text.module.css"
+import { CardSmallNftArticle } from "../../components/Card/CardSmallNFTArticle"
+import { NftArticle } from '../../components/NFTArticle/NFTArticle'
+import { ImagePolymorphic } from '../../components/Medias/ImagePolymorphic'
+import { UserContext } from '../UserProvider'
+import { isUserOrCollaborator } from '../../utils/user'
+import { User } from '../../types/entities/User'
+import Link from 'next/link'
+import { Button } from '../../components/Button'
+import { ArticlesContext } from '../../context/Articles'
 
 interface PageArticleProps {
   article: NFTArticle
@@ -28,6 +29,8 @@ const _PageArticle = ({ article, originUrl, isPreview }: PageArticleProps) => {
   const { id, title, description, author, createdAt, body, language, relatedArticles } = article
   const dateCreatedAt = useMemo(() => new Date(createdAt), [createdAt])
   const { user } = useContext(UserContext)
+  const { isEdited } = useContext(ArticlesContext)
+  const edited = useMemo(() => isEdited(id as string), [isEdited, id])
 
   // is it the author or a collaborator ?
   const isAuthor = useMemo(
@@ -59,10 +62,13 @@ const _PageArticle = ({ article, originUrl, isPreview }: PageArticleProps) => {
                 <Button
                   isLink
                   size="small"
-                  color="black"
+                  color={edited ? "secondary" : "black"}
                   iconComp={<i className="fa-solid fa-pen-to-square" aria-hidden/>}
                 >
-                  edit article
+                  {edited
+                    ? "resume edition"
+                    : "edit article"
+                  }
                 </Button>
               </Link>
             </div>
