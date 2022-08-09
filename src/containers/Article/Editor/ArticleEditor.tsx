@@ -228,6 +228,7 @@ export function ArticleEditor({
           formValues={values}
           hasUnsavedMedias={hasLocalMedias}
           onMediasUnsavedClick={scrollToMediasSave}
+          isMinted={!!editMinted}
         />
       }
       <Field
