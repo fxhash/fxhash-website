@@ -16,6 +16,7 @@ import { clamp } from "./math"
 import { tagsFromString } from "./strings"
 import { transformPricingDutchInputToNumbers, transformPricingFixedInputToNumbers } from "./transformers/pricing"
 import { transformReserveInputToGeneric } from "./transformers/reserves"
+import { isUserOrCollaborator } from "./user"
 
 export function getGenerativeTokenUrl(generative: GenerativeToken): string {
   return generative.slug ? `/generative/slug/${generative.slug}` : `/generative/${generative.id}`
@@ -345,14 +346,10 @@ export function isGenerativeAuthor(
   token: GenerativeToken,
   user: User,
 ): boolean {
-  if (token.author.type === UserType.COLLAB_CONTRACT_V1) {
-    return !!(token.author as Collaboration).collaborators.find(
-      author => author.id === user.id
-    )
-  }
-  else {
-    return token.author.id === user.id
-  }
+  return isUserOrCollaborator(
+    user,
+    token.author
+  )
 }
 
 

@@ -61,9 +61,17 @@
     padding: 0 4px;
     border-radius: 4px;
   }
+
+  :global(.hr) {
+    font-size: 1.2rem;
+  }
 }
 
 .article_wrapper_container {
   width: min(900px, 100%);
   margin: 0 auto;
+}
+
+.article_void {
+  display: none;
 }

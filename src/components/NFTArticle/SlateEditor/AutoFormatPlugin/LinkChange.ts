@@ -49,9 +49,9 @@ export class LinkChange implements AutoFormatChange {
       }
       Transforms.insertNodes(
 	editor,
-	linkNode
+	[linkNode, { text: " "}]
       )
-      return true
+      return true   
     } catch {
       return false;
     }

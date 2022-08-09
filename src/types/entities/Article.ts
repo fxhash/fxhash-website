@@ -45,6 +45,7 @@ export interface NFTArticle {
   artifactUri: string
   displayUri: string
   thumbnailUri: string
+  thumbnailCaption: string
   platforms?: string[] | null
   createdAt: string
   editions: number
