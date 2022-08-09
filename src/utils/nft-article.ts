@@ -1,5 +1,5 @@
 import { NFTArticle } from "../types/entities/Article";
-import { DraftNFTArticle } from "../types/ArticleEditor/Editor";
+import { DraftNFTArticle, NFTArticleForm } from "../types/ArticleEditor/Editor";
 import { User } from "../types/entities/User";
 
 type GenerateNftArticleFromDraft = (id: string, draft: DraftNFTArticle, user?: User) => NFTArticle;
@@ -41,10 +41,27 @@ export const generateNftArticleFromDraft: GenerateNftArticleFromDraft = (id, dra
     artifactUri: '',
     displayUri: draft.form.thumbnailUri || '',
     thumbnailUri: draft.form.thumbnailUri || '',
+    thumbnailCaption: draft.form.thumbnailCaption || '',
     platforms: null,
     createdAt: draft.lastSavedAt,
     editions: parseInt(draft.form.editions),
     royalties: parseFloat(draft.form.royalties) * 10,
     mintOpHash: ''
   })
+}
+
+/**
+ * Given a NFTArticle entity, generates a draft for its edition
+ */
+export function generateNFTArticleDraft(
+  article: NFTArticle
+): Partial<NFTArticleForm> {
+  return {
+    title: article.title,
+    thumbnailUri: article.displayUri,
+    thumbnailCaption: article.thumbnailCaption,
+    body: article.body,
+    abstract: article.description,
+    tags: article.tags,
+  }
 }
