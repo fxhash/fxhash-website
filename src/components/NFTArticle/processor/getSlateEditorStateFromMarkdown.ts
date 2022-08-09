@@ -101,7 +101,6 @@ export default async function getSlateEditorStateFromMarkdown(markdown: string):
 export function getSlateEditorStateFromMarkdownSync(markdown: string): PayloadSlateEditorStateFromMarkdown | null  {
   try {
     const matterResult = matter(markdown)
-    console.log(markdown)
     const processed = mdToSlateProcessor.processSync(matterResult.content)
 
     return {
