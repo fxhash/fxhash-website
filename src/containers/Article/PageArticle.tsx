@@ -1,4 +1,4 @@
-import React, { memo, useContext, useMemo } from 'react'
+import React, { memo, useCallback, useContext, useMemo } from 'react'
 import style from "./PageArticle.module.scss"
 import { NFTArticle } from "../../types/entities/Article"
 import { UserBadge } from "../../components/User/UserBadge"
@@ -29,7 +29,7 @@ const _PageArticle = ({ article, originUrl, isPreview }: PageArticleProps) => {
   const { id, title, description, author, createdAt, body, language, relatedArticles } = article
   const dateCreatedAt = useMemo(() => new Date(createdAt), [createdAt])
   const { user } = useContext(UserContext)
-  const { isEdited } = useContext(ArticlesContext)
+  const { isEdited, dispatch } = useContext(ArticlesContext)
   const edited = useMemo(() => isEdited(id as string), [isEdited, id])
 
   // is it the author or a collaborator ?
@@ -37,6 +37,17 @@ const _PageArticle = ({ article, originUrl, isPreview }: PageArticleProps) => {
     () => user && author && isUserOrCollaborator(user as User, author),
     [user, author]
   )
+
+  const cancelEdition = useCallback(() => {
+    if (window.confirm("Do you want to remove the unpublished local changes made to this article ?")) {
+      dispatch({
+        type: "delete",
+        payload: {
+          id: ""+article.id
+        }
+      })
+    }
+  }, [dispatch])
 
   return (
     <>
@@ -71,6 +82,17 @@ const _PageArticle = ({ article, originUrl, isPreview }: PageArticleProps) => {
                   }
                 </Button>
               </Link>
+              {edited && (
+                <Button
+                  type="button"
+                  size="small"
+                  color="primary"
+                  iconComp={<i className="fa-solid fa-circle-xmark" aria-hidden/>}
+                  onClick={cancelEdition}
+                >
+                  cancel edition
+                </Button>
+              )}
             </div>
           )}
           {author &&
