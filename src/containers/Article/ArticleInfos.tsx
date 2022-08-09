@@ -10,6 +10,7 @@ import { Tags } from "../../components/Tags/Tags";
 import { ipfsGatewayUrl } from "../../services/Ipfs";
 import { useMemo } from "react";
 import SocialMediaShare from "../../components/SocialMediaShare/SocialMediaShare";
+import { ArticleRevisions } from "./Infos/ArticleRevisions";
 
 interface ArticleInfosProps {
   article: NFTArticle
@@ -65,10 +66,12 @@ export function ArticleInfos({
         )}>
           <strong>Royalties</strong>
           <span>{displayRoyalties(article.royalties)}</span>
+
           <ListSplits
             name="Royalties split"
             splits={article.royaltiesSplits}
           />
+
           <strong>Tags</strong>
           <span>
             {article.tags && article.tags.length > 0 ? (
@@ -77,6 +80,7 @@ export function ArticleInfos({
               <span className={cs(text.info)}>{"/"}</span>
             )}
           </span>
+
           <strong>Metadata</strong>
           <a
             target="_blank"
@@ -90,6 +94,12 @@ export function ArticleInfos({
           >
             view on IPFS <i className="fas fa-external-link-square" aria-hidden/>
           </a>
+
+          {!isPreview && article.revisions?.length > 1 && (
+            <ArticleRevisions
+              revisions={article.revisions}
+            />
+          )}
         </div>
       </div>
     </div>

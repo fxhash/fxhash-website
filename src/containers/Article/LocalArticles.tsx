@@ -18,7 +18,7 @@ const _LocalArticles = ({ classNameArticle, user }: LocalArticlesProps) => {
   const localArticles = useMemo(() => Object
     .entries(articles)
     .reduce((acc, [uid, article]) => {
-      if (!article) return acc;
+      if (!article || article.minted) return acc;
       acc.push({
         id: uid,
         slug: uid,

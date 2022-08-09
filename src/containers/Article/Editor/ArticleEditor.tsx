@@ -58,7 +58,8 @@ const defaultValues: NFTArticleForm = {
   tags: []
 }
 
-const schemaNftArticleForm = Yup.object().shape({
+// base schema, common for any kind of edition
+const baseSchemaNftArticleForm = Yup.object().shape({
   title: Yup.string().required('Required'),
   abstract: Yup.string()
     .required('Required')
@@ -69,7 +70,11 @@ const schemaNftArticleForm = Yup.object().shape({
     .test("thumbnail", "Invalid type", (value) => {
       return typeof value === "string"
     }),
-  thumbnailCaption: Yup.string(),
+  thumbnailCaption: Yup.string()
+})
+
+// full schema, used when creating a new article
+const schemaNftArticleForm = baseSchemaNftArticleForm.shape({
   editions: Yup.number()
     .required('Required')
     .min(1, "Min 1 edition"),
@@ -82,31 +87,40 @@ const schemaNftArticleForm = Yup.object().shape({
 })
 
 interface ArticleEditorProps {
-  localId?: string,
+  localId?: string
   hasLocalAutosave?: boolean
-  initialValues?: NFTArticleForm,
+  initialValues?: NFTArticleForm
   onSubmit: (values: NFTArticleForm, formikHelpers: FormikHelpers<NFTArticleForm>) => (void | Promise<any>)
+  editMinted?: boolean
 }
 export function ArticleEditor({
   localId,
   hasLocalAutosave,
   initialValues,
   onSubmit,
+  editMinted,
 }: ArticleEditorProps) {
   const { user } = useContext(UserContext)
   const [immutableInitialValues] = useState(initialValues)
   const editorStateRef = useRef<FxEditor>(null)
   const formik = useFormik({
-    initialValues: immutableInitialValues || {
-      ...defaultValues,
-      // we add the user as default target to royalties split
-      royaltiesSplit: user ? [{
-        address: user.id,
-        pct: 1000,
-      }]:[]
-    },
+    initialValues: (() => {
+      if (editMinted) {
+        return immutableInitialValues || {...defaultValues}
+      }
+      else {
+        return immutableInitialValues || {
+          ...defaultValues,
+          // we add the user as default target to royalties split
+          royaltiesSplit: user ? [{
+            address: user.id,
+            pct: 1000,
+          }]:[]
+        }
+      }
+    })(),
     onSubmit,
-    validationSchema: schemaNftArticleForm,
+    validationSchema: editMinted ? baseSchemaNftArticleForm : schemaNftArticleForm,
     validateOnMount: true,
   });
   const { values, errors, touched, setFieldValue, setFieldTouched } = formik
@@ -214,6 +228,7 @@ export function ArticleEditor({
           formValues={values}
           hasUnsavedMedias={hasLocalMedias}
           onMediasUnsavedClick={scrollToMediasSave}
+          isMinted={!!editMinted}
         />
       }
       <Field
@@ -361,70 +376,74 @@ export function ArticleEditor({
             error={!!errors.tags}
           />
         </Field>
+        
+        {!editMinted && (
+          <>
+            <Field error={errors.editions}>
+              <label htmlFor="editions">
+                Number of editions
+                <small>How many collectible editions <strong>(soon collectible on fxhash)</strong></small>
+              </label>
+              <InputTextUnit
+                unit=""
+                type="number"
+                name="editions"
+                value={values.editions}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={!!errors.editions}
+              />
+            </Field>
 
-        <Field error={errors.editions}>
-          <label htmlFor="editions">
-            Number of editions
-            <small>How many collectible editions <strong>(soon collectible on fxhash)</strong></small>
-          </label>
-          <InputTextUnit
-            unit=""
-            type="number"
-            name="editions"
-            value={values.editions}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            error={!!errors.editions}
-          />
-        </Field>
+            <Field error={errors.royalties}>
+              <label htmlFor="royalties">
+                Royalties
+                <small>Between 0% and 25%</small>
+              </label>
+              <InputTextUnit
+                unit="%"
+                type="number"
+                name="royalties"
+                min={0.1}
+                step={0.1}
+                max={25}
+                value={values.royalties}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={!!errors.royalties}
+              />
+            </Field>
 
-        <Field error={errors.royalties}>
-          <label htmlFor="royalties">
-            Royalties
-            <small>Between 0% and 25%</small>
-          </label>
-          <InputTextUnit
-            unit="%"
-            type="number"
-            name="royalties"
-            min={0.1}
-            step={0.1}
-            max={25}
-            value={values.royalties}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            error={!!errors.royalties}
-          />
-        </Field>
-
-        <Field
-          error={typeof errors.royaltiesSplit === "string"
-            ? errors.royaltiesSplit
-            : undefined
-          }
-        >
-          <label>
-            Royalties Splits
-            <small>
-              You can also split the proceeds on the secondary (royalties will be divided between the addresses)
-            </small>
-          </label>
-          <InputSplits
-            value={values.royaltiesSplit}
-            onChange={splits => setFieldValue("royaltiesSplit", splits)}
-            sharesTransformer={transformSplitsSum1000}
-            textShares="Shares (out of 1000)"
-            errors={errors.royaltiesSplit as any}
-          >
-            {(({ addAddress }) => (
-              <div className={cs(style.royalties_last_row)}>
-                <Donations
-                  onClickDonation={addAddress}
-                />
-              </div>
-            ))}
-          </InputSplits>
-        </Field>
+            <Field
+              error={typeof errors.royaltiesSplit === "string"
+                ? errors.royaltiesSplit
+                : undefined
+              }
+            >
+              <label>
+                Royalties Splits
+                <small>
+                  You can also split the proceeds on the secondary (royalties will be divided between the addresses)
+                </small>
+              </label>
+              <InputSplits
+                value={values.royaltiesSplit}
+                onChange={splits => setFieldValue("royaltiesSplit", splits)}
+                sharesTransformer={transformSplitsSum1000}
+                textShares="Shares (out of 1000)"
+                errors={errors.royaltiesSplit as any}
+              >
+                {(({ addAddress }) => (
+                  <div className={cs(style.royalties_last_row)}>
+                    <Donations
+                      onClickDonation={addAddress}
+                    />
+                  </div>
+                ))}
+              </InputSplits>
+            </Field>
+          </>
+        )}
 
         <Spacing size="3x-large"/>
 
@@ -449,7 +468,7 @@ export function ArticleEditor({
             color="secondary"
             disabled={hasErrors}
           >
-            preview &amp; mint
+            preview &amp; {editMinted ? "update" : "mint"}
           </Button>
         </Submit>
       </div>
