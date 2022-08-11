@@ -1,3 +1,5 @@
+@import "../../styles/fonts.scss";
+
 .article_wrapper {
   h1 {
     font-size: 2.5rem;
@@ -13,8 +15,7 @@
   blockquote,
   table,
   figcaption {
-    font-family: "Noto Serif", serif;
-    font-size: 1.2rem;
+    @include font-secondary;
   }
 
   p,
