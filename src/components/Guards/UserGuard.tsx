@@ -1,8 +1,19 @@
 import { useRouter } from "next/router"
-import { useContext, useEffect, PropsWithChildren } from "react"
+import { useContext, useEffect, PropsWithChildren, useMemo } from "react"
 import { UserContext } from "../../containers/UserProvider"
-import { ConnectedUser } from "../../types/entities/User"
+import { ConnectedUser, User } from "../../types/entities/User"
+import { isUserOrCollaborator } from "../../utils/user"
 
+
+// a collection of basic authorization utilities as factory functions
+export const UserGuardUtils: Record<
+  string, 
+  (...args: any[]) => (user: ConnectedUser) => boolean
+> = {
+  AUTHOR_OF: (author: User) => (user: ConnectedUser) => {
+    return user && author && isUserOrCollaborator(user as User, author)
+  }
+}
 
 interface Props {
   forceRedirect?: boolean
@@ -17,16 +28,29 @@ export function UserGuard({
   const userCtx = useContext(UserContext)
   const router = useRouter()
 
+  const isAllowed = useMemo(() => {
+    if (userCtx.user && userCtx.userFetched) {
+      if (allowed) {
+        return allowed(userCtx.user)
+      }
+      return true
+    }
+    return false
+  }, [userCtx, allowed])
+
+  // handle re-routing if needed (forceRedirect is set to true)
+  // * no user in context
+  // * user in context but not allowed
   useEffect(() => {
     if (forceRedirect && userCtx.autoConnectChecked) {
       if (!userCtx.user) {
         router.push(`/sync-redirect?target=${encodeURIComponent(router.asPath)}`)
       }
-      else if (userCtx.userFetched && allowed && !allowed(userCtx.user)) {
+      else if (userCtx.userFetched && !isAllowed) {
         router.push(`/`)
       }
     }
-  }, [allowed, forceRedirect, router, userCtx])
+  }, [isAllowed, forceRedirect, router, userCtx])
 
-  return userCtx.user ? <>{children}</> : null
+  return isAllowed ? <>{children}</> : null
 }
