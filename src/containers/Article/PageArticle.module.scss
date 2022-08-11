@@ -1,4 +1,5 @@
 @import "../../styles/Variables";
+@import "../../styles/fonts.scss";
 
 @mixin awidth {
   width: min(100%, 900px);
@@ -16,8 +17,7 @@
   .description {
     text-align: left;
     margin-top: $spacing-x-large;
-    font-family: "Noto Serif", serif;
-    font-size: 1.2rem;
+    @include font-secondary;
   }
 
   .thumbnail {
@@ -33,7 +33,7 @@
     }
 
     figcaption {
-      font-family: "Noto Serif", serif;
+      @include font-family-secondary;
       font-size: var(--font-size-small);
       font-weight: bold;
     }
@@ -133,8 +133,7 @@
     blockquote,
     table,
     figcaption {
-      font-family: "Noto Serif", serif;
-      font-size: 1.2rem;
+      @include font-secondary;
     }
 
     pre {

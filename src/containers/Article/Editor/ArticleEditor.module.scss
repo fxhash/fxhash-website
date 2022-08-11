@@ -1,3 +1,5 @@
+@import "../../../styles/fonts.scss";
+
 .field {
   margin-top: 2em;
 }
@@ -54,8 +56,7 @@
 .input_abstract {
   width: min(900px, 100%);
   line-height: 166%;
-  font-family: "Noto Serif", serif !important;
-  font-size: 1.2rem;
+  @include font-secondary;
 }
 
 .input_caption {
@@ -64,7 +65,7 @@
   margin: 0 auto;
   margin-top: 8px;
   font-size: var(--font-size-small);
-  font-family: "Noto Serif", serif !important;
+  @include font-family-secondary;
   font-weight: bold;
 
   &::placeholder {
