@@ -145,6 +145,7 @@ export class InlineTypeChanges implements AutoFormatChange {
 	distance: selectionAfterMatch.anchor.offset, 
 	unit: 'character'
       })
+      Transforms.insertText(editor, text)
       Object.keys(changeData).forEach((key: string) => {
 	editor.removeMark(key);
       })
