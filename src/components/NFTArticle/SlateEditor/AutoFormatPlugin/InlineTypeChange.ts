@@ -34,103 +34,125 @@ function getSelectionAccrossNodes(
   return { anchor, focus };
 }
 
-export class InlineTypeChange implements AutoFormatChange {
+export class InlineTypeChanges implements AutoFormatChange {
   shortcut: string | string[]
   type: AutoFormatChangeType
   data: ChangeData
+  formats: [ChangeData, string | string[]][]
 
-  constructor(shortcut: string | string[], data: ChangeData) {
-    this.shortcut = shortcut
-    this.data = data
-    this.type = 'InlineTypeChange'
+  constructor(formats: [ChangeData, string | string[]][]) {
+    this.type = 'InlineTypeChanges'
+    this.formats = formats;
+    this.shortcut = formats.map(([,shortcut]) => shortcut ).flat()
+    this.data = formats.reduce((acc:ChangeData, [data, shortcut]: [ChangeData, string | string[]]) => {
+      if (Array.isArray(shortcut)) {
+	shortcut.forEach((s: string) => {
+	  acc[s] = data;
+	})
+      } else {
+	acc[shortcut] = data;
+      }
+      return acc; 
+    }, {})
+    console.log(this.shortcut, this.data)
   }
 
   apply = (
     editor: Editor,
+    text: string
   ): boolean => {
-    const testValues = typeof this.shortcut === 'string' ? [this.shortcut] : this.shortcut;
-    const textBeforeCursor = `${getTextFromBlockStartToCursor(editor)} `;
-    const shortcutMatch = testValues.find((shortcut) => textBeforeCursor.endsWith(`${shortcut} `))
-    if (!shortcutMatch) return false;
-
-    // retreive the matches based on usual markdown pattern, e.g.
-    // __bold__, _italic_, etc.
-    const escapedShortcut = escapeRegExp(shortcutMatch);
-    const matcher = RegExp(`(?<!${escapedShortcut})${escapedShortcut}(?!${escapedShortcut}).+?${escapedShortcut}`, 'g')
-    const matches = textBeforeCursor.match(matcher);
-    if (!matches) return false;
-    Transforms.insertText(editor, ' ');
-
-    // We need to get a slate Point for the matched string inside the
-    // editor state. Since the text can be split up into multiple nodes
-    // and the selection can go across them, we need to retrieve the
-    // selection across multiple nodes
-    const matchStartIndex = textBeforeCursor.indexOf(matches[0])
-    const matchEndIndex = matchStartIndex + matches[0].length;
-    const inlineRange = getSelectionAccrossNodes(
-      editor,
-      matchStartIndex,
-      matchEndIndex,
-      shortcutMatch
-    )
-    Transforms.select(editor, inlineRange)
-    // For each value in data add a mark to the node
-    Object.keys(this.data).forEach((key: string) => {
-      const value = this.data[key];
-      editor.addMark(key, value);
-    })
-    Transforms.collapse(editor, { edge: 'anchor' })
-    // Now lets cleanup the md shortcuts from the text.
-    // Setting the marks on text nodes can result in a new structure
-    // because elements might be split up to apply the styles.
-    // Therefore we retrieve the updated selection of the matched string.
-    const selectionBeforeMatch = getSelectionAccrossNodes(
-      editor,
-      matchStartIndex,
-      matchEndIndex,
-      shortcutMatch
-    )
-    // Create a range that matches the md shortcut
-    // before the search string (anchor)
-    const rangeBefore = {
-      anchor: selectionBeforeMatch.anchor,
-      focus: {
-        ...selectionBeforeMatch.anchor,
-        offset: selectionBeforeMatch.anchor.offset + shortcutMatch.length
+    const testValues = typeof this.shortcut === 'string' ? [this.shortcut] : this.shortcut
+    const textBeforeCursor = getTextFromBlockStartToCursor(editor)
+    const isPasted = text.length > 1;
+    const shortcutMatch = testValues.find((shortcut) => textBeforeCursor.endsWith(shortcut))
+    if (shortcutMatch) {
+      const changeData = this.data[shortcutMatch] as ChangeData;
+      const [, shortcut] = this.formats.find(([data]) => data === changeData) || [];
+      if (!shortcut) return false;
+      const formatAliases = typeof shortcut === 'string' ? [shortcut] : shortcut;
+      // retreive the matches based on usual markdown pattern, e.g.
+      // __bold__, _italic_, etc.
+      const escapedShortcuts = `(${formatAliases.map((shortcut: string) => escapeRegExp(shortcut)).join('|')})`
+      const matcher = RegExp(`(?<!${escapedShortcuts})${escapedShortcuts}(?!${escapedShortcuts}).+?${escapedShortcuts}`, 'g')
+      const matches = textBeforeCursor.match(matcher);
+      if (!matches) return false;
+      // We need to get a slate Point for the matched string inside the
+      // editor state. Since the text can be split up into multiple nodes
+      // and the selection can go across them, we need to retrieve the
+      // selection across multiple nodes
+      const matchStartIndex = textBeforeCursor.indexOf(matches[0])
+      const matchEndIndex = matchStartIndex + matches[0].length;
+      const inlineRange = getSelectionAccrossNodes(
+	editor,
+	matchStartIndex,
+	matchEndIndex,
+	shortcutMatch
+      )
+      Transforms.select(editor, inlineRange)
+      // For each value in data add a mark to the node
+      Object.keys(changeData).forEach((key: string) => {
+	const value = changeData[key];
+	editor.addMark(key, value);
+      })
+      Transforms.collapse(editor, { edge: 'anchor' })
+      // Now lets cleanup the md shortcuts from the text.
+      // Setting the marks on text nodes can result in a new structure
+      // because elements might be split up to apply the styles.
+      // Therefore we retrieve the updated selection of the matched string.
+      const selectionBeforeMatch = getSelectionAccrossNodes(
+	editor,
+	matchStartIndex,
+	matchEndIndex,
+	shortcutMatch
+      )
+      // Create a range that matches the md shortcut
+      // before the search string (anchor)
+      const rangeBefore = {
+	anchor: selectionBeforeMatch.anchor,
+	focus: {
+	  ...selectionBeforeMatch.anchor,
+	  offset: selectionBeforeMatch.anchor.offset + shortcutMatch.length
+	}
       }
+      Transforms.delete(
+	editor,
+	{
+	  at: rangeBefore
+	}
+      )
+      const selectionAfterMatch = getSelectionAccrossNodes(
+	editor,
+	matchStartIndex,
+	matchEndIndex,
+	shortcutMatch
+      )
+      // Create a range that matches the md shortcut
+      // after the search string (focus)
+      const rangeAfter = {
+	anchor: selectionAfterMatch.anchor,
+	focus: {
+	  ...selectionAfterMatch.anchor,
+	  offset: selectionAfterMatch.anchor.offset + shortcutMatch.length
+	},
+      }
+      Transforms.delete(
+	editor,
+	{
+	  at: rangeAfter,
+	}
+      )
+      Transforms.move(editor, {
+	distance: selectionAfterMatch.anchor.offset, 
+	unit: 'character'
+      })
+      Object.keys(changeData).forEach((key: string) => {
+	editor.removeMark(key);
+      })
+      return true;
+    } else if(isPasted) {
+      return false
     }
-    Transforms.delete(
-      editor,
-      {
-        at: rangeBefore
-      }
-    )
-    const selectionAfterMatch = getSelectionAccrossNodes(
-      editor,
-      matchStartIndex,
-      matchEndIndex,
-      shortcutMatch
-    )
-    // Create a range that matches the md shortcut
-    // after the search string (focus)
-    const rangeAfter = {
-      anchor: selectionAfterMatch.anchor,
-      focus: {
-        ...selectionAfterMatch.anchor,
-        offset: selectionAfterMatch.anchor.offset + shortcutMatch.length
-      },
-    }
-    Transforms.delete(
-      editor,
-      {
-        at: rangeAfter,
-      }
-    )
-    Transforms.move(editor, {
-      distance: selectionAfterMatch.anchor.offset, 
-      unit: 'character'
-    })
-    return true;
+    return false;
   }
 }
 

@@ -1,11 +1,11 @@
 import { Range, Editor  } from 'slate';
 import { BlockTypeChange } from './BlockTypeChange'
-import { InlineTypeChange } from './InlineTypeChange'
+import { InlineTypeChanges } from './InlineTypeChange'
 import { CustomDirectiveChange } from './CustomDirectiveChange'
 import { LinkChange } from './LinkChange'
 
-export type AutoFormatChangeType = "BlockTypeChange" | "InlineTypeChange" | "CustomDirectiveChange" | "LinkChange";
-export type ChangeData = {[key: string]: number | string | boolean}
+export type AutoFormatChangeType = "BlockTypeChange" | "InlineTypeChanges" | "CustomDirectiveChange" | "LinkChange";
+export type ChangeData = {[key: string]: number | string | boolean | ChangeData}
 
 export type AutoFormatChange = {
   shortcut: string | string[]
@@ -33,9 +33,11 @@ const config: AutoFormatChange[] = [
   new BlockTypeChange('p',   {type: 'paragraph',} ), 
   new BlockTypeChange('>',   {type: 'blockquote',} ), 
   new BlockTypeChange(['---', '***', '___'], {type: 'thematicBreak'}),
-  new InlineTypeChange(['__', '**'], {strong: true}),
-  new InlineTypeChange(['_', '*'], {emphasis: true}),
-  new InlineTypeChange('`', {inlineCode: true}), 
+  new InlineTypeChanges([ 
+    [{strong: true}, ['__', '**']],
+    [{emphasis: true}, ['_', '*']],
+    [{inlineCodeg: true}, ['`']],
+  ]),
   new CustomDirectiveChange('tezos-storage'), 
   new CustomDirectiveChange('embed-media'), 
   new CustomDirectiveChange('link'),
@@ -48,7 +50,7 @@ export const withAutoFormat = (editor: Editor) => {
     const { selection } = editor;
     if (selection && Range.isCollapsed(selection)) {
       const handled = config.some(change =>  {
-        return ['BlockTypeChange', 'InlineTypeChange', 'CustomDirectiveChange', 'LinkChange'].indexOf(change.type) > -1 ?
+        return ['BlockTypeChange', 'InlineTypeChanges', 'CustomDirectiveChange', 'LinkChange'].indexOf(change.type) > -1 ?
           change.apply(editor, text) : false
       });
       if (handled) return true;
