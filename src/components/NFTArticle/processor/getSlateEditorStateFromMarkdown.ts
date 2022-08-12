@@ -106,7 +106,6 @@ export default async function getSlateEditorStateFromMarkdown(markdown: string):
       })
       .process(matterResult.content)
 
-    console.log(matterResult.content, processed.result)
     return {
       ...matterResult.data,
       editorState: processed.result as Descendant[]

@@ -30,7 +30,6 @@ export const figureDefinition: IArticleBlockDefinition<null> = {
   // when the AttributeSettings fires onEdit, we need to update the media
   // child component instead of the figure element
   onEditNodeFactory: (editor, element, path) => (update) => {
-    console.log(update);
     const children = Node.elements(element)
     for (const [child, childPath] of children) {
       if (medias.indexOf(child.type) > -1) {
