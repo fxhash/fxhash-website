@@ -1,7 +1,6 @@
 import style from "./TezosStorageSettings.module.scss"
 import text from "../../../../../styles/Text.module.css"
 import cs from "classnames"
-import { TEditAttributeComp } from "../Blocks"
 import { Submit } from "../../../../Form/Submit"
 import { Button } from "../../../../Button"
 import { Field } from "../../../../Form/Field"
@@ -18,6 +17,7 @@ import { Objkt } from "../../../../../types/entities/Objkt"
 import { LoaderBlock } from "../../../../Layout/LoaderBlock"
 import { ImageIpfs } from "../../../../Medias/ImageIpfs"
 import { generativeTokenTezosStoragePointer, gentkTezosStoragePointer } from "../../../../../utils/tezos-storage"
+import { TEditAttributeComp } from "../../../../../types/ArticleEditor/BlockDefinition";
 
 
 export const TezosStorageSettings: TEditAttributeComp = ({
@@ -50,12 +50,12 @@ export const TezosStorageSettings: TEditAttributeComp = ({
       <ModalTitle>
         Insert fxhash content
       </ModalTitle>
-    
+
       <p className={cs(text.info)}>
         You can first select a project, and then insert the project itself or pick a particular iteration of the project.
       </p>
       <Spacing size="small"/>
-      
+
       <div className={cs({
         [style.hidden]: !!project,
       })}>
@@ -136,7 +136,7 @@ export const TezosStorageSettings: TEditAttributeComp = ({
 }
 
 /**
- * Renderer for the projects for the Input Reactive Search 
+ * Renderer for the projects for the Input Reactive Search
  */
 function ProjectsReactiveSearchResultsRenderer({
   results,
