@@ -12,7 +12,7 @@ const mediaAttributeSettings: Record<string, TEditAttributeComp> = {
   "video": VideoAttributeSettings,
 }
 export const figureDefinition: IArticleBlockDefinition<null> = {
-  name: "Image",
+  name: "Figure",
   icon: null,
   render: FigureElement,
   hasUtilityWrapper: true,
