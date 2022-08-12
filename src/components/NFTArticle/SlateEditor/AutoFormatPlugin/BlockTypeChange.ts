@@ -19,7 +19,7 @@ export class BlockTypeChange implements AutoFormatChange {
     const isTrigger = text === this.trigger;
     const textBeforeCursor = isTrigger ? getTextFromBlockStartToCursor(editor) : text;
     const testValues = typeof this.shortcut === 'string' ? [this.shortcut] : this.shortcut;
-    const shortcutMatch = testValues.find((shortcut) => `${textBeforeCursor} `.startsWith(`${shortcut}`))
+    const shortcutMatch = testValues.find((shortcut) => `${textBeforeCursor} `.startsWith(`${shortcut} `))
     if (isTrigger && shortcutMatch) {
       Transforms.delete(editor, {
 	at: getRangeFromBlockStartToCursor(editor),
