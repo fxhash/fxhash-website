@@ -12,24 +12,6 @@ import remarkGfm from "remark-gfm";
 
 interface DirectiveNodeProps { [key: string]: any }
 
-function createDirectiveNode(node: any, next: (children: any[]) => any): object {
-  const data = node.data || {}
-  const hProperties: {[key:string]: any} = (data.hProperties || {}) as {[key:string]: any}
-  // extract only defined props to avoid error serialization of undefined
-  const propertiesWithoutUndefined: DirectiveNodeProps = Object.keys(hProperties)
-    .reduce((acc: DirectiveNodeProps, key: string) =>{
-      const value = hProperties[key];
-      if (value) {
-        acc[key] = value;
-      }
-      return acc;
-    }, {});
-  return {
-    type: data.hName,
-    children: next(node.children),
-    ...propertiesWithoutUndefined
-  };
-}
 function createMathNode(node: any) {
   return {
     type: node.type,
@@ -37,9 +19,8 @@ function createMathNode(node: any) {
     math: node.value,
   }
 }
-
 function markdownImageToFigure(node: any) {
-  return {
+  return ({
     type: "figure",
     children: [{
       type: "image",
@@ -53,13 +34,52 @@ function markdownImageToFigure(node: any) {
         text: node.alt
       }]
     }]
-  }
+  });
+}
+function markdownDirectiveVideoToFigure(node: any) {
+  return ({
+    type: "figure",
+    children: [{
+      type: "video",
+      src: node.src || '',
+      children: [{
+        text: ""
+      }],
+    }, {
+      type: "figcaption",
+      children: node.children,
+    }]
+  });
 }
 
+const directives: Record<string, (node: any) => object> = {
+  "video": markdownDirectiveVideoToFigure
+}
+
+function createDirectiveNode(node: any, next: (children: any[]) => any): object {
+  const data = node.data || {}
+  const hProperties: {[key:string]: any} = (data.hProperties || {}) as {[key:string]: any}
+  // extract only defined props to avoid error serialization of undefined
+  const propertiesWithoutUndefined: DirectiveNodeProps = Object.keys(hProperties)
+    .reduce((acc: DirectiveNodeProps, key: string) =>{
+      const value = hProperties[key];
+      if (value) {
+        acc[key] = value;
+      }
+      return acc;
+    }, {});
+  const newNode = {
+    type: data.hName,
+    children: next(node.children),
+    ...propertiesWithoutUndefined
+  };
+  const instanciateNode = directives[newNode.type]
+  return instanciateNode ? instanciateNode(newNode) : newNode;
+}
 const remarkSlateTransformerOverrides: OverridedMdastBuilders = {
-  textDirective:  createDirectiveNode,
-  leafDirective:  createDirectiveNode,
-  containerDirective:  createDirectiveNode,
+  textDirective: createDirectiveNode,
+  leafDirective: createDirectiveNode,
+  containerDirective: createDirectiveNode,
   "inlineMath": createMathNode,
   "math": createMathNode,
   image: markdownImageToFigure,
@@ -86,6 +106,7 @@ export default async function getSlateEditorStateFromMarkdown(markdown: string):
       })
       .process(matterResult.content)
 
+    console.log(matterResult.content, processed.result)
     return {
       ...matterResult.data,
       editorState: processed.result as Descendant[]

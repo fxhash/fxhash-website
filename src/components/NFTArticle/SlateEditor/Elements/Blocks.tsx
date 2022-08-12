@@ -1,18 +1,14 @@
-import { FunctionComponent, ReactNode } from "react"
-import { RenderElementProps } from "slate-react"
 import Embed from "../../elements/Embed/Embed"
 import style from '../../NFTArticle.module.scss';
-import { FigureElement } from "../../elements/Figure"
-import { FigcaptionElement } from "../../elements/Figcaption"
-import { ImageElement } from "../../elements/ImageElement"
+import { FigureElement } from "../../elements/Figure/FigureEditor"
+import { FigcaptionElement } from "../../elements/Figure/FigcaptionEditor"
+import { ImageEditor } from "../../elements/Image/ImageEditor"
 import { Editor, Element, Node, Path, Transforms, Range } from "slate"
 import { HeadingAttributeSettings } from "./AttributeSettings/HeadingAttributeSettings"
 import { ListAttributeSettings } from "./AttributeSettings/ListAttributeSettings"
 import { BlockquoteElement } from "../../elements/Blockquote"
-import { ImageAttributeSettings } from "./AttributeSettings/ImageAttributeSettings"
-import { TAttributesEditorWrapper } from "../../../../types/ArticleEditor/ArticleEditorBlocks"
+import { ImageAttributeSettings } from "../../elements/Image/ImageAttributeSettings"
 import { BlockParamsModal } from "../Utils/BlockParamsModal"
-import { TEditNodeFnFactory } from "../../../../types/ArticleEditor/Transforms"
 import { TezosStorageSettings } from "./AttributeSettings/TezosStorageSettings"
 import { BlockKatexEditor } from "../../elements/BlockKatex/BlockKatexEditor";
 import { TableEditor } from "../../elements/Table/TableEditor";
@@ -22,7 +18,11 @@ import TezosStorageEditor from "./TezosStorageEditor";
 import { CodeAttributeSettings } from "./AttributeSettings/CodeAttributeSettings";
 import { CodeEditorElement } from "./CodeEditorElement";
 import { ThematicBreak } from "../../elements/ThematicBreak";
-import { breakBehaviors, EBreakBehavior, InsertBreakFunction } from "../Plugins/SlateBreaksPlugin";
+import { EBreakBehavior } from "../Plugins/SlateBreaksPlugin";
+import { IArticleBlockDefinition } from "../../../../types/ArticleEditor/BlockDefinition";
+import { videoDefinition } from "../../elements/Video/VideoDefinition";
+import { figcaptionDefinition, figureDefinition } from "../../elements/Figure/FigureDefinition";
+import { imageDefinition } from "../../elements/Image/ImageDefinition";
 
 export enum EArticleBlocks {
   "embed-media" = "embed-media",
@@ -47,6 +47,7 @@ export enum EArticleBlocks {
   "figure" = "figure",
   "figcaption" = "figcaption",
   "image" = "image",
+  "video" = "video"
 }
 
 export const ArticleBlocksList: (keyof EArticleBlocks)[] = Object.keys(
@@ -58,47 +59,17 @@ export const InstantiableArticleBlocksList: EArticleBlocks[] = [
   EArticleBlocks.heading,
   EArticleBlocks.thematicBreak,
   EArticleBlocks["tezos-storage"],
-  EArticleBlocks.figure,
-  EArticleBlocks.list,
+  EArticleBlocks.image,
+  EArticleBlocks.video,
   EArticleBlocks["embed-media"],
   EArticleBlocks.math,
   EArticleBlocks.table,
+  EArticleBlocks.list,
   EArticleBlocks.code,
   EArticleBlocks.blockquote,
 ]
 
-/**
- * The Instanciation Component can be displayed to enter informations about a
- * block, so that non-empty blocks aren't inserted by default
- */
-export interface IEditAttributeProps {
-  element: any
-  onEdit: (element: any) => void
-}
-export type TEditAttributeComp = FunctionComponent<IEditAttributeProps>
-
-export interface IArticleBlockDefinition {
-  name: string
-  icon: ReactNode
-  buttonInstantiable?: boolean
-  render: (props: RenderElementProps) => ReactNode
-  hasUtilityWrapper: boolean
-  hideFloatingInlineMenu?: boolean
-  instanciateElement?: () => Element
-  editAttributeComp?: TEditAttributeComp
-  editAttributeWrapper?: TAttributesEditorWrapper
-  // the definition can specify a function which can be called to output a
-  // function which will be called to update a node. This is useful if the
-  // default editNode function doesn't support certain edge cases
-  onEditNodeFactory?: TEditNodeFnFactory
-  // should the settings menu be hidden after node is update
-  hideSettingsAfterUpdate?: boolean
-  // prevent the auto-focus trigger when creating the element
-  preventAutofocusTrigger?: boolean
-  insertBreakBehavior?: EBreakBehavior | InsertBreakFunction
-}
-
-export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> = {
+export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition<any>> = {
   "embed-media": {
     name: "Embed media",
     icon: <i className="fa-brands fa-youtube" aria-hidden/>,
@@ -426,61 +397,13 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
     ),
     hasUtilityWrapper: false,
   },
-  "figure": {
-    name: "Image",
-    icon: <i className="fa-solid fa-image" aria-hidden/>,
-    buttonInstantiable: true,
-    render: FigureElement,
-    hasUtilityWrapper: true,
-    instanciateElement: () => ({
-      type: "figure",
-      children: [{
-        type: "image",
-        url: "",  // if "", will display the "add image" component
-        children: [{
-          text: ""
-        }]
-      }, {
-        type: "figcaption",
-        children: [{
-          text: ""
-        }]
-      }]
-    }),
-    editAttributeComp: ImageAttributeSettings,
-    editAttributeWrapper: BlockParamsModal,
-    // when the ImageAttributeSettings fires onEdit, we need to update the Image
-    // child component instead of the figure element
-    onEditNodeFactory: (editor, element, path) => (update) => {
-      const children = Node.elements(element)
-      for (const [child, childPath] of children) {
-        if (child.type === "image") {
-          Transforms.setNodes(editor, update, {
-            at: path.concat(childPath)
-          })
-          return
-        }
-      }
-    },
-    hideSettingsAfterUpdate: true,
-    preventAutofocusTrigger: true,
-  },
-  "figcaption": {
-    name: "Caption",
-    icon: null,
-    render: FigcaptionElement,
-    hasUtilityWrapper: false,
-    hideFloatingInlineMenu: true,
-  },
-  "image": {
-    name: "Image",
-    icon: null,
-    render: ImageElement,
-    hasUtilityWrapper: false,
-  },
+  "figure": figureDefinition,
+  "figcaption": figcaptionDefinition,
+  "image": imageDefinition,
+  "video": videoDefinition
 }
 
-export const DefaultBlockDefinition: IArticleBlockDefinition = {
+export const DefaultBlockDefinition: IArticleBlockDefinition<null> = {
   name: "NONE",
   icon: null,
   render: ({ attributes, element, children }) => (
@@ -494,6 +417,6 @@ export const DefaultBlockDefinition: IArticleBlockDefinition = {
  * Given the type of an element, outputs their corresponding BlockDefinition or
  * the default one if the one is not defined.
  */
-export function getArticleBlockDefinition(type: string): IArticleBlockDefinition {
+export function getArticleBlockDefinition(type: string): IArticleBlockDefinition<any> {
   return BlockDefinitions[type as EArticleBlocks] || DefaultBlockDefinition
 }

@@ -34,16 +34,16 @@
   figure {
     max-width: 100%;
 
-    img {
+    img, video {
       max-width: 100%;
       margin: 0 auto;
       display: block;
     }
 
     figcaption {
-      font-size: var(--font-size-small);
-      font-weight: bold;
       text-align: center;
+      font-weight: bold;
+      font-size: var(--font-size-small);
     }
   }
 

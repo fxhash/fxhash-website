@@ -9,7 +9,6 @@ import remarkUnwrapImages from "remark-unwrap-images";
 import remarkDirective from "remark-directive";
 import remarkRehype from "remark-rehype";
 import rehypeKatex from "rehype-katex";
-import rehypeHighlight from "rehype-highlight";
 import rehypePrism from "rehype-prism"
 import rehypeFormat from "rehype-format";
 import rehypeStringify from "rehype-stringify";
@@ -20,9 +19,10 @@ import { ComponentsWithNodeOptions, ComponentsWithoutNodeOptions } from "rehype-
 import { SharedOptions } from "rehype-react/lib";
 import { mdastFlattenListItemParagraphs, remarkFxHashCustom } from "./plugins"
 import { TezosStorage } from "../elements/TezosStorage"
-import { NFTArticleImage } from "../elements/Medias/NFTArticleImage";
+import { ImageDisplay } from "../elements/Image/ImageDisplay";
 import { CodeElement } from "../elements/CodeElement";
 import { ThematicBreak } from "../elements/ThematicBreak";
+import { VideoDisplay } from "../elements/Video/VideoDisplay";
 
 declare module "rehype-react" {
   interface WithNode {
@@ -48,7 +48,8 @@ const settingsRehypeReact = {
   components: {
     'tezos-storage': TezosStorage,
     'embed-media': Embed,
-    'img': NFTArticleImage,
+    'img': ImageDisplay,
+    'video': VideoDisplay,
     'pre': CodeElement,
     'hr': ThematicBreak,
   }

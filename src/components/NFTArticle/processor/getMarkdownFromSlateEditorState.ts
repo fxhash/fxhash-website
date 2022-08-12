@@ -27,37 +27,55 @@ function convertSlateLeafDirectiveToMarkdown(
   }
 }
 
-/**
- * Turns a figcaption element into an element which will be turned into an
- * image in proper markdown
- */
-function figureToMarkdown(node: any, next: (children: any[]) => any) {
+const createMarkdownImageFromFigure = (nodeFigure: Node, nodeImage: Node) => {
   // create a regular image node
   const imageNode: any = {
-    type: "image"
+    type: "image",
+    url: nodeImage.url
   }
 
   // find if there's a caption
-  const caption: Node|null = node.children.find(
+  const caption: Node|null = nodeFigure.children.find(
     (node: Node) => node.type === ("figcaption" as any)
   )
   if (caption && caption.children?.length > 0) {
     imageNode.alt = caption.children[0].text
   }
-  // now do the same for the image element
-  const image: Node|null = node.children.find(
-    (node: Node) => node.type === "image"
-  )
-  if (image) {
-    imageNode.url = image.url
-  }
-
   return imageNode
+}
+
+const createMarkdownVideoFromFigure = (nodeFigure: Node, nodeVideo: Node) => {
+  const videoNode: Node = {
+    type: 'video',
+    src: nodeVideo.src
+  }
+  const caption: Node|null = nodeFigure.children.find(
+    (node: Node) => node.type === ("figcaption" as any)
+  )
+  if (caption && caption.children?.length > 0) {
+    videoNode.children = caption.children
+  }
+  return convertSlateLeafDirectiveToMarkdown(videoNode)
+}
+const mediasConvert: Record<string, (nodeFigure: Node, nodeMedia: Node) => any> = {
+  "image": createMarkdownImageFromFigure,
+  "video": createMarkdownVideoFromFigure
+}
+/**
+ * Turns a figcaption element into an element which will be turned into an image or video
+ * in proper markdown
+ */
+function figureToMarkdown(node: any, next: (children: any[]) => any) {
+  const mediaNode: Node|null = node.children.find(
+    (node: Node) => ["image", "video"].indexOf(node.type) > -1
+  )
+  return mediasConvert[mediaNode.type](node, mediaNode);
 }
 
 const slateToRemarkTransformerOverrides: OverridedSlateBuilders = {
   'tezos-storage': convertSlateLeafDirectiveToMarkdown,
   'embed-media': convertSlateLeafDirectiveToMarkdown,
+//  'video': convertSlateLeafDirectiveToMarkdown,
   figure: figureToMarkdown,
   inlineMath: (node: any) => ({
     type: node.type,
@@ -98,7 +116,7 @@ export default async function getMarkdownFromSlateEditorState(slate: Node[] ) {
 
     const directiveAttributesFixed = text.replaceAll(
       // matches tezos-storage directives & captures the alt text & the attributes
-      /::tezos-storage\[([^\]]*)\]{([^}]*)}/g, 
+      /::tezos-storage\[([^\]]*)\]{([^}]*)}/g,
       (match, ...captures) => {
         const alt = captures[0]
         const attributes: string = captures[1]

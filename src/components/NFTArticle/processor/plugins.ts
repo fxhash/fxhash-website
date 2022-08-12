@@ -5,6 +5,7 @@ import { h } from "hastscript"
 import { NFTArticleElementComponent } from "../../../types/Article"
 import Embed from "../elements/Embed/Embed"
 import TezosStorageEditor from "../SlateEditor/Elements/TezosStorageEditor"
+import { VideoEditor } from "../elements/Video/VideoEditor";
 
 interface CustomArticleElementsByType {
   leafDirective: Record<string, NFTArticleElementComponent<any>>,
@@ -15,6 +16,7 @@ export const customNodes: CustomArticleElementsByType = {
   leafDirective: {
     "tezos-storage": TezosStorageEditor,
     "embed-media": Embed,
+    "video": VideoEditor,
   },
   textDirective: {},
   containerDirective: {},
@@ -28,7 +30,7 @@ export function remarkFxHashCustom(): Transformer<Root, Root> {
         node.type === 'containerDirective'
       ) {
         const component = customNodes[node.type]?.[node.name]
-        if (component.getPropsFromNode) {
+        if (component?.getPropsFromNode) {
           const hast: any = h(node.name, node.attributes)
           const props = component.getPropsFromNode(node, hast.properties)
           if (props) {
