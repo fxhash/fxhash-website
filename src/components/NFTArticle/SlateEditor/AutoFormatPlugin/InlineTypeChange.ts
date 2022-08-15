@@ -76,12 +76,14 @@ export class InlineTypeChanges implements AutoFormatChange {
       const matcher = RegExp(`(?<!${escapedShortcuts})${escapedShortcuts}(?!${escapedShortcuts}).+?${escapedShortcuts}`, 'g')
       const matches = textBeforeCursor.match(matcher);
       if (!matches) return false;
+      const match = matches[0];
+      if (!match.startsWith(shortcutMatch) || !match.endsWith(shortcutMatch)) return false
       // We need to get a slate Point for the matched string inside the
       // editor state. Since the text can be split up into multiple nodes
       // and the selection can go across them, we need to retrieve the
       // selection across multiple nodes
-      const matchStartIndex = textBeforeCursor.indexOf(matches[0])
-      const matchEndIndex = matchStartIndex + matches[0].length;
+      const matchStartIndex = textBeforeCursor.indexOf(match)
+      const matchEndIndex = matchStartIndex + match.length;
       const inlineRange = getSelectionAccrossNodes(
 	editor,
 	matchStartIndex,
@@ -145,10 +147,19 @@ export class InlineTypeChanges implements AutoFormatChange {
 	distance: selectionAfterMatch.anchor.offset, 
 	unit: 'character'
       })
+
       Transforms.insertText(editor, text)
-      Object.keys(changeData).forEach((key: string) => {
-	editor.removeMark(key);
+      const selection = editor.selection as Range;
+
+      Transforms.select(editor, {
+	anchor: {...selection.anchor, offset: selection.anchor.offset - text.length},
+	focus: selection.focus,
       })
+
+      Object.keys(changeData).forEach((key: string) => {
+	editor.removeMark(key)
+      })
+      Transforms.collapse(editor, {edge: 'focus'})
       return true;
     } else if(isPasted) {
       return false

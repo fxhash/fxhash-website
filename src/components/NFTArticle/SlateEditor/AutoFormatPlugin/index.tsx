@@ -36,7 +36,7 @@ const config: AutoFormatChange[] = [
   new InlineTypeChanges([ 
     [{strong: true}, ['__', '**']],
     [{emphasis: true}, ['_', '*']],
-    [{inlineCodeg: true}, ['`']],
+    [{inlineCode: true}, ['`']],
   ]),
   new CustomDirectiveChange('tezos-storage'), 
   new CustomDirectiveChange('embed-media'), 
