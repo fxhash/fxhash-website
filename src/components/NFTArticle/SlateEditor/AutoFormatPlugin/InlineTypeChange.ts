@@ -2,6 +2,7 @@ import { Editor, Node, NodeEntry, Path, Range, Transforms } from 'slate';
 import { AutoFormatChange, AutoFormatChangeType, ChangeData } from './index';
 import { getTextFromBlockStartToCursor } from '../utils';
 import { escapeRegExp } from "../../../../utils/regex";
+import { getSlateEditorStateFromMarkdownSync } from '../../processor/getSlateEditorStateFromMarkdown';
 
 function getSelectionAccrossNodes(
   editor: Editor,
@@ -162,7 +163,14 @@ export class InlineTypeChanges implements AutoFormatChange {
       Transforms.collapse(editor, {edge: 'focus'})
       return true;
     } else if(isPasted) {
-      return false
+      try {
+	const parsed = getSlateEditorStateFromMarkdownSync(text)
+	if(!parsed) return false;
+	Transforms.insertFragment(editor, parsed.editorState[0].children)
+	return true;
+      } catch {
+	return false
+      }
     }
     return false;
   }
