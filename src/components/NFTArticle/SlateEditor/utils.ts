@@ -84,3 +84,13 @@ export function lookupElementAtSelection(
   const [, nodePath] = Editor.last(editor, selection)
   return Editor.parent(editor, nodePath)
 }
+
+
+export function getBlockElementAtSelection(editor: Editor, selection: Location): NodeEntry { 
+  const [element] = Editor.nodes(editor, {
+    at: selection, 
+    match: n =>
+      !Editor.isEditor(n) && Element.isElement(n),
+  })
+  return element
+}
