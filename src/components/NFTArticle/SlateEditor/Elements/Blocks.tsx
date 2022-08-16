@@ -15,14 +15,15 @@ import { TableEditor } from "../../elements/Table/TableEditor";
 import { TableCell } from "../../elements/Table/TableCell";
 import { SlateTable } from "../Plugins/SlateTablePlugin";
 import TezosStorageEditor from "./TezosStorageEditor";
-import { CodeAttributeSettings } from "./AttributeSettings/CodeAttributeSettings";
-import { CodeEditorElement } from "./CodeEditorElement";
+import { CodeAttributeSettings } from "../../elements/Code/CodeAttributeSettings";
+import { CodeEditor } from "../../elements/Code/CodeEditor";
 import { ThematicBreak } from "../../elements/ThematicBreak";
 import { EBreakBehavior } from "../Plugins/SlateBreaksPlugin";
 import { IArticleBlockDefinition } from "../../../../types/ArticleEditor/BlockDefinition";
 import { videoDefinition } from "../../elements/Video/VideoDefinition";
 import { figcaptionDefinition, figureDefinition } from "../../elements/Figure/FigureDefinition";
 import { imageDefinition } from "../../elements/Image/ImageDefinition";
+import { codeDefinition } from "../../elements/Code/CodeDefinition";
 
 export enum EArticleBlocks {
   "embed-media" = "embed-media",
@@ -340,21 +341,7 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition<an
       }]
     })
   },
-  "code": {
-    name: "Code",
-    icon: <i className="fa-solid fa-code" aria-hidden/>,
-    buttonInstantiable: true,
-    render: CodeEditorElement,
-    hasUtilityWrapper: true,
-    instanciateElement: () => ({
-      type: "code",
-      lang: "js",
-      children: [{
-        text: ""
-      }]
-    }),
-    editAttributeComp: CodeAttributeSettings,
-  },
+  "code": codeDefinition,
   "yaml": {
     name: "YAML",
     icon: <i className="fa-solid fa-code" aria-hidden/>,

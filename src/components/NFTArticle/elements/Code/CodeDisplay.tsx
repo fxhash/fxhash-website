@@ -1,12 +1,12 @@
-import style from "./CodeElement.module.scss"
+import style from "./CodeDisplay.module.scss"
 import cs from "classnames"
 import { PropsWithChildren, useMemo } from "react"
-import { getCodeEditorLang } from "../SlateEditor/Elements/AttributeSettings/CodeAttributeSettings"
+import { getCodeEditorLang } from "./CodeLanguages"
 
 interface Props {
   className: string
 }
-export function CodeElement({
+export function CodeDisplay({
   className,
   children,
 }: PropsWithChildren<Props>) {
