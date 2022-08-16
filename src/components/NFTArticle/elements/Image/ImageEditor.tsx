@@ -1,9 +1,9 @@
 import { PropsWithChildren, useState } from "react"
 import { Transforms } from "slate"
 import { ReactEditor, useSlateStatic } from "slate-react"
-import editorStyle from "../../SlateEditor/Utils/EditorStyles.module.scss"
+import editorStyle from "../../SlateEditor/UI/EditorStyles.module.scss"
 import cs from "classnames"
-import { BlockParamsModal } from "../../SlateEditor/Utils/BlockParamsModal"
+import { BlockParamsModal } from "../../SlateEditor/UI/BlockParamsModal"
 import { ImageAttributeSettings } from "./ImageAttributeSettings"
 import { ImagePolymorphic } from "../../../Medias/ImagePolymorphic"
 

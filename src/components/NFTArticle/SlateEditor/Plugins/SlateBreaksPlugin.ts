@@ -1,7 +1,7 @@
 import { Transforms, Path, NodeEntry, Node } from "slate";
 import { EnhanceEditorWith, FxEditor } from "../../../../types/ArticleEditor/Editor";
 import { lookupElementAtSelection } from "../utils";
-import { getArticleBlockDefinition } from "../Elements/Blocks";
+import { getArticleBlockDefinition } from "../Blocks";
 
 export enum EBreakBehavior {
   "default" = "default",

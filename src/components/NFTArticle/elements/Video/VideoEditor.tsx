@@ -1,12 +1,10 @@
-import { memo, PropsWithChildren, useCallback, useState } from "react"
+import { memo, NamedExoticComponent, PropsWithChildren, useCallback, useState } from "react"
 import { Transforms } from "slate"
 import { ReactEditor, useSlateStatic } from "slate-react"
 import style from "./VideoEditor.module.scss"
-import articleStyle from "../../NFTArticle.module.scss";
-import editorStyle from "../../SlateEditor/Utils/EditorStyles.module.scss"
+import editorStyle from "../../SlateEditor/UI/EditorStyles.module.scss"
 import cs from "classnames"
-import { NFTArticleElementComponent } from "../../../../types/Article";
-import { BlockParamsModal } from "../../SlateEditor/Utils/BlockParamsModal";
+import { BlockParamsModal } from "../../SlateEditor/UI/BlockParamsModal";
 import { VideoAttributeSettings } from "./VideoAttributeSettings";
 import { VideoPolymorphic } from "../../../Medias/VideoPolymorphic";
 
@@ -15,7 +13,7 @@ interface VideoElementProps {
   element?: any
   src?: string,
 }
-export const VideoEditor: NFTArticleElementComponent<PropsWithChildren<VideoElementProps>> = memo(({
+export const VideoEditor: NamedExoticComponent<PropsWithChildren<VideoElementProps>> = memo(({
   attributes,
   element,
   children,
@@ -79,8 +77,3 @@ export const VideoEditor: NFTArticleElementComponent<PropsWithChildren<VideoElem
 });
 
 VideoEditor.displayName = 'VideoElement';
-VideoEditor.getPropsFromNode = (node, properties) => {
-  return ({
-    src: properties.src || '',
-  })
-}
