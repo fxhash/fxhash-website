@@ -3,6 +3,7 @@ import { AutoFormatChangeType, ChangeData, AutoFormatChange } from './index';
 import { getRangeFromBlockStartToCursor, getTextFromBlockStartToCursor } from '../utils';
 import { BlockDefinitions, EArticleBlocks } from '../Elements/Blocks';
 import { escapeRegExp } from "../../../../utils/regex";
+
 export class BlockTypeChange implements AutoFormatChange {
   shortcut: string | string[]
   type: AutoFormatChangeType
@@ -30,8 +31,8 @@ export class BlockTypeChange implements AutoFormatChange {
       )
       return true;
     } else {
-      const matchLink = new RegExp(`^(${testValues.map(testValue => escapeRegExp(testValue)).join('|')})\\s(?<text>.*)`, 'gm');
-      const matches = matchLink.exec(textBeforeCursor);
+      const matchShortcutWithText = new RegExp(`^(${testValues.map(testValue => escapeRegExp(testValue)).join('|')})\\s(?<text>.*)`, 'gm');
+      const matches = matchShortcutWithText.exec(textBeforeCursor);
       if (!matches) return false;
       const { type } = this.data;
       const matchedText = matches.groups?.text;

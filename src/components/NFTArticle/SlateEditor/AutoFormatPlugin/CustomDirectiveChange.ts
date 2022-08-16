@@ -17,12 +17,11 @@ export class CustomDirectiveChange implements AutoFormatChange {
     this.trigger = ' '
   }
 
-  getMarkdownFromCurrentCursorPosition(editor: Editor):string|undefined {
+  getMarkdownFromCurrentCursorPosition(editor: Editor):string|null {
     const textBeforeCursor = getTextFromBlockStartToCursor(editor);
     const matchDirective = new RegExp('(:+(?<type>.*)\\[(?<text>.*)]{(?<attributes>.*)})\\s*$', 'mg')
     const matches = matchDirective.exec(textBeforeCursor);
     if (!matches) return null; 
-    const index =  textBeforeCursor.indexOf(matches[0])
     return matches[0];
   }
 

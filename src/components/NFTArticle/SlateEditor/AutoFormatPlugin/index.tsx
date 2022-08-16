@@ -40,7 +40,6 @@ const config: AutoFormatChange[] = [
   ]),
   new CustomDirectiveChange('tezos-storage'), 
   new CustomDirectiveChange('embed-media'), 
-  new CustomDirectiveChange('link'),
   new LinkChange(), 
 ]
 
