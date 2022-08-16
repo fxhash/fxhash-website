@@ -20,7 +20,7 @@ import { mdastFlattenListItemParagraphs, remarkFxHashCustom } from "./plugins"
 import { TezosStorageDisplay } from "../elements/TezosStorage/TezosStorageDisplay"
 import { ImageDisplay } from "../elements/Image/ImageDisplay";
 import { CodeDisplay } from "../elements/Code/CodeDisplay";
-import { ThematicBreakDisplay } from "../elements/ThematicBreak/ThematicBreakDisplay";
+import { ThematicBreakEditor } from "../elements/ThematicBreak/ThematicBreakEditor";
 import { VideoDisplay } from "../elements/Video/VideoDisplay";
 
 declare module "rehype-react" {
@@ -50,7 +50,7 @@ const settingsRehypeReact = {
     'img': ImageDisplay,
     'video': VideoDisplay,
     'pre': CodeDisplay,
-    'hr': ThematicBreakDisplay,
+    'hr': ThematicBreakEditor,
   }
 }
 interface PayloadNFTArticleComponentsFromMarkdown {
