@@ -164,8 +164,12 @@ export class InlineTypeChanges implements AutoFormatChange {
       return true;
     } else if(isPasted) {
       try {
+	const escapedShortcuts = `(${(this.shortcut as string[]).map((shortcut: string) => escapeRegExp(shortcut)).join('|')})`
+	const matcher = RegExp(`(?<!${escapedShortcuts})${escapedShortcuts}(?!${escapedShortcuts}).+?${escapedShortcuts}`, 'g')
+	const matches = matcher.exec(text)
+	if (!matches) return false
 	const parsed = getSlateEditorStateFromMarkdownSync(text)
-	if(!parsed) return false;
+	if (!parsed) return false
 	Transforms.insertFragment(editor, parsed.editorState[0].children)
 	return true;
       } catch {
