@@ -4,7 +4,7 @@ import { ReactNode, useCallback, useMemo, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { prettyPrintBytes } from "../../utils/units"
 
-interface Props {
+export interface DropzoneProps {
   accepted?: string | string[]
   files?: File[] | null
   onChange: (files: File[]|null) => void
@@ -22,7 +22,7 @@ export function Dropzone({
   onChange,
   onClick,
   className
-}: Props) {
+}: DropzoneProps) {
   const [error, setError] = useState<string|null>(null)
 
   const onDrop = useCallback(acceptedFiles => {

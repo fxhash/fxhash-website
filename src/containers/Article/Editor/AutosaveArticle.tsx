@@ -7,7 +7,6 @@ import cs from "classnames";
 import { ArticlesContext } from "../../../context/Articles";
 import { debounce } from "../../../utils/debounce";
 import { NFTArticleForm } from "../../../types/ArticleEditor/Editor";
-import { formatRelative } from "date-fns";
 
 interface AutosaveArticleProps {
   id: string,
