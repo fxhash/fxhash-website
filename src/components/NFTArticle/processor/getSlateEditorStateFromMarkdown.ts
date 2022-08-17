@@ -12,11 +12,13 @@ import remarkGfm from "remark-gfm";
 import { mathProcessor } from "../elements/Math/MathProcessor";
 import { imageProcessor } from "../elements/Image/ImageProcessor";
 import { videoProcessor } from "../elements/Video/VideoProcessor";
+import { audioProcessor } from "../elements/Audio/AudioProcessor";
 
 interface DirectiveNodeProps { [key: string]: any }
 
 const directives: Record<string, (node: any) => object> = {
   "video": videoProcessor.transformMarkdownMdhastToSlate!,
+  "audio": audioProcessor.transformMarkdownMdhastToSlate!,
 }
 
 function createDirectiveNode(node: any, next: (children: any[]) => any): object {

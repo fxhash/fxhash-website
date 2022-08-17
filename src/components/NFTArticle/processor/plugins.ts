@@ -6,6 +6,7 @@ import { IArticleElementProcessor } from "../../../types/ArticleEditor/Processor
 import { embedProcessor } from "../elements/Embed/EmbedProcessor";
 import { tezosStorageProcessor } from "../elements/TezosStorage/TezosStorageProcessor";
 import { videoProcessor } from "../elements/Video/VideoProcessor";
+import { audioProcessor } from "../elements/Audio/AudioProcessor";
 
 interface CustomArticleElementsByType {
   leafDirective: Record<string, IArticleElementProcessor>,
@@ -17,6 +18,7 @@ export const customNodes: CustomArticleElementsByType = {
     "tezos-storage": tezosStorageProcessor,
     "embed-media": embedProcessor,
     "video": videoProcessor,
+    "audio": audioProcessor,
   },
   textDirective: {},
   containerDirective: {},
