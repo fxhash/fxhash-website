@@ -1,17 +1,22 @@
 import { ReactNode } from "react";
-import "prismjs/components/prism-clike"
-import "prismjs/components/prism-javascript"
-import "prismjs/components/prism-css"
-import "prismjs/components/prism-c"
-import "prismjs/components/prism-glsl"
-import "prismjs/components/prism-markdown"
-import "prismjs/components/prism-json"
-import "prismjs/components/prism-java"
-import "prismjs/components/prism-cpp"
-import "prismjs/components/prism-r"
-import "prismjs/components/prism-julia"
-import "prismjs/components/prism-python"
-import "prismjs/components/prism-rust"
+
+// SSR Fix
+import Prism from "prismjs";
+if (Prism) {
+  require("prismjs/components/prism-clike");
+  require("prismjs/components/prism-javascript");
+  require("prismjs/components/prism-css");
+  require("prismjs/components/prism-c");
+  require("prismjs/components/prism-glsl");
+  require("prismjs/components/prism-markdown");
+  require("prismjs/components/prism-json");
+  require("prismjs/components/prism-java");
+  require("prismjs/components/prism-cpp");
+  require("prismjs/components/prism-r");
+  require("prismjs/components/prism-julia");
+  require("prismjs/components/prism-python");
+  require("prismjs/components/prism-rust");
+}
 
 export interface ILanguageEntry {
   name: string
