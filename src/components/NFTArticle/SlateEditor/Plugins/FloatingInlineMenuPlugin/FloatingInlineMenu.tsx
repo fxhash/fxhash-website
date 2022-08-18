@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { ReactNode, useRef, useState } from 'react'
 import style from "./FloatingInlineMenu.module.scss"
 import effects from "../../../../../styles/Effects.module.scss"
 import cs from "classnames"
@@ -14,6 +14,32 @@ import {useClientEffect} from '../../../../../utils/hookts'
 import { lookupElementAtSelection, lookupElementByType } from '../../utils'
 import { LinkButton } from './LinkButton'
 import { BlockDefinitions, EArticleBlocks } from '../../Blocks'
+import { ALL_TEXT_FORMATS } from '../../index'
+
+export const ALL_INLINE_FORMATS  = [...ALL_TEXT_FORMATS, 'link'] as const
+export type InlineServiceKey = typeof ALL_INLINE_FORMATS[number]
+
+export type InlineServices = {[key in InlineServiceKey]: ReactNode}
+
+const InlineMenuServices:InlineServices = {
+  'strong': () => (
+    <TextFormatButton format="strong" hotkey="cmd+b">
+      <i className="fa-solid fa-bold"/>
+    </TextFormatButton>
+  ),
+  'emphasis': () => (
+    <TextFormatButton format="emphasis" hotkey="mod+i" >
+      <i className="fa-solid fa-italic"/>
+    </TextFormatButton>
+  ),
+  'inlineCode': () => (
+    <TextFormatButton format="inlineCode" hotkey="mod+`">
+      <i className="fa-solid fa-code" />
+    </TextFormatButton>
+  ),
+  'link': ({ setOverrideContent }: {setOverrideContent: () => void})  =>
+    <LinkButton setOverrideContent={setOverrideContent} />
+}
 
 const FloatingInlineMenu = () => {
   const ref = useRef<HTMLDivElement>(null)
@@ -22,7 +48,10 @@ const FloatingInlineMenu = () => {
   const [overrideContent, setOverrideContent] = useState(null)
 
   const [elementUnderCursor] = lookupElementAtSelection(editor, editor.selection as Location) || []
-  const { hideFloatingInlineMenu } = BlockDefinitions[elementUnderCursor?.type as any as EArticleBlocks] || {};
+
+  const { inlineMenu } = BlockDefinitions[elementUnderCursor?.type as any as EArticleBlocks] || {};
+
+  let hideFloatingInlineMenu = inlineMenu === null;
 
   const activeElement = lookupElementByType(editor, 'link') as NodeEntry;
 
@@ -72,18 +101,22 @@ const FloatingInlineMenu = () => {
       }}
     >
       {(overrideContent && React.cloneElement(overrideContent, {activeElement: activeElement?.[0]})) ||
-	<>
-	  <TextFormatButton format="strong">
-	    <i className="fa-solid fa-bold"/>
-	  </TextFormatButton>
-	  <TextFormatButton format="emphasis" >
-	    <i className="fa-solid fa-italic"/>
-	  </TextFormatButton>
-	  <TextFormatButton format="inlineCode">
-	    <i className="fa-solid fa-code" />
-	  </TextFormatButton>
-	  <LinkButton setOverrideContent={setOverrideContent} />
-	</>
+      <>
+        {
+          Object.keys(InlineMenuServices).map((key: string) => {
+            // if inlineMenu from blockdefinitions is an array we only want to allow those
+            // services specified in the array
+            if (Array.isArray(inlineMenu) && !inlineMenu.includes(key)) return null;
+            const Service = InlineMenuServices[key as InlineServiceKey] as any;
+            return (
+              <Service 
+                key={key}
+                setOverrideContent={setOverrideContent}
+              />
+            )
+          })
+        }
+      </>
       }
     </div>,
     document.body

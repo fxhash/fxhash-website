@@ -33,4 +33,5 @@ export const tableCellDefinition: IArticleBlockDefinition<null> = {
   icon: <i className="fa-regular fa-table" aria-hidden />,
   render: TableCellEditor,
   hasUtilityWrapper: false,
+  inlineMenu: ['strong', 'emphasis'],
 }

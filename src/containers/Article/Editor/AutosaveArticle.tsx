@@ -35,7 +35,6 @@ const _AutosaveArticle = ({
         minted: isMinted,
       },
     })
-    console.log(articleFormState?.body);
     setStatus('saved');
   }, [dispatch, id, isMinted])
 
