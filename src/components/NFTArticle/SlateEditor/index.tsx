@@ -7,7 +7,7 @@ import React, {
   useMemo,
   useState
 } from "react";
-import { BaseElement, createEditor, Node, Descendant } from "slate";
+import { BaseElement, createEditor, Node, Descendant, Editor } from "slate";
 import {
   Slate,
   Editable,
@@ -17,7 +17,6 @@ import {
 import { withHistory } from "slate-history"
 import { TezosStorageProps } from "../elements/TezosStorage"
 import { withAutoFormat } from './AutoFormatPlugin/'
-import { onKeyDownHotkeyPlugin } from "./HotkeyPlugin/HotkeyPlugin"
 import { RenderElements } from "./Elements/RenderElements"
 import { withConstraints } from "./Plugins/SlateConstraintsPlugin"
 import { IEditorMediaFile } from "../../../types/ArticleEditor/Image";
@@ -27,6 +26,7 @@ import useInit from "../../../hooks/useInit";
 import dynamic from 'next/dynamic'
 import { onKeyDownTablePlugin, withTables } from "./Plugins/SlateTablePlugin";
 import { withBreaks } from "./Plugins/SlateBreaksPlugin";
+import { withSimpleCopyPaste } from "./Plugins/SlateSimpleCopyPaste";
 
 
 const FloatingInlineMenu = dynamic(() => import('./FloatingInlineMenu/FloatingInlineMenu'), {
@@ -129,13 +129,13 @@ export const SlateEditor = forwardRef<FxEditor, SlateEditorProps>(({
     onChange?.(newValue)
   }, [onChange])
   const handleKeyDown = useCallback((event: KeyboardEvent<HTMLDivElement>) => {
-    onKeyDownHotkeyPlugin(editor, event)
     onKeyDownTablePlugin(editor, event)
   }, [editor])
 
   // mutate ref to editor whenever editor ref changes
   useImperativeHandle(ref, () => editor, [editor])
   useInit(() => {
+    Editor.normalize(editor, { force: true });
     if (onInit) onInit(editor)
   })
   return (

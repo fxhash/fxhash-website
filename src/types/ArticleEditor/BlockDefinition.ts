@@ -30,7 +30,7 @@ export interface IArticleBlockDefinition<InstanciateOpts> {
   buttonInstantiable?: boolean
   render: (props: RenderElementProps) => ReactNode
   hasUtilityWrapper: boolean
-  hideFloatingInlineMenu?: boolean
+  inlineMenu?: undefined|null|Array<string>
   instanciateElement?: (opts?: InstanciateOpts) => Element
   editAttributeComp?: TEditAttributeComp
   editAttributeWrapper?: TAttributesEditorWrapper
