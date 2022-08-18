@@ -22,6 +22,7 @@ import { mdastFlattenListItemParagraphs, remarkFxHashCustom } from "./plugins"
 import { TezosStorage } from "../elements/TezosStorage"
 import { NFTArticleImage } from "../elements/Medias/NFTArticleImage";
 import { CodeElement } from "../elements/CodeElement";
+import { ThematicBreak } from "../elements/ThematicBreak";
 
 declare module "rehype-react" {
   interface WithNode {
@@ -49,6 +50,7 @@ const settingsRehypeReact = {
     'embed-media': Embed,
     'img': NFTArticleImage,
     'pre': CodeElement,
+    'hr': ThematicBreak,
   }
 }
 interface PayloadNFTArticleComponentsFromMarkdown {

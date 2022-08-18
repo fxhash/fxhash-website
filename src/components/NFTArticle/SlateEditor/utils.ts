@@ -62,17 +62,21 @@ export function toggleFormat(editor: Editor, format: string): void {
   editor.addMark(format, !isActive)
 }
 
-export function lookupElementByType(editor: Editor, type: string): NodeEntry {
+const isTypeInArray = (type: string, typesToCheck: string[]) => typesToCheck.indexOf(type) > -1;
+const isTypeEqual = (type: string, typeToCheck: string) => type === typeToCheck;
+export function lookupElementByType(editor:Editor, type: string | string[]): NodeEntry {
+  const checkType = Array.isArray(type) ? isTypeInArray : isTypeEqual
+
   const [element] = Editor.nodes(editor, {
     match: n =>
-      !Editor.isEditor(n) && Element.isElement(n) && n.type === type,
+      !Editor.isEditor(n) && Element.isElement(n) && checkType(n.type, type as any),
   })
   return element
 }
 
 export function lookupElementAtSelection(
   editor: Editor,
-  selection: Location
+  selection: Location | null
 ): NodeEntry | null {
   if (!selection) return null;
   const [, nodePath] = Editor.last(editor, selection)

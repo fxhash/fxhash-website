@@ -1,60 +1,67 @@
-import { Range, Point,  Node,  Editor, Transforms, Ancestor, NodeEntry } from 'slate'; 
-import { AutoFormatChangeType, ChangeData, AutoFormatChange } from './index'; 
+import { Editor, Node, NodeEntry, Path, Range, Transforms } from 'slate';
+import { AutoFormatChange, AutoFormatChangeType, ChangeData } from './index';
 import { getTextFromBlockStartToCursor } from '../utils';
+import { escapeRegExp } from "../../../../utils/regex";
 
 function getSelectionAccrossNodes(
-  editor: Editor, 
+  editor: Editor,
   startOffset: number,
-  endOffset: number, 
+  endOffset: number,
   shortcut: string
-): Range {  
+): Range {
   const block = Editor.above(editor, {
     match: n => Editor.isBlock(editor, n),
   }) as NodeEntry;
   const node = block[0] as Node;
   const { selection } = editor
-  const { anchor, focus } = node.children.reduce((acc: {[key: string]: any}, node: Node, index: number) => {
+  const { anchor, focus } = node.children.reduce((acc: { [key: string]: any }, node: Node, index: number) => {
     const { anchor } = selection as Range
     acc.sum += node.text?.length || 0;
-    if(acc.sum > startOffset && !acc.anchor && node.text?.indexOf(shortcut) > -1) {
+    if (acc.sum > startOffset && !acc.anchor && node.text?.indexOf(shortcut) > -1) {
       acc.anchor = {
-	path: [anchor.path[0], index], 
-	offset: node.text?.indexOf(shortcut)
+        path: [anchor.path[0], index],
+        offset: node.text?.indexOf(shortcut)
       };
     }
-    if(acc.sum >= endOffset && !acc.focus && node.text?.indexOf(shortcut) > -1) {
+    if (acc.sum >= endOffset && !acc.focus && node.text?.indexOf(shortcut) > -1) {
       acc.focus = {
-	path: [anchor.path[0], index], 
-	offset: node.text?.lastIndexOf(shortcut) + shortcut.length
+        path: [anchor.path[0], index],
+        offset: node.text?.lastIndexOf(shortcut) + shortcut.length
       };
     }
     return acc;
-  }, {sum: 0})
-  return { anchor,  focus };
+  }, { sum: 0 })
+  return { anchor, focus };
 }
 
 export class InlineTypeChange implements AutoFormatChange {
-  shortcut: string
+  shortcut: string | string[]
   type: AutoFormatChangeType
   data: ChangeData
-  constructor(shortcut:string, data: ChangeData) {
+
+  constructor(shortcut: string | string[], data: ChangeData) {
     this.shortcut = shortcut
     this.data = data
     this.type = 'InlineTypeChange'
   }
 
-   apply = (
-    editor: Editor, 
-   ): boolean => {
-    const textBeforeCursor = getTextFromBlockStartToCursor(editor)
-    const beforeTextWithSpace = `${textBeforeCursor} `
-    if (!beforeTextWithSpace.endsWith(`${this.shortcut} `)) { return false }
+  apply = (
+    editor: Editor,
+  ): boolean => {
+    const testValues = typeof this.shortcut === 'string' ? [this.shortcut] : this.shortcut;
+    const textBeforeCursor = `${getTextFromBlockStartToCursor(editor)} `;
+    const shortcutMatch = testValues.find((shortcut) => textBeforeCursor.endsWith(`${shortcut} `))
+    if (!shortcutMatch) return false;
+
     // retreive the matches based on usual markdown pattern, e.g.
     // __bold__, _italic_, etc.
-    const matcher = RegExp(`(?<!${this.shortcut})${this.shortcut}(?!${this.shortcut}).+?${this.shortcut}`, 'g')
+    const escapedShortcut = escapeRegExp(shortcutMatch);
+    const matcher = RegExp(`(?<!${escapedShortcut})${escapedShortcut}(?!${escapedShortcut}).+?${escapedShortcut}`, 'g')
     const matches = textBeforeCursor.match(matcher);
     if (!matches) return false;
-    // We need to get a slate Point for the matched string inside the 
+    Transforms.insertText(editor, ' ');
+
+    // We need to get a slate Point for the matched string inside the
     // editor state. Since the text can be split up into multiple nodes
     // and the selection can go across them, we need to retrieve the
     // selection across multiple nodes
@@ -64,7 +71,7 @@ export class InlineTypeChange implements AutoFormatChange {
       editor,
       matchStartIndex,
       matchEndIndex,
-      this.shortcut
+      shortcutMatch
     )
     Transforms.select(editor, inlineRange)
     // For each value in data add a mark to the node
@@ -72,53 +79,65 @@ export class InlineTypeChange implements AutoFormatChange {
       const value = this.data[key];
       editor.addMark(key, value);
     })
-    Transforms.collapse(editor, {edge: 'anchor'})
+    Transforms.collapse(editor, { edge: 'anchor' })
     // Now lets cleanup the md shortcuts from the text.
     // Setting the marks on text nodes can result in a new structure
     // because elements might be split up to apply the styles.
-    // Therefore we retrieve the updated selection of the matched string. 
+    // Therefore we retrieve the updated selection of the matched string.
     const selectionBeforeMatch = getSelectionAccrossNodes(
-      editor, 
-      matchStartIndex, 
+      editor,
+      matchStartIndex,
       matchEndIndex,
-      this.shortcut
+      shortcutMatch
     )
-    // Create a range that matches the md shortcut 
+    // Create a range that matches the md shortcut
     // before the search string (anchor)
     const rangeBefore = {
       anchor: selectionBeforeMatch.anchor,
       focus: {
-	...selectionBeforeMatch.anchor, 
-	offset: selectionBeforeMatch.anchor.offset + this.shortcut.length
+        ...selectionBeforeMatch.anchor,
+        offset: selectionBeforeMatch.anchor.offset + shortcutMatch.length
       }
     }
     Transforms.delete(
-      editor, 
+      editor,
       {
-	at: rangeBefore
+        at: rangeBefore
       }
     )
     const selectionAfterMatch = getSelectionAccrossNodes(
-      editor, 
-      matchStartIndex, 
+      editor,
+      matchStartIndex,
       matchEndIndex,
-      this.shortcut
+      shortcutMatch
     )
-    // Create a range that matches the md shortcut 
-    // after the search string (focus) 
-    const rangeAfter  = {
+    // Create a range that matches the md shortcut
+    // after the search string (focus)
+    const rangeAfter = {
       anchor: selectionAfterMatch.anchor,
       focus: {
-	...selectionAfterMatch.anchor, 
-	offset: selectionAfterMatch.anchor.offset + this.shortcut.length
+        ...selectionAfterMatch.anchor,
+        offset: selectionAfterMatch.anchor.offset + shortcutMatch.length
       },
     }
     Transforms.delete(
-      editor, 
+      editor,
       {
-	at: rangeAfter, 
+        at: rangeAfter,
       }
     )
+    const currentPath = selectionAfterMatch.anchor.path
+    const nextPath = Path.next(currentPath)
+    Transforms.select(editor, {
+      anchor: {
+        path: nextPath,
+        offset: 1,
+      },
+      focus: {
+        path: nextPath,
+        offset: 1,
+      }
+    });
     return true;
   }
 }

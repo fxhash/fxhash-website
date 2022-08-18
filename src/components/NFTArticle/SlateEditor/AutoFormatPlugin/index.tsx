@@ -1,4 +1,4 @@
-import { Range, Editor  } from 'slate'; 
+import { Range, Editor  } from 'slate';
 import { BlockTypeChange } from './BlockTypeChange'
 import { InlineTypeChange } from './InlineTypeChange'
 import { CustomDirectiveChange } from './CustomDirectiveChange'
@@ -6,18 +6,19 @@ export type AutoFormatChangeType = "BlockTypeChange" | "InlineTypeChange" | "Cus
 export type ChangeData = {[key: string]: number | string | boolean}
 
 export type AutoFormatChange = {
-  shortcut: string
+  shortcut: string | string[]
   type: AutoFormatChangeType
   data?: ChangeData
+  apply: (editor: Editor) => boolean,
 }
 
 function createChangeTypeHeading():AutoFormatChange[] {
   const changes = [];
   for (let i = 1; i < 6; i++) {
     changes.push(new BlockTypeChange(
-      Array(i).fill('#').join(''), 
+      Array(i).fill('#').join(''),
       {
-        type: 'heading', 
+        type: 'heading',
         depth: i,
       }
     ));
@@ -25,28 +26,23 @@ function createChangeTypeHeading():AutoFormatChange[] {
   return changes;
 }
 
-const config: AutoFormatChange[] = [ 
+const config: AutoFormatChange[] = [
   ...createChangeTypeHeading(),
-  new BlockTypeChange('p',   {type: 'paragraph',} ), 
-  new InlineTypeChange('__', {strong: true}), 
-  new InlineTypeChange('_', {emphasis: true}), 
-  new CustomDirectiveChange('tezos-storage'), 
+  new BlockTypeChange('p',   {type: 'paragraph',} ),
+  new InlineTypeChange(['__', '**'], {strong: true}),
+  new InlineTypeChange(['_', '*'], {emphasis: true}),
+  new BlockTypeChange(['---', '***', '___'], {type: 'thematicBreak'}),
+  new CustomDirectiveChange('tezos-storage'),
 ]
 
 export const withAutoFormat = (editor: Editor) => {
-  const {insertText } = editor;
+  const { insertText } = editor;
   editor.insertText = text => {
     const { selection } = editor;
     if (text === ' ' && selection && Range.isCollapsed(selection)) {
       const handled = config.some(change =>  {
-        if(change.type === 'BlockTypeChange') {
-          return (change as BlockTypeChange).apply(editor)
-        } else if (change.type === 'InlineTypeChange') {
-          return (change as InlineTypeChange).apply(editor)
-        } else if(change.type === 'CustomDirectiveChange') {
-          return (change as CustomDirectiveChange).apply(editor)
-        }
-        return false;
+        return ['BlockTypeChange', 'InlineTypeChange', 'CustomDirectiveChange'].indexOf(change.type) > -1 ?
+          change.apply(editor) : false
       });
       if (handled) return true;
     }

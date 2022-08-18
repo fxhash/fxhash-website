@@ -33,8 +33,8 @@ export function ListSplits({
               {displayPercentage(item.pct/1000)}%
             </span>
             <div>
-	      <UserBadge
-		className={style.user}
+	            <UserBadge
+		            className={style.user}
                 size="small"
                 user={item.user}
                 displayAvatar={false}

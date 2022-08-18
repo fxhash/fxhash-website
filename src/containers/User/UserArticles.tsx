@@ -51,7 +51,12 @@ const _UserArticles = ({ user, showLocalDrafts }: UserArticlesProps) => {
         onTrigger={handleFetchMore}
         canTrigger={!!data && !loading}
       >
-        {showLocalDrafts && <LocalArticles classNameArticle={style.article} user={user} />}
+        {showLocalDrafts && (
+          <LocalArticles
+            classNameArticle={style.article}
+            user={user}
+          />
+        )}
         {articles.map((article, index) =>
           <CardNftArticle className={style.article} key={article.slug} article={article} imagePriority={index < 4} />
         )}

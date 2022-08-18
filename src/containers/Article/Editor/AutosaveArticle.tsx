@@ -1,5 +1,7 @@
 import React, { memo, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import style from "./AutosaveArticle.module.scss";
+import effects from "../../../styles/Effects.module.scss"
+import text from "../../../styles/Colors.module.css"
 import { LoaderBlock } from "../../../components/Layout/LoaderBlock";
 import cs from "classnames";
 import { ArticlesContext } from "../../../context/Articles";
@@ -11,8 +13,16 @@ interface AutosaveArticleProps {
   id: string,
   formValues: NFTArticleForm
   hasUnsavedMedias?: boolean
+  onMediasUnsavedClick: () => void
+  isMinted: boolean
 }
-const _AutosaveArticle = ({ id, formValues, hasUnsavedMedias }: AutosaveArticleProps) => {
+const _AutosaveArticle = ({ 
+  id, 
+  formValues, 
+  hasUnsavedMedias,
+  onMediasUnsavedClick,
+  isMinted,
+}: AutosaveArticleProps) => {
   const { state, dispatch } = useContext(ArticlesContext);
   const [status, setStatus] = useState<'unsaved'|'saving'|'saved'>('saved');
 
@@ -20,12 +30,21 @@ const _AutosaveArticle = ({ id, formValues, hasUnsavedMedias }: AutosaveArticleP
     setStatus('saving');
     dispatch({
       type: 'save',
-      payload: { id, articleForm: articleFormState }
+      payload: { 
+        id,
+        articleForm: articleFormState,
+        minted: isMinted,
+      },
     })
     setStatus('saved');
   }, [dispatch, id])
-  const debouncedSave = useMemo<typeof handleSaveDraft>(() => debounce(handleSaveDraft, 800), [handleSaveDraft]);
+
+  const debouncedSave = useMemo<typeof handleSaveDraft>(
+    () => debounce(handleSaveDraft, 800),
+    [handleSaveDraft]
+  );
   const savedArticle = state.articles[id];
+
   useEffect(() => {
     const serializedSavedArticle = savedArticle && JSON.stringify(savedArticle.form);
     const serializedUnsavedArticle = formValues && JSON.stringify(formValues);
@@ -34,33 +53,38 @@ const _AutosaveArticle = ({ id, formValues, hasUnsavedMedias }: AutosaveArticleP
       debouncedSave(formValues);
     }
   }, [debouncedSave, formValues, savedArticle])
-  const savedAt = savedArticle?.lastSavedAt && formatRelative(new Date(savedArticle.lastSavedAt), new Date());
+
   return (
-    <div className={style.wrapper}>
-      <div className={style.container}>
-        {status === 'saving' ?
-          <>
-            <LoaderBlock
-              size="small"
-              height="20px"
-            />
-            <span className={style.text}>
-              saving...
-            </span>
-          </>
-          :
-          <>
-            {status === 'saved' && !hasUnsavedMedias && <i className={cs("fa-solid fa-check", style.icon)} />}
-            {hasUnsavedMedias && <span>{'[MEDIAS UNSAVED]'}</span>}
-            {status === 'unsaved' && <span>{'[CHANGES UNSAVED]'}</span>}
-            {savedAt &&
-              <span className={style.text}>
-                saved {savedAt}
-              </span>
-            }
-          </>
-        }
-      </div>
+    <div className={cs(style.root, effects['drop-shadow-small'])}>
+      {hasUnsavedMedias && (
+        <button
+          type="button"
+          className={cs(text.error, style.medias_unsaved)}
+          onClick={onMediasUnsavedClick}
+        >
+          <i className="fa-solid fa-circle-xmark" aria-hidden />
+          <span>medias not uploaded</span>
+        </button>
+      )}
+      {status === "saving" || status === "unsaved" ? (
+        <>
+          <LoaderBlock
+            size="tiny"
+            height="20px"
+            className={cs(style.loader)}
+          />
+          <span className={style.text}>
+            saving document
+          </span>
+        </>
+      ):(
+        <>
+          <i className="fa-solid fa-circle-check" aria-hidden />
+          <span className={style.text}>
+            document saved
+          </span>
+        </>
+      )}
     </div>
   );
 };

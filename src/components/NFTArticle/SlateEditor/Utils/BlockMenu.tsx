@@ -12,20 +12,21 @@ export function BlockMenu({
   onClose,
   children,
 }: PropsWithChildren<Props>) {
+  const [isInit, setIsInit] = useState(false);
   const markerRef = useRef<HTMLDivElement>(null)
   const rootRef = useRef<HTMLDivElement>(null)
   const [position, setPosition] = useState<"up"|"down">("up")
   const positionRef = useRef<"up"|"down">("up")
 
+
   // add an event listener to the document to know if a click outside was made
   useEffect(() => {
     const onClick = (event: MouseEvent) => {
-      const path = (event as any).path
-      if (path && path.length > 0 && rootRef.current) {
-        if (!path.includes(rootRef.current)) {
-          onClose()
-        }
+      if (!rootRef?.current || rootRef.current.contains(event.target as Node)) {
+        // inside click
+        return;
       }
+      onClose()
     }
 
     const onScroll = () => {
@@ -37,26 +38,28 @@ export function BlockMenu({
           setPosition(pos)
         }
       }
+      setIsInit(true)
     }
 
     const onKeyPressed = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
+        event.preventDefault();
         onClose()
       }
     }
-  
+
     onScroll();
 
-    document.addEventListener("click", onClick)
+    document.addEventListener("mousedown", onClick)
     document.addEventListener("scroll", onScroll)
     document.addEventListener("keydown", onKeyPressed)
 
     return () => {
-      document.removeEventListener("click", onClick)
+      document.removeEventListener("mousedown", onClick)
       document.removeEventListener("scroll", onScroll)
       document.removeEventListener("keydown", onKeyPressed)
     }
-  }, [])
+  }, [onClose])
 
   return (
     <>
@@ -67,6 +70,9 @@ export function BlockMenu({
           style.root,
           style[`pos-${position}`],
           className,
+          {
+            [style.show]: isInit
+          }
         )}
       >
         {children}

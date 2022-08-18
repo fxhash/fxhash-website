@@ -1,4 +1,5 @@
 @import "../../styles/Variables";
+@import "../../styles/fonts.scss";
 
 @mixin awidth {
   width: min(100%, 900px);
@@ -12,12 +13,12 @@
 
 .header {
   text-align: center;
+  position: relative;
 
   .description {
     text-align: left;
     margin-top: $spacing-x-large;
-    font-family: "Noto Serif", serif;
-    font-size: 1.2rem;
+    @include font-secondary;
   }
 
   .thumbnail {
@@ -33,7 +34,7 @@
     }
 
     figcaption {
-      font-family: "Noto Serif", serif;
+      @include font-family-secondary;
       font-size: var(--font-size-small);
       font-weight: bold;
     }
@@ -46,6 +47,16 @@
 
   .title {
     margin-top: $spacing-x-large;
+  }
+
+  .actions {
+    position: absolute;
+    top: 0;
+    right: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
   }
 }
 
@@ -133,8 +144,7 @@
     blockquote,
     table,
     figcaption {
-      font-family: "Noto Serif", serif;
-      font-size: 1.2rem;
+      @include font-secondary;
     }
 
     pre {
@@ -185,6 +195,10 @@
         font-weight: bold;
         font-size: var(--font-size-small);
       }
+    }
+
+    :global(.hr) {
+      font-size: 1.2rem;
     }
 
     table {
