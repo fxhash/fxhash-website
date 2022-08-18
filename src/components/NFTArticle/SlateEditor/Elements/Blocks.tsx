@@ -83,7 +83,7 @@ export interface IArticleBlockDefinition {
   buttonInstantiable?: boolean
   render: (props: RenderElementProps) => ReactNode
   hasUtilityWrapper: boolean
-  hideFloatingInlineMenu?: boolean
+  inlineMenu?: undefined|null|Array<string>
   instanciateElement?: () => Element
   editAttributeComp?: TEditAttributeComp
   editAttributeWrapper?: TAttributesEditorWrapper
@@ -470,7 +470,7 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
     icon: null,
     render: FigcaptionElement,
     hasUtilityWrapper: false,
-    hideFloatingInlineMenu: true,
+    inlineMenu: null,
   },
   "image": {
     name: "Image",
