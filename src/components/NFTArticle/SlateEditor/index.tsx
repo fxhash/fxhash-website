@@ -110,7 +110,6 @@ export const SlateEditor = forwardRef<FxEditor, SlateEditorProps>(({
       { f: withHistory },
       { f: withAutoFormat },
       { f: withMediaSupport, args: { onMediasUpdate } },
-      { f: withImages },
       { f: withTables },
       { f: withConstraints },
       { f: withBreaks },
