@@ -20,7 +20,7 @@ import { SharedOptions } from "rehype-react/lib";
 import { mdastFlattenListItemParagraphs, remarkFxHashCustom } from "./plugins"
 import { TezosStorage } from "../elements/TezosStorage"
 import { ImageDisplay } from "../elements/Image/ImageDisplay";
-import { CodeElement } from "../elements/CodeElement";
+import { CodeDisplay } from "../elements/Code/CodeDisplay";
 import { ThematicBreak } from "../elements/ThematicBreak";
 import { VideoDisplay } from "../elements/Video/VideoDisplay";
 
@@ -50,7 +50,7 @@ const settingsRehypeReact = {
     'embed-media': Embed,
     'img': ImageDisplay,
     'video': VideoDisplay,
-    'pre': CodeElement,
+    'pre': CodeDisplay,
     'hr': ThematicBreak,
   }
 }

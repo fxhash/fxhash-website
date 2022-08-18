@@ -1,25 +1,17 @@
-import style from "./CodeEditorElement.module.scss"
+import style from "./CodeEditor.module.scss"
 import cs from "classnames"
-import { PropsWithChildren, useCallback, useMemo, useRef, useState } from "react"
+import { PropsWithChildren, useMemo, useState } from "react"
 import Editor from "react-simple-code-editor"
 import { highlight, languages } from "prismjs"
-import "prismjs/components/prism-clike"
-import "prismjs/components/prism-javascript"
-import "prismjs/components/prism-css"
-import "prismjs/components/prism-c"
-import "prismjs/components/prism-glsl"
-import "prismjs/components/prism-markdown"
-import "prismjs/components/prism-json"
-import "prismjs/components/prism-java"
 import { ReactEditor, useSlateStatic } from "slate-react"
 import { Node, Transforms } from "slate"
-import { getCodeEditorLang } from "./AttributeSettings/CodeAttributeSettings"
+import { getCodeEditorLang } from "./CodeLanguages";
 
 interface Props {
   attributes: any
   element: any
 }
-export function CodeEditorElement({
+export function CodeEditor({
   attributes,
   element,
   children,
@@ -60,7 +52,7 @@ export function CodeEditorElement({
       >
         <Editor
           // @ts-ignore
-          highlight={code => highlight(code, languages[element.lang || "js"])}
+          highlight={code => highlight(code, languages[element.lang || 'plain'] || languages.plain)}
           value={value}
           onValueChange={update}
           padding={15}
