@@ -46,6 +46,7 @@ const _TableColToolbar = ({ col, row, editor, tableElement }: TableColToolbarPro
           key={alignment}
           contentEditable={false}
           onMouseDown={handleToggleColAlignment(alignment)}
+          type="button"
           className={cs({
             [style.active]: colAlign === alignment,
           })}
@@ -57,6 +58,7 @@ const _TableColToolbar = ({ col, row, editor, tableElement }: TableColToolbarPro
         <button
           contentEditable={false}
           onMouseDown={handleDeleteCol}
+          type="button"
         >
           <i className="fa-solid fa-trash" />
           <span>Col</span>
@@ -66,6 +68,7 @@ const _TableColToolbar = ({ col, row, editor, tableElement }: TableColToolbarPro
         <button
           contentEditable={false}
           onMouseDown={handleDeleteRow}
+          type="button"
         >
           <i className="fa-solid fa-trash" />
           <span>Row</span>

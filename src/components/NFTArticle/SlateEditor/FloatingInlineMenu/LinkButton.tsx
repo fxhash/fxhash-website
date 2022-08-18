@@ -1,15 +1,19 @@
 import React, { useRef, useEffect, useState, FormEvent, useCallback } from 'react'
 import style from "./FloatingInlineMenu.module.scss"
 import effects from "../../../../styles/Effects.module.scss"
-import { useSlateStatic } from 'slate-react'
+import { ReactEditor,  useSlateStatic } from 'slate-react'
 import {
   Transforms,
   Node,
   Element,
-  Editor, 
+  Editor,
+  Range, 
 } from 'slate'
-import { lookupElementByType } from '../utils'; 
+import { lookupElementByType, useHotkey } from '../utils'; 
 import cs from 'classnames'
+
+
+const LINK_HOTKEY = 'mod+k';
 
 type OverrideContentHandler = (form: any) => void
 type ResetOverrideContentHandler = () => void
@@ -115,11 +119,21 @@ export const LinkButton = ({ setOverrideContent }: LinkButtonProps) => {
   const handleSetOverrideContent = useCallback(() => {
     setOverrideContent(
       <LinkButtonForm 
-	resetOverrideContent={() => setOverrideContent(null)}
+	resetOverrideContent={() => {
+	  ReactEditor.focus(editor)
+	  setOverrideContent(null)
+	}}
       />
     )
-  }, [setOverrideContent])
+  }, [setOverrideContent, editor])
 
+
+  useHotkey(
+    LINK_HOTKEY, 
+    handleSetOverrideContent, 
+    editor.selection && Range.isCollapsed(editor.selection)
+  )
+  
   // auto open form when cursor is on a link  
   useEffect(() => {
     if (isActive) {

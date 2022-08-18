@@ -1,4 +1,4 @@
-import React, { memo, useCallback } from 'react';
+import React, { memo, MouseEventHandler, useCallback } from 'react';
 import style from "./TableEditor.module.scss"
 import { RenderElementProps, useSelected, useSlate } from "slate-react";
 import Slate from "slate";
@@ -16,12 +16,14 @@ const _TableEditor = ({ slateAttributes, slateElement, children }: TableEditorPr
   const editor = useSlate();
   const [head, ...body] = children;
   const isSelected = useSelected();
-  const handleClickAddCol = useCallback(() => {
+  const handleClickAddCol = useCallback<MouseEventHandler<HTMLButtonElement>>((e) => {
+    e.preventDefault();
     SlateTable.addCol(editor, slateElement);
   }, [editor, slateElement])
-  const handleClickAddRow = useCallback(() =>
-    SlateTable.addRow(editor, slateElement),
-    [editor, slateElement]);
+  const handleClickAddRow = useCallback<MouseEventHandler<HTMLButtonElement>>((e) => {
+    e.preventDefault();
+    SlateTable.addRow(editor, slateElement)
+  }, [editor, slateElement]);
   const selectedPos = isSelected && SlateTable.getSelectedPos(editor, slateElement);
   return (
     <div className={cs({
@@ -51,14 +53,16 @@ const _TableEditor = ({ slateAttributes, slateElement, children }: TableEditorPr
             <button
               contentEditable={false}
               className={style.add_col}
-              onClick={handleClickAddCol}
+              onMouseDown={handleClickAddCol}
+              type="button"
             >
               <i aria-hidden className="fa-solid fa-plus"/>
             </button>
             <button
               contentEditable={false}
               className={style.add_row}
-              onClick={handleClickAddRow}
+              onMouseDown={handleClickAddRow}
+              type="button"
             >
               <i aria-hidden className="fa-solid fa-plus"/>
             </button>
