@@ -49,5 +49,5 @@ export const figcaptionDefinition: IArticleBlockDefinition<null> = {
   icon: null,
   render: FigcaptionElement,
   hasUtilityWrapper: false,
-  hideFloatingInlineMenu: true,
+  inlineMenu: null,
 }
