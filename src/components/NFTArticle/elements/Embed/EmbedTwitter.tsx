@@ -1,5 +1,5 @@
 import React, { memo, useState, useEffect } from 'react';
-import { EmbedElementProps } from "./EmbedMedia";
+import { EmbedElementProps } from "./EmbedMediaDisplay";
 import { getTweetIdFromUrl } from "../../../../utils/embed";
 import style from "./Embed.module.scss";
 import { Error } from "../../../Error/Error";

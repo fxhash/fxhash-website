@@ -15,9 +15,10 @@ import {
   RenderLeafProps,
 } from "slate-react"
 import { withHistory } from "slate-history"
-import { TezosStorageProps } from "../elements/TezosStorage"
-import { withAutoFormat } from './AutoFormatPlugin/'
-import { RenderElements } from "./Elements/RenderElements"
+import { TezosStorageProps } from "../elements/TezosStorage/TezosStorageDisplay"
+import { withAutoFormat } from './Plugins/AutoFormatPlugin/'
+import { onKeyDownHotkeyPlugin } from "./Plugins/HotkeyPlugin"
+import { RenderElements } from "./RenderElements"
 import { withConstraints } from "./Plugins/SlateConstraintsPlugin"
 import { IEditorMediaFile } from "../../../types/ArticleEditor/Image";
 import { withMediaSupport } from "./Plugins/SlateMediaPlugin";
@@ -26,10 +27,8 @@ import useInit from "../../../hooks/useInit";
 import dynamic from 'next/dynamic'
 import { onKeyDownTablePlugin, withTables } from "./Plugins/SlateTablePlugin";
 import { withBreaks } from "./Plugins/SlateBreaksPlugin";
-import { withSimpleCopyPaste } from "./Plugins/SlateSimpleCopyPaste";
 
-
-const FloatingInlineMenu = dynamic(() => import('./FloatingInlineMenu/FloatingInlineMenu'), {
+const FloatingInlineMenu = dynamic(() => import('./Plugins/FloatingInlineMenuPlugin/FloatingInlineMenu'), {
   ssr: false,
 })
 

@@ -2,21 +2,21 @@ import { Root } from "mdast"
 import { Transformer } from "unified"
 import { visit } from "unist-util-visit"
 import { h } from "hastscript"
-import { NFTArticleElementComponent } from "../../../types/Article"
-import Embed from "../elements/Embed/Embed"
-import TezosStorageEditor from "../SlateEditor/Elements/TezosStorageEditor"
-import { VideoEditor } from "../elements/Video/VideoEditor";
+import { IArticleElementProcessor } from "../../../types/ArticleEditor/Processor";
+import { embedProcessor } from "../elements/Embed/EmbedProcessor";
+import { tezosStorageProcessor } from "../elements/TezosStorage/TezosStorageProcessor";
+import { videoProcessor } from "../elements/Video/VideoProcessor";
 
 interface CustomArticleElementsByType {
-  leafDirective: Record<string, NFTArticleElementComponent<any>>,
-  textDirective: Record<string, NFTArticleElementComponent<any>>,
-  containerDirective: Record<string, NFTArticleElementComponent<any>>,
+  leafDirective: Record<string, IArticleElementProcessor>,
+  textDirective: Record<string, IArticleElementProcessor>,
+  containerDirective: Record<string, IArticleElementProcessor>,
 }
 export const customNodes: CustomArticleElementsByType = {
   leafDirective: {
-    "tezos-storage": TezosStorageEditor,
-    "embed-media": Embed,
-    "video": VideoEditor,
+    "tezos-storage": tezosStorageProcessor,
+    "embed-media": embedProcessor,
+    "video": videoProcessor,
   },
   textDirective: {},
   containerDirective: {},
@@ -30,9 +30,9 @@ export function remarkFxHashCustom(): Transformer<Root, Root> {
         node.type === 'containerDirective'
       ) {
         const component = customNodes[node.type]?.[node.name]
-        if (component?.getPropsFromNode) {
+        if (component?.transformMdhastToComponent) {
           const hast: any = h(node.name, node.attributes)
-          const props = component.getPropsFromNode(node, hast.properties)
+          const props = component.transformMdhastToComponent(node, hast.properties)
           if (props) {
             const data = node.data || (node.data = {})
             data.hName = component.htmlTagName || hast.tagName

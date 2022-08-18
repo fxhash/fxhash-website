@@ -1,7 +1,7 @@
 import React, { memo, useEffect, useState } from 'react';
 import { getNFTArticleComponentsFromMarkdown } from "./processor";
 
-interface NftArticleProps {
+export interface NftArticleProps {
   markdown: string,
 }
 

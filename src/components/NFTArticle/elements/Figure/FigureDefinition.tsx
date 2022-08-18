@@ -1,6 +1,6 @@
 import { FigureElement } from "./FigureEditor";
 import { ImageAttributeSettings } from "../Image/ImageAttributeSettings";
-import { BlockParamsModal } from "../../SlateEditor/Utils/BlockParamsModal";
+import { BlockParamsModal } from "../../SlateEditor/UI/BlockParamsModal";
 import { Node, Transforms } from "slate";
 import { IArticleBlockDefinition, TEditAttributeComp } from "../../../../types/ArticleEditor/BlockDefinition";
 import { FigcaptionElement } from "./FigcaptionEditor";
@@ -49,5 +49,5 @@ export const figcaptionDefinition: IArticleBlockDefinition<null> = {
   icon: null,
   render: FigcaptionElement,
   hasUtilityWrapper: false,
-  hideFloatingInlineMenu: true,
+  inlineMenu: null,
 }

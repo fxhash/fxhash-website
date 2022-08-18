@@ -14,14 +14,13 @@ import rehypeFormat from "rehype-format";
 import rehypeStringify from "rehype-stringify";
 import rehypeReact from "rehype-react";
 import { Element } from "hast";
-import { NFTArticleElementComponent } from "../../../types/Article";
 import { ComponentsWithNodeOptions, ComponentsWithoutNodeOptions } from "rehype-react/lib/complex-types";
 import { SharedOptions } from "rehype-react/lib";
 import { mdastFlattenListItemParagraphs, remarkFxHashCustom } from "./plugins"
-import { TezosStorage } from "../elements/TezosStorage"
+import { TezosStorageDisplay } from "../elements/TezosStorage/TezosStorageDisplay"
 import { ImageDisplay } from "../elements/Image/ImageDisplay";
 import { CodeDisplay } from "../elements/Code/CodeDisplay";
-import { ThematicBreak } from "../elements/ThematicBreak";
+import { ThematicBreakEditor } from "../elements/ThematicBreak/ThematicBreakEditor";
 import { VideoDisplay } from "../elements/Video/VideoDisplay";
 
 declare module "rehype-react" {
@@ -29,7 +28,7 @@ declare module "rehype-react" {
     node: Element
   }
   interface CustomComponentsOptions {
-    [key: string]: NFTArticleElementComponent<any>
+    [key: string]: any
   }
   interface CustomComponentsWithoutNodeOptions extends Omit<ComponentsWithoutNodeOptions, 'components'> {
     components?: CustomComponentsOptions
@@ -46,12 +45,12 @@ const settingsRehypeReact = {
   createElement,
   Fragment,
   components: {
-    'tezos-storage': TezosStorage,
+    'tezos-storage': TezosStorageDisplay,
     'embed-media': Embed,
     'img': ImageDisplay,
     'video': VideoDisplay,
     'pre': CodeDisplay,
-    'hr': ThematicBreak,
+    'hr': ThematicBreakEditor,
   }
 }
 interface PayloadNFTArticleComponentsFromMarkdown {

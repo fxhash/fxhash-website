@@ -10,7 +10,7 @@ import cs from "classnames"
 import layout from "../../styles/Layout.module.scss"
 import text from "../../styles/Text.module.css"
 import { CardSmallNftArticle } from "../../components/Card/CardSmallNFTArticle"
-import { NftArticle } from '../../components/NFTArticle/NFTArticle'
+import { NftArticleProps } from '../../components/NFTArticle/NFTArticle'
 import { ImagePolymorphic } from '../../components/Medias/ImagePolymorphic'
 import { UserContext } from '../UserProvider'
 import { isUserOrCollaborator } from '../../utils/user'
@@ -18,6 +18,16 @@ import { User } from '../../types/entities/User'
 import Link from 'next/link'
 import { Button } from '../../components/Button'
 import { ArticlesContext } from '../../context/Articles'
+import dynamic from "next/dynamic";
+import { LoaderBlock } from "../../components/Layout/LoaderBlock";
+
+const NftArticle = dynamic<NftArticleProps>(() =>
+  import('../../components/NFTArticle/NFTArticle')
+    .then((mod) => mod.NftArticle),
+  {
+    loading: () => <LoaderBlock />
+  }
+);
 
 interface PageArticleProps {
   article: NFTArticle

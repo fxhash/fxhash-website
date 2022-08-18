@@ -8,8 +8,10 @@ import stringify from "remark-stringify";
 import { OverridedSlateBuilders } from "remark-slate-transformer/lib/transformers/slate-to-mdast";
 import { remarkFxHashCustom } from "./plugins";
 import remarkGfm from "remark-gfm";
+import { mathProcessor } from "../elements/Math/MathProcessor";
+import { figureProcessor } from "../elements/Figure/FigureProcessor";
 
-function convertSlateLeafDirectiveToMarkdown(
+export function convertSlateLeafDirectiveToMarkdown(
   node: any,
 ) {
   const { children, type, ...attributes} = node
@@ -27,64 +29,13 @@ function convertSlateLeafDirectiveToMarkdown(
   }
 }
 
-const createMarkdownImageFromFigure = (nodeFigure: Node, nodeImage: Node) => {
-  // create a regular image node
-  const imageNode: any = {
-    type: "image",
-    url: nodeImage.url
-  }
-
-  // find if there's a caption
-  const caption: Node|null = nodeFigure.children.find(
-    (node: Node) => node.type === ("figcaption" as any)
-  )
-  if (caption && caption.children?.length > 0) {
-    imageNode.alt = caption.children[0].text
-  }
-  return imageNode
-}
-
-const createMarkdownVideoFromFigure = (nodeFigure: Node, nodeVideo: Node) => {
-  const videoNode: Node = {
-    type: 'video',
-    src: nodeVideo.src
-  }
-  const caption: Node|null = nodeFigure.children.find(
-    (node: Node) => node.type === ("figcaption" as any)
-  )
-  if (caption && caption.children?.length > 0) {
-    videoNode.children = caption.children
-  }
-  return convertSlateLeafDirectiveToMarkdown(videoNode)
-}
-const mediasConvert: Record<string, (nodeFigure: Node, nodeMedia: Node) => any> = {
-  "image": createMarkdownImageFromFigure,
-  "video": createMarkdownVideoFromFigure
-}
-/**
- * Turns a figcaption element into an element which will be turned into an image or video
- * in proper markdown
- */
-function figureToMarkdown(node: any, next: (children: any[]) => any) {
-  const mediaNode: Node|null = node.children.find(
-    (node: Node) => ["image", "video"].indexOf(node.type) > -1
-  )
-  return mediasConvert[mediaNode.type](node, mediaNode);
-}
 
 const slateToRemarkTransformerOverrides: OverridedSlateBuilders = {
   'tezos-storage': convertSlateLeafDirectiveToMarkdown,
   'embed-media': convertSlateLeafDirectiveToMarkdown,
-//  'video': convertSlateLeafDirectiveToMarkdown,
-  figure: figureToMarkdown,
-  inlineMath: (node: any) => ({
-    type: node.type,
-    value: node.math,
-  }),
-  math: (node: any) => ({
-    type: node.type,
-    value: node.math,
-  }),
+  figure: figureProcessor.transformSlateToMarkdownMdhast!,
+  inlineMath: mathProcessor.transformSlateToMarkdownMdhast!,
+  math: mathProcessor.transformSlateToMarkdownMdhast!,
 }
 export default async function getMarkdownFromSlateEditorState(slate: Node[] ) {
   try {

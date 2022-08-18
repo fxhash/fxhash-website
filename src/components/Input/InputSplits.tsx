@@ -23,7 +23,7 @@ interface PropsChildren {
   addSplits: (splits: ISplit[]) => void
 }
 
-interface Props {
+export interface InputSplitsProps {
   value: ISplit[]
   onChange?: (value: ISplit[]) => void
   unremoveableAddresses?: string[]
@@ -52,7 +52,7 @@ export function InputSplits({
   errors,
   children,
   readOnly,
-}: Props) {
+}: InputSplitsProps) {
   // the pkh of the input
   const [pkh, setPkh] = useState<string>("")
 

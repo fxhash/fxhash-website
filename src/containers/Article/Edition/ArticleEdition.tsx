@@ -1,9 +1,4 @@
-import layout from "../../../../styles/Layout.module.scss"
-import cs from "classnames"
-import { GetServerSideProps, NextPage } from "next"
-import Head from "next/head"
 import { ArticleEditor } from "../../../containers/Article/Editor/ArticleEditor"
-import { Spacing } from "../../../components/Layout/Spacing"
 import React, { FunctionComponent, useCallback, useContext, useEffect, useState } from "react"
 import { ArticlesContext } from "../../../context/Articles"
 import { useRouter } from "next/router"
@@ -29,7 +24,7 @@ const ArticleEdition: FunctionComponent<Props> = ({
   const handleSubmit = useCallback((values) => {
     dispatch({
       type: 'save',
-      payload: { 
+      payload: {
         id: id,
         articleForm: values,
         minted: true,

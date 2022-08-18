@@ -9,51 +9,14 @@ import { remarkToSlate } from "remark-slate-transformer";
 import { OverridedMdastBuilders } from "remark-slate-transformer/lib/transformers/mdast-to-slate";
 import { mdastFlattenListItemParagraphs, remarkFxHashCustom } from "./plugins";
 import remarkGfm from "remark-gfm";
+import { mathProcessor } from "../elements/Math/MathProcessor";
+import { imageProcessor } from "../elements/Image/ImageProcessor";
+import { videoProcessor } from "../elements/Video/VideoProcessor";
 
 interface DirectiveNodeProps { [key: string]: any }
 
-function createMathNode(node: any) {
-  return {
-    type: node.type,
-    children: [{text: ''}],
-    math: node.value,
-  }
-}
-function markdownImageToFigure(node: any) {
-  return ({
-    type: "figure",
-    children: [{
-      type: "image",
-      url: node.url,
-      children: [{
-        text: ""
-      }],
-    }, {
-      type: "figcaption",
-      children: [{
-        text: node.alt
-      }]
-    }]
-  });
-}
-function markdownDirectiveVideoToFigure(node: any) {
-  return ({
-    type: "figure",
-    children: [{
-      type: "video",
-      src: node.src || '',
-      children: [{
-        text: ""
-      }],
-    }, {
-      type: "figcaption",
-      children: node.children,
-    }]
-  });
-}
-
 const directives: Record<string, (node: any) => object> = {
-  "video": markdownDirectiveVideoToFigure
+  "video": videoProcessor.transformMarkdownMdhastToSlate!,
 }
 
 function createDirectiveNode(node: any, next: (children: any[]) => any): object {
@@ -80,9 +43,9 @@ const remarkSlateTransformerOverrides: OverridedMdastBuilders = {
   textDirective: createDirectiveNode,
   leafDirective: createDirectiveNode,
   containerDirective: createDirectiveNode,
-  "inlineMath": createMathNode,
-  "math": createMathNode,
-  image: markdownImageToFigure,
+  "inlineMath": mathProcessor.transformMarkdownMdhastToSlate,
+  "math": mathProcessor.transformMarkdownMdhastToSlate,
+  image: imageProcessor.transformMarkdownMdhastToSlate,
 }
 
 interface PayloadSlateEditorStateFromMarkdown {
