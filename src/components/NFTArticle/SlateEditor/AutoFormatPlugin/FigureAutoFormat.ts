@@ -4,22 +4,22 @@ import { getTextFromBlockStartToCursor } from '../utils';
 import { getSlateEditorStateFromMarkdownSync } from '../../processor/getSlateEditorStateFromMarkdown';
 
 
-export class LinkChange implements AutoFormatChange {
+export class FigureAutoFormat implements AutoFormatChange {
   shortcut: string
   type: AutoFormatChangeType
   data?: ChangeData
   trigger: string
 
   constructor(data?: ChangeData) {
-    this.shortcut = 'link'
+    this.shortcut = 'figure'
     if (data) this.data = data
-    this.type = 'LinkChange'
+    this.type = 'FigureAutoFormat'
     this.trigger = ' '
   }
 
   getMarkdownFromCurrentCursorPosition(editor: Editor) {
     const textBeforeCursor = getTextFromBlockStartToCursor(editor);
-    const matchLink = new RegExp('[^!]\\[(?<text>.+?)\\]\\((?<attributes>.+?)\\)', 'gm');
+    const matchLink = new RegExp('!\\[(?<text>.+?)\\]\\((?<attributes>.+?)\\)', 'gm');
     const matches = matchLink.exec(textBeforeCursor);
     return matches?.[0];
   }
@@ -31,9 +31,8 @@ export class LinkChange implements AutoFormatChange {
     try {
       const parsed = getSlateEditorStateFromMarkdownSync(markdownString)
       if (!parsed) return false;
-      const {editorState: [parsedNode]} = parsed;
-      const linkNode = parsedNode?.children?.[0];
-      if (!linkNode || linkNode.type !== this.shortcut) return false;
+      const {editorState: [figureNode]} = parsed;
+      if (!figureNode || figureNode.type !== this.shortcut) return false;
       const [start] = Range.edges(editor.selection as Range);
       const charBefore = Editor.before(editor, start, {
 	unit: 'character',
@@ -49,7 +48,7 @@ export class LinkChange implements AutoFormatChange {
       }
       Transforms.insertNodes(
 	editor,
-	[linkNode, { text: " "}]
+	[figureNode]
       )
       return true   
     } catch {
