@@ -7,7 +7,7 @@ import React, {
   useMemo,
   useState
 } from "react";
-import { BaseElement, createEditor, Node, Descendant } from "slate";
+import { BaseElement, createEditor, Node, Descendant, Editor } from "slate";
 import {
   Slate,
   Editable,
@@ -28,6 +28,7 @@ import useInit from "../../../hooks/useInit";
 import dynamic from 'next/dynamic'
 import { onKeyDownTablePlugin, withTables } from "./Plugins/SlateTablePlugin";
 import { withBreaks } from "./Plugins/SlateBreaksPlugin";
+import { withSimpleCopyPaste } from "./Plugins/SlateSimpleCopyPaste";
 
 
 const FloatingInlineMenu = dynamic(() => import('./FloatingInlineMenu/FloatingInlineMenu'), {
@@ -111,6 +112,7 @@ export const SlateEditor = forwardRef<FxEditor, SlateEditorProps>(({
       { f: withHistory },
       { f: withAutoFormat },
       { f: withMediaSupport, args: { onMediasUpdate } },
+//      { f: withSimpleCopyPaste },
       { f: withImages },
       { f: withTables },
       { f: withConstraints },
@@ -137,6 +139,7 @@ export const SlateEditor = forwardRef<FxEditor, SlateEditorProps>(({
   // mutate ref to editor whenever editor ref changes
   useImperativeHandle(ref, () => editor, [editor])
   useInit(() => {
+    Editor.normalize(editor, { force: true });
     if (onInit) onInit(editor)
   })
   return (
