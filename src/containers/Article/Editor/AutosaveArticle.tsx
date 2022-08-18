@@ -16,9 +16,9 @@ interface AutosaveArticleProps {
   onMediasUnsavedClick: () => void
   isMinted: boolean
 }
-const _AutosaveArticle = ({ 
-  id, 
-  formValues, 
+const _AutosaveArticle = ({
+  id,
+  formValues,
   hasUnsavedMedias,
   onMediasUnsavedClick,
   isMinted,
@@ -30,14 +30,14 @@ const _AutosaveArticle = ({
     setStatus('saving');
     dispatch({
       type: 'save',
-      payload: { 
+      payload: {
         id,
         articleForm: articleFormState,
         minted: isMinted,
       },
     })
     setStatus('saved');
-  }, [dispatch, id])
+  }, [dispatch, id, isMinted])
 
   const debouncedSave = useMemo<typeof handleSaveDraft>(
     () => debounce(handleSaveDraft, 800),

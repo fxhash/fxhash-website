@@ -17,8 +17,6 @@ import {
 import { withHistory } from "slate-history"
 import { TezosStorageProps } from "../elements/TezosStorage"
 import { withAutoFormat } from './AutoFormatPlugin/'
-import { withImages } from "./Plugins/SlateImagePlugin"
-import { ImageElement } from "../elements/ImageElement"
 import { RenderElements } from "./Elements/RenderElements"
 import { withConstraints } from "./Plugins/SlateConstraintsPlugin"
 import { IEditorMediaFile } from "../../../types/ArticleEditor/Image";
@@ -44,7 +42,7 @@ type HeadlineElement = TypeElement & {
   depth: number
 }
 
-type ImageElement = TypeElement & {
+type ImageEditor = TypeElement & {
   title: string
   url: string
   alt?: string
@@ -52,7 +50,7 @@ type ImageElement = TypeElement & {
 
 type TezosStorageElement = TypeElement & TezosStorageProps
 
-type CustomElement =  HeadlineElement | TezosStorageElement | ImageElement;
+type CustomElement =  HeadlineElement | TezosStorageElement | ImageEditor;
 
 
 
@@ -112,8 +110,6 @@ export const SlateEditor = forwardRef<FxEditor, SlateEditorProps>(({
       { f: withHistory },
       { f: withAutoFormat },
       { f: withMediaSupport, args: { onMediasUpdate } },
-//      { f: withSimpleCopyPaste },
-      { f: withImages },
       { f: withTables },
       { f: withConstraints },
       { f: withBreaks },

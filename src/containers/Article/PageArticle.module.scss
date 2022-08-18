@@ -178,13 +178,13 @@
       margin-bottom: 2em;
     }
 
-    figure.article_image {
+    figure.article_image, figure.article_video {
       width: fit-content;
       margin: 0;
       margin-left: auto;
       margin-right: auto;
 
-      img {
+      img, video {
         max-width: 100%;
         margin-left: auto;
         margin-right: auto;

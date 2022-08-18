@@ -1,20 +1,17 @@
-import { PropsWithChildren, useMemo, useState } from "react"
-import ReactTextareaAutosize from "react-textarea-autosize"
+import { PropsWithChildren, useState } from "react"
 import { Transforms } from "slate"
-import { ReactEditor, useFocused, useSelected, useSlateStatic } from "slate-react"
-import style from "./ImageElement.module.scss"
-import editorStyle from "../SlateEditor/Utils/EditorStyles.module.scss"
+import { ReactEditor, useSlateStatic } from "slate-react"
+import editorStyle from "../../SlateEditor/Utils/EditorStyles.module.scss"
 import cs from "classnames"
-import { BlockParamsModal } from "../SlateEditor/Utils/BlockParamsModal"
-import { ImageAttributeSettings } from "../SlateEditor/Elements/AttributeSettings/ImageAttributeSettings"
-import { ImagePolymorphic } from "../../Medias/ImagePolymorphic"
-
+import { BlockParamsModal } from "../../SlateEditor/Utils/BlockParamsModal"
+import { ImageAttributeSettings } from "./ImageAttributeSettings"
+import { ImagePolymorphic } from "../../../Medias/ImagePolymorphic"
 
 interface Props {
   attributes: any
   element: any
 }
-export function ImageElement({
+export function ImageEditor({
   attributes,
   element,
   children,

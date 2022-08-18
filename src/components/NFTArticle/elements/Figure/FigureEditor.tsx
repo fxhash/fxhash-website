@@ -1,8 +1,6 @@
-import { PropsWithChildren, useEffect, useState } from "react"
-import ReactTextareaAutosize from "react-textarea-autosize"
-import { Transforms, Node } from "slate"
-import { ReactEditor, useFocused, useSelected, useSlateStatic } from "slate-react"
-import style from "./ImageElement.module.scss"
+import { PropsWithChildren } from "react"
+import { useSelected } from "slate-react"
+import style from "./FigureEditor.module.scss"
 import cs from "classnames"
 
 
@@ -16,7 +14,7 @@ export function FigureElement({
   children,
 }: PropsWithChildren<Props>) {
   const selected = useSelected()
-  
+
   return (
     <figure {...attributes} className={cs(style.figure, {
       [style.selected]: selected

@@ -7,9 +7,9 @@ import { getArticleBlockDefinition } from "./Blocks"
 import { Path, Transforms, Node } from "slate"
 import { BlockExtraMenu } from "../Utils/BlockExtraMenu"
 import { BlockMenu } from "../Utils/BlockMenu"
-import { TAttributesEditorWrapper } from "../../../../types/ArticleEditor/ArticleEditorBlocks"
 import { TEditNodeFn, TEditNodeFnFactory } from "../../../../types/ArticleEditor/Transforms"
 import { withStopPropagation } from "../../../../utils/events"
+import { TAttributesEditorWrapper } from "../../../../types/ArticleEditor/BlockDefinition";
 
 
 interface IEditableElementWrapperProps {
@@ -202,7 +202,6 @@ export function RenderElements(props: RenderElementProps) {
     () => getArticleBlockDefinition(props.element.type),
     [props.element.type]
   )
-
   return definition.hasUtilityWrapper ?
     <EditableElementWrapper element={props.element}>
       {definition.render(props)}

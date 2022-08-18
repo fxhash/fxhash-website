@@ -1,12 +1,10 @@
-import style from "./NFTArticleImage.module.scss"
-import cs from "classnames"
 import { ImagePolymorphic } from "../../../Medias/ImagePolymorphic"
 
 interface Props {
   src: string
   alt: string
 }
-export function NFTArticleImage({
+export function ImageDisplay({
   src,
   alt,
 }: Props) {

@@ -1,14 +1,14 @@
 import cs from "classnames"
 import style from "./ImageAttributeSettings.module.scss"
-import { Dropzone } from "../../../../Input/Dropzone"
-import { TabDefinition } from "../../../../Layout/Tabs"
-import { TabsContainer } from "../../../../Layout/TabsContainer"
-import { TEditAttributeComp } from "../Blocks"
-import { InputText } from "../../../../Input/InputText"
-import { useState } from "react"
-import { Field } from "../../../../Form/Field"
-import { Submit } from "../../../../Form/Submit"
-import { Button } from "../../../../Button"
+import { Dropzone } from "../../../Input/Dropzone"
+import { TabDefinition } from "../../../Layout/Tabs"
+import { TabsContainer } from "../../../Layout/TabsContainer"
+import { InputText } from "../../../Input/InputText"
+import { useCallback, useState } from "react"
+import { Field } from "../../../Form/Field"
+import { Submit } from "../../../Form/Submit"
+import { Button } from "../../../Button"
+import { TEditAttributeComp } from "../../../../types/ArticleEditor/BlockDefinition";
 
 const tabs: TabDefinition[] = [
   {
@@ -32,6 +32,11 @@ export const ImageAttributeSettings: TEditAttributeComp = ({
       })
     }
   }
+  const handleClickImport = useCallback(() => {
+    onEdit({
+      url: textUrl
+    })
+  }, [onEdit, textUrl])
 
   return (
     <TabsContainer
@@ -63,14 +68,8 @@ export const ImageAttributeSettings: TEditAttributeComp = ({
               )}
             />
           ):tabIndex === 1 ? (
-            <form 
+            <form
               className={cs(style.link_content)}
-              onSubmit={(event) => {
-                event.preventDefault()
-                onEdit({
-                  url: textUrl
-                })
-              }}
             >
               <Field className={cs(style.field)}>
                 <label>URL to image</label>
@@ -84,10 +83,11 @@ export const ImageAttributeSettings: TEditAttributeComp = ({
 
               <Submit>
                 <Button
-                  type="submit"
+                  type="button"
                   size="small"
                   color="secondary"
                   disabled={textUrl.length === 0}
+                  onClick={handleClickImport}
                 >
                   import image
                 </Button>

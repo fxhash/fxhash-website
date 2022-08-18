@@ -8,6 +8,7 @@ import { forwardRef, useCallback, useImperativeHandle, useMemo } from "react"
 import { isUrlLocal } from "../../../utils/files"
 import useFetch, { CachePolicies } from "use-http"
 import { API_FILE__ARTICLE_UPLOAD_FILE } from "../../../services/apis/file-api.service"
+import { VideoPolymorphic } from "../../../components/Medias/VideoPolymorphic";
 
 const UPLOAD_DEFAULT_ERROR = "Unknown error."
 
@@ -27,7 +28,7 @@ export const EditorMedia = forwardRef<Ref, Props>(({
     [media.uri]
   )
 
-  const { post, loading, error, data } = 
+  const { post, loading, error, data } =
     useFetch<any>(API_FILE__ARTICLE_UPLOAD_FILE, {
       cachePolicy: CachePolicies.NO_CACHE,
       onNewData: (curr, data) => {
@@ -45,7 +46,7 @@ export const EditorMedia = forwardRef<Ref, Props>(({
       form.set("file", file)
       post(form)
     }
-  }, [isLocal, loading])
+  }, [isLocal, loading, media, post])
 
   const errorMessage = error && (data.error || UPLOAD_DEFAULT_ERROR)
 
@@ -60,10 +61,18 @@ export const EditorMedia = forwardRef<Ref, Props>(({
       className={cs(style.entry)}
     >
       <div className={cs(style.image__wrapper)}>
-        <ImagePolymorphic
-          uri={media.uri}
-          className={cs(style.image)}
-        />
+        {media.type === "image" &&
+          <ImagePolymorphic
+            uri={media.uri}
+            className={cs(style.media)}
+          />
+        }
+        {media.type === "video" &&
+          <VideoPolymorphic
+            uri={media.uri}
+            className={cs(style.media)}
+          />
+        }
       </div>
       <span className={cs(style.uri)}>
         {errorMessage ? (
