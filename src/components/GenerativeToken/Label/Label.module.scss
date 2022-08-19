@@ -1,0 +1,12 @@
+.root {
+  font-size: var(--font-size-small);
+  background-color: var(--color-gray-vvlight);
+  color: var(--color-gray);
+  padding: 3px 5px;
+
+  &.group_WARNING {
+    background-color: var(--color-warning);
+    color: black;
+    font-weight: bold;
+  }
+}
