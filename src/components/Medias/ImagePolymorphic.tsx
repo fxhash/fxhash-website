@@ -1,8 +1,8 @@
-import { HTMLAttributes, useMemo } from "react"
+import { HTMLProps, useMemo } from "react"
 import { ipfsGatewayUrl } from "../../services/Ipfs"
 import { isUriIpfs } from "../../utils/ipfs"
 
-type THTMLImageProps = Omit<HTMLAttributes<HTMLImageElement>, "src">
+type THTMLImageProps = Omit<Omit<HTMLProps<HTMLImageElement>, "src">, "crossOrigin">
 
 interface Props extends THTMLImageProps {
   uri: string
