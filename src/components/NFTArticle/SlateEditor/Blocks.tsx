@@ -19,7 +19,7 @@ import { paragraphDefinition } from "../elements/Paragraph/ParagraphDefinition";
 
 export enum EArticleBlocks {
   "embed-media" = "embed-media",
-  "tezos-storage" = "tezos-storage",
+  "tezos-storage-pointer" = "tezos-storage-pointer",
   "paragraph" = "paragraph",
   "heading" = "heading",
   "thematicBreak" = "thematicBreak",
@@ -51,7 +51,7 @@ export const InstantiableArticleBlocksList: EArticleBlocks[] = [
   EArticleBlocks.paragraph,
   EArticleBlocks.heading,
   EArticleBlocks.thematicBreak,
-  EArticleBlocks["tezos-storage"],
+  EArticleBlocks["tezos-storage-pointer"],
   EArticleBlocks.image,
   EArticleBlocks.video,
   EArticleBlocks["embed-media"],
@@ -64,7 +64,7 @@ export const InstantiableArticleBlocksList: EArticleBlocks[] = [
 
 export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition<any>> = {
   "embed-media": embedDefinition,
-  "tezos-storage": {
+  "tezos-storage-pointer": {
     name: "Tezos content",
     icon: <i className="fa-solid fa-hexagon-vertical-nft" aria-hidden/>,
     buttonInstantiable: true,
@@ -75,7 +75,6 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition<an
         contract={element.contract}
         path={element.path}
         storage_type={element.storage_type}
-        spec={element.spec}
         data_spec={element.data_spec}
         value_path={element.value_path}
       >
@@ -84,11 +83,10 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition<an
     ),
     hasUtilityWrapper: true,
     instanciateElement: () => ({
-      type: "tezos-storage",
+      type: "tezos-storage-pointer",
       contract: undefined,
       path: undefined,
       storage_type: undefined,
-      spec: undefined,
       data_spec: undefined,
       value_path: undefined,
       children: [{

@@ -31,7 +31,7 @@ export function convertSlateLeafDirectiveToMarkdown(
 
 
 const slateToRemarkTransformerOverrides: OverridedSlateBuilders = {
-  'tezos-storage': convertSlateLeafDirectiveToMarkdown,
+  'tezos-storage-pointer': convertSlateLeafDirectiveToMarkdown,
   'embed-media': convertSlateLeafDirectiveToMarkdown,
   figure: figureProcessor.transformSlateToMarkdownMdhast!,
   inlineMath: mathProcessor.transformSlateToMarkdownMdhast!,
@@ -67,7 +67,7 @@ export default async function getMarkdownFromSlateEditorState(slate: Node[] ) {
 
     const directiveAttributesFixed = text.replaceAll(
       // matches tezos-storage directives & captures the alt text & the attributes
-      /::tezos-storage\[([^\]]*)\]{([^}]*)}/g,
+      /::tezos-storage-pointer\[([^\]]*)\]{([^}]*)}/g,
       (match, ...captures) => {
         const alt = captures[0]
         const attributes: string = captures[1]
@@ -79,7 +79,7 @@ export default async function getMarkdownFromSlateEditorState(slate: Node[] ) {
               return `${attribute}=""`
             }
           )
-          return `::tezos-storage[${alt}]{${replaced}}`
+          return `::tezos-storage-pointer[${alt}]{${replaced}}`
         }
         else {
           return match
