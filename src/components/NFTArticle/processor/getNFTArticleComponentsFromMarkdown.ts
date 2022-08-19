@@ -45,7 +45,7 @@ const settingsRehypeReact = {
   createElement,
   Fragment,
   components: {
-    'tezos-storage': TezosStorageDisplay,
+    'tezos-storage-pointer': TezosStorageDisplay,
     'embed-media': Embed,
     'img': ImageDisplay,
     'video': VideoDisplay,

@@ -4,8 +4,6 @@ import style from "./TezosStorageDisplay.module.scss"
 import cs from "classnames"
 import { TezosStorageFactory } from './TezosStorageFactory'
 
-type TStorageBlock = "project" | "gentk" | "unknown"
-
 export interface TezosStorageProps extends ITezosStoragePointer {
 }
 
@@ -13,7 +11,6 @@ export function TezosStorageDisplay({
   contract,
   path,
   storage_type,
-  spec,
   data_spec,
   value_path,
 }: TezosStorageProps) {

@@ -19,12 +19,11 @@ export function generativeTokenTezosStoragePointer(
 ): ITezosStoragePointer {
   return {
     contract: FxhashContracts.ISSUER,
-    path: `ledger:${token.id}`,
+    path: `ledger::${token.id}`,
     storage_type: undefined,
-    spec: "FX-ISSUER-002",
     // the specification of the metadata
     data_spec: "FX-GEN-DATA-002",
-    value_path: "",
+    value_path: undefined,
   }
 }
 
@@ -36,9 +35,8 @@ export function gentkTezosStoragePointer(
 ): ITezosStoragePointer {
   return {
     contract: getGentkFA2Contract(gentk),
-    path: `token_metadata:${gentk.id}`,
+    path: `token_metadata::${gentk.id}`,
     storage_type: undefined,
-    spec: undefined,
     data_spec: undefined,
     value_path: undefined,
   }

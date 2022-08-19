@@ -16,7 +16,6 @@ const TezosStorageEditor = forwardRef<HTMLDivElement, TezosStorageProps>(({
   contract,
   path,
   storage_type,
-  spec,
   data_spec,
   value_path,
   element,
@@ -60,7 +59,6 @@ const TezosStorageEditor = forwardRef<HTMLDivElement, TezosStorageProps>(({
             contract={contract}
             path={path}
             storage_type={storage_type}
-            spec={spec}
             data_spec={data_spec}
             value_path={value_path}
           />

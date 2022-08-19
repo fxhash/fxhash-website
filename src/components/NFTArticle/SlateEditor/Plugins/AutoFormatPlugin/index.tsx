@@ -32,7 +32,7 @@ const config: AutoFormatChange[] = [
   new InlineTypeChange(['__', '**'], {strong: true}),
   new InlineTypeChange(['_', '*'], {emphasis: true}),
   new BlockTypeChange(['---', '***', '___'], {type: 'thematicBreak'}),
-  new CustomDirectiveChange('tezos-storage'),
+  new CustomDirectiveChange('tezos-storage-pointer'),
 ]
 
 export const withAutoFormat = (editor: Editor) => {
