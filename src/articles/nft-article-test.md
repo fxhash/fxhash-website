@@ -5,7 +5,7 @@ description: 'What is fxhash ?'
 ---
 
 
-::tezos-storage[optional descriptive text]{address="KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton" key="741172"}
+::tezos-storage-pointer[optional descriptive text]{contract="KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton" path="ledger::741172"}
 
 
 | Syntax       |    Description |      Test Text |

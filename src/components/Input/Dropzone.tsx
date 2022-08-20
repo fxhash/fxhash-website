@@ -4,7 +4,7 @@ import { ReactNode, useCallback, useMemo, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { prettyPrintBytes } from "../../utils/units"
 
-interface Props {
+export interface DropzoneProps {
   accepted?: string | string[]
   files?: File[] | null
   onChange: (files: File[]|null) => void
@@ -22,7 +22,7 @@ export function Dropzone({
   onChange,
   onClick,
   className
-}: Props) {
+}: DropzoneProps) {
   const [error, setError] = useState<string|null>(null)
 
   const onDrop = useCallback(acceptedFiles => {
@@ -56,7 +56,7 @@ export function Dropzone({
   }, [getRootProps])
 
   return (
-    <div 
+    <div
       {...rootProps}
       className={cs(style.container, className, {
         [style.drag]: isDragActive,
@@ -66,9 +66,9 @@ export function Dropzone({
     >
       <input {...getInputProps()} />
       {files ? (
-        <p>{ files.map(f => `📃 ${f.name} (${prettyPrintBytes(f.size)})`).join(', ') }</p>
+        <div>{ files.map(f => `📃 ${f.name} (${prettyPrintBytes(f.size)})`).join(', ') }</div>
       ):(
-        <p>{ error ? error : (isDragActive ? textDrag : textDefault) }</p>
+        <div>{ error ? error : (isDragActive ? textDrag : textDefault) }</div>
       )}
     </div>
   )

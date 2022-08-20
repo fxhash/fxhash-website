@@ -7,19 +7,20 @@ import cs from "classnames";
 import { ArticlesContext } from "../../../context/Articles";
 import { debounce } from "../../../utils/debounce";
 import { NFTArticleForm } from "../../../types/ArticleEditor/Editor";
-import { formatRelative } from "date-fns";
 
 interface AutosaveArticleProps {
   id: string,
   formValues: NFTArticleForm
   hasUnsavedMedias?: boolean
   onMediasUnsavedClick: () => void
+  isMinted: boolean
 }
-const _AutosaveArticle = ({ 
-  id, 
-  formValues, 
+const _AutosaveArticle = ({
+  id,
+  formValues,
   hasUnsavedMedias,
   onMediasUnsavedClick,
+  isMinted,
 }: AutosaveArticleProps) => {
   const { state, dispatch } = useContext(ArticlesContext);
   const [status, setStatus] = useState<'unsaved'|'saving'|'saved'>('saved');
@@ -28,11 +29,15 @@ const _AutosaveArticle = ({
     setStatus('saving');
     dispatch({
       type: 'save',
-      payload: { id, articleForm: articleFormState }
+      payload: {
+        id,
+        articleForm: articleFormState,
+        minted: isMinted,
+      },
     })
-    console.log(articleFormState?.body);
+    console.log(articleFormState.body)
     setStatus('saved');
-  }, [dispatch, id])
+  }, [dispatch, id, isMinted])
 
   const debouncedSave = useMemo<typeof handleSaveDraft>(
     () => debounce(handleSaveDraft, 800),

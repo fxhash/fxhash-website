@@ -26,7 +26,7 @@ const _CardSmallNftArticle = ({ article: { title, slug, description, thumbnailUr
           src={thumbnailUrl}
           layout="fill"
           objectFit="cover"
-          objectPosition="top"
+          objectPosition="center"
           priority={imagePriority}
         />
       </div>

@@ -1,6 +1,6 @@
 import React, { memo, useCallback, useState } from 'react';
 import style from "./Embed.module.scss";
-import { EmbedMedia, mediaPlayers } from "./EmbedMedia";
+import { EmbedMediaDisplay, mediaPlayers } from "./EmbedMediaDisplay";
 import { InputText } from "../../../Input/InputText";
 import { ReactEditor, useSlateStatic } from "slate-react";
 import { Transforms } from "slate";
@@ -32,7 +32,7 @@ const EmbedEditor = memo(({ children, href, slateElement }: EmbedEditorProps) =>
         className={style.input}
         placeholder={`Support URLs from ${mediaPlayersSupported}`}
       />
-      {url && <EmbedMedia href={url} showNotFound>{children}</EmbedMedia>}
+      {url && <EmbedMediaDisplay href={url} showNotFound>{children}</EmbedMediaDisplay>}
     </div>
   )
 });

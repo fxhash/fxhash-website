@@ -9,27 +9,26 @@ import remarkUnwrapImages from "remark-unwrap-images";
 import remarkDirective from "remark-directive";
 import remarkRehype from "remark-rehype";
 import rehypeKatex from "rehype-katex";
-import rehypeHighlight from "rehype-highlight";
 import rehypePrism from "rehype-prism"
 import rehypeFormat from "rehype-format";
 import rehypeStringify from "rehype-stringify";
 import rehypeReact from "rehype-react";
 import { Element } from "hast";
-import { NFTArticleElementComponent } from "../../../types/Article";
 import { ComponentsWithNodeOptions, ComponentsWithoutNodeOptions } from "rehype-react/lib/complex-types";
 import { SharedOptions } from "rehype-react/lib";
 import { mdastFlattenListItemParagraphs, remarkFxHashCustom } from "./plugins"
-import { TezosStorage } from "../elements/TezosStorage"
-import { NFTArticleImage } from "../elements/Medias/NFTArticleImage";
-import { CodeElement } from "../elements/CodeElement";
-import { ThematicBreak } from "../elements/ThematicBreak";
+import { TezosStorageDisplay } from "../elements/TezosStorage/TezosStorageDisplay"
+import { ImageDisplay } from "../elements/Image/ImageDisplay";
+import { CodeDisplay } from "../elements/Code/CodeDisplay";
+import { ThematicBreakEditor } from "../elements/ThematicBreak/ThematicBreakEditor";
+import { VideoDisplay } from "../elements/Video/VideoDisplay";
 
 declare module "rehype-react" {
   interface WithNode {
     node: Element
   }
   interface CustomComponentsOptions {
-    [key: string]: NFTArticleElementComponent<any>
+    [key: string]: any
   }
   interface CustomComponentsWithoutNodeOptions extends Omit<ComponentsWithoutNodeOptions, 'components'> {
     components?: CustomComponentsOptions
@@ -46,11 +45,12 @@ const settingsRehypeReact = {
   createElement,
   Fragment,
   components: {
-    'tezos-storage': TezosStorage,
+    'tezos-storage-pointer': TezosStorageDisplay,
     'embed-media': Embed,
-    'img': NFTArticleImage,
-    'pre': CodeElement,
-    'hr': ThematicBreak,
+    'img': ImageDisplay,
+    'video': VideoDisplay,
+    'pre': CodeDisplay,
+    'hr': ThematicBreakEditor,
   }
 }
 interface PayloadNFTArticleComponentsFromMarkdown {

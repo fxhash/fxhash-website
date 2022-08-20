@@ -145,13 +145,15 @@ export const TezosStorageGentk: TezosStorageRenderer<Props> = ({
 }
 
 TezosStorageGentk.matches = (pointer) => {
+  // get contract address, removing network indentifier if any
+  const contract = pointer.contract.split(".")[0]
   if (![
     FxhashContracts.GENTK_V1, 
     FxhashContracts.GENTK_V2,
-  ].includes(pointer.contract)) {
+  ].includes(contract)) {
     return false
   }
-  const split = pointer.path.split(":")
+  const split = pointer.path.split("::")
   if (split[0] !== "token_metadata") {
     return false
   }
@@ -163,6 +165,6 @@ TezosStorageGentk.matches = (pointer) => {
 
 TezosStorageGentk.getPropsFromPointer = (pointer) => {
   return {
-    id: parseInt(pointer.path.split(":")[1])
+    id: parseInt(pointer.path.split("::")[1])
   }
 }

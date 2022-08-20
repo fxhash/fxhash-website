@@ -1,4 +1,4 @@
-export type IEditorMediaType = "image"
+export type IEditorMediaType = "image" | "video"
 
 export interface IEditorMediaFile {
   uri: string

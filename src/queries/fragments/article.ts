@@ -33,6 +33,7 @@ export const Frag_ArticleFull = gql`
     editions
     royalties
     metadataUri
+    metadata
     author {
       ...UserBadgeInfos
     }
@@ -41,6 +42,12 @@ export const Frag_ArticleFull = gql`
     }
     relatedArticles(take: 4) {
       ...ArticleInfos
+    }
+    revisions {
+      iteration
+      metadataUri
+      createdAt
+      opHash
     }
   }
   ${Frag_ArticleInfos}

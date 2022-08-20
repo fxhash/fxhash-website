@@ -9,8 +9,15 @@ import { remarkToSlate } from "remark-slate-transformer";
 import { OverridedMdastBuilders } from "remark-slate-transformer/lib/transformers/mdast-to-slate";
 import { mdastFlattenListItemParagraphs, remarkFxHashCustom } from "./plugins";
 import remarkGfm from "remark-gfm";
+import { mathProcessor } from "../elements/Math/MathProcessor";
+import { imageProcessor } from "../elements/Image/ImageProcessor";
+import { videoProcessor } from "../elements/Video/VideoProcessor";
 
 interface DirectiveNodeProps { [key: string]: any }
+
+const directives: Record<string, (node: any) => object> = {
+  "video": videoProcessor.transformMarkdownMdhastToSlate!,
+}
 
 function createDirectiveNode(node: any, next: (children: any[]) => any): object {
   const data = node.data || {}
@@ -24,45 +31,21 @@ function createDirectiveNode(node: any, next: (children: any[]) => any): object 
       }
       return acc;
     }, {});
-  return {
+  const newNode = {
     type: data.hName,
     children: next(node.children),
     ...propertiesWithoutUndefined
   };
+  const instanciateNode = directives[newNode.type]
+  return instanciateNode ? instanciateNode(newNode) : newNode;
 }
-function createMathNode(node: any) {
-  return {
-    type: node.type,
-    children: [{text: ''}],
-    math: node.value,
-  }
-}
-
-function markdownImageToFigure(node: any) {
-  return {
-    type: "figure",
-    children: [{
-      type: "image",
-      url: node.url,
-      children: [{
-        text: ""
-      }],
-    }, {
-      type: "figcaption",
-      children: [{
-        text: node.alt
-      }]
-    }]
-  }
-}
-
 const remarkSlateTransformerOverrides: OverridedMdastBuilders = {
-  textDirective:  createDirectiveNode,
-  leafDirective:  createDirectiveNode,
-  containerDirective:  createDirectiveNode,
-  "inlineMath": createMathNode,
-  "math": createMathNode,
-  image: markdownImageToFigure,
+  textDirective: createDirectiveNode,
+  leafDirective: createDirectiveNode,
+  containerDirective: createDirectiveNode,
+  "inlineMath": mathProcessor.transformMarkdownMdhastToSlate,
+  "math": mathProcessor.transformMarkdownMdhastToSlate,
+  image: imageProcessor.transformMarkdownMdhastToSlate,
 }
 
 interface PayloadSlateEditorStateFromMarkdown {

@@ -41,7 +41,7 @@ This is an example of a tezos storage pointer in a markdown string:
 
 Phasellus ut augue in quam facilisis congue consequat ut nibh. In pellentesque erat eget ex pretium, eu tristique nibh pretium.
 
-::tezos-storage[Some comment on this token]{contract="KT1NkZho1yRkDdQnN4Mz93sDYyY2pPrEHTNs" path="token_metadata:880"}
+::tezos-storage-pointer[Some comment on this token]{contract="KT1NkZho1yRkDdQnN4Mz93sDYyY2pPrEHTNs" path="token_metadata:880"}
 
 *Phasellus ut augue in quam facilisis congue consequat ut nibh. In pellentesque erat eget ex pretium, eu tristique nibh pretium. Nullam tristique...*
 ```
