@@ -15,6 +15,9 @@
   margin: 0 auto;
   width: 80%;
 }
+.dropzone_has_file {
+  min-height: 48px;
+}
 
 .csv_example {
   padding: $spacing-x-small;

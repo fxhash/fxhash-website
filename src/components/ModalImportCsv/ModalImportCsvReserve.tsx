@@ -107,7 +107,9 @@ const _ModalImportCsvReserve = ({ onClose, onImport }: ModalImportCsvReserveProp
           accepted={'text/csv'}
           files={file && [file]}
           onChange={handleDropzoneChange}
-          className={style.dropzone}
+          className={cs(style.dropzone, {
+            [style.dropzone_has_file]: !!file
+          })}
         />
         <Spacing size="large"/>
         {error &&
@@ -121,17 +123,22 @@ const _ModalImportCsvReserve = ({ onClose, onImport }: ModalImportCsvReserveProp
           </div>
         }
         {splits &&
-          <div className={style.container_splits}>
-            <InputSplits
-              className={style.splits}
-              value={splits}
-              textShares="Nb of editions"
-              defaultShares={1}
-              sharesTransformer={transformSplitsAccessList}
-              showPercentages={false}
-              readOnly
-            />
-          </div>
+          <>
+            <div className={cs(text.info)}>
+              {splits.length} address{splits.length !== 1 ? 'es' : ''}
+            </div>
+            <div className={style.container_splits}>
+              <InputSplits
+                className={style.splits}
+                value={splits}
+                textShares="Nb of editions"
+                defaultShares={1}
+                sharesTransformer={transformSplitsAccessList}
+                showPercentages={false}
+                readOnly
+              />
+            </div>
+          </>
         }
         <div className={style.container_import}>
           <Button
