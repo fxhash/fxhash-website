@@ -70,6 +70,7 @@ const _ModalImportCsvReserve = ({ onClose, onImport }: ModalImportCsvReserveProp
 	      throw new Error(res.errors.map((err: ParseError) => err.message).join('\n'))
       }
       const missedColumns = hasCsvMissedColumns(res, cols);
+      console.log("alo",res.meta.fields, res.data);
       if (missedColumns) {
         throw new Error(`Missing columns in csv file: ${missedColumns.join(',')}`)
       }
