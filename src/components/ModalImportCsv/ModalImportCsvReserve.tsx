@@ -70,7 +70,6 @@ const _ModalImportCsvReserve = ({ onClose, onImport }: ModalImportCsvReserveProp
 	      throw new Error(res.errors.map((err: ParseError) => err.message).join('\n'))
       }
       const missedColumns = hasCsvMissedColumns(res, cols);
-      console.log("alo",res.meta.fields, res.data);
       if (missedColumns) {
         throw new Error(`Missing columns in csv file: ${missedColumns.join(',')}`)
       }
@@ -91,57 +90,60 @@ const _ModalImportCsvReserve = ({ onClose, onImport }: ModalImportCsvReserveProp
       onClose={onClose}
       className={style.modal}
     >
-      <span className={cs(text.info)}>
-        Use the following format to import users from a .csv file
-      </span>
-      <pre className={style.csv_example}>
-        <code>
-          address, amount<br/>
-          tz1dtzgLYUHMhP6sWeFtFsHkHqyPezBBPLsZ, 2<br/>
-          tz1PoDdN2oyRyF6DA73zTWAWYhNL4UGr3Egj, 4<br/>
-        </code>
-      </pre>
-      <Spacing size="large"/>
-      <Dropzone
-        textDefault="Drop your .csv file here (or click to browse)"
-        accepted={'text/csv'}
-        files={file && [file]}
-        onChange={handleDropzoneChange}
-        className={style.dropzone}
-      />
-      <Spacing size="large"/>
-      {error &&
-        <ErrorBlock align="left" title="Import error">
-          <div className={style.error}>{error}</div>
-        </ErrorBlock>
-      }
-      {loading &&
-        <div className={style.loading}>
-          <Loader/>
+      <div className={style.body}>
+        <span className={cs(text.info)}>
+          Use the following format to import users from a .csv file
+        </span>
+        <pre className={style.csv_example}>
+          <code>
+            address, amount<br/>
+            tz1dtzgLYUHMhP6sWeFtFsHkHqyPezBBPLsZ, 2<br/>
+            tz1PoDdN2oyRyF6DA73zTWAWYhNL4UGr3Egj, 4<br/>
+          </code>
+        </pre>
+        <Spacing size="large"/>
+        <Dropzone
+          textDefault="Drop your .csv file here (or click to browse)"
+          accepted={'text/csv'}
+          files={file && [file]}
+          onChange={handleDropzoneChange}
+          className={style.dropzone}
+        />
+        <Spacing size="large"/>
+        {error &&
+          <ErrorBlock align="left" title="Import error">
+            <div className={style.error}>{error}</div>
+          </ErrorBlock>
+        }
+        {loading &&
+          <div className={style.loading}>
+            <Loader/>
+          </div>
+        }
+        {splits &&
+          <div className={style.container_splits}>
+            <InputSplits
+              className={style.splits}
+              value={splits}
+              textShares="Nb of editions"
+              defaultShares={1}
+              sharesTransformer={transformSplitsAccessList}
+              showPercentages={false}
+              readOnly
+            />
+          </div>
+        }
+        <div className={style.container_import}>
+          <Button
+            type="button"
+            size="regular"
+            color="secondary"
+            disabled={!splits || loading}
+            onClick={handleClickImport}
+          >
+            import users
+          </Button>
         </div>
-      }
-      {splits &&
-        <div className={style.splits}>
-          <InputSplits
-            value={splits}
-            textShares="Nb of editions"
-            defaultShares={1}
-            sharesTransformer={transformSplitsAccessList}
-            showPercentages={false}
-            readOnly
-          />
-        </div>
-      }
-      <div className={style.container_import}>
-        <Button
-          type="button"
-          size="regular"
-          color="secondary"
-          disabled={!splits || loading}
-          onClick={handleClickImport}
-        >
-          import users
-        </Button>
       </div>
     </Modal>
   );

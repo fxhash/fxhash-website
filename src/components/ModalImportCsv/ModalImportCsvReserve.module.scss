@@ -5,6 +5,12 @@
   max-width: 800px;
 }
 
+.body {
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+}
+
 .dropzone {
   margin: 0 auto;
   width: 80%;
@@ -33,6 +39,17 @@
   justify-content: center;
 }
 
-.splits {
+.container_splits {
   margin-top: $spacing;
+  flex: 1;
+  overflow-y: scroll;
+  overscroll-behavior: contain;
+}
+
+.splits {
+  thead {
+    position: sticky;
+    z-index: 1;
+    top: -1px;
+  }
 }
