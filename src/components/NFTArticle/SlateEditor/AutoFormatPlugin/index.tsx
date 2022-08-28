@@ -34,6 +34,7 @@ const config: AutoFormatChange[] = [
   new BlockTypeChange('p',   {type: 'paragraph',} ), 
   new BlockTypeChange('>',   {type: 'blockquote',} ), 
   new BlockTypeChange(['---', '***', '___'], {type: 'thematicBreak'}),
+  new BlockTypeChange(['-', '*'], {type: 'listItem'}),
   new InlineTypeChanges([ 
     [{strong: true}, ['__', '**']],
     [{emphasis: true}, ['_', '*']],

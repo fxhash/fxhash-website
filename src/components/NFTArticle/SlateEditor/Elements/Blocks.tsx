@@ -296,6 +296,17 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition> =
       })
     },
     hasUtilityWrapper: false,
+    instanciateElement: ({text=""}) => ({
+      type: "list",
+      ordered: false,
+      spread: false,
+      children: [{
+        type: "listItem",
+        children: [{
+          text, 
+        }]
+      }]
+    }),
   },
   "table": {
     name: "Table",

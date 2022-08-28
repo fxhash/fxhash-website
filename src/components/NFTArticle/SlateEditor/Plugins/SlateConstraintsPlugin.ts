@@ -1,4 +1,4 @@
-import { Transforms } from "slate";
+import { Transforms, Node } from "slate";
 import { EnhanceEditorWith } from "../../../../types/ArticleEditor/Editor";
 
 /**
@@ -46,6 +46,13 @@ export const withConstraints: EnhanceEditorWith = (editor) => {
             at: path
           }
         )
+      }
+    }
+    // Make sure listItems are wrapped with a list node
+    if(node.type === 'listItem') {
+      const parentNode = Node.parent(editor, path);
+      if (parentNode.type !== 'list') {
+	Transforms.wrapNodes(editor, {type: 'list' })
       }
     }
 
