@@ -4,8 +4,6 @@ date: '2021-10-20'
 description: 'What is fxhash ?'
 ---
 
+::video[beautiful garden]{src="https://samplelib.com/lib/preview/mp4/sample-5s.mp4"}
 
-| Syntax       |   Description   |      Test Text |
-|:-------------|:---------------:|---------------:|
-| Header       |      Title      |    Here's this |
-| Paragraph    |      Text       |       And more |
+![random image](https://picsum.photos/536/354)

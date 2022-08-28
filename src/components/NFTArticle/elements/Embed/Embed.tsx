@@ -1,6 +1,5 @@
 import React, { memo } from 'react';
-import { NFTArticleElementComponent } from "../../../../types/Article";
-import { EmbedMedia } from "./EmbedMedia";
+import { EmbedMediaDisplay } from "./EmbedMediaDisplay";
 import EmbedEditor from "./EmbedEditor";
 
 interface EmbedProps {
@@ -10,8 +9,8 @@ interface EmbedProps {
   slateAttributes?: any
   slateElement?: any
 }
-const Embed: NFTArticleElementComponent<EmbedProps> = memo(
-  ({ children, href, editable, slateAttributes, slateElement }) =>
+const Embed = memo(
+  ({ children, href, editable, slateAttributes, slateElement }: EmbedProps) =>
   editable ?
     <EmbedEditor
       href={href}
@@ -21,23 +20,8 @@ const Embed: NFTArticleElementComponent<EmbedProps> = memo(
       {children}
     </EmbedEditor> :
     <>
-      {href && <EmbedMedia href={href}>{children}</EmbedMedia>}
+      {href && <EmbedMediaDisplay href={href}>{children}</EmbedMediaDisplay>}
     </>
 );
 Embed.displayName = 'Embed';
 export default Embed;
-
-Embed.getPropsFromNode = (node, properties) => {
-  if (!properties.href) return null;
-  return ({
-    href: properties.href,
-    editable: false,
-  })
-}
-Embed.htmlTagName = 'embed-media';
-Embed.fromSlateToMarkdown = properties => {
-  if (!properties.href) return null;
-  return ({
-    href: properties.href
-  })
-}

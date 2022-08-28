@@ -90,7 +90,7 @@ const _CardNftArticle = ({
               src={thumbnailUrl}
               layout="fill"
               objectFit="cover"
-              objectPosition="top"
+              objectPosition="center"
               priority={imagePriority}
             />
           }

@@ -2,6 +2,7 @@
  * A Tezos Storage Pointer is a list of properties designed to target any
  * content stored in Tezos Smart Contracts. It is primarly designed to get NFT
  * content but can be utilized in other fashions.
+ * https://github.com/fxhash/specifications/blob/04fd4c0d5752122324dfc60d8491ee10850c5b93/general/tezos-storage-pointers.md
  */
 export interface ITezosStoragePointer {
   // the contract address under which the resource can be found
@@ -14,9 +15,7 @@ export interface ITezosStoragePointer {
   path: string
   // the type of the data we fetch, default: "bigmap"
   storage_type?: string
-  // the specification of the contract, default "TZIP-012" (FA2)
-  spec?: string
-  // the specification of the data we expect to get, default "TZIP-021"
+  // the specification of the data we expect to get, default undefined
   data_spec?: string
   // the path to get the actual data from the value we get from the contract
   // storage, default: "token_info:"
@@ -29,5 +28,5 @@ export interface ITezosStoragePointer {
 
 // a list of the optional tezos storage pointer keys
 export const OptionalTezosStoragePointerKeys: (keyof ITezosStoragePointer)[] = [
-  "storage_type", "spec", "data_spec", "value_path"
+  "storage_type", "data_spec", "value_path"
 ]

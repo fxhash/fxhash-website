@@ -8,8 +8,10 @@ import stringify from "remark-stringify";
 import { OverridedSlateBuilders } from "remark-slate-transformer/lib/transformers/slate-to-mdast";
 import { remarkFxHashCustom } from "./plugins";
 import remarkGfm from "remark-gfm";
+import { mathProcessor } from "../elements/Math/MathProcessor";
+import { figureProcessor } from "../elements/Figure/FigureProcessor";
 
-function convertSlateLeafDirectiveToMarkdown(
+export function convertSlateLeafDirectiveToMarkdown(
   node: any,
 ) {
   const { children, type, ...attributes} = node
@@ -27,46 +29,13 @@ function convertSlateLeafDirectiveToMarkdown(
   }
 }
 
-/**
- * Turns a figcaption element into an element which will be turned into an
- * image in proper markdown
- */
-function figureToMarkdown(node: any, next: (children: any[]) => any) {
-  // create a regular image node
-  const imageNode: any = {
-    type: "image"
-  }
-
-  // find if there's a caption
-  const caption: Node|null = node.children.find(
-    (node: Node) => node.type === ("figcaption" as any)
-  )
-  if (caption && caption.children?.length > 0) {
-    imageNode.alt = caption.children[0].text
-  }
-  // now do the same for the image element
-  const image: Node|null = node.children.find(
-    (node: Node) => node.type === "image"
-  )
-  if (image) {
-    imageNode.url = image.url
-  }
-
-  return imageNode
-}
 
 const slateToRemarkTransformerOverrides: OverridedSlateBuilders = {
-  'tezos-storage': convertSlateLeafDirectiveToMarkdown,
+  'tezos-storage-pointer': convertSlateLeafDirectiveToMarkdown,
   'embed-media': convertSlateLeafDirectiveToMarkdown,
-  figure: figureToMarkdown,
-  inlineMath: (node: any) => ({
-    type: node.type,
-    value: node.math,
-  }),
-  math: (node: any) => ({
-    type: node.type,
-    value: node.math,
-  }),
+  figure: figureProcessor.transformSlateToMarkdownMdhast!,
+  inlineMath: mathProcessor.transformSlateToMarkdownMdhast!,
+  math: mathProcessor.transformSlateToMarkdownMdhast!,
 }
 export default async function getMarkdownFromSlateEditorState(slate: Node[] ) {
   try {
@@ -98,7 +67,7 @@ export default async function getMarkdownFromSlateEditorState(slate: Node[] ) {
 
     const directiveAttributesFixed = text.replaceAll(
       // matches tezos-storage directives & captures the alt text & the attributes
-      /::tezos-storage\[([^\]]*)\]{([^}]*)}/g, 
+      /::tezos-storage-pointer\[([^\]]*)\]{([^}]*)}/g,
       (match, ...captures) => {
         const alt = captures[0]
         const attributes: string = captures[1]
@@ -110,7 +79,7 @@ export default async function getMarkdownFromSlateEditorState(slate: Node[] ) {
               return `${attribute}=""`
             }
           )
-          return `::tezos-storage[${alt}]{${replaced}}`
+          return `::tezos-storage-pointer[${alt}]{${replaced}}`
         }
         else {
           return match

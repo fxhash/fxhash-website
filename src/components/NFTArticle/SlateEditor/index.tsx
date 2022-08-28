@@ -7,7 +7,7 @@ import React, {
   useMemo,
   useState
 } from "react";
-import { BaseElement, createEditor, Node, Descendant } from "slate";
+import { BaseElement, createEditor, Node, Descendant, Editor } from "slate";
 import {
   Slate,
   Editable,
@@ -15,12 +15,10 @@ import {
   RenderLeafProps,
 } from "slate-react"
 import { withHistory } from "slate-history"
-import { TezosStorageProps } from "../elements/TezosStorage"
-import { withAutoFormat } from './AutoFormatPlugin/'
-import { withImages } from "./Plugins/SlateImagePlugin"
-import { ImageElement } from "../elements/ImageElement"
-import { onKeyDownHotkeyPlugin } from "./HotkeyPlugin/HotkeyPlugin"
-import { RenderElements } from "./Elements/RenderElements"
+import { TezosStorageProps } from "../elements/TezosStorage/TezosStorageDisplay"
+import { withAutoFormat } from './Plugins/AutoFormatPlugin/'
+import { onKeyDownHotkeyPlugin } from "./Plugins/HotkeyPlugin"
+import { RenderElements } from "./RenderElements"
 import { withConstraints } from "./Plugins/SlateConstraintsPlugin"
 import { IEditorMediaFile } from "../../../types/ArticleEditor/Image";
 import { withMediaSupport } from "./Plugins/SlateMediaPlugin";
@@ -30,8 +28,7 @@ import dynamic from 'next/dynamic'
 import { onKeyDownTablePlugin, withTables } from "./Plugins/SlateTablePlugin";
 import { withBreaks } from "./Plugins/SlateBreaksPlugin";
 
-
-const FloatingInlineMenu = dynamic(() => import('./FloatingInlineMenu/FloatingInlineMenu'), {
+const FloatingInlineMenu = dynamic(() => import('./Plugins/FloatingInlineMenuPlugin/FloatingInlineMenu'), {
   ssr: false,
 })
 
@@ -44,7 +41,7 @@ type HeadlineElement = TypeElement & {
   depth: number
 }
 
-type ImageElement = TypeElement & {
+type ImageEditor = TypeElement & {
   title: string
   url: string
   alt?: string
@@ -52,7 +49,7 @@ type ImageElement = TypeElement & {
 
 type TezosStorageElement = TypeElement & TezosStorageProps
 
-type CustomElement =  HeadlineElement | TezosStorageElement | ImageElement;
+type CustomElement =  HeadlineElement | TezosStorageElement | ImageEditor;
 
 
 
@@ -112,7 +109,6 @@ export const SlateEditor = forwardRef<FxEditor, SlateEditorProps>(({
       { f: withHistory },
       { f: withAutoFormat },
       { f: withMediaSupport, args: { onMediasUpdate } },
-      { f: withImages },
       { f: withTables },
       { f: withConstraints },
       { f: withBreaks },
@@ -132,13 +128,13 @@ export const SlateEditor = forwardRef<FxEditor, SlateEditorProps>(({
     onChange?.(newValue)
   }, [onChange])
   const handleKeyDown = useCallback((event: KeyboardEvent<HTMLDivElement>) => {
-    onKeyDownHotkeyPlugin(editor, event)
     onKeyDownTablePlugin(editor, event)
   }, [editor])
 
   // mutate ref to editor whenever editor ref changes
   useImperativeHandle(ref, () => editor, [editor])
   useInit(() => {
+    Editor.normalize(editor, { force: true });
     if (onInit) onInit(editor)
   })
   return (

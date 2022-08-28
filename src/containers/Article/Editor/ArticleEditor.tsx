@@ -2,8 +2,7 @@ import style from "./ArticleEditor.module.scss"
 import articleStyle from "../../../components/NFTArticle/NFTArticle.module.scss"
 import cs from "classnames"
 import TextareaAutosize from "react-textarea-autosize"
-import { useCallback, useContext, useMemo, useRef, useState } from "react"
-import { SlateEditor } from "../../../components/NFTArticle/SlateEditor"
+import React, { useCallback, useContext, useMemo, useRef, useState } from "react"
 import { Dropzone } from "../../../components/Input/Dropzone"
 import { Spacing } from "../../../components/Layout/Spacing"
 import { Field } from "../../../components/Form/Field"
@@ -14,10 +13,6 @@ import { Donations } from "../../Input/Donations"
 import { Submit } from "../../../components/Form/Submit"
 import { Button } from "../../../components/Button"
 import { InputTextUnit } from "../../../components/Input/InputTextUnit"
-import {
-  getMarkdownFromSlateEditorState,
-  getSlateEditorStateFromMarkdown
-} from "../../../components/NFTArticle/processor"
 import { IEditorMediaFile } from "../../../types/ArticleEditor/Image"
 import { FxEditor, NFTArticleForm } from "../../../types/ArticleEditor/Editor"
 import { EditorMedias } from "./EditorMedias"
@@ -36,6 +31,13 @@ import { UserContext } from "../../UserProvider"
 import { ErrorBlock } from "../../../components/Error/ErrorBlock"
 import { YupSplits } from "../../../utils/yup/splits"
 import { InputText } from "../../../components/Input/InputText";
+import dynamic from "next/dynamic";
+
+const NftArticleEditor = dynamic(() =>
+  import('../../../components/NFTArticle/NFTArticleEditor'), {
+    loading: () => <LoaderBlock />
+  }
+);
 
 const editorDefaultValue = [
   {
@@ -139,6 +141,7 @@ export function ArticleEditor({
   }, [])
 
   const handleChangeBody = useCallback(async (nodes: Descendant[]) => {
+    const getMarkdownFromSlateEditorState = (await import('../../../components/NFTArticle/processor')).getMarkdownFromSlateEditorState
     const markdown = await getMarkdownFromSlateEditorState(nodes);
     setFieldTouched('body');
     await setFieldValue('body', markdown);
@@ -191,6 +194,7 @@ export function ArticleEditor({
   }, [setFieldValue, thumbnail])
 
   useInit(async () => {
+    const getSlateEditorStateFromMarkdown = (await import('../../../components/NFTArticle/processor')).getSlateEditorStateFromMarkdown
     const editorFromMd = values.body ? await getSlateEditorStateFromMarkdown(values.body) : null;
     setInitialBody(editorFromMd ? editorFromMd.editorState : editorDefaultValue);
   })
@@ -329,7 +333,7 @@ export function ArticleEditor({
         </div>
         <div className={cs(articleStyle.article_wrapper)}>
           {initialBody ?
-            <SlateEditor
+            <NftArticleEditor
               ref={editorStateRef}
               initialValue={initialBody}
               placeholder="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ut magna eu sapien placerat auctor. Phasellus vel erat a mi cursus posuere nec et diam. Maecenas quis nisl ligula. Sed velit sapien, accumsan eget cursus sit amet, egestas sit amet odio. Cras vitae urna sodales, suscipit ipsum a, aliquam ex. Pellentesque ut placerat arcu, a fringilla ante. Sed varius sem mi, sed interdum nunc consectetur ut. Nulla consectetur diam purus, quis volutpat nunc ultrices eget. Nam vel consectetur lacus, vel auctor dolor."
@@ -376,7 +380,7 @@ export function ArticleEditor({
             error={!!errors.tags}
           />
         </Field>
-        
+
         {!editMinted && (
           <>
             <Field error={errors.editions}>
