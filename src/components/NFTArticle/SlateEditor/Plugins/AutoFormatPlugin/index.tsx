@@ -2,10 +2,9 @@ import { Range, Editor  } from 'slate';
 import { BlockTypeChange } from './BlockTypeChange'
 import { InlineTypeChanges } from './InlineTypeChange'
 import { CustomDirectiveChange } from './CustomDirectiveChange'
-import { LinkChange } from './LinkChange'
-import { FigureAutoFormat } from './FigureAutoFormat'
+import { LinkAndFigureAutoFormat } from './LinkAndFigureAutoFormat'
 
-export type AutoFormatChangeType = "BlockTypeChange" | "InlineTypeChanges" | "CustomDirectiveChange" | "LinkChange" | "FigureAutoFormat";
+export type AutoFormatChangeType = "BlockTypeChange" | "InlineTypeChanges" | "CustomDirectiveChange" | "LinkAndFigureAutoFormat"
 export type ChangeData = {[key: string]: number | string | boolean | ChangeData}
 
 export type AutoFormatChange = {
@@ -42,8 +41,7 @@ const config: AutoFormatChange[] = [
   ]),
   new CustomDirectiveChange('embed-media'), 
   new CustomDirectiveChange('tezos-storage-pointer'),
-  new FigureAutoFormat(), 
-  new LinkChange(), 
+  new LinkAndFigureAutoFormat(), 
 ]
 
 export const withAutoFormat = (editor: Editor) => {
@@ -52,7 +50,7 @@ export const withAutoFormat = (editor: Editor) => {
     const { selection } = editor;
     if (selection && Range.isCollapsed(selection)) {
       const handled = config.some(change =>  {
-        const handler = ['BlockTypeChange', 'InlineTypeChanges', 'CustomDirectiveChange', 'FigureAutoFormat', 'LinkChange'].indexOf(change.type) > -1 ?
+        const handler = ['BlockTypeChange', 'InlineTypeChanges', 'CustomDirectiveChange', 'LinkAndFigureAutoFormat'].indexOf(change.type) > -1 ?
 	  change.apply(editor, text) : false
 	if(handler) {
 	  console.log(change.type)

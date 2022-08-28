@@ -56,7 +56,6 @@ export class InlineTypeChanges implements AutoFormatChange {
       }
       return acc; 
     }, {})
-    console.log(this.shortcut, this.data)
   }
 
   apply = (

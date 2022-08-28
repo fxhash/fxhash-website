@@ -48,7 +48,7 @@ const remarkSlateTransformerOverrides: OverridedMdastBuilders = {
   image: imageProcessor.transformMarkdownMdhastToSlate,
 }
 
-interface PayloadSlateEditorStateFromMarkdown {
+export interface PayloadSlateEditorStateFromMarkdown {
   [p: string]: any
   editorState: Descendant[]
 }

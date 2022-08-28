@@ -54,6 +54,15 @@ export const withConstraints: EnhanceEditorWith = (editor) => {
       if (parentNode.type !== 'list') {
 	Transforms.wrapNodes(editor, {type: 'list' })
       }
+    } 
+
+    // delete link nodes that have no text content
+    if(node.type === 'link') {
+      const text = Node.string(node)
+      if(text.length === 0) {
+	Transforms.removeNodes(editor, {at: path})
+	return;
+      }
     }
 
     normalizeNode(entry)
