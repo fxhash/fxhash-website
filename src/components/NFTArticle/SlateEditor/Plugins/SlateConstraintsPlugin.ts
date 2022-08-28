@@ -1,4 +1,4 @@
-import { Transforms } from "slate";
+import { Transforms, Node } from "slate";
 import { EnhanceEditorWith } from "../../../../types/ArticleEditor/Editor";
 
 /**
@@ -46,6 +46,18 @@ export const withConstraints: EnhanceEditorWith = (editor) => {
             at: path
           }
         )
+      }
+    }
+    // normalise links
+    if(node.type === 'link') {
+      // unwrap links that have no url
+      if(node.url === "") {
+	Transforms.unwrapNodes(editor, {at: path})
+      }
+      // remove links that have no text entirly
+      if(Node.string(node).length === 0) {
+	Transforms.removeNodes(editor, {at: path})
+	return;
       }
     }
 
