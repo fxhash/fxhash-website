@@ -16,12 +16,13 @@ import rehypeReact from "rehype-react";
 import { Element } from "hast";
 import { ComponentsWithNodeOptions, ComponentsWithoutNodeOptions } from "rehype-react/lib/complex-types";
 import { SharedOptions } from "rehype-react/lib";
-import { mdastFlattenListItemParagraphs, remarkFxHashCustom } from "./plugins"
+import { mdastFlattenListItemParagraphs, mdastParseMentions, remarkFxHashCustom, remarkMentions } from "./plugins"
 import { TezosStorageDisplay } from "../elements/TezosStorage/TezosStorageDisplay"
 import { ImageDisplay } from "../elements/Image/ImageDisplay";
 import { CodeDisplay } from "../elements/Code/CodeDisplay";
 import { ThematicBreakEditor } from "../elements/ThematicBreak/ThematicBreakEditor";
 import { VideoDisplay } from "../elements/Video/VideoDisplay";
+import { MentionDisplay } from "../elements/Mention/MentionDisplay";
 
 declare module "rehype-react" {
   interface WithNode {
@@ -51,6 +52,7 @@ const settingsRehypeReact = {
     'video': VideoDisplay,
     'pre': CodeDisplay,
     'hr': ThematicBreakEditor,
+    'mention': MentionDisplay,
   }
 }
 interface PayloadNFTArticleComponentsFromMarkdown {
@@ -63,11 +65,13 @@ export default async function getNFTArticleComponentsFromMarkdown(markdown: stri
     const processed = await unified()
       .use(remarkParse)
       .use(mdastFlattenListItemParagraphs)
+      .use(mdastParseMentions)
       .use(remarkMath)
       .use(remarkGfm)
       .use(remarkUnwrapImages)
       .use(remarkDirective)
       .use(remarkFxHashCustom)
+      .use(remarkMentions)
       .use(remarkRehype)
       .use(rehypePrism)
       .use(rehypeKatex)

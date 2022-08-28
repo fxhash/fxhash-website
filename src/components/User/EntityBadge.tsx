@@ -13,6 +13,7 @@ export interface IProps {
   displayAvatar?: boolean
   toggeable?: boolean
   newTab?: boolean
+  isInline?: boolean
 }
 
 /**

@@ -4,7 +4,7 @@ import React, {
   KeyboardEvent,
   useCallback,
   useImperativeHandle,
-  useMemo,
+  useMemo, useRef,
   useState
 } from "react";
 import { BaseElement, createEditor, Node, Descendant, Editor } from "slate";
@@ -17,7 +17,6 @@ import {
 import { withHistory } from "slate-history"
 import { TezosStorageProps } from "../elements/TezosStorage/TezosStorageDisplay"
 import { withAutoFormat } from './Plugins/AutoFormatPlugin/'
-import { onKeyDownHotkeyPlugin } from "./Plugins/HotkeyPlugin"
 import { RenderElements } from "./RenderElements"
 import { withConstraints } from "./Plugins/SlateConstraintsPlugin"
 import { IEditorMediaFile } from "../../../types/ArticleEditor/Image";
@@ -27,6 +26,7 @@ import useInit from "../../../hooks/useInit";
 import dynamic from 'next/dynamic'
 import { onKeyDownTablePlugin, withTables } from "./Plugins/SlateTablePlugin";
 import { withBreaks } from "./Plugins/SlateBreaksPlugin";
+import { FloatingMentionMenu, RefFloatingMentionMenu } from "../elements/Mention/FloatingMentionMenu";
 
 const FloatingInlineMenu = dynamic(() => import('./Plugins/FloatingInlineMenuPlugin/FloatingInlineMenu'), {
   ssr: false,
@@ -93,8 +93,8 @@ interface SlateEditorProps {
   onInit?: (editor: FxEditor) => void
 }
 
-const INLINE_ELEMENTS = ['inlineMath', 'link']
-const VOID_ELEMENTS = ['inlineMath', 'math']
+const INLINE_ELEMENTS = ['inlineMath', 'link', 'mention']
+const VOID_ELEMENTS = ['inlineMath', 'math', 'mention']
 
 export const SlateEditor = forwardRef<FxEditor, SlateEditorProps>(({
   initialValue,
@@ -103,6 +103,7 @@ export const SlateEditor = forwardRef<FxEditor, SlateEditorProps>(({
   onChange,
   onInit,
 }, ref) => {
+  const refFloatingMentionMenu = useRef<RefFloatingMentionMenu | null>(null);
   const editor = useMemo(() => {
     const withs: Array<{ f: EnhanceEditorWith, args?: any }> = [
       { f: withReact },
@@ -129,6 +130,9 @@ export const SlateEditor = forwardRef<FxEditor, SlateEditorProps>(({
   }, [onChange])
   const handleKeyDown = useCallback((event: KeyboardEvent<HTMLDivElement>) => {
     onKeyDownTablePlugin(editor, event)
+    if (refFloatingMentionMenu.current?.onKeyDown) {
+      refFloatingMentionMenu.current.onKeyDown(event);
+    }
   }, [editor])
 
   // mutate ref to editor whenever editor ref changes
@@ -155,6 +159,7 @@ export const SlateEditor = forwardRef<FxEditor, SlateEditorProps>(({
             onKeyDown={handleKeyDown}
           />
           <FloatingInlineMenu />
+          <FloatingMentionMenu ref={refFloatingMentionMenu} />
         </Slate>
       </div>
     </>

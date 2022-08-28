@@ -7,11 +7,12 @@ import remarkUnwrapImages from "remark-unwrap-images";
 import remarkDirective from "remark-directive";
 import { remarkToSlate } from "remark-slate-transformer";
 import { OverridedMdastBuilders } from "remark-slate-transformer/lib/transformers/mdast-to-slate";
-import { mdastFlattenListItemParagraphs, remarkFxHashCustom } from "./plugins";
+import { mdastFlattenListItemParagraphs, mdastParseMentions, remarkFxHashCustom } from "./plugins";
 import remarkGfm from "remark-gfm";
 import { mathProcessor } from "../elements/Math/MathProcessor";
 import { imageProcessor } from "../elements/Image/ImageProcessor";
 import { videoProcessor } from "../elements/Video/VideoProcessor";
+import { mentionProcessor } from "../elements/Mention/MentionProcessor";
 
 interface DirectiveNodeProps { [key: string]: any }
 
@@ -46,6 +47,7 @@ const remarkSlateTransformerOverrides: OverridedMdastBuilders = {
   "inlineMath": mathProcessor.transformMarkdownMdhastToSlate,
   "math": mathProcessor.transformMarkdownMdhastToSlate,
   image: imageProcessor.transformMarkdownMdhastToSlate,
+  mention: mentionProcessor.transformMarkdownMdhastToSlate,
 }
 
 interface PayloadSlateEditorStateFromMarkdown {
@@ -59,6 +61,7 @@ export default async function getSlateEditorStateFromMarkdown(markdown: string):
     const processed = await unified()
       .use(remarkParse)
       .use(mdastFlattenListItemParagraphs)
+      .use(mdastParseMentions)
       .use(remarkMath)
       .use(remarkGfm)
       .use(remarkUnwrapImages)
