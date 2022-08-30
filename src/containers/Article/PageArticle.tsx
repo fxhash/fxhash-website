@@ -20,6 +20,7 @@ import { Button } from '../../components/Button'
 import { ArticlesContext } from '../../context/Articles'
 import dynamic from "next/dynamic";
 import { LoaderBlock } from "../../components/Layout/LoaderBlock";
+import { ipfsGatewayUrl } from '../../services/Ipfs'
 
 const NftArticle = dynamic<NftArticleProps>(() =>
   import('../../components/NFTArticle/NFTArticle')
@@ -67,8 +68,15 @@ const _PageArticle = ({ article, originUrl, isPreview }: PageArticleProps) => {
         <meta key="description" name="description" content={article.description} />
         <meta key="og:description" property="og:description" content={article.description} />
         <meta key="og:type" property="og:type" content="website"/>
-        <meta key="og:image" property="og:image" content={article.displayUri} />
+        <meta key="og:image" property="og:image" content={ipfsGatewayUrl(article.thumbnailUri)} />
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.0/dist/katex.min.css" crossOrigin="anonymous" />
+
+        <meta name="twitter:site" content="@fx_hash_"/>
+        <meta name="twitter:card" content="summary"/>
+        <meta name="twitter:title" content={title}/>
+        <meta name="twitter:description" content={article.description}/>
+        <meta name="twitter:image" content={ipfsGatewayUrl(article.thumbnailUri)}/>
+
         <link href="/highlight/prism-dracula.css" rel="stylesheet"/>
         <link rel="stylesheet" href="/highlight/dracula.css"/>
       </Head>
