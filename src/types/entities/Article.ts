@@ -33,7 +33,7 @@ export interface NFTArticleGenerativeToken {
   line: number
 }
 
-export type NFTArticleInfos = Pick<NFTArticle, 'id' | 'title' | 'slug' | 'thumbnailUri' | 'description' | 'tags' | 'author' | 'createdAt'>
+export type NFTArticleInfos = Pick<NFTArticle, 'id' | 'title' | 'flag' | 'slug' | 'thumbnailUri' | 'description' | 'tags' | 'author' | 'createdAt'>
 export interface NFTArticle {
   id: number | string
   slug: string
@@ -73,4 +73,7 @@ export interface NFTArticleFilters {
   royalties_lte?: string
   royalties_gte?: string
   searchQuery_eq?: string
+  flag_in?: ArticleFlag[]
+  flag_eq?: ArticleFlag
+  flag_ne?: ArticleFlag
 }

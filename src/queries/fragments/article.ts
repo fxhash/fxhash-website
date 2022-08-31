@@ -8,6 +8,7 @@ export const Frag_ArticleInfos = gql`
     createdAt
     slug
     title
+    flag
     description
     tags
     thumbnailUri

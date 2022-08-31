@@ -1,5 +1,6 @@
 import { FlagBanner } from "../../../components/Flag/FlagBanner"
 import { ArticleFlag, NFTArticle } from "../../../types/entities/Article"
+import { isArticleFlagged } from "../../../utils/entities/articles"
 
 
 function getFlagText(flag: ArticleFlag): string {
@@ -22,14 +23,7 @@ interface Props {
 export function ArticleFlagBanner({
   article
 }: Props) {
-  const flagged = [
-    ArticleFlag.AUTO_DETECT_COPY,
-    ArticleFlag.MALICIOUS,
-    ArticleFlag.REPORTED,
-    ArticleFlag.HIDDEN,
-  ].includes(article.flag)
-
-  return flagged ? (
+  return isArticleFlagged(article) ? (
     <FlagBanner>
       <h4>Warning ! This Article has been flagged</h4>
       <p>{ getFlagText(article.flag) }</p>
