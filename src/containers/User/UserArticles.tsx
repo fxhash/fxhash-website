@@ -27,6 +27,9 @@ const _UserArticles = ({ user, showLocalDrafts }: UserArticlesProps) => {
       take: ITEMS_PER_PAGE,
       sort: {
         createdAt: "DESC"
+      },
+      filters: {
+        flag_ne: "HIDDEN",
       }
     },
     fetchPolicy: "network-only",
