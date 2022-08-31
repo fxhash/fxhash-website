@@ -2,7 +2,7 @@ import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from '
 import style from "./ExploreArticles.module.scss";
 import { useQuery } from "@apollo/client";
 import { Qu_articles } from "../../queries/articles";
-import { NFTArticle, NFTArticleFilters } from "../../types/entities/Article";
+import { ArticleFlag, NFTArticle, NFTArticleFilters } from "../../types/entities/Article";
 import { CardNftArticle } from "../../components/Card/CardNFTArticle";
 import { CardNftArticleSkeleton } from "../../components/Card/CardNFTArticleSkeleton";
 import { InfiniteScrollTrigger } from "../../components/Utils/InfiniteScrollTrigger";
@@ -23,7 +23,10 @@ const _ExploreArticles = () => {
       if (filter === "searchQuery_eq") {
         restoreSort();
       }
-    }
+    },
+    defaultFilters: {
+      flag_in: [ ArticleFlag.CLEAN, ArticleFlag.NONE ],
+    },
   });
 
   const handleSearch = useCallback((value) => {
@@ -99,7 +102,12 @@ const _ExploreArticles = () => {
               canTrigger={!!data && !loading}
             >
               {articles.map((article, index) =>
-                <CardNftArticle className={style.article} key={article.slug} article={article} imagePriority={index < 4} />
+                <CardNftArticle 
+                  key={article.id}
+                  className={style.article}
+                  article={article}
+                  imagePriority={index < 4}
+                />
               )}
               {loading &&
                 [...Array(20)].map((_, idx) =>
