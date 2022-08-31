@@ -1,8 +1,17 @@
 import { ArticleMetadata } from "../Metadata"
 import { Action } from "./Action"
-import { GenerativeToken, GenTokFlag, GenTokPricing } from "./GenerativeToken"
+import { GenerativeToken } from "./GenerativeToken"
 import { Split } from "./Split"
 import { User } from "./User"
+
+export enum ArticleFlag {
+  NONE              = "NONE",
+  CLEAN             = "CLEAN",
+  REPORTED          = "REPORTED",
+  AUTO_DETECT_COPY  = "AUTO_DETECT_COPY",
+  MALICIOUS         = "MALICIOUS",
+  HIDDEN            = "HIDDEN",
+}
 
 export interface NTFArticleLedger {
   article: NFTArticle
