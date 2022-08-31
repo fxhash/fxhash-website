@@ -62,7 +62,7 @@ export interface NFTArticle {
   mintOpHash: string
   relatedArticles: NFTArticle[]
   flag: ArticleFlag
-  moderationReason: string
+  moderationReason?: string
 }
 
 export interface NFTArticleFilters {
