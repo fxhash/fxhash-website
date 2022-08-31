@@ -23,6 +23,7 @@ import { LoaderBlock } from "../../components/Layout/LoaderBlock";
 import { ipfsGatewayUrl } from '../../services/Ipfs'
 import { UserGuard } from '../../components/Guards/UserGuard'
 import { ArticleModeration } from './Moderation/ArticleModeration'
+import { ArticleFlagBanner } from './Moderation/FlagBanner'
 
 const NftArticle = dynamic<NftArticleProps>(() =>
   import('../../components/NFTArticle/NFTArticle')
@@ -82,6 +83,10 @@ const _PageArticle = ({ article, originUrl, isPreview }: PageArticleProps) => {
         <link href="/highlight/prism-dracula.css" rel="stylesheet"/>
         <link rel="stylesheet" href="/highlight/dracula.css"/>
       </Head>
+
+      <ArticleFlagBanner
+        article={article}
+      />
 
       <Spacing size="small" />
 

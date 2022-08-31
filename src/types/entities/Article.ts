@@ -61,6 +61,8 @@ export interface NFTArticle {
   royalties: number
   mintOpHash: string
   relatedArticles: NFTArticle[]
+  flag: ArticleFlag
+  moderationReason: string
 }
 
 export interface NFTArticleFilters {
