@@ -66,7 +66,7 @@ const _PageArticle = ({ article, originUrl, isPreview }: PageArticleProps) => {
   return (
     <>
       <Head>
-        <title>fxhash — {isPreview ? '[Preview] - ' : ''}{title}</title>
+        <title>{isPreview ? '[Preview] - ' : ''}{title} — fxhash</title>
         <meta key="og:title" property="og:title" content={`fxhash - ${title}`} />
         <meta key="description" name="description" content={article.description} />
         <meta key="og:description" property="og:description" content={article.description} />
