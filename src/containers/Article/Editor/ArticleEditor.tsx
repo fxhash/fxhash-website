@@ -31,13 +31,8 @@ import { UserContext } from "../../UserProvider"
 import { ErrorBlock } from "../../../components/Error/ErrorBlock"
 import { YupSplits } from "../../../utils/yup/splits"
 import { InputText } from "../../../components/Input/InputText";
-import dynamic from "next/dynamic";
+import NftArticleEditor from "../../../components/NFTArticle/NFTArticleEditor"
 
-const NftArticleEditor = dynamic(() =>
-  import('../../../components/NFTArticle/NFTArticleEditor'), {
-    loading: () => <LoaderBlock />
-  }
-);
 
 const editorDefaultValue = [
   {

@@ -11,6 +11,7 @@ import { NextPage } from 'next'
 const ROUTES_TO_RETAIN = [
   '/explore',
   '/explore/incoming',
+  '/explore/articles',
   '/marketplace',
   '/marketplace/collections'
 ]

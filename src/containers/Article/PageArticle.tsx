@@ -13,13 +13,17 @@ import { CardSmallNftArticle } from "../../components/Card/CardSmallNFTArticle"
 import { NftArticleProps } from '../../components/NFTArticle/NFTArticle'
 import { ImagePolymorphic } from '../../components/Medias/ImagePolymorphic'
 import { UserContext } from '../UserProvider'
-import { isUserOrCollaborator } from '../../utils/user'
+import { isUserArticleModerator, isUserOrCollaborator } from '../../utils/user'
 import { User } from '../../types/entities/User'
 import Link from 'next/link'
 import { Button } from '../../components/Button'
 import { ArticlesContext } from '../../context/Articles'
 import dynamic from "next/dynamic";
 import { LoaderBlock } from "../../components/Layout/LoaderBlock";
+import { ipfsGatewayUrl } from '../../services/Ipfs'
+import { UserGuard } from '../../components/Guards/UserGuard'
+import { ArticleModeration } from './Moderation/ArticleModeration'
+import { ArticleFlagBanner } from './Moderation/FlagBanner'
 
 const NftArticle = dynamic<NftArticleProps>(() =>
   import('../../components/NFTArticle/NFTArticle')
@@ -62,49 +66,71 @@ const _PageArticle = ({ article, originUrl, isPreview }: PageArticleProps) => {
   return (
     <>
       <Head>
-        <title>fxhash — {isPreview ? '[Preview] - ' : ''}{title}</title>
+        <title>{isPreview ? '[Preview] - ' : ''}{title} — fxhash</title>
         <meta key="og:title" property="og:title" content={`fxhash - ${title}`} />
         <meta key="description" name="description" content={article.description} />
         <meta key="og:description" property="og:description" content={article.description} />
         <meta key="og:type" property="og:type" content="website"/>
-        <meta key="og:image" property="og:image" content={article.displayUri} />
+        <meta key="og:image" property="og:image" content={ipfsGatewayUrl(article.thumbnailUri)} />
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.0/dist/katex.min.css" crossOrigin="anonymous" />
+
+        <meta name="twitter:site" content="@fx_hash_"/>
+        <meta name="twitter:card" content="summary"/>
+        <meta name="twitter:title" content={title}/>
+        <meta name="twitter:description" content={article.description}/>
+        <meta name="twitter:image" content={ipfsGatewayUrl(article.thumbnailUri)}/>
+
         <link href="/highlight/prism-dracula.css" rel="stylesheet"/>
         <link rel="stylesheet" href="/highlight/dracula.css"/>
       </Head>
+
+      <ArticleFlagBanner
+        article={article}
+      />
 
       <Spacing size="small" />
 
       <main className={cs(layout['padding-big'])}>
         <div className={style.header}>
-          {isAuthor && !isPreview && (
-            <div className={cs(style.actions)}>
-              <Link href={`/article/editor/${id}`} passHref>
-                <Button
-                  isLink
-                  size="small"
-                  color={edited ? "secondary" : "black"}
-                  iconComp={<i className="fa-solid fa-pen-to-square" aria-hidden/>}
-                >
-                  {edited
-                    ? "resume edition"
-                    : "edit article"
-                  }
-                </Button>
-              </Link>
-              {edited && (
-                <Button
-                  type="button"
-                  size="small"
-                  color="primary"
-                  iconComp={<i className="fa-solid fa-circle-xmark" aria-hidden/>}
-                  onClick={cancelEdition}
-                >
-                  cancel edition
-                </Button>
-              )}
-            </div>
-          )}
+          <div className={cs(style.actions)}>
+            <UserGuard
+              forceRedirect={false}
+              allowed={user => isUserArticleModerator(user as User)}
+            >
+              <ArticleModeration
+                article={article}
+              />
+            </UserGuard>
+
+            {isAuthor && !isPreview && (
+              <>
+                <Link href={`/article/editor/${id}`} passHref>
+                  <Button
+                    isLink
+                    size="small"
+                    color={edited ? "secondary" : "black"}
+                    iconComp={<i className="fa-solid fa-pen-to-square" aria-hidden/>}
+                  >
+                    {edited
+                      ? "resume edition"
+                      : "edit article"
+                    }
+                  </Button>
+                </Link>
+                {edited && (
+                  <Button
+                    type="button"
+                    size="small"
+                    color="primary"
+                    iconComp={<i className="fa-solid fa-circle-xmark" aria-hidden/>}
+                    onClick={cancelEdition}
+                  >
+                    cancel edition
+                  </Button>
+                )}
+              </>
+            )}
+          </div>
           {author &&
             <UserBadge
               user={author}

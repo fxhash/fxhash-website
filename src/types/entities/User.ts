@@ -22,6 +22,7 @@ export enum UserFlag {
 
 export enum UserAuthorization {
   TOKEN_MODERATION          = "TOKEN_MODERATION",
+  ARTICLE_MODERATION        = "ARTICLE_MODERATION",
   USER_MODERATION           = "USER_MODERATION",
   GOVERNANCE_MODERATION     = "GOVERNANCE_MODERATION",
 }
