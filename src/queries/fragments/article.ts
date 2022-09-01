@@ -26,6 +26,7 @@ export const Frag_ArticleFull = gql`
     title
     description
     thumbnailUri
+    thumbnailCaption
     displayUri
     body
     tags
