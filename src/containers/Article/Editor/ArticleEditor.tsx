@@ -460,7 +460,10 @@ export function ArticleEditor({
             </ul>
           </ErrorBlock>
         }
-        <Submit layout="center">
+        <Submit
+          layout="center"
+          preventSubmitOnKeydownEnter
+        >
           <Button
             type="submit"
             size="large"

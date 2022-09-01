@@ -4,13 +4,18 @@ import { PropsWithChildren } from "react"
 
 interface Props {
   layout?: "left"|"center"
+  preventSubmitOnKeydownEnter?: boolean
 }
 export function Submit({
   layout,
   children,
+  preventSubmitOnKeydownEnter,
 }: PropsWithChildren<Props>) {
   return (
     <div className={cs(style.root, style[`layout_${layout}`])}>
+      {preventSubmitOnKeydownEnter &&
+        <button type="submit" disabled className={style.hide} aria-hidden="true" />
+      }
       {children}
     </div>
   )
