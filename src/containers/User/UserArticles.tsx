@@ -38,13 +38,13 @@ const _UserArticles = ({ user, showLocalDrafts }: UserArticlesProps) => {
   const articles = useMemo(() => data?.user?.articles || [], [data?.user?.articles])
   const handleFetchMore = useCallback(async () => {
     if (loading || hasNothingToFetch) return false;
-    const { data } = await fetchMore({
+    const { data: newData } = await fetchMore({
       variables: {
         skip: articles.length,
         take: ITEMS_PER_PAGE
       },
     });
-    if (!(data?.user?.articles?.length > 0)) {
+    if (!(newData?.user?.articles?.length > 0)) {
       setHasNothingToFetch(true);
     }
   }, [loading, hasNothingToFetch, fetchMore, articles.length])
