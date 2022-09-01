@@ -1,12 +1,70 @@
-import { Transforms } from "slate";
-import { EnhanceEditorWith } from "../../../../types/ArticleEditor/Editor";
+import { Editor, Element, NodeEntry, Range, Transforms } from "slate";
+import { EnhanceEditorWith, FxEditor } from "../../../../types/ArticleEditor/Editor";
+import { getArticleBlockDefinition } from "../Blocks";
+
+const removeFollowingBlock = (
+  editor: FxEditor,
+  currentChildrenIdx: number,
+  followingNode: NodeEntry<Element> | undefined,
+  isPrevious: boolean
+): boolean => {
+  if (followingNode && followingNode[1].length > 0) {
+    const [followingElement, followingPath] = followingNode;
+    if (followingElement) {
+      const blockDefinition = getArticleBlockDefinition(followingElement.type);
+      if (blockDefinition?.hasDeleteBehaviorRemoveBlock && followingPath[0] !== currentChildrenIdx) {
+        Transforms.delete(editor, { at: followingPath, hanging: true, reverse: isPrevious })
+        return true;
+      }
+    }
+  }
+  return false;
+}
 
 /**
  * Adds some constraints to the editor to prevent running into unprocesseable
  * states
  */
 export const withConstraints: EnhanceEditorWith = (editor) => {
-  const { normalizeNode, insertBreak } = editor
+  const { normalizeNode, deleteBackward, deleteForward } = editor
+
+  /**
+   * Editor remove the previous children node if enabled
+   */
+  editor.deleteBackward = (unit) => {
+    const { selection } = editor
+    if (selection && Range.isCollapsed(selection)) {
+      const currentNodeHighestIdx = selection.anchor?.path[0] || 0;
+      const prevNode = Editor.previous<Element>(editor, {
+        at: selection,
+        mode: 'highest',
+        match: (n) => !Editor.isEditor(n) && Element.isElement(n)
+      })
+      if (removeFollowingBlock(editor, currentNodeHighestIdx, prevNode, true)) {
+        return;
+      }
+    }
+    deleteBackward(unit);
+  }
+
+  /**
+   * Editor remove the next children node if enabled
+   */
+  editor.deleteForward = (unit) => {
+    const { selection } = editor
+    if (selection && Range.isCollapsed(selection)) {
+      const currentNodeHighestIdx = selection.anchor?.path[0] || 0;
+      const nextNode = Editor.next<Element>(editor, {
+        at: selection,
+        mode: 'highest',
+        match: (n) => !Editor.isEditor(n) && Element.isElement(n)
+      })
+      if (removeFollowingBlock(editor, currentNodeHighestIdx, nextNode, false)) {
+        return;
+      }
+    }
+    deleteForward(unit);
+  }
 
   editor.normalizeNode = (entry) => {
     const [node, path] = entry
