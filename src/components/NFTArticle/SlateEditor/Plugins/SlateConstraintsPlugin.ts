@@ -1,4 +1,4 @@
-import { Editor, Element, NodeEntry, Range, Transforms } from "slate";
+import { Editor, Element, NodeEntry, Range, Transforms, Node } from "slate";
 import { EnhanceEditorWith, FxEditor } from "../../../../types/ArticleEditor/Editor";
 import { getArticleBlockDefinition } from "../Blocks";
 
@@ -104,6 +104,18 @@ export const withConstraints: EnhanceEditorWith = (editor) => {
             at: path
           }
         )
+      }
+    }
+    // normalise links
+    if(node.type === 'link') {
+      // unwrap links that have no url
+      if(node.url === "") {
+	Transforms.unwrapNodes(editor, {at: path})
+      }
+      // remove links that have no text entirly
+      if(Node.string(node).length === 0) {
+	Transforms.removeNodes(editor, {at: path})
+	return;
       }
     }
 
