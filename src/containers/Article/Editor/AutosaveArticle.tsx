@@ -27,14 +27,14 @@ const _AutosaveArticle = ({
 
   const handleSaveDraft = useCallback((articleFormState: NFTArticleForm) => {
     setStatus('saving');
-/*    dispatch({
+    dispatch({
       type: 'save',
       payload: {
         id,
         articleForm: articleFormState,
         minted: isMinted,
       },
-    })*/
+    })
     console.log(articleFormState.body)
     setStatus('saved');
   }, [dispatch, id, isMinted])
