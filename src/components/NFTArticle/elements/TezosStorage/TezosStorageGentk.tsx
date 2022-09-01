@@ -55,8 +55,22 @@ export const TezosStorageGentk: TezosStorageRenderer<Props> = ({
           <EntityBadge
             size="regular"
             user={token.issuer!.author}
-            className={cs(style.user)}
+            className={cs(
+              style.user,
+              layout.hide_sm,
+            )}
             avatarSide="right"
+            newTab
+          />
+          <EntityBadge
+            size="regular"
+            user={token.issuer!.author}
+            displayAvatar={false}
+            className={cs(
+              style.user,
+              layout.show_sm,
+            )}
+            toggeable
             newTab
           />
         </div>
@@ -85,7 +99,7 @@ export const TezosStorageGentk: TezosStorageRenderer<Props> = ({
           )}
         </ArtworkFrame>
       </SquareContainer>
-      
+
       {token && (
         <div className={cs(layout.buttons_inline, layout.grid_center)}>
           {!running ? (
@@ -145,10 +159,13 @@ export const TezosStorageGentk: TezosStorageRenderer<Props> = ({
 }
 
 TezosStorageGentk.matches = (pointer) => {
+  if (!pointer?.contract) {
+    return false;
+  }
   // get contract address, removing network indentifier if any
   const contract = pointer.contract.split(".")[0]
   if (![
-    FxhashContracts.GENTK_V1, 
+    FxhashContracts.GENTK_V1,
     FxhashContracts.GENTK_V2,
   ].includes(contract)) {
     return false

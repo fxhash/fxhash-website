@@ -18,6 +18,8 @@ export function CollabBadge(props: Props) {
     size,
     toggeable = false,
     avatarSide,
+    className,
+    classNameAvatar,
   } = props
   const [collaborators, setCollaborators] = useState(user.collaborators);
   const [isInitialized, setIsInitialized] = useState(false);
@@ -35,7 +37,8 @@ export function CollabBadge(props: Props) {
         [style.opened]: opened,
         [style.toggeable]: toggeable,
         [style.hide]: !isInitialized,
-      }
+      },
+      className,
     )}>
       <button
         type="button"
@@ -54,6 +57,7 @@ export function CollabBadge(props: Props) {
                 badgeStyle.avatar,
                 badgeStyle[`avatar-${size}`],
                 style.avatar,
+                classNameAvatar,
               )}
             />
             <span className={cs(style.user_name)}>

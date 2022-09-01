@@ -13,6 +13,7 @@ import { EntityBadge } from "../../../User/EntityBadge"
 import { SquareContainer } from "../../../Layout/SquareContainer"
 import { ArtworkFrame } from "../../../Artwork/ArtworkFrame"
 import { GenerativeArtwork } from "../../../GenerativeToken/GenerativeArtwork"
+import layout from "../../../../styles/Layout.module.scss";
 
 interface Props {
   id: number
@@ -51,13 +52,27 @@ export const TezosStorageProject: TezosStorageRenderer<Props> = ({
           <EntityBadge
             size="regular"
             user={token.author}
-            className={cs(style.user)}
+            className={cs(
+              style.user,
+              layout.hide_sm,
+            )}
             avatarSide="right"
+            newTab
+          />
+          <EntityBadge
+            size="regular"
+            user={token.author}
+            displayAvatar={false}
+            className={cs(
+              style.user,
+              layout.show_sm,
+            )}
+            toggeable
             newTab
           />
         </div>
       )}
-      
+
       {token && (
         <GenerativeArtwork
           token={token}
@@ -72,6 +87,9 @@ export const TezosStorageProject: TezosStorageRenderer<Props> = ({
 
 TezosStorageProject.matches = (pointer) => {
   // get contract address, removing network indentifier if any
+  if (!pointer?.contract) {
+    return false;
+  }
   const contract = pointer.contract.split(".")[0]
   if (contract !== FxhashContracts.ISSUER) {
     return false

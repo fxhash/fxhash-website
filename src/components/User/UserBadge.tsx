@@ -26,7 +26,7 @@ const WrapperLink = ({
   children,
 }: WrapperProps) => (
   <Link href={getUserProfileLink(user)}>
-    <a 
+    <a
       className={cs(style.link, style.default_font_styles, className)}
       target={newTab ? "_blank" : "_self"}
     >
@@ -56,7 +56,8 @@ export function UserBadge({
   displayAddress = false,
   displayAvatar = true,
   newTab = false,
-  className
+  className,
+  classNameAvatar,
 }: Props) {
   // the user goes through an aliases check
   const userAlias = useMemo(() => user && userAliases(user), [user])
@@ -83,10 +84,12 @@ export function UserBadge({
           uri={userAlias.avatarUri}
           className={cs(
             style.avatar,
-            style[`avatar-${size}`], { 
-            [style.avatar_mod]: isPlatformOwned(userAlias),
-            [style.avatar_donation]: isDonator(userAlias)
-          })}
+            style[`avatar-${size}`], {
+              [style.avatar_mod]: isPlatformOwned(userAlias),
+              [style.avatar_donation]: isDonator(userAlias),
+            },
+            classNameAvatar
+          )}
         />
       )}
 
@@ -95,7 +98,7 @@ export function UserBadge({
           {prependText && (
             <span className={cs(style.prepend)}>{prependText}</span>
           )}
-          <span className={cs({ 
+          <span className={cs({
             [style.moderator]: isPlatformOwned(userAlias),
             [style.donation]: isDonator(userAlias),
           })}>
