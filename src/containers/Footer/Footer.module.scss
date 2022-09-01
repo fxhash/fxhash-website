@@ -1,0 +1,75 @@
+@import '../../styles/Variables.scss';
+
+.footer {
+  background-color: black;
+  color: var(--color-gray-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  font-size: var(--font-size-small);
+  padding: 100px 0;
+
+  a {
+    color: var(--color-gray);
+    font-weight: normal;
+
+    &:hover {
+      color: var(--color-secondary);
+    }
+  }
+}
+
+.content {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 50px;
+}
+
+.links {
+  display: flex;
+  flex-direction: column;
+
+  a {
+    padding: 4px;
+  }
+}
+
+.logo_wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.socials {
+  & > *+* {
+    margin-left: 10px;
+  }
+
+  a {
+    font-size: 16px;
+    transition: all 0.2s ease-out;
+    color: var(--color-grey);
+
+    &:hover {
+      color: var(--color-secondary);
+    }
+  }
+}
+
+.powered {
+  position: absolute;
+  right: 12px;
+  bottom: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+@media (max-width: $breakpoint-md) {
+  .content {
+    flex-direction: column-reverse;
+  }
+}
