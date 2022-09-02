@@ -1,6 +1,5 @@
 import React, { memo } from 'react';
 import { UserFromAddress } from "../../../User/UserFromAddress";
-import { UserBadge } from "../../../User/UserBadge";
 import style from "./MentionEditor.module.scss";
 import cs from "classnames";
 import Link from 'next/link';

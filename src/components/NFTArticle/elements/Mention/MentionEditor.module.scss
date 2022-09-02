@@ -1,8 +1,15 @@
+@import "../../../../styles/fonts";
 .mention_user {
   vertical-align: bottom;
 }
 
-.mention_display {}
+.mention_display {
+  padding: 0 4px;
+  background: var(--color-gray-vvvlight);
+  border-radius: 4px;
+//  @include font-family-primary;
+  color: var(--color-primary);
+}
 
 .mention_focused {
   box-shadow: 0 0 0 2px var(--color-primary);

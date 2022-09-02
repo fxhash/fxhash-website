@@ -10,7 +10,6 @@ import remarkDirective from "remark-directive";
 import remarkRehype from "remark-rehype";
 import rehypeKatex from "rehype-katex";
 import rehypePrism from "rehype-prism"
-import rehypeFormat from "rehype-format";
 import rehypeStringify from "rehype-stringify";
 import rehypeReact from "rehype-react";
 import { Element } from "hast";
@@ -75,7 +74,6 @@ export default async function getNFTArticleComponentsFromMarkdown(markdown: stri
       .use(remarkRehype)
       .use(rehypePrism)
       .use(rehypeKatex)
-      .use(rehypeFormat)
       .use(rehypeStringify)
       // todo: fix this, because of image component for some reason
       // @ts-ignore
