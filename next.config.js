@@ -27,7 +27,34 @@ module.exports = withBundleAnalyzer({
             value: "/"
           }
         ]
-      }
+      },
+      {
+        source: "/:path*",
+        headers: [
+          {
+            key: "Content-Security-Policy",
+            value: "frame-ancestors 'none';"
+          },
+          {
+            key: "X-Frame-Options",
+            value: "DENY"
+          },
+          // The Referer header will be omitted: sent requests do not include any 
+          // referrer information.
+          // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy
+          {
+            key: 'Referrer-Policy',
+            value: 'no-referrer'
+          },
+          // Isolates the browsing context exclusively to same-origin documents. 
+          // Cross-origin documents are not loaded in the same browsing context.
+          // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cross-Origin-Opener-Policy
+          {
+            key: 'Cross-Origin-Opener-Policy',
+            value: 'same-origin'
+          },
+        ]
+      },
     ]
   },
 
