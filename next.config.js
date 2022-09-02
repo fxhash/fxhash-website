@@ -9,6 +9,22 @@ if (!process.env.NEXT_PUBLIC_IPFS_GATEWAY || !process.env.NEXT_PUBLIC_IPFS_GATEW
 const urlGateway = new URL(process.env.NEXT_PUBLIC_IPFS_GATEWAY);
 const urlGatewaySafe = new URL(process.env.NEXT_PUBLIC_IPFS_GATEWAY_SAFE);
 
+// the main common security headers
+const baseSecurityHeaders = [
+  {
+    key: "X-Frame-Options",
+    value: "SAMEORIGIN"
+  },
+  // Isolates the browsing context exclusively to same-origin documents. 
+  // Cross-origin documents are not loaded in the same browsing context.
+  // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cross-Origin-Opener-Policy
+  {
+    key: 'Cross-Origin-Opener-Policy',
+    value: 'same-origin'
+  },
+]
+
+
 /** @type {import('next').NextConfig} */
 module.exports = withBundleAnalyzer({
   reactStrictMode: true,
@@ -20,6 +36,16 @@ module.exports = withBundleAnalyzer({
   async headers() {
     return [
       {
+        source: "/:path*",
+        headers: [
+          {
+            key: "Content-Security-Policy",
+            value: `frame-ancestors 'self'; frame-src ${process.env.NEXT_PUBLIC_IPFS_GATEWAY_SAFE};`
+          },
+          ...baseSecurityHeaders,
+        ]
+      },
+      {
         source: "/sandbox/worker.js",
         headers: [
           {
@@ -29,32 +55,27 @@ module.exports = withBundleAnalyzer({
         ]
       },
       {
-        source: "/:path*",
+        source: "/sandbox",
         headers: [
           {
             key: "Content-Security-Policy",
-            value: "frame-ancestors 'none';"
-          },
-          {
-            key: "X-Frame-Options",
-            value: "DENY"
-          },
-          // The Referer header will be omitted: sent requests do not include any 
-          // referrer information.
-          // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy
-          {
-            key: 'Referrer-Policy',
-            value: 'no-referrer'
-          },
-          // Isolates the browsing context exclusively to same-origin documents. 
-          // Cross-origin documents are not loaded in the same browsing context.
-          // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cross-Origin-Opener-Policy
-          {
-            key: 'Cross-Origin-Opener-Policy',
-            value: 'same-origin'
+            value: `frame-ancestors 'self';`
           },
         ]
       },
+      {
+        source: "/sandbox/preview.html",
+        headers: [
+          {
+            key: "Content-Security-Policy",
+            value: ""
+          },
+          {
+            key: "Cross-Origin-Embedder-Policy",
+            value: "require-corp"
+          },
+        ]
+      }
     ]
   },
 
