@@ -38,6 +38,11 @@ export function isUserModerator(user: User): boolean {
   return user.authorizations.includes(UserAuthorization.USER_MODERATION)
 }
 
+// true if the user can moderate articles
+export function isUserArticleModerator(user: User): boolean {
+  return user.authorizations.includes(UserAuthorization.ARTICLE_MODERATION)
+}
+
 /**
  * Returns true if the user is verified
  * (accepts collaboration contracts in which case it checks the verified status

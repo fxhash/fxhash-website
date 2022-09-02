@@ -7,7 +7,7 @@ import React, {
   useMemo,
   useState
 } from "react";
-import { BaseElement, createEditor, Node, Descendant } from "slate";
+import { BaseElement, createEditor, Node, Descendant, Editor } from "slate";
 import {
   Slate,
   Editable,
@@ -128,13 +128,13 @@ export const SlateEditor = forwardRef<FxEditor, SlateEditorProps>(({
     onChange?.(newValue)
   }, [onChange])
   const handleKeyDown = useCallback((event: KeyboardEvent<HTMLDivElement>) => {
-    onKeyDownHotkeyPlugin(editor, event)
     onKeyDownTablePlugin(editor, event)
   }, [editor])
 
   // mutate ref to editor whenever editor ref changes
   useImperativeHandle(ref, () => editor, [editor])
   useInit(() => {
+    Editor.normalize(editor, { force: true });
     if (onInit) onInit(editor)
   })
   return (

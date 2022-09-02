@@ -189,7 +189,7 @@ function myRemarkPlugin(): import('unified').Transformer<import('mdast').Root, i
         node.type === 'leafDirective' ||
         node.type === 'containerDirective'
       ) {
-	if(node.name !== 'tezos-storage') return;
+	      if (node.name !== 'tezos-storage-pointer') return;
         const data = node.data || (node.data = {})
         const hast: any = h(node.name, node.attributes)
         if (hast.properties.key) {
@@ -201,7 +201,7 @@ function myRemarkPlugin(): import('unified').Transformer<import('mdast').Root, i
           delete hast.properties.type;
         }
         data.hName = hast.tagName
-	data.hProperties = hast.properties
+	      data.hProperties = hast.properties
       }
     })
   }

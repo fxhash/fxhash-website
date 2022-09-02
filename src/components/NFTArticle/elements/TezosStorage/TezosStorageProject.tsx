@@ -71,10 +71,12 @@ export const TezosStorageProject: TezosStorageRenderer<Props> = ({
 }
 
 TezosStorageProject.matches = (pointer) => {
-  if (pointer.contract !== FxhashContracts.ISSUER) {
+  // get contract address, removing network indentifier if any
+  const contract = pointer.contract.split(".")[0]
+  if (contract !== FxhashContracts.ISSUER) {
     return false
   }
-  const split = pointer.path.split(":")
+  const split = pointer.path.split("::")
   if (split[0] !== "ledger") {
     return false
   }
@@ -86,6 +88,6 @@ TezosStorageProject.matches = (pointer) => {
 
 TezosStorageProject.getPropsFromPointer = (pointer) => {
   return {
-    id: parseInt(pointer.path.split(":")[1])
+    id: parseInt(pointer.path.split("::")[1])
   }
 }

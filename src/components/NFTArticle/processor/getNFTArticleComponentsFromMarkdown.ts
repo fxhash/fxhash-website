@@ -23,6 +23,7 @@ import { CodeDisplay } from "../elements/Code/CodeDisplay";
 import { ThematicBreakEditor } from "../elements/ThematicBreak/ThematicBreakEditor";
 import { VideoDisplay } from "../elements/Video/VideoDisplay";
 import { AudioDisplay } from "../elements/Audio/AudioDisplay";
+import { LinkElement } from "../elements/Link/LinkElement";
 
 declare module "rehype-react" {
   interface WithNode {
@@ -46,13 +47,14 @@ const settingsRehypeReact = {
   createElement,
   Fragment,
   components: {
-    'tezos-storage': TezosStorageDisplay,
+    'tezos-storage-pointer': TezosStorageDisplay,
     'embed-media': Embed,
     'img': ImageDisplay,
     'video': VideoDisplay,
     'audio': AudioDisplay,
     'pre': CodeDisplay,
     'hr': ThematicBreakEditor,
+    'a': LinkElement,
   }
 }
 interface PayloadNFTArticleComponentsFromMarkdown {

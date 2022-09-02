@@ -1,4 +1,6 @@
-import { Range, Editor, Text, Transforms, Element, NodeEntry, Location } from 'slate';
+import { Range, Editor, Text, Transforms, Element, NodeEntry, Location } from 'slate'; 
+import { useEffect } from 'react';
+import isHotkey from 'is-hotkey'
 
 export function getRangeFromBlockStartToCursor(editor: Editor): Range {
   const { anchor } = editor.selection as Range;
@@ -56,12 +58,8 @@ export function isFormatActive(editor: Editor, format: string, options={}):boole
 }
 
 export function toggleFormat(editor: Editor, format: string): void {
-  const isActive = isFormatActive(editor, format)
-  Transforms.setNodes(
-    editor,
-    { [format]: isActive ? null : true },
-    { match: Text.isText, split: true }
-  )
+  const isActive = isFormatActive(editor, format);
+  editor.addMark(format, !isActive)
 }
 
 const isTypeInArray = (type: string, typesToCheck: string[]) => typesToCheck.indexOf(type) > -1;
@@ -83,4 +81,21 @@ export function lookupElementAtSelection(
   if (!selection) return null;
   const [, nodePath] = Editor.last(editor, selection)
   return Editor.parent(editor, nodePath)
+}
+
+export function useHotkey(hotkey:string|undefined, handler:() => void, skip?: boolean|null) {
+  useEffect(() => {
+    if (!hotkey || skip) return;
+    const handleHotKey = (event:KeyboardEvent) => {
+      if (isHotkey(hotkey, event)) {
+	event.preventDefault()
+	handler();
+      }
+    }
+    
+    document.addEventListener("keydown", handleHotKey)
+    return () => {
+      document.removeEventListener("keydown", handleHotKey)
+    } 
+  }, [hotkey, handler, skip]);
 }

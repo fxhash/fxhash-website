@@ -9,7 +9,7 @@ import { useMemo } from "react"
 import { Spacing } from "../../components/Layout/Spacing"
 
 interface Props {
-  moderationContract: "token"|"user"
+  moderationContract: "token"|"user"|"article"
 }
 export function ModerationReasons({
   moderationContract,

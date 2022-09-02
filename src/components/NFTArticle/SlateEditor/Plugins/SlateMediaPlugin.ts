@@ -1,9 +1,9 @@
-import { BaseOperation, Descendant, Editor, Element, Node, Text, Transforms } from "slate"
+import { BaseOperation, Descendant, Editor, Element, Node, Point, Range, Text, Transforms } from "slate"
 import { EnhanceEditorWith, FxEditor } from "../../../../types/ArticleEditor/Editor";
 import { IEditorMediaFile } from "../../../../types/ArticleEditor/Image";
 import { arrayRemoveDuplicates } from "../../../../utils/array";
 import { ALL_TEXT_FORMATS } from "../index";
-import { isFormatActive } from "../utils";
+import { isFormatActive, lookupElementByType } from "../utils";
 import { imageDefinition } from "../../elements/Image/ImageDefinition";
 import { videoDefinition } from "../../elements/Video/VideoDefinition";
 import { audioDefinition } from "../../elements/Audio/AudioDefinition";
@@ -69,11 +69,29 @@ export const withMediaSupport: EnhanceEditorWith = (
   editor: Editor,
   onMediasUpdate: (medias: IEditorMediaFile[]) => void
 ): FxEditor => {
-  const { insertData, isVoid, normalizeNode, apply } = editor
+  const { insertData, isVoid, normalizeNode, apply, deleteBackward } = editor
 
   // make image nodes void nodes
   editor.isVoid = element =>
     mediaTypes.indexOf(element.type) > -1 ? true : isVoid(element)
+
+  /**
+   * Deleting empty figcaption don't delete the media
+   */
+  editor.deleteBackward = unit => {
+    const { selection } = editor
+    if (selection && Range.isCollapsed(selection)) {
+      const element = lookupElementByType(editor, 'figcaption');
+      if (element) {
+        const [, elementPath] = element
+        const start = Editor.start(editor, elementPath)
+        if (Point.equals(selection.anchor, start)) {
+          return
+        }
+      }
+    }
+    deleteBackward(unit)
+  }
 
   // when an operation is triggered, we check if the operation may have resulted
   // in a change of the medias list, and if so we trigger an update.

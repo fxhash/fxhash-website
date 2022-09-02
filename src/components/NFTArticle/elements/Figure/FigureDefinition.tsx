@@ -18,6 +18,7 @@ export const figureDefinition: IArticleBlockDefinition<null> = {
   icon: null,
   render: FigureElement,
   hasUtilityWrapper: true,
+  hasDeleteBehaviorRemoveBlock: true,
   editAttributeComp: ({ element, onEdit }) => {
     const children = Node.elements(element)
     for (const [child] of children) {
@@ -51,5 +52,5 @@ export const figcaptionDefinition: IArticleBlockDefinition<null> = {
   icon: null,
   render: FigcaptionElement,
   hasUtilityWrapper: false,
-  hideFloatingInlineMenu: true,
+  inlineMenu: null,
 }

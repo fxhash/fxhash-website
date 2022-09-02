@@ -15,7 +15,7 @@ interface CustomArticleElementsByType {
 }
 export const customNodes: CustomArticleElementsByType = {
   leafDirective: {
-    "tezos-storage": tezosStorageProcessor,
+    "tezos-storage-pointer": tezosStorageProcessor,
     "embed-media": embedProcessor,
     "video": videoProcessor,
     "audio": audioProcessor,

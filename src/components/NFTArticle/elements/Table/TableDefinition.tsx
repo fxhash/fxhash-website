@@ -13,6 +13,7 @@ export const tableDefinition: IArticleBlockDefinition<null> = {
     </TableEditor>
   ),
   hasUtilityWrapper: true,
+  hasDeleteBehaviorRemoveBlock: true,
   instanciateElement: () => SlateTable.createTable(2, 2),
   preventAutofocusTrigger: true,
 }
@@ -33,4 +34,5 @@ export const tableCellDefinition: IArticleBlockDefinition<null> = {
   icon: <i className="fa-regular fa-table" aria-hidden />,
   render: TableCellEditor,
   hasUtilityWrapper: false,
+  inlineMenu: ['strong', 'emphasis'],
 }
