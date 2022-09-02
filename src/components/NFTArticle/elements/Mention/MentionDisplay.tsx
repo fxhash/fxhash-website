@@ -3,6 +3,8 @@ import { UserFromAddress } from "../../../User/UserFromAddress";
 import { UserBadge } from "../../../User/UserBadge";
 import style from "./MentionEditor.module.scss";
 import cs from "classnames";
+import Link from 'next/link';
+import { getUserName, getUserProfileLink } from '../../../../utils/user';
 
 interface MentionDisplayProps {
   tzAddress: string
@@ -13,13 +15,11 @@ const _MentionDisplay = ({ tzAddress }: MentionDisplayProps) => (
     address={tzAddress}
   >
     {({ user }) => (
-      <UserBadge
-        className={cs(style.mention_user, style.mention_display)}
-        size="small"
-        user={user}
-        hasLink
-        isInline
-      />
+      <Link href={getUserProfileLink(user)}>
+        <a className={cs(style.mention_user, style.mention_display)}>
+          {`@`}{getUserName(user)}
+        </a>
+      </Link>
     )}
   </UserFromAddress>
 );

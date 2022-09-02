@@ -3,6 +3,7 @@ import style from "./MentionEditor.module.scss";
 import { UserFromAddress } from "../../../User/UserFromAddress";
 import cs from "classnames";
 import { UserBadge } from "../../../User/UserBadge";
+import { MentionDisplay } from "./MentionDisplay";
 
 export const MentionEditor = ({ attributes, children, element }: RenderElementProps) => {
   const selected = useSelected()
@@ -16,19 +17,9 @@ export const MentionEditor = ({ attributes, children, element }: RenderElementPr
       })}
     >
       {children}
-      <UserFromAddress
-        address={element.tzAddress}
-      >
-        {({ user }) => (
-          <UserBadge
-            className={style.mention_user}
-            size="small"
-            user={user}
-            hasLink
-            isInline
-          />
-        )}
-      </UserFromAddress>
+      <MentionDisplay
+        tzAddress={element.tzAddress}
+      />
     </span>
   )
 }
