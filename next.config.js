@@ -24,6 +24,8 @@ const baseSecurityHeaders = [
   },
 ]
 
+const articlesAllowedDomains = "https://*.spotify.com/ https://spotify.com https://*.youtube.com/ https://youtube.com https://*.twitter.com/ https://twitter.com"
+
 
 /** @type {import('next').NextConfig} */
 module.exports = withBundleAnalyzer({
@@ -40,7 +42,7 @@ module.exports = withBundleAnalyzer({
         headers: [
           {
             key: "Content-Security-Policy",
-            value: `frame-ancestors 'self'; frame-src ${process.env.NEXT_PUBLIC_IPFS_GATEWAY_SAFE};`
+            value: `frame-ancestors 'self'; frame-src ${process.env.NEXT_PUBLIC_IPFS_GATEWAY_SAFE} ${articlesAllowedDomains} 'self';`
           },
           ...baseSecurityHeaders,
         ]
@@ -52,15 +54,6 @@ module.exports = withBundleAnalyzer({
             key: "service-worker-allowed",
             value: "/"
           }
-        ]
-      },
-      {
-        source: "/sandbox",
-        headers: [
-          {
-            key: "Content-Security-Policy",
-            value: `frame-ancestors 'self';`
-          },
         ]
       },
       {
