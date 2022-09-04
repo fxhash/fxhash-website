@@ -374,6 +374,11 @@ export const mapReserveDefinition: Record<EReserveMethod, IReserveDefinition> = 
     inputComponent: InputReserveWhitelist,
     renderComponent: ReserveAccessList,
   },
+  MINT_PASS: {
+    id: 1,
+    label: "Mint Pass",
+    // TODO
+  }
 }
 
 // maps the reserve IDs to their enum
