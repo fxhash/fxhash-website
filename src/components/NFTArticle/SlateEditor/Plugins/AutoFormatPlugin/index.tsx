@@ -2,14 +2,14 @@ import { Range, Editor  } from 'slate';
 import { BlockTypeChange } from './BlockTypeChange'
 import { InlineTypeChange } from './InlineTypeChange'
 import { CustomDirectiveChange } from './CustomDirectiveChange'
-export type AutoFormatChangeType = "BlockTypeChange" | "InlineTypeChange" | "CustomDirectiveChange";
+export type AutoFormatChangeType = "BlockTypeChange" | "InlineTypeChange" | "CustomDirectiveChange" | "InlineTypeCreate";
 export type ChangeData = {[key: string]: number | string | boolean}
 
 export type AutoFormatChange = {
   shortcut: string | string[]
   type: AutoFormatChangeType
   data?: ChangeData
-  apply: (editor: Editor) => boolean,
+  apply: (editor: Editor, text?: string) => boolean,
 }
 
 function createChangeTypeHeading():AutoFormatChange[] {
@@ -26,7 +26,7 @@ function createChangeTypeHeading():AutoFormatChange[] {
   return changes;
 }
 
-const config: AutoFormatChange[] = [
+const changeWithSpaceValidation: AutoFormatChange[] = [
   ...createChangeTypeHeading(),
   new BlockTypeChange('p',   {type: 'paragraph',} ),
   new InlineTypeChange(['__', '**'], {strong: true}),
@@ -39,11 +39,11 @@ export const withAutoFormat = (editor: Editor) => {
   const { insertText } = editor;
   editor.insertText = text => {
     const { selection } = editor;
-    if (text === ' ' && selection && Range.isCollapsed(selection)) {
-      const handled = config.some(change =>  {
-        return ['BlockTypeChange', 'InlineTypeChange', 'CustomDirectiveChange'].indexOf(change.type) > -1 ?
-          change.apply(editor) : false
-      });
+    let handled = false;
+    if (selection && Range.isCollapsed(selection)) {
+      if (text === ' ') {
+        handled = changeWithSpaceValidation.some(change => change.apply(editor));
+      }
       if (handled) return true;
     }
     insertText(text)

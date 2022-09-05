@@ -49,6 +49,9 @@
       pointer-events: none;
     }
   }
+  .result_keyboard_selected {
+    background: var(--color-gray-vlight)
+  }
 }
 
 .no_results {
