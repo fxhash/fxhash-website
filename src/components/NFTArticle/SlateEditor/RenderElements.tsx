@@ -122,9 +122,27 @@ function EditableElementWrapper({
     const data = e.dataTransfer.getData('text/plain');
     if (!data) return;
     const at = JSON.parse(e.dataTransfer.getData('text/plain')) as Path 
-    const to = ReactEditor.findPath(editor, element)
-    const moveUp = !insertAbove && at[0] > to[0];
-    Transforms.moveNodes(editor, {at, to: moveUp ? Path.next(to) : to})
+    const targetPath = ReactEditor.findPath(editor, element)
+    const insertAfter = !insertAbove && at[0] > targetPath[0];
+    Transforms.moveNodes(editor, {at, to: insertAfter ? Path.next(targetPath) : targetPath})
+  }
+
+  const handleMoveDown = () =>  {
+    const at  = ReactEditor.findPath(editor, element)
+    if (at[0] === editor.children.length - 1) return
+    const to = Path.next(at);
+    Transforms.moveNodes(editor, {at, to})
+    Transforms.select(editor, to)
+    Transforms.collapse(editor)
+  }
+
+  const handleMoveUp = () =>  {
+    const at = ReactEditor.findPath(editor, element)
+    if (at[0] === 0) return
+    const to = Path.previous(at);
+    Transforms.moveNodes(editor, {at, to})
+    Transforms.select(editor, to)
+    Transforms.collapse(editor)
   }
 
   const deleteNode = () => {
@@ -158,6 +176,7 @@ function EditableElementWrapper({
       onDragStart={handleDragStart}
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
+      onDragEnd={handleEndDragging}
       onDrop={handleDrop}
       className={cs(style.element_wrapper, {
         [style.opened]: showAddBlock || showExtraMenu,
@@ -183,7 +202,8 @@ function EditableElementWrapper({
         ):(
           <div/>
         )}
-        <button
+	<button
+	  className={style.add_button}
           type="button"
           contentEditable={false}
           onClick={withStopPropagation(
@@ -203,13 +223,29 @@ function EditableElementWrapper({
           <i className="fa-solid fa-ellipsis" aria-hidden/>
         </button>
 	<button
-	  onMouseDown={handleStartDragging}
-	  onMouseUp={handleEndDragging} 
+	  onPointerDown={handleStartDragging}
+	  onPointerUp={handleEndDragging} 
 	  type="button"
 	  contentEditable={false}
 	  tabIndex={-1}
 	>
 	  <i className="fa-solid fa-grip-dots"/>
+	</button>
+	<button
+	  type="button"
+	  contentEditable={false}
+	  tabIndex={-1}
+	  onClick={handleMoveUp}
+	>
+	  <i className="fa-solid fa-arrow-up"/>
+	</button>
+	<button
+	  type="button"
+	  contentEditable={false}
+	  tabIndex={-1}
+	  onClick={handleMoveDown}
+	>
+	  <i className="fa-solid fa-arrow-down"/>
 	</button>
       </div>
       {showAddBlock && (
