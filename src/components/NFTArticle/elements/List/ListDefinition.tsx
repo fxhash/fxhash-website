@@ -47,6 +47,9 @@ export const listItemDefinition: IArticleBlockDefinition<any> = {
     const [nodeListItem, pathListItem] = element;
     const text = Node.string(nodeListItem);
     if (text) return true;
+    const nextLi = Path.next(pathListItem);
+    const hasNextLi = Node.has(editor, nextLi);
+    if (hasNextLi) return true;
     const parentList = Editor.above(editor, {
       at: pathListItem,
       match: n =>
