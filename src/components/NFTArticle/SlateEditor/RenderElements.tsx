@@ -1,16 +1,15 @@
 import style from "./RenderElements.module.scss"
 import cs from "classnames"
 import { ReactEditor, RenderElementProps, useSlateStatic } from "slate-react"
-import React, { PropsWithChildren, useEffect, useMemo, useState } from "react"
+import React, { PropsWithChildren, DragEvent, useMemo, useRef, useState } from "react"
 import { AddBlock } from "./UI/AddBlock"
 import { getArticleBlockDefinition } from "./Blocks"
-import { Path, Transforms, Node } from "slate"
+import { Path, Transforms, Node, } from "slate"
 import { BlockExtraMenu } from "./UI/BlockExtraMenu"
 import { BlockMenu } from "./UI/BlockMenu"
 import { TEditNodeFn, TEditNodeFnFactory } from "../../../types/ArticleEditor/Transforms"
 import { withStopPropagation } from "../../../utils/events"
 import { TAttributesEditorWrapper } from "../../../types/ArticleEditor/BlockDefinition";
-
 
 interface IEditableElementWrapperProps {
   element: any
@@ -35,7 +34,11 @@ function EditableElementWrapper({
   const [showAddBlock, setShowAddBlock] = useState<boolean>(false)
   const [showExtraMenu, setShowExtraMenu] = useState<boolean>(false)
   const [showSettings, setShowSettings] = useState<boolean>(false)
+  const [isDragOver, setIsDragOver] = useState<boolean>(false)
+  const [isDragging, setIsDragging] = useState<boolean>(false)
+  const [insertAbove, setInsertAbove] = useState<boolean>(false)
 
+  const draggableRef = useRef(null);
   const editor = useSlateStatic()
   const path = ReactEditor.findPath(editor, element)
 
@@ -70,6 +73,57 @@ function EditableElementWrapper({
     }
   }
 
+  const handleStartDragging = () => {
+    if(!draggableRef.current) return;
+    (draggableRef.current as HTMLElement).setAttribute('draggable', 'true')
+    setIsDragging(true)
+  }
+
+  const handleEndDragging = () => {
+    if(!draggableRef.current) return;
+    (draggableRef.current as HTMLElement).setAttribute('draggable', 'false')
+    setIsDragging(false)
+  }
+
+  const handleDragStart = (e:DragEvent<HTMLDivElement>) => {
+    if (!isDragging) return;
+    const domElement = (e.target as HTMLElement).children[0] as HTMLElement
+    if (!domElement) return
+    ReactEditor.deselect(editor)
+    const fromPath = ReactEditor.findPath(editor, element)
+    e.dataTransfer.setDragImage(domElement, domElement.offsetWidth, 0);
+    e.dataTransfer.setData('text/plain', JSON.stringify(fromPath));
+  }
+
+  const handleDragOver = (e:DragEvent<HTMLDivElement>) => {
+    // For the first block we want to be able to drop elements above it
+    if(path === [0]){
+      const {height, top} = (e.target as HTMLElement).getBoundingClientRect();
+      if (e.clientY < (top + height/2)) {
+	setInsertAbove(true)
+      } else {
+	setInsertAbove(false)
+      }
+    }
+    setIsDragOver(true)
+  }
+  
+  const handleDragLeave = () => {
+    setIsDragOver(false)
+  }
+
+  const handleDrop = (e:DragEvent<HTMLDivElement>) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setIsDragOver(false)
+    const data = e.dataTransfer.getData('text/plain');
+    if (!data) return;
+    const at = JSON.parse(e.dataTransfer.getData('text/plain')) as Path 
+    const to = ReactEditor.findPath(editor, element)
+    const moveUp = !insertAbove && at[0] > to[0];
+    Transforms.moveNodes(editor, {at, to: moveUp ? Path.next(to) : to})
+  }
+
   const deleteNode = () => {
     Transforms.removeNodes(editor, {
       at: path
@@ -94,16 +148,25 @@ function EditableElementWrapper({
     return factory(editor, element, path)
   }, [definition, editor, element, path])
 
+
   return (
     <div
+      ref={draggableRef}
+      onDragStart={handleDragStart}
+      onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
+      onDrop={handleDrop}
       className={cs(style.element_wrapper, {
         [style.opened]: showAddBlock || showExtraMenu,
-        [style.buttons_visible]: selected,
+	[style.buttons_visible]: selected,
+	[style.dragOver]: isDragOver,
+	[style.insertAbove]: insertAbove
       })}
     >
       {children}
       <div contentEditable={false} className={cs(style.buttons)}>
-        {definition.editAttributeComp ? (
+
+	{definition.editAttributeComp ? (
           <button
             type="button"
             contentEditable={false}
@@ -136,6 +199,15 @@ function EditableElementWrapper({
         >
           <i className="fa-solid fa-ellipsis" aria-hidden/>
         </button>
+	<button
+	  onMouseDown={handleStartDragging}
+	  onMouseUp={handleEndDragging} 
+	  type="button"
+	  contentEditable={false}
+	  tabIndex={-1}
+	>
+	  <i className="fa-solid fa-grip-dots"/>
+	</button>
       </div>
       {showAddBlock && (
         <>
