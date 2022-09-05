@@ -35,7 +35,7 @@ const ExploreRevealFeed: NextPage = () => {
 
         <ExploreTabs active={2} />
 
-        <main className={cs(layout['padding-big'])}>
+        <main>
           <ExploreArticles />
         </main>
       </section>

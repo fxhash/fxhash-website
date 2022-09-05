@@ -10,19 +10,19 @@ import remarkDirective from "remark-directive";
 import remarkRehype from "remark-rehype";
 import rehypeKatex from "rehype-katex";
 import rehypePrism from "rehype-prism"
-import rehypeFormat from "rehype-format";
 import rehypeStringify from "rehype-stringify";
 import rehypeReact from "rehype-react";
 import { Element } from "hast";
 import { ComponentsWithNodeOptions, ComponentsWithoutNodeOptions } from "rehype-react/lib/complex-types";
 import { SharedOptions } from "rehype-react/lib";
-import { mdastFlattenListItemParagraphs, remarkFxHashCustom } from "./plugins"
+import { mdastFlattenListItemParagraphs, mdastParseMentions, remarkFxHashCustom, remarkMentions } from "./plugins"
 import { TezosStorageDisplay } from "../elements/TezosStorage/TezosStorageDisplay"
 import { ImageDisplay } from "../elements/Image/ImageDisplay";
 import { CodeDisplay } from "../elements/Code/CodeDisplay";
 import { ThematicBreakEditor } from "../elements/ThematicBreak/ThematicBreakEditor";
 import { VideoDisplay } from "../elements/Video/VideoDisplay";
 import { LinkElement } from "../elements/Link/LinkElement";
+import { MentionDisplay } from "../elements/Mention/MentionDisplay";
 
 declare module "rehype-react" {
   interface WithNode {
@@ -53,6 +53,7 @@ const settingsRehypeReact = {
     'pre': CodeDisplay,
     'hr': ThematicBreakEditor,
     'a': LinkElement,
+    'mention': MentionDisplay,
   }
 }
 interface PayloadNFTArticleComponentsFromMarkdown {
@@ -65,15 +66,16 @@ export default async function getNFTArticleComponentsFromMarkdown(markdown: stri
     const processed = await unified()
       .use(remarkParse)
       .use(mdastFlattenListItemParagraphs)
+      .use(mdastParseMentions)
       .use(remarkMath)
       .use(remarkGfm)
       .use(remarkUnwrapImages)
       .use(remarkDirective)
       .use(remarkFxHashCustom)
+      .use(remarkMentions)
       .use(remarkRehype)
       .use(rehypePrism)
       .use(rehypeKatex)
-      .use(rehypeFormat)
       .use(rehypeStringify)
       // todo: fix this, because of image component for some reason
       // @ts-ignore

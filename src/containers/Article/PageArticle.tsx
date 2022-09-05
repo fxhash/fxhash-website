@@ -151,8 +151,8 @@ const _PageArticle = ({ article, originUrl, isPreview }: PageArticleProps) => {
             <ImagePolymorphic
               uri={article.displayUri}
             />
-            {false && (
-              <figcaption></figcaption>
+            {article.thumbnailCaption && (
+              <figcaption>{article.thumbnailCaption}</figcaption>
             )}
           </figure>
         </div>
