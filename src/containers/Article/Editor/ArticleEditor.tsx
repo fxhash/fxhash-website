@@ -1,5 +1,4 @@
 import style from "./ArticleEditor.module.scss"
-import articleStyle from "../../../components/NFTArticle/NFTArticle.module.scss"
 import cs from "classnames"
 import TextareaAutosize from "react-textarea-autosize"
 import React, { useCallback, useContext, useMemo, useRef, useState } from "react"
@@ -19,10 +18,6 @@ import { EditorMedias } from "./EditorMedias"
 import { ImagePolymorphic } from "../../../components/Medias/ImagePolymorphic"
 import { arrayRemoveDuplicates } from "../../../utils/array"
 import { AutosaveArticle } from "./AutosaveArticle";
-import { debounce } from "../../../utils/debounce";
-import { Descendant } from "slate";
-import { LoaderBlock } from "../../../components/Layout/LoaderBlock";
-import useInit from "../../../hooks/useInit";
 import { isUrlLocal } from "../../../utils/files";
 import useConfirmLeavingPage from "../../../hooks/useConfirmLeavingPage";
 import * as Yup from "yup";
@@ -31,17 +26,9 @@ import { UserContext } from "../../UserProvider"
 import { ErrorBlock } from "../../../components/Error/ErrorBlock"
 import { YupSplits } from "../../../utils/yup/splits"
 import { InputText } from "../../../components/Input/InputText";
-import NftArticleEditor from "../../../components/NFTArticle/NFTArticleEditor"
-
-
-const editorDefaultValue = [
-  {
-    type: "paragraph",
-    children: [{
-      text: ""
-    }]
-  }
-]
+import NftArticleEditor, { RefNFTArticleEditor } from "../../../components/NFTArticle/NFTArticleEditor"
+import { getMarkdownMedias } from "../../../components/NFTArticle/SlateEditor/Plugins/SlateMediaPlugin";
+import NFTArticleEditor from "../../../components/NFTArticle/NFTArticleEditor";
 
 const defaultValues: NFTArticleForm = {
   title: "",
@@ -99,7 +86,7 @@ export function ArticleEditor({
 }: ArticleEditorProps) {
   const { user } = useContext(UserContext)
   const [immutableInitialValues] = useState(initialValues)
-  const editorStateRef = useRef<FxEditor>(null)
+  const refNftArticleEditor = useRef<RefNFTArticleEditor>(null)
   const formik = useFormik({
     initialValues: (() => {
       if (editMinted) {
@@ -122,7 +109,6 @@ export function ArticleEditor({
   });
   const { values, errors, touched, setFieldValue, setFieldTouched } = formik
   const [medias, setMedias] = useState<IEditorMediaFile[]>([])
-  const [initialBody, setInitialBody] = useState<Descendant[] | null>(null)
 
   // ref to medias for scrolling to block
   const mediasMarkerRef = useRef<HTMLDivElement>(null)
@@ -135,15 +121,15 @@ export function ArticleEditor({
     }
   }, [])
 
-  const handleChangeBody = useCallback(async (nodes: Descendant[]) => {
-    const getMarkdownFromSlateEditorState = (await import('../../../components/NFTArticle/processor')).getMarkdownFromSlateEditorState
-    const markdown = await getMarkdownFromSlateEditorState(nodes);
+  const handleChangeBody = useCallback(async (markdown: string) => {
     setFieldTouched('body');
     await setFieldValue('body', markdown);
   }, [setFieldTouched, setFieldValue])
-  const debouncedChangeBody = useMemo(() => debounce(handleChangeBody, 800), [handleChangeBody])
-  const handleInitEditor = useCallback((editor) => {
+  const handleInitSlateEditor = useCallback((editor) => {
     setMedias(editor.getUploadedMedias() || []);
+  }, [])
+  const handleInitMarkdownEditor = useCallback((markdown) => {
+    setMedias(getMarkdownMedias(markdown) || []);
   }, [])
   const handleChangeTags = useCallback((e) => {
     setFieldValue("tags", tagsFromString(e.target.value))
@@ -182,17 +168,11 @@ export function ArticleEditor({
       setFieldValue("thumbnailUri", uri);
     }
     // update the medias in the editor
-    editorStateRef.current?.updateMediaUrl(
+    refNftArticleEditor.current?.updateMediaUrl(
       target,
       uri
     )
   }, [setFieldValue, thumbnail])
-
-  useInit(async () => {
-    const getSlateEditorStateFromMarkdown = (await import('../../../components/NFTArticle/processor')).getSlateEditorStateFromMarkdown
-    const editorFromMd = values.body ? await getSlateEditorStateFromMarkdown(values.body) : null;
-    setInitialBody(editorFromMd ? editorFromMd.editorState : editorDefaultValue);
-  })
 
   const tagsAsString = useMemo(() => (values.tags || []).join(','), [values.tags])
 
@@ -326,18 +306,16 @@ export function ArticleEditor({
             BODY
           </span>
         </div>
-        <div className={cs(articleStyle.article_wrapper)}>
-          {initialBody ?
-            <NftArticleEditor
-              ref={editorStateRef}
-              initialValue={initialBody}
-              placeholder="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ut magna eu sapien placerat auctor. Phasellus vel erat a mi cursus posuere nec et diam. Maecenas quis nisl ligula. Sed velit sapien, accumsan eget cursus sit amet, egestas sit amet odio. Cras vitae urna sodales, suscipit ipsum a, aliquam ex. Pellentesque ut placerat arcu, a fringilla ante. Sed varius sem mi, sed interdum nunc consectetur ut. Nulla consectetur diam purus, quis volutpat nunc ultrices eget. Nam vel consectetur lacus, vel auctor dolor."
-              onMediasUpdate={setMedias}
-              onChange={debouncedChangeBody}
-              onInit={handleInitEditor}
-            />
-            : <LoaderBlock size="small" height="20px" />
-          }
+        <div>
+          <NftArticleEditor
+            ref={refNftArticleEditor}
+            valueMarkdown={values.body}
+            placeholder="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ut magna eu sapien placerat auctor. Phasellus vel erat a mi cursus posuere nec et diam. Maecenas quis nisl ligula. Sed velit sapien, accumsan eget cursus sit amet, egestas sit amet odio. Cras vitae urna sodales, suscipit ipsum a, aliquam ex. Pellentesque ut placerat arcu, a fringilla ante. Sed varius sem mi, sed interdum nunc consectetur ut. Nulla consectetur diam purus, quis volutpat nunc ultrices eget. Nam vel consectetur lacus, vel auctor dolor."
+            onMediasUpdate={setMedias}
+            onChange={handleChangeBody}
+            onSlateEditorInit={handleInitSlateEditor}
+            onMarkdownEditorInit={handleInitMarkdownEditor}
+          />
         </div>
       </Field>
 

@@ -1,0 +1,84 @@
+@import "../../styles/fonts";
+
+.toolbar {
+  display: flex;
+  flex-direction: row;
+  z-index: 3;
+  width: min(900px, 100%);
+  margin: 0 auto 8px auto;
+  position: sticky;
+  top: 0;
+  left: 0;
+
+  .container_view {
+    display: flex;
+    flex-direction: row;
+    border-bottom: 1px solid var(--color-gray);
+
+    button {
+      height: 40px;
+      text-align: center;
+      font-size: var(--font-size-small);
+      border-radius: 6px 6px 0 0;
+      padding: 8px 16px;
+      cursor: pointer;
+      border: 1px solid var(--color-gray-vvlight);
+      border-bottom: 1px solid var(--color-gray);
+      background: var(--color-gray-vvvlight);
+      color: var(--color-gray);
+      margin: 0 2px -1px 0;
+      &:last-child {
+        margin-right: 0;
+      }
+
+      &.view_active {
+        background: var(--color-white);
+        color: var(--color-black);
+        border-top: 1px solid var(--color-gray);
+        border-left: 1px solid var(--color-gray);
+        border-right: 1px solid var(--color-gray);
+        border-bottom: 1px solid transparent;
+      }
+    }
+  }
+}
+.container_centered {
+  width: min(900px, 100%);
+  margin: auto;
+}
+.container_markdown {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+.container_markdown_child {
+  flex: 1;
+}
+.container_preview_child {
+  flex: 1;
+  position: relative;
+}
+.container_preview {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 0 16px;
+}
+.textarea_markdown {
+  display: block;
+  width: 100%;
+  min-height: 90vh;
+  resize: vertical;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid var(--color-gray-vlight);
+  color: var(--color-black);
+  background-color: var(--color-gray-vvvlight);
+  &:focus {
+    background: var(--color-white);
+  }
+}

@@ -1,4 +1,4 @@
-import { BaseOperation, Descendant, Editor, Element, Node, Point, Range, Text, Transforms } from "slate"
+import { BaseOperation, Editor, Element, Node, Point, Range, Text, Transforms } from "slate"
 import { EnhanceEditorWith, FxEditor } from "../../../../types/ArticleEditor/Editor";
 import { IEditorMediaFile } from "../../../../types/ArticleEditor/Image";
 import { arrayRemoveDuplicates } from "../../../../utils/array";
@@ -51,6 +51,34 @@ function getEditorMedias(editor: FxEditor): IEditorMediaFile[] {
     medias,
     (a, b) => a.uri === b.uri
   )
+}
+
+export function getMarkdownMedias(markdown: string): IEditorMediaFile[] {
+  const medias: IEditorMediaFile[] = []
+  const regexImageMarkdown = /!\[[^\]]*\]\((?<src>.*?)(?=\"|\))(?<optionalpart>\".*\")?\)/g;
+  const regexVideoMarkdown = /::video\[[^\]]*\]{.*src=\"(?<src>[^\"]*)\".*}/g;
+  const images = markdown.matchAll(regexImageMarkdown);
+  for (const image of images) {
+    if (image?.groups) {
+      medias.push({
+        uri: image.groups['src'],
+        type: "image"
+      })
+    }
+  }
+  const videos = markdown.matchAll(regexVideoMarkdown);
+  for (const video of videos) {
+    if (video?.groups) {
+      medias.push({
+        uri: video.groups['src'],
+        type: "video"
+      })
+    }
+  }
+  return arrayRemoveDuplicates(
+    medias,
+    (a, b) => a.uri === b.uri
+  );
 }
 
 /**
