@@ -43,4 +43,5 @@ export interface IArticleBlockDefinition<InstanciateOpts> {
   // prevent the auto-focus trigger when creating the element
   preventAutofocusTrigger?: boolean
   insertBreakBehavior?: EBreakBehavior | InsertBreakFunction
+  hasDeleteBehaviorRemoveBlock?: boolean
 }

@@ -21,6 +21,7 @@ import { ImageDisplay } from "../elements/Image/ImageDisplay";
 import { CodeDisplay } from "../elements/Code/CodeDisplay";
 import { ThematicBreakEditor } from "../elements/ThematicBreak/ThematicBreakEditor";
 import { VideoDisplay } from "../elements/Video/VideoDisplay";
+import { LinkElement } from "../elements/Link/LinkElement";
 import { MentionDisplay } from "../elements/Mention/MentionDisplay";
 
 declare module "rehype-react" {
@@ -51,6 +52,7 @@ const settingsRehypeReact = {
     'video': VideoDisplay,
     'pre': CodeDisplay,
     'hr': ThematicBreakEditor,
+    'a': LinkElement,
     'mention': MentionDisplay,
   }
 }

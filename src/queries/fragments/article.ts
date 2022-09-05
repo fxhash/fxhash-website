@@ -8,6 +8,7 @@ export const Frag_ArticleInfos = gql`
     createdAt
     slug
     title
+    flag
     description
     tags
     thumbnailUri
@@ -35,6 +36,8 @@ export const Frag_ArticleFull = gql`
     royalties
     metadataUri
     metadata
+    flag
+    moderationReason
     author {
       ...UserBadgeInfos
     }

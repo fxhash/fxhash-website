@@ -1,8 +1,17 @@
 import { ArticleMetadata } from "../Metadata"
 import { Action } from "./Action"
-import { GenerativeToken, GenTokFlag, GenTokPricing } from "./GenerativeToken"
+import { GenerativeToken } from "./GenerativeToken"
 import { Split } from "./Split"
 import { User } from "./User"
+
+export enum ArticleFlag {
+  NONE              = "NONE",
+  CLEAN             = "CLEAN",
+  REPORTED          = "REPORTED",
+  AUTO_DETECT_COPY  = "AUTO_DETECT_COPY",
+  MALICIOUS         = "MALICIOUS",
+  HIDDEN            = "HIDDEN",
+}
 
 export interface NTFArticleLedger {
   article: NFTArticle
@@ -24,7 +33,7 @@ export interface NFTArticleGenerativeToken {
   line: number
 }
 
-export type NFTArticleInfos = Pick<NFTArticle, 'id' | 'title' | 'slug' | 'thumbnailUri' | 'description' | 'tags' | 'author' | 'createdAt'>
+export type NFTArticleInfos = Pick<NFTArticle, 'id' | 'title' | 'flag' | 'slug' | 'thumbnailUri' | 'description' | 'tags' | 'author' | 'createdAt'>
 export interface NFTArticle {
   id: number | string
   slug: string
@@ -52,6 +61,8 @@ export interface NFTArticle {
   royalties: number
   mintOpHash: string
   relatedArticles: NFTArticle[]
+  flag: ArticleFlag
+  moderationReason?: string
 }
 
 export interface NFTArticleFilters {
@@ -62,4 +73,7 @@ export interface NFTArticleFilters {
   royalties_lte?: string
   royalties_gte?: string
   searchQuery_eq?: string
+  flag_in?: ArticleFlag[]
+  flag_eq?: ArticleFlag
+  flag_ne?: ArticleFlag
 }

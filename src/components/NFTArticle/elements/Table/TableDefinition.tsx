@@ -13,6 +13,7 @@ export const tableDefinition: IArticleBlockDefinition<null> = {
     </TableEditor>
   ),
   hasUtilityWrapper: true,
+  hasDeleteBehaviorRemoveBlock: true,
   instanciateElement: () => SlateTable.createTable(2, 2),
   preventAutofocusTrigger: true,
 }

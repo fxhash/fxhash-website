@@ -1,7 +1,7 @@
 import React, { memo, MouseEventHandler, useCallback, useContext, useMemo } from 'react';
 import style from "./CardNFTArticle.module.scss";
 import Image from "next/image";
-import { NFTArticleInfos } from "../../types/entities/Article";
+import { NFTArticle, NFTArticleInfos } from "../../types/entities/Article";
 import { UserBadge } from "../User/UserBadge";
 import { ipfsGatewayUrl } from "../../services/Ipfs";
 import cs from "classnames";
@@ -10,6 +10,7 @@ import { format } from "date-fns";
 import Link from 'next/link';
 import { Tags } from '../Tags/Tags';
 import { ArticlesContext } from '../../context/Articles';
+import { getArticleUrl } from '../../utils/entities/articles';
 
 interface CardNftArticleProps {
   className?: string
@@ -20,7 +21,13 @@ interface CardNftArticleProps {
 }
 
 const _CardNftArticle = ({ 
-  article: { 
+  article,
+  isDraft,
+  imagePriority,
+  onDelete,
+  className 
+}: CardNftArticleProps) => {
+  const { 
     id,
     title,
     slug,
@@ -29,16 +36,11 @@ const _CardNftArticle = ({
     tags,
     author,
     createdAt 
-  },
-  isDraft,
-  imagePriority,
-  onDelete,
-  className 
-}: CardNftArticleProps) => {
+  } = article
   const settings = useContext(SettingsContext)
   const thumbnailUrl = useMemo(() => thumbnailUri && ipfsGatewayUrl(thumbnailUri), [thumbnailUri])
   const dateCreatedAt = useMemo(() => new Date(createdAt), [createdAt])
-  const urlArticle = isDraft ? `/article/editor/local/${id}` : `/article/${slug}`
+  const urlArticle = isDraft ? `/article/editor/local/${id}` : getArticleUrl(article)
   const { isEdited } = useContext(ArticlesContext)
 
   const onClickDelete = useCallback<MouseEventHandler>((event) => {

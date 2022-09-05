@@ -15,7 +15,7 @@ export function Warning({ children, className, closeButton }:PropsWithChildren<P
     <div
       className={cs(className, style.container)}
     >
-      <Link href="/doc/fxhash/one">
+      <Link href="/article/fx(text)">
         <a>
           <span className={cs(style.message)}>
             {children}

@@ -16,6 +16,7 @@ export const figureDefinition: IArticleBlockDefinition<null> = {
   icon: null,
   render: FigureElement,
   hasUtilityWrapper: true,
+  hasDeleteBehaviorRemoveBlock: true,
   editAttributeComp: ({ element, onEdit }) => {
     const children = Node.elements(element)
     for (const [child] of children) {

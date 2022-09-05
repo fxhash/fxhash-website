@@ -11,7 +11,7 @@ import { ResonAddOperation } from "../../../services/contract-operations/ReasonA
 import { ContractFeedback } from "../../Feedback/ContractFeedback"
 
 interface Props {
-  moderationContract: "token"|"user"
+  moderationContract: "token"|"user"|"article"
 }
 export function CreateModerationReason({
   moderationContract,

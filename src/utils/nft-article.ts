@@ -1,4 +1,4 @@
-import { NFTArticle } from "../types/entities/Article";
+import { ArticleFlag, NFTArticle } from "../types/entities/Article";
 import { DraftNFTArticle, NFTArticleForm } from "../types/ArticleEditor/Editor";
 import { User } from "../types/entities/User";
 
@@ -7,6 +7,7 @@ export const generateNftArticleFromDraft: GenerateNftArticleFromDraft = (id, dra
   return ({
     id,
     slug: `preview-${id}`,
+    flag: ArticleFlag.NONE,
     author: user,
     ledgers: [],
     generativeTokenJointures: [],
