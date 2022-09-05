@@ -11,13 +11,19 @@ export function packReserveData(
   input: IReserve<number>
 ): string {
   let packed: string
-  if (input.method === EReserveMethod.WHITELIST) {
-    // first we build a map from the input
-    const map = new MichelsonMap()
-    for (const split of input.data) {
-      map.set(split.address, split.pct)
+  switch (input.method) {
+    case EReserveMethod.WHITELIST: {
+      const map = new MichelsonMap()
+      for (const split of input.data) {
+        map.set(split.address, split.pct)
+      }
+      packed = pack(map, EBuildableParams.RESERVE_WHITELIST)
+      break
     }
-    packed = pack(map, EBuildableParams.RESERVE_WHITELIST)
+    case EReserveMethod.MINT_PASS: {
+      packed = pack(input.data, EBuildableParams.RESERVE_MINT_PASS)
+      break
+    }
   }
   return packed!
 }
@@ -34,9 +40,10 @@ export function packMintReserveInput(input: IReserveMintInput) {
       break
     }
     // todo: here
-    // case EReserveMethod.MINT_PASS: {
-    //   packedData= pack(data, EBuildableParams.)
-    // }
+    case EReserveMethod.MINT_PASS: {
+      throw new Error("IMPLEMENT PACK RESERVE MINT_PASS")
+      // packedData= pack(data, EBuildableParams.)
+    }
   }
 
   // now we pack an input
