@@ -1,0 +1,32 @@
+.multi_list {
+  font-size: var(--font-size-small);
+  overflow-y: auto;
+}
+
+.feature_trait {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+
+  em {
+    color: var(--color-gray);
+    font-size: 0.8em;
+  }
+}
+
+.feature_trait_wrapper {
+  padding: 3px 8px !important;
+
+  &:first-child {
+    margin-top: 5px;
+  }
+
+  &:last-child {
+    margin-bottom: 5px;
+  }
+}
+
+.no_filters {
+  color: var(--color-gray);
+}
