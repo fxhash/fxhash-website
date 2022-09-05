@@ -97,7 +97,7 @@ function EditableElementWrapper({
 
   const handleDragOver = (e:DragEvent<HTMLDivElement>) => {
     // For the first block we want to be able to drop elements above it
-    if(path === [0]){
+    if(path[0] === 0){
       const {height, top} = (e.target as HTMLElement).getBoundingClientRect();
       if (e.clientY < (top + height/2)) {
 	setInsertAbove(true)
@@ -107,7 +107,7 @@ function EditableElementWrapper({
     }
     setIsDragOver(true)
   }
-  
+
   const handleDragLeave = () => {
     setIsDragOver(false)
   }
