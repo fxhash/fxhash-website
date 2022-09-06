@@ -60,7 +60,7 @@ export const AudioAttributeSettings: TEditAttributeComp = ({
                   <div className={cs(style.dropzone__content)}>
                     <i className="fa-solid fa-music" aria-hidden/>
                     <span>
-                      Import an audio file (100mb max)
+                      Import an audio file (30mb max)
                     </span>
                   </div>
                 )}
