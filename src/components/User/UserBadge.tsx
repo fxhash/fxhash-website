@@ -1,12 +1,11 @@
 import style from "./UserBadge.module.scss"
-import layout from "../../styles/Layout.module.scss"
 import cs from "classnames"
 import Link from 'next/link'
 import { User } from "../../types/entities/User"
 import { getUserName, getUserProfileLink, isDonator, isPlatformOwned, isUserVerified, userAliases } from "../../utils/user"
 import { Avatar } from "./Avatar"
 import { IProps as IEntityBadgeProps } from "./EntityBadge"
-import { FunctionComponent, ReactNode, useMemo } from "react"
+import { ReactNode, useMemo } from "react"
 
 
 export interface Props extends IEntityBadgeProps {
@@ -17,6 +16,7 @@ interface WrapperProps {
   user: User
   newTab?: boolean
   children: ReactNode
+  isInline?: boolean
 }
 
 const WrapperLink = ({
@@ -24,28 +24,36 @@ const WrapperLink = ({
   user,
   newTab,
   children,
-}: WrapperProps) => (
-  <Link href={getUserProfileLink(user)}>
-    <a
-      className={cs(style.link, style.default_font_styles, className)}
-      target={newTab ? "_blank" : "_self"}
-    >
-      <div className={style.container}>
-	      {children}
-      </div>
-    </a>
-  </Link>
-)
+  isInline
+}: WrapperProps) => {
+  const Container = isInline ? 'span' : 'div';
+  return (
+    <Link href={getUserProfileLink(user)}>
+      <a
+        className={cs(style.link, style.default_font_styles, className)}
+        target={newTab ? "_blank" : "_self"}
+      >
+        <Container className={style.container}>
+          {children}
+        </Container>
+      </a>
+    </Link>
+  )
+}
 
 const WrapperDiv = ({
   className,
   user,
   children,
-}: WrapperProps) => (
-  <div className={className}>
-    {children}
-  </div>
-)
+  isInline
+}: WrapperProps) => {
+  const Container = isInline ? 'span' : 'div';
+  return (
+    <Container className={className}>
+      {children}
+    </Container>
+  )
+}
 
 export function UserBadge({
   user,
@@ -58,6 +66,7 @@ export function UserBadge({
   newTab = false,
   className,
   classNameAvatar,
+  isInline = false,
 }: Props) {
   // the user goes through an aliases check
   const userAlias = useMemo(() => user && userAliases(user), [user])
@@ -67,6 +76,7 @@ export function UserBadge({
   // the wrapper component, either a link or a div
   const Wrapper = hasLink ? WrapperLink : WrapperDiv
 
+  const Container = isInline ? 'span' : 'div';
   return user ? (
     <Wrapper
       className={cs({
@@ -76,12 +86,14 @@ export function UserBadge({
         style[`side-${avatarSide}`],
         className
       )}
+      isInline={isInline}
       user={userAlias}
       newTab={newTab}
     >
       {displayAvatar && (
         <Avatar
           uri={userAlias.avatarUri}
+          isInline={isInline}
           className={cs(
             style.avatar,
             style[`avatar-${size}`], {
@@ -93,7 +105,7 @@ export function UserBadge({
         />
       )}
 
-      <div className={cs(style.user_infos)}>
+      <Container className={cs(style.user_infos)}>
         <span className={cs(style.user_name)}>
           {prependText && (
             <span className={cs(style.prepend)}>{prependText}</span>
@@ -117,7 +129,7 @@ export function UserBadge({
             {userAlias.id}
           </span>
         )}
-      </div>
+      </Container>
     </Wrapper>
   ) : <></>
 }

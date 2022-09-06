@@ -178,13 +178,15 @@
       margin-bottom: 2em;
     }
 
-    figure.article_image, figure.article_video {
+    figure.article_image,
+    figure.article_video {
       width: fit-content;
       margin: 0;
       margin-left: auto;
       margin-right: auto;
 
-      img, video {
+      img,
+      video {
         max-width: 100%;
         margin-left: auto;
         margin-right: auto;
@@ -194,6 +196,21 @@
         text-align: center;
         font-weight: bold;
         font-size: var(--font-size-small);
+      }
+    }
+
+    blockquote {
+      background-color: var(--color-gray-vvvlight);
+      padding: 20px;
+      border-radius: 4px;
+      border-left: 3px solid var(--color-secondary);
+
+      &>*:first-child {
+        margin-top: 0 !important;
+      }
+
+      &>*:last-child {
+        margin-bottom: 0 !important;
       }
     }
 

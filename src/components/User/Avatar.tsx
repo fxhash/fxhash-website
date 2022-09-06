@@ -6,15 +6,18 @@ import { ipfsGatewayUrl } from "../../services/Ipfs"
 interface Props {
   uri: string|null|undefined
   className?: string
+  isInline?: boolean
 }
 
-export function Avatar({ 
+export function Avatar({
   uri,
-  className
+  className,
+  isInline
 }: Props) {
   const url = ipfsGatewayUrl(uri)
+  const Container = isInline ? 'span' : 'div';
   return (
-    <div 
+    <Container
       className={cs(style.container, effect['drop-shadow-small'], className)}
       style={{
         backgroundImage: url && `url(${url})`
