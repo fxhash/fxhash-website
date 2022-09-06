@@ -288,7 +288,7 @@ export function ArticleEditor({
               <div className={cs(style.placeholder_wrapper)}>
                 <i className="fa-solid fa-image" aria-hidden/>
                 <span>
-                  Select a thumbnail
+                  Select a thumbnail (20mb max)
                 </span>
               </div>
             )
