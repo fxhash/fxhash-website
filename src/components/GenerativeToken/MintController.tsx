@@ -20,6 +20,7 @@ import { MintButton } from "./MintButton"
 interface Props {
   token: GenerativeToken
   forceDisabled?: boolean
+  generateRevealUrl?: (params: { tokenId: number, hash: string | null }) => string
   onReveal?: (hash: string) => void
 }
 
@@ -37,6 +38,7 @@ interface Props {
 export function MintController({
   token,
   forceDisabled = false,
+  generateRevealUrl,
   onReveal,
   children,
 }: PropsWithChildren<Props>) {
@@ -50,7 +52,7 @@ export function MintController({
   } = mintingState
 
   // hook to interact with the contract
-  const { state, loading, success, call, error, opHash } = 
+  const { state, loading, success, call, error, opHash } =
     useContractOperation<TMintOperationParams>(MintOperation)
 
   const mint = (consumeReserve: boolean) => {
@@ -61,13 +63,14 @@ export function MintController({
     })
   }
 
+  const revealUrl = generateRevealUrl ? generateRevealUrl({ tokenId: token.id, hash: opHash }) : `/reveal/${token.id}/${opHash}`
   // whenever there is a transaction hash, we can tell the mint was
   // successful
   useEffect(() => {
     if (opHash) {
       onReveal?.(opHash)
     }
-  }, [opHash])
+  }, [opHash]);
 
   return (
     <div className={cs(style.root)}>
@@ -90,7 +93,7 @@ export function MintController({
 
       {opHash && (
         <>
-          <Link href={`/reveal/${token.id}/${opHash}`} passHref>
+          <Link href={revealUrl} passHref>
             <Button
               isLink
               color="secondary"
@@ -119,7 +122,7 @@ export function MintController({
           <Spacing size="2x-small"/>
         </>
       )}
-      
+
       <div className={cs(
         layout.buttons_inline, layout.flex_wrap, style.buttons_wrapper
       )}>

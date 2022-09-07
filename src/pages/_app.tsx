@@ -16,12 +16,12 @@ const ROUTES_TO_RETAIN = [
   '/marketplace/collections'
 ]
 
-type NextPageWithLayout = NextPage & {
+export type NextPageWithLayout<T = {}> = NextPage<T> & {
   getLayout?: (page: ReactElement) => ReactNode
 }
 
 type AppPropsWithLayout = AppProps & {
-  Component: NextPageWithLayout
+  Component: NextPageWithLayout<any>
 }
 
 const App = ({ Component, pageProps }: AppPropsWithLayout) => {
@@ -86,7 +86,7 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
   return (
     <>
       <Head>
-        <meta key="og:title" property="og:title" content="fxhash — blockchain generative art"/> 
+        <meta key="og:title" property="og:title" content="fxhash — blockchain generative art"/>
         <meta key="description" name="description" content="fxhash is a platform to mint Generative Tokens on the Tezos blockchain"/>
         <meta key="og:description" property="og:description" content="fxhash is a platform to mint Generative Tokens on the Tezos blockchain"/>
         <meta key="og:type" property="og:type" content="website"/>

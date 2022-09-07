@@ -1,0 +1,26 @@
+.container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+}
+.container_button {
+  max-width: 286px;
+  width: 100%;
+}
+.button {
+  width: 100%;
+}
+.purchase {
+  margin-top: 6px;
+  font-size: var(--font-size-small);
+  text-align: center;
+  color: var(--color-gray-light);
+}
+.tezos {
+  color: var(--color-donator);
+}
+.radio {
+  font-size: var(--font-size-small);
+}

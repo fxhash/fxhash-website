@@ -1,0 +1,23 @@
+@import "../../styles/Variables.scss";
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  color: var(--color-black);
+  font-size: 24px;
+
+  span {
+    display: none;
+  }
+}
+
+.button_disconnect {
+  margin-top: 5px;
+}
