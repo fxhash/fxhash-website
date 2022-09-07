@@ -1,10 +1,11 @@
 import style from "./Input.module.scss"
 import cs from "classnames"
 import { InputText, Props as InputProps } from "./InputText"
+import { ReactNode } from "react"
 
 
 interface Props extends InputProps {
-  unit: string
+  unit: ReactNode
   sizeX?: "regular" | "small"
 }
 

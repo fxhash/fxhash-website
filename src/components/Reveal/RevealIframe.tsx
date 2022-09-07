@@ -21,7 +21,7 @@ export const RevealIframe = forwardRef<HTMLIFrameElement, Props>(({
     if (resetOnUrlChange) {
       setLoaded(false)
     }
-  }, [url])
+  }, [resetOnUrlChange, url])
 
   const isLoaded = () => {
     setTimeout(() => {
@@ -53,3 +53,4 @@ export const RevealIframe = forwardRef<HTMLIFrameElement, Props>(({
     </div>
   )
 })
+RevealIframe.displayName = 'RevealIframe'

@@ -1,3 +1,5 @@
+@import "../../styles/Variables";
+
 .root {
   position: relative;
 }
@@ -21,7 +23,8 @@
     opacity: 0;
   }
 
-  &:focus, &.opened {
+  &:focus,
+  &.opened {
     border-color: var(--color-secondary);
     outline: none;
   }
@@ -57,7 +60,7 @@
   color: inherit;
 
   .options_wrapper {
-    max-height: 350px;
+    max-height: 250px;
     overflow: auto;
     overscroll-behavior: contain;
   }
@@ -86,7 +89,8 @@
     width: 100%;
     color: inherit;
 
-    &:hover, &:focus {
+    &:hover,
+    &:focus {
       background-color: var(--color-black);
       color: var(--color-white);
     }

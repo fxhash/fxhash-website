@@ -1,0 +1,28 @@
+.hidden {
+  display: none;
+}
+
+.root {
+  display: flex;
+  flex-direction: column;
+  margin-left: auto;
+  margin-right: auto;
+  width: min(100%, 1200px);
+  align-items: flex-end;
+
+  .lang {
+    font-size: var(--font-size-small);
+    color: var(--color-gray);
+    text-transform: uppercase;
+    margin-right: 3px;
+  }
+}
+
+.code {
+  background-color: #282a36;
+  color: white;
+  font-size: 14px;
+  width: 100%;
+  border-radius: 4px;
+  overflow: hidden;
+}

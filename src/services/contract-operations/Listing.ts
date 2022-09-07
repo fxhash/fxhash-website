@@ -4,8 +4,6 @@ import { Objkt } from "../../types/entities/Objkt"
 import { getGentkFA2Contract } from "../../utils/gentk"
 import { displayMutez } from "../../utils/units"
 import { buildParameters, EBuildableParams } from "../parameters-builder/BuildParameters"
-import { TInputListing } from "../parameters-builder/listing/input"
-import { TInputUpdateOperators } from "../parameters-builder/update-operators/input"
 import { ContractOperation } from "./ContractOperation"
 
 export type TListingOperationParams = {

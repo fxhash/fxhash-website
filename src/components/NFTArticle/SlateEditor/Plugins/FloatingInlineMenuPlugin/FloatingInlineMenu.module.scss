@@ -1,0 +1,48 @@
+.menu {
+  position: absolute;
+  opacity: 1;
+  background-color: var(--color-white);
+  border: 1px solid var(--color-gray-vlight);
+  border-radius: 4px;
+  padding: 4px;
+  visibility: hidden;
+}
+
+.visible {
+  visibility: visible;
+}
+
+.button {
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  color: var(--color-gray);
+
+  &:hover {
+    color: var(--color-secondary);
+  }
+
+  &.active {
+    color: var(--color-black);
+  }
+}
+
+.linkForm {
+  display: flex;
+
+  input {
+    border: none;
+    outline: none;
+    font-family: inherit;
+  }
+
+  button {
+    cursor: pointer;
+    border: none;
+    color: var(--color-secondary);
+    width: 30px;
+    height: 30px;
+    background-color: var(--color-white);
+    margin: 0px 4px;
+  }
+}

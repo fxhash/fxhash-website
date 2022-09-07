@@ -49,3 +49,10 @@ export async function unzipFile(file: File): Promise<Record<string, Blob>> {
 
   return blobs
 }
+
+/**
+ * Is an URL a local object url ?
+ */
+export function isUrlLocal(url: string): boolean {
+  return url.startsWith("blob:")
+}

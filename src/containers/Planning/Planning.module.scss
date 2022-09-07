@@ -1,3 +1,5 @@
+@import "../../styles/Variables";
+
 .selects {
   display: flex;
   flex-direction: row;
@@ -15,6 +17,20 @@
 
     input {
       width: 100px;
+    }
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .selects {
+    .select_timezone {
+      width: 100%;
+    }
+    .select {
+      width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
   }
 }

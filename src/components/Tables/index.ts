@@ -1,0 +1,1 @@
+export { TableUserSales } from "./TableUserSales"

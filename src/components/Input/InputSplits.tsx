@@ -23,16 +23,18 @@ interface PropsChildren {
   addSplits: (splits: ISplit[]) => void
 }
 
-interface Props {
+export interface InputSplitsProps {
+  className?: string
   value: ISplit[]
-  onChange: (value: ISplit[]) => void
+  onChange?: (value: ISplit[]) => void
   unremoveableAddresses?: string[]
   sharesTransformer?: TSplitsTransformer
   textShares?: string
   defaultShares?: number
   showPercentages?: boolean
   errors?: FormikErrors<ISplit[]>
-  children?: FunctionComponent<PropsChildren>
+  children?: FunctionComponent<PropsChildren>,
+  readOnly?: boolean
 }
 
 /**
@@ -41,6 +43,7 @@ interface Props {
  * Tokens but it can also be used to define the collaboration contract shares.
  */
 export function InputSplits({
+  className,
   value,
   onChange,
   unremoveableAddresses = [],
@@ -50,7 +53,8 @@ export function InputSplits({
   showPercentages = true,
   errors,
   children,
-}: Props) {
+  readOnly,
+}: InputSplitsProps) {
   // the pkh of the input
   const [pkh, setPkh] = useState<string>("")
 
@@ -65,7 +69,7 @@ export function InputSplits({
 
   // updates the split and forces the shares to match, if defined
   const update = (splits: ISplit[]) => {
-    onChange(splits.map((split, idx) => ({
+    onChange?.(splits.map((split, idx) => ({
       address: split.address,
       pct: sharesTransformer(splits, idx),
     })))
@@ -102,7 +106,7 @@ export function InputSplits({
         nsplits.push(split)
       }
     }
-    onChange(nsplits)
+    onChange?.(nsplits)
   }
 
   const add = (address?: string) => {
@@ -122,7 +126,7 @@ export function InputSplits({
     const target = nsplits.find(split => split.address === address)
     if (target) {
       target.pct = share
-      onChange(nsplits)
+      onChange?.(nsplits)
     }
   }
 
@@ -131,12 +135,12 @@ export function InputSplits({
     if (!errors || typeof errors === "string") return undefined
     const err = errors[idx]
     if (!err) return undefined
-    return err.pct || undefined 
+    return err.pct || undefined
   }
 
   return (
     <>
-      <table className={cs(style.splits)}>
+      <table className={cs(style.splits, className)}>
         <thead>
           <tr>
             <td>User</td>
@@ -146,7 +150,9 @@ export function InputSplits({
             {showPercentages && (
               <td>Equivalent in %</td>
             )}
-            <td width={107}></td>
+            {!readOnly &&
+              <td width={107}></td>
+            }
           </tr>
         </thead>
         <tbody>
@@ -197,18 +203,20 @@ export function InputSplits({
                     )}
                   </td>
                 )}
-                <td width={107}>
-                  {!unremoveableAddresses.includes(split.address) && (
-                    <ButtonDelete
-                      onClick={() => remove(split.address)}
-                    />
-                  )}
-                </td>
+                {!readOnly &&
+                  <td width={107}>
+                    {!unremoveableAddresses.includes(split.address) && (
+                      <ButtonDelete
+                        onClick={() => remove(split.address)}
+                      />
+                    )}
+                  </td>
+                }
               </tr>
             )
           })}
 
-          <tr>
+          {!readOnly && <tr>
             <td className={cs(style.input_cell)} colSpan={4}>
               <div className={cs(style.add_container)}>
                 <InputSearchUser
@@ -236,13 +244,13 @@ export function InputSplits({
                 </Button>
               </div>
             </td>
-          </tr>
+          </tr>}
 
           {children && (
             <tr>
               <td colSpan={4}>
-                {children({ 
-                  addAddress, 
+                {children({
+                  addAddress,
                   addAddresses,
                   addSplits,
                 })}

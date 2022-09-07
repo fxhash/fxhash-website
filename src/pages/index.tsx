@@ -141,7 +141,7 @@ const Home: NextPage<Props> = ({
       </section>
 
       <Spacing size="6x-large" />
-      <Spacing size="6x-large" />
+      <Spacing size="6x-large" sm="none" />
 
       <section>
         <SectionHeader className={cs(styles.section_header)}>
@@ -173,8 +173,8 @@ const Home: NextPage<Props> = ({
       </section>
 
       <Spacing size="6x-large" />
-      <Spacing size="6x-large" />
-      <Spacing size="6x-large" />
+      <Spacing size="6x-large" sm="none" />
+      <Spacing size="6x-large" sm="none" />
     </>
   )
 }

@@ -18,7 +18,7 @@ export function CardList({
   children
 }: PropsWithChildren<Props>) {
   const [loaded, setLoaded] = useState<string|null>(null)
-  const url = useMemo(() => ipfsGatewayUrl(thumbnailUri), [])
+  const url = useMemo(() => ipfsGatewayUrl(thumbnailUri), [thumbnailUri])
   const { ref, inView } = useInView()
 
   // lazy load the image
@@ -40,8 +40,8 @@ export function CardList({
 
   return (
     <div className={cs(style.container)} ref={ref}>
-      <div 
-        className={cs(style['thumbnail-container'], { 
+      <div
+        className={cs(style['thumbnail-container'], {
           [style.undesirable]: undesirable,
           [effect.placeholder]: !loaded,
         })}
@@ -64,7 +64,7 @@ export function CardList({
       </div>
       <div className={cs(style.content)}>
         { children }
-      </div> 
+      </div>
     </div>
   )
 }
