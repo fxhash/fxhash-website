@@ -4,7 +4,7 @@ import cs from "classnames"
 import layout from "../../styles/Layout.module.scss"
 import { HTMLAttributes, PropsWithChildren, useMemo } from "react"
 import { Spacing } from "../../components/Layout/Spacing"
-import { Tabs } from "../../components/Layout/Tabs"
+import { checkIsTabKeyActive, Tabs } from "../../components/Layout/Tabs"
 import { ipfsGatewayUrl } from "../../services/Ipfs"
 import { User } from "../../types/entities/User"
 import { truncateEnd } from "../../utils/strings"
@@ -22,11 +22,11 @@ const TabWrapper = ({ children, ...props }: TabWrapperProps) => (
 
 interface Props {
   user: User
-  tabIndex: number
+  activeTab: 'creations' | 'articles' | 'collection' | 'on-sale' | 'dashboard'
 }
-export function UserProfileLayout({ 
+export function UserProfileLayout({
   user,
-  tabIndex, 
+  activeTab,
   children
 }: PropsWithChildren<Props>) {
   // find the lastest work/item of the user
@@ -42,38 +42,54 @@ export function UserProfileLayout({
   }, [])
 
   // TABS href are computed using the user profile URL
-  const TABS = [ 
+  const TABS = [
     {
+      key: "creations",
       name: "creations",
       props: {
-        href: getUserProfileLink(user)
+        scroll: false,
+        href: `${getUserProfileLink(user)}/creations`
       }
     },
     {
+      key: "articles",
+      name: "articles",
+      props: {
+        scroll: false,
+        href: `${getUserProfileLink(user)}/articles`
+      }
+    },
+    {
+      key: "collection",
       name: "collection",
       props: {
+        scroll: false,
         href: `${getUserProfileLink(user)}/collection`
       }
     },
     {
+      key: "on-sale",
       name: "on sale",
       props: {
+        scroll: false,
         href: `${getUserProfileLink(user)}/sales`
       }
     },
     {
-      name: "activity",
+      key: "dashboard",
+      name: "dashboard",
       props: {
-        href: `${getUserProfileLink(user)}/activity`
+        scroll: false,
+        href: `${getUserProfileLink(user)}/dashboard`,
       }
-    }
+    },
   ]
 
   return (
     <>
       <Head>
         <title>fxhash — {getUserName(user)} profile</title>
-        <meta key="og:title" property="og:title" content={`fxhash — ${getUserName(user)} profile`}/> 
+        <meta key="og:title" property="og:title" content={`fxhash — ${getUserName(user)} profile`}/>
         <meta key="description" property="description" content={truncateEnd(user.metadata?.description || "", 200, "")}/>
         <meta key="og:description" property="og:description" content={truncateEnd(user.metadata?.description || "", 200, "")}/>
         <meta key="og:type" property="og:type" content="website"/>
@@ -90,7 +106,8 @@ export function UserProfileLayout({
 
       <Tabs
         tabDefinitions={TABS}
-        activeIdx={tabIndex}
+        checkIsTabActive={checkIsTabKeyActive}
+        activeIdx={activeTab}
         tabsLayout="fixed-size"
         tabsClassName={cs(layout['padding-big'])}
         tabWrapperComponent={TabWrapper}
@@ -102,8 +119,8 @@ export function UserProfileLayout({
         {children}
       </section>
 
-      <Spacing size="6x-large" />
-      <Spacing size="6x-large" />
+      <Spacing size="6x-large" sm="3x-large" />
+      <Spacing size="6x-large" sm="none" />
     </>
   )
 }

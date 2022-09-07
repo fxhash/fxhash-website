@@ -2,6 +2,7 @@ import { ObjktMetadata, TokenFeature } from "../Metadata"
 import { Action } from "./Action"
 import { GenerativeToken } from "./GenerativeToken"
 import { Listing } from "./Listing"
+import { Offer } from "./Offer"
 import { Split } from "./Split"
 import { User } from "./User"
 
@@ -24,10 +25,15 @@ export interface Objkt {
   royalties: number
   royaltiesSplit: Split[]
   activeListing?: Listing|null
+  offers?: Offer[]
   actions: Action[]
   createdAt: string
   updatedAt: string
   assignedAt: string|null
+}
+
+export interface ObjktFilters {
+  activeListing_exist?: boolean
 }
 
 export enum EObjktFeatureType {
@@ -47,5 +53,5 @@ export function objktFeatureType(value: any): EObjktFeatureType {
   if (type === "boolean") return EObjktFeatureType.BOOLEAN
   else if (type === "number") return EObjktFeatureType.NUMBER
   else return EObjktFeatureType.STRING
-  
+
 }

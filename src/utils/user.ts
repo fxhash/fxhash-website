@@ -1,4 +1,4 @@
-import { Collaboration, ConnectedUser, User, UserAlias, UserAuthorization, UserFlag, UserItems } from "../types/entities/User"
+import { Collaboration, ConnectedUser, User, UserAlias, UserAuthorization, UserFlag, UserItems, UserType } from "../types/entities/User"
 import { truncateMiddle } from "./strings"
 
 export function userHasName(user: ConnectedUser): boolean {
@@ -20,7 +20,7 @@ export function getUserProfileLink(user: ConnectedUser): string {
  */
 export function getUserName(user: User, truncateLength?: number): string {
   return userHasName(user) 
-    ? user.name! 
+    ? user.name!.length > 64 ? user.name!.substring(0, 64) : user.name!
     : (truncateLength ? truncateMiddle(user.id, truncateLength) : user.id)
 }
 
@@ -36,6 +36,11 @@ export function isTokenModerator(user: User): boolean {
  */
 export function isUserModerator(user: User): boolean {
   return user.authorizations.includes(UserAuthorization.USER_MODERATION)
+}
+
+// true if the user can moderate articles
+export function isUserArticleModerator(user: User): boolean {
+  return user.authorizations.includes(UserAuthorization.ARTICLE_MODERATION)
 }
 
 /**
@@ -62,6 +67,10 @@ export function isEntityVerified(entity: User|Collaboration): boolean {
  */
 export function isPlatformOwned(user: User): boolean {
   return !!user.platformOwned
+}
+
+export function isDonator(user: User): boolean {
+  return !!user.donationAddress
 }
 
 export interface TzProfile {
@@ -116,6 +125,38 @@ export function processTzProfile(data: any): TzProfile|null {
   }
 }
 
+export const UserDonationAliases: Record<string, Partial<User>> = {
+  "tz1aPHze1U5BEEKrGYt3dvY6aAQEeiWm8jjK": {
+    id: "tz1aPHze1U5BEEKrGYt3dvY6aAQEeiWm8jjK",
+    name: "Processing Foundation",
+    descriptionLight: "The Processing Foundation's mission is to promote software literacy within the visual arts. They are developping p5.js",
+    description: "The Processing Foundation's mission is to promote software literacy within the visual arts, and visual literacy within technology-related fields — and to make these fields accessible to diverse communities. They are developping and distributing a group of related software projects, which includes Processing (Java), p5.js (JavaScript), and Processing.py (Python)",
+    avatarUri: "ipfs://QmXEjnYw9R7TWpdSeh5Txg2QeTGvstDShY9Neigj3nxFuL",
+    donationAddress: true,
+    flag: UserFlag.VERIFIED,
+  },
+  
+  "tz1ZUohCAkGjp7vPjQcC4VWcpgYZR1t3Si5C": {
+    id: "tz1ZUohCAkGjp7vPjQcC4VWcpgYZR1t3Si5C",
+    name: "Three.js",
+    descriptionLight: "Three.js is an easy to use, lightweight, cross-browser, general purpose 3D library.",
+    description: "Three.js is an easy to use, lightweight, cross-browser, general purpose 3D library.",
+    avatarUri: "ipfs://QmZbR1AVihDaj5WRSnbxwzVmKR5DoKMP9E1CY6fXJABCmZ",
+    donationAddress: true,
+    flag: UserFlag.VERIFIED,
+  },
+
+  "tz1V1WKxhK9g5UFbhRNUnQMmDnnL2vtBzoZJ": {
+    id: "tz1V1WKxhK9g5UFbhRNUnQMmDnnL2vtBzoZJ",
+    name: "Hydra",
+    descriptionLight: "Hydra is a set of tools for livecoding networked visuals. Inspired by analog modular synthesizers.",
+    description: "Hydra is a set of tools for livecoding networked visuals. Inspired by analog modular synthesizers.",
+    avatarUri: "ipfs://QmZUUcAw82oTGLVcB5ekGX7kLWMSdY3P9nxj3TtwFRBCNt",
+    donationAddress: true,
+    flag: UserFlag.VERIFIED,
+  },
+}
+
 // a list of User aliases
 export const UserAliases: Record<string, Partial<User>> = {
   [process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_MARKETPLACE!]: {
@@ -132,7 +173,9 @@ export const UserAliases: Record<string, Partial<User>> = {
     name: "Minter",
     platformOwned: true,
     preventLink: true,
-  }
+  },
+
+  ...UserDonationAliases,
 }
 
 /**
@@ -156,4 +199,21 @@ export function userAliases(user: User): User {
  */
 export function isUserVerified(user: User): boolean {
   return user.flag === UserFlag.VERIFIED
+}
+
+/**
+ * Is a given user the user provided OR a collaborator in the entity provided
+ */
+export function isUserOrCollaborator(
+  user: User,
+  entity: User
+): boolean {
+  if (entity.type === UserType.COLLAB_CONTRACT_V1) {
+    return !!(entity as Collaboration).collaborators.find(
+      entity => entity.id === user.id
+    )
+  }
+  else {
+    return entity.id === user.id
+  }
 }

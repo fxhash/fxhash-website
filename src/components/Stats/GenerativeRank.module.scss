@@ -21,6 +21,8 @@
   }
 
   .details {
+    overflow-wrap: break-word;
+    word-break: break-word;
     display: flex;
     flex-direction: column;
     font-size: var(--font-size-small);

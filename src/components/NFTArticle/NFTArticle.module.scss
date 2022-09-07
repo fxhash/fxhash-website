@@ -1,0 +1,78 @@
+@import "../../styles/fonts.scss";
+
+.article_wrapper {
+  h1 {
+    font-size: 2.5rem;
+  }
+
+  h2 {
+    font-size: 2.2rem;
+  }
+
+  p,
+  ul,
+  ol,
+  blockquote,
+  table,
+  figcaption {
+    @include font-secondary;
+  }
+
+  p,
+  ul,
+  ol,
+  blockquote,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    width: min(900px, 100%);
+    margin: 0 auto;
+  }
+
+  figure {
+    max-width: 100%;
+
+    img, video {
+      max-width: 100%;
+      margin: 0 auto;
+      display: block;
+    }
+
+    figcaption {
+      text-align: center;
+      font-weight: bold;
+      font-size: var(--font-size-small);
+    }
+  }
+
+  span[data-slate-placeholder="true"] {
+    width: min(900px, 100%) !important;
+    margin: 0 auto;
+    color: var(--color-gray-light);
+    opacity: 1 !important;
+  }
+
+  code {
+    font-family: inherit;
+    background-color: var(--color-gray-vvlight);
+    border: 1px solid var(--color-gray-vlight);
+    padding: 0 4px;
+    border-radius: 4px;
+  }
+
+  :global(.hr) {
+    font-size: 1.2rem;
+  }
+}
+
+.article_wrapper_container {
+  width: min(900px, 100%);
+  margin: 0 auto;
+}
+
+.article_void {
+  display: none;
+}

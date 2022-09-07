@@ -32,12 +32,12 @@ export function Pagination({
       }
     }
     return P
-  }, [activePage])
+  }, [activePage, nbPages])
 
   return (
     <div className={cs(style.container)}>
       <button
-        className={cs(style.page, text.h4, { 
+        className={cs(style.page, text.h4, {
           [style.disabled]: activePage === 0
         })}
         onClick={() => {
@@ -46,16 +46,16 @@ export function Pagination({
       >
         <i aria-hidden className="fas fa-caret-left"/>
       </button>
-      
+
       <div className={cs(style.pages)}>
         {pages.map(page => (
           <Fragment key={page}>
-            {page < 0 
+            {page < 0
               ? <span>...</span>
               : (
                 <button
-                  className={cs(style.page, text.h4, { 
-                    [style.active]: page ===  activePage 
+                  className={cs(style.page, text.h4, {
+                    [style.active]: page ===  activePage
                   })}
                   onClick={() => {
                     onChange(page)
@@ -69,7 +69,7 @@ export function Pagination({
       </div>
 
       <button
-        className={cs(style.page, text.h4, { 
+        className={cs(style.page, text.h4, {
           [style.disabled]: activePage === nbPages-1
         })}
         onClick={() => {

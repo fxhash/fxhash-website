@@ -8,7 +8,7 @@ import { useMemo } from "react"
 import { IOptions, Select } from "./Select"
 
 interface Props extends InputProps<number> {
-  moderationContract: "token"|"user"
+  moderationContract: "token"|"user"|"article"
 }
 export function InputModerationReason({
   value,

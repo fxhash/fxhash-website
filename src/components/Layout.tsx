@@ -2,15 +2,13 @@ import style from "./Layout.module.scss"
 import { PropsWithChildren } from "react"
 import { Footer } from "../containers/Footer/Footer"
 import { Header } from "./Header"
-import { Warning } from "./Layout/Warning"
+import { TopBanner } from "./TopBanner"
 
 export function Layout({ children }: PropsWithChildren<{}>) {
   return (
     <>
       {process.env.NEXT_PUBLIC_BETA_MODE === "on" && (
-        <Warning>
-          <span dangerouslySetInnerHTML={{ __html: process.env.NEXT_PUBLIC_BANNER_MESSAGE! }}/>
-        </Warning>
+        <TopBanner message={process.env.NEXT_PUBLIC_BANNER_MESSAGE} />
       )}
 
       <Header />

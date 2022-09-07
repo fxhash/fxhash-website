@@ -76,8 +76,8 @@ export enum TestPreviewError {
 }
 
 export interface TestPreviewResponse {
-  captureBase64: string
-  features?: Record<string, any>
+  capture: string
+  features?: string
 }
 
 export interface TestPreviewErrorResponse {

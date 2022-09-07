@@ -4,11 +4,10 @@ import colors from "../../styles/Colors.module.css"
 import cs from "classnames"
 import { Action as ActionType, TokenActionType } from "../../types/entities/Action"
 import { UserBadge } from "../User/UserBadge"
-import { FunctionComponent, useMemo } from "react"
+import { FunctionComponent, useMemo, PropsWithChildren } from "react"
 import { format, formatDistance, formatRelative, subDays } from 'date-fns'
 import { displayMutez, displayRoyalties } from "../../utils/units"
 import Link from "next/link"
-import { PropsWithChildren } from "react-router/node_modules/@types/react"
 import { DisplayTezos } from "../Display/DisplayTezos"
 
 
@@ -19,19 +18,18 @@ interface Props {
 
 type TActionComp = FunctionComponent<Props>
 
-const getTokenIdx = (name: string) => '#' + name.split("#").pop()
-
-const DateDistance = ({ timestamptz, append = false }: { timestamptz: string, append?: boolean }) => {
+export const DateDistance = ({ timestamptz, append = false }: { timestamptz: string, append?: boolean }) => {
   const dist = useMemo(() => formatDistance(new Date(timestamptz), new Date(), { addSuffix: true,  }), [])
   return <span>{ dist }</span>
 }
 
-const ActionReference = ({ action }: { action: ActionType }) => {
+export const ActionReference = ({ action }: { action: ActionType }) => {
   return (
     <a
       className={cs(style.date)}
       href={`https://tzkt.io/${action.opHash}`}
       target="_blank"
+      rel="noreferrer"
     >
       <DateDistance timestamptz={action.createdAt}/>
       <i aria-hidden className="fas fa-external-link-square"/>
@@ -169,7 +167,7 @@ const ActionMintedFrom: FunctionComponent<Props> = ({ action, verbose }) => (
       {verbose ? (
         <strong>{action.objkt!.name}</strong>
       ):(
-        <strong>#{action.objkt!.iteration}</strong> 
+        <strong>#{action.objkt!.iteration}</strong>
       )}
     </span>
   </>
@@ -305,7 +303,7 @@ const ActionListing: TActionComp = ({ action, verbose }) => (
       size="small"
     />
     <span>
-      listed <strong>{verbose ? action.objkt!.name : `#${action.objkt!.iteration}`}</strong> for 
+      listed <strong>{verbose ? action.objkt!.name : `#${action.objkt!.iteration}`}</strong> for
     </span>
     <span className={cs(style.price)}>
       <DisplayTezos
@@ -381,7 +379,54 @@ const ActionOffer: FunctionComponent<Props> = ({ action, verbose }) => (
         tezosSize="regular"
       />
     </span>
-    <span>for {verbose ? action.objkt!.name : `#${action.objkt!.iteration}`}</span>
+    <span>for <strong>{verbose ? action.objkt!.name : `#${action.objkt!.iteration}`}</strong></span>
+  </>
+)
+
+const ActionOfferAccepted: FunctionComponent<Props> = ({ action, verbose }) => (
+  <>
+    <UserBadge
+      className={cs(style.user)}
+      hasLink={true}
+      user={action.target!}
+      size="small"
+      />
+    <span>offer of</span>
+    <span className={cs(style.price)}>
+      <DisplayTezos
+        formatBig={false}
+        mutez={action.numericValue}
+        tezosSize="regular"
+      />
+    </span>
+    <span>on <strong>{verbose ? action.objkt!.name : `#${action.objkt!.iteration}`}</strong></span>
+    <span>accepted by</span>
+    <UserBadge
+      className={cs(style.user)}
+      hasLink={true}
+      user={action.issuer!}
+      size="small"
+      />
+  </>
+)
+
+const ActionOfferCancelled: FunctionComponent<Props> = ({ action, verbose }) => (
+  <>
+    <UserBadge
+      className={cs(style.user)}
+      hasLink={true}
+      user={action.issuer!}
+      size="small"
+    />
+    <span>cancelled</span>
+    <span className={cs(style.price)}>
+      <DisplayTezos
+        formatBig={false}
+        mutez={action.numericValue}
+        tezosSize="regular"
+      />
+    </span>
+    <span>offer for <strong>{verbose ? action.objkt!.name : `#${action.objkt!.iteration}`}</strong></span>
   </>
 )
 
@@ -410,6 +455,8 @@ const ActionMapComponent: Record<TokenActionType, FunctionComponent<Props>> = {
   LISTING_V2_CANCELLED:           ActionListingCancelled,
 
   OFFER:                          ActionOffer,
+  OFFER_ACCEPTED:                 ActionOfferAccepted,
+  OFFER_CANCELLED:                ActionOfferCancelled,
 
   UPDATE_PRICING:                 ActionUpdatePrice,
   UPDATE_STATE:                   ActionUpdateState,
@@ -417,16 +464,14 @@ const ActionMapComponent: Record<TokenActionType, FunctionComponent<Props>> = {
   BURN_SUPPLY:                    ActionBurnSupply,
   COMPLETED:                      ActionCompleted,
 
-  // TODO         
+  // TODO
   NONE:                           ActionTODO,
-  OFFER_CANCELLED:                ActionTODO,
-  OFFER_ACCEPTED:                 ActionTODO,
   COLLECTION_OFFER:               ActionTODO,
   COLLECTION_OFFER_CANCELLED:     ActionTODO,
   COLLECTION_OFFER_ACCEPTED:      ActionTODO,
   AUCTION:                        ActionTODO,
   AUCTION_BID:                    ActionTODO,
-  AUCTION_CANCELLED:              ActionTODO,  
+  AUCTION_CANCELLED:              ActionTODO,
   AUCTION_FULFILLED:              ActionTODO,
 }
 
@@ -448,14 +493,14 @@ const actionMapLink: Record<TokenActionType, (action: ActionType) => string|null
   UPDATE_PRICING: (action: ActionType) => `/generative/${action.token?.id}`,
   BURN_SUPPLY: (action: ActionType) => `/gentk/${action.token?.id}`,
   COMPLETED: (action: ActionType) => `/generative/${action.token?.id}`,
-  // TODO         
+  // TODO
   NONE: (action: ActionType) => null,
   COLLECTION_OFFER: (action: ActionType) => null,
   COLLECTION_OFFER_CANCELLED: (action: ActionType) => null,
   COLLECTION_OFFER_ACCEPTED: (action: ActionType) => null,
   AUCTION: (action: ActionType) => null,
   AUCTION_BID: (action: ActionType) => null,
-  AUCTION_CANCELLED: (action: ActionType) => null,  
+  AUCTION_CANCELLED: (action: ActionType) => null,
   AUCTION_FULFILLED: (action: ActionType) => null,
 }
 
@@ -477,14 +522,14 @@ const ActionMapIcon: Record<TokenActionType, FunctionComponent> = {
   OFFER:                          IconSend,
   OFFER_ACCEPTED:                 IconTransfer,
   OFFER_CANCELLED:                IconCancel,
-  // TODO         
+  // TODO
   NONE:                           IconCancel,
   COLLECTION_OFFER:               IconCancel,
   COLLECTION_OFFER_CANCELLED:     IconCancel,
   COLLECTION_OFFER_ACCEPTED:      IconCancel,
   AUCTION:                        IconCancel,
   AUCTION_BID:                    IconCancel,
-  AUCTION_CANCELLED:              IconCancel,  
+  AUCTION_CANCELLED:              IconCancel,
   AUCTION_FULFILLED:              IconCancel,
 }
 
@@ -492,7 +537,7 @@ const ActionMapIcon: Record<TokenActionType, FunctionComponent> = {
 
 function LinkWrapper({ action, children }: PropsWithChildren<{ action: ActionType }>) {
   const link = actionMapLink[action.type] && actionMapLink[action.type](action)
-  return link 
+  return link
     ? (
       <article className={cs(style.container, style.is_link)}>
         <Link href={link}>

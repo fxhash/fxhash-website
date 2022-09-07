@@ -18,8 +18,6 @@ import { Objkt } from '../../types/entities/Objkt'
 import { User } from '../../types/entities/User'
 import { ClientOnlyEmpty } from '../../components/Utils/ClientOnly'
 import { UserGuard } from '../../components/Guards/UserGuard'
-import { OfferControl } from '../../containers/Objkt/OfferControl'
-import { Collect } from '../../containers/Objkt/Collect'
 import { truncateEnd } from '../../utils/strings'
 import { TitleHyphen } from '../../components/Layout/TitleHyphen'
 import { ArtworkIframe, ArtworkIframeRef } from '../../components/Artwork/PreviewIframe'
@@ -36,8 +34,11 @@ import { EntityBadge } from '../../components/User/EntityBadge'
 import { ListSplits } from '../../components/List/ListSplits'
 import { gentkLiveUrl } from '../../utils/objkt'
 import { Tags } from '../../components/Tags/Tags'
+import { ObjktTabs } from "../../containers/Objkt/ObjktTabs"
 import { Labels } from '../../components/GenerativeToken/Label/Labels'
 import { BetaBadge } from '../../components/GenerativeToken/BetaBadge'
+import { MarketplaceActions } from '../../containers/Objkt/MarketplaceActions'
+import { ListingAccept } from '../../containers/Objkt/ListingAccept'
 
 
 interface Props {
@@ -49,7 +50,7 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
   const creator: User = objkt.issuer.author
   const settings = useContext(SettingsContext)
   // get the display url for og:image
-  const displayUrl = objkt.metadata?.displayUri 
+  const displayUrl = objkt.metadata?.displayUri
     && ipfsGatewayUrl(objkt.metadata?.displayUri)
   // used to run code if mode image is active
   const [running, setRunning] = useState<boolean>(false)
@@ -65,7 +66,7 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
     <>
       <Head>
         <title>fxhash — {objkt.name}</title>
-        <meta key="og:title" property="og:title" content={`${objkt.name} — fxhash`}/> 
+        <meta key="og:title" property="og:title" content={`${objkt.name} — fxhash`}/>
         <meta key="description" name="description" content={truncateEnd(objkt.metadata?.description || "", 200, "")}/>
         <meta key="og:description" property="og:description" content={truncateEnd(objkt.metadata?.description || "", 200, "")}/>
         <meta key="og:type" property="og:type" content="website"/>
@@ -85,13 +86,13 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
         <div className={cs(style.artwork_header_mobile, layout.break_words)}>
           <h3>{ objkt.name }</h3>
           <Spacing size="regular"/>
-          <UserBadge 
+          <UserBadge
             prependText="created by"
             user={creator}
             size="regular"
           />
           <Spacing size="2x-small"/>
-          <UserBadge 
+          <UserBadge
             prependText="owned by"
             user={owner}
             size="regular"
@@ -102,14 +103,14 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
         <div className={cs(layout.cols2, layout['responsive-reverse'])}>
           <div className={cs(style['presentation-details'])}>
             <div className={cs(style.artwork_header)}>
-              <EntityBadge 
+              <EntityBadge
                 prependText="created by"
                 user={creator}
                 size="big"
                 toggeable
               />
               <Spacing size="2x-small"/>
-              <UserBadge 
+              <UserBadge
                 prependText="owned by"
                 user={owner}
                 size="big"
@@ -125,7 +126,7 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
 
             <div className={cs(style.buttons)}>
               {objkt.activeListing && (
-                <Collect 
+                <ListingAccept
                   listing={objkt.activeListing}
                   objkt={objkt}
                 />
@@ -133,13 +134,13 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
               {/* @ts-ignore */}
               <ClientOnlyEmpty style={{ width: "100%" }}>
                 <UserGuard forceRedirect={false}>
-                  <OfferControl objkt={objkt}/>
+                  <MarketplaceActions objkt={objkt}/>
                 </UserGuard>
               </ClientOnlyEmpty>
             </div>
 
             <Spacing size="regular"/>
-            
+
             <div className={cs(layout.buttons_inline, layout.flex_wrap)}>
               <Link href={getGenerativeTokenUrl(objkt.issuer)} passHref>
                 <Button isLink={true} size="regular">
@@ -190,8 +191,9 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
                 </>
               )}
               <strong>Operation hash</strong>
-              <a 
+              <a
                 target="_blank"
+                rel="noreferrer"
                 referrerPolicy="no-referrer"
                 href={`https://tzkt.io/${objkt.generationHash}`}
                 className={cs(text.very_small)}
@@ -200,10 +202,10 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
               </a>
               <strong>Metadata</strong>
               {objkt.assigned ? (
-                <a 
+                <a
                   target="_blank"
                   referrerPolicy="no-referrer"
-                  href={ipfsGatewayUrl(objkt.metadataUri)}
+                  href={ipfsGatewayUrl(objkt.metadataUri)} rel="noreferrer"
                 >
                   view on IPFS <i className="fas fa-external-link-square" aria-hidden/>
                 </a>
@@ -220,7 +222,7 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
                   {settings.quality === 0 && !running ? (
                     <img src={displayUrl} alt={`${objkt.name} preview`}/>
                   ):(
-                    <ArtworkIframe 
+                    <ArtworkIframe
                       ref={iframeRef}
                       url={gentkLiveUrl(objkt)}
                       hasLoading={false}
@@ -295,19 +297,9 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
       <Spacing size="6x-large" />
       <Spacing size="6x-large" />
 
-      <section>
-        <SectionHeader>
-          <TitleHyphen>activity ⚡</TitleHyphen>
-        </SectionHeader>
-
-        <Spacing size="3x-large"/>
-
-        <main className={cs(layout['padding-big'])}>
-          <div className={cs(style['activity-wrapper'])}>
-            <Activity actions={objkt.actions} className={style.activity} />
-          </div>
-        </main>
-      </section>
+      <ObjktTabs
+        objkt={objkt}
+      />
 
       <Spacing size="6x-large" />
       <Spacing size="6x-large" />
@@ -318,7 +310,7 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   let idStr,
       slug
-  
+
   if (context.params?.params && context.params.params[0]) {
     if (context.params.params[0] === "slug" && context.params.params[1]) {
       slug = context.params.params[1]

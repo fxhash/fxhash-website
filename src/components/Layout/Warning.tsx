@@ -1,17 +1,28 @@
+import React from 'react'
 import style from "./Warning.module.scss"
 import cs from "classnames"
-import { FunctionComponent } from "react"
+import { PropsWithChildren } from "react"
 import Link from "next/link"
 
-export const Warning: FunctionComponent = ({ children }) => {
+interface Props {
+  closeButton: React.ReactNode | null
+  children: React.ReactNode
+  className: string
+}
+
+export function Warning({ children, className, closeButton }:PropsWithChildren<Props>) {
   return (
-    <Link href="/doc/fxhash/one">
-      <a className={cs(style.container)}>
-        <span className={cs(style.message)}>
-          <i aria-hidden className="fa-solid fa-party-horn"/>
-          {children}
-        </span>
-      </a>
-    </Link>
+    <div
+      className={cs(className, style.container)}
+    >
+      <Link href="/article/fx(text)">
+        <a>
+          <span className={cs(style.message)}>
+            {children}
+          </span>
+        </a>
+      </Link>
+      {closeButton}
+    </div>
   )
 }

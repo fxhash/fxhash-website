@@ -1,0 +1,48 @@
+.caption_textarea {
+  border: none;
+  outline: none;
+  font-weight: inherit;
+  font-family: inherit;
+  resize: none;
+  width: 100%;
+  padding: 0;
+  text-align: center;
+  margin-top: 8px;
+
+  &::placeholder {
+    font-weight: normal;
+    color: var(--color-gray);
+  }
+}
+
+.figcaption {
+  position: relative;
+  margin-top: 4px;
+
+  .placeholder {
+    font-weight: normal;
+    color: var(--color-gray);
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    pointer-events: none;
+  }
+}
+
+.figure {
+  position: relative;
+
+  .figcaption.empty {
+    display: none;
+  }
+
+  &.selected {
+    .figcaption {
+      display: block;
+    }
+
+    .delete {
+      display: block;
+    }
+  }
+}

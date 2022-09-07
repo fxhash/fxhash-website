@@ -2,6 +2,8 @@ import { Action } from "./Action"
 import { GenerativeToken } from "./GenerativeToken"
 import { Objkt } from "./Objkt"
 import { Listing } from "./Listing"
+import { Offer } from "./Offer";
+import { NFTArticle } from "./Article";
 
 export interface UserItems {
   generativeTokens?: GenerativeToken[]
@@ -20,6 +22,7 @@ export enum UserFlag {
 
 export enum UserAuthorization {
   TOKEN_MODERATION          = "TOKEN_MODERATION",
+  ARTICLE_MODERATION        = "ARTICLE_MODERATION",
   USER_MODERATION           = "USER_MODERATION",
   GOVERNANCE_MODERATION     = "GOVERNANCE_MODERATION",
 }
@@ -48,21 +51,27 @@ export interface User {
   description?: string
   avatarUri?: string
   generativeTokens?: GenerativeToken[]
+  sales: Action[]
   actionsAsIssuer: Action[]
   actionsAsTarget: Action[]
   objkts: Objkt[]
   offers: Listing[]
+  offersReceived: Offer[]
+  offersSent: Offer[]
   createdAt: Date
   updatedAt: Date
   // can be populated to merge the actions, however not returned by api
   actions?: Action[]
   // is set by aliases to manually enforce platform accounts
   platformOwned?: boolean
+  donationAddress?: boolean
+  descriptionLight?: string
   // is set by aliases to prevent profile from being linked
   preventLink?: boolean
   // as a regular user, it can have collaboration contracts
   collaborationContracts: Collaboration[]
   moderationReason?: string|null
+  articles: NFTArticle[]
 }
 
 export interface ConnectedUser extends Partial<User> {

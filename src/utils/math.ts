@@ -17,3 +17,9 @@ export function getDecimalsNumber(x: number): number {
 export function isPositive(value: number|undefined): boolean {
   return typeof(value) !== "undefined" ? value >= parseFloat(process.env.NEXT_PUBLIC_GT_MIN_PRICE!) : true
 }
+
+export function getNumberWithOrdinal(n: number) {
+  const s = ["th", "st", "nd", "rd"],
+        v = n % 100
+  return n + (s[(v - 20) % 10] || s[v] || s[0])
+}

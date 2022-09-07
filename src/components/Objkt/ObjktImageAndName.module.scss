@@ -1,0 +1,16 @@
+.container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  cursor: pointer;
+  color: var(--color-black);
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.name {
+  margin-left: 8px;
+  font-weight: bold;
+}

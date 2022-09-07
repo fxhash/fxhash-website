@@ -25,6 +25,7 @@ import { GenerativePricing } from "../../../components/GenerativeToken/Generativ
 import { Tags } from "../../../components/Tags/Tags"
 import { Labels } from "../../../components/GenerativeToken/Label/Labels"
 import { ListReserves } from "../../../components/List/ListReserves"
+import { GenTokArticleMentions } from "./GenTokArticleMentions"
 
 /**
  * This is the Core component resposible for the display logic of a Generative
@@ -47,6 +48,7 @@ export function GenerativeDisplay({
         <EntityBadge
           user={token.author}
           size="regular"
+          toggeable
         />
         <Spacing size="2x-small"/>
         <h3>{ token.name }</h3>
@@ -168,6 +170,15 @@ export function GenerativeDisplay({
               token={token}
             />
           </div>
+
+          {token.articleMentions && token.articleMentions.length > 0 && (
+            <>
+              <Spacing size="2x-large"/>
+              <GenTokArticleMentions
+                mentions={token.articleMentions}
+              />
+            </>
+          )}
         </div>
 
         <div className={cs(style.presentation_artwork)}>

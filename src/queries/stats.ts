@@ -25,7 +25,12 @@ export const Qu_marketStatsCollections = gql`
           metadata
           author {
             id
-            name
+	    name
+	    type
+	    collaborators {
+	      id
+	      name
+	    }
           }
         }
       }

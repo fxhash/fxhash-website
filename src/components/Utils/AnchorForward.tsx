@@ -12,3 +12,4 @@ export const AnchorForward = React.forwardRef<HTMLAnchorElement, PropsWithChildr
     <a ref={ref} {...props}>{ children }</a>
   )
 })
+AnchorForward.displayName = 'AnchorForward';

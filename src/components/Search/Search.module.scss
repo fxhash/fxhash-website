@@ -2,14 +2,10 @@
 
 .search_header {
   position: sticky;
-  top: 0;
-  background-color: var(--color-white);
   display: flex;
   gap: var(--layout-gap-small-lg);
   align-items: center;
   justify-content: space-between;
-  flex-wrap: wrap;
-  position: sticky;
   top: -30px;
   z-index: 10;
   background-color: var(--color-white);
@@ -79,17 +75,23 @@
     z-index: 10;
     top: auto;
     background: black;
-    opacity: 1;
+    opacity: 0;
     display: flex;
     flex-direction: row;
     align-items: center;
     transform: translateX(-50%);
+    pointer-events: none;
     height: 50px;
     padding: 0 30px;
     gap: 10px;
     color: white;
     border: none;
     width: auto;
+
+    &--show-mobile {
+      opacity: 1;
+      pointer-events: auto;
+    }
 
     span {
       display: block;
