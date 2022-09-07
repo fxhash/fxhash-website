@@ -1,0 +1,44 @@
+.animated {
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: 3px 3px 1px 6px;
+  font-size: 0.8em;
+  color: white;
+  // font-weight: bold;
+
+  i {
+    font-size: 14px;
+  }
+}
+.url {
+  font-weight: inherit;
+  &:hover {
+    text-decoration: none;
+  }
+}
+.container {
+}
+.container_image {
+  margin-top: 10px;
+  max-width: 228px;
+  width: 100%;
+}
+.container_arrow {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+.mint_progress {
+  margin-top: 4px;
+}
+.price {
+  flex: 1;
+  font-weight: 700;
+  font-size: var(--font-size-regular)
+}
+.chevron {
+  text-align: right;
+  font-size: var(--font-size-h3);
+  color: var(--color-gray-vlight);
+}
