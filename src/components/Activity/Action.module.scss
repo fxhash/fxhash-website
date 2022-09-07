@@ -102,6 +102,12 @@
   z-index: 1;
 }
 
+.link {
+  position: relative;
+  z-index: 1;
+  color: currentColor;
+}
+
 .align {
   display: flex;
   align-items: center;

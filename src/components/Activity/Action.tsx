@@ -1,15 +1,17 @@
 import style from "./Action.module.scss"
-import effects from "../../styles/Effects.module.scss"
 import colors from "../../styles/Colors.module.css"
 import cs from "classnames"
 import { Action as ActionType, TokenActionType } from "../../types/entities/Action"
 import { UserBadge } from "../User/UserBadge"
 import { FunctionComponent, useMemo, PropsWithChildren } from "react"
-import { format, formatDistance, formatRelative, subDays } from 'date-fns'
-import { displayMutez, displayRoyalties } from "../../utils/units"
+import { formatDistance, } from 'date-fns'
+import { displayRoyalties } from "../../utils/units"
 import Link from "next/link"
 import { DisplayTezos } from "../Display/DisplayTezos"
-
+import { ipfsGatewayUrl } from "../../services/Ipfs"
+import { getArticleUrl } from "../../utils/entities/articles"
+import { getNumberWithOrdinal } from "../../utils/math"
+import { NFTArticleRevision } from "../../types/entities/Article"
 
 interface Props {
   action: ActionType
@@ -136,6 +138,28 @@ const IconCancel = () => (
   />
 )
 
+const IconArticleMedadataUpdate = () => (
+  <i
+    aria-hidden
+    className={cs(
+      "fa-sharp fa-solid fa-money-check-pen",
+      colors.success,
+      style.icon
+    )}
+  />
+)
+
+const IconLock = () => (
+  <i
+    aria-hidden
+    className={cs(
+      "fa-solid fa-lock",
+      colors.success,
+      style.icon,
+    )}
+  />
+)
+
 /**
  * MINT OPERATIONS
  */
@@ -150,6 +174,80 @@ const ActionMinted: FunctionComponent<Props> = ({ action, verbose }) => (
     />
     <span>
       published <strong>{ action.token!.name }</strong>
+    </span>
+  </>
+)
+
+const ActionArticleMinted: FunctionComponent<Props> = ({ action, verbose }) => (
+  <>
+    <UserBadge
+      className={cs(style.user)}
+      hasLink={true}
+      user={action.issuer!}
+      size="small"
+    />
+    <span>
+      minted article <strong>{action.article!.title}</strong>
+    </span>
+  </>
+)
+
+interface ArticleRevisionLinkProps {
+  revision: NFTArticleRevision
+}
+
+function ArticleRevisionLink({
+  revision
+}: ArticleRevisionLinkProps) {
+  return (
+   <a
+      className={style.link}
+      href={ipfsGatewayUrl(revision.metadataUri)}
+      target="_blank"
+      rel="noreferrer"
+    >
+      <strong>
+	{revision.iteration === 0
+	  ? "initial mint"
+	  : getNumberWithOrdinal(revision.iteration) + " revision"
+	}
+      </strong>
+    </a>
+  )
+}
+
+const ActionArticleUpdated: FunctionComponent<Props> = ({ action, verbose }) => {
+  const { from, to } = action.metadata!
+  const revisionFrom = action.article!.revisions!.find(r => r.metadataUri === from)
+  const revisionTo = action.article!.revisions!.find(r => r.metadataUri === to)
+
+  return (
+  <>
+    <UserBadge
+      className={cs(style.user)}
+      hasLink={true}
+      user={action.issuer!}
+      size="small"
+    />
+    <span>
+      updated article {` `}
+      <ArticleRevisionLink revision={revisionFrom!} />
+       {` `} to {` `}
+      <ArticleRevisionLink revision={revisionTo!} />
+    </span>
+  </>
+)}
+
+const ActionArticleLocked: FunctionComponent<Props> = ({ action, verbose }) => (
+  <>
+    <UserBadge
+      className={cs(style.user)}
+      hasLink={true}
+      user={action.issuer!}
+      size="small"
+    />
+    <span>
+      locked article <strong>{action.article!.title}</strong>
     </span>
   </>
 )
@@ -191,6 +289,26 @@ const ActionTransfered: FunctionComponent<Props> = ({ action, verbose }) => (
     />
     <span>
       transfered <strong>#{verbose ? action.objkt!.name : action.objkt!.iteration}</strong> to
+    </span>
+    <UserBadge
+      className={cs(style.user)}
+      hasLink={true}
+      user={action.target!}
+      size="small"
+    />
+  </>
+)
+
+const ActionArticleEditionsTransfered: FunctionComponent<Props> = ({ action, verbose }) => (
+  <>
+    <UserBadge
+      className={cs(style.user)}
+      hasLink={true}
+      user={action.issuer!}
+      size="small"
+    />
+    <span>
+      transfered article edition <strong>#{verbose ? action.article!.title : action.article!.id}</strong> to
     </span>
     <UserBadge
       className={cs(style.user)}
@@ -464,6 +582,11 @@ const ActionMapComponent: Record<TokenActionType, FunctionComponent<Props>> = {
   BURN_SUPPLY:                    ActionBurnSupply,
   COMPLETED:                      ActionCompleted,
 
+  ARTICLE_MINTED:                 ActionArticleMinted,
+  ARTICLE_EDITIONS_TRANSFERED:    ActionArticleEditionsTransfered,
+  ARTICLE_METADATA_UPDATED:       ActionArticleUpdated,
+  ARTICLE_METADATA_LOCKED:        ActionArticleLocked,
+
   // TODO
   NONE:                           ActionTODO,
   COLLECTION_OFFER:               ActionTODO,
@@ -493,6 +616,10 @@ const actionMapLink: Record<TokenActionType, (action: ActionType) => string|null
   UPDATE_PRICING: (action: ActionType) => `/generative/${action.token?.id}`,
   BURN_SUPPLY: (action: ActionType) => `/gentk/${action.token?.id}`,
   COMPLETED: (action: ActionType) => `/generative/${action.token?.id}`,
+  ARTICLE_MINTED: (action: ActionType) => getArticleUrl(action.article!),
+  ARTICLE_EDITIONS_TRANSFERED: (action: ActionType) => getArticleUrl(action.article!),
+  ARTICLE_METADATA_LOCKED: (action: ActionType) => getArticleUrl(action.article!),
+  ARTICLE_METADATA_UPDATED: (action: ActionType) => getArticleUrl(action.article!),
   // TODO
   NONE: (action: ActionType) => null,
   COLLECTION_OFFER: (action: ActionType) => null,
@@ -522,6 +649,10 @@ const ActionMapIcon: Record<TokenActionType, FunctionComponent> = {
   OFFER:                          IconSend,
   OFFER_ACCEPTED:                 IconTransfer,
   OFFER_CANCELLED:                IconCancel,
+  ARTICLE_MINTED:                 IconCreateGentok,
+  ARTICLE_EDITIONS_TRANSFERED:    IconTransfer,
+  ARTICLE_METADATA_UPDATED:       IconArticleMedadataUpdate,
+  ARTICLE_METADATA_LOCKED:        IconLock,
   // TODO
   NONE:                           IconCancel,
   COLLECTION_OFFER:               IconCancel,
