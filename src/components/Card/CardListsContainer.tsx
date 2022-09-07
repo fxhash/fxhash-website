@@ -16,3 +16,4 @@ export const CardListsContainer = forwardRef<HTMLDivElement, Props>(({
     </div>
   )
 })
+CardListsContainer.displayName = 'CardListsContainer'

@@ -31,35 +31,36 @@ export function MintProgress({
   const minted = supply - balance
   const complete = balance === 0
 
-  const [progress, burntProgress, reserveSize, reserveProgress] = 
-  useMemo<[number, number, number, number]>(
-    () => {
-      const progress = minted / (settings.displayBurntCard ? originalSupply : supply)
-      const burnt = originalSupply - supply
-      const burntProgress = settings.displayBurntCard 
-        ? (burnt / originalSupply)
-        : 0
-      const reserveSize = token.reserves 
-        ? token.reserves.reduce((a, b) => a + b.amount, 0)
-        : 0
-      const reserveProgress = Math.min(
-        1, reserveSize/(originalSupply - burntProgress)
-      )
-      return [
-        progress,
-        burntProgress,
-        reserveSize,
-        reserveProgress,
-      ]
-    }
-  , [settings])
+  const [progress, burntProgress, reserveSize, reserveProgress] =
+    useMemo<[number, number, number, number]>(
+      () => {
+        const visibleSupply = (settings.displayBurntCard ? originalSupply : supply)
+        const progress = minted / visibleSupply
+        const burnt = originalSupply - supply
+        const burntProgress = settings.displayBurntCard
+          ? (burnt / originalSupply)
+          : 0
+        const reserveSize = token.reserves
+          ? token.reserves.reduce((a, b) => a + b.amount, 0)
+          : 0
+        const reserveProgress = Math.min(
+          1, reserveSize / visibleSupply
+        )
+        return [
+          progress,
+          burntProgress,
+          reserveSize,
+          reserveProgress,
+        ]
+      }
+      , [settings])
 
   // compute how many editions in reserve the user is eligible for
-  const eligibleFor = useMemo(() => 
+  const eligibleFor = useMemo(() =>
     user
-    ? reserveEligibleAmount(user as User, token)
-    : 0
-  , [user, token])
+      ? reserveEligibleAmount(user as User, token)
+      : 0
+    , [user, token])
 
   return (
     <div className={cs(style.container)}>
@@ -67,29 +68,29 @@ export function MintProgress({
         [style.minted]: complete,
       })}>
         <span>
-          <strong className={cs(colors.secondary)}>{minted}</strong>/{supply} minted 
-          {complete && <i aria-hidden className="fas fa-check-circle"/>}
+          <strong className={cs(colors.secondary)}>{minted}</strong>/{supply} minted
+          {complete && <i aria-hidden className="fas fa-check-circle" />}
         </span>
         {children}
       </span>
       <div className={cs(style.progress)}>
-        <div 
+        <div
           className={cs(style.bar)}
           style={{
-            width: progress*100 + '%'
+            width: progress * 100 + '%'
           }}
         />
         <div
           className={cs(style.bar_reserve)}
           style={{
-            left: progress*100 + '%',
-            width: reserveProgress*100 + "%"
+            left: progress * 100 + '%',
+            width: reserveProgress * 100 + "%"
           }}
         />
-        <div 
+        <div
           className={cs(style.bar_burnt)}
           style={{
-            width: burntProgress*100 + '%'
+            width: burntProgress * 100 + '%'
           }}
         />
       </div>

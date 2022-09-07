@@ -22,7 +22,7 @@ const Explore: NextPage<IProps> = ({ definition }) => {
     <>
       <Head>
         <title>fxhash — about</title>
-        <meta key="og:title" property="og:title" content="fxhash — about"/> 
+        <meta key="og:title" property="og:title" content="fxhash — about"/>
         <meta key="description" name="description" content="General informations on the usage of the FXH platform"/>
         <meta key="og:description" property="og:description" content="General informations on the usage of the FXH platform"/>
         <meta key="og:type" property="og:type" content="website"/>
@@ -35,7 +35,7 @@ const Explore: NextPage<IProps> = ({ definition }) => {
         <SectionHeader layout="center">
           <SectionTitle>{ definition.title }</SectionTitle>
         </SectionHeader>
-        
+
         <Spacing size="large"/>
 
         <div className={cs(style.content, layout['padding-big'])}>
@@ -54,12 +54,12 @@ const Explore: NextPage<IProps> = ({ definition }) => {
             ))}
           </div>
         </div>
-        
+
       </section>
 
-      <Spacing size="6x-large" />
-      <Spacing size="6x-large" />
-      <Spacing size="6x-large" />
+      <Spacing size="6x-large" sm="5x-large" />
+      <Spacing size="6x-large" sm="none" />
+      <Spacing size="6x-large" sm="none" />
     </>
   )
 }

@@ -1,0 +1,14 @@
+@import "../../styles/Variables";
+
+.container {
+  max-width: 1200px;
+  width: 100%;
+  margin: auto;
+}
+
+.article {
+  margin-bottom: $spacing-3x-large;
+  &:last-child {
+    margin-bottom: 0;
+  }
+}

@@ -1,4 +1,4 @@
-import { Collaboration, ConnectedUser, User, UserAlias, UserAuthorization, UserFlag, UserItems } from "../types/entities/User"
+import { Collaboration, ConnectedUser, User, UserAlias, UserAuthorization, UserFlag, UserItems, UserType } from "../types/entities/User"
 import { truncateMiddle } from "./strings"
 
 export function userHasName(user: ConnectedUser): boolean {
@@ -20,7 +20,7 @@ export function getUserProfileLink(user: ConnectedUser): string {
  */
 export function getUserName(user: User, truncateLength?: number): string {
   return userHasName(user) 
-    ? user.name! 
+    ? user.name!.length > 64 ? user.name!.substring(0, 64) : user.name!
     : (truncateLength ? truncateMiddle(user.id, truncateLength) : user.id)
 }
 
@@ -36,6 +36,11 @@ export function isTokenModerator(user: User): boolean {
  */
 export function isUserModerator(user: User): boolean {
   return user.authorizations.includes(UserAuthorization.USER_MODERATION)
+}
+
+// true if the user can moderate articles
+export function isUserArticleModerator(user: User): boolean {
+  return user.authorizations.includes(UserAuthorization.ARTICLE_MODERATION)
 }
 
 /**
@@ -194,4 +199,21 @@ export function userAliases(user: User): User {
  */
 export function isUserVerified(user: User): boolean {
   return user.flag === UserFlag.VERIFIED
+}
+
+/**
+ * Is a given user the user provided OR a collaborator in the entity provided
+ */
+export function isUserOrCollaborator(
+  user: User,
+  entity: User
+): boolean {
+  if (entity.type === UserType.COLLAB_CONTRACT_V1) {
+    return !!(entity as Collaboration).collaborators.find(
+      entity => entity.id === user.id
+    )
+  }
+  else {
+    return entity.id === user.id
+  }
 }

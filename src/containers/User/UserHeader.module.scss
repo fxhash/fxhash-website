@@ -3,6 +3,7 @@
 .container {
   display: flex;
   gap: var(--layout-gap-small-lg);
+  overflow-x: hidden;
 }
 
 .avatar {

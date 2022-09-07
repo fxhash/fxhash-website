@@ -65,7 +65,7 @@ export function SearchInput({
         aria-label="search"
         onClick={handleToggleMinimize}
       >
-        <i className="fas fa-search"/>
+        <i className="fas fa-search" aria-hidden={true}/>
       </button>
       <input
         ref={refInput}

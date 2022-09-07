@@ -18,12 +18,12 @@ export interface ArtworkIframeRef {
   getHtmlIframe: () => HTMLIFrameElement | null
 }
 
-export const SandboxPreview = forwardRef<ArtworkIframeRef, Props>(({ 
-  record, 
-  hash, 
+export const SandboxPreview = forwardRef<ArtworkIframeRef, Props>(({
+  record,
+  hash,
   onUrlUpdate,
   onLoaded,
-  textWaiting 
+  textWaiting
 }, ref) => {
   const iframeRef = useRef<HTMLIFrameElement>(null)
   const workerReg = useRef<ServiceWorkerRegistration|null>(null)
@@ -99,7 +99,7 @@ export const SandboxPreview = forwardRef<ArtworkIframeRef, Props>(({
 
   return (
     <div className={cs(style['iframe-container'])}>
-      <iframe 
+      <iframe
         ref={iframeRef}
         sandbox="allow-scripts allow-same-origin"
         className={cs(style.iframe)}
@@ -111,3 +111,4 @@ export const SandboxPreview = forwardRef<ArtworkIframeRef, Props>(({
     </div>
   )
 })
+SandboxPreview.displayName = 'SandboxPreview'

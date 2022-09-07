@@ -2,11 +2,19 @@ import { ContractAbstraction, MichelsonMap, TransactionWalletOperation, Wallet }
 import { FxhashContracts } from "../../types/Contracts"
 import { ContractOperation } from "./ContractOperation"
 
+type TModContractKey = "user"|"token"|"article"
+
 export type TModerateParams = {
-  contract: "user"|"token"
+  contract: TModContractKey
   entityId: any
   state: number
   reason: number
+}
+
+export const mapModKtKeyToContract: Record<TModContractKey, string> = {
+  user: FxhashContracts.USER_MODERATION,
+  token: FxhashContracts.MODERATION,
+  article: FxhashContracts.ARTICLE_MODERATION,
 }
 
 /**
@@ -17,9 +25,7 @@ export class ModerateOperation extends ContractOperation<TModerateParams> {
 
   async prepare() {
     this.contract = await this.manager.getContract(
-      this.params.contract === "token"
-        ? FxhashContracts.MODERATION
-        : FxhashContracts.USER_MODERATION
+      mapModKtKeyToContract[this.params.contract]
     )
   }
 
@@ -34,7 +40,7 @@ export class ModerateOperation extends ContractOperation<TModerateParams> {
     }
 
     // now build contextual parameters based on target contract
-    if (contract === "token") {
+    if (contract === "token" || contract === "article") {
       params.token_id = entityId
     }
     else {

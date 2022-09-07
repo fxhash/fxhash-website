@@ -1,0 +1,16 @@
+.root {
+  width: min(900px, 100%);
+  margin-left: auto;
+  margin-right: auto;
+
+  hr {
+    border: none;
+    height: 2px;
+    background-color: var(--color-gray-vvlight);
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+}

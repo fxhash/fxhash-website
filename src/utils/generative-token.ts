@@ -16,6 +16,7 @@ import { clamp } from "./math"
 import { tagsFromString } from "./strings"
 import { transformPricingDutchInputToNumbers, transformPricingFixedInputToNumbers } from "./transformers/pricing"
 import { transformReserveInputToGeneric } from "./transformers/reserves"
+import { isUserOrCollaborator } from "./user"
 
 export function getGenerativeTokenUrl(generative: GenerativeToken): string {
   return generative.slug ? `/generative/slug/${generative.slug}` : `/generative/${generative.id}`
@@ -280,7 +281,12 @@ export const genTokLabelDefinitions: Record<GenTokLabel, GenTokLabelDefinition> 
     label: "Interactive",
     shortLabel: "Interactive",
     group: GenTokLabelGroup.DETAILS,
-  }
+  },
+  103: {
+    label: "Profile Picture (PFP)",
+    shortLabel: "PFP",
+    group: GenTokLabelGroup.DETAILS,
+  },
 }
 
 export const getGenTokLabelDefinition = (label: number): GenTokLabelDefinition => 
@@ -340,14 +346,10 @@ export function isGenerativeAuthor(
   token: GenerativeToken,
   user: User,
 ): boolean {
-  if (token.author.type === UserType.COLLAB_CONTRACT_V1) {
-    return !!(token.author as Collaboration).collaborators.find(
-      author => author.id === user.id
-    )
-  }
-  else {
-    return token.author.id === user.id
-  }
+  return isUserOrCollaborator(
+    user,
+    token.author
+  )
 }
 
 

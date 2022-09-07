@@ -12,6 +12,8 @@ export interface IProps {
   displayAddress?: boolean
   displayAvatar?: boolean
   toggeable?: boolean
+  newTab?: boolean
+  isInline?: boolean
 }
 
 /**

@@ -1,27 +1,28 @@
 import style from "./Dropzone.module.scss"
 import cs from "classnames"
-import { useCallback, useState } from 'react'
+import { ReactNode, useCallback, useMemo, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { prettyPrintBytes } from "../../utils/units"
 
-
-interface Props {
+export interface DropzoneProps {
   accepted?: string | string[]
   files?: File[] | null
   onChange: (files: File[]|null) => void
-  textDefault?: string
-  textDrag?: string
+  textDefault?: ReactNode
+  textDrag?: ReactNode
   className?: string
+  onClick?: () => void
 }
 
-export function Dropzone({ 
+export function Dropzone({
   textDefault = "Drag 'n' drop some files here, or click to select files",
   textDrag = "Drop the files here ...",
-  accepted, 
-  files, 
+  accepted,
+  files,
   onChange,
+  onClick,
   className
-}: Props) {
+}: DropzoneProps) {
   const [error, setError] = useState<string|null>(null)
 
   const onDrop = useCallback(acceptedFiles => {
@@ -34,7 +35,7 @@ export function Dropzone({
       onChange(null)
       setError("Format is not supported")
     }
-  }, [])
+  }, [onChange])
 
   const { getRootProps, getInputProps, isDragActive, acceptedFiles } = useDropzone({
     onDrop,
@@ -46,16 +47,28 @@ export function Dropzone({
     maxSize: parseInt(process.env.NEXT_PUBLIC_MAX_FILESIZE!) * 1024 * 1024
   })
 
+  const rootProps = useMemo(() => {
+    const props = getRootProps()
+    if (onClick) {
+      props.onClick = onClick
+    }
+    return props
+  }, [getRootProps])
+
   return (
-    <div {...getRootProps()} className={cs(style.container, className, {
-      [style.drag]: isDragActive,
-      [style.error]: !!error
-    })}>
+    <div
+      {...rootProps}
+      className={cs(style.container, className, {
+        [style.drag]: isDragActive,
+        [style.error]: !!error
+      })}
+      contentEditable={false}
+    >
       <input {...getInputProps()} />
       {files ? (
-        <p>{ files.map(f => `📃 ${f.name} (${prettyPrintBytes(f.size)})`).join(', ') }</p>
+        <div>{ files.map(f => `📃 ${f.name} (${prettyPrintBytes(f.size)})`).join(', ') }</div>
       ):(
-        <p>{ error ? error : (isDragActive ? textDrag : textDefault) }</p>
+        <div>{ error ? error : (isDragActive ? textDrag : textDefault) }</div>
       )}
     </div>
   )

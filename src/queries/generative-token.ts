@@ -1,5 +1,5 @@
 import { gql } from "@apollo/client"
-import { Frag_GenAuthor, Frag_GenPricing, Frag_GenReserves, Frag_GenSplitsPrimary, Frag_GenSplitsSecondary } from "./fragments/generative-token"
+import { Frag_GenArticleMentions, Frag_GenAuthor, Frag_GenPricing, Frag_GenReserves, Frag_GenSplitsPrimary, Frag_GenSplitsSecondary } from "./fragments/generative-token"
 
 export const Qu_genToken = gql`
   ${Frag_GenAuthor}
@@ -7,6 +7,7 @@ export const Qu_genToken = gql`
   ${Frag_GenSplitsPrimary}
   ${Frag_GenSplitsSecondary}
   ${Frag_GenReserves}
+  ${Frag_GenArticleMentions}
 
   query Query($id: Float, $slug: String) {
     generativeToken(id: $id, slug: $slug) {
@@ -32,12 +33,14 @@ export const Qu_genToken = gql`
       ...SplitsPrimary
       ...SplitsSecondary
       ...Reserves
+      ...ArticleMentions
     }
   }
 `
 
 export const Qu_genTokenMarketplace = gql`
   ${Frag_GenAuthor}
+  ${Frag_GenReserves}
   query Query($id: Float, $slug: String) {
     generativeToken(id: $id, slug: $slug) {
       id
@@ -69,6 +72,7 @@ export const Qu_genTokenMarketplace = gql`
       }
       createdAt
       ...Author
+      ...Reserves
     }
   }
 `
@@ -101,6 +105,23 @@ export const Qu_genTokenIterations = gql`
           version
           price
         }
+      }
+    }
+  }
+`
+
+export const Qu_genTokenAllIterations = gql`
+  query GenerativeTokenIterations(
+    $id: Float!
+  ) {
+    generativeToken(id: $id) {
+      id
+      entireCollection {
+        id
+        version
+        iteration
+        name
+        metadata
       }
     }
   }
@@ -145,6 +166,57 @@ export const Qu_genTokOwners = gql`
           name
         }
       }
+    }
+  }
+`
+
+export const Qu_genTokOffers = gql`
+  query GetGenTokOffers($id: Float) {
+    generativeToken(id: $id) {
+      id
+      offers(filters: { active_eq: true }) {
+        id
+        price
+        version
+        createdAt
+        cancelledAt
+        acceptedAt
+        buyer {
+          id
+          name
+        }
+        objkt {
+          id
+          iteration
+          metadata
+          owner {
+            id
+          }
+        }
+      }
+    }
+  }
+`
+
+export const Qu_searchGenTok = gql`
+  ${Frag_GenAuthor}
+
+  query SearchGenerativeToken(
+    $skip: Int,
+    $take: Int,
+    $sort: GenerativeSortInput,
+    $filters: GenerativeTokenFilter
+  ) {
+    generativeTokens(
+      skip: $skip,
+      take: $take, 
+      sort: $sort, 
+      filters: $filters
+    ) {
+      id
+      name
+      thumbnailUri
+      ...Author
     }
   }
 `

@@ -34,6 +34,9 @@ export const Qu_objkt = gql`
         slug
         labels
         generativeUri
+        marketStats {
+          floor
+        }
         ...Author
       }
       metadata
@@ -54,6 +57,18 @@ export const Qu_objkt = gql`
           name
           flag
           avatarUri
+        }
+      }
+      offers(filters: { active_eq: true }) {
+        id
+        price
+        version
+        createdAt
+        cancelledAt
+        acceptedAt
+        buyer {
+          id
+          name
         }
       }
       actions {
