@@ -235,7 +235,17 @@ export const Qu_userActions = gql`
           id
           name
           iteration
-        }
+	}
+	article {
+	  slug
+	  title
+	  id
+	  revisions {
+	    metadataUri
+	    iteration
+	    createdAt
+	  }
+	}
       }
     }
   }
