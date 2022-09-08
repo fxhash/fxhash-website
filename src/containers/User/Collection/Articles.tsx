@@ -27,12 +27,13 @@ export function UserCollectionArticles({
 
   return (
     <div className={cs(style.container, layout['padding-big'])}>
-      {articlesOwned?.map(({ article }, index) =>
+      {articlesOwned?.map((owned, index) =>
         <CardNftArticle 
-          key={article.id}
+          key={owned.article.id}
           className={style.article} 
-          article={article}
+          article={owned.article}
           imagePriority={index < 4}
+          editionsOwned={owned.amount}
         />
       )}
       {loading &&
