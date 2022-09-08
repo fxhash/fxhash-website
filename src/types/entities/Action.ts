@@ -2,6 +2,7 @@ import { HistoryMetadata } from '../Metadata'
 import { GenerativeToken } from './GenerativeToken'
 import { Objkt } from './Objkt'
 import { User } from './User'
+import { NFTArticleInfos } from './Article'
 
 
 export enum TokenActionType {
@@ -45,6 +46,7 @@ export interface Action {
   target?: User
   token?: GenerativeToken
   objkt?: Objkt
+  article?: NFTArticleInfos
   metadata: HistoryMetadata
   createdAt: string
 }

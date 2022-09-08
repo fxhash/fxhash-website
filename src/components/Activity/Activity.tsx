@@ -32,6 +32,10 @@ const ActionsPredecescence: Record<TokenActionType, number> = {
   AUCTION_BID                   : 4,
   AUCTION_CANCELLED             : 4,
   AUCTION_FULFILLED             : 4,
+  ARTICLE_MINTED                : 0,
+  ARTICLE_EDITIONS_TRANSFERED   : 1,
+  ARTICLE_METADATA_UPDATED      : 1,
+  ARTICLE_METADATA_LOCKED       : 20,
 }
 
 // group actions by timestamp, sort by type within group, then rebuild array
