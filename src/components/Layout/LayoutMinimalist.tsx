@@ -2,7 +2,7 @@ import React, { memo, PropsWithChildren, useContext } from 'react';
 import { HeaderMinimalist } from "./HeaderMinimalist";
 import style from "./LayoutMinimalist.module.scss";
 import { UserContext } from "../../containers/UserProvider";
-import { ConnectWallet } from "./ConnectWallet";
+import { ConnectWallet } from "../LiveMinting/ConnectWallet";
 
 interface LayoutMinimalistProps extends PropsWithChildren<{}> {
   requireWallet?: boolean

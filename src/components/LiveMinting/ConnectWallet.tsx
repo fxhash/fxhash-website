@@ -5,6 +5,7 @@ import { UserContext } from "../../containers/UserProvider";
 import { IconTezos } from "../Icons/IconTezos";
 import Link from 'next/link';
 import { Checkbox } from "../Input/Checkbox";
+import { Spacing } from '../Layout/Spacing';
 
 type WalletType = 'custom' | 'naan';
 const options = [
@@ -62,6 +63,7 @@ const _ConnectWallet = () => {
             {opt.label}
           </Checkbox>
         )}
+        <Spacing size="x-small"/>
         <Button
           disabled={!walletType}
           iconComp={<i aria-hidden className="fas fa-wallet"/>}

@@ -14,9 +14,12 @@ const _HeaderMinimalist = () => {
   return (
     <header className={style.header}>
       <div className={style.logo}>
-        <Logo height={34} width={107} fontSize={20} />
-        <span>fx(hash)</span>
+        <img 
+          src="/images/logos/fxhash-black.svg"
+          alt="fxhash"
+        />
       </div>
+
       {userCtx.user &&
         <Dropdown
           mobileMenuAbsolute
