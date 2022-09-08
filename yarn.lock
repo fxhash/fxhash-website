@@ -1506,6 +1506,11 @@ des.js@^1.0.0:
     inherits "^2.0.1"
     minimalistic-assert "^1.0.0"
 
+detect-incognito@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/detect-incognito/-/detect-incognito-1.0.0.tgz#24f8f1957ddc246ef7f602653a2d015c55a84657"
+  integrity sha512-o/58BwX8VdQJFICJlgwLchBw/0js1tWDYe/ygOZhyuMw5pviIkOseH+IYPeR8iceU36KPJyDDm93iRhnH9mIEg==
+
 diff@^5.0.0:
   version "5.0.0"
   resolved "https://registry.npmjs.org/diff/-/diff-5.0.0.tgz"

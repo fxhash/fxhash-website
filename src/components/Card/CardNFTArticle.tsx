@@ -20,14 +20,14 @@ interface CardNftArticleProps {
   onDelete?: (id: string) => void
 }
 
-const _CardNftArticle = ({ 
+const _CardNftArticle = ({
   article,
   isDraft,
   imagePriority,
   onDelete,
-  className 
+  className
 }: CardNftArticleProps) => {
-  const { 
+  const {
     id,
     title,
     slug,
@@ -35,7 +35,7 @@ const _CardNftArticle = ({
     description,
     tags,
     author,
-    createdAt 
+    createdAt
   } = article
   const settings = useContext(SettingsContext)
   const thumbnailUrl = useMemo(() => thumbnailUri && ipfsGatewayUrl(thumbnailUri), [thumbnailUri])
@@ -63,7 +63,7 @@ const _CardNftArticle = ({
       </Link>
       {isDraft && (
         <div className={cs(style.banner, style.banner_draft)}>
-          <span>DRAFT (saved locally)</span>
+          <span>DRAFT (saved locally in your browser)</span>
           <button
             type="button"
             onClick={onClickDelete}

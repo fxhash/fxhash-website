@@ -22,16 +22,20 @@ interface Context {
   isEdited: (id: string) => boolean
 }
 
-const initialState: ArticlesState = { 
+const initialState: ArticlesState = {
   articles: {}
 }
-const localStorageKey = 'local_articles';
+export const localStorageKey = 'local_articles';
 export const ArticlesContext = React.createContext<Context>({} as Context)
 
-const loadAllLocalArticles = () => {
+export const loadAllLocalArticles = () => {
   const localArticlesValue = localStorage.getItem(localStorageKey);
   return localArticlesValue ? JSON.parse(localArticlesValue) : initialState;
 };
+export const loadLocalArticle = (id: string) => {
+  const data = loadAllLocalArticles();
+  return data?.articles ? data.articles[id] : null;
+}
 const articlesReducer = (state: ArticlesState, action: ArticlesAction): ArticlesState => {
   switch (action.type) {
     case "loadAll":
