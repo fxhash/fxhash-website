@@ -17,6 +17,12 @@
       border-bottom: 3px solid var(--color-black);
     }
   }
+  &.layout-subtabs-vertical {
+    nav {
+      justify-content: center;
+      border-bottom: none;
+    }
+  }
 }
 
 .tab {
@@ -57,6 +63,22 @@
   &.active {
     background: var(--color-black);
     color: var(--color-white);
+  }
+}
+
+.tab-subtabs-vertical {
+  padding: 10px;
+  margin-top: 8px;
+  margin-bottom: 0;
+  border: none;
+  font-size: var(--font-size-small);
+
+  &+& {
+    margin-left: $spacing-2x-small;
+    border-left: 3px solid var(--color-gray-vvvlight);
+  }
+
+  &.active {
   }
 }
 

@@ -18,7 +18,7 @@ export type TabDefinition = {
   name: string,
   props?: any
 }
-type TabsLayout = "full-width" | "fixed-size" | "subtabs"
+type TabsLayout = "full-width" | "fixed-size" | "subtabs" | "subtabs-vertical"
 interface TabProps {
   layout: TabsLayout
   definition: TabDefinition
