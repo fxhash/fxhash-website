@@ -149,6 +149,23 @@ export const Qu_userObjkts = gql`
   }
 `
 
+export const Qu_userArticlesOwned = gql`
+  ${Frag_ArticleInfos}
+  query UserCollection(
+    $id: String!,
+  ) {
+    user(id: $id) {
+      id
+      articlesOwned {
+        amount
+	article {
+	  ...ArticleInfos
+	}
+      }
+    }
+  }
+`
+
 export const Qu_userObjktsSubResults = gql`
   query Query($id: String!, $generativeFilters: ObjktFilter, $authorFilters: ObjktFilter) {
     user(id: $id) {
@@ -405,3 +422,4 @@ export const Qu_userArticles = gql`
   }
   ${Frag_ArticleInfos}
 `
+
