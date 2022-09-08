@@ -18,7 +18,7 @@ const EmbedYoutube = memo<EmbedElementProps>(({ href }) => {
         src={embedUrl}
         title="YouTube video player"
         frameBorder="0"
-        sandbox="allow-same-origin allow-scripts"
+        sandbox="allow-same-origin allow-scripts allow-presentation"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
       >
       </iframe>
