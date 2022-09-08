@@ -379,18 +379,18 @@ export function UserCollection({
           </>
         )}
       </CardsExplorer>
-      { activeTab === "articles" &&
-	<div className={cs(style.article_container, layout['padding-big'])}>
-	  {articlesOwned?.map(({ article }, index) =>
-	    <CardNftArticle className={style.article} key={article.slug} article={article} imagePriority={index < 4} />
-	  )}
-	  {loadingArticlesOwned &&
-	    [...Array(20)].map((_, idx) =>
-	      <CardNftArticleSkeleton className={style.article} key={idx} />
-	    )
-	  }
-	</div>
-      }
+      {activeTab === "articles" && ( 
+        <div className={cs(style.article_container, layout['padding-big'])}>
+          {articlesOwned?.map(({ article }, index) =>
+            <CardNftArticle className={style.article} key={article.slug} article={article} imagePriority={index < 4} />
+          )}
+          {loadingArticlesOwned &&
+            [...Array(20)].map((_, idx) =>
+              <CardNftArticleSkeleton className={style.article} key={idx} />
+            )
+          }
+        </div>
+      )}
     </>
   )
 }
