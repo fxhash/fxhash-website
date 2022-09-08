@@ -39,7 +39,7 @@ export const Button = React.forwardRef<HTMLButtonElement & HTMLAnchorElement, Pr
       className={cs(
         style.button,
         style[`size-${size}`],
-        style[`icon-${iconSide}`],
+        style[`icon-${iconSide || 'alone'}`],
         style[`color-${color}`],
         style[`state-${state}`],
         className,

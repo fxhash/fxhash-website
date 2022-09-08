@@ -287,12 +287,12 @@ export function UserCollection({
 		  sortSelectComp={
 		    <div className={style.select_comp_container}>
 		      <Link href={`${getUserProfileLink(user)}/collection/enjoy`} passHref>
-			<Button
-			  isLink={true}
-			  iconComp={<i aria-hidden className="fas fa-arrow-right"/>}
-			  size="regular"
-			  iconSide={null}
-			/>
+          <Button
+            isLink={true}
+            iconComp={<i aria-hidden className="fa-sharp fa-solid fa-circle-play"/>}
+            size="regular"
+            iconSide={null}
+          />
 		      </Link>
 		      <Select
 			classNameRoot={cs({
