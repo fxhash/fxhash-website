@@ -22,12 +22,14 @@ const TabWrapper = ({ children, ...props }: TabWrapperProps) => (
 
 interface Props {
   user: User
-  activeTab: 'creations' | 'articles' | 'collection' | 'on-sale' | 'dashboard'
+  activeTab: 'creations' | 'articles' | 'collection' | 'on-sale' | 'dashboard',
+  hideSectionSpacing?: boolean
 }
 export function UserProfileLayout({
   user,
   activeTab,
-  children
+  children,
+  hideSectionSpacing
 }: PropsWithChildren<Props>) {
   // find the lastest work/item of the user
   const ogImageUrl = useMemo<string|null>(() => {
@@ -113,7 +115,7 @@ export function UserProfileLayout({
         tabWrapperComponent={TabWrapper}
       />
 
-      <Spacing size="x-large" />
+      { !hideSectionSpacing && <Spacing size="x-large" /> }
 
       <section>
         {children}
