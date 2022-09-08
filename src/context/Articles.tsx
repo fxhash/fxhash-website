@@ -1,10 +1,12 @@
 import React, { useEffect, useMemo, useReducer, useState } from "react"
 import { DraftNFTArticle, NFTArticleForm } from "../types/ArticleEditor/Editor";
+import { stringBytesSize } from "../utils/strings";
 
 interface ArticlesState {
   articles: {
     [key: string]: DraftNFTArticle | null,
-  }
+  },
+  sizeBytes: number
 }
 interface ISavePayload {
   id: string
@@ -23,14 +25,20 @@ interface Context {
 }
 
 const initialState: ArticlesState = {
-  articles: {}
+  articles: {},
+  sizeBytes: 0
 }
 export const localStorageKey = 'local_articles';
 export const ArticlesContext = React.createContext<Context>({} as Context)
 
 export const loadAllLocalArticles = () => {
-  const localArticlesValue = localStorage.getItem(localStorageKey);
-  return localArticlesValue ? JSON.parse(localArticlesValue) : initialState;
+  const localStorageArticlesStr = localStorage.getItem(localStorageKey);
+  if (!localStorageArticlesStr) return initialState;
+  const data = JSON.parse(localStorageArticlesStr)
+  return {
+    articles: data?.articles || {},
+    sizeBytes: stringBytesSize(localStorageArticlesStr)
+  }
 };
 export const loadLocalArticle = (id: string) => {
   const data = loadAllLocalArticles();
@@ -47,13 +55,17 @@ const articlesReducer = (state: ArticlesState, action: ArticlesAction): Articles
         lastSavedAt: new Date().toUTCString(),
         minted: action.payload.minted || false,
       };
-      localStorage.setItem(localStorageKey, JSON.stringify(newState));
+      const localStorageArticlesStr = JSON.stringify({ articles: newState.articles });
+      localStorage.setItem(localStorageKey, localStorageArticlesStr);
+      newState.sizeBytes = stringBytesSize(localStorageArticlesStr);
       return newState;
     }
     case "delete": {
       const newState = loadAllLocalArticles();
       delete newState.articles[action.payload.id];
-      localStorage.setItem(localStorageKey, JSON.stringify(newState));
+      const localStorageArticlesStr = JSON.stringify({ articles: newState.articles });
+      newState.sizeBytes = stringBytesSize(localStorageArticlesStr);
+      localStorage.setItem(localStorageKey, localStorageArticlesStr);
       return newState;
     }
     default:
