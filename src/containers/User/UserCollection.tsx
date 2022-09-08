@@ -4,12 +4,12 @@ import styleCardsExplorer from "../../components/Exploration/CardsExplorer.modul
 import styleSearch from "../../components/Input/SearchInput.module.scss"
 import layout from "../../styles/Layout.module.scss"
 import cs from "classnames"
-import Link from "next/link"
-import { useRef, useEffect, useState, useMemo } from "react"
+import Link, { LinkProps } from "next/link"
+import { useRef, useEffect, useState, useMemo, PropsWithChildren, HTMLAttributes } from "react"
 import { CardsContainer } from "../../components/Card/CardsContainer"
 import { ObjktCard } from "../../components/Card/ObjktCard"
 import { InfiniteScrollTrigger } from "../../components/Utils/InfiniteScrollTrigger"
-import { Qu_userObjkts } from "../../queries/user"
+import { Qu_userObjkts, Qu_userArticlesOwned } from "../../queries/user"
 import { Objkt } from "../../types/entities/Objkt"
 import { User, IUserCollectionFilters } from "../../types/entities/User"
 import { Spacing } from "../../components/Layout/Spacing"
@@ -23,6 +23,17 @@ import { FiltersPanel } from "../../components/Exploration/FiltersPanel"
 import { ExploreTagDef, ExploreTags } from "../../components/Exploration/ExploreTags"
 import { UserCollectionFilters } from "./UserCollectionFilters"
 import { CardsLoading } from "../../components/Card/CardsLoading"
+import { checkIsTabKeyActive, Tabs } from "../../components/Layout/Tabs"
+import { NFTArticlesOwned } from '../../types/entities/Article'
+import { CardNftArticle } from "../../components/Card/CardNFTArticle";
+import { CardNftArticleSkeleton } from "../../components/Card/CardNFTArticleSkeleton";
+
+type TabWrapperProps = PropsWithChildren<LinkProps> & HTMLAttributes<HTMLAnchorElement>
+const TabWrapper = ({ children, ...props }: TabWrapperProps) => (
+  <Link {...props}>
+    <a className={props.className}>{ children }</a>
+  </Link>
+)
 
 const ITEMS_PER_PAGE = 20
 
@@ -66,10 +77,12 @@ function sortValueToSortVariable(val: string) {
 }
 
 interface Props {
-  user: User
+  user: User,
+  activeTab: 'gentk' | 'articles'
 }
 export function UserCollection({
   user,
+  activeTab,
 }: Props) {
   // sort variables
   const [sortValue, setSortValue] = useState<string>("id-desc")
@@ -107,8 +120,16 @@ export function UserCollection({
     },
   })
 
+  const { data: dataArticlesOwned, loading: loadingArticlesOwned } = useQuery(Qu_userArticlesOwned, {
+    notifyOnNetworkStatusChange: true,
+    variables: {
+      id: user.id,
+    },
+  })
+
   // safe access to gentks
   const objkts: Objkt[] = data?.user?.objkts || null
+  const articlesOwned: NFTArticlesOwned[] = dataArticlesOwned?.user?.articlesOwned || null
 
   useEffect(() => {
     if (!loading) {
@@ -209,19 +230,38 @@ export function UserCollection({
     return tags
   }, [filters])
 
+  // TABS href are computed using the user profile URL
+  const TABS = [
+    {
+      key: "gentk",
+      name: "gentk",
+      props: {
+        scroll: false,
+        href: `${getUserProfileLink(user)}/collection/`
+      }
+    },
+    {
+      key: "articles",
+      name: "articles",
+      props: {
+        scroll: false,
+        href: `${getUserProfileLink(user)}/collection/articles/`
+      }
+    },
+  ]
+
+
+  
   return (
     <>
-      <header className={cs(style.header, layout['padding-small'])}>
-        <Link href={`${getUserProfileLink(user)}/collection/enjoy`} passHref>
-          <Button
-            isLink={true}
-            iconComp={<i aria-hidden className="fas fa-arrow-right"/>}
-            iconSide="right"
-          >
-            enjoy
-          </Button>
-        </Link>
-      </header>
+      <Tabs
+        tabDefinitions={TABS}
+        checkIsTabActive={checkIsTabKeyActive}
+        activeIdx={activeTab}
+        tabsLayout="subtabs-vertical"
+        tabsClassName={cs(layout['padding-big'])}
+        tabWrapperComponent={TabWrapper}
+      />
 
       <CardsExplorer>
         {({
@@ -233,97 +273,122 @@ export function UserCollection({
           isSearchMinimized,
         }) => (
           <>
-            <div ref={topMarkerRef}/>
+	    {activeTab === "gentk" && 
+	      <>
+		<div ref={topMarkerRef}/>
 
-            <SearchHeader
-              hasFilters
-              filtersOpened={filtersVisible}
-              showFiltersOnMobile={inViewCardsContainer}
-              onToggleFilters={() => setFiltersVisible(!filtersVisible)}
-              sortSelectComp={
-                <Select
-                  classNameRoot={cs({
-                    [styleCardsExplorer['hide-sort']]: !isSearchMinimized
-                  })}
-                  value={sortValue}
-                  options={sortOptions}
-                  onChange={setSortValue}
-                />
-              }
-            >
-              <SearchInputControlled
-                minimizeOnMobile
-                onMinimize={setIsSearchMinimized}
-                onSearch={(value) => {
-                  if (value) {
-                    setSortOptions(searchSortOptions)
-                    setSortValue("relevance-desc")
-                    addFilter("searchQuery_eq", value)
-                  }
-                  else {
-                    removeFilter("searchQuery_eq")
-                    setSortOptions(generalSortOptions)
-                    if (sortValue === "relevance-desc") {
-                      setSortValue(sortBeforeSearch.current)
-                    }
-                  }
-                }}
-                className={styleSearch.large_search}
-              />
-            </SearchHeader>
+		<SearchHeader
+		  hasFilters
+		  filtersOpened={filtersVisible}
+		  showFiltersOnMobile={inViewCardsContainer}
+		  onToggleFilters={() => setFiltersVisible(!filtersVisible)}
+		  sortSelectComp={
+		    <div className={style.select_comp_container}>
+		      <Link href={`${getUserProfileLink(user)}/collection/enjoy`} passHref>
+			<Button
+			  isLink={true}
+			  iconComp={<i aria-hidden className="fas fa-arrow-right"/>}
+			  size="regular"
+			  iconSide={null}
+			/>
+		      </Link>
+		      <Select
+			classNameRoot={cs({
+			  [styleCardsExplorer['hide-sort']]: !isSearchMinimized
+			})}
+			value={sortValue}
+			options={sortOptions}
+			onChange={setSortValue}
+		      />
+		    </div>
+		  }
+		>
+		  <SearchInputControlled
+		    minimizeOnMobile
+		    onMinimize={setIsSearchMinimized}
+		    onSearch={(value) => {
+		      if (value) {
+			setSortOptions(searchSortOptions)
+			setSortValue("relevance-desc")
+			addFilter("searchQuery_eq", value)
+		      }
+		      else {
+			removeFilter("searchQuery_eq")
+			setSortOptions(generalSortOptions)
+			if (sortValue === "relevance-desc") {
+			  setSortValue(sortBeforeSearch.current)
+			}
+		      }
+		    }}
+		    className={styleSearch.large_search}
+		  />
+		</SearchHeader>
 
-            <div className={cs(layout.cards_explorer, layout['padding-big'])}>
-              {filtersVisible && (
-                <FiltersPanel onClose={() => setFiltersVisible(false)}>
-                  <UserCollectionFilters
-                    user={user}
-                    filters={filters}
-                    setFilters={setFilters}
-                  />
-                </FiltersPanel>
-              )}
+		<div className={cs(layout.cards_explorer, layout['padding-big'])}>
+		  {filtersVisible && (
+		    <FiltersPanel onClose={() => setFiltersVisible(false)}>
+		      <UserCollectionFilters
+			user={user}
+			filters={filters}
+			setFilters={setFilters}
+		      />
+		    </FiltersPanel>
+		  )}
 
-              <div style={{width: "100%"}}>
-                {filterTags.length > 0 && (
-                  <>
-                    <ExploreTags
-                      terms={filterTags}
-                      onClearAll={() => {
-                        setFilters({})
-                        setSortOptions(generalSortOptions)
-                        setSortValue(sortBeforeSearch.current)
-                      }}
-                    />
-                    <Spacing size="regular"/>
-                  </>
-                )}
+		  <div style={{width: "100%"}}>
+		    {filterTags.length > 0 && (
+		      <>
+			<ExploreTags
+			  terms={filterTags}
+			  onClearAll={() => {
+			    setFilters({})
+			    setSortOptions(generalSortOptions)
+			    setSortValue(sortBeforeSearch.current)
+			  }}
+			/>
+			<Spacing size="regular"/>
+		      </>
+		    )}
 
-                {!loading && objkts?.length === 0 && (
-                  <span>No results</span>
-                )}
-
-                <InfiniteScrollTrigger
-                  onTrigger={load}
-                >
-                  <CardsContainer ref={refCardsContainer}>
-                    {objkts?.map(objkt => (
-                      <ObjktCard
-                        key={objkt.id}
-                        objkt={objkt}
-                        showOwner={false}
-                        showRarity={sort.rarity != null}
-                      />
-                    ))}
-                    {loading && (
-                      <CardsLoading number={ITEMS_PER_PAGE} />
-                    )}
-                  </CardsContainer>
-                </InfiniteScrollTrigger>
+		    {!loading && objkts?.length === 0 && (
+		      <span>No results</span>
+		    )}
+		    <InfiniteScrollTrigger
+		      onTrigger={load}
+		    >
+		      <CardsContainer ref={refCardsContainer}>
+			{objkts?.map(objkt => (
+			  <ObjktCard
+			    key={objkt.id}
+			    objkt={objkt}
+			    showOwner={false}
+			    showRarity={sort.rarity != null}
+			  />
+			))}
+			{loading && (
+			  <CardsLoading number={ITEMS_PER_PAGE} />
+			)}
+		      </CardsContainer>
+		    </InfiniteScrollTrigger>
               </div>
-            </div>
+	      </div>
+	      </>
+	    }
           </>
         )}
       </CardsExplorer>
+      { activeTab === "articles" &&
+	<div className={cs(style.article_container, layout['padding-big'])}>
+	  {articlesOwned?.map(({ article }, index) =>
+	    <CardNftArticle className={style.article} key={article.slug} article={article} imagePriority={index < 4} />
+	  )}
+	  {loadingArticlesOwned &&
+	    [...Array(20)].map((_, idx) =>
+	      <CardNftArticleSkeleton className={style.article} key={idx} />
+	    )
+	  }
+	</div>
+      }
     </>
   )
 }

@@ -1,4 +1,23 @@
+@import "../../styles/Variables";
+
 .header {
   display: flex;
   justify-content: flex-end;
+}
+
+.select_comp_container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.article_container {
+  margin-top: $spacing-3x-large;
+}
+
+.article {
+  margin-bottom: $spacing-3x-large;
+  &:last-child {
+    margin-bottom: 0;
+  }
 }
