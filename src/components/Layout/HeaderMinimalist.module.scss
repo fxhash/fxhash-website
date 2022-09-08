@@ -4,7 +4,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 14px 14px;
+  padding: 10px 14px;
 }
 
 .logo {
@@ -20,4 +20,9 @@
 
 .button_disconnect {
   margin-top: 5px;
+}
+
+.user_badge {
+  font-size: var(--font-size-small);
+  margin-top: 8px;
 }

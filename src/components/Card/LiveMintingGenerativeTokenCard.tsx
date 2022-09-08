@@ -40,6 +40,7 @@ export function LiveMintingGenerativeTokenCard({
             user={token.author}
             size="regular"
             hasLink={false}
+            className={cs(style.user_badge)}
           />
           <Spacing size="2x-small" />
           {token.balance > 0 && (
