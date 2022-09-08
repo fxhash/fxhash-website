@@ -15,7 +15,7 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   size?: ButtonSize
   color?: "black" | "primary" | "secondary" | "transparent"
   className?: string
-  iconSide?: "left" | "right"
+  iconSide?: "left" | "right" | null
   isLink?: boolean
   disabled?: boolean
 }
