@@ -158,9 +158,9 @@ export const Qu_userArticlesOwned = gql`
       id
       articlesOwned {
         amount
-	article {
-	  ...ArticleInfos
-	}
+        article {
+          ...ArticleInfos
+        }
       }
     }
   }

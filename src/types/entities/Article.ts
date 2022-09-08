@@ -78,8 +78,3 @@ export interface NFTArticleFilters {
   flag_eq?: ArticleFlag
   flag_ne?: ArticleFlag
 }
-
-export interface NFTArticlesOwned {
-  amount: number,
-  article: NFTArticle
-}
