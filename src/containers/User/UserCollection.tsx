@@ -254,6 +254,8 @@ export function UserCollection({
   
   return (
     <>
+      <Spacing size="2x-small"/>
+
       <Tabs
         tabDefinitions={TABS}
         checkIsTabActive={checkIsTabKeyActive}
