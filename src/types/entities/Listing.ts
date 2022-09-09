@@ -1,9 +1,11 @@
 import { Objkt } from './Objkt'
 import { User } from './User'
+import { NFTArticle } from "./Article";
 
 export interface Listing {
   id: number
   version: number
+  amount: number
   issuer: User
 	issuerId: number
   objkt: Objkt
@@ -11,6 +13,7 @@ export interface Listing {
   royalties: number
   createdAt: Date
   updatedAt: Date
+  article: NFTArticle
 }
 
 export interface ListingFilters {

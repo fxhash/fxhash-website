@@ -8,6 +8,11 @@
   overscroll-behavior: contain;
 }
 
+.wrapper_scrollable_x {
+  overflow-x: auto;
+  overscroll-behavior: auto;
+}
+
 .table {
   overflow-x: auto;
   min-width: 940px;
@@ -46,11 +51,24 @@
 
   tbody tr {
     border: 1px solid var(--color-gray-vlight);
+    &.tr_separator {
+      border: 0;
+      & td {
+        height: 8px;
+      }
+    }
   }
 
   thead tr {
     border: 1px solid var(--color-black);
   }
+}
+
+th.th-center, td.td-center {
+  text-align: center;
+}
+th.th-right, td.td-right {
+  text-align: right;
 }
 
 .th-gentk {
@@ -71,6 +89,14 @@
 
 .th-action {
   width: 80px;
+}
+
+.th-editions {
+  width: 200px;
+}
+
+.th-listing-actions {
+  width: 180px;
 }
 
 .th-time {
@@ -96,6 +122,12 @@
 .td-price {}
 
 .td-time {}
+
+.article_actions {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
 
 .price {
   color: var(--color-secondary);
