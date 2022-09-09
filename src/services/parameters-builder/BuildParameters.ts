@@ -13,6 +13,8 @@ import updateReserveType from "./update-reserve/type.json"
 import burnSupplyType from "./burn-supply/type.json"
 import burnType from "./burn/type.json"
 import reserveWhitelistType from "./reserve-whitelist/type.json"
+import reserveMintPassType from "./reserve-mint-pass/type.json"
+import reserveMintInputType from "./reserve-mint-input/type.json"
 import { Schema } from "@taquito/michelson-encoder"
 import { packData, packDataBytes, unpackDataBytes } from "@taquito/michel-codec"
 
@@ -34,6 +36,8 @@ export enum EBuildableParams {
   BURN_SUPPLY           = "BURN_SUPPLY",
   BURN                  = "BURN",
   RESERVE_WHITELIST     = "RESERVE_WHITELIST",
+  RESERVE_MINT_PASS     = "RESERVE_MINT_PASS",
+  RESERVE_MINT_INPUT    = "RESERVE_MINT_INPUT",
 }
 
 // maps a builadable param type with the actual type in json
@@ -52,6 +56,8 @@ const buildableParamTypes: Record<EBuildableParams, MichelsonV1Expression> = {
   BURN_SUPPLY: burnSupplyType,
   BURN: burnType,
   RESERVE_WHITELIST: reserveWhitelistType,
+  RESERVE_MINT_PASS: reserveMintPassType,
+  RESERVE_MINT_INPUT: reserveMintInputType,
 }
 
 /**

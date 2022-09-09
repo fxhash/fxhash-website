@@ -10,14 +10,20 @@ export function unpackReserve(
 ) {
   const method = mapReserveIdtoEnum[reserve.method_id]
   let data: any
-  if (method === EReserveMethod.WHITELIST) {
-    const map = unpackBytes<MichelsonMap<string, BigNumber>>(
-      reserve.data, 
-      EBuildableParams.RESERVE_WHITELIST
-    )
-    // now turn the map into { address: amount }
-    data = {}
-    map.forEach((V, K) => data[K] = V.toNumber())
+  switch (method) {
+    case EReserveMethod.WHITELIST: {
+      const map = unpackBytes<MichelsonMap<string, BigNumber>>(
+        reserve.data, 
+        EBuildableParams.RESERVE_WHITELIST
+      )
+      // now turn the map into { address: amount }
+      data = {}
+      map.forEach((V, K) => data[K] = V.toNumber())
+      break
+    }
+    case EReserveMethod.MINT_PASS: {
+      data = unpackBytes(reserve.data, EBuildableParams.RESERVE_MINT_PASS)
+    }
   }
   return {
     method: method,

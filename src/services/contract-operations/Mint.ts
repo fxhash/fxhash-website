@@ -1,6 +1,8 @@
 import { ContractAbstraction, TransactionWalletOperation, Wallet } from "@taquito/taquito"
 import { FxhashContracts } from "../../types/Contracts"
 import { GenerativeToken } from "../../types/entities/GenerativeToken"
+import { EReserveMethod } from "../../types/entities/Reserve"
+import { packMintReserveInput } from "../../utils/pack/reserves"
 import { ContractOperation } from "./ContractOperation"
 
 export type TMintOperationParams = {
@@ -23,7 +25,10 @@ export class MintOperation extends ContractOperation<TMintOperationParams> {
     return this.issuerContract!.methodsObject.mint({
       issuer_id: this.params.token.id,
       referrer: null,
-      reserve_input: this.params.consumeReserve ? "00" : null,
+      // todo: abstract this logic, we don't want a single boolean as input now
+      reserve_input: this.params.consumeReserve 
+        ? packMintReserveInput({ method: EReserveMethod.WHITELIST, data: null })
+        : null,
     }).send({
       amount: this.params.price,
       mutez: true,
