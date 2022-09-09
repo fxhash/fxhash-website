@@ -63,6 +63,13 @@
     border-radius: 4px;
   }
 
+  ul li {
+    margin-top: 0.5em;
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+
   :global(.hr) {
     font-size: 1.2rem;
   }
