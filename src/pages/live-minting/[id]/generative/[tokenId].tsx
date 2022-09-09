@@ -20,8 +20,10 @@ interface Props {
 }
 
 const GenerativeTokenDetails: NextPageWithLayout<Props> = ({ eventId, token }) => {
-  const handleGenerationRevealUrl = useCallback(({ tokenId, hash }) =>
-    `/live-minting/${eventId}/reveal/${tokenId}/${hash}`, [eventId]);
+  const handleGenerationRevealUrl = useCallback(
+    ({ tokenId, hash }) => `/live-minting/${eventId}/reveal/${tokenId}/${hash}`,
+    [eventId]
+  )
 
   // get the display url for og:image
   const displayUrl = token.metadata?.displayUri
@@ -53,42 +55,21 @@ const GenerativeTokenDetails: NextPageWithLayout<Props> = ({ eventId, token }) =
   )
 }
 
-GenerativeTokenDetails.getLayout = (page) => LiveMintingLayout
+GenerativeTokenDetails.getLayout = LiveMintingLayout
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  let idStr,
-      slug
+  const id = context.params?.tokenId as string
+  let token: any = null
 
-  if (context.params?.params && context.params.params[0]) {
-    if (context.params.params[0] === "slug" && context.params.params[1]) {
-      slug = context.params.params[1]
-    }
-    else if (context.params.params[0]) {
-      idStr = context.params.params[0]
-    }
-  }
-  let token = null
-
-  if (idStr) {
-    const id = parseInt(idStr as string)
-    if (id === 0 || id) {
-      const { data } = await client.query({
-        query: Qu_genToken,
-        fetchPolicy: "no-cache",
-        variables: { id }
-      })
-      if (data) {
-        token = data.generativeToken
-      }
-    }
-  }
-  else if (slug) {
-    const { data } = await client.query({
+  if (id) {
+    const { data, error } = await client.query({
       query: Qu_genToken,
       fetchPolicy: "no-cache",
-      variables: { slug }
+      variables: {
+        id: parseInt(id)
+      }
     })
-    if (data) {
+    if (data?.generativeToken) {
       token = data.generativeToken
     }
   }
@@ -98,7 +79,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       eventId: context.params?.id,
       token: token,
     },
-    notFound: !token
+    notFound: !token,
   }
 }
 

@@ -31,59 +31,57 @@ export function LiveMintingGenerativeTokenCard({
   const url = `/live-minting/${eventId}/${token.id}`
 
   return (
-    <Link href={url} passHref>
-      <AnchorForward style={{ height: '100%' }} className={cs(style.url, className)}>
-        <div className={style.container}>
-          <h4 className={colors.black}>{ token.name }</h4>
-          <Spacing size="2x-small" />
-          <div className={cs(style.container_header)}>
-            <EntityBadge
-              user={token.author}
-              size="regular"
-              hasLink={false}
-              className={cs(style.user_badge)}
+    <>
+      <div className={style.container}>
+        <h4 className={colors.black}>{ token.name }</h4>
+        <Spacing size="2x-small" />
+        <div className={cs(style.container_header)}>
+          <EntityBadge
+            user={token.author}
+            size="regular"
+            hasLink={false}
+            className={cs(style.user_badge)}
+          />
+          <div>
+            <DisplayTezos
+              className={style.price}
+              mutez={genTokCurrentPrice(token)}
+              formatBig={false}
+              tezosSize="regular"
             />
-            <div>
-              <DisplayTezos
-                className={style.price}
-                mutez={genTokCurrentPrice(token)}
-                formatBig={false}
-                tezosSize="regular"
-              />
-            </div>
           </div>
-          <Spacing size="2x-small" />
-          {token.balance > 0 && (
-            <MintingState
+        </div>
+        <Spacing size="2x-small" />
+        {token.balance > 0 && (
+          <MintingState
+            token={token}
+          />
+        )}
+      </div>
+      <div className={style.container_arrow}>
+        <div className={style.container_image}>
+          <Card
+            displayDetails={false}
+            thumbnailUri={token.thumbnailUri}
+            thumbInfosComp={token.labels?.includes(GenTokLabel.INTERACTIVE) ? (
+              <div className={cs(style.animated)}>
+                Interactive{" "}
+                <i className="fa-solid fa-hand-pointer" aria-hidden/>
+              </div>
+            ):token.labels?.includes(GenTokLabel.ANIMATED) && (
+              <div className={cs(style.animated)}>
+                Animated{" "}
+                <i className="fa-solid fa-film" aria-hidden/>
+              </div>
+            )}
+          />
+          <div className={cs(text.small, colors.gray, style.mint_progress)}>
+            <MintProgress
               token={token}
             />
-          )}
-        </div>
-        <div className={style.container_arrow}>
-          <div className={style.container_image}>
-            <Card
-              displayDetails={false}
-              thumbnailUri={token.thumbnailUri}
-              thumbInfosComp={token.labels?.includes(GenTokLabel.INTERACTIVE) ? (
-                <div className={cs(style.animated)}>
-                  Interactive{" "}
-                  <i className="fa-solid fa-hand-pointer" aria-hidden/>
-                </div>
-              ):token.labels?.includes(GenTokLabel.ANIMATED) && (
-                <div className={cs(style.animated)}>
-                  Animated{" "}
-                  <i className="fa-solid fa-film" aria-hidden/>
-                </div>
-              )}
-            />
-            <div className={cs(text.small, colors.gray, style.mint_progress)}>
-              <MintProgress
-                token={token}
-              />
-            </div>
           </div>
         </div>
-      </AnchorForward>
-    </Link>
+      </div>
+    </>
   )
 }

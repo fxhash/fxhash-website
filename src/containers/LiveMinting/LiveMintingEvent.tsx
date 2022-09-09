@@ -1,10 +1,14 @@
-import React, { memo } from 'react';
+import React, { memo, useContext } from 'react';
 import style from "./LiveMintingEvent.module.scss";
+import cs from "classnames";
+import text from "../../styles/Text.module.css"
 import { gql, useQuery } from "@apollo/client";
 import { Frag_GenAuthor, Frag_GenPricing } from "../../queries/fragments/generative-token";
 import { CardsLoading } from "../../components/Card/CardsLoading";
 import { GenerativeToken } from "../../types/entities/GenerativeToken";
 import { LiveMintingGenerativeTokenCard } from "../../components/Card/LiveMintingGenerativeTokenCard";
+import { LiveMintingContext } from '../../context/LiveMinting';
+import Link from 'next/link';
 
 // replace with event tokens
 const Qu_genTokens = gql`
@@ -35,15 +39,21 @@ const Qu_genTokens = gql`
   }
 `
 interface LiveMintingEventProps {
-  eventId: string
 }
 
-const _LiveMintingEvent = ({ eventId }: LiveMintingEventProps) => {
+const _LiveMintingEvent = ({}: LiveMintingEventProps) => {
+  const eventCtx = useContext(LiveMintingContext)
+
+  console.log(JSON.stringify(eventCtx, null, 2))
+
   const { data, loading } = useQuery(Qu_genTokens, {
     notifyOnNetworkStatusChange: true,
     variables: {
       skip: 0,
       take: 10,
+      filters: {
+        id_in: eventCtx.event!.projectIds
+      }
     },
     fetchPolicy: "network-only",
     nextFetchPolicy: "cache-and-network",
@@ -58,14 +68,19 @@ const _LiveMintingEvent = ({ eventId }: LiveMintingEventProps) => {
       </p>
       <div className={style.container_token}>
         {generativeTokens?.length > 0 && generativeTokens.map(token => (
-          <LiveMintingGenerativeTokenCard
-            eventId={eventId}
+          <Link 
             key={token.id}
-            token={token}
-            displayPrice
-            displayDetails
-            className={style.token}
-          />
+            href={`/live-minting/${eventCtx.event!.id}/generative/${token.id}`}
+          >
+            <a className={cs(text.reset, style.token)}>
+              <LiveMintingGenerativeTokenCard
+                eventId={"0"}
+                token={token}
+                displayPrice
+                displayDetails
+              />
+            </a>
+          </Link>
         ))}
         {loading && (
           <CardsLoading number={10} />

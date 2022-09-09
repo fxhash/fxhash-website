@@ -4,6 +4,7 @@ import { ErrorPage } from "../components/Error/ErrorPage"
 import { LoaderBlock } from "../components/Layout/LoaderBlock"
 import { Qu_event, Qu_eventMintPass } from "../queries/events/events"
 import { eventsClient } from "../services/EventsClient"
+import { LiveMintingEvent, LiveMintingPass } from "../types/entities/LiveMinting"
 import { useClientAsyncEffect } from "../utils/hookts"
 
 /**
@@ -13,8 +14,8 @@ import { useClientAsyncEffect } from "../utils/hookts"
 
 export interface ILiveMintingContext {
   loading: boolean
-  event: any|null
-  mintPass: any|null
+  event: LiveMintingEvent|null
+  mintPass: LiveMintingPass|null
   error: string|null
 }
 
