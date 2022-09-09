@@ -1,0 +1,15 @@
+.root {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-small);
+  color: var(--color-gray);
+
+  .balance {
+    color: var(--color-secondary);
+    font-weight: bold;
+    font-size: var(--font-size-h5);
+    margin-left: 8px;
+  }
+}

@@ -13,6 +13,7 @@ import { EntityBadge } from "../../../../../components/User/EntityBadge"
 import { Reveal } from "../../../../../containers/Reveal/Reveal";
 import { LayoutMinimalist } from "../../../../../components/Layout/LayoutMinimalist";
 import { NextPageWithLayout } from "../../../../_app";
+import { LiveMintingLayout } from "../../../../../containers/LiveMinting/LiveMintingLayout"
 
 interface Props {
   hash: string
@@ -73,9 +74,7 @@ const LiveMintingRevealPage: NextPageWithLayout<Props> = ({ hash, token }) => {
     </>
   )
 }
-LiveMintingRevealPage.getLayout = (page) => {
-  return (<LayoutMinimalist requireWallet>{page}</LayoutMinimalist>)
-}
+LiveMintingRevealPage.getLayout = LiveMintingLayout
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const hash = context.params?.hash

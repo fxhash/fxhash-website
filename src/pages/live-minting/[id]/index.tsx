@@ -1,9 +1,9 @@
 import Head from 'next/head'
-import { NextPageWithLayout } from "../../_app";
-import { LayoutMinimalist } from "../../../components/Layout/LayoutMinimalist";
-import { LiveMintingEvent } from "../../../containers/LiveMinting/LiveMintingEvent";
+import { NextPageWithLayout } from "../../_app"
+import { LiveMintingEvent } from "../../../containers/LiveMinting/LiveMintingEvent"
+import { LiveMintingLayout } from '../../../containers/LiveMinting/LiveMintingLayout'
 
-const LiveMinting: NextPageWithLayout = () => {
+const LiveMinting: NextPageWithLayout = (page) => {
   // todo fetch event name and change title / meta
   return (
     <>
@@ -20,8 +20,6 @@ const LiveMinting: NextPageWithLayout = () => {
   )
 }
 
-LiveMinting.getLayout = (page) => {
-  return (<LayoutMinimalist requireWallet>{page}</LayoutMinimalist>)
-}
+LiveMinting.getLayout = LiveMintingLayout
 
 export default LiveMinting

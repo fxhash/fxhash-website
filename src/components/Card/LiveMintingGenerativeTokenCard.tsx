@@ -28,7 +28,7 @@ export function LiveMintingGenerativeTokenCard({
   token,
   className,
 }: Props) {
-  const url = `/live-minting/${eventId}/${getGenerativeTokenUrl(token)}`
+  const url = `/live-minting/${eventId}/${token.id}`
 
   return (
     <Link href={url} passHref>

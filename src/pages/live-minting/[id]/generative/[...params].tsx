@@ -12,6 +12,7 @@ import { NextPageWithLayout } from "../../../_app";
 import { GenerativeDisplayMinimalist } from "../../../../containers/Generative/Display/GenerativeDisplayMinimalist";
 import { Spacing } from "../../../../components/Layout/Spacing";
 import { useCallback } from "react";
+import { LiveMintingLayout } from '../../../../containers/LiveMinting/LiveMintingLayout'
 
 interface Props {
   eventId: string
@@ -52,9 +53,7 @@ const GenerativeTokenDetails: NextPageWithLayout<Props> = ({ eventId, token }) =
   )
 }
 
-GenerativeTokenDetails.getLayout = (page) => {
-  return (<LayoutMinimalist requireWallet>{page}</LayoutMinimalist>)
-}
+GenerativeTokenDetails.getLayout = (page) => LiveMintingLayout
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   let idStr,

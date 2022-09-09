@@ -16,8 +16,10 @@ const ROUTES_TO_RETAIN = [
   '/marketplace/collections'
 ]
 
+export type TPageLayoutComponent = (page: ReactElement) => ReactNode
+
 export type NextPageWithLayout<T = {}> = NextPage<T> & {
-  getLayout?: (page: ReactElement) => ReactNode
+  getLayout?: TPageLayoutComponent
 }
 
 type AppPropsWithLayout = AppProps & {
