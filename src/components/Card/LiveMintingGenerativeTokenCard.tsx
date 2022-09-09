@@ -34,14 +34,24 @@ export function LiveMintingGenerativeTokenCard({
     <Link href={url} passHref>
       <AnchorForward style={{ height: '100%' }} className={cs(style.url, className)}>
         <div className={style.container}>
-          <h5 className={colors.black}>{ token.name }</h5>
+          <h4 className={colors.black}>{ token.name }</h4>
           <Spacing size="2x-small" />
-          <EntityBadge
-            user={token.author}
-            size="regular"
-            hasLink={false}
-            className={cs(style.user_badge)}
-          />
+          <div className={cs(style.container_header)}>
+            <EntityBadge
+              user={token.author}
+              size="regular"
+              hasLink={false}
+              className={cs(style.user_badge)}
+            />
+            <div>
+              <DisplayTezos
+                className={style.price}
+                mutez={genTokCurrentPrice(token)}
+                formatBig={false}
+                tezosSize="regular"
+              />
+            </div>
+          </div>
           <Spacing size="2x-small" />
           {token.balance > 0 && (
             <MintingState
@@ -49,12 +59,6 @@ export function LiveMintingGenerativeTokenCard({
             />
           )}
         </div>
-        <DisplayTezos
-          className={style.price}
-          mutez={genTokCurrentPrice(token)}
-          formatBig={false}
-          tezosSize="regular"
-        />
         <div className={style.container_arrow}>
           <div className={style.container_image}>
             <Card
@@ -77,9 +81,6 @@ export function LiveMintingGenerativeTokenCard({
                 token={token}
               />
             </div>
-          </div>
-          <div className={cs(style.chevron)}>
-            <i className="fa-solid fa-chevron-right" aria-hidden="true" />
           </div>
         </div>
       </AnchorForward>

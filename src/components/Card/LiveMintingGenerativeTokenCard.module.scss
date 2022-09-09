@@ -18,11 +18,18 @@
   }
 }
 
-.container {}
+.container {
+  .container_header {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
 
 .container_image {
-  margin-top: 10px;
-  max-width: 70vw;
+  margin-top: 4px;
   width: 100%;
 }
 
@@ -35,13 +42,14 @@
 }
 
 .mint_progress {
-  margin-top: 4px;
+  margin-top: 12px;
+  width: 300px;
 }
 
 .price {
   flex: 1;
   font-weight: 700;
-  font-size: var(--font-size-regular)
+  font-size: var(--font-size-h5);
 }
 
 .chevron {
