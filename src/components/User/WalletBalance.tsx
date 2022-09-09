@@ -20,6 +20,7 @@ export function WalletBalance({
       {balance !== null && (
         <DisplayTezos
           mutez={balance}
+          tezosSize="regular"
         />
       )}
       {loading && (
