@@ -10,6 +10,7 @@ import nl2br from "react-nl2br"
 import { GenerativeArtwork } from "../../../components/GenerativeToken/GenerativeArtwork"
 import { EntityBadge } from "../../../components/User/EntityBadge"
 import { Labels } from "../../../components/GenerativeToken/Label/Labels"
+import { MintProgress } from "../../../components/Artwork/MintProgress"
 
 interface Props {
   generateRevealUrl?: (params: { tokenId: number, hash: string | null }) => string,
@@ -69,6 +70,15 @@ export function GenerativeDisplayMinimalist({
               Published on { format(new Date(token.createdAt), "MMMM d, yyyy' at 'HH:mm") }
             </span>
             <Labels labels={token.labels!}/>
+          </div>
+
+          <Spacing size="regular"/>
+
+          <div className={cs(style.artwork_details)}>
+            <MintProgress
+              token={token}
+              showReserve
+            />
           </div>
 
           <Spacing size="large"/>

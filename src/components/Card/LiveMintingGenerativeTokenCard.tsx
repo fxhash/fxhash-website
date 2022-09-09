@@ -20,16 +20,12 @@ interface Props {
   displayPrice?: boolean
   displayDetails?: boolean
   lockedUntil?: string
-  eventId: string
 }
 
 export function LiveMintingGenerativeTokenCard({
-  eventId,
   token,
   className,
 }: Props) {
-  const url = `/live-minting/${eventId}/${token.id}`
-
   return (
     <>
       <div className={style.container}>

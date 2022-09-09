@@ -44,6 +44,7 @@ const GenerativeTokenDetails: NextPageWithLayout<Props> = ({ eventId, token }) =
         <meta name="twitter:description" content={truncateEnd(token.metadata?.description || "", 200, "")}/>
         <meta name="twitter:image" content={displayUrl || "https://www.fxhash.xyz/images/og/og1.jpg"}/>
       </Head>
+
       <Spacing size="3x-large" />
       <section className={cs(layout['padding-big'])}>
         <GenerativeDisplayMinimalist
@@ -51,6 +52,7 @@ const GenerativeTokenDetails: NextPageWithLayout<Props> = ({ eventId, token }) =
           generateRevealUrl={handleGenerationRevealUrl}
         />
       </section>
+      <Spacing size="6x-large" />
     </>
   )
 }

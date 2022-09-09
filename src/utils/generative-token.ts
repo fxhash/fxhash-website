@@ -5,6 +5,7 @@ import { ReserveMintPass } from "../components/GenerativeToken/Reserves/ReserveM
 import { TInputReserve } from "../components/Input/Reserves/InputReserve"
 import { InputReserveMintPass } from "../components/Input/Reserves/InputReserveMintPass"
 import { InputReserveWhitelist } from "../components/Input/Reserves/InputReserveWhitelist"
+import { ILiveMintingContext } from "../context/LiveMinting"
 import { TInputMintIssuer } from "../services/parameters-builder/mint-issuer/input"
 import { TInputPricingDetails } from "../services/parameters-builder/pricing/input"
 import { GenerativeToken, GenTokFlag, GenTokLabel, GenTokLabelDefinition, GenTokLabelGroup, GenTokPricing } from "../types/entities/GenerativeToken"
@@ -414,19 +415,32 @@ export function reserveSize(
 export function reserveEligibleAmount(
   user: User,
   token: GenerativeToken,
+  liveMintingContext?: ILiveMintingContext,
 ): number {
   let eligibleFor = 0
   if (token.reserves && user && user.id) {
     for (const reserve of token.reserves) {
       if (reserve.amount > 0) {
         // check if user is in the reserve
-        if (reserve.method === EReserveMethod.WHITELIST) {
-          if (reserve.data[user.id]) {
-            // we add the amount value clamped to reserve size
-            eligibleFor += Math.min(
-              reserve.data[user.id],
-              reserve.amount,
-            )
+        switch (reserve.method) {
+          case EReserveMethod.WHITELIST: {
+            if (reserve.data[user.id]) {
+              // we add the amount value clamped to reserve size
+              eligibleFor += Math.min(
+                reserve.data[user.id],
+                reserve.amount,
+              )
+            }
+            break
+          }
+          case EReserveMethod.MINT_PASS: {
+            if (liveMintingContext?.mintPass?.group) {
+              // if the address of the mint pass matches with the reserve
+              if (liveMintingContext.mintPass.group.address === reserve.data) {
+                eligibleFor += 1
+              }
+            }
+            break
           }
         }
       }

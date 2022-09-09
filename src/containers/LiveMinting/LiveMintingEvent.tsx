@@ -74,7 +74,6 @@ const _LiveMintingEvent = ({}: LiveMintingEventProps) => {
           >
             <a className={cs(text.reset, style.token)}>
               <LiveMintingGenerativeTokenCard
-                eventId={"0"}
                 token={token}
                 displayPrice
                 displayDetails

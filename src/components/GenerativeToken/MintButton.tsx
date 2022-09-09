@@ -8,6 +8,7 @@ import { UserContext } from "../../containers/UserProvider"
 import { reserveEligibleAmount, reserveSize } from "../../utils/generative-token"
 import { User } from "../../types/entities/User"
 import { Cover } from "../Utils/Cover"
+import { LiveMintingContext } from "../../context/LiveMinting"
 
 
 /**
@@ -38,6 +39,8 @@ export function MintButton({
 }: PropsWithChildren<Props>) {
   // user ctx
   const { user } = useContext(UserContext)
+  // live minting ctx
+  const liveMintingContext = useContext(LiveMintingContext)
 
   const [showDropdown, setShowDropdown] = useState(false)
   
@@ -53,7 +56,7 @@ export function MintButton({
   // compute how many editions in reserve the user is eligible for
   const eligibleFor = useMemo(
     () => user
-      ? reserveEligibleAmount(user as User, token)
+      ? reserveEligibleAmount(user as User, token, liveMintingContext)
       : 0,
     [user, token]
   )
