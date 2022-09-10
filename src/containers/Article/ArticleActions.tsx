@@ -20,6 +20,7 @@ const _ArticleActions = ({ article }: ArticleActionsProps) => {
       {data?.article &&
         <div className={style.center}>
           <TableArticleListings
+            article={data.article}
             listings={data.article.activeListings}
             ledgers={data.article.ledger}
             loading={loading}

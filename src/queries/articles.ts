@@ -30,6 +30,7 @@ export const Qu_articleActionsById = gql`
   query ArticleActionsById($id: Int!) {
     article(id: $id) {
       id
+      title
       ledger {
         amount
         owner {
@@ -39,6 +40,18 @@ export const Qu_articleActionsById = gql`
           flag
         }
       }
+      activeListings {
+        ...ListingArticle
+      }
+    }
+  }
+  ${Frag_ListingArticle}
+`
+
+export const Qu_articleListingsById = gql`
+  query ArticleActionsById($id: Int!) {
+    article(id: $id) {
+      id
       activeListings {
         ...ListingArticle
       }

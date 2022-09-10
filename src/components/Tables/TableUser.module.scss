@@ -176,6 +176,10 @@ td.td-right {
   }
 }
 
+.light_border_color {
+  border-top-color: var(--color-gray-vvvlight) !important;
+}
+
 
 @media (max-width: $breakpoint-sm) {
   .wrapper {
