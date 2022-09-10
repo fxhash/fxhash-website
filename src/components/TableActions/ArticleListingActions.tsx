@@ -24,7 +24,7 @@ export function ArticleListingActions({
       color="secondary"
       size="very-small"
     >
-      <DisplayTezos mutez={listing.price} formatBig={false} tezosSize="regular" /> buy
+      <DisplayTezos mutez={listing.price} formatBig={false} tezosSize="regular" /> buy one
     </Button>
   )
 

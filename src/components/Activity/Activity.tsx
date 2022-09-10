@@ -22,6 +22,9 @@ const ActionsPredecescence: Record<TokenActionType, number> = {
   LISTING_V2                    : 4,
   LISTING_V2_CANCELLED          : 4,
   LISTING_V2_ACCEPTED           : 4,
+  LISTING_V3                    : 4,
+  LISTING_V3_CANCELLED          : 4,
+  LISTING_V3_ACCEPTED           : 4,
   OFFER                         : 4,
   OFFER_CANCELLED               : 4,
   OFFER_ACCEPTED                : 4,
@@ -70,6 +73,8 @@ export function Activity({
   loading = false
 }: Props) {
   const sortedActions = useMemo(() => sortActions(actions), [actions])
+
+  console.log(sortedActions)
 
   return (
     <section className={cs(style.container, className)}>
