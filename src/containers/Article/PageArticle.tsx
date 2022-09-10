@@ -24,10 +24,10 @@ import { ipfsGatewayUrl } from '../../services/Ipfs'
 import { UserGuard } from '../../components/Guards/UserGuard'
 import { ArticleModeration } from './Moderation/ArticleModeration'
 import { ArticleFlagBanner } from './Moderation/FlagBanner'
-import { checkIsTabKeyActive, LinkTabWrapper, Tabs } from "../../components/Layout/Tabs";
-import { getArticleUrl } from "../../utils/entities/articles";
+import { checkIsTabKeyActive } from "../../components/Layout/Tabs";
 import { ArticleActivity } from "./ArticleActivity";
 import { ArticleActions } from "./ArticleActions";
+import { TabsContainer } from '../../components/Layout/TabsContainer'
 
 const NftArticle = dynamic<NftArticleProps>(() =>
   import('../../components/NFTArticle/NFTArticle')
@@ -37,24 +37,26 @@ const NftArticle = dynamic<NftArticleProps>(() =>
   }
 );
 
-type ArticleTab = 'owners' | 'activity';
-const articleTabComponents: Record<ArticleTab, any> = {
-  owners: ArticleActions,
-  activity: ArticleActivity,
-}
-export const tabComponentsKeys = Object.keys(articleTabComponents);
+const TABS = [
+  {
+    key: "owners",
+    name: "owners",
+  },
+  {
+    key: "activity",
+    name: "activity",
+  },
+]
 
 interface PageArticleProps {
   article: NFTArticle
   isPreview?: boolean,
   originUrl: string
-  activeTab?: ArticleTab
 }
 const _PageArticle = ({ 
   article,
   originUrl,
   isPreview,
-  activeTab = 'owners',
 }: PageArticleProps) => {
   const { id, title, description, author, createdAt, body, language, relatedArticles } = article
   const dateCreatedAt = useMemo(() => new Date(createdAt), [createdAt])
@@ -78,27 +80,6 @@ const _PageArticle = ({
       })
     }
   }, [article.id, dispatch])
-
-  const TABS = [
-    {
-      key: "owners",
-      name: "owners",
-      props: {
-        scroll: false,
-        href: `${getArticleUrl(article)}/`
-      }
-    },
-    {
-      key: "activity",
-      name: "activity",
-      props: {
-        scroll: false,
-        href: `${getArticleUrl(article)}/activity`
-      }
-    },
-  ]
-
-  const TabChildComponent = useMemo(() => !isPreview && articleTabComponents[activeTab], [activeTab, isPreview])
 
   return (
     <>
@@ -216,22 +197,30 @@ const _PageArticle = ({
           </div>
         }
       </main>
+
       {!isPreview &&
         <>
           <Spacing size="6x-large" />
-          <Tabs
+          <TabsContainer
             tabDefinitions={TABS}
             checkIsTabActive={checkIsTabKeyActive}
-            activeIdx={activeTab}
             tabsLayout="fixed-size"
             tabsClassName={cs(layout['padding-big'])}
-            tabWrapperComponent={LinkTabWrapper}
-          />
-          {TabChildComponent &&
-            <div className={layout['padding-big']}>
-              <TabChildComponent article={article} />
-            </div>
-          }
+          >
+            {({ tabIndex }) => (
+              <div className={layout['padding-big']}>
+                {tabIndex === 0 ? (
+                  <ArticleActions
+                    article={article}
+                  />
+                ):(
+                  <ArticleActivity
+                    article={article}
+                  />
+                )}
+              </div>
+            )}
+          </TabsContainer>
         </>
       }
       <Spacing size="6x-large" />
