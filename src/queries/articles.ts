@@ -47,3 +47,15 @@ export const Qu_articleActionsById = gql`
   }
   ${Frag_ListingArticle}
 `
+
+export const Qu_articleListingsById = gql`
+  query ArticleActionsById($id: Int!) {
+    article(id: $id) {
+      id
+      activeListings {
+        ...ListingArticle
+      }
+    }
+  }
+  ${Frag_ListingArticle}
+`
