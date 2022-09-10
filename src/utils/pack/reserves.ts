@@ -39,10 +39,9 @@ export function packMintReserveInput(input: IReserveMintInput) {
       packedInput = null
       break
     }
-    // todo: here
     case EReserveMethod.MINT_PASS: {
-      throw new Error("IMPLEMENT PACK RESERVE MINT_PASS")
-      // packedData= pack(data, EBuildableParams.)
+      packedInput = pack(input.data, EBuildableParams.RESERVE_MINT_PASS_INPUT)
+      break
     }
   }
 

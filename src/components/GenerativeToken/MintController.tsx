@@ -9,7 +9,7 @@ import { PropsWithChildren, useContext, useEffect, useMemo } from "react"
 import { ContractFeedback } from "../Feedback/ContractFeedback"
 import { DisplayTezos } from "../Display/DisplayTezos"
 import { useContractOperation } from "../../hooks/useContractOperation"
-import { MintOperation, TMintOperationParams } from "../../services/contract-operations/Mint"
+import { IReserveConsumption, MintOperation, TMintOperationParams } from "../../services/contract-operations/Mint"
 import { MintingState } from "./MintingState/MintingState"
 import { useMintingState } from "../../hooks/useMintingState"
 import { UserContext } from "../../containers/UserProvider"
@@ -20,8 +20,10 @@ import { MintButton } from "./MintButton"
 interface Props {
   token: GenerativeToken
   forceDisabled?: boolean
+  forceReserveConsumption?: boolean
   generateRevealUrl?: (params: { tokenId: number, hash: string | null }) => string
   onReveal?: (hash: string) => void
+  className?: string
 }
 
 /**
@@ -38,8 +40,10 @@ interface Props {
 export function MintController({
   token,
   forceDisabled = false,
+  forceReserveConsumption = false,
   generateRevealUrl,
   onReveal,
+  className,
   children,
 }: PropsWithChildren<Props>) {
   // the mint context, handles display logic
@@ -55,11 +59,11 @@ export function MintController({
   const { state, loading, success, call, error, opHash } =
     useContractOperation<TMintOperationParams>(MintOperation)
 
-  const mint = (consumeReserve: boolean) => {
+  const mint = (reserveConsumption: IReserveConsumption|null) => {
     call({
       token: token,
       price: price,
-      consumeReserve: consumeReserve,
+      consumeReserve: reserveConsumption
     })
   }
 
@@ -73,7 +77,7 @@ export function MintController({
   }, [opHash]);
 
   return (
-    <div className={cs(style.root)}>
+    <div className={cs(className || style.root)}>
 
       {token.balance > 0 && (
         <MintingState
@@ -132,6 +136,7 @@ export function MintController({
             loading={loading}
             disabled={!enabled || locked}
             onMint={mint}
+            forceReserveConsumption={forceReserveConsumption}
           >
             mint iteration&nbsp;&nbsp;<DisplayTezos mutez={price} tezosSize="regular" formatBig={false} />
           </MintButton>

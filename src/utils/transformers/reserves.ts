@@ -39,6 +39,9 @@ export function transformReserveGenericToInput(
         })
       }
     }
+    else if (reserve.method === EReserveMethod.MINT_PASS) {
+      data = reserve.data
+    }
     return {
       amount: reserve.amount as any,
       data: data!,

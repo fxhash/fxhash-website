@@ -3,7 +3,7 @@ import style from "./LiveMintingEvent.module.scss";
 import cs from "classnames";
 import text from "../../styles/Text.module.css"
 import { gql, useQuery } from "@apollo/client";
-import { Frag_GenAuthor, Frag_GenPricing } from "../../queries/fragments/generative-token";
+import { Frag_GenAuthor, Frag_GenPricing, Frag_GenReserves } from "../../queries/fragments/generative-token";
 import { CardsLoading } from "../../components/Card/CardsLoading";
 import { GenerativeToken } from "../../types/entities/GenerativeToken";
 import { LiveMintingGenerativeTokenCard } from "../../components/Card/LiveMintingGenerativeTokenCard";
@@ -14,6 +14,8 @@ import Link from 'next/link';
 const Qu_genTokens = gql`
   ${Frag_GenAuthor}
   ${Frag_GenPricing}
+  ${Frag_GenReserves}
+
   query GenerativeTokens ($skip: Int, $take: Int, $sort: GenerativeSortInput, $filters: GenerativeTokenFilter) {
     generativeTokens(
       skip: $skip, take: $take, sort: $sort, filters: $filters
@@ -31,9 +33,7 @@ const Qu_genTokens = gql`
       enabled
       royalties
       createdAt
-      reserves {
-        amount
-      }
+      ...Reserves
       ...Author
     }
   }

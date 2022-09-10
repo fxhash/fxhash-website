@@ -14,6 +14,11 @@ import { Reveal } from "../../../../../containers/Reveal/Reveal";
 import { LayoutMinimalist } from "../../../../../components/Layout/LayoutMinimalist";
 import { NextPageWithLayout } from "../../../../_app";
 import { LiveMintingLayout } from "../../../../../containers/LiveMinting/LiveMintingLayout"
+import Link from "next/link"
+import { useContext } from "react"
+import { LiveMintingContext } from "../../../../../context/LiveMinting"
+import { Button } from "../../../../../components/Button"
+import { Submit } from "../../../../../components/Form/Submit"
 
 interface Props {
   hash: string
@@ -21,6 +26,8 @@ interface Props {
 }
 
 const LiveMintingRevealPage: NextPageWithLayout<Props> = ({ hash, token }) => {
+  const eventCtx = useContext(LiveMintingContext)
+
   return (
     <>
       <Head>
@@ -53,22 +60,25 @@ const LiveMintingRevealPage: NextPageWithLayout<Props> = ({ hash, token }) => {
             hash={hash}
             generativeUri={token.metadata.generativeUri}
           />
-          <Article className={cs(layout.small_centered)}>
-            <p>
-              Your token will now have to go through a <strong>signing process</strong>. No more actions are required from yourself, this happens automatically in the back stage ! Until this process is finished, your token will appear as <strong>[waiting to be signed]</strong> in your wallet and on fxhash.
-            </p>
-            <p>
-              During the signing, fxhash servers will generate the token metadata and send it to the blockchain. This process is required for a few reasons:
-            </p>
-            <ul>
-              <li>an image preview of the token needs to be generated for it to be displayed on any platform properly</li>
-              <li>features need to be extracted from the program</li>
-            </ul>
-            <p>
-              The signing of the metadata can only happen once, and once done your token become immutable on the blockchain.
-            </p>
-          </Article>
-          <Spacing size="3x-large"/>
+
+          <Submit layout="center">
+            <Link 
+              href={`/live-minting/${eventCtx.event!.id}?token=${eventCtx.mintPass?.token}`}
+              passHref
+            >
+              <Button
+                isLink
+                color="secondary"
+                iconComp={<i aria-hidden className="fas fa-arrow-left"/>}
+                iconSide="left"
+                size="regular"
+                style={{ justifySelf: "center" }}
+              >
+                mint other project
+              </Button>
+            </Link>
+          </Submit>
+          <Spacing size="6x-large"/>
         </main>
       </section>
     </>

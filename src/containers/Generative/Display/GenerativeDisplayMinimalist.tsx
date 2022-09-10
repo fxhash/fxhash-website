@@ -57,6 +57,8 @@ export function GenerativeDisplayMinimalist({
               token={token}
               forceDisabled={offlineMode}
               generateRevealUrl={generateRevealUrl}
+              className={layout.y_centered}
+              forceReserveConsumption
             />
           </div>
 
