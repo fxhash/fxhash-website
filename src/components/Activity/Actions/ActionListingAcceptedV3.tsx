@@ -66,7 +66,6 @@ const ActionListingObjktAccepted: TActionComp = ({ action, verbose }) => (
 )
 
 export const ActionListingAcceptedV3: TActionComp = (props) => {
-  console.log(props.action)
   // todo: when add support for gentks, add a filter upfront to pick right comp.
   return ActionListingArticleAccepted(props)
 }

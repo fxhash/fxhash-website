@@ -74,8 +74,6 @@ export function Activity({
 }: Props) {
   const sortedActions = useMemo(() => sortActions(actions), [actions])
 
-  console.log(sortedActions)
-
   return (
     <section className={cs(style.container, className)}>
       {sortedActions?.length > 0 || loading ? (

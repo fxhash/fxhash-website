@@ -30,6 +30,7 @@ export const Qu_articleActionsById = gql`
   query ArticleActionsById($id: Int!) {
     article(id: $id) {
       id
+      title
       ledger {
         amount
         owner {
