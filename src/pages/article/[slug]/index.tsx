@@ -17,7 +17,7 @@ const ArticleBySlug: NextPage<ArticleBySlugProps> = ({ error, article, origin })
     <PageArticle
       article={article!}
       originUrl={origin!}
-      activeTab="actions"
+      activeTab="owners"
     />
   );
 

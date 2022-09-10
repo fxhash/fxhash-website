@@ -24,7 +24,7 @@ const _TableArticleListings = ({
       <table className={style.table}>
         <thead>
           <tr>
-            <th className={style['th-gentk']}>User</th>
+            <th className={style['th-user']}>User</th>
             <th className={cs(style['th-editions'], style['th-center'])}>Editions</th>
             <th className={cs(style['th-time'], style['th-center'])}>Time</th>
             <th className={cs(style['th-listing-actions'], style['th-right'])}>Actions</th>

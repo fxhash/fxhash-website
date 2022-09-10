@@ -41,7 +41,7 @@
 
   td {
     vertical-align: middle;
-    padding: 4px;
+    padding: 4px 6px;
     height: 50px;
 
     &>* {
@@ -51,8 +51,10 @@
 
   tbody tr {
     border: 1px solid var(--color-gray-vlight);
+
     &.tr_separator {
       border: 0;
+
       & td {
         height: 8px;
       }
@@ -64,10 +66,13 @@
   }
 }
 
-th.th-center, td.td-center {
+th.th-center,
+td.td-center {
   text-align: center;
 }
-th.th-right, td.td-right {
+
+th.th-right,
+td.td-right {
   text-align: right;
 }
 

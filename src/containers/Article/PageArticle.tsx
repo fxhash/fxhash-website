@@ -37,9 +37,9 @@ const NftArticle = dynamic<NftArticleProps>(() =>
   }
 );
 
-type ArticleTab = 'actions' | 'activity';
+type ArticleTab = 'owners' | 'activity';
 const articleTabComponents: Record<ArticleTab, any> = {
-  actions: ArticleActions,
+  owners: ArticleActions,
   activity: ArticleActivity,
 }
 export const tabComponentsKeys = Object.keys(articleTabComponents);
@@ -50,7 +50,12 @@ interface PageArticleProps {
   originUrl: string
   activeTab?: ArticleTab
 }
-const _PageArticle = ({ article, originUrl, isPreview, activeTab = 'actions' }: PageArticleProps) => {
+const _PageArticle = ({ 
+  article,
+  originUrl,
+  isPreview,
+  activeTab = 'owners',
+}: PageArticleProps) => {
   const { id, title, description, author, createdAt, body, language, relatedArticles } = article
   const dateCreatedAt = useMemo(() => new Date(createdAt), [createdAt])
   const { user } = useContext(UserContext)
@@ -76,8 +81,8 @@ const _PageArticle = ({ article, originUrl, isPreview, activeTab = 'actions' }: 
 
   const TABS = [
     {
-      key: "actions",
-      name: "actions",
+      key: "owners",
+      name: "owners",
       props: {
         scroll: false,
         href: `${getArticleUrl(article)}/`
@@ -92,6 +97,7 @@ const _PageArticle = ({ article, originUrl, isPreview, activeTab = 'actions' }: 
       }
     },
   ]
+
   const TabChildComponent = useMemo(() => !isPreview && articleTabComponents[activeTab], [activeTab, isPreview])
 
   return (
@@ -212,7 +218,7 @@ const _PageArticle = ({ article, originUrl, isPreview, activeTab = 'actions' }: 
       </main>
       {!isPreview &&
         <>
-          <Spacing size="4x-large" />
+          <Spacing size="6x-large" />
           <Tabs
             tabDefinitions={TABS}
             checkIsTabActive={checkIsTabKeyActive}
