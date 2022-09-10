@@ -29,10 +29,7 @@ export function ArticleQuickCollect({
     }
   })
 
-  console.log(data)
-
   const listingHighlight = useMemo<Listing|null>(() => {
-    console.log(data)
     if (data?.article?.activeListings) {
       let listings: Listing[] = data.article.activeListings
       if (listings?.length === 0) return null
