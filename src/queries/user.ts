@@ -1,6 +1,6 @@
 import { gql } from "@apollo/client"
 import { Frag_GenAuthor, Frag_GenPricing } from "./fragments/generative-token"
-import { Frag_ArticleInfos } from "./fragments/article";
+import { Frag_ArticleInfos, Frag_ArticleInfosAction } from "./fragments/article";
 
 export const Qu_user = gql`
   query User($id: String, $name: String) {
@@ -149,6 +149,23 @@ export const Qu_userObjkts = gql`
   }
 `
 
+export const Qu_userArticlesOwned = gql`
+  ${Frag_ArticleInfos}
+  query UserCollection(
+    $id: String!,
+  ) {
+    user(id: $id) {
+      id
+      articlesOwned {
+        amount
+        article {
+          ...ArticleInfos
+        }
+      }
+    }
+  }
+`
+
 export const Qu_userObjktsSubResults = gql`
   query Query($id: String!, $generativeFilters: ObjktFilter, $authorFilters: ObjktFilter) {
     user(id: $id) {
@@ -235,20 +252,15 @@ export const Qu_userActions = gql`
           id
           name
           iteration
-	}
-	article {
-	  slug
-	  title
-	  id
-	  revisions {
-	    metadataUri
-	    iteration
-	    createdAt
-	  }
-	}
+        }
+        article {
+          id
+          ...ArticleInfosAction
+        }
       }
     }
   }
+  ${Frag_ArticleInfosAction}
 `
 
 export const Qu_userSales = gql`
@@ -405,3 +417,4 @@ export const Qu_userArticles = gql`
   }
   ${Frag_ArticleInfos}
 `
+

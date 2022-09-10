@@ -17,11 +17,13 @@ interface CardNftArticleProps {
   imagePriority?: boolean
   isDraft?: boolean
   article: NFTArticleInfos
+  editionsOwned?: number
   onDelete?: (id: string) => void
 }
 
 const _CardNftArticle = ({ 
   article,
+  editionsOwned,
   isDraft,
   imagePriority,
   onDelete,
@@ -84,6 +86,11 @@ const _CardNftArticle = ({
         </div>
       )}
       <div className={style.content}>
+        {editionsOwned && (
+          <span className={cs(style.editions_owned)}>
+            x{editionsOwned}
+          </span>
+        )}
         <div className={cs(style['img-wrapper'], {
           [style['draft_img-wrapper']]: isDraft,
         })}>

@@ -19,12 +19,20 @@ import { ActionArticleMinted } from "./Actions/ActionArticleMinted"
 import { ActionArticleEditionsTransfered } from "./Actions/ActionArticleTransfered"
 import { ActionArticleUpdated } from "./Actions/ActionArticleUpdated"
 import { ActionArticleLocked } from "./Actions/ActionArticleLocked"
+import { ActionListingV3 } from "./Actions/ActionListingV3"
+import { ActionListingAcceptedV3 } from "./Actions/ActionListingAcceptedV3"
+import { ActionListingCancelledV3 } from "./Actions/ActionListingCancelledV3"
+import { getObjktUrl } from "../../utils/objkt"
 
 
 const ActionLinks = {
   gentk: (action: ActionType) => `/gentk/${action.objkt?.id}`,
   token: (action: ActionType) => `/generative/${action.token?.id}`,
   article: (action: ActionType) => getArticleUrl(action.article!),
+  gentkOrArticle: (action: ActionType) => 
+    action.article 
+      ? getArticleUrl(action.article)
+      : getObjktUrl(action.objkt!)
 } as const
 
 const ActionTodoDefinition: ActionDefinition = {
@@ -112,6 +120,27 @@ export const ActionDefinitions: Record<TokenActionType, ActionDefinition> = {
     render: ActionListingCancelled,
     predecescence: 0,
     link: ActionLinks.gentk,
+  },
+  LISTING_V3: {
+    icon: "fa-regular fa-arrow-turn-up",
+    iconColor: "success",
+    render: ActionListingV3,
+    predecescence: 0,
+    link: ActionLinks.gentkOrArticle,
+  },
+  LISTING_V3_ACCEPTED: {
+    icon: "fa-regular fa-arrow-right-arrow-left",
+    iconColor: "success",
+    render: ActionListingAcceptedV3,
+    predecescence: 0,
+    link: ActionLinks.gentkOrArticle,
+  },
+  LISTING_V3_CANCELLED: {
+    icon: "fa-solid fa-xmark",
+    iconColor: "error",
+    render: ActionListingCancelledV3,
+    predecescence: 0,
+    link: ActionLinks.gentkOrArticle,
   },
   UPDATE_PRICING: {
     icon: "fa-solid fa-arrow-rotate-right",
