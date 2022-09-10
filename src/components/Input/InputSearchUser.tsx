@@ -1,6 +1,6 @@
 import { useApolloClient } from "@apollo/client"
 import { Qu_searchUser } from "../../queries/user"
-import { User } from "../../types/entities/User"
+import { User, UserFlag } from "../../types/entities/User"
 import { InputReactiveSearch } from "./InputReactiveSearch"
 import { UserBadge } from "../User/UserBadge"
 
@@ -35,6 +35,7 @@ export function InputSearchUser({
       variables: {
         filters: {
           searchQuery_eq: search,
+          flag_in: [UserFlag.NONE, UserFlag.VERIFIED],
         }
       }
     })

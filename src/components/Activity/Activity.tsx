@@ -22,6 +22,9 @@ const ActionsPredecescence: Record<TokenActionType, number> = {
   LISTING_V2                    : 4,
   LISTING_V2_CANCELLED          : 4,
   LISTING_V2_ACCEPTED           : 4,
+  LISTING_V3                    : 4,
+  LISTING_V3_CANCELLED          : 4,
+  LISTING_V3_ACCEPTED           : 4,
   OFFER                         : 4,
   OFFER_CANCELLED               : 4,
   OFFER_ACCEPTED                : 4,
@@ -32,6 +35,10 @@ const ActionsPredecescence: Record<TokenActionType, number> = {
   AUCTION_BID                   : 4,
   AUCTION_CANCELLED             : 4,
   AUCTION_FULFILLED             : 4,
+  ARTICLE_MINTED                : 0,
+  ARTICLE_EDITIONS_TRANSFERED   : 1,
+  ARTICLE_METADATA_UPDATED      : 1,
+  ARTICLE_METADATA_LOCKED       : 20,
 }
 
 // group actions by timestamp, sort by type within group, then rebuild array

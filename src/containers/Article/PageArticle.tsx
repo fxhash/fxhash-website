@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useContext, useMemo } from 'react'
+import React, { Component, memo, NamedExoticComponent, ReactElement, useCallback, useContext, useMemo } from 'react'
 import style from "./PageArticle.module.scss"
 import { NFTArticle } from "../../types/entities/Article"
 import { UserBadge } from "../../components/User/UserBadge"
@@ -24,6 +24,10 @@ import { ipfsGatewayUrl } from '../../services/Ipfs'
 import { UserGuard } from '../../components/Guards/UserGuard'
 import { ArticleModeration } from './Moderation/ArticleModeration'
 import { ArticleFlagBanner } from './Moderation/FlagBanner'
+import { checkIsTabKeyActive } from "../../components/Layout/Tabs";
+import { ArticleActivity } from "./ArticleActivity";
+import { ArticleActions } from "./ArticleActions";
+import { TabsContainer } from '../../components/Layout/TabsContainer'
 
 const NftArticle = dynamic<NftArticleProps>(() =>
   import('../../components/NFTArticle/NFTArticle')
@@ -33,13 +37,27 @@ const NftArticle = dynamic<NftArticleProps>(() =>
   }
 );
 
+const TABS = [
+  {
+    key: "owners",
+    name: "owners",
+  },
+  {
+    key: "activity",
+    name: "activity",
+  },
+]
+
 interface PageArticleProps {
   article: NFTArticle
   isPreview?: boolean,
   originUrl: string
 }
-
-const _PageArticle = ({ article, originUrl, isPreview }: PageArticleProps) => {
+const _PageArticle = ({ 
+  article,
+  originUrl,
+  isPreview,
+}: PageArticleProps) => {
   const { id, title, description, author, createdAt, body, language, relatedArticles } = article
   const dateCreatedAt = useMemo(() => new Date(createdAt), [createdAt])
   const { user } = useContext(UserContext)
@@ -61,7 +79,7 @@ const _PageArticle = ({ article, originUrl, isPreview }: PageArticleProps) => {
         }
       })
     }
-  }, [dispatch])
+  }, [article.id, dispatch])
 
   return (
     <>
@@ -179,6 +197,32 @@ const _PageArticle = ({ article, originUrl, isPreview }: PageArticleProps) => {
           </div>
         }
       </main>
+
+      {!isPreview &&
+        <>
+          <Spacing size="6x-large" />
+          <TabsContainer
+            tabDefinitions={TABS}
+            checkIsTabActive={checkIsTabKeyActive}
+            tabsLayout="fixed-size"
+            tabsClassName={cs(layout['padding-big'])}
+          >
+            {({ tabIndex }) => (
+              <div className={layout['padding-big']}>
+                {tabIndex === 0 ? (
+                  <ArticleActions
+                    article={article}
+                  />
+                ):(
+                  <ArticleActivity
+                    article={article}
+                  />
+                )}
+              </div>
+            )}
+          </TabsContainer>
+        </>
+      }
       <Spacing size="6x-large" />
     </>
   );

@@ -10,16 +10,17 @@ import { videoProcessor } from "../elements/Video/VideoProcessor";
 import { findAndReplace } from "mdast-util-find-and-replace";
 import { mentionProcessor } from "../elements/Mention/MentionProcessor";
 
-declare module 'mdast' {
-  interface Mention extends Parent {
-    type: 'mention';
-    value: string;
-    children: PhrasingContent[];
-  }
-  interface StaticPhrasingContentMap {
-    mention: Mention;
-  }
-}
+
+// declare module 'mdast' {
+//   interface Mention extends Parent {
+//     type: 'mention';
+//     value: string;
+//     children: PhrasingContent[];
+//   }
+//   interface StaticPhrasingContentMap {
+//     mention: Mention;
+//   }
+// }
 
 interface CustomArticleElementsByType {
   leafDirective: Record<string, IArticleElementProcessor>,
@@ -59,7 +60,7 @@ export function remarkFxHashCustom(): Transformer<Root, Root> {
 }
 export function remarkMentions(): Transformer<Root, Root> {
   return (tree: Root) => {
-    visit(tree, (node) => {
+    visit(tree, (node: any) => {
       if (node.type === 'mention') {
         const component = mentionProcessor;
         if (component?.transformMdhastToComponent) {
@@ -93,6 +94,7 @@ export function mdastFlattenListItemParagraphs(): Transformer<Root, Root> {
 
 export function mdastParseMentions(): Transformer<Root, Root> {
   return (ast) => {
+    // @ts-ignore
     findAndReplace(ast, [
       [/@(tz[1-3][1-9a-zA-Z]{33})/g, function ($0: any, $1: any) {
         return u('mention', { name: 'mention', value: $1 }, [{ type: 'text', value: '' }]);

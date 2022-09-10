@@ -17,6 +17,13 @@
       border-bottom: 3px solid var(--color-black);
     }
   }
+
+  &.layout-subtabs-vertical {
+    nav {
+      justify-content: center;
+      border-bottom: none;
+    }
+  }
 }
 
 .tab {
@@ -58,6 +65,20 @@
     background: var(--color-black);
     color: var(--color-white);
   }
+}
+
+.tab-subtabs-vertical {
+  padding: 10px $spacing-large;
+  margin-top: 8px;
+  margin-bottom: 0;
+  border: none;
+  font-size: var(--font-size-small);
+
+  &+& {
+    border-left: 3px solid var(--color-gray-vvvlight);
+  }
+
+  &.active {}
 }
 
 .tab-fixed-size {
