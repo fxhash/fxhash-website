@@ -34,7 +34,7 @@ const _ConnectWallet = () => {
   return (
     <div className={style.container}>
       <div className={style.container_button}>
-        <Link href={"https://www.naanwallet.com"} passHref>
+        <Link href={"https://play.google.com/store/apps/details?id=com.naan&hl=en&gl=US"} passHref>
           <Button
             isLink
             // @ts-ignore

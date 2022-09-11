@@ -56,6 +56,7 @@ export function LiveMintingProvider({
           })
         }
         catch(err) {
+          console.log(err)
           throw new Error("Network error: cannot find the event.")
         }
   
