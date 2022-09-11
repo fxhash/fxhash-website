@@ -1,6 +1,6 @@
 import { User } from '../../../../types/entities/User'
 import { UserProfileLayout } from "../../../../containers/User/UserProfileLayout"
-import { getServerSidePropsUserByName } from "../../../../services/ServerSideProps/ServerSidePropsUser"
+import { getServerSidePropsUserById, getServerSidePropsUserByName } from "../../../../services/ServerSideProps/ServerSidePropsUser"
 import { UserCollection } from "../../../../containers/User/UserCollection"
 import { ReactElement } from "react"
 
@@ -27,6 +27,6 @@ UserPageCollectionArticles.getLayout = function getLayout(page: ReactElement) {
   )
 }
 
-export const getServerSideProps = getServerSidePropsUserByName
+export const getServerSideProps = getServerSidePropsUserById
 
 export default UserPageCollectionArticles
