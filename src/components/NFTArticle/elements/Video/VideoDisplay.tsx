@@ -11,6 +11,7 @@ const _VideoDisplay = ({ src, children }: VideoDisplayProps) => (
     <VideoPolymorphic
       uri={src}
       controls
+      showLoadingError
     />
     {src && (
       <figcaption>

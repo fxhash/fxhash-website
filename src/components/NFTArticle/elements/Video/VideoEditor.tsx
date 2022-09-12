@@ -47,6 +47,7 @@ export const VideoEditor: NamedExoticComponent<PropsWithChildren<VideoElementPro
               controls
               uri={element.src}
               className={style.video}
+              showLoadingError
             />
           ):(
             <button
