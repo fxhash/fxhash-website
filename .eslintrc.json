@@ -3,8 +3,8 @@
     "prettier"
   ],
   "extends": [
-    "next/core-web-vitals",
-    "prettier"
+    "prettier",
+    "next/core-web-vitals"
   ],
    "rules": {
     "prettier/prettier": "error"
