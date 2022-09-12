@@ -1,0 +1,46 @@
+@import "../../../../styles/Variables";
+
+.input {
+  width: 100%;
+}
+
+p.not_found {
+  margin-top: 8px;
+}
+
+.spotify {
+  width: 100%;
+  border-radius: 12px;
+  margin: var(--layout-margin-small-sm) 0;
+}
+
+.youtube {
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  //  max-width: 660px;
+  margin: var(--layout-margin-small-sm) 0;
+
+  &:after {
+    padding-top: 56.25%;
+    display: block;
+    content: '';
+  }
+
+  iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.twitter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.twitter_loading {
+  margin-top: 16px;
+}

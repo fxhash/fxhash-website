@@ -4,7 +4,8 @@ import cs from "classnames"
 import { forwardRef, PropsWithChildren } from "react"
 
 interface Props {
-  sortSelectComp: React.ReactNode
+  sortSelectComp?: React.ReactNode
+  sizeSelectComp?: React.ReactNode
   hasFilters?: boolean
   onToggleFilters?: () => void
   filtersOpened?: boolean
@@ -13,6 +14,7 @@ interface Props {
 }
 export const SearchHeader = forwardRef<HTMLDivElement, PropsWithChildren<Props>>(({
   sortSelectComp,
+  sizeSelectComp,
   hasFilters,
   onToggleFilters,
   filtersOpened,
@@ -45,8 +47,10 @@ export const SearchHeader = forwardRef<HTMLDivElement, PropsWithChildren<Props>>
         )}
         {children}
       </div>
+      {sizeSelectComp}
       {sortSelectComp}
     </div>
   )
 })
+
 SearchHeader.displayName = 'SearchHeader';

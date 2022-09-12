@@ -18,11 +18,13 @@ body {
   --color-error: #eb1b1b;
   --color-error-20: rgba(255, 0, 0, 0.2);
   --color-warning: #ffc300;
+  --color-gray-vvvlight: #f1f1f1;
   --color-gray-vvlight: #e7e7e7;
   --color-gray-vlight: #d3d3d3;
   --color-gray-light: #C4C4C4;
   --color-gray: #727272;
   --color-gray-dark: #484848;
+  --color-gray-vdark: #363636;
   --color-black: #000000;
   --color-white: #FFFFFF;
   --color-border: #000000;
@@ -42,8 +44,10 @@ body {
   --layout-gap-small-lg: 30px;
   --layout-gap-small-md: 15px;
 
+  --font-size-vsmall: 0.7rem;
   --font-size-small: 0.875rem;
   --font-size-regular: 1rem;
+  --font-size-big: 1.125rem;
   --font-size-h6: 1rem;
   --font-size-h5: 1.25rem;
   --font-size-h4: 1.5625rem;
@@ -54,12 +58,14 @@ body {
   --cards-border-width: 3px;
   --cards-shadow: 19px;
   --cards-gap: 30px;
+  --cards-size: 270px;
 }
 
 .dark {
   --color-white: #242424;
   --color-black: white;
   --color-gray: #a5a5a5;
+  --color-gray-vvvlight: #2b2b2b;
   --color-gray-vvlight: #2e2e2e;
   --color-gray-vlight: #363636;
   --color-gray-light: #505050;
@@ -81,7 +87,7 @@ body {
   &:hover {
     background: var(--color-gray-dark);
   }
-  
+
   &:active {
     background: var(--color-black);
   }
@@ -112,23 +118,33 @@ strong {
 h6 {
   font-size: var(--font-size-h6);
 }
+
 h5 {
   font-size: var(--font-size-h5);
 }
+
 h4 {
   font-size: var(--font-size-h4);
 }
+
 h3 {
   font-size: var(--font-size-h3);
 }
+
 h2 {
   font-size: var(--font-size-h2);
 }
+
 h1 {
   font-size: var(--font-size-h1);
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   margin: 0;
 }
 
@@ -136,18 +152,23 @@ h1, h2, h3, h4, h5, h6 {
   h6 {
     font-size: var(--font-size-h6);
   }
+
   h5 {
     font-size: var(--font-size-h6);
   }
+
   h4 {
     font-size: var(--font-size-h5);
   }
+
   h3 {
     font-size: var(--font-size-h4);
   }
+
   h2 {
     font-size: var(--font-size-h3);
   }
+
   h1 {
     font-size: var(--font-size-h2);
   }

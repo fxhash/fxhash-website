@@ -12,6 +12,7 @@ import { CyclesProvider } from "../context/Cycles"
 import { MessageCenterProvider } from "../context/MessageCenter"
 import { LaunchCountdown } from "./RareEvents/LaunchCountdown"
 import { isLaunchCountdown } from "../utils/rare-events/launch"
+import { ArticlesProvider } from "../context/Articles";
 
 const EXCLUDE_LAYOUT= [
   "/generative/[id]/enjoy",
@@ -23,8 +24,8 @@ export function Root({ children }: PropsWithChildren<{}>) {
   const router = useRouter()
 
   // should the page be renderer with the layout ?
-  const LayoutWrapper = (EXCLUDE_LAYOUT.includes(router.pathname)) 
-    ? Fragment 
+  const LayoutWrapper = (EXCLUDE_LAYOUT.includes(router.pathname))
+    ? Fragment
     : Layout
 
   return (
@@ -33,9 +34,11 @@ export function Root({ children }: PropsWithChildren<{}>) {
         <UserProvider>
           <MessageCenterProvider>
             <CyclesProvider>
-              <LayoutWrapper>
-                {children}
-              </LayoutWrapper>
+              <ArticlesProvider>
+                <LayoutWrapper>
+                  {children}
+                </LayoutWrapper>
+              </ArticlesProvider>
             </CyclesProvider>
           </MessageCenterProvider>
         </UserProvider>

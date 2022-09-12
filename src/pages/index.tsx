@@ -127,7 +127,7 @@ const Home: NextPage<Props> = ({
         <Spacing size="3x-large"/>
 
         <main className={cs(layout['padding-big'])}>
-          <CardsContainer addExtraDivs className={cs(styles['row-responsive-limiter'])}>
+          <CardsContainer className={cs(styles['row-responsive-limiter'])}>
             {generativeTokens.map(token => (
               <GenerativeTokenCard
                 key={token.id}
@@ -141,7 +141,7 @@ const Home: NextPage<Props> = ({
       </section>
 
       <Spacing size="6x-large" />
-      <Spacing size="6x-large" />
+      <Spacing size="6x-large" sm="none" />
 
       <section>
         <SectionHeader className={cs(styles.section_header)}>
@@ -164,7 +164,7 @@ const Home: NextPage<Props> = ({
         <Spacing size="3x-large"/>
 
         <main className={cs(layout['padding-big'])}>
-          <CardsContainer addExtraDivs className={cs(styles['row-responsive-limiter'])}>
+          <CardsContainer className={cs(styles['row-responsive-limiter'])}>
             {listings.map(listing => (
               <ObjktCard key={listing.objkt.id} objkt={listing.objkt}/>
             ))}
@@ -173,8 +173,8 @@ const Home: NextPage<Props> = ({
       </section>
 
       <Spacing size="6x-large" />
-      <Spacing size="6x-large" />
-      <Spacing size="6x-large" />
+      <Spacing size="6x-large" sm="none" />
+      <Spacing size="6x-large" sm="none" />
     </>
   )
 }

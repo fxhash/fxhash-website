@@ -91,8 +91,14 @@ export function Navigation() {
               <Link href={`${getUserProfileLink(userCtx.user)}`}>
                 <a>creations</a>
               </Link>
+              <Link href={`${getUserProfileLink(userCtx.user)}/articles`}>
+                <a>articles</a>
+              </Link>
               <Link href={`${getUserProfileLink(userCtx.user)}/collection`}>
                 <a>collection</a>
+              </Link>
+              <Link href={`${getUserProfileLink(userCtx.user)}/dashboard`}>
+                <a>dashboard</a>
               </Link>
               <Link href={`/collaborations`}>
                 <a>collaborations</a>
@@ -100,9 +106,9 @@ export function Navigation() {
               <Link href="/edit-profile">
                 <a>edit profile</a>
               </Link>
-              <Button 
-                size="small" 
-                color="primary" 
+              <Button
+                size="small"
+                color="primary"
                 onClick={() => userCtx.disconnect()}
                 style={{
                   marginTop: "5px"

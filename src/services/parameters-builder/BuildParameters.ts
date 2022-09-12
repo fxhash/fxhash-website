@@ -3,6 +3,10 @@ import updateOperatorsType from "./update-operators/type.json"
 import listingType from "./listing/type.json"
 import listingCancelType from "./listing-cancel/type.json"
 import listingAcceptType from "./listing-accept/type.json"
+import listingV3Type from "./listing-v3/type.json"
+// import listingCancelType from "./listing-cancel/type.json"
+// import listingAcceptType from "./listing-accept/type.json"
+import offerAcceptType from "./offer-accept/type.json"
 import mintIssuerType from "./mint-issuer/type.json"
 import pricingFixedType from "./pricing-fixed/type.json"
 import pricingDutchAuctionType from "./pricing-dutch-auction/type.json"
@@ -23,6 +27,10 @@ export enum EBuildableParams {
   LISTING               = "LISTING",
   LISTING_CANCEL        = "LISTING_CANCEL",
   LISTING_ACCEPT        = "LISTING_ACCEPT",
+  LISTING_V3            = "LISTING_V3",
+  // LISTING_CANCEL        = "LISTING_CANCEL",
+  // LISTING_ACCEPT        = "LISTING_ACCEPT",
+  OFFER_ACCEPT          = "OFFER_ACCEPT",
   MINT_ISSUER           = "MINT_ISSUER",
   PRICING_FIXED         = "PRICING_FIXED",
   PRICING_DUTCH_AUCTION = "PRICING_DUTCH_AUCTION",
@@ -40,6 +48,10 @@ const buildableParamTypes: Record<EBuildableParams, MichelsonV1Expression> = {
   LISTING: listingType,
   LISTING_CANCEL: listingCancelType,
   LISTING_ACCEPT: listingAcceptType,
+  LISTING_V3: listingV3Type,
+  // LISTING_CANCEL: listingCancelType,
+  // LISTING_ACCEPT: listingAcceptType,
+  OFFER_ACCEPT: offerAcceptType,
   MINT_ISSUER: mintIssuerType,
   PRICING_FIXED: pricingFixedType,
   PRICING_DUTCH_AUCTION: pricingDutchAuctionType,

@@ -3,20 +3,20 @@ import cs from "classnames"
 import { ScheduleLine } from "./ScheduleLine"
 import { useContext, useMemo } from "react"
 import { addDays, startOfDay, subDays } from "date-fns"
-import { Timezone } from "../../utils/timzones"
-import { utcToZonedTime, zonedTimeToUtc } from "date-fns-tz"
+import { utcToZonedTime } from "date-fns-tz"
 import { CyclesContext } from "../../context/Cycles"
+import { TimeZone } from "@vvo/tzdb";
 
 
 interface Props {
-  timezone: Timezone
+  timezone: TimeZone
   nbDays?: number
 }
 export function Schedule({ timezone, nbDays = 7 }: Props) {
   // build the array of days displayed by the schedule
   const days = useMemo<Date[]>(() => {
-    // now, with the timezone
-    const nowTz = utcToZonedTime(new Date(), timezone.utc[0])
+    // now, with the timezones
+    const nowTz = utcToZonedTime(new Date(), timezone.name)
     // get yesterday midnight
     const yesterday = subDays(startOfDay(nowTz), 1)   // todo: replace -3 by 1
     // 7 more days starting from "yesterday"

@@ -1,0 +1,50 @@
+@import "../../../styles/Variables";
+
+.root {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  z-index: 20;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  max-width: 600px;
+  padding: $spacing-small $spacing;
+  margin: auto;
+  font-size: var(--font-size-small);
+  border-radius: 4px;
+  border: 1px solid var(--color-gray-vlight);
+  background-color: var(--color-white);
+
+  i {
+    font-size: var(--font-size-big);
+  }
+
+  *+* {
+    margin-left: 6px;
+  }
+
+  .medias_unsaved {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-right: 8px;
+    border: none;
+    background-color: transparent;
+    font-weight: bold;
+    padding: 0;
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: underline;
+    }
+
+    *+* {
+      margin-left: 6px;
+    }
+  }
+
+  .loader {
+    width: auto;
+  }
+}

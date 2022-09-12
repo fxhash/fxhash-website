@@ -1,6 +1,6 @@
 import style from "./Form.module.scss"
 import cs from "classnames"
-import { PropsWithChildren } from "react-router/node_modules/@types/react"
+import { PropsWithChildren } from "react"
 
 interface Props {
   className?: string

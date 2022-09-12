@@ -11,7 +11,7 @@ interface Props {
 
 const UserPageCollection = ({ user }: Props) => {
   return (
-    <UserCollection user={user}/>
+    <UserCollection user={user} activeTab="gentk"/>
   )
 }
 
@@ -19,7 +19,8 @@ UserPageCollection.getLayout = function getLayout(page: ReactElement) {
   return (
     <UserProfileLayout
       user={page.props.user}
-      tabIndex={1}
+      activeTab="collection"
+      hideSectionSpacing
     >
       {page}
     </UserProfileLayout>

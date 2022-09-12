@@ -20,6 +20,7 @@ import { User } from "../../types/entities/User"
 import Link from "next/link"
 import { InputModerationReason } from "../../components/Input/InputModerationReason"
 import { ModerationModal } from "../../components/Moderation/Modal/ModerationModal"
+import { EditLabelsModal } from "./Moderation/EditLabelsModal"
 
 
 function OpenButton() {
@@ -39,6 +40,7 @@ export function GenerativeExtraActions({
   
   const [reportModal, setReportModal] = useState<boolean>(false)
   const [moderateModal, setModerateModal] = useState<boolean>(false)
+  const [editLabelsModal, setEditLabelsModal] = useState<boolean>(false)
 
   const { state: callState, loading: contractLoading, success, call, error: contractError } = 
     useContractCall<ReportCall>(userCtx.walletManager!.report)
@@ -108,6 +110,13 @@ export function GenerativeExtraActions({
         />
       )}
 
+      {editLabelsModal && (
+        <EditLabelsModal
+          token={token}
+          onClose={() => setEditLabelsModal(false)}
+        />
+      )}
+
       <div className={cs(style.container)}>
         <Dropdown
           itemComp={<OpenButton />}
@@ -129,6 +138,16 @@ export function GenerativeExtraActions({
             >
               <i aria-hidden className="fas fa-gavel"/>
               <span>moderate token</span>
+            </button>
+          )}
+
+          {user && isTokenModerator(user as User) && (
+            <button
+              className={cs(style.btn_action)}
+              onClick={() => setEditLabelsModal(true)}
+            >
+              <i aria-hidden className="fas fa-tags"/>
+              <span>edit labels</span>
             </button>
           )}
         </Dropdown>

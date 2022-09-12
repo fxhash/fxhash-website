@@ -7,7 +7,7 @@ import { ButtonHTMLAttributes } from "react"
 
 
 export type ButtonState = "default" | "loading"
-export type ButtonSize = "regular" | "medium" | "large" | "small" | "very-small" | "very-large"
+export type ButtonSize = "regular" | "medium" | "large" | "small" | "very-small" | "very-large" | "large-x"
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   iconComp?: React.ReactNode
@@ -15,13 +15,13 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   size?: ButtonSize
   color?: "black" | "primary" | "secondary" | "transparent"
   className?: string
-  iconSide?: "left" | "right"
+  iconSide?: "left" | "right" | null
   isLink?: boolean
   disabled?: boolean
 }
 
-export const Button = React.forwardRef<HTMLButtonElement & HTMLAnchorElement, PropsWithChildren<ButtonProps>>(({ 
-  iconComp, 
+export const Button = React.forwardRef<HTMLButtonElement & HTMLAnchorElement, PropsWithChildren<ButtonProps>>(({
+  iconComp,
   state = "default",
   iconSide = "left",
   size = "medium",
@@ -37,9 +37,9 @@ export const Button = React.forwardRef<HTMLButtonElement & HTMLAnchorElement, Pr
       ref={ref}
       isLink={isLink}
       className={cs(
-        style.button, 
+        style.button,
         style[`size-${size}`],
-        style[`icon-${iconSide}`],
+        style[`icon-${iconSide || 'alone'}`],
         style[`color-${color}`],
         style[`state-${state}`],
         className,
@@ -58,3 +58,4 @@ export const Button = React.forwardRef<HTMLButtonElement & HTMLAnchorElement, Pr
     </ButtonOrLink>
   )
 })
+Button.displayName = 'Button'

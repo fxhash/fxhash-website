@@ -1,5 +1,6 @@
 import { gql } from "@apollo/client"
 import { Frag_GenAuthor, Frag_GenPricing } from "./fragments/generative-token"
+import { Frag_ArticleInfos, Frag_ArticleInfosAction } from "./fragments/article";
 
 export const Qu_user = gql`
   query User($id: String, $name: String) {
@@ -148,6 +149,23 @@ export const Qu_userObjkts = gql`
   }
 `
 
+export const Qu_userArticlesOwned = gql`
+  ${Frag_ArticleInfos}
+  query UserCollection(
+    $id: String!,
+  ) {
+    user(id: $id) {
+      id
+      articlesOwned {
+        amount
+        article {
+          ...ArticleInfos
+        }
+      }
+    }
+  }
+`
+
 export const Qu_userObjktsSubResults = gql`
   query Query($id: String!, $generativeFilters: ObjktFilter, $authorFilters: ObjktFilter) {
     user(id: $id) {
@@ -235,6 +253,102 @@ export const Qu_userActions = gql`
           name
           iteration
         }
+        article {
+          id
+          ...ArticleInfosAction
+        }
+      }
+    }
+  }
+  ${Frag_ArticleInfosAction}
+`
+
+export const Qu_userSales = gql`
+  query UserSales($id: String!, $take: Int, $skip: Int) {
+    user(id: $id) {
+      id
+      sales(take: $take, skip: $skip) {
+        id
+        type
+        numericValue
+        opHash
+        createdAt
+        issuer {
+          id
+          name
+          avatarUri
+        }
+        target {
+          id
+          name
+          avatarUri
+        }
+        objkt {
+          id
+          name
+          metadata
+        }
+      }
+    }
+  }
+`
+
+export const Qu_userOffersReceived = gql`
+  query UserOffersReceived($id: String!, $filters: OfferFilter) {
+    user(id: $id) {
+      id
+      offersReceived(filters: $filters) {
+        id
+        price
+        createdAt
+        buyer {
+          id
+          name
+        }
+        objkt {
+          id
+          version
+          name
+          metadata
+          activeListing {
+            id
+            version
+          }
+          owner {
+            id
+          }
+          issuer {
+            marketStats {
+              floor
+            }
+          }
+        }
+      }
+    }
+  }
+`
+
+export const Qu_userOffersSent = gql`
+  query UserOffersSent($id: String!, $filters: OfferFilter) {
+    user(id: $id) {
+      id
+      offersSent(filters: $filters) {
+        id
+        price
+        createdAt
+        buyer {
+          id
+        }
+        objkt {
+          id
+          version
+          name
+          metadata
+          owner {
+            id
+            name
+          }
+        }
       }
     }
   }
@@ -291,3 +405,16 @@ export const Qu_searchUser = gql`
     }
   }
 `
+
+export const Qu_userArticles = gql`
+  query UserArticles($id: String!, $skip: Int, $take: Int, $sort: ArticleSortInput, $filters: ArticleFilter) {
+    user(id: $id) {
+      id
+      articles(skip: $skip, take: $take, sort: $sort, filters: $filters) {
+        ...ArticleInfos
+      }
+    }
+  }
+  ${Frag_ArticleInfos}
+`
+

@@ -1,4 +1,4 @@
-import { Collaboration, ConnectedUser, User, UserAlias, UserAuthorization, UserFlag, UserItems } from "../types/entities/User"
+import { Collaboration, ConnectedUser, User, UserAlias, UserAuthorization, UserFlag, UserItems, UserType } from "../types/entities/User"
 import { truncateMiddle } from "./strings"
 
 export function userHasName(user: ConnectedUser): boolean {
@@ -20,7 +20,7 @@ export function getUserProfileLink(user: ConnectedUser): string {
  */
 export function getUserName(user: User, truncateLength?: number): string {
   return userHasName(user) 
-    ? user.name! 
+    ? user.name!.length > 64 ? user.name!.substring(0, 64) : user.name!
     : (truncateLength ? truncateMiddle(user.id, truncateLength) : user.id)
 }
 
@@ -36,6 +36,11 @@ export function isTokenModerator(user: User): boolean {
  */
 export function isUserModerator(user: User): boolean {
   return user.authorizations.includes(UserAuthorization.USER_MODERATION)
+}
+
+// true if the user can moderate articles
+export function isUserArticleModerator(user: User): boolean {
+  return user.authorizations.includes(UserAuthorization.ARTICLE_MODERATION)
 }
 
 /**
@@ -154,13 +159,34 @@ export const UserDonationAliases: Record<string, Partial<User>> = {
 
 // a list of User aliases
 export const UserAliases: Record<string, Partial<User>> = {
-  [process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_MARKETPLACE!]: {
-    id: process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_MARKETPLACE!,
-    name: "fxhash marketplace",
-    description: "The official fxhash [beta] marketplace",
+  [process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_MARKETPLACE_V1!]: {
+    id: process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_MARKETPLACE_V1!,
+    name: "fxhash marketplace v1.0",
+    description: "The official fxhash [beta] marketplace, first version.",
     authorizations: Object.values(UserAuthorization),
     avatarUri: "ipfs://QmURUAU4YPa6Wwco3JSVrcN7WfCrFBZH7hY51BLrc87WjM",
     platformOwned: true,
+    preventLink: true,
+  },
+
+  [process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_MARKETPLACE_V2!]: {
+    id: process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_MARKETPLACE_V2!,
+    name: "fxhash marketplace 2.0",
+    description: "The official marketplace 2.0 of fxhash.",
+    authorizations: Object.values(UserAuthorization),
+    avatarUri: "ipfs://QmURUAU4YPa6Wwco3JSVrcN7WfCrFBZH7hY51BLrc87WjM",
+    platformOwned: true,
+    preventLink: true,
+  },
+
+  [process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_MARKETPLACE_V3!]: {
+    id: process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_MARKETPLACE_V3!,
+    name: "fxhash marketplace 3.0",
+    description: "The official marketplace 3.0 of fxhash.",
+    authorizations: Object.values(UserAuthorization),
+    avatarUri: "ipfs://QmURUAU4YPa6Wwco3JSVrcN7WfCrFBZH7hY51BLrc87WjM",
+    platformOwned: true,
+    preventLink: true,
   },
 
   [process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_GENTK_V2!]: {
@@ -194,4 +220,21 @@ export function userAliases(user: User): User {
  */
 export function isUserVerified(user: User): boolean {
   return user.flag === UserFlag.VERIFIED
+}
+
+/**
+ * Is a given user the user provided OR a collaborator in the entity provided
+ */
+export function isUserOrCollaborator(
+  user: User,
+  entity: User
+): boolean {
+  if (entity.type === UserType.COLLAB_CONTRACT_V1) {
+    return !!(entity as Collaboration).collaborators.find(
+      entity => entity.id === user.id
+    )
+  }
+  else {
+    return entity.id === user.id
+  }
 }

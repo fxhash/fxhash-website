@@ -8,7 +8,7 @@
 
   .user_name {
     display: flex;
-    flex: row;
+    flex-direction: row;
     align-items: baseline;
     gap: 0.25em;
     text-align: left;
@@ -19,7 +19,7 @@
     font-weight: normal;
     font-size: 0.8em;
   }
-  
+
   .verified {
     font-size: 1.15em;
     bottom: -1px;
@@ -43,6 +43,13 @@
     }
   }
 }
+
+.no_avatar {
+  .user_infos {
+    margin-left: 0;
+  }
+}
+
 .default_font_styles {
   color: var(--color-primary);
   font-weight: bold;
@@ -56,6 +63,7 @@
   .avatar {
     transform: scale(1.05);
   }
+
   .append {
     text-decoration: none !important;
   }
@@ -79,6 +87,12 @@
 .avatar-big {
   width: 50px;
   height: 50px;
+}
+
+.avatar-inline {
+  width: 26px;
+  height: 26px;
+  display: inline-block;
 }
 
 .prepend {

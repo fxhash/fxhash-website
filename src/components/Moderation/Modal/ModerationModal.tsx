@@ -16,7 +16,7 @@ import Link from "next/link"
 import { Submit } from "../../Form/Submit"
 
 interface Props extends ModalProps {
-  moderationContract: "token"|"user"
+  moderationContract: "token"|"user"|"article"
   infoText: string
   infoState?: string
   flags: IOptions[]

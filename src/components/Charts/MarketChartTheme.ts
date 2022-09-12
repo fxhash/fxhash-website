@@ -1,4 +1,4 @@
-export default {
+const marketChartTheme =  {
   "color": [
     "#ff715e",
     "#ffaf51",
@@ -383,3 +383,4 @@ export default {
     }
   }
 }
+export default marketChartTheme;

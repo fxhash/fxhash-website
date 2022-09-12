@@ -15,32 +15,46 @@ export interface Props extends IEntityBadgeProps {
 interface WrapperProps {
   className: string
   user: User
+  newTab?: boolean
   children: ReactNode
+  isInline?: boolean
 }
 
 const WrapperLink = ({
   className,
   user,
+  newTab,
   children,
-}: WrapperProps) => (
-  <Link href={getUserProfileLink(user)}>
-    <a className={cs(style.link, style.default_font_styles, className)}>
-      <div className={style.container}>
-	      {children}
-      </div>
-    </a>
-  </Link>
-)
+  isInline
+}: WrapperProps) => {
+  const Container = isInline ? 'span' : 'div';
+  return (
+    <Link href={getUserProfileLink(user)}>
+      <a
+        className={cs(style.link, style.default_font_styles, className)}
+        target={newTab ? "_blank" : "_self"}
+      >
+        <Container className={style.container}>
+          {children}
+        </Container>
+      </a>
+    </Link>
+  )
+}
 
 const WrapperDiv = ({
   className,
   user,
   children,
-}: WrapperProps) => (
-  <div className={className}>
-    {children}
-  </div>
-)
+  isInline
+}: WrapperProps) => {
+  const Container = isInline ? 'span' : 'div';
+  return (
+    <Container className={className}>
+      {children}
+    </Container>
+  )
+}
 
 export function UserBadge({
   user,
@@ -50,6 +64,8 @@ export function UserBadge({
   avatarSide = "left",
   displayAddress = false,
   displayAvatar = true,
+  newTab = false,
+  isInline = false,
   className
 }: Props) {
   // the user goes through an aliases check
@@ -60,34 +76,39 @@ export function UserBadge({
   // the wrapper component, either a link or a div
   const Wrapper = hasLink ? WrapperLink : WrapperDiv
 
+  const Container = isInline ? 'span' : 'div';
   return user ? (
     <Wrapper
       className={cs({
         [style.container]: !hasLink,
-        [style.default_font_styles]: !hasLink, },
+        [style.default_font_styles]: !hasLink,
+        [style.no_avatar]: !displayAvatar },
         style[`side-${avatarSide}`],
         className
       )}
+      isInline={isInline}
       user={userAlias}
+      newTab={newTab}
     >
       {displayAvatar && (
         <Avatar
           uri={userAlias.avatarUri}
+          isInline={isInline}
           className={cs(
             style.avatar,
-            style[`avatar-${size}`], { 
+            style[`avatar-${size}`], {
             [style.avatar_mod]: isPlatformOwned(userAlias),
             [style.avatar_donation]: isDonator(userAlias)
           })}
         />
       )}
 
-      <div className={cs(style.user_infos)}>
+      <Container className={cs(style.user_infos)}>
         <span className={cs(style.user_name)}>
           {prependText && (
             <span className={cs(style.prepend)}>{prependText}</span>
           )}
-          <span className={cs({ 
+          <span className={cs({
             [style.moderator]: isPlatformOwned(userAlias),
             [style.donation]: isDonator(userAlias),
           })}>
@@ -106,7 +127,7 @@ export function UserBadge({
             {userAlias.id}
           </span>
         )}
-      </div>
+      </Container>
     </Wrapper>
   ) : <></>
 }

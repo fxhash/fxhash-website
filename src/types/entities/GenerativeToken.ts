@@ -1,6 +1,7 @@
 import { CSSProperties } from "react"
 import { GenerativeTokenMetadata } from "../Metadata"
 import { Action } from "./Action"
+import { ArticleGenerativeTokenMention } from "./ArticleGenerativeTokenMention"
 import { Objkt } from "./Objkt"
 import { IPricingDutchAuction, IPricingFixed } from "./Pricing"
 import { Report } from "./Report"
@@ -29,6 +30,7 @@ export enum GenTokLabel {
   IMAGE_COMPOSITION   = 100,
   ANIMATED            = 101,
   INTERACTIVE         = 102,
+  PFP                 = 103,
 }
 
 export enum GenTokLabelGroup {
@@ -113,6 +115,7 @@ export interface GenerativeToken {
   features?: GenerativeTokenFeature[]
   moderationReason?: string|null
   entireCollection?: Objkt[]
+  articleMentions?: ArticleGenerativeTokenMention[]
 }
 
 export interface GenerativeTokenWithCollection extends GenerativeToken {

@@ -79,7 +79,7 @@ export function GenerativeActions({
         ended.current = true
       }
       else {
-        currentLength.current = data.generativeTokens?.actions?.length
+        currentLength.current = data.generativeToken?.actions?.length
       }
     }
   }, [data, loading])
@@ -104,11 +104,10 @@ export function GenerativeActions({
       <InfiniteScrollTrigger
         onTrigger={load}
         className={style.activity_wrapper}
+        canTrigger={!loading}
       >
-        <Activity actions={actions} className={className} />
+        <Activity actions={actions} className={className} loading={loading} />
       </InfiniteScrollTrigger>
-
-      {loading && data && <LoaderBlock/>}
     </>
   )
 }

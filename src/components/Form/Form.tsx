@@ -1,7 +1,6 @@
-import { FunctionComponent, HTMLAttributes } from "react"
+import { FunctionComponent, FormHTMLAttributes } from "react"
 import style from "./Form.module.scss"
 import cs from "classnames"
-import { FormHTMLAttributes } from "react-router/node_modules/@types/react"
 
 
 type FormProps = FormHTMLAttributes<HTMLFormElement> 

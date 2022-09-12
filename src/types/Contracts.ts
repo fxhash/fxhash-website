@@ -19,11 +19,14 @@ export const FxhashContracts = {
   ISSUER            : process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_ISSUER!,
   MARKETPLACE_V1    : process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_MARKETPLACE_V1!,
   MARKETPLACE_V2    : process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_MARKETPLACE_V2!,
+  MARKETPLACE_V3    : process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_MARKETPLACE_V3!,
   GENTK_V1          : process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_GENTK_V1!,
   GENTK_V2          : process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_GENTK_V2!,
+  ARTICLES          : process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_ARTICLES!,
   REGISTER          : process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_USERREGISTER!,
   MODERATION        : process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_TOK_MODERATION!,
   USER_MODERATION   : process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_USER_MODERATION!,
+  ARTICLE_MODERATION: process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_ARTICLE_MODERATION!,
   COLLAB_FACTORY    : process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_COLLAB_FACTORY!,
 }
 
@@ -53,6 +56,7 @@ export type TContractOperationHookReturn<Params> = {
   error: boolean,
   opHash: string|null,
   operation: WalletOperation|null
+  params: Params|null,
   call: (data: Params) => void,
   clear: () => void
 }

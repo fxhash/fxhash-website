@@ -145,7 +145,7 @@ export function EditPricing({
                   <>
                     <Spacing size="small"/>
                     <TextWarning>
-                      Warning: only reschedule opening in case of an issue with the project/platform. Rescheduling an opening time will push your token at the top of the gallery, it is considered as an abuse and it will be moderated.
+                      Warning: only reschedule opening in case of an issue with the project or if you're significantly modifying the allow list. Rescheduling an opening time will push your token at the top of the gallery, it is considered as an abuse and it will be moderated.
                     </TextWarning>
                   </>
                 )}

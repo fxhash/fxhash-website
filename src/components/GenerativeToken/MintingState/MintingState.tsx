@@ -26,14 +26,15 @@ export function MintingState({
   verbose = false,
   existingState,
 }: Props) {
-  const state = existingState || useMintingState(token)
-  
+  const mintingState = useMintingState(token);
+  const state = existingState || mintingState
+
   return (
     <>
       {state.activeState === EMintingState.DUTCH_AUCTION ? (
         <DutchAuctionState
           state={state}
-          verbose={verbose}  
+          verbose={verbose}
         />
       ):state.activeState === EMintingState.FIXED_PRICING ? (
         <FixedPricingState

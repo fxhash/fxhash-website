@@ -1,13 +1,12 @@
-import style from "./GenerativeIterations.module.scss"
 import layout from "../../../styles/Layout.module.scss"
 import cs from "classnames"
 import { GenerativeToken } from "../../../types/entities/GenerativeToken"
 import { useQuery } from "@apollo/client"
 import { Qu_genTokenIterations } from "../../../queries/generative-token"
 import { CardsContainer } from "../../../components/Card/CardsContainer"
-import { IObjktFeatureFilter, Objkt } from "../../../types/entities/Objkt"
+import { IObjktFeatureFilter, Objkt, ObjktFilters } from "../../../types/entities/Objkt"
 import { CardsLoading } from "../../../components/Card/CardsLoading"
-import { useEffect, useMemo, useRef, useState } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { SearchHeader } from "../../../components/Search/SearchHeader"
 import { IOptions, Select } from "../../../components/Input/Select"
 import { InfiniteScrollTrigger } from "../../../components/Utils/InfiniteScrollTrigger"
@@ -17,6 +16,8 @@ import { GenerativeIterationsFilters } from "./GenerativeIterationsFilters"
 import { ExploreTagDef, ExploreTags } from "../../../components/Exploration/ExploreTags"
 import { Spacing } from "../../../components/Layout/Spacing"
 import { LargeGentkCard } from "../../../components/Card/LargeGentkCard"
+import { CardSizeSelect } from "../../../components/Input/CardSizeSelect"
+import { getTagsFromFiltersObject, ITagsFilters, tagsFilters } from "../../../utils/filters";
 
 
 const ITEMS_PER_PAGE = 20
@@ -31,6 +32,14 @@ const sortOptions: IOptions[] = [
     value: "iteration-desc",
   },
   {
+    label: "price (low to high)",
+    value: "listingPrice-asc",
+  },
+  {
+    label: "price (high to low)",
+    value: "listingPrice-desc",
+  },
+  {
     label: "rarity (rarest first)",
     value: "rarity-asc",
   },
@@ -39,6 +48,7 @@ const sortOptions: IOptions[] = [
     value: "rarity-desc",
   },
 ]
+
 
 function sortValueToSortVariable(val: string) {
   if (val === "pertinence") return {}
@@ -67,9 +77,26 @@ export function GenerativeIterations({
   // the sort value
   const [sortValue, setSortValue] = useState<string>("iteration-asc")
   const sort = useMemo<Record<string, any>>(() => sortValueToSortVariable(sortValue), [sortValue])
-
   // the filters on the features, default no filters
   const [featureFilters, setFeatureFilters] = useState<IObjktFeatureFilter[]>([])
+  const [objtkFilters, setObjtkFilters] = useState<ObjktFilters>({})
+
+  const removeObjtkFilter = useCallback((key: keyof ObjktFilters) => {
+    setObjtkFilters(oldFilters => {
+      const newFilters = { ...oldFilters };
+      delete newFilters[key];
+      return newFilters;
+    })
+  }, [])
+
+  const clearFeatureFilter = useCallback((name: string) => {
+    setFeatureFilters(oldFeaturesFilters => oldFeaturesFilters.filter(filter => filter.name !== name))
+  }, [])
+
+  const handleClearAllTags = useCallback(() => {
+    setFeatureFilters([])
+    setObjtkFilters({});
+  }, []);
 
   // serialize the feature filters to send to the backend
   const serializedFeatureFilters = useMemo<IObjktFeatureFilter[]>(() => {
@@ -91,13 +118,31 @@ export function GenerativeIterations({
       take: ITEMS_PER_PAGE,
       sort,
       featureFilters: serializedFeatureFilters,
-    }
+      filters: objtkFilters,
+    },
+    fetchPolicy: 'cache-and-network',
+    nextFetchPolicy: "cache-and-network",
   })
 
   //
   // FAST ACCESS
   //
   const tokens: Objkt[]|null = data?.generativeToken?.objkts
+
+  // the visible filter tags
+  const filterTags = useMemo<ExploreTagDef[]>(() => {
+    const featuresFiltersTags = serializedFeatureFilters.map(filter => {
+      return {
+        value: `${filter.name}: ${filter.values.join(', ')}`,
+        onClear: () => clearFeatureFilter(filter.name)
+      }
+    })
+    const objtkFiltersTags = getTagsFromFiltersObject<ObjktFilters, ExploreTagDef>(objtkFilters, ({ key, label}) => ({
+      value: label,
+      onClear: () => removeObjtkFilter(key)
+    }));
+    return featuresFiltersTags.concat(objtkFiltersTags)
+  }, [clearFeatureFilter, objtkFilters, removeObjtkFilter, serializedFeatureFilters])
 
   //
   // UTILITIES
@@ -142,32 +187,18 @@ export function GenerativeIterations({
       }
     }
   }, [loading])
-
-  const clearFeatureFilter = (name: string) => {
-    setFeatureFilters(featureFilters.filter(filter => filter.name !== name))
-  }
-
-  // the visible filter tags
-  const filterTags = useMemo<ExploreTagDef[]>(() => {
-    return serializedFeatureFilters.map(filter => {
-      return {
-        value: `${filter.name}: ${filter.values.join(', ')}`,
-        onClear: () => clearFeatureFilter(filter.name)
-      }
-    })
-  }, [serializedFeatureFilters])
-
   return (
-    <CardsExplorer>
+    <CardsExplorer cardSizeScope="generative-iteration">
       {({
         filtersVisible,
         setFiltersVisible,
         inViewCardsContainer,
         refCardsContainer,
+        cardSize,
+        setCardSize,
       }) => (
         <>
           <div ref={topMarkerRef}/>
-
           <SearchHeader
             hasFilters
             showFiltersOnMobile={inViewCardsContainer}
@@ -178,10 +209,15 @@ export function GenerativeIterations({
                 options={sortOptions}
                 onChange={setSortValue}
               />
+	          }
+            sizeSelectComp={
+              <CardSizeSelect
+                value={cardSize}
+                onChange={setCardSize}
+              />
             }
             padding="small"
           />
-
           <section className={cs(layout.cards_explorer, layout['padding-small'])}>
             {filtersVisible && (
               <FiltersPanel onClose={() => setFiltersVisible(false)}>
@@ -189,18 +225,18 @@ export function GenerativeIterations({
                   token={token}
                   featureFilters={featureFilters}
                   setFeatureFilters={setFeatureFilters}
+                  objtkFilters={objtkFilters}
+                  setObjtkFilters={setObjtkFilters}
                 />
               </FiltersPanel>
-            )}
+	          )}
 
             <div style={{width: "100%"}}>
               {filterTags.length > 0 && (
                 <>
                   <ExploreTags
                     terms={filterTags}
-                    onClearAll={() => {
-                      setFeatureFilters([])
-                    }}
+                    onClearAll={handleClearAllTags}
                   />
                   <Spacing size="regular"/>
                 </>

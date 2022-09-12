@@ -24,18 +24,18 @@ export function ProgressModule({
       cursorProgress(position-1, entries.length),
       cursorProgress(position, entries.length),
     ]
-  }, [position])
+  }, [entries.length, position])
 
   return (
     <div className={cs(style.container)}>
       <div className={cs(style.progress)}>
-        <div 
+        <div
           className={cs(style.progress_valid)}
           style={{
             height: `${validPos*100}%`
           }}
         />
-        <div 
+        <div
           className={cs(style.progress_loading)}
           style={{
             height: `${loadingPos*100}%`
