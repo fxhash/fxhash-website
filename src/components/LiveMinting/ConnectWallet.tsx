@@ -48,7 +48,7 @@ const _ConnectWallet = () => {
 
   // check if this is device is iOS
   const isIos = useMemo(
-    () => /iPad|iPhone|iPod/.test(navigator.userAgent),
+    () => typeof window !== "undefined" && /iPad|iPhone|iPod/.test(navigator.userAgent),
     []
   )
 

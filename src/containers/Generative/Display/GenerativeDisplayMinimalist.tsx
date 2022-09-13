@@ -57,8 +57,9 @@ export function GenerativeDisplayMinimalist({
               token={token}
               forceDisabled={offlineMode}
               generateRevealUrl={generateRevealUrl}
-              className={layout.y_centered}
+              className={cs(layout.y_centered, layout.text_centered)}
               forceReserveConsumption
+              hideMintButtonAfterReveal
             />
           </div>
 

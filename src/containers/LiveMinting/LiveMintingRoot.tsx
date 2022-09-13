@@ -1,6 +1,7 @@
 import { PropsWithChildren } from "react"
 import { LiveMintingWalletGuard } from "../../components/LiveMinting/WalletGuard"
 import { LiveMintingProvider } from "../../context/LiveMinting"
+import { LiveMintingGuard } from "./LiveMintingGuard"
 
 type Props = PropsWithChildren<{
 }>
@@ -9,9 +10,11 @@ export function LiveMintingRoot({
 }: Props) {
   return (
     <LiveMintingProvider>
-      <LiveMintingWalletGuard>
-        {children}
-      </LiveMintingWalletGuard>
+      <LiveMintingGuard>
+        <LiveMintingWalletGuard>
+          {children}
+        </LiveMintingWalletGuard>
+      </LiveMintingGuard>
     </LiveMintingProvider>
   )
 }

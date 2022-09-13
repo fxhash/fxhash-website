@@ -44,8 +44,6 @@ interface LiveMintingEventProps {
 const _LiveMintingEvent = ({}: LiveMintingEventProps) => {
   const eventCtx = useContext(LiveMintingContext)
 
-  console.log(JSON.stringify(eventCtx, null, 2))
-
   const { data, loading } = useQuery(Qu_genTokens, {
     notifyOnNetworkStatusChange: true,
     variables: {
@@ -63,14 +61,14 @@ const _LiveMintingEvent = ({}: LiveMintingEventProps) => {
   return (
     <div className={style.container}>
       <p>
-        These are the projects created especially for this event.<br/>
+        These projects were created especially for this event.<br/>
         Make sure you have enough tezos in your wallet before minting.
       </p>
       <div className={style.container_token}>
         {generativeTokens?.length > 0 && generativeTokens.map(token => (
           <Link 
             key={token.id}
-            href={`/live-minting/${eventCtx.event!.id}/generative/${token.id}`}
+            href={`/live-minting/${eventCtx.event!.id}/generative/${token.id}/?token=${eventCtx.mintPass?.token}`}
           >
             <a className={cs(text.reset, style.token)}>
               <LiveMintingGenerativeTokenCard

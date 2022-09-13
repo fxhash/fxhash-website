@@ -11,8 +11,9 @@ import { LayoutMinimalist } from "../../../../components/Layout/LayoutMinimalist
 import { NextPageWithLayout } from "../../../_app";
 import { GenerativeDisplayMinimalist } from "../../../../containers/Generative/Display/GenerativeDisplayMinimalist";
 import { Spacing } from "../../../../components/Layout/Spacing";
-import { useCallback } from "react";
+import { useCallback, useContext } from "react";
 import { LiveMintingLayout } from '../../../../containers/LiveMinting/LiveMintingLayout'
+import { LiveMintingContext } from '../../../../context/LiveMinting'
 
 interface Props {
   eventId: string
@@ -20,8 +21,10 @@ interface Props {
 }
 
 const GenerativeTokenDetails: NextPageWithLayout<Props> = ({ eventId, token }) => {
+  const liveMinting = useContext(LiveMintingContext)
+
   const handleGenerationRevealUrl = useCallback(
-    ({ tokenId, hash }) => `/live-minting/${eventId}/reveal/${tokenId}/${hash}`,
+    ({ tokenId, hash }) => `/live-minting/${eventId}/reveal/${tokenId}/${hash}/?token=${liveMinting.mintPass?.token}`,
     [eventId]
   )
 

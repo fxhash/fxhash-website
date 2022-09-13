@@ -66,7 +66,7 @@ export function MintButton({
   const userEligible = eligibleFor > 0
 
   // should we show the button with dropdown
-  const isMintDropdown = userEligible && !onlyReserveLeft
+  const isMintDropdown = userEligible && !onlyReserveLeft && !forceReserveConsumption
   // conditions required to show the regular mint button
   const isMintButton = !isMintDropdown
     && ((userEligible && onlyReserveLeft) || !onlyReserveLeft)

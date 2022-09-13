@@ -10,10 +10,12 @@ export function LiveMintingWalletBalance({
 }: Props) {
   return (
     <div className={cs(style.root)}>
-      <span>Wallet balance:</span>
-      <span className={cs(style.balance)}>
-        <WalletBalance/>
-      </span>
+      <div className={cs(style.wrapper)}>
+        <span>Wallet balance:</span>
+        <span className={cs(style.balance)}>
+          <WalletBalance/>
+        </span>
+      </div>
     </div>
   )
 }

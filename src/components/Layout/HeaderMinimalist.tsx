@@ -41,6 +41,7 @@ const _HeaderMinimalist = () => {
                     user={fetchedUser}
                     hasLink={false}
                     avatarSide="right"
+                    className={cs(style.user_badge)}
                   />
                 }
               </UserFromAddress>

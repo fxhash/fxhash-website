@@ -112,22 +112,7 @@ export function LiveMintingProvider({
 
   return (
     <LiveMintingContext.Provider value={context}>
-      {context.loading ? (
-        <LoaderBlock
-          size="small"
-          height="80vh"
-        >
-          loading mint pass
-        </LoaderBlock>
-      ):(
-        context.error ? (
-          <ErrorPage
-            title="An error has occured 😟"
-          >
-            {context.error}
-          </ErrorPage>
-        ):children
-      )}
+      {children}
     </LiveMintingContext.Provider>
   )
 }

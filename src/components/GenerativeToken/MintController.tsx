@@ -22,6 +22,7 @@ interface Props {
   forceDisabled?: boolean
   forceReserveConsumption?: boolean
   generateRevealUrl?: (params: { tokenId: number, hash: string | null }) => string
+  hideMintButtonAfterReveal?: boolean
   onReveal?: (hash: string) => void
   className?: string
 }
@@ -41,6 +42,7 @@ export function MintController({
   token,
   forceDisabled = false,
   forceReserveConsumption = false,
+  hideMintButtonAfterReveal = false,
   generateRevealUrl,
   onReveal,
   className,
@@ -127,23 +129,25 @@ export function MintController({
         </>
       )}
 
-      <div className={cs(
-        layout.buttons_inline, layout.flex_wrap, style.buttons_wrapper
-      )}>
-        {!hidden && (
-          <MintButton
-            token={token}
-            loading={loading}
-            disabled={!enabled || locked}
-            onMint={mint}
-            forceReserveConsumption={forceReserveConsumption}
-          >
-            mint iteration&nbsp;&nbsp;<DisplayTezos mutez={price} tezosSize="regular" formatBig={false} />
-          </MintButton>
-        )}
+      {!(opHash && hideMintButtonAfterReveal) && (
+        <div className={cs(
+          layout.buttons_inline, layout.flex_wrap, style.buttons_wrapper
+        )}>
+          {!hidden && (
+            <MintButton
+              token={token}
+              loading={loading}
+              disabled={!enabled || locked}
+              onMint={mint}
+              forceReserveConsumption={forceReserveConsumption}
+            >
+              mint iteration&nbsp;&nbsp;<DisplayTezos mutez={price} tezosSize="regular" formatBig={false} />
+            </MintButton>
+          )}
 
-        {children}
-      </div>
+          {children}
+        </div>
+      )}
     </div>
   )
 }
