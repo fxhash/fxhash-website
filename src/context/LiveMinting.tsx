@@ -110,8 +110,6 @@ export function LiveMintingProvider({
     }
   }, [router.isReady])
 
-  console.log(context)
-
   return (
     <LiveMintingContext.Provider value={context}>
       {context.loading ? (

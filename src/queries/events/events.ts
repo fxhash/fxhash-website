@@ -4,6 +4,8 @@ export const Qu_event = gql`
   query Event($where: EventWhereUniqueInput!) {
     event(where: $where) {
       id
+      name
+      description
       createdAt
       updatedAt
       startsAt
