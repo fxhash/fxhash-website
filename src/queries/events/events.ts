@@ -19,6 +19,7 @@ export const Qu_eventMintPass = gql`
   query MintPass($where: MintPassWhereUniqueInput!) {
     mintPass(where: $where) {
       token
+      expiresAt
       group {
         address
         event {

@@ -19,6 +19,9 @@ import { useContext } from "react"
 import { LiveMintingContext } from "../../../../../context/LiveMinting"
 import { Button } from "../../../../../components/Button"
 import { Submit } from "../../../../../components/Form/Submit"
+import { UserContext } from "../../../../../containers/UserProvider"
+import { getUserProfileLink } from "../../../../../utils/user"
+import { User } from "../../../../../types/entities/User"
 
 interface Props {
   hash: string
@@ -27,6 +30,7 @@ interface Props {
 
 const LiveMintingRevealPage: NextPageWithLayout<Props> = ({ hash, token }) => {
   const eventCtx = useContext(LiveMintingContext)
+  const { user } = useContext(UserContext)
 
   return (
     <>
@@ -75,6 +79,24 @@ const LiveMintingRevealPage: NextPageWithLayout<Props> = ({ hash, token }) => {
                 style={{ justifySelf: "center" }}
               >
                 mint other project
+              </Button>
+            </Link>
+          </Submit>
+
+          <Submit layout="center">
+            <Link 
+              href={`${getUserProfileLink(user as User)}/collection`}
+              passHref
+            >
+              <Button
+                isLink
+                color="transparent"
+                iconComp={<i aria-hidden className="fas fa-arrow-right"/>}
+                iconSide="right"
+                size="regular"
+                style={{ justifySelf: "center" }}
+              >
+                open your profile
               </Button>
             </Link>
           </Submit>

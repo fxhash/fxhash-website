@@ -19,4 +19,5 @@ export interface LiveMintingPassGroup {
 export interface LiveMintingPass {
   token: string
   group: LiveMintingPassGroup
+  expiresAt: string
 }
