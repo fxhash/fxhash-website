@@ -11,6 +11,7 @@ export interface LiveMintingEvent {
 
 export interface LiveMintingPassGroup {
   address: string
+  label: string
   maxMints: number
   maxMintsPerProject: number
   event: LiveMintingEvent

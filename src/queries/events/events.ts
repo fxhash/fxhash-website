@@ -29,3 +29,16 @@ export const Qu_eventMintPass = gql`
     }
   }
 `
+
+export const Qu_eventMintPassGroup = gql`
+  query MintPassGroup($where: MintPassGroupWhereUniqueInput!) {
+    mintPassGroup(where: $where) {
+      address
+      label
+      event {
+        id
+        name
+      }
+    }
+  }
+`
