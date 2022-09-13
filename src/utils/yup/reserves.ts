@@ -1,5 +1,6 @@
 import * as Yup from "yup"
 import { EReserveMethod } from "../../types/entities/Reserve"
+import { isContractAddress } from "../tezos"
 
 export const YupReserves = (
   getAmount = (ctx: any): number => ctx.parent.editions
@@ -36,7 +37,7 @@ export const YupReserves = (
             "Invalid contract address",
             (value, context) => {
               return value 
-                ? /^KT1[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{33}$/.test(value)
+                ? isContractAddress(value)
                 : false
             }
           )
