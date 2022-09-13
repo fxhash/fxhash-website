@@ -1,8 +1,12 @@
 import { differenceInSeconds } from "date-fns"
 import { TRenderReserveComponent } from "../components/GenerativeToken/Reserves/Reserve"
 import { ReserveAccessList } from "../components/GenerativeToken/Reserves/ReserveAccessList"
+import { ReserveMintPass } from "../components/GenerativeToken/Reserves/ReserveMintPass"
 import { TInputReserve } from "../components/Input/Reserves/InputReserve"
+import { InputReserveMintPass } from "../components/Input/Reserves/InputReserveMintPass"
 import { InputReserveWhitelist } from "../components/Input/Reserves/InputReserveWhitelist"
+import { ILiveMintingContext } from "../context/LiveMinting"
+import { IReserveConsumption } from "../services/contract-operations/Mint"
 import { TInputMintIssuer } from "../services/parameters-builder/mint-issuer/input"
 import { TInputPricingDetails } from "../services/parameters-builder/pricing/input"
 import { GenerativeToken, GenTokFlag, GenTokLabel, GenTokLabelDefinition, GenTokLabelGroup, GenTokPricing } from "../types/entities/GenerativeToken"
@@ -363,6 +367,7 @@ interface IReserveDefinition {
   description: string
   inputComponent: TInputReserve
   renderComponent: TRenderReserveComponent
+  initialValue: any
 }
 
 // maps reserves to their definition
@@ -373,7 +378,16 @@ export const mapReserveDefinition: Record<EReserveMethod, IReserveDefinition> = 
     description: "A list of users to whom a number of editions is reserved",
     inputComponent: InputReserveWhitelist,
     renderComponent: ReserveAccessList,
+    initialValue: [],
   },
+  MINT_PASS: {
+    id: 1,
+    label: "Mint Pass",
+    description: "[For Live Events] A Smart Contract which controls whether a user can mint or not.",
+    inputComponent: InputReserveMintPass,
+    renderComponent: ReserveMintPass,
+    initialValue: "",
+  }
 }
 
 // maps the reserve IDs to their enum
@@ -396,27 +410,47 @@ export function reserveSize(
   return Math.min(token.balance, size)
 }
 
+type TReserveEligibility = (
+  reserve: IReserve,
+  user: User,
+  liveMintContext?: ILiveMintingContext
+) => number
+
+/**
+ * Maps a reserve method with its function to compute how many can be consumed
+ * from the reserve
+ */
+const mapReserveToEligiblity: Record<EReserveMethod, TReserveEligibility> = {
+  WHITELIST: (reserve, user) => {
+    return reserve.data[user.id] || 0
+  },
+  MINT_PASS: (reserve, user, passCtx) => {
+    return reserve.data
+      ? (passCtx?.mintPass?.group?.address === reserve.data ? 1 : 0)
+      : 0
+  },
+}
+
 /**
  * Is a user elligible to mint from the reserve of a token ?
  */
 export function reserveEligibleAmount(
   user: User,
   token: GenerativeToken,
+  liveMintingContext?: ILiveMintingContext,
 ): number {
   let eligibleFor = 0
   if (token.reserves && user && user.id) {
     for (const reserve of token.reserves) {
-      if (reserve.amount > 0) {
-        // check if user is in the reserve
-        if (reserve.method === EReserveMethod.WHITELIST) {
-          if (reserve.data[user.id]) {
-            // we add the amount value clamped to reserve size
-            eligibleFor += Math.min(
-              reserve.data[user.id],
-              reserve.amount,
-            )
-          }
-        }
+      if (reserve.amount > 0 && reserve.method) {
+        eligibleFor += Math.min(
+          mapReserveToEligiblity[reserve.method](
+            reserve,
+            user,
+            liveMintingContext
+          ),
+          reserve.amount
+        )
       }
     }
   }
@@ -430,4 +464,50 @@ export function getReservesAmount(reserves: IReserve[]): number {
   return reserves && reserves.length > 0
     ? reserves.reduce((a, b) => a + b.amount, 0)
     : 0
+}
+
+/**
+ * Get the best reserve consumption method to consume, or null if no reserve
+ * can be consumed
+ */
+export function getReserveConsumptionMethod(
+  token: GenerativeToken,
+  user: User,
+  liveMintingContext: ILiveMintingContext,
+): IReserveConsumption|null {
+  let consumption: IReserveConsumption|null = null
+
+  // only if a token has a reserve we check
+  if (token.reserves) {
+    // we sort the reserve, MINT_PASS is last
+    const sorted = token.reserves.sort(
+      (a, b) => a.method === EReserveMethod.MINT_PASS ? -1 : 1
+    )
+
+    // we parse the reserve and check for a match
+    for (const reserve of token.reserves) {
+      if (reserve.amount > 0) {
+        if (
+          mapReserveToEligiblity[reserve.method](
+            reserve,
+            user,
+            liveMintingContext
+          ) > 0
+        ) {
+          consumption = {
+            method: reserve.method,
+            data: {
+              token: liveMintingContext.mintPass?.token,
+              address: user.id,
+              project: token.id,
+              reserveData: reserve.data,
+            }
+          }
+          break
+        }
+      }
+    }
+  }
+
+  return consumption
 }

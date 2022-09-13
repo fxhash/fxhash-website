@@ -7,7 +7,7 @@ export const YupReserves = (
   Yup.object({
     amount: Yup.number()
       .positive("At least 1"),
-    data: Yup.array()
+    data: Yup.mixed()
       .when("method", {
         is: EReserveMethod.WHITELIST,
         then: Yup.array()
@@ -25,6 +25,19 @@ export const YupReserves = (
             "At most 500 different addresses",
             (value, context) => {
               return (value?.length || 0) < 500
+            }
+          )
+      })
+      .when("method", {
+        is: EReserveMethod.MINT_PASS,
+        then: Yup.string()
+          .test(
+            "ktAddress",
+            "Invalid contract address",
+            (value, context) => {
+              return value 
+                ? /^KT1[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{33}$/.test(value)
+                : false
             }
           )
       })
