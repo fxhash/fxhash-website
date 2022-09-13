@@ -8,10 +8,17 @@ export function transformReserveInputToGeneric(
 ): IReserve<number>[] {
   return input.map(reserve => {
     let data: any
-    if (reserve.method === EReserveMethod.WHITELIST) {
-      data = {}
-      for (const sh of reserve.data) {
-        data[sh.address] = parseInt(sh.pct)
+    switch (reserve.method) {
+      case EReserveMethod.WHITELIST: {
+        data = {}
+        for (const sh of reserve.data) {
+          data[sh.address] = parseInt(sh.pct)
+        }
+        break
+      }
+      case EReserveMethod.MINT_PASS: {
+        data = reserve.data
+        break
       }
     }
     return {
