@@ -11,6 +11,7 @@ import Link from 'next/link';
 import { Tags } from '../Tags/Tags';
 import { ArticlesContext } from '../../context/Articles';
 import { getArticleUrl } from '../../utils/entities/articles';
+import { Button } from "../Button";
 
 interface CardNftArticleProps {
   className?: string
@@ -18,18 +19,16 @@ interface CardNftArticleProps {
   isDraft?: boolean
   article: NFTArticleInfos
   editionsOwned?: number
-  onDelete?: (id: string) => void
 }
 
-const _CardNftArticle = ({ 
+const _CardNftArticle = ({
   article,
   editionsOwned,
   isDraft,
   imagePriority,
-  onDelete,
-  className 
+  className
 }: CardNftArticleProps) => {
-  const { 
+  const {
     id,
     title,
     slug,
@@ -37,21 +36,24 @@ const _CardNftArticle = ({
     description,
     tags,
     author,
-    createdAt 
+    createdAt
   } = article
   const settings = useContext(SettingsContext)
   const thumbnailUrl = useMemo(() => thumbnailUri && ipfsGatewayUrl(thumbnailUri), [thumbnailUri])
   const dateCreatedAt = useMemo(() => new Date(createdAt), [createdAt])
   const urlArticle = isDraft ? `/article/editor/local/${id}` : getArticleUrl(article)
-  const { isEdited } = useContext(ArticlesContext)
+  const { isEdited, dispatch } = useContext(ArticlesContext)
 
-  const onClickDelete = useCallback<MouseEventHandler>((event) => {
+  const onClickDeleteLocal = useCallback<(confirmMsg: string) => MouseEventHandler>((confirmMsg) => (event) => {
     event.preventDefault()
     event.stopPropagation()
-    if (window.confirm?.("Do you really want to delete this article ? It will be removed from your browser memory.")) {
-      onDelete?.(id as string)
+    if (window.confirm?.(confirmMsg)) {
+      dispatch({
+        type: "delete",
+        payload: { id: id as string }
+      })
     }
-  }, [])
+  }, [dispatch, id])
 
   const edited = useMemo(() => isEdited(id as string), [isEdited, id])
 
@@ -68,7 +70,7 @@ const _CardNftArticle = ({
           <span>DRAFT (saved locally)</span>
           <button
             type="button"
-            onClick={onClickDelete}
+            onClick={onClickDeleteLocal("Do you really want to delete this article ? It will be removed from your browser memory.")}
           >
             <i className="fa-solid fa-trash" aria-hidden/>
           </button>
@@ -77,12 +79,19 @@ const _CardNftArticle = ({
       {!isDraft && edited && (
         <div className={cs(style.banner, style.banner_edition)}>
           <span>Unpublished changes</span>
-          <button
-            type="button"
-            onClick={onClickDelete}
-          >
-            <i className="fa-solid fa-pen-to-square" aria-hidden/>
-          </button>
+          <div>
+            <button
+              type="button"
+              onClick={onClickDeleteLocal("Do you want to remove the unpublished local changes made to this article ?")}
+            >
+              <i className="fa-solid fa-trash" aria-hidden/>
+            </button>
+            <Link href={`/article/editor/${article.id}/`} passHref>
+              <a>
+                <i className="fa-solid fa-pen-to-square" aria-hidden/>
+              </a>
+            </Link>
+          </div>
         </div>
       )}
       <div className={style.content}>
