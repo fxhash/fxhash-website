@@ -53,7 +53,7 @@ interface PageArticleProps {
   isPreview?: boolean,
   originUrl: string
 }
-const _PageArticle = ({ 
+const _PageArticle = ({
   article,
   originUrl,
   isPreview,
@@ -81,6 +81,8 @@ const _PageArticle = ({
     }
   }, [article.id, dispatch])
 
+  // todo [#392] remove article.metadata?.thumbnailCaption
+  const thumbnailCaption = article.metadata?.thumbnailCaption || article.thumbnailCaption;
   return (
     <>
       <Head>
@@ -169,8 +171,8 @@ const _PageArticle = ({
             <ImagePolymorphic
               uri={article.displayUri}
             />
-            {article.thumbnailCaption && (
-              <figcaption>{article.thumbnailCaption}</figcaption>
+            {thumbnailCaption && (
+              <figcaption>{thumbnailCaption}</figcaption>
             )}
           </figure>
         </div>
