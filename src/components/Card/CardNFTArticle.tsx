@@ -26,7 +26,6 @@ const _CardNftArticle = ({
   editionsOwned,
   isDraft,
   imagePriority,
-  onDelete,
   className
 }: CardNftArticleProps) => {
   const {
