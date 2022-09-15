@@ -1,6 +1,7 @@
 import { addHours, addSeconds, differenceInSeconds, isAfter, isBefore, subHours } from "date-fns"
 import { useContext, useEffect, useRef, useState } from "react"
 import { UserContext } from "../containers/UserProvider"
+import { ILiveMintingContext, LiveMintingContext } from "../context/LiveMinting"
 import { GenerativeToken, GenTokFlag } from "../types/entities/GenerativeToken"
 import { ConnectedUser, User } from "../types/entities/User"
 import { getReservesAmount, reserveEligibleAmount } from "../utils/generative-token"
@@ -74,6 +75,7 @@ export interface IMintingState {
 function deriveMintingStateFromToken(
   token: Readonly<GenerativeToken>,
   user: Readonly<ConnectedUser>|null,
+  liveMintingContext: ILiveMintingContext,
   forceDisabled: boolean
 ): IMintingState {
   // should the minting button be hidden ?
@@ -205,7 +207,7 @@ function deriveMintingStateFromToken(
   if (token.reserves && token.reserves.length > 0) {
     if (getReservesAmount(token.reserves) >= token.balance) {
       // then we check if user has access
-      if (reserveEligibleAmount(user as User, token) <= 0) {
+      if (reserveEligibleAmount(user as User, token, liveMintingContext) <= 0) {
         locked = true
       }
     }
@@ -243,11 +245,15 @@ export function useMintingState(
 ) {
   // we need the user to derive certain states
   const userContext = useContext(UserContext)
+  // get the Live Minting context, can be used to find a mint pass
+  const liveMintContext = useContext(LiveMintingContext)
+
   // initialize the state
   const [state, setState] = useState<IMintingState>(
     deriveMintingStateFromToken(
       token,
       userContext.user,
+      liveMintContext,
       forceDisabled,
     )
   )
@@ -275,6 +281,7 @@ export function useMintingState(
               deriveMintingStateFromToken(
                 token,
                 userContext.user,
+                liveMintContext,
                 forceDisabled,
               )
             )
@@ -295,6 +302,7 @@ export function useMintingState(
       deriveMintingStateFromToken(
         token,
         userContext.user,
+        liveMintContext,
         forceDisabled,
       )
     )

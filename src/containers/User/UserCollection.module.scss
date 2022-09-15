@@ -1,4 +1,21 @@
+@import "../../styles/Variables";
+
 .header {
   display: flex;
   justify-content: flex-end;
+}
+
+.article_container {
+  margin-top: $spacing-3x-large;
+  width: min(100%, 1200px);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.article {
+  margin-bottom: $spacing-3x-large;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
 }

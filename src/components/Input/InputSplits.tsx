@@ -24,6 +24,7 @@ interface PropsChildren {
 }
 
 export interface InputSplitsProps {
+  className?: string
   value: ISplit[]
   onChange?: (value: ISplit[]) => void
   unremoveableAddresses?: string[]
@@ -42,6 +43,7 @@ export interface InputSplitsProps {
  * Tokens but it can also be used to define the collaboration contract shares.
  */
 export function InputSplits({
+  className,
   value,
   onChange,
   unremoveableAddresses = [],
@@ -138,7 +140,7 @@ export function InputSplits({
 
   return (
     <>
-      <table className={cs(style.splits)}>
+      <table className={cs(style.splits, className)}>
         <thead>
           <tr>
             <td>User</td>

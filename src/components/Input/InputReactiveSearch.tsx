@@ -1,11 +1,9 @@
 import style from "./InputReactiveSearch.module.scss"
-import text from "../../styles/Text.module.css"
 import cs from "classnames"
 import { FunctionComponent, useRef, useState } from "react"
 import useAsyncEffect from "use-async-effect"
 import { InputText } from "./InputText"
 import { Cover } from "../Utils/Cover"
-import { LoaderBlock } from "../Layout/LoaderBlock"
 
 // props passed down to renderer components
 interface PassedDownProps<ObjectType> {
@@ -22,6 +20,7 @@ export interface InputReactSearchResultsRendererProps<ObjectType> extends Passed
   hideResults: boolean
   onChangeHideResults: (hide: boolean) => void
   selectedValue?: string
+  keyboardSelectedIdx?: number
   onChangeSelectedValue: (value: string) => void
   children?: FunctionComponent<PropsChildren<ObjectType>>
 }
@@ -36,6 +35,9 @@ interface BaseResultItem {
 interface Props<ObjectType> extends PassedDownProps<ObjectType> {
   placeholder?: string
   className?: string
+  hideInput?: boolean,
+  hideNoResults?: boolean,
+  keyboardSelectedIdx?: number,
   // should perform a search given an input
   searchFn: (searchInput: string) => Promise<any>
   // given the output of the searchFn, outputs a list of objects
@@ -65,7 +67,10 @@ interface PropsChildren<ObjectType> {
  */
 export function InputReactiveSearch<ObjectType extends BaseResultItem>({
   value,
+  keyboardSelectedIdx,
   onChange,
+  hideInput,
+  hideNoResults,
   placeholder,
   searchFn,
   transformSearchResults,
@@ -104,7 +109,7 @@ export function InputReactiveSearch<ObjectType extends BaseResultItem>({
     }
     // sets up the timeout to make call to get results
     timeout.current = window.setTimeout(async () => {
-      // start the loading 
+      // start the loading
       if (isMounted()) {
         setLoading(true)
         setSelectedValue(undefined)
@@ -124,14 +129,16 @@ export function InputReactiveSearch<ObjectType extends BaseResultItem>({
 
   return (
     <div className={cs(style.root, className)}>
-      <InputText
-        value={value}
-        onChange={evt => onChange(evt.target.value, false)}
-        placeholder={placeholder}
-        className={style.input_search}
-        onFocus={() => hideResults && setHideResults(false)}
-      />
-      {!loading && results?.length === 0 && (
+      {!hideInput &&
+        <InputText
+          value={value}
+          onChange={evt => onChange(evt.target.value, false)}
+          placeholder={placeholder}
+          className={style.input_search}
+          onFocus={() => hideResults && setHideResults(false)}
+        />
+      }
+      {(!loading && results?.length === 0) && !hideNoResults && (
         <div className={cs(style.no_results)}>
           This search yielded 0 result <i className="fa-solid fa-face-frown-open" aria-hidden/>
         </div>
@@ -146,6 +153,7 @@ export function InputReactiveSearch<ObjectType extends BaseResultItem>({
         valueFromResult={valueFromResult}
         selectedValue={selectedValue}
         onChangeSelectedValue={setSelectedValue}
+        keyboardSelectedIdx={keyboardSelectedIdx}
       >
         {children}
       </RenderResults>
@@ -166,6 +174,7 @@ function DefaultResultsRenderer<ObjectType extends BaseResultItem>({
   classNameResults,
   valueFromResult,
   selectedValue,
+  keyboardSelectedIdx,
   onChangeSelectedValue,
   children,
 }: InputReactSearchResultsRendererProps<ObjectType>) {
@@ -173,11 +182,13 @@ function DefaultResultsRenderer<ObjectType extends BaseResultItem>({
     <>
       <div className={cs(style.results_wrapper)}>
         <div className={cs(style.results, classNameResults)}>
-          {results.map(result => (
+          {results.map((result, idx) => (
             <button
               key={result.id}
               type="button"
-              className={cs(style.result)}
+              className={cs(style.result, {
+                [style.result_keyboard_selected]: keyboardSelectedIdx !== undefined && keyboardSelectedIdx === idx
+              })}
               onClick={() => {
                 const nval = valueFromResult(result)
                 onChangeSelectedValue(nval)

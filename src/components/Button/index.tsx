@@ -15,7 +15,7 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   size?: ButtonSize
   color?: "black" | "primary" | "secondary" | "transparent"
   className?: string
-  iconSide?: "left" | "right"
+  iconSide?: "left" | "right" | null
   isLink?: boolean
   disabled?: boolean
 }
@@ -39,7 +39,7 @@ export const Button = React.forwardRef<HTMLButtonElement & HTMLAnchorElement, Pr
       className={cs(
         style.button,
         style[`size-${size}`],
-        style[`icon-${iconSide}`],
+        style[`icon-${iconSide || 'alone'}`],
         style[`color-${color}`],
         style[`state-${state}`],
         className,

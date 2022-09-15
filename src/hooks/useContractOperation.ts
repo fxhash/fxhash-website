@@ -91,7 +91,7 @@ export function useContractOperation<Params>(
       else if (status === ContractOperationStatus.ERROR) {
         messageCenter.addMessage({
           type: "error",
-          title: "Error when calling contract",
+          title: "An error occured",
           content: data,
         })
       }
