@@ -1,28 +1,31 @@
-import React, { memo, useMemo } from 'react';
-import style from "./ObjktImageAndName.module.scss";
-import { Objkt } from "../../types/entities/Objkt";
-import Link from "next/link";
-import Image from "next/image";
-import { ipfsGatewayUrl } from "../../services/Ipfs";
+import React, { memo, useMemo } from "react"
+import style from "./ObjktImageAndName.module.scss"
+import { Objkt } from "../../types/entities/Objkt"
+import Link from "next/link"
+import Image from "next/image"
+import { ipfsGatewayUrl } from "../../services/Ipfs"
 
 interface Props {
-  objkt: Objkt,
+  objkt: Objkt
   imagePriority?: boolean
   shortName?: boolean
   size?: number
 }
 
-const _ObjtkImageAndName = ({ 
+const _ObjtkImageAndName = ({
   objkt,
   imagePriority,
   shortName,
   size = 40,
 }: Props) => {
-  const thumbnailUrl = useMemo(() => ipfsGatewayUrl(objkt.metadata?.thumbnailUri), [objkt])
+  const thumbnailUrl = useMemo(
+    () => ipfsGatewayUrl(objkt.metadata?.thumbnailUri),
+    [objkt]
+  )
   return (
     <Link href={`/gentk/${objkt.id}`}>
       <a className={style.container}>
-        {thumbnailUrl &&
+        {thumbnailUrl && (
           <Image
             width={size}
             height={size}
@@ -33,13 +36,13 @@ const _ObjtkImageAndName = ({
             alt={`thumbnail of ${objkt.name}`}
             priority={imagePriority}
           />
-        }
+        )}
         <span className={style.name}>
           {shortName ? `#${objkt.iteration}` : objkt.name}
         </span>
       </a>
     </Link>
-  );
-};
+  )
+}
 
-export const ObjktImageAndName = memo(_ObjtkImageAndName);
+export const ObjktImageAndName = memo(_ObjtkImageAndName)

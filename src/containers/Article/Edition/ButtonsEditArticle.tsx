@@ -60,7 +60,7 @@ export function ButtonsEditArticle({
 
   useEffect(() => {
     if (success) {
-      dispatch({ 
+      dispatch({
         type: 'delete',
         payload: { id: ""+article.id }
       })

@@ -2,6 +2,7 @@ import { HistoryMetadata } from '../Metadata'
 import { GenerativeToken } from './GenerativeToken'
 import { Objkt } from './Objkt'
 import { User } from './User'
+import { NFTArticleInfos } from './Article'
 
 
 export enum TokenActionType {
@@ -20,6 +21,9 @@ export enum TokenActionType {
   LISTING_V2                    = "LISTING_V2",
   LISTING_V2_CANCELLED          = "LISTING_V2_CANCELLED",
   LISTING_V2_ACCEPTED           = "LISTING_V2_ACCEPTED",
+  LISTING_V3                    = "LISTING_V3",
+  LISTING_V3_CANCELLED          = "LISTING_V3_CANCELLED",
+  LISTING_V3_ACCEPTED           = "LISTING_V3_ACCEPTED",
   OFFER                         = "OFFER",
   OFFER_CANCELLED               = "OFFER_CANCELLED",
   OFFER_ACCEPTED                = "OFFER_ACCEPTED",
@@ -45,6 +49,7 @@ export interface Action {
   target?: User
   token?: GenerativeToken
   objkt?: Objkt
+  article?: NFTArticleInfos
   metadata: HistoryMetadata
   createdAt: string
 }

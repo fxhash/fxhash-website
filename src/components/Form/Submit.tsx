@@ -3,15 +3,10 @@ import cs from "classnames"
 import { PropsWithChildren } from "react"
 
 interface Props {
-  layout?: "left"|"center"
+  layout?: "left" | "center" | "center-vertical"
 }
-export function Submit({
-  layout,
-  children,
-}: PropsWithChildren<Props>) {
+export function Submit({ layout, children }: PropsWithChildren<Props>) {
   return (
-    <div className={cs(style.root, style[`layout_${layout}`])}>
-      {children}
-    </div>
+    <div className={cs(style.root, style[`layout_${layout}`])}>{children}</div>
   )
 }

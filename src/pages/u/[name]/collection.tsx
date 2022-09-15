@@ -1,18 +1,15 @@
-import { User } from '../../../types/entities/User'
+import { User } from "../../../types/entities/User"
 import { UserProfileLayout } from "../../../containers/User/UserProfileLayout"
 import { getServerSidePropsUserByName } from "../../../services/ServerSideProps/ServerSidePropsUser"
 import { UserCollection } from "../../../containers/User/UserCollection"
 import { ReactElement } from "react"
-
 
 interface Props {
   user: User
 }
 
 const UserPageCollection = ({ user }: Props) => {
-  return (
-    <UserCollection user={user}/>
-  )
+  return <UserCollection user={user} activeTab="gentk" />
 }
 
 UserPageCollection.getLayout = function getLayout(page: ReactElement) {
@@ -20,6 +17,7 @@ UserPageCollection.getLayout = function getLayout(page: ReactElement) {
     <UserProfileLayout
       user={page.props.user}
       activeTab="collection"
+      hideSectionSpacing
     >
       {page}
     </UserProfileLayout>

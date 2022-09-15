@@ -11,7 +11,6 @@ import { truncateEnd } from "../../utils/strings"
 import { TitleHyphen } from "../../components/Layout/TitleHyphen"
 import { SectionTitle } from "../../components/Layout/SectionTitle"
 
-
 interface Props {
   article: Article
 }
@@ -21,31 +20,47 @@ const ArticlePage: NextPage<Props> = ({ article }) => {
     <>
       <Head>
         <title>fxhash — {article.title}</title>
-        <meta key="og:title" property="og:title" content={`fxhash — ${article.title}`}/> 
-        <meta key="description" name="description" content={truncateEnd(article.description || "", 200, "")}/>
-        <meta key="og:description" property="og:description" content={truncateEnd(article.description || "", 200, "")}/>
-        <meta key="og:type" property="og:type" content="article"/>
-        <meta key="og:image" property="og:image" content="https://www.fxhash.xyz/images/og/og1.jpg"/>
-        <link rel="stylesheet" href="/highlight/dracula.css"/>
+        <meta
+          key="og:title"
+          property="og:title"
+          content={`fxhash — ${article.title}`}
+        />
+        <meta
+          key="description"
+          name="description"
+          content={truncateEnd(article.description || "", 200, "")}
+        />
+        <meta
+          key="og:description"
+          property="og:description"
+          content={truncateEnd(article.description || "", 200, "")}
+        />
+        <meta key="og:type" property="og:type" content="article" />
+        <meta
+          key="og:image"
+          property="og:image"
+          content="https://www.fxhash.xyz/images/og/og1.jpg"
+        />
+        <link rel="stylesheet" href="/highlight/dracula.css" />
       </Head>
 
-      <Spacing size="6x-large"/>
+      <Spacing size="6x-large" />
 
       <section>
         <SectionHeader layout="center">
           <SectionTitle>{article.title}</SectionTitle>
         </SectionHeader>
 
-        <Spacing size="x-large"/>
+        <Spacing size="x-large" />
 
-        <main className={cs(layout['padding-big'])}>
+        <main className={cs(layout["padding-big"])}>
           <ArticleContent content={article.contentHtml} />
         </main>
       </section>
 
-      <Spacing size="6x-large"/>
-      <Spacing size="6x-large"/>
-      <Spacing size="6x-large"/>
+      <Spacing size="6x-large" />
+      <Spacing size="6x-large" />
+      <Spacing size="6x-large" />
     </>
   )
 }
@@ -54,18 +69,18 @@ export const getStaticPaths: GetStaticPaths = () => {
   const paths = getArticleIds()
   return {
     paths,
-    fallback: false
+    fallback: false,
   }
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   // fetch necessary data for the blog post using params.id
-  const article = params?.id && await getArticleData(params.id as string)
+  const article = params?.id && (await getArticleData(params.id as string))
   return {
     props: {
-      article
+      article,
     },
-    notFound: !article
+    notFound: !article,
   }
 }
 

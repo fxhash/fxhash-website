@@ -4,10 +4,9 @@ import cs from "classnames"
 import { ipfsGatewayUrl } from "../../services/Ipfs"
 import { MouseEventHandler, useMemo, useRef } from "react"
 
-
 interface Props {
   currentIpfs?: string
-  file?: File|null
+  file?: File | null
   onChange: (file: File) => void
   className?: string
 }
@@ -16,7 +15,7 @@ export function AvatarUpload({
   currentIpfs,
   file,
   className,
-  onChange
+  onChange,
 }: Props) {
   const inputFileRef = useRef<HTMLInputElement>(null)
 
@@ -24,11 +23,10 @@ export function AvatarUpload({
   // - is there a file ? if so get a local url to display it
   // - is there a current ipfs url to display url
   // - url is empty
-  const url = useMemo<string|null>(() => (
-    file 
-      ? URL.createObjectURL(file)
-      : ipfsGatewayUrl(currentIpfs)
-  ), [currentIpfs, file])
+  const url = useMemo<string | null>(
+    () => (file ? URL.createObjectURL(file) : ipfsGatewayUrl(currentIpfs)),
+    [currentIpfs, file]
+  )
 
   const onFileChange = () => {
     if (inputFileRef.current) {
@@ -46,13 +44,19 @@ export function AvatarUpload({
 
   return (
     <>
-      <button 
+      <button
         type="button"
-        className={cs(style.container, style['avatar-upload'], effect['drop-shadow-small'], className, {
-          [style['no-image']]: !url
-        })}
+        className={cs(
+          style.container,
+          style["avatar-upload"],
+          effect["drop-shadow-small"],
+          className,
+          {
+            [style["no-image"]]: !url,
+          }
+        )}
         style={{
-          backgroundImage: url ? `url(${url})` : "none"
+          backgroundImage: url ? `url(${url})` : "none",
         }}
         onClick={onClick}
       >
