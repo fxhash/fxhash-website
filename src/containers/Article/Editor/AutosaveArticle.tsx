@@ -1,5 +1,5 @@
 import React, { memo, useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { detectIncognito } from "detect-incognito";
+// import { detectIncognito } from "detect-incognito";
 import style from "./AutosaveArticle.module.scss";
 import effects from "../../../styles/Effects.module.scss"
 import text from "../../../styles/Colors.module.css"
@@ -56,14 +56,14 @@ const _AutosaveArticle = ({
 
   useEffect(() => {
     const canSaveInLocalStorage = async () => {
-      try {
-        const { isPrivate } = await detectIncognito();
-        if (isPrivate) {
-          return setSaveAbility('privateNavigation');
-        }
-      } catch (e) {
-        console.error(e);
-      }
+      // try {
+      //   const { isPrivate } = await detectIncognito();
+      //   if (isPrivate) {
+      //     return setSaveAbility('privateNavigation');
+      //   }
+      // } catch (e) {
+      //   console.error(e);
+      // }
       if (!hasLocalStorage()) {
         return setSaveAbility('noLocalStorage')
       }
