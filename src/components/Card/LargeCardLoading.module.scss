@@ -1,0 +1,22 @@
+.root {
+  .artwork {
+    padding-top: 100%;
+  }
+  .content {
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    .avatar {
+      width: 26px;
+      height: 26px;
+      border-radius: 50px;
+    }
+
+    .name {
+      height: 16px;
+      width: 50%;
+    }
+  }
+}
