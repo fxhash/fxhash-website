@@ -6,7 +6,7 @@ import { PropsWithChildren, ReactNode, useEffect, useState } from "react"
 interface Props {
   label: string
   placeholder: ReactNode
-  toggled?: boolean,
+  toggled?: boolean
   onToggled?: () => void
 }
 export function ToggableInfo({
@@ -29,17 +29,17 @@ export function ToggableInfo({
         onClick={() => setOpened(!opened)}
         className={cs(style.btn_toggle)}
       >
-        <i className={`fa-solid fa-angle-${opened?"up":"down"}`} aria-hidden/>
+        <i
+          className={`fa-solid fa-angle-${opened ? "up" : "down"}`}
+          aria-hidden
+        />
         <strong>{label}</strong>
       </button>
 
       {opened ? (
         children
-      ):(
-        <span
-          className={cs(text.info)}
-          onClick={() => setOpened(!opened)}
-        >
+      ) : (
+        <span className={cs(text.info)} onClick={() => setOpened(!opened)}>
           {placeholder}
         </span>
       )}

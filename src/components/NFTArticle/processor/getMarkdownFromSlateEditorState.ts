@@ -1,45 +1,42 @@
-import { Node } from "slate";
-import { unified } from "unified";
-import remarkMath from "remark-math";
-import remarkDirective from "remark-directive";
-import remarkUnwrapImages from "remark-unwrap-images";
-import { slateToRemark } from "remark-slate-transformer";
-import stringify from "remark-stringify";
-import { OverridedSlateBuilders } from "remark-slate-transformer/lib/transformers/slate-to-mdast";
-import { remarkFxHashCustom } from "./plugins";
-import remarkGfm from "remark-gfm";
-import { mathProcessor } from "../elements/Math/MathProcessor";
-import { figureProcessor } from "../elements/Figure/FigureProcessor";
-import { mentionProcessor } from "../elements/Mention/MentionProcessor";
+import { Node } from "slate"
+import { unified } from "unified"
+import remarkMath from "remark-math"
+import remarkDirective from "remark-directive"
+import remarkUnwrapImages from "remark-unwrap-images"
+import { slateToRemark } from "remark-slate-transformer"
+import stringify from "remark-stringify"
+import { OverridedSlateBuilders } from "remark-slate-transformer/lib/transformers/slate-to-mdast"
+import { remarkFxHashCustom } from "./plugins"
+import remarkGfm from "remark-gfm"
+import { mathProcessor } from "../elements/Math/MathProcessor"
+import { figureProcessor } from "../elements/Figure/FigureProcessor"
+import { mentionProcessor } from "../elements/Mention/MentionProcessor"
 
-export function convertSlateLeafDirectiveToMarkdown(
-  node: any,
-) {
-  const { children, type, ...attributes} = node
+export function convertSlateLeafDirectiveToMarkdown(node: any) {
+  const { children, type, ...attributes } = node
 
   return {
-    type: 'leafDirective',
+    type: "leafDirective",
     name: type,
     children: [
       {
-        type: 'text',
+        type: "text",
         value: children[0].text,
-      }
+      },
     ],
     attributes,
   }
 }
 
-
 const slateToRemarkTransformerOverrides: OverridedSlateBuilders = {
-  'tezos-storage-pointer': convertSlateLeafDirectiveToMarkdown,
-  'embed-media': convertSlateLeafDirectiveToMarkdown,
+  "tezos-storage-pointer": convertSlateLeafDirectiveToMarkdown,
+  "embed-media": convertSlateLeafDirectiveToMarkdown,
   figure: figureProcessor.transformSlateToMarkdownMdhast!,
   inlineMath: mathProcessor.transformSlateToMarkdownMdhast!,
   math: mathProcessor.transformSlateToMarkdownMdhast!,
   mention: mentionProcessor.transformSlateToMarkdownMdhast!,
 }
-export default async function getMarkdownFromSlateEditorState(slate: Node[] ) {
+export default async function getMarkdownFromSlateEditorState(slate: Node[]) {
   try {
     const processor = unified()
       .use(remarkMath)
@@ -50,7 +47,7 @@ export default async function getMarkdownFromSlateEditorState(slate: Node[] ) {
       .use(slateToRemark, {
         overrides: slateToRemarkTransformerOverrides,
       })
-      .use(stringify, { bulletOther: '-' })
+      .use(stringify, { bulletOther: "-" })
     const ast = await processor.run({
       type: "root",
       children: slate,
@@ -82,17 +79,15 @@ export default async function getMarkdownFromSlateEditorState(slate: Node[] ) {
             }
           )
           return `::tezos-storage-pointer[${alt}]{${replaced}}`
-        }
-        else {
+        } else {
           return match
         }
       }
     )
 
     return directiveAttributesFixed
-  }
-  catch(e) {
+  } catch (e) {
     console.error(e)
-    return null;
+    return null
   }
 }

@@ -22,10 +22,7 @@ interface Props {
   ledger: Ledger
   article: NFTArticle
 }
-export function ArticleListEditions({
-  ledger,
-  article,
-}: Props) {
+export function ArticleListEditions({ ledger, article }: Props) {
   const [showModal, setShowModal] = useState(false)
 
   const validation = useMemo(() => {
@@ -39,22 +36,20 @@ export function ArticleListEditions({
     })
   }, [ledger])
 
-  const {
-    call,
-    loading,
-    success,
-    error,
-    state
-  } = useContractOperation(ListingV3Operation)
+  const { call, loading, success, error, state } =
+    useContractOperation(ListingV3Operation)
 
-  const list = useCallback((amount: string, price: string) => {
-    call({
-      article: article,
-      owner: ledger.owner,
-      amount: amount,
-      price: ((price as any) * 1000000).toString(),
-    })
-  }, [article, ledger])
+  const list = useCallback(
+    (amount: string, price: string) => {
+      call({
+        article: article,
+        owner: ledger.owner,
+        amount: amount,
+        price: ((price as any) * 1000000).toString(),
+      })
+    },
+    [article, ledger]
+  )
 
   return (
     <>
@@ -75,7 +70,7 @@ export function ArticleListEditions({
           <Formik
             initialValues={{
               amount: "1",
-              price: "0"
+              price: "0",
             }}
             onSubmit={(values) => {
               list(values.amount, values.price)
@@ -83,41 +78,40 @@ export function ArticleListEditions({
             validationSchema={validation}
           >
             {({ values, setFieldValue, errors }) => (
-              <Form
-                className={cs(style.modal_content)}
-              >
+              <Form className={cs(style.modal_content)}>
                 <Field error={errors?.amount}>
                   <label htmlFor="editions">
                     Editions for sale
-                    <small>The number of editions which will be listed, [1; {ledger.amount}]</small>
+                    <small>
+                      The number of editions which will be listed, [1;{" "}
+                      {ledger.amount}]
+                    </small>
                   </label>
                   <SliderWithTextInput
                     value={values.amount as any}
-                    onChange={val => setFieldValue("amount", val)}
+                    onChange={(val) => setFieldValue("amount", val)}
                     min={1}
                     max={ledger.amount}
                     step={1}
-                    textTransform={v => v as any}
+                    textTransform={(v) => v as any}
                     unit="editions"
                   />
                 </Field>
 
                 <Field error={errors?.price}>
-                  <label htmlFor="price">
-                    Price
-                  </label>
+                  <label htmlFor="price">Price</label>
                   <InputTextUnit
                     unit="tez"
                     type="text"
                     name="price"
                     value={values?.price ?? ""}
-                    onChange={evt => setFieldValue("price", evt.target.value)}
+                    onChange={(evt) => setFieldValue("price", evt.target.value)}
                     // onBlur={onBlur}
                     // error={!!errors?.price}
                   />
                 </Field>
 
-                <Spacing size="2x-large"/>
+                <Spacing size="2x-large" />
 
                 <Submit layout="center-vertical">
                   <ContractFeedback

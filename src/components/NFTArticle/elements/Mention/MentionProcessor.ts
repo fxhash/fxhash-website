@@ -1,20 +1,20 @@
-import { IArticleElementProcessor } from "../../../../types/ArticleEditor/Processor";
+import { IArticleElementProcessor } from "../../../../types/ArticleEditor/Processor"
 
 export const mentionProcessor: IArticleElementProcessor = {
   transformSlateToMarkdownMdhast: (node: any) => {
-    return ({
-      type: 'text',
+    return {
+      type: "text",
       value: `@${node.tzAddress}`,
-    });
+    }
   },
   transformMarkdownMdhastToSlate: (node: any) => ({
     type: node.type,
-    children: [{ text: '' }],
+    children: [{ text: "" }],
     tzAddress: node.value,
   }),
   transformMdhastToComponent: (node, properties) => {
-    return ({
+    return {
       tzAddress: properties.value,
-    });
-  }
+    }
+  },
 }
