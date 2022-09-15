@@ -44,7 +44,7 @@ export const TezosStorageGentk: TezosStorageRenderer<Props> = ({
   }
 
   return (
-    <div>
+    <div className={style.container}>
       {token && (
         <div className={cs(style.header)}>
           <Link href={getGentkUrl(token)}>
@@ -85,7 +85,6 @@ export const TezosStorageGentk: TezosStorageRenderer<Props> = ({
           )}
         </ArtworkFrame>
       </SquareContainer>
-      
       {token && (
         <div className={cs(layout.buttons_inline, layout.grid_center)}>
           {!running ? (
@@ -148,7 +147,7 @@ TezosStorageGentk.matches = (pointer) => {
   // get contract address, removing network indentifier if any
   const contract = pointer.contract.split(".")[0]
   if (![
-    FxhashContracts.GENTK_V1, 
+    FxhashContracts.GENTK_V1,
     FxhashContracts.GENTK_V2,
   ].includes(contract)) {
     return false

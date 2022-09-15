@@ -26,6 +26,7 @@ const _CardNftArticle = ({
   editionsOwned,
   isDraft,
   imagePriority,
+  onDelete,
   className
 }: CardNftArticleProps) => {
   const {
@@ -67,7 +68,7 @@ const _CardNftArticle = ({
       </Link>
       {isDraft && (
         <div className={cs(style.banner, style.banner_draft)}>
-          <span>DRAFT (saved locally)</span>
+          <span>DRAFT (saved locally in your browser)</span>
           <button
             type="button"
             onClick={onClickDeleteLocal("Do you really want to delete this article ? It will be removed from your browser memory.")}

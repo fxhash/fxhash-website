@@ -36,7 +36,6 @@ export const linkDefinition: IArticleBlockDefinition<any> = {
   name: "Link",
   icon: <i className="fa-solid fa-link" aria-hidden/>,
   render: ({ attributes, element, children }) => {
-    console.log("test")
     return (
       <a
         {...attributes}
