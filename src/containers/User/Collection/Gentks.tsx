@@ -19,7 +19,7 @@ import { InfiniteScrollTrigger } from "../../../components/Utils/InfiniteScrollT
 import { CardsContainer } from "../../../components/Card/CardsContainer"
 import { ObjktCard } from "../../../components/Card/ObjktCard"
 import { CardsLoading } from "../../../components/Card/CardsLoading"
-import { useEffect, useMemo, useRef, useState } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useQuery } from "@apollo/client"
 import { Qu_userObjkts } from "../../../queries/user"
 import { Objkt } from "../../../types/entities/Objkt"
@@ -72,10 +72,12 @@ interface Props {
 export function UserCollectionGentks({
   user,
 }: Props) {
+  const [hasNothingToFetch, setHasNothingToFetch] = useState(false);
+
   // sort variables
   const [sortValue, setSortValue] = useState<string>("id-desc")
   const sort = useMemo<Record<string, any>>(
-    () => sortValueToSortVariable(sortValue), 
+    () => sortValueToSortVariable(sortValue),
     [sortValue]
   )
   // sort options - when the search is triggered, options are updated to include relevance
@@ -96,11 +98,7 @@ export function UserCollectionGentks({
   // reference to an element at the top to scroll back
   const topMarkerRef = useRef<HTMLDivElement>(null)
 
-  // use to know when to stop loading
-  const currentLength = useRef<number>(0)
-  const ended = useRef<boolean>(false)
-
-  const { data, loading, fetchMore, refetch } = useQuery(Qu_userObjkts, {
+  const { data, loading, fetchMore, refetch } = useQuery<{ user: User }>(Qu_userObjkts, {
     notifyOnNetworkStatusChange: true,
     variables: {
       id: user.id,
@@ -109,32 +107,28 @@ export function UserCollectionGentks({
       filters,
       sort,
     },
+    onCompleted: (newData) => {
+      if (!newData?.user?.objkts?.length || newData.user.objkts.length < ITEMS_PER_PAGE) {
+        setHasNothingToFetch(true);
+      }
+    }
   })
 
   // safe access to gentks
-  const objkts: Objkt[] = data?.user?.objkts || null
+  const objkts = data?.user?.objkts || null
 
-  useEffect(() => {
-    if (!loading) {
-      if (currentLength.current === objkts?.length) {
-        ended.current = true
-      }
-      else {
-        currentLength.current = objkts?.length
-      }
+  const handleFetchMore = useCallback(async () => {
+    if (loading || hasNothingToFetch) return false;
+    const { data: newData } = await fetchMore({
+      variables: {
+        skip: objkts?.length || 0,
+        take: ITEMS_PER_PAGE,
+      },
+    });
+    if (!newData?.user?.objkts?.length || newData.user.objkts.length < ITEMS_PER_PAGE) {
+      setHasNothingToFetch(true);
     }
-  }, [data, loading])
-
-  const load = () => {
-    if (!ended.current) {
-      fetchMore({
-        variables: {
-          skip: objkts?.length || 0,
-          take: ITEMS_PER_PAGE
-        }
-      })
-    }
-  }
+  }, [fetchMore, hasNothingToFetch, loading, objkts?.length])
 
   useEffect(() => {
     // first we scroll to the top
@@ -143,8 +137,6 @@ export function UserCollectionGentks({
       window.scrollTo(0, top)
     }
 
-    currentLength.current = 0
-    ended.current = false
     refetch?.({
       skip: 0,
       take: ITEMS_PER_PAGE,
@@ -233,8 +225,8 @@ export function UserCollectionGentks({
             onToggleFilters={() => setFiltersVisible(!filtersVisible)}
             sortSelectComp={
 		          <div className={style.select_comp_container}>
-		            <Link 
-                  href={`${getUserProfileLink(user)}/collection/enjoy`} 
+		            <Link
+                  href={`${getUserProfileLink(user)}/collection/enjoy`}
                   passHref
                 >
                   <Button
@@ -308,7 +300,10 @@ export function UserCollectionGentks({
                 <span>No results</span>
               )}
 
-              <InfiniteScrollTrigger onTrigger={load}>
+              <InfiniteScrollTrigger
+                onTrigger={handleFetchMore}
+                canTrigger={!loading && !hasNothingToFetch}
+              >
                 <CardsContainer ref={refCardsContainer}>
                   {objkts?.map(objkt => (
                     <ObjktCard

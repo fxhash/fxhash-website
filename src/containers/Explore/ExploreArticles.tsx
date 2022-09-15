@@ -53,6 +53,11 @@ const _ExploreArticles = () => {
     },
     fetchPolicy: "network-only",
     nextFetchPolicy: "cache-and-network",
+    onCompleted: (newData) => {
+      if (!newData?.articles?.length || newData.articles.length < ITEMS_PER_PAGE) {
+        setHasNothingToFetch(true);
+      }
+    }
   })
   const articles = useMemo(() => data?.articles || [], [data?.articles])
   const handleFetchMore = useCallback(async () => {
@@ -63,7 +68,7 @@ const _ExploreArticles = () => {
         take: ITEMS_PER_PAGE
       },
     });
-    if (!(newData?.articles.length > 0)) {
+    if (!newData?.articles?.length || newData.articles.length < ITEMS_PER_PAGE) {
       setHasNothingToFetch(true);
     }
   }, [loading, hasNothingToFetch, fetchMore, articles.length])
@@ -99,10 +104,10 @@ const _ExploreArticles = () => {
           <div ref={refCardsContainer}>
             <InfiniteScrollTrigger
               onTrigger={handleFetchMore}
-              canTrigger={!!data && !loading}
+              canTrigger={!hasNothingToFetch && !loading}
             >
               {articles.map((article, index) =>
-                <CardNftArticle 
+                <CardNftArticle
                   key={article.id}
                   className={style.article}
                   article={article}
