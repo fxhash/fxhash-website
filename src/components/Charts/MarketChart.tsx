@@ -7,13 +7,10 @@ import MarketChartTheme from "./MarketChartTheme"
 import format from "date-fns/format"
 import { SettingsContext } from "../../context/Theme"
 
-
 interface Props {
   data: any[] | null
 }
-export function MarketChart({ 
-  data,
-}: Props) {
+export function MarketChart({ data }: Props) {
   // reference to the DOM container of the chart
   const containerRef = useRef<HTMLDivElement>(null)
 
@@ -25,7 +22,7 @@ export function MarketChart({
     const EChartModule = await import("echarts")
     EChartModule.registerTheme("fxhash", MarketChartTheme)
     const chart = EChartModule.init(containerRef.current!, "fxhash", {
-      renderer: "canvas"
+      renderer: "canvas",
     })
     const onResize = () => {
       chart.resize()
@@ -52,16 +49,16 @@ export function MarketChart({
           fontFamily: "Fira code",
         },
         title: {
-          text: ''
+          text: "",
         },
         tooltip: {
-          trigger: 'none',
+          trigger: "none",
           axisPointer: {
-            type: 'cross',
-          }
+            type: "cross",
+          },
         },
         xAxis: {
-          data: data.map(d => d.time),
+          data: data.map((d) => d.time),
           axisLabel: {
             color: settings.theme.colors.gray,
             formatter: (value: any) => {
@@ -76,26 +73,26 @@ export function MarketChart({
               fontSize: 14,
               backgroundColor: "#000000",
               borderRadius: 0,
-            }
+            },
           },
           axisLine: {
             lineStyle: {
               width: 2,
               color: settings.theme.colors.gray,
-            }
+            },
           },
           axisTick: {
             show: true,
             lineStyle: {
               width: 2,
               color: settings.theme.colors.gray,
-            }
+            },
           },
           splitLine: {
             lineStyle: {
-              color: settings.theme.colors["gray-vlight"]
-            }
-          }
+              color: settings.theme.colors["gray-vlight"],
+            },
+          },
         },
         yAxis: {
           axisLabel: {
@@ -109,53 +106,53 @@ export function MarketChart({
               fontSize: 14,
               backgroundColor: "#000000",
               borderRadius: 0,
-            }
+            },
           },
           axisLine: {
             lineStyle: {
               width: 2,
               color: settings.theme.colors.gray,
-            }
+            },
           },
           axisTick: {
             show: true,
             lineStyle: {
               width: 2,
               color: settings.theme.colors.gray,
-            }
+            },
           },
           splitLine: {
             lineStyle: {
-              color: settings.theme.colors["gray-vlight"]
-            }
-          }
+              color: settings.theme.colors["gray-vlight"],
+            },
+          },
         },
         series: [
           {
-            name: 'sales',
+            name: "sales",
             type: "line",
             smooth: 0.4,
-            data: data.map(d => d.value),
+            data: data.map((d) => d.value),
             lineStyle: {
               color: settings.theme.colors.secondary,
-              width: 4
+              width: 4,
             },
             symbolSize: 6,
             itemStyle: {
-              color: settings.theme.colors.secondary
+              color: settings.theme.colors.secondary,
             },
             areaStyle: {
-              opacity: 0.2
-            }
+              opacity: 0.2,
+            },
           },
-        ]
+        ],
       })
     }
   }, [echart, data, settings.theme])
 
   return (
     <div className={cs(style.root)}>
-      <div className={cs(style.chart_container)} ref={containerRef}/>
+      <div className={cs(style.chart_container)} ref={containerRef} />
     </div>
   )
 }

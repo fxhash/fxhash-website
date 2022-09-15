@@ -6,29 +6,16 @@ import { useWalletBalance } from "../../hooks/useWalletBalance"
 import { DisplayTezos } from "../Display/DisplayTezos"
 import { Loader } from "../Utils/Loader"
 
-interface Props {
-  
-}
-export function WalletBalance({
-  
-}: Props) {
+interface Props {}
+export function WalletBalance({}: Props) {
   const userCtx = useContext(UserContext)
   const { balance, loading } = useWalletBalance(userCtx)
 
   return (
     <div className={cs(style.root)}>
-      {balance !== null && (
-        <DisplayTezos
-          mutez={balance}
-          tezosSize="regular"
-        />
-      )}
+      {balance !== null && <DisplayTezos mutez={balance} tezosSize="regular" />}
       {loading && (
-        <Loader 
-          size="tiny"
-          color="gray-light"
-          className={cs(style.loader)}
-        />
+        <Loader size="tiny" color="gray-light" className={cs(style.loader)} />
       )}
     </div>
   )

@@ -13,7 +13,13 @@ const ActionListingArticleAccepted: TActionComp = ({ action, verbose }) => (
       size="small"
     />
     <span>
-      bought <strong>{action.metadata.amountCollected}</strong> editions {verbose && <>of <strong>{action.article!.title}</strong></>} from
+      bought <strong>{action.metadata.amountCollected}</strong> editions{" "}
+      {verbose && (
+        <>
+          of <strong>{action.article!.title}</strong>
+        </>
+      )}{" "}
+      from
     </span>
     <UserBadge
       className={cs(style.user)}
@@ -44,7 +50,11 @@ const ActionListingObjktAccepted: TActionComp = ({ action, verbose }) => (
       size="small"
     />
     <span>
-      bought <strong>{verbose ? action.objkt!.name : `#${action.objkt!.iteration}`}</strong> from
+      bought{" "}
+      <strong>
+        {verbose ? action.objkt!.name : `#${action.objkt!.iteration}`}
+      </strong>{" "}
+      from
     </span>
     <UserBadge
       className={cs(style.user)}

@@ -6,18 +6,18 @@ import { ipfsGatewayUrl } from "../../services/Ipfs"
 interface Props {
   token: GenerativeToken
 }
-export function ListItemGenerative({
-  token,
-}: Props) {
+export function ListItemGenerative({ token }: Props) {
   return (
     <div className={cs(style.root)}>
-      <div 
+      <div
         className={cs(style.icon)}
         style={{
-          backgroundImage: `url(${ipfsGatewayUrl(token.metadata.thumbnailUri)})`
+          backgroundImage: `url(${ipfsGatewayUrl(
+            token.metadata.thumbnailUri
+          )})`,
         }}
       />
-      <span>{ token.name }</span>
+      <span>{token.name}</span>
     </div>
   )
 }

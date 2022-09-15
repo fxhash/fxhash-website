@@ -20,6 +20,11 @@ export const ActionOffer: TActionComp = ({ action, verbose }) => (
         tezosSize="regular"
       />
     </span>
-    <span>for <strong>{verbose ? action.objkt!.name : `#${action.objkt!.iteration}`}</strong></span>
+    <span>
+      for{" "}
+      <strong>
+        {verbose ? action.objkt!.name : `#${action.objkt!.iteration}`}
+      </strong>
+    </span>
   </>
 )

@@ -1,18 +1,18 @@
-import { User } from '../../../../types/entities/User'
+import { User } from "../../../../types/entities/User"
 import { UserProfileLayout } from "../../../../containers/User/UserProfileLayout"
-import { getServerSidePropsUserById, getServerSidePropsUserByName } from "../../../../services/ServerSideProps/ServerSidePropsUser"
+import {
+  getServerSidePropsUserById,
+  getServerSidePropsUserByName,
+} from "../../../../services/ServerSideProps/ServerSidePropsUser"
 import { UserCollection } from "../../../../containers/User/UserCollection"
 import { ReactElement } from "react"
-
 
 interface Props {
   user: User
 }
 
 const UserPageCollectionArticles = ({ user }: Props) => {
-  return (
-    <UserCollection user={user} activeTab="articles"/>
-  )
+  return <UserCollection user={user} activeTab="articles" />
 }
 
 UserPageCollectionArticles.getLayout = function getLayout(page: ReactElement) {

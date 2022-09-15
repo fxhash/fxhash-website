@@ -30,7 +30,7 @@ export function GenerativeArtwork({
   const iframeRef = useRef<ArtworkIframeRef>(null)
 
   // used to preview the token in the iframe with different hashes
-  const [previewHash, setPreviewHash] = useState<string|null>(
+  const [previewHash, setPreviewHash] = useState<string | null>(
     token.metadata.previewHash || null
   )
   // forcing image display as a state
@@ -40,9 +40,7 @@ export function GenerativeArtwork({
 
   // update the state of display image if we record a change in settings
   useEffect(() => {
-    setDisplayImage(
-      settings.quality === 0 || forceImageDisplay
-    )
+    setDisplayImage(settings.quality === 0 || forceImageDisplay)
   }, [settings.quality])
 
   const reload = () => {
@@ -52,19 +50,19 @@ export function GenerativeArtwork({
   }
 
   // get the display url for og:image
-  const displayUrl = token.metadata?.displayUri && ipfsGatewayUrl(
-    token.metadata.displayUri
-  )
+  const displayUrl =
+    token.metadata?.displayUri && ipfsGatewayUrl(token.metadata.displayUri)
 
   // the direct URL to the resource to display in the <iframe>
   const artifactUrl = useMemo<string>(() => {
     // if no hash is forced, use the artifact URI directly
     if (!previewHash) {
       return ipfsGatewayUrl(token.metadata.artifactUri)
-    }
-    else {
+    } else {
       // there is a forced hash, add it to the generative URL
-      return `${ipfsGatewayUrl(token.metadata.generativeUri)}/?fxhash=${previewHash}`
+      return `${ipfsGatewayUrl(
+        token.metadata.generativeUri
+      )}/?fxhash=${previewHash}`
     }
   }, [previewHash])
 
@@ -73,9 +71,9 @@ export function GenerativeArtwork({
       <SquareContainer>
         <ArtworkFrame>
           {displayImage ? (
-            <img src={displayUrl} alt={`${token.name} preview`}/>
-          ):(
-            <ArtworkIframe 
+            <img src={displayUrl} alt={`${token.name} preview`} />
+          ) : (
+            <ArtworkIframe
               ref={iframeRef}
               url={artifactUrl}
               hasLoading={false}
@@ -84,9 +82,9 @@ export function GenerativeArtwork({
         </ArtworkFrame>
       </SquareContainer>
 
-      <Spacing size="8px"/>
+      <Spacing size="8px" />
 
-      <div className={cs(layout['x-inline'], style.artwork_buttons)}>
+      <div className={cs(layout["x-inline"], style.artwork_buttons)}>
         <ButtonVariations
           token={token}
           previewHash={previewHash}
@@ -100,7 +98,7 @@ export function GenerativeArtwork({
             type="button"
             size="small"
             color="transparent"
-            iconComp={<i aria-hidden className="fas fa-play"/>}
+            iconComp={<i aria-hidden className="fas fa-play" />}
             iconSide="right"
             onClick={() => {
               setPreviewHash(token.metadata.previewHash || null)
@@ -109,13 +107,13 @@ export function GenerativeArtwork({
           >
             run
           </Button>
-        ):(
+        ) : (
           <>
             <Button
               type="button"
               size="small"
               color="transparent"
-              iconComp={<i aria-hidden className="fas fa-stop"/>}
+              iconComp={<i aria-hidden className="fas fa-stop" />}
               iconSide="right"
               onClick={() => setDisplayImage(true)}
             >
@@ -125,7 +123,7 @@ export function GenerativeArtwork({
               type="button"
               size="small"
               color="transparent"
-              iconComp={<i aria-hidden className="fas fa-redo"/>}
+              iconComp={<i aria-hidden className="fas fa-redo" />}
               iconSide="right"
               onClick={reload}
             >
@@ -138,7 +136,7 @@ export function GenerativeArtwork({
             isLink={true}
             size="small"
             color="transparent"
-            iconComp={<i aria-hidden className="fas fa-external-link-square"/>}
+            iconComp={<i aria-hidden className="fas fa-external-link-square" />}
             // @ts-ignore
             target="_blank"
             iconSide="right"
