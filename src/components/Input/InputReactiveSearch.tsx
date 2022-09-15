@@ -15,7 +15,8 @@ interface PassedDownProps<ObjectType> {
 }
 
 // props of the Results renderer component
-export interface InputReactSearchResultsRendererProps<ObjectType> extends PassedDownProps<ObjectType> {
+export interface InputReactSearchResultsRendererProps<ObjectType>
+  extends PassedDownProps<ObjectType> {
   results: ObjectType[] | null
   hideResults: boolean
   onChangeHideResults: (hide: boolean) => void
@@ -25,7 +26,9 @@ export interface InputReactSearchResultsRendererProps<ObjectType> extends Passed
   children?: FunctionComponent<PropsChildren<ObjectType>>
 }
 // the Results renderer component
-type InputReactiveSearchResultsRenderer<ObjectType> = FunctionComponent<InputReactSearchResultsRendererProps<ObjectType>>
+type InputReactiveSearchResultsRenderer<ObjectType> = FunctionComponent<
+  InputReactSearchResultsRendererProps<ObjectType>
+>
 
 // the minimum implementation for the items in the results
 interface BaseResultItem {
@@ -35,9 +38,9 @@ interface BaseResultItem {
 interface Props<ObjectType> extends PassedDownProps<ObjectType> {
   placeholder?: string
   className?: string
-  hideInput?: boolean,
-  hideNoResults?: boolean,
-  keyboardSelectedIdx?: number,
+  hideInput?: boolean
+  hideNoResults?: boolean
+  keyboardSelectedIdx?: number
   // should perform a search given an input
   searchFn: (searchInput: string) => Promise<any>
   // given the output of the searchFn, outputs a list of objects
@@ -47,7 +50,9 @@ interface Props<ObjectType> extends PassedDownProps<ObjectType> {
   // the children, used to render each item
   children: FunctionComponent<PropsChildren<ObjectType>>
   // the component used to render the results
-  RenderResults?: FunctionComponent<InputReactSearchResultsRendererProps<ObjectType>>
+  RenderResults?: FunctionComponent<
+    InputReactSearchResultsRendererProps<ObjectType>
+  >
 }
 
 interface PropsChildren<ObjectType> {
@@ -94,53 +99,57 @@ export function InputReactiveSearch<ObjectType extends BaseResultItem>({
   const [selectedValue, setSelectedValue] = useState<string>()
 
   // an async effect is triggered at each inut change
-  useAsyncEffect(async (isMounted) => {
-    // if not nullish, clears the timeout
-    if (timeout.current != null) {
-      window.clearTimeout(timeout.current)
-    }
-    // if there are less than 3 characters, we clear the results and return
-    if (value.length < 3 || value === selectedValue) {
-      setResults(null)
-      if (value.length < 3) {
-        setSelectedValue(undefined)
+  useAsyncEffect(
+    async (isMounted) => {
+      // if not nullish, clears the timeout
+      if (timeout.current != null) {
+        window.clearTimeout(timeout.current)
       }
-      return
-    }
-    // sets up the timeout to make call to get results
-    timeout.current = window.setTimeout(async () => {
-      // start the loading
-      if (isMounted()) {
-        setLoading(true)
-        setSelectedValue(undefined)
+      // if there are less than 3 characters, we clear the results and return
+      if (value.length < 3 || value === selectedValue) {
+        setResults(null)
+        if (value.length < 3) {
+          setSelectedValue(undefined)
+        }
+        return
       }
-      // make the request to get the results
-      const results = await searchFn(value)
-      // transforms the results to get a list of items
-      const items = transformSearchResults(results)
-      // finally update the items in the state
-      if (isMounted()) {
-        setLoading(false)
-        setHideResults(false)
-        setResults(items)
-      }
-    }, debounceDuration)
-  }, [value])
+      // sets up the timeout to make call to get results
+      timeout.current = window.setTimeout(async () => {
+        // start the loading
+        if (isMounted()) {
+          setLoading(true)
+          setSelectedValue(undefined)
+        }
+        // make the request to get the results
+        const results = await searchFn(value)
+        // transforms the results to get a list of items
+        const items = transformSearchResults(results)
+        // finally update the items in the state
+        if (isMounted()) {
+          setLoading(false)
+          setHideResults(false)
+          setResults(items)
+        }
+      }, debounceDuration)
+    },
+    [value]
+  )
 
   return (
     <div className={cs(style.root, className)}>
-      {!hideInput &&
+      {!hideInput && (
         <InputText
           value={value}
-          onChange={evt => onChange(evt.target.value, false)}
+          onChange={(evt) => onChange(evt.target.value, false)}
           placeholder={placeholder}
           className={style.input_search}
           onFocus={() => hideResults && setHideResults(false)}
         />
-      }
-      {(!loading && results?.length === 0) && !hideNoResults && (
+      )}
+      {!loading && results?.length === 0 && !hideNoResults && (
         <div className={cs(style.no_results)}>
-          This search yielded 0 result <i className="fa-solid fa-face-frown-open" aria-hidden/>
+          This search yielded 0 result{" "}
+          <i className="fa-solid fa-face-frown-open" aria-hidden />
         </div>
       )}
       <RenderResults
@@ -187,7 +196,9 @@ function DefaultResultsRenderer<ObjectType extends BaseResultItem>({
               key={result.id}
               type="button"
               className={cs(style.result, {
-                [style.result_keyboard_selected]: keyboardSelectedIdx !== undefined && keyboardSelectedIdx === idx
+                [style.result_keyboard_selected]:
+                  keyboardSelectedIdx !== undefined &&
+                  keyboardSelectedIdx === idx,
               })}
               onClick={() => {
                 const nval = valueFromResult(result)
@@ -199,17 +210,13 @@ function DefaultResultsRenderer<ObjectType extends BaseResultItem>({
               }}
             >
               {children?.({
-                item: result
+                item: result,
               })}
             </button>
           ))}
         </div>
       </div>
-      <Cover
-        index={1}
-        opacity={0}
-        onClick={() => onChangeHideResults(true)}
-      />
+      <Cover index={1} opacity={0} onClick={() => onChangeHideResults(true)} />
     </>
-  ):null
+  ) : null
 }

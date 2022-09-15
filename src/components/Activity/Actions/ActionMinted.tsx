@@ -12,7 +12,7 @@ export const ActionMinted: TActionComp = ({ action, verbose }) => (
       size="small"
     />
     <span>
-      published <strong>{ action.token!.name }</strong>
+      published <strong>{action.token!.name}</strong>
     </span>
   </>
 )

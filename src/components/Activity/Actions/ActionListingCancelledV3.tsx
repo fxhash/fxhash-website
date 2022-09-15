@@ -4,7 +4,6 @@ import { TActionComp } from "./Action"
 import { UserBadge } from "../../User/UserBadge"
 import { DisplayTezos } from "../../Display/DisplayTezos"
 
-
 const ActionListingArticleCancelledV3: TActionComp = ({ action, verbose }) => (
   <>
     <UserBadge
@@ -14,7 +13,13 @@ const ActionListingArticleCancelledV3: TActionComp = ({ action, verbose }) => (
       size="small"
     />
     <span>
-      cancelled listing of <strong>{action.metadata.amount}</strong> editions {verbose && <>on <strong>{action.article!.title}</strong></>} of{' '}
+      cancelled listing of <strong>{action.metadata.amount}</strong> editions{" "}
+      {verbose && (
+        <>
+          on <strong>{action.article!.title}</strong>
+        </>
+      )}{" "}
+      of{" "}
       <span className={cs(style.price)}>
         <DisplayTezos
           formatBig={false}

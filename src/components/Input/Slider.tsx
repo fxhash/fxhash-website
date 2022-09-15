@@ -2,7 +2,6 @@ import style from "./Slider.module.scss"
 import cs from "classnames"
 import { useMemo } from "react"
 
-
 export interface Props {
   min: number
   max: number
@@ -12,17 +11,12 @@ export interface Props {
   className?: string
 }
 
-export function Slider({
-  min,
-  max,
-  step,
-  value,
-  onChange,
-  className,
-}: Props) {
+export function Slider({ min, max, step, value, onChange, className }: Props) {
   const gradient = useMemo<string>(() => {
-    const T = (value-min) / (max-min)
-    return `linear-gradient(to right, var(--color-black) 0%, var(--color-black) ${T*100}%, var(--color-gray-light) ${T*100}%, var(--color-gray-light) 100%)`
+    const T = (value - min) / (max - min)
+    return `linear-gradient(to right, var(--color-black) 0%, var(--color-black) ${
+      T * 100
+    }%, var(--color-gray-light) ${T * 100}%, var(--color-gray-light) 100%)`
   }, [min, max, value])
 
   return (
@@ -32,10 +26,10 @@ export function Slider({
       max={max}
       step={step}
       value={value}
-      onChange={evt => onChange(parseFloat(evt.target.value))}
+      onChange={(evt) => onChange(parseFloat(evt.target.value))}
       className={cs(style.slider, className)}
       style={{
-        background: gradient
+        background: gradient,
       }}
     />
   )

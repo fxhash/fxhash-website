@@ -10,9 +10,9 @@ import { GenerativeToken } from "../../../../../types/entities/GenerativeToken"
 import { Qu_genToken } from "../../../../../queries/generative-token"
 import { Article } from "../../../../../components/Article/Article"
 import { EntityBadge } from "../../../../../components/User/EntityBadge"
-import { Reveal } from "../../../../../containers/Reveal/Reveal";
-import { LayoutMinimalist } from "../../../../../components/Layout/LayoutMinimalist";
-import { NextPageWithLayout } from "../../../../_app";
+import { Reveal } from "../../../../../containers/Reveal/Reveal"
+import { LayoutMinimalist } from "../../../../../components/Layout/LayoutMinimalist"
+import { NextPageWithLayout } from "../../../../_app"
 import { LiveMintingLayout } from "../../../../../containers/LiveMinting/LiveMintingLayout"
 import Link from "next/link"
 import { useContext } from "react"
@@ -36,44 +36,57 @@ const LiveMintingRevealPage: NextPageWithLayout<Props> = ({ hash, token }) => {
     <>
       <Head>
         <title>fxhash — reveal token</title>
-        <meta key="og:title" property="og:title" content="fxhash — reveal gentk"/>
-        <meta key="description" name="description" content="Reveal a gentk minted from fxhash"/>
-        <meta key="og:description" property="og:description" content="Reveal a gentk minted from fxhash"/>
-        <meta key="og:type" property="og:type" content="website"/>
-        <meta key="og:image" property="og:image" content="https://www.fxhash.xyz/images/og/og1.jpg"/>
+        <meta
+          key="og:title"
+          property="og:title"
+          content="fxhash — reveal gentk"
+        />
+        <meta
+          key="description"
+          name="description"
+          content="Reveal a gentk minted from fxhash"
+        />
+        <meta
+          key="og:description"
+          property="og:description"
+          content="Reveal a gentk minted from fxhash"
+        />
+        <meta key="og:type" property="og:type" content="website" />
+        <meta
+          key="og:image"
+          property="og:image"
+          content="https://www.fxhash.xyz/images/og/og1.jpg"
+        />
       </Head>
       <section>
-        <Spacing size="3x-large"/>
-        <main className={cs(layout['padding-big'])}>
+        <Spacing size="3x-large" />
+        <main className={cs(layout["padding-big"])}>
           <div className={cs(layout.y_centered)}>
-            <span className={cs(text.small, color.gray)}>this is your unique iteration of</span>
-            <Spacing size="8px"/>
-            <h2>{ token.name }</h2>
-            <Spacing size="8px"/>
+            <span className={cs(text.small, color.gray)}>
+              this is your unique iteration of
+            </span>
+            <Spacing size="8px" />
+            <h2>{token.name}</h2>
+            <Spacing size="8px" />
             <div className={cs(layout.x_centered)}>
               <span style={{ marginRight: 10 }}>created by </span>
-              <EntityBadge
-                size="regular"
-                user={token.author}
-                toggeable
-              />
+              <EntityBadge size="regular" user={token.author} toggeable />
             </div>
           </div>
-          <Spacing size="3x-large"/>
-          <Reveal
-            hash={hash}
-            generativeUri={token.metadata.generativeUri}
-          />
+          <Spacing size="3x-large" />
+          <Reveal hash={hash} generativeUri={token.metadata.generativeUri} />
 
           <Submit layout="center">
-            <Link 
-              href={`/live-minting/${eventCtx.event!.id}?token=${eventCtx.mintPass?.token}`}
+            <Link
+              href={`/live-minting/${eventCtx.event!.id}?token=${
+                eventCtx.mintPass?.token
+              }`}
               passHref
             >
               <Button
                 isLink
                 color="secondary"
-                iconComp={<i aria-hidden className="fas fa-arrow-left"/>}
+                iconComp={<i aria-hidden className="fas fa-arrow-left" />}
                 iconSide="left"
                 size="regular"
                 style={{ justifySelf: "center" }}
@@ -84,14 +97,14 @@ const LiveMintingRevealPage: NextPageWithLayout<Props> = ({ hash, token }) => {
           </Submit>
 
           <Submit layout="center">
-            <Link 
+            <Link
               href={`${getUserProfileLink(user as User)}/collection`}
               passHref
             >
               <Button
                 isLink
                 color="transparent"
-                iconComp={<i aria-hidden className="fas fa-arrow-right"/>}
+                iconComp={<i aria-hidden className="fas fa-arrow-right" />}
                 iconSide="right"
                 size="regular"
                 style={{ justifySelf: "center" }}
@@ -100,7 +113,7 @@ const LiveMintingRevealPage: NextPageWithLayout<Props> = ({ hash, token }) => {
               </Button>
             </Link>
           </Submit>
-          <Spacing size="6x-large"/>
+          <Spacing size="6x-large" />
         </main>
       </section>
     </>
@@ -110,7 +123,8 @@ LiveMintingRevealPage.getLayout = LiveMintingLayout
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const hash = context.params?.hash
-  const id = context.params?.number && parseInt(context.params?.number as string)
+  const id =
+    context.params?.number && parseInt(context.params?.number as string)
   let token = null
 
   if (hash != null && id != null) {
@@ -118,8 +132,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       query: Qu_genToken,
       fetchPolicy: "no-cache",
       variables: {
-        id
-      }
+        id,
+      },
     })
     if (data) {
       token = data.generativeToken
@@ -131,7 +145,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       hash,
       token: token,
     },
-    notFound: !token || !hash
+    notFound: !token || !hash,
   }
 }
 

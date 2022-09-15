@@ -19,11 +19,11 @@ export function InputReserveMintPass({
     client: eventsClient,
     variables: {
       where: {
-        address: value
-      }
+        address: value,
+      },
     },
     fetchPolicy: "cache-first",
-    skip: !isContractAddress(value)
+    skip: !isContractAddress(value),
   })
 
   const mintPassGroup: LiveMintingPassGroup | null = data?.mintPassGroup || null
@@ -33,17 +33,19 @@ export function InputReserveMintPass({
       {children}
       <InputText
         value={value}
-        onChange={evt => onChange(evt.target.value)}
+        onChange={(evt) => onChange(evt.target.value)}
         placeholder="Enter the Mint Pass contract address"
         className={cs(style.input)}
       />
       {mintPassGroup && (
-        <div className={cs(text.small)} style={{
-          textAlign: "right"
-        }}>
-          <Spacing size="2x-small"/>
-          <strong>{mintPassGroup.event.name}</strong> -{" "}
-          {mintPassGroup.label}
+        <div
+          className={cs(text.small)}
+          style={{
+            textAlign: "right",
+          }}
+        >
+          <Spacing size="2x-small" />
+          <strong>{mintPassGroup.event.name}</strong> - {mintPassGroup.label}
         </div>
       )}
     </div>

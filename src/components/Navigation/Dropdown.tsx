@@ -1,9 +1,13 @@
 import style from "./Dropdown.module.scss"
 import cs from "classnames"
-import { MouseEventHandler, PropsWithChildren, useCallback, useState } from "react"
+import {
+  MouseEventHandler,
+  PropsWithChildren,
+  useCallback,
+  useState,
+} from "react"
 import { DropdownMenu } from "./DropdownMenu"
 import { useClientEffect } from "../../utils/hookts"
-
 
 interface Props {
   itemComp: React.ReactNode
@@ -21,23 +25,25 @@ export function Dropdown({
   btnClassName,
   closeOnClick = true,
   children,
-  mobileMenuAbsolute
+  mobileMenuAbsolute,
 }: PropsWithChildren<Props>) {
   const [opened, setOpened] = useState<boolean>(false)
 
-  const toggle: MouseEventHandler = useCallback((evt) => {
-    evt.preventDefault()
-    evt.stopPropagation()
-    setOpened(!opened)
-  }, [opened])
+  const toggle: MouseEventHandler = useCallback(
+    (evt) => {
+      evt.preventDefault()
+      evt.stopPropagation()
+      setOpened(!opened)
+    },
+    [opened]
+  )
 
   useClientEffect(() => {
     if (opened) {
       const onClick = (evt: any) => {
         if (closeOnClick) {
           setOpened(false)
-        }
-        else {
+        } else {
           let close = true
           if (evt.path) {
             for (const el of evt.path) {
@@ -60,19 +66,21 @@ export function Dropdown({
   }, [opened])
 
   return (
-    <div className={cs(style.container, "dropdown_root", {
-      "avoid-close-event": opened,
-      [style.mobile_static_menu]: !mobileMenuAbsolute
-    })}>
+    <div
+      className={cs(style.container, "dropdown_root", {
+        "avoid-close-event": opened,
+        [style.mobile_static_menu]: !mobileMenuAbsolute,
+      })}
+    >
       <button
         aria-label={ariaLabel}
         onClick={toggle}
         className={cs(style.button, btnClassName, { [style.opened]: opened })}
       >
-        { itemComp }
+        {itemComp}
       </button>
       <DropdownMenu opened={opened} className={className}>
-        { children }
+        {children}
       </DropdownMenu>
     </div>
   )

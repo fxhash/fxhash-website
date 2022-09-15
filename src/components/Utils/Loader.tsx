@@ -13,10 +13,10 @@ export function Loader({
   className,
 }: Props) {
   return (
-    <div 
+    <div
       className={cs(style.loader, style[`size_${size}`], className)}
       style={{
-        backgroundColor: `var(--color-${color})`
+        backgroundColor: `var(--color-${color})`,
       }}
     />
   )
