@@ -60,7 +60,7 @@ export const VideoAttributeSettings: TEditAttributeComp = ({
                   <div className={cs(style.dropzone__content)}>
                     <i className="fa-solid fa-video" aria-hidden/>
                     <span>
-                      Import a video (100mb max)
+                      Import a video (50mb max)
                     </span>
                   </div>
                 )}

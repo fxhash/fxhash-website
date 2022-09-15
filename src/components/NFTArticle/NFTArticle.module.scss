@@ -36,6 +36,8 @@
     max-width: 100%;
 
     img, video {
+      width: fit-content;
+      max-height: calc(100vh - 64px);
       max-width: 100%;
       margin: 0 auto;
       display: block;

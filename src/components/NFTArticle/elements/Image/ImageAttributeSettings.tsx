@@ -55,7 +55,7 @@ export const ImageAttributeSettings: TEditAttributeComp = ({
                 <div className={cs(style.dropzone__content)}>
                   <i className="fa-solid fa-image" aria-hidden/>
                   <span>
-                    Import an image
+                    Import an image (20mb max)
                   </span>
                 </div>
               )}
