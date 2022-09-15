@@ -44,8 +44,8 @@ export function CodeEditor({
       </span>
       <div contentEditable={false} className={cs(style.code)}>
         <Editor
-          // @ts-ignore
           highlight={(code) =>
+            // @ts-ignore
             highlight(
               code,
               languages[element.lang || "plain"] || languages.plain

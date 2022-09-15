@@ -13,8 +13,8 @@ export function Chart({ reports, className }: Props) {
   // the data needs to be aggregated
   const aggregated = useMemo(() => {
     // 1. sort the data by date
-    // @ts-ignore
     const sorted = reports.sort(
+      // @ts-ignore
       (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
     )
     // exclude reports > 12 hours
