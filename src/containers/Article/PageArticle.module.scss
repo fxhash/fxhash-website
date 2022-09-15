@@ -218,6 +218,13 @@
       font-size: 1.2rem;
     }
 
+    ul li {
+      margin-top: 0.5em;
+      &:first-child {
+        margin-top: 0;
+      }
+    }
+
     table {
       width: min(100%, 1400px);
       table-layout: fixed;
