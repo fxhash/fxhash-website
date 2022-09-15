@@ -1,7 +1,10 @@
 import { NextPage } from "next"
 import { NFTArticle } from "../../../../types/entities/Article"
 import { getServerSidePropsArticleById } from "../../../../services/ServerSideProps/ServerSidePropsArticle"
-import { UserGuard, UserGuardUtils } from "../../../../components/Guards/UserGuard"
+import {
+  UserGuard,
+  UserGuardUtils,
+} from "../../../../components/Guards/UserGuard"
 import { ArticleEditionPreview } from "../../../../containers/Article/Edition/ArticleEditionPreview"
 
 interface Props {
@@ -17,10 +20,7 @@ const MintedArticleEditionPreviewPage: NextPage<Props> = ({
       forceRedirect
       allowed={UserGuardUtils.AUTHOR_OF(article.author!)}
     >
-      <ArticleEditionPreview
-        article={article}
-        origin={origin}
-      />
+      <ArticleEditionPreview article={article} origin={origin} />
     </UserGuard>
   )
 }

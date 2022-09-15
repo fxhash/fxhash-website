@@ -5,10 +5,7 @@ import { PropsWithChildren } from "react"
 interface Props {
   title: string
 }
-export function FiltersGroup({
-  title,
-  children,
-}: PropsWithChildren<Props>) {
+export function FiltersGroup({ title, children }: PropsWithChildren<Props>) {
   return (
     <div className={cs(style.root)}>
       <div className={cs(style.title)}>{title}</div>

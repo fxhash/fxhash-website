@@ -8,25 +8,21 @@ interface Props {
   activeCategory: string
   activeArticle: string
 }
-export function DocSidebar({
-  activeCategory,
-  activeArticle,
-}: Props) {
+export function DocSidebar({ activeCategory, activeArticle }: Props) {
   // only for mobile
   const [opened, setOpened] = useState(false)
 
   return (
-    <div className={cs(style.root, {
-      [style.opened]: opened
-    })}>
-      <button
-        className={cs(style.title)}
-        onClick={() => setOpened(!opened)}
-      >
-        <i className="fas fa-bars" aria-hidden/>
+    <div
+      className={cs(style.root, {
+        [style.opened]: opened,
+      })}
+    >
+      <button className={cs(style.title)} onClick={() => setOpened(!opened)}>
+        <i className="fas fa-bars" aria-hidden />
         <span>Documentation</span>
       </button>
-  
+
       <div className={cs(style.content)}>
         {docJSON.categories.map((category) => (
           <DocSidebarCategory

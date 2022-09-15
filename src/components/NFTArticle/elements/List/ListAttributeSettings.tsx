@@ -1,6 +1,6 @@
 import cs from "classnames"
 import { ContextualMenuItems } from "../../../Menus/ContextualMenuItems"
-import { TEditAttributeComp } from "../../../../types/ArticleEditor/BlockDefinition";
+import { TEditAttributeComp } from "../../../../types/ArticleEditor/BlockDefinition"
 
 export const ListAttributeSettings: TEditAttributeComp = ({
   element,
@@ -10,26 +10,30 @@ export const ListAttributeSettings: TEditAttributeComp = ({
     <ContextualMenuItems>
       <button
         type="button"
-        onClick={() => onEdit({
-          ordered: false
-        })}
+        onClick={() =>
+          onEdit({
+            ordered: false,
+          })
+        }
         className={cs({
-          selected: element.ordered === false
+          selected: element.ordered === false,
         })}
       >
-        <i className="fa-solid fa-list" aria-hidden/>
+        <i className="fa-solid fa-list" aria-hidden />
         <span>Bulleted</span>
       </button>
       <button
         type="button"
-        onClick={() => onEdit({
-          ordered: true
-        })}
+        onClick={() =>
+          onEdit({
+            ordered: true,
+          })
+        }
         className={cs({
-          selected: element.ordered === true
+          selected: element.ordered === true,
         })}
       >
-        <i className="fa-solid fa-list-ol" aria-hidden/>
+        <i className="fa-solid fa-list-ol" aria-hidden />
         <span>Ordered</span>
       </button>
     </ContextualMenuItems>

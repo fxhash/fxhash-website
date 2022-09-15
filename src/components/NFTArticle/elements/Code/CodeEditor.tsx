@@ -5,7 +5,7 @@ import Editor from "react-simple-code-editor"
 import { highlight, languages } from "prismjs"
 import { ReactEditor, useSlateStatic } from "slate-react"
 import { Node, Transforms } from "slate"
-import { getCodeEditorLang } from "./CodeLanguages";
+import { getCodeEditorLang } from "./CodeLanguages"
 
 interface Props {
   attributes: any
@@ -21,9 +21,7 @@ export function CodeEditor({
   const nodePath = ReactEditor.findPath(editor, element)
 
   // we edit the text locally, and initialize with current value
-  const [value, setValue] = useState<string>(
-    Node.string(element)
-  )
+  const [value, setValue] = useState<string>(Node.string(element))
 
   // update the value in the state & update the node too
   const update = (val: string) => {
@@ -31,7 +29,7 @@ export function CodeEditor({
     const path = [...nodePath, 0]
     Transforms.insertText(editor, val, {
       at: path,
-      voids: true
+      voids: true,
     })
   }
 
@@ -40,19 +38,19 @@ export function CodeEditor({
 
   return (
     <div {...attributes} className={cs(style.root)}>
-      <div className={cs(style.hidden)}>
-        {children}
-      </div>
+      <div className={cs(style.hidden)}>{children}</div>
       <span contentEditable={false} className={cs(style.lang)}>
         {lang.name}
       </span>
-      <div
-        contentEditable={false}
-        className={cs(style.code)}
-      >
+      <div contentEditable={false} className={cs(style.code)}>
         <Editor
           // @ts-ignore
-          highlight={code => highlight(code, languages[element.lang || 'plain'] || languages.plain)}
+          highlight={(code) =>
+            highlight(
+              code,
+              languages[element.lang || "plain"] || languages.plain
+            )
+          }
           value={value}
           onValueChange={update}
           padding={15}

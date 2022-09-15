@@ -12,44 +12,39 @@ import { User } from "../../../types/entities/User"
 import { ModerationReasons } from "../../../containers/Moderation/ModerationReasons"
 import { CreateModerationReason } from "../../../components/Moderation/Reason/CreateModerationReason"
 
-
 const CreateArticleModerationReason: NextPage = () => {
   return (
     <>
       <Head>
         <title>fxhash — create moderation reason for articles</title>
-        <meta key="description" name="description" content="create moderation reason for articles"/>
+        <meta
+          key="description"
+          name="description"
+          content="create moderation reason for articles"
+        />
       </Head>
 
-      <Spacing size="6x-large"/>
+      <Spacing size="6x-large" />
 
       <section>
         <SectionHeader>
           <TitleHyphen>articles {"->"} create moderation reason</TitleHyphen>
         </SectionHeader>
 
-        <Spacing size="6x-large"/>
+        <Spacing size="6x-large" />
 
-        <main className={cs(layout['padding-big'])}>
+        <main className={cs(layout["padding-big"])}>
           <ClientOnly>
-            <UserGuard
-              allowed={
-                user => isUserArticleModerator(user as User)
-              }
-            >
-              <ModerationReasons
-                moderationContract="article"
-              />
-              <Spacing size="3x-large"/>
-              <CreateModerationReason
-                moderationContract="article"
-              />
+            <UserGuard allowed={(user) => isUserArticleModerator(user as User)}>
+              <ModerationReasons moderationContract="article" />
+              <Spacing size="3x-large" />
+              <CreateModerationReason moderationContract="article" />
             </UserGuard>
           </ClientOnly>
         </main>
       </section>
 
-      <Spacing size="6x-large"/>
+      <Spacing size="6x-large" />
     </>
   )
 }

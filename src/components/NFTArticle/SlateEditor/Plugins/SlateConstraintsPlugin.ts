@@ -1,6 +1,9 @@
-import { Editor, Element, NodeEntry, Range, Transforms, Node } from "slate";
-import { EnhanceEditorWith, FxEditor } from "../../../../types/ArticleEditor/Editor";
-import { getArticleBlockDefinition } from "../Blocks";
+import { Editor, Element, NodeEntry, Range, Transforms, Node } from "slate"
+import {
+  EnhanceEditorWith,
+  FxEditor,
+} from "../../../../types/ArticleEditor/Editor"
+import { getArticleBlockDefinition } from "../Blocks"
 
 const removeFollowingBlock = (
   editor: FxEditor,
@@ -9,16 +12,23 @@ const removeFollowingBlock = (
   isPrevious: boolean
 ): boolean => {
   if (followingNode && followingNode[1].length > 0) {
-    const [followingElement, followingPath] = followingNode;
+    const [followingElement, followingPath] = followingNode
     if (followingElement) {
-      const blockDefinition = getArticleBlockDefinition(followingElement.type);
-      if (blockDefinition?.hasDeleteBehaviorRemoveBlock && followingPath[0] !== currentChildrenIdx) {
-        Transforms.delete(editor, { at: followingPath, hanging: true, reverse: isPrevious })
-        return true;
+      const blockDefinition = getArticleBlockDefinition(followingElement.type)
+      if (
+        blockDefinition?.hasDeleteBehaviorRemoveBlock &&
+        followingPath[0] !== currentChildrenIdx
+      ) {
+        Transforms.delete(editor, {
+          at: followingPath,
+          hanging: true,
+          reverse: isPrevious,
+        })
+        return true
       }
     }
   }
-  return false;
+  return false
 }
 
 /**
@@ -34,17 +44,17 @@ export const withConstraints: EnhanceEditorWith = (editor) => {
   editor.deleteBackward = (unit) => {
     const { selection } = editor
     if (selection && Range.isCollapsed(selection)) {
-      const currentNodeHighestIdx = selection.anchor?.path[0] || 0;
+      const currentNodeHighestIdx = selection.anchor?.path[0] || 0
       const prevNode = Editor.previous<Element>(editor, {
         at: selection,
-        mode: 'highest',
-        match: (n) => !Editor.isEditor(n) && Element.isElement(n)
+        mode: "highest",
+        match: (n) => !Editor.isEditor(n) && Element.isElement(n),
       })
       if (removeFollowingBlock(editor, currentNodeHighestIdx, prevNode, true)) {
-        return;
+        return
       }
     }
-    deleteBackward(unit);
+    deleteBackward(unit)
   }
 
   /**
@@ -53,17 +63,19 @@ export const withConstraints: EnhanceEditorWith = (editor) => {
   editor.deleteForward = (unit) => {
     const { selection } = editor
     if (selection && Range.isCollapsed(selection)) {
-      const currentNodeHighestIdx = selection.anchor?.path[0] || 0;
+      const currentNodeHighestIdx = selection.anchor?.path[0] || 0
       const nextNode = Editor.next<Element>(editor, {
         at: selection,
-        mode: 'highest',
-        match: (n) => !Editor.isEditor(n) && Element.isElement(n)
+        mode: "highest",
+        match: (n) => !Editor.isEditor(n) && Element.isElement(n),
       })
-      if (removeFollowingBlock(editor, currentNodeHighestIdx, nextNode, false)) {
-        return;
+      if (
+        removeFollowingBlock(editor, currentNodeHighestIdx, nextNode, false)
+      ) {
+        return
       }
     }
-    deleteForward(unit);
+    deleteForward(unit)
   }
 
   editor.normalizeNode = (entry) => {
@@ -74,9 +86,11 @@ export const withConstraints: EnhanceEditorWith = (editor) => {
       if (editor.children.length < 1) {
         Transforms.insertNodes(editor, {
           type: "paragraph",
-          children: [{
-            text: ""
-          }]
+          children: [
+            {
+              text: "",
+            },
+          ],
         })
       }
     }
@@ -86,36 +100,42 @@ export const withConstraints: EnhanceEditorWith = (editor) => {
       // if the node has less than 1 child, insert a text node
       if (!node.children || node.children.length === 0) {
         Transforms.insertNodes(
-          editor, {
-            text: ""
-          }, {
-            at: path
+          editor,
+          {
+            text: "",
+          },
+          {
+            at: path,
           }
         )
       }
       // if the node has more than 1 child or children is not text, force text
       else if (node.children.length > 1 || node.children[0].type) {
         Transforms.setNodes(
-          editor, {
-            children: [{
-              text: "",
-            }]
-          }, {
-            at: path
+          editor,
+          {
+            children: [
+              {
+                text: "",
+              },
+            ],
+          },
+          {
+            at: path,
           }
         )
       }
     }
     // normalise links
-    if(node.type === 'link') {
+    if (node.type === "link") {
       // unwrap links that have no url
-      if(node.url === "") {
-	Transforms.unwrapNodes(editor, {at: path})
+      if (node.url === "") {
+        Transforms.unwrapNodes(editor, { at: path })
       }
       // remove links that have no text entirly
-      if(Node.string(node).length === 0) {
-	Transforms.removeNodes(editor, {at: path})
-	return;
+      if (Node.string(node).length === 0) {
+        Transforms.removeNodes(editor, { at: path })
+        return
       }
     }
 

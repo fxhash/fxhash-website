@@ -3,7 +3,10 @@ import cs from "classnames"
 import { TActionComp } from "./Action"
 import { UserBadge } from "../../User/UserBadge"
 
-export const ActionArticleEditionsTransfered: TActionComp = ({ action, verbose }) => (
+export const ActionArticleEditionsTransfered: TActionComp = ({
+  action,
+  verbose,
+}) => (
   <>
     <UserBadge
       className={cs(style.user)}
@@ -12,7 +15,13 @@ export const ActionArticleEditionsTransfered: TActionComp = ({ action, verbose }
       size="small"
     />
     <span>
-      transfered <strong>{action.numericValue}</strong> editions {verbose && <>of <strong>{action.article!.title}</strong></>} to
+      transfered <strong>{action.numericValue}</strong> editions{" "}
+      {verbose && (
+        <>
+          of <strong>{action.article!.title}</strong>
+        </>
+      )}{" "}
+      to
     </span>
     <UserBadge
       className={cs(style.user)}

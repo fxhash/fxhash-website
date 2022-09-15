@@ -25,8 +25,8 @@ export function EntityBadge(props: IProps) {
   const { user } = props
 
   return user.type === UserType.COLLAB_CONTRACT_V1 ? (
-    <CollabBadge {...props} user={props.user as Collaboration}/>
-  ):(
-    <UserBadge {...props}/>
+    <CollabBadge {...props} user={props.user as Collaboration} />
+  ) : (
+    <UserBadge {...props} />
   )
 }

@@ -8,15 +8,15 @@ import { useCallback, useState } from "react"
 import { Field } from "../../../Form/Field"
 import { Submit } from "../../../Form/Submit"
 import { Button } from "../../../Button"
-import { TEditAttributeComp } from "../../../../types/ArticleEditor/BlockDefinition";
+import { TEditAttributeComp } from "../../../../types/ArticleEditor/BlockDefinition"
 
 const tabs: TabDefinition[] = [
   {
-    name: "Upload"
+    name: "Upload",
   },
   {
-    name: "External link"
-  }
+    name: "External link",
+  },
 ]
 
 export const ImageAttributeSettings: TEditAttributeComp = ({
@@ -28,13 +28,13 @@ export const ImageAttributeSettings: TEditAttributeComp = ({
   const onAddFile = (file: File) => {
     if (file) {
       onEdit({
-        url: URL.createObjectURL(file)
+        url: URL.createObjectURL(file),
       })
     }
   }
   const handleClickImport = useCallback(() => {
     onEdit({
-      url: textUrl
+      url: textUrl,
     })
   }, [onEdit, textUrl])
 
@@ -48,35 +48,29 @@ export const ImageAttributeSettings: TEditAttributeComp = ({
         <div className={cs(style.content)}>
           {tabIndex === 0 ? (
             <Dropzone
-              onChange={files => files && files[0] && onAddFile(files[0])}
+              onChange={(files) => files && files[0] && onAddFile(files[0])}
               accepted={["image/jpeg", "image/png", "image/gif"]}
               className={cs(style.dropzone)}
-              textDefault={(
+              textDefault={
                 <div className={cs(style.dropzone__content)}>
-                  <i className="fa-solid fa-image" aria-hidden/>
-                  <span>
-                    Import an image
-                  </span>
+                  <i className="fa-solid fa-image" aria-hidden />
+                  <span>Import an image</span>
                 </div>
-              )}
-              textDrag={(
+              }
+              textDrag={
                 <div className={cs(style.dropzone__content)}>
-                  <span>
-                    Drop image file
-                  </span>
+                  <span>Drop image file</span>
                 </div>
-              )}
+              }
             />
-          ):tabIndex === 1 ? (
-            <form
-              className={cs(style.link_content)}
-            >
+          ) : tabIndex === 1 ? (
+            <form className={cs(style.link_content)}>
               <Field className={cs(style.field)}>
                 <label>URL to image</label>
                 <InputText
                   type="text"
                   value={textUrl}
-                  onChange={event => setTextUrl(event.target.value)}
+                  onChange={(event) => setTextUrl(event.target.value)}
                   placeholder="https://image.com/image.jpg"
                 />
               </Field>
@@ -93,7 +87,7 @@ export const ImageAttributeSettings: TEditAttributeComp = ({
                 </Button>
               </Submit>
             </form>
-          ):null}
+          ) : null}
         </div>
       )}
     </TabsContainer>

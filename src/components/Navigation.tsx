@@ -1,17 +1,17 @@
-import Link from 'next/link'
-import style from './Navigation.module.scss'
-import text from '../styles/Text.module.css'
-import effects from '../styles/Effects.module.scss'
-import cs from 'classnames'
-import { Button } from './Button'
-import { useContext, useMemo } from 'react'
-import { UserContext } from '../containers/UserProvider'
-import { Dropdown } from './Navigation/Dropdown'
-import { Avatar } from './User/Avatar'
-import { getUserProfileLink } from '../utils/user'
-import { useState, useEffect } from 'react'
-import { useRouter } from 'next/router'
-import { SettingsModal } from '../containers/Settings/SettingsModal'
+import Link from "next/link"
+import style from "./Navigation.module.scss"
+import text from "../styles/Text.module.css"
+import effects from "../styles/Effects.module.scss"
+import cs from "classnames"
+import { Button } from "./Button"
+import { useContext, useMemo } from "react"
+import { UserContext } from "../containers/UserProvider"
+import { Dropdown } from "./Navigation/Dropdown"
+import { Avatar } from "./User/Avatar"
+import { getUserProfileLink } from "../utils/user"
+import { useState, useEffect } from "react"
+import { useRouter } from "next/router"
+import { SettingsModal } from "../containers/Settings/SettingsModal"
 
 export function Navigation() {
   const userCtx = useContext(UserContext)
@@ -30,13 +30,20 @@ export function Navigation() {
   return (
     <>
       <nav className={cs(style.nav, text.h6, { [style.opened]: opened })}>
-        <button className={cs(style.hamburger)} onClick={() => setOpened(!opened)}>
-          <div/><div/><div/>
+        <button
+          className={cs(style.hamburger)}
+          onClick={() => setOpened(!opened)}
+        >
+          <div />
+          <div />
+          <div />
         </button>
 
         <div className={cs(style.content)}>
           <Link href="/explore">
-            <a className={cs({ [style.active]: routerRoot === "explore" })}>explore</a>
+            <a className={cs({ [style.active]: routerRoot === "explore" })}>
+              explore
+            </a>
           </Link>
 
           <Dropdown
@@ -55,10 +62,14 @@ export function Navigation() {
           </Dropdown>
 
           <Link href="/marketplace">
-            <a className={cs({ [style.active]: routerRoot === "marketplace" })}>marketplace</a>
+            <a className={cs({ [style.active]: routerRoot === "marketplace" })}>
+              marketplace
+            </a>
           </Link>
           <Link href="/sandbox">
-            <a className={cs({ [style.active]: routerRoot === "sandbox" })}>sandbox</a>
+            <a className={cs({ [style.active]: routerRoot === "sandbox" })}>
+              sandbox
+            </a>
           </Link>
           <Link href="/doc">
             <a className={cs({ [style.active]: routerRoot === "doc" })}>doc</a>
@@ -69,21 +80,21 @@ export function Navigation() {
             onClick={() => setSettingsModal(!settingsModal)}
             className={cs(style.btn_icon)}
           >
-            <i
-              aria-hidden
-              className="fas fa-cog"
-            />
+            <i aria-hidden className="fas fa-cog" />
           </button>
 
           {userCtx.user ? (
             <Dropdown
               ariaLabel="Open user actions"
-              itemComp={(
+              itemComp={
                 <div className={cs(style.avatar_btn)}>
-                  <Avatar uri={userCtx.user.avatarUri} className={cs(style.avatar, effects['drop-shadow-big'])} />
-                  <i aria-hidden className="fas fa-caret-down"/>
+                  <Avatar
+                    uri={userCtx.user.avatarUri}
+                    className={cs(style.avatar, effects["drop-shadow-big"])}
+                  />
+                  <i aria-hidden className="fas fa-caret-down" />
                 </div>
-              )}
+              }
             >
               <Link href="/mint-generative">
                 <a>mint generative token</a>
@@ -111,16 +122,16 @@ export function Navigation() {
                 color="primary"
                 onClick={() => userCtx.disconnect()}
                 style={{
-                  marginTop: "5px"
+                  marginTop: "5px",
                 }}
               >
                 unsync
               </Button>
             </Dropdown>
-          ):(
+          ) : (
             <Button
               className="btn-sync"
-              iconComp={<i aria-hidden className="fas fa-wallet"/>}
+              iconComp={<i aria-hidden className="fas fa-wallet" />}
               onClick={() => {
                 userCtx.connect()
               }}
@@ -132,9 +143,7 @@ export function Navigation() {
       </nav>
 
       {settingsModal && (
-        <SettingsModal
-          onClose={() => setSettingsModal(false)}
-        />
+        <SettingsModal onClose={() => setSettingsModal(false)} />
       )}
     </>
   )
