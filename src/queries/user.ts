@@ -1,6 +1,6 @@
 import { gql } from "@apollo/client"
 import { Frag_GenAuthor, Frag_GenPricing } from "./fragments/generative-token"
-import { Frag_ArticleInfos } from "./fragments/article";
+import { Frag_ArticleInfos, Frag_ArticleInfosAction } from "./fragments/article";
 
 export const Qu_user = gql`
   query User($id: String, $name: String) {
@@ -149,6 +149,23 @@ export const Qu_userObjkts = gql`
   }
 `
 
+export const Qu_userArticlesOwned = gql`
+  ${Frag_ArticleInfos}
+  query UserCollection(
+    $id: String!,
+  ) {
+    user(id: $id) {
+      id
+      articlesOwned {
+        amount
+        article {
+          ...ArticleInfos
+        }
+      }
+    }
+  }
+`
+
 export const Qu_userObjktsSubResults = gql`
   query Query($id: String!, $generativeFilters: ObjktFilter, $authorFilters: ObjktFilter) {
     user(id: $id) {
@@ -236,9 +253,14 @@ export const Qu_userActions = gql`
           name
           iteration
         }
+        article {
+          id
+          ...ArticleInfosAction
+        }
       }
     }
   }
+  ${Frag_ArticleInfosAction}
 `
 
 export const Qu_userSales = gql`
@@ -385,13 +407,14 @@ export const Qu_searchUser = gql`
 `
 
 export const Qu_userArticles = gql`
-  query UserArticles($id: String!, $skip: Int, $take: Int, $sort: ArticleSortInput) {
+  query UserArticles($id: String!, $skip: Int, $take: Int, $sort: ArticleSortInput, $filters: ArticleFilter) {
     user(id: $id) {
       id
-      articles(skip: $skip, take: $take, sort: $sort) {
+      articles(skip: $skip, take: $take, sort: $sort, filters: $filters) {
         ...ArticleInfos
       }
     }
   }
   ${Frag_ArticleInfos}
 `
+

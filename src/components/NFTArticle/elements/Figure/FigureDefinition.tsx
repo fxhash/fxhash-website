@@ -5,17 +5,20 @@ import { Node, Transforms } from "slate";
 import { IArticleBlockDefinition, TEditAttributeComp } from "../../../../types/ArticleEditor/BlockDefinition";
 import { FigcaptionElement } from "./FigcaptionEditor";
 import { VideoAttributeSettings } from "../Video/VideoAttributeSettings";
+import { AudioAttributeSettings } from "../Audio/AudioAttributeSettings";
 
-const medias = ["image", "video"];
+const medias = ["image", "video", "audio"];
 const mediaAttributeSettings: Record<string, TEditAttributeComp> = {
   "image": ImageAttributeSettings,
   "video": VideoAttributeSettings,
+  "audio": AudioAttributeSettings,
 }
 export const figureDefinition: IArticleBlockDefinition<null> = {
   name: "Figure",
   icon: null,
   render: FigureElement,
   hasUtilityWrapper: true,
+  hasDeleteBehaviorRemoveBlock: true,
   editAttributeComp: ({ element, onEdit }) => {
     const children = Node.elements(element)
     for (const [child] of children) {

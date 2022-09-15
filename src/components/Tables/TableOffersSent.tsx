@@ -1,6 +1,6 @@
 import React, { Fragment, memo, useContext, useRef } from 'react';
 import style from "./TableUser.module.scss";
-import { DateDistance } from "../Activity/Action";
+import { DateDistance } from "../Utils/Date/DateDistance";
 import { DisplayTezos } from "../Display/DisplayTezos";
 import { UserBadge } from "../User/UserBadge";
 import { ObjktImageAndName } from "../Objkt/ObjktImageAndName";

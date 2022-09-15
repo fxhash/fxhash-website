@@ -2,6 +2,7 @@ import React, { memo, useCallback, useContext, useMemo } from 'react';
 import style from "./LocalArticles.module.scss";
 import { ArticlesContext } from "../../context/Articles";
 import {
+  ArticleFlag,
   NFTArticleInfos,
 } from "../../types/entities/Article";
 import { CardNftArticle } from "../../components/Card/CardNFTArticle";
@@ -22,6 +23,7 @@ const _LocalArticles = ({ classNameArticle, user }: LocalArticlesProps) => {
       acc.push({
         id: uid,
         slug: uid,
+        flag: ArticleFlag.NONE,
         author: user,
         title: article.form.title || '',
         description: article.form.abstract || '',

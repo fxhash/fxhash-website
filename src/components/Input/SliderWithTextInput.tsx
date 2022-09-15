@@ -22,6 +22,7 @@ export function SliderWithTextInput({
         className={cs(style.input_text)}
         onChange={evt => props.onChange(evt.target.value as any)}
       />
+      {unit && <span>{unit}</span>}
     </div>
   )
 }

@@ -69,13 +69,15 @@ class Walker {
 }
 
 export class LogoEffect {
+  fontSize: number
   cvs: HTMLCanvasElement
   ctx: CanvasRenderingContext2D
   walkers: Walker[]
   env: Float32Array
 
-  constructor(canvas: HTMLCanvasElement) {
+  constructor(canvas: HTMLCanvasElement, fontSize: number) {
     this.cvs = canvas
+    this.fontSize = fontSize
     this.ctx = this.cvs.getContext("2d")!
     this.walkers = []
     this.env = new Float32Array(this.cvs.width*this.cvs.height)
@@ -89,7 +91,7 @@ export class LogoEffect {
     this.ctx.fillStyle = `rgb(${white[0]}, ${white[1]}, ${white[2]})`
     this.ctx.fillRect(0, 0, this.cvs.width, this.cvs.height)
     this.ctx.fillStyle = `rgb(${black[0]}, ${black[1]}, ${black[2]})`
-    this.ctx.font = "bold 28px 'Fira Code'"
+    this.ctx.font = `bold ${this.fontSize}px 'Fira Code'`
     this.ctx.textAlign = "center"
     this.ctx.textBaseline = "middle"
     this.ctx.fillText("fx(hash)", this.cvs.width*.5, this.cvs.height*.5)
@@ -160,7 +162,7 @@ export class LogoEffect {
       // walker has chances to turn
       if (Math.random() < cfg.turnChances) {
         let turn = Math.random()
-        if (cfg.turnDiscrete) 
+        if (cfg.turnDiscrete)
           turn = Math.round(turn)
         W.ang += (turn-0.5) * cfg.turnAngle
       }

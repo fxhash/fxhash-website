@@ -15,6 +15,12 @@ export const getDataFromCsvFile = async (file: File): Promise<ParseResult<any>> 
   return new Promise((resolve, reject) => {
     Papa.parse(file, {
       header: true,
+      transformHeader: (header) => {
+        return header.trim()
+      },
+      transform: (col) => {
+        return col.trim();
+      },
       skipEmptyLines: true,
       complete (results, file) {
         resolve(results)

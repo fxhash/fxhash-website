@@ -1,12 +1,11 @@
 :global .dark :local {
   .logo {
     filter: invert(100%);
-    display: block;
   }
-  
+
   .logo_wrapper {
     position: relative;
-  
+
     &::after {
       content: "";
       display: block;
@@ -18,4 +17,9 @@
       background-color: rgba(255, 255, 255, 0.14);
     }
   }
+}
+
+.logo_wrapper {
+  display: flex;
+  align-items: center;
 }

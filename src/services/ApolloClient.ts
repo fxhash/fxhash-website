@@ -73,6 +73,10 @@ export const clientSideClient = new ApolloClient({
             keyArgs: false,
             merge: cacheMergePaginatedField,
           },
+          articles: {
+            keyArgs: false,
+            merge: cacheMergePaginatedField,
+          },
           actions: {
             keyArgs: false,
             merge: cacheMergePaginatedField,
