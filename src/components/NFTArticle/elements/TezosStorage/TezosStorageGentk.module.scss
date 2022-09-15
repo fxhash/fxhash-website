@@ -1,0 +1,22 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+
+  .title {
+    font-weight: bold;
+    color: var(--color-black);
+  }
+
+  .user {
+    font-size: var(--font-size-small);
+  }
+}

@@ -24,39 +24,40 @@ export function CollabBadge(props: Props) {
   const [collaborators, setCollaborators] = useState(user.collaborators);
   const [isInitialized, setIsInitialized] = useState(false);
 
-  const [opened, setOpened] = useState<boolean>(false);
+
+  const [opened, setOpened] = useState<boolean>(false)
   useEffect(() => {
-    setCollaborators(stateArray => shuffleArray(stateArray));
-    setIsInitialized(true);
+    setCollaborators((stateArray) => shuffleArray(stateArray))
+    setIsInitialized(true)
   }, [])
   return (
-    <div className={cs(
-      style.root,
-      style[`size_${size}`],
-      style[`side_${avatarSide}`], {
-        [style.opened]: opened,
-        [style.toggeable]: toggeable,
-	[style.hide]: !isInitialized,
-	[style.centered]: centered,
-      }
-    )}>
+    <div
+      className={cs(
+        style.root,
+        style[`size_${size}`],
+        style[`side_${avatarSide}`],
+        {
+          [style.opened]: opened,
+          [style.toggeable]: toggeable,
+          [style.hide]: !isInitialized,
+          [style.centered]: centered,
+        }
+      )}
+    >
       <button
         type="button"
         className={cs(style.avatars)}
         onClick={() => setOpened(!opened)}
         disabled={!toggeable}
       >
-        {collaborators.map(user => (
-          <div
-            key={user.id}
-            className={cs(style.avatar_wrapper)}
-          >
+        {collaborators.map((user) => (
+          <div key={user.id} className={cs(style.avatar_wrapper)}>
             <Avatar
               uri={user.avatarUri}
               className={cs(
                 badgeStyle.avatar,
                 badgeStyle[`avatar-${size}`],
-                style.avatar,
+                style.avatar
               )}
             />
             <span className={cs(style.user_name)}>
@@ -78,7 +79,7 @@ export function CollabBadge(props: Props) {
             badgeStyle[`avatar-${size}`],
             style.avatar,
             style.avatar_wrapper,
-            style.link,
+            style.link
           )}
         >
           <span>
@@ -86,15 +87,15 @@ export function CollabBadge(props: Props) {
               <>
                 <i
                   className={cs(
-                    `fa-solid fa-angle-${opened?"up":"down"}`,
-                    style.caret,
+                    `fa-solid fa-angle-${opened ? "up" : "down"}`,
+                    style.caret
                   )}
                   aria-hidden
                 />
                 <span> collab </span>
               </>
-            ):(
-              <i className="fa-solid fa-link" aria-hidden/>
+            ) : (
+              <i className="fa-solid fa-link" aria-hidden />
             )}
           </span>
         </div>
@@ -102,7 +103,7 @@ export function CollabBadge(props: Props) {
 
       {toggeable && (
         <div className={cs(style.collaborators)}>
-          {collaborators.map(user => (
+          {collaborators.map((user) => (
             <UserBadge
               key={user.id}
               {...props}

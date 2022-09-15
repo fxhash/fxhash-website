@@ -7,25 +7,18 @@ import { IOptions, Select } from "../Select"
 import { useState } from "react"
 import { InputReserve } from "./InputReserve"
 import { FormikErrors } from "formik"
+import { mapReserveDefinition } from "../../../utils/generative-token"
 
-
-const MethodOptions: IOptions[] = [
-  {
-    label: "Access list",
-    value: EReserveMethod.WHITELIST,
-  }
-]
+const MethodOptions: IOptions[] = Object.keys(EReserveMethod).map((method) => ({
+  label: mapReserveDefinition[method as EReserveMethod].label,
+  value: method,
+}))
 
 interface Props extends InputProps<IReserve<string>[]> {
   maxSize: number
   errors: FormikErrors<IReserve[]>
 }
-export function InputReserves({
-  maxSize,
-  value,
-  onChange,
-  errors,
-}: Props) {
+export function InputReserves({ maxSize, value, onChange, errors }: Props) {
   const [method, setMethod] = useState<EReserveMethod>()
 
   const addReserve = () => {
@@ -34,9 +27,9 @@ export function InputReserves({
         ...value,
         {
           method: method,
-          data: [],
+          data: mapReserveDefinition[method].initialValue,
           amount: "0",
-        }
+        },
       ])
       setMethod(undefined)
     }
@@ -58,7 +51,7 @@ export function InputReserves({
   const getReserveError = (idx: number) => {
     if (!errors || typeof errors === "string") return undefined
     const err = errors[idx]
-    return err || undefined 
+    return err || undefined
   }
 
   return (
@@ -68,7 +61,7 @@ export function InputReserves({
           key={idx}
           maxSize={maxSize}
           value={reserve}
-          onChange={value => updateReserve(value, idx)}
+          onChange={(value) => updateReserve(value, idx)}
           onRemove={() => removeReserve(idx)}
           errors={getReserveError(idx)}
         />
@@ -85,7 +78,7 @@ export function InputReserves({
         <Button
           type="button"
           size="regular"
-          iconComp={<i className="fa-solid fa-plus" aria-hidden/>}
+          iconComp={<i className="fa-solid fa-plus" aria-hidden />}
           onClick={addReserve}
           disabled={!method}
         >

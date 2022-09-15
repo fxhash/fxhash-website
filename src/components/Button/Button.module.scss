@@ -26,7 +26,8 @@
     border: 1px solid var(--color-white);
   }
 
-  &:disabled, &.disabled {
+  &:disabled,
+  &.disabled {
     pointer-events: none;
     background-color: var(--color-gray);
     opacity: 0.7;
@@ -38,16 +39,16 @@
   color: white !important;
 
   &.color-black {
-    &:disabled, &.disabled {
+
+    &:disabled,
+    &.disabled {
       background-color: var(--color-gray-light);
       opacity: 0.5;
     }
   }
 }
 
-.font-regular {
-  
-}
+.font-regular {}
 
 .size-very-small {
   height: 36px;
@@ -88,6 +89,10 @@
   &.state-loading {
     margin-top: 0 !important;
   }
+
+  &.icon-alone {
+    padding: 0 20px !important;
+  }
 }
 
 .size-medium {
@@ -96,7 +101,7 @@
   font-size: var(--font-size-regular);
 
   &.state-loading {
-    margin-top: math.div((56px - 30px) , 2);
+    margin-top: math.div((56px - 30px), 2);
   }
 }
 
@@ -106,7 +111,7 @@
   font-size: var(--font-size-regular);
 
   &.state-loading {
-    margin-top: math.div((62px - 30px) , 2);
+    margin-top: math.div((62px - 30px), 2);
   }
 }
 
@@ -114,9 +119,19 @@
   height: auto;
   padding: 30px 45px !important;
   font-size: var(--font-size-regular);
-  
+
   i {
     font-size: 26px;
+  }
+}
+
+.size-large-x {
+  height: 62px;
+  padding: 0 60px !important;
+  font-size: var(--font-size-regular);
+
+  &.state-loading {
+    margin-top: math.div((62px - 30px), 2);
   }
 }
 
@@ -153,19 +168,21 @@
 .color-transparent {
   background-color: transparent;
   color: var(--color-black) !important;
+  // box-shadow: 0px 2px 8px -4px rgba(0, 0, 0, 0.3);
   box-shadow: none;
 
   &.size-small {
     padding-left: 8px !important;
     padding-right: 8px !important;
   }
-  
+
   &:hover {
     color: var(--color-secondary) !important;
     box-shadow: none;
+    // box-shadow: 0px 2px 12px -4px rgba(0, 0, 0, 0.3);
     border-color: transparent;
   }
-  
+
   &.disabled {
     background-color: transparent;
     opacity: 0.3;
@@ -179,9 +196,11 @@
   0% {
     transform: rotate(0deg);
   }
+
   85% {
     transform: rotate(400deg);
   }
+
   100% {
     transform: rotate(360deg);
   }
@@ -196,7 +215,7 @@
   color: transparent !important;
   animation: turn 1.5s ease-in-out 0.5s infinite forwards;
 
-  & > * {
+  &>* {
     opacity: 0;
   }
 }

@@ -6,11 +6,10 @@ import { useEffect, useState, useRef } from "react"
 import { generateFxHash, isHashValid } from "../../utils/hash"
 import { Field } from "../Form/Field"
 
-
 interface Props {
   onHashUpdate: (hash: string) => void
   onRetry: () => void
-  value: string|null
+  value: string | null
   autoGenerate?: boolean
 }
 
@@ -18,7 +17,7 @@ export function HashTest({
   onHashUpdate,
   onRetry,
   value,
-  autoGenerate = true
+  autoGenerate = true,
 }: Props) {
   const [error, setError] = useState<string>()
   const hashInputRef = useRef<HTMLInputElement>(null)
@@ -28,7 +27,7 @@ export function HashTest({
     if (autoGenerate) {
       onHashUpdate(generateFxHash())
     }
-  }, [])
+  }, [autoGenerate, onHashUpdate])
 
   const newHash = () => {
     setError(undefined)
@@ -39,8 +38,7 @@ export function HashTest({
     if (isHashValid(hash)) {
       setError(undefined)
       onHashUpdate(hash)
-    }
-    else {
+    } else {
       setError("You can only paste a valid hash")
     }
   }
@@ -49,28 +47,19 @@ export function HashTest({
     <div className={cs(style.container)}>
       <Field error={error}>
         <small>Current hash</small>
-        <InputText 
+        <InputText
           ref={hashInputRef}
-          value={value || ""} 
-          onChange={evt => manualHashUpdate(evt.target.value)}
+          value={value || ""}
+          onChange={(evt) => manualHashUpdate(evt.target.value)}
           onFocus={() => hashInputRef.current && hashInputRef.current.select()}
           onClick={() => hashInputRef.current && hashInputRef.current.select()}
         />
       </Field>
       <div className={cs(style.buttons)}>
-        <Button
-          size="small"
-          color="primary"
-          onClick={newHash}
-          type="button"
-        >
+        <Button size="small" color="primary" onClick={newHash} type="button">
           new hash
         </Button>
-        <Button
-          size="small"
-          onClick={onRetry}
-          type="button"
-        >
+        <Button size="small" onClick={onRetry} type="button">
           retry with same hash
         </Button>
       </div>

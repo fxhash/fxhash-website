@@ -95,7 +95,7 @@ const defaultProperties: ISettingsProperties = {
   displayPricesCard: false,
   displayBurntCard: false,
   hoverEffectCard: true,
-  quality: isMobile() ? 0 : 1,
+  quality: 0,
   topBannerMessage: '', 
 }
 

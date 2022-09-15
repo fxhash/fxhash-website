@@ -3,6 +3,7 @@ import { GenerativeToken } from "./GenerativeToken"
 import { Objkt } from "./Objkt"
 import { Listing } from "./Listing"
 import { Offer } from "./Offer";
+import { NFTArticle } from "./Article";
 
 export interface UserItems {
   generativeTokens?: GenerativeToken[]
@@ -21,6 +22,7 @@ export enum UserFlag {
 
 export enum UserAuthorization {
   TOKEN_MODERATION          = "TOKEN_MODERATION",
+  ARTICLE_MODERATION        = "ARTICLE_MODERATION",
   USER_MODERATION           = "USER_MODERATION",
   GOVERNANCE_MODERATION     = "GOVERNANCE_MODERATION",
 }
@@ -52,6 +54,7 @@ export interface User {
   sales: Action[]
   actionsAsIssuer: Action[]
   actionsAsTarget: Action[]
+  listings: Listing[]
   objkts: Objkt[]
   offers: Listing[]
   offersReceived: Offer[]
@@ -69,6 +72,7 @@ export interface User {
   // as a regular user, it can have collaboration contracts
   collaborationContracts: Collaboration[]
   moderationReason?: string|null
+  articles: NFTArticle[]
 }
 
 export interface ConnectedUser extends Partial<User> {
