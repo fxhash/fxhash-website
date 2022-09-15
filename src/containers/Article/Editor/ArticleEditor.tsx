@@ -67,7 +67,7 @@ const baseSchemaNftArticleForm = Yup.object().shape({
     .test("thumbnail", "Invalid type", (value) => {
       return typeof value === "string"
     }),
-  thumbnailCaption: Yup.string()
+  thumbnailCaption: Yup.string().nullable()
 })
 
 // full schema, used when creating a new article

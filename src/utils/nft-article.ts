@@ -60,7 +60,8 @@ export function generateNFTArticleDraft(
   return {
     title: article.title,
     thumbnailUri: article.displayUri,
-    thumbnailCaption: article.thumbnailCaption,
+    // todo [#392] remove article.metadata?.thumbnailCaption
+    thumbnailCaption: article.metadata?.thumbnailCaption || article.thumbnailCaption,
     body: article.body,
     abstract: article.description,
     tags: article.tags,
