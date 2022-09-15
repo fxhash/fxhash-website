@@ -7,7 +7,7 @@ interface Props {
   mutez: number
   className?: string
   formatBig?: boolean
-  tezosSize?: "small" | "regular" | "big"
+  tezosSize?: "small"|"regular"|"big"
 }
 export function DisplayTezos({
   mutez,
@@ -17,7 +17,7 @@ export function DisplayTezos({
 }: Props) {
   return (
     <span className={cs(style.root, className)}>
-      <IconTezos size={tezosSize} />
+      <IconTezos size={tezosSize}/>
       <span>{formatBig ? bigMutezFormatter(mutez) : displayMutez(mutez)}</span>
     </span>
   )

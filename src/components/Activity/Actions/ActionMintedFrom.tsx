@@ -15,7 +15,7 @@ export const ActionMintedFrom: TActionComp = ({ action, verbose }) => (
       <span>minted </span>
       {verbose ? (
         <strong>{action.objkt!.name}</strong>
-      ) : (
+      ):(
         <strong>#{action.objkt!.iteration}</strong>
       )}
     </span>

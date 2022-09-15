@@ -15,13 +15,13 @@ export const ActionUpdateState: TActionComp = ({ action }) => {
         user={action.issuer!}
         size="small"
       />
-      <span>updated state:</span>
+      <span>
+        updated state:
+      </span>
       <span>
         {changes.enabled !== undefined && (
           <span>
-            <strong
-              className={cs(changes.enabled ? colors.success : colors.error)}
-            >
+            <strong className={cs(changes.enabled ? colors.success : colors.error)}>
               {changes.enabled ? "enabled" : "disabled"}
             </strong>
             {changes.royalties !== undefined ? ", " : ""}
@@ -31,8 +31,7 @@ export const ActionUpdateState: TActionComp = ({ action }) => {
           <span>
             <strong className={cs(style.price)}>
               {displayRoyalties(changes.royalties)}
-            </strong>{" "}
-            royalties
+            </strong> royalties
           </span>
         )}
       </span>

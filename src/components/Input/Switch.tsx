@@ -3,16 +3,21 @@ import cs from "classnames"
 import { InputProps } from "../../types/Inputs"
 import { useState } from "react"
 
-interface Props extends InputProps<boolean> {}
-export function Switch({ value, onChange }: Props) {
+interface Props extends InputProps<boolean> {
+
+}
+export function Switch({
+  value,
+  onChange
+}: Props) {
   return (
     <label className={cs(style.root)}>
       <input
         type="checkbox"
-        checked={value}
+        checked={value} 
         onChange={() => onChange(!value)}
       />
-      <span className={cs(style.slider)} />
+      <span className={cs(style.slider)}/>
     </label>
   )
 }

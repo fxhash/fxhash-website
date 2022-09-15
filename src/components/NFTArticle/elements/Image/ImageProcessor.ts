@@ -1,28 +1,21 @@
-import { IArticleElementProcessor } from "../../../../types/ArticleEditor/Processor"
+import { IArticleElementProcessor } from "../../../../types/ArticleEditor/Processor";
 
 export const imageProcessor: IArticleElementProcessor = {
   transformMarkdownMdhastToSlate: (node) => {
-    return {
+    return ({
       type: "figure",
-      children: [
-        {
-          type: "image",
-          url: node.url,
-          children: [
-            {
-              text: "",
-            },
-          ],
-        },
-        {
-          type: "figcaption",
-          children: [
-            {
-              text: node.alt,
-            },
-          ],
-        },
-      ],
-    }
-  },
+      children: [{
+        type: "image",
+        url: node.url,
+        children: [{
+          text: ""
+        }],
+      }, {
+        type: "figcaption",
+        children: [{
+          text: node.alt
+        }]
+      }]
+    });
+  }
 }

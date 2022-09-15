@@ -7,12 +7,22 @@ interface Props {
   onDeleteNode: () => void
   className?: string
 }
-export function BlockExtraMenu({ onClose, onDeleteNode, className }: Props) {
+export function BlockExtraMenu({
+  onClose,
+  onDeleteNode,
+  className,
+}: Props) {
   return (
-    <BlockMenu onClose={onClose} className={cs(className)}>
+    <BlockMenu
+      onClose={onClose}
+      className={cs(className)}
+    >
       <ContextualMenuItems>
-        <button type="button" onClick={onDeleteNode}>
-          <i className="fa-solid fa-trash-can" aria-hidden />
+        <button
+          type="button"
+          onClick={onDeleteNode}
+        >
+          <i className="fa-solid fa-trash-can" aria-hidden/>
           <span>Delete block</span>
         </button>
       </ContextualMenuItems>

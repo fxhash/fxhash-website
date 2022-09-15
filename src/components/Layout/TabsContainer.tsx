@@ -4,6 +4,7 @@
 import { FunctionComponent, PropsWithChildren, useState } from "react"
 import { Props as TabsProps, Tabs } from "./Tabs"
 
+
 interface PropsChildren {
   tabIndex: number
 }
@@ -38,7 +39,7 @@ export function TabsContainer({
       />
 
       {children({
-        tabIndex: index,
+        tabIndex: index
       })}
     </>
   )

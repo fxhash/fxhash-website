@@ -20,8 +20,8 @@ export const ActionReference = ({ action }: { action: ActionType }) => {
       target="_blank"
       rel="noreferrer"
     >
-      <DateDistance timestamptz={action.createdAt} />
-      <i aria-hidden className="fas fa-external-link-square" />
+      <DateDistance timestamptz={action.createdAt}/>
+      <i aria-hidden className="fas fa-external-link-square"/>
     </a>
   )
 }
@@ -31,19 +31,27 @@ type ILinkWrapperProps = PropsWithChildren<{
   action: ActionType
   linkFn?: TActionLinkFn | null
 }>
-function LinkWrapper({ action, linkFn, children }: ILinkWrapperProps) {
-  const link = useMemo(() => linkFn?.(action) || null, [action, linkFn])
-
-  return link ? (
-    <article className={cs(style.container, style.is_link)}>
-      <Link href={link}>
-        <a className={cs(style.link_wrapper)} />
-      </Link>
-      {children}
-    </article>
-  ) : (
-    <article className={cs(style.container)}>{children}</article>
+function LinkWrapper({ 
+  action,
+  linkFn,
+  children 
+}: ILinkWrapperProps) {
+  const link = useMemo(
+    () => linkFn?.(action) || null,
+    [action, linkFn]
   )
+
+  return link
+    ? (
+      <article className={cs(style.container, style.is_link)}>
+        <Link href={link}>
+          <a className={cs(style.link_wrapper)}/>
+        </Link>
+        { children }
+      </article>
+    ):(
+      <article className={cs(style.container)}>{ children }</article>
+    )
 }
 
 export function Action({ action, verbose }: Props) {
@@ -54,18 +62,25 @@ export function Action({ action, verbose }: Props) {
   }
 
   return (
-    <LinkWrapper action={action} linkFn={def.link}>
+    <LinkWrapper
+      action={action}
+      linkFn={def.link}
+    >
       <div className={cs(style.content)}>
         <div className={cs(style.details)}>
           <i
             aria-hidden
-            className={cs(def.icon, colors[def.iconColor], style.icon)}
+            className={cs(
+              def.icon,
+              colors[def.iconColor],
+              style.icon,
+            )}
           />
           <div className={cs(style.details_content)}>
             {def.render({ action, verbose })}
           </div>
         </div>
-        <ActionReference action={action} />
+        <ActionReference action={action}/>
       </div>
     </LinkWrapper>
   )

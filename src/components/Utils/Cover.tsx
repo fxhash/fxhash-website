@@ -6,7 +6,11 @@ interface Props {
   onClick: () => void
   opacity?: number
 }
-export function Cover({ index, opacity = 0.3, onClick }: Props) {
+export function Cover({
+  index,
+  opacity = 0.3,
+  onClick
+}: Props) {
   return (
     <div
       style={{ zIndex: index, opacity }}

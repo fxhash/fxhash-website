@@ -38,28 +38,26 @@ export function ProposalActionVote({
         loading={loading}
         noSpacing
       />
-
+  
       <div className={cs(layout.buttons_inline)}>
-        {!loading && (
-          <Button
-            color="black"
-            size="small"
-            iconComp={<i aria-hidden className="fa-solid fa-check" />}
-            onClick={() => {
-              call({
-                proposal: proposal,
-                collaboration: collaboration,
-                approval: true,
-              })
-            }}
-          >
-            approve operation
-          </Button>
-        )}
+        {!loading && (<Button
+          color="black"
+          size="small"
+          iconComp={<i aria-hidden className="fa-solid fa-check"/>}
+          onClick={() => {
+            call({
+              proposal: proposal,
+              collaboration: collaboration,
+              approval: true,
+            })
+          }}
+        >
+          approve operation
+        </Button>)}
         <Button
           color="black"
           size="small"
-          iconComp={<i aria-hidden className="fa-solid fa-xmark" />}
+          iconComp={<i aria-hidden className="fa-solid fa-xmark"/>}
           onClick={() => {
             call({
               proposal: proposal,

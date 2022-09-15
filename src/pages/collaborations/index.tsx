@@ -10,42 +10,39 @@ import Head from "next/head"
 import { CollaborationsList } from "../../containers/Collaborations/CollaborationsList"
 import { CollaborationCreate } from "../../containers/Collaborations/CollaborationCreate"
 
+
 const CollaborationsIndex: NextPage = () => {
   return (
     <>
       <Head>
         <title>fxhash — your collaborations</title>
-        <meta
-          key="description"
-          name="description"
-          content="your collaborations"
-        />
+        <meta key="description" name="description" content="your collaborations"/>
       </Head>
 
-      <Spacing size="6x-large" />
+      <Spacing size="6x-large"/>
 
       <section>
         <SectionHeader>
           <TitleHyphen>your collaborations</TitleHyphen>
           <ClientOnly>
             <UserGuard>
-              <CollaborationCreate />
+              <CollaborationCreate/>
             </UserGuard>
           </ClientOnly>
         </SectionHeader>
 
-        <Spacing size="6x-large" />
+        <Spacing size="6x-large"/>
 
-        <main className={cs(layout["padding-big"])}>
+        <main className={cs(layout['padding-big'])}>
           <ClientOnly>
             <UserGuard>
-              <CollaborationsList />
+              <CollaborationsList/>
             </UserGuard>
           </ClientOnly>
         </main>
       </section>
 
-      <Spacing size="6x-large" />
+      <Spacing size="6x-large"/>
     </>
   )
 }

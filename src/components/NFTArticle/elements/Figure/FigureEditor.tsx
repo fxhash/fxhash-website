@@ -3,6 +3,7 @@ import { useSelected } from "slate-react"
 import style from "./FigureEditor.module.scss"
 import cs from "classnames"
 
+
 interface Props {
   attributes: any
   element: any
@@ -15,13 +16,11 @@ export function FigureElement({
   const selected = useSelected()
 
   return (
-    <figure
-      {...attributes}
-      className={cs(style.figure, {
-        [style.selected]: selected,
-      })}
-    >
+    <figure {...attributes} className={cs(style.figure, {
+      [style.selected]: selected
+    })}>
       {children}
     </figure>
   )
 }
+

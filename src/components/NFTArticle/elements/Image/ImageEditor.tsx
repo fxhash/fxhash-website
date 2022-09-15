@@ -25,7 +25,7 @@ export function ImageEditor({
 
   const setImage = (element: any) => {
     Transforms.setNodes(editor, element, {
-      at: path,
+      at: path
     })
   }
 
@@ -35,8 +35,10 @@ export function ImageEditor({
         {children}
         <div contentEditable={false}>
           {hasUrl ? (
-            <ImagePolymorphic uri={element.url} />
-          ) : (
+            <ImagePolymorphic
+              uri={element.url}
+            />
+          ):(
             <button
               type="button"
               className={cs(editorStyle.import_btn)}
@@ -46,17 +48,21 @@ export function ImageEditor({
                 event.stopPropagation()
               }}
             >
-              <i className="fa-solid fa-image" aria-hidden />
-              <span>Add an image</span>
+              <i className="fa-solid fa-image" aria-hidden/>
+              <span>
+                Add an image
+              </span>
             </button>
           )}
         </div>
       </div>
       {showAddImage && (
-        <BlockParamsModal onClose={() => setShowAddImage(false)}>
+        <BlockParamsModal
+          onClose={() => setShowAddImage(false)}
+        >
           <ImageAttributeSettings
             element={element}
-            onEdit={(element) => {
+            onEdit={element => {
               setImage(element)
               setShowAddImage(false)
             }}

@@ -4,6 +4,7 @@ import { TActionComp } from "./Action"
 import { UserBadge } from "../../User/UserBadge"
 import { DisplayTezos } from "../../Display/DisplayTezos"
 
+
 const ActionListingArticle: TActionComp = ({ action, verbose }) => (
   <>
     <UserBadge
@@ -13,13 +14,7 @@ const ActionListingArticle: TActionComp = ({ action, verbose }) => (
       size="small"
     />
     <span>
-      listed <strong>{action.metadata.amount}</strong> editions{" "}
-      {verbose && (
-        <>
-          of <strong>{action.article!.title}</strong>
-        </>
-      )}{" "}
-      for
+      listed <strong>{action.metadata.amount}</strong> editions {verbose && <>of <strong>{action.article!.title}</strong></>} for
     </span>
     <span className={cs(style.price)}>
       <DisplayTezos

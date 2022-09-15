@@ -14,10 +14,13 @@ import { LinkIcon } from "../../../Link/LinkIcon"
 import { getGenerativeTokenUrl } from "../../../../utils/generative-token"
 import { unpackBurnSupply } from "../../../../utils/unpack/burn-supply"
 
+
 export function ProposalDetailsBurnSupplyHeader({
   proposal,
 }: ProposalDetailsProps) {
-  return <h5>Update Generative Token {"->"} Burn editions</h5>
+  return (
+    <h5>Update Generative Token {"->"} Burn editions</h5>
+  )
 }
 
 export function ProposalDetailsBurnSupplyExpanded({
@@ -25,30 +28,33 @@ export function ProposalDetailsBurnSupplyExpanded({
   collaboration,
   showOldSettings,
 }: ProposalDetailsProps) {
-  const unpacked = useMemo(
-    () => unpackBurnSupply(proposal.callSettings.params),
-    [proposal]
-  )
+  const unpacked = useMemo(() =>
+    unpackBurnSupply(proposal.callSettings.params)
+  , [proposal])
 
   // the qury to get the issuer associated with the call
   const { data, loading } = useQuery(Qu_genToken, {
     variables: {
-      id: unpacked.issuer_id,
-    },
+      id: unpacked.issuer_id
+    }
   })
 
   // easier
   const token: GenerativeToken = data?.generativeToken
 
+
   return (
     <div>
       {loading ? (
-        <LoaderBlock height="20vh" size="small" />
-      ) : (
+        <LoaderBlock
+          height="20vh"
+          size="small"
+        />
+      ):(
         <>
           <h5>Preview</h5>
-          <Spacing size="small" />
-
+          <Spacing size="small"/>
+          
           {token && (
             <>
               <div className={cs(style.details)}>
@@ -56,7 +62,7 @@ export function ProposalDetailsBurnSupplyExpanded({
                   <strong>Token: </strong>
                   <LinkIcon
                     iconComp={
-                      <i aria-hidden className="fas fa-external-link-square" />
+                      <i aria-hidden className="fas fa-external-link-square"/>
                     }
                     href={getGenerativeTokenUrl(token)}
                     newTab
@@ -71,9 +77,7 @@ export function ProposalDetailsBurnSupplyExpanded({
                 {showOldSettings && (
                   <div>
                     <strong>Balance: </strong>
-                    {token.balance}
-                    {" -> "}
-                    {token.balance - unpacked.amount}
+                    {token.balance}{" -> "}{token.balance - unpacked.amount}
                   </div>
                 )}
               </div>
@@ -82,11 +86,14 @@ export function ProposalDetailsBurnSupplyExpanded({
         </>
       )}
 
-      <Spacing size="large" />
+      <Spacing size="large"/>
 
       <h5>Call parameters</h5>
-      <Spacing size="8px" />
-      <JsonViewer json={unpacked as any} collapsed={true} />
+      <Spacing size="8px"/>
+      <JsonViewer
+        json={unpacked as any}
+        collapsed={true}
+      />
     </div>
   )
 }

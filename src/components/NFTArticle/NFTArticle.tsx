@@ -1,23 +1,27 @@
-import React, { memo, useEffect, useState } from "react"
-import { getNFTArticleComponentsFromMarkdown } from "./processor"
+import React, { memo, useEffect, useState } from 'react';
+import { getNFTArticleComponentsFromMarkdown } from "./processor";
 
 export interface NftArticleProps {
-  markdown: string
+  markdown: string,
 }
 
 const _NftArticle = ({ markdown }: NftArticleProps) => {
-  const [content, setContent] = useState<React.FunctionComponent | null>(null)
+  const [content, setContent] = useState<React.FunctionComponent | null>(null);
   useEffect(() => {
     const getNFTArticle = async () => {
-      const data = await getNFTArticleComponentsFromMarkdown(markdown)
+      const data = await getNFTArticleComponentsFromMarkdown(markdown);
       if (data?.content) {
-        setContent(data.content)
+        setContent(data.content);
       }
-    }
-    getNFTArticle()
+    };
+    getNFTArticle();
   }, [markdown])
 
-  return <>{content}</>
-}
+  return (
+    <>
+      {content}
+    </>
+  );
+};
 
-export const NftArticle = memo(_NftArticle)
+export const NftArticle = memo(_NftArticle);

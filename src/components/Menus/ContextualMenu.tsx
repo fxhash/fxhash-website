@@ -6,14 +6,14 @@ import effects from "../../styles/Effects.module.scss"
 interface Props {
   className?: string
 }
-export const ContextualMenu = forwardRef<
-  HTMLDivElement,
-  PropsWithChildren<Props>
->(({ className, children }, ref) => {
+export const ContextualMenu = forwardRef<HTMLDivElement, PropsWithChildren<Props>>(({
+  className,
+  children,
+}, ref) => {
   return (
     <div
       ref={ref}
-      className={cs(style.root, effects["drop-shadow-small"], className)}
+      className={cs(style.root, effects['drop-shadow-small'], className)}
       contentEditable={false}
     >
       {children}

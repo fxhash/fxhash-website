@@ -9,11 +9,7 @@ export interface LogoGenerativeProps {
   height?: number
   fontSize?: number
 }
-export function LogoGenerative({
-  width = 213,
-  height = 120,
-  fontSize = 28,
-}: LogoGenerativeProps) {
+export function LogoGenerative({ width = 213, height = 120, fontSize = 28 }: LogoGenerativeProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const effectRef = useRef<LogoEffect>()
   const router = useRouter()

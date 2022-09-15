@@ -11,10 +11,7 @@ import { Spacing } from "../../components/Layout/Spacing"
 import Head from "next/head"
 import gql from "graphql-tag"
 import client from "../../services/ApolloClient"
-import {
-  GenerativeToken,
-  GenTokFlag,
-} from "../../types/entities/GenerativeToken"
+import { GenerativeToken, GenTokFlag } from "../../types/entities/GenerativeToken"
 import { GenerativeTokenCard } from "../../components/Card/GenerativeTokenCard"
 import { useState, useMemo } from "react"
 import { useClientEffect } from "../../utils/hookts"
@@ -22,17 +19,15 @@ import ClientOnly from "../../components/Utils/ClientOnly"
 import { UserGuard } from "../../components/Guards/UserGuard"
 import { ModeratorActions } from "../../containers/Community/ModeratorActions"
 import { CardsContainer } from "../../components/Card/CardsContainer"
-import {
-  Frag_GenAuthor,
-  Frag_GenPricing,
-} from "../../queries/fragments/generative-token"
+import { Frag_GenAuthor, Frag_GenPricing } from "../../queries/fragments/generative-token"
 
 const Chart = dynamic(() => import("../../components/Charts/Chart"))
+
 
 const Qu_reportedGenTokens = gql`
   ${Frag_GenAuthor}
   ${Frag_GenPricing}
-  query Query($skip: Int, $take: Int, $filters: GenerativeTokenFilter) {
+  query Query ($skip: Int, $take: Int, $filters: GenerativeTokenFilter) {
     generativeTokens(skip: $skip, take: $take, filters: $filters) {
       id
       flag
@@ -57,44 +52,26 @@ const Qu_reportedGenTokens = gql`
 interface Props {
   tokens: GenerativeToken[]
 }
-const ReportsPage: NextPage<Props> = ({ tokens }) => {
+const ReportsPage: NextPage<Props> = ({
+  tokens,
+}) => {
   const awaitingMod = useMemo<GenerativeToken[]>(() => {
-    return tokens.filter(
-      (tok) =>
-        tok.flag === GenTokFlag.REPORTED ||
-        tok.flag === GenTokFlag.AUTO_DETECT_COPY
-    )
+    return tokens.filter(tok => tok.flag === GenTokFlag.REPORTED || tok.flag === GenTokFlag.AUTO_DETECT_COPY)
   }, [tokens])
 
   const malicious = useMemo<GenerativeToken[]>(() => {
-    return tokens.filter((tok) => tok.flag === GenTokFlag.MALICIOUS)
+    return tokens.filter(tok => tok.flag === GenTokFlag.MALICIOUS)
   }, [tokens])
 
   return (
     <>
       <Head>
         <title>fxhash — reports by community</title>
-        <meta
-          key="og:title"
-          property="og:title"
-          content="fxhash — reports by community"
-        />
-        <meta
-          key="description"
-          name="description"
-          content="Reports mades by the community"
-        />
-        <meta
-          key="og:description"
-          property="og:description"
-          content="Reports mades by the community"
-        />
-        <meta key="og:type" property="og:type" content="website" />
-        <meta
-          key="og:image"
-          property="og:image"
-          content="https://www.fxhash.xyz/images/og/og1.jpg"
-        />
+        <meta key="og:title" property="og:title" content="fxhash — reports by community"/>
+        <meta key="description" name="description" content="Reports mades by the community"/>
+        <meta key="og:description" property="og:description" content="Reports mades by the community"/>
+        <meta key="og:type" property="og:type" content="website"/>
+        <meta key="og:image" property="og:image" content="https://www.fxhash.xyz/images/og/og1.jpg"/>
       </Head>
 
       <Spacing size="6x-large" sm="3x-large" />
@@ -106,24 +83,10 @@ const ReportsPage: NextPage<Props> = ({ tokens }) => {
 
         <Spacing size="3x-large" />
 
-        <main className={cs(layout["padding-big"])}>
-          <p>
-            This page lists Generative Tokens reported by the community,
-            awaiting for moderation. To learn more about the current moderation
-            system in place,{" "}
-            <Link href="/articles/moderation-system">
-              <a>read the report system guide</a>
-            </Link>
-            .
-          </p>
-          <p>
-            Only a group of trusted moderators can decide on the final state of
-            a reported Token. This is a temporary system.
-          </p>
-          <p>
-            These Generative Tokens will remain hidden from the rest of the
-            application until a statement is decided.
-          </p>
+        <main className={cs(layout['padding-big'])}>
+          <p>This page lists Generative Tokens reported by the community, awaiting for moderation. To learn more about the current moderation system in place, <Link href="/articles/moderation-system"><a>read the report system guide</a></Link>.</p>
+          <p>Only a group of trusted moderators can decide on the final state of a reported Token. This is a temporary system.</p>
+          <p>These Generative Tokens will remain hidden from the rest of the application until a statement is decided.</p>
 
           <Spacing size="3x-large" />
 
@@ -132,12 +95,9 @@ const ReportsPage: NextPage<Props> = ({ tokens }) => {
 
           {awaitingMod.length > 0 ? (
             <div className={cs(style.reports)}>
-              {awaitingMod.map((token) => (
+              {awaitingMod.map(token => (
                 <div key={token.id} className={cs(style.report)}>
-                  <GenerativeTokenCard
-                    token={token}
-                    className={cs(style.token)}
-                  />
+                  <GenerativeTokenCard token={token} className={cs(style.token)} />
                   <div>
                     <strong>Total reports: {token.reports?.length || 0}</strong>
                     {Chart && token.reports && token.reports.length > 0 && (
@@ -155,7 +115,7 @@ const ReportsPage: NextPage<Props> = ({ tokens }) => {
                 </div>
               ))}
             </div>
-          ) : (
+          ):(
             <em>No tokens are awaiting for moderation.</em>
           )}
 
@@ -165,8 +125,11 @@ const ReportsPage: NextPage<Props> = ({ tokens }) => {
           <Spacing size="large" />
 
           <CardsContainer>
-            {malicious.map((tok) => (
-              <GenerativeTokenCard key={tok.id} token={tok} />
+            {malicious.map(tok => (
+              <GenerativeTokenCard
+                key={tok.id}
+                token={tok}
+              />
             ))}
           </CardsContainer>
 
@@ -189,9 +152,9 @@ export async function getServerSideProps() {
           GenTokFlag.REPORTED,
           GenTokFlag.AUTO_DETECT_COPY,
           GenTokFlag.MALICIOUS,
-        ],
-      },
-    },
+        ]
+      }
+    }
   })
 
   return {

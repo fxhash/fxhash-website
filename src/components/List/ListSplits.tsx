@@ -13,22 +13,28 @@ interface Props {
   splits: Split[]
   toggled?: boolean
 }
-export function ListSplits({ name, splits, toggled }: Props) {
+export function ListSplits({
+  name,
+  splits,
+  toggled,
+}: Props) {
   return (
     <ToggableInfo
       label={name}
       placeholder={`(${splits.length})`}
       toggled={toggled}
     >
-      <ConnectedList items={splits}>
+      <ConnectedList
+        items={splits}
+      >
         {({ item }) => (
           <>
             <span className={cs(style.pct)}>
-              {displayPercentage(item.pct / 1000)}%
+              {displayPercentage(item.pct/1000)}%
             </span>
             <div>
-              <UserBadge
-                className={style.user}
+	            <UserBadge
+		            className={style.user}
                 size="small"
                 user={item.user}
                 displayAvatar={false}

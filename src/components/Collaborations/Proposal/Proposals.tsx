@@ -29,10 +29,12 @@ export function Proposals({
   return (
     <>
       {ordered.length === 0 ? (
-        <em className={cs(colors.gray)}>No operations to display</em>
-      ) : (
+        <em className={cs(colors.gray)}>
+          No operations to display
+        </em>
+      ):(
         <div className={cs(style.root)}>
-          {ordered.map((prop) => (
+          {ordered.map(prop => (
             <Proposal
               key={prop.id}
               proposal={prop}

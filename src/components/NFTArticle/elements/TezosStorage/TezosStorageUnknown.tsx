@@ -22,7 +22,7 @@ export const TezosStorageUnknown: TezosStorageRenderer<Props> = ({
 
   return (
     <div className={cs(style.root)}>
-      <i className="fa-solid fa-bug" aria-hidden />
+      <i className="fa-solid fa-bug" aria-hidden/>
       unsupported tezos storage content
       <div className={cs(style.pointer)}>
         {keys.map((key) => (
@@ -38,4 +38,4 @@ export const TezosStorageUnknown: TezosStorageRenderer<Props> = ({
 // fallback, always matches
 TezosStorageUnknown.matches = () => true
 // no props
-TezosStorageUnknown.getPropsFromPointer = (pointer) => ({ pointer })
+TezosStorageUnknown.getPropsFromPointer = pointer => ({ pointer })

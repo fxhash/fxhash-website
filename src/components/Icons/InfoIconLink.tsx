@@ -8,11 +8,19 @@ interface Props {
   target?: HTMLAttributeAnchorTarget
   title?: string
 }
-export function InfoIconLink({ href, target = "_blank", title }: Props) {
+export function InfoIconLink({
+  href,
+  target = "_blank",
+  title,
+}: Props) {
   return (
     <Link href={href}>
-      <a target={target} className={cs(style.root)} title={title}>
-        <i className="fa-solid fa-circle-info" aria-hidden />
+      <a
+        target={target}
+        className={cs(style.root)}
+        title={title}
+      >
+        <i className="fa-solid fa-circle-info" aria-hidden/>
       </a>
     </Link>
   )

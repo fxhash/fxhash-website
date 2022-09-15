@@ -4,21 +4,23 @@ import { PropsWithChildren } from "react"
 
 interface Props {
   className?: string
-  message?: string | null
+  message?: string|null
 }
 export function HoverTitle({
   message,
   className,
-  children,
+  children
 }: PropsWithChildren<Props>) {
   return (
-    <div
-      className={cs(style.wrapper, className, {
-        [style.hover_enabled]: !!message,
-      })}
-    >
+    <div className={cs(style.wrapper, className, {
+      [style.hover_enabled]: !!message
+    })}>
       {children}
-      {message && <div className={cs(style.hover_message)}>{message}</div>}
+      {message && (
+        <div className={cs(style.hover_message)}>
+          {message}
+        </div>
+      )}
     </div>
   )
 }

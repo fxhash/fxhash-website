@@ -20,10 +20,11 @@ import { Button } from "../../Button"
 import { Qu_genTokOwners } from "../../../queries/generative-token"
 import { ISplit } from "../../../types/entities/Split"
 
+
 enum EImportStrategy {
-  FULL = "FULL",
-  ONE_PER_USER_PER_PROJECT = "ONE_PER_USER_PER_PROJECT",
-  ONE_PER_USER = "ONE_PER_USER",
+  FULL =                      "FULL",
+  ONE_PER_USER_PER_PROJECT =  "ONE_PER_USER_PER_PROJECT",
+  ONE_PER_USER =              "ONE_PER_USER",
 }
 
 interface IImportStrategyDefinition {
@@ -32,14 +33,10 @@ interface IImportStrategyDefinition {
   getUsers: (gentks: Objkt[]) => ISplit[]
 }
 
-const importStrategyDefinitions: Record<
-  EImportStrategy,
-  IImportStrategyDefinition
-> = {
+const importStrategyDefinitions: Record<EImportStrategy, IImportStrategyDefinition> = {
   FULL: {
     label: "Full import",
-    description:
-      "Holders will have as many slots as the total number of iterations they own",
+    description: "Holders will have as many slots as the total number of iterations they own",
     getUsers: (gentks) => {
       // maps user id -> number of slots
       const splitsMap: Record<string, number> = {}
@@ -50,7 +47,7 @@ const importStrategyDefinitions: Record<
         }
         splitsMap[id]++
       }
-      return Object.keys(splitsMap).map((addr) => ({
+      return Object.keys(splitsMap).map(addr => ({
         address: addr,
         pct: splitsMap[addr],
       }))
@@ -58,8 +55,7 @@ const importStrategyDefinitions: Record<
   },
   ONE_PER_USER_PER_PROJECT: {
     label: "One per user per project",
-    description:
-      "Holders will have as many slots as projects for which they hold at least one iteration. This limits the number of slots to 1 if a user holds 10 iterations of the same project.",
+    description: "Holders will have as many slots as projects for which they hold at least one iteration. This limits the number of slots to 1 if a user holds 10 iterations of the same project.",
     getUsers: (gentks) => {
       // hashmap { project_id => [ owner ]}
       const mappedByProject: Record<number, User[]> = {}
@@ -70,7 +66,7 @@ const importStrategyDefinitions: Record<
           mappedByProject[id] = []
         }
         // only push user if not already in
-        if (!mappedByProject[id].find((u) => u.id === gentk.owner!.id)) {
+        if (!mappedByProject[id].find(u => u.id === gentk.owner!.id)) {
           mappedByProject[id].push(gentk.owner!)
         }
       }
@@ -87,7 +83,7 @@ const importStrategyDefinitions: Record<
         }
         splitsMap[user.id]++
       }
-      return Object.keys(splitsMap).map((addr) => ({
+      return Object.keys(splitsMap).map(addr => ({
         address: addr,
         pct: splitsMap[addr],
       }))
@@ -95,15 +91,14 @@ const importStrategyDefinitions: Record<
   },
   ONE_PER_USER: {
     label: "One per user",
-    description:
-      "Holders will only get 1 slot regardless of how many iterations they own in total.",
+    description: "Holders will only get 1 slot regardless of how many iterations they own in total.",
     getUsers: (gentks) => {
       // maps user id -> number of slots
       const splitsMap: Record<string, number> = {}
       for (const gentk of gentks) {
         splitsMap[gentk.owner!.id] = 1
       }
-      return Object.keys(splitsMap).map((addr) => ({
+      return Object.keys(splitsMap).map(addr => ({
         address: addr,
         pct: splitsMap[addr],
       }))
@@ -122,7 +117,10 @@ interface Props {
   onClose: () => void
   onImport: (splits: ISplit[]) => void
 }
-export function ProjectHolders({ onClose, onImport }: Props) {
+export function ProjectHolders({
+  onClose,
+  onImport,
+}: Props) {
   // need user to find their projects
   const { user } = useContext(UserContext)
 
@@ -130,7 +128,7 @@ export function ProjectHolders({ onClose, onImport }: Props) {
   const [selected, setSelected] = useState<number[]>([])
   // the import strategy
   const [importStrategy, setImportStrategy] = useState<EImportStrategy>(
-    EImportStrategy.ONE_PER_USER_PER_PROJECT
+    EImportStrategy.ONE_PER_USER_PER_PROJECT,
   )
 
   // query the projects of the user
@@ -139,43 +137,48 @@ export function ProjectHolders({ onClose, onImport }: Props) {
       id: user!.id,
       skip: 0,
       take: 50,
-    },
+    }
   })
 
-  const options = useMemo<MultiListItem[] | null>(() => {
-    if (!data || !data.user) return null
-    const tokens: GenerativeToken[] = data.user.generativeTokens
-    return tokens.map((tok) => ({
-      value: tok.id,
-      props: tok,
-    }))
-  }, [data])
+  const options = useMemo<MultiListItem[]|null>(
+    () => {
+      if (!data || !data.user) return null
+      const tokens: GenerativeToken[] = data.user.generativeTokens
+      return tokens.map(tok => ({
+        value: tok.id,
+        props: tok,
+      }))
+    },
+    [data]
+  )
 
   // query to get the owners of some project
-  const [getProjects, { data: projects, loading: projectsLoading }] =
-    useLazyQuery(Qu_genTokOwners, {
-      fetchPolicy: "no-cache",
-      nextFetchPolicy: "no-cache",
-    })
+  const [
+    getProjects, 
+    { data: projects, loading: projectsLoading }
+  ] = useLazyQuery(Qu_genTokOwners, {
+    fetchPolicy: "no-cache",
+    nextFetchPolicy: "no-cache",
+  })
 
   // projects fetched, safe to use
-  const projectsSafe: GenerativeToken[] | null =
-    projects?.generativeTokens || null
+  const projectsSafe: GenerativeToken[]|null = projects?.generativeTokens || null
 
   // when projects are fetched, we push to the parent
   useEffect(() => {
     if (projectsSafe) {
       // concatenates all the objkts from results
       const gentks = projectsSafe.reduce(
-        (prev, curr) =>
-          prev.concat(
-            curr.entireCollection!.map((gentk) => ({
+        (prev, curr) => prev.concat(
+          curr.entireCollection!.map(
+            gentk => ({
               ...gentk,
               issuer: {
                 id: curr.id,
-              } as GenerativeToken,
-            }))
-          ),
+              } as GenerativeToken
+            })
+          )
+        ),
         [] as Objkt[]
       )
       // apply the function to get a list of splits
@@ -206,30 +209,33 @@ export function ProjectHolders({ onClose, onImport }: Props) {
                 onChangeSelected={setSelected}
               >
                 {({ itemProps, selected }) => (
-                  <div
-                    className={cs(style.project, {
-                      [style.selected]: selected,
-                    })}
-                  >
-                    <img src={ipfsGatewayUrl(itemProps.thumbnailUri)} />
+                  <div className={cs(style.project, {
+                    [style.selected]: selected
+                  })}>
+                    <img src={ipfsGatewayUrl(itemProps.thumbnailUri)}/>
                     {itemProps.name}
                   </div>
                 )}
               </InputMultiList>
             </div>
-          ) : (
-            <LoaderBlock size="small" height="100px" />
+          ):(
+            <LoaderBlock
+              size="small"
+              height="100px"
+            />
           )}
         </Field>
 
         <Field>
-          <label>Import strategy</label>
+          <label>
+            Import strategy
+          </label>
           <Select
             options={importOptions}
             value={importStrategy}
             onChange={setImportStrategy}
           />
-          <Spacing size="8px" />
+          <Spacing size="8px"/>
           <span className={cs(text.info)}>
             {importStrategyDefinitions[importStrategy].description}
           </span>
@@ -246,9 +252,9 @@ export function ProjectHolders({ onClose, onImport }: Props) {
               getProjects({
                 variables: {
                   filters: {
-                    id_in: selected,
-                  },
-                },
+                    id_in: selected
+                  }
+                }
               })
             }}
           >
@@ -256,6 +262,7 @@ export function ProjectHolders({ onClose, onImport }: Props) {
           </Button>
         </Submit>
       </div>
+
     </Modal>
   )
 }

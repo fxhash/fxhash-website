@@ -8,21 +8,14 @@ interface Props {
   className?: string
 }
 
-export function SectionHeader({
+export function SectionHeader({ 
   layout = "left",
   className,
   children,
 }: PropsWithChildren<Props>) {
   return (
-    <header
-      className={cs(
-        style.container,
-        style[`layout_${layout}`],
-        layoutStyle["padding-small"],
-        className
-      )}
-    >
-      {children}
+    <header className={cs(style.container, style[`layout_${layout}`], layoutStyle['padding-small'], className)}>
+      { children }
     </header>
   )
 }

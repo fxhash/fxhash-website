@@ -1,5 +1,5 @@
-import { IArticleBlockDefinition } from "../../../../types/ArticleEditor/BlockDefinition"
-import { VideoEditor } from "./VideoEditor"
+import { IArticleBlockDefinition } from "../../../../types/ArticleEditor/BlockDefinition";
+import { VideoEditor } from "./VideoEditor";
 
 interface InstanciateVideoOpts {
   src?: string
@@ -7,7 +7,7 @@ interface InstanciateVideoOpts {
 }
 export const videoDefinition: IArticleBlockDefinition<InstanciateVideoOpts> = {
   name: "Video",
-  icon: <i className="fa-solid fa-video" aria-hidden />,
+  icon: <i className="fa-solid fa-video" aria-hidden/>,
   buttonInstantiable: true,
   render: ({ attributes, element, children }) => {
     return (
@@ -17,26 +17,19 @@ export const videoDefinition: IArticleBlockDefinition<InstanciateVideoOpts> = {
     )
   },
   hasUtilityWrapper: false,
-  instanciateElement: (opts = { src: "", caption: "" }) => ({
+  instanciateElement: (opts = { src: '', caption: '' }) => ({
     type: "figure",
-    children: [
-      {
-        type: "video",
-        src: opts.src,
-        children: [
-          {
-            text: "",
-          },
-        ],
-      },
-      {
-        type: "figcaption",
-        children: [
-          {
-            text: opts.caption,
-          },
-        ],
-      },
-    ],
+    children: [{
+      type: "video",
+      src: opts.src,
+      children: [{
+        text: ""
+      }]
+    }, {
+      type: "figcaption",
+      children: [{
+        text: opts.caption
+      }]
+    }]
   }),
-}
+};

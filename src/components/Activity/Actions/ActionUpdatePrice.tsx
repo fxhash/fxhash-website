@@ -12,7 +12,9 @@ export const ActionUpdatePrice: TActionComp = ({ action }) => (
       user={action.issuer!}
       size="small"
     />
-    <span>updated price:</span>
+    <span>
+      updated price:
+    </span>
     <span>
       <span className={cs(style.price)}>
         <DisplayTezos

@@ -5,16 +5,18 @@ import { Error } from "../../../components/Error/Error"
 import { getServerSidePropsArticleById } from "../../../services/ServerSideProps/ServerSidePropsArticle"
 
 interface ArticleByIdProps {
-  article?: NFTArticle
-  origin?: string
-  error?: string
+  article?: NFTArticle,
+  origin?: string,
+  error?: string,
 }
-const ArticleById: NextPage<ArticleByIdProps> = ({ error, article, origin }) =>
-  error ? (
-    <Error>{error}</Error>
-  ) : (
-    <PageArticle article={article!} originUrl={origin!} />
-  )
+const ArticleById: NextPage<ArticleByIdProps> = ({
+  error,
+  article,
+  origin
+}) =>
+  error
+    ? <Error>{error}</Error>
+    : <PageArticle article={article!} originUrl={origin!} />
 
 export default ArticleById
 export const getServerSideProps = getServerSidePropsArticleById

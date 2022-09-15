@@ -19,32 +19,40 @@ export function ContractsOpened() {
   }, [cycles, counter])
 
   const onEnd = () => {
-    setCounter(counter + 1)
+    setCounter(counter+1)
     setTimeout(() => {
-      setCounter(counter + 2)
+      setCounter(counter+2)
     }, 2000)
   }
-
+  
   return (
     <>
       {cycles.length === 0 ? (
         <Loader size="small" />
-      ) : !cyclesState.opened ? (
-        <div className={cs(style.state, style.state_closed)}>
-          <span>Publishing new projects closed for </span>
-          <span>
-            <Countdown until={cyclesState.nextOpening} onEnd={onEnd} />
-          </span>
-          <div />
-        </div>
-      ) : (
-        <div className={cs(style.state)}>
-          <span>Publishing new projects opened for </span>
-          <span>
-            <Countdown until={cyclesState.nextClosing} onEnd={onEnd} />
-          </span>
-          <div />
-        </div>
+      ):(
+        !cyclesState.opened ? (
+          <div className={cs(style.state, style.state_closed)}>
+            <span>Publishing new projects closed for </span>
+            <span>
+              <Countdown
+                until={cyclesState.nextOpening}
+                onEnd={onEnd}
+              />
+            </span>
+            <div/>
+          </div>
+        ):(
+          <div className={cs(style.state)}>
+            <span>Publishing new projects opened for </span>
+            <span>
+              <Countdown
+                until={cyclesState.nextClosing}
+                onEnd={onEnd}
+              />
+            </span>
+            <div/>
+          </div>
+        )
       )}
     </>
   )

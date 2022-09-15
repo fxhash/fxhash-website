@@ -9,28 +9,25 @@ import { UserGuard } from "../components/Guards/UserGuard"
 import Head from "next/head"
 import { TitleHyphen } from "../components/Layout/TitleHyphen"
 
+
 const EditProfilePage: NextPage = () => {
   return (
     <>
       <Head>
         <title>fxhash — edit your profile</title>
-        <meta
-          key="description"
-          name="description"
-          content="edit your profile"
-        />
+        <meta key="description" name="description" content="edit your profile"/>
       </Head>
 
-      <Spacing size="6x-large" />
+      <Spacing size="6x-large"/>
 
       <section>
         <SectionHeader>
           <TitleHyphen>edit profile</TitleHyphen>
         </SectionHeader>
 
-        <Spacing size="x-large" />
+        <Spacing size="x-large"/>
 
-        <main className={cs(layout["padding-big"])}>
+        <main className={cs(layout['padding-big'])}>
           <ClientOnly>
             <UserGuard>
               <EditProfile />

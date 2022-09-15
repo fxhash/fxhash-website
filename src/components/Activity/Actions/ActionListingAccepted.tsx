@@ -13,11 +13,7 @@ export const ActionListingAccepted: TActionComp = ({ action, verbose }) => (
       size="small"
     />
     <span>
-      bought{" "}
-      <strong>
-        {verbose ? action.objkt!.name : `#${action.objkt!.iteration}`}
-      </strong>{" "}
-      from
+      bought <strong>{verbose ? action.objkt!.name : `#${action.objkt!.iteration}`}</strong> from
     </span>
     <UserBadge
       className={cs(style.user)}

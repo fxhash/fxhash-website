@@ -13,7 +13,9 @@ export function Layout({ children }: PropsWithChildren<{}>) {
 
       <Header />
 
-      <main className={style.main}>{children}</main>
+      <main className={style.main}>
+        {children}
+      </main>
 
       <Footer />
     </>
