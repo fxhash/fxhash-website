@@ -1,5 +1,5 @@
-import { ThematicBreakEditor } from "./ThematicBreakEditor"
-import { IArticleBlockDefinition } from "../../../../types/ArticleEditor/BlockDefinition"
+import { ThematicBreakEditor } from "./ThematicBreakEditor";
+import { IArticleBlockDefinition } from "../../../../types/ArticleEditor/BlockDefinition";
 
 export const thematicBreakDefinition: IArticleBlockDefinition<any> = {
   name: "Horizontal break",
@@ -7,11 +7,9 @@ export const thematicBreakDefinition: IArticleBlockDefinition<any> = {
   render: ThematicBreakEditor,
   instanciateElement: () => ({
     type: "thematicBreak",
-    children: [
-      {
-        text: "",
-      },
-    ],
+    children: [{
+      text: ""
+    }],
   }),
   buttonInstantiable: true,
   hasUtilityWrapper: true,

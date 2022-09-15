@@ -28,7 +28,11 @@ interface Props {
  * It is not render opiniated and the parent component is responsible for
  * styling.
  */
-export function OfferActions({ offer, objkt, children }: Props) {
+export function OfferActions({
+  offer,
+  objkt,
+  children,
+}: Props) {
   const { user } = useContext(UserContext)
 
   // ensures that objkt is set even if not passed as prop
@@ -39,7 +43,7 @@ export function OfferActions({ offer, objkt, children }: Props) {
     loading: cancelLoading,
     error: cancelError,
     success: cancelSuccess,
-    call: cancelCall,
+    call: cancelCall ,
     params: cancelParams,
   } = useContractOperation(OfferCancelOperation)
 
@@ -55,7 +59,7 @@ export function OfferActions({ offer, objkt, children }: Props) {
     loading: acceptLoading,
     error: acceptError,
     success: acceptSuccess,
-    call: acceptCall,
+    call: acceptCall ,
     params: acceptParams,
   } = useContractOperation(OfferAcceptOperation)
 
@@ -63,63 +67,53 @@ export function OfferActions({ offer, objkt, children }: Props) {
     acceptCall({
       offer: offer,
       token: objktSafe,
-      price: offer.price,
+      price: offer.price
     })
   }
 
   // the buttons, call to actions for the contracts
-  const buttons =
-    offer.buyer.id === user?.id ? (
-      <Button
-        type="button"
-        color="primary"
-        size="very-small"
-        onClick={() => cancelOffer(offer)}
-        state={
-          cancelLoading && cancelParams?.offer.id === offer.id
-            ? "loading"
-            : "default"
-        }
-      >
-        cancel
-      </Button>
-    ) : objktSafe.owner?.id === user?.id ? (
-      <Button
-        type="button"
-        color="secondary"
-        size="very-small"
-        onClick={() => acceptOffer(offer)}
-        state={
-          acceptLoading && acceptParams?.offer.id === offer.id
-            ? "loading"
-            : "default"
-        }
-      >
-        accept
-      </Button>
-    ) : null
+  const buttons = offer.buyer.id === user?.id ? (
+    <Button
+      type="button"
+      color="primary"
+      size="very-small"
+      onClick={() => cancelOffer(offer)}
+      state={cancelLoading && cancelParams?.offer.id === offer.id ? "loading" : "default"}
+    >
+      cancel
+    </Button>
+  ) : objktSafe.owner?.id === user?.id ? (
+    <Button
+      type="button"
+      color="secondary"
+      size="very-small"
+      onClick={() => acceptOffer(offer)}
+      state={acceptLoading && acceptParams?.offer.id === offer.id ? "loading" : "default"}
+    >
+      accept
+    </Button>
+  ) : null
 
   // contract feedback component
-  const feedback =
-    cancelParams?.offer.id === offer.id ? (
-      <ContractFeedback
-        state={cancelState}
-        loading={cancelLoading}
-        success={cancelSuccess}
-        error={cancelError}
-        successMessage="Your offer has been cancelled"
-        noSpacing
-      />
-    ) : acceptParams?.offer.id === offer.id ? (
-      <ContractFeedback
-        state={acceptState}
-        loading={acceptLoading}
-        success={acceptSuccess}
-        error={acceptError}
-        successMessage="You have accepted the offer"
-        noSpacing
-      />
-    ) : null
+  const feedback = cancelParams?.offer.id === offer.id ? (
+    <ContractFeedback
+      state={cancelState}
+      loading={cancelLoading}
+      success={cancelSuccess}
+      error={cancelError}
+      successMessage="Your offer has been cancelled"
+      noSpacing
+    />
+  ) : acceptParams?.offer.id === offer.id ? (
+    <ContractFeedback
+      state={acceptState}
+      loading={acceptLoading}
+      success={acceptSuccess}
+      error={acceptError}
+      successMessage="You have accepted the offer"
+      noSpacing
+    />
+  ) : null
 
   return children({
     buttons,

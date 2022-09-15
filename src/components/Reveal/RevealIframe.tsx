@@ -10,45 +10,47 @@ interface Props {
   onLoaded?: () => void
   resetOnUrlChange?: boolean
 }
-export const RevealIframe = forwardRef<HTMLIFrameElement, Props>(
-  ({ url, onLoaded, resetOnUrlChange = false }, ref) => {
-    const [loaded, setLoaded] = useState(false)
+export const RevealIframe = forwardRef<HTMLIFrameElement, Props>(({
+  url,
+  onLoaded,
+  resetOnUrlChange = false
+}, ref) => {
+  const [loaded, setLoaded] = useState(false)
 
-    useEffect(() => {
-      if (resetOnUrlChange) {
-        setLoaded(false)
-      }
-    }, [resetOnUrlChange, url])
-
-    const isLoaded = () => {
-      setTimeout(() => {
-        setLoaded(true)
-        onLoaded?.()
-      }, 500)
+  useEffect(() => {
+    if (resetOnUrlChange) {
+      setLoaded(false)
     }
+  }, [resetOnUrlChange, url])
 
-    return (
-      <div className={cs(style.container)}>
-        <div
-          className={cs(style.iframe_container, effects["drop-shadow-big"], {
-            [style.loaded]: loaded,
-          })}
-        >
-          <ClientOnlyEmpty>
-            <iframe
-              ref={ref}
-              sandbox="allow-scripts allow-same-origin"
-              onLoad={() => isLoaded()}
-              // onReset
-              src={url}
-            />
-          </ClientOnlyEmpty>
-          <LoaderBlock height="100%" className={cs(style.loader)} color="white">
-            .loading token.
-          </LoaderBlock>
-        </div>
-      </div>
-    )
+  const isLoaded = () => {
+    setTimeout(() => {
+      setLoaded(true)
+      onLoaded?.()
+    }, 500)
   }
-)
-RevealIframe.displayName = "RevealIframe"
+
+  return (
+    <div className={cs(style.container)}>
+      <div className={cs(style.iframe_container, effects['drop-shadow-big'], { [style.loaded]: loaded })}>
+        <ClientOnlyEmpty>
+          <iframe
+            ref={ref}
+            sandbox="allow-scripts allow-same-origin"
+            onLoad={() => isLoaded()}
+            // onReset
+            src={url}
+          />
+        </ClientOnlyEmpty>
+        <LoaderBlock
+          height="100%"
+          className={cs(style.loader)}
+          color="white"
+        >
+          .loading token.
+        </LoaderBlock>
+      </div>
+    </div>
+  )
+})
+RevealIframe.displayName = 'RevealIframe'

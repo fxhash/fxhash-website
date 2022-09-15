@@ -20,7 +20,9 @@ export function DocLayout({
           activeArticle={activeArticle}
         />
       </div>
-      <div className={cs(style.content)}>{children}</div>
+      <div className={cs(style.content)}>
+        {children}
+      </div>
     </div>
   )
 }

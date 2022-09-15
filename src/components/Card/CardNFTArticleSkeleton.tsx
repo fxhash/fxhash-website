@@ -1,19 +1,17 @@
-import React, { memo } from "react"
-import cs from "classnames"
-import style from "./CardNFTArticle.module.scss"
-import Skeleton from "../Skeleton"
+import React, { memo } from 'react';
+import cs from "classnames";
+import style from "./CardNFTArticle.module.scss";
+import Skeleton from "../Skeleton";
 
 interface CardNftArticleSkeletonProps {
-  className?: string
+  className?: string,
 }
 
-const _CardNftArticleSkeleton = ({
-  className,
-}: CardNftArticleSkeletonProps) => {
+const _CardNftArticleSkeleton = ({ className }: CardNftArticleSkeletonProps) => {
   return (
     <div className={cs(style.container, className)}>
       <div className={style.content}>
-        <div className={style["img-wrapper"]}>
+        <div className={style['img-wrapper']}>
           <Skeleton height="100%" width="100%" />
         </div>
         <div className={style.infos}>
@@ -25,14 +23,12 @@ const _CardNftArticleSkeleton = ({
             <Skeleton height="80%" />
           </div>
           <div className={style.tags}>
-            {[1, 2, 3].map((nb) => (
-              <Skeleton key={nb} height="29px" width="84px" />
-            ))}
+            {[1, 2, 3].map(nb => <Skeleton key={nb} height="29px" width="84px" />)}
           </div>
-        </div>
+      </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export const CardNftArticleSkeleton = memo(_CardNftArticleSkeleton)
+export const CardNftArticleSkeleton = memo(_CardNftArticleSkeleton);

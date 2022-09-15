@@ -1,17 +1,12 @@
 import style from "./Select.module.scss"
 import effects from "../../styles/Effects.module.scss"
 import cs from "classnames"
-import {
-  InputHTMLAttributes,
-  useMemo,
-  useState,
-  useRef,
-  useEffect,
-} from "react"
+import { InputHTMLAttributes, useMemo, useState, useRef, useEffect } from "react"
 import { Cover } from "../Utils/Cover"
 import { useClientAsyncEffect } from "../../utils/hookts"
 import { InputText } from "./InputText"
 import type FuzzySearchType from "fuzzy-search"
+
 
 export interface IOptions {
   label: string
@@ -46,15 +41,15 @@ export function Select({
 }: Props) {
   const selectRef = useRef<HTMLDivElement>(null)
   const [searchString, setSearchString] = useState<string>("")
-  const searcherRef = useRef<FuzzySearchType<any> | null>(null)
-  const [searchResults, setSearchResults] = useState<IOptions[] | null>(null)
+  const searcherRef = useRef<FuzzySearchType<any>|null>(null)
+  const [searchResults, setSearchResults] = useState<IOptions[]|null>(null)
 
   const searchRef = useRef<HTMLInputElement>(null)
   const [opened, setOpened] = useState<boolean>(false)
-  const [direction, setDirection] = useState<"top" | "bottom">("bottom")
+  const [direction, setDirection] = useState<"top"|"bottom">("bottom")
 
   const selectedOption = useMemo<IOptions>(() => {
-    return options.find((opt) => opt.value === value) || options[0]
+    return options.find(opt => opt.value === value) || options[0]
   }, [value])
 
   const toggleOpened = () => {
@@ -72,18 +67,12 @@ export function Select({
   }
 
   // is search is enabled, load fuse in async
-  useClientAsyncEffect(
-    async (isMounted) => {
-      if (search) {
-        const FuzzySearch = (await import("fuzzy-search")).default
-        searcherRef.current = new FuzzySearch(
-          searchDictionnary || [],
-          searchKeys || []
-        )
-      }
-    },
-    [search]
-  )
+  useClientAsyncEffect(async (isMounted) => {
+    if (search) {
+      const FuzzySearch = (await import("fuzzy-search")).default
+      searcherRef.current = new FuzzySearch(searchDictionnary || [], searchKeys || [])
+    }
+  }, [search])
 
   // when the select is opened, focus on the search input
   useEffect(() => {
@@ -100,13 +89,12 @@ export function Select({
         // find within the options, those who match the search results
         const found: IOptions[] = []
         for (const result of results) {
-          const f = options.find(
-            (opt) => opt.value === result[searchValue || "value"]
-          )
+          const f = options.find(opt => opt.value === result[searchValue||"value"])
           if (f) found.push(f)
         }
         setSearchResults(found)
-      } else {
+      }
+      else {
         setSearchResults(null)
       }
     }
@@ -118,7 +106,11 @@ export function Select({
   return (
     <>
       <div
-        className={cs(style.root, style[`opening_${direction}`], classNameRoot)}
+        className={cs(
+          style.root,
+          style[`opening_${direction}`],
+          classNameRoot,
+        )}
         ref={selectRef}
       >
         <button
@@ -129,33 +121,25 @@ export function Select({
           {placeholder && value === "" ? (
             <>
               <div className={cs(style.placeholder)}>{placeholder}</div>
-              <div aria-hidden="true" className={cs(style.sizer)}>
-                {placeholder}
-              </div>
+              <div aria-hidden="true" className={cs(style.sizer)}>{placeholder}</div>
             </>
-          ) : (
+          ):(
             <div className={style.value}>{selectedOption.label}</div>
           )}
           {options.map((opt, idx) => (
-            <div key={idx} aria-hidden="true" className={cs(style.sizer)}>
-              {opt.label}
-            </div>
+            <div key={idx} aria-hidden="true" className={cs(style.sizer)}>{opt.label}</div>
           ))}
         </button>
 
         {opened && (
-          <div
-            className={cs(style.options, effects["drop-shadow-big"], {
-              [style.has_search]: search,
-            })}
-          >
+          <div className={cs(style.options, effects['drop-shadow-big'], { [style.has_search]: search })}>
             {search && (
               <InputText
                 value={searchString}
                 onChange={(evt) => setSearchString(evt.target.value)}
                 placeholder="Search..."
                 ref={searchRef}
-                className={cs(style.search, effects["drop-shadow-big"])}
+                className={cs(style.search, effects['drop-shadow-big'])}
               />
             )}
             <div className={cs(style.options_wrapper)}>
@@ -177,7 +161,11 @@ export function Select({
         )}
       </div>
       {opened && (
-        <Cover onClick={() => setOpened(false)} opacity={0} index={10} />
+        <Cover
+          onClick={() => setOpened(false)}
+          opacity={0}
+          index={10}
+        />
       )}
     </>
   )

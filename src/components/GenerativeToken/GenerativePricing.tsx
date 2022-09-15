@@ -9,15 +9,18 @@ import { IconTezos } from "../Icons/IconTezos"
 import { InfoIconLink } from "../Icons/InfoIconLink"
 import { DutchAuctionLevels } from "./Pricing/DutchAuctionLevels"
 
+
 interface Props {
-  token: GenerativeToken
+  token: GenerativeToken  
 }
 
 /**
  * A module to display the pricing of a Generative Token in the token details
  * Responsible for handling the pricing method
  */
-export function GenerativePricing({ token }: Props) {
+export function GenerativePricing({
+  token,
+}: Props) {
   return (
     <>
       <strong>Price</strong>
@@ -48,7 +51,7 @@ export function GenerativePricing({ token }: Props) {
               {formatDuration(
                 intervalToDuration({
                   start: 0,
-                  end: token.pricingDutchAuction.decrementDuration * 1000,
+                  end: token.pricingDutchAuction.decrementDuration*1000
                 })
               )}
             </span>
@@ -61,7 +64,7 @@ export function GenerativePricing({ token }: Props) {
           <strong>Minting opens</strong>
           <span>
             {format(
-              new Date(token.pricingFixed.opensAt),
+              new Date(token.pricingFixed.opensAt), 
               "MMMM d, yyyy' at 'HH:mm"
             )}
           </span>
@@ -73,7 +76,7 @@ export function GenerativePricing({ token }: Props) {
           <strong>Auction starts</strong>
           <span>
             {format(
-              new Date(token.pricingDutchAuction.opensAt!),
+              new Date(token.pricingDutchAuction.opensAt!), 
               "MMMM d, yyyy' at 'HH:mm"
             )}
           </span>

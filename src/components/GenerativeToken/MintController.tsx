@@ -9,18 +9,11 @@ import { PropsWithChildren, useContext, useEffect, useMemo } from "react"
 import { ContractFeedback } from "../Feedback/ContractFeedback"
 import { DisplayTezos } from "../Display/DisplayTezos"
 import { useContractOperation } from "../../hooks/useContractOperation"
-import {
-  IReserveConsumption,
-  MintOperation,
-  TMintOperationParams,
-} from "../../services/contract-operations/Mint"
+import { IReserveConsumption, MintOperation, TMintOperationParams } from "../../services/contract-operations/Mint"
 import { MintingState } from "./MintingState/MintingState"
 import { useMintingState } from "../../hooks/useMintingState"
 import { UserContext } from "../../containers/UserProvider"
-import {
-  reserveEligibleAmount,
-  reserveSize,
-} from "../../utils/generative-token"
+import { reserveEligibleAmount, reserveSize } from "../../utils/generative-token"
 import { User } from "../../types/entities/User"
 import { MintButton } from "./MintButton"
 
@@ -28,10 +21,7 @@ interface Props {
   token: GenerativeToken
   forceDisabled?: boolean
   forceReserveConsumption?: boolean
-  generateRevealUrl?: (params: {
-    tokenId: number
-    hash: string | null
-  }) => string
+  generateRevealUrl?: (params: { tokenId: number, hash: string | null }) => string
   hideMintButtonAfterReveal?: boolean
   onReveal?: (hash: string) => void
   className?: string
@@ -60,35 +50,43 @@ export function MintController({
 }: PropsWithChildren<Props>) {
   // the mint context, handles display logic
   const mintingState = useMintingState(token, forceDisabled)
-  const { hidden, enabled, locked, price } = mintingState
+  const {
+    hidden,
+    enabled,
+    locked,
+    price,
+  } = mintingState
 
   // hook to interact with the contract
   const { state, loading, success, call, error, opHash } =
     useContractOperation<TMintOperationParams>(MintOperation)
 
-  const mint = (reserveConsumption: IReserveConsumption | null) => {
+  const mint = (reserveConsumption: IReserveConsumption|null) => {
     call({
       token: token,
       price: price,
-      consumeReserve: reserveConsumption,
+      consumeReserve: reserveConsumption
     })
   }
 
-  const revealUrl = generateRevealUrl
-    ? generateRevealUrl({ tokenId: token.id, hash: opHash })
-    : `/reveal/${token.id}/${opHash}`
+  const revealUrl = generateRevealUrl ? generateRevealUrl({ tokenId: token.id, hash: opHash }) : `/reveal/${token.id}/${opHash}`
   // whenever there is a transaction hash, we can tell the mint was
   // successful
   useEffect(() => {
     if (opHash) {
       onReveal?.(opHash)
     }
-  }, [opHash])
+  }, [opHash]);
 
   return (
     <div className={cs(className || style.root)}>
+
       {token.balance > 0 && (
-        <MintingState token={token} existingState={mintingState} verbose />
+        <MintingState
+          token={token}
+          existingState={mintingState}
+          verbose
+        />
       )}
 
       <ContractFeedback
@@ -105,42 +103,36 @@ export function MintController({
             <Button
               isLink
               color="secondary"
-              iconComp={<i aria-hidden className="fas fa-arrow-right" />}
+              iconComp={<i aria-hidden className="fas fa-arrow-right"/>}
               iconSide="right"
               size="regular"
             >
               reveal
             </Button>
           </Link>
-          <Spacing size="regular" />
+          <Spacing size="regular"/>
         </>
       )}
 
       {!token.enabled && token.balance > 0 && (
         <>
           <small>
-            <span>
-              Token is currently <strong>disabled</strong> by author
-            </span>
+            <span>Token is currently <strong>disabled</strong> by author</span>
             {enabled && (
               <span>
-                <br />
+                <br/>
                 But as the author, you can still mint
               </span>
             )}
           </small>
-          <Spacing size="2x-small" />
+          <Spacing size="2x-small"/>
         </>
       )}
 
       {!(opHash && hideMintButtonAfterReveal) && (
-        <div
-          className={cs(
-            layout.buttons_inline,
-            layout.flex_wrap,
-            style.buttons_wrapper
-          )}
-        >
+        <div className={cs(
+          layout.buttons_inline, layout.flex_wrap, style.buttons_wrapper
+        )}>
           {!hidden && (
             <MintButton
               token={token}
@@ -149,12 +141,7 @@ export function MintController({
               onMint={mint}
               forceReserveConsumption={forceReserveConsumption}
             >
-              mint iteration&nbsp;&nbsp;
-              <DisplayTezos
-                mutez={price}
-                tezosSize="regular"
-                formatBig={false}
-              />
+              mint iteration&nbsp;&nbsp;<DisplayTezos mutez={price} tezosSize="regular" formatBig={false} />
             </MintButton>
           )}
 

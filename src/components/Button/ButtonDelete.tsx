@@ -20,8 +20,10 @@ export function ButtonDelete({
       onClick={onClick}
       disabled={disabled}
     >
-      {children && children + " "}
-      <i aria-hidden className="fa-solid fa-circle-xmark" />
+      {children && (
+        children + " "
+      )}
+      <i aria-hidden className="fa-solid fa-circle-xmark"/>
     </button>
   )
 }

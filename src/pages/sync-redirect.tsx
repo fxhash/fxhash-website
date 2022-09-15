@@ -3,6 +3,7 @@ import { useMemo } from "react"
 import { ClientOnlyEmpty } from "../components/Utils/ClientOnly"
 import { SyncRedirect } from "../containers/SyncRedirect"
 
+
 interface Props {
   target: string
 }
@@ -18,20 +19,20 @@ interface Props {
 const SyncRedirectPage: NextPage<Props> = ({ target }) => {
   return (
     <ClientOnlyEmpty>
-      <SyncRedirect target={target} />
+      <SyncRedirect target={target}/>
     </ClientOnlyEmpty>
   )
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   // check if the query has a target, otherwise redirect to home page
-  const target = context.query.target
+  const target = context.query.target 
   if (!target || typeof target === "object") {
     return {
       redirect: {
         destination: "/",
-        permanent: true,
-      },
+        permanent: true
+      }
     }
   }
 
@@ -40,8 +41,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   return {
     props: {
-      target: targetDecoded,
-    },
+      target: targetDecoded
+    }
   }
 }
 

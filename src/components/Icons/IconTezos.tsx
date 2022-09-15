@@ -5,14 +5,17 @@ export interface Props {
   size?: "small" | "regular" | "big"
   className?: string
 }
-export function IconTezos({ size = "regular", className }: Props) {
+export function IconTezos({
+  size = "regular",
+  className,
+}: Props) {
   return (
-    <span
+    <span 
       className={cs(
-        "icon-tezos-xtz-logo",
+        'icon-tezos-xtz-logo',
         style.tezos,
         style[`tezos_${size}`],
-        className
+        className,
       )}
     />
   )

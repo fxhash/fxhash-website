@@ -9,11 +9,11 @@ interface Props {
 
 export type TActionComp = FunctionComponent<Props>
 
-export type TActionLinkFn = (action: Action) => string | null
+export type TActionLinkFn = (action: Action) => string|null
 
 export interface ActionDefinition {
   icon: string
-  iconColor: TColor
+  iconColor: TColor,
   render: TActionComp
   predecescence: number
   link: TActionLinkFn | null

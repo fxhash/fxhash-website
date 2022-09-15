@@ -20,12 +20,7 @@ export const ActionOfferAccepted: TActionComp = ({ action, verbose }) => (
         tezosSize="regular"
       />
     </span>
-    <span>
-      on{" "}
-      <strong>
-        {verbose ? action.objkt!.name : `#${action.objkt!.iteration}`}
-      </strong>
-    </span>
+    <span>on <strong>{verbose ? action.objkt!.name : `#${action.objkt!.iteration}`}</strong></span>
     <span>accepted by</span>
     <UserBadge
       className={cs(style.user)}

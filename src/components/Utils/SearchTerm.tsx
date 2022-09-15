@@ -6,10 +6,13 @@ interface Props {
   onClear: () => void
 }
 
-export function SearchTerm({ term, onClear }: Props) {
+export function SearchTerm({
+  term,
+  onClear
+}: Props) {
   return (
     <div className={cs(style.container)}>
-      <strong>{term}</strong>
+      <strong>{ term }</strong>
       <i aria-hidden className="fas fa-times" onClick={onClear} />
     </div>
   )

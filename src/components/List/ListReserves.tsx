@@ -3,10 +3,7 @@ import text from "../../styles/Colors.module.css"
 import cs from "classnames"
 import { IReserve } from "../../types/entities/Reserve"
 import { useContext, useMemo } from "react"
-import {
-  getReservesAmount,
-  reserveEligibleAmount,
-} from "../../utils/generative-token"
+import { getReservesAmount, reserveEligibleAmount } from "../../utils/generative-token"
 import { ToggableInfo } from "../Layout/ToggableInfo"
 import { Reserve } from "../GenerativeToken/Reserves/Reserve"
 import { UserContext } from "../../containers/UserProvider"
@@ -18,13 +15,17 @@ interface Props {
   token?: GenerativeToken
   toggled?: boolean
 }
-export function ListReserves({ reserves, token, toggled }: Props) {
+export function ListReserves({
+  reserves,
+  token,
+  toggled,
+}: Props) {
   const { user } = useContext(UserContext)
-  const total = useMemo(() => getReservesAmount(reserves), [reserves])
+  const total = useMemo(() => getReservesAmount(reserves), [ reserves ])
 
   // how many eligible to user ?
   const eligibleAmount = useMemo(
-    () => (token && user ? reserveEligibleAmount(user as User, token) : 0),
+    () => (token && user) ? reserveEligibleAmount(user as User, token) : 0,
     [token, user]
   )
 
@@ -45,7 +46,10 @@ export function ListReserves({ reserves, token, toggled }: Props) {
     >
       <div className={cs(style.reserves)}>
         {reserves.map((reserve, idx) => (
-          <Reserve key={idx} reserve={reserve} />
+          <Reserve 
+            key={idx}
+            reserve={reserve}
+          />
         ))}
       </div>
     </ToggableInfo>

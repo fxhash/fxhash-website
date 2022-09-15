@@ -18,13 +18,10 @@ export function LoaderBlock({
   textPos = "top",
   color = "black",
   size = "regular",
-  children,
+  children
 }: PropsWithChildren<Props>) {
   return (
-    <div
-      className={cs(style.container, style[textPos], colors[color], className)}
-      style={{ height }}
-    >
+    <div className={cs(style.container, style[textPos], colors[color], className)} style={{ height }}>
       {children}
       <Loader color={color} size={size} />
     </div>

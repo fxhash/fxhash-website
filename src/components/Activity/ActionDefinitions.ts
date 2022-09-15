@@ -1,7 +1,4 @@
-import {
-  Action as ActionType,
-  TokenActionType,
-} from "../../types/entities/Action"
+import { Action as ActionType, TokenActionType } from "../../types/entities/Action"
 import { getArticleUrl } from "../../utils/entities/articles"
 import { ActionDefinition, TActionLinkFn } from "./Actions/Action"
 import { ActionMinted } from "./Actions/ActionMinted"
@@ -27,12 +24,15 @@ import { ActionListingAcceptedV3 } from "./Actions/ActionListingAcceptedV3"
 import { ActionListingCancelledV3 } from "./Actions/ActionListingCancelledV3"
 import { getObjktUrl } from "../../utils/objkt"
 
+
 const ActionLinks = {
   gentk: (action: ActionType) => `/gentk/${action.objkt?.id}`,
   token: (action: ActionType) => `/generative/${action.token?.id}`,
   article: (action: ActionType) => getArticleUrl(action.article!),
-  gentkOrArticle: (action: ActionType) =>
-    action.article ? getArticleUrl(action.article) : getObjktUrl(action.objkt!),
+  gentkOrArticle: (action: ActionType) => 
+    action.article 
+      ? getArticleUrl(action.article)
+      : getObjktUrl(action.objkt!)
 } as const
 
 const ActionTodoDefinition: ActionDefinition = {

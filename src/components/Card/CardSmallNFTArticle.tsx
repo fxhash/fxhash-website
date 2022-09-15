@@ -1,12 +1,12 @@
-import React, { memo, useContext, useMemo } from "react"
-import style from "./CardSmallNFTArticle.module.scss"
-import { NFTArticle } from "../../types/entities/Article"
-import Image from "next/image"
-import { ipfsGatewayUrl } from "../../services/Ipfs"
-import { SettingsContext } from "../../context/Theme"
-import cs from "classnames"
-import { UserBadge } from "../User/UserBadge"
-import Link from "next/link"
+import React, { memo, useContext, useMemo } from 'react';
+import style from "./CardSmallNFTArticle.module.scss";
+import { NFTArticle } from "../../types/entities/Article";
+import Image from "next/image";
+import { ipfsGatewayUrl } from "../../services/Ipfs";
+import { SettingsContext } from "../../context/Theme";
+import cs from "classnames";
+import { UserBadge } from "../User/UserBadge";
+import Link from 'next/link';
 
 interface CardSmallNftArticleProps {
   article: NFTArticle
@@ -14,23 +14,14 @@ interface CardSmallNftArticleProps {
   className?: string
 }
 
-const _CardSmallNftArticle = ({
-  article: { title, slug, description, thumbnailUri, author },
-  imagePriority,
-  className,
-}: CardSmallNftArticleProps) => {
+const _CardSmallNftArticle = ({ article: { title, slug, description, thumbnailUri, author }, imagePriority, className }: CardSmallNftArticleProps) => {
   const settings = useContext(SettingsContext)
-  const thumbnailUrl = useMemo(
-    () => thumbnailUri && ipfsGatewayUrl(thumbnailUri),
-    [thumbnailUri]
-  )
+  const thumbnailUrl = useMemo(() => thumbnailUri && ipfsGatewayUrl(thumbnailUri), [thumbnailUri])
   return (
-    <div
-      className={cs(style.container, className, {
-        [style.hover_effect]: settings.hoverEffectCard,
-      })}
-    >
-      <div className={style["img-wrapper"]}>
+    <div className={cs(style.container, className, {
+      [style.hover_effect]: settings.hoverEffectCard,
+    })}>
+      <div className={style['img-wrapper']}>
         <Image
           src={thumbnailUrl}
           layout="fill"
@@ -49,7 +40,7 @@ const _CardSmallNftArticle = ({
         <p className={style.description}>{description}</p>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export const CardSmallNftArticle = memo(_CardSmallNftArticle)
+export const CardSmallNftArticle = memo(_CardSmallNftArticle);

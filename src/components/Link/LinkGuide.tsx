@@ -1,6 +1,7 @@
 import { FunctionComponent } from "react"
 import { LinkIcon } from "./LinkIcon"
 
+
 interface Props {
   href: string
   newTab?: boolean
@@ -9,11 +10,11 @@ interface Props {
 export const LinkGuide: FunctionComponent<Props> = ({
   href,
   newTab,
-  children,
+  children
 }) => {
   return (
     <LinkIcon
-      iconComp={<i aria-hidden className="fas fa-book" />}
+      iconComp={<i aria-hidden className="fas fa-book"/>}
       href={href}
       newTab={newTab}
     >

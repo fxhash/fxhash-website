@@ -7,8 +7,8 @@ import { transformSplitsAccessList } from "../../../utils/transformers/splits"
 import { Button } from "../../Button"
 import { useCallback, useState } from "react"
 import { ProjectHolders } from "../ProjectHolders/ProjectHolders"
-import { ISplit } from "../../../types/entities/Split"
-import { ModalImportCsvReserve } from "../../ModalImportCsv/ModalImportCsvReserve"
+import { ISplit } from "../../../types/entities/Split";
+import { ModalImportCsvReserve } from "../../ModalImportCsv/ModalImportCsvReserve";
 
 export function InputReserveWhitelist({
   value,
@@ -19,28 +19,16 @@ export function InputReserveWhitelist({
   const [showAddHoldersModal, setShowAddHoldersModal] = useState(false)
   const [showImportCsvModal, setShowImportCsvModal] = useState(false)
 
-  const handleToggleAddHoldersModal = useCallback(
-    (newState) => () => setShowAddHoldersModal(newState),
-    []
-  )
-  const handleToggleImportCsvModal = useCallback(
-    (newState) => () => setShowImportCsvModal(newState),
-    []
-  )
-  const handleImportHolders = useCallback(
-    (addSplits) => (splits: ISplit[]) => {
-      addSplits(splits)
-      setShowAddHoldersModal(false)
-    },
-    []
-  )
-  const handleImportCsv = useCallback(
-    (addSplits) => (splits: ISplit[]) => {
-      addSplits(splits)
-      setShowImportCsvModal(false)
-    },
-    []
-  )
+  const handleToggleAddHoldersModal = useCallback((newState) => () => setShowAddHoldersModal(newState), []);
+  const handleToggleImportCsvModal = useCallback((newState) => () => setShowImportCsvModal(newState), []);
+  const handleImportHolders = useCallback((addSplits) => (splits: ISplit[]) => {
+    addSplits(splits);
+    setShowAddHoldersModal(false);
+  }, [])
+  const handleImportCsv = useCallback((addSplits) => (splits: ISplit[]) => {
+    addSplits(splits);
+    setShowImportCsvModal(false);
+  }, [])
   return (
     <div>
       {children}
@@ -57,7 +45,7 @@ export function InputReserveWhitelist({
             <Button
               type="button"
               size="very-small"
-              iconComp={<i className="fa-solid fa-plus" aria-hidden />}
+              iconComp={<i className="fa-solid fa-plus" aria-hidden/>}
               onClick={handleToggleImportCsvModal(true)}
             >
               import from .csv
@@ -65,7 +53,7 @@ export function InputReserveWhitelist({
             <Button
               type="button"
               size="very-small"
-              iconComp={<i className="fa-solid fa-plus" aria-hidden />}
+              iconComp={<i className="fa-solid fa-plus" aria-hidden/>}
               onClick={handleToggleAddHoldersModal(true)}
             >
               add current holders of a project

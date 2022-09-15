@@ -1,6 +1,7 @@
 import { FunctionComponent } from "react"
 import Link from "next/link"
 
+
 interface Props {
   href: string
   iconComp: React.ReactNode
@@ -13,19 +14,15 @@ export const LinkIcon: FunctionComponent<Props> = ({
   iconComp,
   newTab = false,
   iconSide = "left",
-  children,
+  children
 }) => {
   return (
     <Link href={href}>
       <a target={newTab ? "_blank" : "_self"}>
         {iconSide === "left" ? (
-          <>
-            {iconComp} {children}
-          </>
-        ) : (
-          <>
-            {children} {iconComp}
-          </>
+          <>{iconComp} {children}</>
+          ):(
+          <>{children} {iconComp}</>
         )}
       </a>
     </Link>
