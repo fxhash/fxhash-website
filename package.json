@@ -24,6 +24,7 @@
     "classnames": "^2.3.1",
     "date-fns": "^2.25.0",
     "date-fns-tz": "^1.1.6",
+    "detect-incognito": "^1.0.0",
     "echarts": "^5.2.2",
     "file-type": "^16.5.3",
     "formik": "^2.2.9",
