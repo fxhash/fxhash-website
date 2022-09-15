@@ -100,7 +100,7 @@ This snippet serves 2 purposes:
 
 The code snippet exposes 4 variables:
 
-- `fxhash`: a random 51 characters base 58 encoded string (designed to have the same signature has a Tezos transaction hash). When someone mints a unique Token from a Generative Token, the transaction hash is hardcoded in place of the code that generates a random one.
+- `fxhash`: a random 51 characters base 58 encoded string (designed to have the same signature as a Tezos transaction hash). When someone mints a unique Token from a Generative Token, the transaction hash is hardcoded in place of the code that generates a random one.
 - `fxrand()`: a PRNG function that generates deterministic PRN between 0 and 1. **Simply use it instead of Math.random()**.
 - `fxpreview()`: a function you can call whenever the code is ready to be captured
 - `isFxpreview`: a boolean, true when the code is executed to take the capture, false otherwise
