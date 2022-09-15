@@ -9,7 +9,7 @@ import { PropsWithChildren, useContext, useEffect, useMemo } from "react"
 import { ContractFeedback } from "../Feedback/ContractFeedback"
 import { DisplayTezos } from "../Display/DisplayTezos"
 import { useContractOperation } from "../../hooks/useContractOperation"
-import { MintOperation, TMintOperationParams } from "../../services/contract-operations/Mint"
+import { IReserveConsumption, MintOperation, TMintOperationParams } from "../../services/contract-operations/Mint"
 import { MintingState } from "./MintingState/MintingState"
 import { useMintingState } from "../../hooks/useMintingState"
 import { UserContext } from "../../containers/UserProvider"
@@ -20,7 +20,11 @@ import { MintButton } from "./MintButton"
 interface Props {
   token: GenerativeToken
   forceDisabled?: boolean
+  forceReserveConsumption?: boolean
+  generateRevealUrl?: (params: { tokenId: number, hash: string | null }) => string
+  hideMintButtonAfterReveal?: boolean
   onReveal?: (hash: string) => void
+  className?: string
 }
 
 /**
@@ -37,7 +41,11 @@ interface Props {
 export function MintController({
   token,
   forceDisabled = false,
+  forceReserveConsumption = false,
+  hideMintButtonAfterReveal = false,
+  generateRevealUrl,
   onReveal,
+  className,
   children,
 }: PropsWithChildren<Props>) {
   // the mint context, handles display logic
@@ -50,27 +58,28 @@ export function MintController({
   } = mintingState
 
   // hook to interact with the contract
-  const { state, loading, success, call, error, opHash } = 
+  const { state, loading, success, call, error, opHash } =
     useContractOperation<TMintOperationParams>(MintOperation)
 
-  const mint = (consumeReserve: boolean) => {
+  const mint = (reserveConsumption: IReserveConsumption|null) => {
     call({
       token: token,
       price: price,
-      consumeReserve: consumeReserve,
+      consumeReserve: reserveConsumption
     })
   }
 
+  const revealUrl = generateRevealUrl ? generateRevealUrl({ tokenId: token.id, hash: opHash }) : `/reveal/${token.id}/${opHash}`
   // whenever there is a transaction hash, we can tell the mint was
   // successful
   useEffect(() => {
     if (opHash) {
       onReveal?.(opHash)
     }
-  }, [opHash])
+  }, [opHash]);
 
   return (
-    <div className={cs(style.root)}>
+    <div className={cs(className || style.root)}>
 
       {token.balance > 0 && (
         <MintingState
@@ -90,7 +99,7 @@ export function MintController({
 
       {opHash && (
         <>
-          <Link href={`/reveal/${token.id}/${opHash}`} passHref>
+          <Link href={revealUrl} passHref>
             <Button
               isLink
               color="secondary"
@@ -119,23 +128,26 @@ export function MintController({
           <Spacing size="2x-small"/>
         </>
       )}
-      
-      <div className={cs(
-        layout.buttons_inline, layout.flex_wrap, style.buttons_wrapper
-      )}>
-        {!hidden && (
-          <MintButton
-            token={token}
-            loading={loading}
-            disabled={!enabled || locked}
-            onMint={mint}
-          >
-            mint iteration&nbsp;&nbsp;<DisplayTezos mutez={price} tezosSize="regular" formatBig={false} />
-          </MintButton>
-        )}
 
-        {children}
-      </div>
+      {!(opHash && hideMintButtonAfterReveal) && (
+        <div className={cs(
+          layout.buttons_inline, layout.flex_wrap, style.buttons_wrapper
+        )}>
+          {!hidden && (
+            <MintButton
+              token={token}
+              loading={loading}
+              disabled={!enabled || locked}
+              onMint={mint}
+              forceReserveConsumption={forceReserveConsumption}
+            >
+              mint iteration&nbsp;&nbsp;<DisplayTezos mutez={price} tezosSize="regular" formatBig={false} />
+            </MintButton>
+          )}
+
+          {children}
+        </div>
+      )}
     </div>
   )
 }

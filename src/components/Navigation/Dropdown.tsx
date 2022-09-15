@@ -11,6 +11,7 @@ interface Props {
   className?: string
   btnClassName?: string
   closeOnClick?: boolean
+  mobileMenuAbsolute?: boolean
 }
 
 export function Dropdown({
@@ -19,7 +20,8 @@ export function Dropdown({
   className,
   btnClassName,
   closeOnClick = true,
-  children
+  children,
+  mobileMenuAbsolute
 }: PropsWithChildren<Props>) {
   const [opened, setOpened] = useState<boolean>(false)
 
@@ -59,9 +61,10 @@ export function Dropdown({
 
   return (
     <div className={cs(style.container, "dropdown_root", {
-      "avoid-close-event": opened
+      "avoid-close-event": opened,
+      [style.mobile_static_menu]: !mobileMenuAbsolute
     })}>
-      <button 
+      <button
         aria-label={ariaLabel}
         onClick={toggle}
         className={cs(style.button, btnClassName, { [style.opened]: opened })}

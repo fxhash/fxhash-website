@@ -11,7 +11,12 @@ export function ErrorPage({
   children,
 }: PropsWithChildren<Props>) {
   return (
-    <div className={cs(style.root, layout.y_centered, layout.full_body_height)}>
+    <div className={cs(
+      style.root,
+      layout.y_centered,
+      layout.full_body_height,
+      layout['padding-big']
+    )}>
       <h1>{title}</h1>
       <div>{children}</div>
     </div>
