@@ -40,13 +40,16 @@ const _ConnectWallet = () => {
     []
   )
   const handleClickConnect = useCallback(() => {
-    if (walletType === "custom") {
-      userCtx.connect()
-    } else if (walletType === "naan") {
-      openNaaN()
-    } else {
-      userCtx.connect()
-    }
+    // if (walletType === "custom") {
+    //   userCtx.connect()
+    // } 
+    // else if (walletType === "naan") {
+    //   openNaaN()
+    // } 
+    // else {
+    //   userCtx.connect()
+    // }
+    userCtx.connect()
   }, [userCtx, walletType])
 
   // check if this is device is iOS
@@ -108,7 +111,7 @@ const _ConnectWallet = () => {
         </div>
       )}
       <div className={style.container_button}>
-        {!isFocus && (
+        {/* {!isFocus && (
           <>
             {options.map((opt) => (
               <Checkbox
@@ -124,9 +127,10 @@ const _ConnectWallet = () => {
             ))}
             <Spacing size="x-small" />
           </>
-        )}
+        )} */}
         <Button
-          disabled={!walletType && !isFocus}
+          type="button"
+          // disabled={!walletType && !isFocus}
           iconComp={<i aria-hidden className="fas fa-wallet" />}
           onClick={handleClickConnect}
         >
