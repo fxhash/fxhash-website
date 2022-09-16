@@ -42,11 +42,9 @@ const _ConnectWallet = () => {
   const handleClickConnect = useCallback(() => {
     // if (walletType === "custom") {
     //   userCtx.connect()
-    // } 
-    // else if (walletType === "naan") {
+    // } else if (walletType === "naan") {
     //   openNaaN()
-    // } 
-    // else {
+    // } else {
     //   userCtx.connect()
     // }
     userCtx.connect()
