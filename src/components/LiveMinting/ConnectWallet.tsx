@@ -82,9 +82,10 @@ const _ConnectWallet = () => {
         <div className={style.container_button}>
           <Link
             href={
-              isIos
-                ? "https://apps.apple.com/us/app/naan-a-tasty-tezos-wallet/id1573210354"
-                : "https://play.google.com/store/apps/details?id=com.naan&hl=en&gl=US"
+              // isIos
+              //   ? "https://apps.apple.com/us/app/naan-a-tasty-tezos-wallet/id1573210354"
+              //   : "https://play.google.com/store/apps/details?id=com.naan&hl=en&gl=US"
+              "https://wallet.kukai.app/"
             }
             passHref
           >
@@ -95,7 +96,7 @@ const _ConnectWallet = () => {
               color="secondary"
               className={style.button}
             >
-              install naan wallet
+              create wallet with kukai
             </Button>
           </Link>
           <div className={style.purchase}>
