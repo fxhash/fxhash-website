@@ -4,15 +4,17 @@
   display: flex;
   justify-content: center;
   flex-direction: column;
-  
+
   &.align_left {
     text-align: left;
     align-items: flex-start;
   }
+
   &.align_center {
     text-align: center;
     align-items: center;
   }
+
   &.align_right {
     text-align: right;
     align-items: flex-end;

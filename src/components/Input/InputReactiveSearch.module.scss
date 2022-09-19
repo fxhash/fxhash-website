@@ -49,4 +49,16 @@
       pointer-events: none;
     }
   }
+  .result_keyboard_selected {
+    background: var(--color-gray-vlight)
+  }
+}
+
+.no_results {
+  margin-top: 8px;
+  color: var(--color-gray);
+
+  i {
+    font-size: 1.15em;
+  }
 }

@@ -30,24 +30,22 @@ export function LargeGentkCard({
 
   return (
     <Link href={url} passHref>
-      <AnchorForward style={{ height: '100%' }}>
+      <AnchorForward style={{ height: "100%" }}>
         <LargeCard
-          thumbnailUri={objkt.metadata?.displayUri} 
+          thumbnailUri={objkt.metadata?.displayUri}
           undesirable={objkt.issuer?.flag === GenTokFlag.MALICIOUS}
           displayDetails={settings.displayInfosGentkCard}
           topper={
             <div className={cs(style.topper)}>
               <span>#{objkt.iteration}</span>
               {objkt.duplicate && (
-                <div className={cs(style.dup_flag)}>
-                  [WARNING: DUPLICATE]
-                </div>
+                <div className={cs(style.dup_flag)}>[WARNING: DUPLICATE]</div>
               )}
               {showRarity && objkt.rarity != null && (
                 <>
                   <Spacing size="2x-small" />
                   <div className={cs(style.rarity)}>
-                    Rarity: { objkt.rarity.toFixed(3) }
+                    Rarity: {objkt.rarity.toFixed(3)}
                   </div>
                 </>
               )}

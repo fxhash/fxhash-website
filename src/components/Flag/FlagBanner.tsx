@@ -5,12 +5,10 @@ import { PropsWithChildren } from "react"
 
 export function FlagBanner({ children }: PropsWithChildren<{}>) {
   return (
-    <div className={cs(layout['padding-small'])}>
+    <div className={cs(layout["padding-small"])}>
       <div className={cs(style.banner)}>
-        <i aria-hidden className="fas fa-exclamation-triangle"/>
-        <div>
-          {children}
-        </div>
+        <i aria-hidden className="fas fa-exclamation-triangle" />
+        <div>{children}</div>
       </div>
     </div>
   )

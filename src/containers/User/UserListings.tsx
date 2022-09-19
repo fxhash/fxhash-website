@@ -1,7 +1,7 @@
 import layout from "../../styles/Layout.module.scss"
 import cs from "classnames"
 import { useQuery } from "@apollo/client"
-import { useRef, useEffect } from "react"
+import { useRef, useEffect, useCallback, useState } from "react"
 import { CardsContainer } from "../../components/Card/CardsContainer"
 import { ObjktCard } from "../../components/Card/ObjktCard"
 import { LoaderBlock } from "../../components/Layout/LoaderBlock"
@@ -11,58 +11,52 @@ import { Listing } from "../../types/entities/Listing"
 import { User } from "../../types/entities/User"
 import { CardsLoading } from "../../components/Card/CardsLoading"
 
+const ITEMS_PER_PAGE = 20;
 interface Props {
   user: User
 }
 export function UserListings({
   user,
 }: Props) {
-  // use to know when to stop loading
-  const currentLength = useRef<number>(0)
-  const ended = useRef<boolean>(false)
+  const [hasNothingToFetch, setHasNothingToFetch] = useState(false);
 
-  const { data, loading, fetchMore } = useQuery(Qu_userListings, {
+  const { data, loading, fetchMore } = useQuery<{ user: User }>(Qu_userListings, {
     notifyOnNetworkStatusChange: true,
     variables: {
       id: user.id,
       skip: 0,
-      take: 20
+      take: ITEMS_PER_PAGE
+    },
+    onCompleted: (newData) => {
+      if (!newData?.user?.listings?.length || newData.user.listings.length < ITEMS_PER_PAGE) {
+        setHasNothingToFetch(true);
+      }
     }
   })
 
   // safe access to gentoks
-  const listings: Listing[] = data?.user?.listings || null
-
-  useEffect(() => {
-    if (!loading) {
-      if (currentLength.current === listings?.length) {
-        ended.current = true
-      }
-      else {
-        currentLength.current = listings?.length
-      }
+  const listings = data?.user?.listings || null
+  const handleFetchMore = useCallback(async () => {
+    if (loading || hasNothingToFetch) return false;
+    const { data: newData } = await fetchMore({
+      variables: {
+        skip: listings?.length || 0,
+        take: ITEMS_PER_PAGE,
+      },
+    });
+    if (!newData?.user?.listings?.length || newData.user.listings.length < ITEMS_PER_PAGE) {
+      setHasNothingToFetch(true);
     }
-  }, [data, loading])
-
-  const load = () => {
-    if (!ended.current) {
-      fetchMore({
-        variables: {
-          id: user.id,
-          skip: listings?.length || 0,
-          take: 20
-        }
-      })
-    }
-  }
+  }, [fetchMore, hasNothingToFetch, listings?.length, loading])
 
   return (
     <div className={cs(layout['padding-big'])}>
       <InfiniteScrollTrigger
-        onTrigger={load}
+        onTrigger={handleFetchMore}
+        canTrigger={!hasNothingToFetch && !loading}
       >
         <CardsContainer>
-          {listings?.map(offer => (
+          {listings?.map(offer => offer.objkt && (
             <ObjktCard
               key={offer.objkt.id}
               objkt={offer.objkt}

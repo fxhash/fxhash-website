@@ -8,7 +8,6 @@ import { UserContext } from "../../containers/UserProvider"
 import { reserveEligibleAmount } from "../../utils/generative-token"
 import { User } from "../../types/entities/User"
 
-
 interface Props {
   token: GenerativeToken
   showReserve?: boolean
@@ -21,54 +20,42 @@ export function MintProgress({
   const settings = useContext(SettingsContext)
   const { user } = useContext(UserContext)
 
-  const {
-    balance,
-    supply,
-    originalSupply,
-  } = token
+  const { balance, supply, originalSupply } = token
 
   // number of iterations minted
   const minted = supply - balance
   const complete = balance === 0
 
-  const [progress, burntProgress, reserveSize, reserveProgress] =
-    useMemo<[number, number, number, number]>(
-      () => {
-        const visibleSupply = (settings.displayBurntCard ? originalSupply : supply)
-        const progress = minted / visibleSupply
-        const burnt = originalSupply - supply
-        const burntProgress = settings.displayBurntCard
-          ? (burnt / originalSupply)
-          : 0
-        const reserveSize = token.reserves
-          ? token.reserves.reduce((a, b) => a + b.amount, 0)
-          : 0
-        const reserveProgress = Math.min(
-          1, reserveSize / visibleSupply
-        )
-        return [
-          progress,
-          burntProgress,
-          reserveSize,
-          reserveProgress,
-        ]
-      }
-      , [settings])
+  const [progress, burntProgress, reserveSize, reserveProgress] = useMemo<
+    [number, number, number, number]
+  >(() => {
+    const visibleSupply = settings.displayBurntCard ? originalSupply : supply
+    const progress = minted / visibleSupply
+    const burnt = originalSupply - supply
+    const burntProgress = settings.displayBurntCard ? burnt / originalSupply : 0
+    const reserveSize = token.reserves
+      ? token.reserves.reduce((a, b) => a + b.amount, 0)
+      : 0
+    const reserveProgress = Math.min(1, reserveSize / visibleSupply)
+    return [progress, burntProgress, reserveSize, reserveProgress]
+  }, [settings])
 
   // compute how many editions in reserve the user is eligible for
-  const eligibleFor = useMemo(() =>
-    user
-      ? reserveEligibleAmount(user as User, token)
-      : 0
-    , [user, token])
+  const eligibleFor = useMemo(
+    () => (user ? reserveEligibleAmount(user as User, token) : 0),
+    [user, token]
+  )
 
   return (
     <div className={cs(style.container)}>
-      <span className={cs(style.infos, {
-        [style.minted]: complete,
-      })}>
+      <span
+        className={cs(style.infos, {
+          [style.minted]: complete,
+        })}
+      >
         <span>
-          <strong className={cs(colors.secondary)}>{minted}</strong>/{supply} minted
+          <strong className={cs(colors.secondary)}>{minted}</strong>/{supply}{" "}
+          minted
           {complete && <i aria-hidden className="fas fa-check-circle" />}
         </span>
         {children}
@@ -77,22 +64,23 @@ export function MintProgress({
         <div
           className={cs(style.bar)}
           style={{
-            width: progress * 100 + '%'
+            width: progress * 100 + "%",
           }}
-	/>
-	{ !complete &&
-	  <div
-	    className={cs(style.bar_reserve)}
-	    style={{
-	      left: progress * 100 + '%',
-	      width: reserveProgress * 100 + "%"
-	    }}
-	  />
-	}
+
+        />
+        { !complete &&
+          <div
+            className={cs(style.bar_reserve)}
+            style={{
+              left: progress * 100 + "%",
+              width: reserveProgress * 100 + "%",
+            }}
+          />
+        }
         <div
           className={cs(style.bar_burnt)}
           style={{
-            width: burntProgress * 100 + '%'
+            width: burntProgress * 100 + "%",
           }}
         />
       </div>

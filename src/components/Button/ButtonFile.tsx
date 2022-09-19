@@ -2,18 +2,18 @@ import { useRef } from "react"
 import { Button, ButtonProps } from "./index"
 
 interface Props extends ButtonProps {
-  onFile: (file: File|null) => void
+  onFile: (file: File | null) => void
   accepted?: string[]
   multiple?: boolean
   maxSize?: number
 }
 
-export function ButtonFile({ 
+export function ButtonFile({
   onFile,
-  accepted = [ "*" ],
+  accepted = ["*"],
   multiple = false,
-  maxSize = 1024*1024,
-  ...props 
+  maxSize = 1024 * 1024,
+  ...props
 }: Props) {
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -27,23 +27,24 @@ export function ButtonFile({
     const files = inputRef.current!.files
     if (files && files.length > 0) {
       onFile(files[0])
-    }
-    else {
+    } else {
       onFile(null)
     }
   }
 
   return (
     <>
-      <input 
+      <input
         hidden
         ref={inputRef}
         type="file"
         multiple={multiple}
-        accept={accepted.join(',')}
+        accept={accepted.join(",")}
         onChange={onChange}
       />
-      <Button {...props} onClick={clicked}>{ props.children }</Button>
+      <Button {...props} onClick={clicked}>
+        {props.children}
+      </Button>
     </>
   )
 }
