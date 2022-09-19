@@ -3,7 +3,6 @@ import cs from "classnames"
 import { ContractOperationStatus } from "../../types/Contracts"
 import { Spacing } from "../Layout/Spacing"
 
-
 interface Props {
   state: ContractOperationStatus
   success: boolean
@@ -41,17 +40,17 @@ export function ContractFeedback({
       {(loading || success || error) && (
         <div className={cs(style.container, className)}>
           {error ? (
-            <span className={cs(style.error)}>{ errorMessage }</span>
-          ):(
-            success ? (
-              <span className={cs(style.success)}>{ successMessage }</span>
-            ):(
-              loading && (
-                <span className={cs(style.loading)}>{ messageFromState(state) }</span>
-              )
+            <span className={cs(style.error)}>{errorMessage}</span>
+          ) : success ? (
+            <span className={cs(style.success)}>{successMessage}</span>
+          ) : (
+            loading && (
+              <span className={cs(style.loading)}>
+                {messageFromState(state)}
+              </span>
             )
           )}
-          {!noSpacing && <Spacing size="x-small"/>}
+          {!noSpacing && <Spacing size="x-small" />}
         </div>
       )}
     </>

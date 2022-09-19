@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react"
 import style from "./Warning.module.scss"
 import cs from "classnames"
 import { PropsWithChildren } from "react"
@@ -10,16 +10,16 @@ interface Props {
   className: string
 }
 
-export function Warning({ children, className, closeButton }:PropsWithChildren<Props>) {
+export function Warning({
+  children,
+  className,
+  closeButton,
+}: PropsWithChildren<Props>) {
   return (
-    <div
-      className={cs(className, style.container)}
-    >
+    <div className={cs(className, style.container)}>
       <Link href="/article/fx(text)">
         <a>
-          <span className={cs(style.message)}>
-            {children}
-          </span>
+          <span className={cs(style.message)}>{children}</span>
         </a>
       </Link>
       {closeButton}

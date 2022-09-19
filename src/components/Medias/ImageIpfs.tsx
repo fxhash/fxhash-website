@@ -14,10 +14,5 @@ export function ImageIpfs({
   gateway = EGatewayIpfs.FXHASH_SAFE,
   ...props
 }: Props) {
-  return (
-    <img
-      {...props}
-      src={ipfsGatewayUrl(src, gateway)}
-    />
-  )
+  return <img {...props} src={ipfsGatewayUrl(src, gateway)} />
 }

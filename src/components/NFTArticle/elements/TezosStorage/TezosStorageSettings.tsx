@@ -4,11 +4,17 @@ import cs from "classnames"
 import { Submit } from "../../../Form/Submit"
 import { Button } from "../../../Button"
 import { Field } from "../../../Form/Field"
-import { InputReactiveSearch, InputReactSearchResultsRendererProps } from "../../../Input/InputReactiveSearch"
+import {
+  InputReactiveSearch,
+  InputReactSearchResultsRendererProps,
+} from "../../../Input/InputReactiveSearch"
 import { GenerativeToken } from "../../../../types/entities/GenerativeToken"
 import { Fragment, useCallback, useMemo, useState } from "react"
 import { useApolloClient, useQuery } from "@apollo/client"
-import { Qu_genTokenAllIterations, Qu_searchGenTok } from "../../../../queries/generative-token"
+import {
+  Qu_genTokenAllIterations,
+  Qu_searchGenTok,
+} from "../../../../queries/generative-token"
 import { ipfsGatewayUrl } from "../../../../services/Ipfs"
 import { EntityBadge } from "../../../User/EntityBadge"
 import { Spacing } from "../../../Layout/Spacing"
@@ -16,9 +22,11 @@ import { ModalTitle } from "../../SlateEditor/UI/ModalTitle"
 import { Objkt } from "../../../../types/entities/Objkt"
 import { LoaderBlock } from "../../../Layout/LoaderBlock"
 import { ImageIpfs } from "../../../Medias/ImageIpfs"
-import { generativeTokenTezosStoragePointer, gentkTezosStoragePointer } from "../../../../utils/tezos-storage"
-import { TEditAttributeComp } from "../../../../types/ArticleEditor/BlockDefinition";
-
+import {
+  generativeTokenTezosStoragePointer,
+  gentkTezosStoragePointer,
+} from "../../../../utils/tezos-storage"
+import { TEditAttributeComp } from "../../../../types/ArticleEditor/BlockDefinition"
 
 export const TezosStorageSettings: TEditAttributeComp = ({
   element,
@@ -26,9 +34,9 @@ export const TezosStorageSettings: TEditAttributeComp = ({
   children,
 }) => {
   // the selected project
-  const [project, setProject] = useState<GenerativeToken|null>(null)
+  const [project, setProject] = useState<GenerativeToken | null>(null)
   // the selected iteration
-  const [iteration, setIteration] = useState<Objkt|null>(null)
+  const [iteration, setIteration] = useState<Objkt | null>(null)
 
   // clears the selection -> state of iteration & project
   const clearSelection = useCallback(() => {
@@ -39,73 +47,66 @@ export const TezosStorageSettings: TEditAttributeComp = ({
   const importSelection = useCallback(() => {
     if (iteration) {
       onEdit(gentkTezosStoragePointer(iteration))
-    }
-    else if (project) {
+    } else if (project) {
       onEdit(generativeTokenTezosStoragePointer(project))
     }
   }, [onEdit, project, iteration])
 
   return (
     <div className={cs(style.root)}>
-      <ModalTitle>
-        Insert fxhash content
-      </ModalTitle>
+      <ModalTitle>Insert fxhash content</ModalTitle>
 
       <p className={cs(text.info)}>
-        You can first select a project, and then insert the project itself or pick a particular iteration of the project.
+        You can first select a project, and then insert the project itself or
+        pick a particular iteration of the project.
       </p>
-      <Spacing size="small"/>
+      <Spacing size="small" />
 
-      <div className={cs({
-        [style.hidden]: !!project,
-      })}>
-        <TezosStorageLoadProject
-          onChange={setProject}
-        />
+      <div
+        className={cs({
+          [style.hidden]: !!project,
+        })}
+      >
+        <TezosStorageLoadProject onChange={setProject} />
       </div>
 
       {project && (
-        <div className={cs(style.selected_project_wrapper, {
-          [style.disabled]: !!iteration,
-        })}>
+        <div
+          className={cs(style.selected_project_wrapper, {
+            [style.disabled]: !!iteration,
+          })}
+        >
           <div className={cs(style.selected_project_title)}>
             <span>Selected project</span>
-            <button
-              type="button"
-              onClick={clearSelection}
-            >
+            <button type="button" onClick={clearSelection}>
               clear selection
-              <i aria-hidden className="far fa-xmark"/>
+              <i aria-hidden className="far fa-xmark" />
             </button>
           </div>
           <div className={cs(style.selected_project)}>
-            <ProjectRendererOneLine
-              project={project}
-            />
+            <ProjectRendererOneLine project={project} />
           </div>
         </div>
       )}
 
       {project && (
         <>
-          <Spacing size="8px"/>
-          <div className={cs(style.selected_project_wrapper, {
-            [style.disabled]: !iteration
-          })}>
+          <Spacing size="8px" />
+          <div
+            className={cs(style.selected_project_wrapper, {
+              [style.disabled]: !iteration,
+            })}
+          >
             <div className={cs(style.selected_project_title)}>
               <span>
                 {iteration
                   ? "Iteration selected"
-                  : "You can select an iteration"
-                }
+                  : "You can select an iteration"}
               </span>
               {iteration && (
-                <button
-                  type="button"
-                  onClick={() => setIteration(null)}
-                >
+                <button type="button" onClick={() => setIteration(null)}>
                   clear selection
-                  <i aria-hidden className="far fa-xmark"/>
+                  <i aria-hidden className="far fa-xmark" />
                 </button>
               )}
             </div>
@@ -145,18 +146,15 @@ function ProjectsReactiveSearchResultsRenderer({
   return (
     <div className={cs(style.search_results)}>
       {results?.map((token) => (
-        <Fragment
-          key={token.id}
-        >
+        <Fragment key={token.id}>
           {children?.({
-            item: token
+            item: token,
           })}
         </Fragment>
       ))}
     </div>
   )
 }
-
 
 /**
  * The component to quickly search and explore projects, with a list to display
@@ -165,9 +163,7 @@ function ProjectsReactiveSearchResultsRenderer({
 interface IImportCompProps {
   onChange: (project: GenerativeToken) => void
 }
-function TezosStorageLoadProject({
-  onChange,
-}: IImportCompProps) {
+function TezosStorageLoadProject({ onChange }: IImportCompProps) {
   const client = useApolloClient()
   const [value, setValue] = useState<string>("")
 
@@ -182,21 +178,21 @@ function TezosStorageLoadProject({
           searchQuery_eq: search,
         },
         sort: {
-          relevance: "DESC"
-        }
-      }
+          relevance: "DESC",
+        },
+      },
     })
   }
 
   const resultsIntoGenToks = (results: any): GenerativeToken[] => {
-    if (!results || ! results.data || !results.data.generativeTokens) {
+    if (!results || !results.data || !results.data.generativeTokens) {
       return []
     }
     return results.data.generativeTokens
   }
 
   const valueFromToken = (token: GenerativeToken) => {
-    return ""+token.id
+    return "" + token.id
   }
 
   // update the value and clear the selection
@@ -225,9 +221,7 @@ function TezosStorageLoadProject({
                 onChange(item)
               }}
             >
-              <ProjectRendererOneLine
-                project={item}
-              />
+              <ProjectRendererOneLine project={item} />
             </button>
           )}
         </InputReactiveSearch>
@@ -236,16 +230,13 @@ function TezosStorageLoadProject({
   )
 }
 
-
 /**
  * A simple component to render a project with a one-liner
  */
 interface IProjectRendererOneLineProps {
   project: GenerativeToken
 }
-function ProjectRendererOneLine({
-  project,
-}: IProjectRendererOneLineProps) {
+function ProjectRendererOneLine({ project }: IProjectRendererOneLineProps) {
   return (
     <div className={cs(style.project_one_liner)}>
       <img
@@ -257,23 +248,19 @@ function ProjectRendererOneLine({
         <div>
           #{project.id} <strong>{project.name}</strong>
         </div>
-        <EntityBadge
-          user={project.author}
-          size="small"
-        />
+        <EntityBadge user={project.author} size="small" />
       </div>
     </div>
   )
 }
-
 
 /***
  * Component to select an iteration from a project
  */
 interface IProjectIterationPickerProps {
   project: GenerativeToken
-  selected: Objkt|null
-  onChange: (value: Objkt|null) => void
+  selected: Objkt | null
+  onChange: (value: Objkt | null) => void
 }
 function ProjectIterationPicker({
   project,
@@ -283,7 +270,7 @@ function ProjectIterationPicker({
   const { data } = useQuery(Qu_genTokenAllIterations, {
     variables: {
       id: project.id,
-    }
+    },
   })
 
   const iterations = useMemo<Objkt[] | null>(() => {
@@ -307,25 +294,20 @@ function ProjectIterationPicker({
               key={item.id}
               type="button"
               className={cs(style.iteration, {
-                [style.selected]: selected?.id === item.id
+                [style.selected]: selected?.id === item.id,
               })}
               onClick={() => onChange(selected?.id === item.id ? null : item)}
             >
-              <div className={cs(style.iteration__border)}/>
+              <div className={cs(style.iteration__border)} />
               <div className={cs(style.thumbnail_wrapper)}>
-                <ImageIpfs
-                  src={item.metadata!.thumbnailUri}
-                />
+                <ImageIpfs src={item.metadata!.thumbnailUri} />
               </div>
               <span>#{item.iteration}</span>
             </button>
           ))}
         </div>
-      ):(
-        <LoaderBlock
-          size="small"
-          height="100%"
-        />
+      ) : (
+        <LoaderBlock size="small" height="100%" />
       )}
     </div>
   )

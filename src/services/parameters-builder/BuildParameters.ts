@@ -3,8 +3,12 @@ import updateOperatorsType from "./update-operators/type.json"
 import listingType from "./listing/type.json"
 import listingCancelType from "./listing-cancel/type.json"
 import listingAcceptType from "./listing-accept/type.json"
+import listingV3Type from "./listing-v3/type.json"
+// import listingCancelType from "./listing-cancel/type.json"
+// import listingAcceptType from "./listing-accept/type.json"
 import offerAcceptType from "./offer-accept/type.json"
 import mintIssuerType from "./mint-issuer/type.json"
+import mintType from "./mint/type.json"
 import pricingFixedType from "./pricing-fixed/type.json"
 import pricingDutchAuctionType from "./pricing-dutch-auction/type.json"
 import updateIssuerType from "./update-issuer/type.json"
@@ -13,6 +17,10 @@ import updateReserveType from "./update-reserve/type.json"
 import burnSupplyType from "./burn-supply/type.json"
 import burnType from "./burn/type.json"
 import reserveWhitelistType from "./reserve-whitelist/type.json"
+import reserveMintPassType from "./reserve-mint-pass/type.json"
+import reserveMintInputType from "./reserve-mint-input/type.json"
+import reserveMintPassInputType from "./reserve-mint-pass-input/type.json"
+import mintPassConsumeType from "./mint-pass-consume/type.json"
 import { Schema } from "@taquito/michelson-encoder"
 import { packData, packDataBytes, unpackDataBytes } from "@taquito/michel-codec"
 
@@ -24,7 +32,11 @@ export enum EBuildableParams {
   LISTING               = "LISTING",
   LISTING_CANCEL        = "LISTING_CANCEL",
   LISTING_ACCEPT        = "LISTING_ACCEPT",
+  LISTING_V3            = "LISTING_V3",
+  // LISTING_CANCEL        = "LISTING_CANCEL",
+  // LISTING_ACCEPT        = "LISTING_ACCEPT",
   OFFER_ACCEPT          = "OFFER_ACCEPT",
+  MINT                  = "MINT",
   MINT_ISSUER           = "MINT_ISSUER",
   PRICING_FIXED         = "PRICING_FIXED",
   PRICING_DUTCH_AUCTION = "PRICING_DUTCH_AUCTION",
@@ -34,6 +46,10 @@ export enum EBuildableParams {
   BURN_SUPPLY           = "BURN_SUPPLY",
   BURN                  = "BURN",
   RESERVE_WHITELIST     = "RESERVE_WHITELIST",
+  RESERVE_MINT_PASS     = "RESERVE_MINT_PASS",
+  RESERVE_MINT_PASS_INPUT= "RESERVE_MINT_PASS_INPUT",
+  RESERVE_MINT_INPUT    = "RESERVE_MINT_INPUT",
+  MINT_PASS_CONSUME     = "MINT_PASS_CONSUME",
 }
 
 // maps a builadable param type with the actual type in json
@@ -42,8 +58,12 @@ const buildableParamTypes: Record<EBuildableParams, MichelsonV1Expression> = {
   LISTING: listingType,
   LISTING_CANCEL: listingCancelType,
   LISTING_ACCEPT: listingAcceptType,
+  LISTING_V3: listingV3Type,
+  // LISTING_CANCEL: listingCancelType,
+  // LISTING_ACCEPT: listingAcceptType,
   OFFER_ACCEPT: offerAcceptType,
   MINT_ISSUER: mintIssuerType,
+  MINT: mintType,
   PRICING_FIXED: pricingFixedType,
   PRICING_DUTCH_AUCTION: pricingDutchAuctionType,
   UPDATE_ISSUER: updateIssuerType,
@@ -52,6 +72,10 @@ const buildableParamTypes: Record<EBuildableParams, MichelsonV1Expression> = {
   BURN_SUPPLY: burnSupplyType,
   BURN: burnType,
   RESERVE_WHITELIST: reserveWhitelistType,
+  RESERVE_MINT_PASS: reserveMintPassType,
+  RESERVE_MINT_INPUT: reserveMintInputType,
+  RESERVE_MINT_PASS_INPUT: reserveMintPassInputType,
+  MINT_PASS_CONSUME: mintPassConsumeType,
 }
 
 /**

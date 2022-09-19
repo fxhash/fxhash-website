@@ -41,9 +41,13 @@ export function ArticleEditionPreview({
       edited.displayUri = draft.form.thumbnailUri as string
       edited.thumbnailCaption = draft.form.thumbnailCaption
       edited.description = draft.form.abstract
+      // todo [#392] remove if (edited.metadata) and content
+      if (edited.metadata) {
+        edited.metadata.thumbnailCaption = draft.form.thumbnailCaption
+      }
       setEditedArticle(edited)
     }
-  }, [hasLoadUpToDate])
+  }, [article, hasLoadUpToDate, id, state.articles])
 
   return editedArticle ? (
     <>

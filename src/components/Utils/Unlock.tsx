@@ -5,16 +5,13 @@ interface Props {
   locked: boolean
   onClick: () => void
 }
-export function Unlock({
-  locked,
-  onClick,
-}: Props) {
+export function Unlock({ locked, onClick }: Props) {
   return (
     <div className={cs(style.container)}>
       <button onClick={onClick}>
-        <i aria-hidden className="fas fa-unlock"/>
+        <i aria-hidden className="fas fa-unlock" />
       </button>
       <span>unlock</span>
     </div>
-  )  
+  )
 }

@@ -33,7 +33,8 @@ export interface NFTArticleGenerativeToken {
   line: number
 }
 
-export type NFTArticleInfos = Pick<NFTArticle, 'id' | 'title' | 'flag' | 'slug' | 'thumbnailUri' | 'description' | 'tags' | 'author' | 'createdAt'>
+export type NFTArticleInfos = Pick<NFTArticle, 'id' | 'title' | 'flag' | 'slug' | 'thumbnailUri' | 'description' | 'tags' | 'author' | 'createdAt'> & { revisions?: NFTArticleRevision[]}
+
 export interface NFTArticle {
   id: number | string
   slug: string

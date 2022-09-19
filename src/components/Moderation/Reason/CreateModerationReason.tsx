@@ -11,37 +11,28 @@ import { ResonAddOperation } from "../../../services/contract-operations/ReasonA
 import { ContractFeedback } from "../../Feedback/ContractFeedback"
 
 interface Props {
-  moderationContract: "token"|"user"|"article"
+  moderationContract: "token" | "user" | "article"
 }
-export function CreateModerationReason({
-  moderationContract,
-}: Props) {
+export function CreateModerationReason({ moderationContract }: Props) {
   const [reason, setReason] = useState<string>("")
 
-  const {
-    state,
-    success,
-    loading,
-    error,
-    call,
-  } = useContractOperation(ResonAddOperation)
+  const { state, success, loading, error, call } =
+    useContractOperation(ResonAddOperation)
 
   return (
     <Form>
       <Field>
         <label>
           Reason
-          <small>
-            As concise as possible (will be stored on chain)
-          </small>
+          <small>As concise as possible (will be stored on chain)</small>
         </label>
         <InputText
           value={reason}
-          onChange={evt => setReason(evt.target.value)}
+          onChange={(evt) => setReason(evt.target.value)}
           placeholder="Copymint, Hateful, Market manipulation,..."
         />
       </Field>
-      
+
       <Submit>
         <ContractFeedback
           state={state}

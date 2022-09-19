@@ -11,6 +11,7 @@
 .content {
   display: flex;
   flex-direction: row;
+  position: relative;
 }
 
 .link_wrapper {
@@ -20,6 +21,14 @@
   left: 0;
   right: 0;
   z-index: 2;
+}
+
+.editions_owned {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  z-index: 1;
+  font-weight: bold;
 }
 
 .img-wrapper {
@@ -91,7 +100,7 @@
     padding: 8px 12px;
   }
 
-  button {
+  button, a {
     background-color: transparent;
     border: none;
     cursor: pointer;
@@ -115,7 +124,7 @@
     color: var(--color-white);
     background: var(--color-border);
 
-    button:hover {
+    button:hover, a:hover {
       color: var(--color-success);
     }
   }
@@ -153,6 +162,7 @@
     flex-direction: column;
     align-items: flex-start;
   }
+
   .date {
     margin-left: 0;
   }

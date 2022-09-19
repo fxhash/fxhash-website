@@ -13,11 +13,15 @@ export function ThematicBreakEditor({
   children,
 }: PropsWithChildren<Props>) {
   return (
-    <div className={cs(style.root, "hr")} {...attributes} contentEditable={false}>
-      {children && <div className={cs(articleStyle.article_void)}>
-        {children}
-      </div>}
-      <hr/>
+    <div
+      className={cs(style.root, "hr")}
+      {...attributes}
+      contentEditable={false}
+    >
+      {children && (
+        <div className={cs(articleStyle.article_void)}>{children}</div>
+      )}
+      <hr />
     </div>
   )
 }

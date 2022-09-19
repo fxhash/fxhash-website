@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { gql, useQuery } from '@apollo/client'
 import { GenerativeToken, GenerativeTokenFilters, GenTokFlag } from '../types/entities/GenerativeToken'
 import { CardsContainer } from '../components/Card/CardsContainer'
@@ -50,6 +51,7 @@ interface Props {
 }
 
 export const ExploreGenerativeTokens = ({ }: Props) => {
+  const [hasNothingToFetch, setHasNothingToFetch] = useState(false);
   const {
     sortValue, setSortValue, sortVariable, restoreSort, setSearchSortOptions, sortOptions
   } = useSort(sortOptionsGenerativeTokens, "mintOpensAt-desc")
@@ -75,11 +77,7 @@ export const ExploreGenerativeTokens = ({ }: Props) => {
   const topMarkerRef = useRef<HTMLDivElement>(null)
   const settingsCtx = useContext(SettingsContext)
 
-  // use to know when to stop loading
-  const currentLength = useRef<number>(0)
-  const ended = useRef<boolean>(false)
-
-  const { data, loading, fetchMore, refetch } = useQuery(Qu_genTokens, {
+  const { data, loading, fetchMore, refetch } = useQuery<{ generativeTokens: GenerativeToken[] }>(Qu_genTokens, {
     notifyOnNetworkStatusChange: true,
     variables: {
       skip: 0,
@@ -89,31 +87,26 @@ export const ExploreGenerativeTokens = ({ }: Props) => {
     },
     fetchPolicy: "network-only",
     nextFetchPolicy: "cache-and-network",
+    onCompleted: (newData) => {
+      if (!newData?.generativeTokens?.length || newData.generativeTokens.length < ITEMS_PER_PAGE) {
+        setHasNothingToFetch(true);
+      }
+    }
   })
 
-  useEffect(() => {
-    if (!loading) {
-      if (currentLength.current === data.generativeTokens.length) {
-        ended.current = true
-      }
-      else {
-        currentLength.current = data.generativeTokens.length
-      }
+  const generativeTokens = data?.generativeTokens
+  const handleFetchMore = useCallback(async () => {
+    if (loading || hasNothingToFetch) return false;
+    const { data: newData } = await fetchMore({
+      variables: {
+        skip: generativeTokens?.length || 0,
+        take: ITEMS_PER_PAGE,
+      },
+    });
+    if (!newData?.generativeTokens?.length || newData.generativeTokens.length < ITEMS_PER_PAGE) {
+      setHasNothingToFetch(true);
     }
-  }, [data, loading])
-
-  const infiniteScrollFetch = () => {
-    if (!ended.current) {
-      fetchMore({
-        variables: {
-          skip: data.generativeTokens.length,
-          take: ITEMS_PER_PAGE
-        }
-      })
-    }
-  }
-
-  const generativeTokens: GenerativeToken[] = data?.generativeTokens
+  }, [loading, hasNothingToFetch, fetchMore, generativeTokens?.length])
 
   useEffect(() => {
     // first we scroll to the top
@@ -122,8 +115,6 @@ export const ExploreGenerativeTokens = ({ }: Props) => {
       window.scrollTo(0, top)
     }
 
-    currentLength.current = 0
-    ended.current = false
     refetch?.({
       skip: 0,
       take: ITEMS_PER_PAGE,
@@ -178,9 +169,12 @@ export const ExploreGenerativeTokens = ({ }: Props) => {
         }
       >
         {({ refCardsContainer }) =>
-          <InfiniteScrollTrigger onTrigger={infiniteScrollFetch} canTrigger={!!data && !loading}>
+          <InfiniteScrollTrigger
+            onTrigger={handleFetchMore}
+            canTrigger={!hasNothingToFetch && !loading}
+          >
             <CardsContainer ref={refCardsContainer}>
-              {generativeTokens?.length > 0 && generativeTokens.map(token => (
+              {generativeTokens && generativeTokens.length > 0 && generativeTokens.map(token => (
                 <GenerativeTokenCard
                   key={token.id}
                   token={token}

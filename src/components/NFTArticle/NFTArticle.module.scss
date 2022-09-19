@@ -36,6 +36,8 @@
     max-width: 100%;
 
     img, video {
+      width: fit-content;
+      max-height: calc(100vh - 64px);
       max-width: 100%;
       margin: 0 auto;
       display: block;
@@ -61,6 +63,13 @@
     border: 1px solid var(--color-gray-vlight);
     padding: 0 4px;
     border-radius: 4px;
+  }
+
+  ul li {
+    margin-top: 0.5em;
+    &:first-child {
+      margin-top: 0;
+    }
   }
 
   :global(.hr) {

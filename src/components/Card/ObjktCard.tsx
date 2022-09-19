@@ -31,18 +31,25 @@ export function ObjktCard({
 }: Props) {
   const url = getObjktUrl(objkt)
   const settings = useContext(SettingsContext)
-  const previewUri = useHQ && objkt.metadata?.displayUri ? objkt.metadata.displayUri : objkt.metadata.thumbnailUri;
+  const previewUri =
+    useHQ && objkt.metadata?.displayUri
+      ? objkt.metadata.displayUri
+      : objkt.metadata.thumbnailUri
   return (
     <Link href={url} passHref>
-      <AnchorForward style={{ height: '100%' }}>
+      <AnchorForward style={{ height: "100%" }}>
         <Card
-          thumbnailUri={previewUri} 
+          thumbnailUri={previewUri}
           undesirable={objkt.issuer?.flag === GenTokFlag.MALICIOUS}
           displayDetails={settings.displayInfosGentkCard}
         >
           <div>
-            {objkt.duplicate && <div className={cs(styleObjkt.dup_flag)}>[WARNING: DUPLICATE]</div>}
-            <h5>{ objkt.name }</h5>
+            {objkt.duplicate && (
+              <div className={cs(styleObjkt.dup_flag)}>
+                [WARNING: DUPLICATE]
+              </div>
+            )}
+            <h5>{objkt.name}</h5>
             {showOwner && (
               <>
                 <Spacing size="2x-small" />
@@ -53,7 +60,7 @@ export function ObjktCard({
               <>
                 <Spacing size="2x-small" />
                 <div className={cs(styleObjkt.rarity)}>
-                  Rarity: { objkt.rarity.toFixed(3) }
+                  Rarity: {objkt.rarity.toFixed(3)}
                 </div>
               </>
             )}
@@ -74,7 +81,7 @@ export function ObjktCard({
             </div>
             {objkt.issuer && (
               <div className={cs(style.badge)}>
-                <span className={cs(colors['gray-dark'])}>created by</span> 
+                <span className={cs(colors["gray-dark"])}>created by</span>
                 <EntityBadge
                   user={objkt.issuer.author!}
                   size="regular"

@@ -1,5 +1,8 @@
-import { IArticleElementProcessor } from "../../../../types/ArticleEditor/Processor";
-import { ITezosStoragePointer, OptionalTezosStoragePointerKeys } from "../../../../types/TezosStorage";
+import { IArticleElementProcessor } from "../../../../types/ArticleEditor/Processor"
+import {
+  ITezosStoragePointer,
+  OptionalTezosStoragePointerKeys,
+} from "../../../../types/TezosStorage"
 
 export const tezosStorageProcessor: IArticleElementProcessor = {
   transformMdhastToComponent: (node, properties) => {
@@ -13,5 +16,5 @@ export const tezosStorageProcessor: IArticleElementProcessor = {
       }
     }
     return props as any
-  }
+  },
 }

@@ -15,9 +15,12 @@ export function FigcaptionElement({
   const text = element.children[0].text
 
   return (
-    <figcaption {...attributes} className={cs(style.figcaption, {
-      [style.empty]: text === ""
-    })}>
+    <figcaption
+      {...attributes}
+      className={cs(style.figcaption, {
+        [style.empty]: text === "",
+      })}
+    >
       {text === "" && (
         <div className={cs(style.placeholder)} contentEditable={false}>
           Image caption...

@@ -32,6 +32,10 @@
   margin-right: 15px;
 }
 
+.radio .checkmark {
+  border-radius: 50%;
+}
+
 /* On mouse-over, add a grey background color */
 .container:hover input ~ .checkmark {
   border-color: var(--color-secondary);

@@ -1,15 +1,14 @@
-import { gql } from '@apollo/client'
-import Head from 'next/head'
+import { gql } from "@apollo/client"
+import Head from "next/head"
 import { GetServerSideProps, NextPage } from "next"
 import client from "../../../services/ApolloClient"
 import { GenerativeTokenWithCollection } from "../../../types/entities/GenerativeToken"
-import { ipfsGatewayUrl } from '../../../services/Ipfs'
-import ClientOnly from '../../../components/Utils/ClientOnly'
-import { GenerativeEnjoy } from '../../../containers/Generative/Enjoy/GenerativeEnjoy'
-import { useMemo } from 'react'
-import { shuffleArray } from '../../../utils/array'
-import { getGenerativeTokenUrl } from '../../../utils/generative-token'
-
+import { ipfsGatewayUrl } from "../../../services/Ipfs"
+import ClientOnly from "../../../components/Utils/ClientOnly"
+import { GenerativeEnjoy } from "../../../containers/Generative/Enjoy/GenerativeEnjoy"
+import { useMemo } from "react"
+import { shuffleArray } from "../../../utils/array"
+import { getGenerativeTokenUrl } from "../../../utils/generative-token"
 
 interface Props {
   token: GenerativeTokenWithCollection
@@ -17,8 +16,8 @@ interface Props {
 
 const GenerativeTokenEnjoy: NextPage<Props> = ({ token }) => {
   // get the display url for og:image
-  const displayUrl = token.metadata?.displayUri 
-    && ipfsGatewayUrl(token.metadata?.displayUri)
+  const displayUrl =
+    token.metadata?.displayUri && ipfsGatewayUrl(token.metadata?.displayUri)
 
   // inject the author within the issuer of the token
   for (const gentk of token.entireCollection) {
@@ -30,24 +29,49 @@ const GenerativeTokenEnjoy: NextPage<Props> = ({ token }) => {
       generativeUri: token.generativeUri,
     }
   }
-  
+
   // randomize the order of the collection
-  const rndCollection = useMemo(() => shuffleArray(token.entireCollection), [token])
+  const rndCollection = useMemo(
+    () => shuffleArray(token.entireCollection),
+    [token]
+  )
 
   return (
     <>
       <Head>
         <title>fxhash — collection of {token.name}</title>
-        <meta key="og:title" property="og:title" content={`${token.name} — enjoy`}/> 
-        <meta key="description" name="description" content={`Sit back and enjoy the collection ${token.name}, created by ${token.author.name}`}/>
-        <meta key="og:description" property="og:description" content={`Sit back and enjoy the collection ${token.name}, created by ${token.author.name}`}/>
-        <meta key="og:type" property="og:type" content="website"/>
-        <meta key="og:image" property="og:image" content={displayUrl || "https://www.fxhash.xyz/images/og/og1.jpg"}/>
-        <meta name="twitter:site" content="@fx_hash_"/>
-        <meta name="twitter:card" content="summary_large_image"/>
-        <meta name="twitter:title" content={`${token.name} — enjoy`}/>
-        <meta name="twitter:description" content={`Sit back and enjoy the collection ${token.name}, created by ${token.author.name}`}/>
-        <meta name="twitter:image" content={displayUrl || "https://www.fxhash.xyz/images/og/og1.jpg"}/>
+        <meta
+          key="og:title"
+          property="og:title"
+          content={`${token.name} — enjoy`}
+        />
+        <meta
+          key="description"
+          name="description"
+          content={`Sit back and enjoy the collection ${token.name}, created by ${token.author.name}`}
+        />
+        <meta
+          key="og:description"
+          property="og:description"
+          content={`Sit back and enjoy the collection ${token.name}, created by ${token.author.name}`}
+        />
+        <meta key="og:type" property="og:type" content="website" />
+        <meta
+          key="og:image"
+          property="og:image"
+          content={displayUrl || "https://www.fxhash.xyz/images/og/og1.jpg"}
+        />
+        <meta name="twitter:site" content="@fx_hash_" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={`${token.name} — enjoy`} />
+        <meta
+          name="twitter:description"
+          content={`Sit back and enjoy the collection ${token.name}, created by ${token.author.name}`}
+        />
+        <meta
+          name="twitter:image"
+          content={displayUrl || "https://www.fxhash.xyz/images/og/og1.jpg"}
+        />
       </Head>
 
       <ClientOnly>
@@ -98,7 +122,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
           }
         `,
         fetchPolicy: "no-cache",
-        variables: { id }
+        variables: { id },
       })
       if (data) {
         token = data.generativeToken
@@ -110,7 +134,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     props: {
       token: token,
     },
-    notFound: !token
+    notFound: !token,
   }
 }
 
