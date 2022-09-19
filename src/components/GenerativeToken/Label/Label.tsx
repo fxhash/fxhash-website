@@ -5,9 +5,7 @@ import { GenTokLabelDefinition } from "../../../types/entities/GenerativeToken"
 interface Props {
   definition: GenTokLabelDefinition
 }
-export function Label({
-  definition,
-}: Props) {
+export function Label({ definition }: Props) {
   return (
     <div className={cs(style.root, style[`group_${definition.group}`])}>
       {definition.shortLabel}

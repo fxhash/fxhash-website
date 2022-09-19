@@ -14,7 +14,7 @@ export function HashList({
   className,
   onChange,
   onHashClick,
-  activeHash
+  activeHash,
 }: Props) {
   const removeHash = (idx: number) => {
     const cleaned = [...hashes]
@@ -27,19 +27,17 @@ export function HashList({
         <div
           key={idx}
           title="Load hash on the right"
-          className={cs(style.hash, effects['drop-shadow-small'], {
-            [style.active]: hash === activeHash
+          className={cs(style.hash, effects["drop-shadow-small"], {
+            [style.active]: hash === activeHash,
           })}
         >
-          <span
-            onClick={() => onHashClick?.(hash)}
-          >{hash}</span>
+          <span onClick={() => onHashClick?.(hash)}>{hash}</span>
           <button
             type="button"
             className={cs(style.close_btn)}
             onClick={() => removeHash(idx)}
           >
-            <i aria-hidden className="fas fa-times"/>
+            <i aria-hidden className="fas fa-times" />
           </button>
         </div>
       ))}

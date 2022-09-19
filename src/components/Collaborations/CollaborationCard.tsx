@@ -12,37 +12,30 @@ interface Props {
   user: User
   collaboration: Collaboration
 }
-export function CollaborationCard({
-  user,
-  collaboration,
-}: Props) {
+export function CollaborationCard({ user, collaboration }: Props) {
   // we put the artist viewving as first of the list
   const sortedCollaborators = useMemo<User[]>(() => {
-    return [...collaboration.collaborators].sort(
-      (a, b) => a.id === user.id ? -1 : 1
+    return [...collaboration.collaborators].sort((a, b) =>
+      a.id === user.id ? -1 : 1
     )
-  }, [collaboration.collaborators])
+  }, [user.id, collaboration.collaborators])
 
   const genToks = collaboration.generativeTokens
 
   return (
     <div className={cs(style.root)}>
       <div className={cs(style.users)}>
-        {sortedCollaborators.map(user => (
-          <UserBadge
-            key={user.id}
-            user={user}
-            size="small"
-          />
+        {sortedCollaborators.map((user) => (
+          <UserBadge key={user.id} user={user} size="small" />
         ))}
       </div>
-      <Spacing size="regular"/>
+      <Spacing size="regular" />
       <div className={cs(style.line)}>
         <strong>Address:</strong>
         <Link href={`https://tzkt.io/${collaboration.id}`}>
           <a className={cs(style.address)} target="_blank">
             <span>{collaboration.id}</span>
-            <i aria-hidden className="fas fa-external-link-square"/>
+            <i aria-hidden className="fas fa-external-link-square" />
           </a>
         </Link>
       </div>
@@ -55,10 +48,8 @@ export function CollaborationCard({
       <div className={cs(style.line)}>
         <strong>Projects:</strong>
         {genToks && genToks.length > 0 ? (
-          <span>
-            {genToks.map(g => g.name).join(", ")}
-          </span>
-        ):(
+          <span>{genToks.map((g) => g.name).join(", ")}</span>
+        ) : (
           "/"
         )}
       </div>

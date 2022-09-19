@@ -7,9 +7,7 @@ import { Label } from "./Label"
 interface Props {
   labels: number[]
 }
-export function Labels({
-  labels,
-}: Props) {
+export function Labels({ labels }: Props) {
   const defs = useMemo(() => {
     return getGenTokLabelDefinitions(labels)
   }, [labels])
@@ -17,11 +15,8 @@ export function Labels({
   return defs.length > 0 ? (
     <div className={cs(style.root)}>
       {defs.map((def, idx) => (
-        <Label
-          key={idx}
-          definition={def}
-        />
+        <Label key={idx} definition={def} />
       ))}
     </div>
-  ):null
+  ) : null
 }

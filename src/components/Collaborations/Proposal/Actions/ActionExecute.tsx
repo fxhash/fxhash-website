@@ -14,10 +14,7 @@ interface Props {
   proposal: CollaborationProposal
   collaboration: Collaboration
 }
-export function ProposalActionExecute({
-  proposal,
-  collaboration,
-}: Props) {
+export function ProposalActionExecute({ proposal, collaboration }: Props) {
   const { call, state, success, error, loading } = useContractOperation(
     CollabExecuteProposalOperation
   )
@@ -37,22 +34,25 @@ export function ProposalActionExecute({
         <span className={cs(text.info)}>
           {canBeExecuted ? (
             <span className={cs(text.success)}>
-              Since all the collaborators have approved the operation, any collaborator can execute it in the name of the group.
+              Since all the collaborators have approved the operation, any
+              collaborator can execute it in the name of the group.
             </span>
-          ):(
+          ) : (
             "When all the collaborators have approved the operation, it can be executed by any collaborator in the name of the whole group."
           )}
         </span>
         <Button
           color="secondary"
           size="small"
-          iconComp={<i aria-hidden className="fa-solid fa-sparkles"/>}
+          iconComp={<i aria-hidden className="fa-solid fa-sparkles" />}
           disabled={!canBeExecuted}
           state={loading ? "loading" : "default"}
-          onClick={() => call({ 
-            proposal,
-            collaboration,
-          })}
+          onClick={() =>
+            call({
+              proposal,
+              collaboration,
+            })
+          }
         >
           execute operation
         </Button>

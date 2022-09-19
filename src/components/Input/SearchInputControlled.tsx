@@ -6,9 +6,9 @@ interface Props {
   onSearch: (query: string) => void
   placeholder?: string
   initialValue?: string
-  className?: string,
-  minimizeOnMobile?: boolean,
-  onMinimize?: (value: boolean) => void,
+  className?: string
+  minimizeOnMobile?: boolean
+  onMinimize?: (value: boolean) => void
 }
 
 /**

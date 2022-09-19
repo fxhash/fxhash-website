@@ -4,7 +4,7 @@ import { Offer } from "../../types/entities/Offer"
 import { Fragment, useContext } from "react"
 import { UserBadge } from "../User/UserBadge"
 import { DisplayTezos } from "../Display/DisplayTezos"
-import { DateDistance } from "../Activity/Action"
+import { DateDistance } from "../Utils/Date/DateDistance"
 import { UserContext } from "../../containers/UserProvider"
 import { Objkt } from "../../types/entities/Objkt"
 import { Button } from "../Button"
@@ -22,7 +22,7 @@ interface Props {
   className?: string
   showObjkt?: boolean
   loading?: boolean
-  floor: number|null
+  floor: number | null
 }
 export function ListOffers({
   objkt,
@@ -39,7 +39,7 @@ export function ListOffers({
     loading: cancelLoading,
     error: cancelError,
     success: cancelSuccess,
-    call: cancelCall ,
+    call: cancelCall,
     params: cancelParams,
   } = useContractOperation(OfferCancelOperation)
 
@@ -55,7 +55,7 @@ export function ListOffers({
     loading: acceptLoading,
     error: acceptError,
     success: acceptSuccess,
-    call: acceptCall ,
+    call: acceptCall,
     params: acceptParams,
   } = useContractOperation(OfferAcceptOperation)
 
@@ -63,13 +63,13 @@ export function ListOffers({
     acceptCall({
       offer: offer,
       token: objkt || offer.objkt,
-      price: offer.price
+      price: offer.price,
     })
   }
 
   return (
     <div className={cs(style.root, className)}>
-      {offers?.map(offer => (
+      {offers?.map((offer) => (
         <Fragment key={`${offer.id}-${offer.version}`}>
           {cancelParams?.offer.id === offer.id && (
             <div className={cs(style.contract_feedback)}>
@@ -95,34 +95,25 @@ export function ListOffers({
               />
             </div>
           )}
-          <div className={cs(style.offer, {
-            [style.small_padding]: !!showObjkt
-          })}>
+          <div
+            className={cs(style.offer, {
+              [style.small_padding]: !!showObjkt,
+            })}
+          >
             {showObjkt && (
               <div className={cs(style.objkt)}>
-                <ObjktImageAndName
-                  objkt={offer.objkt}
-                  size={50}
-                  shortName
-                />
+                <ObjktImageAndName objkt={offer.objkt} size={50} shortName />
               </div>
             )}
             <div className={cs(style.user_badge_wrapper)}>
-              <UserBadge
-                user={offer.buyer}
-                size="small"
-              />
+              <UserBadge user={offer.buyer} size="small" />
             </div>
             <DisplayTezos
               mutez={offer.price}
               formatBig={false}
               className={cs(style.price)}
             />
-            <FloorDifference
-              price={offer.price}
-              floor={floor}
-              append="floor"
-            />
+            <FloorDifference price={offer.price} floor={floor} append="floor" />
             <div className={cs(style.call_btn)}>
               {offer.buyer.id === user?.id ? (
                 <Button
@@ -130,33 +121,38 @@ export function ListOffers({
                   color="primary"
                   size="very-small"
                   onClick={() => cancelOffer(offer)}
-                  state={cancelLoading && cancelParams?.offer.id === offer.id ? "loading" : "default"}
+                  state={
+                    cancelLoading && cancelParams?.offer.id === offer.id
+                      ? "loading"
+                      : "default"
+                  }
                 >
                   cancel
                 </Button>
-              ):(objkt?.owner?.id || offer.objkt?.owner?.id) === user?.id ? (
+              ) : (objkt?.owner?.id || offer.objkt?.owner?.id) === user?.id ? (
                 <Button
                   type="button"
                   color="secondary"
                   size="very-small"
                   onClick={() => acceptOffer(offer)}
-                  state={acceptLoading && acceptParams?.offer.id === offer.id ? "loading" : "default"}
+                  state={
+                    acceptLoading && acceptParams?.offer.id === offer.id
+                      ? "loading"
+                      : "default"
+                  }
                 >
                   accept
                 </Button>
-              ):null}
+              ) : null}
             </div>
             <div className={cs(style.date)}>
-              <DateDistance
-                timestamptz={offer.createdAt}
-              />
+              <DateDistance timestamptz={offer.createdAt} />
             </div>
           </div>
         </Fragment>
       ))}
-      {loading && [...Array(10)].map((_, idx) => (
-        <Skeleton height="60px"/>
-      ))}
+      {loading &&
+        [...Array(10)].map((_, idx) => <Skeleton key={idx} height="60px" />)}
       {!loading && offers?.length === 0 && (
         <span>There are no offers on any iteration of this collection.</span>
       )}

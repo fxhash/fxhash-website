@@ -7,10 +7,7 @@ interface Props {
   messages: IMessage[]
   removeMessage: (id: string) => void
 }
-export function MessageCenterContainer({
-  messages,
-  removeMessage,
-}: Props) {
+export function MessageCenterContainer({ messages, removeMessage }: Props) {
   return (
     <div className={cs(style.root)}>
       {messages.map((message) => (
@@ -21,5 +18,5 @@ export function MessageCenterContainer({
         />
       ))}
     </div>
-  ) 
+  )
 }

@@ -75,7 +75,6 @@ export function useContractOperation<Params>(
 
       // even if not mounted anymore we push the messages to message center
       if (status === ContractOperationStatus.INJECTED) {
-        console.log("op injected !")
         messageCenter.addMessages([
           {
             type: "warning",
@@ -92,7 +91,7 @@ export function useContractOperation<Params>(
       else if (status === ContractOperationStatus.ERROR) {
         messageCenter.addMessage({
           type: "error",
-          title: "Error when calling contract",
+          title: "An error occured",
           content: data,
         })
       }

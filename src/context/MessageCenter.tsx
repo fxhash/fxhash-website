@@ -4,7 +4,7 @@ import { MessageCenterContainer } from "../components/MessageCenter/MessageCente
 
 type TMessageType = "success" | "warning" | "error"
 
-interface IMessageSent {
+export interface IMessageSent {
   type: TMessageType
   title: string
   content?: string|null
@@ -16,17 +16,23 @@ export interface IMessage extends IMessageSent {
 }
 
 interface IMessageCenterContext {
+  ready: boolean
   messages: IMessage[]
   removeMessage: (id: string) => void
   addMessage: (message: IMessageSent) => void
   addMessages: (message: IMessageSent[]) => void
+  ignoreWarnings: boolean
+  setIgnoreWarnings: (state: boolean) => void
 }
 
 const defaultProperties: IMessageCenterContext = {
+  ready: false,
   messages: [],
   removeMessage: () => {},
   addMessage: () => {},
   addMessages: () => {},
+  ignoreWarnings: false,
+  setIgnoreWarnings: () => {},
 }
 
 const defaultCtx: IMessageCenterContext = {
@@ -39,29 +45,35 @@ export function MessageCenterProvider({ children }: PropsWithChildren<{}>) {
   const [context, setContext] = useState<IMessageCenterContext>(defaultCtx)
   
   // memoize to prevent rerendering JIC
-  const withAddMessage = useMemo<IMessageCenterContext>(() => {
+  const memoizedContext = useMemo<IMessageCenterContext>(() => {
     // adds a message to the list of messages to display
     const addMessage = (message: IMessageSent) => {
-      const toAdd: IMessage = {
-        ...message,
-        id: ""+Math.random(),
-        createdAt: performance.now(),
+      if (!(context.ignoreWarnings && message.type === "warning")) {
+        const toAdd: IMessage = {
+          ...message,
+          id: ""+Math.random(),
+          createdAt: performance.now(),
+        }
+        setContext({
+          ...context,
+          messages: [
+            ...context.messages,
+            toAdd,
+          ]
+        })
       }
-      setContext({
-        ...context,
-        messages: [
-          ...context.messages,
-          toAdd,
-        ]
-      })
     }
 
     const addMessages = (messages: IMessageSent[]) => {
-      const toAdd: IMessage[] = messages.map(message => ({
-        ...message,
-        id: ""+Math.random(),
-        createdAt: performance.now(),
-      }))
+      const toAdd: IMessage[] = messages
+        .filter(
+          message => context.ignoreWarnings ? message.type !== "warning" : true
+        )
+        .map(message => ({
+          ...message,
+          id: ""+Math.random(),
+          createdAt: performance.now(),
+        }))
       setContext({
         ...context,
         messages: [
@@ -79,20 +91,29 @@ export function MessageCenterProvider({ children }: PropsWithChildren<{}>) {
       })
     }
 
+    const setIgnoreWarnings = (state: boolean) => {
+      setContext({
+        ...context,
+        ignoreWarnings: state,
+      })
+    }
+
     return {
       ...context,
+      ready: true, // once methods are defined it's ready to be consumed
       removeMessage,
       addMessage,
       addMessages,
+      setIgnoreWarnings,
     }
   }, [context])
 
   return (
-    <MessageCenterContext.Provider value={withAddMessage}>
+    <MessageCenterContext.Provider value={memoizedContext}>
       {children}
       <MessageCenterContainer
-        messages={context.messages}
-        removeMessage={context.removeMessage}
+        messages={memoizedContext.messages}
+        removeMessage={memoizedContext.removeMessage}
       />
     </MessageCenterContext.Provider>
   )

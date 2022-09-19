@@ -1,12 +1,10 @@
 import { ContractAbstraction, MichelsonMap, TransactionWalletOperation, Wallet } from "@taquito/taquito"
-import { FxhashContracts } from "../../types/Contracts"
-import { ISplit } from "../../types/entities/Split"
-import { stringToByteString } from "../../utils/convert"
 import { ContractOperation } from "./ContractOperation"
+import { mapModKtKeyToContract } from "./Moderate"
 
 export type TResonAddParams = {
   reason: string
-  contract: "user"|"token"
+  contract: "user"|"token"|"article"
 }
 
 /**
@@ -17,9 +15,7 @@ export class ResonAddOperation extends ContractOperation<TResonAddParams> {
 
   async prepare() {
     this.contract = await this.manager.getContract(
-      this.params.contract === "token"
-        ? FxhashContracts.MODERATION
-        : FxhashContracts.USER_MODERATION
+      mapModKtKeyToContract[this.params.contract]
     )
   }
 

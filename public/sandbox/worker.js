@@ -16,9 +16,13 @@ self.addEventListener("fetch", async (event) => {
         // find the path of the resource requested
         const path = event.request.url.replace(referrers[id].root, "")
         // only fetch if there is a match in the cache
-        return cache[id][path]
-          ? fetch(cache[id][path].url)
-          : null
+        if (!cache[id][path]) return null;
+        
+        // Let the service worker decide on secure response
+        // headers, but set its body to the file blob.
+
+        const record = await fetch(cache[id][path].url);
+        return new Response(await record.body);
       }())
     }
   }
