@@ -9,12 +9,9 @@ let ReactJson: any
 
 interface IProps {
   json: object
-  collapsed?: boolean|number
+  collapsed?: boolean | number
 }
-export function JsonViewer({ 
-  json,
-  collapsed = false,
-}: IProps) {
+export function JsonViewer({ json, collapsed = false }: IProps) {
   const [ReactJson, setReactJson] = useState<any>(null)
   const settings = useContext(SettingsContext)
 
@@ -22,16 +19,14 @@ export function JsonViewer({
     setReactJson(dynamic(() => import("react-json-view")))
   }, [])
 
-  return (
-    ReactJson ? (
-      <div className={cs(style.root)}>
-        <ReactJson
-          src={json}
-          theme="threezerotwofour"
-          collapsed={collapsed}
-          name={null}
-        />
-      </div>
-    ): null
-  )
+  return ReactJson ? (
+    <div className={cs(style.root)}>
+      <ReactJson
+        src={json}
+        theme="threezerotwofour"
+        collapsed={collapsed}
+        name={null}
+      />
+    </div>
+  ) : null
 }

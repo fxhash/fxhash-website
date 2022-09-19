@@ -17,9 +17,9 @@ export function BlockParamsModal({
   useClickOutside(rootRef, onClose, false)
 
   return (
-    <div 
+    <div
       ref={rootRef}
-      className={cs(style.root, effects['drop-shadow-small'], className)}
+      className={cs(style.root, effects["drop-shadow-small"], className)}
       contentEditable={false}
     >
       {children}

@@ -54,6 +54,7 @@ export interface User {
   sales: Action[]
   actionsAsIssuer: Action[]
   actionsAsTarget: Action[]
+  listings: Listing[]
   objkts: Objkt[]
   offers: Listing[]
   offersReceived: Offer[]

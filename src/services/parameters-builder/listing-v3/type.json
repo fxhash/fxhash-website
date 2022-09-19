@@ -1,0 +1,92 @@
+{
+  "prim": "pair",
+  "args": [
+    {
+      "prim": "nat",
+      "annots": [
+        "%amount"
+      ]
+    },
+    {
+      "prim": "pair",
+      "args": [
+        {
+          "prim": "pair",
+          "args": [
+            {
+              "prim": "nat",
+              "annots": [
+                "%contract_id"
+              ]
+            },
+            {
+              "prim": "pair",
+              "args": [
+                {
+                  "prim": "nat",
+                  "annots": [
+                    "%asset_id"
+                  ]
+                },
+                {
+                  "prim": "nat",
+                  "annots": [
+                    "%amount"
+                  ]
+                }
+              ]
+            }
+          ],
+          "annots": [
+            "%asset"
+          ]
+        },
+        {
+          "prim": "or",
+          "args": [
+            {
+              "prim": "address",
+              "annots": [
+                "%fa12"
+              ]
+            },
+            {
+              "prim": "or",
+              "args": [
+                {
+                  "prim": "pair",
+                  "args": [
+                    {
+                      "prim": "address",
+                      "annots": [
+                        "%address"
+                      ]
+                    },
+                    {
+                      "prim": "nat",
+                      "annots": [
+                        "%token_id"
+                      ]
+                    }
+                  ],
+                  "annots": [
+                    "%fa2"
+                  ]
+                },
+                {
+                  "prim": "unit",
+                  "annots": [
+                    "%tez"
+                  ]
+                }
+              ]
+            }
+          ],
+          "annots": [
+            "%currency"
+          ]
+        }
+      ]
+    }
+  ]
+}

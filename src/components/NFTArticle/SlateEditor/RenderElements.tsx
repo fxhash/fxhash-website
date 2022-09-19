@@ -7,7 +7,10 @@ import { getArticleBlockDefinition } from "./Blocks"
 import { Path, Transforms, Node, } from "slate"
 import { BlockExtraMenu } from "./UI/BlockExtraMenu"
 import { BlockMenu } from "./UI/BlockMenu"
-import { TEditNodeFn, TEditNodeFnFactory } from "../../../types/ArticleEditor/Transforms"
+import {
+  TEditNodeFn,
+  TEditNodeFnFactory,
+} from "../../../types/ArticleEditor/Transforms"
 import { withStopPropagation } from "../../../utils/events"
 import { TAttributesEditorWrapper } from "../../../types/ArticleEditor/BlockDefinition";
 
@@ -16,12 +19,12 @@ interface IEditableElementWrapperProps {
 }
 
 // default function to create an edit node function
-const defaultEditNodeFactory: TEditNodeFnFactory = (editor, element, path) =>
-(update) => {
-  Transforms.setNodes(editor, update, {
-    at: path
-  })
-}
+const defaultEditNodeFactory: TEditNodeFnFactory =
+  (editor, element, path) => (update) => {
+    Transforms.setNodes(editor, update, {
+      at: path,
+    })
+  }
 
 /**
  * A generic wrapper which adds some utility components on top of the
@@ -56,7 +59,7 @@ function EditableElementWrapper({
   const addBlock = (element: any) => {
     const target = Path.next(path)
     Transforms.insertNodes(editor, element, {
-      at: target
+      at: target,
     })
     setShowAddBlock(false)
     // focus the block except if the definition says otherwise
@@ -67,7 +70,7 @@ function EditableElementWrapper({
       setTimeout(() => {
         ReactEditor.focus(editor)
         const path = ReactEditor.findPath(editor, element)
-        const [, lastLeafPath] = Node.last(editor, path);
+        const [, lastLeafPath] = Node.last(editor, path)
         Transforms.select(editor, lastLeafPath)
       })
     }
@@ -147,7 +150,7 @@ function EditableElementWrapper({
 
   const deleteNode = () => {
     Transforms.removeNodes(editor, {
-      at: path
+      at: path,
     })
   }
 
@@ -192,35 +195,29 @@ function EditableElementWrapper({
           <button
             type="button"
             contentEditable={false}
-            onClick={withStopPropagation(
-              () => setShowSettings(true)
-            )}
+            onClick={withStopPropagation(() => setShowSettings(true))}
             tabIndex={-1}
           >
-            <i className="fa-solid fa-gear" aria-hidden/>
+            <i className="fa-solid fa-gear" aria-hidden />
           </button>
-        ):(
-          <div/>
+        ) : (
+          <div />
         )}
 	<button
 	  className={style.add_button}
           type="button"
           contentEditable={false}
-          onClick={withStopPropagation(
-            () => setShowAddBlock(true)
-          )}
+          onClick={withStopPropagation(() => setShowAddBlock(true))}
         >
-          <i className="fa-solid fa-plus" aria-hidden/>
+          <i className="fa-solid fa-plus" aria-hidden />
         </button>
         <button
           type="button"
           contentEditable={false}
-          onClick={withStopPropagation(
-            () => setShowExtraMenu(true)
-          )}
+          onClick={withStopPropagation(() => setShowExtraMenu(true))}
           tabIndex={-1}
         >
-          <i className="fa-solid fa-ellipsis" aria-hidden/>
+          <i className="fa-solid fa-ellipsis" aria-hidden />
         </button>
 	<button
 	  onPointerDown={handleStartDragging}
@@ -250,27 +247,18 @@ function EditableElementWrapper({
       </div>
       {showAddBlock && (
         <>
-          <div
-            className={cs(style.add_block_wrapper)}
-            contentEditable={false}
-          >
+          <div className={cs(style.add_block_wrapper)} contentEditable={false}>
             <AddBlock
               onClose={() => setShowAddBlock(false)}
               onAddBlock={addBlock}
               className={cs(style.add_block)}
             />
           </div>
-          <div
-            contentEditable={false}
-            className={cs(style.sep)}
-          />
+          <div contentEditable={false} className={cs(style.sep)} />
         </>
       )}
       {showExtraMenu && (
-        <div
-          className={cs(style.add_block_wrapper)}
-          contentEditable={false}
-        >
+        <div className={cs(style.add_block_wrapper)} contentEditable={false}>
           <BlockExtraMenu
             onClose={() => setShowExtraMenu(false)}
             onDeleteNode={deleteNode}
@@ -279,22 +267,20 @@ function EditableElementWrapper({
         </div>
       )}
       {definition.editAttributeComp && showSettings && (
-        <div
-          className={cs(style.add_block_wrapper)}
-          contentEditable={false}
-        >
+        <div className={cs(style.add_block_wrapper)} contentEditable={false}>
           <ParametersWrapper
             onClose={() => setShowSettings(false)}
             className={cs(style.add_block)}
           >
             <definition.editAttributeComp
               element={element}
-              onEdit={!definition.hideSettingsAfterUpdate
-                ? editNode
-                : (update) => {
-                  editNode(update)
-                  setShowSettings(false)
-                }
+              onEdit={
+                !definition.hideSettingsAfterUpdate
+                  ? editNode
+                  : (update) => {
+                      editNode(update)
+                      setShowSettings(false)
+                    }
               }
             />
           </ParametersWrapper>
@@ -313,9 +299,11 @@ export function RenderElements(props: RenderElementProps) {
     () => getArticleBlockDefinition(props.element.type),
     [props.element.type]
   )
-  return definition.hasUtilityWrapper ?
+  return definition.hasUtilityWrapper ? (
     <EditableElementWrapper element={props.element}>
       {definition.render(props)}
     </EditableElementWrapper>
-    : <>{definition.render(props)}</>
+  ) : (
+    <>{definition.render(props)}</>
+  )
 }

@@ -21,18 +21,16 @@ import { gentkLiveUrl } from "../../../../utils/objkt"
 interface Props {
   id: number
 }
-export const TezosStorageGentk: TezosStorageRenderer<Props> = ({
-  id,
-}) => {
+export const TezosStorageGentk: TezosStorageRenderer<Props> = ({ id }) => {
   const [running, setRunning] = useState<boolean>(false)
 
   const { data } = useQuery(Qu_objkt, {
     variables: {
-      id: id
-    }
+      id: id,
+    },
   })
 
-  const token = useMemo<Objkt|null>(() => {
+  const token = useMemo<Objkt | null>(() => {
     return data?.objkt || null
   }, [data])
 
@@ -44,7 +42,7 @@ export const TezosStorageGentk: TezosStorageRenderer<Props> = ({
   }
 
   return (
-    <div>
+    <div className={style.container}>
       {token && (
         <div className={cs(style.header)}>
           <Link href={getGentkUrl(token)}>
@@ -70,22 +68,16 @@ export const TezosStorageGentk: TezosStorageRenderer<Props> = ({
                 url={gentkLiveUrl(token)}
                 hasLoading={false}
               />
-            ):(
-              <ImageIpfs
-                src={token.metadata!.displayUri}
-              />
+            ) : (
+              <ImageIpfs src={token.metadata!.displayUri} />
             )
-          ):(
-            <LoaderBlock
-              size="small"
-              height="100%"
-            >
+          ) : (
+            <LoaderBlock size="small" height="100%">
               loading token
             </LoaderBlock>
           )}
         </ArtworkFrame>
       </SquareContainer>
-      
       {token && (
         <div className={cs(layout.buttons_inline, layout.grid_center)}>
           {!running ? (
@@ -93,19 +85,19 @@ export const TezosStorageGentk: TezosStorageRenderer<Props> = ({
               type="button"
               size="small"
               color="transparent"
-              iconComp={<i aria-hidden className="fas fa-play"/>}
+              iconComp={<i aria-hidden className="fas fa-play" />}
               iconSide="right"
               onClick={() => setRunning(true)}
             >
               run
             </Button>
-          ):(
+          ) : (
             <>
               <Button
                 type="button"
                 size="small"
                 color="transparent"
-                iconComp={<i aria-hidden className="fas fa-stop"/>}
+                iconComp={<i aria-hidden className="fas fa-stop" />}
                 iconSide="right"
                 onClick={() => setRunning(false)}
               >
@@ -114,7 +106,7 @@ export const TezosStorageGentk: TezosStorageRenderer<Props> = ({
               <Button
                 type="button"
                 size="small"
-                iconComp={<i aria-hidden className="fas fa-redo"/>}
+                iconComp={<i aria-hidden className="fas fa-redo" />}
                 iconSide="right"
                 onClick={reload}
                 color="transparent"
@@ -128,7 +120,7 @@ export const TezosStorageGentk: TezosStorageRenderer<Props> = ({
               isLink={true}
               size="small"
               iconComp={
-                <i aria-hidden className="fas fa-external-link-square"/>
+                <i aria-hidden className="fas fa-external-link-square" />
               }
               // @ts-ignore
               target="_blank"
@@ -147,10 +139,9 @@ export const TezosStorageGentk: TezosStorageRenderer<Props> = ({
 TezosStorageGentk.matches = (pointer) => {
   // get contract address, removing network indentifier if any
   const contract = pointer.contract.split(".")[0]
-  if (![
-    FxhashContracts.GENTK_V1, 
-    FxhashContracts.GENTK_V2,
-  ].includes(contract)) {
+  if (
+    ![FxhashContracts.GENTK_V1, FxhashContracts.GENTK_V2].includes(contract)
+  ) {
     return false
   }
   const split = pointer.path.split("::")
@@ -165,6 +156,6 @@ TezosStorageGentk.matches = (pointer) => {
 
 TezosStorageGentk.getPropsFromPointer = (pointer) => {
   return {
-    id: parseInt(pointer.path.split("::")[1])
+    id: parseInt(pointer.path.split("::")[1]),
   }
 }

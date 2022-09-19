@@ -17,18 +17,16 @@ import { GenerativeArtwork } from "../../../GenerativeToken/GenerativeArtwork"
 interface Props {
   id: number
 }
-export const TezosStorageProject: TezosStorageRenderer<Props> = ({
-  id,
-}) => {
+export const TezosStorageProject: TezosStorageRenderer<Props> = ({ id }) => {
   const [running, setRunning] = useState<boolean>(false)
 
   const { data } = useQuery(Qu_genToken, {
     variables: {
-      id: id
-    }
+      id: id,
+    },
   })
 
-  const token = useMemo<GenerativeToken|null>(() => {
+  const token = useMemo<GenerativeToken | null>(() => {
     return data?.generativeToken || null
   }, [data])
 
@@ -57,7 +55,7 @@ export const TezosStorageProject: TezosStorageRenderer<Props> = ({
           />
         </div>
       )}
-      
+
       {token && (
         <GenerativeArtwork
           token={token}
@@ -88,6 +86,6 @@ TezosStorageProject.matches = (pointer) => {
 
 TezosStorageProject.getPropsFromPointer = (pointer) => {
   return {
-    id: parseInt(pointer.path.split("::")[1])
+    id: parseInt(pointer.path.split("::")[1]),
   }
 }

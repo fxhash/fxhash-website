@@ -59,20 +59,18 @@ interface Props {
 }
 
 export const MarketplaceCollections = ({}: Props) => {
+  const [hasNothingToFetch, setHasNothingToFetch] = useState(false);
   const [sortValue, setSortValue] = useState<string>("mintOpensAt-desc")
   const [sortOptions, setSortOptions] = useState<IOptions[]>(sortOptionsCollections)
   const [filters, setFilters] = useState<GenerativeTokenFilters>({})
 
-  // use to know when to stop loading
-  const currentLength = useRef<number>(0)
-  const ended = useRef<boolean>(false)
   const sortBeforeSearch = useRef<string>(sortValue)
 
   const sort = useMemo<Record<string, any>>(() => sortValueToSortVariable(
     sortValue
   ), [sortValue])
 
-  const { data, loading, fetchMore } = useQuery(Qu_genTokens, {
+  const { data, loading, fetchMore } = useQuery<{ generativeTokens: GenerativeToken[] }>(Qu_genTokens, {
     notifyOnNetworkStatusChange: true,
     variables: {
       skip: 0,
@@ -82,18 +80,12 @@ export const MarketplaceCollections = ({}: Props) => {
     },
     fetchPolicy: "network-only",
     nextFetchPolicy: "cache-and-network",
-  })
-
-  const infiniteScrollFetch = useCallback(() => {
-    if (!ended.current) {
-      fetchMore({
-        variables: {
-          skip: data.generativeTokens.length,
-          take: ITEMS_PER_PAGE
-        }
-      })
+    onCompleted: (newData) => {
+      if (!newData?.generativeTokens?.length || newData.generativeTokens.length < ITEMS_PER_PAGE) {
+        setHasNothingToFetch(true);
+      }
     }
-  }, [data, fetchMore])
+  })
 
   const addFilter = useCallback((filter: string, value: any) => {
     setFilters({
@@ -138,17 +130,21 @@ export const MarketplaceCollections = ({}: Props) => {
       sortBeforeSearch.current = sortValue
     }
   }, [sortValue])
-  useEffect(() => {
-    if (!loading) {
-      if (currentLength.current === data?.generativeTokens?.length) {
-        ended.current = true
-      }
-      else {
-        currentLength.current = data?.generativeTokens?.length
-      }
+
+  const generativeTokens = data?.generativeTokens;
+
+  const handleFetchMore = useCallback(async () => {
+    if (loading || hasNothingToFetch) return false;
+    const { data: newData } = await fetchMore({
+      variables: {
+        skip: generativeTokens?.length,
+        take: ITEMS_PER_PAGE
+      },
+    });
+    if (!newData?.generativeTokens?.length || newData.generativeTokens.length < ITEMS_PER_PAGE) {
+      setHasNothingToFetch(true);
     }
-  }, [data, loading])
-  const generativeTokens: GenerativeToken[] = data?.generativeTokens
+  }, [loading, hasNothingToFetch, fetchMore, generativeTokens?.length])
   return (
     <CardsExplorer>
       {({
@@ -209,8 +205,11 @@ export const MarketplaceCollections = ({}: Props) => {
                   <Spacing size="regular" />
                 </>
               )}
-              {generativeTokens?.length > 0 && (
-                  <InfiniteScrollTrigger onTrigger={infiniteScrollFetch}>
+              {generativeTokens && generativeTokens?.length > 0 && (
+                  <InfiniteScrollTrigger
+                    onTrigger={handleFetchMore}
+                    canTrigger={!loading && !hasNothingToFetch}
+                  >
                     <CardListsContainer ref={refCardsContainer}>
                       {generativeTokens.map(token => (
                         <GenerativeTokenCardList
@@ -223,7 +222,7 @@ export const MarketplaceCollections = ({}: Props) => {
                   </InfiniteScrollTrigger>
                 )
               }
-              {!loading && !(generativeTokens?.length > 0) && <p>Your query did not yield any results. 😟</p>}
+              {!loading && !(generativeTokens && generativeTokens?.length > 0) && <p>Your query did not yield any results. 😟</p>}
               {loading && <LoaderBlock height="30vh">loading</LoaderBlock>}
             </div>
           </div>

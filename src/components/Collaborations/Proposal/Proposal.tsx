@@ -37,13 +37,13 @@ export function Proposal({
         className={cs(style.section, style.header)}
         onClick={() => setExpanded(!expanded)}
       >
-        <Details.header
-          proposal={proposal}
-          collaboration={collaboration}
-        />
+        <Details.header proposal={proposal} collaboration={collaboration} />
         <div className={cs(text.small, colors.gray)}>
           <span>details </span>
-          <i aria-hidden className={`fa-solid fa-caret-${expanded?"up":"down"}`}/>
+          <i
+            aria-hidden
+            className={`fa-solid fa-caret-${expanded ? "up" : "down"}`}
+          />
         </div>
       </button>
 
@@ -56,14 +56,16 @@ export function Proposal({
           />
         </section>
       )}
-  
+
       <section className={cs(style.section)}>
         <div className={cs(style.line, text.small)}>
           <span>Initiated by</span>
           <UserBadge
-            user={collaboration.collaborators.find(
-              u => u.id === proposal.initiator
-            )!}
+            user={
+              collaboration.collaborators.find(
+                (u) => u.id === proposal.initiator
+              )!
+            }
             size="small"
           />
           <span className={cs(colors.gray)}>
@@ -74,26 +76,26 @@ export function Proposal({
 
       {proposal.executed ? (
         <section className={cs(style.execution, style.section, text.small)}>
-          <i aria-hidden className="fas fa-check-circle"/>
+          <i aria-hidden className="fas fa-check-circle" />
           <span>executed by</span>
           <UserBadge
-            user={collaboration.collaborators.find(
-              u => u.id === proposal.executedBy
-            )!}
+            user={
+              collaboration.collaborators.find(
+                (u) => u.id === proposal.executedBy
+              )!
+            }
             size="small"
           />
           <span>
-            on {format(new Date(proposal.executedAt!), "MMMM d, yyyy' at 'HH:mm")}
+            on{" "}
+            {format(new Date(proposal.executedAt!), "MMMM d, yyyy' at 'HH:mm")}
           </span>
         </section>
-      ):(
+      ) : (
         <>
           <section className={cs(style.section, style.section_spaced)}>
             <h6>Approvals</h6>
-            <Approvals
-              collaboration={collaboration}
-              proposal={proposal}
-            />
+            <Approvals collaboration={collaboration} proposal={proposal} />
           </section>
 
           <section className={cs(style.section, style.section_spaced)}>
@@ -103,7 +105,7 @@ export function Proposal({
               proposal={proposal}
               onVoteSubmitted={onAction}
             />
-            <Spacing size="small"/>
+            <Spacing size="small" />
             <ProposalActionExecute
               collaboration={collaboration}
               proposal={proposal}

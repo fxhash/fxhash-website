@@ -159,13 +159,34 @@ export const UserDonationAliases: Record<string, Partial<User>> = {
 
 // a list of User aliases
 export const UserAliases: Record<string, Partial<User>> = {
-  [process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_MARKETPLACE!]: {
-    id: process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_MARKETPLACE!,
-    name: "fxhash marketplace",
-    description: "The official fxhash [beta] marketplace",
+  [process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_MARKETPLACE_V1!]: {
+    id: process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_MARKETPLACE_V1!,
+    name: "fxhash marketplace v1.0",
+    description: "The official fxhash [beta] marketplace, first version.",
     authorizations: Object.values(UserAuthorization),
     avatarUri: "ipfs://QmURUAU4YPa6Wwco3JSVrcN7WfCrFBZH7hY51BLrc87WjM",
     platformOwned: true,
+    preventLink: true,
+  },
+
+  [process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_MARKETPLACE_V2!]: {
+    id: process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_MARKETPLACE_V2!,
+    name: "fxhash marketplace 2.0",
+    description: "The official marketplace 2.0 of fxhash.",
+    authorizations: Object.values(UserAuthorization),
+    avatarUri: "ipfs://QmURUAU4YPa6Wwco3JSVrcN7WfCrFBZH7hY51BLrc87WjM",
+    platformOwned: true,
+    preventLink: true,
+  },
+
+  [process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_MARKETPLACE_V3!]: {
+    id: process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_MARKETPLACE_V3!,
+    name: "fxhash marketplace 3.0",
+    description: "The official marketplace 3.0 of fxhash.",
+    authorizations: Object.values(UserAuthorization),
+    avatarUri: "ipfs://QmURUAU4YPa6Wwco3JSVrcN7WfCrFBZH7hY51BLrc87WjM",
+    platformOwned: true,
+    preventLink: true,
   },
 
   [process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_GENTK_V2!]: {

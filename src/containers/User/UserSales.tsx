@@ -19,17 +19,22 @@ const _UserSalesTable = ({ user }: UserSalesTableProps) => {
       skip: 0,
       take: ITEMS_PER_PAGE,
     },
+    onCompleted: (newData) => {
+      if (!newData?.user?.sales?.length || newData.user.sales.length < ITEMS_PER_PAGE) {
+        setHasNothingToFetch(true);
+      }
+    }
   })
   const sales = useMemo(() => data?.user?.sales || [], [data?.user?.sales])
   const handleFetchMore = useCallback(async () => {
     if (loading || hasNothingToFetch) return false;
-    const { data } = await fetchMore({
+    const { data: newData } = await fetchMore({
       variables: {
         skip: sales.length,
         take: ITEMS_PER_PAGE
       },
     });
-    if (!(data?.user.sales.length > 0)) {
+    if (!newData?.user?.sales?.length || newData.user.sales.length < ITEMS_PER_PAGE) {
       setHasNothingToFetch(true);
     }
   }, [loading, hasNothingToFetch, fetchMore, sales.length])

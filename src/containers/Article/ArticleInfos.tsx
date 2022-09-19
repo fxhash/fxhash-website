@@ -11,6 +11,7 @@ import { ipfsGatewayUrl } from "../../services/Ipfs";
 import { useMemo } from "react";
 import SocialMediaShare from "../../components/SocialMediaShare/SocialMediaShare";
 import { ArticleRevisions } from "./Infos/ArticleRevisions";
+import { ArticleQuickCollect } from "./Infos/ArticleQuickCollect";
 
 interface ArticleInfosProps {
   article: NFTArticle
@@ -57,6 +58,18 @@ export function ArticleInfos({
           </div>
         </div>
       </div>
+
+      <ArticleQuickCollect
+        article={article}
+      >
+        {({ collectAction }) => (
+          <div className={cs(style.details)}>
+            <h6 className={text.small_title}>Collect</h6>
+            {collectAction}
+          </div>
+        )}
+      </ArticleQuickCollect>
+
       <div className={style.details}>
         <h6 className={text.small_title}>Details</h6>
         <div className={cs(
