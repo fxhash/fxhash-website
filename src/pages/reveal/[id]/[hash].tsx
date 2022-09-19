@@ -15,7 +15,6 @@ import Link from "next/link"
 import { Button } from "../../../components/Button"
 import { EntityBadge } from "../../../components/User/EntityBadge"
 
-
 interface Props {
   hash: string
   token: GenerativeToken
@@ -26,57 +25,79 @@ const RevealPage: NextPage<Props> = ({ hash, token }) => {
     <>
       <Head>
         <title>fxhash — reveal token</title>
-        <meta key="og:title" property="og:title" content="fxhash — reveal gentk"/> 
-        <meta key="description" name="description" content="Reveal a gentk minted from fxhash"/>
-        <meta key="og:description" property="og:description" content="Reveal a gentk minted from fxhash"/>
-        <meta key="og:type" property="og:type" content="website"/>
-        <meta key="og:image" property="og:image" content="https://www.fxhash.xyz/images/og/og1.jpg"/>
+        <meta
+          key="og:title"
+          property="og:title"
+          content="fxhash — reveal gentk"
+        />
+        <meta
+          key="description"
+          name="description"
+          content="Reveal a gentk minted from fxhash"
+        />
+        <meta
+          key="og:description"
+          property="og:description"
+          content="Reveal a gentk minted from fxhash"
+        />
+        <meta key="og:type" property="og:type" content="website" />
+        <meta
+          key="og:image"
+          property="og:image"
+          content="https://www.fxhash.xyz/images/og/og1.jpg"
+        />
       </Head>
 
       <section>
-        <Spacing size="3x-large"/>
-        <main className={cs(layout['padding-big'])}>
-          <Reveal
-            hash={hash}
-            generativeUri={token.metadata.generativeUri}
-          />
+        <Spacing size="3x-large" />
+        <main className={cs(layout["padding-big"])}>
+          <Reveal hash={hash} generativeUri={token.metadata.generativeUri} />
 
-          <Spacing size="3x-large"/>
+          <Spacing size="3x-large" />
 
           <div className={cs(layout.y_centered)}>
-            <span className={cs(text.small, color.gray)}>this is your unique iteration of</span>
-            <Spacing size="8px"/>
-            <h2>{ token.name }</h2>
-            <Spacing size="8px"/>
+            <span className={cs(text.small, color.gray)}>
+              this is your unique iteration of
+            </span>
+            <Spacing size="8px" />
+            <h2>{token.name}</h2>
+            <Spacing size="8px" />
             <div className={cs(layout.x_centered)}>
               <span style={{ marginRight: 10 }}>created by </span>
-              <EntityBadge
-                size="regular"
-                user={token.author}
-                toggeable
-              />
+              <EntityBadge size="regular" user={token.author} toggeable />
             </div>
           </div>
 
-          <Spacing size="3x-large"/>
+          <Spacing size="3x-large" />
 
           <Article className={cs(layout.small_centered)}>
             <p>
-              Your token will now have to go through a <strong>signing process</strong>. No more actions are required from yourself, this happens automatically in the back stage ! Until this process is finished, your token will appear as <strong>[waiting to be signed]</strong> in your wallet and on fxhash.
+              Your token will now have to go through a{" "}
+              <strong>signing process</strong>. No more actions are required
+              from yourself, this happens automatically in the back stage !
+              Until this process is finished, your token will appear as{" "}
+              <strong>[waiting to be signed]</strong> in your wallet and on
+              fxhash.
             </p>
             <p>
-              During the signing, fxhash servers will generate the token metadata and send it to the blockchain. This process is required for a few reasons:
+              During the signing, fxhash servers will generate the token
+              metadata and send it to the blockchain. This process is required
+              for a few reasons:
             </p>
             <ul>
-              <li>an image preview of the token needs to be generated for it to be displayed on any platform properly</li>
+              <li>
+                an image preview of the token needs to be generated for it to be
+                displayed on any platform properly
+              </li>
               <li>features need to be extracted from the program</li>
             </ul>
             <p>
-              The signing of the metadata can only happen once, and once done your token become immutable on the blockchain.
+              The signing of the metadata can only happen once, and once done
+              your token become immutable on the blockchain.
             </p>
           </Article>
 
-          <Spacing size="6x-large"/>
+          <Spacing size="6x-large" />
 
           {/* <div className={cs(layout.y_centered)}>
             <Link href={`/reveal/progress/${hash}`} passHref>
@@ -110,8 +131,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       query: Qu_genToken,
       fetchPolicy: "no-cache",
       variables: {
-        id
-      }
+        id,
+      },
     })
     if (data) {
       token = data.generativeToken
@@ -123,7 +144,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       hash,
       token: token,
     },
-    notFound: !token || !hash
+    notFound: !token || !hash,
   }
 }
 

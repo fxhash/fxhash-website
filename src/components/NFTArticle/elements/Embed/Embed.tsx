@@ -1,43 +1,29 @@
-import React, { memo } from 'react';
-import { NFTArticleElementComponent } from "../../../../types/Article";
-import { EmbedMedia } from "./EmbedMedia";
-import EmbedEditor from "./EmbedEditor";
+import React, { memo } from "react"
+import { EmbedMediaDisplay } from "./EmbedMediaDisplay"
+import EmbedEditor from "./EmbedEditor"
 
 interface EmbedProps {
-  href?: string,
+  href?: string
   children?: any
-  editable?: boolean,
+  editable?: boolean
   slateAttributes?: any
   slateElement?: any
 }
-const Embed: NFTArticleElementComponent<EmbedProps> = memo(
-  ({ children, href, editable, slateAttributes, slateElement }) =>
-  editable ?
-    <EmbedEditor
-      href={href}
-      slateAttributes={slateAttributes}
-      slateElement={slateElement}
-    >
-      {children}
-    </EmbedEditor> :
-    <>
-      {href && <EmbedMedia href={href}>{children}</EmbedMedia>}
-    </>
-);
-Embed.displayName = 'Embed';
-export default Embed;
-
-Embed.getPropsFromNode = (node, properties) => {
-  if (!properties.href) return null;
-  return ({
-    href: properties.href,
-    editable: false,
-  })
-}
-Embed.htmlTagName = 'embed-media';
-Embed.fromSlateToMarkdown = properties => {
-  if (!properties.href) return null;
-  return ({
-    href: properties.href
-  })
-}
+const Embed = memo(
+  ({ children, href, editable, slateAttributes, slateElement }: EmbedProps) =>
+    editable ? (
+      <EmbedEditor
+        href={href}
+        slateAttributes={slateAttributes}
+        slateElement={slateElement}
+      >
+        {children}
+      </EmbedEditor>
+    ) : (
+      <>
+        {href && <EmbedMediaDisplay href={href}>{children}</EmbedMediaDisplay>}
+      </>
+    )
+)
+Embed.displayName = "Embed"
+export default Embed

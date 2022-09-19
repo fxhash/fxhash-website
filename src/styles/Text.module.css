@@ -74,3 +74,12 @@
 .bold {
   font-weight: bold !important;
 }
+
+.reset {
+  text-decoration: inherit;
+  font-weight: inherit;
+}
+
+.reset:hover {
+  text-decoration: inherit;
+}

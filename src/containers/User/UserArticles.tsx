@@ -27,21 +27,29 @@ const _UserArticles = ({ user, showLocalDrafts }: UserArticlesProps) => {
       take: ITEMS_PER_PAGE,
       sort: {
         createdAt: "DESC"
+      },
+      filters: {
+        flag_ne: "HIDDEN",
       }
     },
     fetchPolicy: "network-only",
     nextFetchPolicy: "cache-and-network",
+    onCompleted: (newData) => {
+      if (!newData?.user?.articles?.length || newData.user.articles.length < ITEMS_PER_PAGE) {
+        setHasNothingToFetch(true);
+      }
+    }
   })
   const articles = useMemo(() => data?.user?.articles || [], [data?.user?.articles])
   const handleFetchMore = useCallback(async () => {
     if (loading || hasNothingToFetch) return false;
-    const { data } = await fetchMore({
+    const { data: newData } = await fetchMore({
       variables: {
         skip: articles.length,
         take: ITEMS_PER_PAGE
       },
     });
-    if (!(data?.user?.articles?.length > 0)) {
+    if (!newData?.user?.articles?.length || newData.user.articles.length < ITEMS_PER_PAGE) {
       setHasNothingToFetch(true);
     }
   }, [loading, hasNothingToFetch, fetchMore, articles.length])
@@ -51,7 +59,12 @@ const _UserArticles = ({ user, showLocalDrafts }: UserArticlesProps) => {
         onTrigger={handleFetchMore}
         canTrigger={!!data && !loading}
       >
-        {showLocalDrafts && <LocalArticles classNameArticle={style.article} user={user} />}
+        {showLocalDrafts && (
+          <LocalArticles
+            classNameArticle={style.article}
+            user={user}
+          />
+        )}
         {articles.map((article, index) =>
           <CardNftArticle className={style.article} key={article.slug} article={article} imagePriority={index < 4} />
         )}

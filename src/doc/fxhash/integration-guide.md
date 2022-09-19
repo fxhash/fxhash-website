@@ -23,8 +23,10 @@ These are the addresses of the contracts actively being used by fxhash:
 | issuer | `{{process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_ISSUER}}` | Generative Tokens - stores the projects & main entrypoint to mint NFTs |
 | gentk_v1 | `{{process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_GENTK_V1}}` | FA2 NFTs, beta tokens |
 | gentk_v2 | `{{process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_GENTK_V2}}` | FA2 NFTs, tokens since fxhash 1.0 |
+| articles | `{{process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_ARTICLES}}` | fx(text) FA2 contract |
 | marketplace_v1 | `{{process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_MARKETPLACE_V1}}` | The beta marketplace contract, still indexed but no more listings are made through this contract. Shouldn't be used anymore, soon to be deprecated. |
 | marketplace_v2 | `{{process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_MARKETPLACE_V2}}` | The marketplace contact since fxhash 1.0 |
+| marketplace_v3 | `{{process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_MARKETPLACE_V3}}` | The next marketplace contract, currently only being used for the Articles. |
 | user_register | `{{process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_USERREGISTER}}` | Used to store user name & user profile |
 | moderation_team | `{{process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_TEAM_MODERATION}}` | Controls which tezos addresses have special rights on fxhash contracts |
 | moderation_token | `{{process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_TOK_MODERATION}}` | Can be used by moderation to assign a flag to a token |

@@ -17,18 +17,16 @@ import { GenerativeArtwork } from "../../../GenerativeToken/GenerativeArtwork"
 interface Props {
   id: number
 }
-export const TezosStorageProject: TezosStorageRenderer<Props> = ({
-  id,
-}) => {
+export const TezosStorageProject: TezosStorageRenderer<Props> = ({ id }) => {
   const [running, setRunning] = useState<boolean>(false)
 
   const { data } = useQuery(Qu_genToken, {
     variables: {
-      id: id
-    }
+      id: id,
+    },
   })
 
-  const token = useMemo<GenerativeToken|null>(() => {
+  const token = useMemo<GenerativeToken | null>(() => {
     return data?.generativeToken || null
   }, [data])
 
@@ -57,7 +55,7 @@ export const TezosStorageProject: TezosStorageRenderer<Props> = ({
           />
         </div>
       )}
-      
+
       {token && (
         <GenerativeArtwork
           token={token}
@@ -71,10 +69,12 @@ export const TezosStorageProject: TezosStorageRenderer<Props> = ({
 }
 
 TezosStorageProject.matches = (pointer) => {
-  if (pointer.contract !== FxhashContracts.ISSUER) {
+  // get contract address, removing network indentifier if any
+  const contract = pointer.contract.split(".")[0]
+  if (contract !== FxhashContracts.ISSUER) {
     return false
   }
-  const split = pointer.path.split(":")
+  const split = pointer.path.split("::")
   if (split[0] !== "ledger") {
     return false
   }
@@ -86,6 +86,6 @@ TezosStorageProject.matches = (pointer) => {
 
 TezosStorageProject.getPropsFromPointer = (pointer) => {
   return {
-    id: parseInt(pointer.path.split(":")[1])
+    id: parseInt(pointer.path.split("::")[1]),
   }
 }

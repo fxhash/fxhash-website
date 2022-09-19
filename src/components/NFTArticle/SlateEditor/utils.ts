@@ -1,25 +1,35 @@
-import { Range, Editor, Text, Transforms, Element, NodeEntry, Location } from 'slate';
+import {
+  Range,
+  Editor,
+  Text,
+  Transforms,
+  Element,
+  NodeEntry,
+  Location,
+} from "slate"
+import { useEffect } from "react"
+import isHotkey from "is-hotkey"
 
 export function getRangeFromBlockStartToCursor(editor: Editor): Range {
-  const { anchor } = editor.selection as Range;
+  const { anchor } = editor.selection as Range
   const block = Editor.above(editor, {
-    match: n => Editor.isBlock(editor, n),
+    match: (n) => Editor.isBlock(editor, n),
   })
   const path = block ? block[1] : []
   const start = Editor.start(editor, path)
   const range = { anchor, focus: start }
-  return range;
+  return range
 }
 
 export function getRangeFromCursorToBlockEnd(editor: Editor): Range {
-  const { anchor } = editor.selection as Range;
+  const { anchor } = editor.selection as Range
   const block = Editor.above(editor, {
-    match: n => Editor.isBlock(editor, n),
+    match: (n) => Editor.isBlock(editor, n),
   })
   const path = block ? block[1] : []
   const end = Editor.end(editor, path)
   const range = { anchor, focus: end }
-  return range;
+  return range
 }
 
 export function getTextFromBlockStartToCursor(editor: Editor): string {
@@ -32,7 +42,7 @@ export function getTextFromCursorToBlockEnd(editor: Editor): string {
 }
 
 export function isMarkActive(editor: Editor, format: string): boolean {
-  const marks = Editor.marks(editor) as {[key: string]: boolean}
+  const marks = Editor.marks(editor) as { [key: string]: boolean }
   return marks ? marks[format] === true : false
 }
 
@@ -46,32 +56,38 @@ export function toggleMark(editor: Editor, format: string): void {
   }
 }
 
-export function isFormatActive(editor: Editor, format: string, options={}):boolean {
+export function isFormatActive(
+  editor: Editor,
+  format: string,
+  options = {}
+): boolean {
   const [match] = Editor.nodes(editor, {
-    match: n => n[format] === true,
-    mode: 'all',
-    ...options
+    match: (n) => n[format] === true,
+    mode: "all",
+    ...options,
   })
   return !!match
 }
 
 export function toggleFormat(editor: Editor, format: string): void {
   const isActive = isFormatActive(editor, format)
-  Transforms.setNodes(
-    editor,
-    { [format]: isActive ? null : true },
-    { match: Text.isText, split: true }
-  )
+  editor.addMark(format, !isActive)
 }
 
-const isTypeInArray = (type: string, typesToCheck: string[]) => typesToCheck.indexOf(type) > -1;
-const isTypeEqual = (type: string, typeToCheck: string) => type === typeToCheck;
-export function lookupElementByType(editor:Editor, type: string | string[]): NodeEntry {
+const isTypeInArray = (type: string, typesToCheck: string[]) =>
+  typesToCheck.indexOf(type) > -1
+const isTypeEqual = (type: string, typeToCheck: string) => type === typeToCheck
+export function lookupElementByType(
+  editor: Editor,
+  type: string | string[]
+): NodeEntry {
   const checkType = Array.isArray(type) ? isTypeInArray : isTypeEqual
 
   const [element] = Editor.nodes(editor, {
-    match: n =>
-      !Editor.isEditor(n) && Element.isElement(n) && checkType(n.type, type as any),
+    match: (n) =>
+      !Editor.isEditor(n) &&
+      Element.isElement(n) &&
+      checkType(n.type, type as any),
   })
   return element
 }
@@ -80,17 +96,28 @@ export function lookupElementAtSelection(
   editor: Editor,
   selection: Location | null
 ): NodeEntry | null {
-  if (!selection) return null;
+  if (!selection) return null
   const [, nodePath] = Editor.last(editor, selection)
   return Editor.parent(editor, nodePath)
 }
 
+export function useHotkey(
+  hotkey: string | undefined,
+  handler: () => void,
+  skip?: boolean | null
+) {
+  useEffect(() => {
+    if (!hotkey || skip) return
+    const handleHotKey = (event: KeyboardEvent) => {
+      if (isHotkey(hotkey, event)) {
+        event.preventDefault()
+        handler()
+      }
+    }
 
-export function getBlockElementAtSelection(editor: Editor, selection: Location): NodeEntry { 
-  const [element] = Editor.nodes(editor, {
-    at: selection, 
-    match: n =>
-      !Editor.isEditor(n) && Element.isElement(n),
-  })
-  return element
+    document.addEventListener("keydown", handleHotKey)
+    return () => {
+      document.removeEventListener("keydown", handleHotKey)
+    }
+  }, [hotkey, handler, skip])
 }

@@ -1,4 +1,5 @@
 @import "../../styles/Variables";
+@import "../../styles/fonts.scss";
 
 .container {
   border: var(--cards-border-width) solid var(--color-border);
@@ -10,6 +11,7 @@
 .content {
   display: flex;
   flex-direction: row;
+  position: relative;
 }
 
 .link_wrapper {
@@ -19,6 +21,14 @@
   left: 0;
   right: 0;
   z-index: 2;
+}
+
+.editions_owned {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  z-index: 1;
+  font-weight: bold;
 }
 
 .img-wrapper {
@@ -65,8 +75,7 @@
 .description {
   flex: 1;
   margin: $spacing 0;
-  font-family: "Noto Serif", serif !important;
-  font-size: 1.2rem;
+  @include font-secondary;
 
   p {
     font-size: var(--font-size-big);
@@ -78,22 +87,20 @@
   }
 }
 
-.draft_banner {
+.banner {
   font-weight: bold;
-  color: var(--color-white);
-  background: var(--color-gray);
-  font-size: var(--font-size-small);
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+  font-size: var(--font-size-small);
 
   span {
     display: block;
     padding: 8px 12px;
   }
 
-  button {
+  button, a {
     background-color: transparent;
     border: none;
     cursor: pointer;
@@ -102,9 +109,23 @@
     color: var(--color-white);
     height: 32px;
     padding: 0 10px;
+  }
 
-    &:hover {
+  &.banner_draft {
+    color: var(--color-white);
+    background: var(--color-gray);
+
+    button:hover {
       color: var(--color-error);
+    }
+  }
+
+  &.banner_edition {
+    color: var(--color-white);
+    background: var(--color-border);
+
+    button:hover, a:hover {
+      color: var(--color-success);
     }
   }
 }
@@ -138,6 +159,12 @@
 
   .infos_header {
     gap: $spacing-x-small;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .date {
+    margin-left: 0;
   }
 
   .title {

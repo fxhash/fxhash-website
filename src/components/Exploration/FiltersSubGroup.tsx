@@ -19,17 +19,15 @@ export function FiltersSubGroup({
 
   return (
     <div className={cs(style.root)}>
-      <button 
+      <button
         type="button"
         className={cs(style.header)}
         onClick={() => setExpanded(!expanded)}
       >
         <span>{title}</span>
-        <i className={`fas fa-caret-${expanded?"down":"left"}`}/>
+        <i className={`fas fa-caret-${expanded ? "down" : "left"}`} />
       </button>
-      {expanded && (
-        <main>{children}</main>
-      )}
-    </div>    
+      {expanded && <main>{children}</main>}
+    </div>
   )
 }

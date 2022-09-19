@@ -30,4 +30,6 @@ export interface NFTArticleForm {
 export interface DraftNFTArticle {
   form: NFTArticleForm
   lastSavedAt: string // utc
+  // is the article already minted ? (edition)
+  minted: boolean
 }

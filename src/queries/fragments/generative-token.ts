@@ -1,4 +1,5 @@
 import { gql } from "@apollo/client";
+import { Frag_ArticleInfos } from "./article";
 
 export const Frag_GenPricing = gql`
   fragment Pricing on GenerativeToken {
@@ -68,6 +69,19 @@ export const Frag_GenReserves = gql`
       data
       amount
       method
+    }
+  }
+`
+
+export const Frag_GenArticleMentions = gql`
+  ${Frag_ArticleInfos}
+
+  fragment ArticleMentions on GenerativeToken {
+    articleMentions {
+      line
+      article {
+        ...ArticleInfos
+      }
     }
   }
 `

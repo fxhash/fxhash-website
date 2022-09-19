@@ -2,12 +2,25 @@ import { gql } from "@apollo/client";
 import { Frag_UserBadge } from "./user";
 import { Frag_RoyaltySplit } from "./split";
 
+export const Frag_ArticleInfosAction = gql`
+  fragment ArticleInfosAction on Article {
+    id
+    slug
+    title
+    revisions {
+      metadataUri
+      iteration
+      createdAt
+    }
+  }
+`
 export const Frag_ArticleInfos = gql`
   fragment ArticleInfos on Article {
     id
     createdAt
     slug
     title
+    flag
     description
     tags
     thumbnailUri
@@ -26,6 +39,7 @@ export const Frag_ArticleFull = gql`
     title
     description
     thumbnailUri
+    thumbnailCaption
     displayUri
     body
     tags
@@ -33,6 +47,9 @@ export const Frag_ArticleFull = gql`
     editions
     royalties
     metadataUri
+    metadata
+    flag
+    moderationReason
     author {
       ...UserBadgeInfos
     }
@@ -41,6 +58,12 @@ export const Frag_ArticleFull = gql`
     }
     relatedArticles(take: 4) {
       ...ArticleInfos
+    }
+    revisions {
+      iteration
+      metadataUri
+      createdAt
+      opHash
     }
   }
   ${Frag_ArticleInfos}

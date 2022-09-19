@@ -2,8 +2,7 @@ import style from "./ArticleEditor.module.scss"
 import articleStyle from "../../../components/NFTArticle/NFTArticle.module.scss"
 import cs from "classnames"
 import TextareaAutosize from "react-textarea-autosize"
-import { useCallback, useContext, useMemo, useRef, useState } from "react"
-import { SlateEditor } from "../../../components/NFTArticle/SlateEditor"
+import React, { useCallback, useContext, useMemo, useRef, useState } from "react"
 import { Dropzone } from "../../../components/Input/Dropzone"
 import { Spacing } from "../../../components/Layout/Spacing"
 import { Field } from "../../../components/Form/Field"
@@ -14,10 +13,6 @@ import { Donations } from "../../Input/Donations"
 import { Submit } from "../../../components/Form/Submit"
 import { Button } from "../../../components/Button"
 import { InputTextUnit } from "../../../components/Input/InputTextUnit"
-import {
-  getMarkdownFromSlateEditorState,
-  getSlateEditorStateFromMarkdown
-} from "../../../components/NFTArticle/processor"
 import { IEditorMediaFile } from "../../../types/ArticleEditor/Image"
 import { FxEditor, NFTArticleForm } from "../../../types/ArticleEditor/Editor"
 import { EditorMedias } from "./EditorMedias"
@@ -36,6 +31,8 @@ import { UserContext } from "../../UserProvider"
 import { ErrorBlock } from "../../../components/Error/ErrorBlock"
 import { YupSplits } from "../../../utils/yup/splits"
 import { InputText } from "../../../components/Input/InputText";
+import NftArticleEditor from "../../../components/NFTArticle/NFTArticleEditor"
+
 
 const editorDefaultValue = [
   {
@@ -58,7 +55,8 @@ const defaultValues: NFTArticleForm = {
   tags: []
 }
 
-const schemaNftArticleForm = Yup.object().shape({
+// base schema, common for any kind of edition
+const baseSchemaNftArticleForm = Yup.object().shape({
   title: Yup.string().required('Required'),
   abstract: Yup.string()
     .required('Required')
@@ -69,7 +67,11 @@ const schemaNftArticleForm = Yup.object().shape({
     .test("thumbnail", "Invalid type", (value) => {
       return typeof value === "string"
     }),
-  thumbnailCaption: Yup.string(),
+  thumbnailCaption: Yup.string().nullable()
+})
+
+// full schema, used when creating a new article
+const schemaNftArticleForm = baseSchemaNftArticleForm.shape({
   editions: Yup.number()
     .required('Required')
     .min(1, "Min 1 edition"),
@@ -82,38 +84,59 @@ const schemaNftArticleForm = Yup.object().shape({
 })
 
 interface ArticleEditorProps {
-  localId?: string,
+  localId?: string
   hasLocalAutosave?: boolean
-  initialValues?: NFTArticleForm,
+  initialValues?: NFTArticleForm
   onSubmit: (values: NFTArticleForm, formikHelpers: FormikHelpers<NFTArticleForm>) => (void | Promise<any>)
+  editMinted?: boolean
 }
 export function ArticleEditor({
   localId,
   hasLocalAutosave,
   initialValues,
   onSubmit,
+  editMinted,
 }: ArticleEditorProps) {
   const { user } = useContext(UserContext)
   const [immutableInitialValues] = useState(initialValues)
   const editorStateRef = useRef<FxEditor>(null)
   const formik = useFormik({
-    initialValues: immutableInitialValues || {
-      ...defaultValues,
-      // we add the user as default target to royalties split
-      royaltiesSplit: user ? [{
-        address: user.id,
-        pct: 1000,
-      }]:[]
-    },
+    initialValues: (() => {
+      if (editMinted) {
+        return immutableInitialValues || {...defaultValues}
+      }
+      else {
+        return immutableInitialValues || {
+          ...defaultValues,
+          // we add the user as default target to royalties split
+          royaltiesSplit: user ? [{
+            address: user.id,
+            pct: 1000,
+          }]:[]
+        }
+      }
+    })(),
     onSubmit,
-    validationSchema: schemaNftArticleForm,
+    validationSchema: editMinted ? baseSchemaNftArticleForm : schemaNftArticleForm,
     validateOnMount: true,
   });
   const { values, errors, touched, setFieldValue, setFieldTouched } = formik
   const [medias, setMedias] = useState<IEditorMediaFile[]>([])
   const [initialBody, setInitialBody] = useState<Descendant[] | null>(null)
 
+  // ref to medias for scrolling to block
+  const mediasMarkerRef = useRef<HTMLDivElement>(null)
+  const scrollToMediasSave = useCallback(() => {
+    if (mediasMarkerRef.current) {
+      mediasMarkerRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      })
+    }
+  }, [])
+
   const handleChangeBody = useCallback(async (nodes: Descendant[]) => {
+    const getMarkdownFromSlateEditorState = (await import('../../../components/NFTArticle/processor')).getMarkdownFromSlateEditorState
     const markdown = await getMarkdownFromSlateEditorState(nodes);
     setFieldTouched('body');
     await setFieldValue('body', markdown);
@@ -166,6 +189,7 @@ export function ArticleEditor({
   }, [setFieldValue, thumbnail])
 
   useInit(async () => {
+    const getSlateEditorStateFromMarkdown = (await import('../../../components/NFTArticle/processor')).getSlateEditorStateFromMarkdown
     const editorFromMd = values.body ? await getSlateEditorStateFromMarkdown(values.body) : null;
     setInitialBody(editorFromMd ? editorFromMd.editorState : editorDefaultValue);
   })
@@ -202,6 +226,8 @@ export function ArticleEditor({
           id={localId}
           formValues={values}
           hasUnsavedMedias={hasLocalMedias}
+          onMediasUnsavedClick={scrollToMediasSave}
+          isMinted={!!editMinted}
         />
       }
       <Field
@@ -262,7 +288,7 @@ export function ArticleEditor({
               <div className={cs(style.placeholder_wrapper)}>
                 <i className="fa-solid fa-image" aria-hidden/>
                 <span>
-                  Select a thumbnail
+                  Select a thumbnail (20mb max)
                 </span>
               </div>
             )
@@ -302,7 +328,7 @@ export function ArticleEditor({
         </div>
         <div className={cs(articleStyle.article_wrapper)}>
           {initialBody ?
-            <SlateEditor
+            <NftArticleEditor
               ref={editorStateRef}
               initialValue={initialBody}
               placeholder="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ut magna eu sapien placerat auctor. Phasellus vel erat a mi cursus posuere nec et diam. Maecenas quis nisl ligula. Sed velit sapien, accumsan eget cursus sit amet, egestas sit amet odio. Cras vitae urna sodales, suscipit ipsum a, aliquam ex. Pellentesque ut placerat arcu, a fringilla ante. Sed varius sem mi, sed interdum nunc consectetur ut. Nulla consectetur diam purus, quis volutpat nunc ultrices eget. Nam vel consectetur lacus, vel auctor dolor."
@@ -323,6 +349,7 @@ export function ArticleEditor({
 
       <div className={cs(style.w900)}>
         <Field>
+          <div ref={mediasMarkerRef} className={cs(style.medias_save_marker)}/>
           <label>
             Medias ({mediasWithThumbnail.length})
             <small>Before the article can be published, all the medias within the article must be uploaded to IPFS</small>
@@ -349,69 +376,73 @@ export function ArticleEditor({
           />
         </Field>
 
-        <Field error={errors.editions}>
-          <label htmlFor="editions">
-            Number of editions
-            <small>How many collectible editions <strong>(soon collectible on fxhash)</strong></small>
-          </label>
-          <InputTextUnit
-            unit=""
-            type="number"
-            name="editions"
-            value={values.editions}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            error={!!errors.editions}
-          />
-        </Field>
+        {!editMinted && (
+          <>
+            <Field error={errors.editions}>
+              <label htmlFor="editions">
+                Number of editions
+                <small>How many collectible editions <strong>(soon collectible on fxhash)</strong></small>
+              </label>
+              <InputTextUnit
+                unit=""
+                type="number"
+                name="editions"
+                value={values.editions}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={!!errors.editions}
+              />
+            </Field>
 
-        <Field error={errors.royalties}>
-          <label htmlFor="royalties">
-            Royalties
-            <small>Between 0% and 25%</small>
-          </label>
-          <InputTextUnit
-            unit="%"
-            type="number"
-            name="royalties"
-            min={0.1}
-            step={0.1}
-            max={25}
-            value={values.royalties}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            error={!!errors.royalties}
-          />
-        </Field>
+            <Field error={errors.royalties}>
+              <label htmlFor="royalties">
+                Royalties
+                <small>Between 0% and 25%</small>
+              </label>
+              <InputTextUnit
+                unit="%"
+                type="number"
+                name="royalties"
+                min={0.1}
+                step={0.1}
+                max={25}
+                value={values.royalties}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={!!errors.royalties}
+              />
+            </Field>
 
-        <Field
-          error={typeof errors.royaltiesSplit === "string"
-            ? errors.royaltiesSplit
-            : undefined
-          }
-        >
-          <label>
-            Royalties Splits
-            <small>
-              You can also split the proceeds on the secondary (royalties will be divided between the addresses)
-            </small>
-          </label>
-          <InputSplits
-            value={values.royaltiesSplit}
-            onChange={splits => setFieldValue("royaltiesSplit", splits)}
-            sharesTransformer={transformSplitsSum1000}
-            textShares="Shares (out of 1000)"
-            errors={errors.royaltiesSplit as any}
-          >
-            {(({ addAddress }) => (
-              <div className={cs(style.royalties_last_row)}>
-                <Donations
-                  onClickDonation={addAddress}
-                />
-              </div>
-            ))}
-          </InputSplits>
-        </Field>
+            <Field
+              error={typeof errors.royaltiesSplit === "string"
+                ? errors.royaltiesSplit
+                : undefined
+              }
+            >
+              <label>
+                Royalties Splits
+                <small>
+                  You can also split the proceeds on the secondary (royalties will be divided between the addresses)
+                </small>
+              </label>
+              <InputSplits
+                value={values.royaltiesSplit}
+                onChange={splits => setFieldValue("royaltiesSplit", splits)}
+                sharesTransformer={transformSplitsSum1000}
+                textShares="Shares (out of 1000)"
+                errors={errors.royaltiesSplit as any}
+              >
+                {(({ addAddress }) => (
+                  <div className={cs(style.royalties_last_row)}>
+                    <Donations
+                      onClickDonation={addAddress}
+                    />
+                  </div>
+                ))}
+              </InputSplits>
+            </Field>
+          </>
+        )}
 
         <Spacing size="3x-large"/>
 
@@ -436,7 +467,7 @@ export function ArticleEditor({
             color="secondary"
             disabled={hasErrors}
           >
-            preview &amp; mint
+            preview &amp; {editMinted ? "update" : "mint"}
           </Button>
         </Submit>
       </div>

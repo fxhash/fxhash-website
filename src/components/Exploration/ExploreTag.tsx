@@ -6,13 +6,10 @@ interface Props {
   onClear: () => void
 }
 
-export function ExploreTag({
-  term,
-  onClear
-}: Props) {
+export function ExploreTag({ term, onClear }: Props) {
   return (
     <div className={cs(style.container)}>
-      <strong>{ term }</strong>
+      <strong>{term}</strong>
       <i aria-hidden className="fas fa-times" onClick={onClear} />
     </div>
   )

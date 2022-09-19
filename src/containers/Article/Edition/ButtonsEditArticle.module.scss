@@ -1,0 +1,16 @@
+@import "../../../styles/Variables";
+
+.container {
+  text-align: center;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 10px;
+}
+
+.feedback {
+  margin-top: $spacing;
+}

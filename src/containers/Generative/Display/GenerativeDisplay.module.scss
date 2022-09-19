@@ -12,7 +12,7 @@
   .artwork_header {
     display: none;
   }
-  
+
   .artwork_header_mobile {
     display: flex;
     width: 100%;
@@ -51,7 +51,7 @@
 
   &.inline {
     flex-grow: 2;
-    
+
     header {
       display: flex;
       align-items: flex-start;
@@ -67,7 +67,7 @@
       align-items: flex-end;
     }
 
-    @media (max-width: $breakpoint-md) { 
+    @media (max-width: $breakpoint-md) {
       header {
         flex-direction: column-reverse;
       }
@@ -134,6 +134,11 @@
     header {
       margin-left: 0px;
     }
+  }
+  .centered_mint {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
   }
 }
 
