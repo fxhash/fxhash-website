@@ -4,7 +4,7 @@ import text from "../styles/Text.module.css"
 import effects from "../styles/Effects.module.scss"
 import cs from "classnames"
 import { Button } from "./Button"
-import { useContext, useMemo } from "react"
+import { useCallback, useContext, useMemo } from "react"
 import { UserContext } from "../containers/UserProvider"
 import { Dropdown } from "./Navigation/Dropdown"
 import { Avatar } from "./User/Avatar"
@@ -12,13 +12,21 @@ import { getUserProfileLink } from "../utils/user"
 import { useState, useEffect } from "react"
 import { useRouter } from "next/router"
 import { SettingsModal } from "../containers/Settings/SettingsModal"
+import { SearchInputControlled } from "./Input/SearchInputControlled"
 
 export function Navigation() {
   const userCtx = useContext(UserContext)
   const router = useRouter()
   const [opened, setOpened] = useState(false)
+  const [isSearchMinimized, setIsSearchMinimized] = useState(true)
   const [settingsModal, setSettingsModal] = useState<boolean>(false)
 
+  const handleSearch = useCallback(
+    (search) => {
+      router.push(`/search?query=${encodeURIComponent(search)}`)
+    },
+    [router]
+  )
   const routerRoot = useMemo<string>(() => {
     return router.pathname.split("/")[1]
   }, [router.pathname])
@@ -40,48 +48,87 @@ export function Navigation() {
         </button>
 
         <div className={cs(style.content)}>
-          <Link href="/explore">
-            <a className={cs({ [style.active]: routerRoot === "explore" })}>
-              explore
-            </a>
-          </Link>
-
-          <Dropdown
-            itemComp={<span>community</span>}
-            btnClassName={cs({ [style.active]: routerRoot === "community" })}
+          <div
+            className={cs(style.links, {
+              [style.links_minimized]: !isSearchMinimized,
+            })}
           >
-            <Link href="/community/opening-schedule">
-              <a>opening schedule</a>
+            <Link href="/explore">
+              <a
+                className={cs(style.nav_button, {
+                  [style.active]: routerRoot === "explore",
+                })}
+              >
+                explore
+              </a>
             </Link>
-            <Link href="/community/reports">
-              <a>tokens reported</a>
-            </Link>
-            <Link href="https://feedback.fxhash.xyz/">
-              <a target="_blank">feedback</a>
-            </Link>
-          </Dropdown>
 
-          <Link href="/marketplace">
-            <a className={cs({ [style.active]: routerRoot === "marketplace" })}>
-              marketplace
-            </a>
-          </Link>
-          <Link href="/sandbox">
-            <a className={cs({ [style.active]: routerRoot === "sandbox" })}>
-              sandbox
-            </a>
-          </Link>
-          <Link href="/doc">
-            <a className={cs({ [style.active]: routerRoot === "doc" })}>doc</a>
-          </Link>
+            <Dropdown
+              itemComp={<span>community</span>}
+              btnClassName={cs(style.nav_button, {
+                [style.active]: routerRoot === "community",
+              })}
+            >
+              <Link href="/community/opening-schedule">
+                <a className={style.nav_button}>opening schedule</a>
+              </Link>
+              <Link href="/community/reports">
+                <a className={style.nav_button}>tokens reported</a>
+              </Link>
+              <Link href="https://feedback.fxhash.xyz/">
+                <a className={style.nav_button} target="_blank">
+                  feedback
+                </a>
+              </Link>
+            </Dropdown>
+
+            <Link href="/marketplace">
+              <a
+                className={cs(style.nav_button, {
+                  [style.active]: routerRoot === "marketplace",
+                })}
+              >
+                marketplace
+              </a>
+            </Link>
+            <Link href="/sandbox">
+              <a
+                className={cs(style.nav_button, {
+                  [style.active]: routerRoot === "sandbox",
+                })}
+              >
+                sandbox
+              </a>
+            </Link>
+            <Link href="/doc">
+              <a
+                className={cs(style.nav_button, {
+                  [style.active]: routerRoot === "doc",
+                })}
+              >
+                doc
+              </a>
+            </Link>
+          </div>
 
           <button
             aria-label="Open settings modal"
             onClick={() => setSettingsModal(!settingsModal)}
-            className={cs(style.btn_icon)}
+            className={cs(style.nav_button, style.btn_icon)}
           >
             <i aria-hidden className="fas fa-cog" />
           </button>
+
+          <SearchInputControlled
+            iconPosition="right"
+            className={cs(style.search, {
+              [style["search--open"]]: !isSearchMinimized,
+            })}
+            placeholder="Search users, gentk, articles..."
+            onSearch={handleSearch}
+            onMinimize={setIsSearchMinimized}
+            minimize="desktop"
+          />
 
           {userCtx.user ? (
             <Dropdown
@@ -97,25 +144,25 @@ export function Navigation() {
               }
             >
               <Link href="/mint-generative">
-                <a>mint generative token</a>
+                <a className={style.nav_button}>mint generative token</a>
               </Link>
               <Link href={`${getUserProfileLink(userCtx.user)}`}>
-                <a>creations</a>
+                <a className={style.nav_button}>creations</a>
               </Link>
               <Link href={`${getUserProfileLink(userCtx.user)}/articles`}>
-                <a>articles</a>
+                <a className={style.nav_button}>articles</a>
               </Link>
               <Link href={`${getUserProfileLink(userCtx.user)}/collection`}>
-                <a>collection</a>
+                <a className={style.nav_button}>collection</a>
               </Link>
               <Link href={`${getUserProfileLink(userCtx.user)}/dashboard`}>
-                <a>dashboard</a>
+                <a className={style.nav_button}>dashboard</a>
               </Link>
               <Link href={`/collaborations`}>
-                <a>collaborations</a>
+                <a className={style.nav_button}>collaborations</a>
               </Link>
               <Link href="/edit-profile">
-                <a>edit profile</a>
+                <a className={style.nav_button}>edit profile</a>
               </Link>
               <Button
                 size="small"

@@ -1,11 +1,20 @@
 @import "../styles/Variables.scss";
 
 .nav {
+  display: flex;
+  flex: 1;
+  justify-content: flex-end;
   .content {
+    flex: 1;
     display: flex;
     align-items: center;
-
-    a, button {
+    justify-content: flex-end;
+    .links {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+    }
+    .nav_button {
       font-weight: bold;
       color: var(--color-gray);
       transition: color 0.3s ease-out;
@@ -18,7 +27,7 @@
 
       &.active {
         position: relative;
-  
+
         &:after {
           content: "";
           display: block;
@@ -64,14 +73,14 @@
     position: relative;
     cursor: pointer;
     display: none;
-  
+
     div {
       width: 100%;
       height: 3px;
       background-color: var(--color-black);
       position: absolute;
       transition: all 0.2s ease-out;
-  
+
       &:nth-child(1) {
         transform: scaleX(0.9) translateY(-15px);
       }
@@ -135,7 +144,7 @@
       transition: all 0.3s ease-out;
       pointer-events: none;
 
-      a, button { 
+      .nav_button {
         padding-top: 8px;
         padding-bottom: 8px;
       }
@@ -173,4 +182,25 @@
 
 .settings_container {
   padding: 0 8px;
+}
+
+.search {
+  margin-right: 24px;
+  &--open {
+    flex-basis: 350px;
+  }
+  & button {
+    font-size: var(--font-size-regular);
+    color: var(--color-gray);
+    transition: color 0.3s ease-out;
+    &:hover {
+      color: var(--color-black);
+    }
+  }
+}
+
+@media (max-width: 1200px) {
+  .nav .content .links_minimized {
+    display: none;
+  }
 }

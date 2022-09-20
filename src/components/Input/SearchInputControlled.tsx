@@ -1,14 +1,10 @@
 import cs from "classnames"
 import { useState } from "react"
-import { SearchInput } from "./SearchInput"
+import { SearchInput, SearchInputProps } from "./SearchInput"
 
-interface Props {
-  onSearch: (query: string) => void
-  placeholder?: string
+interface SearchInputControlledProps
+  extends Omit<SearchInputProps, "value" | "onChange"> {
   initialValue?: string
-  className?: string
-  minimizeOnMobile?: boolean
-  onMinimize?: (value: boolean) => void
 }
 
 /**
@@ -21,9 +17,10 @@ export function SearchInputControlled({
   onSearch,
   initialValue = "",
   className,
-  minimizeOnMobile,
+  minimize,
   onMinimize,
-}: Props) {
+  iconPosition,
+}: SearchInputControlledProps) {
   const [value, setValue] = useState<string>(initialValue)
 
   return (
@@ -33,8 +30,9 @@ export function SearchInputControlled({
       placeholder={placeholder}
       onSearch={onSearch}
       className={cs(className)}
-      minimizeOnMobile={minimizeOnMobile}
+      minimize={minimize}
       onMinimize={onMinimize}
+      iconPosition={iconPosition}
     />
   )
 }

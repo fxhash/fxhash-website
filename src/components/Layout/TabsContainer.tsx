@@ -1,14 +1,19 @@
 // import style from "./TabsContainer.module.scss"
 // import cs from "classnames"
 
-import { FunctionComponent, PropsWithChildren, useState } from "react"
+import {
+  FunctionComponent,
+  useCallback,
+  useState,
+} from "react"
 import { Props as TabsProps, Tabs } from "./Tabs"
 
 interface PropsChildren {
   tabIndex: number
 }
 
-interface Props extends Omit<TabsProps, "activeIdx"> {
+interface TabContainerProps extends Omit<TabsProps, "activeIdx"> {
+  initialIdx?: number
   children: FunctionComponent<PropsChildren>
 }
 /**
@@ -16,20 +21,31 @@ interface Props extends Omit<TabsProps, "activeIdx"> {
  * pass down the active tab to the children component
  */
 export function TabsContainer({
+  initialIdx,
+  checkIsTabActive,
+  onClickTab,
   tabsLayout,
   tabDefinitions,
   tabsClassName,
   contentClassName,
   tabWrapperComponent,
   children,
-}: Props) {
-  const [index, setIndex] = useState<number>(0)
+}: TabContainerProps) {
+  const [index, setIndex] = useState<number>(initialIdx || 0)
 
+  const handleClickTab = useCallback(
+    (newIdx, newDef) => {
+      setIndex(newIdx)
+      onClickTab?.(newIdx, newDef)
+    },
+    [onClickTab]
+  )
   return (
     <>
       <Tabs
         activeIdx={index}
-        onClickTab={setIndex}
+        checkIsTabActive={checkIsTabActive}
+        onClickTab={handleClickTab}
         tabDefinitions={tabDefinitions}
         tabsLayout={tabsLayout}
         tabsClassName={tabsClassName}

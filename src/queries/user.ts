@@ -1,6 +1,6 @@
 import { gql } from "@apollo/client"
 import { Frag_GenAuthor, Frag_GenPricing } from "./fragments/generative-token"
-import { Frag_ArticleInfos, Frag_ArticleInfosAction } from "./fragments/article";
+import { Frag_ArticleInfos, Frag_ArticleInfosAction } from "./fragments/article"
 
 export const Qu_user = gql`
   query User($id: String, $name: String) {
@@ -23,8 +23,13 @@ export const Qu_user = gql`
 `
 
 export const Qu_users = gql`
-  query Users($filters: UserFilter) {
-    users(filters: $filters, skip: 0, take: 500) {
+  query Users(
+    $skip: Int
+    $take: Int
+    $sort: UserSortInput
+    $filters: UserFilter
+  ) {
+    users(filters: $filters, skip: $skip, take: $take, sort: $sort) {
       id
       type
       name
@@ -52,9 +57,7 @@ export const Qu_userGenTokens = gql`
   query UserGenerativeTokens($id: String!, $take: Int, $skip: Int) {
     user(id: $id) {
       id
-      generativeTokens(take: $take, skip: $skip, filters: {
-        flag_ne: HIDDEN
-      }) {
+      generativeTokens(take: $take, skip: $skip, filters: { flag_ne: HIDDEN }) {
         id
         supply
         originalSupply
@@ -75,9 +78,7 @@ export const Qu_userGenTokens = gql`
 export const Qu_userEntireCollection = gql`
   ${Frag_GenAuthor}
 
-  query UserCollection(
-    $id: String!,
-  ) {
+  query UserCollection($id: String!) {
     user(id: $id) {
       id
       entireCollection {
@@ -109,10 +110,10 @@ export const Qu_userObjkts = gql`
   ${Frag_GenAuthor}
 
   query UserCollection(
-    $id: String!,
-    $take: Int,
-    $skip: Int,
-    $sort: ObjktsSortInput,
+    $id: String!
+    $take: Int
+    $skip: Int
+    $sort: ObjktsSortInput
     $filters: ObjktFilter
   ) {
     user(id: $id) {
@@ -151,9 +152,7 @@ export const Qu_userObjkts = gql`
 
 export const Qu_userArticlesOwned = gql`
   ${Frag_ArticleInfos}
-  query UserCollection(
-    $id: String!,
-  ) {
+  query UserCollection($id: String!) {
     user(id: $id) {
       id
       articlesOwned {
@@ -167,13 +166,17 @@ export const Qu_userArticlesOwned = gql`
 `
 
 export const Qu_userObjktsSubResults = gql`
-  query Query($id: String!, $generativeFilters: ObjktFilter, $authorFilters: ObjktFilter) {
+  query Query(
+    $id: String!
+    $generativeFilters: ObjktFilter
+    $authorFilters: ObjktFilter
+  ) {
     user(id: $id) {
       generativeTokensFromObjktFilters(filters: $generativeFilters) {
         id
         name
         metadata
-      } 
+      }
       authorsFromObjktFilters(filters: $authorFilters) {
         id
         name
@@ -407,7 +410,13 @@ export const Qu_searchUser = gql`
 `
 
 export const Qu_userArticles = gql`
-  query UserArticles($id: String!, $skip: Int, $take: Int, $sort: ArticleSortInput, $filters: ArticleFilter) {
+  query UserArticles(
+    $id: String!
+    $skip: Int
+    $take: Int
+    $sort: ArticleSortInput
+    $filters: ArticleFilter
+  ) {
     user(id: $id) {
       id
       articles(skip: $skip, take: $take, sort: $sort, filters: $filters) {
@@ -417,4 +426,3 @@ export const Qu_userArticles = gql`
   }
   ${Frag_ArticleInfos}
 `
-

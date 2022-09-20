@@ -85,3 +85,27 @@ export const Frag_GenArticleMentions = gql`
     }
   }
 `
+
+export const Frag_GenCardInfos = gql`
+  ${Frag_GenAuthor}
+  ${Frag_GenPricing}
+  fragment GenTokenCardInfos on GenerativeToken {
+    id
+    name
+    slug
+    thumbnailUri
+    flag
+    labels
+    ...Pricing
+    supply
+    originalSupply
+    balance
+    enabled
+    royalties
+    createdAt
+    reserves {
+      amount
+    }
+    ...Author
+  }
+`
