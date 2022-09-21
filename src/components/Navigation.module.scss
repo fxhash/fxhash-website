@@ -133,16 +133,24 @@
     .content {
       width: 100%;
       height: 100%;
-      padding-top: 20px;
-      padding-right: 15px;
+      padding: 20px 15px 300px;
       background-color: var(--color-white);
       position: fixed;
+      top: 95px;
+      overflow-y: auto;
+      overscroll-behavior: contain;
       flex-direction: column;
       align-items: flex-end;
+      justify-content: flex-start;
       right: -100%;
       z-index: 1000;
       transition: all 0.3s ease-out;
       pointer-events: none;
+      .links {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+      }
 
       .nav_button {
         padding-top: 8px;
@@ -199,7 +207,23 @@
   }
 }
 
-@media (max-width: 1200px) {
+@media (max-width: $breakpoint-md) {
+  .search {
+    margin-right: 6px;
+    margin-bottom: 8px;
+    &--open {
+      width: 100%;
+      max-width: 350px;
+      flex-shrink: 0;
+      flex-basis: auto;
+      & input {
+        font-size: var(--font-size-regular);
+      }
+    }
+  }
+}
+
+@media (min-width: $breakpoint-md) and (max-width: 1200px) {
   .nav .content .links_minimized {
     display: none;
   }

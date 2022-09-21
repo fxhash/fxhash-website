@@ -42,6 +42,10 @@
       flex-direction: row-reverse;
     }
   }
+  &.side-top {
+    flex-direction: column;
+    gap: 16px;
+  }
 }
 
 .no_avatar {
@@ -89,6 +93,11 @@
   height: 50px;
 }
 
+.avatar-xl {
+  width: 160px;
+  height: 160px;
+}
+
 .avatar-inline {
   width: 26px;
   height: 26px;
@@ -115,4 +124,8 @@
 
 .avatar_donation {
   border: 3px solid var(--color-donator);
+}
+
+.avatar_loading {
+  border-radius: 50%;
 }

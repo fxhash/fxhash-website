@@ -20,6 +20,8 @@ import useSort from "../../hooks/useSort"
 import { sortOptionsUsers } from "../../utils/sort"
 import useFilters from "../../hooks/useFilters"
 import { UserBadge } from "../User/UserBadge"
+import style from "./GalleryUsers.module.scss"
+import { UserBadgeLoading } from "../User/UserBadgeLoading"
 
 const ITEMS_PER_PAGE = 20
 interface GalleryUsersProps {
@@ -157,13 +159,28 @@ const _GalleryUsers = ({
             onTrigger={handleFetchMore}
             canTrigger={!hasNothingToFetch && !loading}
           >
-            <CardsContainer ref={refCardsContainer}>
+            <CardsContainer
+              className={style.gallery_users}
+              ref={refCardsContainer}
+            >
               {users &&
                 users.length > 0 &&
                 users.map((user) => (
-                  <UserBadge key={user.id} size="big" user={user} />
+                  <UserBadge
+                    hasLink
+                    key={user.id}
+                    avatarSide="top"
+                    size="xl"
+                    user={user}
+                  />
                 ))}
-              {loading && <CardsLoading number={ITEMS_PER_PAGE} />}
+              {loading && (
+                <UserBadgeLoading
+                  avatarSide="top"
+                  number={ITEMS_PER_PAGE}
+                  size="xl"
+                />
+              )}
             </CardsContainer>
           </InfiniteScrollTrigger>
         )}
