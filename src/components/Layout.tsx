@@ -7,7 +7,8 @@ import { TopBanner } from "./TopBanner"
 export function Layout({ children }: PropsWithChildren<{}>) {
   return (
     <>
-      {process.env.NEXT_PUBLIC_BETA_MODE === "on" && (
+      {process.env.NEXT_PUBLIC_BETA_MODE === "on" && 
+      process.env.NEXT_PUBLIC_BANNER_MESSAGE !== "" && (
         <TopBanner message={process.env.NEXT_PUBLIC_BANNER_MESSAGE} />
       )}
 
