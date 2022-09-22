@@ -102,7 +102,7 @@ const _SearchSummary = ({
         acc[newDataKey] = {
           results: !!(
             newData?.[newDataKey]?.length &&
-            newData.users.length >= ITEMS_PER_PAGE
+            newData[newDataKey].length >= ITEMS_PER_PAGE
           ),
           loading: false,
         }
