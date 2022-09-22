@@ -12,7 +12,7 @@ interface SearchProps {
 }
 
 export default function Search({ tab, query }: SearchProps) {
-  return <PageSearch initialTab={tab} query={query} />
+  return <PageSearch tab={tab} query={query} />
 }
 
 export const getServerSideProps: GetServerSideProps<SearchProps> = async ({

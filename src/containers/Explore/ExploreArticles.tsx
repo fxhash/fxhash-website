@@ -54,6 +54,11 @@ const _ExploreArticles = ({
           onChangeSearch?.("")
         }
       },
+      initialFilters: initialSearchQuery
+        ? {
+            searchQuery_eq: initialSearchQuery,
+          }
+        : null,
       defaultFilters: {
         flag_in: [ArticleFlag.CLEAN, ArticleFlag.NONE],
       },
@@ -137,7 +142,7 @@ const _ExploreArticles = ({
     if (window.scrollY > top) {
       window.scrollTo(0, top)
     }
-    setHasNothingToFetch(false);
+    setHasNothingToFetch(false)
   }, [sortVariable, filters])
   return (
     <div className={style.container} ref={topMarkerRef}>

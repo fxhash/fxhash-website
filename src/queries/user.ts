@@ -1,6 +1,7 @@
 import { gql } from "@apollo/client"
 import { Frag_GenAuthor, Frag_GenPricing } from "./fragments/generative-token"
 import { Frag_ArticleInfos, Frag_ArticleInfosAction } from "./fragments/article"
+import { Frag_UserBadge } from "./fragments/user";
 
 export const Qu_user = gql`
   query User($id: String, $name: String) {
@@ -31,12 +32,10 @@ export const Qu_users = gql`
   ) {
     users(filters: $filters, skip: $skip, take: $take, sort: $sort) {
       id
-      type
-      name
-      avatarUri
-      flag
+      ...UserBadgeInfos
     }
   }
+  ${Frag_UserBadge}
 `
 
 export const Qu_userLight = gql`

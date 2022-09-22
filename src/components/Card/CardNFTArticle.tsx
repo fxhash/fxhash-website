@@ -7,7 +7,7 @@ import React, {
 } from "react"
 import style from "./CardNFTArticle.module.scss"
 import Image from "next/image"
-import { NFTArticle, NFTArticleInfos } from "../../types/entities/Article"
+import { NFTArticleInfos } from "../../types/entities/Article"
 import { UserBadge } from "../User/UserBadge"
 import { ipfsGatewayUrl } from "../../services/Ipfs"
 import cs from "classnames"
@@ -17,7 +17,6 @@ import Link from "next/link"
 import { Tags } from "../Tags/Tags"
 import { ArticlesContext } from "../../context/Articles"
 import { getArticleUrl } from "../../utils/entities/articles"
-import { Button } from "../Button"
 
 interface CardNftArticleProps {
   className?: string

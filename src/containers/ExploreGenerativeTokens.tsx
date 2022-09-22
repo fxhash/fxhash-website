@@ -92,7 +92,7 @@ export const ExploreGenerativeTokens = ({
   const topMarkerRef = useRef<HTMLDivElement>(null)
   const settingsCtx = useContext(SettingsContext)
 
-  const { data, loading, fetchMore, refetch } = useQuery<{
+  const { data, loading, fetchMore } = useQuery<{
     generativeTokens: GenerativeToken[]
   }>(Qu_genTokens, {
     notifyOnNetworkStatusChange: true,
@@ -137,8 +137,8 @@ export const ExploreGenerativeTokens = ({
     if (window.scrollY > top) {
       window.scrollTo(0, top)
     }
-    setHasNothingToFetch(false);
-  }, [sortVariable, filters, refetch])
+    setHasNothingToFetch(false)
+  }, [sortVariable, filters])
 
   const handleSearch = useCallback(
     (value) => {

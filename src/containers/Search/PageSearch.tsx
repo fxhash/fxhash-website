@@ -18,6 +18,8 @@ import { SearchUsers } from "./SearchUsers"
 import { SearchGentk } from "./SearchGentk"
 import { SearchArticles } from "./SearchArticles"
 import { SearchMarketplace } from "./SearchMarketplace"
+import Head from "next/head"
+import { Spacing } from "../../components/Layout/Spacing";
 
 export const searchTabs = [
   "summary",
@@ -31,6 +33,7 @@ export type SearchTabKey = typeof searchTabs[number]
 export interface TabSearchComponentProps {
   query?: string
   onChangeQuery: (value: string) => void
+  onChangeTab: (newTab: SearchTabKey) => void
 }
 interface SearchTabData {
   component: ElementType<TabSearchComponentProps>
@@ -60,30 +63,40 @@ const tabsDefinitions: TabDefinition[] = Object.entries(tabs).map(
 )
 
 interface PageSearchProps {
-  initialTab?: SearchTabKey
+  tab?: SearchTabKey
   query?: string
 }
-const _PageSearch = ({ query: initialQuery, initialTab }: PageSearchProps) => {
+const _PageSearch = ({ query: queryUrl, tab }: PageSearchProps) => {
   const router = useRouter()
-  const [query, setQuery] = useState(initialQuery)
-  const [activeIdx, setActiveIdx] = useState(initialTab || "summary")
+  const [query, setQuery] = useState(queryUrl)
+  const [activeIdx, setActiveIdx] = useState(tab || "summary")
   const handleReplaceUrl = useCallback(
     (queryString, sectionKey) => {
       const section = sectionKey === "summary" ? "" : sectionKey
-      router.replace(
+      router.push(
         `/search/${section}${
           queryString ? `?query=${encodeURIComponent(queryString)}` : ""
-        }`
+        }`,
+        "",
+        {
+          shallow: true,
+        }
       )
     },
     [router]
   )
-  const handleClickTab = useCallback(
-    (newIdx, newDef) => {
-      setActiveIdx(newDef.key)
-      handleReplaceUrl(query, newDef.key)
+  const handleChangeTab = useCallback(
+    (newTab) => {
+      setActiveIdx(newTab)
+      handleReplaceUrl(query, newTab)
     },
     [handleReplaceUrl, query]
+  )
+  const handleClickTab = useCallback(
+    (newIdx, newDef) => {
+      handleChangeTab(newDef.key)
+    },
+    [handleChangeTab]
   )
   const handleChangeQuery = useCallback(
     (newQuery) => {
@@ -94,8 +107,29 @@ const _PageSearch = ({ query: initialQuery, initialTab }: PageSearchProps) => {
   )
 
   const Component = tabs[activeIdx] ? tabs[activeIdx].component : null
+  const title = `fxhash — search${query ? ` "${query}"` : ""}`
   return (
     <>
+      <Head>
+        <title>{title}</title>
+        <meta key="og:title" property="og:title" content={title} />
+        <meta
+          key="description"
+          name="description"
+          content="Search fxhash by users, gentk, articles and marketplace listings"
+        />
+        <meta
+          key="og:description"
+          property="og:description"
+          content="Search fxhash by users, gentk, articles and marketplace listings"
+        />
+        <meta key="og:type" property="og:type" content="website" />
+        <meta
+          key="og:image"
+          property="og:image"
+          content="https://www.fxhash.xyz/images/og/og1.jpg"
+        />
+      </Head>
       <Tabs
         onClickTab={handleClickTab}
         checkIsTabActive={checkIsTabKeyActive}
@@ -103,10 +137,15 @@ const _PageSearch = ({ query: initialQuery, initialTab }: PageSearchProps) => {
         activeIdx={activeIdx}
       />
       {Component ? (
-        <Component query={query} onChangeQuery={handleChangeQuery} />
+        <Component
+          query={query}
+          onChangeQuery={handleChangeQuery}
+          onChangeTab={handleChangeTab}
+        />
       ) : (
         <div>Search section not found</div>
       )}
+      <Spacing size="6x-large" />
     </>
   )
 }

@@ -71,7 +71,7 @@ const _GalleryUsers = ({
   // reference to an element at the top to scroll back
   const topMarkerRef = useRef<HTMLDivElement>(null)
 
-  const { data, loading, fetchMore, refetch } = useQuery<{
+  const { data, loading, fetchMore } = useQuery<{
     users: User[]
   }>(Qu_users, {
     notifyOnNetworkStatusChange: true,

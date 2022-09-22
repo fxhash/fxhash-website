@@ -1,0 +1,29 @@
+@import "../../styles/Variables";
+
+.search {
+  flex: 1;
+}
+.sample {
+  margin-bottom: 64px;
+  &:last-child {
+    margin-bottom: 0;
+  }
+  .container_gallery {
+    padding: 32px 0;
+    overflow: hidden;
+  }
+  .gallery_users {
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 32px 16px;
+    &--one-row {
+      max-height: 197px;
+    }
+  }
+  .gallery_articles {
+    grid-template-columns: repeat(auto-fit, minmax(871px, 1fr));
+    gap: 16px;
+  }
+  .gallery_gentk--one-row, .gallery_marketplace--one-row {
+    max-height: 480px;
+  }
+}

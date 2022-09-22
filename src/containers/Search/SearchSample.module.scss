@@ -1,0 +1,27 @@
+.container_title {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  h3 {
+    flex: 1;
+  }
+}
+.explore_more {
+  color: var(--color-black);
+}
+.container_show_more {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+.show_more {
+  padding: 0;
+  border: 0;
+  height: auto;
+  background-color: transparent;
+  cursor: pointer;
+  font-weight: bold;
+  &:hover {
+    text-decoration: underline;
+  }
+}
