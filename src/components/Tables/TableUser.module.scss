@@ -1,0 +1,190 @@
+@import "../../styles/Variables.scss";
+
+.wrapper {
+  display: block;
+  width: 100%;
+  max-height: 500px;
+  overflow-y: scroll;
+  overscroll-behavior: contain;
+}
+
+.wrapper_scrollable_x {
+  overflow-x: auto;
+  overscroll-behavior: auto;
+}
+
+.table {
+  overflow-x: auto;
+  min-width: 940px;
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  font-size: var(--font-size-small);
+
+  thead {
+    position: sticky;
+    z-index: 10;
+    top: 0;
+    background: var(--color-black);
+    color: var(--color-white);
+  }
+
+  th {
+    padding: 12px 4px;
+    font-weight: 600;
+    text-align: left;
+
+    &:first-child {
+      padding-left: 8px;
+    }
+  }
+
+  td {
+    vertical-align: middle;
+    padding: 4px 6px;
+    height: 50px;
+
+    &>* {
+      vertical-align: middle;
+    }
+  }
+
+  tbody tr {
+    border: 1px solid var(--color-gray-vlight);
+
+    &.tr_separator {
+      border: 0;
+
+      & td {
+        height: 8px;
+      }
+    }
+  }
+
+  thead tr {
+    border: 1px solid var(--color-black);
+  }
+}
+
+th.th-center,
+td.td-center {
+  text-align: center;
+}
+
+th.th-right,
+td.td-right {
+  text-align: right;
+}
+
+.th-gentk {
+  width: 100%;
+}
+
+.th-user {
+  width: 180px;
+}
+
+.th-price {
+  width: 120px;
+}
+
+.th-floor {
+  width: 160px;
+}
+
+.th-action {
+  width: 80px;
+}
+
+.th-editions {
+  width: 200px;
+}
+
+.th-listing-actions {
+  width: 180px;
+}
+
+.th-time {
+  width: 180px;
+}
+
+.td-gentk {
+  .link_wrapper {
+    display: flex;
+  }
+}
+
+.td-user {
+  overflow-wrap: break-word;
+  word-break: break-word;
+
+  a {
+    color: var(--color-black);
+    font-weight: normal;
+  }
+}
+
+.td-price {}
+
+.td-time {}
+
+.article_actions {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.price {
+  color: var(--color-secondary);
+  font-weight: bold;
+}
+
+.date {
+  font-size: var(--font-size-vsmall);
+  color: var(--color-gray);
+}
+
+.skeleton-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-right: 8px;
+}
+
+.skeleton-thumbnail {
+  margin-right: 8px;
+}
+
+.empty {
+  padding: 0 8px;
+  text-align: center;
+}
+
+.contract_feedback {
+  text-align: center;
+
+  td {
+    height: auto;
+    padding: 0;
+    padding-top: 10px;
+
+    .feedback_wrapper {
+      background-color: var(--color-gray-vvlight);
+      border-top: 1px solid var(--color-gray-vlight);
+      padding: 8px;
+    }
+  }
+}
+
+.light_border_color {
+  border-top-color: var(--color-gray-vvvlight) !important;
+}
+
+
+@media (max-width: $breakpoint-sm) {
+  .wrapper {
+    height: auto;
+    max-height: 400px;
+    overscroll-behavior: auto;
+  }
+}
