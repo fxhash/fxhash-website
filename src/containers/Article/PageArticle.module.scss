@@ -59,16 +59,6 @@
     align-items: flex-end;
     gap: 8px;
   }
-  .authorTools {
-    display: flex;
-    flex-direction: column;
-    & > button {
-      margin: $spacing 0;
-      &:first-child {
-        margin-top: 0;
-      }
-    }
-  }
   .editTools {
     & > button {
       margin: $spacing 0;

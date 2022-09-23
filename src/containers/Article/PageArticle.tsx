@@ -1,8 +1,5 @@
 import React, {
-  Component,
   memo,
-  NamedExoticComponent,
-  ReactElement,
   useCallback,
   useContext,
   useMemo,
@@ -93,7 +90,7 @@ const _PageArticle = ({ article, originUrl, isPreview }: PageArticleProps) => {
   } = useContractOperation(LockArticleOperation)
 
   const isLocked = useMemo(
-    () => isAuthor && (metadataLocked || successLocked),
+    () => (isAuthor && (metadataLocked || successLocked)) || false,
     [user, isAuthor, metadataLocked, successLocked]
   )
 
@@ -181,8 +178,8 @@ const _PageArticle = ({ article, originUrl, isPreview }: PageArticleProps) => {
             </UserGuard>
 
             {isAuthor && !isPreview && (
-              <div className={style.authorTools}>
-                {!edited && (
+              <>
+                {(!edited || isLocked) && (
                   <Button
                     className={style.lockButton}
                     size="small"
@@ -234,7 +231,7 @@ const _PageArticle = ({ article, originUrl, isPreview }: PageArticleProps) => {
                     )}
                   </>
                 )}
-              </div>
+              </>
             )}
           </div>
           {author && <UserBadge user={author} hasLink size="big" />}
