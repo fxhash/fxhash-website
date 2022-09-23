@@ -5,12 +5,12 @@ import { Split } from "./Split"
 import { User } from "./User"
 
 export enum ArticleFlag {
-  NONE              = "NONE",
-  CLEAN             = "CLEAN",
-  REPORTED          = "REPORTED",
-  AUTO_DETECT_COPY  = "AUTO_DETECT_COPY",
-  MALICIOUS         = "MALICIOUS",
-  HIDDEN            = "HIDDEN",
+  NONE = "NONE",
+  CLEAN = "CLEAN",
+  REPORTED = "REPORTED",
+  AUTO_DETECT_COPY = "AUTO_DETECT_COPY",
+  MALICIOUS = "MALICIOUS",
+  HIDDEN = "HIDDEN",
 }
 
 export interface NTFArticleLedger {
@@ -33,7 +33,19 @@ export interface NFTArticleGenerativeToken {
   line: number
 }
 
-export type NFTArticleInfos = Pick<NFTArticle, 'id' | 'title' | 'flag' | 'slug' | 'thumbnailUri' | 'description' | 'tags' | 'author' | 'createdAt'> & { revisions?: NFTArticleRevision[]}
+export type NFTArticleInfos = Pick<
+  NFTArticle,
+  | "id"
+  | "title"
+  | "flag"
+  | "slug"
+  | "thumbnailUri"
+  | "description"
+  | "tags"
+  | "author"
+  | "createdAt"
+  | "metadataLocked"
+> & { revisions?: NFTArticleRevision[] }
 
 export interface NFTArticle {
   id: number | string
