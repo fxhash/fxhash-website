@@ -381,7 +381,7 @@ export function ArticleEditor({
             <Field error={errors.editions}>
               <label htmlFor="editions">
                 Number of editions
-                <small>How many collectible editions <strong>(soon collectible on fxhash)</strong></small>
+                <small>How many collectible editions</small>
               </label>
               <InputTextUnit
                 unit=""
