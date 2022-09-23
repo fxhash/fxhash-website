@@ -63,7 +63,7 @@ const WrapperDiv = ({
         className,
         style.default_font_styles,
         style.container,
-        style[`side-${avatarSide}`],
+        style[`side-${avatarSide}`]
       )}
     >
       {children}

@@ -112,7 +112,7 @@ export const GalleryMarketplace = ({
     if (window.scrollY > top) {
       window.scrollTo(0, top)
     }
-    setHasNothingToFetch(false);
+    setHasNothingToFetch(false)
   }, [sortVariable, filters])
 
   const handleSearch = useCallback(

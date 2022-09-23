@@ -1,11 +1,7 @@
 // import style from "./TabsContainer.module.scss"
 // import cs from "classnames"
 
-import {
-  FunctionComponent,
-  useCallback,
-  useState,
-} from "react"
+import { FunctionComponent, useCallback, useState } from "react"
 import { Props as TabsProps, Tabs } from "./Tabs"
 
 interface PropsChildren {
