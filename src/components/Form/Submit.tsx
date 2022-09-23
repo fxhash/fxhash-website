@@ -3,7 +3,7 @@ import cs from "classnames"
 import { PropsWithChildren } from "react"
 
 interface Props {
-  layout?: "left"|"center"
+  layout?: "left" | "center" | "center-vertical"
   preventSubmitOnKeydownEnter?: boolean
 }
 export function Submit({

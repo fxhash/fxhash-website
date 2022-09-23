@@ -1,13 +1,9 @@
 import style from "./GenerativeActions.module.scss"
-import cs from "classnames"
 import { Activity } from "../../components/Activity/Activity"
 import { InfiniteScrollTrigger } from "../../components/Utils/InfiniteScrollTrigger"
-import { Action } from "../../types/entities/Action"
 import { gql, useQuery } from "@apollo/client"
-import { useRef, useEffect } from "react"
+import { useState, useCallback } from "react"
 import { GenerativeToken } from "../../types/entities/GenerativeToken"
-import { LoaderBlock } from "../../components/Layout/LoaderBlock"
-
 
 interface Props {
   token: GenerativeToken
@@ -58,53 +54,44 @@ export function GenerativeActions({
   token,
   className,
   filters,
-}: Props) {  
-  // use to know when to stop loading
-  const currentLength = useRef<number>(0)
-  const ended = useRef<boolean>(false)
+}: Props) {
+  const [hasNothingToFetch, setHasNothingToFetch] = useState(false);
 
-  const { data, loading, fetchMore } = useQuery(Qu_genTokActions, {
+  const { data, loading, fetchMore } = useQuery<{ generativeToken: GenerativeToken }>(Qu_genTokActions, {
     notifyOnNetworkStatusChange: true,
     variables: {
       id: token.id,
       skip: 0,
       take: ITEMS_PER_PAGE,
       filters
+    },
+    onCompleted: (newData) => {
+      if (!newData?.generativeToken?.actions?.length || newData.generativeToken?.actions?.length < ITEMS_PER_PAGE) {
+        setHasNothingToFetch(true);
+      }
     }
   })
 
-  useEffect(() => {
-    if (!loading) {
-      if (currentLength.current === data.generativeToken?.actions?.length) {
-        ended.current = true
-      }
-      else {
-        currentLength.current = data.generativeToken?.actions?.length
-      }
-    }
-  }, [data, loading])
-
-  const load = () => {
-    if (!ended.current) {
-      fetchMore({
-        variables: {
-          id: token.id,
-          skip: data?.generativeToken?.actions?.length || 0,
-          take: ITEMS_PER_PAGE,
-          filters
-        }
-      })
-    }
-  }
-
   const actions = data?.generativeToken?.actions || []
+  const handleFetchMore = useCallback(async () => {
+    if (loading || hasNothingToFetch) return false;
+    const { data: newData } = await fetchMore({
+      variables: {
+        skip: actions?.length || 0,
+        take: ITEMS_PER_PAGE,
+      },
+    });
+    if (!newData?.generativeToken?.actions?.length || newData.generativeToken?.actions?.length < ITEMS_PER_PAGE) {
+      setHasNothingToFetch(true);
+    }
+  }, [loading, hasNothingToFetch, fetchMore, actions?.length])
 
   return (
     <>
       <InfiniteScrollTrigger
-        onTrigger={load}
+        onTrigger={handleFetchMore}
         className={style.activity_wrapper}
-        canTrigger={!loading}
+        canTrigger={!loading && !hasNothingToFetch}
       >
         <Activity actions={actions} className={className} loading={loading} />
       </InfiniteScrollTrigger>

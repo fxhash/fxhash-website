@@ -12,11 +12,10 @@ export function MintingStateTimer({
   icon = "fa-solid fa-clock",
   children,
 }: PropsWithChildren<Props>) {
-  return  (
+  return (
     <div className={cs(style.root)}>
-      <i className={icon} aria-hidden/>
-      {children}{" "}
-      <Countdown until={until}/>
+      <i className={icon} aria-hidden />
+      {children} <Countdown until={until} />
     </div>
   )
 }

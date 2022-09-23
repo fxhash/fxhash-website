@@ -7,7 +7,6 @@ import { addMonths, startOfYesterday } from "date-fns"
 import { InputProps } from "../../types/Inputs"
 import { Button } from "../Button"
 
-
 const DatePicker = dynamic(() => import("react-datepicker"))
 
 export interface IInputDatetimeFastBtn {
@@ -19,13 +18,8 @@ interface Props extends InputProps<Date> {
   error?: boolean
   fastBtns?: IInputDatetimeFastBtn[]
 }
-export function InputDatetime({
-  value,
-  onChange,
-  error,
-  fastBtns,
-}: Props) {
-  const [startDate, setStartDate] = useState<Date|null>(new Date())
+export function InputDatetime({ value, onChange, error, fastBtns }: Props) {
+  const [startDate, setStartDate] = useState<Date | null>(new Date())
 
   return (
     <div className={cs(style.root)}>
@@ -36,10 +30,12 @@ export function InputDatetime({
         // @ts-ignore
         onChange={onChange}
         // @ts-ignore
-        excludeDateIntervals={[{
-          start: new Date(0),
-          end: startOfYesterday(),
-        }]}
+        excludeDateIntervals={[
+          {
+            start: new Date(0),
+            end: startOfYesterday(),
+          },
+        ]}
         className={cs({
           [style.error]: !!error,
         })}

@@ -6,7 +6,7 @@ import { ConnectedUser } from "../types/entities/User"
 import { useClientAsyncEffect, useClientEffect } from "../utils/hookts"
 
 
-interface UserContextType {
+export interface UserContextType {
   autoConnectChecked: boolean
   user: ConnectedUser|null
   userFetched: boolean

@@ -36,7 +36,8 @@
   justify-content: space-between;
 }
 
-.smallform, .small_centered {
+.smallform,
+.small_centered {
   align-items: center;
   max-width: 1000px;
   margin: auto;
@@ -48,7 +49,7 @@
   gap: var(--layout-gap-big-lg);
   width: 100%;
 
-  & > * {
+  &>* {
     flex: 1 0 0;
   }
 
@@ -163,4 +164,8 @@
   .show_md {
     display: block;
   }
+}
+
+.text_centered {
+  text-align: center;
 }

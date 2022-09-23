@@ -4,8 +4,8 @@
 }
 
 .iframe_container {
-  width: min(calc(100vh - 140px - 50px - 48px), 100vw);
-  height: min(calc(100vh - 140px - 50px - 48px), 100vw);
+  width: min(calc(100vh - 140px - 50px - 48px), calc(100vw - 20px));
+  height: min(calc(100vh - 140px - 50px - 48px), calc(100vw - 20px));
   border: 10px solid var(--color-border);
   background: var(--color-border);
   position: relative;

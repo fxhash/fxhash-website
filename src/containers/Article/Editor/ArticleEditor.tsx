@@ -67,7 +67,7 @@ const baseSchemaNftArticleForm = Yup.object().shape({
     .test("thumbnail", "Invalid type", (value) => {
       return typeof value === "string"
     }),
-  thumbnailCaption: Yup.string()
+  thumbnailCaption: Yup.string().nullable()
 })
 
 // full schema, used when creating a new article
@@ -288,7 +288,7 @@ export function ArticleEditor({
               <div className={cs(style.placeholder_wrapper)}>
                 <i className="fa-solid fa-image" aria-hidden/>
                 <span>
-                  Select a thumbnail
+                  Select a thumbnail (20mb max)
                 </span>
               </div>
             )

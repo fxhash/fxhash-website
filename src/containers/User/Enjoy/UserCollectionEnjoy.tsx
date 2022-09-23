@@ -22,7 +22,7 @@ export function UserCollectionEnjoy({
   })
 
   const entireCollection: Objkt[]|null = useMemo(
-    () => data?.user.entireCollection
+    () => data?.user?.entireCollection
       ? data.user.entireCollection.map((gentk: Objkt) => ({
         ...gentk,
         owner: user,

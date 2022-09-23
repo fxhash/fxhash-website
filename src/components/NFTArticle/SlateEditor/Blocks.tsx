@@ -1,22 +1,35 @@
 import { BlockParamsModal } from "./UI/BlockParamsModal"
 import { TezosStorageSettings } from "../elements/TezosStorage/TezosStorageSettings"
-import TezosStorageEditor from "../elements/TezosStorage/TezosStorageEditor";
-import { EBreakBehavior } from "./Plugins/SlateBreaksPlugin";
-import { IArticleBlockDefinition } from "../../../types/ArticleEditor/BlockDefinition";
-import { videoDefinition } from "../elements/Video/VideoDefinition";
-import { figcaptionDefinition, figureDefinition } from "../elements/Figure/FigureDefinition";
-import { imageDefinition } from "../elements/Image/ImageDefinition";
-import { codeDefinition } from "../elements/Code/CodeDefinition";
-import { blockquoteDefinition } from "../elements/Blockquote/BlockquoteDefinition";
-import { linkDefinition } from "../elements/Link/LinkDefinition";
-import { tableCellDefinition, tableDefinition, tableRowDefinition } from "../elements/Table/TableDefinition";
-import { listDefinition, listItemDefinition } from "../elements/List/ListDefinition";
-import { embedDefinition } from "../elements/Embed/EmbedDefinition";
-import { headingDefinition } from "../elements/Heading/HeadingDefinition";
-import { inlineMathDefinition, mathDefinition } from "../elements/Math/MathDefinition";
-import { thematicBreakDefinition } from "../elements/ThematicBreak/ThematicBreakDefinition";
-import { paragraphDefinition } from "../elements/Paragraph/ParagraphDefinition";
-import { mentionDefinition } from "../elements/Mention/MentionDefinition";
+import TezosStorageEditor from "../elements/TezosStorage/TezosStorageEditor"
+import { EBreakBehavior } from "./Plugins/SlateBreaksPlugin"
+import { IArticleBlockDefinition } from "../../../types/ArticleEditor/BlockDefinition"
+import { videoDefinition } from "../elements/Video/VideoDefinition"
+import {
+  figcaptionDefinition,
+  figureDefinition,
+} from "../elements/Figure/FigureDefinition"
+import { imageDefinition } from "../elements/Image/ImageDefinition"
+import { codeDefinition } from "../elements/Code/CodeDefinition"
+import { blockquoteDefinition } from "../elements/Blockquote/BlockquoteDefinition"
+import { linkDefinition } from "../elements/Link/LinkDefinition"
+import {
+  tableCellDefinition,
+  tableDefinition,
+  tableRowDefinition,
+} from "../elements/Table/TableDefinition"
+import {
+  listDefinition,
+  listItemDefinition,
+} from "../elements/List/ListDefinition"
+import { embedDefinition } from "../elements/Embed/EmbedDefinition"
+import { headingDefinition } from "../elements/Heading/HeadingDefinition"
+import {
+  inlineMathDefinition,
+  mathDefinition,
+} from "../elements/Math/MathDefinition"
+import { thematicBreakDefinition } from "../elements/ThematicBreak/ThematicBreakDefinition"
+import { paragraphDefinition } from "../elements/Paragraph/ParagraphDefinition"
+import { mentionDefinition } from "../elements/Mention/MentionDefinition"
 
 export enum EArticleBlocks {
   "embed-media" = "embed-media",
@@ -42,7 +55,7 @@ export enum EArticleBlocks {
   "figcaption" = "figcaption",
   "image" = "image",
   "video" = "video",
-  "mention" = "mention"
+  "mention" = "mention",
 }
 
 export const ArticleBlocksList: (keyof EArticleBlocks)[] = Object.keys(
@@ -64,11 +77,14 @@ export const InstantiableArticleBlocksList: EArticleBlocks[] = [
   EArticleBlocks.blockquote,
 ]
 
-export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition<any>> = {
+export const BlockDefinitions: Record<
+  EArticleBlocks,
+  IArticleBlockDefinition<any>
+> = {
   "embed-media": embedDefinition,
   "tezos-storage-pointer": {
     name: "Tezos content",
-    icon: <i className="fa-solid fa-hexagon-vertical-nft" aria-hidden/>,
+    icon: <i className="fa-solid fa-hexagon-vertical-nft" aria-hidden />,
     buttonInstantiable: true,
     render: ({ attributes, element, children }) => (
       <TezosStorageEditor
@@ -91,36 +107,38 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition<an
       storage_type: undefined,
       data_spec: undefined,
       value_path: undefined,
-      children: [{
-        text: ""
-      }]
+      children: [
+        {
+          text: "",
+        },
+      ],
     }),
     editAttributeComp: TezosStorageSettings,
     editAttributeWrapper: BlockParamsModal,
     hideSettingsAfterUpdate: true,
     preventAutofocusTrigger: true,
   },
-  "paragraph": paragraphDefinition,
-  "heading": headingDefinition,
-  "thematicBreak": thematicBreakDefinition,
-  "blockquote": blockquoteDefinition,
-  "list": listDefinition,
-  "listItem": listItemDefinition,
-  "table": tableDefinition,
-  "tableRow": tableRowDefinition,
-  "tableCell": tableCellDefinition,
-  "inlineMath": inlineMathDefinition,
-  "math": mathDefinition,
-  "code": codeDefinition,
-  "link": linkDefinition,
-  "figure": figureDefinition,
-  "figcaption": figcaptionDefinition,
-  "image": imageDefinition,
-  "video": videoDefinition,
-  "mention": mentionDefinition,
-  "html": {
+  paragraph: paragraphDefinition,
+  heading: headingDefinition,
+  thematicBreak: thematicBreakDefinition,
+  blockquote: blockquoteDefinition,
+  list: listDefinition,
+  listItem: listItemDefinition,
+  table: tableDefinition,
+  tableRow: tableRowDefinition,
+  tableCell: tableCellDefinition,
+  inlineMath: inlineMathDefinition,
+  math: mathDefinition,
+  code: codeDefinition,
+  link: linkDefinition,
+  figure: figureDefinition,
+  figcaption: figcaptionDefinition,
+  image: imageDefinition,
+  video: videoDefinition,
+  mention: mentionDefinition,
+  html: {
     name: "HTML",
-    icon: <i className="fa-brands fa-html5" aria-hidden/>,
+    icon: <i className="fa-brands fa-html5" aria-hidden />,
     render: ({ attributes, element, children }) => (
       <div
         {...attributes}
@@ -131,9 +149,9 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition<an
     ),
     hasUtilityWrapper: true,
   },
-  "yaml": {
+  yaml: {
     name: "YAML",
-    icon: <i className="fa-solid fa-code" aria-hidden/>,
+    icon: <i className="fa-solid fa-code" aria-hidden />,
     render: ({ attributes, element, children }) => (
       <pre>
         <code {...attributes}>{children}</code>
@@ -141,9 +159,9 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition<an
     ),
     hasUtilityWrapper: true,
   },
-  "toml": {
+  toml: {
     name: "TOML",
-    icon: <i className="fa-solid fa-code" aria-hidden/>,
+    icon: <i className="fa-solid fa-code" aria-hidden />,
     render: ({ attributes, element, children }) => (
       <pre>
         <code {...attributes}>{children}</code>
@@ -151,12 +169,10 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition<an
     ),
     hasUtilityWrapper: true,
   },
-  "break": {
+  break: {
     name: "Break",
     icon: null,
-    render: ({ attributes, element, children }) => (
-      <br/>
-    ),
+    render: ({ attributes, element, children }) => <br />,
     hasUtilityWrapper: false,
   },
 }
@@ -175,6 +191,8 @@ export const DefaultBlockDefinition: IArticleBlockDefinition<null> = {
  * Given the type of an element, outputs their corresponding BlockDefinition or
  * the default one if the one is not defined.
  */
-export function getArticleBlockDefinition(type: string): IArticleBlockDefinition<any> {
+export function getArticleBlockDefinition(
+  type: string
+): IArticleBlockDefinition<any> {
   return BlockDefinitions[type as EArticleBlocks] || DefaultBlockDefinition
 }

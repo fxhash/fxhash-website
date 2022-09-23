@@ -35,13 +35,6 @@ const _LocalArticles = ({ classNameArticle, user }: LocalArticlesProps) => {
     }, [] as NFTArticleInfos[])
     .sort((articleA, articleB) => articleA.createdAt > articleB.createdAt ? -1 : 1), [articles, user])
 
-  const deleteArticle = useCallback((id: string) => {
-    dispatch({
-      type: "delete",
-      payload: { id }
-    })
-  }, [dispatch])
-
   return (
     <>
       <div className={style.container_button}>
@@ -60,7 +53,6 @@ const _LocalArticles = ({ classNameArticle, user }: LocalArticlesProps) => {
           key={article.id}
           className={classNameArticle}
           article={article}
-          onDelete={deleteArticle}
           isDraft
         />
       )}

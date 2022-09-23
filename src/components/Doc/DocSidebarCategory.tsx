@@ -17,19 +17,18 @@ export function DocSidebarCategory({
   const [opened, setOpened] = useState(category.link === activeCategory)
 
   return (
-    <div className={cs(style.root, {
-      [style.opened]: opened
-    })}>
-      <button 
-        className={cs(style.title)}
-        onClick={() => setOpened(!opened)}
-      >
+    <div
+      className={cs(style.root, {
+        [style.opened]: opened,
+      })}
+    >
+      <button className={cs(style.title)} onClick={() => setOpened(!opened)}>
         <i className={category.icon} aria-hidden />
         <span>{category.title}</span>
         {opened ? (
-          <i className="far fa-minus" aria-hidden/>
-        ):(
-          <i className="far fa-plus" aria-hidden/>
+          <i className="far fa-minus" aria-hidden />
+        ) : (
+          <i className="far fa-plus" aria-hidden />
         )}
       </button>
       {opened && (
@@ -39,9 +38,11 @@ export function DocSidebarCategory({
               key={article.link}
               href={`/doc/${category.link}/${article.link}`}
             >
-              <a 
+              <a
                 className={cs({
-                  [style.active]: category.link === activeCategory && article.link === activeArticle
+                  [style.active]:
+                    category.link === activeCategory &&
+                    article.link === activeArticle,
                 })}
               >
                 {article.title}
