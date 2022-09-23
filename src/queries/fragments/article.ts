@@ -24,6 +24,7 @@ export const Frag_ArticleInfos = gql`
     description
     tags
     thumbnailUri
+    metadataLocked
     author {
       ...UserBadgeInfos
     }
