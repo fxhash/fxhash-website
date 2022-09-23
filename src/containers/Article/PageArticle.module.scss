@@ -61,9 +61,12 @@
   }
   .authorTools {
     display: flex;
-    align-items: flex-start;
+    flex-direction: column;
     & > button {
-      margin: 0 $spacing;
+      margin: $spacing 0;
+      &:first-child {
+        margin-top: 0;
+      }
     }
   }
   .editTools {

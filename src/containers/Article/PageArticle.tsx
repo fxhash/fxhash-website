@@ -181,8 +181,8 @@ const _PageArticle = ({ article, originUrl, isPreview }: PageArticleProps) => {
             </UserGuard>
 
             {isAuthor && !isPreview && (
-              <>
-                <div className={style.authorTools}>
+              <div className={style.authorTools}>
+                {!edited && (
                   <Button
                     className={style.lockButton}
                     size="small"
@@ -199,45 +199,42 @@ const _PageArticle = ({ article, originUrl, isPreview }: PageArticleProps) => {
                   >
                     {isLocked ? "Metadata locked" : "Lock Metadata"}
                   </Button>
-                  {!isLocked && (
-                    <div className={style.editTools}>
-                      <Link href={`/article/editor/${id}`} passHref>
-                        <Button
-                          isLink
-                          size="small"
-                          color={edited ? "secondary" : "black"}
-                          disabled={lockLoading}
-                          iconComp={
-                            <i
-                              className="fa-solid fa-pen-to-square"
-                              aria-hidden
-                            />
-                          }
-                        >
-                          {edited ? "resume edition" : "edit article"}
-                        </Button>
-                      </Link>
-                      {edited && (
-                        <Button
-                          type="button"
-                          size="small"
-                          color="primary"
-                          disabled={lockLoading}
-                          iconComp={
-                            <i
-                              className="fa-solid fa-circle-xmark"
-                              aria-hidden
-                            />
-                          }
-                          onClick={cancelEdition}
-                        >
-                          cancel edition
-                        </Button>
-                      )}
-                    </div>
-                  )}
-                </div>
-              </>
+                )}
+                {!isLocked && (
+                  <>
+                    <Link href={`/article/editor/${id}`} passHref>
+                      <Button
+                        isLink
+                        size="small"
+                        color={edited ? "secondary" : "black"}
+                        disabled={lockLoading}
+                        iconComp={
+                          <i
+                            className="fa-solid fa-pen-to-square"
+                            aria-hidden
+                          />
+                        }
+                      >
+                        {edited ? "resume edition" : "edit article"}
+                      </Button>
+                    </Link>
+                    {edited && (
+                      <Button
+                        type="button"
+                        size="small"
+                        color="primary"
+                        disabled={lockLoading}
+                        iconComp={
+                          <i className="fa-solid fa-circle-xmark" aria-hidden />
+                        }
+                        onClick={cancelEdition}
+                      >
+                        cancel edition
+                      </Button>
+                    )}
+                  </>
+                )}
+              </div>
             )}
           </div>
           {author && <UserBadge user={author} hasLink size="big" />}
