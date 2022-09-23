@@ -12,19 +12,18 @@ export function BlockMenu({
   onClose,
   children,
 }: PropsWithChildren<Props>) {
-  const [isInit, setIsInit] = useState(false);
+  const [isInit, setIsInit] = useState(false)
   const markerRef = useRef<HTMLDivElement>(null)
   const rootRef = useRef<HTMLDivElement>(null)
-  const [position, setPosition] = useState<"up"|"down">("up")
-  const positionRef = useRef<"up"|"down">("up")
-
+  const [position, setPosition] = useState<"up" | "down">("up")
+  const positionRef = useRef<"up" | "down">("up")
 
   // add an event listener to the document to know if a click outside was made
   useEffect(() => {
     const onClick = (event: MouseEvent) => {
       if (!rootRef?.current || rootRef.current.contains(event.target as Node)) {
         // inside click
-        return;
+        return
       }
       onClose()
     }
@@ -43,12 +42,12 @@ export function BlockMenu({
 
     const onKeyPressed = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        event.preventDefault();
+        event.preventDefault()
         onClose()
       }
     }
 
-    onScroll();
+    onScroll()
 
     document.addEventListener("mousedown", onClick)
     document.addEventListener("scroll", onScroll)
@@ -63,17 +62,12 @@ export function BlockMenu({
 
   return (
     <>
-      <div ref={markerRef}/>
+      <div ref={markerRef} />
       <ContextualMenu
         ref={rootRef}
-        className={cs(
-          style.root,
-          style[`pos-${position}`],
-          className,
-          {
-            [style.show]: isInit
-          }
-        )}
+        className={cs(style.root, style[`pos-${position}`], className, {
+          [style.show]: isInit,
+        })}
       >
         {children}
       </ContextualMenu>

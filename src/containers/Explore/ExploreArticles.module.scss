@@ -7,8 +7,13 @@
 }
 
 .article {
-  margin-bottom: $spacing-3x-large;
+  margin-bottom: $spacing-x-large;
+
   &:last-child {
     margin-bottom: 0;
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    margin-bottom: 20px;
   }
 }

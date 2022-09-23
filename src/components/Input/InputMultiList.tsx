@@ -3,7 +3,6 @@ import cs from "classnames"
 import { FunctionComponent } from "react"
 import { arrayRemove } from "../../utils/array"
 
-
 interface MultiListLocalItemProps {
   selected: boolean
   itemProps: any
@@ -36,35 +35,35 @@ export function InputMultiList<ItemType = any>({
   placeholder,
   children,
 }: Props<ItemType>) {
-
   const itemClicked = (item: MultiListItem) => {
     if (selected.includes(item.value)) {
       onChangeSelected(arrayRemove([...selected], item.value))
-    }
-    else {
-      onChangeSelected(multiple ? [ ...selected, item.value ] : [ item.value ])
+    } else {
+      onChangeSelected(multiple ? [...selected, item.value] : [item.value])
     }
   }
 
   return (
     <div className={cs(style.root, className)}>
       {placeholder && listItems.length === 0 && (
-        <div className={cs(style.placeholder)}>
-          {placeholder}
-        </div>
+        <div className={cs(style.placeholder)}>{placeholder}</div>
       )}
-      {listItems.map(item => (
-        <button 
+      {listItems.map((item) => (
+        <button
           key={item.value}
           type="button"
-          className={cs(style.item, { [style.selected]: selected.includes(item.value) }, btnClassName)}
+          className={cs(
+            style.item,
+            { [style.selected]: selected.includes(item.value) },
+            btnClassName
+          )}
           onClick={() => itemClicked(item)}
         >
           {children({
             itemProps: item.props,
             selected: selected.includes(item.value),
           })}
-          <div className={cs(style.circle)}/>
+          <div className={cs(style.circle)} />
         </button>
       ))}
     </div>

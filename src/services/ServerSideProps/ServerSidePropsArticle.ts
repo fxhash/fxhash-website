@@ -2,8 +2,9 @@ import { ParsedUrlQuery } from "querystring"
 import { NFTArticle } from "../../types/entities/Article"
 import { getAbsoluteUrl } from "../../utils/host"
 import client from "../../services/ApolloClient"
-import { Qu_articleById } from "../../queries/articles"
+import { Qu_articleById, Qu_articleBySlug } from "../../queries/articles"
 import { GetServerSideProps } from "next"
+import { isArticleFlagged } from "../../utils/entities/articles";
 
 interface ArticleByIdParams extends ParsedUrlQuery {
   id: string
@@ -20,7 +21,7 @@ export const getServerSidePropsArticleById: GetServerSideProps<
   ArticleByIdParams
 > = async ({
   params,
-  req 
+  req
 }) => {
   const id = params?.id! && parseInt(params.id)
   if (!id && id !== 0) return { props: { error: 'Invalid URL for article'} }
@@ -46,6 +47,49 @@ export const getServerSidePropsArticleById: GetServerSideProps<
     return {
       props: {
         error: 'An error occured: couldn\'t load the article'
+      }
+    }
+  }
+}
+
+
+interface ArticleBySlugParams extends ParsedUrlQuery {
+  slug: string
+}
+export const getServerSidePropsBySlug: GetServerSideProps<
+  Props,
+  ArticleBySlugParams
+> = async ({ req, params }) => {
+  const slug = params?.slug!;
+  const { origin } = getAbsoluteUrl(req);
+  try {
+    const { data } = await client.query<{ article: NFTArticle }>({
+      query: Qu_articleBySlug,
+      variables: {
+        slug
+      }
+    });
+    if (!data?.article) {
+      return { notFound: true };
+    }
+    if (isArticleFlagged(data.article)) {
+      return {
+        props: {
+          error: `This article has been flagged and as such it is not possible to access its URL with the slug.\n We do not want to encourage "domain-sitting" practices.`
+        }
+      }
+    }
+    return ({
+      props: {
+        article: data.article,
+        origin,
+      }
+    })
+  } catch (e) {
+    console.error(e);
+    return {
+      props: {
+        error: 'The article could not be loaded'
       }
     }
   }
