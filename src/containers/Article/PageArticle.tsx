@@ -1,4 +1,12 @@
-import React, { Component, memo, NamedExoticComponent, ReactElement, useCallback, useContext, useMemo } from 'react'
+import React, {
+  Component,
+  memo,
+  NamedExoticComponent,
+  ReactElement,
+  useCallback,
+  useContext,
+  useMemo,
+} from "react"
 import style from "./PageArticle.module.scss"
 import { NFTArticle } from "../../types/entities/Article"
 import { UserBadge } from "../../components/User/UserBadge"
@@ -10,32 +18,36 @@ import cs from "classnames"
 import layout from "../../styles/Layout.module.scss"
 import text from "../../styles/Text.module.css"
 import { CardSmallNftArticle } from "../../components/Card/CardSmallNFTArticle"
-import { NftArticleProps } from '../../components/NFTArticle/NFTArticle'
-import { ImagePolymorphic } from '../../components/Medias/ImagePolymorphic'
-import { UserContext } from '../UserProvider'
-import { isUserArticleModerator, isUserOrCollaborator } from '../../utils/user'
-import { User } from '../../types/entities/User'
-import Link from 'next/link'
-import { Button } from '../../components/Button'
-import { ArticlesContext } from '../../context/Articles'
-import dynamic from "next/dynamic";
-import { LoaderBlock } from "../../components/Layout/LoaderBlock";
-import { ipfsGatewayUrl } from '../../services/Ipfs'
-import { UserGuard } from '../../components/Guards/UserGuard'
-import { ArticleModeration } from './Moderation/ArticleModeration'
-import { ArticleFlagBanner } from './Moderation/FlagBanner'
-import { checkIsTabKeyActive } from "../../components/Layout/Tabs";
-import { ArticleActivity } from "./ArticleActivity";
-import { ArticleActions } from "./ArticleActions";
-import { TabsContainer } from '../../components/Layout/TabsContainer'
+import { NftArticleProps } from "../../components/NFTArticle/NFTArticle"
+import { ImagePolymorphic } from "../../components/Medias/ImagePolymorphic"
+import { UserContext } from "../UserProvider"
+import { isUserArticleModerator, isUserOrCollaborator } from "../../utils/user"
+import { User } from "../../types/entities/User"
+import Link from "next/link"
+import { Button } from "../../components/Button"
+import { ArticlesContext } from "../../context/Articles"
+import dynamic from "next/dynamic"
+import { LoaderBlock } from "../../components/Layout/LoaderBlock"
+import { ipfsGatewayUrl } from "../../services/Ipfs"
+import { UserGuard } from "../../components/Guards/UserGuard"
+import { ArticleModeration } from "./Moderation/ArticleModeration"
+import { ArticleFlagBanner } from "./Moderation/FlagBanner"
+import { checkIsTabKeyActive } from "../../components/Layout/Tabs"
+import { ArticleActivity } from "./ArticleActivity"
+import { ArticleActions } from "./ArticleActions"
+import { TabsContainer } from "../../components/Layout/TabsContainer"
+import { useContractOperation } from "../../hooks/useContractOperation"
+import { LockArticleOperation } from "../../services/contract-operations/LockArticle"
 
-const NftArticle = dynamic<NftArticleProps>(() =>
-  import('../../components/NFTArticle/NFTArticle')
-    .then((mod) => mod.NftArticle),
+const NftArticle = dynamic<NftArticleProps>(
+  () =>
+    import("../../components/NFTArticle/NFTArticle").then(
+      (mod) => mod.NftArticle
+    ),
   {
-    loading: () => <LoaderBlock />
+    loading: () => <LoaderBlock />,
   }
-);
+)
 
 const TABS = [
   {
@@ -50,136 +62,199 @@ const TABS = [
 
 interface PageArticleProps {
   article: NFTArticle
-  isPreview?: boolean,
+  isPreview?: boolean
   originUrl: string
 }
-const _PageArticle = ({
-  article,
-  originUrl,
-  isPreview,
-}: PageArticleProps) => {
-  const { id, title, description, author, createdAt, body, language, relatedArticles } = article
+const _PageArticle = ({ article, originUrl, isPreview }: PageArticleProps) => {
+  const {
+    id,
+    title,
+    description,
+    author,
+    createdAt,
+    body,
+    language,
+    relatedArticles,
+    metadataLocked,
+  } = article
   const dateCreatedAt = useMemo(() => new Date(createdAt), [createdAt])
   const { user } = useContext(UserContext)
   const { isEdited, dispatch } = useContext(ArticlesContext)
   const edited = useMemo(() => isEdited(id as string), [isEdited, id])
-
   // is it the author or a collaborator ?
   const isAuthor = useMemo(
     () => user && author && isUserOrCollaborator(user as User, author),
     [user, author]
   )
+  const {
+    success: successLocked,
+    call: lockArticle,
+    loading: lockLoading,
+  } = useContractOperation(LockArticleOperation)
+
+  const isLocked = useMemo(
+    () => isAuthor && (metadataLocked || successLocked),
+    [user, isAuthor, metadataLocked, successLocked]
+  )
 
   const cancelEdition = useCallback(() => {
-    if (window.confirm("Do you want to remove the unpublished local changes made to this article ?")) {
+    if (
+      window.confirm(
+        "Do you want to remove the unpublished local changes made to this article ?"
+      )
+    ) {
       dispatch({
         type: "delete",
         payload: {
-          id: ""+article.id
-        }
+          id: "" + article.id,
+        },
       })
     }
   }, [article.id, dispatch])
 
+  const handleLockMetaData = useCallback(() => {
+    lockArticle({ article })
+  }, [article.id])
+
   // todo [#392] remove article.metadata?.thumbnailCaption
-  const thumbnailCaption = article.metadata?.thumbnailCaption || article.thumbnailCaption;
+  const thumbnailCaption =
+    article.metadata?.thumbnailCaption || article.thumbnailCaption
   return (
     <>
       <Head>
-        <title>{isPreview ? '[Preview] - ' : ''}{title} — fxhash</title>
-        <meta key="og:title" property="og:title" content={`fxhash - ${title}`} />
-        <meta key="description" name="description" content={article.description} />
-        <meta key="og:description" property="og:description" content={article.description} />
-        <meta key="og:type" property="og:type" content="website"/>
-        <meta key="og:image" property="og:image" content={ipfsGatewayUrl(article.thumbnailUri)} />
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.0/dist/katex.min.css" crossOrigin="anonymous" />
+        <title>
+          {isPreview ? "[Preview] - " : ""}
+          {title} — fxhash
+        </title>
+        <meta
+          key="og:title"
+          property="og:title"
+          content={`fxhash - ${title}`}
+        />
+        <meta
+          key="description"
+          name="description"
+          content={article.description}
+        />
+        <meta
+          key="og:description"
+          property="og:description"
+          content={article.description}
+        />
+        <meta key="og:type" property="og:type" content="website" />
+        <meta
+          key="og:image"
+          property="og:image"
+          content={ipfsGatewayUrl(article.thumbnailUri)}
+        />
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/katex@0.15.0/dist/katex.min.css"
+          crossOrigin="anonymous"
+        />
 
-        <meta name="twitter:site" content="@fx_hash_"/>
-        <meta name="twitter:card" content="summary"/>
-        <meta name="twitter:title" content={title}/>
-        <meta name="twitter:description" content={article.description}/>
-        <meta name="twitter:image" content={ipfsGatewayUrl(article.thumbnailUri)}/>
+        <meta name="twitter:site" content="@fx_hash_" />
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:title" content={title} />
+        <meta name="twitter:description" content={article.description} />
+        <meta
+          name="twitter:image"
+          content={ipfsGatewayUrl(article.thumbnailUri)}
+        />
 
-        <link href="/highlight/prism-dracula.css" rel="stylesheet"/>
-        <link rel="stylesheet" href="/highlight/dracula.css"/>
+        <link href="/highlight/prism-dracula.css" rel="stylesheet" />
+        <link rel="stylesheet" href="/highlight/dracula.css" />
       </Head>
 
-      <ArticleFlagBanner
-        article={article}
-      />
+      <ArticleFlagBanner article={article} />
 
       <Spacing size="small" />
 
-      <main className={cs(layout['padding-big'])}>
+      <main className={cs(layout["padding-big"])}>
         <div className={style.header}>
           <div className={cs(style.actions)}>
             <UserGuard
               forceRedirect={false}
-              allowed={user => isUserArticleModerator(user as User)}
+              allowed={(user) => isUserArticleModerator(user as User)}
             >
-              <ArticleModeration
-                article={article}
-              />
+              <ArticleModeration article={article} />
             </UserGuard>
 
             {isAuthor && !isPreview && (
               <>
-                <Link href={`/article/editor/${id}`} passHref>
+                <div className={style.authorTools}>
                   <Button
-                    isLink
+                    className={style.lockButton}
                     size="small"
-                    color={edited ? "secondary" : "black"}
-                    iconComp={<i className="fa-solid fa-pen-to-square" aria-hidden/>}
-                  >
-                    {edited
-                      ? "resume edition"
-                      : "edit article"
+                    color="black"
+                    iconComp={
+                      <i
+                        className={`fa-solid fa-lock${isLocked ? "" : "-open"}`}
+                        aria-hidden
+                      />
                     }
-                  </Button>
-                </Link>
-                {edited && (
-                  <Button
-                    type="button"
-                    size="small"
-                    color="primary"
-                    iconComp={<i className="fa-solid fa-circle-xmark" aria-hidden/>}
-                    onClick={cancelEdition}
+                    onClick={handleLockMetaData}
+                    disabled={isLocked}
+                    state={lockLoading ? "loading" : "default"}
                   >
-                    cancel edition
+                    {isLocked ? "Metadata locked" : "Lock Metadata"}
                   </Button>
-                )}
+                  {!isLocked && (
+                    <div className={style.editTools}>
+                      <Link href={`/article/editor/${id}`} passHref>
+                        <Button
+                          isLink
+                          size="small"
+                          color={edited ? "secondary" : "black"}
+                          disabled={lockLoading}
+                          iconComp={
+                            <i
+                              className="fa-solid fa-pen-to-square"
+                              aria-hidden
+                            />
+                          }
+                        >
+                          {edited ? "resume edition" : "edit article"}
+                        </Button>
+                      </Link>
+                      {edited && (
+                        <Button
+                          type="button"
+                          size="small"
+                          color="primary"
+                          disabled={lockLoading}
+                          iconComp={
+                            <i
+                              className="fa-solid fa-circle-xmark"
+                              aria-hidden
+                            />
+                          }
+                          onClick={cancelEdition}
+                        >
+                          cancel edition
+                        </Button>
+                      )}
+                    </div>
+                  )}
+                </div>
               </>
             )}
           </div>
-          {author &&
-            <UserBadge
-              user={author}
-              hasLink
-              size="big"
-            />
-          }
+          {author && <UserBadge user={author} hasLink size="big" />}
           <div className={style.date}>
-            <time dateTime={format(dateCreatedAt, 'yyyy/MM/dd')}>
-              {format(dateCreatedAt, 'MMMM d, yyyy')}
+            <time dateTime={format(dateCreatedAt, "yyyy/MM/dd")}>
+              {format(dateCreatedAt, "MMMM d, yyyy")}
             </time>
           </div>
           <h1 className={cs(style.title)}>{title}</h1>
-          <p className={cs(style.description, style.awidth)}>
-            {description}
-          </p>
+          <p className={cs(style.description, style.awidth)}>{description}</p>
           <figure className={cs(style.thumbnail)}>
-            <ImagePolymorphic
-              uri={article.displayUri}
-            />
-            {thumbnailCaption && (
-              <figcaption>{thumbnailCaption}</figcaption>
-            )}
+            <ImagePolymorphic uri={article.displayUri} />
+            {thumbnailCaption && <figcaption>{thumbnailCaption}</figcaption>}
           </figure>
         </div>
         <article lang={language} className={style.body}>
-          <NftArticle
-            markdown={body}
-          />
+          <NftArticle markdown={body} />
         </article>
         <div className={style.infos}>
           <ArticleInfos
@@ -188,46 +263,41 @@ const _PageArticle = ({
             isPreview={isPreview}
           />
         </div>
-        {relatedArticles?.length > 0 &&
-          <div className={style['related-articles']}>
+        {relatedArticles?.length > 0 && (
+          <div className={style["related-articles"]}>
             <h2 className={text.small_title}>Related articles</h2>
-            <div className={style['related-articles_list']}>
-              {relatedArticles.map((a, index) =>
-                <CardSmallNftArticle key={index} article={a}/>
-              )}
+            <div className={style["related-articles_list"]}>
+              {relatedArticles.map((a, index) => (
+                <CardSmallNftArticle key={index} article={a} />
+              ))}
             </div>
           </div>
-        }
+        )}
       </main>
-
-      {!isPreview &&
+      {!isPreview && (
         <>
           <Spacing size="6x-large" />
           <TabsContainer
             tabDefinitions={TABS}
             checkIsTabActive={checkIsTabKeyActive}
             tabsLayout="fixed-size"
-            tabsClassName={cs(layout['padding-big'])}
+            tabsClassName={cs(layout["padding-big"])}
           >
             {({ tabIndex }) => (
-              <div className={layout['padding-big']}>
+              <div className={layout["padding-big"]}>
                 {tabIndex === 0 ? (
-                  <ArticleActions
-                    article={article}
-                  />
-                ):(
-                  <ArticleActivity
-                    article={article}
-                  />
+                  <ArticleActions article={article} />
+                ) : (
+                  <ArticleActivity article={article} />
                 )}
               </div>
             )}
           </TabsContainer>
         </>
-      }
+      )}
       <Spacing size="6x-large" />
     </>
-  );
-};
+  )
+}
 
-export const PageArticle = memo(_PageArticle);
+export const PageArticle = memo(_PageArticle)

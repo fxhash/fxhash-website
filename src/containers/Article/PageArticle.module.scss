@@ -59,6 +59,21 @@
     align-items: flex-end;
     gap: 8px;
   }
+  .authorTools {
+    display: flex;
+    align-items: flex-start;
+    & > button {
+      margin: 0 $spacing;
+    }
+  }
+  .editTools {
+    & > button {
+      margin: $spacing 0;
+    }
+  }
+  .lockButton {
+    align-self: center;
+  }
 }
 
 .infos {
