@@ -1,5 +1,5 @@
-import React, { ChangeEventHandler, FocusEventHandler, memo } from 'react';
-import useInit from "../../../hooks/useInit";
+import React, { ChangeEventHandler, FocusEventHandler, memo } from "react"
+import useInit from "../../../hooks/useInit"
 
 interface MarkdownEditorProps {
   className?: string
@@ -10,10 +10,17 @@ interface MarkdownEditorProps {
   onInit?: (markdown: string) => void
 }
 
-const _MarkdownEditor = ({ className, value, onChange, onBlur, placeholder, onInit }: MarkdownEditorProps) => {
+const _MarkdownEditor = ({
+  className,
+  value,
+  onChange,
+  onBlur,
+  placeholder,
+  onInit,
+}: MarkdownEditorProps) => {
   useInit(() => {
     if (onInit) {
-      onInit(value || '');
+      onInit(value || "")
     }
   })
   return (
@@ -24,7 +31,7 @@ const _MarkdownEditor = ({ className, value, onChange, onBlur, placeholder, onIn
       onBlur={onBlur}
       placeholder={placeholder}
     />
-  );
-};
+  )
+}
 
-export const MarkdownEditor = memo(_MarkdownEditor);
+export const MarkdownEditor = memo(_MarkdownEditor)
