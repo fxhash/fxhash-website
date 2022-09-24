@@ -7,10 +7,10 @@ export const blockquoteDefinition: IArticleBlockDefinition<any> = {
   buttonInstantiable: true,
   render: BlockquoteEditor,
   hasUtilityWrapper: true,
-  instanciateElement: () => ({
+  instanciateElement: ({text=""}: {text?: string} = {}) => ({
     type: "blockquote",
     children: [{
-      text: ""
+      text
     }]
   })
 }

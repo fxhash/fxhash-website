@@ -1,7 +1,7 @@
 import { Range, Point,  Node,  Editor, Transforms, Ancestor, NodeEntry } from 'slate';
 import { AutoFormatChangeType, ChangeData, AutoFormatChange } from './index';
-import { customNodes } from '../../../processor/plugins';
 import { getTextFromBlockStartToCursor } from '../../utils';
+import { getSlateEditorStateFromMarkdownSync } from '../../../processor/getSlateEditorStateFromMarkdown';
 
 function parseAttributes(attributes:string|undefined): {[key: string]: any} {
   const classNames = []
@@ -35,54 +35,56 @@ function parseAttributes(attributes:string|undefined): {[key: string]: any} {
   return parsed
 }
 
-
-
 export class CustomDirectiveChange implements AutoFormatChange {
   shortcut: string
   type: AutoFormatChangeType
   data?: ChangeData
+  trigger: string
 
   constructor(shortcut:string, data?: ChangeData) {
     this.shortcut = shortcut
     if (data) this.data = data
     this.type = 'CustomDirectiveChange'
+    this.trigger = ' '
   }
 
-  apply(editor: Editor): boolean {
+  getMarkdownFromCurrentCursorPosition(editor: Editor):string|null {
     const textBeforeCursor = getTextFromBlockStartToCursor(editor);
-    const matchDirective = new RegExp('(:*s*(?<type>[^\\s]*)\\s*\\[(?<text>.*)]\\s*{(?<attributes>.*)})', 'mg')
+    const matchDirective = new RegExp('(:+(?<type>.*)\\[(?<text>.*)]{(?<attributes>.*)})\\s*$', 'mg')
     const matches = matchDirective.exec(textBeforeCursor);
-    if (!matches) return false;
-    const type = matches.groups?.['type']
-    const text = matches.groups?.['text']
-    const attributes = matches.groups?.['attributes']
-    if (!type) return false;
-    const parsedAttributes = parseAttributes(attributes)
-    const nodeAttributes = {
-      value: text,
-      type,
-      ...parsedAttributes.attributes
+    if (!matches) return null; 
+    return matches[0];
+  }
+
+  apply(editor: Editor, text:string): boolean {
+    const isTrigger = text === this.trigger;
+    const markdownString = isTrigger ? this.getMarkdownFromCurrentCursorPosition(editor) : text;
+    if (!markdownString) return false;
+    try {
+      const parsed = getSlateEditorStateFromMarkdownSync(markdownString)
+      if(!parsed) return false;
+      const {editorState: [parsedNode]} = parsed;
+      if (parsedNode.type !== this.shortcut) return false;
+      const [start] = Range.edges(editor.selection as Range);
+      const charBefore = Editor.before(editor, start, {
+	unit: 'character',
+	distance: markdownString.length,
+      }) as Point;
+      if (isTrigger) {
+	Transforms.delete(editor, {
+	  at: {
+	    anchor: charBefore,
+	    focus: start
+	  }
+	})
+      }
+      Transforms.insertNodes(
+	editor,
+	parsedNode
+      )
+      return true
+    } catch {
+      return false;
     }
-    const props = customNodes.leafDirective[type]?.transformMdhastToComponent?.(null as any, nodeAttributes) || nodeAttributes;
-    const [start] = Range.edges(editor.selection as Range);
-    const charBefore = Editor.before(editor, start, {
-      unit: 'character',
-      distance: matches[0].length,
-    }) as Point;
-    Transforms.delete(editor, {
-      at: {
-	anchor: charBefore,
-	focus: start
-      }
-    })
-    Transforms.insertNodes(
-      editor,
-      {
-	...props,
-	type:props.type,
-	children: [{text: props.value}],
-      }
-    )
-    return true;
   }
 }

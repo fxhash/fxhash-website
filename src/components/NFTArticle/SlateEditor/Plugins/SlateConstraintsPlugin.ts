@@ -106,16 +106,22 @@ export const withConstraints: EnhanceEditorWith = (editor) => {
         )
       }
     }
-    // normalise links
-    if(node.type === 'link') {
-      // unwrap links that have no url
-      if(node.url === "") {
-	Transforms.unwrapNodes(editor, {at: path})
+    // Make sure listItems are wrapped with a list node
+    if(node.type === 'listItem') {
+      const parentNode = Node.parent(editor, path);
+      if (parentNode.type !== 'list') {
+	      Transforms.wrapNodes(editor, {type: 'list' })
       }
-      // remove links that have no text entirly
+    } 
+
+    // delete link nodes that have no text content
+    if(node.type === 'link') {
+      if(node.url === "") {
+      	Transforms.unwrapNodes(editor, {at: path})
+      }
       if(Node.string(node).length === 0) {
-	Transforms.removeNodes(editor, {at: path})
-	return;
+	      Transforms.removeNodes(editor, {at: path})
+        return;
       }
     }
 

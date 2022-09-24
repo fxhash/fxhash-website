@@ -26,11 +26,11 @@ export const headingDefinition: IArticleBlockDefinition<any> = {
   },
   insertBreakBehavior: EBreakBehavior.insertParagraph,
   hasUtilityWrapper: true,
-  instanciateElement: () => ({
+  instanciateElement: ({depth=1, text=""}: {depth?: number, text?:string} = {}) => ({
     type: "heading",
-    depth: 1,
+    depth,
     children: [{
-      text: ""
+      text
     }]
   }),
   editAttributeComp: HeadingAttributeSettings,

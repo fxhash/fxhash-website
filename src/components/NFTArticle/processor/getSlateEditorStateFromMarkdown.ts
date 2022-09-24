@@ -64,30 +64,44 @@ const remarkSlateTransformerOverrides: OverridedMdastBuilders = {
   mention: mentionProcessor.transformMarkdownMdhastToSlate,
 };
 
-interface PayloadSlateEditorStateFromMarkdown {
-  [p: string]: any;
-  editorState: Descendant[];
+export interface PayloadSlateEditorStateFromMarkdown {
+  [p: string]: any
+  editorState: Descendant[]
 }
 
-export default async function getSlateEditorStateFromMarkdown(
-  markdown: string
-): Promise<PayloadSlateEditorStateFromMarkdown | null> {
-  try {
-    const matterResult = matter(markdown);
-    const processed = await unified()
-      .use(remarkParse)
-      .use(mdastFlattenListItemParagraphs)
-      .use(mdastParseMentions)
-      .use(remarkMath)
-      .use(remarkGfm)
-      .use(remarkUnwrapImages)
-      .use(remarkDirective)
-      .use(remarkFxHashCustom)
-      .use(remarkToSlate, {
-        overrides: remarkSlateTransformerOverrides,
-      })
-      .process(matterResult.content);
+const mdToSlateProcessor = unified()
+  .use(remarkParse)
+  .use(mdastFlattenListItemParagraphs)
+  .use(mdastParseMentions)
+  .use(remarkMath)
+  .use(remarkGfm)
+  .use(remarkUnwrapImages)
+  .use(remarkDirective)
+  .use(remarkFxHashCustom)
+  .use(remarkToSlate, {
+    overrides: remarkSlateTransformerOverrides,
+  })
 
+
+export default async function getSlateEditorStateFromMarkdown(markdown: string): Promise<PayloadSlateEditorStateFromMarkdown | null>  {
+  try {
+    const matterResult = matter(markdown)
+    const processed = await mdToSlateProcessor.process(matterResult.content)
+
+    return {
+      ...matterResult.data,
+      editorState: processed.result as Descendant[]
+    };
+  } catch(e)  {
+    console.error(e)
+    return null;
+  }
+}
+
+export function getSlateEditorStateFromMarkdownSync(markdown: string): PayloadSlateEditorStateFromMarkdown | null  {
+  try {
+    const matterResult = matter(markdown)
+    const processed = mdToSlateProcessor.processSync(matterResult.content)
     return {
       ...matterResult.data,
       editorState: processed.result as Descendant[],
