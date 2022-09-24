@@ -41,6 +41,7 @@ const _UserArticles = ({ user, showLocalDrafts }: UserArticlesProps) => {
     }
   })
   const articles = useMemo(() => data?.user?.articles || [], [data?.user?.articles])
+  console.log(articles)
   const handleFetchMore = useCallback(async () => {
     if (loading || hasNothingToFetch) return false;
     const { data: newData } = await fetchMore({
