@@ -10,6 +10,7 @@ import { remarkFxHashCustom } from "./plugins";
 import remarkGfm from "remark-gfm";
 import { mathProcessor } from "../elements/Math/MathProcessor";
 import { figureProcessor } from "../elements/Figure/FigureProcessor";
+import { mentionProcessor } from "../elements/Mention/MentionProcessor";
 
 export function convertSlateLeafDirectiveToMarkdown(
   node: any,
@@ -36,6 +37,7 @@ const slateToRemarkTransformerOverrides: OverridedSlateBuilders = {
   figure: figureProcessor.transformSlateToMarkdownMdhast!,
   inlineMath: mathProcessor.transformSlateToMarkdownMdhast!,
   math: mathProcessor.transformSlateToMarkdownMdhast!,
+  mention: mentionProcessor.transformSlateToMarkdownMdhast!,
 }
 export default async function getMarkdownFromSlateEditorState(slate: Node[] ) {
   try {

@@ -13,6 +13,7 @@ const EmbedSpotify = memo<EmbedElementProps>(({ href }) => {
         className={style.spotify}
         src={src} width="660px"
         height="380" frameBorder="0"
+        sandbox="allow-same-origin allow-scripts"
         allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture">
       </iframe>
     </div>

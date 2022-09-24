@@ -2,7 +2,7 @@ import style from "./Loader.module.scss"
 import cs from "classnames"
 
 interface Props {
-  color?: "white" | "black"
+  color?: "white" | "black" | "gray-light"
   size?: "tiny" | "small" | "regular" | "large"
   className?: string
 }

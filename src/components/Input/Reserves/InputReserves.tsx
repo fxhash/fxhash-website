@@ -7,14 +7,13 @@ import { IOptions, Select } from "../Select"
 import { useState } from "react"
 import { InputReserve } from "./InputReserve"
 import { FormikErrors } from "formik"
+import { mapReserveDefinition } from "../../../utils/generative-token"
 
 
-const MethodOptions: IOptions[] = [
-  {
-    label: "Access list",
-    value: EReserveMethod.WHITELIST,
-  }
-]
+const MethodOptions: IOptions[] = Object.keys(EReserveMethod).map(method => ({
+  label: mapReserveDefinition[method as EReserveMethod].label,
+  value: method,
+}))
 
 interface Props extends InputProps<IReserve<string>[]> {
   maxSize: number
@@ -34,7 +33,7 @@ export function InputReserves({
         ...value,
         {
           method: method,
-          data: [],
+          data: mapReserveDefinition[method].initialValue,
           amount: "0",
         }
       ])

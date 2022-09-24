@@ -29,7 +29,7 @@ export function UserGuard({
   const router = useRouter()
 
   const isAllowed = useMemo(() => {
-    if (userCtx.user && userCtx.userFetched) {
+    if (userCtx.user) {
       if (allowed) {
         return allowed(userCtx.user)
       }

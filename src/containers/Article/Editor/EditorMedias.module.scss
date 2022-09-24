@@ -39,6 +39,15 @@
     object-fit: contain;
     display: block;
   }
+  .media_audio {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
 
   .uri {
     font-size: var(--font-size-vsmall);

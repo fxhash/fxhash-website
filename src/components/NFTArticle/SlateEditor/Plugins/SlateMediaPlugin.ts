@@ -1,11 +1,12 @@
-import { BaseOperation, Descendant, Editor, Element, Node, Text, Transforms } from "slate"
+import { BaseOperation, Descendant, Editor, Element, Node, Point, Range, Text, Transforms } from "slate"
 import { EnhanceEditorWith, FxEditor } from "../../../../types/ArticleEditor/Editor";
 import { IEditorMediaFile } from "../../../../types/ArticleEditor/Image";
 import { arrayRemoveDuplicates } from "../../../../utils/array";
 import { ALL_TEXT_FORMATS } from "../index";
-import { isFormatActive } from "../utils";
+import { isFormatActive, lookupElementByType } from "../utils";
 import { imageDefinition } from "../../elements/Image/ImageDefinition";
 import { videoDefinition } from "../../elements/Video/VideoDefinition";
+import { audioDefinition } from "../../elements/Audio/AudioDefinition";
 
 // a list of operation types which can mutate the list of medias
 const mediaMutableOperations: BaseOperation["type"][] = [
@@ -13,7 +14,7 @@ const mediaMutableOperations: BaseOperation["type"][] = [
   "remove_node",
   "set_node"
 ]
-const mediaTypes = ["image", "video"];
+const mediaTypes = ["image", "video", "audio"];
 const mediaTypesWithFigure = [...mediaTypes, "figure"];
 
 function insertImage(editor: Editor, url: string) {
@@ -21,6 +22,9 @@ function insertImage(editor: Editor, url: string) {
 }
 function insertVideo(editor: Editor, src: string) {
   Transforms.insertNodes(editor, videoDefinition.instanciateElement!({ src, caption: '' }))
+}
+function insertAudio(editor: Editor, src: string) {
+  Transforms.insertNodes(editor, audioDefinition.instanciateElement!({ src, caption: '' }))
 }
 
 /**
@@ -38,11 +42,15 @@ function getEditorMedias(editor: FxEditor): IEditorMediaFile[] {
         uri: node.url,
         type: "image"
       })
-    }
-    else if (node.type === "video" && node.src && node.src !== "") {
+    } else if (node.type === "video" && node.src && node.src !== "") {
       medias.push({
         uri: node.src,
         type: "video"
+      })
+    } else if (node.type === "audio" && node.src && node.src !== "") {
+      medias.push({
+        uri: node.src,
+        type: "audio"
       })
     }
   }
@@ -61,11 +69,29 @@ export const withMediaSupport: EnhanceEditorWith = (
   editor: Editor,
   onMediasUpdate: (medias: IEditorMediaFile[]) => void
 ): FxEditor => {
-  const { insertData, isVoid, normalizeNode, apply } = editor
+  const { insertData, isVoid, normalizeNode, apply, deleteBackward } = editor
 
   // make image nodes void nodes
   editor.isVoid = element =>
     mediaTypes.indexOf(element.type) > -1 ? true : isVoid(element)
+
+  /**
+   * Deleting empty figcaption don't delete the media
+   */
+  editor.deleteBackward = unit => {
+    const { selection } = editor
+    if (selection && Range.isCollapsed(selection)) {
+      const element = lookupElementByType(editor, 'figcaption');
+      if (element) {
+        const [, elementPath] = element
+        const start = Editor.start(editor, elementPath)
+        if (Point.equals(selection.anchor, start)) {
+          return
+        }
+      }
+    }
+    deleteBackward(unit)
+  }
 
   // when an operation is triggered, we check if the operation may have resulted
   // in a change of the medias list, and if so we trigger an update.
@@ -104,6 +130,9 @@ export const withMediaSupport: EnhanceEditorWith = (
         } else if (fileType === 'video') {
           const src = URL.createObjectURL(file)
           insertVideo(editor, src);
+        } else if (fileType === 'audio') {
+          const src = URL.createObjectURL(file)
+          insertAudio(editor, src);
         }
       }
     }
@@ -121,7 +150,7 @@ export const withMediaSupport: EnhanceEditorWith = (
     if (Element.isElement(node) && node.type === "figure") {
       // if the figure node doesn't have an image node as a child, the figure
       // node gets completely removed
-      if (!node.children.find((node: Node) => ["image", "video", "figcaption"].indexOf(node.type) > -1)) {
+      if (!node.children.find((node: Node) => ["image", "video", "audio", "figcaption"].indexOf(node.type) > -1)) {
         Transforms.removeNodes(editor, {
           at: path
         })
@@ -192,6 +221,12 @@ export const withMediaSupport: EnhanceEditorWith = (
             at: path
           })
         } else if (node.type === "video" && node.src === target.uri) {
+          Transforms.setNodes(editor, {
+            src: uri
+          }, {
+            at: path
+          })
+        } else if (node.type === "audio" && node.src === target.uri) {
           Transforms.setNodes(editor, {
             src: uri
           }, {

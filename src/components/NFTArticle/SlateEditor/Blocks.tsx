@@ -16,6 +16,8 @@ import { headingDefinition } from "../elements/Heading/HeadingDefinition";
 import { inlineMathDefinition, mathDefinition } from "../elements/Math/MathDefinition";
 import { thematicBreakDefinition } from "../elements/ThematicBreak/ThematicBreakDefinition";
 import { paragraphDefinition } from "../elements/Paragraph/ParagraphDefinition";
+import { mentionDefinition } from "../elements/Mention/MentionDefinition";
+import { audioDefinition } from "../elements/Audio/AudioDefinition";
 
 export enum EArticleBlocks {
   "embed-media" = "embed-media",
@@ -40,7 +42,9 @@ export enum EArticleBlocks {
   "figure" = "figure",
   "figcaption" = "figcaption",
   "image" = "image",
-  "video" = "video"
+  "video" = "video",
+  "mention" = "mention",
+  "audio" = "audio"
 }
 
 export const ArticleBlocksList: (keyof EArticleBlocks)[] = Object.keys(
@@ -54,6 +58,7 @@ export const InstantiableArticleBlocksList: EArticleBlocks[] = [
   EArticleBlocks["tezos-storage-pointer"],
   EArticleBlocks.image,
   EArticleBlocks.video,
+  EArticleBlocks.audio,
   EArticleBlocks["embed-media"],
   EArticleBlocks.math,
   EArticleBlocks.table,
@@ -115,6 +120,8 @@ export const BlockDefinitions: Record<EArticleBlocks, IArticleBlockDefinition<an
   "figcaption": figcaptionDefinition,
   "image": imageDefinition,
   "video": videoDefinition,
+  "mention": mentionDefinition,
+  "audio": audioDefinition,
   "html": {
     name: "HTML",
     icon: <i className="fa-brands fa-html5" aria-hidden/>,
