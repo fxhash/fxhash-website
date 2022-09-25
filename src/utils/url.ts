@@ -32,3 +32,25 @@ export function sanitizeUrl(url: string, fallback: string = "about:blank") {
 
   return sanitizedUrl
 }
+
+/**
+ * Given an URL, and if it's a valid URL, replaces it with the fallback if the
+ * domain is external to the application's domain.
+ */
+export function urlSanitizeExternalSource(
+  url: string,
+  fallback: string = "/"
+): string {
+  try {
+    const parsed = new URL(url)
+    // this is a valid URL, we check for host
+    if (parsed.hostname !== "fxhash.xyz") {
+      return fallback
+    } else {
+      return url
+    }
+  } catch (err: any) {
+    // this is most likely not a valid URL, so we can just return it
+    return url
+  }
+}
