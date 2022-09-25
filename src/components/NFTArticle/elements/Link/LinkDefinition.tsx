@@ -1,7 +1,6 @@
 import { IArticleBlockDefinition } from "../../../../types/ArticleEditor/BlockDefinition"
 import { sanitizeUrl } from "../../../../utils/url"
 
-
 export const linkDefinition: IArticleBlockDefinition<any> = {
   name: "Link",
   icon: <i className="fa-solid fa-link" aria-hidden />,
