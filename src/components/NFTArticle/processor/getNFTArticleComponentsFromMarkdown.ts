@@ -12,6 +12,7 @@ import rehypeKatex from "rehype-katex"
 import rehypePrism from "rehype-prism"
 import rehypeStringify from "rehype-stringify"
 import rehypeReact from "rehype-react"
+import rehypeSanitize from "rehype-sanitize"
 import { Element } from "hast"
 import {
   ComponentsWithNodeOptions,
@@ -87,6 +88,7 @@ export default async function getNFTArticleComponentsFromMarkdown(
       .use(remarkRehype)
       .use(rehypePrism)
       .use(rehypeKatex)
+      .use(rehypeSanitize)
       .use(rehypeStringify)
       // todo: fix this, because of image component for some reason
       // @ts-ignore
