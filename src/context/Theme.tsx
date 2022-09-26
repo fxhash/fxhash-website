@@ -89,7 +89,7 @@ const defaultProperties: ISettingsProperties = {
   spaceBetweenCards: 30,
   borderWidthCards: 3,
   shadowCards: 19,
-  cardSize: 270,
+  cardSize: {},
   displayInfosGenerativeCard: true,
   displayInfosGentkCard: true,
   displayPricesCard: false,

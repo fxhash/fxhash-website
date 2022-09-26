@@ -107,7 +107,7 @@ export const ExploreIncomingTokens = ({ }: Props) => {
 	    canTrigger={!!data && !loading}
 	  >
 	    <CardsContainer>
-	      {generativeTokens?.length > 0 && generativeTokens.map(token => (
+	      {generativeTokens && generativeTokens?.length > 0 && generativeTokens.map(token => (
 		<GenerativeTokenCard
 		  key={token.id}
 		  token={token}
