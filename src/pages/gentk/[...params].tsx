@@ -112,8 +112,8 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
 
       <section className={cs(layout["padding-big"])}>
         <div className={cs(style.artwork_header_mobile, layout.break_words)}>
-          <h3>{ objkt.name }</h3>
-          <Spacing size="regular"/>
+          <h3>{objkt.name}</h3>
+          <Spacing size="regular" />
           <EntityBadge
             prependText="created by"
             user={creator}
@@ -121,13 +121,9 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
             centered
             size="regular"
           />
-          <Spacing size="2x-small"/>
-          <UserBadge
-            prependText="owned by"
-            user={owner}
-            size="regular"
-          />
-          <Spacing size="x-large"/>
+          <Spacing size="2x-small" />
+          <UserBadge prependText="owned by" user={owner} size="regular" />
+          <Spacing size="x-large" />
         </div>
 
         <div className={cs(layout.cols2, layout["responsive-reverse"])}>

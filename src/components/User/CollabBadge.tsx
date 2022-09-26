@@ -14,16 +14,9 @@ interface Props extends IEntityBadgeProps {
   centered?: boolean
 }
 export function CollabBadge(props: Props) {
-  const {
-    user,
-    size,
-    toggeable = false,
-    centered = false, 
-    avatarSide,
-  } = props
-  const [collaborators, setCollaborators] = useState(user.collaborators);
-  const [isInitialized, setIsInitialized] = useState(false);
-
+  const { user, size, toggeable = false, centered = false, avatarSide } = props
+  const [collaborators, setCollaborators] = useState(user.collaborators)
+  const [isInitialized, setIsInitialized] = useState(false)
 
   const [opened, setOpened] = useState<boolean>(false)
   useEffect(() => {
