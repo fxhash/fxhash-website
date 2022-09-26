@@ -6,7 +6,7 @@ import text from "../../styles/Text.module.css"
 import style from "../../styles/GenerativeTokenDetails.module.scss"
 import colors from "../../styles/Colors.module.css"
 import cs from "classnames"
-import client from "../../services/ApolloClient"
+import { createApolloClient } from "../../services/ApolloClient"
 import { Spacing } from "../../components/Layout/Spacing"
 import { UserBadge } from "../../components/User/UserBadge"
 import { Button } from "../../components/Button"
@@ -355,7 +355,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   // only run query if valid variables
   if (Object.keys(variables).length > 0) {
-    const { data } = await client.query({
+    const apolloClient = createApolloClient()
+    const { data } = await apolloClient.query({
       query: Qu_objkt,
       fetchPolicy: "no-cache",
       variables,
