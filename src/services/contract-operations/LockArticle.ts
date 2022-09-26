@@ -28,6 +28,6 @@ export class LockArticleOperation extends ContractOperation<TLockArticleOperatio
   }
 
   success(): string {
-    return `Article meta_data was successfully locked.`
+    return `The metadata of your article ${this.params.article.title} was successfully locked.`
   }
 }
