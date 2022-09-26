@@ -34,7 +34,7 @@ export function ObjktCard({
   const previewUri =
     useHQ && objkt.metadata?.displayUri
       ? objkt.metadata.displayUri
-      : objkt.metadata.thumbnailUri
+      : objkt.metadata?.thumbnailUri
   return (
     <Link href={url} passHref>
       <AnchorForward style={{ height: "100%" }}>

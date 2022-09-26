@@ -11,7 +11,7 @@ interface ISettingsProperties {
   spaceBetweenCards: number
   displayPricesCard: boolean
   displayBurntCard: boolean
-  cardSize: number
+  cardSize: {[scope: string]: number }
   displayInfosGenerativeCard: boolean
   displayInfosGentkCard: boolean
   borderWidthCards: number

@@ -28,7 +28,7 @@ interface PropsChildren {
   isSearchMinimized: boolean
   setIsSearchMinimized: (state: boolean) => void
   cardSize: number
-  setCardSize: (size: number | null) => void
+  setCardSize: (size: number) => void
 }
 
 interface Props {
@@ -64,10 +64,10 @@ export function CardsExplorer({
     [cardSizeScope, settings.cardSize]
   )
 
-  const handleSetCardSize = (value) => {
+  const handleSetCardSize = (value: number) => {
     settings.update("cardSize", {
       ...settings.cardSize,
-      [cardSizeScope]: value,
+      [cardSizeScope!]: value,
     })
   }
 
