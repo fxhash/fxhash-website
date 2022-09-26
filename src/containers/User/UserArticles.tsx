@@ -41,7 +41,6 @@ const _UserArticles = ({ user, showLocalDrafts }: UserArticlesProps) => {
     }
   })
   const articles = useMemo(() => data?.user?.articles || [], [data?.user?.articles])
-  console.log(articles)
   const handleFetchMore = useCallback(async () => {
     if (loading || hasNothingToFetch) return false;
     const { data: newData } = await fetchMore({
@@ -54,6 +53,7 @@ const _UserArticles = ({ user, showLocalDrafts }: UserArticlesProps) => {
       setHasNothingToFetch(true);
     }
   }, [loading, hasNothingToFetch, fetchMore, articles.length])
+  
   return (
     <div className={cs(style.container, layout['padding-big'])}>
       <InfiniteScrollTrigger
