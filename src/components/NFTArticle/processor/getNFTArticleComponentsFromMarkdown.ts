@@ -74,6 +74,7 @@ interface PayloadNFTArticleComponentsFromMarkdown {
 export default async function getNFTArticleComponentsFromMarkdown(
   markdown: string
 ): Promise<PayloadNFTArticleComponentsFromMarkdown | null> {
+  console.log(markdown)
   try {
     const matterResult = matter(markdown)
     const processed = await unified()
