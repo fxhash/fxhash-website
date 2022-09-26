@@ -114,7 +114,13 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
         <div className={cs(style.artwork_header_mobile, layout.break_words)}>
           <h3>{objkt.name}</h3>
           <Spacing size="regular" />
-          <UserBadge prependText="created by" user={creator} size="regular" />
+          <EntityBadge
+            prependText="created by"
+            user={creator}
+            toggeable
+            centered
+            size="regular"
+          />
           <Spacing size="2x-small" />
           <UserBadge prependText="owned by" user={owner} size="regular" />
           <Spacing size="x-large" />
