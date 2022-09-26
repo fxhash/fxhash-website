@@ -1,6 +1,6 @@
-import { gql } from "@apollo/client";
-import { Frag_UserBadge } from "./user";
-import { Frag_RoyaltySplit } from "./split";
+import { gql } from "@apollo/client"
+import { Frag_UserBadge } from "./user"
+import { Frag_RoyaltySplit } from "./split"
 
 export const Frag_ArticleInfosAction = gql`
   fragment ArticleInfosAction on Article {
@@ -24,12 +24,13 @@ export const Frag_ArticleInfos = gql`
     description
     tags
     thumbnailUri
+    metadataLocked
     author {
       ...UserBadgeInfos
     }
   }
   ${Frag_UserBadge}
-`;
+`
 
 export const Frag_ArticleFull = gql`
   fragment ArticleFull on Article {
@@ -48,6 +49,7 @@ export const Frag_ArticleFull = gql`
     royalties
     metadataUri
     metadata
+    metadataLocked
     flag
     moderationReason
     author {
@@ -69,4 +71,4 @@ export const Frag_ArticleFull = gql`
   ${Frag_ArticleInfos}
   ${Frag_UserBadge}
   ${Frag_RoyaltySplit}
-`;
+`

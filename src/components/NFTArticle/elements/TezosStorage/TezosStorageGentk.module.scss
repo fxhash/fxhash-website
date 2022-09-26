@@ -1,3 +1,5 @@
+@import "../../../../styles/Variables";
+
 .container {
   display: flex;
   flex-direction: column;
@@ -18,5 +20,12 @@
 
   .user {
     font-size: var(--font-size-small);
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .header {
+    flex-wrap: wrap;
+    gap: 4px 8px;
   }
 }

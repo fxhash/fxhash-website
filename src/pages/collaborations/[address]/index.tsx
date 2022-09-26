@@ -8,7 +8,7 @@ import cs from "classnames"
 import { UserGuard } from "../../../components/Guards/UserGuard"
 import Head from "next/head"
 import { Collaboration, User, UserType } from "../../../types/entities/User"
-import client from "../../../services/ApolloClient"
+import { createApolloClient } from "../../../services/ApolloClient"
 import { Qu_collaboration } from "../../../queries/user"
 import { SectionTitle } from "../../../components/Layout/SectionTitle"
 import { UserBadge } from "../../../components/User/UserBadge"
@@ -66,7 +66,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   let collab: Collaboration | null = null
 
   if (id) {
-    const { data } = await client.query({
+    const apolloClient = createApolloClient()
+    const { data } = await apolloClient.query({
       query: Qu_collaboration,
       fetchPolicy: "no-cache",
       variables: { id },

@@ -95,18 +95,29 @@ export function ArticleInfos({
           </span>
 
           <strong>Metadata</strong>
-          <a
-            target="_blank"
-            referrerPolicy="no-referrer"
-            rel="noreferrer"
-            href={urlIpfs}
-            className={cs(text.info_link, {
-              [style.disabled]: isPreview
-            })}
-            tabIndex={isPreview ? -1 : 0}
-          >
-            view on IPFS <i className="fas fa-external-link-square" aria-hidden/>
-          </a>
+          <div className={cs(text.info)}>
+            {article.metadataLocked && (
+              <>
+                <span className={cs(style.locked)}>
+                  <i className="fa-sharp fa-solid fa-lock" aria-hidden/>
+                  locked
+                </span>
+                {" - "}
+              </>
+            )}
+            <a
+              target="_blank"
+              referrerPolicy="no-referrer"
+              rel="noreferrer"
+              href={urlIpfs}
+              className={cs(text.info_link, {
+                [style.disabled]: isPreview
+              })}
+              tabIndex={isPreview ? -1 : 0}
+            >
+              view on IPFS <i className="fas fa-external-link-square" aria-hidden/>
+            </a>
+          </div>
 
           {!isPreview && article.revisions?.length > 1 && (
             <ArticleRevisions

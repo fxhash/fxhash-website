@@ -1,4 +1,10 @@
-.root {}
+.root {
+  .infos {
+    font-family: var(--font-family-primary) !important;
+    font-size: var(--font-size-small);
+    color: var(--color-gray);
+  }
+}
 
 .content {
   min-height: 600px;
