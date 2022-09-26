@@ -66,9 +66,8 @@ export function MintProgress({
           style={{
             width: progress * 100 + "%",
           }}
-
         />
-        { !complete &&
+        {!complete && (
           <div
             className={cs(style.bar_reserve)}
             style={{
@@ -76,7 +75,7 @@ export function MintProgress({
               width: reserveProgress * 100 + "%",
             }}
           />
-        }
+        )}
         <div
           className={cs(style.bar_burnt)}
           style={{
