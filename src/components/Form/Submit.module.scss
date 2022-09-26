@@ -1,0 +1,15 @@
+.root {
+  margin-top: 2em;
+  display: flex;
+  justify-content: flex-start;
+
+  &.layout_center {
+    justify-content: center;
+  }
+
+  &.layout_center-vertical {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+}
