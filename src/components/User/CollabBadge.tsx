@@ -32,17 +32,20 @@ export function CollabBadge(props: Props) {
     setIsInitialized(true)
   }, [])
   return (
-    <div className={cs(
-      style.root,
-      style[`size_${size}`],
-      style[`side_${avatarSide}`], {
-        [style.opened]: opened,
-        [style.toggeable]: toggeable,
-        [style.hide]: !isInitialized,
-        [style.centered]: centered,
-      },
-      className,
-    )}>
+    <div
+      className={cs(
+        style.root,
+        style[`size_${size}`],
+        style[`side_${avatarSide}`],
+        {
+          [style.opened]: opened,
+          [style.toggeable]: toggeable,
+          [style.hide]: !isInitialized,
+          [style.centered]: centered,
+        },
+        className
+      )}
+    >
       <button
         type="button"
         className={cs(style.avatars)}
@@ -57,7 +60,7 @@ export function CollabBadge(props: Props) {
                 badgeStyle.avatar,
                 badgeStyle[`avatar-${size}`],
                 style.avatar,
-                classNameAvatar,
+                classNameAvatar
               )}
             />
             <span className={cs(style.user_name)}>
