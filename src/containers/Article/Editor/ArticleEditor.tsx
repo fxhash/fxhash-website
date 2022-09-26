@@ -220,7 +220,12 @@ export function ArticleEditor({
   const hasErrors = errorsList.length > 0
 
   return (
-    <form onSubmit={formik.handleSubmit}>
+    <form
+      onSubmit={event => {
+        event.preventDefault()
+        event.stopPropagation()
+      }}
+    >
       {hasLocalAutosave && localId &&
         <AutosaveArticle
           id={localId}
@@ -462,10 +467,11 @@ export function ArticleEditor({
         }
         <Submit layout="center">
           <Button
-            type="submit"
+            type="button"
             size="large"
             color="secondary"
             disabled={hasErrors}
+            onClick={() => formik.handleSubmit()}
           >
             preview &amp; {editMinted ? "update" : "mint"}
           </Button>
