@@ -2,6 +2,7 @@ import { IArticleElementProcessor } from "../../../../types/ArticleEditor/Proces
 
 export const embedProcessor: IArticleElementProcessor = {
   htmlTagName: "embed-media",
+  htmlAttributes: ["href", "editable"],
   transformMdhastToComponent: (node, properties) => {
     if (!properties.href) return null
     return {

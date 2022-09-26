@@ -32,6 +32,7 @@ import { ThematicBreakEditor } from "../elements/ThematicBreak/ThematicBreakEdit
 import { VideoDisplay } from "../elements/Video/VideoDisplay"
 import { LinkElement } from "../elements/Link/LinkElement"
 import { MentionDisplay } from "../elements/Mention/MentionDisplay"
+import { articleSchemaSanitize } from "./sanitize"
 
 declare module "rehype-react" {
   interface WithNode {
@@ -88,7 +89,7 @@ export default async function getNFTArticleComponentsFromMarkdown(
       .use(remarkRehype)
       .use(rehypePrism)
       .use(rehypeKatex)
-      .use(rehypeSanitize)
+      .use(rehypeSanitize, articleSchemaSanitize)
       .use(rehypeStringify)
       // todo: fix this, because of image component for some reason
       // @ts-ignore
