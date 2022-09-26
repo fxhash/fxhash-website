@@ -15,6 +15,7 @@ export interface IProps {
   toggeable?: boolean
   newTab?: boolean
   isInline?: boolean
+  centered?: boolean
 }
 
 /**

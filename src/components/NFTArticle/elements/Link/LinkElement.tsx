@@ -1,5 +1,5 @@
 import { PropsWithChildren, useMemo } from "react"
-import { sanitizeUrl } from "./LinkDefinition"
+import { sanitizeUrl } from "../../../../utils/url"
 
 interface Props {
   href: string
