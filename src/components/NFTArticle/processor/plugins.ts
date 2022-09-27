@@ -23,9 +23,9 @@ import { audioProcessor } from "../elements/Audio/AudioProcessor";
 // }
 
 interface CustomArticleElementsByType {
-  leafDirective: Record<string, IArticleElementProcessor>;
-  textDirective: Record<string, IArticleElementProcessor>;
-  containerDirective: Record<string, IArticleElementProcessor>;
+  leafDirective: Record<string, IArticleElementProcessor>
+  textDirective: Record<string, IArticleElementProcessor>
+  containerDirective: Record<string, IArticleElementProcessor>
 }
 export const customNodes: CustomArticleElementsByType = {
   leafDirective: {
@@ -91,12 +91,12 @@ export function mdastFlattenListItemParagraphs(): Transformer<Root, Root> {
         listItem.children.length === 1 &&
         listItem.children[0].type === "paragraph"
       ) {
-        listItem.children = listItem.children[0].children;
+        listItem.children = listItem.children[0].children
       }
-      return listItem;
-    });
-    return ast;
-  };
+      return listItem
+    })
+    return ast
+  }
 }
 
 export function mdastParseMentions(): Transformer<Root, Root> {
@@ -108,10 +108,10 @@ export function mdastParseMentions(): Transformer<Root, Root> {
         function ($0: any, $1: any) {
           return u("mention", { name: "mention", value: $1 }, [
             { type: "text", value: "" },
-          ]);
+          ])
         },
       ],
-    ]);
-    return ast;
-  };
+    ])
+    return ast
+  }
 }

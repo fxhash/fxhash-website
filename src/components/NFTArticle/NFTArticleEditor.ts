@@ -1,3 +1,3 @@
-import { SlateEditor as NftArticleEditor } from './SlateEditor'
+import { SlateEditor as NftArticleEditor } from "./SlateEditor"
 
-export default NftArticleEditor;
+export default NftArticleEditor

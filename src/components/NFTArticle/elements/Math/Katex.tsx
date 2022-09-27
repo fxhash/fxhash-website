@@ -1,5 +1,5 @@
-import React, { memo, useMemo } from 'react'
-import KaTeX from 'katex'
+import React, { memo, useMemo } from "react"
+import KaTeX from "katex"
 import style from "./BlockKatex.module.scss"
 import cs from "classnames"
 
@@ -13,16 +13,16 @@ const _Katex = ({ children, inline }: KatexProps) => {
     const generatedHtml = KaTeX.renderToString(children, {
       displayMode: !inline,
       throwOnError: false,
-    });
-    return { __html: generatedHtml };
-  }, [children, inline]);
+    })
+    return { __html: generatedHtml }
+  }, [children, inline])
   return (
     <span
       contentEditable={false}
       dangerouslySetInnerHTML={html}
       className={cs(style.render)}
     />
-  );
-};
+  )
+}
 
-export const Katex = memo(_Katex);
+export const Katex = memo(_Katex)

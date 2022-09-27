@@ -6,17 +6,16 @@ import { PropsWithChildren } from "react"
 interface Props {
   title: string
 }
-export function ErrorPage({
-  title,
-  children,
-}: PropsWithChildren<Props>) {
+export function ErrorPage({ title, children }: PropsWithChildren<Props>) {
   return (
-    <div className={cs(
-      style.root,
-      layout.y_centered,
-      layout.full_body_height,
-      layout['padding-big']
-    )}>
+    <div
+      className={cs(
+        style.root,
+        layout.y_centered,
+        layout.full_body_height,
+        layout["padding-big"]
+      )}
+    >
       <h1>{title}</h1>
       <div>{children}</div>
     </div>

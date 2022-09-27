@@ -3,44 +3,51 @@ import style from "./VideoAttributeSettings.module.scss"
 import { Dropzone } from "../../../Input/Dropzone"
 import { TabDefinition } from "../../../Layout/Tabs"
 import { TabsContainer } from "../../../Layout/TabsContainer"
-import { useCallback, useState } from "react";
-import { Field } from "../../../Form/Field";
-import { InputText } from "../../../Input/InputText";
-import { Submit } from "../../../Form/Submit";
-import { Button } from "../../../Button";
-import { TEditAttributeComp } from "../../../../types/ArticleEditor/BlockDefinition";
+import { useCallback, useState } from "react"
+import { Field } from "../../../Form/Field"
+import { InputText } from "../../../Input/InputText"
+import { Submit } from "../../../Form/Submit"
+import { Button } from "../../../Button"
+import { TEditAttributeComp } from "../../../../types/ArticleEditor/BlockDefinition"
 
 const tabs: TabDefinition[] = [
   {
-    name: "Upload"
+    name: "Upload",
   },
   {
-    name: "External link"
-  }
+    name: "External link",
+  },
 ]
-const acceptedVideoFiles = ["video/mp4", "video/ogg", "video/webm"];
+const acceptedVideoFiles = ["video/mp4", "video/ogg", "video/webm"]
 
-export const VideoAttributeSettings: TEditAttributeComp = ({
-  onEdit,
-}) => {
+export const VideoAttributeSettings: TEditAttributeComp = ({ onEdit }) => {
   const [textUrl, setTextUrl] = useState<string>("")
 
-  const handleAddFile = useCallback((files) => {
-    if (!files || !files[0]) return null;
-    const [file] = files;
-    if (file) {
+  const handleAddFile = useCallback(
+    (files) => {
+      if (!files || !files[0]) return null
+      const [file] = files
+      if (file) {
+        onEdit({
+          src: URL.createObjectURL(file),
+        })
+      }
+    },
+    [onEdit]
+  )
+  const handleChangeUrlVideo = useCallback(
+    (event) => setTextUrl(event.target.value),
+    []
+  )
+  const handleImportVideoFromUrl = useCallback(
+    (event) => {
+      event.preventDefault()
       onEdit({
-        src: URL.createObjectURL(file)
+        src: textUrl,
       })
-    }
-  }, [onEdit])
-  const handleChangeUrlVideo = useCallback(event => setTextUrl(event.target.value), []);
-  const handleImportVideoFromUrl = useCallback((event) => {
-    event.preventDefault()
-    onEdit({
-      src: textUrl
-    })
-  }, [onEdit, textUrl])
+    },
+    [onEdit, textUrl]
+  )
 
   return (
     <div>
@@ -56,27 +63,20 @@ export const VideoAttributeSettings: TEditAttributeComp = ({
                 onChange={handleAddFile}
                 accepted={acceptedVideoFiles}
                 className={cs(style.dropzone)}
-                textDefault={(
+                textDefault={
                   <div className={cs(style.dropzone__content)}>
-                    <i className="fa-solid fa-video" aria-hidden/>
-                    <span>
-                      Import a video (100mb max)
-                    </span>
+                    <i className="fa-solid fa-video" aria-hidden />
+                    <span>Import a video (50mb max)</span>
                   </div>
-                )}
-                textDrag={(
+                }
+                textDrag={
                   <div className={cs(style.dropzone__content)}>
-                    <span>
-                      Drop video file
-                    </span>
+                    <span>Drop video file</span>
                   </div>
-                )}
+                }
               />
-            )
-              : tabIndex === 1 ? (
-              <div
-                className={cs(style.link_content)}
-              >
+            ) : tabIndex === 1 ? (
+              <div className={cs(style.link_content)}>
                 <Field className={cs(style.field)}>
                   <label>URL to video</label>
                   <InputText
@@ -98,7 +98,7 @@ export const VideoAttributeSettings: TEditAttributeComp = ({
                   </Button>
                 </Submit>
               </div>
-            ): null}
+            ) : null}
           </div>
         )}
       </TabsContainer>

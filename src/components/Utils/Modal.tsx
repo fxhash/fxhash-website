@@ -15,27 +15,22 @@ export function Modal({
   index = 999999,
   onClose,
   className,
-  children
+  children,
 }: PropsWithChildren<Props>) {
   return (
     <>
       <Cover onClick={onClose} index={index} />
-      <div 
-        className={cs(style.modal, effects['drop-shadow-big'], className)}
-        style={{ zIndex: index+1 }}
+      <div
+        className={cs(style.modal, effects["drop-shadow-big"], className)}
+        style={{ zIndex: index + 1 }}
       >
         <header>
-          <span>{ title }</span>
-          <button
-            className={cs(style.btn_close)}
-            onClick={onClose}
-          >
-            <i aria-hidden className="far fa-times"/>
+          <span>{title}</span>
+          <button className={cs(style.btn_close)} onClick={onClose}>
+            <i aria-hidden className="far fa-times" />
           </button>
         </header>
-        <main>
-          {children}
-        </main>
+        <main>{children}</main>
       </div>
     </>
   )

@@ -34,6 +34,11 @@ const _UserArticles = ({ user, showLocalDrafts }: UserArticlesProps) => {
     },
     fetchPolicy: "network-only",
     nextFetchPolicy: "cache-and-network",
+    onCompleted: (newData) => {
+      if (!newData?.user?.articles?.length || newData.user.articles.length < ITEMS_PER_PAGE) {
+        setHasNothingToFetch(true);
+      }
+    }
   })
   const articles = useMemo(() => data?.user?.articles || [], [data?.user?.articles])
   const handleFetchMore = useCallback(async () => {
@@ -44,10 +49,11 @@ const _UserArticles = ({ user, showLocalDrafts }: UserArticlesProps) => {
         take: ITEMS_PER_PAGE
       },
     });
-    if (!(newData?.user?.articles?.length > 0)) {
+    if (!newData?.user?.articles?.length || newData.user.articles.length < ITEMS_PER_PAGE) {
       setHasNothingToFetch(true);
     }
   }, [loading, hasNothingToFetch, fetchMore, articles.length])
+  
   return (
     <div className={cs(style.container, layout['padding-big'])}>
       <InfiniteScrollTrigger

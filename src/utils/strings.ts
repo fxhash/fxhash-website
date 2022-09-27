@@ -37,3 +37,7 @@ export function isTezosAddress(str: string): boolean {
 export function countWords(str: string): number {
   return str.match(/\w+/g)?.length || 0;
 }
+
+export function stringBytesSize(str: string): number {
+  return new Blob([str]).size
+};

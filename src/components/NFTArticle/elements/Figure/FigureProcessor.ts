@@ -6,11 +6,11 @@ const createMarkdownImageFromFigure = (nodeFigure: Node, nodeImage: Node) => {
   // create a regular image node
   const imageNode: any = {
     type: "image",
-    url: nodeImage.url
+    url: nodeImage.url,
   }
 
   // find if there's a caption
-  const caption: Node|null = nodeFigure.children.find(
+  const caption: Node | null = nodeFigure.children.find(
     (node: Node) => node.type === ("figcaption" as any)
   )
   if (caption && caption.children?.length > 0) {
@@ -21,10 +21,10 @@ const createMarkdownImageFromFigure = (nodeFigure: Node, nodeImage: Node) => {
 
 const createMarkdownVideoFromFigure = (nodeFigure: Node, nodeVideo: Node) => {
   const videoNode: Node = {
-    type: 'video',
-    src: nodeVideo.src
+    type: "video",
+    src: nodeVideo.src,
   }
-  const caption: Node|null = nodeFigure.children.find(
+  const caption: Node | null = nodeFigure.children.find(
     (node: Node) => node.type === ("figcaption" as any)
   )
   if (caption && caption.children?.length > 0) {
@@ -61,6 +61,6 @@ export const figureProcessor: IArticleElementProcessor = {
     const mediaNode: Node|null = node.children.find(
       (node: Node) => ["image", "video", "audio"].indexOf(node.type) > -1
     )
-    return mediasConvert[mediaNode.type](node, mediaNode);
-  }
+    return mediasConvert[mediaNode.type](node, mediaNode)
+  },
 }

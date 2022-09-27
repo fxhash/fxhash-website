@@ -1,27 +1,46 @@
-import { BaseOperation, Descendant, Editor, Element, Node, Point, Range, Text, Transforms } from "slate"
-import { EnhanceEditorWith, FxEditor } from "../../../../types/ArticleEditor/Editor";
-import { IEditorMediaFile } from "../../../../types/ArticleEditor/Image";
-import { arrayRemoveDuplicates } from "../../../../utils/array";
-import { ALL_TEXT_FORMATS } from "../index";
-import { isFormatActive, lookupElementByType } from "../utils";
-import { imageDefinition } from "../../elements/Image/ImageDefinition";
-import { videoDefinition } from "../../elements/Video/VideoDefinition";
+import {
+  BaseOperation,
+  Descendant,
+  Editor,
+  Element,
+  Node,
+  Point,
+  Range,
+  Text,
+  Transforms,
+} from "slate"
+import {
+  EnhanceEditorWith,
+  FxEditor,
+} from "../../../../types/ArticleEditor/Editor"
+import { IEditorMediaFile } from "../../../../types/ArticleEditor/Image"
+import { arrayRemoveDuplicates } from "../../../../utils/array"
+import { ALL_TEXT_FORMATS } from "../index"
+import { isFormatActive, lookupElementByType } from "../utils"
+import { imageDefinition } from "../../elements/Image/ImageDefinition"
+import { videoDefinition } from "../../elements/Video/VideoDefinition"
 import { audioDefinition } from "../../elements/Audio/AudioDefinition";
 
 // a list of operation types which can mutate the list of medias
 const mediaMutableOperations: BaseOperation["type"][] = [
   "insert_node",
   "remove_node",
-  "set_node"
+  "set_node",
 ]
 const mediaTypes = ["image", "video", "audio"];
 const mediaTypesWithFigure = [...mediaTypes, "figure"];
 
 function insertImage(editor: Editor, url: string) {
-  Transforms.insertNodes(editor, imageDefinition.instanciateElement!({ url, caption: '' }))
+  Transforms.insertNodes(
+    editor,
+    imageDefinition.instanciateElement!({ url, caption: "" })
+  )
 }
 function insertVideo(editor: Editor, src: string) {
-  Transforms.insertNodes(editor, videoDefinition.instanciateElement!({ src, caption: '' }))
+  Transforms.insertNodes(
+    editor,
+    videoDefinition.instanciateElement!({ src, caption: "" })
+  )
 }
 function insertAudio(editor: Editor, src: string) {
   Transforms.insertNodes(editor, audioDefinition.instanciateElement!({ src, caption: '' }))
@@ -40,12 +59,12 @@ function getEditorMedias(editor: FxEditor): IEditorMediaFile[] {
     if (node.type === "image" && node.url && node.url !== "") {
       medias.push({
         uri: node.url,
-        type: "image"
+        type: "image",
       })
     } else if (node.type === "video" && node.src && node.src !== "") {
       medias.push({
         uri: node.src,
-        type: "video"
+        type: "video",
       })
     } else if (node.type === "audio" && node.src && node.src !== "") {
       medias.push({
@@ -55,10 +74,7 @@ function getEditorMedias(editor: FxEditor): IEditorMediaFile[] {
     }
   }
   // return the result without the duplicates
-  return arrayRemoveDuplicates(
-    medias,
-    (a, b) => a.uri === b.uri
-  )
+  return arrayRemoveDuplicates(medias, (a, b) => a.uri === b.uri)
 }
 
 /**
@@ -72,16 +88,16 @@ export const withMediaSupport: EnhanceEditorWith = (
   const { insertData, isVoid, normalizeNode, apply, deleteBackward } = editor
 
   // make image nodes void nodes
-  editor.isVoid = element =>
+  editor.isVoid = (element) =>
     mediaTypes.indexOf(element.type) > -1 ? true : isVoid(element)
 
   /**
    * Deleting empty figcaption don't delete the media
    */
-  editor.deleteBackward = unit => {
+  editor.deleteBackward = (unit) => {
     const { selection } = editor
     if (selection && Range.isCollapsed(selection)) {
-      const element = lookupElementByType(editor, 'figcaption');
+      const element = lookupElementByType(editor, "figcaption")
       if (element) {
         const [, elementPath] = element
         const start = Editor.start(editor, elementPath)
@@ -102,8 +118,9 @@ export const withMediaSupport: EnhanceEditorWith = (
     // if the operation may have resulted in the change on the media list
     if (mediaMutableOperations.includes(operation.type)) {
       // locate the node
-      const node = (operation as any).node
-        || Editor.node(editor, (operation as any).path)[0]
+      const node =
+        (operation as any).node ||
+        Editor.node(editor, (operation as any).path)[0]
 
       // if the node is eventually holding a media object
       if (mediaTypesWithFigure.includes(node.type)) {
@@ -127,7 +144,7 @@ export const withMediaSupport: EnhanceEditorWith = (
           // create a link to the image stored locally
           const url = URL.createObjectURL(file)
           insertImage(editor, url)
-        } else if (fileType === 'video') {
+        } else if (fileType === "video") {
           const src = URL.createObjectURL(file)
           insertVideo(editor, src);
         } else if (fileType === 'audio') {
@@ -152,7 +169,7 @@ export const withMediaSupport: EnhanceEditorWith = (
       // node gets completely removed
       if (!node.children.find((node: Node) => ["image", "video", "audio", "figcaption"].indexOf(node.type) > -1)) {
         Transforms.removeNodes(editor, {
-          at: path
+          at: path,
         })
         return
       }
@@ -166,37 +183,49 @@ export const withMediaSupport: EnhanceEditorWith = (
       for (const [child, childPath] of Node.children(editor, path)) {
         if (child.type === "figcaption") {
           C++
-          if(C == 1) {
+          if (C == 1) {
             // for the first node we want to remove any formatting from the string
-            if (ALL_TEXT_FORMATS.some(format => isFormatActive(editor, format, {at: childPath}))) {
+            if (
+              ALL_TEXT_FORMATS.some((format) =>
+                isFormatActive(editor, format, { at: childPath })
+              )
+            ) {
               Transforms.unsetNodes(
                 editor,
-                ['emphasis', 'strong', 'inlineCode'],
+                ["emphasis", "strong", "inlineCode"],
                 {
                   at: childPath,
-                  match: Text.isText
+                  match: Text.isText,
                 }
-              );
+              )
             }
           }
           // if this is not the first figcaption node
           if (C > 1) {
             // move the figcaption after the figure
-            Transforms.setNodes(editor, {
-              type: "paragraph"
-            }, {
-              at: childPath
-            })
+            Transforms.setNodes(
+              editor,
+              {
+                type: "paragraph",
+              },
+              {
+                at: childPath,
+              }
+            )
             Transforms.liftNodes(editor, {
-              at: childPath
+              at: childPath,
             })
           }
-        }
-        else {
+        } else {
           // any child that is not the first image in the figure moved after the figure
-          if (!(mediaTypes.indexOf(child.type) > -1 && childPath[childPath.length - 1] === 0)) {
-            Transforms.liftNodes(editor, {at: childPath})
-            return;
+          if (
+            !(
+              mediaTypes.indexOf(child.type) > -1 &&
+              childPath[childPath.length - 1] === 0
+            )
+          ) {
+            Transforms.liftNodes(editor, { at: childPath })
+            return
           }
         }
       }
@@ -215,11 +244,15 @@ export const withMediaSupport: EnhanceEditorWith = (
       // if the node is found, trigger an update
       if (node.type === target.type) {
         if (node.type === "image" && node.url === target.uri) {
-          Transforms.setNodes(editor, {
-            url: uri
-          }, {
-            at: path
-          })
+          Transforms.setNodes(
+            editor,
+            {
+              url: uri,
+            },
+            {
+              at: path,
+            }
+          )
         } else if (node.type === "video" && node.src === target.uri) {
           Transforms.setNodes(editor, {
             src: uri

@@ -1,13 +1,13 @@
 import style from "./Dropzone.module.scss"
 import cs from "classnames"
-import { ReactNode, useCallback, useMemo, useState } from 'react'
-import { useDropzone } from 'react-dropzone'
+import { ReactNode, useCallback, useMemo, useState } from "react"
+import { useDropzone } from "react-dropzone"
 import { prettyPrintBytes } from "../../utils/units"
 
 export interface DropzoneProps {
   accepted?: string | string[]
   files?: File[] | null
-  onChange: (files: File[]|null) => void
+  onChange: (files: File[] | null) => void
   textDefault?: ReactNode
   textDrag?: ReactNode
   className?: string
@@ -21,31 +21,33 @@ export function Dropzone({
   files,
   onChange,
   onClick,
-  className
+  className,
 }: DropzoneProps) {
-  const [error, setError] = useState<string|null>(null)
+  const [error, setError] = useState<string | null>(null)
 
-  const onDrop = useCallback(acceptedFiles => {
-    if (acceptedFiles.length > 0) {
-      // send file upwards
-      onChange(acceptedFiles)
-      setError(null)
-    }
-    else {
-      onChange(null)
-      setError("Format is not supported")
-    }
-  }, [onChange])
-
-  const { getRootProps, getInputProps, isDragActive, acceptedFiles } = useDropzone({
-    onDrop,
-    onDragEnter: (event) => {
+  const onDrop = useCallback(
+    (acceptedFiles) => {
+      if (acceptedFiles.length > 0) {
+        // send file upwards
+        onChange(acceptedFiles)
+        setError(null)
+      } else {
+        onChange(null)
+        setError("Format is not supported")
+      }
     },
-    accept: accepted,
-    maxFiles: 1,
-    multiple: false,
-    maxSize: parseInt(process.env.NEXT_PUBLIC_MAX_FILESIZE!) * 1024 * 1024
-  })
+    [onChange]
+  )
+
+  const { getRootProps, getInputProps, isDragActive, acceptedFiles } =
+    useDropzone({
+      onDrop,
+      onDragEnter: (event) => {},
+      accept: accepted,
+      maxFiles: 1,
+      multiple: false,
+      maxSize: parseInt(process.env.NEXT_PUBLIC_MAX_FILESIZE!) * 1024 * 1024,
+    })
 
   const rootProps = useMemo(() => {
     const props = getRootProps()
@@ -60,15 +62,19 @@ export function Dropzone({
       {...rootProps}
       className={cs(style.container, className, {
         [style.drag]: isDragActive,
-        [style.error]: !!error
+        [style.error]: !!error,
       })}
       contentEditable={false}
     >
       <input {...getInputProps()} />
       {files ? (
-        <div>{ files.map(f => `📃 ${f.name} (${prettyPrintBytes(f.size)})`).join(', ') }</div>
-      ):(
-        <div>{ error ? error : (isDragActive ? textDrag : textDefault) }</div>
+        <div>
+          {files
+            .map((f) => `📃 ${f.name} (${prettyPrintBytes(f.size)})`)
+            .join(", ")}
+        </div>
+      ) : (
+        <div>{error ? error : isDragActive ? textDrag : textDefault}</div>
       )}
     </div>
   )

@@ -28,6 +28,7 @@
     margin-right: auto;
 
     img {
+      max-height: calc(100vh - 64px);
       max-width: 100%;
       margin-left: auto;
       margin-right: auto;
@@ -57,6 +58,14 @@
     flex-direction: column;
     align-items: flex-end;
     gap: 8px;
+  }
+  .editTools {
+    & > button {
+      margin: $spacing 0;
+    }
+  }
+  .lockButton {
+    align-self: center;
   }
 }
 
@@ -194,12 +203,11 @@
 
     figure.article_image, figure.article_video,  {
       width: fit-content;
-      margin: 0;
-      margin-left: auto;
-      margin-right: auto;
+      margin: 0 auto;
 
       img,
       video {
+        max-height: calc(100vh - 64px);
         max-width: 100%;
         margin-left: auto;
         margin-right: auto;
@@ -229,6 +237,13 @@
 
     :global(.hr) {
       font-size: 1.2rem;
+    }
+
+    ul li {
+      margin-top: 0.5em;
+      &:first-child {
+        margin-top: 0;
+      }
     }
 
     table {
