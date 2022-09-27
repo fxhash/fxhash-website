@@ -40,6 +40,7 @@ const _AutosaveArticle = ({
         minted: isMinted,
       },
     })
+
     const article = loadLocalArticle(id);
     if (JSON.stringify(article.form) !== JSON.stringify(articleFormState)) {
       setStatus('failed')
