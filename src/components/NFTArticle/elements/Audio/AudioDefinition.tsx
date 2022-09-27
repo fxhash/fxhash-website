@@ -1,5 +1,5 @@
-import { IArticleBlockDefinition } from "../../../../types/ArticleEditor/BlockDefinition";
-import { AudioEditor } from "./AudioEditor";
+import { IArticleBlockDefinition } from "../../../../types/ArticleEditor/BlockDefinition"
+import { AudioEditor } from "./AudioEditor"
 
 interface InstanciateAudioOpts {
   src?: string
@@ -7,7 +7,7 @@ interface InstanciateAudioOpts {
 }
 export const audioDefinition: IArticleBlockDefinition<InstanciateAudioOpts> = {
   name: "Audio",
-  icon: <i className="fa-solid fa-music" aria-hidden/>,
+  icon: <i className="fa-solid fa-music" aria-hidden />,
   buttonInstantiable: true,
   render: ({ attributes, element, children }) => {
     return (
@@ -17,19 +17,26 @@ export const audioDefinition: IArticleBlockDefinition<InstanciateAudioOpts> = {
     )
   },
   hasUtilityWrapper: false,
-  instanciateElement: (opts = { src: '', caption: '' }) => ({
+  instanciateElement: (opts = { src: "", caption: "" }) => ({
     type: "figure",
-    children: [{
-      type: "audio",
-      src: opts.src,
-      children: [{
-        text: ""
-      }]
-    }, {
-      type: "figcaption",
-      children: [{
-        text: opts.caption
-      }]
-    }]
+    children: [
+      {
+        type: "audio",
+        src: opts.src,
+        children: [
+          {
+            text: "",
+          },
+        ],
+      },
+      {
+        type: "figcaption",
+        children: [
+          {
+            text: opts.caption,
+          },
+        ],
+      },
+    ],
   }),
-};
+}

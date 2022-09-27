@@ -1,6 +1,6 @@
-import { IArticleElementProcessor } from "../../../../types/ArticleEditor/Processor";
-import { Node } from "slate";
-import { convertSlateLeafDirectiveToMarkdown } from "../../processor/getMarkdownFromSlateEditorState";
+import { IArticleElementProcessor } from "../../../../types/ArticleEditor/Processor"
+import { Node } from "slate"
+import { convertSlateLeafDirectiveToMarkdown } from "../../processor/getMarkdownFromSlateEditorState"
 
 const createMarkdownImageFromFigure = (nodeFigure: Node, nodeImage: Node) => {
   // create a regular image node
@@ -35,10 +35,10 @@ const createMarkdownVideoFromFigure = (nodeFigure: Node, nodeVideo: Node) => {
 
 const createMarkdownAudioFromFigure = (nodeFigure: Node, nodeVideo: Node) => {
   const videoNode: Node = {
-    type: 'audio',
-    src: nodeVideo.src
+    type: "audio",
+    src: nodeVideo.src,
   }
-  const caption: Node|null = nodeFigure.children.find(
+  const caption: Node | null = nodeFigure.children.find(
     (node: Node) => node.type === ("figcaption" as any)
   )
   if (caption && caption.children?.length > 0) {
@@ -46,10 +46,13 @@ const createMarkdownAudioFromFigure = (nodeFigure: Node, nodeVideo: Node) => {
   }
   return convertSlateLeafDirectiveToMarkdown(videoNode)
 }
-const mediasConvert: Record<string, (nodeFigure: Node, nodeMedia: Node) => any> = {
-  "image": createMarkdownImageFromFigure,
-  "video": createMarkdownVideoFromFigure,
-  "audio": createMarkdownAudioFromFigure,
+const mediasConvert: Record<
+  string,
+  (nodeFigure: Node, nodeMedia: Node) => any
+> = {
+  image: createMarkdownImageFromFigure,
+  video: createMarkdownVideoFromFigure,
+  audio: createMarkdownAudioFromFigure,
 }
 
 export const figureProcessor: IArticleElementProcessor = {
@@ -58,7 +61,7 @@ export const figureProcessor: IArticleElementProcessor = {
    * in proper markdown
    */
   transformSlateToMarkdownMdhast: (node) => {
-    const mediaNode: Node|null = node.children.find(
+    const mediaNode: Node | null = node.children.find(
       (node: Node) => ["image", "video", "audio"].indexOf(node.type) > -1
     )
     return mediasConvert[mediaNode.type](node, mediaNode)
