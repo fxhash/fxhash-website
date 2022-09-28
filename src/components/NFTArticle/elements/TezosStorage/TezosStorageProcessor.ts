@@ -5,6 +5,8 @@ import {
 } from "../../../../types/TezosStorage"
 
 export const tezosStorageProcessor: IArticleElementProcessor = {
+  htmlTagName: "tezos-storage-pointer",
+  htmlAttributes: ["contract", "path", ...OptionalTezosStoragePointerKeys],
   transformMdhastToComponent: (node, properties) => {
     const props: Partial<ITezosStoragePointer> = {
       contract: properties.contract,

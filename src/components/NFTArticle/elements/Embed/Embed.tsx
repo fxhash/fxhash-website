@@ -21,7 +21,11 @@ const Embed = memo(
       </EmbedEditor>
     ) : (
       <>
-        {href && <EmbedMediaDisplay href={href}>{children}</EmbedMediaDisplay>}
+        {href && (
+          <EmbedMediaDisplay href={href} showNotFound>
+            {children}
+          </EmbedMediaDisplay>
+        )}
       </>
     )
 )
