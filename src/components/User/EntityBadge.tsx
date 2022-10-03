@@ -9,11 +9,13 @@ export interface IProps {
   hasLink?: boolean
   className?: string
   avatarSide?: "left" | "right" | "top"
+  classNameAvatar?: string
   displayAddress?: boolean
   displayAvatar?: boolean
   toggeable?: boolean
   newTab?: boolean
   isInline?: boolean
+  centered?: boolean
 }
 
 /**

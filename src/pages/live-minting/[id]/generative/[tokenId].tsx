@@ -6,8 +6,7 @@ import { GenerativeToken } from "../../../../types/entities/GenerativeToken"
 import { ipfsGatewayUrl } from "../../../../services/Ipfs"
 import { truncateEnd } from "../../../../utils/strings"
 import { Qu_genToken } from "../../../../queries/generative-token"
-import client from "../../../../services/ApolloClient"
-import { LayoutMinimalist } from "../../../../components/Layout/LayoutMinimalist"
+import { createApolloClient } from "../../../../services/ApolloClient"
 import { NextPageWithLayout } from "../../../_app"
 import { GenerativeDisplayMinimalist } from "../../../../containers/Generative/Display/GenerativeDisplayMinimalist"
 import { Spacing } from "../../../../components/Layout/Spacing"
@@ -93,7 +92,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   let token: any = null
 
   if (id) {
-    const { data, error } = await client.query({
+    const apolloClient = createApolloClient()
+    const { data, error } = await apolloClient.query({
       query: Qu_genToken,
       fetchPolicy: "no-cache",
       variables: {

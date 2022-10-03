@@ -5,7 +5,7 @@ import styles from "../styles/Home.module.scss"
 import layout from "../styles/Layout.module.scss"
 import cs from "classnames"
 import Colors from "../styles/Colors.module.css"
-import client from "../services/ApolloClient"
+import { createApolloClient } from "../services/ApolloClient"
 import { gql } from "@apollo/client"
 import {
   GenerativeToken,
@@ -212,8 +212,8 @@ export async function getServerSideProps() {
     take: number
     filters: GenerativeTokenFilters
   }
-
-  const { data, error } = await client.query<any, IQueryVariables>({
+  const apolloClient = createApolloClient()
+  const { data, error } = await apolloClient.query<any, IQueryVariables>({
     query: gql`
       ${Frag_GenAuthor}
       ${Frag_GenPricing}

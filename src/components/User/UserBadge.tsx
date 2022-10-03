@@ -1,5 +1,4 @@
 import style from "./UserBadge.module.scss"
-import layout from "../../styles/Layout.module.scss"
 import cs from "classnames"
 import Link from "next/link"
 import { User } from "../../types/entities/User"
@@ -80,8 +79,9 @@ export function UserBadge({
   displayAddress = false,
   displayAvatar = true,
   newTab = false,
-  isInline = false,
   className,
+  classNameAvatar,
+  isInline = false,
 }: Props) {
   // the user goes through an aliases check
   const userAlias = useMemo(() => user && userAliases(user), [user])
@@ -109,10 +109,15 @@ export function UserBadge({
         <Avatar
           uri={userAlias.avatarUri}
           isInline={isInline}
-          className={cs(style.avatar, style[`avatar-${size}`], {
-            [style.avatar_mod]: isPlatformOwned(userAlias),
-            [style.avatar_donation]: isDonator(userAlias),
-          })}
+          className={cs(
+            style.avatar,
+            style[`avatar-${size}`],
+            {
+              [style.avatar_mod]: isPlatformOwned(userAlias),
+              [style.avatar_donation]: isDonator(userAlias),
+            },
+            classNameAvatar
+          )}
         />
       )}
 

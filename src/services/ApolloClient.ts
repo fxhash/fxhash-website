@@ -116,4 +116,11 @@ export const clientSideClient = new ApolloClient({
   }),
 })
 
-export default client
+export function createApolloClient() {
+  return new ApolloClient({
+    uri: process.env.NEXT_PUBLIC_API_ROOT,
+    cache: new InMemoryCache(),
+    ssrMode: true,
+    ssrForceFetchDelay: 1000,
+  })
+}

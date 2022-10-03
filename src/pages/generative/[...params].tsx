@@ -3,7 +3,7 @@ import { GetServerSideProps, NextPage } from "next"
 import layout from "../../styles/Layout.module.scss"
 import style from "../../styles/GenerativeTokenDetails.module.scss"
 import cs from "classnames"
-import client from "../../services/ApolloClient"
+import { createApolloClient } from "../../services/ApolloClient"
 import { GenerativeToken } from "../../types/entities/GenerativeToken"
 import { Spacing } from "../../components/Layout/Spacing"
 import { ipfsGatewayUrl } from "../../services/Ipfs"
@@ -118,11 +118,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
   }
   let token = null
-
+  const apolloClient = createApolloClient()
   if (idStr) {
     const id = parseInt(idStr as string)
     if (id === 0 || id) {
-      const { data } = await client.query({
+      const { data } = await apolloClient.query({
         query: Qu_genToken,
         fetchPolicy: "no-cache",
         variables: { id },
@@ -132,7 +132,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       }
     }
   } else if (slug) {
-    const { data } = await client.query({
+    const { data } = await apolloClient.query({
       query: Qu_genToken,
       fetchPolicy: "no-cache",
       variables: { slug },
