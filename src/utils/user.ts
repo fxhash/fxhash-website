@@ -156,10 +156,11 @@ export const UserDonationAliases: Record<string, Partial<User>> = {
     flag: UserFlag.VERIFIED,
   },
 
-  "KT1Jpf2TAcZS7QfBraQMBeCxjFhH6kAdDL4z": {
+  KT1Jpf2TAcZS7QfBraQMBeCxjFhH6kAdDL4z: {
     id: "KT1Jpf2TAcZS7QfBraQMBeCxjFhH6kAdDL4z",
     name: "Savepakistan",
-    descriptionLight: "Tezos Flood Relief Fundraiser for Pakistan.",
+    descriptionLight:
+      "Savepakistan - Cross-platform Tezos Flood Relief Fundraiser.",
     description: "Tezos Flood Relief Fundraiser for Pakistan.",
     avatarUri: "ipfs://Qma8bVd3213ZaWUFkRdxCwnCq52fbtzgykDUnniQ36gEuh",
     donationAddress: true,
