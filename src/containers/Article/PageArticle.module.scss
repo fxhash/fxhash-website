@@ -69,6 +69,12 @@
   }
 }
 
+.collect {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .infos {
   max-width: 900px;
   margin: 150px auto 0;
