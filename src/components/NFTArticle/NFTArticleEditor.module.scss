@@ -1,0 +1,92 @@
+@import "../../styles/fonts";
+
+.toolbar {
+  display: flex;
+  flex-direction: row;
+  z-index: 3;
+  width: 100%;
+  margin-bottom: 16px;
+  background: var(--color-white);
+  position: sticky;
+  top: 0;
+  left: 0;
+  border-bottom: 3px solid var(--color-editor-black);
+
+  .container_view {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    margin: auto;
+    width: min(900px, 100%);
+    button {
+      position: relative;
+      height: 40px;
+      text-align: center;
+      font-size: var(--font-size-small);
+      padding: 8px 16px;
+      cursor: pointer;
+      border: 3px solid var(--color-editor-gray-vvlight);
+      border-bottom: 0;
+      background: var(--color-editor-gray-vvlight);
+      color: var(--color-editor-gray);
+      margin: 0 4px -3px 0;
+      &:last-child {
+        margin-right: 0;
+      }
+      &:not(.view_active):after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: -3px;
+        right: -3px;
+        height: 3px;
+        background: var(--color-editor-black);
+        z-index: 2;
+      }
+      &.view_active {
+        color: var(--color-black);
+        background: var(--color-white);
+        border-color: var(--color-editor-black);
+      }
+    }
+  }
+}
+.container_centered {
+  width: min(900px, 100%);
+  margin: auto;
+}
+.container_markdown {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+.container_markdown_child {
+  flex: 1;
+}
+.container_preview_child {
+  flex: 1;
+  position: relative;
+}
+.container_preview {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 0 16px;
+}
+.textarea_markdown {
+  display: block;
+  width: 100%;
+  min-height: 90vh;
+  resize: vertical;
+  padding: 8px;
+  border: 0;
+  color: var(--color-black);
+  background-color: var(--color-editor-gray-vvlight);
+  &:focus {
+//    background: var(--color-white);
+  }
+}
