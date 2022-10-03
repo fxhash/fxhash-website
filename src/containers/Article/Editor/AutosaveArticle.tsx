@@ -6,7 +6,7 @@ import React, {
   useMemo,
   useState,
 } from "react"
-import { detectIncognito } from "detect-incognito"
+import { detectIncognito } from "detectincognitojs"
 import style from "./AutosaveArticle.module.scss"
 import effects from "../../../styles/Effects.module.scss"
 import text from "../../../styles/Colors.module.css"

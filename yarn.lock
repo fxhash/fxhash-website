@@ -1535,10 +1535,10 @@ des.js@^1.0.0:
     inherits "^2.0.1"
     minimalistic-assert "^1.0.0"
 
-detect-incognito@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/detect-incognito/-/detect-incognito-1.0.0.tgz#24f8f1957ddc246ef7f602653a2d015c55a84657"
-  integrity sha512-o/58BwX8VdQJFICJlgwLchBw/0js1tWDYe/ygOZhyuMw5pviIkOseH+IYPeR8iceU36KPJyDDm93iRhnH9mIEg==
+detectincognitojs@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/detectincognitojs/-/detectincognitojs-1.1.2.tgz#d01d305da1a284bc1064ec3c169a3b535889e64b"
+  integrity sha512-7b+0/zJ76ZTeEtNl9MCPEKgFauEw/LerdlwnEnnrgYCFhp5FL+RJGD13EF/R9FYqrVxL7H5fgCyBdzJ6BtkPhg==
 
 diff@^5.0.0:
   version "5.0.0"
