@@ -15,7 +15,7 @@ import style from "./SearchSummary.module.scss"
 import { useQuery } from "@apollo/client"
 import { Qu_search } from "../../queries/search"
 import { LoaderBlock } from "../../components/Layout/LoaderBlock"
-import { User } from "../../types/entities/User"
+import { User, UserFlag } from "../../types/entities/User"
 import {
   GenerativeToken,
   GenTokFlag,
@@ -66,7 +66,7 @@ const _SearchSummary = ({
   const filter = { searchQuery_eq: query }
   const sort = { relevance: "DESC" }
   const variables = {
-    usersFilters: filter,
+    usersFilters: { ...filter, flag_in: [UserFlag.NONE, UserFlag.VERIFIED] },
     usersSort: sort,
     usersTake: ITEMS_PER_PAGE,
     usersSkip: 0,

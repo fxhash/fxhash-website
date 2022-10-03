@@ -1,12 +1,4 @@
-import React, {
-  ElementType,
-  memo,
-  NamedExoticComponent,
-  ReactElement,
-  ReactNode,
-  useCallback,
-  useState,
-} from "react"
+import React, { ElementType, memo, useCallback, useState } from "react"
 import {
   checkIsTabKeyActive,
   TabDefinition,
@@ -19,7 +11,7 @@ import { SearchGentk } from "./SearchGentk"
 import { SearchArticles } from "./SearchArticles"
 import { SearchMarketplace } from "./SearchMarketplace"
 import Head from "next/head"
-import { Spacing } from "../../components/Layout/Spacing";
+import { Spacing } from "../../components/Layout/Spacing"
 
 export const searchTabs = [
   "summary",
