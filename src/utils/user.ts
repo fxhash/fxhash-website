@@ -9,7 +9,7 @@ export function userHasName(user: ConnectedUser): boolean {
  * if user has a name, then url uses its name, otherwise it uses its tkh
  */
 export function getUserProfileLink(user: ConnectedUser): string {
-  return userHasName(user) 
+  return userHasName(user)
     ? `/u/${encodeURIComponent(user.name!)}`
     : `/pkh/${user.id}`
 }
@@ -19,7 +19,7 @@ export function getUserProfileLink(user: ConnectedUser): string {
  * then returns its pkh but truncated in the middle, with triple dots
  */
 export function getUserName(user: User, truncateLength?: number): string {
-  return userHasName(user) 
+  return userHasName(user)
     ? user.name!.length > 64 ? user.name!.substring(0, 64) : user.name!
     : (truncateLength ? truncateMiddle(user.id, truncateLength) : user.id)
 }
@@ -135,7 +135,7 @@ export const UserDonationAliases: Record<string, Partial<User>> = {
     donationAddress: true,
     flag: UserFlag.VERIFIED,
   },
-  
+
   "tz1ZUohCAkGjp7vPjQcC4VWcpgYZR1t3Si5C": {
     id: "tz1ZUohCAkGjp7vPjQcC4VWcpgYZR1t3Si5C",
     name: "Three.js",
@@ -152,6 +152,16 @@ export const UserDonationAliases: Record<string, Partial<User>> = {
     descriptionLight: "Hydra is a set of tools for livecoding networked visuals. Inspired by analog modular synthesizers.",
     description: "Hydra is a set of tools for livecoding networked visuals. Inspired by analog modular synthesizers.",
     avatarUri: "ipfs://QmZUUcAw82oTGLVcB5ekGX7kLWMSdY3P9nxj3TtwFRBCNt",
+    donationAddress: true,
+    flag: UserFlag.VERIFIED,
+  },
+
+  "KT1Jpf2TAcZS7QfBraQMBeCxjFhH6kAdDL4z": {
+    id: "KT1Jpf2TAcZS7QfBraQMBeCxjFhH6kAdDL4z",
+    name: "Savepakistan",
+    descriptionLight: "Tezos Flood Relief Fundraiser for Pakistan.",
+    description: "Tezos Flood Relief Fundraiser for Pakistan.",
+    avatarUri: "ipfs://Qma8bVd3213ZaWUFkRdxCwnCq52fbtzgykDUnniQ36gEuh",
     donationAddress: true,
     flag: UserFlag.VERIFIED,
   },
