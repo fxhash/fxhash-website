@@ -10,7 +10,7 @@ import { TitleHyphen } from "../../components/Layout/TitleHyphen"
 import { Spacing } from "../../components/Layout/Spacing"
 import Head from "next/head"
 import gql from "graphql-tag"
-import client from "../../services/ApolloClient"
+import { createApolloClient } from "../../services/ApolloClient"
 import {
   GenerativeToken,
   GenTokFlag,
@@ -178,7 +178,8 @@ const ReportsPage: NextPage<Props> = ({ tokens }) => {
 }
 
 export async function getServerSideProps() {
-  const { data } = await client.query({
+  const apolloClient = createApolloClient()
+  const { data } = await apolloClient.query({
     query: Qu_reportedGenTokens,
     fetchPolicy: "no-cache",
     variables: {

@@ -1,6 +1,7 @@
 import { IArticleElementProcessor } from "../../../../types/ArticleEditor/Processor"
 
 export const mentionProcessor: IArticleElementProcessor = {
+  htmlAttributes: ["tzAddress"],
   transformSlateToMarkdownMdhast: (node: any) => {
     return {
       type: "text",

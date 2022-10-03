@@ -57,6 +57,13 @@
 
 .details {
   margin-top: $spacing-4x-large;
+
+  .locked {
+    font-weight: bold;
+    i {
+      margin-right: 4px;
+    }
+  }
 }
 
 .details_list {

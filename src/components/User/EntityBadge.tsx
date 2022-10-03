@@ -8,12 +8,14 @@ export interface IProps {
   prependText?: string
   hasLink?: boolean
   className?: string
+  classNameAvatar?: string
   avatarSide?: "left" | "right"
   displayAddress?: boolean
   displayAvatar?: boolean
   toggeable?: boolean
   newTab?: boolean
   isInline?: boolean
+  centered?: boolean
 }
 
 /**

@@ -241,6 +241,12 @@
   &.hide {
     opacity: 0;
   }
+
+  &.centered {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 }
 
 :global(.dark) :local(.root) {

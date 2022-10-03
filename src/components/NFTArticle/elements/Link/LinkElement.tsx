@@ -1,10 +1,8 @@
-import { PropsWithChildren, useMemo } from "react"
-import { sanitizeUrl } from "./LinkDefinition"
+import { PropsWithChildren } from "react"
 
 interface Props {
   href: string
 }
 export function LinkElement({ href, children }: PropsWithChildren<Props>) {
-  const sanitized = useMemo(() => sanitizeUrl(href), [href])
-  return <a href={sanitized}>{children}</a>
+  return <a href={href}>{children}</a>
 }
