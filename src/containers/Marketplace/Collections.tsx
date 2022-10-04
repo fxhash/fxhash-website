@@ -173,7 +173,7 @@ export const MarketplaceCollections = ({}: Props) => {
             }
           >
             <SearchInputControlled
-              minimize="mobile"
+              minimizeBehavior="mobile"
               onMinimize={setIsSearchMinimized}
               onSearch={handleSearch}
               className={styleSearch.large_search}

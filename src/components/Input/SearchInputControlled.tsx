@@ -17,9 +17,12 @@ export function SearchInputControlled({
   onSearch,
   initialValue = "",
   className,
-  minimize,
+  minimizeBehavior,
   onMinimize,
+  minimize,
   iconPosition,
+  onFocus,
+  onBlur,
 }: SearchInputControlledProps) {
   const [value, setValue] = useState<string>(initialValue)
 
@@ -30,9 +33,12 @@ export function SearchInputControlled({
       placeholder={placeholder}
       onSearch={onSearch}
       className={cs(className)}
+      minimizeBehavior={minimizeBehavior}
       minimize={minimize}
       onMinimize={onMinimize}
       iconPosition={iconPosition}
+      onFocus={onFocus}
+      onBlur={onBlur}
     />
   )
 }

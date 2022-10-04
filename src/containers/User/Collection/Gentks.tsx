@@ -248,7 +248,7 @@ export function UserCollectionGentks({
             }
           >
             <SearchInputControlled
-              minimize="mobile"
+              minimizeBehavior="mobile"
               onMinimize={setIsSearchMinimized}
               onSearch={(value) => {
                 if (value) {

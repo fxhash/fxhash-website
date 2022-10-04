@@ -1,7 +1,14 @@
 import style from "./SearchInput.module.scss"
 import effects from "../../styles/Effects.module.scss"
 import cs from "classnames"
-import { FormEvent, useCallback, useMemo, useRef, useState } from "react"
+import {
+  FocusEventHandler,
+  FormEvent,
+  useCallback,
+  useMemo,
+  useRef,
+  useState,
+} from "react"
 import useClickOutside from "../../hooks/useClickOutside"
 import useWindowSize, { breakpoints } from "../../hooks/useWindowsSize"
 
@@ -14,7 +21,10 @@ export interface SearchInputProps {
   onChange: (value: string) => void
   onSearch: (value: string) => void
   onMinimize?: (state: boolean) => void
-  minimize?: false | "desktop" | "mobile"
+  minimize?: boolean
+  minimizeBehavior?: false | "desktop" | "mobile"
+  onFocus?: FocusEventHandler<HTMLInputElement>
+  onBlur?: FocusEventHandler<HTMLInputElement>
 }
 
 export function SearchInput({
@@ -24,20 +34,30 @@ export function SearchInput({
   className,
   onChange,
   onMinimize,
-  minimize = false,
+  minimize,
+  minimizeBehavior = false,
   iconPosition = "left",
+  onBlur,
+  onFocus,
 }: SearchInputProps) {
   const refInput = useRef<HTMLInputElement>(null)
   const refForm = useRef<HTMLFormElement>(null)
-  const [isMinimized, setIsMinimized] = useState(!!minimize)
   const { width } = useWindowSize()
+  const [isMinimizedControlled, setIsMinimizedControlled] = useState(
+    !!minimizeBehavior
+  )
+  const isMinimized = useMemo(
+    () => (minimize === undefined ? isMinimizedControlled : minimize),
+    [isMinimizedControlled, minimize]
+  )
+
   const isMobile = useMemo(
     () => width !== undefined && width <= breakpoints.sm,
     [width]
   )
   const handleMinimize = useCallback(
     (newState) => {
-      setIsMinimized(newState)
+      setIsMinimizedControlled(newState)
       onMinimize?.(newState)
     },
     [onMinimize]
@@ -45,15 +65,21 @@ export function SearchInput({
   const handleSubmit = useCallback(
     (event: FormEvent<HTMLFormElement>) => {
       event.preventDefault()
-      if (minimize === "desktop" || (isMobile && minimize === "mobile")) {
+      if (
+        minimizeBehavior === "desktop" ||
+        (isMobile && minimizeBehavior === "mobile")
+      ) {
         handleMinimize(true)
       }
       onSearch(value)
     },
-    [handleMinimize, isMobile, minimize, onSearch, value]
+    [handleMinimize, isMobile, minimizeBehavior, onSearch, value]
   )
   const handleToggleMinimize = useCallback(() => {
-    if (minimize === "desktop" || (isMobile && minimize === "mobile")) {
+    if (
+      minimizeBehavior === "desktop" ||
+      (isMobile && minimizeBehavior === "mobile")
+    ) {
       handleMinimize(!isMinimized)
     }
     setTimeout(() => {
@@ -61,23 +87,27 @@ export function SearchInput({
         refInput.current.focus()
       }
     }, 10)
-  }, [handleMinimize, isMinimized, isMobile, minimize])
+  }, [handleMinimize, isMinimized, isMobile, minimizeBehavior])
 
   useClickOutside(
     refForm,
     () => handleMinimize(true),
-    !minimize ||
+    !minimizeBehavior ||
       (isMinimized &&
-        ((isMobile && minimize === "mobile") || minimize === "desktop"))
+        ((isMobile && minimizeBehavior === "mobile") ||
+          minimizeBehavior === "desktop"))
   )
+
+  console.log("min", isMinimized, minimize)
   return (
     <form
       ref={refForm}
       className={cs(style.search, effects["drop-shadow-small"], className, {
         [style["search--icon-right"]]: iconPosition === "right",
-        [style["search--minimize"]]: isMinimized && minimize === "desktop",
+        [style["search--minimize"]]:
+          isMinimized && minimizeBehavior === "desktop",
         [style["search--minimize-mobile"]]:
-          isMinimized && minimize === "mobile",
+          isMinimized && minimizeBehavior === "mobile",
       })}
       onSubmit={handleSubmit}
     >
@@ -93,6 +123,8 @@ export function SearchInput({
         ref={refInput}
         type="text"
         value={value}
+        onFocus={onFocus}
+        onBlur={onBlur}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
       />

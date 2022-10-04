@@ -68,7 +68,7 @@ const _SortAndFilters = ({
             }
           >
             <SearchInputControlled
-              minimize="mobile"
+              minimizeBehavior="mobile"
               initialValue={initialSearchQuery}
               onMinimize={setIsSearchMinimized}
               onSearch={onSearch}

@@ -1,11 +1,10 @@
 @import "../styles/Variables.scss";
 
 .header {
-  height: 140px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0px var(--main-padding-sm);
+  padding: 32px var(--main-padding-sm);
   padding-left: 10px;
 
   @media (max-width: $breakpoint-md) {
@@ -14,12 +13,19 @@
 }
 
 .logo {
+  height: 0;
   display: flex;
   align-items: center;
   color: var(--color-black);
   font-size: 24px;
-  
+
   span {
+    display: none;
+  }
+}
+
+@media (max-width: 490px) {
+  .logo--hide {
     display: none;
   }
 }

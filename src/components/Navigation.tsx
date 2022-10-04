@@ -14,13 +14,23 @@ import { useRouter } from "next/router"
 import { SettingsModal } from "../containers/Settings/SettingsModal"
 import { SearchInputControlled } from "./Input/SearchInputControlled"
 
-export function Navigation() {
+interface NavigationProps {
+  onChangeSearchVisibility: (isVisible: boolean) => void
+}
+export function Navigation({ onChangeSearchVisibility }: NavigationProps) {
   const userCtx = useContext(UserContext)
   const router = useRouter()
   const [opened, setOpened] = useState(false)
   const [isSearchMinimized, setIsSearchMinimized] = useState(true)
   const [settingsModal, setSettingsModal] = useState<boolean>(false)
 
+  const handleMinimize = useCallback(
+    (isMinimized) => {
+      setIsSearchMinimized(isMinimized)
+      onChangeSearchVisibility(!isMinimized)
+    },
+    [onChangeSearchVisibility]
+  )
   const handleSearch = useCallback(
     (search) => {
       router.push(`/search?query=${encodeURIComponent(search)}`)
@@ -38,6 +48,17 @@ export function Navigation() {
   return (
     <>
       <nav className={cs(style.nav, text.h6, { [style.opened]: opened })}>
+        <SearchInputControlled
+          iconPosition="right"
+          className={cs(style.search_mobile, {
+            [style["search_mobile--open"]]: !isSearchMinimized,
+          })}
+          placeholder="Search users, gentk, articles..."
+          onSearch={handleSearch}
+          onMinimize={handleMinimize}
+          minimize={isSearchMinimized}
+          minimizeBehavior="desktop"
+        />
         <button
           className={cs(style.hamburger)}
           onClick={() => setOpened(!opened)}
@@ -126,8 +147,9 @@ export function Navigation() {
             })}
             placeholder="Search users, gentk, articles..."
             onSearch={handleSearch}
-            onMinimize={setIsSearchMinimized}
-            minimize="desktop"
+            onMinimize={handleMinimize}
+            minimize={isSearchMinimized}
+            minimizeBehavior="desktop"
           />
 
           {userCtx.user ? (
