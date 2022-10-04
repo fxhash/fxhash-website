@@ -133,38 +133,7 @@
     }
 
     .content {
-      width: 100%;
-      height: 100%;
-      padding: 20px 15px 300px;
-      background-color: var(--color-white);
-      position: fixed;
-      top: 95px;
-      overflow-y: auto;
-      overscroll-behavior: contain;
-      flex-direction: column;
-      align-items: flex-end;
-      justify-content: flex-start;
-      right: -100%;
-      z-index: 1000;
-      transition: all 0.3s ease-out;
-      pointer-events: none;
-      .links {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-      }
-
-      .nav_button {
-        padding-top: 8px;
-        padding-bottom: 8px;
-      }
-    }
-
-    &.opened {
-      .content {
-        right: 0;
-        pointer-events: all;
-      }
+      display: none;
     }
   }
 }

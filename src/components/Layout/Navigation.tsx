@@ -13,6 +13,8 @@ import { useState, useEffect } from "react"
 import { useRouter } from "next/router"
 import { SettingsModal } from "../../containers/Settings/SettingsModal"
 import { SearchInputControlled } from "../Input/SearchInputControlled"
+import { getProfileLinks, navigationLinks } from "./navigationLinks"
+import { MobileMenu } from "./MobileMenu"
 
 interface NavigationProps {
   onChangeSearchVisibility: (isVisible: boolean) => void
@@ -37,6 +39,12 @@ export function Navigation({ onChangeSearchVisibility }: NavigationProps) {
     },
     [router]
   )
+  const handleClickConnect = useCallback(() => {
+    userCtx.connect()
+  }, [userCtx])
+  const handleClickDisconnect = useCallback(() => {
+    userCtx.disconnect()
+  }, [userCtx])
   const routerRoot = useMemo<string>(() => {
     return router.pathname.split("/")[1]
   }, [router.pathname])
@@ -45,6 +53,10 @@ export function Navigation({ onChangeSearchVisibility }: NavigationProps) {
     setOpened(false)
   }, [router.asPath])
 
+  const profileLinks = useMemo(
+    () => userCtx?.user && getProfileLinks(userCtx.user),
+    [userCtx.user]
+  )
   return (
     <>
       <nav className={cs(style.nav, text.h6, { [style.opened]: opened })}>
@@ -74,62 +86,37 @@ export function Navigation({ onChangeSearchVisibility }: NavigationProps) {
               [style.links_minimized]: !isSearchMinimized,
             })}
           >
-            <Link href="/explore">
-              <a
-                className={cs(style.nav_button, {
-                  [style.active]: routerRoot === "explore",
-                })}
-              >
-                explore
-              </a>
-            </Link>
-
-            <Dropdown
-              itemComp={<span>community</span>}
-              btnClassName={cs(style.nav_button, {
-                [style.active]: routerRoot === "community",
-              })}
-            >
-              <Link href="/community/opening-schedule">
-                <a className={style.nav_button}>opening schedule</a>
-              </Link>
-              <Link href="/community/reports">
-                <a className={style.nav_button}>tokens reported</a>
-              </Link>
-              <Link href="https://feedback.fxhash.xyz/">
-                <a className={style.nav_button} target="_blank">
-                  feedback
-                </a>
-              </Link>
-            </Dropdown>
-
-            <Link href="/marketplace">
-              <a
-                className={cs(style.nav_button, {
-                  [style.active]: routerRoot === "marketplace",
-                })}
-              >
-                marketplace
-              </a>
-            </Link>
-            <Link href="/sandbox">
-              <a
-                className={cs(style.nav_button, {
-                  [style.active]: routerRoot === "sandbox",
-                })}
-              >
-                sandbox
-              </a>
-            </Link>
-            <Link href="/doc">
-              <a
-                className={cs(style.nav_button, {
-                  [style.active]: routerRoot === "doc",
-                })}
-              >
-                doc
-              </a>
-            </Link>
+            {navigationLinks.map((link) => {
+              return "subMenu" in link ? (
+                <Dropdown
+                  itemComp={<span>{link.label}</span>}
+                  btnClassName={cs(style.nav_button, {
+                    [style.active]: routerRoot === link.key,
+                  })}
+                >
+                  {link.subMenu.map((linkSubmenu) => (
+                    <Link key={linkSubmenu.key} href={linkSubmenu.href}>
+                      <a
+                        className={style.nav_button}
+                        target={linkSubmenu.external ? "_blank" : undefined}
+                      >
+                        {linkSubmenu.label}
+                      </a>
+                    </Link>
+                  ))}
+                </Dropdown>
+              ) : (
+                <Link href={link.href}>
+                  <a
+                    className={cs(style.nav_button, {
+                      [style.active]: routerRoot === link.key,
+                    })}
+                  >
+                    {link.label}
+                  </a>
+                </Link>
+              )
+            })}
           </div>
 
           <button
@@ -152,7 +139,7 @@ export function Navigation({ onChangeSearchVisibility }: NavigationProps) {
             minimizeBehavior="desktop"
           />
 
-          {userCtx.user ? (
+          {userCtx.user && profileLinks ? (
             <Dropdown
               ariaLabel="Open user actions"
               itemComp={
@@ -165,31 +152,15 @@ export function Navigation({ onChangeSearchVisibility }: NavigationProps) {
                 </div>
               }
             >
-              <Link href="/mint-generative">
-                <a className={style.nav_button}>mint generative token</a>
-              </Link>
-              <Link href={`${getUserProfileLink(userCtx.user)}`}>
-                <a className={style.nav_button}>creations</a>
-              </Link>
-              <Link href={`${getUserProfileLink(userCtx.user)}/articles`}>
-                <a className={style.nav_button}>articles</a>
-              </Link>
-              <Link href={`${getUserProfileLink(userCtx.user)}/collection`}>
-                <a className={style.nav_button}>collection</a>
-              </Link>
-              <Link href={`${getUserProfileLink(userCtx.user)}/dashboard`}>
-                <a className={style.nav_button}>dashboard</a>
-              </Link>
-              <Link href={`/collaborations`}>
-                <a className={style.nav_button}>collaborations</a>
-              </Link>
-              <Link href="/edit-profile">
-                <a className={style.nav_button}>edit profile</a>
-              </Link>
+              {profileLinks.map((profileLink) => (
+                <Link key={profileLink.key} href={profileLink.href}>
+                  <a className={style.nav_button}>{profileLink.label}</a>
+                </Link>
+              ))}
               <Button
                 size="small"
                 color="primary"
-                onClick={() => userCtx.disconnect()}
+                onClick={handleClickDisconnect}
                 style={{
                   marginTop: "5px",
                 }}
@@ -201,16 +172,23 @@ export function Navigation({ onChangeSearchVisibility }: NavigationProps) {
             <Button
               className="btn-sync"
               iconComp={<i aria-hidden className="fas fa-wallet" />}
-              onClick={() => {
-                userCtx.connect()
-              }}
+              onClick={handleClickConnect}
             >
               sync
             </Button>
           )}
         </div>
       </nav>
-
+      {opened && (
+        <MobileMenu
+          onClickSettings={() => setSettingsModal(true)}
+          navigationLinks={navigationLinks}
+          profileLinks={profileLinks}
+          onClickConnect={handleClickConnect}
+          onClickDisconnect={handleClickDisconnect}
+          user={userCtx.user}
+        />
+      )}
       {settingsModal && (
         <SettingsModal onClose={() => setSettingsModal(false)} />
       )}

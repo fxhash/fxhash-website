@@ -24,7 +24,11 @@ export function Header() {
     return { width: 213, height: 120, fontSize: 28 }
   }, [width])
   return (
-    <header className={style.header}>
+    <header
+      className={cs(style.header, {
+        [style["header--search-opened"]]: isSearchOpen,
+      })}
+    >
       <Link href="/">
         <a
           className={cs(style.logo, {

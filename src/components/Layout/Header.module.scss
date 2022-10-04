@@ -4,7 +4,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 32px var(--main-padding-sm);
+  padding: 18px var(--main-padding-sm);
   padding-left: 10px;
 
   @media (max-width: $breakpoint-md) {
@@ -27,5 +27,8 @@
 @media (max-width: 490px) {
   .logo--hide {
     display: none;
+  }
+  .header--search-opened {
+    padding-left: var(--main-padding-sm);
   }
 }
