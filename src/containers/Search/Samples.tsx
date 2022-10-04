@@ -77,7 +77,7 @@ export const samples: Record<Exclude<SearchTabKey, "summary">, Sample<any>> = {
       )
     },
   }),
-  gentk: makeSample<"generativeTokens">({
+  projects: makeSample<"generativeTokens">({
     dataKey: "generativeTokens",
     title: "Generative Tokens",
     hrefExploreMore: "/search/gentk",

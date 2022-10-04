@@ -16,7 +16,7 @@ import { Spacing } from "../../components/Layout/Spacing"
 export const searchTabs = [
   "summary",
   "users",
-  "gentk",
+  "projects",
   "articles",
   "marketplace",
 ] as const
@@ -37,7 +37,7 @@ const tabs: Record<SearchTabKey, SearchTabData> = {
   users: {
     component: SearchUsers,
   },
-  gentk: {
+  projects: {
     component: SearchGentk,
   },
   articles: {
@@ -122,6 +122,7 @@ const _PageSearch = ({ query: queryUrl, tab }: PageSearchProps) => {
           content="https://www.fxhash.xyz/images/og/og1.jpg"
         />
       </Head>
+      <Spacing size="3x-large"/>
       <Tabs
         onClickTab={handleClickTab}
         checkIsTabActive={checkIsTabKeyActive}
