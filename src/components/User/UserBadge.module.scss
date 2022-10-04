@@ -48,6 +48,25 @@
   }
 }
 
+.container_size_xl {
+  font-size: var(--font-size-small);
+  
+  .user_infos {
+    margin-left: 0;
+  }
+
+  .user_name {
+    text-align: center;
+    flex-direction: column-reverse;
+    align-items: center;
+
+    i {
+      margin-top: -25px;
+      font-size: 22px;
+    }
+  }
+}
+
 .no_avatar {
   .user_infos {
     margin-left: 0;

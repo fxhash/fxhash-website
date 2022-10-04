@@ -98,6 +98,7 @@ export function UserBadge({
         {
           [style.no_avatar]: !displayAvatar,
         },
+        style[`container_size_${size}`],
         className
       )}
       isInline={isInline}
