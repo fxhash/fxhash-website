@@ -1,8 +1,8 @@
 import Link from "next/link"
 import style from "./Header.module.scss"
-import { Logo } from "./Logo/Logo"
+import { Logo } from "../Logo/Logo"
 import { Navigation } from "./Navigation"
-import useWindowSize, { breakpoints } from "../hooks/useWindowsSize"
+import useWindowSize, { breakpoints } from "../../hooks/useWindowsSize"
 import { useMemo, useState } from "react"
 import cs from "classnames"
 
