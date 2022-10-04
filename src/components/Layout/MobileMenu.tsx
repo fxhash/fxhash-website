@@ -45,6 +45,7 @@ const _MobileMenu = ({
         {navigationLinks.map((link) => {
           return "subMenu" in link ? (
             <Dropdown
+              key={link.key}
               itemComp={<span>{link.label}</span>}
               btnClassName={cs(style.nav_button, {
                 [style.active]: routerRoot === link.key,
@@ -65,7 +66,7 @@ const _MobileMenu = ({
               </div>
             </Dropdown>
           ) : (
-            <Link href={link.href}>
+            <Link key={link.key} href={link.href}>
               <a
                 className={cs(style.nav_button, {
                   [style.active]: routerRoot === link.key,

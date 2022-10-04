@@ -98,7 +98,6 @@ export function SearchInput({
           minimizeBehavior === "desktop"))
   )
 
-  console.log("min", isMinimized, minimize)
   return (
     <form
       ref={refForm}

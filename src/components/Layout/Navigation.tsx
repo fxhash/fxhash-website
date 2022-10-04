@@ -35,7 +35,17 @@ export function Navigation({ onChangeSearchVisibility }: NavigationProps) {
   )
   const handleSearch = useCallback(
     (search) => {
-      router.push(`/search?query=${encodeURIComponent(search)}`)
+      const isSamePath = router.pathname.startsWith("/search")
+      router
+        .push({
+          pathname: "/search",
+          query: { query: encodeURIComponent(search) },
+        })
+        .then(() => {
+          if (isSamePath) {
+            window.location.reload()
+          }
+        })
     },
     [router]
   )
@@ -89,6 +99,7 @@ export function Navigation({ onChangeSearchVisibility }: NavigationProps) {
             {navigationLinks.map((link) => {
               return "subMenu" in link ? (
                 <Dropdown
+                  key={link.key}
                   itemComp={<span>{link.label}</span>}
                   btnClassName={cs(style.nav_button, {
                     [style.active]: routerRoot === link.key,
@@ -106,7 +117,7 @@ export function Navigation({ onChangeSearchVisibility }: NavigationProps) {
                   ))}
                 </Dropdown>
               ) : (
-                <Link href={link.href}>
+                <Link key={link.key} href={link.href}>
                   <a
                     className={cs(style.nav_button, {
                       [style.active]: routerRoot === link.key,
