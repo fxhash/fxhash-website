@@ -1,9 +1,12 @@
-import React, { memo, useCallback, useState } from "react"
+import React, { memo, useCallback, useEffect, useRef, useState } from "react"
 import style from "./SearchSample.module.scss"
 import Link from "next/link"
+import { debounce } from "../../utils/debounce"
+import cs from "classnames"
 
 interface SearchSampleProps {
   className?: string
+  classNameContainerChildren?: string
   title: string
   hrefExploreMore: string
   onFetchMore: () => void
@@ -14,6 +17,7 @@ interface SearchSampleProps {
 
 const _SearchSample = ({
   className,
+  classNameContainerChildren,
   title,
   hrefExploreMore,
   hasMoreResults,
@@ -21,6 +25,8 @@ const _SearchSample = ({
   onFetchMore,
   children,
 }: SearchSampleProps) => {
+  const refContainerChildren = useRef<HTMLDivElement>(null)
+  const [hasClamp, setHasClamp] = useState(false)
   const [showMoreResults, setShowMoreResults] = useState(false)
   const handleClickShowMore = useCallback(() => {
     if (!showMoreResults) {
@@ -29,6 +35,27 @@ const _SearchSample = ({
     }
     onFetchMore()
   }, [onFetchMore, showMoreResults])
+
+  useEffect(() => {
+    const hasClamping = (el: HTMLDivElement) => {
+      const { scrollHeight, clientHeight } = el
+
+      return scrollHeight > clientHeight
+    }
+
+    const checkButtonAvailability = () => {
+      if (refContainerChildren.current) {
+        setHasClamp(hasClamping(refContainerChildren.current))
+      }
+    }
+
+    const debouncedCheck = debounce(checkButtonAvailability, 50)
+    checkButtonAvailability()
+    window.addEventListener("resize", debouncedCheck)
+    return () => {
+      window.removeEventListener("resize", debouncedCheck)
+    }
+  }, [])
   return (
     <div className={className}>
       <div className={style.container_title}>
@@ -39,9 +66,16 @@ const _SearchSample = ({
           </a>
         </Link>
       </div>
-      <div>{children({ showMoreResults })}</div>
+      <div
+        ref={refContainerChildren}
+        className={cs(style.container_children, {
+          [classNameContainerChildren || ""]: !showMoreResults,
+        })}
+      >
+        {children({ showMoreResults })}
+      </div>
       <hr />
-      {hasMoreResults && (
+      {((hasClamp && !showMoreResults) || hasMoreResults) && (
         <div className={style.container_show_more}>
           <button
             type="button"

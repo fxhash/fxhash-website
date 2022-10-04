@@ -106,5 +106,6 @@ export interface IUserCollectionFilters {
 }
 
 export interface UserFilters {
+  flag_in?: UserFlag[]
   searchQuery_eq?: string
 }

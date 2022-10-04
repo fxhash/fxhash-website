@@ -9,6 +9,9 @@
 .explore_more {
   color: var(--color-black);
 }
+.container_children {
+  overflow: hidden;
+}
 .container_show_more {
   display: flex;
   flex-direction: row;

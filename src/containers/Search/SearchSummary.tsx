@@ -30,6 +30,7 @@ import {
   HasMoreResultsState,
   reducerHasMoreResults,
 } from "./SearchSummaryReducer"
+import useWindowSize from "../../hooks/useWindowsSize";
 
 export interface SearchQuery {
   users: User[]
@@ -48,6 +49,7 @@ const _SearchSummary = ({
     React.Reducer<HasMoreResultsState, HasMoreResultsAction>
   >(reducerHasMoreResults, defaultHasMoreResults)
   const settingsCtx = useContext(SettingsContext)
+  const { width } = useWindowSize();
   const handleChangeQuery = useCallback(
     (newQuery) => {
       onChangeQuery(newQuery)
@@ -176,7 +178,7 @@ const _SearchSummary = ({
             ) : (
               Object.entries(samples).map(([key, sample]) => {
                 const hrefWithQuery = `${sample.hrefExploreMore}${
-                  encodedQuery ? `?=${encodedQuery}` : ""
+                  encodedQuery ? `?query=${encodedQuery}` : ""
                 }`
                 const dataSample = data?.[sample.dataKey as keyof SearchQuery]
                 const sampleHasResults =
@@ -187,6 +189,9 @@ const _SearchSummary = ({
                     <SearchSample
                       key={`${key}${encodedQuery}`}
                       className={style.sample}
+                      classNameContainerChildren={
+                        sample.classNameContainerMaxHeight
+                      }
                       title={sample.title}
                       hrefExploreMore={hrefWithQuery}
                       onClickExploreMore={handleChangeTab(key)}
@@ -194,12 +199,13 @@ const _SearchSummary = ({
                       hasMoreResults={sampleHasResults.results}
                     >
                       {({ showMoreResults }) =>
-                        sample.render(
-                          dataSample,
+                        sample.render({
+                          data: dataSample,
                           showMoreResults,
-                          sampleHasResults.loading,
-                          settingsCtx
-                        )
+                          windowWidth: width || 0,
+                          loading: sampleHasResults.loading,
+                          settings: settingsCtx,
+                        })
                       }
                     </SearchSample>
                   )

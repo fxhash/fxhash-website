@@ -7,7 +7,7 @@ import React, {
   useState,
 } from "react"
 import { useQuery } from "@apollo/client"
-import { User, UserFilters } from "../../types/entities/User"
+import { User, UserFilters, UserFlag } from "../../types/entities/User"
 import { Qu_users } from "../../queries/user"
 import { InfiniteScrollTrigger } from "../Utils/InfiniteScrollTrigger"
 import { CardsContainer } from "../Card/CardsContainer"
@@ -64,6 +64,9 @@ const _GalleryUsers = ({
           restoreSort()
           onChangeSearch?.("")
         }
+      },
+      defaultFilters: {
+        flag_in: [UserFlag.NONE, UserFlag.VERIFIED],
       },
       initialFilters,
     })

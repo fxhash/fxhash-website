@@ -16,7 +16,7 @@
     grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
     gap: 32px 16px;
     &--one-row {
-      max-height: 197px;
+      max-height: 293px;
     }
   }
   .gallery_articles {
@@ -24,6 +24,17 @@
     gap: 16px;
   }
   .gallery_gentk--one-row, .gallery_marketplace--one-row {
-    max-height: 480px;
+    max-height: 650px;
+  }
+  .gallery_articles--limit {
+    max-height: 900px;
+  }
+}
+
+@media (max-width: $breakpoint-md) {
+  .sample {
+    .gallery_articles {
+      grid-template-columns: repeat(1, 1fr);
+    }
   }
 }
