@@ -139,6 +139,7 @@ const _PageSearch = ({ query: queryUrl, tab }: PageSearchProps) => {
         <div>Search section not found</div>
       )}
       <Spacing size="6x-large" />
+      <Spacing size="6x-large" />
     </>
   )
 }
