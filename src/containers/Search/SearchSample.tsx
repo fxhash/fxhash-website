@@ -1,5 +1,6 @@
 import React, { memo, useCallback, useEffect, useRef, useState } from "react"
 import style from "./SearchSample.module.scss"
+import text from "../../styles/Text.module.css"
 import Link from "next/link"
 import { debounce } from "../../utils/debounce"
 import cs from "classnames"
@@ -57,7 +58,7 @@ const _SearchSample = ({
     }
   }, [])
   return (
-    <div className={className}>
+    <div className={cs(style.root, className)}>
       <div className={style.container_title}>
         <h3>{title}</h3>
         <Link href={hrefExploreMore} as={hrefExploreMore} shallow>
@@ -79,7 +80,7 @@ const _SearchSample = ({
         <div className={style.container_show_more}>
           <button
             type="button"
-            className={style.show_more}
+            className={cs(style.show_more, text.info)}
             onClick={handleClickShowMore}
           >
             show more results{" "}

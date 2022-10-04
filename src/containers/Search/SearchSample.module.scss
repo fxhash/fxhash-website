@@ -1,3 +1,10 @@
+.root {
+  hr {
+    border: none;
+    height: 3px;
+    background-color: var(--color-gray-vvlight);
+  }
+}
 .container_title {
   display: flex;
   flex-direction: row;
@@ -23,7 +30,6 @@
   height: auto;
   background-color: transparent;
   cursor: pointer;
-  font-weight: bold;
   &:hover {
     text-decoration: underline;
   }
