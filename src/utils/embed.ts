@@ -23,3 +23,9 @@ export const getCodepenFromUrl = (url: string) => {
       }
     : null
 }
+export const getOpenProcessingIdFromUrl = (url: string) => {
+  const regexExtractCode =
+    /(?:https?:\/\/)?(?:www\.)?openprocessing\.org\/sketch\/(\d+)(?:\/embed)?/
+  const match = url.match(regexExtractCode)
+  return match?.[1] || null
+}

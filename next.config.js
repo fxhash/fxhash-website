@@ -30,7 +30,7 @@ const baseSecurityHeaders = [
 ]
 
 const articlesAllowedDomains =
-  "https://*.spotify.com/ https://spotify.com https://*.youtube.com/ https://youtube.com https://*.twitter.com/ https://twitter.com https://codepen.io"
+  "https://*.spotify.com/ https://spotify.com https://*.youtube.com/ https://youtube.com https://*.twitter.com/ https://twitter.com https://codepen.io https://openprocessing.org"
 
 /** @type {import('next').NextConfig} */
 module.exports = withBundleAnalyzer({

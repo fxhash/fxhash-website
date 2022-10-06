@@ -42,7 +42,7 @@ const EmbedCodepen = memo<EmbedElementProps>(({ href }) => {
           .
         </iframe>
       ) : (
-        <Error>CodePen can't be load.</Error>
+        <Error>CodePen can&apos;t be load.</Error>
       )}
     </div>
   )
