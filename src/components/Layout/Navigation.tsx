@@ -8,13 +8,13 @@ import { useCallback, useContext, useMemo } from "react"
 import { UserContext } from "../../containers/UserProvider"
 import { Dropdown } from "../Navigation/Dropdown"
 import { Avatar } from "../User/Avatar"
-import { getUserProfileLink } from "../../utils/user"
 import { useState, useEffect } from "react"
 import { useRouter } from "next/router"
 import { SettingsModal } from "../../containers/Settings/SettingsModal"
 import { SearchInputControlled } from "../Input/SearchInputControlled"
 import { getProfileLinks, navigationLinks } from "./navigationLinks"
 import { MobileMenu } from "./MobileMenu"
+import ClientOnly from "../Utils/ClientOnly";
 
 interface NavigationProps {
   onChangeSearchVisibility: (isVisible: boolean) => void
@@ -190,15 +190,17 @@ export function Navigation({ onChangeSearchVisibility }: NavigationProps) {
           )}
         </div>
       </nav>
-      <MobileMenu
-        open={opened}
-        onClickSettings={() => setSettingsModal(true)}
-        navigationLinks={navigationLinks}
-        profileLinks={profileLinks}
-        onClickConnect={handleClickConnect}
-        onClickDisconnect={handleClickDisconnect}
-        user={userCtx.user}
-      />
+      <ClientOnly>
+        <MobileMenu
+          open={opened}
+          onClickSettings={() => setSettingsModal(true)}
+          navigationLinks={navigationLinks}
+          profileLinks={profileLinks}
+          onClickConnect={handleClickConnect}
+          onClickDisconnect={handleClickDisconnect}
+          user={userCtx.user}
+        />
+      </ClientOnly>
       {settingsModal && (
         <SettingsModal onClose={() => setSettingsModal(false)} />
       )}
