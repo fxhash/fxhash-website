@@ -6,12 +6,13 @@ import EmbedTwitter from "./EmbedTwitter"
 import style from "./Embed.module.scss"
 import text from "../../../../styles/Text.module.css"
 import {
-  getCodepenFromUrl, getOpenProcessingIdFromUrl,
+  getCodepenFromUrl,
+  getOpenProcessingIdFromUrl,
   getTweetIdFromUrl,
   getYoutubeCodeFromUrl,
 } from "../../../../utils/embed"
 import EmbedCodepen from "./EmbedCodepen"
-import EmbedOpenProcessing from "./EmbedOpenProcessing";
+import EmbedOpenProcessing from "./EmbedOpenProcessing"
 
 export interface EmbedElementProps {
   href: string
