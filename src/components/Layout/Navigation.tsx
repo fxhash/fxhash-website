@@ -190,16 +190,15 @@ export function Navigation({ onChangeSearchVisibility }: NavigationProps) {
           )}
         </div>
       </nav>
-      {opened && (
-        <MobileMenu
-          onClickSettings={() => setSettingsModal(true)}
-          navigationLinks={navigationLinks}
-          profileLinks={profileLinks}
-          onClickConnect={handleClickConnect}
-          onClickDisconnect={handleClickDisconnect}
-          user={userCtx.user}
-        />
-      )}
+      <MobileMenu
+        open={opened}
+        onClickSettings={() => setSettingsModal(true)}
+        navigationLinks={navigationLinks}
+        profileLinks={profileLinks}
+        onClickConnect={handleClickConnect}
+        onClickDisconnect={handleClickDisconnect}
+        user={userCtx.user}
+      />
       {settingsModal && (
         <SettingsModal onClose={() => setSettingsModal(false)} />
       )}

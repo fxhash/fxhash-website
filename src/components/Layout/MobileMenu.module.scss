@@ -15,12 +15,15 @@
   top: 86px;
   left: 0;
   right: 0;
+  pointer-events: none;
   z-index: 20;
   bottom: 0;
   padding: 0 20px 24px;
   background: var(--color-white);
   overflow: auto;
   overscroll-behavior: contain;
+  transition: 0.3s transform ease-in-out;
+  transform: translateX(100%);
   .links {
     display: flex;
     flex-direction: column;
@@ -79,5 +82,9 @@
 @media (max-width: $breakpoint-md) {
   .container {
     display: flex;
+    &--open {
+      pointer-events: all;
+      transform: translateY(0);
+    }
   }
 }

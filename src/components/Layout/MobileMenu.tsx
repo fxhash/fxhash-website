@@ -14,6 +14,7 @@ import ReactDOM from "react-dom"
 import { MobileMenuUser } from "./MobileMenuUser"
 
 interface MobileMenuProps {
+  open: boolean
   navigationLinks: NavigationLink[]
   profileLinks: NavigationLinkSingle[] | null
   onClickSettings: () => void
@@ -23,6 +24,7 @@ interface MobileMenuProps {
 }
 
 const _MobileMenu = ({
+  open,
   navigationLinks,
   profileLinks,
   onClickSettings,
@@ -40,7 +42,11 @@ const _MobileMenu = ({
     []
   )
   return ReactDOM.createPortal(
-    <div className={style.container}>
+    <div
+      className={cs(style.container, {
+        [style["container--open"]]: open,
+      })}
+    >
       <div className={style.links}>
         {navigationLinks.map((link) => {
           return "subMenu" in link ? (
