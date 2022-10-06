@@ -14,7 +14,7 @@ import { SettingsModal } from "../../containers/Settings/SettingsModal"
 import { SearchInputControlled } from "../Input/SearchInputControlled"
 import { getProfileLinks, navigationLinks } from "./navigationLinks"
 import { MobileMenu } from "./MobileMenu"
-import ClientOnly from "../Utils/ClientOnly";
+import ClientOnly from "../Utils/ClientOnly"
 
 interface NavigationProps {
   onChangeSearchVisibility: (isVisible: boolean) => void
