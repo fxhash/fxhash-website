@@ -1,6 +1,7 @@
 import { ArticleMetadata } from "../Metadata"
 import { Action } from "./Action"
 import { GenerativeToken } from "./GenerativeToken"
+import {MediaImage} from "./MediaImage"
 import { Split } from "./Split"
 import { User } from "./User"
 
@@ -33,7 +34,7 @@ export interface NFTArticleGenerativeToken {
   line: number
 }
 
-export type NFTArticleInfos = Pick<NFTArticle, 'id' | 'title' | 'flag' | 'slug' | 'thumbnailUri' | 'description' | 'tags' | 'author' | 'createdAt'> & { revisions?: NFTArticleRevision[]}
+export type NFTArticleInfos = Pick<NFTArticle, 'id' | 'title' | 'flag' | 'slug' | 'thumbnailUri' | 'thumbnailMedia' | 'description' | 'tags' | 'author' | 'createdAt'> & { revisions?: NFTArticleRevision[]}
 
 export interface NFTArticle {
   id: number | string
@@ -56,6 +57,7 @@ export interface NFTArticle {
   displayUri: string
   thumbnailUri: string
   thumbnailCaption: string
+  thumbnailMedia: MediaImage
   platforms?: string[] | null
   createdAt: string
   editions: number
