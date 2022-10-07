@@ -5,53 +5,44 @@ import { PropsWithChildren, useMemo, useState } from "react"
 import { ipfsGatewayUrl } from "../../services/Ipfs"
 import { useClientAsyncEffect } from "../../utils/hookts"
 import { useInView } from "react-intersection-observer"
+import { Image } from "../Image"
+import { MediaImage } from "../../types/entities/MediaImage"
 
 interface Props {
+  image?: MediaImage
   thumbnailUri: string | null | undefined
   undesirable?: boolean
 }
 
 export function CardList({
+  image,
   thumbnailUri,
   undesirable = false,
   children,
 }: PropsWithChildren<Props>) {
-  const [loaded, setLoaded] = useState<string | null>(null)
-  const url = useMemo(() => ipfsGatewayUrl(thumbnailUri), [thumbnailUri])
-  const { ref, inView } = useInView()
-
-  // lazy load the image
-  useClientAsyncEffect(
-    (isMounted) => {
-      if (inView && !loaded && url) {
-        const img = new Image()
-        img.onload = () => {
-          if (isMounted()) {
-            setLoaded(img.src)
-          }
-        }
-        img.onerror = () => {
-          // we fallback to the IPFS gateway
-          // img.src = ipfsGatewayUrl(thumbnailUri)
-        }
-        img.src = url
-      }
-    },
-    [inView]
-  )
-
+  const [loaded, setLoaded] = useState<boolean>(false)
+  const [error, setError] = useState<boolean>(false)
   return (
-    <div className={cs(style.container)} ref={ref}>
+    <div className={cs(style.container)}>
       <div
         className={cs(style["thumbnail-container"], {
           [style.undesirable]: undesirable,
           [effect.placeholder]: !loaded,
         })}
-        style={{
-          backgroundImage: loaded ? `url(${loaded})` : "none",
-        }}
       >
-        {!url && (
+        {!undesirable && (
+          <Image
+            ipfsUri={thumbnailUri!}
+            image={image}
+            alt=""
+            layout="fill"
+            objectFit="contain"
+            sizes="20vw"
+            onLoadingComplete={() => setLoaded(true)}
+            onError={() => setError(true)}
+          />
+        )}
+        {error && (
           <div className={cs(style.error)}>
             <i aria-hidden className="fas fa-exclamation-circle" />
             <span>could not load image</span>

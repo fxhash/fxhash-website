@@ -88,6 +88,7 @@ export function UserBadge({
     >
       {displayAvatar && (
         <Avatar
+          image={user.avatarMedia}
           uri={userAlias.avatarUri}
           isInline={isInline}
           className={cs(style.avatar, style[`avatar-${size}`], {

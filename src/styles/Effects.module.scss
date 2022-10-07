@@ -22,6 +22,7 @@
   background-color: var(--color-gray-vlight);
 
   &::before {
+    z-index: 1;
     content: '';
     display: block;
     position: absolute;

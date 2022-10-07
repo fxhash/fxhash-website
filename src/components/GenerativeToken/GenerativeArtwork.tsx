@@ -12,6 +12,7 @@ import Link from "next/link"
 import { useContext, useEffect, useMemo, useRef, useState } from "react"
 import { SettingsContext } from "../../context/Theme"
 import { ipfsGatewayUrl } from "../../services/Ipfs"
+import { Image } from "../Image"
 
 interface Props {
   token: GenerativeToken
@@ -49,10 +50,6 @@ export function GenerativeArtwork({
     }
   }
 
-  // get the display url for og:image
-  const displayUrl =
-    token.metadata?.displayUri && ipfsGatewayUrl(token.metadata.displayUri)
-
   // the direct URL to the resource to display in the <iframe>
   const artifactUrl = useMemo<string>(() => {
     // if no hash is forced, use the artifact URI directly
@@ -71,7 +68,12 @@ export function GenerativeArtwork({
       <SquareContainer>
         <ArtworkFrame>
           {displayImage ? (
-            <img src={displayUrl} alt={`${token.name} preview`} />
+            <Image
+              image={token.captureMedia}
+              ipfsUri={token.thumbnailUri}
+              alt={`${token.name} preview`}
+              layout="fill"
+            />
           ) : (
             <ArtworkIframe
               ref={iframeRef}

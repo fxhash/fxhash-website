@@ -35,11 +35,11 @@ export function GenerativeTokenCard({
   lockedUntil,
 }: Props) {
   const url = getGenerativeTokenUrl(token)
-
   return (
     <Link href={url} passHref>
       <AnchorForward style={{ height: "100%" }} className={className}>
         <Card
+          image={token.captureMedia}
           thumbnailUri={token.thumbnailUri}
           displayDetails={displayDetails}
           thumbInfosComp={

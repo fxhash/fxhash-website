@@ -1,9 +1,8 @@
-import React, { memo, useMemo } from "react"
+import React, { memo } from "react"
 import style from "./ObjktImageAndName.module.scss"
 import { Objkt } from "../../types/entities/Objkt"
 import Link from "next/link"
-import Image from "next/image"
-import { ipfsGatewayUrl } from "../../services/Ipfs"
+import { Image } from "../Image"
 
 interface Props {
   objkt: Objkt
@@ -18,25 +17,18 @@ const _ObjtkImageAndName = ({
   shortName,
   size = 40,
 }: Props) => {
-  const thumbnailUrl = useMemo(
-    () => ipfsGatewayUrl(objkt.metadata?.thumbnailUri),
-    [objkt]
-  )
   return (
     <Link href={`/gentk/${objkt.id}`}>
       <a className={style.container}>
-        {thumbnailUrl && (
-          <Image
-            width={size}
-            height={size}
-            placeholder="blur"
-            layout="fixed"
-            src={thumbnailUrl}
-            blurDataURL={thumbnailUrl}
-            alt={`thumbnail of ${objkt.name}`}
-            priority={imagePriority}
-          />
-        )}
+        <Image
+          width={size}
+          height={size}
+          layout="fixed"
+          ipfsUri={objkt.metadata?.thumbnailUri}
+          image={objkt.captureMedia}
+          alt={`thumbnail of ${objkt.name}`}
+          priority={imagePriority}
+        />
         <span className={style.name}>
           {shortName ? `#${objkt.iteration}` : objkt.name}
         </span>

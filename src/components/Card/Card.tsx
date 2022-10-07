@@ -13,8 +13,11 @@ import { useClientAsyncEffect } from "../../utils/hookts"
 import { Loader } from "../Utils/Loader"
 import { useInView } from "react-intersection-observer"
 import { SettingsContext } from "../../context/Theme"
+import { MediaImage } from "../../types/entities/MediaImage"
+import { Image } from "../Image"
 
 interface Props {
+  image?: MediaImage
   thumbnailUri?: string | null
   undesirable?: boolean
   displayDetails?: boolean
@@ -22,58 +25,40 @@ interface Props {
 }
 
 export function Card({
+  image,
   thumbnailUri,
   undesirable = false,
   displayDetails = true,
   thumbInfosComp,
   children,
 }: PropsWithChildren<Props>) {
-  const [loaded, setLoaded] = useState<string | null>(null)
+  const [loaded, setLoaded] = useState<boolean>(false)
   const [error, setError] = useState<boolean>(false)
-  const url = useMemo(
-    () => thumbnailUri && ipfsGatewayUrl(thumbnailUri),
-    [thumbnailUri]
-  )
-  const { ref, inView } = useInView()
   const settings = useContext(SettingsContext)
-
-  // lazy load the image
-  useClientAsyncEffect(
-    (isMounted) => {
-      if (inView && !loaded && url && !error) {
-        const img = new Image()
-        img.onload = () => {
-          if (isMounted()) {
-            setLoaded(img.src)
-          }
-        }
-        img.onerror = () => {
-          // we fallback to the IPFS gateway
-          // img.src = ipfsGatewayUrl(thumbnailUri)
-          setError(true)
-        }
-        img.src = url
-      }
-    },
-    [inView]
-  )
 
   return (
     <div
       className={cs(style.container, {
         [style.hover_effect]: settings.hoverEffectCard,
       })}
-      ref={ref}
     >
       <div
         className={cs(style["thumbnail-container"], {
           [style.undesirable]: undesirable,
           [effect.placeholder]: !loaded && !error,
         })}
-        style={{
-          backgroundImage: loaded ? `url(${loaded})` : "none",
-        }}
       >
+        {!undesirable && (
+          <Image
+            ipfsUri={thumbnailUri!}
+            image={image}
+            alt=""
+            layout="fill"
+            objectFit="contain"
+            onLoadingComplete={() => setLoaded(true)}
+            onError={() => setError(true)}
+          />
+        )}
         {error && (
           <div className={cs(style.error)}>
             <i aria-hidden className="fa-solid fa-bug" />
