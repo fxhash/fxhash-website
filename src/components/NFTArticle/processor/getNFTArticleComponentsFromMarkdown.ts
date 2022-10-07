@@ -33,7 +33,7 @@ import { VideoDisplay } from "../elements/Video/VideoDisplay"
 import { LinkElement } from "../elements/Link/LinkElement"
 import { MentionDisplay } from "../elements/Mention/MentionDisplay"
 import { articleSchemaSanitize } from "./sanitize"
-import { Katex } from "../elements/Math/Katex";
+import { Katex } from "../elements/Math/Katex"
 
 declare module "rehype-react" {
   interface WithNode {
