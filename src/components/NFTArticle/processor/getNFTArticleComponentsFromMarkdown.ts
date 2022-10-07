@@ -33,6 +33,7 @@ import { VideoDisplay } from "../elements/Video/VideoDisplay"
 import { LinkElement } from "../elements/Link/LinkElement"
 import { MentionDisplay } from "../elements/Mention/MentionDisplay"
 import { articleSchemaSanitize } from "./sanitize"
+import { Katex } from "../elements/Math/Katex";
 
 declare module "rehype-react" {
   interface WithNode {
@@ -88,8 +89,8 @@ export default async function getNFTArticleComponentsFromMarkdown(
       .use(remarkMentions)
       .use(remarkRehype)
       .use(rehypePrism)
-      .use(rehypeKatex)
       .use(rehypeSanitize, articleSchemaSanitize)
+      .use(rehypeKatex)
       .use(rehypeStringify)
       // todo: fix this, because of image component for some reason
       // @ts-ignore
