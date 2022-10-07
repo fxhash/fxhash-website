@@ -9,10 +9,17 @@ import { ILiveMintingContext } from "../context/LiveMinting"
 import { IReserveConsumption } from "../services/contract-operations/Mint"
 import { TInputMintIssuer } from "../services/parameters-builder/mint-issuer/input"
 import { TInputPricingDetails } from "../services/parameters-builder/pricing/input"
-import { GenerativeToken, GenTokFlag, GenTokLabel, GenTokLabelDefinition, GenTokLabelGroup, GenTokPricing } from "../types/entities/GenerativeToken"
+import {
+  GenerativeToken,
+  GenTokFlag,
+  GenTokLabel,
+  GenTokLabelDefinition,
+  GenTokLabelGroup,
+  GenTokPricing
+} from "../types/entities/GenerativeToken"
 import { IPricingDutchAuction, IPricingFixed } from "../types/entities/Pricing"
 import { EReserveMethod, IReserve } from "../types/entities/Reserve"
-import { Collaboration, User, UserType } from "../types/entities/User"
+import { User } from "../types/entities/User"
 import { CaptureSettings, GenerativeTokenMetadata } from "../types/Metadata"
 import { CaptureMode, CaptureTriggerMode, MintGenerativeData } from "../types/Mint"
 import { getIpfsSlash } from "./ipfs"
@@ -192,7 +199,7 @@ export function generativeFromMintForm(
   const pricing = dist.pricing
 
   // we need to * 60 the decrement duration from the form
-  const pricingDA = pricing.pricingMethod === GenTokPricing.DUTCH_AUCTION 
+  const pricingDA = pricing.pricingMethod === GenTokPricing.DUTCH_AUCTION
     ? transformPricingDutchInputToNumbers(
       pricing.pricingDutchAuction as IPricingDutchAuction<string>
     )
@@ -210,7 +217,7 @@ export function generativeFromMintForm(
     metadataUri: "ipfs://not-uploaded-to-ipfs-yet",
     tags: metadata.tags,
     labels: data.informations?.labels,
-    pricingFixed: pricing.pricingMethod === GenTokPricing.FIXED 
+    pricingFixed: pricing.pricingMethod === GenTokPricing.FIXED
       ? transformPricingFixedInputToNumbers(
         pricing.pricingFixed as IPricingFixed<string>
       )
@@ -225,7 +232,7 @@ export function generativeFromMintForm(
     royalties: Math.floor(parseFloat(dist.royalties!)*10),
     splitsPrimary: dist.splitsPrimary.map(split => ({
       pct: split.pct,
-      user: split.address === user.id ? user 
+      user: split.address === user.id ? user
       : (data.collaboration && data.collaboration.collaborators.find(
         user => user.id === split.address
       )) || {
@@ -234,7 +241,7 @@ export function generativeFromMintForm(
     })),
     splitsSecondary: dist.splitsSecondary.map(split => ({
       pct: split.pct,
-      user: split.address === user.id ? user 
+      user: split.address === user.id ? user
       : (data.collaboration && data.collaboration.collaborators.find(
         user => user.id === split.address
       )) || {
@@ -291,9 +298,19 @@ export const genTokLabelDefinitions: Record<GenTokLabel, GenTokLabelDefinition> 
     shortLabel: "PFP",
     group: GenTokLabelGroup.DETAILS,
   },
+  104: {
+    label: "Audio",
+    shortLabel: "Audio",
+    group: GenTokLabelGroup.DETAILS,
+  },
+  105: {
+    label: "Includes prerendered components",
+    shortLabel: "Prerendered components",
+    group: GenTokLabelGroup.DETAILS,
+  },
 }
 
-export const getGenTokLabelDefinition = (label: number): GenTokLabelDefinition => 
+export const getGenTokLabelDefinition = (label: number): GenTokLabelDefinition =>
   //@ts-ignore
   genTokLabelDefinitions[label]
 

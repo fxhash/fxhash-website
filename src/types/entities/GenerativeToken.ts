@@ -31,6 +31,8 @@ export enum GenTokLabel {
   ANIMATED            = 101,
   INTERACTIVE         = 102,
   PFP                 = 103,
+  AUDIO               = 104,
+  INCLUDE_PRERENDERED_COMPONENTS = 105,
 }
 
 export enum GenTokLabelGroup {
