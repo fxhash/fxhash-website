@@ -6,10 +6,12 @@
   &.layout_center {
     justify-content: center;
   }
-
   &.layout_center-vertical {
     flex-direction: column;
     justify-content: center;
     align-items: center;
   }
+}
+.hide {
+  display: none;
 }

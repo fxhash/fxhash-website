@@ -1,37 +1,38 @@
-import { GetServerSideProps, GetServerSidePropsContext } from "next";
-import { Qu_user } from "../../queries/user";
-import { User, UserFlag, UserType } from "../../types/entities/User";
-import { isTezosAddress } from "../../utils/strings";
-import { UserAliases } from "../../utils/user";
-import client from "../ApolloClient";
+import { GetServerSidePropsContext } from "next"
+import { Qu_user } from "../../queries/user"
+import { User, UserFlag, UserType } from "../../types/entities/User"
+import { isTezosAddress } from "../../utils/strings"
+import { UserAliases } from "../../utils/user"
+import { createApolloClient } from "../ApolloClient"
 
 type ServerSidePropsUserPayload = {
   props: {
-    user: User | null;
-  };
-  notFound: boolean;
-};
+    user: User | null
+  }
+  notFound: boolean
+}
 export const getServerSidePropsUserByName = async (
   context: GetServerSidePropsContext
 ): Promise<ServerSidePropsUserPayload> => {
-  const name = context.params?.name;
+  const name = context.params?.name
 
   // if there is an alias, query by ID instead
   const userAlias = Object.values(UserAliases).find(
     (alias) => alias.name === name
-  );
-  const variables = userAlias ? { id: userAlias.id } : { name };
+  )
+  const variables = userAlias ? { id: userAlias.id } : { name }
 
-  let user = null;
+  let user = null
 
   if (userAlias || (name && name.length > 0)) {
-    const { data, error } = await client.query({
+    const apolloClient = createApolloClient()
+    const { data, error } = await apolloClient.query({
       query: Qu_user,
       fetchPolicy: "no-cache",
       variables,
-    });
+    })
     if (data) {
-      user = data.user;
+      user = data.user
     }
   }
   return {
@@ -39,29 +40,30 @@ export const getServerSidePropsUserByName = async (
       user,
     },
     notFound: !user,
-  };
-};
+  }
+}
 
 export const getServerSidePropsUserById = async (
   context: GetServerSidePropsContext
 ): Promise<ServerSidePropsUserPayload> => {
-  const pkh = context.params?.id;
-  let user: User | null = null;
+  const pkh = context.params?.id
+  let user: User | null = null
 
   if (pkh) {
-    const { data, error } = await client.query({
+    const apolloClient = createApolloClient()
+    const { data, error } = await apolloClient.query({
       query: Qu_user,
       fetchPolicy: "no-cache",
       variables: { id: pkh },
-    });
+    })
     if (data) {
-      user = data.user;
+      user = data.user
     }
 
     // if there's no user in DB, but address is valid we craft a fake user object
     // so that the page doesn't 404
     if (!user && isTezosAddress(pkh as string)) {
-      const now = new Date().toISOString();
+      const now = new Date().toISOString()
       user = {
         id: pkh as string,
         description:
@@ -82,7 +84,7 @@ export const getServerSidePropsUserById = async (
         offersSent: [],
         articles: [],
         listings: [],
-      };
+      }
     }
   }
 
@@ -91,5 +93,5 @@ export const getServerSidePropsUserById = async (
       user,
     },
     notFound: !user,
-  };
-};
+  }
+}

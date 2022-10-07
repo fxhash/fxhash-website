@@ -6,7 +6,7 @@ import style from "./GenerativeTokenMarketplace.module.scss"
 import colors from "../../../styles/Colors.module.css"
 import styleActivity from "../../../styles/Activity.module.scss"
 import cs from "classnames"
-import client from "../../../services/ApolloClient"
+import { createApolloClient } from "../../../services/ApolloClient"
 import { GenerativeToken } from "../../../types/entities/GenerativeToken"
 import { Spacing } from "../../../components/Layout/Spacing"
 import { MintProgress } from "../../../components/Artwork/MintProgress"
@@ -287,7 +287,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   if (idStr) {
     const id = parseInt(idStr as string)
     if (id === 0 || id) {
-      const { data } = await client.query({
+      const apolloClient = createApolloClient()
+      const { data } = await apolloClient.query({
         query: Qu_genTokenMarketplace,
         fetchPolicy: "no-cache",
         variables: { id },

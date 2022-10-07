@@ -56,7 +56,7 @@ export const TezosStorageSettings: TEditAttributeComp = ({
     <div className={cs(style.root)}>
       <ModalTitle>Insert fxhash content</ModalTitle>
 
-      <p className={cs(text.info)}>
+      <p className={cs(style.infos)}>
         You can first select a project, and then insert the project itself or
         pick a particular iteration of the project.
       </p>

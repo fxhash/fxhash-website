@@ -1,4 +1,5 @@
 @import "./Variables.scss";
+@import "./fonts.scss";
 
 html,
 body {
@@ -54,6 +55,8 @@ body {
   --font-size-h3: 2rem;
   --font-size-h2: 2.4375rem;
   --font-size-h1: 3rem;
+
+  --font-family-primary: "Fira Code", monospace;
 
   --cards-border-width: 3px;
   --cards-shadow: 19px;

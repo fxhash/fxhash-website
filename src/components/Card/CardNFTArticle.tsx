@@ -44,6 +44,7 @@ const _CardNftArticle = ({
     tags,
     author,
     createdAt,
+    metadataLocked,
   } = article
   const settings = useContext(SettingsContext)
   const dateCreatedAt = useMemo(() => new Date(createdAt), [createdAt])
@@ -95,7 +96,10 @@ const _CardNftArticle = ({
       )}
       {!isDraft && edited && (
         <div className={cs(style.banner, style.banner_edition)}>
-          <span>Unpublished changes</span>
+          <span>
+            Unpublished changes
+            {metadataLocked && ` but metadata is already locked`}
+          </span>
           <div>
             <button
               type="button"
@@ -105,11 +109,13 @@ const _CardNftArticle = ({
             >
               <i className="fa-solid fa-trash" aria-hidden />
             </button>
-            <Link href={`/article/editor/${article.id}/`} passHref>
-              <a>
-                <i className="fa-solid fa-pen-to-square" aria-hidden />
-              </a>
-            </Link>
+            {!metadataLocked && (
+              <Link href={`/article/editor/${article.id}/`} passHref>
+                <a>
+                  <i className="fa-solid fa-pen-to-square" aria-hidden />
+                </a>
+              </Link>
+            )}
           </div>
         </div>
       )}

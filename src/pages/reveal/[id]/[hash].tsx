@@ -5,7 +5,7 @@ import layout from "../../../styles/Layout.module.scss"
 import text from "../../../styles/Text.module.css"
 import color from "../../../styles/Colors.module.css"
 import cs from "classnames"
-import client from "../../../services/ApolloClient"
+import { createApolloClient } from "../../../services/ApolloClient"
 import { Reveal } from "../../../containers/Reveal/Reveal"
 import { GenerativeToken } from "../../../types/entities/GenerativeToken"
 import { Qu_genToken } from "../../../queries/generative-token"
@@ -127,7 +127,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   let token = null
 
   if (hash != null && id != null) {
-    const { data, error } = await client.query({
+    const apolloClient = createApolloClient()
+    const { data, error } = await apolloClient.query({
       query: Qu_genToken,
       fetchPolicy: "no-cache",
       variables: {
