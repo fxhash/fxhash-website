@@ -57,7 +57,7 @@ export interface NFTArticle {
   displayUri: string
   thumbnailUri: string
   thumbnailCaption: string
-  thumbnailMedia: MediaImage
+  thumbnailMedia?: MediaImage
   platforms?: string[] | null
   createdAt: string
   editions: number
