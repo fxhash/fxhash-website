@@ -1,6 +1,13 @@
 import css from "./Image.module.scss"
 import cs from "classnames"
-import { CSSProperties, useCallback, useEffect, useMemo, useRef, useState } from "react"
+import {
+  CSSProperties,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react"
 import {
   EGatewayIpfs,
   ipfsCidFromUriOrCid,
@@ -63,19 +70,11 @@ export function Image(props: FxImageProps) {
   // if there is no image element available (or if not processed yet), just
   // display the image from the source directly
   if (!image || !image.width || !image.height || !image.placeholder) {
-    return (
-      <SimpleImage
-        ipfsUri={ipfsUri}
-        alt={alt}
-        mode={mode}
-        style={style}
-      />
-    )
+    return <SimpleImage ipfsUri={ipfsUri} alt={alt} mode={mode} style={style} />
   }
 
-  return <ReactiveImage {...props}/>
+  return <ReactiveImage {...props} />
 }
-
 
 function SimpleImage({
   ipfsUri,
@@ -109,7 +108,6 @@ function SimpleImage({
     />
   )
 }
-
 
 function ReactiveImage({
   image,
