@@ -1,6 +1,6 @@
 /* eslint @next/next/no-img-element: 0 */
 import styles from "./Image.module.scss"
-import { CSSProperties, ImgHTMLAttributes } from "react"
+import { CSSProperties, ImgHTMLAttributes, useLayoutEffect } from "react"
 import { useCallback, useRef, useState } from "react"
 import { ipfsCidFromUriOrCid } from "../../services/Ipfs"
 import { MediaImage } from "../../types/entities/MediaImage"
@@ -53,26 +53,36 @@ export function Image(props: FxImageProps) {
   const [containerSize, setContainerSize] = useState<ContainerSize | null>(null)
   const [loadedUrl, setLoadedUrl] = useState<string | null>(null)
 
-  const updateContainerSize = useCallback(() => {
-    if (!ref.current?.parentNode) return
-    const { width, height } = (
-      ref.current.parentNode as HTMLElement
-    ).getBoundingClientRect()
-    const containerWidth = Math.ceil(width / SIZE_PRECISION) * SIZE_PRECISION
-    const containerHeight = Math.ceil(height / SIZE_PRECISION) * SIZE_PRECISION
-    if (
-      !containerSize ||
-      containerSize.width < containerWidth ||
-      containerSize.height < containerHeight
-    ) {
-      setContainerSize({ width: containerWidth, height: containerHeight })
-    }
-  }, [ref, containerSize])
+  const updateContainerSize = useCallback(
+    (entries: ResizeObserverEntry[]) => {
+      if (!Array.isArray(entries)) return
+      const entry = entries[0]
+      const { width, height } = entry.contentRect
+      if (width === 0 || height === 0) return
+      const containerWidth = Math.ceil(width / SIZE_PRECISION) * SIZE_PRECISION
+      const containerHeight =
+        Math.ceil(height / SIZE_PRECISION) * SIZE_PRECISION
+      if (
+        !containerSize ||
+        containerSize.width < containerWidth ||
+        containerSize.height < containerHeight
+      ) {
+        setContainerSize({ width: containerWidth, height: containerHeight })
+      }
+    },
+    [containerSize]
+  )
 
   useClientEffect(() => {
-    updateContainerSize()
-  }, [ref])
+    if (!ref.current) return
 
+    const resizeObserver = new ResizeObserver(updateContainerSize)
+    resizeObserver.observe(ref.current)
+
+    return () => {
+      resizeObserver.disconnect()
+    }
+  }, [ref, updateContainerSize])
   useClientEffect(() => {
     if (!containerSize || !ipfsUri) return
     const imgWidth = image?.width || containerSize.width
