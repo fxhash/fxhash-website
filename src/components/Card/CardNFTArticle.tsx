@@ -132,6 +132,7 @@ const _CardNftArticle = ({
             ipfsUri={thumbnailUri}
             image={thumbnailMedia}
             alt=""
+            className={style.thumbnail}
           />
         </div>
         <div className={style.infos}>

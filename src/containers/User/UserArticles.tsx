@@ -4,6 +4,7 @@ import { useQuery } from "@apollo/client";
 import style from "./UserArticles.module.scss";
 import { InfiniteScrollTrigger } from "../../components/Utils/InfiniteScrollTrigger";
 import { CardNftArticle } from "../../components/Card/CardNFTArticle";
+import { CardSmallNftArticle } from "../../components/Card/CardSmallNFTArticle";
 import { CardNftArticleSkeleton } from "../../components/Card/CardNFTArticleSkeleton";
 import { Qu_userArticles } from "../../queries/user";
 import cs from "classnames";
@@ -67,7 +68,7 @@ const _UserArticles = ({ user, showLocalDrafts }: UserArticlesProps) => {
           />
         )}
         {articles.map((article, index) =>
-          <CardNftArticle className={style.article} key={article.slug} article={article} imagePriority={index < 4} />
+          <CardSmallNftArticle className={style.article} key={article.slug} article={article} imagePriority={index < 4} />
         )}
         {loading &&
           [...Array(20)].map((_, idx) =>

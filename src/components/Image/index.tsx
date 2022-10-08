@@ -1,11 +1,12 @@
 /* eslint @next/next/no-img-element: 0 */
-
+import styles from "./Image.module.scss"
+import { CSSProperties, ImgHTMLAttributes } from "react"
 import { useCallback, useRef, useState } from "react"
 import { ipfsCidFromUriOrCid } from "../../services/Ipfs"
 import { MediaImage } from "../../types/entities/MediaImage"
 import { useClientEffect, useLazyImage } from "../../utils/hookts"
 import { useInView } from "react-intersection-observer"
-
+import cx from "classnames"
 const getImageApiUrl = (ipfsUri: string, width: number, height: number) =>
   `${
     process.env.NEXT_PUBLIC_API_MEDIA_ROOT
@@ -16,14 +17,19 @@ interface ContainerSize {
   height: number
 }
 
-export interface FxImageProps {
+export interface FxImageProps
+  extends Omit<
+    ImgHTMLAttributes<HTMLImageElement>,
+    "height" | "width" | "onError"
+  > {
   image?: MediaImage
-  alt: string
   ipfsUri: string | null | undefined
-  style?: {}
   onLoadingComplete?: () => void
-  onError?: () => void
-  className?: string
+  onError?: (e: Event | string) => void
+  width?: number | null
+  height?: number | null
+  objectFit?: CSSProperties["objectFit"]
+  objectPosition?: CSSProperties["objectPosition"]
 }
 
 const SIZE_PRECISION = 50
@@ -36,6 +42,11 @@ export function Image(props: FxImageProps) {
     onLoadingComplete,
     onError,
     style,
+    width,
+    height,
+    objectFit = "contain",
+    objectPosition = "center",
+    className,
     ...restProps
   } = props
   const ref = useRef<HTMLImageElement>(null)
@@ -64,21 +75,22 @@ export function Image(props: FxImageProps) {
 
   useClientEffect(() => {
     if (!containerSize || !ipfsUri) return
-    const width = image?.width || containerSize.width
-    const height = image?.height || containerSize.height
-    const ratio = Math.max(width, height) / Math.min(width, height)
+    const imgWidth = image?.width || containerSize.width
+    const imgHeight = image?.height || containerSize.height
+    const ratio = Math.max(imgWidth, imgHeight) / Math.min(imgWidth, imgHeight)
+    const size = Math.min(containerSize.width, containerSize.height)
     const url = getImageApiUrl(
       ipfsUri,
-      containerSize.width * window.devicePixelRatio,
-      containerSize.width * ratio * window.devicePixelRatio
+      (width || size) * window.devicePixelRatio,
+      (height || size * ratio) * window.devicePixelRatio
     )
     const img = new global.Image()
     img.onload = () => {
       setLoadedUrl(url)
       onLoadingComplete?.()
     }
-    img.onerror = () => {
-      onError?.()
+    img.onerror = (e) => {
+      onError?.(e)
     }
     img.src = url
   }, [containerSize, ipfsUri, image])
@@ -88,12 +100,14 @@ export function Image(props: FxImageProps) {
       ref={ref}
       src={loadedUrl || image?.placeholder}
       alt={alt}
-      width="100%"
-      height="100%"
+      width={width || "100%"}
+      height={height || "100%"}
       style={{
-        objectFit: "contain",
+        objectFit,
+        objectPosition,
         ...style,
       }}
+      className={cx(className, styles.root, { [styles.blur]: !loadedUrl })}
       {...restProps}
     />
   )

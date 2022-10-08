@@ -37,7 +37,6 @@ export function UserHeader({ user }: Props) {
     <header className={cs(style.container, layout["padding-small"])}>
       <Avatar
         image={user.avatarMedia}
-        imageSizes="1024px"
         uri={user.avatarUri}
         className={cs(style.avatar, effects["drop-shadow-big"])}
       />

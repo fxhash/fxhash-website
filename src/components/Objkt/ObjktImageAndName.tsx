@@ -24,6 +24,9 @@ const _ObjtkImageAndName = ({
           ipfsUri={objkt.metadata?.thumbnailUri}
           image={objkt.captureMedia}
           alt={`thumbnail of ${objkt.name}`}
+          width={size}
+          height={size}
+          objectFit="cover"
         />
         <span className={style.name}>
           {shortName ? `#${objkt.iteration}` : objkt.name}

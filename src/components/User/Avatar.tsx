@@ -9,17 +9,9 @@ interface Props {
   className?: string
   isInline?: boolean
   image?: MediaImage
-  imageSizes?: string
 }
 
-const DEFAULT_AVATAR_IMAGE_SIZE = "64px"
-
-export function Avatar({
-  image,
-  uri,
-  className,
-  isInline,
-}: Props) {
+export function Avatar({ image, uri, className, isInline }: Props) {
   const Container = isInline ? "span" : "div"
   return (
     <Container

@@ -27,11 +27,7 @@ const _CardSmallNftArticle = ({
       })}
     >
       <div className={style["img-wrapper"]}>
-        <Image
-          alt=""
-          ipfsUri={thumbnailUri}
-          image={thumbnailMedia}
-        />
+        <Image alt="" ipfsUri={thumbnailUri} image={thumbnailMedia} />
       </div>
       <div className={style.infos}>
         <UserBadge user={author!} size="regular" />

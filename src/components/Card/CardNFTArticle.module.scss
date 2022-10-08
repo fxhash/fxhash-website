@@ -39,6 +39,15 @@
   border-right: var(--cards-border-width) solid var(--color-border);
 }
 
+
+.thumbnail {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  object-fit: contain;
+}
+
 .infos {
   flex: 1;
   padding: $spacing;
