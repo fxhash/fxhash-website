@@ -1,19 +1,12 @@
 import css from "./Image.module.scss"
 import cs from "classnames"
-import { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { CSSProperties, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import {
   EGatewayIpfs,
   ipfsCidFromUriOrCid,
   ipfsGatewayUrl,
 } from "../../services/Ipfs"
 import { MediaImage } from "../../types/entities/MediaImage"
-import { useClientEffect, useLazyImage } from "../../utils/hookts"
-import { useInView } from "react-intersection-observer"
-
-// a 1x1 base64 png image used as a placeholder for the image tag before
-// a proper image URL is found based on the available viewport space
-const base64_1x1_png =
-  "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
 
 // a list of common sizes which will be used to fetch the resource, ensuring
 // we hit the cache as often as possible
@@ -38,14 +31,20 @@ interface ISize {
   height: number
 }
 
-export interface FxImageProps {
+interface BaseImageProps {
+  ipfsUri?: string | null
+  alt: string
+  mode?: TImageMode
+  style?: CSSProperties
+}
+
+export interface FxImageProps extends BaseImageProps {
   image?: MediaImage
-  ipfsUri: string | null | undefined
   alt: string
   mode?: TImageMode
   // if set to true, only the original image will be loaded
   trueResolution?: boolean
-  style?: {}
+  style?: CSSProperties
   // if the image should have position absolute, it should be set by this prop
   // instead of through the CSS, this is because we use a ::after element to
   // achieve the blur effect
@@ -55,7 +54,64 @@ export interface FxImageProps {
   className?: string
 }
 
-export function Image({
+export function Image(props: FxImageProps) {
+  const { image, ipfsUri, alt, mode, style } = props
+
+  // top condition to avoid any computations if there is no img
+  if (!image && !ipfsUri) return null
+
+  // if there is no image element available (or if not processed yet), just
+  // display the image from the source directly
+  if (!image || !image.width || !image.height || !image.placeholder) {
+    return (
+      <SimpleImage
+        ipfsUri={ipfsUri}
+        alt={alt}
+        mode={mode}
+        style={style}
+      />
+    )
+  }
+
+  return <ReactiveImage {...props}/>
+}
+
+
+function SimpleImage({
+  ipfsUri,
+  alt,
+  mode = "contain",
+  style,
+  ...restProps
+}: BaseImageProps) {
+  const gatewayUrl = useMemo(
+    () => ipfsGatewayUrl(ipfsUri!, EGatewayIpfs.FXHASH),
+    [ipfsUri]
+  )
+
+  return (
+    <img
+      src={gatewayUrl}
+      alt={alt}
+      style={{
+        objectFit:
+          mode === "contain"
+            ? "contain"
+            : mode === "cover"
+            ? "cover"
+            : undefined,
+        width: "100%",
+        height: "100%",
+        ...style,
+      }}
+      {...restProps}
+      loading="lazy"
+    />
+  )
+}
+
+
+function ReactiveImage({
   image,
   ipfsUri,
   alt,
@@ -67,40 +123,14 @@ export function Image({
   position,
   ...restProps
 }: FxImageProps) {
-  // top condition to avoid any computations if there is no img
-  if (!image && !ipfsUri) return null
-
-  // if there is no image element available (or if not processed yet), just
-  // display the image from the source directly
-  const gatewayUrl = useMemo(
-    () => ipfsGatewayUrl(ipfsUri, EGatewayIpfs.FXHASH),
-    [ipfsUri]
-  )
-  if (!image || !image.width || !image.height || !image.placeholder) {
-    return (
-      <img
-        src={gatewayUrl}
-        alt={alt}
-        style={{
-          objectFit:
-            mode === "contain"
-              ? "contain"
-              : mode === "cover"
-              ? "cover"
-              : undefined,
-          width: "100%",
-          height: "100%",
-          ...style,
-        }}
-        {...restProps}
-        loading="lazy"
-      />
-    )
-  }
-
   const ref = useRef<HTMLImageElement>(null)
   const [url, setUrl] = useState<string | null>(null)
   const [loaded, setLoaded] = useState<boolean>(false)
+
+  const gatewayUrl = useMemo(
+    () => ipfsGatewayUrl(ipfsUri!, EGatewayIpfs.FXHASH),
+    [ipfsUri]
+  )
 
   // keep a reference to the highest size loaded
   const highestWidth = useRef(0)
