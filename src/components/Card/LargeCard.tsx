@@ -45,12 +45,7 @@ export function LargeCard({
             <span>undesirable content</span>
           </div>
         )}
-        <Image
-          image={image}
-          ipfsUri={thumbnailUri!}
-          mode="responsive"
-          alt=""
-        />
+        <Image image={image} ipfsUri={thumbnailUri!} mode="responsive" alt="" />
       </div>
       {displayDetails && <div className={cs(style.content)}>{children}</div>}
     </div>

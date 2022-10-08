@@ -1,22 +1,27 @@
 import css from "./Image.module.scss"
 import cs from "classnames"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
-import { EGatewayIpfs, ipfsCidFromUriOrCid, ipfsGatewayUrl } from "../../services/Ipfs"
+import {
+  EGatewayIpfs,
+  ipfsCidFromUriOrCid,
+  ipfsGatewayUrl,
+} from "../../services/Ipfs"
 import { MediaImage } from "../../types/entities/MediaImage"
 import { useClientEffect, useLazyImage } from "../../utils/hookts"
 import { useInView } from "react-intersection-observer"
 
-// a 1x1 base64 png image used as a placeholder for the image tag before 
+// a 1x1 base64 png image used as a placeholder for the image tag before
 // a proper image URL is found based on the available viewport space
-const base64_1x1_png = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
+const base64_1x1_png =
+  "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
 
 // a list of common sizes which will be used to fetch the resource, ensuring
 // we hit the cache as often as possible
 const sizes = [
-  8, 16, 32, 64, 128, 256, 512, 768, 1024, 1536, 2048, 2560, 3072, 4196
+  8, 16, 32, 64, 128, 256, 512, 768, 1024, 1536, 2048, 2560, 3072, 4196,
 ]
 
-// the image display mode, depends on the context of the parent and how the 
+// the image display mode, depends on the context of the parent and how the
 // image should be displayed, required to display a proper blur effect
 // - contain: wrapper takes full width and height available, and image is set
 //            to be contained in the available area
@@ -42,7 +47,7 @@ export interface FxImageProps {
   trueResolution?: boolean
   style?: {}
   // if the image should have position absolute, it should be set by this prop
-  // instead of through the CSS, this is because we use a ::after element to 
+  // instead of through the CSS, this is because we use a ::after element to
   // achieve the blur effect
   position?: "absolute"
   onLoadingComplete?: () => void
@@ -50,17 +55,17 @@ export interface FxImageProps {
   className?: string
 }
 
-export function Image({ 
-  image, 
-  ipfsUri, 
+export function Image({
+  image,
+  ipfsUri,
   alt,
   trueResolution,
   mode = "contain",
-  onLoadingComplete, 
-  onError, 
-  style, 
+  onLoadingComplete,
+  onError,
+  style,
   position,
-  ...restProps 
+  ...restProps
 }: FxImageProps) {
   // top condition to avoid any computations if there is no img
   if (!image && !ipfsUri) return null
@@ -77,9 +82,12 @@ export function Image({
         src={gatewayUrl}
         alt={alt}
         style={{
-          objectFit: mode === "contain" ? "contain"
-            : mode === "cover" ? "cover"
-            : undefined,
+          objectFit:
+            mode === "contain"
+              ? "contain"
+              : mode === "cover"
+              ? "cover"
+              : undefined,
           width: "100%",
           height: "100%",
           ...style,
@@ -91,7 +99,7 @@ export function Image({
   }
 
   const ref = useRef<HTMLImageElement>(null)
-  const [url, setUrl] = useState<string|null>(null)
+  const [url, setUrl] = useState<string | null>(null)
   const [loaded, setLoaded] = useState<boolean>(false)
 
   // keep a reference to the highest size loaded
@@ -123,10 +131,10 @@ export function Image({
     // compute available space and load the appropriate image accordingly
     const space = getViewportSpace()
     // find the best width based on available space
-    let width = sizes[sizes.length-1]
+    let width = sizes[sizes.length - 1]
     for (const w of sizes) {
       if (w > space.width) {
-        width = w 
+        width = w
         break
       }
     }
@@ -173,17 +181,16 @@ export function Image({
   return (
     <div
       ref={ref}
-      className={cs(
-        css.wrapper,
-        css[`wrapper_${mode}`], {
+      className={cs(css.wrapper, css[`wrapper_${mode}`], {
         [css.loading]: !loaded,
       })}
       style={{
         backgroundImage: loaded ? undefined : `url("${image?.placeholder}")`,
         position: position,
-        paddingTop: mode === "responsive" ? (
-          `${image!.height! / image!.width! * 100}%`
-        ):undefined
+        paddingTop:
+          mode === "responsive"
+            ? `${(image!.height! / image!.width!) * 100}%`
+            : undefined,
       }}
     >
       {url && (

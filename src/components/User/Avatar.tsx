@@ -14,20 +14,13 @@ interface Props {
 
 const DEFAULT_AVATAR_IMAGE_SIZE = "64px"
 
-export function Avatar({
-  image,
-  uri,
-  className,
-  isInline,
-}: Props) {
+export function Avatar({ image, uri, className, isInline }: Props) {
   const Container = isInline ? "span" : "div"
   return (
     <Container
       className={cs(style.container, effect["drop-shadow-small"], className)}
     >
-      {(image || uri) && (
-        <Image image={image} ipfsUri={uri} alt="" />
-      )}
+      {(image || uri) && <Image image={image} ipfsUri={uri} alt="" />}
     </Container>
   )
 }
