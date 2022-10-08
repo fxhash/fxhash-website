@@ -53,10 +53,9 @@ export function Card({
             ipfsUri={thumbnailUri!}
             image={image}
             alt=""
-            layout="fill"
-            objectFit="contain"
             onLoadingComplete={() => setLoaded(true)}
             onError={() => setError(true)}
+            className={style.thumbnail}
           />
         )}
         {error && (

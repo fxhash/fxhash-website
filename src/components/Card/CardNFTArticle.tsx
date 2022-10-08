@@ -132,10 +132,6 @@ const _CardNftArticle = ({
             ipfsUri={thumbnailUri}
             image={thumbnailMedia}
             alt=""
-            layout="fill"
-            objectFit="cover"
-            objectPosition="center"
-            priority={imagePriority}
           />
         </div>
         <div className={style.infos}>

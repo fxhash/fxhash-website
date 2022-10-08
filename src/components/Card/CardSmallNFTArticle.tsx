@@ -31,10 +31,6 @@ const _CardSmallNftArticle = ({
           alt=""
           ipfsUri={thumbnailUri}
           image={thumbnailMedia}
-          layout="fill"
-          objectFit="cover"
-          objectPosition="center"
-          priority={imagePriority}
         />
       </div>
       <div className={style.infos}>

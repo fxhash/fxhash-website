@@ -29,9 +29,6 @@ export function GenerativeRank({ token, children }: PropsWithChildren<Props>) {
             ipfsUri={token.thumbnailUri!}
             image={token.captureMedia}
             alt=""
-            layout="fill"
-            objectFit="contain"
-            sizes="20vw"
           />
         </div>
         <div className={cs(style.details)}>

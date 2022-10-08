@@ -72,7 +72,6 @@ export function GenerativeArtwork({
               image={token.captureMedia}
               ipfsUri={token.thumbnailUri}
               alt={`${token.name} preview`}
-              layout="fill"
             />
           ) : (
             <ArtworkIframe

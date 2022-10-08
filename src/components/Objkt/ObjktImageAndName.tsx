@@ -21,13 +21,9 @@ const _ObjtkImageAndName = ({
     <Link href={`/gentk/${objkt.id}`}>
       <a className={style.container}>
         <Image
-          width={size}
-          height={size}
-          layout="fixed"
           ipfsUri={objkt.metadata?.thumbnailUri}
           image={objkt.captureMedia}
           alt={`thumbnail of ${objkt.name}`}
-          priority={imagePriority}
         />
         <span className={style.name}>
           {shortName ? `#${objkt.iteration}` : objkt.name}

@@ -35,9 +35,6 @@ export function CardList({
             ipfsUri={thumbnailUri!}
             image={image}
             alt=""
-            layout="fill"
-            objectFit="contain"
-            sizes="20vw"
             onLoadingComplete={() => setLoaded(true)}
             onError={() => setError(true)}
           />

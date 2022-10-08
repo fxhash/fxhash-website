@@ -19,14 +19,13 @@ export function Avatar({
   uri,
   className,
   isInline,
-  imageSizes = DEFAULT_AVATAR_IMAGE_SIZE,
 }: Props) {
   const Container = isInline ? "span" : "div"
   return (
     <Container
       className={cs(style.container, effect["drop-shadow-small"], className)}
     >
-      <Image image={image} ipfsUri={uri} alt="" sizes={imageSizes} />
+      <Image image={image} ipfsUri={uri} alt="" />
     </Container>
   )
 }

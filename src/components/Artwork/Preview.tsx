@@ -21,7 +21,7 @@ export function ArtworkPreview({
     <ArtworkFrame>
       {url && !ipfsUri && <LazyImage url={url} alt={alt} />}
       {ipfsUri && image && (
-        <Image image={image} ipfsUri={ipfsUri} alt={alt} layout="fill" />
+        <Image image={image} ipfsUri={ipfsUri} alt={alt}/>
       )}
     </ArtworkFrame>
   )

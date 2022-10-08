@@ -1,63 +1,82 @@
-import NextImage, {
-  ImageProps as NextImageProps,
-  ImageLoaderProps,
-  ImageLoader,
-} from "next/image"
-import { useMemo } from "react"
+import { useCallback, useRef, useState } from "react"
 import { ipfsCidFromUriOrCid } from "../../services/Ipfs"
 import { MediaImage } from "../../types/entities/MediaImage"
-import { LazyImage } from "./LazyImage"
-import { ipfsGatewayUrl } from "../../services/Ipfs"
+import { useClientEffect, useLazyImage } from "../../utils/hookts"
+import { useInView } from "react-intersection-observer"
 
-export interface FxHashImageLoaderFactoryProps {
-  ratio: number
+const getImageApiUrl = (ipfsUri: string, width: number, height: number) =>
+  `${
+    process.env.NEXT_PUBLIC_API_MEDIA_ROOT
+  }/w_${width},h_${height}/${ipfsCidFromUriOrCid(ipfsUri)}`
+
+interface ContainerSize {
+  width: number
+  height: number
 }
 
-const fxHashImageLoaderFactory =
-  ({ ratio }: FxHashImageLoaderFactoryProps): ImageLoader =>
-  ({ src, width }: ImageLoaderProps): string => {
-    return `${process.env.NEXT_PUBLIC_API_MEDIA_ROOT}/w_${width},h_${Math.ceil(
-      width * ratio
-    )}/${ipfsCidFromUriOrCid(src)}`
-  }
-
-export interface FxImageProps extends Omit<NextImageProps, "src"> {
+export interface FxImageProps {
   image?: MediaImage
   alt: string
   ipfsUri: string | null | undefined
+  style?: {}
+  onLoadingComplete?: () => void
+  onError?: () => void
+  className?: string
 }
 
 export function Image(props: FxImageProps) {
-  const { image, alt, ipfsUri, layout = "responsive", ...restProps } = props
-  const loader = useMemo(() => {
-    if (!image) return undefined
-    const { width, height } = image
+  const { image, alt, ipfsUri, onLoadingComplete, onError, style, ...restProps } =
+    props
+  const ref = useRef<HTMLImageElement>(null)
+  const [containerSize, setContainerSize] = useState<ContainerSize | null>(null)
+  const [loadedUrl, setLoadedUrl] = useState<string | null>(null)
+
+  const updateContainerSize = useCallback(() => {
+    if (!ref.current?.parentNode) return
+    const { width, height } = (
+      ref.current.parentNode as HTMLElement
+    ).getBoundingClientRect()
+    setContainerSize({ width: Math.ceil(width), height: Math.ceil(height) })
+  }, [ref])
+
+  useClientEffect(() => {
+    updateContainerSize()
+  }, [ref])
+
+  useClientEffect(() => {
+    if (!containerSize || !ipfsUri) return
+    const { width, height } = image || {
+      width: containerSize.width,
+      height: containerSize.height,
+    }
     const ratio = width > height ? width / height : height / width
-    return fxHashImageLoaderFactory({ ratio })
-  }, [image])
-  const sizesRequired = layout !== "fill"
-  const ipfsUrl = useMemo(() => ipfsGatewayUrl(ipfsUri), [ipfsUri])
-  if (!ipfsUri) return null
-  if (!image && sizesRequired)
-    return (
-      <LazyImage
-        url={ipfsUri}
-        alt={alt}
-        {...restProps}
-        onLoad={props.onLoadingComplete as () => void}
-        onError={props.onError as () => void}
-      />
+    const url = getImageApiUrl(
+      ipfsUri,
+      containerSize.width,
+      containerSize.width * ratio
     )
+    const img = new global.Image()
+    img.onload = () => {
+      setLoadedUrl(url)
+      onLoadingComplete?.()
+    }
+    img.onerror = () => {
+      onError?.()
+    }
+    img.src = url
+  }, [containerSize, ipfsUri, image])
+
   return (
-    <NextImage
-      placeholder={image?.placeholder ? "blur" : "empty"}
-      height={sizesRequired ? image?.height : undefined}
-      width={sizesRequired ? image?.width : undefined}
-      blurDataURL={image?.placeholder}
-      loader={loader}
-      src={loader ? ipfsUri : ipfsUrl}
+    <img
+      ref={ref}
+      src={loadedUrl || image?.placeholder}
       alt={alt}
-      layout={layout}
+      width="100%"
+      height="100%"
+      style={{
+        objectFit: "contain",
+        ...style,
+      }}
       {...restProps}
     />
   )
