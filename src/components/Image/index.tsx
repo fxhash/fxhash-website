@@ -1,3 +1,5 @@
+/* eslint @next/next/no-img-element: 0 */
+
 import { useCallback, useRef, useState } from "react"
 import { ipfsCidFromUriOrCid } from "../../services/Ipfs"
 import { MediaImage } from "../../types/entities/MediaImage"
@@ -24,9 +26,18 @@ export interface FxImageProps {
   className?: string
 }
 
+const SIZE_PRECISION = 50
+
 export function Image(props: FxImageProps) {
-  const { image, alt, ipfsUri, onLoadingComplete, onError, style, ...restProps } =
-    props
+  const {
+    image,
+    alt,
+    ipfsUri,
+    onLoadingComplete,
+    onError,
+    style,
+    ...restProps
+  } = props
   const ref = useRef<HTMLImageElement>(null)
   const [containerSize, setContainerSize] = useState<ContainerSize | null>(null)
   const [loadedUrl, setLoadedUrl] = useState<string | null>(null)
@@ -36,8 +47,16 @@ export function Image(props: FxImageProps) {
     const { width, height } = (
       ref.current.parentNode as HTMLElement
     ).getBoundingClientRect()
-    setContainerSize({ width: Math.ceil(width), height: Math.ceil(height) })
-  }, [ref])
+    const containerWidth = Math.ceil(width / SIZE_PRECISION) * SIZE_PRECISION
+    const containerHeight = Math.ceil(height / SIZE_PRECISION) * SIZE_PRECISION
+    if (
+      !containerSize ||
+      containerSize.width < containerWidth ||
+      containerSize.height < containerHeight
+    ) {
+      setContainerSize({ width: containerWidth, height: containerHeight })
+    }
+  }, [ref, containerSize])
 
   useClientEffect(() => {
     updateContainerSize()
@@ -45,15 +64,13 @@ export function Image(props: FxImageProps) {
 
   useClientEffect(() => {
     if (!containerSize || !ipfsUri) return
-    const { width, height } = image || {
-      width: containerSize.width,
-      height: containerSize.height,
-    }
-    const ratio = width > height ? width / height : height / width
+    const width = image?.width || containerSize.width
+    const height = image?.height || containerSize.height
+    const ratio = Math.max(width, height) / Math.min(width, height)
     const url = getImageApiUrl(
       ipfsUri,
-      containerSize.width,
-      containerSize.width * ratio
+      containerSize.width * window.devicePixelRatio,
+      containerSize.width * ratio * window.devicePixelRatio
     )
     const img = new global.Image()
     img.onload = () => {
