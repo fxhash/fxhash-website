@@ -111,6 +111,7 @@ export const Frag_GenTokenBadge = gql`
     id
     name
     thumbnailUri
+    displayUri
     captureMedia {
       ...MediaImage
     }

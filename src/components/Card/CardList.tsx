@@ -27,7 +27,6 @@ export function CardList({
       <div
         className={cs(style["thumbnail-container"], {
           [style.undesirable]: undesirable,
-          [effect.placeholder]: !loaded,
         })}
       >
         {!undesirable && (

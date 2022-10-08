@@ -1,8 +1,9 @@
 export interface MediaImage {
-  width: number
-  height: number
-  metadata: {} | null
-  mimeType: string
-  placeholder: string 
-  pocessed: boolean
+  cid: string
+  width?: number
+  height?: number
+  metadata?: {} | null
+  mimeType?: string
+  placeholder?: string 
+  processed: boolean
 }

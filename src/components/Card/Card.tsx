@@ -8,10 +8,6 @@ import {
   useMemo,
   useState,
 } from "react"
-import { ipfsGatewayUrl } from "../../services/Ipfs"
-import { useClientAsyncEffect } from "../../utils/hookts"
-import { Loader } from "../Utils/Loader"
-import { useInView } from "react-intersection-observer"
 import { SettingsContext } from "../../context/Theme"
 import { MediaImage } from "../../types/entities/MediaImage"
 import { Image } from "../Image"
@@ -32,7 +28,6 @@ export function Card({
   thumbInfosComp,
   children,
 }: PropsWithChildren<Props>) {
-  const [loaded, setLoaded] = useState<boolean>(false)
   const [error, setError] = useState<boolean>(false)
   const settings = useContext(SettingsContext)
 
@@ -45,7 +40,6 @@ export function Card({
       <div
         className={cs(style["thumbnail-container"], {
           [style.undesirable]: undesirable,
-          [effect.placeholder]: !loaded && !error,
         })}
       >
         {!undesirable && (
@@ -53,9 +47,9 @@ export function Card({
             ipfsUri={thumbnailUri!}
             image={image}
             alt=""
-            onLoadingComplete={() => setLoaded(true)}
             onError={() => setError(true)}
             className={style.thumbnail}
+            position="absolute"
           />
         )}
         {error && (

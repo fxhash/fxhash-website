@@ -19,10 +19,10 @@ export function ArtworkPreview({
 }: Props) {
   return (
     <ArtworkFrame>
-      {url && !ipfsUri && <LazyImage url={url} alt={alt} />}
-      {ipfsUri && image && (
-        <Image image={image} ipfsUri={ipfsUri} alt={alt}/>
-      )}
+      {url 
+        ? <LazyImage url={url} alt={alt} />
+        : <Image image={image} ipfsUri={ipfsUri} alt={alt}/>
+      }
     </ArtworkFrame>
   )
 }

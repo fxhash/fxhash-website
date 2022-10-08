@@ -31,17 +31,12 @@ export function LargeCard({
   topper,
   children,
 }: PropsWithChildren<Props>) {
-  const [loaded, setLoaded] = useState<boolean>(false)
-  const { ref, inView } = useInView()
-
   return (
-    <div className={cs(style.root)} ref={ref}>
+    <div className={cs(style.root)}>
       {topper && <div className={cs(style.topper)}>{topper}</div>}
       <div
         className={cs(style.thumbnail_wrapper, {
           [style.undesirable]: undesirable,
-          [effect.placeholder]: !loaded,
-          [style.loaded]: loaded,
         })}
       >
         {undesirable && (
@@ -51,10 +46,10 @@ export function LargeCard({
           </div>
         )}
         <Image
-          ipfsUri={thumbnailUri!}
           image={image}
+          ipfsUri={thumbnailUri!}
+          mode="responsive"
           alt=""
-          onLoadingComplete={() => setLoaded(true)}
         />
       </div>
       {displayDetails && <div className={cs(style.content)}>{children}</div>}

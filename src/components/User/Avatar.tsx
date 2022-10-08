@@ -25,7 +25,9 @@ export function Avatar({
     <Container
       className={cs(style.container, effect["drop-shadow-small"], className)}
     >
-      <Image image={image} ipfsUri={uri} alt="" />
+      {(image || uri) && (
+        <Image image={image} ipfsUri={uri} alt="" />
+      )}
     </Container>
   )
 }

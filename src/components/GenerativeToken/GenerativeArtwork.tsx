@@ -70,8 +70,9 @@ export function GenerativeArtwork({
           {displayImage ? (
             <Image
               image={token.captureMedia}
-              ipfsUri={token.thumbnailUri}
+              ipfsUri={token.displayUri}
               alt={`${token.name} preview`}
+              trueResolution
             />
           ) : (
             <ArtworkIframe

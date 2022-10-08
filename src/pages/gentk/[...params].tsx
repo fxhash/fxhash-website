@@ -44,6 +44,7 @@ import { ObjktTabs } from "../../containers/Objkt/ObjktTabs"
 import { Labels } from "../../components/GenerativeToken/Label/Labels"
 import { MarketplaceActions } from "../../containers/Objkt/MarketplaceActions"
 import { ListingAccept } from "../../containers/Objkt/ListingAccept"
+import { Image } from "../../components/Image"
 
 interface Props {
   objkt: Objkt
@@ -246,7 +247,13 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
               <div className={cs(style["preview-wrapper"])}>
                 <ArtworkFrame>
                   {settings.quality === 0 && !running ? (
-                    <img src={displayUrl} alt={`${objkt.name} preview`} />
+                    <Image
+                      image={objkt.captureMedia}
+                      ipfsUri={objkt.metadata?.displayUri}
+                      mode="contain"
+                      alt={`${objkt.name} preview`}
+                      trueResolution
+                    />
                   ) : (
                     <ArtworkIframe
                       ref={iframeRef}
