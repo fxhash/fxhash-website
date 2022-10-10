@@ -36,6 +36,7 @@ interface Props {
   cardSizeScope?: string
   children: FunctionComponent<PropsChildren>
 }
+
 export function CardsExplorer({
   filtersVisibleDefault = false,
   cardSizeScope,
@@ -71,23 +72,14 @@ export function CardsExplorer({
     })
   }
 
-  // get the basePath from pathname
-  const basePath = useMemo<string>(
-    () => router.pathname.split("/")[1],
-    [router.pathname]
-  )
-  const isActiveScope = basePath === cardSizeScope
-
   useEffect(() => {
     // cardSize scopes need to match the basePath to prevent race conditions
     // when updating cardSize for retained routes
-    if (isActiveScope) {
-      const root = document.documentElement
-      root.style.setProperty("--cards-size", `${cardSize}px`)
-      // Reset to default size when cleanup
-      return () => {
-        root.style.setProperty("--cards-size", `${DEFAULT_SIZE}px`)
-      }
+    const root = document.documentElement
+    root.style.setProperty("--cards-size", `${cardSize}px`)
+    // Reset to default size when cleanup
+    return () => {
+      root.style.setProperty("--cards-size", `${DEFAULT_SIZE}px`)
     }
   }, [cardSize, router.pathname])
 

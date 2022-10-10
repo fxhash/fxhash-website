@@ -1,7 +1,14 @@
 import "../styles/globals.scss"
 import "../styles/fonts.css"
 import type { AppProps } from "next/app"
-import { useRef, useEffect, memo, ReactElement, ReactNode } from "react"
+import {
+  useRef,
+  useEffect,
+  memo,
+  ReactElement,
+  ReactNode,
+  useMemo,
+} from "react"
 import { useRouter } from "next/router"
 import NextNprogress from "nextjs-progressbar"
 import Head from "next/head"
@@ -85,6 +92,20 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
   // custom layout for the components
   const subLayout = Component.getLayout ?? ((page) => page)
 
+  // we sort the retained components by visisble
+  // this way we render the visible component at last
+  // which is helpfull to prevent race conditions between
+  // visible and invisible effects
+  const sortedRetainedComponentEntries = useMemo(
+    () =>
+      Object.entries(retainedComponents.current).sort((a, b) => {
+        const isVisibleA = a[0] === router.pathname
+        const isVisibleB = b[0] === router.pathname
+        return isVisibleA === isVisibleB ? 0 : isVisibleA ? 1 : -1
+      }),
+    [retainedComponents.current, router.pathname]
+  )
+
   return (
     <>
       <Head>
@@ -141,18 +162,16 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
         <Root>
           <>
             <div style={{ display: isRetainableRoute ? "block" : "none" }}>
-              {Object.entries(retainedComponents.current).map(
-                ([path, c]: any) => (
-                  <div
-                    key={path}
-                    style={{
-                      display: router.pathname === path ? "block" : "none",
-                    }}
-                  >
-                    {c.component}
-                  </div>
-                )
-              )}
+              {sortedRetainedComponentEntries.map(([path, c]: any) => (
+                <div
+                  key={path}
+                  style={{
+                    display: router.pathname === path ? "block" : "none",
+                  }}
+                >
+                  {c.component}
+                </div>
+              ))}
             </div>
 
             {!isRetainableRoute && subLayout(<Component {...pageProps} />)}
