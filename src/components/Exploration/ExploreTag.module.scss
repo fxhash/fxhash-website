@@ -1,0 +1,35 @@
+@import "../../styles/Variables.scss";
+
+.container {
+  height: 50px;
+  display: flex;
+  background-color: var(--color-black);
+  padding-left: 20px;
+  color: var(--color-white);
+  align-items: center;
+  font-size: var(--font-size-small);
+
+  i {
+    cursor: pointer;
+    padding: 15px;
+    margin-left: 5px;
+    opacity: 0.5;
+    font-size: var(--font-size-regular);
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .container {
+    padding-left: 10px;
+    height: 40px;
+
+    i {
+      padding: 10px;
+      padding-left: 5px;
+    }
+  }
+}
