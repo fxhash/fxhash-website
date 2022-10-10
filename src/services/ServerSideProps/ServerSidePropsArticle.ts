@@ -57,7 +57,7 @@ export const getServerSidePropsBySlug: GetServerSideProps<
   Props,
   ArticleBySlugParams
 > = async ({ req, params }) => {
-  const slug = params?.slug!
+  const slug = decodeURIComponent(params?.slug!)
   const { origin } = getAbsoluteUrl(req)
   try {
     const apolloClient = createApolloClient()
