@@ -43,6 +43,10 @@ interface BaseImageProps {
   alt: string
   mode?: TImageMode
   style?: CSSProperties
+  // if the image should have position absolute, it should be set by this prop
+  // instead of through the CSS, this is because we use a ::after element to
+  // achieve the blur effect
+  position?: "absolute"
 }
 
 export interface FxImageProps extends BaseImageProps {
@@ -52,17 +56,13 @@ export interface FxImageProps extends BaseImageProps {
   // if set to true, only the original image will be loaded
   trueResolution?: boolean
   style?: CSSProperties
-  // if the image should have position absolute, it should be set by this prop
-  // instead of through the CSS, this is because we use a ::after element to
-  // achieve the blur effect
-  position?: "absolute"
   onLoadingComplete?: () => void
   onError?: () => void
   className?: string
 }
 
 export function Image(props: FxImageProps) {
-  const { image, ipfsUri, alt, mode, style } = props
+  const { image, ipfsUri, alt, mode, position, style } = props
 
   // top condition to avoid any computations if there is no img
   if (!image && !ipfsUri) return null
@@ -70,7 +70,7 @@ export function Image(props: FxImageProps) {
   // if there is no image element available (or if not processed yet), just
   // display the image from the source directly
   if (!image || !image.width || !image.height || !image.placeholder) {
-    return <SimpleImage ipfsUri={ipfsUri} alt={alt} mode={mode} style={style} />
+    return <SimpleImage ipfsUri={ipfsUri} alt={alt} mode={mode} style={style} position={position} />
   }
 
   return <ReactiveImage {...props} />
@@ -81,6 +81,7 @@ function SimpleImage({
   alt,
   mode = "contain",
   style,
+  position,
   ...restProps
 }: BaseImageProps) {
   const gatewayUrl = useMemo(
@@ -101,10 +102,12 @@ function SimpleImage({
             : undefined,
         width: "100%",
         height: "100%",
+        position: position,
         ...style,
       }}
       {...restProps}
       loading="lazy"
+      className={cs(css.simple_image)}
     />
   )
 }
