@@ -33,6 +33,7 @@ query Listings (
       issuer {
         flag
         name
+        labels
         ...Author
       }
     }

@@ -8,6 +8,7 @@ import { Report } from "./Report"
 import { IReserve } from "./Reserve"
 import { ISplit, Split } from "./Split"
 import { User } from "./User"
+import { ISettingsContext } from "../../context/Theme";
 
 export enum GenTokFlag {
   NONE              = "NONE",
@@ -42,6 +43,10 @@ export interface GenTokLabelDefinition {
   label: string
   shortLabel: string
   group: GenTokLabelGroup
+  description?: string
+  icon?: string
+  hideWarningSetting?: keyof ISettingsContext
+  hideWarningIfSettingIs?: boolean
 }
 
 export interface GenerativeTokenMarketStats {

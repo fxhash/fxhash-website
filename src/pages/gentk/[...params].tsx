@@ -244,7 +244,7 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
           <div className={cs(style["presentation-artwork"])}>
             <div className={cs(style["preview-container-auto"])}>
               <div className={cs(style["preview-wrapper"])}>
-                <ArtworkFrame>
+                <ArtworkFrame tokenLabels={objkt.issuer?.labels}>
                   {settings.quality === 0 && !running ? (
                     <img src={displayUrl} alt={`${objkt.name} preview`} />
                   ) : (

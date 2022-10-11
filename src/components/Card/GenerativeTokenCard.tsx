@@ -1,20 +1,14 @@
 import style from "./GenerativeTokenCard.module.scss"
 import Link from "next/link"
 import cs from "classnames"
-import {
-  GenerativeToken,
-  GenTokLabel,
-} from "../../types/entities/GenerativeToken"
+import { GenerativeToken, GenTokLabel, } from "../../types/entities/GenerativeToken"
 import colors from "../../styles/Colors.module.css"
 import text from "../../styles/Text.module.css"
 import { AnchorForward } from "../Utils/AnchorForward"
 import { Card } from "./Card"
 import { MintProgress } from "../Artwork/MintProgress"
 import { Spacing } from "../Layout/Spacing"
-import {
-  genTokCurrentPrice,
-  getGenerativeTokenUrl,
-} from "../../utils/generative-token"
+import { genTokCurrentPrice, getGenerativeTokenUrl, } from "../../utils/generative-token"
 import { EntityBadge } from "../User/EntityBadge"
 import { MintingState } from "../GenerativeToken/MintingState/MintingState"
 import { DisplayTezos } from "../Display/DisplayTezos"
@@ -40,6 +34,7 @@ export function GenerativeTokenCard({
     <Link href={url} passHref>
       <AnchorForward style={{ height: "100%" }} className={className}>
         <Card
+          tokenLabels={token.labels}
           thumbnailUri={token.thumbnailUri}
           displayDetails={displayDetails}
           thumbInfosComp={

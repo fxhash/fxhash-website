@@ -21,3 +21,51 @@
     border: none;
   }
 }
+
+.blur {
+  position: relative;
+  .warning {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0 32px;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(17px);
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.7;
+
+    i {
+      color: var(--color-white);
+      font-size: 56px;
+      margin-bottom: 32px;
+      margin-right: 4px;
+      &:last-child {
+        margin-right: 0;
+      }
+
+    }
+    .description {
+      margin-top: 8px;
+      font-size: 0.8em;
+      text-align: center;
+    }
+    ul.description {
+      margin: 8px 0 0 0;
+      text-align: left;
+      padding: 0 0 0 16px;
+      list-style-type: '- ';
+    }
+    .show_button {
+      margin-top: 32px;
+    }
+  }
+}

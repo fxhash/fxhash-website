@@ -69,7 +69,7 @@ export function GenerativeArtwork({
   return (
     <>
       <SquareContainer>
-        <ArtworkFrame>
+        <ArtworkFrame tokenLabels={token.labels}>
           {displayImage ? (
             <img src={displayUrl} alt={`${token.name} preview`} />
           ) : (

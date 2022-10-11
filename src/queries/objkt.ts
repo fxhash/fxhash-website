@@ -119,6 +119,7 @@ export const Qu_objktsFeed = gql`
         id
         name
         slug
+        labels
         generativeUri
         ...Author
       }

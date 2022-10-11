@@ -68,7 +68,7 @@ export const TezosStorageGentk: TezosStorageRenderer<Props> = ({ id }) => {
         </div>
       )}
       <SquareContainer>
-        <ArtworkFrame>
+        <ArtworkFrame tokenLabels={token?.issuer?.labels}>
           {token ? (
             running ? (
               <ArtworkIframe

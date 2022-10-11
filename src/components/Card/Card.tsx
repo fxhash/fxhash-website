@@ -4,17 +4,21 @@ import cs from "classnames"
 import {
   PropsWithChildren,
   ReactNode,
+  useCallback,
   useContext,
   useMemo,
   useState,
 } from "react"
 import { ipfsGatewayUrl } from "../../services/Ipfs"
 import { useClientAsyncEffect } from "../../utils/hookts"
-import { Loader } from "../Utils/Loader"
 import { useInView } from "react-intersection-observer"
 import { SettingsContext } from "../../context/Theme"
+import { GenTokLabel } from "../../types/entities/GenerativeToken"
+import { getGenTokWarning } from "../../utils/generative-token"
+import { Button } from "../Button"
 
 interface Props {
+  tokenLabels?: GenTokLabel[] | null
   thumbnailUri?: string | null
   undesirable?: boolean
   displayDetails?: boolean
@@ -22,12 +26,14 @@ interface Props {
 }
 
 export function Card({
+  tokenLabels,
   thumbnailUri,
   undesirable = false,
   displayDetails = true,
   thumbInfosComp,
   children,
 }: PropsWithChildren<Props>) {
+  const [showWarning, setShowWarning] = useState(true)
   const [loaded, setLoaded] = useState<string | null>(null)
   const [error, setError] = useState<boolean>(false)
   const url = useMemo(
@@ -36,6 +42,11 @@ export function Card({
   )
   const { ref, inView } = useInView()
   const settings = useContext(SettingsContext)
+  const handleClickShow = useCallback((e) => {
+    e.stopPropagation()
+    e.preventDefault()
+    setShowWarning(false)
+  }, [])
 
   // lazy load the image
   useClientAsyncEffect(
@@ -58,6 +69,10 @@ export function Card({
     [inView]
   )
 
+  const warning = useMemo(() => {
+    if (!tokenLabels || tokenLabels.length === 0) return false
+    return getGenTokWarning(tokenLabels, settings)
+  }, [settings, tokenLabels])
   return (
     <div
       className={cs(style.container, {
@@ -67,7 +82,7 @@ export function Card({
     >
       <div
         className={cs(style["thumbnail-container"], {
-          [style.undesirable]: undesirable,
+          [style.blur]: undesirable || (warning && showWarning),
           [effect.placeholder]: !loaded && !error,
         })}
         style={{
@@ -84,6 +99,33 @@ export function Card({
           <div className={cs(style.flag)}>
             <i aria-hidden className="fas fa-exclamation-triangle" />
             <span>undesirable content</span>
+          </div>
+        )}
+        {!undesirable && warning && showWarning && (
+          <div className={cs(style.warning)}>
+            <div>
+              {warning.icons.map((iconClassName) => (
+                <i key={iconClassName} aria-hidden className={iconClassName} />
+              ))}
+            </div>
+            <span>{warning.labels.join(", ")} warning:</span>
+            {warning.descriptions.length > 1 ? (
+              <ul className={style.description}>
+                {warning.descriptions.map((description) => (
+                  <li key={description}>{description}</li>
+                ))}
+              </ul>
+            ) : (
+              <div className={style.description}>{warning.descriptions[0]}</div>
+            )}
+            <Button
+              className={style.show_button}
+              size="very-small"
+              type="button"
+              onClick={handleClickShow}
+            >
+              show
+            </Button>
           </div>
         )}
         {thumbInfosComp && (

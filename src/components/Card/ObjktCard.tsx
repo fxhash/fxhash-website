@@ -34,6 +34,7 @@ export function ObjktCard({
     <Link href={url} passHref>
       <AnchorForward style={{ height: "100%" }}>
         <Card
+          tokenLabels={objkt.issuer?.labels}
           thumbnailUri={objkt.metadata?.thumbnailUri}
           undesirable={objkt.issuer?.flag === GenTokFlag.MALICIOUS}
           displayDetails={settings.displayInfosGentkCard}

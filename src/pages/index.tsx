@@ -256,6 +256,7 @@ export async function getServerSideProps() {
             slug
             metadata
             issuer {
+              labels
               ...Author
             }
             owner {

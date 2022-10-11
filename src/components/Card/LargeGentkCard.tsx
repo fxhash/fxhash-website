@@ -32,6 +32,7 @@ export function LargeGentkCard({
     <Link href={url} passHref>
       <AnchorForward style={{ height: "100%" }}>
         <LargeCard
+          tokenLabels={objkt.issuer?.labels}
           thumbnailUri={objkt.metadata?.displayUri}
           undesirable={objkt.issuer?.flag === GenTokFlag.MALICIOUS}
           displayDetails={settings.displayInfosGentkCard}

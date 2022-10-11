@@ -18,17 +18,14 @@ interface Props {
   settings: ISettingsContext
   className?: string
 }
-export function DisplaySettings({
-  settings,
-  className,
-}: Props) {
+export function DisplaySettings({ settings, className }: Props) {
   return (
     <div className={cs(styleSettings.page)}>
       <SettingsGroup title="General">
         <div className={cs(styleSettings.toggle_line)}>
           <span>Dark mode</span>
-          <Switch 
-            onChange={(value) => settings.update("darkTheme", value)} 
+          <Switch
+            onChange={(value) => settings.update("darkTheme", value)}
             value={settings.darkTheme}
           />
         </div>
@@ -37,9 +34,32 @@ export function DisplaySettings({
             <span>Image previews</span>
             <em>Display image previews instead of real-time code</em>
           </span>
-          <Switch 
-            onChange={(value) => settings.update("quality", value ? 0 : 1)} 
+          <Switch
+            onChange={(value) => settings.update("quality", value ? 0 : 1)}
             value={!settings.quality}
+          />
+        </div>
+        <div className={cs(styleSettings.toggle_line)}>
+          <span>
+            <span>NSFW</span>
+            <em>
+              Display without warning content that contains nudity, violence and
+              sensitive content.
+            </em>
+          </span>
+          <Switch
+            onChange={(value) => settings.update("nsfw", value)}
+            value={settings.nsfw}
+          />
+        </div>
+        <div className={cs(styleSettings.toggle_line)}>
+          <span>
+            <span>Epilepsy</span>
+            <em>Hide tokens that contains epilepsy triggers</em>
+          </span>
+          <Switch
+            onChange={(value) => settings.update("epilepsy", value)}
+            value={settings.epilepsy}
           />
         </div>
       </SettingsGroup>
@@ -51,7 +71,7 @@ export function DisplaySettings({
               <span>Border width</span>
               <Slider
                 value={settings.borderWidthCards}
-                onChange={val => settings.update("borderWidthCards", val)}
+                onChange={(val) => settings.update("borderWidthCards", val)}
                 className={cs(style.slider)}
                 min={0}
                 max={4}
@@ -62,7 +82,7 @@ export function DisplaySettings({
               <span>Shadow</span>
               <Slider
                 value={settings.shadowCards}
-                onChange={val => settings.update("shadowCards", val)}
+                onChange={(val) => settings.update("shadowCards", val)}
                 className={cs(style.slider)}
                 min={0}
                 max={30}
@@ -73,7 +93,7 @@ export function DisplaySettings({
               <span>Gap between cards</span>
               <Slider
                 value={settings.spaceBetweenCards}
-                onChange={val => settings.update("spaceBetweenCards", val)}
+                onChange={(val) => settings.update("spaceBetweenCards", val)}
                 className={cs(style.slider)}
                 min={0}
                 max={30}
@@ -82,8 +102,8 @@ export function DisplaySettings({
             </div>
             <div className={cs(styleSettings.toggle_line)}>
               <span>Hover effect</span>
-              <Switch 
-                onChange={(value) => settings.update("hoverEffectCard", value)} 
+              <Switch
+                onChange={(value) => settings.update("hoverEffectCard", value)}
                 value={settings.hoverEffectCard}
               />
             </div>
@@ -103,26 +123,34 @@ export function DisplaySettings({
           <div className={cs(style.settings_controls)}>
             <div className={cs(styleSettings.toggle_line)}>
               <span>Display infos</span>
-              <Switch 
-                onChange={(value) => settings.update("displayInfosGenerativeCard", value)} 
+              <Switch
+                onChange={(value) =>
+                  settings.update("displayInfosGenerativeCard", value)
+                }
                 value={settings.displayInfosGenerativeCard}
               />
             </div>
-            <div className={cs(styleSettings.toggle_line, {
-              [styleSettings.disabled]: !settings.displayInfosGenerativeCard
-            })}>
+            <div
+              className={cs(styleSettings.toggle_line, {
+                [styleSettings.disabled]: !settings.displayInfosGenerativeCard,
+              })}
+            >
               <span>Display prices</span>
-              <Switch 
-                onChange={(value) => settings.update("displayPricesCard", value)} 
+              <Switch
+                onChange={(value) =>
+                  settings.update("displayPricesCard", value)
+                }
                 value={settings.displayPricesCard}
               />
             </div>
-            <div className={cs(styleSettings.toggle_line, {
-              [styleSettings.disabled]: !settings.displayInfosGenerativeCard
-            })}>
+            <div
+              className={cs(styleSettings.toggle_line, {
+                [styleSettings.disabled]: !settings.displayInfosGenerativeCard,
+              })}
+            >
               <span>Display editions burnt</span>
-              <Switch 
-                onChange={(value) => settings.update("displayBurntCard", value)} 
+              <Switch
+                onChange={(value) => settings.update("displayBurntCard", value)}
                 value={settings.displayBurntCard}
               />
             </div>
@@ -142,19 +170,19 @@ export function DisplaySettings({
           <div className={cs(style.settings_controls)}>
             <div className={cs(styleSettings.toggle_line)}>
               <span>Display infos</span>
-              <Switch 
-                onChange={(value) => settings.update("displayInfosGentkCard", value)} 
+              <Switch
+                onChange={(value) =>
+                  settings.update("displayInfosGentkCard", value)
+                }
                 value={settings.displayInfosGentkCard}
               />
             </div>
           </div>
           <div className={cs(style.card_wrapper)}>
-            <ObjktCard
-              objkt={fakeGentk as Objkt}
-            />
+            <ObjktCard objkt={fakeGentk as Objkt} />
           </div>
         </div>
       </SettingsGroup>
     </div>
-  )  
+  )
 }
