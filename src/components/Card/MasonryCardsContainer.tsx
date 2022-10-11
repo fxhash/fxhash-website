@@ -1,11 +1,4 @@
-import {
-  ReactChild,
-  useEffect,
-  useRef,
-  useState,
-  forwardRef,
-  useCallback,
-} from "react"
+import { ReactChild, useEffect, useRef, useState, useCallback } from "react"
 import style from "./MasonryCardsContainer.module.scss"
 import cs from "classnames"
 import { HTMLAttributes, PropsWithChildren } from "react"
@@ -33,9 +26,14 @@ export function MasonryCardsContainer({
 
   const resizeHandler = useCallback(() => {
     if (elementRef.current) {
+      const cardsGap = +getComputedStyle(document.documentElement)
+        .getPropertyValue("--cards-gap")
+        .replace("px", "")
       const numCols = Math.max(
         1,
-        Math.floor(elementRef.current.offsetWidth / cardSize) - 1
+        Math.floor(
+          (elementRef.current.offsetWidth + cardsGap) / (cardSize + cardsGap)
+        )
       )
       setNumCols(numCols)
     }
@@ -49,6 +47,11 @@ export function MasonryCardsContainer({
       {...props}
       ref={elementRef}
       className={cs(style.container, props.className)}
+      style={{
+        gridTemplateColumns:
+          cardSize && `repeat(auto-fit, minmax(${cardSize}px, 1fr))`,
+        ...props?.style,
+      }}
     >
       {[...Array(numCols)].map((_, index) => (
         <div key={index} className={style.col}>
