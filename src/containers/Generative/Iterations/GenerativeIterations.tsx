@@ -4,9 +4,10 @@ import { GenerativeToken } from "../../../types/entities/GenerativeToken"
 import { useQuery } from "@apollo/client"
 import { Qu_genTokenIterations } from "../../../queries/generative-token"
 import { MasonryCardsContainer } from "../../../components/Card/MasonryCardsContainer"
+import { CardsContainer } from "../../../components/Card/CardsContainer"
 import { IObjktFeatureFilter, Objkt, ObjktFilters } from "../../../types/entities/Objkt"
 import { CardsLoading } from "../../../components/Card/CardsLoading"
-import { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState, useContext } from "react"
 import { SearchHeader } from "../../../components/Search/SearchHeader"
 import { IOptions, Select } from "../../../components/Input/Select"
 import { InfiniteScrollTrigger } from "../../../components/Utils/InfiniteScrollTrigger"
@@ -17,7 +18,8 @@ import { ExploreTagDef, ExploreTags } from "../../../components/Exploration/Expl
 import { Spacing } from "../../../components/Layout/Spacing"
 import { LargeGentkCard } from "../../../components/Card/LargeGentkCard"
 import { CardSizeSelect } from "../../../components/Input/CardSizeSelect"
-import { getTagsFromFiltersObject, ITagsFilters, tagsFilters } from "../../../utils/filters";
+import { getTagsFromFiltersObject, } from "../../../utils/filters";
+import { SettingsContext } from "../../../context/Theme"
 
 
 const ITEMS_PER_PAGE = 20
@@ -64,6 +66,8 @@ interface Props {
 export function GenerativeIterations({
   token,
 }: Props) {
+  
+  const settings = useContext(SettingsContext)
   //
   // REFS / STATE
   //
@@ -187,6 +191,9 @@ export function GenerativeIterations({
       }
     }
   }, [loading])
+
+  const CContainer = settings.layoutMasonry ? MasonryCardsContainer : CardsContainer;
+
   return (
     <CardsExplorer cardSizeScope="generative-iteration">
       {({
@@ -250,7 +257,7 @@ export function GenerativeIterations({
                 onTrigger={infiniteScrollFetch}
                 canTrigger={!!data && !loading}
               >
-                <MasonryCardsContainer cardSize={cardSize}>
+                <CContainer cardSize={cardSize}>
                   {tokens?.map(gentk => ( 
                     <LargeGentkCard
                       key={gentk.id}
@@ -258,7 +265,7 @@ export function GenerativeIterations({
                       showRarity={sort.rarity != null}
                     />
                   ))}
-                </MasonryCardsContainer>
+                </CContainer>
                 {loading && (
                   <CardsLoading
                     type="large"

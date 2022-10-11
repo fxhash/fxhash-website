@@ -1,7 +1,7 @@
 import style from "./DisplaySettings.module.scss"
 import styleSettings from "./Settings.module.scss"
 import cs from "classnames"
-import { useContext, useEffect, useRef, useState } from "react"
+import { useContext, useEffect, useMemo, useRef, useState } from "react"
 import { Switch } from "../../components/Input/Switch"
 import { ISettingsContext, SettingsContext } from "../../context/Theme"
 import { SettingsGroup } from "./SettingsGroup"
@@ -13,22 +13,32 @@ import { Slider } from "../../components/Input/Slider"
 import { ObjktCard } from "../../components/Card/ObjktCard"
 import { fakeGentk } from "../../utils/gentk"
 import { Objkt } from "../../types/entities/Objkt"
+import { MasonryCardsContainer } from "../../components/Card/MasonryCardsContainer"
+import { CardsContainer } from "../../components/Card/CardsContainer"
 
 interface Props {
   settings: ISettingsContext
   className?: string
 }
-export function DisplaySettings({
-  settings,
-  className,
-}: Props) {
+
+const NUM_MASONRY_BOXES = 9
+const SIZE_MASONRY_BOXES = 100
+
+export function DisplaySettings({ settings, className }: Props) {
+  const randomSizes = useMemo(
+    () => [...Array(NUM_MASONRY_BOXES)].map(() => Math.random()),
+    []
+  )
+  const CContainer = settings.layoutMasonry
+    ? MasonryCardsContainer
+    : CardsContainer
   return (
     <div className={cs(styleSettings.page)}>
       <SettingsGroup title="General">
         <div className={cs(styleSettings.toggle_line)}>
           <span>Dark mode</span>
-          <Switch 
-            onChange={(value) => settings.update("darkTheme", value)} 
+          <Switch
+            onChange={(value) => settings.update("darkTheme", value)}
             value={settings.darkTheme}
           />
         </div>
@@ -37,10 +47,47 @@ export function DisplaySettings({
             <span>Image previews</span>
             <em>Display image previews instead of real-time code</em>
           </span>
-          <Switch 
-            onChange={(value) => settings.update("quality", value ? 0 : 1)} 
+          <Switch
+            onChange={(value) => settings.update("quality", value ? 0 : 1)}
             value={!settings.quality}
           />
+        </div>
+      </SettingsGroup>
+      <SettingsGroup title="Layout">
+        <div className={style.settings_layout}>
+          <div className={style.layout_controls}>
+            <div className={cs(styleSettings.toggle_line)}>
+              <span>Masonry</span>
+              <Switch
+                onChange={(value) => settings.update("layoutMasonry", value)}
+                value={settings.layoutMasonry}
+              />
+            </div>
+            <div className={cs(styleSettings.toggle_line)}>
+              <span>Gap between cards</span>
+              <Slider
+                value={settings.spaceBetweenCards}
+                onChange={(val) => settings.update("spaceBetweenCards", val)}
+                className={cs(style.slider)}
+                min={0}
+                max={30}
+                step={1}
+              />
+            </div>
+          </div>
+          <div className={style.masonry_container}>
+            <CContainer cardSize={SIZE_MASONRY_BOXES}>
+              {randomSizes.map((size, i) => (
+                <div
+                  key={`mini_card-${size}-${i}`}
+                  className={style.mini_card}
+                  style={{
+                    height: SIZE_MASONRY_BOXES + size * SIZE_MASONRY_BOXES,
+                  }}
+                />
+              ))}
+            </CContainer>
+          </div>
         </div>
       </SettingsGroup>
 
@@ -51,7 +98,7 @@ export function DisplaySettings({
               <span>Border width</span>
               <Slider
                 value={settings.borderWidthCards}
-                onChange={val => settings.update("borderWidthCards", val)}
+                onChange={(val) => settings.update("borderWidthCards", val)}
                 className={cs(style.slider)}
                 min={0}
                 max={4}
@@ -62,7 +109,7 @@ export function DisplaySettings({
               <span>Shadow</span>
               <Slider
                 value={settings.shadowCards}
-                onChange={val => settings.update("shadowCards", val)}
+                onChange={(val) => settings.update("shadowCards", val)}
                 className={cs(style.slider)}
                 min={0}
                 max={30}
@@ -73,7 +120,7 @@ export function DisplaySettings({
               <span>Gap between cards</span>
               <Slider
                 value={settings.spaceBetweenCards}
-                onChange={val => settings.update("spaceBetweenCards", val)}
+                onChange={(val) => settings.update("spaceBetweenCards", val)}
                 className={cs(style.slider)}
                 min={0}
                 max={30}
@@ -82,8 +129,8 @@ export function DisplaySettings({
             </div>
             <div className={cs(styleSettings.toggle_line)}>
               <span>Hover effect</span>
-              <Switch 
-                onChange={(value) => settings.update("hoverEffectCard", value)} 
+              <Switch
+                onChange={(value) => settings.update("hoverEffectCard", value)}
                 value={settings.hoverEffectCard}
               />
             </div>
@@ -103,26 +150,34 @@ export function DisplaySettings({
           <div className={cs(style.settings_controls)}>
             <div className={cs(styleSettings.toggle_line)}>
               <span>Display infos</span>
-              <Switch 
-                onChange={(value) => settings.update("displayInfosGenerativeCard", value)} 
+              <Switch
+                onChange={(value) =>
+                  settings.update("displayInfosGenerativeCard", value)
+                }
                 value={settings.displayInfosGenerativeCard}
               />
             </div>
-            <div className={cs(styleSettings.toggle_line, {
-              [styleSettings.disabled]: !settings.displayInfosGenerativeCard
-            })}>
+            <div
+              className={cs(styleSettings.toggle_line, {
+                [styleSettings.disabled]: !settings.displayInfosGenerativeCard,
+              })}
+            >
               <span>Display prices</span>
-              <Switch 
-                onChange={(value) => settings.update("displayPricesCard", value)} 
+              <Switch
+                onChange={(value) =>
+                  settings.update("displayPricesCard", value)
+                }
                 value={settings.displayPricesCard}
               />
             </div>
-            <div className={cs(styleSettings.toggle_line, {
-              [styleSettings.disabled]: !settings.displayInfosGenerativeCard
-            })}>
+            <div
+              className={cs(styleSettings.toggle_line, {
+                [styleSettings.disabled]: !settings.displayInfosGenerativeCard,
+              })}
+            >
               <span>Display editions burnt</span>
-              <Switch 
-                onChange={(value) => settings.update("displayBurntCard", value)} 
+              <Switch
+                onChange={(value) => settings.update("displayBurntCard", value)}
                 value={settings.displayBurntCard}
               />
             </div>
@@ -142,19 +197,20 @@ export function DisplaySettings({
           <div className={cs(style.settings_controls)}>
             <div className={cs(styleSettings.toggle_line)}>
               <span>Display infos</span>
-              <Switch 
-                onChange={(value) => settings.update("displayInfosGentkCard", value)} 
+              <Switch
+                onChange={(value) =>
+                  settings.update("displayInfosGentkCard", value)
+                }
                 value={settings.displayInfosGentkCard}
               />
             </div>
           </div>
           <div className={cs(style.card_wrapper)}>
-            <ObjktCard
-              objkt={fakeGentk as Objkt}
-            />
+            <ObjktCard objkt={fakeGentk as Objkt} />
           </div>
         </div>
       </SettingsGroup>
     </div>
-  )  
+  )
 }
+
