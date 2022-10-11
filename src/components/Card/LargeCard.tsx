@@ -15,7 +15,7 @@ import { SettingsContext } from "../../context/Theme"
 import { useClientAsyncEffect } from "../../utils/hookts"
 import { getGenTokWarning } from "../../utils/generative-token"
 import { GenTokLabel } from "../../types/entities/GenerativeToken"
-import { Button } from "../Button";
+import { Button } from "../Button"
 
 interface Props {
   tokenLabels?: GenTokLabel[] | null
