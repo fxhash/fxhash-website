@@ -1,7 +1,7 @@
 import React, { memo, useContext, useMemo } from "react"
 import style from "./CardSmallNFTArticle.module.scss"
 import { NFTArticle } from "../../types/entities/Article"
-import Image from "next/image"
+import { Image } from "../Image"
 import { ipfsGatewayUrl } from "../../services/Ipfs"
 import { SettingsContext } from "../../context/Theme"
 import cs from "classnames"
@@ -15,15 +15,11 @@ interface CardSmallNftArticleProps {
 }
 
 const _CardSmallNftArticle = ({
-  article: { title, slug, description, thumbnailUri, author },
+  article: { title, slug, description, thumbnailUri, thumbnailMedia, author },
   imagePriority,
   className,
 }: CardSmallNftArticleProps) => {
   const settings = useContext(SettingsContext)
-  const thumbnailUrl = useMemo(
-    () => thumbnailUri && ipfsGatewayUrl(thumbnailUri),
-    [thumbnailUri]
-  )
   return (
     <div
       className={cs(style.container, className, {
@@ -31,13 +27,7 @@ const _CardSmallNftArticle = ({
       })}
     >
       <div className={style["img-wrapper"]}>
-        <Image
-          src={thumbnailUrl}
-          layout="fill"
-          objectFit="cover"
-          objectPosition="center"
-          priority={imagePriority}
-        />
+        <Image alt="" ipfsUri={thumbnailUri} image={thumbnailMedia} />
       </div>
       <div className={style.infos}>
         <UserBadge user={author!} size="regular" />

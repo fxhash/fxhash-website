@@ -1,6 +1,7 @@
-import { gql } from "@apollo/client"
-import { Frag_UserBadge } from "./user"
-import { Frag_RoyaltySplit } from "./split"
+import { gql } from "@apollo/client";
+import { Frag_UserBadge } from "./user";
+import { Frag_RoyaltySplit } from "./split";
+import { Frag_MediaImage } from "./media";
 
 export const Frag_ArticleInfosAction = gql`
   fragment ArticleInfosAction on Article {
@@ -14,6 +15,7 @@ export const Frag_ArticleInfosAction = gql`
     }
   }
 `
+
 export const Frag_ArticleInfos = gql`
   fragment ArticleInfos on Article {
     id
@@ -24,12 +26,16 @@ export const Frag_ArticleInfos = gql`
     description
     tags
     thumbnailUri
+    thumbnailMedia {
+      ...MediaImage
+    }
     metadataLocked
     author {
       ...UserBadgeInfos
     }
   }
   ${Frag_UserBadge}
+  ${Frag_MediaImage}
 `
 
 export const Frag_ArticleFull = gql`
@@ -40,6 +46,9 @@ export const Frag_ArticleFull = gql`
     title
     description
     thumbnailUri
+    thumbnailMedia {
+      ...MediaImage
+    }
     thumbnailCaption
     displayUri
     body
@@ -71,4 +80,5 @@ export const Frag_ArticleFull = gql`
   ${Frag_ArticleInfos}
   ${Frag_UserBadge}
   ${Frag_RoyaltySplit}
+  ${Frag_MediaImage}
 `

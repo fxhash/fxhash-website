@@ -12,8 +12,11 @@ import { ipfsGatewayUrl } from "../../services/Ipfs"
 import { useInView } from "react-intersection-observer"
 import { SettingsContext } from "../../context/Theme"
 import { useClientAsyncEffect } from "../../utils/hookts"
+import { Image } from "../Image"
+import { MediaImage } from "../../types/entities/MediaImage"
 
 interface Props {
+  image?: MediaImage
   thumbnailUri?: string | null
   undesirable?: boolean
   displayDetails?: boolean
@@ -22,40 +25,18 @@ interface Props {
 
 export function LargeCard({
   thumbnailUri,
+  image,
   undesirable = false,
   displayDetails = true,
   topper,
   children,
 }: PropsWithChildren<Props>) {
-  const [loaded, setLoaded] = useState<string | null>(null)
-  const url = useMemo(() => thumbnailUri && ipfsGatewayUrl(thumbnailUri), [])
-  const { ref, inView } = useInView()
-  const settings = useContext(SettingsContext)
-
-  // lazy load the image
-  useClientAsyncEffect(
-    (isMounted) => {
-      if (inView && !loaded && url) {
-        const img = new Image()
-        img.onload = () => {
-          if (isMounted()) {
-            setLoaded(img.src)
-          }
-        }
-        img.src = url
-      }
-    },
-    [inView]
-  )
-
   return (
-    <div className={cs(style.root)} ref={ref}>
+    <div className={cs(style.root)}>
       {topper && <div className={cs(style.topper)}>{topper}</div>}
       <div
         className={cs(style.thumbnail_wrapper, {
           [style.undesirable]: undesirable,
-          [effect.placeholder]: !loaded,
-          [style.loaded]: loaded,
         })}
       >
         {undesirable && (
@@ -64,7 +45,7 @@ export function LargeCard({
             <span>undesirable content</span>
           </div>
         )}
-        {loaded && url && <img src={url} alt="preview" />}
+        <Image image={image} ipfsUri={thumbnailUri!} mode="responsive" alt="" />
       </div>
       {displayDetails && <div className={cs(style.content)}>{children}</div>}
     </div>

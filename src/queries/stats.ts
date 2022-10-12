@@ -1,7 +1,13 @@
 import { gql } from "@apollo/client"
+import { Frag_GenTokenBadge } from "./fragments/generative-token"
 
 export const Qu_marketStatsCollections = gql`
-  query MarketStatsCollections($sort: StatsGenTokSortInput, $take: Int, $skip: Int) {
+  ${Frag_GenTokenBadge}
+  query MarketStatsCollections(
+    $sort: StatsGenTokSortInput
+    $take: Int
+    $skip: Int
+  ) {
     marketStats {
       generativeTokens(sort: $sort, take: $take, skip: $skip) {
         floor
@@ -20,18 +26,8 @@ export const Qu_marketStatsCollections = gql`
         median
         listed
         generativeToken {
-          id
-          name
+          ...TokenBadge
           metadata
-          author {
-            id
-	    name
-	    type
-	    collaborators {
-	      id
-	      name
-	    }
-          }
         }
       }
     }

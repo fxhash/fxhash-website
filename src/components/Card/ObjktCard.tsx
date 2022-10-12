@@ -29,11 +29,11 @@ export function ObjktCard({
 }: Props) {
   const url = getObjktUrl(objkt)
   const settings = useContext(SettingsContext)
-
   return (
     <Link href={url} passHref>
       <AnchorForward style={{ height: "100%" }}>
         <Card
+          image={objkt.captureMedia}
           thumbnailUri={objkt.metadata?.thumbnailUri}
           undesirable={objkt.issuer?.flag === GenTokFlag.MALICIOUS}
           displayDetails={settings.displayInfosGentkCard}
