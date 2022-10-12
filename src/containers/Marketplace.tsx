@@ -1,34 +1,36 @@
 import layout from "../styles/Layout.module.scss"
 import styleSearch from "../components/Input/SearchInput.module.scss"
 import cs from "classnames"
-import { useQuery } from '@apollo/client'
-import { CardsContainer } from '../components/Card/CardsContainer'
-import { ObjktCard } from '../components/Card/ObjktCard'
-import { InfiniteScrollTrigger } from '../components/Utils/InfiniteScrollTrigger'
-import { useState, useEffect, useMemo, useRef } from 'react'
-import { Spacing } from '../components/Layout/Spacing'
-import { Listing, ListingFilters } from '../types/entities/Listing'
-import { IOptions, Select } from '../components/Input/Select'
-import { CardsLoading } from '../components/Card/CardsLoading'
+import { useQuery } from "@apollo/client"
+import { CardsContainer } from "../components/Card/CardsContainer"
+import { ObjktCard } from "../components/Card/ObjktCard"
+import { InfiniteScrollTrigger } from "../components/Utils/InfiniteScrollTrigger"
+import { useState, useEffect, useMemo, useRef } from "react"
+import { Spacing } from "../components/Layout/Spacing"
+import { Listing, ListingFilters } from "../types/entities/Listing"
+import { IOptions, Select } from "../components/Input/Select"
+import { CardsLoading } from "../components/Card/CardsLoading"
 import { CardsExplorer } from "../components/Exploration/CardsExplorer"
 import { SearchHeader } from "../components/Search/SearchHeader"
 import { FiltersPanel } from "../components/Exploration/FiltersPanel"
 import { MarketplaceFilters } from "./Marketplace/MarketplaceFilters"
-import { ExploreTagDef, ExploreTags } from "../components/Exploration/ExploreTags"
+import {
+  ExploreTagDef,
+  ExploreTags,
+} from "../components/Exploration/ExploreTags"
 import { displayMutez } from "../utils/units"
 import { SearchInputControlled } from "../components/Input/SearchInputControlled"
 import { Qu_listings } from "../queries/listing"
 import { useRouter } from "next/router"
-import styleCardsExplorer from "../components/Exploration/CardsExplorer.module.scss";
+import styleCardsExplorer from "../components/Exploration/CardsExplorer.module.scss"
 import { CardSizeSelect } from "../components/Input/CardSizeSelect"
-
 
 const ITEMS_PER_PAGE = 40
 
 const generalSortOptions: IOptions[] = [
   {
     label: "recently listed",
-    value: "createdAt-desc"
+    value: "createdAt-desc",
   },
   {
     label: "price (high to low)",
@@ -49,14 +51,14 @@ const searchSortOptions: IOptions[] = [
     label: "search relevance",
     value: "relevance-desc",
   },
-  ...generalSortOptions
+  ...generalSortOptions,
 ]
 
 function sortValueToSortVariable(val: string) {
   if (val === "pertinence") return {}
   const split = val.split("-")
   return {
-    [split[0]]: split[1].toUpperCase()
+    [split[0]]: split[1].toUpperCase(),
   }
 }
 
@@ -67,51 +69,50 @@ interface Props {
 // a map of (listing filter) => transformer
 // to turn the query parameters into gql-ready variables
 type TQueryFilterHandler = {
-  param: string,
-  transform: (param?: string) => any|undefined,
-  encode: (value?: any) => string|undefined
+  param: string
+  transform: (param?: string) => any | undefined
+  encode: (value?: any) => string | undefined
 }
 const queryListingFilterHandlers: Record<
-  keyof ListingFilters, TQueryFilterHandler
+  keyof ListingFilters,
+  TQueryFilterHandler
 > = {
   price_lte: {
     param: "price_lte",
-    transform: param => param || undefined,
-    encode: value => value ? encodeURIComponent(value) : undefined,
+    transform: (param) => param || undefined,
+    encode: (value) => (value ? encodeURIComponent(value) : undefined),
   },
   price_gte: {
     param: "price_gte",
-    transform: param => param || undefined,
-    encode: value => value ? encodeURIComponent(value) : undefined,
+    transform: (param) => param || undefined,
+    encode: (value) => (value ? encodeURIComponent(value) : undefined),
   },
   fullyMinted_eq: {
     param: "fullMint",
-    transform: param => param ? param === "1" : undefined,
-    encode: value => value !== undefined
-      ? encodeURIComponent(value ? "1" : "0")
-      : undefined
+    transform: (param) => (param ? param === "1" : undefined),
+    encode: (value) =>
+      value !== undefined ? encodeURIComponent(value ? "1" : "0") : undefined,
   },
   authorVerified_eq: {
     param: "verified",
-    transform: param => param ? param === "1" : undefined,
-    encode: value => value !== undefined
-      ? encodeURIComponent(value ? "1" : "0")
-      : undefined
+    transform: (param) => (param ? param === "1" : undefined),
+    encode: (value) =>
+      value !== undefined ? encodeURIComponent(value ? "1" : "0") : undefined,
   },
   searchQuery_eq: {
     param: "search",
-    transform: param => param || undefined,
-    encode: value => value || undefined,
+    transform: (param) => param || undefined,
+    encode: (value) => value || undefined,
   },
   tokenSupply_lte: {
     param: "supply_lte",
-    transform: param => param ? parseInt(param) : undefined,
-    encode: value => value ? encodeURIComponent(value) : undefined
+    transform: (param) => (param ? parseInt(param) : undefined),
+    encode: (value) => (value ? encodeURIComponent(value) : undefined),
   },
   tokenSupply_gte: {
     param: "supply_gte",
-    transform: param => param ? parseInt(param) : undefined,
-    encode: value => value ? encodeURIComponent(value) : undefined
+    transform: (param) => (param ? parseInt(param) : undefined),
+    encode: (value) => (value ? encodeURIComponent(value) : undefined),
   },
 }
 
@@ -138,7 +139,7 @@ const getSortFromUrlQuery = (urlQuery: Record<string, string>) => {
 
   // if there is a sort value in the url, pre-select it in the sort input
   // else, select the default value
-  let defaultSortValue = search ? 'relevance-desc' : 'createdAt-desc'
+  let defaultSortValue = search ? "relevance-desc" : "createdAt-desc"
   if (sort) {
     let sortValues = search ? searchSortOptions : generalSortOptions
     return sortValues.map(({ value }) => value).includes(sort)
@@ -150,7 +151,6 @@ const getSortFromUrlQuery = (urlQuery: Record<string, string>) => {
 }
 
 export const Marketplace = ({ urlQuery }: Props) => {
-
   // sort variables
   const [sortValue, setSortValue] = useState<string>(
     getSortFromUrlQuery(urlQuery)
@@ -193,7 +193,7 @@ export const Marketplace = ({ urlQuery }: Props) => {
       take: ITEMS_PER_PAGE,
       sort,
       filters,
-    }
+    },
   })
 
   const router = useRouter()
@@ -216,30 +216,31 @@ export const Marketplace = ({ urlQuery }: Props) => {
 
     router.push(
       { pathname: router.pathname, query },
-      `${router.pathname}?${Object.keys(query).map(key => `${key}=${query[key]}`).join('&')}`,
+      `${router.pathname}?${Object.keys(query)
+        .map((key) => `${key}=${query[key]}`)
+        .join("&")}`,
       { shallow: true }
     )
-
   }, [filters, sortValue])
 
   useEffect(() => {
     if (!loading && data) {
       if (currentLength.current === data.listings?.length) {
         ended.current = true
-      }
-      else {
+      } else {
         currentLength.current = data.listings?.length
       }
     }
   }, [loading, data])
 
   const infiniteScrollFetch = () => {
-    !ended.current && fetchMore?.({
-      variables: {
-        skip: data.listings.length,
-        take: ITEMS_PER_PAGE,
-      },
-    })
+    !ended.current &&
+      fetchMore?.({
+        variables: {
+          skip: data.listings.length,
+          take: ITEMS_PER_PAGE,
+        },
+      })
   }
 
   const listings: Listing[] = data?.listings
@@ -264,7 +265,7 @@ export const Marketplace = ({ urlQuery }: Props) => {
   const addFilter = (filter: string, value: any) => {
     setFilters({
       ...filters,
-      [filter]: value
+      [filter]: value,
     })
   }
 
@@ -281,7 +282,6 @@ export const Marketplace = ({ urlQuery }: Props) => {
 
   // build the list of filters
   const filterTags = useMemo<ExploreTagDef[]>(() => {
-
     const tags: ExploreTagDef[] = []
     for (const key in filters) {
       let value: string | null = null
@@ -320,7 +320,7 @@ export const Marketplace = ({ urlQuery }: Props) => {
         if (value) {
           tags.push({
             value,
-            onClear: () => removeFilter(key)
+            onClear: () => removeFilter(key),
           })
         }
       }
@@ -337,8 +337,8 @@ export const Marketplace = ({ urlQuery }: Props) => {
         refCardsContainer,
         setIsSearchMinimized,
         isSearchMinimized,
-	cardSize,
-	setCardSize
+        cardSize,
+        setCardSize,
       }) => (
         <>
           <div ref={topMarkerRef} />
@@ -350,15 +350,17 @@ export const Marketplace = ({ urlQuery }: Props) => {
             sortSelectComp={
               <Select
                 classNameRoot={cs({
-                  [styleCardsExplorer['hide-sort']]: !isSearchMinimized
+                  [styleCardsExplorer["hide-sort"]]: !isSearchMinimized,
                 })}
                 value={sortValue}
                 options={sortOptions}
                 onChange={setSortValue}
               />
             }
-	    sizeSelectComp={<CardSizeSelect value={cardSize} onChange={setCardSize} />}
-	  >
+            sizeSelectComp={
+              <CardSizeSelect value={cardSize} onChange={setCardSize} />
+            }
+          >
             <SearchInputControlled
               minimizeOnMobile
               onMinimize={setIsSearchMinimized}
@@ -367,8 +369,7 @@ export const Marketplace = ({ urlQuery }: Props) => {
                   setSortOptions(searchSortOptions)
                   setSortValue("relevance-desc")
                   addFilter("searchQuery_eq", value)
-                }
-                else {
+                } else {
                   removeFilter("searchQuery_eq")
                   setSortOptions(generalSortOptions)
                   if (sortValue === "relevance-desc") {
@@ -381,13 +382,10 @@ export const Marketplace = ({ urlQuery }: Props) => {
             />
           </SearchHeader>
 
-          <div className={cs(layout.cards_explorer, layout['padding-big'])}>
+          <div className={cs(layout.cards_explorer, layout["padding-big"])}>
             {filtersVisible && (
               <FiltersPanel onClose={() => setFiltersVisible(false)}>
-                <MarketplaceFilters
-                  filters={filters}
-                  setFilters={setFilters}
-                />
+                <MarketplaceFilters filters={filters} setFilters={setFilters} />
               </FiltersPanel>
             )}
 
@@ -406,25 +404,18 @@ export const Marketplace = ({ urlQuery }: Props) => {
                 </>
               )}
 
-              {!loading && listings?.length === 0 && (
-                <span>No results</span>
-              )}
+              {!loading && listings?.length === 0 && <span>No results</span>}
 
               <InfiniteScrollTrigger
                 onTrigger={infiniteScrollFetch}
                 canTrigger={!!data && !loading}
               >
                 <CardsContainer ref={refCardsContainer}>
-                  {listings?.length > 0 && listings.map(offer => (
-		    <ObjktCard
-		      key={offer.id}
-		      objkt={offer.objkt}
-		      useHQ={cardSize >= 400}
-		    />
-                  ))}
-                  {loading && (
-                    <CardsLoading number={ITEMS_PER_PAGE} />
-                  )}
+                  {listings?.length > 0 &&
+                    listings.map((offer) => (
+                      <ObjktCard key={offer.id} objkt={offer.objkt} />
+                    ))}
+                  {loading && <CardsLoading number={ITEMS_PER_PAGE} />}
                 </CardsContainer>
               </InfiniteScrollTrigger>
             </div>

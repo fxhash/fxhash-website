@@ -1,17 +1,17 @@
 import style from "./GenerativeListings.module.scss"
 import cs from "classnames"
-import { useQuery } from '@apollo/client'
-import { CardsContainer } from '../../components/Card/CardsContainer'
-import { ObjktCard } from '../../components/Card/ObjktCard'
-import { useState, useEffect, useMemo, useRef } from 'react'
-import { Spacing } from '../../components/Layout/Spacing'
-import { IOptions, Select } from '../../components/Input/Select'
-import { GenerativeToken } from '../../types/entities/GenerativeToken'
-import { Objkt } from '../../types/entities/Objkt'
+import { useQuery } from "@apollo/client"
+import { CardsContainer } from "../../components/Card/CardsContainer"
+import { ObjktCard } from "../../components/Card/ObjktCard"
+import { useState, useEffect, useMemo, useRef } from "react"
+import { Spacing } from "../../components/Layout/Spacing"
+import { IOptions, Select } from "../../components/Input/Select"
+import { GenerativeToken } from "../../types/entities/GenerativeToken"
+import { Objkt } from "../../types/entities/Objkt"
 import { InfiniteScrollTrigger } from "../../components/Utils/InfiniteScrollTrigger"
 import { CardsLoading } from "../../components/Card/CardsLoading"
 import { Qu_genTokListings } from "../../queries/marketplace"
-import { CardsExplorer } from '../../components/Exploration/CardsExplorer'
+import { CardsExplorer } from "../../components/Exploration/CardsExplorer"
 import { CardSizeSelect } from "../../components/Input/CardSizeSelect"
 
 const ITEMS_PER_PAGE = 20
@@ -19,7 +19,7 @@ const ITEMS_PER_PAGE = 20
 const sortOptions: IOptions[] = [
   {
     label: "recently listed",
-    value: "listingCreatedAt-desc"
+    value: "listingCreatedAt-desc",
   },
   {
     label: "price (high to low)",
@@ -39,7 +39,7 @@ function sortValueToSortVariable(val: string) {
   if (val === "pertinence") return {}
   const split = val.split("-")
   return {
-    [split[0]]: split[1].toUpperCase()
+    [split[0]]: split[1].toUpperCase(),
   }
 }
 
@@ -47,11 +47,12 @@ interface Props {
   token: GenerativeToken
 }
 
-export const GenerativeListings = ({ 
-  token,
-}: Props) => {
+export const GenerativeListings = ({ token }: Props) => {
   const [sortValue, setSortValue] = useState<string>("listingCreatedAt-desc")
-  const sort = useMemo<Record<string, any>>(() => sortValueToSortVariable(sortValue), [sortValue])
+  const sort = useMemo<Record<string, any>>(
+    () => sortValueToSortVariable(sortValue),
+    [sortValue]
+  )
 
   // use to know when to stop loading
   const currentLength = useRef<number>(0)
@@ -64,31 +65,31 @@ export const GenerativeListings = ({
       id: token.id,
       skip: 0,
       take: ITEMS_PER_PAGE,
-      sort: sort
-    }
+      sort: sort,
+    },
   })
 
-  const objkts: Objkt[]|null = data?.generativeToken.activeListedObjkts
+  const objkts: Objkt[] | null = data?.generativeToken.activeListedObjkts
 
   useEffect(() => {
     if (!loading && objkts) {
       if (currentLength.current === objkts.length) {
         ended.current = true
-      }
-      else {
+      } else {
         currentLength.current = objkts.length
       }
     }
   }, [loading])
 
   const infiniteScrollFetch = () => {
-    !ended.current && fetchMore?.({
-      variables: {
-        id: token.id,
-        skip: objkts?.length || 0,
-        take: ITEMS_PER_PAGE,
-      },
-    })
+    !ended.current &&
+      fetchMore?.({
+        variables: {
+          id: token.id,
+          skip: objkts?.length || 0,
+          take: ITEMS_PER_PAGE,
+        },
+      })
   }
 
   useEffect(() => {
@@ -99,49 +100,45 @@ export const GenerativeListings = ({
       id: token.id,
       skip: 0,
       take: ITEMS_PER_PAGE,
-      sort
+      sort,
     })
   }, [sort])
 
   return (
     <CardsExplorer cardSizeScope="marketplace">
-      {({
-	cardSize,
-	setCardSize
-      }) => (
-    <>
-      <div className={cs(style.top_bar)}>
-	    <CardSizeSelect value={cardSize} onChange={setCardSize}  />
-        <Select
-          value={sortValue}
-          options={sortOptions}
-          onChange={setSortValue}
-        />
-      </div>
+      {({ cardSize, setCardSize }) => (
+        <>
+          <div className={cs(style.top_bar)}>
+            <CardSizeSelect value={cardSize} onChange={setCardSize} />
+            <Select
+              value={sortValue}
+              options={sortOptions}
+              onChange={setSortValue}
+            />
+          </div>
 
-      <Spacing size="large" />
+          <Spacing size="large" />
 
-      <InfiniteScrollTrigger onTrigger={infiniteScrollFetch} canTrigger={!!data && !loading}>
-        <CardsContainer>
-          <>
-            {objkts && objkts?.length > 0 && objkts.map(objkt => (
-              <ObjktCard
-                key={objkt.id}
-                objkt={objkt}
-		useHQ={cardSize >= 400}
-              />
-            ))}
-            {loading && (
-              <CardsLoading number={ITEMS_PER_PAGE} />
-            )}
-            {!loading && objkts?.length === 0 && (
-              <p>No items currently listed</p>
-            )}
-          </>
-        </CardsContainer>
-      </InfiniteScrollTrigger>
-    </>
-    )}
-   </CardsExplorer>
+          <InfiniteScrollTrigger
+            onTrigger={infiniteScrollFetch}
+            canTrigger={!!data && !loading}
+          >
+            <CardsContainer>
+              <>
+                {objkts &&
+                  objkts?.length > 0 &&
+                  objkts.map((objkt) => (
+                    <ObjktCard key={objkt.id} objkt={objkt} />
+                  ))}
+                {loading && <CardsLoading number={ITEMS_PER_PAGE} />}
+                {!loading && objkts?.length === 0 && (
+                  <p>No items currently listed</p>
+                )}
+              </>
+            </CardsContainer>
+          </InfiniteScrollTrigger>
+        </>
+      )}
+    </CardsExplorer>
   )
 }
