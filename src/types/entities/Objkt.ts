@@ -5,6 +5,7 @@ import { Listing } from "./Listing"
 import { Offer } from "./Offer"
 import { Split } from "./Split"
 import { User } from "./User"
+import { MediaImage } from "./MediaImage"
 
 export interface Objkt {
   id: number
@@ -30,6 +31,7 @@ export interface Objkt {
   createdAt: string
   updatedAt: string
   assignedAt: string|null
+  captureMedia?: MediaImage 
 }
 
 export interface ObjktFilters {

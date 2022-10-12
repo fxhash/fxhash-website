@@ -43,8 +43,7 @@ export function DisplaySettings({ settings, className }: Props) {
           <span>
             <span>NSFW</span>
             <em>
-              Display without warning content that contains nudity, violence and
-              sensitive content.
+              Hide content that contains nudity, violence and sensitive content.
             </em>
           </span>
           <Switch
@@ -55,7 +54,7 @@ export function DisplaySettings({ settings, className }: Props) {
         <div className={cs(styleSettings.toggle_line)}>
           <span>
             <span>Epilepsy</span>
-            <em>Hide tokens that contains epilepsy triggers</em>
+            <em>Hide tokens that contain epilepsy, vestibular and photosensitive triggers</em>
           </span>
           <Switch
             onChange={(value) => settings.update("epilepsy", value)}

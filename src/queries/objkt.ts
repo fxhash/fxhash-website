@@ -1,8 +1,10 @@
 import { gql } from "@apollo/client"
 import { Frag_GenAuthor } from "./fragments/generative-token"
+import { Frag_MediaImage } from "./fragments/media"
 
 export const Qu_objkt = gql`
   ${Frag_GenAuthor}
+  ${Frag_MediaImage}
   query Gentk($id: Float, $slug: String) {
     objkt(id: $id, slug: $slug) {
       id
@@ -41,6 +43,9 @@ export const Qu_objkt = gql`
       }
       metadata
       metadataUri
+      captureMedia {
+        ...MediaImage
+      }
       features
       rarity
       assigned

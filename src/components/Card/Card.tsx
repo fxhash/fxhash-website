@@ -1,5 +1,4 @@
 import style from "./Card.module.scss"
-import effect from "../../styles/Effects.module.scss"
 import cs from "classnames"
 import {
   PropsWithChildren,
@@ -9,16 +8,18 @@ import {
   useMemo,
   useState,
 } from "react"
-import { ipfsGatewayUrl } from "../../services/Ipfs"
-import { useClientAsyncEffect } from "../../utils/hookts"
-import { useInView } from "react-intersection-observer"
+
 import { SettingsContext } from "../../context/Theme"
 import { GenTokLabel } from "../../types/entities/GenerativeToken"
 import { getGenTokWarning } from "../../utils/generative-token"
 import { Button } from "../Button"
+import { MediaImage } from "../../types/entities/MediaImage"
+import { Image } from "../Image"
+import { WarningLayer } from "../Warning/WarningLayer";
 
 interface Props {
   tokenLabels?: GenTokLabel[] | null
+  image?: MediaImage
   thumbnailUri?: string | null
   undesirable?: boolean
   displayDetails?: boolean
@@ -27,68 +28,42 @@ interface Props {
 
 export function Card({
   tokenLabels,
+  image,
   thumbnailUri,
   undesirable = false,
   displayDetails = true,
   thumbInfosComp,
   children,
 }: PropsWithChildren<Props>) {
-  const [showWarning, setShowWarning] = useState(true)
-  const [loaded, setLoaded] = useState<string | null>(null)
   const [error, setError] = useState<boolean>(false)
-  const url = useMemo(
-    () => thumbnailUri && ipfsGatewayUrl(thumbnailUri),
-    [thumbnailUri]
-  )
-  const { ref, inView } = useInView()
   const settings = useContext(SettingsContext)
-  const handleClickShow = useCallback((e) => {
-    e.stopPropagation()
-    e.preventDefault()
-    setShowWarning(false)
-  }, [])
-
-  // lazy load the image
-  useClientAsyncEffect(
-    (isMounted) => {
-      if (inView && !loaded && url && !error) {
-        const img = new Image()
-        img.onload = () => {
-          if (isMounted()) {
-            setLoaded(img.src)
-          }
-        }
-        img.onerror = () => {
-          // we fallback to the IPFS gateway
-          // img.src = ipfsGatewayUrl(thumbnailUri)
-          setError(true)
-        }
-        img.src = url
-      }
-    },
-    [inView]
-  )
 
   const warning = useMemo(() => {
     if (!tokenLabels || tokenLabels.length === 0) return false
-    return getGenTokWarning(tokenLabels, settings)
+    return getGenTokWarning(tokenLabels, settings, "preview")
   }, [settings, tokenLabels])
+
   return (
     <div
       className={cs(style.container, {
         [style.hover_effect]: settings.hoverEffectCard,
       })}
-      ref={ref}
     >
       <div
         className={cs(style["thumbnail-container"], {
-          [style.blur]: undesirable || (warning && showWarning),
-          [effect.placeholder]: !loaded && !error,
+          [style.blur]: undesirable,
         })}
-        style={{
-          backgroundImage: loaded ? `url(${loaded})` : "none",
-        }}
       >
+        {!undesirable && (
+          <Image
+            ipfsUri={thumbnailUri!}
+            image={image}
+            alt=""
+            onError={() => setError(true)}
+            className={style.thumbnail}
+            position="absolute"
+          />
+        )}
         {error && (
           <div className={cs(style.error)}>
             <i aria-hidden className="fa-solid fa-bug" />
@@ -101,33 +76,7 @@ export function Card({
             <span>undesirable content</span>
           </div>
         )}
-        {!undesirable && warning && showWarning && (
-          <div className={cs(style.warning)}>
-            <div>
-              {warning.icons.map((iconClassName) => (
-                <i key={iconClassName} aria-hidden className={iconClassName} />
-              ))}
-            </div>
-            <span>{warning.labels.join(", ")} warning:</span>
-            {warning.descriptions.length > 1 ? (
-              <ul className={style.description}>
-                {warning.descriptions.map((description) => (
-                  <li key={description}>{description}</li>
-                ))}
-              </ul>
-            ) : (
-              <div className={style.description}>{warning.descriptions[0]}</div>
-            )}
-            <Button
-              className={style.show_button}
-              size="very-small"
-              type="button"
-              onClick={handleClickShow}
-            >
-              show
-            </Button>
-          </div>
-        )}
+        {!undesirable && warning && <WarningLayer warning={warning} />}
         {thumbInfosComp && (
           <div className={cs(style.thumbinfos)}>{thumbInfosComp}</div>
         )}

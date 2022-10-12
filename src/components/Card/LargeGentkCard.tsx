@@ -1,7 +1,6 @@
 // import style from "./GenerativeTokenCard.module.scss"
 import Link from "next/link"
 import style from "./LargeGentkCard.module.scss"
-import colors from "../../styles/Colors.module.css"
 import cs from "classnames"
 import { AnchorForward } from "../Utils/AnchorForward"
 import { UserBadge } from "../User/UserBadge"
@@ -27,12 +26,12 @@ export function LargeGentkCard({
 }: Props) {
   const url = getObjktUrl(objkt)
   const settings = useContext(SettingsContext)
-
   return (
     <Link href={url} passHref>
       <AnchorForward style={{ height: "100%" }}>
         <LargeCard
           tokenLabels={objkt.issuer?.labels}
+          image={objkt.captureMedia}
           thumbnailUri={objkt.metadata?.displayUri}
           undesirable={objkt.issuer?.flag === GenTokFlag.MALICIOUS}
           displayDetails={settings.displayInfosGentkCard}

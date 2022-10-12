@@ -101,6 +101,8 @@ export function generativeFromMintParams(
     flag: GenTokFlag.NONE,
     metadata: metadata,
     metadataUri: metadataUri,
+    thumbnailUri: metadata.thumbnailUri,
+    displayUri: metadata.displayUri,
     tags: metadata.tags,
     labels: metadata.tags as any,
     pricingFixed:
@@ -238,6 +240,8 @@ export function generativeFromMintForm(
     flag: GenTokFlag.NONE,
     metadata: metadata,
     metadataUri: "ipfs://not-uploaded-to-ipfs-yet",
+    thumbnailUri: metadata.thumbnailUri,
+    displayUri: metadata.displayUri,
     tags: metadata.tags,
     labels: data.informations?.labels,
     pricingFixed:
@@ -305,8 +309,8 @@ export const genTokLabelDefinitions: Record<
     description:
       "Contains flashes or light that could trigger seizures for people with visual sensitivities",
     icon: "fa-solid fa-bolt",
-    hideWarningSetting: "epilepsy",
-    hideWarningIfSettingIs: false,
+    showWarningSetting: "epilepsy",
+    showWarningOn: "run",
   },
   1: {
     label: "Sexual content",
@@ -314,8 +318,8 @@ export const genTokLabelDefinitions: Record<
     group: GenTokLabelGroup.WARNING,
     description: "Nudity",
     icon: "fa-solid fa-eye-slash",
-    hideWarningSetting: "nsfw",
-    hideWarningIfSettingIs: true,
+    showWarningSetting: "nsfw",
+    showWarningOn: "preview",
   },
   2: {
     label: "Sensitive content (blood, gore,...)",
@@ -323,8 +327,8 @@ export const genTokLabelDefinitions: Record<
     group: GenTokLabelGroup.WARNING,
     description: "Violence and Sensitive content",
     icon: "fa-solid fa-eye-slash",
-    hideWarningSetting: "nsfw",
-    hideWarningIfSettingIs: true,
+    showWarningSetting: "nsfw",
+    showWarningOn: "preview",
   },
   100: {
     label: "Image composition",
@@ -364,15 +368,17 @@ export interface GenTokWarning {
 }
 export const getGenTokWarning = (
   labels: GenTokLabel[],
-  settings: ISettingsContext
+  settings: ISettingsContext,
+  on?: GenTokLabelDefinition["showWarningOn"]
 ): GenTokWarning | null => {
   const warning = labels.reduce(
     (acc, label) => {
       const def = getGenTokLabelDefinition(label)
-      const hideWarning =
-        def.hideWarningSetting !== undefined &&
-        settings[def.hideWarningSetting] === !!def.hideWarningIfSettingIs
-      if (def.group === GenTokLabelGroup.WARNING && !hideWarning) {
+      const showWarning =
+        def.showWarningSetting !== undefined &&
+        !!settings[def.showWarningSetting]
+      const filterByOn = on ? on === def.showWarningOn : true
+      if (def.group === GenTokLabelGroup.WARNING && showWarning && filterByOn) {
         if (def.icon && !acc.icons.includes(def.icon)) {
           acc.icons.push(def.icon)
         }

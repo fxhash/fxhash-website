@@ -72,6 +72,7 @@ export const TezosStorageGentk: TezosStorageRenderer<Props> = ({ id }) => {
           {token ? (
             running ? (
               <ArtworkIframe
+                tokenLabels={token?.issuer?.labels}
                 ref={iframeRef}
                 url={gentkLiveUrl(token)}
                 hasLoading={false}
