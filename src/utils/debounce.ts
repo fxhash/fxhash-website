@@ -1,6 +1,10 @@
+export type Debounce<T extends {}> = T & {
+  cancel: () => void
+}
+
 export const debounce = (func: any, wait: number, immediate?: boolean) => {
   let timeout: NodeJS.Timeout | null;
-  return function debounceFunc(this: any) {
+  const fn = function debounceFunc(this: any) {
     const context = this;
     const args = arguments;
     clearTimeout(timeout!);
@@ -10,4 +14,12 @@ export const debounce = (func: any, wait: number, immediate?: boolean) => {
     }, wait);
     if (immediate && !timeout) func.apply(context, args);
   };
+  return Object.assign(fn, {
+    cancel() {
+      if (timeout) {
+        clearTimeout(timeout)
+        timeout = null;
+      }
+    }
+  })
 };

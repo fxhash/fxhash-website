@@ -158,9 +158,7 @@ const _PageArticle = ({ article, originUrl, isPreview }: PageArticleProps) => {
           name="twitter:image"
           content={ipfsGatewayUrl(article.thumbnailUri)}
         />
-
-        <link href="/highlight/prism-dracula.css" rel="stylesheet" />
-        <link rel="stylesheet" href="/highlight/dracula.css" />
+        <link href="/highlight/prism-dracula.css" rel="stylesheet"/>
       </Head>
 
       <ArticleFlagBanner article={article} />

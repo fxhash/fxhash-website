@@ -4,11 +4,12 @@ import cs from "classnames"
 import { IEditorMediaFile } from "../../../types/ArticleEditor/Image"
 import { ImagePolymorphic } from "../../../components/Medias/ImagePolymorphic"
 import { Button } from "../../../components/Button"
-import { forwardRef, useCallback, useImperativeHandle, useMemo } from "react"
+import { forwardRef, useCallback, useImperativeHandle, useMemo, useState } from "react"
 import { isUrlLocal } from "../../../utils/files"
 import useFetch, { CachePolicies } from "use-http"
 import { API_FILE__ARTICLE_UPLOAD_FILE } from "../../../services/apis/file-api.service"
 import { VideoPolymorphic } from "../../../components/Medias/VideoPolymorphic";
+import { LoaderBlock } from "../../../components/Layout/LoaderBlock";
 
 const UPLOAD_DEFAULT_ERROR = "Unknown error."
 
@@ -23,6 +24,10 @@ export const EditorMedia = forwardRef<Ref, Props>(({
   media,
   onChangeUri,
 }, ref) => {
+  const [hasMediaLoad, setHasMediaLoad] = useState<-1|boolean>(-1);
+  const handleLoadMediaError = useCallback(() => setHasMediaLoad(false), [])
+  const handleLoadMediaSuccess = useCallback(() => setHasMediaLoad(true), [])
+
   const isLocal = useMemo(
     () => isUrlLocal(media.uri),
     [media.uri]
@@ -65,12 +70,16 @@ export const EditorMedia = forwardRef<Ref, Props>(({
           <ImagePolymorphic
             uri={media.uri}
             className={cs(style.media)}
+            onError={handleLoadMediaError}
+            onLoad={handleLoadMediaSuccess}
           />
         }
         {media.type === "video" &&
           <VideoPolymorphic
             uri={media.uri}
             className={cs(style.media)}
+            onError={handleLoadMediaError}
+            onLoadedData={handleLoadMediaSuccess}
           />
         }
       </div>
@@ -91,22 +100,36 @@ export const EditorMedia = forwardRef<Ref, Props>(({
           </strong>
         )}
       </span>
-      {!isLocal ? (
-        <i
-          className={cs("fa-solid fa-circle-check", text.success, text.h4)}
-          aria-hidden
-        />
-      ):(
-        <Button
-          type="button"
-          color="secondary"
-          size="very-small"
-          onClick={uploadFile}
-          state={loading ? "loading" : "default"}
-        >
-          upload
-        </Button>
-      )}
+      {hasMediaLoad !== -1 ?
+        <>
+          {hasMediaLoad ?
+            <>
+              {!isLocal ? (
+                <i
+                  className={cs("fa-solid fa-circle-check", text.success, text.h4)}
+                  aria-hidden
+                />
+              ) : (
+                <Button
+                  type="button"
+                  color="secondary"
+                  size="very-small"
+                  onClick={uploadFile}
+                  state={loading ? "loading" : "default"}
+                >
+                  upload
+                </Button>
+              )}
+            </>
+            :
+            <i
+              className={cs("fa-solid fa-circle-xmark", text.error, text.h4)}
+              aria-hidden
+            />
+          }
+        </>
+        : (<span className={style.loader}><LoaderBlock size="tiny" /></span>)
+      }
     </div>
   )
 })
