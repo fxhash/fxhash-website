@@ -70,7 +70,15 @@ export function Image(props: FxImageProps) {
   // if there is no image element available (or if not processed yet), just
   // display the image from the source directly
   if (!image || !image.width || !image.height || !image.placeholder) {
-    return <SimpleImage ipfsUri={ipfsUri} alt={alt} mode={mode} style={style} position={position} />
+    return (
+      <SimpleImage
+        ipfsUri={ipfsUri}
+        alt={alt}
+        mode={mode}
+        style={style}
+        position={position}
+      />
+    )
   }
 
   return <ReactiveImage {...props} />
@@ -90,25 +98,14 @@ function SimpleImage({
   )
 
   return (
-    <img
-      src={gatewayUrl}
-      alt={alt}
+    <div
+      className={cs(css.wrapper, css[`wrapper_${mode}`])}
       style={{
-        objectFit:
-          mode === "contain"
-            ? "contain"
-            : mode === "cover"
-            ? "cover"
-            : undefined,
-        width: "100%",
-        height: "100%",
         position: position,
-        ...style,
       }}
-      {...restProps}
-      loading="lazy"
-      className={cs(css.simple_image)}
-    />
+    >
+      <img src={gatewayUrl} alt={alt} {...restProps} loading="lazy" />
+    </div>
   )
 }
 
@@ -228,10 +225,6 @@ function ReactiveImage({
         <img
           src={url}
           alt={alt}
-          style={{
-            objectFit: mode === "contain" ? "contain" : "cover",
-            ...style,
-          }}
           {...restProps}
           onLoad={isLoaded}
           onError={triggerError}
