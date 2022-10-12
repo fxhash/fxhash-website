@@ -4,6 +4,11 @@
   background-color: var(--color-border);
   background-size: cover;
   background-position: center;
+  position: relative;
+  
+  &:has(img) {
+    background-color: var(--color-white);
+  }
 }
 
 .avatar-upload {

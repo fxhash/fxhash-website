@@ -18,8 +18,11 @@
 }
 
 .container_button {
-  max-width: 286px;
+  max-width: 300px;
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
   label {
     margin-bottom: 4px !important;
@@ -28,6 +31,11 @@
 
 .button {
   width: 100%;
+  padding-left: 15px !important;
+  padding-right: 15px !important;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .purchase {

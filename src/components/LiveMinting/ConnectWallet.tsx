@@ -40,13 +40,14 @@ const _ConnectWallet = () => {
     []
   )
   const handleClickConnect = useCallback(() => {
-    if (walletType === "custom") {
-      userCtx.connect()
-    } else if (walletType === "naan") {
-      openNaaN()
-    } else {
-      userCtx.connect()
-    }
+    // if (walletType === "custom") {
+    //   userCtx.connect()
+    // } else if (walletType === "naan") {
+    //   openNaaN()
+    // } else {
+    //   userCtx.connect()
+    // }
+    userCtx.connect()
   }, [userCtx, walletType])
 
   // check if this is device is iOS
@@ -81,9 +82,10 @@ const _ConnectWallet = () => {
         <div className={style.container_button}>
           <Link
             href={
-              isIos
-                ? "https://apps.apple.com/us/app/naan-a-tasty-tezos-wallet/id1573210354"
-                : "https://play.google.com/store/apps/details?id=com.naan&hl=en&gl=US"
+              // isIos
+              //   ? "https://apps.apple.com/us/app/naan-a-tasty-tezos-wallet/id1573210354"
+              //   : "https://play.google.com/store/apps/details?id=com.naan&hl=en&gl=US"
+              "https://wallet.kukai.app/"
             }
             passHref
           >
@@ -94,7 +96,7 @@ const _ConnectWallet = () => {
               color="secondary"
               className={style.button}
             >
-              install naan wallet
+              create wallet with kukai
             </Button>
           </Link>
           <div className={style.purchase}>
@@ -108,7 +110,7 @@ const _ConnectWallet = () => {
         </div>
       )}
       <div className={style.container_button}>
-        {!isFocus && (
+        {/* {!isFocus && (
           <>
             {options.map((opt) => (
               <Checkbox
@@ -124,9 +126,10 @@ const _ConnectWallet = () => {
             ))}
             <Spacing size="x-small" />
           </>
-        )}
+        )} */}
         <Button
-          disabled={!walletType && !isFocus}
+          type="button"
+          // disabled={!walletType && !isFocus}
           iconComp={<i aria-hidden className="fas fa-wallet" />}
           onClick={handleClickConnect}
         >

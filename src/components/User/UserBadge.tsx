@@ -1,5 +1,4 @@
 import style from "./UserBadge.module.scss"
-import layout from "../../styles/Layout.module.scss"
 import cs from "classnames"
 import Link from "next/link"
 import { User } from "../../types/entities/User"
@@ -13,7 +12,7 @@ import {
 } from "../../utils/user"
 import { Avatar } from "./Avatar"
 import { IProps as IEntityBadgeProps } from "./EntityBadge"
-import { FunctionComponent, ReactNode, useMemo } from "react"
+import { ReactNode, useMemo } from "react"
 
 export interface Props extends IEntityBadgeProps {}
 
@@ -59,8 +58,9 @@ export function UserBadge({
   displayAddress = false,
   displayAvatar = true,
   newTab = false,
-  isInline = false,
   className,
+  classNameAvatar,
+  isInline = false,
 }: Props) {
   // the user goes through an aliases check
   const userAlias = useMemo(() => user && userAliases(user), [user])
@@ -88,12 +88,18 @@ export function UserBadge({
     >
       {displayAvatar && (
         <Avatar
+          image={user.avatarMedia}
           uri={userAlias.avatarUri}
           isInline={isInline}
-          className={cs(style.avatar, style[`avatar-${size}`], {
-            [style.avatar_mod]: isPlatformOwned(userAlias),
-            [style.avatar_donation]: isDonator(userAlias),
-          })}
+          className={cs(
+            style.avatar,
+            style[`avatar-${size}`],
+            {
+              [style.avatar_mod]: isPlatformOwned(userAlias),
+              [style.avatar_donation]: isDonator(userAlias),
+            },
+            classNameAvatar
+          )}
         />
       )}
 

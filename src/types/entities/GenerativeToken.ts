@@ -8,6 +8,7 @@ import { Report } from "./Report"
 import { IReserve } from "./Reserve"
 import { ISplit, Split } from "./Split"
 import { User } from "./User"
+import { MediaImage } from "./MediaImage"
 
 export enum GenTokFlag {
   NONE              = "NONE",
@@ -116,6 +117,7 @@ export interface GenerativeToken {
   moderationReason?: string|null
   entireCollection?: Objkt[]
   articleMentions?: ArticleGenerativeTokenMention[]
+  captureMedia?: MediaImage
 }
 
 export interface GenerativeTokenWithCollection extends GenerativeToken {

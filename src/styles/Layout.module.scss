@@ -135,12 +135,25 @@
   gap: var(--layout-gap-big-md);
 }
 
+.show_sm {
+  display: none;
+}
 .show_md {
   display: none;
 }
 
 .w100 {
   width: 100%;
+}
+
+@media (max-width: $breakpoint-sm) {
+  .hide_sm {
+    display: none;
+  }
+
+  .show_sm {
+    display: block;
+  }
 }
 
 @media (max-width: $breakpoint-md) {

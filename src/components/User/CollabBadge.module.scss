@@ -19,6 +19,7 @@
 
     .avatar_wrapper {
       transition: all 0.3s;
+      position: relative;
 
       &:not(:first-child) {
         margin-left: -28px;
@@ -72,7 +73,6 @@
     transition: all 0.3s;
     pointer-events: none;
     position: relative;
-    z-index: 0;
     align-items: flex-start;
     .collaborator {
       margin-top: -40px;
@@ -240,6 +240,12 @@
 
   &.hide {
     opacity: 0;
+  }
+
+  &.centered {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 }
 

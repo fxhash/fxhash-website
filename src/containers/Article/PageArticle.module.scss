@@ -59,6 +59,14 @@
     align-items: flex-end;
     gap: 8px;
   }
+  .editTools {
+    & > button {
+      margin: $spacing 0;
+    }
+  }
+  .lockButton {
+    align-self: center;
+  }
 }
 
 .infos {
