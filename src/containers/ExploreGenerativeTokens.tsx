@@ -14,36 +14,10 @@ import useSort from "../hooks/useSort";
 import { sortOptionsGenerativeTokens } from "../utils/sort";
 import useFilters from "../hooks/useFilters";
 import { SortAndFilters } from "../components/SortAndFilters/SortAndFilters";
+import { Qu_genTokens } from '../queries/generative-token'
 
 const ITEMS_PER_PAGE = 20
 
-const Qu_genTokens = gql`
-  ${Frag_GenAuthor}
-  ${Frag_GenPricing}
-  query GenerativeTokens ($skip: Int, $take: Int, $sort: GenerativeSortInput, $filters: GenerativeTokenFilter) {
-    generativeTokens(
-      skip: $skip, take: $take, sort: $sort, filters: $filters
-    ) {
-      id
-      name
-      slug
-      thumbnailUri
-      flag
-      labels
-      ...Pricing
-      supply
-      originalSupply
-      balance
-      enabled
-      royalties
-      createdAt
-      reserves {
-        amount
-      }
-      ...Author
-    }
-  }
-`
 
 interface Props {
 }

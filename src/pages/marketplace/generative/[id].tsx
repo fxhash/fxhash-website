@@ -115,7 +115,10 @@ const GenerativeTokenMarketplace: NextPage<Props> = ({ token }) => {
       <section className={cs(style.presentation, layout["padding-big"])}>
         <header className={cs(style.presentation_header)}>
           <div className={cs(style.preview_wrapper)}>
-            <ArtworkPreview ipfsUri={token.metadata?.thumbnailUri} />
+            <ArtworkPreview
+              ipfsUri={token.metadata?.thumbnailUri}
+              image={token.captureMedia}
+            />
           </div>
           <div className={cs(style.presentation_details)}>
             <small className={cs(colors.gray)}>#{token.id}</small>
