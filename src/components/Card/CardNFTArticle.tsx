@@ -6,10 +6,8 @@ import React, {
   useMemo,
 } from "react"
 import style from "./CardNFTArticle.module.scss"
-import Image from "next/image"
 import { NFTArticleInfos } from "../../types/entities/Article"
 import { UserBadge } from "../User/UserBadge"
-import { ipfsGatewayUrl } from "../../services/Ipfs"
 import cs from "classnames"
 import { SettingsContext } from "../../context/Theme"
 import { format } from "date-fns"
@@ -17,6 +15,7 @@ import Link from "next/link"
 import { Tags } from "../Tags/Tags"
 import { ArticlesContext } from "../../context/Articles"
 import { getArticleUrl } from "../../utils/entities/articles"
+import { Image } from "../Image"
 
 interface CardNftArticleProps {
   className?: string
@@ -38,6 +37,7 @@ const _CardNftArticle = ({
     title,
     slug,
     thumbnailUri,
+    thumbnailMedia,
     description,
     tags,
     author,
@@ -45,10 +45,6 @@ const _CardNftArticle = ({
     metadataLocked,
   } = article
   const settings = useContext(SettingsContext)
-  const thumbnailUrl = useMemo(
-    () => thumbnailUri && ipfsGatewayUrl(thumbnailUri),
-    [thumbnailUri]
-  )
   const dateCreatedAt = useMemo(() => new Date(createdAt), [createdAt])
   const urlArticle = isDraft
     ? `/article/editor/local/${id}`
@@ -130,15 +126,12 @@ const _CardNftArticle = ({
             [style["draft_img-wrapper"]]: isDraft,
           })}
         >
-          {thumbnailUrl && (
-            <Image
-              src={thumbnailUrl}
-              layout="fill"
-              objectFit="cover"
-              objectPosition="center"
-              priority={imagePriority}
-            />
-          )}
+          <Image
+            ipfsUri={thumbnailUri}
+            image={thumbnailMedia}
+            alt=""
+            mode="cover"
+          />
         </div>
         <div className={style.infos}>
           {!isDraft && (

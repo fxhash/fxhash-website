@@ -156,6 +156,7 @@ export function Navigation({ onChangeSearchVisibility }: NavigationProps) {
               itemComp={
                 <div className={cs(style.avatar_btn)}>
                   <Avatar
+                    image={userCtx.user.avatarMedia}
                     uri={userCtx.user.avatarUri}
                     className={cs(style.avatar, effects["drop-shadow-big"])}
                   />

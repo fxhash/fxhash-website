@@ -29,6 +29,9 @@ export const Frag_ListingCardInfos = gql`
       name
       slug
       metadata
+      captureMedia {
+        ...MediaImage
+      }
       duplicate
       activeListing {
         id

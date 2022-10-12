@@ -1,11 +1,30 @@
-import { DependencyList, Dispatch, EffectCallback, SetStateAction, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
-import useAsyncEffect from 'use-async-effect'
-import useFetch, { CachePolicies } from 'use-http'
-import { MessageCenterContext } from '../context/MessageCenter'
-import { API_BLOCKCHAIN_CONTRACT_STORAGE } from '../services/Blockchain'
-import { ContractCallHookReturn, ContractInteractionMethod, ContractOperationStatus } from '../types/Contracts'
-import { MintError, MintProgressMessage, MintResponse } from '../types/Responses'
-import { processTzProfile } from './user'
+import {
+  DependencyList,
+  Dispatch,
+  EffectCallback,
+  SetStateAction,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react"
+import useAsyncEffect from "use-async-effect"
+import useFetch, { CachePolicies } from "use-http"
+import { MessageCenterContext } from "../context/MessageCenter"
+import { API_BLOCKCHAIN_CONTRACT_STORAGE } from "../services/Blockchain"
+import {
+  ContractCallHookReturn,
+  ContractInteractionMethod,
+  ContractOperationStatus,
+} from "../types/Contracts"
+import {
+  MintError,
+  MintProgressMessage,
+  MintResponse,
+} from "../types/Responses"
+import { processTzProfile } from "./user"
 import { getWalletOperationText } from "./wallet"
 
 export function useIsMounted() {
@@ -36,28 +55,38 @@ export function useIsMountedState(): boolean {
   return isMounted
 }
 
-export const useClientEffect = (effect: EffectCallback, dependencies?: DependencyList): void => {
+export const useClientEffect = (
+  effect: EffectCallback,
+  dependencies?: DependencyList
+): void => {
   if (typeof window !== "undefined") {
     useEffect(effect, dependencies)
   }
 }
 
-export const useClientAsyncEffect = (effect: (isMounted: () => boolean) => unknown, dependencies?: any[]): void => {
+export const useClientAsyncEffect = (
+  effect: (isMounted: () => boolean) => unknown,
+  dependencies?: any[]
+): void => {
   if (typeof window !== "undefined") {
     useAsyncEffect(effect, dependencies)
   }
 }
 
-export const useInterval = (callback: () => void, intervalMs: number, triggerStart: boolean = false) => {
+export const useInterval = (
+  callback: () => void,
+  intervalMs: number,
+  triggerStart: boolean = false
+) => {
   const isMounted = useIsMounted()
 
   useEffect(() => {
     if (triggerStart) callback()
-    
+
     const interval = setInterval(() => {
       if (isMounted()) callback()
     }, intervalMs)
-    
+
     return () => {
       clearInterval(interval)
     }
@@ -67,12 +96,16 @@ export const useInterval = (callback: () => void, intervalMs: number, triggerSta
 /**
  * Designed to interract with generic contract methods residing in the Wallet service.
  */
-export function useContractCall<T>(contractMethod?: ContractInteractionMethod<T>): ContractCallHookReturn<T> {
-  const [state, setState] = useState<ContractOperationStatus>(ContractOperationStatus.NONE)
+export function useContractCall<T>(
+  contractMethod?: ContractInteractionMethod<T>
+): ContractCallHookReturn<T> {
+  const [state, setState] = useState<ContractOperationStatus>(
+    ContractOperationStatus.NONE
+  )
   const [loading, setLoading] = useState<boolean>(false)
   const [success, setSuccess] = useState<boolean>(false)
   const [error, setError] = useState<boolean>(false)
-  const [transactionHash, setTransactionHash] = useState<string|null>(null)
+  const [transactionHash, setTransactionHash] = useState<string | null>(null)
   const counter = useRef<number>(0)
   const isMounted = useIsMounted()
   const messageCenter = useContext(MessageCenterContext)
@@ -91,40 +124,41 @@ export function useContractCall<T>(contractMethod?: ContractInteractionMethod<T>
     setError(false)
     setTransactionHash(null)
     setState(ContractOperationStatus.NONE)
-    
+
     // assign the ID to this call and increment it to prevent overlaps
     counter.current++
     const id = counter.current
-    contractMethod && contractMethod(data, (opState, opData) => {
-      if (counter.current === id && isMounted()) {
-        setState(opState)
-        if (opState === ContractOperationStatus.INJECTED) {
-          setSuccess(true)
-          setLoading(false)
-          if (opData?.hash) {
-            setTransactionHash(opData.hash)
+    contractMethod &&
+      contractMethod(data, (opState, opData) => {
+        if (counter.current === id && isMounted()) {
+          setState(opState)
+          if (opState === ContractOperationStatus.INJECTED) {
+            setSuccess(true)
+            setLoading(false)
+            if (opData?.hash) {
+              setTransactionHash(opData.hash)
+            }
+          } else if (opState === ContractOperationStatus.ERROR) {
+            setLoading(false)
+            setError(true)
           }
         }
-        else if (opState === ContractOperationStatus.ERROR) {
-          setLoading(false)
-          setError(true)
+        // even if not mounted anymore we push the messages to message center
+        if (opState === ContractOperationStatus.INJECTED) {
+          messageCenter.addMessage({
+            type: "success",
+            title: `Operation "${getWalletOperationText(
+              opData.operationType
+            )}" successfully applied`,
+          })
+        } else if (opState === ContractOperationStatus.ERROR) {
+          messageCenter.addMessage({
+            type: "error",
+            title: "Error when calling contract",
+            content: opData,
+          })
         }
-      }
-      // even if not mounted anymore we push the messages to message center
-      if (opState === ContractOperationStatus.INJECTED) {
-        messageCenter.addMessage({
-          type: "success",
-          title: `Operation "${getWalletOperationText(opData.operationType)}" successfully applied`
-        })
-      }
-      else if (opState === ContractOperationStatus.ERROR) {
-        messageCenter.addMessage({
-          type: "error",
-          title: "Error when calling contract",
-          content: opData,
-        })
-      }
-    })
+      })
   }
 
   return {
@@ -134,31 +168,30 @@ export function useContractCall<T>(contractMethod?: ContractInteractionMethod<T>
     success,
     call,
     clear,
-    error
+    error,
   }
 }
 
-
 interface HookMintReturn {
-  progress: MintProgressMessage|null
-  error: MintError|null
+  progress: MintProgressMessage | null
+  error: MintError | null
   success: boolean
   loading: boolean
-  data: MintResponse|null
+  data: MintResponse | null
   start: () => void
 }
 
 export function useMint(id: number): HookMintReturn {
   // the counter is used to keep track of the calls made, prevent overlap
   const [counter, setCounter] = useState(-1)
-  const [progress, setProgress] = useState<MintProgressMessage|null>(null)
-  const [error, setError] = useState<MintError|null>(null)
+  const [progress, setProgress] = useState<MintProgressMessage | null>(null)
+  const [error, setError] = useState<MintError | null>(null)
   const [success, setSuccess] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
-  const [data, setData] = useState<MintResponse|null>(null)
+  const [data, setData] = useState<MintResponse | null>(null)
 
   const start = () => {
-    setCounter(counter+1)
+    setCounter(counter + 1)
   }
 
   const reset = () => {
@@ -175,7 +208,9 @@ export function useMint(id: number): HookMintReturn {
       // clear and start the event source
       reset()
       setLoading(true)
-      const source = new EventSource(`${process.env.NEXT_PUBLIC_API_FILE_ROOT!}/mint/${id}`)
+      const source = new EventSource(
+        `${process.env.NEXT_PUBLIC_API_FILE_ROOT!}/mint/${id}`
+      )
 
       const progressHandler = (message: MessageEvent<MintProgressMessage>) => {
         setProgress(message.data)
@@ -198,7 +233,7 @@ export function useMint(id: number): HookMintReturn {
       source.addEventListener("mint-success", successHandler)
       // @ts-ignore
       source.addEventListener("mint-error", errorHandler)
-      
+
       return () => {
         // @ts-ignore
         source.removeEventListener("progress", progressHandler)
@@ -217,18 +252,17 @@ export function useMint(id: number): HookMintReturn {
     success,
     loading,
     data,
-    start
+    start,
   }
 }
 
-
 type EventSourceState = "progress" | "error" | "success"
 interface HookEventSourceReturn<T, P, E> {
-  progress: P|null
-  error: E|null
+  progress: P | null
+  error: E | null
   success: boolean
   loading: boolean
-  data: T|null
+  data: T | null
   start: () => void
 }
 
@@ -239,19 +273,19 @@ interface HookEventSourceReturn<T, P, E> {
  * @param url target URL of the event source (server implementing Server-Sent Events)
  */
 export function useEventSource<T, P = string, E = string>(
-  url: string, 
-  dataTransform: ((data: string) => any) = (data) => data
+  url: string,
+  dataTransform: (data: string) => any = (data) => data
 ): HookEventSourceReturn<T, P, E> {
   // the counter is used to keep track of the calls made, prevent overlap
   const [counter, setCounter] = useState(-1)
-  const [progress, setProgress] = useState<P|null>(null)
-  const [error, setError] = useState<E|null>(null)
+  const [progress, setProgress] = useState<P | null>(null)
+  const [error, setError] = useState<E | null>(null)
   const [success, setSuccess] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
-  const [data, setData] = useState<T|null>(null)
+  const [data, setData] = useState<T | null>(null)
 
   const start = () => {
-    setCounter(counter+1)
+    setCounter(counter + 1)
   }
 
   const reset = () => {
@@ -291,7 +325,7 @@ export function useEventSource<T, P = string, E = string>(
       source.addEventListener("success", successHandler)
       // @ts-ignore
       source.addEventListener("error", errorHandler)
-      
+
       return () => {
         // @ts-ignore
         source.removeEventListener("progress", progressHandler)
@@ -310,14 +344,23 @@ export function useEventSource<T, P = string, E = string>(
     success,
     loading,
     data,
-    start
+    start,
   }
 }
 
 /**
- * Lazy loads an image 
+ * Lazy loads an image
  */
-export function useLazyImage(url: string | null): boolean {
+
+interface UseLazyImageOptions {
+  onLoad?: () => void
+  onError?: () => void
+}
+
+export function useLazyImage(
+  url: string | null,
+  { onLoad, onError }: UseLazyImageOptions
+): boolean {
   const [loaded, setLoaded] = useState<boolean>(false)
   useEffect(() => {
     if (loaded) setLoaded(false)
@@ -325,6 +368,10 @@ export function useLazyImage(url: string | null): boolean {
       const img = new Image()
       img.onload = () => {
         setLoaded(true)
+        onLoad?.()
+      }
+      img.onerror = () => {
+        onError?.()
       }
       img.src = url
     }
@@ -336,40 +383,53 @@ export function useLazyImage(url: string | null): boolean {
  * Verify a use via tz profile
  */
 export function useTzProfileVerification(address: string) {
-  const { data: data, post, loading } = useFetch('https://indexer.tzprofiles.com/v1/graphql', {
-    cachePolicy: CachePolicies.NO_CACHE
+  const {
+    data: data,
+    post,
+    loading,
+  } = useFetch("https://indexer.tzprofiles.com/v1/graphql", {
+    cachePolicy: CachePolicies.NO_CACHE,
   })
-  
+
   useEffect(() => {
     post({
       query: `query MyQuery { tzprofiles_by_pk(account: \"${address}\") { valid_claims } }`,
       variables: null,
-      operationName: 'MyQuery',
+      operationName: "MyQuery",
     })
   }, [address])
 
-  const tzProfileData = useMemo(() => (!!data?.data?.tzprofiles_by_pk?.valid_claims 
-    && processTzProfile(data?.data?.tzprofiles_by_pk?.valid_claims)) || null, [data])
+  const tzProfileData = useMemo(
+    () =>
+      (!!data?.data?.tzprofiles_by_pk?.valid_claims &&
+        processTzProfile(data?.data?.tzprofiles_by_pk?.valid_claims)) ||
+      null,
+    [data]
+  )
 
   return {
-    loading, tzProfileData
+    loading,
+    tzProfileData,
   }
 }
-
 
 /**
  * Get contract storage
  */
- export function useContractStorage(address: string) {
-  const { data, loading } = useFetch(API_BLOCKCHAIN_CONTRACT_STORAGE(address), {
-    cachePolicy: CachePolicies.NO_CACHE
-  }, [])
+export function useContractStorage(address: string) {
+  const { data, loading } = useFetch(
+    API_BLOCKCHAIN_CONTRACT_STORAGE(address),
+    {
+      cachePolicy: CachePolicies.NO_CACHE,
+    },
+    []
+  )
 
   return {
-    data, loading
+    data,
+    loading,
   }
 }
-
 
 type TAnimationFrameCallback = (time: number, delta: number) => void
 
@@ -377,7 +437,10 @@ type TAnimationFrameCallback = (time: number, delta: number) => void
  * Creates a request to use animation frame and calls the callback at each tick
  * Responsible for handling dealloc
  */
-export function useAnimationFrame(callback: TAnimationFrameCallback, dependencies?: DependencyList) {
+export function useAnimationFrame(
+  callback: TAnimationFrameCallback,
+  dependencies?: DependencyList
+) {
   const started = useRef<number>(0)
   const lastFrameTime = useRef<number>(0)
   const requestRef = useRef<number>()
@@ -394,7 +457,7 @@ export function useAnimationFrame(callback: TAnimationFrameCallback, dependencie
     callback(time, delta)
     lastFrameTime.current = now
   }
-  
+
   useEffect(() => {
     // initialize the values
     started.current = lastFrameTime.current = performance.now()
@@ -404,13 +467,15 @@ export function useAnimationFrame(callback: TAnimationFrameCallback, dependencie
   }, dependencies)
 }
 
-
 /**
  * Returns [true|false] depending on user interracting with the page
  * Whenever the user doesn't interact with the page for X seconds, return true, otherwise
  * returns false
  */
-export function useHasInterractedIn(milliseconds: number = 2000, defaultValue: boolean = true): [boolean, Dispatch<SetStateAction<boolean>>] {
+export function useHasInterractedIn(
+  milliseconds: number = 2000,
+  defaultValue: boolean = true
+): [boolean, Dispatch<SetStateAction<boolean>>] {
   const timeoutID = useRef<ReturnType<typeof setTimeout>>()
   const [inter, setInter] = useState<boolean>(defaultValue)
 
@@ -432,3 +497,4 @@ export function useHasInterractedIn(milliseconds: number = 2000, defaultValue: b
 
   return [inter, setInter]
 }
+

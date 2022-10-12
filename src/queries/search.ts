@@ -1,6 +1,6 @@
 import { gql } from "@apollo/client"
 import { Frag_UserBadge } from "./fragments/user"
-import { Frag_GenCardInfos } from "./fragments/generative-token"
+import { Frag_GenTokenInfo } from "./fragments/generative-token"
 import { Frag_ArticleInfos } from "./fragments/article"
 import { Frag_ListingCardInfos } from "./fragments/listing"
 
@@ -39,7 +39,7 @@ export const Qu_search = gql`
       skip: $generativeTokensSkip
     ) {
       id
-      ...GenTokenCardInfos
+      ...TokenInfo
     }
     articles(
       filters: $articlesFilters
@@ -61,7 +61,7 @@ export const Qu_search = gql`
     }
   }
   ${Frag_UserBadge}
-  ${Frag_GenCardInfos}
+  ${Frag_GenTokenInfo}
   ${Frag_ArticleInfos}
   ${Frag_ListingCardInfos}
 `

@@ -1,4 +1,4 @@
-import { gql, useQuery } from "@apollo/client"
+import { useQuery } from "@apollo/client"
 import {
   GenerativeToken,
   GenerativeTokenFilters,
@@ -17,31 +17,18 @@ import {
 } from "react"
 import { CardsLoading } from "../components/Card/CardsLoading"
 import { SettingsContext } from "../context/Theme"
-import { ExploreTagDef } from "../components/Exploration/ExploreTags"
+import {
+  ExploreTagDef,
+} from "../components/Exploration/ExploreTags"
 import { GenerativeFilters } from "./Generative/GenerativeFilters"
-import { Frag_GenCardInfos } from "../queries/fragments/generative-token"
 import { getTagsFromFiltersObject } from "../utils/filters"
 import useSort from "../hooks/useSort"
 import { sortOptionsGenerativeTokens } from "../utils/sort"
 import useFilters from "../hooks/useFilters"
 import { SortAndFilters } from "../components/SortAndFilters/SortAndFilters"
+import { Qu_genTokens } from "../queries/generative-token"
 
 const ITEMS_PER_PAGE = 20
-
-const Qu_genTokens = gql`
-  ${Frag_GenCardInfos}
-  query GenerativeTokens(
-    $skip: Int
-    $take: Int
-    $sort: GenerativeSortInput
-    $filters: GenerativeTokenFilter
-  ) {
-    generativeTokens(skip: $skip, take: $take, sort: $sort, filters: $filters) {
-      id
-      ...GenTokenCardInfos
-    }
-  }
-`
 
 interface ExploreGenerativeTokensProps {
   initialSearchQuery?: string

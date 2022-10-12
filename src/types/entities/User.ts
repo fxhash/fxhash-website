@@ -4,6 +4,7 @@ import { Objkt } from "./Objkt"
 import { Listing } from "./Listing"
 import { Offer } from "./Offer";
 import { NFTArticle } from "./Article";
+import { MediaImage } from "./MediaImage";
 
 export interface UserItems {
   generativeTokens?: GenerativeToken[]
@@ -50,6 +51,7 @@ export interface User {
   metadataUri?: string
   description?: string
   avatarUri?: string
+  avatarMedia?: MediaImage
   generativeTokens?: GenerativeToken[]
   sales: Action[]
   actionsAsIssuer: Action[]

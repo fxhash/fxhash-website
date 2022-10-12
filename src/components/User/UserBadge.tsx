@@ -108,6 +108,7 @@ export function UserBadge({
     >
       {displayAvatar && (
         <Avatar
+          image={user.avatarMedia}
           uri={userAlias.avatarUri}
           isInline={isInline}
           className={cs(

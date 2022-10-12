@@ -27,11 +27,11 @@ export function LargeGentkCard({
 }: Props) {
   const url = getObjktUrl(objkt)
   const settings = useContext(SettingsContext)
-
   return (
     <Link href={url} passHref>
       <AnchorForward style={{ height: "100%" }}>
         <LargeCard
+          image={objkt.captureMedia}
           thumbnailUri={objkt.metadata?.displayUri}
           undesirable={objkt.issuer?.flag === GenTokFlag.MALICIOUS}
           displayDetails={settings.displayInfosGentkCard}

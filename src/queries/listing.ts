@@ -2,6 +2,7 @@ import { gql } from "@apollo/client"
 import { Frag_ListingCardInfos } from "./fragments/listing"
 
 export const Qu_listings = gql`
+  ${Frag_ListingCardInfos}
   query Listings(
     $skip: Int
     $take: Int
@@ -13,5 +14,4 @@ export const Qu_listings = gql`
       ...ListingCardInfos
     }
   }
-  ${Frag_ListingCardInfos}
 `
