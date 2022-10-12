@@ -5,7 +5,7 @@ import styles from "../styles/Home.module.scss"
 import layout from "../styles/Layout.module.scss"
 import cs from "classnames"
 import Colors from "../styles/Colors.module.css"
-import client from "../services/ApolloClient"
+import { createApolloClient } from "../services/ApolloClient"
 import { gql } from "@apollo/client"
 import {
   GenerativeToken,
@@ -30,8 +30,9 @@ import { SettingsContext } from "../context/Theme"
 import { PresentationHeader } from "../containers/Home/PresentationHeader"
 import {
   Frag_GenAuthor,
-  Frag_GenPricing,
+  Frag_GenTokenInfo,
 } from "../queries/fragments/generative-token"
+import { Frag_MediaImage } from "../queries/fragments/media"
 
 interface Props {
   randomGenerativeToken: GenerativeToken | null
@@ -126,7 +127,9 @@ const Home: NextPage<Props> = ({
 
             <div className={cs(styles["artwork-container"])}>
               <ArtworkPreview
+                image={randomGenerativeToken.captureMedia}
                 ipfsUri={randomGenerativeToken.metadata?.displayUri}
+                loading={true}
               />
             </div>
           </section>
@@ -212,40 +215,20 @@ export async function getServerSideProps() {
     take: number
     filters: GenerativeTokenFilters
   }
-
-  const { data, error } = await client.query<any, IQueryVariables>({
+  const apolloClient = createApolloClient()
+  const { data, error } = await apolloClient.query<any, IQueryVariables>({
     query: gql`
       ${Frag_GenAuthor}
-      ${Frag_GenPricing}
+      ${Frag_MediaImage}
+      ${Frag_GenTokenInfo}
       query Query($skip: Int, $take: Int, $filters: GenerativeTokenFilter) {
         randomGenerativeToken {
-          id
-          name
-          slug
+          ...TokenInfo
           metadata
           metadataUri
-          ...Pricing
-          supply
-          originalSupply
-          balance
-          enabled
-          royalties
-          createdAt
-          ...Author
         }
         generativeTokens(skip: $skip, take: $take, filters: $filters) {
-          id
-          name
-          slug
-          thumbnailUri
-          ...Pricing
-          supply
-          originalSupply
-          balance
-          enabled
-          royalties
-          createdAt
-          ...Author
+          ...TokenInfo
         }
         listings(skip: $skip, take: $take) {
           id
@@ -255,6 +238,9 @@ export async function getServerSideProps() {
             name
             slug
             metadata
+            captureMedia {
+              ...MediaImage
+            }
             issuer {
               ...Author
             }

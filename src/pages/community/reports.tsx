@@ -10,7 +10,7 @@ import { TitleHyphen } from "../../components/Layout/TitleHyphen"
 import { Spacing } from "../../components/Layout/Spacing"
 import Head from "next/head"
 import gql from "graphql-tag"
-import client from "../../services/ApolloClient"
+import { createApolloClient } from "../../services/ApolloClient"
 import {
   GenerativeToken,
   GenTokFlag,
@@ -22,37 +22,9 @@ import ClientOnly from "../../components/Utils/ClientOnly"
 import { UserGuard } from "../../components/Guards/UserGuard"
 import { ModeratorActions } from "../../containers/Community/ModeratorActions"
 import { CardsContainer } from "../../components/Card/CardsContainer"
-import {
-  Frag_GenAuthor,
-  Frag_GenPricing,
-} from "../../queries/fragments/generative-token"
+import { Qu_genTokensReported } from "../../queries/generative-token"
 
 const Chart = dynamic(() => import("../../components/Charts/Chart"))
-
-const Qu_reportedGenTokens = gql`
-  ${Frag_GenAuthor}
-  ${Frag_GenPricing}
-  query Query($skip: Int, $take: Int, $filters: GenerativeTokenFilter) {
-    generativeTokens(skip: $skip, take: $take, filters: $filters) {
-      id
-      flag
-      reports {
-        id
-        createdAt
-      }
-      name
-      slug
-      metadata
-      supply
-      balance
-      enabled
-      royalties
-      createdAt
-      ...Pricing
-      ...Author
-    }
-  }
-`
 
 interface Props {
   tokens: GenerativeToken[]
@@ -178,8 +150,9 @@ const ReportsPage: NextPage<Props> = ({ tokens }) => {
 }
 
 export async function getServerSideProps() {
-  const { data } = await client.query({
-    query: Qu_reportedGenTokens,
+  const apolloClient = createApolloClient()
+  const { data } = await apolloClient.query({
+    query: Qu_genTokensReported,
     fetchPolicy: "no-cache",
     variables: {
       skip: 0,

@@ -6,7 +6,7 @@ import style from "./GenerativeTokenMarketplace.module.scss"
 import colors from "../../../styles/Colors.module.css"
 import styleActivity from "../../../styles/Activity.module.scss"
 import cs from "classnames"
-import client from "../../../services/ApolloClient"
+import { createApolloClient } from "../../../services/ApolloClient"
 import { GenerativeToken } from "../../../types/entities/GenerativeToken"
 import { Spacing } from "../../../components/Layout/Spacing"
 import { MintProgress } from "../../../components/Artwork/MintProgress"
@@ -115,7 +115,10 @@ const GenerativeTokenMarketplace: NextPage<Props> = ({ token }) => {
       <section className={cs(style.presentation, layout["padding-big"])}>
         <header className={cs(style.presentation_header)}>
           <div className={cs(style.preview_wrapper)}>
-            <ArtworkPreview ipfsUri={token.metadata?.thumbnailUri} />
+            <ArtworkPreview
+              ipfsUri={token.metadata?.thumbnailUri}
+              image={token.captureMedia}
+            />
           </div>
           <div className={cs(style.presentation_details)}>
             <small className={cs(colors.gray)}>#{token.id}</small>
@@ -287,7 +290,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   if (idStr) {
     const id = parseInt(idStr as string)
     if (id === 0 || id) {
-      const { data } = await client.query({
+      const apolloClient = createApolloClient()
+      const { data } = await apolloClient.query({
         query: Qu_genTokenMarketplace,
         fetchPolicy: "no-cache",
         variables: { id },

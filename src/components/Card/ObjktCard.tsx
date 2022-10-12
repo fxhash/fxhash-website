@@ -20,26 +20,21 @@ interface Props {
   objkt: Objkt
   showOwner?: boolean
   showRarity?: boolean
-  useHQ?: boolean
 }
 
 export function ObjktCard({
   objkt,
   showOwner = true,
   showRarity = false,
-  useHQ = false,
 }: Props) {
   const url = getObjktUrl(objkt)
   const settings = useContext(SettingsContext)
-  const previewUri =
-    useHQ && objkt.metadata?.displayUri
-      ? objkt.metadata.displayUri
-      : objkt.metadata?.thumbnailUri
   return (
     <Link href={url} passHref>
       <AnchorForward style={{ height: "100%" }}>
         <Card
-          thumbnailUri={previewUri}
+          image={objkt.captureMedia}
+          thumbnailUri={objkt.metadata?.thumbnailUri}
           undesirable={objkt.issuer?.flag === GenTokFlag.MALICIOUS}
           displayDetails={settings.displayInfosGentkCard}
         >

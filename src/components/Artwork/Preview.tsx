@@ -1,10 +1,10 @@
-import { ipfsGatewayUrl } from "../../services/Ipfs"
-import { useLazyImage } from "../../utils/hookts"
-import { Loader } from "../Utils/Loader"
-import style from "./Artwork.module.scss"
 import { ArtworkFrame } from "./ArtworkFrame"
+import { Image } from "../Image"
+import { LazyImage } from "../Image/LazyImage"
+import { MediaImage } from "../../types/entities/MediaImage"
 
 interface Props {
+  image?: MediaImage
   ipfsUri?: string
   url?: string
   alt?: string
@@ -12,18 +12,18 @@ interface Props {
 }
 
 export function ArtworkPreview({
+  image,
   ipfsUri,
   url,
   alt = "Generative Token preview",
-  loading = false,
 }: Props) {
-  const U = url || (ipfsUri && ipfsGatewayUrl(ipfsUri)) || null
-  const loaded = useLazyImage(U)
-
   return (
     <ArtworkFrame>
-      {U && loaded && <img src={U} alt={alt} />}
-      {loading && !loaded && <Loader color="white" />}
+      {url ? (
+        <LazyImage url={url} alt={alt} />
+      ) : (
+        <Image image={image} ipfsUri={ipfsUri} alt={alt} />
+      )}
     </ArtworkFrame>
   )
 }

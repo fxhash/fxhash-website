@@ -2,6 +2,7 @@ import { GetServerSideProps, NextPage } from "next"
 import { useMemo } from "react"
 import { ClientOnlyEmpty } from "../components/Utils/ClientOnly"
 import { SyncRedirect } from "../containers/SyncRedirect"
+import { sanitizeUrl, urlSanitizeExternalSource } from "../utils/url"
 
 interface Props {
   target: string
@@ -36,7 +37,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 
   // otherwise we can process the target
-  const targetDecoded = decodeURIComponent(target)
+  const targetDecoded = urlSanitizeExternalSource(
+    sanitizeUrl(decodeURIComponent(target), "/"),
+    "/"
+  )
 
   return {
     props: {

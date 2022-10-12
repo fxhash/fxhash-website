@@ -25,7 +25,6 @@ interface Props {
   displayPrice?: boolean
   displayDetails?: boolean
   lockedUntil?: string
-  useHQ?: boolean
 }
 
 export function GenerativeTokenCard({
@@ -34,16 +33,14 @@ export function GenerativeTokenCard({
   displayDetails = true,
   className,
   lockedUntil,
-  useHQ = false,
 }: Props) {
   const url = getGenerativeTokenUrl(token)
-  const previewUri =
-    useHQ && token.displayUri ? token.displayUri : token.thumbnailUri
   return (
     <Link href={url} passHref>
       <AnchorForward style={{ height: "100%" }} className={className}>
         <Card
-          thumbnailUri={previewUri}
+          image={token.captureMedia}
+          thumbnailUri={token.thumbnailUri}
           displayDetails={displayDetails}
           thumbInfosComp={
             token.labels?.includes(GenTokLabel.INTERACTIVE) ? (

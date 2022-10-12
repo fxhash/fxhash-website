@@ -53,6 +53,7 @@ const _UserArticles = ({ user, showLocalDrafts }: UserArticlesProps) => {
       setHasNothingToFetch(true);
     }
   }, [loading, hasNothingToFetch, fetchMore, articles.length])
+  
   return (
     <div className={cs(style.container, layout['padding-big'])}>
       <InfiniteScrollTrigger

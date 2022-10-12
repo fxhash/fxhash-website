@@ -1,20 +1,12 @@
 import style from "./Card.module.scss"
-import effect from "../../styles/Effects.module.scss"
 import cs from "classnames"
-import {
-  PropsWithChildren,
-  ReactNode,
-  useContext,
-  useMemo,
-  useState,
-} from "react"
-import { ipfsGatewayUrl } from "../../services/Ipfs"
-import { useClientAsyncEffect, useClientEffect } from "../../utils/hookts"
-import { Loader } from "../Utils/Loader"
-import { useInView } from "react-intersection-observer"
+import { PropsWithChildren, ReactNode, useContext, useState } from "react"
 import { SettingsContext } from "../../context/Theme"
+import { MediaImage } from "../../types/entities/MediaImage"
+import { Image } from "../Image"
 
 interface Props {
+  image?: MediaImage
   thumbnailUri?: string | null
   undesirable?: boolean
   displayDetails?: boolean
@@ -22,59 +14,37 @@ interface Props {
 }
 
 export function Card({
+  image,
   thumbnailUri,
   undesirable = false,
   displayDetails = true,
   thumbInfosComp,
   children,
 }: PropsWithChildren<Props>) {
-  const [loaded, setLoaded] = useState<{ [key: string]: any }>({})
   const [error, setError] = useState<boolean>(false)
-  const url = useMemo(
-    () => thumbnailUri && ipfsGatewayUrl(thumbnailUri),
-    [thumbnailUri]
-  )
-  const { ref, inView } = useInView()
   const settings = useContext(SettingsContext)
-  const loadedUrl = url != undefined ? loaded[url] : null
-
-  // lazy load the image
-  useClientAsyncEffect(
-    (isMounted) => {
-      if (inView && !loadedUrl && url && !error) {
-        const img = new Image()
-        img.onload = () => {
-          if (isMounted()) {
-            setLoaded({ ...loaded, [url]: img.src })
-          }
-        }
-        img.onerror = () => {
-          // we fallback to the IPFS gateway
-          // img.src = ipfsGatewayUrl(thumbnailUri)
-          setError(true)
-        }
-        img.src = url
-      }
-    },
-    [inView, url]
-  )
 
   return (
     <div
       className={cs(style.container, {
         [style.hover_effect]: settings.hoverEffectCard,
       })}
-      ref={ref}
     >
       <div
         className={cs(style["thumbnail-container"], {
           [style.undesirable]: undesirable,
-          [effect.placeholder]: !loadedUrl && !error,
         })}
-        style={{
-          backgroundImage: loadedUrl ? `url(${loadedUrl})` : "none",
-        }}
       >
+        {!undesirable && (
+          <Image
+            ipfsUri={thumbnailUri!}
+            image={image}
+            alt=""
+            onError={() => setError(true)}
+            className={style.thumbnail}
+            position="absolute"
+          />
+        )}
         {error && (
           <div className={cs(style.error)}>
             <i aria-hidden className="fa-solid fa-bug" />
