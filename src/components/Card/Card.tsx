@@ -15,7 +15,7 @@ import { getGenTokWarning } from "../../utils/generative-token"
 import { Button } from "../Button"
 import { MediaImage } from "../../types/entities/MediaImage"
 import { Image } from "../Image"
-import { WarningLayer } from "../Warning/WarningLayer";
+import { WarningLayer } from "../Warning/WarningLayer"
 
 interface Props {
   tokenLabels?: GenTokLabel[] | null

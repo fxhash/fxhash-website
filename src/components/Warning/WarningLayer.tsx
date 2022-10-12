@@ -5,7 +5,7 @@ import { Button } from "../Button"
 import { GenTokWarning } from "../../utils/generative-token"
 
 interface WarningLayerProps {
-  className?: string,
+  className?: string
   warning: GenTokWarning
 }
 
