@@ -374,6 +374,7 @@ export const getGenTokWarning = (
   const warning = labels.reduce(
     (acc, label) => {
       const def = getGenTokLabelDefinition(label)
+      if (!def) return acc
       const showWarning =
         def.showWarningSetting !== undefined &&
         !!settings[def.showWarningSetting]
