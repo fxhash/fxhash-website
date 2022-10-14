@@ -19,7 +19,7 @@ import {
 } from "../types/entities/GenerativeToken"
 import { IPricingDutchAuction, IPricingFixed } from "../types/entities/Pricing"
 import { EReserveMethod, IReserve } from "../types/entities/Reserve"
-import { Collaboration, User, UserType } from "../types/entities/User"
+import { User } from "../types/entities/User"
 import { CaptureSettings, GenerativeTokenMetadata } from "../types/Metadata"
 import {
   CaptureMode,
@@ -35,6 +35,7 @@ import {
 } from "./transformers/pricing"
 import { transformReserveInputToGeneric } from "./transformers/reserves"
 import { isUserOrCollaborator } from "./user"
+import { ISettingsContext } from "../context/Theme"
 
 export function getGenerativeTokenUrl(generative: GenerativeToken): string {
   return generative.slug
@@ -305,16 +306,29 @@ export const genTokLabelDefinitions: Record<
     label: "Epileptic trigger",
     shortLabel: "Epileptic trigger",
     group: GenTokLabelGroup.WARNING,
+    description:
+      "Contains flashes or light that could trigger seizures for people with visual sensitivities",
+    icon: "fa-solid fa-bolt",
+    showWarningSetting: "epilepsy",
+    showWarningOn: "run",
   },
   1: {
     label: "Sexual content",
     shortLabel: "Sexual content",
     group: GenTokLabelGroup.WARNING,
+    description: "Nudity",
+    icon: "fa-solid fa-eye-slash",
+    showWarningSetting: "nsfw",
+    showWarningOn: "preview",
   },
   2: {
     label: "Sensitive content (blood, gore,...)",
     shortLabel: "Sensitive content",
     group: GenTokLabelGroup.WARNING,
+    description: "Violence and Sensitive content",
+    icon: "fa-solid fa-eye-slash",
+    showWarningSetting: "nsfw",
+    showWarningOn: "preview",
   },
   100: {
     label: "Image composition",
@@ -346,6 +360,39 @@ export const getGenTokLabelDefinition = (
 
 export const getGenTokLabelDefinitions = (labels: number[]) =>
   labels.map((label) => getGenTokLabelDefinition(label)).filter((res) => !!res)
+
+export interface GenTokWarning {
+  icons: string[]
+  labels: string[]
+  descriptions: string[]
+}
+export const getGenTokWarning = (
+  labels: GenTokLabel[],
+  settings: ISettingsContext,
+  on?: GenTokLabelDefinition["showWarningOn"]
+): GenTokWarning | null => {
+  const warning = labels.reduce(
+    (acc, label) => {
+      const def = getGenTokLabelDefinition(label)
+      const showWarning =
+        def.showWarningSetting !== undefined &&
+        !!settings[def.showWarningSetting]
+      const filterByOn = on ? on === def.showWarningOn : true
+      if (def.group === GenTokLabelGroup.WARNING && showWarning && filterByOn) {
+        if (def.icon && !acc.icons.includes(def.icon)) {
+          acc.icons.push(def.icon)
+        }
+        acc.labels.push(def.shortLabel)
+        if (def.description) {
+          acc.descriptions.push(def.description)
+        }
+      }
+      return acc
+    },
+    { icons: [], labels: [], descriptions: [] } as GenTokWarning
+  )
+  return warning.labels.length > 0 ? warning : null
+}
 
 export const mapGenTokPricingToId: Record<GenTokPricing, number> = {
   FIXED: 0,
