@@ -48,7 +48,7 @@ export const EditorMedia = forwardRef<Ref, Props>(({
     }
   }, [isLocal, loading, media, post])
 
-  const errorMessage = error && (data.error || UPLOAD_DEFAULT_ERROR)
+  const errorMessage = error && (data?.error || UPLOAD_DEFAULT_ERROR)
 
   // map the ref
   useImperativeHandle(ref, () => ({
@@ -72,6 +72,11 @@ export const EditorMedia = forwardRef<Ref, Props>(({
             uri={media.uri}
             className={cs(style.media)}
           />
+        }
+        {media.type === "audio" &&
+          <div className={style.media_audio}>
+            <i className="fa-solid fa-music" aria-hidden/>
+          </div>
         }
       </div>
       <span className={cs(style.uri)}>
