@@ -11,7 +11,7 @@ import remarkGfm from "remark-gfm"
 import { mathProcessor } from "../elements/Math/MathProcessor"
 import { figureProcessor } from "../elements/Figure/FigureProcessor"
 import { mentionProcessor } from "../elements/Mention/MentionProcessor"
-import { listItemProcessor } from "../elements/List/ListProcessor";
+import { listItemProcessor } from "../elements/List/ListProcessor"
 
 export function convertSlateLeafDirectiveToMarkdown(node: any) {
   const { children, type, ...attributes } = node
