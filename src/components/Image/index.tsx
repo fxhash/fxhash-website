@@ -149,31 +149,34 @@ function ReactiveImage({
     }
   }, [])
 
-  const updateImageUrl = useCallback(() => {
-    // no media element = pull image from IPFS directly
-    if (!image) {
-      setUrl(ipfsGatewayUrl(ipfsUri, EGatewayIpfs.FXHASH))
-      return
-    }
-
-    // compute available space and load the appropriate image accordingly
-    const space = getViewportSpace()
-    // find the best width based on available space
-    let width = sizes[sizes.length - 1]
-    for (const w of sizes) {
-      if (w > space.width) {
-        width = w
-        break
+  const updateImageUrl = useCallback(
+    (forceChange) => {
+      // no media element = pull image from IPFS directly
+      if (!image || forceChange) {
+        setUrl(ipfsGatewayUrl(ipfsUri, EGatewayIpfs.FXHASH))
+        return
       }
-    }
 
-    // if target size is greater than the highest size loaded, we update
-    if (width > highestWidth.current) {
-      highestWidth.current = width
-      const imageUrl = getImageApiUrl(image?.cid, width)
-      setUrl(imageUrl)
-    }
-  }, [])
+      // compute available space and load the appropriate image accordingly
+      const space = getViewportSpace()
+      // find the best width based on available space
+      let width = sizes[sizes.length - 1]
+      for (const w of sizes) {
+        if (w > space.width) {
+          width = w
+          break
+        }
+      }
+
+      // if target size is greater than the highest size loaded, we update
+      if (width > highestWidth.current) {
+        highestWidth.current = width
+        const imageUrl = getImageApiUrl(image?.cid, width)
+        setUrl(imageUrl)
+      }
+    },
+    [getViewportSpace, image, ipfsUri]
+  )
 
   // attach a resize observer to the element, which will eventually fetch a
   // higher resolution image if needed
@@ -186,7 +189,7 @@ function ReactiveImage({
 
     if (ref.current) {
       const observer = new ResizeObserver(() => {
-        updateImageUrl()
+        updateImageUrl(false)
       })
       observer.observe(ref.current)
 
@@ -194,12 +197,16 @@ function ReactiveImage({
         ref.current && observer.disconnect()
       }
     }
-  }, [image, ipfsUri, gatewayUrl])
+  }, [image, ipfsUri, gatewayUrl, trueResolution, updateImageUrl])
+  useEffect(() => {
+    // new image will update updateImageUrl hence trigger a change
+    updateImageUrl(true)
+  }, [updateImageUrl])
 
   // triggers an error if an image has not yet been loaded
   const triggerError = useCallback(() => {
     !loaded && onError?.()
-  }, [loaded])
+  }, [loaded, onError])
 
   // when the image is loaded
   const isLoaded = useCallback(() => {
