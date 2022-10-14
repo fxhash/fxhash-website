@@ -1,9 +1,18 @@
 import { gql } from "@apollo/client"
-import { Frag_GenArticleMentions, Frag_GenAuthor, Frag_GenPricing, Frag_GenReserves, Frag_GenSplitsPrimary, Frag_GenSplitsSecondary } from "./fragments/generative-token"
+import {
+  Frag_GenArticleMentions,
+  Frag_GenAuthor,
+  Frag_GenPricing,
+  Frag_GenReserves,
+  Frag_GenSplitsPrimary,
+  Frag_GenSplitsSecondary,
+  Frag_GenTokenInfo,
+} from "./fragments/generative-token"
+import { Frag_UserBadge } from "./fragments/user"
+import { Frag_MediaImage } from "./fragments/media"
 
 export const Qu_genToken = gql`
-  ${Frag_GenAuthor}
-  ${Frag_GenPricing}
+  ${Frag_GenTokenInfo}
   ${Frag_GenSplitsPrimary}
   ${Frag_GenSplitsSecondary}
   ${Frag_GenReserves}
@@ -11,25 +20,13 @@ export const Qu_genToken = gql`
 
   query Query($id: Float, $slug: String) {
     generativeToken(id: $id, slug: $slug) {
-      id
-      name
-      flag
-      moderationReason
-      slug
+      ...TokenInfo
       tags
-      labels
+      moderationReason
+      mintOpensAt
+      lockEnd
       metadata
       metadataUri
-      supply
-      originalSupply
-      balance
-      enabled
-      royalties
-      lockEnd
-      mintOpensAt
-      createdAt
-      ...Pricing
-      ...Author
       ...SplitsPrimary
       ...SplitsSecondary
       ...Reserves
@@ -38,24 +35,69 @@ export const Qu_genToken = gql`
   }
 `
 
+export const Qu_genTokens = gql`
+  ${Frag_GenTokenInfo}
+  query GenerativeTokens(
+    $skip: Int
+    $take: Int
+    $sort: GenerativeSortInput
+    $filters: GenerativeTokenFilter
+  ) {
+    generativeTokens(skip: $skip, take: $take, sort: $sort, filters: $filters) {
+      ...TokenInfo
+      reserves {
+        amount
+      }
+    }
+  }
+`
+
+export const Qu_genTokensMarketplaceCollections = gql`
+  ${Frag_GenTokenInfo}
+  query GenerativeTokens(
+    $skip: Int
+    $take: Int
+    $sort: GenerativeSortInput
+    $filters: GenerativeTokenFilter
+  ) {
+    generativeTokens(skip: $skip, take: $take, sort: $sort, filters: $filters) {
+      ...TokenInfo
+      marketStats {
+        floor
+        listed
+      }
+    }
+  }
+`
+
+export const Qu_genTokensReported = gql`
+  ${Frag_GenTokenInfo}
+  query GenerativeTokens(
+    $skip: Int
+    $take: Int
+    $sort: GenerativeSortInput
+    $filters: GenerativeTokenFilter
+  ) {
+    generativeTokens(skip: $skip, take: $take, sort: $sort, filters: $filters) {
+      ...TokenInfo
+      reports {
+        id
+        createdAt
+      }
+    }
+  }
+`
+
 export const Qu_genTokenMarketplace = gql`
-  ${Frag_GenAuthor}
+  ${Frag_GenTokenInfo}
   ${Frag_GenReserves}
   query Query($id: Float, $slug: String) {
     generativeToken(id: $id, slug: $slug) {
-      id
-      name
-      flag
+      ...TokenInfo
       moderationReason
-      slug
       tags
       metadata
       metadataUri
-      supply
-      originalSupply
-      balance
-      enabled
-      royalties
       lockEnd
       marketStats {
         floor
@@ -70,32 +112,36 @@ export const Qu_genTokenMarketplace = gql`
         secVolumeTz24
         secVolumeNb24
       }
-      createdAt
-      ...Author
       ...Reserves
     }
   }
 `
 
 export const Qu_genTokenIterations = gql`
+  ${Frag_MediaImage}
+  ${Frag_UserBadge}
   query GenerativeTokenIterations(
-    $id: Float 
-    $take: Int 
+    $id: Float
+    $take: Int
     $skip: Int
-    $sort: ObjktsSortInput 
+    $sort: ObjktsSortInput
     $featureFilters: [FeatureFilter!]
     $filters: ObjktFilter
   ) {
     generativeToken(id: $id) {
       id
-      objkts(take: $take, skip: $skip, sort: $sort, featureFilters: $featureFilters, filters: $filters) {
+      objkts(
+        take: $take
+        skip: $skip
+        sort: $sort
+        featureFilters: $featureFilters
+        filters: $filters
+      ) {
         id
         version
         iteration
         owner {
-          id
-          name
-          avatarUri
+          ...UserBadgeInfos
         }
         name
         metadata
@@ -105,15 +151,16 @@ export const Qu_genTokenIterations = gql`
           version
           price
         }
+        captureMedia {
+          ...MediaImage
+        }
       }
     }
   }
 `
 
 export const Qu_genTokenAllIterations = gql`
-  query GenerativeTokenIterations(
-    $id: Float!
-  ) {
+  query GenerativeTokenIterations($id: Float!) {
     generativeToken(id: $id) {
       id
       entireCollection {
@@ -136,9 +183,12 @@ export const Qu_genTokenFeatures = gql`
 `
 
 export const Qu_genTokenMarketHistory = gql`
-  query GenerativeTokenMarketHistory($id: Float, $filters: MarketStatsHistoryInput!) {
+  query GenerativeTokenMarketHistory(
+    $id: Float
+    $filters: MarketStatsHistoryInput!
+  ) {
     generativeToken(id: $id) {
-      id,
+      id
       marketStatsHistory(filters: $filters) {
         floor
         median
@@ -202,17 +252,12 @@ export const Qu_searchGenTok = gql`
   ${Frag_GenAuthor}
 
   query SearchGenerativeToken(
-    $skip: Int,
-    $take: Int,
-    $sort: GenerativeSortInput,
+    $skip: Int
+    $take: Int
+    $sort: GenerativeSortInput
     $filters: GenerativeTokenFilter
   ) {
-    generativeTokens(
-      skip: $skip,
-      take: $take, 
-      sort: $sort, 
-      filters: $filters
-    ) {
+    generativeTokens(skip: $skip, take: $take, sort: $sort, filters: $filters) {
       id
       name
       thumbnailUri

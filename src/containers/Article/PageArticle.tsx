@@ -31,6 +31,7 @@ import { ArticleActions } from "./ArticleActions"
 import { TabsContainer } from "../../components/Layout/TabsContainer"
 import { useContractOperation } from "../../hooks/useContractOperation"
 import { LockArticleOperation } from "../../services/contract-operations/LockArticle"
+import { ArticleQuickCollect } from "./Infos/ArticleQuickCollect"
 
 const NftArticle = dynamic<NftArticleProps>(
   () =>
@@ -231,6 +232,13 @@ const _PageArticle = ({ article, originUrl, isPreview }: PageArticleProps) => {
             </time>
           </div>
           <h1 className={cs(style.title)}>{title}</h1>
+          <ArticleQuickCollect article={article}>
+            {({ collectAction }) => (
+              <div className={cs(style.collect)}>
+                {collectAction}
+              </div>
+            )}
+          </ArticleQuickCollect>
           <p className={cs(style.description, style.awidth)}>{description}</p>
           <figure className={cs(style.thumbnail)}>
             <ImagePolymorphic uri={article.displayUri} />

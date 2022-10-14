@@ -10,17 +10,10 @@ interface Props {
   article: NFTArticle
   listing: Listing
 }
-export function ArticleQuickCollectionAction({
-  article,
-  listing
-}: Props) {
-  const {
-    call,
-    loading,
-    state,
-    error,
-    success,
-  } = useContractOperation(ListingV3AcceptOperation)
+export function ArticleQuickCollectionAction({ article, listing }: Props) {
+  const { call, loading, state, error, success } = useContractOperation(
+    ListingV3AcceptOperation
+  )
 
   return (
     <>
@@ -42,7 +35,7 @@ export function ArticleQuickCollectionAction({
           call({
             listing: listing,
             article: article,
-            amount: 1
+            amount: 1,
           })
         }}
       >

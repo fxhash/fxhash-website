@@ -55,6 +55,7 @@ export function CollabBadge(props: Props) {
         {collaborators.map((user) => (
           <div key={user.id} className={cs(style.avatar_wrapper)}>
             <Avatar
+              image={user.avatarMedia}
               uri={user.avatarUri}
               className={cs(
                 badgeStyle.avatar,
