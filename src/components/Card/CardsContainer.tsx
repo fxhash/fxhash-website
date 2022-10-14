@@ -5,10 +5,7 @@ import { ICardContainerProps } from "../../types/Components/CardsContainer"
 
 interface Props extends ICardContainerProps {}
 export const CardsContainer = forwardRef<HTMLDivElement, Props>(
-  (
-    { children, cardSize, addDivs = true, ...props }: Props,
-    ref
-  ) => {
+  ({ children, cardSize, addDivs = true, ...props }: Props, ref) => {
     return (
       <div
         {...props}

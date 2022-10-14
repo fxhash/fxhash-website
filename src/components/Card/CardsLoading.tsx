@@ -21,7 +21,5 @@ export function CardsLoading({ number = 15, type = "regular" }: Props) {
 
   return Array(number)
     .fill(0)
-    .map((_, idx) => (
-      <CardLoadingComp key={idx} />
-    ))
+    .map((_, idx) => <CardLoadingComp key={idx} />)
 }

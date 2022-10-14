@@ -1,4 +1,13 @@
-import React, { ReactChild, useEffect, useRef, useState, useCallback, useMemo, ReactNode, Children } from "react"
+import React, {
+  ReactChild,
+  useEffect,
+  useRef,
+  useState,
+  useCallback,
+  useMemo,
+  ReactNode,
+  Children,
+} from "react"
 import style from "./MasonryCardsContainer.module.scss"
 import cs from "classnames"
 import { HTMLAttributes, PropsWithChildren } from "react"
@@ -6,13 +15,12 @@ import { HTMLAttributes, PropsWithChildren } from "react"
 import { useEventListener } from "../../utils/useEventListener"
 import { ICardContainerProps } from "../../types/Components/CardsContainer"
 
-interface Props extends ICardContainerProps {
-}
+interface Props extends ICardContainerProps {}
 
 const fillCols = (children: ReactNode, nbCols: number) => {
   const childrenArray = Children.toArray(children)
   const cols: ReactNode[][] = [...Array(nbCols)].map(() => [])
-  childrenArray.forEach((child, i) => cols[i%nbCols].push(child))
+  childrenArray.forEach((child, i) => cols[i % nbCols].push(child))
   return cols
 }
 
@@ -57,11 +65,12 @@ export function MasonryCardsContainer({
         ...props?.style,
       }}
     >
-      {cols && [...Array(numCols)].map((_, index) => (
-        <div key={index} className={style.col}>
-          {cols[index]}
-        </div>
-      ))}
+      {cols &&
+        [...Array(numCols)].map((_, index) => (
+          <div key={index} className={style.col}>
+            {cols[index]}
+          </div>
+        ))}
     </div>
   )
 }
