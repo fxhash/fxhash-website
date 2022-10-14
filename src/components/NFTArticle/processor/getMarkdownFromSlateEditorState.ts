@@ -11,6 +11,7 @@ import remarkGfm from "remark-gfm"
 import { mathProcessor } from "../elements/Math/MathProcessor"
 import { figureProcessor } from "../elements/Figure/FigureProcessor"
 import { mentionProcessor } from "../elements/Mention/MentionProcessor"
+import { listItemProcessor } from "../elements/List/ListProcessor";
 
 export function convertSlateLeafDirectiveToMarkdown(node: any) {
   const { children, type, ...attributes } = node
@@ -35,6 +36,7 @@ const slateToRemarkTransformerOverrides: OverridedSlateBuilders = {
   inlineMath: mathProcessor.transformSlateToMarkdownMdhast!,
   math: mathProcessor.transformSlateToMarkdownMdhast!,
   mention: mentionProcessor.transformSlateToMarkdownMdhast!,
+  listItem: listItemProcessor.transformSlateToMarkdownMdhast!,
 }
 export default async function getMarkdownFromSlateEditorState(slate: Node[]) {
   try {
@@ -47,7 +49,7 @@ export default async function getMarkdownFromSlateEditorState(slate: Node[]) {
       .use(slateToRemark, {
         overrides: slateToRemarkTransformerOverrides,
       })
-      .use(stringify, { bulletOther: "-" })
+      .use(stringify, { bullet: "-", bulletOther: "+" })
     const ast = await processor.run({
       type: "root",
       children: slate,

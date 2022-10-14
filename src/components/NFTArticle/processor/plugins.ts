@@ -97,6 +97,25 @@ export function mdastFlattenListItemParagraphs(): Transformer<Root, Root> {
   }
 }
 
+export function mdastNestListItemWithParagraphs(): Transformer<Root, Root> {
+  return (ast) => {
+    visit<any, any>(ast, "listItem", (listItem: any) => {
+      if (
+        !(
+          listItem.children.length === 1 &&
+          listItem.children[0].type === "paragraph"
+        )
+      ) {
+        const t = u("paragraph", listItem.children)
+        listItem = u("listItem", [t])
+        //listItem.children = u("paragraph", listItem.children)
+      }
+      return listItem
+    })
+    return ast
+  }
+}
+
 export function mdastParseMentions(): Transformer<Root, Root> {
   return (ast) => {
     // @ts-ignore
