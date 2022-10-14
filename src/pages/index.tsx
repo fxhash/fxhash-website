@@ -242,6 +242,7 @@ export async function getServerSideProps() {
               ...MediaImage
             }
             issuer {
+              labels
               ...Author
             }
             owner {

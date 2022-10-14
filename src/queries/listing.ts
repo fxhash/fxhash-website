@@ -39,10 +39,10 @@ export const Qu_listings = gql`
         issuer {
           flag
           name
+          labels
           ...Author
         }
       }
     }
   }
 `
-
