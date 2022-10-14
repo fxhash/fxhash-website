@@ -21,8 +21,8 @@ interface Props {
   className?: string
 }
 
-const NUM_MASONRY_BOXES = 9
-const SIZE_MASONRY_BOXES = 100
+const NUM_MASONRY_BOXES = 10
+const SIZE_MASONRY_BOXES = 60
 
 export function DisplaySettings({ settings, className }: Props) {
   const randomSizes = useMemo(
@@ -32,6 +32,7 @@ export function DisplaySettings({ settings, className }: Props) {
   const CContainer = settings.layoutMasonry
     ? MasonryCardsContainer
     : CardsContainer
+
   return (
     <div className={cs(styleSettings.page)}>
       <SettingsGroup title="General">
@@ -76,11 +77,19 @@ export function DisplaySettings({ settings, className }: Props) {
             </div>
           </div>
           <div className={style.masonry_container}>
-            <CContainer cardSize={SIZE_MASONRY_BOXES}>
+            <CContainer 
+              cardSize={SIZE_MASONRY_BOXES}
+              addDivs={false}
+              style={{
+                gap: "calc(var(--cards-gap) * 0.5)",
+              }}
+            >
               {randomSizes.map((size, i) => (
                 <div
                   key={`mini_card-${size}-${i}`}
-                  className={style.mini_card}
+                  className={cs(style.mini_card ,{
+                    [style.mini_card_masonry]: settings.layoutMasonry
+                  })}
                   style={{
                     height: SIZE_MASONRY_BOXES + size * SIZE_MASONRY_BOXES,
                   }}

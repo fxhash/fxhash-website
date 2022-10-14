@@ -4,10 +4,10 @@ import cs from "classnames"
 import { HTMLAttributes, PropsWithChildren } from "react"
 
 import { useEventListener } from "../../utils/useEventListener"
+import { ICardContainerProps } from "../../types/Components/CardsContainer"
 
-interface Props extends HTMLAttributes<HTMLDivElement> {
+interface Props extends ICardContainerProps {
   children?: ReactChild[]
-  cardSize?: number
 }
 
 const fillCols = (children: ReactChild[], cols: Array<ReactChild[]>) => {

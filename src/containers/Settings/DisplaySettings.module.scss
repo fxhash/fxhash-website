@@ -49,8 +49,10 @@
 }
 .mini_card { 
   width: 100%;
-  margin-bottom: var(--cards-gap);
   background: black;
+}
+.mini_card_masonry:not(:last-child) {
+  margin-bottom: calc(var(--cards-gap) * 0.5);
 }
 .slider {
   width: auto !important;
