@@ -6,6 +6,7 @@ interface Props {}
 export function LargeCardLoading({}: Props) {
   return (
     <div className={cs(style.root)}>
+      <div className={cs(style.iteration, effect.placeholder)} />
       <div className={cs(style.artwork, effect.placeholder)} />
       <div className={cs(style.content)}>
         <div className={cs(style.avatar, effect.placeholder)} />

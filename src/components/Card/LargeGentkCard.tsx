@@ -29,7 +29,7 @@ export function LargeGentkCard({
   const settings = useContext(SettingsContext)
   return (
     <Link href={url} passHref>
-      <AnchorForward style={{ height: "100%" }}>
+      <AnchorForward className={style.root} style={{ height: "100%" }}>
         <LargeCard
           image={objkt.captureMedia}
           thumbnailUri={objkt.metadata?.displayUri}
@@ -60,6 +60,7 @@ export function LargeGentkCard({
                   size="small"
                   hasLink={false}
                   className={cs(style.badge)}
+                  hasVerified={false}
                 />
               </>
             )}
