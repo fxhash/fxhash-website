@@ -1,4 +1,4 @@
-import { ReactChild, useEffect, useRef, useState, useCallback } from "react"
+import React, { ReactChild, useEffect, useRef, useState, useCallback, useMemo, ReactNode, Children } from "react"
 import style from "./MasonryCardsContainer.module.scss"
 import cs from "classnames"
 import { HTMLAttributes, PropsWithChildren } from "react"
@@ -7,11 +7,13 @@ import { useEventListener } from "../../utils/useEventListener"
 import { ICardContainerProps } from "../../types/Components/CardsContainer"
 
 interface Props extends ICardContainerProps {
-  children?: ReactChild[]
 }
 
-const fillCols = (children: ReactChild[], cols: Array<ReactChild[]>) => {
-  children.forEach((child, i) => cols[i % cols.length].push(child))
+const fillCols = (children: ReactNode, nbCols: number) => {
+  const childrenArray = Children.toArray(children)
+  const cols: ReactNode[][] = [...Array(nbCols)].map(() => [])
+  childrenArray.forEach((child, i) => cols[i%nbCols].push(child))
+  return cols
 }
 
 export function MasonryCardsContainer({
@@ -22,8 +24,9 @@ export function MasonryCardsContainer({
 }: PropsWithChildren<Props>) {
   const elementRef = useRef<HTMLDivElement>(null)
   const [numCols, setNumCols] = useState<number>(3)
-  const cols = [...Array(numCols)].map(() => [])
-  children && fillCols(children, cols)
+  const cols = useMemo(() => {
+    return children && fillCols(children, numCols)
+  }, [children, numCols])
 
   const resizeHandler = useCallback(() => {
     if (elementRef.current) {
@@ -54,7 +57,7 @@ export function MasonryCardsContainer({
         ...props?.style,
       }}
     >
-      {[...Array(numCols)].map((_, index) => (
+      {cols && [...Array(numCols)].map((_, index) => (
         <div key={index} className={style.col}>
           {cols[index]}
         </div>

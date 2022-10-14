@@ -7,6 +7,7 @@ export interface IProps {
   size?: "regular" | "big" | "small"
   prependText?: string
   hasLink?: boolean
+  hasVerified?: boolean
   className?: string
   classNameAvatar?: string
   avatarSide?: "left" | "right"

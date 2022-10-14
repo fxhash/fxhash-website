@@ -265,13 +265,11 @@ export function GenerativeIterations({
                       showRarity={sort.rarity != null}
                     />
                   ))}
+                  {loading && CardsLoading({
+                    number: ITEMS_PER_PAGE,
+                    type: "large"
+                  })}
                 </CContainer>
-                {loading && (
-                  <CardsLoading
-                    type="large"
-                    number={ITEMS_PER_PAGE}
-                  />
-                )}
               </InfiniteScrollTrigger>
             </div>
           </section>
