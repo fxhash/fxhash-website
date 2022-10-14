@@ -69,9 +69,9 @@ export function UserGenerativeTokens({
               displayDetails={settings.displayInfosGenerativeCard}
             />
           ))}
-          {loading && (
-            <CardsLoading number={20} />
-          )}
+          {loading && CardsLoading({
+            number: ITEMS_PER_PAGE,
+          })}
         </CardsContainer>
       </InfiniteScrollTrigger>
     </div>
