@@ -8,11 +8,13 @@ import {
 } from "../../../../types/ArticleEditor/BlockDefinition"
 import { FigcaptionElement } from "./FigcaptionEditor"
 import { VideoAttributeSettings } from "../Video/VideoAttributeSettings"
+import { AudioAttributeSettings } from "../Audio/AudioAttributeSettings"
 
-const medias = ["image", "video"]
+const medias = ["image", "video", "audio"]
 const mediaAttributeSettings: Record<string, TEditAttributeComp> = {
   image: ImageAttributeSettings,
   video: VideoAttributeSettings,
+  audio: AudioAttributeSettings,
 }
 export const figureDefinition: IArticleBlockDefinition<null> = {
   name: "Figure",

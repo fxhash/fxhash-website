@@ -19,7 +19,8 @@ interface ISettingsProperties {
   hoverEffectCard: boolean
   // performances
   quality: number
-  topBannerMessage: string 
+  topBannerMessage: string
+  layoutMasonry: boolean
 }
 
 const Colors = {
@@ -96,7 +97,8 @@ const defaultProperties: ISettingsProperties = {
   displayBurntCard: false,
   hoverEffectCard: true,
   quality: 0,
-  topBannerMessage: '', 
+  topBannerMessage: '',
+  layoutMasonry: true,
 }
 
 const defaultCtx: ISettingsContext = {
