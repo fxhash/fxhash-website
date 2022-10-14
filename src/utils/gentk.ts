@@ -14,7 +14,7 @@ export const fakeGentk: DeepPartial<Objkt> = {
   id: 0,
   name: "[WAITING TO BE SIGNED]",
   owner: {
-    id: "tz1gjftp2aoEkC4xvRfNNkPjcfF2fStESgwo",
+    id: "tz1fepn7jZsCYBqCDhpM63hzh9g2Ytqk4Tpv",
     name: "fxhash",
     avatarUri: "ipfs://QmURUAU4YPa6Wwco3JSVrcN7WfCrFBZH7hY51BLrc87WjM"
   },
@@ -31,9 +31,9 @@ export const fakeGentk: DeepPartial<Objkt> = {
   activeListing: null,
   issuer: {
     author: {
-      id: "tz1PADW67gHdeXY8mxmM13vn7V7oXvW8MgPr",
-      name: "Eltono",
-      avatarUri: "ipfs://QmaAH6byCkjJiki3Q1gx9jdShR2DdP6gCzK2Mk3rx3m3Gx"
+      id: "tz1fepn7jZsCYBqCDhpM63hzh9g2Ytqk4Tpv",
+      name: "fxhash",
+      avatarUri: "ipfs://QmURUAU4YPa6Wwco3JSVrcN7WfCrFBZH7hY51BLrc87WjM"
     },
   },
   rarity: null,

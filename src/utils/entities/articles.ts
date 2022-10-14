@@ -9,7 +9,7 @@ const flagged: ArticleFlag[] = [
 
 export function getArticleUrl(article: NFTArticleInfos): string {
   return isValidSlug(article.slug) && !isArticleFlagged(article)
-    ? `/article/${article.slug}`
+    ? `/article/${encodeURIComponent(article.slug)}`
     : `/article/id/${article.id}`
 }
 

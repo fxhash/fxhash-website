@@ -27,6 +27,7 @@ export interface ISettingsProperties {
   topBannerMessage: string
   nsfw: boolean
   epilepsy: boolean
+  layoutMasonry: boolean
 }
 
 const Colors = {
@@ -110,6 +111,7 @@ const defaultProperties: ISettingsProperties = {
   topBannerMessage: "",
   nsfw: false,
   epilepsy: hasReducedMotion && hasReducedMotion.matches,
+  layoutMasonry: true,
 }
 
 const defaultCtx: ISettingsContext = {

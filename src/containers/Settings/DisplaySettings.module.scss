@@ -25,7 +25,35 @@
     pointer-events: none;
   }
 }
+.settings_layout {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
+.layout_controls {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+
+    & > * {
+      min-height: 34px;
+    }
+
+    & > *+* {
+      margin-top: 12px;
+    }
+}
+.masonry_container {
+  width: 360px; 
+}
+.mini_card { 
+  width: 100%;
+  background: black;
+}
+.mini_card_masonry:not(:last-child) {
+  margin-bottom: calc(var(--cards-gap) * 0.5);
+}
 .slider {
   width: auto !important;
 }

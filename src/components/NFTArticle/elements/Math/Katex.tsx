@@ -1,3 +1,4 @@
+import "katex/dist/katex.min.css"
 import React, { memo, useMemo } from "react"
 import KaTeX from "katex"
 import style from "./BlockKatex.module.scss"

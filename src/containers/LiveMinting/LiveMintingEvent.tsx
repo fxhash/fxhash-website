@@ -79,9 +79,9 @@ const _LiveMintingEvent = ({}: LiveMintingEventProps) => {
             </a>
           </Link>
         ))}
-        {loading && (
-          <CardsLoading number={10} />
-        )}
+        {loading && CardsLoading({
+          number: 10,
+        })}
       </div>
     </div>
   );

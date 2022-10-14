@@ -313,9 +313,9 @@ export function UserCollectionGentks({
                       showRarity={sort.rarity != null}
                     />
                   ))}
-                  {loading && (
-                    <CardsLoading number={ITEMS_PER_PAGE} />
-                  )}
+                  {loading && CardsLoading({
+                    number: ITEMS_PER_PAGE,
+                  })}
 	      	      </CardsContainer>
 		          </InfiniteScrollTrigger>
             </div>

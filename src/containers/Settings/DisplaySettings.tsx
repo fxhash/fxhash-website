@@ -1,7 +1,7 @@
 import style from "./DisplaySettings.module.scss"
 import styleSettings from "./Settings.module.scss"
 import cs from "classnames"
-import { useContext, useEffect, useRef, useState } from "react"
+import { useContext, useEffect, useMemo, useRef, useState } from "react"
 import { Switch } from "../../components/Input/Switch"
 import { ISettingsContext, SettingsContext } from "../../context/Theme"
 import { SettingsGroup } from "./SettingsGroup"
@@ -13,12 +13,26 @@ import { Slider } from "../../components/Input/Slider"
 import { ObjktCard } from "../../components/Card/ObjktCard"
 import { fakeGentk } from "../../utils/gentk"
 import { Objkt } from "../../types/entities/Objkt"
+import { MasonryCardsContainer } from "../../components/Card/MasonryCardsContainer"
+import { CardsContainer } from "../../components/Card/CardsContainer"
 
 interface Props {
   settings: ISettingsContext
   className?: string
 }
+
+const NUM_MASONRY_BOXES = 10
+const SIZE_MASONRY_BOXES = 60
+
 export function DisplaySettings({ settings, className }: Props) {
+  const randomSizes = useMemo(
+    () => [...Array(NUM_MASONRY_BOXES)].map(() => Math.random()),
+    []
+  )
+  const CContainer = settings.layoutMasonry
+    ? MasonryCardsContainer
+    : CardsContainer
+
   return (
     <div className={cs(styleSettings.page)}>
       <SettingsGroup title="General">
@@ -62,6 +76,51 @@ export function DisplaySettings({ settings, className }: Props) {
           />
         </div>
       </SettingsGroup>
+      <SettingsGroup title="Layout">
+        <div className={style.settings_layout}>
+          <div className={style.layout_controls}>
+            <div className={cs(styleSettings.toggle_line)}>
+              <span>Masonry</span>
+              <Switch
+                onChange={(value) => settings.update("layoutMasonry", value)}
+                value={settings.layoutMasonry}
+              />
+            </div>
+            <div className={cs(styleSettings.toggle_line)}>
+              <span>Gap between cards</span>
+              <Slider
+                value={settings.spaceBetweenCards}
+                onChange={(val) => settings.update("spaceBetweenCards", val)}
+                className={cs(style.slider)}
+                min={0}
+                max={30}
+                step={1}
+              />
+            </div>
+          </div>
+          <div className={style.masonry_container}>
+            <CContainer 
+              cardSize={SIZE_MASONRY_BOXES}
+              addDivs={false}
+              style={{
+                gap: "calc(var(--cards-gap) * 0.5)",
+              }}
+            >
+              {randomSizes.map((size, i) => (
+                <div
+                  key={`mini_card-${size}-${i}`}
+                  className={cs(style.mini_card ,{
+                    [style.mini_card_masonry]: settings.layoutMasonry
+                  })}
+                  style={{
+                    height: SIZE_MASONRY_BOXES + size * SIZE_MASONRY_BOXES,
+                  }}
+                />
+              ))}
+            </CContainer>
+          </div>
+        </div>
+      </SettingsGroup>
 
       <SettingsGroup title="Cards design">
         <div className={cs(style.settings_card)}>
@@ -97,13 +156,6 @@ export function DisplaySettings({ settings, className }: Props) {
                 min={0}
                 max={30}
                 step={1}
-              />
-            </div>
-            <div className={cs(styleSettings.toggle_line)}>
-              <span>Hover effect</span>
-              <Switch
-                onChange={(value) => settings.update("hoverEffectCard", value)}
-                value={settings.hoverEffectCard}
               />
             </div>
           </div>

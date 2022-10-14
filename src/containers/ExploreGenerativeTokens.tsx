@@ -153,9 +153,9 @@ export const ExploreGenerativeTokens = ({ }: Props) => {
                   displayDetails={settingsCtx.displayInfosGenerativeCard}
                 />
               ))}
-              {loading && (
-                <CardsLoading number={ITEMS_PER_PAGE}/>
-              )}
+              {loading && CardsLoading({
+                number: ITEMS_PER_PAGE,
+              })}
             </CardsContainer>
           </InfiniteScrollTrigger>
         }

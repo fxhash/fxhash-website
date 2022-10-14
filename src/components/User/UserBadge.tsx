@@ -54,6 +54,7 @@ export function UserBadge({
   prependText,
   size = "regular",
   hasLink = true,
+  hasVerified = true,
   avatarSide = "left",
   displayAddress = false,
   displayAvatar = true,
@@ -64,7 +65,7 @@ export function UserBadge({
 }: Props) {
   // the user goes through an aliases check
   const userAlias = useMemo(() => user && userAliases(user), [user])
-  const verified = user && isUserVerified(user)
+  const verified = user && hasVerified && isUserVerified(user)
   // alias can force no link
   hasLink = user && hasLink && !userAlias.preventLink
   // the wrapper component, either a link or a div

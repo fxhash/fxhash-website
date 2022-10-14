@@ -19,13 +19,7 @@ interface Props {
 export function CardsLoading({ number = 15, type = "regular" }: Props) {
   const CardLoadingComp = mapCardLoading[type]
 
-  return (
-    <>
-      {Array(number)
-        .fill(0)
-        .map((_, idx) => (
-          <CardLoadingComp key={idx} />
-        ))}
-    </>
-  )
+  return Array(number)
+    .fill(0)
+    .map((_, idx) => <CardLoadingComp key={idx} />)
 }

@@ -17,6 +17,7 @@ import { mathProcessor } from "../elements/Math/MathProcessor"
 import { imageProcessor } from "../elements/Image/ImageProcessor"
 import { videoProcessor } from "../elements/Video/VideoProcessor"
 import { mentionProcessor } from "../elements/Mention/MentionProcessor"
+import { audioProcessor } from "../elements/Audio/AudioProcessor"
 
 interface DirectiveNodeProps {
   [key: string]: any
@@ -24,6 +25,7 @@ interface DirectiveNodeProps {
 
 const directives: Record<string, (node: any) => object> = {
   video: videoProcessor.transformMarkdownMdhastToSlate!,
+  audio: audioProcessor.transformMarkdownMdhastToSlate!,
 }
 
 function createDirectiveNode(
@@ -34,6 +36,7 @@ function createDirectiveNode(
   const hProperties: { [key: string]: any } = (data.hProperties || {}) as {
     [key: string]: any
   }
+
   // extract only defined props to avoid error serialization of undefined
   const propertiesWithoutUndefined: DirectiveNodeProps = Object.keys(
     hProperties
