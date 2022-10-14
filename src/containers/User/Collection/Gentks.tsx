@@ -22,8 +22,7 @@ import { CardsLoading } from "../../../components/Card/CardsLoading"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useQuery } from "@apollo/client"
 import { Qu_userObjkts } from "../../../queries/user"
-import { Objkt } from "../../../types/entities/Objkt"
-
+import { CardSizeSelect } from "../../../components/Input/CardSizeSelect"
 
 const ITEMS_PER_PAGE = 40
 
@@ -206,7 +205,7 @@ export function UserCollectionGentks({
   }, [filters])
 
   return (
-    <CardsExplorer>
+    <CardsExplorer cardSizeScope="user-collection">
       {({
         filtersVisible,
         setFiltersVisible,
@@ -214,6 +213,8 @@ export function UserCollectionGentks({
         inViewCardsContainer,
         setIsSearchMinimized,
         isSearchMinimized,
+        cardSize,
+        setCardSize
       }) => (
         <>
           <div ref={topMarkerRef}/>
@@ -245,6 +246,9 @@ export function UserCollectionGentks({
                   onChange={setSortValue}
                 />
               </div>
+            }
+            sizeSelectComp={
+                <CardSizeSelect value={cardSize} onChange={setCardSize} />
             }
           >
             <SearchInputControlled
