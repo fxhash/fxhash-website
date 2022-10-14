@@ -1,0 +1,16 @@
+.container {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+
+  span {
+    font-weight: bold;
+    font-size: var(--font-size-h4);
+  }
+
+  input {
+    min-width: 0;
+    text-align: center;
+    font-weight: bold;
+  }
+}
