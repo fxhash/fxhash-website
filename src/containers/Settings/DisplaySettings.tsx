@@ -117,17 +117,6 @@ export function DisplaySettings({ settings, className }: Props) {
               />
             </div>
             <div className={cs(styleSettings.toggle_line)}>
-              <span>Gap between cards</span>
-              <Slider
-                value={settings.spaceBetweenCards}
-                onChange={(val) => settings.update("spaceBetweenCards", val)}
-                className={cs(style.slider)}
-                min={0}
-                max={30}
-                step={1}
-              />
-            </div>
-            <div className={cs(styleSettings.toggle_line)}>
               <span>Hover effect</span>
               <Switch
                 onChange={(value) => settings.update("hoverEffectCard", value)}
