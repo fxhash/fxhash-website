@@ -4,6 +4,7 @@
   nav {
     border-bottom: 3px solid var(--color-gray-light);
     display: flex;
+    flex-direction: row;
   }
 
   &.layout-fixed-size {
@@ -84,14 +85,6 @@
 .tab-fixed-size {
   padding-left: 80px;
   padding-right: 80px;
-
-  @media (max-width: $breakpoint-lg) {
-    padding-left: 0;
-    padding-right: 0;
-    flex: 1 1 0px;
-    display: flex;
-    justify-content: center;
-  }
 }
 
 .tab-full-width {
@@ -101,46 +94,74 @@
 }
 
 @media (max-width: $breakpoint-sm) {
+  .container {
+    overflow-x: auto;
+    -ms-overflow-style: none; /* for Internet Explorer, Edge */
+    scrollbar-width: none;
+    &::-webkit-scrollbar {
+      display: none; /* for Chrome, Safari, and Opera */
+    }
+  }
   .container nav {
-    flex-direction: column;
-    align-items: flex-start;
-    border: none;
-    border-left: 3px solid var(--color-gray-light);
-    padding: 3px 0;
+    min-width: fit-content;
+  }
+
+  .container.layout-fixed-size nav {
+    justify-content: flex-start;
   }
 
   .container.layout-subtabs nav {
-    display: grid;
-    align-items: stretch;
-    padding: 0;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 4px;
     border: none;
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .tab {
-    padding-left: var(--layout-margin-big-sm);
+    padding: 0 16px 10px 0;
+    margin-bottom: 0;
     position: relative;
-    left: -3px;
     border: none;
-    width: 100%;
-    justify-content: flex-start;
+    white-space: nowrap;
+    &:last-child {
+      padding-right: 0;
+    }
 
     &.active {
       border: none;
-      border-left: 3px solid var(--color-black);
+      &:after {
+        content: "";
+        position: absolute;
+        bottom: -3px;
+        left: 0;
+        right: 0;
+        height: 3px;
+        z-index: 150;
+        background-color: var(--color-black);
+        width: 100%;
+      }
     }
   }
 
   .tab-subtabs {
+    padding: 8px 12px;
+    position: relative;
+    border: none;
     left: 0;
+    flex: 1 0 auto;
     display: inline-flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
-
+    font-size: var(--font-size-big);
     &+& {
       margin-left: 0;
+    }
+    &:after {
+      display: none;
     }
   }
 }
