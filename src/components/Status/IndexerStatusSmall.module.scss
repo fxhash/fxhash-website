@@ -1,0 +1,19 @@
+.root {
+  :first-child {
+    margin-right: 10px;
+  }
+  .low {
+    color: var(--color-success)
+  }
+  .medium {
+    color: var(--color-warning)
+  }
+  .high {
+    color: var(--color-error)
+  }
+}
+.loader {
+  display: inline-block;
+  vertical-align: sub;
+}
+
