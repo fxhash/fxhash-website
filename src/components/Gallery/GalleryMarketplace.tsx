@@ -186,7 +186,9 @@ export const GalleryMarketplace = ({
                 listings.map((offer) => (
                   <ObjktCard key={offer.id} objkt={offer.objkt} />
                 ))}
-              {loading && <CardsLoading number={ITEMS_PER_PAGE} />}
+              {loading && CardsLoading({
+                number: ITEMS_PER_PAGE
+              })}
             </CardsContainer>
           </InfiniteScrollTrigger>
         )}
