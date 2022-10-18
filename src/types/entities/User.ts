@@ -106,3 +106,8 @@ export interface IUserCollectionFilters {
   author_in?: string[]
   searchQuery_eq?: string
 }
+
+export interface UserFilters {
+  flag_in?: UserFlag[]
+  searchQuery_eq?: string
+}

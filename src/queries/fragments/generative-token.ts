@@ -79,30 +79,6 @@ export const Frag_GenArticleMentions = gql`
     }
   }
 `
-export const Frag_GenTokenMini = gql`
-  ${Frag_GenAuthor}
-  ${Frag_GenPricing}
-  ${Frag_MediaImage}
-  fragment TokenInfo on GenerativeToken {
-    id
-    name
-    slug
-    flag
-    labels
-    supply
-    originalSupply
-    balance
-    enabled
-    royalties
-    createdAt
-    thumbnailUri
-    captureMedia {
-      ...MediaImage
-    }
-    ...Pricing
-    ...Author
-  }
-`
 
 export const Frag_GenTokenBadge = gql`
   ${Frag_GenAuthor}
@@ -124,6 +100,7 @@ export const Frag_GenTokenInfo = gql`
   ${Frag_GenTokenBadge}
   fragment TokenInfo on GenerativeToken {
     ...TokenBadge
+    id
     slug
     flag
     labels
@@ -133,6 +110,9 @@ export const Frag_GenTokenInfo = gql`
     enabled
     royalties
     createdAt
+    reserves {
+      amount
+    }
     ...Pricing
   }
 `

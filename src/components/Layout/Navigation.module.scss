@@ -1,11 +1,21 @@
-@import "../styles/Variables.scss";
+@import "../../styles/Variables";
 
 .nav {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: flex-end;
   .content {
+    flex: 1;
     display: flex;
     align-items: center;
-
-    a, button {
+    justify-content: flex-end;
+    .links {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+    }
+    .nav_button {
       font-weight: bold;
       color: var(--color-gray);
       transition: color 0.3s ease-out;
@@ -18,7 +28,7 @@
 
       &.active {
         position: relative;
-  
+
         &:after {
           content: "";
           display: block;
@@ -54,8 +64,9 @@
   }
 
   .hamburger {
-    width: 50px;
-    height: 50px;
+    flex-shrink: 0;
+    width: 25px;
+    height: 25px;
     background-color: transparent;
     border: none;
     // padding: 10px;
@@ -64,34 +75,34 @@
     position: relative;
     cursor: pointer;
     display: none;
-  
+
     div {
       width: 100%;
       height: 3px;
-      background-color: var(--color-black);
+      background-color: var(--color-gray);
       position: absolute;
       transition: all 0.2s ease-out;
-  
+
       &:nth-child(1) {
-        transform: scaleX(0.9) translateY(-15px);
+        transform: scaleX(1) translateY(-12px);
       }
       &:nth-child(2) {
-        transform: scaleX(0.9);
+        transform: scaleX(1) translateY(-1.5px);
       }
       &:nth-child(3) {
-        transform: scaleX(0.9) translateY(15px);
+        transform: scaleX(1) translateY(9px);
       }
 
       &:hover {
         div {
           &:nth-child(1) {
-            transform: scaleX(1) translateY(-12px);
+            transform: scaleX(1) translateY(-6px);
           }
           &:nth-child(2) {
-            transform: scaleX(1);
+            transform: scaleX(1) translateY(0);
           }
           &:nth-child(3) {
-            transform: scaleX(1) translateY(12px);
+            transform: scaleX(1) translateY(6px);
           }
         }
       }
@@ -105,7 +116,7 @@
           transform: scaleX(1) translateY(0);
         }
         &:nth-child(2) {
-          transform: scaleX(1);
+          transform: scaleX(1) translateY(0);
         }
         &:nth-child(3) {
           transform: scaleX(1) translateY(0);
@@ -122,30 +133,7 @@
     }
 
     .content {
-      width: 100%;
-      height: 100%;
-      padding-top: 20px;
-      padding-right: 15px;
-      background-color: var(--color-white);
-      position: fixed;
-      flex-direction: column;
-      align-items: flex-end;
-      right: -100%;
-      z-index: 1000;
-      transition: all 0.3s ease-out;
-      pointer-events: none;
-
-      a, button { 
-        padding-top: 8px;
-        padding-bottom: 8px;
-      }
-    }
-
-    &.opened {
-      .content {
-        right: 0;
-        pointer-events: all;
-      }
+      display: none;
     }
   }
 }
@@ -173,4 +161,52 @@
 
 .settings_container {
   padding: 0 8px;
+}
+
+.search, .search_mobile {
+  margin-right: 24px;
+  &--open {
+    flex-basis: 350px;
+  }
+  & button {
+    font-size: var(--font-size-regular);
+    color: var(--color-gray);
+    transition: color 0.3s ease-out;
+    &:hover {
+      color: var(--color-black);
+    }
+  }
+}
+
+.nav .search_mobile {
+  display: none;
+  margin-right: 26px;
+  & button {
+    font-size: 25px;
+  }
+}
+
+@media (max-width: $breakpoint-md) {
+  .nav .search_mobile {
+    display: flex;
+  }
+  .search {
+    margin-right: 6px;
+    margin-bottom: 8px;
+    &--open {
+      width: 100%;
+      max-width: 350px;
+      flex-shrink: 0;
+      flex-basis: auto;
+      & input {
+        font-size: var(--font-size-regular);
+      }
+    }
+  }
+}
+
+@media (min-width: $breakpoint-md) and (max-width: 1200px) {
+  .nav .content .links_minimized {
+    display: none;
+  }
 }
