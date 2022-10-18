@@ -1,25 +1,37 @@
-@import "../styles/Variables.scss";
+@import "../../styles/Variables";
 
 .header {
-  height: 140px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0px var(--main-padding-sm);
+  min-height: 140px;
+  padding: 18px var(--main-padding-sm);
   padding-left: 10px;
+  overflow-y: hidden;
 
   @media (max-width: $breakpoint-md) {
+    min-height: 90px;
     padding-left: 0;
   }
 }
 
 .logo {
+  height: 0;
   display: flex;
   align-items: center;
   color: var(--color-black);
   font-size: 24px;
-  
+
   span {
     display: none;
+  }
+}
+
+@media (max-width: 490px) {
+  .logo--hide {
+    display: none;
+  }
+  .header--search-opened {
+    padding-left: var(--main-padding-sm);
   }
 }

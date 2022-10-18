@@ -4,13 +4,13 @@ import { UserBadge } from "./UserBadge"
 
 export interface IProps {
   user: User
-  size?: "regular" | "big" | "small"
+  size?: "small" | "regular" | "big" | "xl"
   prependText?: string
   hasLink?: boolean
   hasVerified?: boolean
   className?: string
+  avatarSide?: "left" | "right" | "top"
   classNameAvatar?: string
-  avatarSide?: "left" | "right"
   displayAddress?: boolean
   displayAvatar?: boolean
   toggeable?: boolean

@@ -22,6 +22,7 @@ interface WrapperProps {
   newTab?: boolean
   children: ReactNode
   isInline?: boolean
+  avatarSide?: "left" | "right" | "top"
 }
 
 const WrapperLink = ({
@@ -30,6 +31,7 @@ const WrapperLink = ({
   newTab,
   children,
   isInline,
+  avatarSide,
 }: WrapperProps) => {
   const Container = isInline ? "span" : "div"
   return (
@@ -38,15 +40,34 @@ const WrapperLink = ({
         className={cs(style.link, style.default_font_styles, className)}
         target={newTab ? "_blank" : "_self"}
       >
-        <Container className={style.container}>{children}</Container>
+        <Container className={cs(style.container, style[`side-${avatarSide}`])}>
+          {children}
+        </Container>
       </a>
     </Link>
   )
 }
 
-const WrapperDiv = ({ className, user, children, isInline }: WrapperProps) => {
+const WrapperDiv = ({
+  className,
+  user,
+  children,
+  isInline,
+  avatarSide,
+}: WrapperProps) => {
   const Container = isInline ? "span" : "div"
-  return <Container className={className}>{children}</Container>
+  return (
+    <Container
+      className={cs(
+        className,
+        style.default_font_styles,
+        style.container,
+        style[`side-${avatarSide}`]
+      )}
+    >
+      {children}
+    </Container>
+  )
 }
 
 export function UserBadge({
@@ -76,16 +97,15 @@ export function UserBadge({
     <Wrapper
       className={cs(
         {
-          [style.container]: !hasLink,
-          [style.default_font_styles]: !hasLink,
           [style.no_avatar]: !displayAvatar,
         },
-        style[`side-${avatarSide}`],
+        style[`container_size_${size}`],
         className
       )}
       isInline={isInline}
       user={userAlias}
       newTab={newTab}
+      avatarSide={avatarSide}
     >
       {displayAvatar && (
         <Avatar

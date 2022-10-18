@@ -4,7 +4,7 @@
 import { ApolloProvider } from "@apollo/client"
 import { useRouter } from "next/router"
 import { Fragment, PropsWithChildren } from "react"
-import { Layout } from "../components/Layout"
+import { Layout } from "../components/Layout/Layout"
 import { clientSideClient } from "../services/ApolloClient"
 import { UserProvider } from "./UserProvider"
 import { SettingsProvider } from "../context/Theme"

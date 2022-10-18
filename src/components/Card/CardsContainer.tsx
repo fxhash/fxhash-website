@@ -1,11 +1,11 @@
 import style from "./CardsContainer.module.scss"
 import cs from "classnames"
-import { forwardRef } from "react"
+import { forwardRef, HTMLAttributes, PropsWithChildren } from "react"
 import { ICardContainerProps } from "../../types/Components/CardsContainer"
 
 interface Props extends ICardContainerProps {}
 export const CardsContainer = forwardRef<HTMLDivElement, Props>(
-  ({ children, cardSize, addDivs = true, ...props }: Props, ref) => {
+  ({ children, cardSize, emptyDivs = 8, ...props }: Props, ref) => {
     return (
       <div
         {...props}
@@ -18,18 +18,11 @@ export const CardsContainer = forwardRef<HTMLDivElement, Props>(
         }}
       >
         {children}
-        {addDivs && (
-          <>
-            <div />
-            <div />
-            <div />
-            <div />
-            <div />
-            <div />
-            <div />
-            <div />
-          </>
-        )}
+        {Array(emptyDivs)
+          .fill(0)
+          .map((_, idx) => (
+            <div key={idx} />
+          ))}
       </div>
     )
   }
