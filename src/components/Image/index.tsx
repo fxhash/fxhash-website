@@ -151,36 +151,33 @@ function ReactiveImage({
     }
   }, [])
 
-  const updateImageUrl = useCallback(
-    () => {
-      // no media element = pull image from IPFS directly
-      if (!image || trueResolution) {
-        setUrl(gatewayUrl)
-        return
-      }
+  const updateImageUrl = useCallback(() => {
+    // no media element = pull image from IPFS directly
+    if (!image || trueResolution) {
+      setUrl(gatewayUrl)
+      return
+    }
 
-      // compute available space and load the appropriate image accordingly
-      const space = getViewportSpace()
-      // find the best width based on available space
-      let width = sizes[sizes.length - 1]
-      for (const w of sizes) {
-        if (w > space.width) {
-          width = w
-          break
-        }
+    // compute available space and load the appropriate image accordingly
+    const space = getViewportSpace()
+    // find the best width based on available space
+    let width = sizes[sizes.length - 1]
+    for (const w of sizes) {
+      if (w > space.width) {
+        width = w
+        break
       }
+    }
 
-      // get the current highest width, fallback to 0 if none is found
-      const hw = highestWidth.current[image!.cid] || 0
+    // get the current highest width, fallback to 0 if none is found
+    const hw = highestWidth.current[image!.cid] || 0
 
-      // if target size is greater than the highest size loaded, we update
-      if (width > hw) {
-        highestWidth.current[image!.cid] = width
-        setUrl(getImageApiUrl(image?.cid, width))
-      }
-    },
-    [getViewportSpace, image, ipfsUri]
-  )
+    // if target size is greater than the highest size loaded, we update
+    if (width > hw) {
+      highestWidth.current[image!.cid] = width
+      setUrl(getImageApiUrl(image?.cid, width))
+    }
+  }, [getViewportSpace, image, ipfsUri])
 
   // attach a resize observer to the element, which will eventually fetch a
   // higher resolution image if needed
