@@ -109,6 +109,8 @@ function SimpleImage({
   )
 }
 
+type THighestWidth = Record<string, number>
+
 function ReactiveImage({
   image,
   ipfsUri,
@@ -131,7 +133,7 @@ function ReactiveImage({
   )
 
   // keep a reference to the highest size loaded
-  const highestWidth = useRef(0)
+  const highestWidth = useRef<THighestWidth>({})
 
   // returns the viewport available space based on the wrapper viewport
   // dimensions, or [1, 1] if ref doesn't exist
@@ -151,8 +153,8 @@ function ReactiveImage({
 
   const updateImageUrl = useCallback(() => {
     // no media element = pull image from IPFS directly
-    if (!image) {
-      setUrl(ipfsGatewayUrl(ipfsUri, EGatewayIpfs.FXHASH))
+    if (!image || trueResolution) {
+      setUrl(gatewayUrl)
       return
     }
 
@@ -167,13 +169,15 @@ function ReactiveImage({
       }
     }
 
+    // get the current highest width, fallback to 0 if none is found
+    const hw = highestWidth.current[image!.cid] || 0
+
     // if target size is greater than the highest size loaded, we update
-    if (width > highestWidth.current) {
-      highestWidth.current = width
-      const imageUrl = getImageApiUrl(image?.cid, width)
-      setUrl(imageUrl)
+    if (width > hw) {
+      highestWidth.current[image!.cid] = width
+      setUrl(getImageApiUrl(image?.cid, width))
     }
-  }, [])
+  }, [getViewportSpace, image, ipfsUri])
 
   // attach a resize observer to the element, which will eventually fetch a
   // higher resolution image if needed
@@ -194,12 +198,17 @@ function ReactiveImage({
         ref.current && observer.disconnect()
       }
     }
-  }, [image, ipfsUri, gatewayUrl])
+  }, [image, ipfsUri, gatewayUrl, trueResolution, updateImageUrl])
+
+  useEffect(() => {
+    // new image will update updateImageUrl hence trigger a change
+    updateImageUrl()
+  }, [updateImageUrl])
 
   // triggers an error if an image has not yet been loaded
   const triggerError = useCallback(() => {
     !loaded && onError?.()
-  }, [loaded])
+  }, [loaded, onError])
 
   // when the image is loaded
   const isLoaded = useCallback(() => {

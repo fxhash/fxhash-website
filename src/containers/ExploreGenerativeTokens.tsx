@@ -182,17 +182,17 @@ export const ExploreGenerativeTokens = ({
             canTrigger={!hasNothingToFetch && !loading}
           >
             <CardsContainer ref={refCardsContainer}>
-              {generativeTokens &&
-                generativeTokens.length > 0 &&
-                generativeTokens.map((token) => (
-                  <GenerativeTokenCard
-                    key={token.id}
-                    token={token}
-                    displayPrice={settingsCtx.displayPricesCard}
-                    displayDetails={settingsCtx.displayInfosGenerativeCard}
-                  />
-                ))}
-              {loading && <CardsLoading number={ITEMS_PER_PAGE} />}
+              {generativeTokens && generativeTokens.length > 0 && generativeTokens.map(token => (
+                <GenerativeTokenCard
+                  key={token.id}
+                  token={token}
+                  displayPrice={settingsCtx.displayPricesCard}
+                  displayDetails={settingsCtx.displayInfosGenerativeCard}
+                />
+              ))}
+              {loading && CardsLoading({
+                number: ITEMS_PER_PAGE,
+              })}
             </CardsContainer>
           </InfiniteScrollTrigger>
         )}

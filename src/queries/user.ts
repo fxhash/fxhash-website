@@ -92,6 +92,7 @@ export const Qu_userEntireCollection = gql`
           name
           flag
           generativeUri
+          labels
           ...Author
         }
         name
@@ -139,6 +140,7 @@ export const Qu_userObjkts = gql`
           name
           flag
           generativeUri
+          labels
           ...Author
         }
         name
@@ -218,6 +220,7 @@ export const Qu_userListings = gql`
           }
           issuer {
             flag
+            labels
             ...Author
           }
         }

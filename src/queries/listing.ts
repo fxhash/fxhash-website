@@ -10,7 +10,6 @@ export const Qu_listings = gql`
     $filters: ListingFilter
   ) {
     listings(skip: $skip, take: $take, sort: $sort, filters: $filters) {
-      id
       ...ListingCardInfos
     }
   }

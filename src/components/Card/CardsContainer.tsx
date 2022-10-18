@@ -1,25 +1,21 @@
 import style from "./CardsContainer.module.scss"
 import cs from "classnames"
 import { forwardRef, HTMLAttributes, PropsWithChildren } from "react"
+import { ICardContainerProps } from "../../types/Components/CardsContainer"
 
-interface CardsContainerProps extends HTMLAttributes<HTMLDivElement> {
-  emptyDivs?: number
-}
-
-export const CardsContainer = forwardRef<HTMLDivElement, CardsContainerProps>(
-  (
-    {
-      children,
-      emptyDivs = 8,
-      ...props
-    }: PropsWithChildren<CardsContainerProps>,
-    ref
-  ) => {
+interface Props extends ICardContainerProps {}
+export const CardsContainer = forwardRef<HTMLDivElement, Props>(
+  ({ children, cardSize, emptyDivs = 8, ...props }: Props, ref) => {
     return (
       <div
         {...props}
         className={cs(style.container, props.className)}
         ref={ref}
+        style={{
+          gridTemplateColumns:
+            cardSize && `repeat(auto-fit, minmax(${cardSize}px, 1fr))`,
+          ...props?.style,
+        }}
       >
         {children}
         {Array(emptyDivs)

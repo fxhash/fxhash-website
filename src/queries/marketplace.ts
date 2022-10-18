@@ -26,6 +26,7 @@ export const Qu_genTokListings = gql`
             name
             flag
             avatarUri
+            labels
           }
         }
         owner {

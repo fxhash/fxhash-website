@@ -1,5 +1,6 @@
 import { BlockParamsModal } from "./UI/BlockParamsModal"
 import { TezosStorageSettings } from "../elements/TezosStorage/TezosStorageSettings"
+import { audioDefinition } from "../elements/Audio/AudioDefinition"
 import TezosStorageEditor from "../elements/TezosStorage/TezosStorageEditor"
 import { EBreakBehavior } from "./Plugins/SlateBreaksPlugin"
 import { IArticleBlockDefinition } from "../../../types/ArticleEditor/BlockDefinition"
@@ -56,6 +57,7 @@ export enum EArticleBlocks {
   "image" = "image",
   "video" = "video",
   "mention" = "mention",
+  "audio" = "audio",
 }
 
 export const ArticleBlocksList: (keyof EArticleBlocks)[] = Object.keys(
@@ -69,6 +71,7 @@ export const InstantiableArticleBlocksList: EArticleBlocks[] = [
   EArticleBlocks["tezos-storage-pointer"],
   EArticleBlocks.image,
   EArticleBlocks.video,
+  EArticleBlocks.audio,
   EArticleBlocks["embed-media"],
   EArticleBlocks.math,
   EArticleBlocks.table,
@@ -135,6 +138,7 @@ export const BlockDefinitions: Record<
   figcaption: figcaptionDefinition,
   image: imageDefinition,
   video: videoDefinition,
+  audio: audioDefinition,
   mention: mentionDefinition,
   html: {
     name: "HTML",

@@ -1,9 +1,5 @@
-import React, {
-  memo,
-  useCallback,
-  useContext,
-  useMemo,
-} from "react"
+import "katex/dist/katex.min.css"
+import React, { memo, useCallback, useContext, useMemo } from "react"
 import style from "./PageArticle.module.scss"
 import { NFTArticle } from "../../types/entities/Article"
 import { UserBadge } from "../../components/User/UserBadge"
@@ -35,6 +31,7 @@ import { ArticleActions } from "./ArticleActions"
 import { TabsContainer } from "../../components/Layout/TabsContainer"
 import { useContractOperation } from "../../hooks/useContractOperation"
 import { LockArticleOperation } from "../../services/contract-operations/LockArticle"
+import { ArticleQuickCollect } from "./Infos/ArticleQuickCollect"
 
 const NftArticle = dynamic<NftArticleProps>(
   () =>
@@ -144,12 +141,6 @@ const _PageArticle = ({ article, originUrl, isPreview }: PageArticleProps) => {
           property="og:image"
           content={ipfsGatewayUrl(article.thumbnailUri)}
         />
-        <link
-          rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/katex@0.15.0/dist/katex.min.css"
-          crossOrigin="anonymous"
-        />
-
         <meta name="twitter:site" content="@fx_hash_" />
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:title" content={title} />
@@ -241,6 +232,13 @@ const _PageArticle = ({ article, originUrl, isPreview }: PageArticleProps) => {
             </time>
           </div>
           <h1 className={cs(style.title)}>{title}</h1>
+          <ArticleQuickCollect article={article}>
+            {({ collectAction }) => (
+              <div className={cs(style.collect)}>
+                {collectAction}
+              </div>
+            )}
+          </ArticleQuickCollect>
           <p className={cs(style.description, style.awidth)}>{description}</p>
           <figure className={cs(style.thumbnail)}>
             <ImagePolymorphic uri={article.displayUri} />

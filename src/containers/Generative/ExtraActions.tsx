@@ -37,12 +37,12 @@ export function GenerativeExtraActions({
 }: Props) {
   const userCtx = useContext(UserContext)
   const user = userCtx.user!
-  
+
   const [reportModal, setReportModal] = useState<boolean>(false)
   const [moderateModal, setModerateModal] = useState<boolean>(false)
   const [editLabelsModal, setEditLabelsModal] = useState<boolean>(false)
 
-  const { state: callState, loading: contractLoading, success, call, error: contractError } = 
+  const { state: callState, loading: contractLoading, success, call, error: contractError } =
     useContractCall<ReportCall>(userCtx.walletManager!.report)
 
   const report = () => {

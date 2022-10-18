@@ -66,7 +66,7 @@ export function GenerativeArtwork({
   return (
     <>
       <SquareContainer>
-        <ArtworkFrame>
+        <ArtworkFrame tokenLabels={token.labels}>
           {displayImage ? (
             <Image
               image={token.captureMedia}
@@ -76,6 +76,7 @@ export function GenerativeArtwork({
             />
           ) : (
             <ArtworkIframe
+              tokenLabels={token.labels}
               ref={iframeRef}
               url={artifactUrl}
               hasLoading={false}

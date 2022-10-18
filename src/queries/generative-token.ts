@@ -138,6 +138,10 @@ export const Qu_genTokenIterations = gql`
         id
         version
         iteration
+        issuer {
+          flag
+          labels
+        }
         owner {
           ...UserBadgeInfos
         }

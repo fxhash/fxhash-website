@@ -105,9 +105,9 @@ export const ExploreIncomingTokens = ({ }: Props) => {
               lockedUntil={token.lockEnd as any}
             />
           ))}
-          {loading && (
-            <CardsLoading number={ITEMS_PER_PAGE} />
-          )}
+          {loading && CardsLoading({
+            number: ITEMS_PER_PAGE,
+          })}
         </CardsContainer>
       </InfiniteScrollTrigger>
     </>

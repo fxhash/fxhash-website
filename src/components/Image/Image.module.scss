@@ -15,6 +15,7 @@
   top: 0;
   left: 0;
   animation: none;
+  border-radius: inherit;
 
   &.wrapper_contain {
     height: 100%;
@@ -24,7 +25,7 @@
       object-fit: contain;
     }
   }
-  
+
   &.wrapper_cover {
     height: 100%;
     background-size: cover;
@@ -37,7 +38,7 @@
 
   &.wrapper_responsive {
     background-size: cover;
-    
+
     img {
       position: absolute;
       top: 0;
