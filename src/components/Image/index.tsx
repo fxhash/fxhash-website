@@ -109,7 +109,10 @@ function SimpleImage({
   )
 }
 
-type THighestWidth = Record<string, number>
+interface ImageLoaded {
+  cid: string
+  highestWidth: number
+}
 
 function ReactiveImage({
   image,
@@ -132,8 +135,8 @@ function ReactiveImage({
     [ipfsUri]
   )
 
-  // keep a reference to the highest size loaded
-  const highestWidth = useRef<THighestWidth>({})
+  // keep a reference to the image loaded (cid & highest width)
+  const imageLoaded = useRef<ImageLoaded | null>(null)
 
   // returns the viewport available space based on the wrapper viewport
   // dimensions, or [1, 1] if ref doesn't exist
@@ -169,13 +172,15 @@ function ReactiveImage({
       }
     }
 
-    // get the current highest width, fallback to 0 if none is found
-    const hw = highestWidth.current[image!.cid] || 0
-
-    // if target size is greater than the highest size loaded, we update
-    if (width > hw) {
-      highestWidth.current[image!.cid] = width
-      setUrl(getImageApiUrl(image?.cid, width))
+    // if target size is greater than the highest size loaded, or if there is no
+    // image currently loaded or if CIDs don't match
+    const loaded = imageLoaded.current
+    if (!loaded || loaded.cid !== image.cid || loaded.highestWidth < width) {
+      imageLoaded.current = {
+        cid: image.cid,
+        highestWidth: width,
+      }
+      setUrl(getImageApiUrl(image.cid, width))
     }
   }, [getViewportSpace, image, ipfsUri])
 
@@ -199,11 +204,6 @@ function ReactiveImage({
       }
     }
   }, [image, ipfsUri, gatewayUrl, trueResolution, updateImageUrl])
-
-  useEffect(() => {
-    // new image will update updateImageUrl hence trigger a change
-    updateImageUrl()
-  }, [updateImageUrl])
 
   // triggers an error if an image has not yet been loaded
   const triggerError = useCallback(() => {
