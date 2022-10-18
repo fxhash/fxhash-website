@@ -1,9 +1,13 @@
 .root {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 1rem;
   & > div {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+
   }
 }

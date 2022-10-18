@@ -1,7 +1,6 @@
 import style from "./IndexerStatusDetails.module.scss"
 import { IndexerStatus, NetworkStatus } from "../../types/IndexerStatus"
-import { formatDistanceToNow, formatDistanceStrict } from "date-fns"
-import { IndexerStatusSmall } from "./IndexerStatusSmall"
+import { formatDistanceStrict, format } from "date-fns"
 
 interface Props {
   status: IndexerStatus
@@ -12,13 +11,14 @@ export function IndexerStatusDetails({ status, networkStatus }: Props) {
   return (
     <div className={style.root}>
       <div>
-        <div>Indexer Status</div>
+        <b>Last block indexed</b>
         <div>
-          {Number((status.level / networkStatus.level) * 100).toFixed(3)}%
+          {format(new Date(status.lastIndexedAt), "dd.MM.yyyy - HH:mm")}
+          &nbsp;/&nbsp;#{status.level}
         </div>
       </div>
       <div>
-        <div>Indexer is behind the blockhain by</div>
+        <b>Distance with Blockchain</b>
         <div>
           {formatDistanceStrict(
             new Date(status.lastIndexedAt),
@@ -26,18 +26,6 @@ export function IndexerStatusDetails({ status, networkStatus }: Props) {
           )}{" "}
           / {networkStatus.level - status.level} blocks
         </div>
-      </div>
-      <div>
-        <div>Time of last indexer block processed</div>
-        <div>
-          {formatDistanceToNow(new Date(status.lastIndexedAt), {
-            addSuffix: true,
-          })}
-        </div>
-      </div>
-      <div>
-        <div>Index of last block processed</div>
-        <div>#{status.level}</div>
       </div>
     </div>
   )

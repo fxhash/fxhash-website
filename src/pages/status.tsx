@@ -8,8 +8,9 @@ import { SectionTitle } from "../components/Layout/SectionTitle"
 import { SectionHeader } from "../components/Layout/SectionHeader"
 import { SectionWrapper } from "../components/Layout/SectionWrapper"
 import { IndexerStatusDetails } from "../components/Status/IndexerStatusDetails"
-import { IndexerStatusSmall } from "../components/Status/IndexerStatusSmall"
+import { IndexerStatusIcon } from "../components/Status/IndexerStatusIcon"
 import { IndexerStatus, NetworkStatus } from "../types/IndexerStatus"
+import { useIndexerStatusSeverity } from "../hooks/useIndexerStatusSeverity"
 
 interface Props {
   tezosNetworkStatus: NetworkStatus
@@ -20,6 +21,7 @@ const StatusPage: NextPage<Props> = ({
   tezosNetworkStatus,
   indexerStatus,
 }: Props) => {
+  const severity = useIndexerStatusSeverity(indexerStatus, tezosNetworkStatus)
   return (
     <>
       <Head>
@@ -45,15 +47,11 @@ const StatusPage: NextPage<Props> = ({
 
       <Spacing size="3x-large" />
 
-      <Spacing size="6x-large" />
-
       <SectionWrapper layout="fixed-width-centered">
         <SectionHeader layout="center">
-          <SectionTitle>
-            <IndexerStatusSmall
-              status={indexerStatus}
-              networkStatus={tezosNetworkStatus}
-            />
+          <SectionTitle flexDirection="column">
+            <IndexerStatusIcon severity={severity!} />
+            Indexer status
           </SectionTitle>
         </SectionHeader>
         <Spacing size="3x-large" />

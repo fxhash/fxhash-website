@@ -2,8 +2,9 @@ import style from "./Footer.module.scss"
 import cs from "classnames"
 import Link from "next/link"
 import { Logo } from "./Logo"
-import { IndexerStatusSmall } from "../../components/Status/IndexerStatusSmall"
+import { IndexerStatusLabel } from "../../components/Status/IndexerStatusLabel"
 import { useFetchIndexerStati } from "../../hooks/useFetchIndexerStati"
+
 interface SocialProps {
   icon: string
   url: string
@@ -60,7 +61,7 @@ export function Footer() {
             </Link>
             <Link href="/status">
               <a>
-                <IndexerStatusSmall
+                <IndexerStatusLabel
                   status={indexerStatus}
                   networkStatus={networkStatus}
                 />
