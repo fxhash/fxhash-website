@@ -27,7 +27,7 @@ const fillCols = (children: ReactNode, nbCols: number) => {
 export function MasonryCardsContainer({
   children,
   cardSize = 270,
-  addDivs = false,
+  emptyDivs = 0,
   ...props
 }: PropsWithChildren<Props>) {
   const elementRef = useRef<HTMLDivElement>(null)
