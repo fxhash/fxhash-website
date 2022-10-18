@@ -109,6 +109,8 @@ function SimpleImage({
   )
 }
 
+type THighestWidth = Record<string, number>
+
 function ReactiveImage({
   image,
   ipfsUri,
@@ -131,7 +133,7 @@ function ReactiveImage({
   )
 
   // keep a reference to the highest size loaded
-  const highestWidth = useRef(0)
+  const highestWidth = useRef<THighestWidth>({})
 
   // returns the viewport available space based on the wrapper viewport
   // dimensions, or [1, 1] if ref doesn't exist
@@ -150,10 +152,10 @@ function ReactiveImage({
   }, [])
 
   const updateImageUrl = useCallback(
-    (forceChange) => {
+    () => {
       // no media element = pull image from IPFS directly
-      if (!image || forceChange) {
-        setUrl(ipfsGatewayUrl(ipfsUri, EGatewayIpfs.FXHASH))
+      if (!image || trueResolution) {
+        setUrl(gatewayUrl)
         return
       }
 
@@ -168,11 +170,13 @@ function ReactiveImage({
         }
       }
 
+      // get the current highest width, fallback to 0 if none is found
+      const hw = highestWidth.current[image!.cid] || 0
+
       // if target size is greater than the highest size loaded, we update
-      if (width > highestWidth.current) {
-        highestWidth.current = width
-        const imageUrl = getImageApiUrl(image?.cid, width)
-        setUrl(imageUrl)
+      if (width > hw) {
+        highestWidth.current[image!.cid] = width
+        setUrl(getImageApiUrl(image?.cid, width))
       }
     },
     [getViewportSpace, image, ipfsUri]
@@ -189,7 +193,7 @@ function ReactiveImage({
 
     if (ref.current) {
       const observer = new ResizeObserver(() => {
-        updateImageUrl(false)
+        updateImageUrl()
       })
       observer.observe(ref.current)
 
@@ -198,9 +202,10 @@ function ReactiveImage({
       }
     }
   }, [image, ipfsUri, gatewayUrl, trueResolution, updateImageUrl])
+
   useEffect(() => {
     // new image will update updateImageUrl hence trigger a change
-    updateImageUrl(true)
+    updateImageUrl()
   }, [updateImageUrl])
 
   // triggers an error if an image has not yet been loaded
