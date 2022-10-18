@@ -1,0 +1,25 @@
+@mixin font-family-primary {
+  font-family: "Fira Code", monospace;
+}
+
+@mixin font-size-primary {
+  font-size: 1rem;
+}
+
+@mixin font-primary {
+  @include font-family-primary;
+  @include font-size-primary;
+}
+
+@mixin font-family-secondary {
+  font-family: "Source Serif Pro", serif !important;
+}
+
+@mixin font-size-secondary {
+  font-size: 1.3rem;
+}
+
+@mixin font-secondary {
+  @include font-family-secondary;
+  @include font-size-secondary;
+}
