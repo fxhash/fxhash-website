@@ -271,7 +271,6 @@ const _PageArticle = ({ article, originUrl, isPreview }: PageArticleProps) => {
           <Spacing size="6x-large" />
           <TabsContainer
             tabDefinitions={TABS}
-            checkIsTabActive={checkIsTabKeyActive}
             tabsLayout="fixed-size"
             tabsClassName={cs(layout["padding-big"])}
           >
