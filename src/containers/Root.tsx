@@ -10,39 +10,41 @@ import { UserProvider } from "./UserProvider"
 import { SettingsProvider } from "../context/Theme"
 import { CyclesProvider } from "../context/Cycles"
 import { MessageCenterProvider } from "../context/MessageCenter"
-import { ArticlesProvider } from "../context/Articles";
-import { matchRule } from "../utils/regex";
-
-const EXCLUDE_LAYOUT= [
+import { ArticlesProvider } from "../context/Articles"
+import { matchRule } from "../utils/regex"
+import { ParamsProvider } from "../context/Params"
+const EXCLUDE_LAYOUT = [
   "/generative/[id]/enjoy",
   "/u/[name]/collection/enjoy",
   "/pkh/[id]/collection/enjoy",
-  "/live-minting/*"
+  "/live-minting/*",
 ]
 
 export function Root({ children }: PropsWithChildren<{}>) {
   const router = useRouter()
 
   // should the page be renderer with the layout ?
-  const LayoutWrapper = (EXCLUDE_LAYOUT.some((rule) => matchRule(rule, router.pathname)))
+  const LayoutWrapper = EXCLUDE_LAYOUT.some((rule) =>
+    matchRule(rule, router.pathname)
+  )
     ? Fragment
     : Layout
 
   return (
     <ApolloProvider client={clientSideClient}>
-      <SettingsProvider>
-        <UserProvider>
-          <MessageCenterProvider>
-            <CyclesProvider>
-              <ArticlesProvider>
-                <LayoutWrapper>
-                  {children}
-                </LayoutWrapper>
-              </ArticlesProvider>
-            </CyclesProvider>
-          </MessageCenterProvider>
-        </UserProvider>
-      </SettingsProvider>
+      <ParamsProvider>
+        <SettingsProvider>
+          <UserProvider>
+            <MessageCenterProvider>
+              <CyclesProvider>
+                <ArticlesProvider>
+                  <LayoutWrapper>{children}</LayoutWrapper>
+                </ArticlesProvider>
+              </CyclesProvider>
+            </MessageCenterProvider>
+          </UserProvider>
+        </SettingsProvider>
+      </ParamsProvider>
     </ApolloProvider>
   )
 }
