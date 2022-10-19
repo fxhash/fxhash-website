@@ -222,7 +222,7 @@
 }
 
 @media (max-width: $breakpoint-md) {
-  .size-small {
+  .size-small, .size-medium {
     font-size: var(--font-size-big);
   }
 }

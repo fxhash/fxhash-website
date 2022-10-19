@@ -1,3 +1,5 @@
+@import "../../styles/Variables";
+
 .form {
   display: flex;
 	flex-direction: column;
@@ -5,19 +7,19 @@
 
 .field {
   display: flex;
-	flex-direction: column;
-	position: relative;
+  flex-direction: column;
+  position: relative;
   width: 100%;
 
   & + .field, & + .fieldset {
     margin-top: var(--layout-margin-md);
   }
 
-	& > label {
-		display: flex;
+  & > label {
+    display: flex;
     flex-direction: column;
     gap: 5px;
-		margin-bottom: 10px;
+    margin-bottom: 10px;
     font-weight: bold;
     font-size: var(--font-size-h5);
 
@@ -26,7 +28,7 @@
       font-size: 0.7em;
       color: var(--color-gray);
     }
-	}
+  }
 }
 
 .fieldset {
@@ -73,11 +75,19 @@
 }
 
 .error-top-right {
-  top: 3px; 
+  top: 3px;
   right: 0;
 }
 
 .error-bottom-left {
   bottom: -25px;
   left: 0;
+}
+
+@media (max-width: $breakpoint-sm) {
+  .field {
+    & + .field, & + .fieldset {
+      margin-top: 16px
+    }
+  }
 }

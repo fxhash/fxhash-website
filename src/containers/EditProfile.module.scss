@@ -30,3 +30,16 @@
     flex-direction: column;
   }
 }
+@media (max-width: $breakpoint-sm) {
+  .form-header {
+    gap: 32px;
+  }
+  .avatar {
+    width: 162px;
+    height: 162px;
+    margin-top: 0;
+  }
+  .button {
+    width: 100%;
+  }
+}
