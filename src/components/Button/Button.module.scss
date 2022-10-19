@@ -1,4 +1,5 @@
 @use "sass:math";
+@import "../../styles/Variables";
 
 .button {
   background: var(--color-border);
@@ -217,5 +218,11 @@
 
   &>* {
     opacity: 0;
+  }
+}
+
+@media (max-width: $breakpoint-md) {
+  .size-small {
+    font-size: var(--font-size-big);
   }
 }

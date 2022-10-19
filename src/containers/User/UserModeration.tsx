@@ -16,88 +16,79 @@ import { ModerateOperation } from "../../services/contract-operations/Moderate"
 interface Props {
   user: User
 }
-export function UserModeration({
-  user,
-}: Props) {
+export function UserModeration({ user }: Props) {
   const userCtx = useContext(UserContext)
   const userConnected = userCtx.user!
-  
+
   const [moderateModal, setModerateModal] = useState<boolean>(false)
 
-  const { 
-    state, 
-    loading, 
-    success, 
-    call, 
-    error
-  } = useContractOperation(ModerateOperation)
+  const { state, loading, success, call, error } =
+    useContractOperation(ModerateOperation)
 
-  return (
-    isUserModerator(userConnected as User) ? (
-      <>
-        {moderateModal && (
-          <ModerationModal
-            entityId={user.id}
-            moderationContract="user"
-            title="Moderate user account"
-            infoText="You can moderate the tezos address associated with the account. It can restrict some contract features."
-            flags={Object.keys(UserFlag).map((flag, idx) => ({
-              label: flag,
-              value: UserFlagValues[flag as UserFlag]
-            }))}
-            onClose={() => setModerateModal(false)}
-          />
-        )}
-        <div>
-          <ContractFeedback
-            state={state}
-            loading={loading}
-            success={success}
-            error={error}
-            className={cs(style.contract_feedback)}
-          />
-          <div className={cs(layout.buttons_inline)}>
-            <Button
-              type="button"
-              size="small"
-              color="black"
-              onClick={() => setModerateModal(true)}
-            >
-              moderate
-            </Button>
-            <Button
-              type="button"
-              size="small"
-              color="secondary"
-              onClick={() => {
-                call({
-                  entityId: user.id,
-                  reason: -1,
-                  state: UserFlagValues[UserFlag.VERIFIED],
-                  contract: "user"
-                })
-              }}
-            >
-              verify
-            </Button>
-            <Button
-              type="button"
-              size="small"
-              color="primary"
-              onClick={() => {
-                call({
-                  entityId: user.id,
-                  reason: -1,
-                  state: UserFlagValues[UserFlag.MALICIOUS],
-                  contract: "user"
-                })
-              }}
-            >
-              ban
-            </Button>
-          </div>
+  return isUserModerator(userConnected as User) ? (
+    <>
+      {moderateModal && (
+        <ModerationModal
+          entityId={user.id}
+          moderationContract="user"
+          title="Moderate user account"
+          infoText="You can moderate the tezos address associated with the account. It can restrict some contract features."
+          flags={Object.keys(UserFlag).map((flag, idx) => ({
+            label: flag,
+            value: UserFlagValues[flag as UserFlag],
+          }))}
+          onClose={() => setModerateModal(false)}
+        />
+      )}
+      <div>
+        <ContractFeedback
+          state={state}
+          loading={loading}
+          success={success}
+          error={error}
+          className={cs(style.contract_feedback)}
+        />
+        <div className={cs(layout.buttons_inline)}>
+          <Button
+            type="button"
+            size="small"
+            color="black"
+            onClick={() => setModerateModal(true)}
+          >
+            moderate
+          </Button>
+          <Button
+            type="button"
+            size="small"
+            color="secondary"
+            onClick={() => {
+              call({
+                entityId: user.id,
+                reason: -1,
+                state: UserFlagValues[UserFlag.VERIFIED],
+                contract: "user",
+              })
+            }}
+          >
+            verify
+          </Button>
+          <Button
+            type="button"
+            size="small"
+            color="primary"
+            onClick={() => {
+              call({
+                entityId: user.id,
+                reason: -1,
+                state: UserFlagValues[UserFlag.MALICIOUS],
+                contract: "user",
+              })
+            }}
+          >
+            ban
+          </Button>
         </div>
-      </>
-    ):null
-  )
+      </div>
+    </>
+  ) : null
 }

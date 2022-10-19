@@ -83,6 +83,7 @@
 }
 
 .tab-fixed-size {
+  white-space: nowrap;
   padding-left: 80px;
   padding-right: 80px;
 }
@@ -92,6 +93,17 @@
   display: flex;
   justify-content: center;
 }
+@media (max-width: $breakpoint-lg) {
+  .container.layout-fixed-size nav {
+    justify-content: center;
+  }
+  .tab-fixed-size {
+    text-align: center;
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+}
+
 
 @media (max-width: $breakpoint-sm) {
   .container {
@@ -125,6 +137,7 @@
     position: relative;
     border: none;
     white-space: nowrap;
+    text-align: left;
     &:last-child {
       padding-right: 0;
     }
@@ -138,7 +151,7 @@
         left: 0;
         right: 0;
         height: 3px;
-        z-index: 150;
+        z-index: 20;
         background-color: var(--color-black);
         width: 100%;
       }

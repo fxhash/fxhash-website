@@ -2,8 +2,11 @@
 
 .container {
   display: flex;
-  gap: var(--layout-gap-small-lg);
-  overflow-x: hidden;
+  gap: $spacing-x-large;
+  p {
+    margin: 16px 0;
+    font-size: var(--font-size-regular);
+  }
 }
 
 .avatar {
@@ -21,7 +24,8 @@
 .tz_link {
   font-weight: normal;
   text-decoration: none;
-  color: var(--color-gray-light);
+  font-size: var(--font-size-small);
+  color: var(--color-gray);
   transition: color .2s ease-out;
 
   &:hover {
@@ -30,8 +34,29 @@
   }
 }
 
+.container_verification {
+  margin-top: 4px;
+}
+
+.moderator {
+  color: var(--color-success);
+}
+
+.badge {
+  margin-left: 15px;
+  font-size: 44px;
+  color: var(--color-secondary);
+}
+
+.name {
+  display: flex;
+  align-items: center;
+  word-break: break-all;
+}
+
 @media (max-width: $breakpoint-md) {
   .container {
+    overflow-x: hidden;
     flex-direction: column;
     align-items: center;
 
@@ -45,19 +70,41 @@
       flex-direction: column;
       align-items: center;
     }
+    p {
+      margin: 8px 0 0 0;
+      text-align: center;
+    }
+  }
+  .name {
+    margin-top: $spacing-x-small;
+  }
+  .badge {
+    margin-left: $spacing-x-small;
+    font-size: var(--font-size-regular);
+  }
+  .buttons {
+    width: 100%;
+    margin-top: $spacing-x-large;
   }
 }
 
-.moderator {
-  color: var(--color-success);
-}
 
-.badge {
-  margin-left: 15px;
-  color: var(--color-secondary);
-}
-
-.name {
-  display: flex;
-  align-items: center;
+@media (max-width: $breakpoint-sm) {
+  .container {
+    p {
+      margin: 8px 0 0 0;
+      text-align: center;
+      font-size: var(--font-size-small);
+    }
+  }
+  .avatar {
+    width: 162px;
+    height: 162px;
+  }
+  .container_verification {
+    margin-top: 8px;
+  }
+  .button_edit {
+    width: 100%;
+  }
 }

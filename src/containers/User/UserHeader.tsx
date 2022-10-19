@@ -1,6 +1,5 @@
 import style from "./UserHeader.module.scss"
 import layout from "../../styles/Layout.module.scss"
-import colors from "../../styles/Colors.module.css"
 import effects from "../../styles/Effects.module.scss"
 import cs from "classnames"
 import { User } from "../../types/entities/User"
@@ -8,17 +7,17 @@ import { Avatar } from "../../components/User/Avatar"
 import {
   getUserName,
   isPlatformOwned,
+  isUserModerator,
   isUserVerified,
   userAliases,
 } from "../../utils/user"
 import nl2br from "react-nl2br"
-import { useContext, useMemo } from "react"
+import { useContext } from "react"
 import { UserContext } from "../UserProvider"
 import Link from "next/link"
 import { Button } from "../../components/Button"
 import { useTzProfileVerification } from "../../utils/hookts"
 import { UserVerification } from "./UserVerification"
-import { Spacing } from "../../components/Layout/Spacing"
 import { HoverTitle } from "../../components/Utils/HoverTitle"
 import { UserModeration } from "./UserModeration"
 
@@ -34,23 +33,17 @@ export function UserHeader({ user }: Props) {
   const verified = isUserVerified(user)
 
   return (
-    <header className={cs(style.container, layout["padding-small"])}>
+    <header className={cs(style.container, layout["padding-big"])}>
       <Avatar
         image={user.avatarMedia}
-        imageSizes="1024px"
         uri={user.avatarUri}
         className={cs(style.avatar, effects["drop-shadow-big"])}
       />
       <div className={cs(style.infos)}>
         {user.id && (
-          <small className={cs(colors["gray-light"])}>
-            <a
-              href={"https://tzkt.io/" + user.id}
-              className={cs(style.tz_link)}
-            >
-              {user.id}
-            </a>
-          </small>
+          <a href={"https://tzkt.io/" + user.id} className={cs(style.tz_link)}>
+            {user.id}
+          </a>
         )}
 
         <h1
@@ -70,38 +63,32 @@ export function UserHeader({ user }: Props) {
         </h1>
 
         {(tzProfileData || loading) && (
-          <>
-            <Spacing size="2x-small" />
+          <div className={style.container_verification}>
             <UserVerification profile={tzProfileData} loading={loading} />
-          </>
+          </div>
         )}
         <p>{nl2br(user.description)}</p>
-        {userConnected && (
-          <div className={cs(layout["x-inline"], layout.flex_wrap)}>
-            {userConnected.id === user.id && (
-              <div
-                style={{
-                  display: "inline-block",
-                }}
-              >
+        {userConnected &&
+          (isUserModerator(userConnected as User) ||
+            userConnected.id === user.id) && (
+            <div
+              className={cs(
+                layout["x-inline"],
+                layout.flex_wrap,
+                style.buttons
+              )}
+            >
+              {userConnected.id === user.id && (
                 <Link href="/edit-profile" passHref>
-                  <Button
-                    isLink
-                    style={{
-                      alignSelf: "flex-start",
-                    }}
-                    size="small"
-                  >
+                  <Button className={style.button_edit} isLink size="small">
                     edit profile
                   </Button>
                 </Link>
-              </div>
-            )}
-            <UserModeration user={user} />
-          </div>
-        )}
+              )}
+              <UserModeration user={user} />
+            </div>
+          )}
       </div>
     </header>
   )
 }
-

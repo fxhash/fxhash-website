@@ -7,13 +7,13 @@
   & > *+* {
     margin-left: 20px;
   }
-  
+
   @media (max-width: $breakpoint-sm) {
     flex-direction: column;
 
     & > *+* {
       margin-left: 0px;
-      margin-top: 5px;
+      margin-top: 8px;
     }
   }
 }
@@ -43,4 +43,12 @@
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+@media (max-width: $breakpoint-sm) {
+  .badge {
+    i {
+      font-size: 19px;
+    }
+  }
 }

@@ -67,6 +67,7 @@ type IsTabActiveHandler = (
 export const checkIsTabKeyActive: IsTabActiveHandler = (def, activeIdx) =>
   def.key === activeIdx
 export interface Props {
+  className?: string
   tabsLayout?: TabsLayout
   tabDefinitions: TabDefinition[]
   activeIdx: number | string

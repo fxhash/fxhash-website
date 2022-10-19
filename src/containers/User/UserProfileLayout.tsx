@@ -12,32 +12,32 @@ import { getUserName, getUserProfileLink } from "../../utils/user"
 import { UserHeader } from "./UserHeader"
 import { UserFlagBanner } from "./FlagBanner"
 
-
-type TabWrapperProps = PropsWithChildren<LinkProps> & HTMLAttributes<HTMLAnchorElement>
+type TabWrapperProps = PropsWithChildren<LinkProps> &
+  HTMLAttributes<HTMLAnchorElement>
 const TabWrapper = ({ children, ...props }: TabWrapperProps) => (
   <Link {...props}>
-    <a className={props.className}>{ children }</a>
+    <a className={props.className}>{children}</a>
   </Link>
 )
 
 interface Props {
   user: User
-  activeTab: 'creations' | 'articles' | 'collection' | 'on-sale' | 'dashboard',
+  activeTab: "creations" | "articles" | "collection" | "on-sale" | "dashboard"
   hideSectionSpacing?: boolean
 }
 export function UserProfileLayout({
   user,
   activeTab,
   children,
-  hideSectionSpacing
+  hideSectionSpacing,
 }: PropsWithChildren<Props>) {
   // find the lastest work/item of the user
-  const ogImageUrl = useMemo<string|null>(() => {
+  const ogImageUrl = useMemo<string | null>(() => {
     let url = null
     if (user.generativeTokens && user.generativeTokens?.length > 0) {
       url = user.generativeTokens[0].metadata.displayUri
     }
-    if(!url && user.objkts && user.objkts.length > 0) {
+    if (!url && user.objkts && user.objkts.length > 0) {
       url = user.objkts[0].metadata?.displayUri
     }
     return (url && ipfsGatewayUrl(url)) || null
@@ -50,32 +50,32 @@ export function UserProfileLayout({
       name: "creations",
       props: {
         scroll: false,
-        href: `${getUserProfileLink(user)}/creations`
-      }
+        href: `${getUserProfileLink(user)}/creations`,
+      },
     },
     {
       key: "articles",
       name: "articles",
       props: {
         scroll: false,
-        href: `${getUserProfileLink(user)}/articles`
-      }
+        href: `${getUserProfileLink(user)}/articles`,
+      },
     },
     {
       key: "collection",
       name: "collection",
       props: {
         scroll: false,
-        href: `${getUserProfileLink(user)}/collection`
-      }
+        href: `${getUserProfileLink(user)}/collection`,
+      },
     },
     {
       key: "on-sale",
       name: "on sale",
       props: {
         scroll: false,
-        href: `${getUserProfileLink(user)}/sales`
-      }
+        href: `${getUserProfileLink(user)}/sales`,
+      },
     },
     {
       key: "dashboard",
@@ -83,7 +83,7 @@ export function UserProfileLayout({
       props: {
         scroll: false,
         href: `${getUserProfileLink(user)}/dashboard`,
-      }
+      },
     },
   ]
 
@@ -91,35 +91,50 @@ export function UserProfileLayout({
     <>
       <Head>
         <title>fxhash — {getUserName(user)} profile</title>
-        <meta key="og:title" property="og:title" content={`fxhash — ${getUserName(user)} profile`}/>
-        <meta key="description" property="description" content={truncateEnd(user.metadata?.description || "", 200, "")}/>
-        <meta key="og:description" property="og:description" content={truncateEnd(user.metadata?.description || "", 200, "")}/>
-        <meta key="og:type" property="og:type" content="website"/>
-        <meta key="og:image" property="og:image" content={ogImageUrl || "https://www.fxhash.xyz/images/og/og1.jpg"}/>
+        <meta
+          key="og:title"
+          property="og:title"
+          content={`fxhash — ${getUserName(user)} profile`}
+        />
+        <meta
+          key="description"
+          property="description"
+          content={truncateEnd(user.metadata?.description || "", 200, "")}
+        />
+        <meta
+          key="og:description"
+          property="og:description"
+          content={truncateEnd(user.metadata?.description || "", 200, "")}
+        />
+        <meta key="og:type" property="og:type" content="website" />
+        <meta
+          key="og:image"
+          property="og:image"
+          content={ogImageUrl || "https://www.fxhash.xyz/images/og/og1.jpg"}
+        />
       </Head>
 
       <UserFlagBanner user={user} />
 
-      <Spacing size="6x-large" />
+      <Spacing size="6x-large" sm="x-large" />
 
       <UserHeader user={user} />
 
-      <Spacing size="x-large" />
+      <Spacing size="x-large" sm="3x-large" />
 
-      <Tabs
-        tabDefinitions={TABS}
-        checkIsTabActive={checkIsTabKeyActive}
-        activeIdx={activeTab}
-        tabsLayout="fixed-size"
-        tabsClassName={cs(layout['padding-big'])}
-        tabWrapperComponent={TabWrapper}
-      />
+      <div className={layout["padding-big"]}>
+        <Tabs
+          tabDefinitions={TABS}
+          checkIsTabActive={checkIsTabKeyActive}
+          activeIdx={activeTab}
+          tabsLayout="fixed-size"
+          tabWrapperComponent={TabWrapper}
+        />
+      </div>
 
-      { !hideSectionSpacing && <Spacing size="x-large" /> }
+      {!hideSectionSpacing && <Spacing size="x-large" />}
 
-      <section>
-        {children}
-      </section>
+      <section>{children}</section>
 
       <Spacing size="6x-large" sm="3x-large" />
       <Spacing size="6x-large" sm="none" />
