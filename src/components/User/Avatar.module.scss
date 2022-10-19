@@ -1,11 +1,13 @@
+@import "../../styles/Variables";
+
 .container {
   border-radius: 999px;
-  overflow: hidden;
+  //overflow: hidden;
   background-color: var(--color-border);
   background-size: cover;
   background-position: center;
   position: relative;
-  
+
   &:has(img) {
     background-color: var(--color-white);
   }
@@ -35,6 +37,23 @@
     border-radius: 999px;
   }
 
+  i {
+    position: absolute;
+    z-index: 2;
+    right: 0;
+    bottom: 0;
+    background: var(--color-black);
+    color: var(--color-white);
+    border-radius: 50%;
+    height: 75px;
+    width: 75px;
+    font-size: 22px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
   &:hover {
     border-color: var(--color-secondary);
 
@@ -46,6 +65,16 @@
   &.no-image {
     span {
       opacity: 1;
+    }
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .avatar-upload {
+    i {
+      height: 48px;
+      width: 48px;
+      font-size: 16px;
     }
   }
 }
