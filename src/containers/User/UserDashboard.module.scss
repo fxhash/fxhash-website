@@ -1,5 +1,11 @@
 @import "../../styles/Variables";
 .container {
   width: calc(min(100%, 1440px));
-  margin: auto;
+  margin: 32px auto 0 auto;
+}
+
+@media (max-width: $breakpoint-sm) {
+  .container {
+    margin-top: 16px;
+  }
 }
