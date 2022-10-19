@@ -45,7 +45,9 @@ const _MobileMenuUser = ({
         <div className={style.links}>
           {links.map((profileLink) => (
             <Link key={profileLink.key} href={profileLink.href}>
-              <a className={style.nav_button}>{profileLink.label}</a>
+              <a className={style.nav_button} onClick={onClose}>
+                {profileLink.label}
+              </a>
             </Link>
           ))}
         </div>
