@@ -12,13 +12,13 @@ export const ActionListing: TActionComp = ({ action, verbose }) => (
       user={action.issuer!}
       size="small"
     />
-    <span>
+    <>
       listed{" "}
       <strong>
         {verbose ? action.objkt!.name : `#${action.objkt!.iteration}`}
       </strong>{" "}
       for
-    </span>
+    </>
     <span className={cs(style.price)}>
       <DisplayTezos
         formatBig={false}

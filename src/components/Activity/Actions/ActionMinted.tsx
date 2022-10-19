@@ -11,8 +11,8 @@ export const ActionMinted: TActionComp = ({ action, verbose }) => (
       user={action.issuer!}
       size="small"
     />
-    <span>
+    <>
       published <strong>{action.token!.name}</strong>
-    </span>
+    </>
   </>
 )

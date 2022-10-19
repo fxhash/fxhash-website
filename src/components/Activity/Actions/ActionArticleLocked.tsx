@@ -11,8 +11,8 @@ export const ActionArticleLocked: TActionComp = ({ action, verbose }) => (
       user={action.issuer!}
       size="small"
     />
-    <span>
+    <>
       locked article <strong>{action.article!.title}</strong>
-    </span>
+    </>
   </>
 )

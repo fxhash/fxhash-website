@@ -12,7 +12,7 @@ const ActionListingArticleAccepted: TActionComp = ({ action, verbose }) => (
       user={action.issuer!}
       size="small"
     />
-    <span>
+    <>
       bought <strong>{action.metadata.amountCollected}</strong> editions{" "}
       {verbose && (
         <>
@@ -20,15 +20,15 @@ const ActionListingArticleAccepted: TActionComp = ({ action, verbose }) => (
         </>
       )}{" "}
       from
-    </span>
+    </>
     <UserBadge
       className={cs(style.user)}
       hasLink={true}
       user={action.target!}
       size="small"
     />
-    <span>
-      <span>for </span>
+    <>
+      <>for </>
       <span className={cs(style.price)}>
         <DisplayTezos
           formatBig={false}
@@ -36,8 +36,8 @@ const ActionListingArticleAccepted: TActionComp = ({ action, verbose }) => (
           tezosSize="regular"
         />
       </span>
-      <span> each</span>
-    </span>
+      <> each</>
+    </>
   </>
 )
 
@@ -49,20 +49,20 @@ const ActionListingObjktAccepted: TActionComp = ({ action, verbose }) => (
       user={action.issuer!}
       size="small"
     />
-    <span>
+    <>
       bought{" "}
       <strong>
         {verbose ? action.objkt!.name : `#${action.objkt!.iteration}`}
       </strong>{" "}
       from
-    </span>
+    </>
     <UserBadge
       className={cs(style.user)}
       hasLink={true}
       user={action.target!}
       size="small"
     />
-    <span>
+    <>
       <span>for </span>
       <span className={cs(style.price)}>
         <DisplayTezos
@@ -71,7 +71,7 @@ const ActionListingObjktAccepted: TActionComp = ({ action, verbose }) => (
           tezosSize="regular"
         />
       </span>
-    </span>
+    </>
   </>
 )
 
