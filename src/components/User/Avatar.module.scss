@@ -2,7 +2,7 @@
 
 .container {
   border-radius: 999px;
-  //overflow: hidden;
+  overflow: hidden;
   background-color: var(--color-border);
   background-size: cover;
   background-position: center;
@@ -14,6 +14,7 @@
 }
 
 .avatar-upload {
+  overflow: visible;
   cursor: pointer;
   font-family: inherit;
   font-size: inherit;
