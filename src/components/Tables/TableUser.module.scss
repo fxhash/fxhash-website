@@ -185,6 +185,11 @@ td.td-right {
 
 
 @media (max-width: $breakpoint-sm) {
+  .table {
+    thead {
+      display: none;
+    }
+  }
   .wrapper {
     height: auto;
     max-height: 400px;
