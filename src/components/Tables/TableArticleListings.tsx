@@ -171,7 +171,10 @@ const _TableArticleListings = ({
             ))
           ) : (
             <tr>
-              <td className={style.empty} colSpan={4}>
+              <td
+                className={cs(style.empty, style.td_mobile_fullwidth)}
+                colSpan={4}
+              >
                 No listings found
               </td>
             </tr>
@@ -196,18 +199,17 @@ const _TableArticleListings = ({
                   <td
                     className={cs({
                       [style.td_mobile_fullwidth]: true,
-                      //[style.td_mobile_hide]: !(user?.id === ledger.owner.id),
+                      [style.td_mobile_hide]: !(user?.id === ledger.owner.id),
                     })}
                     data-label="Action"
                   >
                     <div className={style.article_actions}>
-                      {user?.id === ledger.owner.id ||
-                        (true && (
-                          <ArticleListEditions
-                            ledger={ledger}
-                            article={article}
-                          />
-                        ))}
+                      {user?.id === ledger.owner.id && (
+                        <ArticleListEditions
+                          ledger={ledger}
+                          article={article}
+                        />
+                      )}
                     </div>
                   </td>
                 </tr>

@@ -119,7 +119,10 @@ const _TableUserOffersReceived = ({
               ))
             ) : (
               <tr>
-                <td className={style.empty} colSpan={6}>
+                <td
+                  className={cs(style.empty, style.td_mobile_fullwidth)}
+                  colSpan={6}
+                >
                   No offers found
                 </td>
               </tr>
