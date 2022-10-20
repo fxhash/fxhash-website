@@ -8,9 +8,9 @@ import { SectionTitle } from "../components/Layout/SectionTitle"
 import { SectionHeader } from "../components/Layout/SectionHeader"
 import { SectionWrapper } from "../components/Layout/SectionWrapper"
 import { IndexerStatusDetails } from "../components/Status/IndexerStatusDetails"
-import { IndexerStatusIcon } from "../components/Status/IndexerStatusIcon"
 import { IndexerStatus, NetworkStatus } from "../types/IndexerStatus"
 import { useIndexerStatusSeverity } from "../hooks/useIndexerStatusSeverity"
+import layout from "../styles/Layout.module.scss"
 
 interface Props {
   tezosNetworkStatus: NetworkStatus
@@ -46,21 +46,18 @@ const StatusPage: NextPage<Props> = ({
       </Head>
 
       <Spacing size="3x-large" />
-
-      <SectionWrapper layout="fixed-width-centered">
-        <SectionHeader layout="center">
-          <SectionTitle flexDirection="column">
-            <IndexerStatusIcon severity={severity!} />
-            Indexer status
-          </SectionTitle>
-        </SectionHeader>
-        <Spacing size="3x-large" />
-        <IndexerStatusDetails
-          status={indexerStatus}
-          networkStatus={tezosNetworkStatus}
-        />
-      </SectionWrapper>
-
+      <div className={layout["padding-small"]}>
+        <SectionWrapper layout="fixed-width-centered">
+          <SectionHeader layout="center">
+            <SectionTitle>Services status</SectionTitle>
+          </SectionHeader>
+          <Spacing size="3x-large" />
+          <IndexerStatusDetails
+            status={indexerStatus}
+            networkStatus={tezosNetworkStatus}
+          />
+        </SectionWrapper>
+      </div>
       <Spacing size="6x-large" />
       <Spacing size="6x-large" />
       <Spacing size="6x-large" />
@@ -76,7 +73,6 @@ export async function getServerSideProps() {
   })
 
   const tezosNetworkStatus = await getTezosNetworkIndexerStatus()
-  console.log(tezosNetworkStatus, data)
   return {
     props: {
       indexerStatus: data.statusIndexing,
