@@ -10,11 +10,13 @@ interface Props {
   label?: string
 }
 
-export function IndexerStatusLabel({
-  status,
-  networkStatus,
-  label = "Indexer status",
-}: Props) {
+const indexerStatusLabelSeverityMap = {
+  low: "synced",
+  medium: "sligth delay",
+  high: "too much behind",
+}
+
+export function IndexerStatusLabel({ status, networkStatus, label }: Props) {
   const severity = useIndexerStatusSeverity(status, networkStatus)
   return (
     <span className={style.root}>
@@ -23,7 +25,9 @@ export function IndexerStatusLabel({
       ) : (
         <IndexerStatusIcon severity={severity} />
       )}
-      <span>{label}</span>
+      <span>
+        {label || (severity && indexerStatusLabelSeverityMap[severity])}
+      </span>
     </span>
   )
 }

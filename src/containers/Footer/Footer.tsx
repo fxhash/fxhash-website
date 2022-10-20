@@ -62,6 +62,7 @@ export function Footer() {
             <Link href="/status">
               <a>
                 <IndexerStatusLabel
+                  label="Indexer status"
                   status={indexerStatus}
                   networkStatus={networkStatus}
                 />

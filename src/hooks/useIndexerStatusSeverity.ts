@@ -6,6 +6,9 @@ import {
 } from "../types/IndexerStatus"
 import formatDistanceStrict from "date-fns/formatDistanceStrict"
 
+export const NUM_BLOCKS_MEDIUM_SEVERITY = 4
+export const NUM_BLOCKS_HIGH_SEVERITY = 15
+
 export function useIndexerStatusSeverity(
   indexerStatus?: IndexerStatus | null,
   networkStatus?: NetworkStatus | null
@@ -18,8 +21,9 @@ export function useIndexerStatusSeverity(
       new Date(networkStatus.lastSyncedAt),
       { unit: "minute" }
     ).replace(" minutes", "")
-    if (blocksBehind <= 4 && minutesBehind <= 2) return "low"
-    if (blocksBehind <= 15) return "medium"
+    if (blocksBehind <= NUM_BLOCKS_MEDIUM_SEVERITY && minutesBehind <= 2)
+      return "low"
+    if (blocksBehind <= NUM_BLOCKS_HIGH_SEVERITY) return "medium"
     return "high"
   }, [indexerStatus, networkStatus])
 
