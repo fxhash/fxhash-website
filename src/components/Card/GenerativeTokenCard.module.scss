@@ -1,3 +1,5 @@
+@import "../../styles/Variables";
+
 .animated {
   background-color: rgba(0, 0, 0, 0.8);
   padding: 3px 3px 1px 6px;
@@ -7,5 +9,21 @@
 
   i {
     font-size: 14px;
+  }
+}
+
+.mint_progress {
+  font-size: var(--font-size-small);
+}
+
+@media (max-width: $breakpoint-sm) {
+  .title {
+    font-size: var(--font-size-h5);
+  }
+  .mint_progress {
+    font-size: var(--font-size-h5);
+    & i {
+      font-size: 0.8em;
+    }
   }
 }

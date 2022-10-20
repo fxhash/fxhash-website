@@ -152,8 +152,8 @@
 
   .img-wrapper {
     width: 100%;
-    min-height: 150px;
-    height: 150px;
+    min-height: 189px;
+    height: 189px;
     border-right: none;
     border-bottom: var(--cards-border-width) solid var(--color-border);
   }
@@ -162,6 +162,7 @@
     gap: $spacing-x-small;
     flex-direction: column;
     align-items: flex-start;
+    margin-bottom: $spacing-x-small;
   }
 
   .date {
@@ -170,9 +171,20 @@
 
   .title {
     -webkit-line-clamp: 3;
+    h4 {
+      font-size: var(--font-size-regular);
+    }
   }
 
   .description {
     font-size: var(--font-size-regular);
+    margin: $spacing-x-small 0;
+    p {
+      line-height: 1.25;
+    }
+  }
+
+  .tags {
+    gap: 4px;
   }
 }

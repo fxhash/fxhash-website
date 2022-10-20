@@ -24,6 +24,7 @@
     font-size: 1.15em;
     bottom: -1px;
     position: relative;
+    color: var(--color-secondary);
   }
 
   &.side-left {
@@ -50,7 +51,7 @@
 
 .container_size_xl {
   font-size: var(--font-size-small);
-  
+
   .user_infos {
     margin-left: 0;
   }
