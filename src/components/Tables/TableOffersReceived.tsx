@@ -1,4 +1,4 @@
-import React, { Fragment, memo, useContext, useRef } from "react"
+import React, { memo, useRef } from "react"
 import style from "./TableUser.module.scss"
 import { DateDistance } from "../Utils/Date/DateDistance"
 import { DisplayTezos } from "../Display/DisplayTezos"
@@ -63,14 +63,11 @@ const _TableUserOffersReceived = ({
                         <td className={style["td-gentk"]}>
                           {offer.objkt && (
                             <div className={cs(style.link_wrapper)}>
-                              <ObjktImageAndName
-                                objkt={offer.objkt}
-                                imagePriority
-                              />
+                              <ObjktImageAndName objkt={offer.objkt} />
                             </div>
                           )}
                         </td>
-                        <td className={style["td-price"]}>
+                        <td className={style["td-price"]} data-label="Price">
                           <DisplayTezos
                             className={style.price}
                             formatBig={false}
@@ -78,7 +75,10 @@ const _TableUserOffersReceived = ({
                             tezosSize="regular"
                           />
                         </td>
-                        <td className={style["td-price"]}>
+                        <td
+                          className={style["td-price"]}
+                          data-label="Floor Difference"
+                        >
                           <FloorDifference
                             price={offer.price}
                             floor={
@@ -86,7 +86,7 @@ const _TableUserOffersReceived = ({
                             }
                           />
                         </td>
-                        <td className={style["td-user"]}>
+                        <td className={style["td-user"]} data-label="From">
                           <UserBadge
                             hasLink
                             user={offer.buyer}
@@ -94,12 +94,19 @@ const _TableUserOffersReceived = ({
                             displayAvatar={false}
                           />
                         </td>
-                        <td className={style["td-time"]}>
+                        <td className={style["td-time"]} data-label="Time">
                           <div className={style.date}>
                             <DateDistance timestamptz={offer.createdAt} />
                           </div>
                         </td>
-                        <td>{buttons}</td>
+                        <td
+                          data-label="Action"
+                          className={cs(style.td_mobile_fullwidth, {
+                            [style.td_mobile_hide]: !buttons,
+                          })}
+                        >
+                          {buttons}
+                        </td>
                       </tr>
                     </>
                   )}
@@ -125,13 +132,25 @@ const _TableUserOffersReceived = ({
                       <Skeleton height="25px" width="100%" />
                     </div>
                   </td>
-                  <td className={style["td-user"]}>
+                  <td className={style["td-user"]} data-label="Price">
                     <Skeleton height="25px" />
                   </td>
-                  <td className={style["td-price"]}>
+                  <td
+                    className={style["td-user"]}
+                    data-label="Floor Difference"
+                  >
                     <Skeleton height="25px" />
                   </td>
-                  <td className={style["td-time"]}>
+                  <td className={style["td-user"]} data-label="From">
+                    <Skeleton height="25px" />
+                  </td>
+                  <td className={style["td-time"]} data-label="Time">
+                    <Skeleton height="25px" />
+                  </td>
+                  <td
+                    data-label="Action"
+                    className={cs(style.td_mobile_fullwidth)}
+                  >
                     <Skeleton height="25px" />
                   </td>
                 </tr>

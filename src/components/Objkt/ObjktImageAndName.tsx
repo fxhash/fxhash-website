@@ -6,17 +6,11 @@ import { Image } from "../Image"
 
 interface Props {
   objkt: Objkt
-  imagePriority?: boolean
   shortName?: boolean
   size?: number
 }
 
-const _ObjtkImageAndName = ({
-  objkt,
-  imagePriority,
-  shortName,
-  size = 40,
-}: Props) => {
+const _ObjtkImageAndName = ({ objkt, shortName, size = 40 }: Props) => {
   return (
     <Link href={`/gentk/${objkt.id}`}>
       <a className={style.container}>
@@ -27,8 +21,11 @@ const _ObjtkImageAndName = ({
             alt={`thumbnail of ${objkt.name}`}
           />
         </div>
-        <span className={style.name}>
-          {shortName ? `#${objkt.iteration}` : objkt.name}
+        <span className={style.container_name}>
+          <span className={style.label}>Gentk</span>
+          <span className={style.name}>
+            {shortName ? `#${objkt.iteration}` : objkt.name}
+          </span>
         </span>
       </a>
     </Link>

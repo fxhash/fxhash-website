@@ -180,6 +180,9 @@
     &:after {
       display: none;
     }
+    &:last-child {
+      padding-right: 12px;
+    }
   }
 
   .tab-subtabs-vertical {

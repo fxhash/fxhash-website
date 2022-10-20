@@ -4,7 +4,7 @@
   display: block;
   width: 100%;
   max-height: 500px;
-  overflow-y: scroll;
+  overflow-y: auto;
   overscroll-behavior: contain;
 }
 
@@ -46,6 +46,9 @@
     border-bottom: 1px solid var(--color-gray-vlight);
     &:first-child {
       border-left: 1px solid var(--color-gray-vlight);
+    }
+    &:last-child {
+      border-right: 1px solid var(--color-gray-vlight);
     }
     &>* {
       vertical-align: middle;
@@ -140,6 +143,7 @@ td.td-right {
 .price {
   color: var(--color-secondary);
   font-weight: bold;
+  word-break: break-all;
 }
 
 .date {
@@ -183,13 +187,74 @@ td.td-right {
   border-top-color: var(--color-gray-vvvlight) !important;
 }
 
+.mobile {
+  display: none;
+}
 
 @media (max-width: $breakpoint-sm) {
   .table {
+    padding-top: $spacing;
+    min-width: 0;
     thead {
       display: none;
     }
+    tbody, td, tr {
+      display: block;
+    }
+    tr {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      margin-bottom: $spacing-x-small;
+      padding: 0 2px;
+    }
+    td {
+      height: auto;
+      width: 50%;
+      display: inline-block;
+      border: none;
+      padding: 8px 6px;
+      margin-top: 2px;
+
+      &.td_mobile_fullwidth {
+        width: 100%;
+      }
+      &.td_mobile_hide {
+        display: none;
+      }
+      &:first-child {
+        margin-top: 0;
+        border-left: none;
+        width: 100%;
+      }
+      &:last-child {
+        border-right: none;
+      }
+      &:before {
+        content: attr(data-label);
+        width: 100%;
+        display: block;
+        color: var(--color-gray);
+        font-size: var(--font-size-small);
+        margin-bottom: $spacing-2x-small;
+      }
+    }
+    .date {
+      font-size: var(--font-size-regular);
+      color: var(--color-black);
+    }
   }
+
+  .td-price {
+    font-size: var(--font-size-h4);
+  }
+  .td-user {
+    font-size: var(--font-size-regular);
+  }
+  .td-time {
+    font-size: var(--font-size-regular);
+  }
+
   .wrapper {
     height: auto;
     max-height: 400px;

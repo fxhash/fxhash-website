@@ -61,14 +61,11 @@ const _TableUserOffersSent = ({
                         <td className={style["td-gentk"]}>
                           {offer.objkt && (
                             <div className={cs(style.link_wrapper)}>
-                              <ObjktImageAndName
-                                objkt={offer.objkt}
-                                imagePriority
-                              />
+                              <ObjktImageAndName objkt={offer.objkt} />
                             </div>
                           )}
                         </td>
-                        <td className={style["td-price"]}>
+                        <td className={style["td-price"]} data-label="Price">
                           <DisplayTezos
                             className={style.price}
                             formatBig={false}
@@ -76,7 +73,7 @@ const _TableUserOffersSent = ({
                             tezosSize="regular"
                           />
                         </td>
-                        <td className={style["td-user"]}>
+                        <td className={style["td-user"]} data-label="Owner">
                           {offer.objkt?.owner && (
                             <UserBadge
                               hasLink
@@ -86,12 +83,19 @@ const _TableUserOffersSent = ({
                             />
                           )}
                         </td>
-                        <td className={style["td-time"]}>
+                        <td className={style["td-time"]} data-label="Time">
                           <div className={style.date}>
                             <DateDistance timestamptz={offer.createdAt} />
                           </div>
                         </td>
-                        <td>{buttons}</td>
+                        <td
+                          data-label="Action"
+                          className={cs({
+                            [style.td_mobile_hide]: !buttons,
+                          })}
+                        >
+                          {buttons}
+                        </td>
                       </tr>
                     </>
                   )}
@@ -117,13 +121,16 @@ const _TableUserOffersSent = ({
                       <Skeleton height="25px" width="100%" />
                     </div>
                   </td>
-                  <td className={style["td-user"]}>
+                  <td className={style["td-user"]} data-label="Price">
                     <Skeleton height="25px" />
                   </td>
-                  <td className={style["td-price"]}>
+                  <td className={style["td-user"]} data-label="Owner">
                     <Skeleton height="25px" />
                   </td>
-                  <td className={style["td-time"]}>
+                  <td className={style["td-time"]} data-label="Time">
+                    <Skeleton height="25px" />
+                  </td>
+                  <td className={style["td-action"]} data-label="Action">
                     <Skeleton height="25px" />
                   </td>
                 </tr>
