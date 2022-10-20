@@ -201,12 +201,13 @@ const _TableArticleListings = ({
                     data-label="Action"
                   >
                     <div className={style.article_actions}>
-                      {(user?.id === ledger.owner.id) || true && (
-                        <ArticleListEditions
-                          ledger={ledger}
-                          article={article}
-                        />
-                      )}
+                      {user?.id === ledger.owner.id ||
+                        (true && (
+                          <ArticleListEditions
+                            ledger={ledger}
+                            article={article}
+                          />
+                        ))}
                     </div>
                   </td>
                 </tr>
