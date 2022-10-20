@@ -58,7 +58,12 @@ const _TableUserOffersSent = ({
                         </tr>
                       )}
                       <tr key={offer.id}>
-                        <td className={style["td-gentk"]}>
+                        <td
+                          className={cs(
+                            style["td-gentk"],
+                            style.td_mobile_fullwidth
+                          )}
+                        >
                           {offer.objkt && (
                             <div className={cs(style.link_wrapper)}>
                               <ObjktImageAndName objkt={offer.objkt} />

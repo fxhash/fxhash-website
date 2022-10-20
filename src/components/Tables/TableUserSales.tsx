@@ -46,7 +46,12 @@ const _TableUserSales = ({
               sales.map((sale) => (
                 <>
                   <tr key={sale.id}>
-                    <td className={style["td-gentk"]}>
+                    <td
+                      className={cs(
+                        style["td-gentk"],
+                        style.td_mobile_fullwidth
+                      )}
+                    >
                       {sale.objkt && (
                         <div className={cs(style.link_wrapper)}>
                           <ObjktImageAndName objkt={sale.objkt} />

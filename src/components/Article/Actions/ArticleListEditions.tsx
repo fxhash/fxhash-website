@@ -57,6 +57,7 @@ export function ArticleListEditions({ ledger, article }: Props) {
         type="button"
         size="very-small"
         color="secondary"
+        className={style.button}
         onClick={() => setShowModal(true)}
       >
         list

@@ -225,7 +225,6 @@ td.td-right {
       &:first-child {
         margin-top: 0;
         border-left: none;
-        width: 100%;
       }
       &:last-child {
         border-right: none;
@@ -242,6 +241,9 @@ td.td-right {
     .date {
       font-size: var(--font-size-regular);
       color: var(--color-black);
+    }
+    .td-center, .td-right {
+      text-align: left;
     }
   }
 

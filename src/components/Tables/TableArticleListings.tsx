@@ -139,20 +139,29 @@ const _TableArticleListings = ({
                           listing.id === listingOperated?.id,
                       })}
                     >
-                      <td className={style["td-gentk"]}>
+                      <td className={style["td-gentk"]} data-label="User">
                         <UserBadge hasLink user={listing.issuer} size="small" />
                       </td>
                       <td
                         className={cs(style["td-editions"], style["td-center"])}
+                        data-label="Editions"
                       >
                         <span className={text.bold}>{listing.amount}</span>
                       </td>
-                      <td className={cs(style["td-time"], style["td-center"])}>
+                      <td
+                        className={cs(style["td-time"], style["td-center"])}
+                        data-label="Time"
+                      >
                         <div className={cs(text.info)}>
                           <DateDistance timestamptz={listing.createdAt} />
                         </div>
                       </td>
-                      <td>
+                      <td
+                        data-label="Action"
+                        className={cs({
+                          [style.td_mobile_hide]: !buttons,
+                        })}
+                      >
                         <div className={style.article_actions}>{buttons}</div>
                       </td>
                     </tr>
@@ -174,16 +183,25 @@ const _TableArticleListings = ({
             (ledgers.length > 0 &&
               ledgers.map((ledger, idx) => (
                 <tr key={ledger.owner?.id || idx}>
-                  <td className={style["td-gentk"]}>
+                  <td className={style["td-gentk"]} data-label="User">
                     <UserBadge hasLink user={ledger.owner} size="small" />
                   </td>
-                  <td className={cs(style["td-editions"], style["td-center"])}>
+                  <td
+                    className={cs(style["td-editions"], style["td-center"])}
+                    data-label="Editions"
+                  >
                     <span className={text.bold}>{ledger.amount}</span>
                   </td>
-                  <td colSpan={1} />
-                  <td>
+                  <td colSpan={1} className={style.td_mobile_hide} />
+                  <td
+                    className={cs({
+                      [style.td_mobile_fullwidth]: true,
+                      //[style.td_mobile_hide]: !(user?.id === ledger.owner.id),
+                    })}
+                    data-label="Action"
+                  >
                     <div className={style.article_actions}>
-                      {user?.id === ledger.owner.id && (
+                      {(user?.id === ledger.owner.id) || true && (
                         <ArticleListEditions
                           ledger={ledger}
                           article={article}
