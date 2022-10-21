@@ -1,13 +1,11 @@
 import style from "./IndexerStatusLabel.module.scss"
-import { IndexerStatus, NetworkStatus } from "../../types/IndexerStatus"
 import { Loader } from "../Utils/Loader"
-import { useIndexerStatusSeverity } from "../../hooks/useIndexerStatusSeverity"
 import { IndexerStatusIcon } from "./IndexerStatusIcon"
+import { IndexerStatusSeverity } from "../../types/IndexerStatus"
 
 interface Props {
-  status?: IndexerStatus | null
-  networkStatus?: NetworkStatus | null
   label?: string
+  severity: IndexerStatusSeverity | null
 }
 
 const indexerStatusLabelSeverityMap = {
@@ -16,8 +14,7 @@ const indexerStatusLabelSeverityMap = {
   high: "too much behind",
 }
 
-export function IndexerStatusLabel({ status, networkStatus, label }: Props) {
-  const severity = useIndexerStatusSeverity(status, networkStatus)
+export function IndexerStatusLabel({ label, severity }: Props) {
   return (
     <span className={style.root}>
       {!severity ? (

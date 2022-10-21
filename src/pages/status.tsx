@@ -1,3 +1,4 @@
+import { useContext } from "react"
 import type { NextPage } from "next"
 import { Spacing } from "../components/Layout/Spacing"
 import Head from "next/head"
@@ -8,20 +9,13 @@ import { SectionTitle } from "../components/Layout/SectionTitle"
 import { SectionHeader } from "../components/Layout/SectionHeader"
 import { SectionWrapper } from "../components/Layout/SectionWrapper"
 import { IndexerStatusDetails } from "../components/Status/IndexerStatusDetails"
-import { IndexerStatus, NetworkStatus } from "../types/IndexerStatus"
-import { useIndexerStatusSeverity } from "../hooks/useIndexerStatusSeverity"
+import { IndexerStatusContext } from "../context/IndexerStatus"
 import layout from "../styles/Layout.module.scss"
 
-interface Props {
-  tezosNetworkStatus: NetworkStatus
-  indexerStatus: IndexerStatus
-}
+interface Props {}
 
-const StatusPage: NextPage<Props> = ({
-  tezosNetworkStatus,
-  indexerStatus,
-}: Props) => {
-  const severity = useIndexerStatusSeverity(indexerStatus, tezosNetworkStatus)
+const StatusPage: NextPage<Props> = () => {
+  const { indexerStatus, networkStatus } = useContext(IndexerStatusContext)
   return (
     <>
       <Head>
@@ -53,8 +47,8 @@ const StatusPage: NextPage<Props> = ({
           </SectionHeader>
           <Spacing size="3x-large" />
           <IndexerStatusDetails
-            status={indexerStatus}
-            networkStatus={tezosNetworkStatus}
+            indexerStatus={indexerStatus}
+            networkStatus={networkStatus}
           />
         </SectionWrapper>
       </div>
@@ -72,11 +66,11 @@ export async function getServerSideProps() {
     fetchPolicy: "no-cache",
   })
 
-  const tezosNetworkStatus = await getTezosNetworkIndexerStatus()
+  const networkStatus = await getTezosNetworkIndexerStatus()
   return {
     props: {
       indexerStatus: data.statusIndexing,
-      tezosNetworkStatus,
+      networkStatus,
     },
   }
 }

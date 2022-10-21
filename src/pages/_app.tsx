@@ -138,7 +138,7 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
       {process.env.NEXT_PUBLIC_MAINTENANCE_MODE === "1" ? (
         <Component {...pageProps} />
       ) : (
-        <Root>
+        <Root {...pageProps}>
           <>
             <div style={{ display: isRetainableRoute ? "block" : "none" }}>
               {Object.entries(retainedComponents.current).map(

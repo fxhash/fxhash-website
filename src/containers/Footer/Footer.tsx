@@ -3,7 +3,7 @@ import cs from "classnames"
 import Link from "next/link"
 import { Logo } from "./Logo"
 import { IndexerStatusLabel } from "../../components/Status/IndexerStatusLabel"
-import { useFetchIndexerStati } from "../../hooks/useFetchIndexerStati"
+import { useIndexerStatusSeverity } from "../../hooks/useIndexerStatusSeverity"
 
 interface SocialProps {
   icon: string
@@ -21,7 +21,7 @@ function FooterSocial({ icon, url }: SocialProps) {
 }
 
 export function Footer() {
-  const [indexerStatus, networkStatus] = useFetchIndexerStati()
+  const severity = useIndexerStatusSeverity()
   return (
     <footer className={cs(style.footer)}>
       <div className={cs(style.content)}>
@@ -62,9 +62,8 @@ export function Footer() {
             <Link href="/status">
               <a>
                 <IndexerStatusLabel
+                  severity={severity}
                   label="Indexer status"
-                  status={indexerStatus}
-                  networkStatus={networkStatus}
                 />
               </a>
             </Link>
@@ -121,4 +120,3 @@ export function Footer() {
     </footer>
   )
 }
-

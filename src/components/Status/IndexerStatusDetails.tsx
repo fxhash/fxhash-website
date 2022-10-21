@@ -9,19 +9,20 @@ import {
 import { BlockchainProgress } from "./BlockchainProgress"
 
 interface Props {
-  status: IndexerStatus
-  networkStatus: NetworkStatus
+  indexerStatus?: IndexerStatus | null
+  networkStatus?: NetworkStatus | null
 }
 
-export function IndexerStatusDetails({ status, networkStatus }: Props) {
-  const numBlocksBehind = networkStatus.level - status.level
-  const severity = useIndexerStatusSeverity(status, networkStatus)
+export function IndexerStatusDetails({ indexerStatus, networkStatus }: Props) {
+  const severity = useIndexerStatusSeverity()
+  if (!indexerStatus || !networkStatus) return null
+  const numBlocksBehind = networkStatus.level - indexerStatus.level
   return (
     <div className={classes.root}>
       <section>
         <h3>Indexer</h3>
         <div style={{ alignSelf: "center" }}>
-          <IndexerStatusLabel status={status} networkStatus={networkStatus} />
+          <IndexerStatusLabel severity={severity} />
         </div>
       </section>
       <BlockchainProgress
@@ -48,9 +49,9 @@ export function IndexerStatusDetails({ status, networkStatus }: Props) {
       <section>
         <div className={classes.indexerStatus}>
           <h5>Last block indexed</h5>
-          <div>#{status.level}</div>
+          <div>#{indexerStatus?.level}</div>
           <div>
-            {formatDistanceToNow(new Date(status.lastIndexedAt), {
+            {formatDistanceToNow(new Date(indexerStatus?.lastIndexedAt), {
               addSuffix: true,
             })}
           </div>
