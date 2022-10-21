@@ -37,14 +37,14 @@ const SchedulePage: NextPage = () => {
         />
       </Head>
 
-      <Spacing size="6x-large" sm="3x-large" />
+      <Spacing size="6x-large" sm="x-large" />
 
       <section>
         <SectionHeader>
           <TitleHyphen>opening schedule</TitleHyphen>
         </SectionHeader>
 
-        <Spacing size="3x-large" />
+        <Spacing size="3x-large" sm="regular" />
 
         <main className={cs(layout["padding-big"])}>
           <p>
@@ -58,7 +58,7 @@ const SchedulePage: NextPage = () => {
             the opening for Generative Tokens.
           </p>
 
-          <Spacing size="3x-large" />
+          <Spacing size="3x-large" sm="x-large" />
 
           <ClientOnlyEmpty>
             <h4>Current state</h4>

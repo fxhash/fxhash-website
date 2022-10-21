@@ -87,7 +87,10 @@
 @media (max-width: $breakpoint-sm) {
   .field {
     & + .field, & + .fieldset {
-      margin-top: 16px
+      margin-top: 16px;
+    }
+    & > label {
+      margin-bottom: $spacing;
     }
   }
 }

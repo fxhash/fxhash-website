@@ -18,7 +18,7 @@ export function SectionHeader({
       className={cs(
         style.container,
         style[`layout_${layout}`],
-        layoutStyle["padding-small"],
+        layoutStyle["padding-big"],
         className
       )}
     >
