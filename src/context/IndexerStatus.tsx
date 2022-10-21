@@ -39,7 +39,7 @@ export function IndexerStatusProvider({
   useClientEffect(() => {
     const reloadInterval = setInterval(() => {
       reloadStatus()
-    }, 10000)
+    }, 30000)
     return () => clearInterval(reloadInterval)
   })
 
