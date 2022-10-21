@@ -30,12 +30,16 @@
 
 @media (max-width: $breakpoint-sm) {
   .root {
+    gap: 8px;
     i {
-      font-size: 24px;
+      font-size: 25px;
+    }
+    h4 {
+      margin-bottom: 8px;
     }
   }
 
   .icon-wrapper {
-    width: 24px;
+    width: 35px;
   }
 }

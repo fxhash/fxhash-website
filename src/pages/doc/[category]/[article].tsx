@@ -52,7 +52,7 @@ const DocArticlePage: NextPage<Props> = ({
         <link rel="stylesheet" href="/highlight/dracula.css" />
       </Head>
 
-      <Spacing size="large" sm="none" />
+      <Spacing size="large" sm="x-large" />
 
       <section>
         <DocLayout activeCategory={categoryLink} activeArticle={articleLink}>
