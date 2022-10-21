@@ -27,14 +27,14 @@ const SandboxPage: NextPage = () => {
         />
       </Head>
 
-      <Spacing size="6x-large" sm="3x-large" />
+      <Spacing size="6x-large" sm="x-large" />
 
       <section>
         <SectionHeader>
           <TitleHyphen>sandbox</TitleHyphen>
         </SectionHeader>
 
-        <Spacing size="x-large" />
+        <Spacing size="x-large" sm="regular" />
 
         <main className={cs(layout["padding-big"])}>
           <p>
@@ -55,7 +55,7 @@ const SandboxPage: NextPage = () => {
             .
           </p>
 
-          <Spacing size="3x-large" />
+          <Spacing size="3x-large" sm="x-large" />
 
           <ClientOnly>
             <Sandbox />
