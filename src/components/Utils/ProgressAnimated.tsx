@@ -6,11 +6,12 @@ export interface ProgressAnimatedRef {
   start: () => void
 }
 interface Props {
-  width: string
+  width?: string
   duration?: number
+  className?: string
 }
 export const ProgressAnimated = forwardRef<ProgressAnimatedRef, Props>(
-  ({ width, duration = 2 }, ref) => {
+  ({ className, width, duration = 2 }, ref) => {
     const divRef = useRef<HTMLDivElement>(null)
 
     const start = () => {
@@ -26,7 +27,7 @@ export const ProgressAnimated = forwardRef<ProgressAnimatedRef, Props>(
     return (
       <div
         ref={divRef}
-        className={cs(style.container)}
+        className={cs(style.container, className)}
         style={{
           width,
         }}

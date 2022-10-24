@@ -83,6 +83,7 @@ export interface Props {
  * components to usee it higher in the hierarchy
  */
 export function Tabs({
+  className,
   tabDefinitions,
   tabsLayout = "full-width",
   activeIdx,
@@ -120,7 +121,7 @@ export function Tabs({
   return (
     <div
       ref={refContainer}
-      className={cs(style.container, style[`layout-${tabsLayout}`])}
+      className={cs(style.container, style[`layout-${tabsLayout}`], className)}
     >
       <nav className={cs(tabsClassName)}>
         {tabDefinitions.map((def, idx) => {

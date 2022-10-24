@@ -19,48 +19,61 @@ import { UserBadge } from "../../components/User/UserBadge"
 import { Button } from "../../components/Button"
 import { getGentkUrl } from "../../utils/gentk"
 import { SectionHeader } from "../../components/Layout/SectionHeader"
-import { ProgressAnimated, ProgressAnimatedRef } from "../../components/Utils/ProgressAnimated"
+import {
+  ProgressAnimated,
+  ProgressAnimatedRef,
+} from "../../components/Utils/ProgressAnimated"
 import { gentkLiveUrl } from "../../utils/objkt"
 
 export function LiveFeed() {
   const isMounted = useIsMounted()
 
   const lastFetch = useRef<Date>(subMinutes(new Date(), 60))
-  const [getObjktsFeed, { data, loading, error }] = useLazyQuery(Qu_objktsFeed, {
-    fetchPolicy: "no-cache"
-  })
+  const [getObjktsFeed, { data, loading, error }] = useLazyQuery(
+    Qu_objktsFeed,
+    {
+      fetchPolicy: "no-cache",
+    }
+  )
 
   // 3 piles: to be revealed, revealing, revealed
   const [toReveal, setToReveal] = useState<Objkt[]>([])
-  const [revealing, setRevealing] = useState<Objkt|null>(null)
+  const [revealing, setRevealing] = useState<Objkt | null>(null)
   const [revealed, setRevealed] = useState<Objkt[]>([])
   // is it ready to be revealed
   const [readyRevealNew, setReadyRevealNew] = useState<boolean>(false)
 
   const progressRef = useRef<ProgressAnimatedRef>(null)
 
-  useInterval(() => {
-    getObjktsFeed({
-      variables: {
-        "filters": {
-          "assigned_eq": true,
-          "assignedAt_gt": lastFetch.current.toISOString()
+  useInterval(
+    () => {
+      getObjktsFeed({
+        variables: {
+          filters: {
+            assigned_eq: true,
+            assignedAt_gt: lastFetch.current.toISOString(),
+          },
+          take: 20,
         },
-        "take": 20
-      }
-    })
-  }, 30000, true)
+      })
+    },
+    30000,
+    true
+  )
 
   useEffect(() => {
     if (!data) return
-    // @ts-ignore update the date based on the most recent assignation
-    const sortedByAssigned = [...data.objkts].sort((a: Objkt, b: Objkt) => new Date(a.assignedAt!) - new Date(b.assignedAt!))
+    // update the date based on the most recent assignation
+    const sortedByAssigned = [...data.objkts].sort(
+      // @ts-ignore
+      (a: Objkt, b: Objkt) => new Date(a.assignedAt!) - new Date(b.assignedAt!)
+    )
     if (sortedByAssigned.length > 0) {
       lastFetch.current = new Date(sortedByAssigned[0].assignedAt)
     }
 
     // filter those already seen - never know
-    const filtered = sortedByAssigned.filter(objkt => {
+    const filtered = sortedByAssigned.filter((objkt) => {
       if (revealing && revealing.id === objkt.id) return false
       for (const obj of revealed) {
         if (obj.id === objkt.id) return false
@@ -99,8 +112,7 @@ export function LiveFeed() {
         // update the revealing token
         if (reveal) {
           setRevealing(reveal)
-        }
-        else {
+        } else {
           setReadyRevealNew(true)
         }
         // finally we start to load the next resource in the background
@@ -115,7 +127,7 @@ export function LiveFeed() {
 
   return (
     <div>
-      <Spacing size="x-large"/>
+      <Spacing size="x-large" />
 
       <div className={cs(style.reveal_container)}>
         {revealing ? (
@@ -126,28 +138,31 @@ export function LiveFeed() {
               resetOnUrlChange={true}
             />
 
-            <Spacing size="large"/>
+            <Spacing size="large" sm="regular" />
             <ProgressAnimated
-              width="min(250px, 50vw)"
+              className={style.progress_bar}
               ref={progressRef}
             />
-            <Spacing size="large"/>
+            <Spacing size="large" sm="x-small" />
 
-            <small className={cs(colors.gray)}>GENTK#{ revealing.id }</small>
-            <h3>{ revealing.name }</h3>
-            <Spacing size="x-small"/>
+            <small className={cs(colors.gray)}>GENTK#{revealing.id}</small>
+            <Spacing size="none" sm="x-small" />
+            <h3>{revealing.name}</h3>
+            <Spacing size="x-small" sm="x-large" />
             <UserBadge
               prependText="created by"
               user={revealing.issuer.author}
               size="big"
+              classNameAvatar={style.avatar}
             />
-            <Spacing size="8px"/>
-            <UserBadge 
+            <Spacing size="8px" />
+            <UserBadge
               prependText="owned by"
               user={revealing.owner!}
               size="big"
+              classNameAvatar={style.avatar}
             />
-            <Spacing size="2x-large"/>
+            <Spacing size="2x-large" sm="x-large" />
 
             <Link href={getGentkUrl(revealing)} passHref>
               <Button
@@ -159,32 +174,33 @@ export function LiveFeed() {
               </Button>
             </Link>
           </>
-        ):(
-          <LoaderBlock height="30vh">
-            waiting for a reveal
-          </LoaderBlock>
+        ) : (
+          <LoaderBlock height="30vh">waiting for a reveal</LoaderBlock>
         )}
       </div>
 
-      <Spacing size="6x-large"/>
+      <Spacing size="6x-large" sm="2x-large" />
 
       <SectionHeader>
         <TitleHyphen>Recently revealed</TitleHyphen>
       </SectionHeader>
 
-      <Spacing size="x-large"/>
+      <Spacing size="x-large" sm="regular" />
 
       {revealed.length > 0 ? (
-        <CardsContainer>
-          {revealed.map(gentk => (
+        <CardsContainer
+          emptyDivs={revealed.length > 8 ? 0 : 8 - revealed.length}
+        >
+          {revealed.map((gentk) => (
             <ObjktCard key={gentk.id} objkt={gentk} />
           ))}
         </CardsContainer>
-      ):(
-        <em className={cs(colors['gray-dark'])}>
+      ) : (
+        <em className={cs(colors["gray-dark"])}>
           Once a token will be revealed on your screen it will appear in here...
         </em>
       )}
+      <Spacing size="x-large" />
     </div>
   )
 }
