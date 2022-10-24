@@ -118,6 +118,10 @@
     min-width: fit-content;
   }
 
+  .container.layout-full-width nav {
+    justify-content: flex-start;
+  }
+
   .container.layout-fixed-size nav {
     justify-content: flex-start;
   }
@@ -160,6 +164,11 @@
         width: 100%;
       }
     }
+  }
+
+  .tab-full-width {
+    text-align: left;
+    flex: 0;
   }
 
   .tab-subtabs {

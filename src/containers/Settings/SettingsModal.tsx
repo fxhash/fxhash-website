@@ -23,10 +23,10 @@ function TabWrapper({
 
 const SettingTabs: TabDefinition[] = [
   {
-    name: "Display",
+    name: "display",
   },
   {
-    name: "Network",
+    name: "network",
   },
 ]
 
@@ -39,6 +39,7 @@ export function SettingsModal({ onClose }: Props) {
   return (
     <Modal title="Settings" onClose={onClose} className={cs(style.root)}>
       <TabsContainer
+        tabsLayout="full-width"
         tabDefinitions={SettingTabs}
         tabWrapperComponent={TabWrapper}
       >
