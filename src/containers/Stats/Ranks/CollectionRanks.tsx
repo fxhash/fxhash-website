@@ -11,11 +11,10 @@ import { RankPlaceholder } from "../../../components/Stats/RankPlaceholder"
 import { DisplayTezos } from "../../../components/Display/DisplayTezos"
 import { Spacing } from "../../../components/Layout/Spacing"
 
-
 const sortOptions: IOptions[] = [
   {
     label: "24 hours",
-    value: "secVolumeTz24"
+    value: "secVolumeTz24",
   },
   {
     label: "7 days",
@@ -35,61 +34,57 @@ function sortValueToSortVariable(val: string) {
   if (val === "pertinence") return {}
   const split = val.split("-")
   return {
-    [split[0]]: split[1].toUpperCase()
+    [split[0]]: split[1].toUpperCase(),
   }
 }
 
-interface Props {
-  
-}
-export function CollectionRanks({
-  
-}: Props) {
+interface Props {}
+export function CollectionRanks({}: Props) {
   const [sortValue, setSortValue] = useState<string>("secVolumeTz7d")
-  const sort = useMemo(() => sortValueToSortVariable(`${sortValue}-desc`), [sortValue])
-  
+  const sort = useMemo(
+    () => sortValueToSortVariable(`${sortValue}-desc`),
+    [sortValue]
+  )
+
   const { data, loading } = useQuery(Qu_marketStatsCollections, {
     notifyOnNetworkStatusChange: true,
     variables: {
       skip: 0,
       take: 15,
       sort,
-    }
+    },
   })
 
-  const stats: GenerativeTokenMarketStats[] = data?.marketStats?.generativeTokens
+  const stats: GenerativeTokenMarketStats[] =
+    data?.marketStats?.generativeTokens
 
   return (
     <>
       <div className={cs(style.selector)}>
         <span>Highest volume</span>
-        <Select 
+        <Select
+          classNameRoot={style.select}
           value={sortValue}
           options={sortOptions}
           onChange={setSortValue}
         />
       </div>
-      <Spacing size="x-large" />
+      <Spacing size="x-large" sm="large" />
       <Ranks>
-        {stats ? (
-          stats.map((stat, idx) => (
-            <GenerativeRank
-              key={idx}
-              token={stat.generativeToken!}
-            >
-              <DisplayTezos
-                // @ts-ignore
-                mutez={stat[sortValue]}
-                className="price"
-                formatBig
-              />
-            </GenerativeRank>
-          ))
-        ):(
-          Array(15).fill(0).map((_, idx) => (
-            <RankPlaceholder key={idx} />
-          ))
-        )}
+        {stats
+          ? stats.map((stat, idx) => (
+              <GenerativeRank key={idx} token={stat.generativeToken!}>
+                <DisplayTezos
+                  // @ts-ignore
+                  mutez={stat[sortValue]}
+                  className="price"
+                  formatBig
+                />
+              </GenerativeRank>
+            ))
+          : Array(15)
+              .fill(0)
+              .map((_, idx) => <RankPlaceholder key={idx} />)}
       </Ranks>
     </>
   )

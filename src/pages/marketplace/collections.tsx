@@ -38,14 +38,14 @@ const MarketplaceCollectionPage: NextPage = () => {
         />
       </Head>
 
-      <Spacing size="3x-large" />
+      <Spacing size="3x-large" sm="x-large" />
 
       <section>
-        <SectionHeader layout="center">
+        <SectionHeader layout="center" sm="left">
           <SectionTitle>marketplace / collections</SectionTitle>
         </SectionHeader>
 
-        <Spacing size="3x-large" />
+        <Spacing size="3x-large" sm="2x-large" />
 
         <MarketplaceTabs active={1} />
         <main>

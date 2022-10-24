@@ -1,11 +1,27 @@
+@import "../../../styles/Variables";
+
 .selector {
   display: flex;
   flex-direction: row;
   align-items: center;
   font-weight: bold;
-  
+
   & > span {
     font-size: var(--font-size-h5);
     margin-right: 12px;
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .selector {
+    width: 100%;
+    justify-content: space-between;
+    & > span {
+      font-size: 24px;
+      margin-right: 8px;
+    }
+  }
+  .select {
+    flex-shrink: 0;
   }
 }
