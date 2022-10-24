@@ -8,7 +8,7 @@ import Head from "next/head"
 import { SectionTitle } from "../components/Layout/SectionTitle"
 import { getDocDefinition, IDocPage } from "../services/LocalFiles"
 import { DocHomeCategory } from "../components/Doc/DocHomeCategory"
-import { TitleHyphen } from "../components/Layout/TitleHyphen";
+import { TitleHyphen } from "../components/Layout/TitleHyphen"
 
 interface IProps {
   definition: IDocPage
