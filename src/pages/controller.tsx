@@ -1,34 +1,30 @@
 import type { NextPage } from "next"
 import { useRef, useContext, useEffect } from "react"
-import layout from "../styles/Layout.module.scss"
-import cs from "classnames"
 import { Spacing } from "../components/Layout/Spacing"
 import { SectionHeader } from "../components/Layout/SectionHeader"
-import ClientOnly from "../components/Utils/ClientOnly"
-import { Sandbox } from "../containers/Sandbox/Sandbox"
 import Head from "next/head"
-import { LinkGuide } from "../components/Link/LinkGuide"
 import { SectionTitle } from "../components/Layout/SectionTitle"
-import { useTweaks } from "use-tweaks"
 import { ParamsContext } from "../context/Params"
+import { InputParams } from "tweakpane"
 
-function useParams(parameters) {
+function useParams(parameters: InputParams) {
   const params = useContext(ParamsContext)
   useEffect(() => {
-    params.setParams(parameters)
+    params.addParams(parameters)
   }, [])
   return params
 }
 
-const ControllerPage: NextPage = () => {
+interface Props {
+  params: InputParams
+}
+
+const ControllerPage: NextPage<Props> = ({ params }) => {
   const ref = useRef(null)
 
-  const params = useParams({
-    factor: 123,
-    title: "hello",
-    color: 0xff0055,
-  })
-  console.log(params)
+  const controller = useParams(params)
+
+  console.log(controller)
 
   /*
   const { speed, factor } = useTweaks(
@@ -66,12 +62,24 @@ const ControllerPage: NextPage = () => {
         </SectionHeader>
         <div ref={ref} id="someContainer" />
       </section>
-
+      {controller.factor}
       <Spacing size="6x-large" sm="5x-large" />
       <Spacing size="6x-large" sm="none" />
       <Spacing size="6x-large" sm="none" />
     </>
   )
+}
+
+export async function getServerSideProps() {
+  return {
+    props: {
+      params: {
+        factor: 123,
+        title: "hello",
+        color: 0xff0055,
+      },
+    },
+  }
 }
 
 export default ControllerPage

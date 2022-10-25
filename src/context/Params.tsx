@@ -6,13 +6,14 @@ import React, {
   useEffect,
   useMemo,
 } from "react"
-import { Pane } from "tweakpane"
+import { Pane, InputParams, TpChangeEvent } from "tweakpane"
+
 interface IParamsContext {
-  params: Object
+  addParams: (params: InputParams) => void
 }
 
 const defaultProperties: IParamsContext = {
-  params: {},
+  addParams: () => {},
 }
 
 const defaultCtx: IParamsContext = {
@@ -22,19 +23,15 @@ const defaultCtx: IParamsContext = {
 export const ParamsContext = React.createContext<IParamsContext>(defaultCtx)
 
 export function ParamsProvider({ children }: PropsWithChildren<{}>) {
-  const [params, setParams] = useState({})
-  const [data, setData] = useState({ ...params })
-  const ref = useRef()
+  const [params, setParams] = useState<InputParams>({})
+  const [data, setData] = useState({})
 
-  const addData = useCallback(
-    (entry) => {
-      setData({
-        ...data,
-        ...entry,
-      })
-    },
-    [data, setData]
-  )
+  const addParams = (params: InputParams) => {
+    setParams((p) => ({ ...p, ...params }))
+    setData((d) => ({ ...d, ...params }))
+  }
+
+  const ref = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (!ref.current) return
@@ -42,15 +39,16 @@ export function ParamsProvider({ children }: PropsWithChildren<{}>) {
     Object.keys(params).map((key) => {
       p.addInput(params, key)
     })
-    p.on("change", (e) => {
-      addData({ [e.presetKey]: e.value })
+    p.on("change", (e: TpChangeEvent<unknown>) => {
+      setData((d) => ({ ...d, [e.presetKey as string]: e.value }))
     })
     return () => {
       p.dispose()
     }
-  }, [params, ref, addData])
+  }, [params, ref])
+
   return (
-    <ParamsContext.Provider value={{ setParams, ...data }}>
+    <ParamsContext.Provider value={{ addParams, ...data }}>
       <div ref={ref} />
       {children}
     </ParamsContext.Provider>
