@@ -3,18 +3,21 @@ import React, {
   useState,
   useRef,
   useEffect,
-  useContext
+  useContext,
+  Ref,
 } from "react"
 import { Pane, InputParams, TpChangeEvent } from "tweakpane"
 
 interface IParamsContext {
   addParams: (params: InputParams) => void
   setParam: (key: string, value: any) => void
+  setPaneContainer: (container: HTMLDivElement) => void
 }
 
 const defaultProperties: IParamsContext = {
   addParams: () => {},
   setParam: () => {},
+  setPaneContainer: () => {},
 }
 
 const defaultCtx: IParamsContext = {
@@ -23,16 +26,21 @@ const defaultCtx: IParamsContext = {
 
 export const ParamsContext = React.createContext<IParamsContext>(defaultCtx)
 
-export function useParams(parameters: InputParams) {
+export function useParams(
+  parameters: InputParams,
+  paneContainerRef: Ref<HTMLDivElement>
+) {
   const params = useContext(ParamsContext)
   useEffect(() => {
     params.addParams(parameters)
-  }, [parameters])
+    params.setPaneContainer(paneContainerRef?.current)
+  }, [parameters, paneContainerRef])
   return params
 }
 
 export function ParamsProvider({ children }: PropsWithChildren<{}>) {
   const pane = useRef<Pane>()
+  const [paneContainer, setPaneContainer] = useState<HTMLDivElement>()
   const [params, setParams] = useState<InputParams>({})
   const [data, setData] = useState({})
 
@@ -47,7 +55,7 @@ export function ParamsProvider({ children }: PropsWithChildren<{}>) {
   }
 
   useEffect(() => {
-    const p = new Pane()
+    const p = new Pane({ container: paneContainer })
     pane.current = p
     Object.keys(params).map((key) => {
       p.addInput(params, key)
@@ -59,10 +67,12 @@ export function ParamsProvider({ children }: PropsWithChildren<{}>) {
     return () => {
       p.dispose()
     }
-  }, [params])
+  }, [params, paneContainer])
 
   return (
-    <ParamsContext.Provider value={{ addParams, setParam, ...data }}>
+    <ParamsContext.Provider
+      value={{ addParams, setParam, setPaneContainer, ...data }}
+    >
       {children}
     </ParamsContext.Provider>
   )

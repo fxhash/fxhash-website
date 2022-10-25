@@ -6,15 +6,16 @@ import Head from "next/head"
 import { SectionTitle } from "../components/Layout/SectionTitle"
 import { useParams } from "../context/Params"
 import { InputParams } from "tweakpane"
+import { SectionWrapper } from "../components/Layout/SectionWrapper"
 
 interface Props {
   params: InputParams
 }
 
 const ControllerPage: NextPage<Props> = ({ params }) => {
-  const ref = useRef(null)
+  const paneContainer = useRef<HTMLDivElement>(null)
 
-  const controller = useParams(params)
+  const controller = useParams(params, paneContainer)
 
   console.log(controller)
 
@@ -40,17 +41,17 @@ const ControllerPage: NextPage<Props> = ({ params }) => {
 
       <Spacing size="6x-large" sm="3x-large" />
 
-      <section>
-        <SectionHeader>
+      <SectionWrapper layout="fixed-width-centered">
           <SectionTitle>Controller</SectionTitle>
-        </SectionHeader>
-        <div ref={ref} id="someContainer" />
-      </section>
-      {controller.factor}
-      <button onClick={handleReset}>set factor 1000</button>
-      <Spacing size="6x-large" sm="5x-large" />
-      <Spacing size="6x-large" sm="none" />
-      <Spacing size="6x-large" sm="none" />
+          <Spacing size="2x-large" />
+          {controller.factor}
+          {controller.title}
+          {controller.color}
+          <Spacing size="2x-large" />
+          <button onClick={handleReset}>set factor 1000</button>
+          <Spacing size="2x-large" />
+          <div ref={paneContainer} />
+      </SectionWrapper>
     </>
   )
 }
