@@ -1,19 +1,20 @@
 import React, {
   PropsWithChildren,
   useState,
-  useCallback,
   useRef,
   useEffect,
-  useMemo,
+  useContext
 } from "react"
 import { Pane, InputParams, TpChangeEvent } from "tweakpane"
 
 interface IParamsContext {
   addParams: (params: InputParams) => void
+  setParam: (key: string, value: any) => void
 }
 
 const defaultProperties: IParamsContext = {
   addParams: () => {},
+  setParam: () => {},
 }
 
 const defaultCtx: IParamsContext = {
@@ -22,7 +23,16 @@ const defaultCtx: IParamsContext = {
 
 export const ParamsContext = React.createContext<IParamsContext>(defaultCtx)
 
+export function useParams(parameters: InputParams) {
+  const params = useContext(ParamsContext)
+  useEffect(() => {
+    params.addParams(parameters)
+  }, [parameters])
+  return params
+}
+
 export function ParamsProvider({ children }: PropsWithChildren<{}>) {
+  const pane = useRef<Pane>()
   const [params, setParams] = useState<InputParams>({})
   const [data, setData] = useState({})
 
@@ -31,25 +41,28 @@ export function ParamsProvider({ children }: PropsWithChildren<{}>) {
     setData((d) => ({ ...d, ...params }))
   }
 
-  const ref = useRef<HTMLDivElement>(null)
+  const setParam = (key: string, value: any) => {
+    setParams((d) => ({ ...d, [key]: value }))
+    setData((d) => ({ ...d, [key]: value }))
+  }
 
   useEffect(() => {
-    if (!ref.current) return
-    const p = new Pane({ container: ref.current })
+    const p = new Pane()
+    pane.current = p
     Object.keys(params).map((key) => {
       p.addInput(params, key)
     })
     p.on("change", (e: TpChangeEvent<unknown>) => {
       setData((d) => ({ ...d, [e.presetKey as string]: e.value }))
     })
+    p.refresh()
     return () => {
       p.dispose()
     }
-  }, [params, ref])
+  }, [params])
 
   return (
-    <ParamsContext.Provider value={{ addParams, ...data }}>
-      <div ref={ref} />
+    <ParamsContext.Provider value={{ addParams, setParam, ...data }}>
       {children}
     </ParamsContext.Provider>
   )

@@ -4,16 +4,8 @@ import { Spacing } from "../components/Layout/Spacing"
 import { SectionHeader } from "../components/Layout/SectionHeader"
 import Head from "next/head"
 import { SectionTitle } from "../components/Layout/SectionTitle"
-import { ParamsContext } from "../context/Params"
+import { useParams } from "../context/Params"
 import { InputParams } from "tweakpane"
-
-function useParams(parameters: InputParams) {
-  const params = useContext(ParamsContext)
-  useEffect(() => {
-    params.addParams(parameters)
-  }, [])
-  return params
-}
 
 interface Props {
   params: InputParams
@@ -26,17 +18,9 @@ const ControllerPage: NextPage<Props> = ({ params }) => {
 
   console.log(controller)
 
-  /*
-  const { speed, factor } = useTweaks(
-    {
-      speed: 1,
-      factor: { value: 1, min: 10, max: 100 },
-    },
-    { container: ref }
-  )
-
-  console.log(speed)
-   */
+  const handleReset = () => {
+    controller.setParam("factor", 1000)
+  }
   return (
     <>
       <Head>
@@ -63,6 +47,7 @@ const ControllerPage: NextPage<Props> = ({ params }) => {
         <div ref={ref} id="someContainer" />
       </section>
       {controller.factor}
+      <button onClick={handleReset}>set factor 1000</button>
       <Spacing size="6x-large" sm="5x-large" />
       <Spacing size="6x-large" sm="none" />
       <Spacing size="6x-large" sm="none" />
