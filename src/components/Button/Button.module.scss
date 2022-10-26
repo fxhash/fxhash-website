@@ -222,7 +222,20 @@
 }
 
 @media (max-width: $breakpoint-md) {
-  .size-small, .size-medium {
+  .size-small, .size-regular, .size-medium {
     font-size: var(--font-size-big);
+  }
+  .button {
+    .btn_content {
+      justify-content: center;
+      width: 100%;
+    }
+  }
+  .children {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    flex: 1;
+    justify-content: center;
   }
 }

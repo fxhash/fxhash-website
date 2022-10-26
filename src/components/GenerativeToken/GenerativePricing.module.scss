@@ -1,5 +1,16 @@
+@import "../../styles/Variables";
+
 .group_details {
   display: flex;
   flex-direction: column;
   gap: 6px;
+}
+@media (max-width: $breakpoint-sm) {
+  .mobile_align_right {
+    width: 100%;
+    text-align: right;
+  }
+  .mobile_grid_two {
+    grid-column: span 2;
+  }
 }

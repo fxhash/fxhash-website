@@ -76,16 +76,17 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
 
       <GenerativeFlagBanner token={token} />
 
-      <Spacing size="3x-large" />
+      <Spacing size="3x-large" sm="x-large" />
 
       <section className={cs(layout["padding-big"])}>
         <GenerativeDisplay token={token} />
       </section>
 
-      <Spacing size="6x-large" />
-      <Spacing size="6x-large" />
+      <Spacing size="6x-large" sm="2x-large" />
+      <Spacing size="6x-large" sm="none" />
 
       <Tabs
+        className={style.tabs}
         activeIdx={tabActive}
         tabDefinitions={tabs}
         tabsLayout="fixed-size"
@@ -101,8 +102,8 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
         </main>
       )}
 
-      <Spacing size="6x-large" />
-      <Spacing size="6x-large" />
+      <Spacing size="6x-large" sm="3x-large" />
+      <Spacing size="6x-large" sm="none" />
     </>
   )
 }

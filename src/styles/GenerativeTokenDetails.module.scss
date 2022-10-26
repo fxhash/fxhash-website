@@ -11,7 +11,7 @@
   .artwork_header {
     display: none;
   }
-  
+
   .artwork_header_mobile {
     display: flex;
     width: 100%;
@@ -47,7 +47,7 @@
 
   &.inline {
     flex-grow: 2;
-    
+
     header {
       display: flex;
       align-items: flex-start;
@@ -63,7 +63,7 @@
       align-items: flex-end;
     }
 
-    @media (max-width: $breakpoint-md) { 
+    @media (max-width: $breakpoint-md) {
       header {
         flex-direction: column-reverse;
       }
@@ -146,6 +146,9 @@
         margin-left: 0 !important;
       }
     }
+  }
+  .tabs {
+    margin: 0 20px;
   }
 }
 

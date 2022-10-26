@@ -30,6 +30,21 @@
   }
 }
 
+.padding-small-sm-big {
+  padding-left: var(--layout-margin-small-lg);
+  padding-right: var(--layout-margin-small-lg);
+
+  @media (max-width: $breakpoint-lg) {
+    padding-left: var(--layout-margin-big-md);
+    padding-right: var(--layout-margin-big-md);
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    padding-left: var(--layout-margin-big-sm);
+    padding-right: var(--layout-margin-big-sm);
+  }
+}
+
 .explore_header {
   display: flex;
   gap: var(--layout-gap-small-lg);

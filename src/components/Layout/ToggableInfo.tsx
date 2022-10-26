@@ -27,19 +27,24 @@ export function ToggableInfo({
       <button
         type="button"
         onClick={() => setOpened(!opened)}
-        className={cs(style.btn_toggle)}
+        className={cs(style.btn_toggle, {
+          [style.btn_toggle_opened]: opened,
+        })}
       >
         <i
-          className={`fa-solid fa-angle-${opened ? "up" : "down"}`}
+          className={`fa-solid fa-caret-${opened ? "up" : "down"}`}
           aria-hidden
         />
         <strong>{label}</strong>
       </button>
 
       {opened ? (
-        children
+        <span className={style.children}>{children}</span>
       ) : (
-        <span className={cs(text.info)} onClick={() => setOpened(!opened)}>
+        <span
+          className={cs(style.placeholder, style.mobile_align_right)}
+          onClick={() => setOpened(!opened)}
+        >
           {placeholder}
         </span>
       )}

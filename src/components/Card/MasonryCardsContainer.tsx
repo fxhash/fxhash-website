@@ -1,5 +1,4 @@
 import React, {
-  ReactChild,
   useEffect,
   useRef,
   useState,
@@ -7,10 +6,12 @@ import React, {
   useMemo,
   ReactNode,
   Children,
+  forwardRef,
+  useImperativeHandle,
 } from "react"
 import style from "./MasonryCardsContainer.module.scss"
 import cs from "classnames"
-import { HTMLAttributes, PropsWithChildren } from "react"
+import { PropsWithChildren } from "react"
 
 import { useEventListener } from "../../utils/useEventListener"
 import { ICardContainerProps } from "../../types/Components/CardsContainer"
@@ -24,12 +25,10 @@ const fillCols = (children: ReactNode, nbCols: number) => {
   return cols
 }
 
-export function MasonryCardsContainer({
-  children,
-  cardSize = 270,
-  emptyDivs = 0,
-  ...props
-}: PropsWithChildren<Props>) {
+export const MasonryCardsContainer = forwardRef<
+  HTMLDivElement,
+  PropsWithChildren<Props>
+>(({ children, cardSize = 270, emptyDivs = 0, ...props }, ref) => {
   const elementRef = useRef<HTMLDivElement>(null)
   const [numCols, setNumCols] = useState<number>(3)
   const cols = useMemo(() => {
@@ -49,8 +48,9 @@ export function MasonryCardsContainer({
       )
       setNumCols(numCols)
     }
-  }, [elementRef, cardSize, setNumCols])
+  }, [cardSize, setNumCols])
 
+  useImperativeHandle(ref, () => elementRef.current as HTMLDivElement)
   useEffect(resizeHandler, [resizeHandler])
   useEventListener(`resize`, resizeHandler)
 
@@ -73,6 +73,6 @@ export function MasonryCardsContainer({
         ))}
     </div>
   )
-}
+})
 
 MasonryCardsContainer.displayName = "MasonryCardsContainer"

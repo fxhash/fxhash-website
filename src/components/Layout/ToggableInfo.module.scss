@@ -1,3 +1,5 @@
+@import "../../styles/Variables";
+
 .btn_toggle {
   border: none;
   background: transparent;
@@ -14,7 +16,7 @@
     position: absolute;
     left: 0;
     top: 50%;
-    transform: translateY(calc(-50% + 1px));
+    transform: translateY(calc(-50% - 1px));
     font-size: 10px;
     color: var(--color-gray);
     transition: all 0.15s;
@@ -24,5 +26,31 @@
     i {
       color: var(--color-black);
     }
+  }
+}
+.placeholder {
+  font-size: var(--font-size-small);
+  color: var(--color-gray);
+}
+@media (max-width: $breakpoint-sm) {
+  .btn_toggle {
+    left: 0;
+    i {
+      font-size: 14px;
+      color: var(--color-black);
+    }
+    &_opened {
+      grid-column: span 2;
+    }
+  }
+  .mobile_align_right {
+    width: 100%;
+    text-align: right;
+  }
+  .placeholder {
+    font-size: var(--font-size-regular);
+  }
+  .children {
+    grid-column: span 2;
   }
 }

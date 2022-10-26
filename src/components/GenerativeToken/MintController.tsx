@@ -103,6 +103,7 @@ export function MintController({
         <>
           <Link href={revealUrl} passHref>
             <Button
+              className={style.button}
               isLink
               color="secondary"
               iconComp={<i aria-hidden className="fas fa-arrow-right" />}
@@ -149,12 +150,14 @@ export function MintController({
               onMint={mint}
               forceReserveConsumption={forceReserveConsumption}
             >
-              mint iteration&nbsp;&nbsp;
-              <DisplayTezos
-                mutez={price}
-                tezosSize="regular"
-                formatBig={false}
-              />
+              <span className={style.mint}>
+                mint iteration&nbsp;&nbsp;
+                <DisplayTezos
+                  mutez={price}
+                  tezosSize="regular"
+                  formatBig={false}
+                />
+              </span>
             </MintButton>
           )}
 
