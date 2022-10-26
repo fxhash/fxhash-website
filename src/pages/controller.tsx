@@ -42,15 +42,15 @@ const ControllerPage: NextPage<Props> = ({ params }) => {
       <Spacing size="6x-large" sm="3x-large" />
 
       <SectionWrapper layout="fixed-width-centered">
-          <SectionTitle>Controller</SectionTitle>
-          <Spacing size="2x-large" />
-          {controller.factor}
-          {controller.title}
-          {controller.color}
-          <Spacing size="2x-large" />
-          <button onClick={handleReset}>set factor 1000</button>
-          <Spacing size="2x-large" />
-          <div ref={paneContainer} />
+        <SectionTitle>Controller</SectionTitle>
+        <Spacing size="2x-large" />
+        {controller.factor}
+        {controller.title}
+        {controller.color}
+        <Spacing size="2x-large" />
+        <button onClick={handleReset}>set factor 1000</button>
+        <Spacing size="2x-large" />
+        <div ref={paneContainer} />
       </SectionWrapper>
     </>
   )

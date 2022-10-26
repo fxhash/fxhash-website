@@ -5,13 +5,15 @@ import React, {
   useEffect,
   useContext,
   Ref,
+  RefObject,
 } from "react"
 import { Pane, InputParams, TpChangeEvent } from "tweakpane"
 
 interface IParamsContext {
   addParams: (params: InputParams) => void
   setParam: (key: string, value: any) => void
-  setPaneContainer: (container: HTMLDivElement) => void
+  setPaneContainer: (container?: HTMLDivElement) => void
+  [key: string]: any
 }
 
 const defaultProperties: IParamsContext = {
@@ -28,12 +30,12 @@ export const ParamsContext = React.createContext<IParamsContext>(defaultCtx)
 
 export function useParams(
   parameters: InputParams,
-  paneContainerRef: Ref<HTMLDivElement>
+  paneContainerRef: RefObject<HTMLDivElement>
 ) {
   const params = useContext(ParamsContext)
   useEffect(() => {
     params.addParams(parameters)
-    params.setPaneContainer(paneContainerRef?.current)
+    params.setPaneContainer(paneContainerRef?.current || undefined)
   }, [parameters, paneContainerRef])
   return params
 }
