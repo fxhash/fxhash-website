@@ -111,7 +111,7 @@ const defaultProperties: ISettingsProperties = {
   topBannerMessage: "",
   nsfw: false,
   epilepsy: hasReducedMotion && hasReducedMotion.matches,
-  layoutMasonry: true,
+  layoutMasonry: false,
 }
 
 const defaultCtx: ISettingsContext = {
