@@ -102,7 +102,11 @@ const _MobileMenu = ({
         >
           <UserFromAddress address={user.id}>
             {({ user: fetchedUser }) => (
-              <UserBadge user={fetchedUser} hasLink={false} size="big" />
+              <UserBadge 
+                user={fetchedUser} 
+                hasLink={false} 
+                size="big"
+              />
             )}
           </UserFromAddress>
           <i aria-hidden className="fas fa-caret-up" />
