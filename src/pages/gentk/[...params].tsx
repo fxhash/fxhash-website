@@ -10,7 +10,7 @@ import { truncateEnd } from "../../utils/strings"
 import { Qu_objkt } from "../../queries/objkt"
 import { GenerativeFlagBanner } from "../../containers/Generative/FlagBanner"
 import { ObjktTabs } from "../../containers/Objkt/ObjktTabs"
-import { GenerativeDisplayIteration } from "../../containers/Generative/Display/GenerativeDisplayIteration";
+import { GenerativeDisplayIteration } from "../../containers/Generative/Display/GenerativeDisplayIteration"
 
 interface Props {
   objkt: Objkt

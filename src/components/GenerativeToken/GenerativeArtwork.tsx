@@ -96,7 +96,7 @@ export function GenerativeArtwork({
       <Spacing size="8px" />
 
       <div className={cs(layout["x-inline"], style.artwork_buttons)}>
-        {!hideVariations &&
+        {!hideVariations && (
           <ButtonVariations
             token={token}
             previewHash={previewHash}
@@ -105,7 +105,7 @@ export function GenerativeArtwork({
               setPreviewHash(hash)
             }}
           />
-        }
+        )}
         {displayImage ? (
           <Button
             type="button"
