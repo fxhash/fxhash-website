@@ -2,7 +2,7 @@ import style from "./ArticleEditor.module.scss"
 import articleStyle from "../../../components/NFTArticle/NFTArticle.module.scss"
 import cs from "classnames"
 import TextareaAutosize from "react-textarea-autosize"
-import React, { useCallback, useContext, useMemo, useRef, useState } from "react"
+import React, { forwardRef, useCallback, useContext, useMemo, useRef, useState } from "react"
 import { Dropzone } from "../../../components/Input/Dropzone"
 import { Spacing } from "../../../components/Layout/Spacing"
 import { Field } from "../../../components/Form/Field"
@@ -31,8 +31,7 @@ import { UserContext } from "../../UserProvider"
 import { ErrorBlock } from "../../../components/Error/ErrorBlock"
 import { YupSplits } from "../../../utils/yup/splits"
 import { InputText } from "../../../components/Input/InputText";
-import NftArticleEditor from "../../../components/NFTArticle/NFTArticleEditor"
-
+import NftArticleEditor from "../../../components/NFTArticle/NFTArticleEditor";
 
 const editorDefaultValue = [
   {
@@ -182,6 +181,7 @@ export function ArticleEditor({
       setFieldValue("thumbnailUri", uri);
     }
     // update the medias in the editor
+
     editorStateRef.current?.updateMediaUrl(
       target,
       uri

@@ -32,12 +32,27 @@ const createMarkdownVideoFromFigure = (nodeFigure: Node, nodeVideo: Node) => {
   }
   return convertSlateLeafDirectiveToMarkdown(videoNode)
 }
+
+const createMarkdownAudioFromFigure = (nodeFigure: Node, nodeVideo: Node) => {
+  const videoNode: Node = {
+    type: "audio",
+    src: nodeVideo.src,
+  }
+  const caption: Node | null = nodeFigure.children.find(
+    (node: Node) => node.type === ("figcaption" as any)
+  )
+  if (caption && caption.children?.length > 0) {
+    videoNode.children = caption.children
+  }
+  return convertSlateLeafDirectiveToMarkdown(videoNode)
+}
 const mediasConvert: Record<
   string,
   (nodeFigure: Node, nodeMedia: Node) => any
 > = {
   image: createMarkdownImageFromFigure,
   video: createMarkdownVideoFromFigure,
+  audio: createMarkdownAudioFromFigure,
 }
 
 export const figureProcessor: IArticleElementProcessor = {
@@ -47,7 +62,7 @@ export const figureProcessor: IArticleElementProcessor = {
    */
   transformSlateToMarkdownMdhast: (node: any) => {
     const mediaNode: Node | null = node.children.find(
-      (node: Node) => ["image", "video"].indexOf(node.type) > -1
+      (node: Node) => ["image", "video", "audio"].indexOf(node.type) > -1
     )
     return mediasConvert[mediaNode.type](node, mediaNode)
   },

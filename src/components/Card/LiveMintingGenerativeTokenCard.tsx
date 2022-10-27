@@ -55,6 +55,7 @@ export function LiveMintingGenerativeTokenCard({ token, className }: Props) {
       <div className={style.container_arrow}>
         <div className={style.container_image}>
           <Card
+            tokenLabels={token.labels}
             displayDetails={false}
             thumbnailUri={token.thumbnailUri}
             thumbInfosComp={

@@ -8,71 +8,77 @@ import { Report } from "./Report"
 import { IReserve } from "./Reserve"
 import { ISplit, Split } from "./Split"
 import { User } from "./User"
+import { ISettingsContext } from "../../context/Theme"
+import { MediaImage } from "./MediaImage"
 
 export enum GenTokFlag {
-  NONE              = "NONE",
-  CLEAN             = "CLEAN",
-  REPORTED          = "REPORTED",
-  AUTO_DETECT_COPY  = "AUTO_DETECT_COPY",
-  MALICIOUS         = "MALICIOUS",
-  HIDDEN            = "HIDDEN",
+  NONE = "NONE",
+  CLEAN = "CLEAN",
+  REPORTED = "REPORTED",
+  AUTO_DETECT_COPY = "AUTO_DETECT_COPY",
+  MALICIOUS = "MALICIOUS",
+  HIDDEN = "HIDDEN",
 }
 
 export enum GenTokPricing {
-  FIXED           = "FIXED",
-  DUTCH_AUCTION   = "DUTCH_AUCTION",
+  FIXED = "FIXED",
+  DUTCH_AUCTION = "DUTCH_AUCTION",
 }
 
 export enum GenTokLabel {
-  EPILEPTIC_TRIGGER   = 0,
-  SEXUAL_CONTENT      = 1,
-  SENSITIVE           = 2,
-  IMAGE_COMPOSITION   = 100,
-  ANIMATED            = 101,
-  INTERACTIVE         = 102,
-  PFP                 = 103,
+  EPILEPTIC_TRIGGER = 0,
+  SEXUAL_CONTENT = 1,
+  SENSITIVE = 2,
+  IMAGE_COMPOSITION = 100,
+  ANIMATED = 101,
+  INTERACTIVE = 102,
+  PFP = 103,
 }
 
 export enum GenTokLabelGroup {
-  WARNING       = "WARNING",
-  DETAILS       = "DETAILS",
+  WARNING = "WARNING",
+  DETAILS = "DETAILS",
 }
 
 export interface GenTokLabelDefinition {
   label: string
   shortLabel: string
   group: GenTokLabelGroup
+  description?: string
+  icon?: string
+  showWarningSetting?: keyof ISettingsContext
+  showWarningOn?: "preview" | "run"
 }
 
 export interface GenerativeTokenMarketStats {
-  floor: number|null
-  median: number|null
-  listed: number|null
-  highestSold: number|null
-  lowestSold: number|null
-  primVolumeTz: number|null
-  primVolumeNb: number|null
-	secVolumeTz: number|null
-	secVolumeNb: number|null
-	secVolumeTz24: number|null
-	secVolumeNb24: number|null
-	secVolumeTz7d: number|null
-	secVolumeNb7d: number|null
-	secVolumeTz30d: number|null
-	secVolumeNb30d: number|null
+  floor: number | null
+  median: number | null
+  listed: number | null
+  highestSold: number | null
+  lowestSold: number | null
+  primVolumeTz: number | null
+  primVolumeNb: number | null
+  secVolumeTz: number | null
+  secVolumeNb: number | null
+  secVolumeTz24: number | null
+  secVolumeNb24: number | null
+  secVolumeTz7d: number | null
+  secVolumeNb7d: number | null
+  secVolumeTz30d: number | null
+  secVolumeNb30d: number | null
   generativeToken?: GenerativeToken
 }
 
 export interface GenerativeTokenMarketStatsHistory {
-  floor: number|null
-  median: number|null
-  listed: number|null
-  highestSold: number|null
-  lowestSold: number|null
-  primVolumeTz: number|null
-  primVolumeNb: number|null
-	secVolumeTz: number|null
-	secVolumeNb: number|null
+  floor: number | null
+  median: number | null
+  listed: number | null
+  highestSold: number | null
+  lowestSold: number | null
+  primVolumeTz: number | null
+  primVolumeNb: number | null
+  secVolumeTz: number | null
+  secVolumeNb: number | null
   from: string
   to: string
 }
@@ -113,9 +119,10 @@ export interface GenerativeToken {
   marketStats?: GenerativeTokenMarketStats
   marketStatsHistory?: GenerativeTokenMarketStatsHistory[]
   features?: GenerativeTokenFeature[]
-  moderationReason?: string|null
+  moderationReason?: string | null
   entireCollection?: Objkt[]
   articleMentions?: ArticleGenerativeTokenMention[]
+  captureMedia?: MediaImage
 }
 
 export interface GenerativeTokenWithCollection extends GenerativeToken {
@@ -129,7 +136,7 @@ export interface GenerativeTokenFilters {
   flag_neq?: GenTokFlag
   price_gte?: number
   price_lte?: number
-  mintProgress_eq?: "COMPLETED"|"ONGOING"|"ALMOST"
+  mintProgress_eq?: "COMPLETED" | "ONGOING" | "ALMOST"
   authorVerified_eq?: boolean
   searchQuery_eq?: string
   supply_lte?: number
@@ -140,7 +147,7 @@ export interface GenerativeTokenFilters {
 }
 
 export interface GenerativeTokenFeatureValue {
-  value: string|boolean|number
+  value: string | boolean | number
   occur: number
 }
 

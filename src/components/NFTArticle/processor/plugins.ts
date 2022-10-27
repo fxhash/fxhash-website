@@ -9,6 +9,7 @@ import { tezosStorageProcessor } from "../elements/TezosStorage/TezosStorageProc
 import { videoProcessor } from "../elements/Video/VideoProcessor"
 import { findAndReplace } from "mdast-util-find-and-replace"
 import { mentionProcessor } from "../elements/Mention/MentionProcessor"
+import { audioProcessor } from "../elements/Audio/AudioProcessor"
 
 // declare module 'mdast' {
 //   interface Mention extends Parent {
@@ -31,6 +32,7 @@ export const customNodes: CustomArticleElementsByType = {
     "tezos-storage-pointer": tezosStorageProcessor,
     "embed-media": embedProcessor,
     video: videoProcessor,
+    audio: audioProcessor,
   },
   textDirective: {},
   containerDirective: {},

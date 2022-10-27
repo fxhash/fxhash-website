@@ -60,6 +60,8 @@ export function ProposalDetailsUpdateIssuerExpanded({
       variables: {
         filters: {
           id_in: userIds,
+          skip: 0,
+          take: 500,
         },
       },
     })

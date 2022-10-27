@@ -1,41 +1,16 @@
 import { gql } from "@apollo/client"
-import { Frag_GenAuthor } from "./fragments/generative-token"
-
+import { Frag_ListingCardInfos } from "./fragments/listing"
 
 export const Qu_listings = gql`
-${Frag_GenAuthor}
-
-query Listings (
-  $skip: Int, $take: Int, $sort: ListingsSortInput, $filters: ListingFilter
-) {
-  listings(skip: $skip, take: $take, sort: $sort, filters: $filters) {
-    id
-    version
-    price
-    objkt {
-      id
-      version
-      name
-      slug
-      metadata
-      duplicate
-      activeListing {
-        id
-        version
-        price
-      }
-      owner {
-        id
-        name
-        flag
-        avatarUri
-      }
-      issuer {
-        flag
-        name
-        ...Author
-      }
+  ${Frag_ListingCardInfos}
+  query Listings(
+    $skip: Int
+    $take: Int
+    $sort: ListingsSortInput
+    $filters: ListingFilter
+  ) {
+    listings(skip: $skip, take: $take, sort: $sort, filters: $filters) {
+      ...ListingCardInfos
     }
   }
-}
 `
