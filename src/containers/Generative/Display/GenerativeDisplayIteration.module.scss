@@ -79,6 +79,9 @@
   }
   .buttons {
     gap: 16px;
+    button {
+      width: 100%;
+    }
   }
   .minted {
     font-size: var(--font-size-regular);
@@ -96,5 +99,11 @@
   }
   .labels {
     margin-top: 8px;
+  }
+  .button {
+    width: 100%;
+  }
+  .actions {
+    gap: 16px;
   }
 }

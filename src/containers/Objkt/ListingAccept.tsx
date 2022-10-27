@@ -10,7 +10,10 @@ import { useRouter } from "next/router"
 import { GenTokFlag } from "../../types/entities/GenerativeToken"
 import { Unlock } from "../../components/Utils/Unlock"
 import { useContractOperation } from "../../hooks/useContractOperation"
-import { ListingAcceptOperation, TListingAcceptOperationParams } from "../../services/contract-operations/ListingAccept"
+import {
+  ListingAcceptOperation,
+  TListingAcceptOperationParams,
+} from "../../services/contract-operations/ListingAccept"
 import { DisplayTezos } from "../../components/Display/DisplayTezos"
 
 interface Props {
@@ -22,15 +25,24 @@ export function ListingAccept({ listing, objkt }: Props) {
   const userCtx = useContext(UserContext)
   const router = useRouter()
 
-  const [locked, setLocked] = useState<boolean>([
-    GenTokFlag.AUTO_DETECT_COPY,
-    GenTokFlag.REPORTED,
-    GenTokFlag.MALICIOUS,
-    GenTokFlag.HIDDEN
-  ].includes(objkt.issuer.flag))
+  const [locked, setLocked] = useState<boolean>(
+    [
+      GenTokFlag.AUTO_DETECT_COPY,
+      GenTokFlag.REPORTED,
+      GenTokFlag.MALICIOUS,
+      GenTokFlag.HIDDEN,
+    ].includes(objkt.issuer.flag)
+  )
 
-  const { state, loading: contractLoading, error: contractError, success, call, clear } = 
-    useContractOperation<TListingAcceptOperationParams>(ListingAcceptOperation)
+  const {
+    state,
+    loading: contractLoading,
+    error: contractError,
+    success,
+    call,
+  } = useContractOperation<TListingAcceptOperationParams>(
+    ListingAcceptOperation
+  )
 
   const callContract = () => {
     call({
@@ -39,7 +51,7 @@ export function ListingAccept({ listing, objkt }: Props) {
     })
   }
 
-  const isOwner = (objkt.owner?.id === userCtx.user?.id)
+  const isOwner = objkt.owner?.id === userCtx.user?.id
 
   return (
     <>
@@ -54,25 +66,23 @@ export function ListingAccept({ listing, objkt }: Props) {
       <div className={cs(style.lock_container)}>
         {!isOwner && (
           <>
-          <Button
-            state={contractLoading ? "loading" : "default"}
-            color="secondary"
-            onClick={callContract}
-            disabled={locked}
-          >
-            purchase token - <DisplayTezos
-              mutez={listing.price}
-              tezosSize="regular"
-              formatBig={false}
-            />
-          </Button>
+            <Button
+              state={contractLoading ? "loading" : "default"}
+              color="secondary"
+              onClick={callContract}
+              disabled={locked}
+            >
+              purchase token -{" "}
+              <DisplayTezos
+                mutez={listing.price}
+                tezosSize="regular"
+                formatBig={false}
+              />
+            </Button>
 
-          {locked && (
-            <Unlock
-              locked={true}
-              onClick={() => setLocked(false)}
-            />
-          )}
+            {locked && (
+              <Unlock locked={true} onClick={() => setLocked(false)} />
+            )}
           </>
         )}
       </div>

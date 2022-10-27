@@ -107,9 +107,15 @@ const _GenerativeDisplayIteration = ({
 
           <Spacing size="regular" />
 
-          <div className={cs(layout.buttons_inline, layout.flex_wrap)}>
+          <div
+            className={cs(
+              layout.buttons_inline,
+              layout.flex_wrap,
+              style.actions
+            )}
+          >
             <Link href={getGenerativeTokenUrl(objkt.issuer)} passHref>
-              <Button isLink={true} size="regular">
+              <Button isLink={true} className={style.button} size="regular">
                 open project
               </Button>
             </Link>
@@ -117,7 +123,7 @@ const _GenerativeDisplayIteration = ({
               href={getGenerativeTokenMarketplaceUrl(objkt.issuer)}
               passHref
             >
-              <Button isLink={true} size="regular">
+              <Button isLink={true} className={style.button} size="regular">
                 open marketplace
               </Button>
             </Link>

@@ -1,34 +1,37 @@
 import style from "./MarketplaceActions.module.scss"
 import cs from "classnames"
-import { useContext, useState } from "react"
+import { useState } from "react"
 import { Button } from "../../components/Button"
 import { InputTextUnit } from "../../components/Input/InputTextUnit"
 import { Objkt } from "../../types/entities/Objkt"
-import { UserContext } from "../UserProvider"
 import { ContractFeedback } from "../../components/Feedback/ContractFeedback"
 import { useContractOperation } from "../../hooks/useContractOperation"
-import { ListingOperation, TListingOperationParams } from "../../services/contract-operations/Listing"
+import {
+  ListingOperation,
+  TListingOperationParams,
+} from "../../services/contract-operations/Listing"
 
 interface Props {
   objkt: Objkt
 }
 
 export function ListingCreate({ objkt }: Props) {
-  const userCtx = useContext(UserContext)
-  const user = userCtx.user!
-  
   const [opened, setOpened] = useState<boolean>(false)
   const [price, setPrice] = useState<string>("")
 
-  const { state, loading: contractLoading, error: contractError, success, call, clear } = 
-    useContractOperation<TListingOperationParams>(ListingOperation)
+  const {
+    state,
+    loading: contractLoading,
+    error: contractError,
+    success,
+    call,
+  } = useContractOperation<TListingOperationParams>(ListingOperation)
 
   const callContract = () => {
     const mutez = Math.floor(parseFloat(price) * 1000000)
     if (isNaN(mutez)) {
       alert("Invalid price")
-    }
-    else {
+    } else {
       call({
         token: objkt,
         price: mutez,
@@ -53,7 +56,7 @@ export function ListingCreate({ objkt }: Props) {
             type="number"
             sizeX="small"
             value={price}
-            onChange={evt => setPrice(evt.target.value)}
+            onChange={(evt) => setPrice(evt.target.value)}
             min={0}
             step={0.0000001}
           />
@@ -66,7 +69,7 @@ export function ListingCreate({ objkt }: Props) {
             list
           </Button>
         </div>
-      ):(
+      ) : (
         <Button
           color={opened ? "primary" : "secondary"}
           onClick={() => setOpened(!opened)}
