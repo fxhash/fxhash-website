@@ -60,7 +60,7 @@ export const figureProcessor: IArticleElementProcessor = {
    * Turns a figcaption element into an element which will be turned into an image or video
    * in proper markdown
    */
-  transformSlateToMarkdownMdhast: (node) => {
+  transformSlateToMarkdownMdhast: (node: any) => {
     const mediaNode: Node | null = node.children.find(
       (node: Node) => ["image", "video", "audio"].indexOf(node.type) > -1
     )
