@@ -13,7 +13,6 @@ import style from "./MasonryCardsContainer.module.scss"
 import cs from "classnames"
 import { PropsWithChildren } from "react"
 
-import { useEventListener } from "../../utils/useEventListener"
 import { ICardContainerProps } from "../../types/Components/CardsContainer"
 
 interface Props extends ICardContainerProps {}
@@ -52,8 +51,13 @@ export const MasonryCardsContainer = forwardRef<
 
   useImperativeHandle(ref, () => elementRef.current as HTMLDivElement)
   useEffect(resizeHandler, [resizeHandler])
-  useEventListener(`resize`, resizeHandler)
 
+  useEffect(() => {
+    window.addEventListener("resize", resizeHandler)
+    return () => {
+      window.removeEventListener("resize", resizeHandler)
+    }
+  }, [resizeHandler])
   return (
     <div
       {...props}

@@ -15,17 +15,24 @@ import { ipfsGatewayUrl } from "../../services/Ipfs"
 import { Image } from "../Image"
 
 interface Props {
-  token: GenerativeToken
+  token: Pick<
+    GenerativeToken,
+    "metadata" | "labels" | "captureMedia" | "displayUri" | "name" | "balance"
+  >
   forceImageDisplay?: boolean
   canStop?: boolean
   openUrl?: string
   openText?: string
+  hideVariations?: boolean
+  artifactUrl?: string
 }
 export function GenerativeArtwork({
   token,
   forceImageDisplay = false,
   openUrl,
   openText = "open",
+  hideVariations,
+  artifactUrl: artworkArtifactUrl,
 }: Props) {
   const settings = useContext(SettingsContext)
   const iframeRef = useRef<ArtworkIframeRef>(null)
@@ -52,6 +59,7 @@ export function GenerativeArtwork({
 
   // the direct URL to the resource to display in the <iframe>
   const artifactUrl = useMemo<string>(() => {
+    if (artworkArtifactUrl) return artworkArtifactUrl
     // if no hash is forced, use the artifact URI directly
     if (!previewHash) {
       return ipfsGatewayUrl(token.metadata.artifactUri)
@@ -88,14 +96,16 @@ export function GenerativeArtwork({
       <Spacing size="8px" />
 
       <div className={cs(layout["x-inline"], style.artwork_buttons)}>
-        <ButtonVariations
-          token={token}
-          previewHash={previewHash}
-          onChangeHash={(hash) => {
-            setDisplayImage(false)
-            setPreviewHash(hash)
-          }}
-        />
+        {!hideVariations &&
+          <ButtonVariations
+            token={token}
+            previewHash={previewHash}
+            onChangeHash={(hash) => {
+              setDisplayImage(false)
+              setPreviewHash(hash)
+            }}
+          />
+        }
         {displayImage ? (
           <Button
             type="button"

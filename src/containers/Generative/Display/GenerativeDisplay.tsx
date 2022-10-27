@@ -27,7 +27,7 @@ import { Labels } from "../../../components/GenerativeToken/Label/Labels"
 import { ListReserves } from "../../../components/List/ListReserves"
 import { GenTokArticleMentions } from "./GenTokArticleMentions"
 import { Clamp } from "../../../components/Clamp/Clamp"
-import { useCallback, useState } from "react";
+import { useCallback, useState } from "react"
 
 /**
  * This is the Core component resposible for the display logic of a Generative
@@ -117,7 +117,7 @@ export function GenerativeDisplay({ token, offlineMode = false }: Props) {
               Published on{" "}
               {format(new Date(token.createdAt), "MMMM d, yyyy' at 'HH:mm")}
             </span>
-            <Labels labels={token.labels!} />
+            {token.labels && <Labels className={style.labels} labels={token.labels!} />}
           </div>
 
           <Spacing size="large" sm="regular" />

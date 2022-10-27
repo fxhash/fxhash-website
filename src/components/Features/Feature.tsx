@@ -27,7 +27,7 @@ export function Feature({ feature }: Props) {
     >
       <div className={cs(style.details)}>
         <strong>{feature.name}</strong>
-        <span>{displayFeatureValue(feature.value)}</span>
+        <span className={style.details_value}>{displayFeatureValue(feature.value)}</span>
       </div>
       {feature.rarity && (
         <div className={cs(style.rarity)}>

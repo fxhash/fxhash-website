@@ -75,6 +75,9 @@
       flex-direction: column-reverse;
     }
   }
+  @media (max-width: $breakpoint-sm) {
+    gap: 32px;
+  }
 }
 
 .x-inline {
