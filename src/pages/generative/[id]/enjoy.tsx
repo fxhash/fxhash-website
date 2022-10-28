@@ -9,6 +9,7 @@ import { GenerativeEnjoy } from "../../../containers/Generative/Enjoy/Generative
 import { useMemo } from "react"
 import { shuffleArray } from "../../../utils/array"
 import { getGenerativeTokenUrl } from "../../../utils/generative-token"
+import { Frag_UserBadge } from "../../../queries/fragments/user"
 
 interface Props {
   token: GenerativeTokenWithCollection
@@ -94,6 +95,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       const apolloClient = createApolloClient()
       const { data, error } = await apolloClient.query({
         query: gql`
+          ${Frag_UserBadge}
           query Query($id: Float!) {
             generativeToken(id: $id) {
               id
@@ -101,10 +103,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
               metadata
               generativeUri
               author {
-                id
-                name
-                flag
-                avatarUri
+                ...UserBadgeInfos
               }
               entireCollection {
                 id
@@ -113,10 +112,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
                 iteration
                 generationHash
                 owner {
-                  id
-                  name
-                  flag
-                  avatarUri
+                  ...UserBadgeInfos
                 }
               }
             }
