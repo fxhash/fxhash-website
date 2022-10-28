@@ -10,7 +10,7 @@ import { ContractFeedback } from "../Feedback/ContractFeedback"
 import { OfferAcceptOperation } from "../../services/contract-operations/OfferAccept"
 import Skeleton from "../Skeleton"
 import { Offer } from "./Offer"
-import { OfferMobile } from "./OfferMobile";
+import { OfferMobile } from "./OfferMobile"
 
 interface Props {
   objkt?: Objkt

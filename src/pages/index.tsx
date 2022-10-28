@@ -33,7 +33,7 @@ import {
   Frag_GenTokenInfo,
 } from "../queries/fragments/generative-token"
 import { Frag_MediaImage } from "../queries/fragments/media"
-import { Clamp } from "../components/Clamp/Clamp";
+import { Clamp } from "../components/Clamp/Clamp"
 
 interface Props {
   randomGenerativeToken: GenerativeToken | null
@@ -116,7 +116,11 @@ const Home: NextPage<Props> = ({
                     href={getGenerativeTokenUrl(randomGenerativeToken)}
                     passHref
                   >
-                    <Button className={styles.button} isLink={true} size="regular">
+                    <Button
+                      className={styles.button}
+                      isLink={true}
+                      size="regular"
+                    >
                       open project
                     </Button>
                   </Link>
