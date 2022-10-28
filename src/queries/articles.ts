@@ -1,6 +1,7 @@
 import { gql } from "@apollo/client";
-import { Frag_ArticleFull, Frag_ArticleInfos } from "./fragments/article";
+import { Frag_ArticleFull, Frag_ArticleInfos, Frag_ArticleInfosAction } from "./fragments/article";
 import { Frag_ListingArticle } from "./fragments/listing";
+import { Frag_UserBadge } from "./fragments/user"
 
 export const Qu_articles = gql`
   query Articles($filters: ArticleFilter, $sort: ArticleSortInput, $skip: Int, $take: Int) {
@@ -34,10 +35,7 @@ export const Qu_articleActionsById = gql`
       ledger {
         amount
         owner {
-          id
-          name
-          avatarUri
-          flag
+          ...UserBadgeInfos
         }
       }
       activeListings {
@@ -46,6 +44,7 @@ export const Qu_articleActionsById = gql`
     }
   }
   ${Frag_ListingArticle}
+  ${Frag_UserBadge}
 `
 
 export const Qu_articleListingsById = gql`
@@ -58,4 +57,31 @@ export const Qu_articleListingsById = gql`
     }
   }
   ${Frag_ListingArticle}
+`
+const Qu_articleActions = gql`
+  query Query ($id: Int!, $skip: Int, $take: Int, $filters: ActionFilter) {
+    article(id: $id) {
+      id
+      actions(skip: $skip, take: $take, filters: $filters) {
+        id
+        type
+        opHash
+        numericValue
+        metadata
+        createdAt
+        issuer {
+          ...UserBadgeInfos
+        }
+        target {
+          ...UserBadgeInfos
+        }
+        article {
+          id
+          ...ArticleInfosAction
+        }
+      }
+    }
+  }
+  ${Frag_ArticleInfosAction}
+  ${Frag_UserBadge}
 `

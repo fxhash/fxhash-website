@@ -110,6 +110,7 @@ export const Qu_userEntireCollection = gql`
 export const Qu_userObjkts = gql`
   ${Frag_GenAuthor}
   ${Frag_MediaImage}
+  ${Frag_UserBadge}
   query UserCollection(
     $id: String!
     $take: Int
@@ -131,10 +132,7 @@ export const Qu_userObjkts = gql`
         }
         metadata
         owner {
-          id
-          name
-          flag
-          avatarUri
+          ...UserBadgeInfos
         }
         issuer {
           name
