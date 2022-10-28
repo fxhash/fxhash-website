@@ -33,7 +33,7 @@ import {
   Frag_GenTokenInfo,
 } from "../queries/fragments/generative-token"
 import { Frag_MediaImage } from "../queries/fragments/media"
-import {Frag_UserBadge} from "../queries/fragments/user"
+import { Frag_UserBadge } from "../queries/fragments/user"
 
 interface Props {
   randomGenerativeToken: GenerativeToken | null
