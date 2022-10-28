@@ -28,6 +28,7 @@ import { User } from "../../../types/entities/User"
 import { Objkt } from "../../../types/entities/Objkt"
 import { GenerativeArtwork } from "../../../components/GenerativeToken/GenerativeArtwork"
 import { Clamp } from "../../../components/Clamp/Clamp"
+import { truncateMiddle } from "../../../utils/strings"
 
 interface GenerativeDisplayIterationProps {
   objkt: Objkt
@@ -186,7 +187,10 @@ const _GenerativeDisplayIteration = ({
               href={`https://tzkt.io/${objkt.generationHash}`}
               className={cs(text.very_small, style.mobile_align_right)}
             >
-              {objkt.generationHash}{" "}
+              <span className={layout.hide_sm}>{objkt.generationHash}</span>
+              <span className={layout.show_sm}>
+                {truncateMiddle(objkt.generationHash || "", 12)}
+              </span>{" "}
               <i className="fas fa-external-link-square" aria-hidden />
             </a>
             <strong>Metadata</strong>

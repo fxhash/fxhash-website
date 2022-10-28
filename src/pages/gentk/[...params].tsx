@@ -73,7 +73,7 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
       <ObjktTabs objkt={objkt} />
 
       <Spacing size="6x-large" />
-      <Spacing size="6x-large" />
+      <Spacing size="6x-large" sm="none" />
     </>
   )
 }
