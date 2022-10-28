@@ -180,6 +180,7 @@ function ReactiveImage({
         cid: image.cid,
         highestWidth: width,
       }
+      if (loaded?.cid !== image.cid) setLoaded(false)
       setUrl(getImageApiUrl(image.cid, width))
     }
   }, [getViewportSpace, image, ipfsUri])
