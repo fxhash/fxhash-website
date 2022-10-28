@@ -5,7 +5,7 @@ import { TezosStorageRenderer } from "./TezosStorageFactory"
 import { FxhashContracts } from "../../../../types/Contracts"
 import { SquareContainer } from "../../../Layout/SquareContainer"
 import { ArtworkFrame } from "../../../Artwork/ArtworkFrame"
-import { ImageIpfs } from "../../../Medias/ImageIpfs"
+import { Image } from "../../../Image"
 import { useQuery } from "@apollo/client"
 import { Qu_objkt } from "../../../../queries/objkt"
 import { useMemo, useRef, useState } from "react"
@@ -78,7 +78,11 @@ export const TezosStorageGentk: TezosStorageRenderer<Props> = ({ id }) => {
                 hasLoading={false}
               />
             ) : (
-              <ImageIpfs src={token.metadata!.displayUri} />
+              <Image
+                image={token.captureMedia}
+                ipfsUri={token.metadata!.displayUri}
+                alt={token.name || ""}
+              />
             )
           ) : (
             <LoaderBlock size="small" height="100%">
