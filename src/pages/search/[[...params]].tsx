@@ -22,7 +22,7 @@ export const getServerSideProps: GetServerSideProps<SearchProps> = async ({
   if (!params || params.length === 0) {
     return {
       props: {
-        query: queryString && queryString.toString(),
+        query: queryString && decodeURIComponent(queryString.toString()),
         tab: "summary",
       },
     }
@@ -35,7 +35,7 @@ export const getServerSideProps: GetServerSideProps<SearchProps> = async ({
   ) {
     return {
       props: {
-        query: queryString,
+        query: decodeURIComponent(queryString),
         tab,
       },
     }
