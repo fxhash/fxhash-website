@@ -1,0 +1,36 @@
+@import "../../styles/Variables";
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 140px;
+  padding: 18px var(--main-padding-sm);
+  padding-left: 10px;
+
+  @media (max-width: $breakpoint-md) {
+    min-height: 90px;
+    padding-left: 0;
+  }
+}
+
+.logo {
+  height: 0;
+  display: flex;
+  align-items: center;
+  color: var(--color-black);
+  font-size: 24px;
+
+  span {
+    display: none;
+  }
+}
+
+@media (max-width: 490px) {
+  .logo--hide {
+    display: none;
+  }
+  .header--search-opened {
+    padding-left: var(--main-padding-sm);
+  }
+}

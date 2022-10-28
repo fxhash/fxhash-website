@@ -1,0 +1,31 @@
+.input {
+  width: 100%;
+  font-size: var(--font-size-regular);
+  display: block;
+  font-family: inherit;
+  border: none;
+  outline: none;
+  resize: none;
+  padding: 0;
+  overflow: hidden;
+  background: transparent;
+  color: var(--color-black);
+
+  &::placeholder {
+    color: var(--color-gray-light);
+  }
+}
+
+.hide {
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.container_katex_margin {
+  margin-top: 8px;
+}
+
+.render {
+  font-size: 1.2rem;
+}
