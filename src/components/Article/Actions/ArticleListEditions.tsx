@@ -112,7 +112,7 @@ export function ArticleListEditions({ ledger, article }: Props) {
                   />
                 </Field>
 
-                <Spacing size="2x-large" />
+                <Spacing size="2x-large" sm="none" />
 
                 <Submit layout="center-vertical">
                   <ContractFeedback

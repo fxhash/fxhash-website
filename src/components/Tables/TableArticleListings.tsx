@@ -139,17 +139,34 @@ const _TableArticleListings = ({
                           listing.id === listingOperated?.id,
                       })}
                     >
-                      <td className={style["td-gentk"]} data-label="User">
+                      <td
+                        className={cs(
+                          style["td-gentk"],
+                          style["td_mobile_fullwidth"]
+                        )}
+                      >
                         <UserBadge hasLink user={listing.issuer} size="small" />
                       </td>
                       <td
-                        className={cs(style["td-editions"], style["td-center"])}
+                        className={cs(
+                          style["td-editions"],
+                          style["td-center"],
+                          style["td_mobile_fullwidth"],
+                          style["td_space_between"],
+                          style["td_listing_spacing"]
+                        )}
                         data-label="Editions"
                       >
                         <span className={text.bold}>{listing.amount}</span>
                       </td>
                       <td
-                        className={cs(style["td-time"], style["td-center"])}
+                        className={cs(
+                          style["td-time"],
+                          style["td-center"],
+                          style["td_mobile_fullwidth"],
+                          style["td_space_between"],
+                          style["td_listing_spacing"]
+                        )}
                         data-label="Time"
                       >
                         <div className={cs(text.info)}>
@@ -157,7 +174,6 @@ const _TableArticleListings = ({
                         </div>
                       </td>
                       <td
-                        data-label="Action"
                         className={cs({
                           [style.td_mobile_hide]: !buttons,
                         })}
@@ -186,11 +202,21 @@ const _TableArticleListings = ({
             (ledgers.length > 0 &&
               ledgers.map((ledger, idx) => (
                 <tr key={ledger.owner?.id || idx}>
-                  <td className={style["td-gentk"]} data-label="User">
+                  <td
+                    className={cs(
+                      style["td-gentk"],
+                      style["td_mobile_fullwidth"]
+                    )}
+                  >
                     <UserBadge hasLink user={ledger.owner} size="small" />
                   </td>
                   <td
-                    className={cs(style["td-editions"], style["td-center"])}
+                    className={cs(
+                      style["td-editions"],
+                      style["td-center"],
+                      style["td_mobile_fullwidth"],
+                      style["td_space_between"]
+                    )}
                     data-label="Editions"
                   >
                     <span className={text.bold}>{ledger.amount}</span>
@@ -198,10 +224,8 @@ const _TableArticleListings = ({
                   <td colSpan={1} className={style.td_mobile_hide} />
                   <td
                     className={cs({
-                      [style.td_mobile_fullwidth]: true,
                       [style.td_mobile_hide]: !(user?.id === ledger.owner.id),
                     })}
-                    data-label="Action"
                   >
                     <div className={style.article_actions}>
                       {user?.id === ledger.owner.id && (

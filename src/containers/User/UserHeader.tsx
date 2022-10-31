@@ -67,7 +67,7 @@ export function UserHeader({ user }: Props) {
             <UserVerification profile={tzProfileData} loading={loading} />
           </div>
         )}
-        <p>{nl2br(user.description)}</p>
+        <p className={layout.break_words}>{nl2br(user.description)}</p>
         {userConnected &&
           (isUserModerator(userConnected as User) ||
             userConnected.id === user.id) && (

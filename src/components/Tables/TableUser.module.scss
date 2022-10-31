@@ -223,6 +223,13 @@ td.td-right {
       &.td_mobile_hide {
         display: none;
       }
+      &:before {
+        content: attr(data-label);
+        display: block;
+        color: var(--color-gray);
+        font-size: var(--font-size-small);
+        margin-bottom: $spacing-2x-small;
+      }
       &:first-child {
         margin-top: 0;
         border-left: none;
@@ -230,13 +237,19 @@ td.td-right {
       &:last-child {
         border-right: none;
       }
-      &:before {
-        content: attr(data-label);
-        width: 100%;
-        display: block;
-        color: var(--color-gray);
-        font-size: var(--font-size-small);
-        margin-bottom: $spacing-2x-small;
+      &.td_space_between {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        &:before {
+          margin-bottom: 0;
+        }
+      }
+      &.td_listing_spacing {
+        padding-top: 0;
+        padding-bottom: 0;
+        margin-top: 4px;
       }
     }
     .date {
