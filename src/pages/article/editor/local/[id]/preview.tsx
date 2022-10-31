@@ -45,9 +45,9 @@ const ArticlePreviewPage: NextPage<ArticlePreviewPageProps> = ({ origin }) => {
               id_in: article.form.royaltiesSplit.map(
                 (royalty) => royalty.address
               ),
-              skip: 0,
-              take: 500,
             },
+            skip: 0,
+            take: 500,
           },
         })
         const newArticle = generateNftArticleFromDraft(
