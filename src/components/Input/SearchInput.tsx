@@ -11,6 +11,7 @@ import {
 } from "react"
 import useClickOutside from "../../hooks/useClickOutside"
 import useWindowSize, { breakpoints } from "../../hooks/useWindowsSize"
+import { focusAndOpenKeyboard } from "../../utils/events";
 
 export interface SearchInputProps {
   placeholder?: string
@@ -76,23 +77,24 @@ export function SearchInput({
     [handleMinimize, isMobile, minimizeBehavior, onSearch, value]
   )
   const handleToggleMinimize = useCallback(() => {
+    let isMinimizedUpdated = isMinimized
     if (
       minimizeBehavior === "desktop" ||
       (isMobile && minimizeBehavior === "mobile")
     ) {
-      handleMinimize(!isMinimized)
+      isMinimizedUpdated = !isMinimized
+      handleMinimize(isMinimizedUpdated)
     }
-    setTimeout(() => {
-      if (refInput.current && refInput.current.scrollWidth > 0) {
-        refInput.current.focus()
-      }
-    }, 10)
+    if (refInput.current && !isMinimizedUpdated) {
+      focusAndOpenKeyboard(refInput.current, 100)
+    }
   }, [handleMinimize, isMinimized, isMobile, minimizeBehavior])
 
   useClickOutside(
     refForm,
-    () => handleMinimize(true),
+    () => setTimeout(() => handleMinimize(true), 100),
     !minimizeBehavior ||
+      (!isMobile && minimizeBehavior === "mobile") ||
       (isMinimized &&
         ((isMobile && minimizeBehavior === "mobile") ||
           minimizeBehavior === "desktop"))

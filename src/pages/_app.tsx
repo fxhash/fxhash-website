@@ -1,12 +1,20 @@
 import "../styles/globals.scss"
 import "../styles/fonts.css"
 import type { AppProps } from "next/app"
-import { useRef, useEffect, memo, ReactElement, ReactNode } from "react"
+import {
+  useRef,
+  useEffect,
+  memo,
+  ReactElement,
+  ReactNode,
+  useCallback,
+} from "react"
 import { useRouter } from "next/router"
 import NextNprogress from "nextjs-progressbar"
 import Head from "next/head"
 import { Root } from "../containers/Root"
 import { NextPage } from "next"
+import { disableIosTextFieldZoom } from "../utils/mobile";
 
 const ROUTES_TO_RETAIN = [
   "/explore",
@@ -31,6 +39,15 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
   const retainedComponents = useRef<any>({})
 
   const isRetainableRoute = ROUTES_TO_RETAIN.includes(router.pathname)
+
+  const handleIOS = useCallback(() => {
+    const isIOS =
+      /iPad|iPhone|iPod/.test(navigator.userAgent) &&
+      !(window as any)["MSStream"]
+    if (isIOS) {
+      disableIosTextFieldZoom()
+    }
+  }, [])
 
   // if the current route is stored in memory and is loaded now, reset its index
   if (retainedComponents.current[router.pathname]) {
@@ -82,6 +99,16 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
     }
   }, [Component, pageProps])
 
+  useEffect(() => {
+    router.events.on("routeChangeComplete", handleIOS)
+    return () => {
+      router.events.off("routeChangeComplete", handleIOS)
+    }
+  }, [handleIOS, router.events])
+  useEffect(() => {
+    handleIOS()
+  }, [handleIOS])
+
   // custom layout for the components
   const subLayout = Component.getLayout ?? ((page) => page)
 
@@ -109,7 +136,10 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
           property="og:image"
           content="https://www.fxhash.xyz/images/og/og1.jpg"
         />
-
+        <meta
+          name="viewport"
+          content="width=device-width, height=device-height, initial-scale=1.0"
+        />
         <link
           rel="apple-touch-icon"
           sizes="180x180"
