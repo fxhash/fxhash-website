@@ -14,7 +14,7 @@ import NextNprogress from "nextjs-progressbar"
 import Head from "next/head"
 import { Root } from "../containers/Root"
 import { NextPage } from "next"
-import { disableIosTextFieldZoom } from "../utils/mobile";
+import { disableIosTextFieldZoom } from "../utils/mobile"
 
 const ROUTES_TO_RETAIN = [
   "/explore",

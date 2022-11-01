@@ -11,7 +11,7 @@ import {
 } from "react"
 import useClickOutside from "../../hooks/useClickOutside"
 import useWindowSize, { breakpoints } from "../../hooks/useWindowsSize"
-import { focusAndOpenKeyboard } from "../../utils/events";
+import { focusAndOpenKeyboard } from "../../utils/events"
 
 export interface SearchInputProps {
   placeholder?: string
