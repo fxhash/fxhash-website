@@ -65,7 +65,8 @@ const GenerativeTokenMarketplace: NextPage<Props> = ({ token }) => {
 
   // get the display url for og:image
   const displayUrl =
-    token.captureMedia?.cid && getImageApiUrl(token.captureMedia.cid, OG_IMAGE_SIZE)
+    token.captureMedia?.cid &&
+    getImageApiUrl(token.captureMedia.cid, OG_IMAGE_SIZE)
 
   return (
     <>
