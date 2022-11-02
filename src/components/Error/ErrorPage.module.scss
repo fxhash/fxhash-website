@@ -1,6 +1,16 @@
+@import "../../styles/Variables.scss";
+
 .root {
+  text-align: center;
+
   h1 {
     color: var(--color-error);
     margin-bottom: 1em;
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    h1 {
+      font-size: var(--font-size-h4);
+    }
   }
 }

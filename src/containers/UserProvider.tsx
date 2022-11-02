@@ -6,7 +6,7 @@ import { ConnectedUser } from "../types/entities/User"
 import { useClientAsyncEffect, useClientEffect } from "../utils/hookts"
 
 
-interface UserContextType {
+export interface UserContextType {
   autoConnectChecked: boolean
   user: ConnectedUser|null
   userFetched: boolean
@@ -80,7 +80,7 @@ export function UserProvider({ children }: PropsWithChildren<{}>) {
       reject()
     }
   })
-  
+
   // asks the manager for a disconnect & clears the context
   const disconnect = async () => {
     const ctx = ctxRef.current
@@ -91,7 +91,7 @@ export function UserProvider({ children }: PropsWithChildren<{}>) {
   }
 
   useClientAsyncEffect(async (isMounted) => {
-    const initCtx: UserContextType = { 
+    const initCtx: UserContextType = {
       ...defaultCtx,
       connect,
       disconnect,

@@ -1,13 +1,15 @@
-import { ApolloClient, FieldFunctionOptions, InMemoryCache } from "@apollo/client";
+import {
+  ApolloClient,
+  FieldFunctionOptions,
+  InMemoryCache,
+} from "@apollo/client"
 
 const client = new ApolloClient({
   uri: process.env.NEXT_PUBLIC_API_ROOT,
   cache: new InMemoryCache(),
   ssrMode: true,
-  ssrForceFetchDelay: 1000
+  ssrForceFetchDelay: 1000,
 })
-
-
 
 /**
  * Given a set of existing data, incoming data and pagination arguments,
@@ -34,7 +36,7 @@ export function cacheMergePaginatedField(
       }
     }
     // add the incoming to the merge array
-    merged[skip + (j++)] = incoming[i]
+    merged[skip + j++] = incoming[i]
   }
   return merged
 }
@@ -57,7 +59,7 @@ export const clientSideClient = new ApolloClient({
             keyArgs: ["sort", "featureFilters", "filters"],
             merge: cacheMergePaginatedField,
           },
-        }
+        },
       },
       User: {
         fields: {
@@ -73,6 +75,10 @@ export const clientSideClient = new ApolloClient({
             keyArgs: false,
             merge: cacheMergePaginatedField,
           },
+          articles: {
+            keyArgs: false,
+            merge: cacheMergePaginatedField,
+          },
           actions: {
             keyArgs: false,
             merge: cacheMergePaginatedField,
@@ -81,10 +87,10 @@ export const clientSideClient = new ApolloClient({
             keyArgs: false,
             merge: cacheMergePaginatedField,
           },
-        }
+        },
       },
       Listing: {
-        keyFields: ["id", "version"]
+        keyFields: ["id", "version"],
       },
       Query: {
         fields: {
@@ -92,14 +98,29 @@ export const clientSideClient = new ApolloClient({
             keyArgs: ["sort", "filters"],
             merge: cacheMergePaginatedField,
           },
+          articles: {
+            keyArgs: ["sort", "filters"],
+            merge: cacheMergePaginatedField,
+          },
           listings: {
             keyArgs: ["sort", "filters"],
             merge: cacheMergePaginatedField,
-          }
-        }
-      }
-    }
-  })
+          },
+          users: {
+            keyArgs: ["sort", "filters"],
+            merge: cacheMergePaginatedField,
+          },
+        },
+      },
+    },
+  }),
 })
 
-export default client
+export function createApolloClient() {
+  return new ApolloClient({
+    uri: process.env.NEXT_PUBLIC_API_ROOT,
+    cache: new InMemoryCache(),
+    ssrMode: true,
+    ssrForceFetchDelay: 1000,
+  })
+}

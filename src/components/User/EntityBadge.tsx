@@ -4,14 +4,19 @@ import { UserBadge } from "./UserBadge"
 
 export interface IProps {
   user: User
-  size?: "regular" | "big" | "small"
+  size?: "small" | "regular" | "big" | "xl"
   prependText?: string
   hasLink?: boolean
+  hasVerified?: boolean
   className?: string
-  avatarSide?: "left" | "right"
+  avatarSide?: "left" | "right" | "top"
+  classNameAvatar?: string
   displayAddress?: boolean
   displayAvatar?: boolean
   toggeable?: boolean
+  newTab?: boolean
+  isInline?: boolean
+  centered?: boolean
 }
 
 /**
@@ -23,8 +28,8 @@ export function EntityBadge(props: IProps) {
   const { user } = props
 
   return user.type === UserType.COLLAB_CONTRACT_V1 ? (
-    <CollabBadge {...props} user={props.user as Collaboration}/>
-  ):(
-    <UserBadge {...props}/>
+    <CollabBadge {...props} user={props.user as Collaboration} />
+  ) : (
+    <UserBadge {...props} />
   )
 }

@@ -1,14 +1,15 @@
 import React, { HTMLAttributes, PropsWithChildren } from "react"
 
+interface Props {}
 
-interface Props {
-}
-
-export const AnchorForward = React.forwardRef<HTMLAnchorElement, PropsWithChildren<HTMLAttributes<HTMLAnchorElement>>>(({
-  children,
-  ...props
-}, ref) => {
+export const AnchorForward = React.forwardRef<
+  HTMLAnchorElement,
+  PropsWithChildren<HTMLAttributes<HTMLAnchorElement>>
+>(({ children, ...props }, ref) => {
   return (
-    <a ref={ref} {...props}>{ children }</a>
+    <a ref={ref} {...props}>
+      {children}
+    </a>
   )
 })
+AnchorForward.displayName = "AnchorForward"

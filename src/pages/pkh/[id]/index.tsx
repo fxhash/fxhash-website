@@ -1,26 +1,20 @@
-import { User } from '../../../types/entities/User'
+import { User } from "../../../types/entities/User"
 import { UserProfileLayout } from "../../../containers/User/UserProfileLayout"
 import { getServerSidePropsUserById } from "../../../services/ServerSideProps/ServerSidePropsUser"
 import { ReactElement } from "react"
-import { UserDashboard } from "../../../containers/User/UserDashboard";
-
+import { UserGenerativeTokens } from "../../../containers/User/UserGenerativeTokens"
 
 interface Props {
   user: User
 }
 
 const UserPageDashboard = ({ user }: Props) => {
-  return (
-    <UserDashboard activeTab="sales" user={user} />
-  )
+  return <UserGenerativeTokens user={user} />
 }
 
 UserPageDashboard.getLayout = function getLayout(page: ReactElement) {
   return (
-    <UserProfileLayout
-      user={page.props.user}
-      activeTab="dashboard"
-    >
+    <UserProfileLayout user={page.props.user} activeTab="creations">
       {page}
     </UserProfileLayout>
   )

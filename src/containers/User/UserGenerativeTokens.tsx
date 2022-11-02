@@ -2,7 +2,7 @@
 import layout from "../../styles/Layout.module.scss"
 import { useQuery } from "@apollo/client"
 import cs from "classnames"
-import { useRef, useEffect, useContext } from "react"
+import { useRef, useEffect, useContext, useCallback, useState } from "react"
 import { CardsContainer } from "../../components/Card/CardsContainer"
 import { GenerativeTokenCard } from "../../components/Card/GenerativeTokenCard"
 import { LoaderBlock } from "../../components/Layout/LoaderBlock"
@@ -13,57 +13,52 @@ import { GenerativeToken } from "../../types/entities/GenerativeToken"
 import { User } from "../../types/entities/User"
 import { CardsLoading } from "../../components/Card/CardsLoading"
 
+const ITEMS_PER_PAGE = 20;
 interface Props {
   user: User
 }
 export function UserGenerativeTokens({
   user,
 }: Props) {
-  // use to know when to stop loading
-  const currentLength = useRef<number>(0)
-  const ended = useRef<boolean>(false)
+  const [hasNothingToFetch, setHasNothingToFetch] = useState(false);
 
   const settings = useContext(SettingsContext)
 
-  const { data, loading, fetchMore } = useQuery(Qu_userGenTokens, {
+  const { data, loading, fetchMore } = useQuery<{ user: User }>(Qu_userGenTokens, {
     notifyOnNetworkStatusChange: true,
     variables: {
       id: user.id,
       skip: 0,
-      take: 20
+      take: ITEMS_PER_PAGE
     },
+    onCompleted: (newData) => {
+      if (!newData?.user?.generativeTokens?.length || newData.user.generativeTokens.length < ITEMS_PER_PAGE) {
+        setHasNothingToFetch(true);
+      }
+    }
   })
 
   // safe access to gentoks
-  const genToks: GenerativeToken[] = data?.user?.generativeTokens || null
+  const genToks = data?.user?.generativeTokens || null
 
-  useEffect(() => {
-    if (!loading) {
-      if (currentLength.current === genToks?.length) {
-        ended.current = true
-      }
-      else {
-        currentLength.current = genToks?.length
-      }
+  const handleFetchMore = useCallback(async () => {
+    if (loading || hasNothingToFetch) return false;
+    const { data: newData } = await fetchMore({
+      variables: {
+        skip: genToks?.length || 0,
+        take: ITEMS_PER_PAGE,
+      },
+    });
+    if (!newData?.user?.generativeTokens?.length || newData.user.generativeTokens.length < ITEMS_PER_PAGE) {
+      setHasNothingToFetch(true);
     }
-  }, [data, loading])
-
-  const load = () => {
-    if (!ended.current) {
-      fetchMore({
-        variables: {
-          id: user.id,
-          skip: genToks?.length || 0,
-          take: 20
-        }
-      })
-    }
-  }
+  }, [fetchMore, genToks?.length, hasNothingToFetch, loading])
 
   return (
     <div className={cs(layout['padding-big'])}>
       <InfiniteScrollTrigger
-        onTrigger={load}
+        onTrigger={handleFetchMore}
+        canTrigger={!loading && !hasNothingToFetch}
       >
         <CardsContainer>
           {genToks?.map(token => (
@@ -74,9 +69,9 @@ export function UserGenerativeTokens({
               displayDetails={settings.displayInfosGenerativeCard}
             />
           ))}
-          {loading && (
-            <CardsLoading number={20} />
-          )}
+          {loading && CardsLoading({
+            number: ITEMS_PER_PAGE,
+          })}
         </CardsContainer>
       </InfiniteScrollTrigger>
     </div>

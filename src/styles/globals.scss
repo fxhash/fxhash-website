@@ -1,4 +1,5 @@
 @import "./Variables.scss";
+@import "./fonts.scss";
 
 html,
 body {
@@ -9,7 +10,7 @@ body {
 }
 
 :root {
-  --main-padding-sm: 30px;
+  --main-padding-sm: 20px;
 
   --color-primary: #FF005C;
   --color-secondary: #7000FF;
@@ -18,11 +19,13 @@ body {
   --color-error: #eb1b1b;
   --color-error-20: rgba(255, 0, 0, 0.2);
   --color-warning: #ffc300;
+  --color-gray-vvvlight: #f1f1f1;
   --color-gray-vvlight: #e7e7e7;
   --color-gray-vlight: #d3d3d3;
   --color-gray-light: #C4C4C4;
   --color-gray: #727272;
   --color-gray-dark: #484848;
+  --color-gray-vdark: #363636;
   --color-black: #000000;
   --color-white: #FFFFFF;
   --color-border: #000000;
@@ -45,12 +48,15 @@ body {
   --font-size-vsmall: 0.7rem;
   --font-size-small: 0.875rem;
   --font-size-regular: 1rem;
+  --font-size-big: 1.125rem;
   --font-size-h6: 1rem;
   --font-size-h5: 1.25rem;
   --font-size-h4: 1.5625rem;
   --font-size-h3: 2rem;
   --font-size-h2: 2.4375rem;
   --font-size-h1: 3rem;
+
+  --font-family-primary: "Fira Code", monospace;
 
   --cards-border-width: 3px;
   --cards-shadow: 19px;
@@ -62,6 +68,7 @@ body {
   --color-white: #242424;
   --color-black: white;
   --color-gray: #a5a5a5;
+  --color-gray-vvvlight: #2b2b2b;
   --color-gray-vvlight: #2e2e2e;
   --color-gray-vlight: #363636;
   --color-gray-light: #505050;

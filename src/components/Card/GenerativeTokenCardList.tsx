@@ -16,40 +16,44 @@ interface Props {
   url?: string
 }
 
-export function GenerativeTokenCardList({
-  token,
-  url,
-  className,
-}: Props) {
+export function GenerativeTokenCardList({ token, url, className }: Props) {
   url = url || getGenerativeTokenUrl(token)
-  
+
   return (
     <Link href={url} passHref>
-      <AnchorForward style={{ height: '100%' }} className={className}>
-        <CardList thumbnailUri={token.thumbnailUri}>
+      <AnchorForward style={{ height: "100%" }} className={className}>
+        <CardList thumbnailUri={token.thumbnailUri} image={token.captureMedia}>
           <div className={cs(style.main_details)}>
-            <h6>{ token.name }</h6>
+            <h6>{token.name}</h6>
             <Spacing size="8px" />
-            <EntityBadge
-              user={token.author}
-              size="small"
-              hasLink={false}
-            />
+            <EntityBadge user={token.author} size="small" hasLink={false} />
           </div>
           <div className={cs(style.details)}>
             <div className={cs(style.metric)}>
               <span>Floor</span>
-              <strong>{ token.marketStats?.floor && `${displayMutez(token.marketStats.floor)} tez` || "/" }</strong>
+              <strong>
+                {(token.marketStats?.floor &&
+                  `${displayMutez(token.marketStats.floor)} tez`) ||
+                  "/"}
+              </strong>
             </div>
             <div className={cs(style.metric)}>
               <span>For sale</span>
-              <strong>{ token.marketStats?.listed || "0" }</strong>
+              <strong>{token.marketStats?.listed || "0"}</strong>
             </div>
             <div className={cs(style.metric, style.progress)}>
               <span>Minted</span>
               <strong>
-                <span className={cs(style.minted)}>{token.supply-token.balance}</span>
-                <span className={cs(style.supply, { [style.minted_done]: token.balance === 0 })}>/{token.supply}</span>
+                <span className={cs(style.minted)}>
+                  {token.supply - token.balance}
+                </span>
+                <span
+                  className={cs(style.supply, {
+                    [style.minted_done]: token.balance === 0,
+                  })}
+                >
+                  /{token.supply}
+                </span>
               </strong>
             </div>
           </div>

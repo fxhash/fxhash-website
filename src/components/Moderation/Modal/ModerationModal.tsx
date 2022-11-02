@@ -16,7 +16,7 @@ import Link from "next/link"
 import { Submit } from "../../Form/Submit"
 
 interface Props extends ModalProps {
-  moderationContract: "token"|"user"
+  moderationContract: "token" | "user" | "article"
   infoText: string
   infoState?: string
   flags: IOptions[]
@@ -33,15 +33,13 @@ export function ModerationModal({
   className,
   moderationContract,
 }: Props) {
-
   // the moderation state
   const [moderationState, setModerationState] = useState<number>(0)
   // the moderation reason
   const [reason, setReason] = useState<number>(-1)
 
-  const { 
-    state, loading, success, call, error 
-  } = useContractOperation(ModerateOperation)
+  const { state, loading, success, call, error } =
+    useContractOperation(ModerateOperation)
 
   const moderate = (evt: any) => {
     evt.preventDefault()
@@ -54,17 +52,10 @@ export function ModerationModal({
   }
 
   return (
-    <Modal
-      title={title}
-      onClose={onClose}
-      index={index}
-      className={className}
-    >
-      <span className={cs(text.info)}>
-        {infoText}
-      </span>
+    <Modal title={title} onClose={onClose} index={index} className={className}>
+      <span className={cs(text.info)}>{infoText}</span>
 
-      <Spacing size="large"/>
+      <Spacing size="large" />
 
       <div className={cs(style.reports_bottom)}>
         <div className={cs(style.report_btns)}>
@@ -72,11 +63,7 @@ export function ModerationModal({
             <Field>
               <label>
                 State
-                {infoState && (
-                  <small>
-                    {infoState}
-                  </small>
-                )}
+                {infoState && <small>{infoState}</small>}
               </label>
               <Select
                 value={moderationState}
@@ -90,10 +77,13 @@ export function ModerationModal({
                 Reason
                 <small>
                   If no reason fits this case, you can{" "}
-                  <Link href={`/moderation/${moderationContract}/create-reason`}>
+                  <Link
+                    href={`/moderation/${moderationContract}/create-reason`}
+                  >
                     <a target="_blank">create a new reason here</a>
                   </Link>
-                  . You will have to refresh this page until the indexer has picked the new reason.
+                  . You will have to refresh this page until the indexer has
+                  picked the new reason.
                 </small>
               </label>
               <InputModerationReason

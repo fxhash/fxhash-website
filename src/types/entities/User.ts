@@ -3,6 +3,8 @@ import { GenerativeToken } from "./GenerativeToken"
 import { Objkt } from "./Objkt"
 import { Listing } from "./Listing"
 import { Offer } from "./Offer";
+import { NFTArticle } from "./Article";
+import { MediaImage } from "./MediaImage";
 
 export interface UserItems {
   generativeTokens?: GenerativeToken[]
@@ -21,6 +23,7 @@ export enum UserFlag {
 
 export enum UserAuthorization {
   TOKEN_MODERATION          = "TOKEN_MODERATION",
+  ARTICLE_MODERATION        = "ARTICLE_MODERATION",
   USER_MODERATION           = "USER_MODERATION",
   GOVERNANCE_MODERATION     = "GOVERNANCE_MODERATION",
 }
@@ -48,10 +51,12 @@ export interface User {
   metadataUri?: string
   description?: string
   avatarUri?: string
+  avatarMedia?: MediaImage
   generativeTokens?: GenerativeToken[]
   sales: Action[]
   actionsAsIssuer: Action[]
   actionsAsTarget: Action[]
+  listings: Listing[]
   objkts: Objkt[]
   offers: Listing[]
   offersReceived: Offer[]
@@ -69,6 +74,7 @@ export interface User {
   // as a regular user, it can have collaboration contracts
   collaborationContracts: Collaboration[]
   moderationReason?: string|null
+  articles: NFTArticle[]
 }
 
 export interface ConnectedUser extends Partial<User> {
@@ -98,5 +104,10 @@ export interface IUserCollectionFilters {
   mintProgress_eq?: "COMPLETED"|"ONGOING"|"ALMOST"
   authorVerified_eq?: boolean
   author_in?: string[]
+  searchQuery_eq?: string
+}
+
+export interface UserFilters {
+  flag_in?: UserFlag[]
   searchQuery_eq?: string
 }

@@ -1,61 +1,118 @@
 import style from "./Dropzone.module.scss"
 import cs from "classnames"
-import { useCallback, useState } from 'react'
-import { useDropzone } from 'react-dropzone'
+import { ReactNode, useCallback, useMemo, useState } from "react"
+import { ErrorCode, useDropzone } from "react-dropzone"
 import { prettyPrintBytes } from "../../utils/units"
+import colors from "../../styles/Colors.module.css"
 
-
-interface Props {
-  accepted?: string | string[]
-  files?: File[] | null
-  onChange: (files: File[]|null) => void
-  textDefault?: string
-  textDrag?: string
-  className?: string
+const getPrettyError = (code: ErrorCode) => {
+  switch (code) {
+    case ErrorCode.FileInvalidType:
+      return "Invalid format"
+    case ErrorCode.FileTooLarge:
+      return "File is too large"
+    case ErrorCode.FileTooSmall:
+      return "File is too small"
+    case ErrorCode.TooManyFiles:
+      return "There are too many files"
+    default:
+      return "Unknown error"
+  }
 }
 
-export function Dropzone({ 
+export interface DropzoneProps {
+  accepted?: string | string[]
+  files?: File[] | null
+  onChange: (files: File[] | null) => void
+  textDefault?: ReactNode
+  textDrag?: ReactNode
+  className?: string
+  onClick?: () => void
+  maxSizeMb?: number
+}
+
+export function Dropzone({
   textDefault = "Drag 'n' drop some files here, or click to select files",
   textDrag = "Drop the files here ...",
-  accepted, 
-  files, 
+  accepted,
+  files,
   onChange,
-  className
-}: Props) {
-  const [error, setError] = useState<string|null>(null)
+  onClick,
+  className,
+  maxSizeMb = parseInt(process.env.NEXT_PUBLIC_MAX_FILESIZE!),
+}: DropzoneProps) {
+  const [error, setError] = useState<string | null>(null)
 
-  const onDrop = useCallback(acceptedFiles => {
-    if (acceptedFiles.length > 0) {
-      // send file upwards
-      onChange(acceptedFiles)
-      setError(null)
-    }
-    else {
-      onChange(null)
-      setError("Format is not supported")
-    }
-  }, [])
-
-  const { getRootProps, getInputProps, isDragActive, acceptedFiles } = useDropzone({
-    onDrop,
-    onDragEnter: (event) => {
+  const onDrop = useCallback(
+    (acceptedFiles) => {
+      if (acceptedFiles.length > 0) {
+        // send file upwards
+        onChange(acceptedFiles)
+        setError(null)
+      } else {
+        onChange(null)
+        setError("Format is not supported")
+      }
     },
-    accept: accepted,
-    maxFiles: 1,
-    multiple: false,
-    maxSize: parseInt(process.env.NEXT_PUBLIC_MAX_FILESIZE!) * 1024 * 1024
-  })
+    [onChange]
+  )
+
+  const { getRootProps, getInputProps, isDragActive, fileRejections } =
+    useDropzone({
+      onDrop,
+      onDragEnter: (event) => {},
+      accept: accepted,
+      maxFiles: 1,
+      multiple: false,
+      maxSize: maxSizeMb * 1024 * 1024,
+    })
+
+  const rootProps = useMemo(() => {
+    const props = getRootProps()
+    if (onClick) {
+      props.onClick = onClick
+    }
+    return props
+  }, [getRootProps])
 
   return (
-    <div {...getRootProps()} className={cs(style.container, className, {
-      [style.drag]: isDragActive,
-      [style.error]: !!error
-    })}>
+    <div
+      {...rootProps}
+      className={cs(style.container, className, {
+        [style.drag]: isDragActive,
+        [style.error]: !!error,
+      })}
+      contentEditable={false}
+    >
       <input {...getInputProps()} />
       {files ? (
-        <p>{ files.map(f => `📃 ${f.name} (${prettyPrintBytes(f.size)})`).join(', ') }</p>
-      ):(
-        <p>{ error ? error : (isDragActive ? textDrag : textDefault) }</p>
+        <div>
+          {files
+            .map((f) => `📃 ${f.name} (${prettyPrintBytes(f.size)})`)
+            .join(", ")}
+        </div>
+      ) : (
+        <div>
+          {error ? (
+            <>
+              {fileRejections?.length > 0
+                ? fileRejections.map(({ file, errors }) => (
+                    <div key={file.name} className={colors.error}>
+                      {file.name}:{" "}
+                      {errors
+                        .map((e) => getPrettyError(e.code as ErrorCode))
+                        .join(",")}
+                      {"."}
+                    </div>
+                  ))
+                : error}
+            </>
+          ) : isDragActive ? (
+            textDrag
+          ) : (
+            textDefault
+          )}
+        </div>
       )}
     </div>
   )

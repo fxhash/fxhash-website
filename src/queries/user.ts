@@ -1,45 +1,48 @@
 import { gql } from "@apollo/client"
 import { Frag_GenAuthor, Frag_GenPricing } from "./fragments/generative-token"
+import { Frag_ArticleInfos, Frag_ArticleInfosAction } from "./fragments/article"
+import { Frag_MediaImage } from "./fragments/media"
+import { Frag_UserBadge } from "./fragments/user"
 
 export const Qu_user = gql`
+  ${Frag_UserBadge}
   query User($id: String, $name: String) {
     user(id: $id, name: $name) {
-      id
+      ...UserBadgeInfos
       type
-      name
       metadata
       authorizations
       collaborationContracts {
         id
       }
-      flag
       moderationReason
       description
-      avatarUri
       createdAt
     }
   }
 `
 
 export const Qu_users = gql`
-  query Users($filters: UserFilter) {
-    users(filters: $filters, skip: 0, take: 500) {
+  ${Frag_UserBadge}
+  query Users(
+    $skip: Int
+    $take: Int
+    $sort: UserSortInput
+    $filters: UserFilter
+  ) {
+    users(filters: $filters, skip: $skip, take: $take, sort: $sort) {
       id
       type
-      name
-      avatarUri
-      flag
+      ...UserBadgeInfos
     }
   }
 `
 
 export const Qu_userLight = gql`
+  ${Frag_UserBadge}
   query UserLight($id: String) {
     user(id: $id) {
-      id
-      name
-      flag
-      avatarUri
+      ...UserBadgeInfos
     }
   }
 `
@@ -47,19 +50,20 @@ export const Qu_userLight = gql`
 export const Qu_userGenTokens = gql`
   ${Frag_GenAuthor}
   ${Frag_GenPricing}
-
+  ${Frag_MediaImage}
   query UserGenerativeTokens($id: String!, $take: Int, $skip: Int) {
     user(id: $id) {
       id
-      generativeTokens(take: $take, skip: $skip, filters: {
-        flag_ne: HIDDEN
-      }) {
+      generativeTokens(take: $take, skip: $skip, filters: { flag_ne: HIDDEN }) {
         id
         supply
         originalSupply
         balance
         name
         thumbnailUri
+        captureMedia {
+          ...MediaImage
+        }
         labels
         lockEnd
         ...Author
@@ -74,9 +78,7 @@ export const Qu_userGenTokens = gql`
 export const Qu_userEntireCollection = gql`
   ${Frag_GenAuthor}
 
-  query UserCollection(
-    $id: String!,
-  ) {
+  query UserCollection($id: String!) {
     user(id: $id) {
       id
       entireCollection {
@@ -90,6 +92,7 @@ export const Qu_userEntireCollection = gql`
           name
           flag
           generativeUri
+          labels
           ...Author
         }
         name
@@ -106,12 +109,12 @@ export const Qu_userEntireCollection = gql`
 
 export const Qu_userObjkts = gql`
   ${Frag_GenAuthor}
-
+  ${Frag_MediaImage}
   query UserCollection(
-    $id: String!,
-    $take: Int,
-    $skip: Int,
-    $sort: ObjktsSortInput,
+    $id: String!
+    $take: Int
+    $skip: Int
+    $sort: ObjktsSortInput
     $filters: ObjktFilter
   ) {
     user(id: $id) {
@@ -123,6 +126,9 @@ export const Qu_userObjkts = gql`
         rarity
         iteration
         generationHash
+        captureMedia {
+          ...MediaImage
+        }
         metadata
         owner {
           id
@@ -134,6 +140,7 @@ export const Qu_userObjkts = gql`
           name
           flag
           generativeUri
+          labels
           ...Author
         }
         name
@@ -148,19 +155,36 @@ export const Qu_userObjkts = gql`
   }
 `
 
+export const Qu_userArticlesOwned = gql`
+  ${Frag_ArticleInfos}
+  query UserCollection($id: String!) {
+    user(id: $id) {
+      id
+      articlesOwned {
+        amount
+        article {
+          ...ArticleInfos
+        }
+      }
+    }
+  }
+`
+
 export const Qu_userObjktsSubResults = gql`
-  query Query($id: String!, $generativeFilters: ObjktFilter, $authorFilters: ObjktFilter) {
+  ${Frag_UserBadge}
+  query Query(
+    $id: String!
+    $generativeFilters: ObjktFilter
+    $authorFilters: ObjktFilter
+  ) {
     user(id: $id) {
       generativeTokensFromObjktFilters(filters: $generativeFilters) {
         id
         name
         metadata
-      } 
+      }
       authorsFromObjktFilters(filters: $authorFilters) {
-        id
-        name
-        avatarUri
-        flag
+        ...UserBadgeInfos
       }
     }
   }
@@ -168,7 +192,8 @@ export const Qu_userObjktsSubResults = gql`
 
 export const Qu_userListings = gql`
   ${Frag_GenAuthor}
-
+  ${Frag_UserBadge}
+  ${Frag_MediaImage}
   query UserListings($id: String!, $take: Int, $skip: Int) {
     user(id: $id) {
       id
@@ -182,11 +207,11 @@ export const Qu_userListings = gql`
           version
           name
           metadata
+          captureMedia {
+            ...MediaImage
+          }
           owner {
-            id
-            name
-            flag
-            avatarUri
+            ...UserBadgeInfos
           }
           activeListing {
             id
@@ -195,6 +220,7 @@ export const Qu_userListings = gql`
           }
           issuer {
             flag
+            labels
             ...Author
           }
         }
@@ -204,6 +230,7 @@ export const Qu_userListings = gql`
 `
 
 export const Qu_userActions = gql`
+  ${Frag_UserBadge}
   query Query($id: String!, $take: Int, $skip: Int) {
     user(id: $id) {
       id
@@ -215,16 +242,10 @@ export const Qu_userActions = gql`
         metadata
         createdAt
         issuer {
-          id
-          name
-          flag
-          avatarUri
+          ...UserBadgeInfos
         }
         target {
-          id
-          name
-          flag
-          avatarUri
+          ...UserBadgeInfos
         }
         token {
           id
@@ -235,12 +256,19 @@ export const Qu_userActions = gql`
           name
           iteration
         }
+        article {
+          id
+          ...ArticleInfosAction
+        }
       }
     }
   }
+  ${Frag_ArticleInfosAction}
 `
 
 export const Qu_userSales = gql`
+  ${Frag_UserBadge}
+  ${Frag_MediaImage}
   query UserSales($id: String!, $take: Int, $skip: Int) {
     user(id: $id) {
       id
@@ -251,19 +279,18 @@ export const Qu_userSales = gql`
         opHash
         createdAt
         issuer {
-          id
-          name
-          avatarUri
+          ...UserBadgeInfos
         }
         target {
-          id
-          name
-          avatarUri
+          ...UserBadgeInfos
         }
         objkt {
           id
           name
           metadata
+          captureMedia { 
+            ...MediaImage
+          }
         }
       }
     }
@@ -271,6 +298,7 @@ export const Qu_userSales = gql`
 `
 
 export const Qu_userOffersReceived = gql`
+  ${Frag_MediaImage}
   query UserOffersReceived($id: String!, $filters: OfferFilter) {
     user(id: $id) {
       id
@@ -287,6 +315,9 @@ export const Qu_userOffersReceived = gql`
           version
           name
           metadata
+          captureMedia {
+            ...MediaImage
+          }
           activeListing {
             id
             version
@@ -306,6 +337,7 @@ export const Qu_userOffersReceived = gql`
 `
 
 export const Qu_userOffersSent = gql`
+  ${Frag_MediaImage}
   query UserOffersSent($id: String!, $filters: OfferFilter) {
     user(id: $id) {
       id
@@ -321,6 +353,9 @@ export const Qu_userOffersSent = gql`
           version
           name
           metadata
+          captureMedia {
+            ...MediaImage
+          }
           owner {
             id
             name
@@ -332,6 +367,8 @@ export const Qu_userOffersSent = gql`
 `
 
 export const Qu_userCollaborations = gql`
+  ${Frag_MediaImage}
+  ${Frag_UserBadge}
   query Query($id: String!) {
     user(id: $id) {
       id
@@ -341,10 +378,7 @@ export const Qu_userCollaborations = gql`
         type
         createdAt
         collaborators {
-          id
-          name
-          avatarUri
-          flag
+          ...UserBadgeInfos
         }
         generativeTokens {
           id
@@ -356,6 +390,7 @@ export const Qu_userCollaborations = gql`
 `
 
 export const Qu_collaboration = gql`
+  ${Frag_UserBadge}
   query Collaboration($id: String!) {
     user(id: $id) {
       id
@@ -363,22 +398,35 @@ export const Qu_collaboration = gql`
       type
       createdAt
       collaborators {
-        id
-        name
-        avatarUri
-        flag
+        ...UserBadgeInfos
       }
     }
   }
 `
 
 export const Qu_searchUser = gql`
+  ${Frag_UserBadge}
   query SearchUser($filters: UserFilter) {
     users(filters: $filters, take: 50, sort: { relevance: "DESC" }) {
-      id
-      name
-      flag
-      avatarUri
+      ...UserBadgeInfos
     }
   }
+`
+
+export const Qu_userArticles = gql`
+  query UserArticles(
+    $id: String!
+    $skip: Int
+    $take: Int
+    $sort: ArticleSortInput
+    $filters: ArticleFilter
+  ) {
+    user(id: $id) {
+      id
+      articles(skip: $skip, take: $take, sort: $sort, filters: $filters) {
+        ...ArticleInfos
+      }
+    }
+  }
+  ${Frag_ArticleInfos}
 `

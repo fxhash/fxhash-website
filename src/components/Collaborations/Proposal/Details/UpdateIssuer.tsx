@@ -4,7 +4,10 @@ import layout from "../../../../styles/Layout.module.scss"
 import cs from "classnames"
 import { ProposalDetailsProps } from "./ProposalDetails"
 import { useEffect, useMemo } from "react"
-import { EBuildableParams, unpackBytes } from "../../../../services/parameters-builder/BuildParameters"
+import {
+  EBuildableParams,
+  unpackBytes,
+} from "../../../../services/parameters-builder/BuildParameters"
 import { useLazyQuery } from "@apollo/client"
 import { Qu_genToken } from "../../../../queries/generative-token"
 import { Spacing } from "../../../Layout/Spacing"
@@ -19,13 +22,10 @@ import { GenerativeToken } from "../../../../types/entities/GenerativeToken"
 import { LinkIcon } from "../../../Link/LinkIcon"
 import { getGenerativeTokenUrl } from "../../../../utils/generative-token"
 
-
 export function ProposalDetailsUpdateIssuerHeader({
   proposal,
 }: ProposalDetailsProps) {
-  return (
-    <h5>Update Generative Token {"->"} General settings</h5>
-  )
+  return <h5>Update Generative Token {"->"} General settings</h5>
 }
 
 export function ProposalDetailsUpdateIssuerExpanded({
@@ -33,37 +33,37 @@ export function ProposalDetailsUpdateIssuerExpanded({
   collaboration,
   showOldSettings,
 }: ProposalDetailsProps) {
-  const unpacked = useMemo(() =>
-    unpackUpdateIssuer(proposal.callSettings.params)
-  , [proposal])
+  const unpacked = useMemo(
+    () => unpackUpdateIssuer(proposal.callSettings.params),
+    [proposal]
+  )
 
   // the qury to get the issuer associated with the call
-  const [
-    getToken,
-    { data: tokenData, loading: tokenLoading }
-  ] = useLazyQuery(Qu_genToken)
+  const [getToken, { data: tokenData, loading: tokenLoading }] =
+    useLazyQuery(Qu_genToken)
 
   // the query to get the users in the splits
-  const [
-    getUsers,
-    { data: usersData, loading: usersLoading }
-  ] = useLazyQuery(Qu_users)
+  const [getUsers, { data: usersData, loading: usersLoading }] =
+    useLazyQuery(Qu_users)
 
   useEffect(() => {
-    const userIds = unpacked.primary_split.map(splt => splt.address)
-      .concat(unpacked.royalties_split.map(splt => splt.address))
+    const userIds = unpacked.primary_split
+      .map((splt) => splt.address)
+      .concat(unpacked.royalties_split.map((splt) => splt.address))
 
     getToken({
       variables: {
         id: unpacked.issuer_id,
-      }
+      },
     })
     getUsers({
       variables: {
         filters: {
-          id_in: userIds
-        }
-      }
+          id_in: userIds,
+          skip: 0,
+          take: 500,
+        },
+      },
     })
   }, [unpacked])
 
@@ -71,17 +71,17 @@ export function ProposalDetailsUpdateIssuerExpanded({
   const splits = useMemo(() => {
     const ud: User[] = usersData?.users || []
     return {
-      primary: unpacked.primary_split.map(split => ({
+      primary: unpacked.primary_split.map((split) => ({
         pct: split.pct,
-        user: ud.find(u => u.id === split.address) || {
-          id: split.address
-        }
+        user: ud.find((u) => u.id === split.address) || {
+          id: split.address,
+        },
       })),
-      secondary: unpacked.royalties_split.map(split => ({
+      secondary: unpacked.royalties_split.map((split) => ({
         pct: split.pct,
-        user: ud.find(u => u.id === split.address) || {
-          id: split.address
-        }
+        user: ud.find((u) => u.id === split.address) || {
+          id: split.address,
+        },
       })),
     }
   }, [unpacked, usersData])
@@ -94,42 +94,41 @@ export function ProposalDetailsUpdateIssuerExpanded({
   return (
     <div>
       {loading ? (
-        <LoaderBlock
-          height="20vh"
-          size="small"
-        />
-      ):(
+        <LoaderBlock height="20vh" size="small" />
+      ) : (
         <>
           <h5>Preview</h5>
-          <Spacing size="small"/>
-          
+          <Spacing size="small" />
+
           {token && (
             <div>
               <strong>Token: </strong>
               <LinkIcon
                 iconComp={
-                  <i aria-hidden className="fas fa-external-link-square"/>
+                  <i aria-hidden className="fas fa-external-link-square" />
                 }
                 href={getGenerativeTokenUrl(token)}
                 newTab
               >
                 {token.name}
               </LinkIcon>
-              <Spacing size="regular"/>
+              <Spacing size="regular" />
             </div>
           )}
 
           <div className={cs(layout.cols2)}>
             <div>
               <h6>New settings</h6>
-              <Spacing size="8px"/>
+              <Spacing size="8px" />
 
               <div className={cs(style.details)}>
                 <div>
                   <strong>Enabled: </strong>
-                  <strong className={cs(
-                    unpacked.enabled ? colors.success : colors.error
-                  )}>
+                  <strong
+                    className={cs(
+                      unpacked.enabled ? colors.success : colors.error
+                    )}
+                  >
                     {unpacked.enabled ? "true" : "false"}
                   </strong>
                 </div>
@@ -153,14 +152,16 @@ export function ProposalDetailsUpdateIssuerExpanded({
             {token && showOldSettings && (
               <div>
                 <h6>Current settings</h6>
-                <Spacing size="8px"/>
-                
+                <Spacing size="8px" />
+
                 <div className={cs(style.details)}>
                   <div>
                     <strong>Enabled: </strong>
-                    <strong className={cs(
-                      token.enabled ? colors.success : colors.error
-                    )}>
+                    <strong
+                      className={cs(
+                        token.enabled ? colors.success : colors.error
+                      )}
+                    >
                       {token.enabled ? "true" : "false"}
                     </strong>
                   </div>
@@ -185,14 +186,11 @@ export function ProposalDetailsUpdateIssuerExpanded({
         </>
       )}
 
-      <Spacing size="large"/>
+      <Spacing size="large" />
 
       <h5>Call parameters</h5>
-      <Spacing size="8px"/>
-      <JsonViewer
-        json={unpacked as any}
-        collapsed={true}
-      />
+      <Spacing size="8px" />
+      <JsonViewer json={unpacked as any} collapsed={true} />
     </div>
   )
 }

@@ -1,12 +1,13 @@
 import style from "./UserActions.module.scss"
 import { useQuery } from "@apollo/client"
 import cs from "classnames"
-import { useRef, useEffect } from "react"
+import { useState, useCallback } from "react"
 import { Activity } from "../../components/Activity/Activity"
 import { InfiniteScrollTrigger } from "../../components/Utils/InfiniteScrollTrigger"
 import { Qu_userActions } from "../../queries/user"
-import { Action } from "../../types/entities/Action"
 import { User } from "../../types/entities/User"
+
+const ITEMS_PER_PAGE = 20
 
 interface Props {
   user: User
@@ -14,51 +15,44 @@ interface Props {
 export function UserActions({
   user,
 }: Props) {
-  // use to know when to stop loading
-  const currentLength = useRef<number>(0)
-  const ended = useRef<boolean>(false)
+  const [hasNothingToFetch, setHasNothingToFetch] = useState(false);
 
-  const { data, loading, fetchMore } = useQuery(Qu_userActions, {
+  const { data, loading, fetchMore } = useQuery<{ user: User | null }>(Qu_userActions, {
     notifyOnNetworkStatusChange: true,
     variables: {
       id: user.id,
       skip: 0,
-      take: 20
+      take: ITEMS_PER_PAGE
+    },
+    onCompleted: (newData) => {
+      if (!newData?.user?.actions?.length || newData.user.actions.length < ITEMS_PER_PAGE) {
+        setHasNothingToFetch(true);
+      }
     }
   })
 
   // safe access to actions
-  const actions: Action[] = data?.user?.actions || null
+  const actions = data?.user?.actions || null
 
-  useEffect(() => {
-    if (!loading) {
-      if (currentLength.current === actions?.length) {
-        ended.current = true
-      }
-      else {
-        currentLength.current = actions?.length
-      }
+  const handleFetchMore = useCallback(async () => {
+    if (loading || hasNothingToFetch) return false;
+    const { data: newData } = await fetchMore({
+      variables: {
+        skip: actions?.length || 0,
+        take: ITEMS_PER_PAGE,
+      },
+    });
+    if (!newData?.user?.actions?.length || newData.user.actions.length < ITEMS_PER_PAGE) {
+      setHasNothingToFetch(true);
     }
-  }, [data, loading])
-
-  const load = () => {
-    if (!ended.current) {
-      fetchMore({
-        variables: {
-          id: user.id,
-          skip: actions?.length || 0,
-          take: 20
-        }
-      })
-    }
-  }
+  }, [loading, hasNothingToFetch, fetchMore, actions?.length])
 
   return (
     <div
       className={cs(style.activity)}
     >
       <InfiniteScrollTrigger
-        onTrigger={load}
+        onTrigger={handleFetchMore}
         canTrigger={!loading}
       >
         {actions && (

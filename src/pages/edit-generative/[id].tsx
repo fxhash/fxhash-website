@@ -1,15 +1,14 @@
-import { gql } from '@apollo/client'
-import Head from 'next/head'
+import { gql } from "@apollo/client"
+import Head from "next/head"
 import { GetServerSideProps, NextPage } from "next"
-import client from "../../services/ApolloClient"
+import { createApolloClient } from "../../services/ApolloClient"
 import { GenerativeToken } from "../../types/entities/GenerativeToken"
-import { Spacing } from '../../components/Layout/Spacing'
-import ClientOnly from '../../components/Utils/ClientOnly'
-import { EditToken } from '../../containers/Token/EditToken'
-import { UserGuard } from '../../components/Guards/UserGuard'
-import { truncateEnd } from '../../utils/strings'
-import { Qu_genToken } from '../../queries/generative-token'
-
+import { Spacing } from "../../components/Layout/Spacing"
+import ClientOnly from "../../components/Utils/ClientOnly"
+import { EditToken } from "../../containers/Token/EditToken"
+import { UserGuard } from "../../components/Guards/UserGuard"
+import { truncateEnd } from "../../utils/strings"
+import { Qu_genToken } from "../../queries/generative-token"
 
 interface Props {
   token: GenerativeToken
@@ -20,7 +19,11 @@ const EditGenerative: NextPage<Props> = ({ token }) => {
     <>
       <Head>
         <title>fxhash — edit {token.name}</title>
-        <meta key="description" name="description" content={truncateEnd(token.metadata?.description || "", 200, "")}/>
+        <meta
+          key="description"
+          name="description"
+          content={truncateEnd(token.metadata?.description || "", 200, "")}
+        />
       </Head>
 
       <Spacing size="6x-large" />
@@ -29,7 +32,7 @@ const EditGenerative: NextPage<Props> = ({ token }) => {
         <UserGuard>
           <EditToken token={token} />
         </UserGuard>
-      </ClientOnly> 
+      </ClientOnly>
     </>
   )
 }
@@ -41,10 +44,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   if (idStr) {
     const id = parseInt(idStr as string)
     if (id === 0 || id) {
-      const { data, error } = await client.query({
+      const apolloClient = createApolloClient()
+      const { data, error } = await apolloClient.query({
         query: Qu_genToken,
         fetchPolicy: "no-cache",
-        variables: { id }
+        variables: { id },
       })
       if (data) {
         token = data.generativeToken
@@ -56,7 +60,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     props: {
       token: token,
     },
-    notFound: !token
+    notFound: !token,
   }
 }
 

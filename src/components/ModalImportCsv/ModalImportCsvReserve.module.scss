@@ -1,0 +1,58 @@
+@import "../../styles/Variables";
+
+.modal {
+  width: 100%;
+  max-width: 800px;
+}
+
+.body {
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.dropzone {
+  margin: 0 auto;
+  width: 80%;
+}
+div.dropzone_has_file {
+  min-height: 48px;
+}
+
+.csv_example {
+  padding: $spacing-x-small;
+  background-color: var(--color-gray-vvlight);
+}
+
+.container_import {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-top: $spacing;
+}
+
+.error {
+  white-space: pre-line;
+}
+
+.loading {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.container_splits {
+  margin-top: $spacing;
+  flex: 1;
+  overflow-y: scroll;
+  overscroll-behavior: contain;
+}
+
+.splits {
+  thead {
+    position: sticky;
+    z-index: 1;
+    top: -1px;
+  }
+}

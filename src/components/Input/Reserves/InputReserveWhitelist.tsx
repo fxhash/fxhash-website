@@ -5,9 +5,10 @@ import { TInputReserveProps } from "./InputReserve"
 import { InputSplits } from "../InputSplits"
 import { transformSplitsAccessList } from "../../../utils/transformers/splits"
 import { Button } from "../../Button"
-import { useState } from "react"
+import { useCallback, useState } from "react"
 import { ProjectHolders } from "../ProjectHolders/ProjectHolders"
-
+import { ISplit } from "../../../types/entities/Split"
+import { ModalImportCsvReserve } from "../../ModalImportCsv/ModalImportCsvReserve"
 
 export function InputReserveWhitelist({
   value,
@@ -15,8 +16,31 @@ export function InputReserveWhitelist({
   children,
 }: TInputReserveProps<any>) {
   // the select holders modal
-  const [holdersModal, setHoldersModal] = useState(false)
+  const [showAddHoldersModal, setShowAddHoldersModal] = useState(false)
+  const [showImportCsvModal, setShowImportCsvModal] = useState(false)
 
+  const handleToggleAddHoldersModal = useCallback(
+    (newState) => () => setShowAddHoldersModal(newState),
+    []
+  )
+  const handleToggleImportCsvModal = useCallback(
+    (newState) => () => setShowImportCsvModal(newState),
+    []
+  )
+  const handleImportHolders = useCallback(
+    (addSplits) => (splits: ISplit[]) => {
+      addSplits(splits)
+      setShowAddHoldersModal(false)
+    },
+    []
+  )
+  const handleImportCsv = useCallback(
+    (addSplits) => (splits: ISplit[]) => {
+      addSplits(splits)
+      setShowImportCsvModal(false)
+    },
+    []
+  )
   return (
     <div>
       {children}
@@ -33,19 +57,29 @@ export function InputReserveWhitelist({
             <Button
               type="button"
               size="very-small"
-              iconComp={<i className="fa-solid fa-plus" aria-hidden/>}
-              onClick={() => setHoldersModal(true)}
+              iconComp={<i className="fa-solid fa-plus" aria-hidden />}
+              onClick={handleToggleImportCsvModal(true)}
+            >
+              import from .csv
+            </Button>
+            <Button
+              type="button"
+              size="very-small"
+              iconComp={<i className="fa-solid fa-plus" aria-hidden />}
+              onClick={handleToggleAddHoldersModal(true)}
             >
               add current holders of a project
             </Button>
-
-            {holdersModal && (
+            {showAddHoldersModal && (
               <ProjectHolders
-                onClose={() => setHoldersModal(false)}
-                onImport={(splits) => {
-                  addSplits(splits)
-                  setHoldersModal(false)
-                }}
+                onClose={handleToggleAddHoldersModal(false)}
+                onImport={handleImportHolders(addSplits)}
+              />
+            )}
+            {showImportCsvModal && (
+              <ModalImportCsvReserve
+                onClose={handleToggleImportCsvModal(false)}
+                onImport={handleImportCsv(addSplits)}
               />
             )}
           </div>

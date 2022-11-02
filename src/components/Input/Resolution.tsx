@@ -4,7 +4,6 @@ import { Vec2 } from "../../types/Math"
 import { InputText } from "./InputText"
 import { clamp } from "../../utils/math"
 
-
 const integerConstraint = (x: number) => Math.round(x)
 
 interface Props {
@@ -22,19 +21,19 @@ export function InputResolution({
   max,
   onChange,
   constraint = integerConstraint,
-  className
+  className,
 }: Props) {
-  const update = (v: number, component: "x"|"y") => {
+  const update = (v: number, component: "x" | "y") => {
     onChange({
       ...value,
-      [component]: v
+      [component]: v,
     })
   }
 
-  const applyConstraint = (component: "x"|"y") => {
+  const applyConstraint = (component: "x" | "y") => {
     onChange({
       ...value,
-      [component]: constraint(clamp(value[component], min, max))
+      [component]: constraint(clamp(value[component], min, max)),
     })
   }
 
@@ -43,14 +42,14 @@ export function InputResolution({
       <InputText
         type="number"
         value={value.x}
-        onChange={evt => update(parseFloat(evt.target.value), "x")}
+        onChange={(evt) => update(parseFloat(evt.target.value), "x")}
         onBlur={() => applyConstraint("x")}
       />
       <span>*</span>
       <InputText
         type="number"
         value={value.y}
-        onChange={evt => update(parseFloat(evt.target.value), "y")}
+        onChange={(evt) => update(parseFloat(evt.target.value), "y")}
         onBlur={() => applyConstraint("y")}
       />
     </div>

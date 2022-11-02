@@ -39,7 +39,7 @@ const validation = Yup.object().shape({
   editions: Yup.number()
     .typeError("Valid number plz")
     .min(1, "At least 1 edition")
-    .max(10000, "10000 editions max.")
+    .max(50000, "50000 editions max.")
     .required("Required"),
   pricing: Yup.object({
     pricingFixed: Yup.object()

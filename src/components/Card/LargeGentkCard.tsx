@@ -1,7 +1,6 @@
 // import style from "./GenerativeTokenCard.module.scss"
 import Link from "next/link"
 import style from "./LargeGentkCard.module.scss"
-import colors from "../../styles/Colors.module.css"
 import cs from "classnames"
 import { AnchorForward } from "../Utils/AnchorForward"
 import { UserBadge } from "../User/UserBadge"
@@ -27,27 +26,26 @@ export function LargeGentkCard({
 }: Props) {
   const url = getObjktUrl(objkt)
   const settings = useContext(SettingsContext)
-
   return (
     <Link href={url} passHref>
-      <AnchorForward style={{ height: '100%' }}>
+      <AnchorForward className={style.root} style={{ height: "100%" }}>
         <LargeCard
-          thumbnailUri={objkt.metadata?.displayUri} 
+          tokenLabels={objkt.issuer?.labels}
+          image={objkt.captureMedia}
+          thumbnailUri={objkt.metadata?.displayUri}
           undesirable={objkt.issuer?.flag === GenTokFlag.MALICIOUS}
           displayDetails={settings.displayInfosGentkCard}
           topper={
             <div className={cs(style.topper)}>
               <span>#{objkt.iteration}</span>
               {objkt.duplicate && (
-                <div className={cs(style.dup_flag)}>
-                  [WARNING: DUPLICATE]
-                </div>
+                <div className={cs(style.dup_flag)}>[WARNING: DUPLICATE]</div>
               )}
               {showRarity && objkt.rarity != null && (
                 <>
                   <Spacing size="2x-small" />
                   <div className={cs(style.rarity)}>
-                    Rarity: { objkt.rarity.toFixed(3) }
+                    Rarity: {objkt.rarity.toFixed(3)}
                   </div>
                 </>
               )}
@@ -62,6 +60,7 @@ export function LargeGentkCard({
                   size="small"
                   hasLink={false}
                   className={cs(style.badge)}
+                  hasVerified={false}
                 />
               </>
             )}

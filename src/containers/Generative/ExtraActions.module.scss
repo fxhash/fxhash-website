@@ -1,5 +1,4 @@
-.container {
-}
+.container {}
 
 .open_btn {
   width: 20px;
@@ -32,13 +31,14 @@
   color: var(--color-gray-dark);
   padding: 10px 14px;
   display: flex;
-  align-items: center;
+  align-items: baseline;
   font-weight: bold;
+  font-size: var(--font-size-small);
 
   i {
-    margin-right: 8px;
+    margin-right: 10px;
   }
-  
+
   &:hover {
     color: var(--color-error);
   }
@@ -48,8 +48,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  
-  & > *+* {
+
+  &>*+* {
     margin-left: 8px;
   }
 }

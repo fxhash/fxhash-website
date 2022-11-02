@@ -1,26 +1,37 @@
-import '../styles/globals.scss'
-import '../styles/fonts.css'
-import type { AppProps } from 'next/app'
-import { useRef, useEffect, memo, ReactElement, ReactNode } from 'react'
-import { useRouter } from 'next/router'
-import NextNprogress from 'nextjs-progressbar'
+import "../styles/globals.scss"
+import "../styles/fonts.css"
+import type { AppProps } from "next/app"
+import {
+  useRef,
+  useEffect,
+  memo,
+  ReactElement,
+  ReactNode,
+  useCallback,
+} from "react"
+import { useRouter } from "next/router"
+import NextNprogress from "nextjs-progressbar"
 import Head from "next/head"
-import { Root } from '../containers/Root'
-import { NextPage } from 'next'
+import { Root } from "../containers/Root"
+import { NextPage } from "next"
+import { disableIosTextFieldZoom } from "../utils/mobile"
 
 const ROUTES_TO_RETAIN = [
-  '/explore',
-  '/explore/incoming',
-  '/marketplace',
-  '/marketplace/collections'
+  "/explore",
+  "/explore/incoming",
+  "/explore/articles",
+  "/marketplace",
+  "/marketplace/collections",
 ]
 
-type NextPageWithLayout = NextPage & {
-  getLayout?: (page: ReactElement) => ReactNode
+export type TPageLayoutComponent = (page: ReactElement) => ReactNode
+
+export type NextPageWithLayout<T = {}> = NextPage<T> & {
+  getLayout?: TPageLayoutComponent
 }
 
 type AppPropsWithLayout = AppProps & {
-  Component: NextPageWithLayout
+  Component: NextPageWithLayout<any>
 }
 
 const App = ({ Component, pageProps }: AppPropsWithLayout) => {
@@ -28,6 +39,15 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
   const retainedComponents = useRef<any>({})
 
   const isRetainableRoute = ROUTES_TO_RETAIN.includes(router.pathname)
+
+  const handleIOS = useCallback(() => {
+    const isIOS =
+      /iPad|iPhone|iPod/.test(navigator.userAgent) &&
+      !(window as any)["MSStream"]
+    if (isIOS) {
+      disableIosTextFieldZoom()
+    }
+  }, [])
 
   // if the current route is stored in memory and is loaded now, reset its index
   if (retainedComponents.current[router.pathname]) {
@@ -52,7 +72,7 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
     retainedComponents.current[router.pathname] = {
       component: <MemoComponent {...pageProps} />,
       scrollPos: 0,
-      index: 0
+      index: 0,
     }
   }
 
@@ -66,9 +86,9 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
 
   // Save scroll position - requires an up-to-date router.pathname
   useEffect(() => {
-    router.events.on('routeChangeStart', handleRouteChangeStart)
+    router.events.on("routeChangeStart", handleRouteChangeStart)
     return () => {
-      router.events.off('routeChangeStart', handleRouteChangeStart)
+      router.events.off("routeChangeStart", handleRouteChangeStart)
     }
   }, [router.pathname])
 
@@ -79,24 +99,67 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
     }
   }, [Component, pageProps])
 
+  useEffect(() => {
+    router.events.on("routeChangeComplete", handleIOS)
+    return () => {
+      router.events.off("routeChangeComplete", handleIOS)
+    }
+  }, [handleIOS, router.events])
+  useEffect(() => {
+    handleIOS()
+  }, [handleIOS])
+
   // custom layout for the components
   const subLayout = Component.getLayout ?? ((page) => page)
 
   return (
     <>
       <Head>
-        <meta key="og:title" property="og:title" content="fxhash — blockchain generative art"/> 
-        <meta key="description" name="description" content="fxhash is a platform to mint Generative Tokens on the Tezos blockchain"/>
-        <meta key="og:description" property="og:description" content="fxhash is a platform to mint Generative Tokens on the Tezos blockchain"/>
-        <meta key="og:type" property="og:type" content="website"/>
-        <meta key="og:image" property="og:image" content="https://www.fxhash.xyz/images/og/og1.jpg"/>
-
-        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/>
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"/>
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"/>
-        <link rel="manifest" href="/site.webmanifest"/>
-        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"/>
-        <meta name="msapplication-TileColor" content="#ffffff"/>
+        <meta
+          key="og:title"
+          property="og:title"
+          content="fxhash — blockchain generative art"
+        />
+        <meta
+          key="description"
+          name="description"
+          content="fxhash is a platform to mint Generative Tokens on the Tezos blockchain"
+        />
+        <meta
+          key="og:description"
+          property="og:description"
+          content="fxhash is a platform to mint Generative Tokens on the Tezos blockchain"
+        />
+        <meta key="og:type" property="og:type" content="website" />
+        <meta
+          key="og:image"
+          property="og:image"
+          content="https://www.fxhash.xyz/images/og/og1.jpg"
+        />
+        <meta
+          name="viewport"
+          content="width=device-width, height=device-height, initial-scale=1.0"
+        />
+        <link
+          rel="apple-touch-icon"
+          sizes="180x180"
+          href="/apple-touch-icon.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="32x32"
+          href="/favicon-32x32.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="16x16"
+          href="/favicon-16x16.png"
+        />
+        <link rel="manifest" href="/site.webmanifest" />
+        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
+        <meta name="msapplication-TileColor" content="#ffffff" />
         <meta name="theme-color" content="#ffffff"></meta>
       </Head>
 
@@ -104,23 +167,25 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
 
       {process.env.NEXT_PUBLIC_MAINTENANCE_MODE === "1" ? (
         <Component {...pageProps} />
-      ):(
+      ) : (
         <Root>
           <>
-            <div style={{ display: isRetainableRoute ? 'block' : 'none' }}>
-              {Object.entries(retainedComponents.current).map(([path, c]: any) => (
-                <div
-                  key={path}
-                  style={{ display: router.pathname === path ? 'block' : 'none' }}
-                >
-                  {c.component}
-                </div>
-              ))}
+            <div style={{ display: isRetainableRoute ? "block" : "none" }}>
+              {Object.entries(retainedComponents.current).map(
+                ([path, c]: any) => (
+                  <div
+                    key={path}
+                    style={{
+                      display: router.pathname === path ? "block" : "none",
+                    }}
+                  >
+                    {c.component}
+                  </div>
+                )
+              )}
             </div>
 
-            {!isRetainableRoute && (
-              subLayout(<Component {...pageProps} />)
-            )}
+            {!isRetainableRoute && subLayout(<Component {...pageProps} />)}
           </>
         </Root>
       )}

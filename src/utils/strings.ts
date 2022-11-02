@@ -33,3 +33,11 @@ export function tagsFromString(str: string): string[] {
 export function isTezosAddress(str: string): boolean {
   return /^(tz|KT)[1-3][a-zA-Z0-9]{33}$/.test(str)
 }
+
+export function countWords(str: string): number {
+  return str.match(/\w+/g)?.length || 0;
+}
+
+export function stringBytesSize(str: string): number {
+  return new Blob([str]).size
+};
