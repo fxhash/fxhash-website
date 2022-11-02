@@ -283,6 +283,7 @@ export function ArticleEditor({
           className={cs(style.thumbnail_dropzone, {
             [style.image_loaded]: !!thumbnail
           })}
+          maxSizeMb={20}
           onChange={(files) => updateThumbnail(files?.[0] || null)}
           textDefault={
             thumbnail ? (

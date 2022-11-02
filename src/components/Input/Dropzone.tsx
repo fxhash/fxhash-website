@@ -1,8 +1,24 @@
 import style from "./Dropzone.module.scss"
 import cs from "classnames"
 import { ReactNode, useCallback, useMemo, useState } from "react"
-import { useDropzone } from "react-dropzone"
+import { ErrorCode, useDropzone } from "react-dropzone"
 import { prettyPrintBytes } from "../../utils/units"
+import colors from "../../styles/Colors.module.css"
+
+const getPrettyError = (code: ErrorCode) => {
+  switch (code) {
+    case ErrorCode.FileInvalidType:
+      return "Invalid format"
+    case ErrorCode.FileTooLarge:
+      return "File is too large"
+    case ErrorCode.FileTooSmall:
+      return "File is too small"
+    case ErrorCode.TooManyFiles:
+      return "There are too many files"
+    default:
+      return "Unknown error"
+  }
+}
 
 export interface DropzoneProps {
   accepted?: string | string[]
@@ -12,6 +28,7 @@ export interface DropzoneProps {
   textDrag?: ReactNode
   className?: string
   onClick?: () => void
+  maxSizeMb?: number
 }
 
 export function Dropzone({
@@ -22,6 +39,7 @@ export function Dropzone({
   onChange,
   onClick,
   className,
+  maxSizeMb = parseInt(process.env.NEXT_PUBLIC_MAX_FILESIZE!),
 }: DropzoneProps) {
   const [error, setError] = useState<string | null>(null)
 
@@ -39,14 +57,14 @@ export function Dropzone({
     [onChange]
   )
 
-  const { getRootProps, getInputProps, isDragActive, acceptedFiles } =
+  const { getRootProps, getInputProps, isDragActive, fileRejections } =
     useDropzone({
       onDrop,
       onDragEnter: (event) => {},
       accept: accepted,
       maxFiles: 1,
       multiple: false,
-      maxSize: parseInt(process.env.NEXT_PUBLIC_MAX_FILESIZE!) * 1024 * 1024,
+      maxSize: maxSizeMb * 1024 * 1024,
     })
 
   const rootProps = useMemo(() => {
@@ -74,7 +92,27 @@ export function Dropzone({
             .join(", ")}
         </div>
       ) : (
-        <div>{error ? error : isDragActive ? textDrag : textDefault}</div>
+        <div>
+          {error ? (
+            <>
+              {fileRejections?.length > 0
+                ? fileRejections.map(({ file, errors }) => (
+                    <div key={file.name} className={colors.error}>
+                      {file.name}:{" "}
+                      {errors
+                        .map((e) => getPrettyError(e.code as ErrorCode))
+                        .join(",")}
+                      {"."}
+                    </div>
+                  ))
+                : error}
+            </>
+          ) : isDragActive ? (
+            textDrag
+          ) : (
+            textDefault
+          )}
+        </div>
       )}
     </div>
   )
