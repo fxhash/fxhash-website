@@ -128,6 +128,7 @@ export function SearchInput({
         onBlur={onBlur}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
+        enterKeyHint="search"
       />
     </form>
   )
