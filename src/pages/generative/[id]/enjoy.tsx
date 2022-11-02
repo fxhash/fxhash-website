@@ -3,13 +3,13 @@ import Head from "next/head"
 import { GetServerSideProps, NextPage } from "next"
 import { createApolloClient } from "../../../services/ApolloClient"
 import { GenerativeTokenWithCollection } from "../../../types/entities/GenerativeToken"
-import { ipfsGatewayUrl } from "../../../services/Ipfs"
 import ClientOnly from "../../../components/Utils/ClientOnly"
 import { GenerativeEnjoy } from "../../../containers/Generative/Enjoy/GenerativeEnjoy"
 import { useMemo } from "react"
 import { shuffleArray } from "../../../utils/array"
 import { getGenerativeTokenUrl } from "../../../utils/generative-token"
 import { Frag_UserBadge } from "../../../queries/fragments/user"
+import { getImageApiUrl, OG_IMAGE_SIZE } from "../../../components/Image"
 
 interface Props {
   token: GenerativeTokenWithCollection
@@ -18,7 +18,8 @@ interface Props {
 const GenerativeTokenEnjoy: NextPage<Props> = ({ token }) => {
   // get the display url for og:image
   const displayUrl =
-    token.metadata?.displayUri && ipfsGatewayUrl(token.metadata?.displayUri)
+    token.captureMedia?.cid &&
+    getImageApiUrl(token.captureMedia.cid, OG_IMAGE_SIZE)
 
   // inject the author within the issuer of the token
   for (const gentk of token.entireCollection) {

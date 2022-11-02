@@ -15,6 +15,7 @@ import { GenerativeFlagBanner } from "../../containers/Generative/FlagBanner"
 import { TabDefinition, Tabs } from "../../components/Layout/Tabs"
 import { GenerativeIterations } from "../../containers/Generative/Iterations/GenerativeIterations"
 import { GenerativeDisplay } from "../../containers/Generative/Display/GenerativeDisplay"
+import { getImageApiUrl, OG_IMAGE_SIZE } from "../../components/Image"
 
 const tabs: TabDefinition[] = [
   {
@@ -34,7 +35,8 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
 
   // get the display url for og:image
   const displayUrl =
-    token.metadata?.displayUri && ipfsGatewayUrl(token.metadata?.displayUri)
+    token.captureMedia?.cid &&
+    getImageApiUrl(token.captureMedia.cid, OG_IMAGE_SIZE)
 
   return (
     <>
