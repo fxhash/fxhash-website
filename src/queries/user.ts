@@ -170,6 +170,7 @@ export const Qu_userArticlesOwned = gql`
 
 export const Qu_userObjktsSubResults = gql`
   ${Frag_UserBadge}
+  ${Frag_MediaImage}
   query Query(
     $id: String!
     $generativeFilters: ObjktFilter
@@ -179,6 +180,9 @@ export const Qu_userObjktsSubResults = gql`
       generativeTokensFromObjktFilters(filters: $generativeFilters) {
         id
         name
+        captureMedia {
+          ...MediaImage
+        }
         metadata
       }
       authorsFromObjktFilters(filters: $authorFilters) {
