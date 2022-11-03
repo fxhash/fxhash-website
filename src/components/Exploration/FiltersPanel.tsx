@@ -1,7 +1,7 @@
 import style from "./FiltersPanel.module.scss"
 import cs from "classnames"
 import { PropsWithChildren, useEffect, useMemo } from "react"
-import useWindowSize, { breakpoints } from "../../hooks/useWindowsSize";
+import useWindowSize, { breakpoints } from "../../hooks/useWindowsSize"
 
 interface Props {
   onClose?: () => void
