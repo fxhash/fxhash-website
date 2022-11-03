@@ -1,6 +1,10 @@
 import style from "./IndexerStatusDetails.module.scss"
 import cs from "classnames"
-import { IndexerStatus, IndexerStatusSeverity, NetworkStatus } from "../../types/IndexerStatus"
+import {
+  IndexerStatus,
+  IndexerStatusSeverity,
+  NetworkStatus,
+} from "../../types/IndexerStatus"
 import { formatDistanceToNow } from "date-fns"
 import { IndexerStatusLabel } from "./IndexerStatusLabel"
 import { useIndexerStatusSeverity } from "../../hooks/useIndexerStatusSeverity"
@@ -13,7 +17,8 @@ interface Props {
 
 const IndexerStatusInfos: Record<IndexerStatusSeverity, string> = {
   low: "It is expected to be behind 2 and 4 blocks with our indexing strategy.",
-  medium: "We should be behind at most 4 blocks, our services may have an issue. It is expected to be behind 2 and 4 blocks with our indexing strategy.",
+  medium:
+    "We should be behind at most 4 blocks, our services may have an issue. It is expected to be behind 2 and 4 blocks with our indexing strategy.",
   high: "We are behind the blockchain by more than 15 blocks. The team has received an automatic alert and is working on the issue.",
 }
 
@@ -26,7 +31,7 @@ export function IndexerStatusDetails({ indexerStatus, networkStatus }: Props) {
       <section>
         <h3>Indexer</h3>
         <div className={cs(style.status_label)}>
-          <IndexerStatusLabel 
+          <IndexerStatusLabel
             severity={severity}
             iconSide="right"
             iconSize="big"
@@ -41,9 +46,7 @@ export function IndexerStatusDetails({ indexerStatus, networkStatus }: Props) {
         <span>
           Indexer is behind the blockchain by <b>{numBlocksBehind}</b> blocks.
         </span>
-        {severity && (
-          <span>{IndexerStatusInfos[severity]}</span>
-        )}
+        {severity && <span>{IndexerStatusInfos[severity]}</span>}
       </p>
       <section>
         <div className={style.indexerStatus}>

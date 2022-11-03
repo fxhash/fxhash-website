@@ -10,13 +10,10 @@ const iconSeverityMap = {
 
 interface Props {
   severity: IndexerStatusSeverity
-  size?: "small"|"big"
+  size?: "small" | "big"
 }
 
-export function IndexerStatusIcon({ 
-  severity,
-  size = "small",
-}: Props) {
+export function IndexerStatusIcon({ severity, size = "small" }: Props) {
   return (
     <span
       className={cx(

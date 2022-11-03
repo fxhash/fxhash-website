@@ -7,8 +7,8 @@ import { IndexerStatusSeverity } from "../../types/IndexerStatus"
 interface Props {
   label?: string
   severity: IndexerStatusSeverity | null
-  iconSide?: "left"|"right"
-  iconSize?: "small"|"big"
+  iconSide?: "left" | "right"
+  iconSize?: "small" | "big"
 }
 
 const indexerStatusLabelSeverityMap = {
@@ -17,14 +17,20 @@ const indexerStatusLabelSeverityMap = {
   high: "too much behind",
 }
 
-export function IndexerStatusLabel({ 
-  label, 
+export function IndexerStatusLabel({
+  label,
   severity,
   iconSide = "left",
   iconSize = "small",
 }: Props) {
   return (
-    <span className={cs(style.root, style[`severity_${severity}`], style[`icon_${iconSide}`])}>
+    <span
+      className={cs(
+        style.root,
+        style[`severity_${severity}`],
+        style[`icon_${iconSide}`]
+      )}
+    >
       {!severity ? (
         <Loader size="tiny" color="currentColor" className={style.loader} />
       ) : (
