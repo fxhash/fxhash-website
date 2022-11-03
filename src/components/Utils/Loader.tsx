@@ -2,7 +2,7 @@ import style from "./Loader.module.scss"
 import cs from "classnames"
 
 interface Props {
-  color?: "white" | "black" | "gray-light"
+  color?: "white" | "black" | "gray-light" | "currentColor"
   size?: "tiny" | "small" | "regular" | "large"
   className?: string
 }
@@ -16,7 +16,8 @@ export function Loader({
     <div
       className={cs(style.loader, style[`size_${size}`], className)}
       style={{
-        backgroundColor: `var(--color-${color})`,
+        backgroundColor:
+          color === "currentColor" ? color : `var(--color-${color})`,
       }}
     />
   )
