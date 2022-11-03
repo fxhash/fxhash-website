@@ -1,4 +1,5 @@
-import classes from "./IndexerStatusDetails.module.scss"
+import style from "./IndexerStatusDetails.module.scss"
+import cs from "classnames"
 import { IndexerStatus, IndexerStatusSeverity, NetworkStatus } from "../../types/IndexerStatus"
 import { formatDistanceToNow } from "date-fns"
 import { IndexerStatusLabel } from "./IndexerStatusLabel"
@@ -21,11 +22,15 @@ export function IndexerStatusDetails({ indexerStatus, networkStatus }: Props) {
   if (!indexerStatus || !networkStatus) return null
   const numBlocksBehind = networkStatus.level - indexerStatus.level
   return (
-    <div className={classes.root}>
+    <div className={style.root}>
       <section>
         <h3>Indexer</h3>
-        <div style={{ alignSelf: "center" }}>
-          <IndexerStatusLabel severity={severity} />
+        <div className={cs(style.status_label)}>
+          <IndexerStatusLabel 
+            severity={severity}
+            iconSide="right"
+            iconSize="big"
+          />
         </div>
       </section>
       <BlockchainProgress
@@ -41,7 +46,7 @@ export function IndexerStatusDetails({ indexerStatus, networkStatus }: Props) {
         )}
       </p>
       <section>
-        <div className={classes.indexerStatus}>
+        <div className={style.indexerStatus}>
           <h5>Last block indexed</h5>
           <div>#{indexerStatus?.level}</div>
           <div>
@@ -50,7 +55,7 @@ export function IndexerStatusDetails({ indexerStatus, networkStatus }: Props) {
             })}
           </div>
         </div>
-        <div className={classes.networkStatus}>
+        <div className={style.networkStatus}>
           <h5>Blockchain Head</h5>
           <div>#{networkStatus.level}</div>
           <div>

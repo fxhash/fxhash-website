@@ -1,6 +1,11 @@
 .root {
-  :first-child {
-    margin-right: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5em;
+
+  &.icon_right {
+    flex-direction: row-reverse;
   }
 }
 .loader {
@@ -8,3 +13,12 @@
   vertical-align: sub;
 }
 
+.severity_low {
+  color: inherit;
+}
+.severity_medium {
+  color: inherit;
+}
+.severity_high {
+  color: var(--color-error);
+}
