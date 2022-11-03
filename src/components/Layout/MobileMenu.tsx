@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useMemo, useState } from "react"
+import React, { memo, useCallback, useEffect, useMemo, useState } from "react"
 import style from "./MobileMenu.module.scss"
 import { NavigationLink, NavigationLinkSingle } from "./navigationLinks"
 import cs from "classnames"
@@ -41,6 +41,16 @@ const _MobileMenu = ({
     (newState) => () => setShowProfile(newState),
     []
   )
+  useEffect(() => {
+    if (open) {
+      document.body.classList.add("modal-open")
+    } else {
+      document.body.classList.remove("modal-open")
+    }
+    return () => {
+      document.body.classList.remove("modal-open")
+    }
+  }, [open])
   return ReactDOM.createPortal(
     <div
       className={cs(style.container, {
