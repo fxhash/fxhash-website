@@ -1,0 +1,8 @@
+.layout_fixed_width_centered_wrapper {
+  display: flex;
+  justify-content: center;
+
+  .layout_fixed_width_centered {
+    width: min(100%, 1000px);
+  }
+}
