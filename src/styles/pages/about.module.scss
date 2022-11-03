@@ -1,0 +1,22 @@
+@import "../Variables.scss";
+
+.content {
+  max-width: 1000px;
+  margin: 0 auto;
+
+  .description {
+    color: var(--color-gray);
+  }
+}
+
+.categories {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 40px;
+}
+
+@media (max-width: $breakpoint-sm) {
+  .categories {
+    grid-template-columns: 1fr;
+  }
+}
