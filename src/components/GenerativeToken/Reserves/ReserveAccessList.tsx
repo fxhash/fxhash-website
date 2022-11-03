@@ -17,9 +17,9 @@ export const ReserveAccessList: TRenderReserveComponent = ({ reserve }) => {
     variables: {
       filters: {
         id_in: Object.keys(reserve.data),
-        skip: 0,
-        take: 500,
       },
+      skip: 0,
+      take: 500,
     },
   })
 
