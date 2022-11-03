@@ -1,0 +1,31 @@
+@import "../../../../styles/Variables";
+.header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  width: 100%;
+
+  .title {
+    font-weight: bold;
+    color: var(--color-black);
+  }
+
+  .user {
+    font-size: var(--font-size-small);
+  }
+}
+
+.root {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+@media (max-width: $breakpoint-sm) {
+  .header {
+    flex-wrap: wrap;
+    gap: 4px 8px;
+  }
+}
