@@ -10,7 +10,7 @@ interface Props {
 
 const indexerStatusLabelSeverityMap = {
   low: "synced",
-  medium: "sligth delay",
+  medium: "slight delay",
   high: "too much behind",
 }
 
