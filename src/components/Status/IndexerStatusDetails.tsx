@@ -1,16 +1,19 @@
 import classes from "./IndexerStatusDetails.module.scss"
-import { IndexerStatus, NetworkStatus } from "../../types/IndexerStatus"
+import { IndexerStatus, IndexerStatusSeverity, NetworkStatus } from "../../types/IndexerStatus"
 import { formatDistanceToNow } from "date-fns"
 import { IndexerStatusLabel } from "./IndexerStatusLabel"
-import {
-  NUM_BLOCKS_MEDIUM_SEVERITY,
-  useIndexerStatusSeverity,
-} from "../../hooks/useIndexerStatusSeverity"
+import { useIndexerStatusSeverity } from "../../hooks/useIndexerStatusSeverity"
 import { BlockchainProgress } from "./BlockchainProgress"
 
 interface Props {
   indexerStatus?: IndexerStatus | null
   networkStatus?: NetworkStatus | null
+}
+
+const IndexerStatusInfos: Record<IndexerStatusSeverity, string> = {
+  low: "It is expected to be behind 2 and 4 blocks with our indexing strategy.",
+  medium: "We should be behind at most 4 blocks, our services may have an issue. It is expected to be behind 2 and 4 blocks with our indexing strategy.",
+  high: "We are behind the blockchain by more than 15 blocks. The team has received an automatic alert and is working on the issue.",
 }
 
 export function IndexerStatusDetails({ indexerStatus, networkStatus }: Props) {
@@ -33,17 +36,8 @@ export function IndexerStatusDetails({ indexerStatus, networkStatus }: Props) {
         <span>
           Indexer is behind the blockchain by <b>{numBlocksBehind}</b> blocks.
         </span>
-        {numBlocksBehind >= NUM_BLOCKS_MEDIUM_SEVERITY ? (
-          <span>
-            We should be behind at most 4 blocks, our services may have an
-            issue. It is expected to be behind 2 and 4 blocks with our indexing
-            strategy.
-          </span>
-        ) : (
-          <span>
-            It is expected to be behind 2 and 4 blocks with our indexing
-            strategy.
-          </span>
+        {severity && (
+          <span>{IndexerStatusInfos[severity]}</span>
         )}
       </p>
       <section>
