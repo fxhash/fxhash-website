@@ -17,9 +17,7 @@ import { MediaImage } from "../../types/entities/MediaImage"
 
 // a list of common sizes which will be used to fetch the resource, ensuring
 // we hit the cache as often as possible
-const sizes = [
-  8, 16, 32, 64, 128, 256, 512, 768, 1024, 1536, 2048, 2560, 3072, 4196,
-]
+const sizes = [8, 16, 32, 64, 128, 256, 512, 768, 1024, 1400]
 
 // the image display mode, depends on the context of the parent and how the
 // image should be displayed, required to display a proper blur effect
@@ -143,9 +141,11 @@ function ReactiveImage({
   const getViewportSpace: () => ISize = useCallback(() => {
     if (ref.current) {
       const bounds = ref.current.getBoundingClientRect()
+      const devicePixelRatio =
+        (window.devicePixelRatio > 2 ? 2 : window.devicePixelRatio) || 1
       return {
-        width: bounds.width * (window.devicePixelRatio || 1),
-        height: bounds.height * (window.devicePixelRatio || 1),
+        width: bounds.width * devicePixelRatio,
+        height: bounds.height * devicePixelRatio,
       }
     }
     return {
@@ -180,6 +180,7 @@ function ReactiveImage({
         cid: image.cid,
         highestWidth: width,
       }
+      if (loaded?.cid !== image.cid) setLoaded(false)
       setUrl(getImageApiUrl(image.cid, width))
     }
   }, [getViewportSpace, image, ipfsUri])

@@ -15,6 +15,7 @@ import { SearchInputControlled } from "../Input/SearchInputControlled"
 import { getProfileLinks, navigationLinks } from "./navigationLinks"
 import { MobileMenu } from "./MobileMenu"
 import ClientOnly from "../Utils/ClientOnly"
+import useWindowSize, { breakpoints } from "../../hooks/useWindowsSize"
 
 interface NavigationProps {
   onChangeSearchVisibility: (isVisible: boolean) => void
@@ -25,6 +26,7 @@ export function Navigation({ onChangeSearchVisibility }: NavigationProps) {
   const [opened, setOpened] = useState(false)
   const [isSearchMinimized, setIsSearchMinimized] = useState(true)
   const [settingsModal, setSettingsModal] = useState<boolean>(false)
+  const { width } = useWindowSize()
 
   const handleMinimize = useCallback(
     (isMinimized) => {
@@ -67,20 +69,27 @@ export function Navigation({ onChangeSearchVisibility }: NavigationProps) {
     () => userCtx?.user && getProfileLinks(userCtx.user),
     [userCtx.user]
   )
+
+  const isMobile = useMemo(
+    () => width !== undefined && width <= breakpoints.md,
+    [width]
+  )
   return (
     <>
       <nav className={cs(style.nav, text.h6, { [style.opened]: opened })}>
-        <SearchInputControlled
-          iconPosition="right"
-          className={cs(style.search_mobile, {
-            [style["search_mobile--open"]]: !isSearchMinimized,
-          })}
-          placeholder="Search users, gentk, articles..."
-          onSearch={handleSearch}
-          onMinimize={handleMinimize}
-          minimize={isSearchMinimized}
-          minimizeBehavior="desktop"
-        />
+        {isMobile && (
+          <SearchInputControlled
+            iconPosition="right"
+            className={cs(style.search_mobile, {
+              [style["search_mobile--open"]]: !isSearchMinimized,
+            })}
+            placeholder="Search users, gentk, articles..."
+            onSearch={handleSearch}
+            onMinimize={handleMinimize}
+            minimize={isSearchMinimized}
+            minimizeBehavior="desktop"
+          />
+        )}
         <button
           className={cs(style.hamburger)}
           onClick={() => setOpened(!opened)}
@@ -138,18 +147,19 @@ export function Navigation({ onChangeSearchVisibility }: NavigationProps) {
             <i aria-hidden className="fas fa-cog" />
           </button>
 
-          <SearchInputControlled
-            iconPosition="right"
-            className={cs(style.search, {
-              [style["search--open"]]: !isSearchMinimized,
-            })}
-            placeholder="Search users, gentk, articles..."
-            onSearch={handleSearch}
-            onMinimize={handleMinimize}
-            minimize={isSearchMinimized}
-            minimizeBehavior="desktop"
-          />
-
+          {!isMobile && (
+            <SearchInputControlled
+              iconPosition="right"
+              className={cs(style.search, {
+                [style["search--open"]]: !isSearchMinimized,
+              })}
+              placeholder="Search users, gentk, articles..."
+              onSearch={handleSearch}
+              onMinimize={handleMinimize}
+              minimize={isSearchMinimized}
+              minimizeBehavior="desktop"
+            />
+          )}
           {userCtx.user && profileLinks ? (
             <Dropdown
               ariaLabel="Open user actions"
@@ -192,15 +202,17 @@ export function Navigation({ onChangeSearchVisibility }: NavigationProps) {
         </div>
       </nav>
       <ClientOnly>
-        <MobileMenu
-          open={opened}
-          onClickSettings={() => setSettingsModal(true)}
-          navigationLinks={navigationLinks}
-          profileLinks={profileLinks}
-          onClickConnect={handleClickConnect}
-          onClickDisconnect={handleClickDisconnect}
-          user={userCtx.user}
-        />
+        {isMobile && (
+          <MobileMenu
+            open={opened}
+            onClickSettings={() => setSettingsModal(true)}
+            navigationLinks={navigationLinks}
+            profileLinks={profileLinks}
+            onClickConnect={handleClickConnect}
+            onClickDisconnect={handleClickDisconnect}
+            user={userCtx.user}
+          />
+        )}
       </ClientOnly>
       {settingsModal && (
         <SettingsModal onClose={() => setSettingsModal(false)} />

@@ -68,6 +68,7 @@ export const AudioAttributeSettings: TEditAttributeComp = ({ onEdit }) => {
                 onChange={handleAddFile}
                 accepted={acceptedAudioFiles}
                 className={cs(style.dropzone)}
+                maxSizeMb={30}
                 textDefault={
                   <div className={cs(style.dropzone__content)}>
                     <i className="fa-solid fa-music" aria-hidden />
