@@ -71,7 +71,7 @@ export function Navigation({ onChangeSearchVisibility }: NavigationProps) {
   )
 
   const isMobile = useMemo(
-    () => width !== undefined && width <= breakpoints.sm,
+    () => width !== undefined && width <= breakpoints.md,
     [width]
   )
   return (
@@ -202,15 +202,17 @@ export function Navigation({ onChangeSearchVisibility }: NavigationProps) {
         </div>
       </nav>
       <ClientOnly>
-        <MobileMenu
-          open={opened}
-          onClickSettings={() => setSettingsModal(true)}
-          navigationLinks={navigationLinks}
-          profileLinks={profileLinks}
-          onClickConnect={handleClickConnect}
-          onClickDisconnect={handleClickDisconnect}
-          user={userCtx.user}
-        />
+        {isMobile && (
+          <MobileMenu
+            open={opened}
+            onClickSettings={() => setSettingsModal(true)}
+            navigationLinks={navigationLinks}
+            profileLinks={profileLinks}
+            onClickConnect={handleClickConnect}
+            onClickDisconnect={handleClickDisconnect}
+            user={userCtx.user}
+          />
+        )}
       </ClientOnly>
       {settingsModal && (
         <SettingsModal onClose={() => setSettingsModal(false)} />

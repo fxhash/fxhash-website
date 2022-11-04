@@ -40,13 +40,14 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
 
   const isRetainableRoute = ROUTES_TO_RETAIN.includes(router.pathname)
 
-  const handleIOS = useCallback(() => {
+  const handlePageLoad = useCallback(() => {
     const isIOS =
       /iPad|iPhone|iPod/.test(navigator.userAgent) &&
       !(window as any)["MSStream"]
     if (isIOS) {
       disableIosTextFieldZoom()
     }
+    document.body.classList.remove("modal-open")
   }, [])
 
   // if the current route is stored in memory and is loaded now, reset its index
@@ -100,14 +101,14 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
   }, [Component, pageProps])
 
   useEffect(() => {
-    router.events.on("routeChangeComplete", handleIOS)
+    router.events.on("routeChangeComplete", handlePageLoad)
     return () => {
-      router.events.off("routeChangeComplete", handleIOS)
+      router.events.off("routeChangeComplete", handlePageLoad)
     }
-  }, [handleIOS, router.events])
+  }, [handlePageLoad, router.events])
   useEffect(() => {
-    handleIOS()
-  }, [handleIOS])
+    handlePageLoad()
+  }, [handlePageLoad])
 
   // custom layout for the components
   const subLayout = Component.getLayout ?? ((page) => page)

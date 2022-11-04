@@ -175,7 +175,11 @@ export function SettingsProvider({ children }: PropsWithChildren<{}>) {
   }, [context])
 
   useEffect(() => {
-    document.body.className = context.darkTheme ? "dark" : ""
+    if (context.darkTheme) {
+      document.body.classList.add("dark")
+    } else {
+      document.body.classList.remove("dark")
+    }
   }, [context.darkTheme])
 
   return (
