@@ -60,7 +60,7 @@ const Colors = {
     "gray-light": "#505050",
     gray: "#a5a5a5",
     "gray-dark": "#999999",
-    black: " white",
+    black: "white",
     white: "#242424",
     border: "#0f0f0f",
     "border-input": "#7e7e7e",

@@ -187,6 +187,10 @@ button {
 }
 
 .dark {
+  span, div {
+    // makes sure all text is visible in darkmode
+    color: white;
+  }
   input {
     color: white;
   }
