@@ -7,21 +7,13 @@ import { SectionTitle } from "../components/Layout/SectionTitle"
 import { useParams } from "../context/Params"
 import { InputParams } from "tweakpane"
 import { SectionWrapper } from "../components/Layout/SectionWrapper"
+import {ConfigurationPane} from "../containers/Params/ConfigurationPane"
 
 interface Props {
   params: InputParams
 }
 
 const ControllerPage: NextPage<Props> = ({ params }) => {
-  const paneContainer = useRef<HTMLDivElement>(null)
-
-  const controller = useParams(params, paneContainer)
-
-  console.log(controller)
-
-  const handleReset = () => {
-    controller.setParam("factor", 1000)
-  }
   return (
     <>
       <Head>
@@ -42,15 +34,9 @@ const ControllerPage: NextPage<Props> = ({ params }) => {
       <Spacing size="6x-large" sm="3x-large" />
 
       <SectionWrapper layout="fixed-width-centered">
-          <SectionTitle>Controller</SectionTitle>
-          <Spacing size="2x-large" />
-          {controller.factor}
-          {controller.title}
-          {controller.color}
-          <Spacing size="2x-large" />
-          <button onClick={handleReset}>set factor 1000</button>
-          <Spacing size="2x-large" />
-          <div ref={paneContainer} />
+        <SectionTitle>Controller</SectionTitle>
+        <Spacing size="2x-large" />
+        <ConfigurationPane />
       </SectionWrapper>
     </>
   )
