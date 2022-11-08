@@ -1,7 +1,7 @@
 import React, { useRef, useState, useMemo } from "react"
-import { useParams, usePaneOfParams } from "../../context/Params"
+import { useParams, usePaneOfParams, ParamsSchema } from "../../context/Params"
 import { IOptions, Select } from "../../components/Input/Select"
-import classes from './ConfigurationPane.module.scss';
+import classes from "./ConfigurationPane.module.scss"
 export type FxParamType = "number" | "boolean" | "color" | "string" | "select"
 
 const options = [
@@ -27,6 +27,18 @@ const options = [
   },
 ]
 
+interface IPaneProps {
+  params: string[]
+}
+
+export function Pane(props: IPaneProps) {
+  const params = useMemo(() => props.params, [JSON.stringify(props.params)])
+  const pane = useRef<HTMLDivElement>(null)
+  const data = usePaneOfParams(params, pane)
+  console.log(data)
+  return <div ref={pane} />
+}
+
 export function ConfigurationPane() {
   const [selectedOption, setSelectedOption] = useState(options[0].value)
   const [params, setParams] = useState({
@@ -35,27 +47,21 @@ export function ConfigurationPane() {
     color: 0xff0055,
   })
   const paneContainer = useRef<HTMLDivElement>(null)
-  const subPane = useRef<HTMLDivElement>(null)
-  const subPane2 = useRef<HTMLDivElement>(null)
-  const subPane3 = useRef<HTMLDivElement>(null)
 
   const controller = useParams(params, paneContainer)
 
-  console.log(controller)
-
-  const prams = useMemo( () => ["factor"], [])
-  const prams2 = useMemo( () => ["factor", "color"], [])
-
-  usePaneOfParams(prams, subPane)
-  usePaneOfParams(prams2, subPane2)
- // usePaneOfParams(["factor", "title"], subPane3)
+  console.log('controller')
 
   const handleReset = () => {
     controller.setParam("factor", 1000)
   }
-  const handleChangeSelectedOption = (value) => {
+  const handleChangeSelectedOption = (value: any) => {
     setSelectedOption(value)
   }
+
+
+  const p = useMemo(() => ["factor"], [])
+
   return (
     <div>
       <div ref={paneContainer} />
@@ -70,9 +76,10 @@ export function ConfigurationPane() {
         />
         <button>add</button>
       </div>
-      <div ref={subPane} />
-      <div ref={subPane2} />
-      <div ref={subPane3} />
+      <Pane params={["factor"]} />
+      <Pane params={["factor", "title"]} />
+      <Pane params={["factor"]} />
+      <Pane params={["factor"]} />
     </div>
   )
 }

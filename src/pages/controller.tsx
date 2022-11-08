@@ -7,7 +7,7 @@ import { SectionTitle } from "../components/Layout/SectionTitle"
 import { useParams } from "../context/Params"
 import { InputParams } from "tweakpane"
 import { SectionWrapper } from "../components/Layout/SectionWrapper"
-import {ConfigurationPane} from "../containers/Params/ConfigurationPane"
+import { ConfigurationPane } from "../containers/Params/ConfigurationPane"
 
 interface Props {
   params: InputParams

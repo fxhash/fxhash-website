@@ -5,24 +5,25 @@ import React, {
   useEffect,
   useCallback,
   useContext,
-  Ref,
   RefObject,
   MutableRefObject,
   useMemo,
 } from "react"
 import { Pane, InputParams, TpChangeEvent } from "tweakpane"
 
-type ParamsShema = Record<string, unknown>
+export type ParamsSchema = Record<string, unknown>
 
-interface IParamsContext<CustomParams = ParamsShema> {
-  pane?: MutableRefObject<Pane | undefined>
-  params?: CustomParams
+interface IParamsContext<CustomParams = ParamsSchema> {
+  pane?: Pane | undefined
+  params?: CustomParams | undefined
+  data?: CustomParams | undefined
+  values?: MutableRefObject<CustomParams> | undefined
   addParams: (params: CustomParams) => void
   setParam: (key: string, value: any) => void
   setPaneContainer: (container?: HTMLDivElement) => void
 }
 
-interface IPaneConfiguration<CustomParams = ParamsShema> {
+interface IPaneConfiguration<CustomParams = ParamsSchema> {
   name?: string
   params?: CustomParams
 }
@@ -40,21 +41,25 @@ const defaultCtx: IParamsContext = {
 export const ParamsContext = React.createContext<IParamsContext>(defaultCtx)
 
 export function useParams(
-  parameters: ParamsShema,
+  parameters: ParamsSchema,
   paneContainerRef: RefObject<HTMLDivElement>
 ) {
   const params = useContext(ParamsContext)
   useEffect(() => {
     params.addParams(parameters)
-    params.setPaneContainer(paneContainerRef?.current)
+    if (paneContainerRef?.current)
+      params.setPaneContainer(paneContainerRef?.current)
   }, [parameters, paneContainerRef])
   return params
 }
 
-const filterParams = (params, filter) => {
+const filterParams = (
+  params: ParamsSchema | undefined,
+  filter: (parameter: unknown, key: string) => boolean
+) => {
   if (!params) return
   const paramsCopy = JSON.parse(JSON.stringify(params))
-  return Object.keys(paramsCopy).reduce((acc, key) => {
+  return Object.keys(paramsCopy).reduce((acc: ParamsSchema, key: string) => {
     if (filter(paramsCopy[key], key)) {
       acc[key] = paramsCopy[key]
     }
@@ -62,94 +67,105 @@ const filterParams = (params, filter) => {
   }, {})
 }
 
-function usePaneStable(params, settings) {
-  const values = useRef()
-  const pane = useRef()
-  const [data, setData] = useState({})
-  const pContext = useContext(ParamsContext)
+interface PaneSettings {
+  container: HTMLElement | null
+}
+
+function usePaneStable(
+  params: ParamsSchema | undefined,
+  settings: PaneSettings
+) {
+  const values = useRef<ParamsSchema>({})
+  const pane = useRef<Pane>()
+  const {
+    setParam,
+    pane: contextPane,
+    values: contextValues,
+  } = useContext(ParamsContext)
   useEffect(() => {
     if (!settings.container || !params) return
-    values.current = JSON.parse(JSON.stringify(params))
     const p = new Pane({ container: settings.container })
-    Object.keys(values.current).map((key) => {
-      p.addInput(values.current, key)
+    Object.keys(params).map((key) => {
+      p.addInput(params, key)
     })
     p.on("change", (e: TpChangeEvent<unknown>) => {
-      setData((d) => ({ ...d, [e.presetKey as string]: e.value }))
-      pContext.setParam(e.presetKey, e.value)
-      console.log("trigger change?")
+      setParam(e.presetKey as string, e.value)
     })
 
-    console.log("stable")
     pane.current = p
+    values.current = params
     return () => {
       p.dispose()
     }
-  }, [params, settings, pContext.setParam])
+  }, [params, settings, setParam, contextValues])
   useEffect(() => {
-    pContext?.pane?.on("change", (e: TpChangeEvent<unknown>) => {
-      const key = e.presetKey
+    contextPane?.on?.("change", (e: TpChangeEvent<unknown>) => {
+      const key = e.presetKey as string
       const value = e.value
-      setData((d) => ({ ...d, [key]: value }))
+      if (values.current[key] === value) return
       values.current[key] = value
       pane.current?.refresh()
     })
-  }, [pContext.pane, pane])
-  return data
+  }, [contextPane, pane, values])
 }
 
-export function usePaneOfParams(paramsKeys, container) {
+export function usePaneOfParams(
+  paramsKeys: string[],
+  container: RefObject<HTMLElement | null>
+) {
   const pContext = useContext(ParamsContext)
   const params = useMemo(
     () => filterParams(pContext.params, (p, key) => paramsKeys.includes(key)),
     [pContext.params, paramsKeys]
   )
-  const settings = useMemo(
-    () => ({
+
+  const settings = useMemo(() => {
+    return {
       container: container.current,
-    }),
-    [container.current]
-  )
+    }
+  }, [container.current])
   const data = usePaneStable(params, settings)
-  console.log(data)
-  return data
+  return pContext.data
 }
 
 export function ParamsProvider({ children }: PropsWithChildren<{}>) {
-  //  const pane = useRef<Pane>()
-  const values = useRef()
-  const [pane, setPane] = useState()
-  const [paneContainer, setPaneContainer] = useState<HTMLDivElement>()
-  const [params, setParams] = useState<ParamsShema>({})
+  const paneContainerRef = useRef<HTMLDivElement>(null)
+  const values = useRef<ParamsSchema>({})
+  const [pane, setPane] = useState<Pane>()
+  const [paneContainer, setPaneContainer] = useState<HTMLElement>()
+  const [params, setParams] = useState<ParamsSchema>({})
   const [data, setData] = useState({})
 
-  const addParams = (params: ParamsShema) => {
-    setParams((p) => ({ ...p, ...params }))
-    setData((d) => ({ ...d, ...params }))
-  }
+  const addParams = useCallback(
+    (params: ParamsSchema) => {
+      setParams((p) => ({ ...p, ...params }))
+      setData((d) => ({ ...d, ...params }))
+    },
+    [setParams, setData]
+  )
 
   const setParam = useCallback(
     (key: string, value: any) => {
-      // setParams((d) => ({ ...d, [key]: value }))
-      setData((d) => ({ ...d, [key]: value }))
+      if (!values.current) return
+      if (values?.current?.[key] === value) return
       values.current[key] = value
       pane?.refresh()
     },
-    [pane]
+    [pane, values]
   )
 
   useEffect(() => {
-    values.current = JSON.parse(JSON.stringify(params))
-    const p = new Pane({ container: paneContainer })
-    Object.keys(values.current).map((key) => {
-      p.addInput(values.current, key)
+    const container = paneContainer || paneContainerRef?.current
+    if (!container) return
+    const p = new Pane({ container })
+    Object.keys(params).map((key) => {
+      p.addInput(params, key)
     })
     p.on("change", (e: TpChangeEvent<unknown>) => {
       setData((d) => ({ ...d, [e.presetKey as string]: e.value }))
     })
-    // p.refresh()
     setPane(p)
-    console.log("CREATED MAIN PANE")
+    values.current = params
     return () => {
       p.dispose()
     }
@@ -164,22 +180,14 @@ export function ParamsProvider({ children }: PropsWithChildren<{}>) {
       params,
       pane,
       setData,
-      values: values.current,
-    }),
-    [
-      addParams,
-      setParams,
-      setPaneContainer,
-      data,
-      pane,
-      setData,
       values,
-      params,
-    ]
+    }),
+    [addParams, setPaneContainer, data, pane, setData, values, params, setParam]
   )
 
   return (
     <ParamsContext.Provider value={contextValue}>
+      <div ref={paneContainerRef} style={{ display: "none" }} />
       {children}
     </ParamsContext.Provider>
   )
