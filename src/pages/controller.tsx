@@ -8,9 +8,10 @@ import { useParams } from "../context/Params"
 import { InputParams } from "tweakpane"
 import { SectionWrapper } from "../components/Layout/SectionWrapper"
 import { ConfigurationPane } from "../containers/Params/ConfigurationPane"
+import { IParameterDefinition } from "../context/tweakpane/index"
 
 interface Props {
-  params: InputParams
+  params: IParameterDefinition[]
 }
 
 const ControllerPage: NextPage<Props> = ({ params }) => {
@@ -36,20 +37,40 @@ const ControllerPage: NextPage<Props> = ({ params }) => {
       <SectionWrapper layout="fixed-width-centered">
         <SectionTitle>Controller</SectionTitle>
         <Spacing size="2x-large" />
-        <ConfigurationPane />
+        <ConfigurationPane params={params} />
       </SectionWrapper>
     </>
   )
 }
 
+const TEST_PARAMS: IParameterDefinition[] = [
+  {
+    name: "string_name",
+    type: "string",
+    id: "string_id",
+    default: "hello world",
+    options: {},
+  },
+  {
+    name: "number_name",
+    type: "number",
+    id: "number_id",
+    default: "0",
+    options: {},
+  },
+  {
+    name: "boolean_name",
+    type: "boolean",
+    id: "boolean_id",
+    default: "false",
+    options: {},
+  },
+]
+
 export async function getServerSideProps() {
   return {
     props: {
-      params: {
-        factor: 123,
-        title: "hello",
-        color: 0xff0055,
-      },
+      params: TEST_PARAMS,
     },
   }
 }

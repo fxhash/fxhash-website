@@ -43,6 +43,7 @@ export function cacheMergePaginatedField(
 
 export const clientSideClient = new ApolloClient({
   uri: process.env.NEXT_PUBLIC_API_ROOT,
+  connectToDevTools: true,
   cache: new InMemoryCache({
     typePolicies: {
       GenerativeToken: {

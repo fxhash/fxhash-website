@@ -1,8 +1,6 @@
 import React, { useRef, useState, useMemo } from "react"
-import { useParams, usePaneOfParams, ParamsSchema } from "../../context/Params"
-import { IOptions, Select } from "../../components/Input/Select"
-import classes from "./ConfigurationPane.module.scss"
-export type FxParamType = "number" | "boolean" | "color" | "string" | "select"
+import { useParams, usePaneOfParams } from "../../context/Params"
+import { IParameterDefinition } from "../../context/tweakpane"
 
 const options = [
   {
@@ -39,47 +37,31 @@ export function Pane(props: IPaneProps) {
   return <div ref={pane} />
 }
 
-export function ConfigurationPane() {
-  const [selectedOption, setSelectedOption] = useState(options[0].value)
-  const [params, setParams] = useState({
-    factor: 123,
-    title: "hello",
-    color: 0xff0055,
-  })
+interface IConfigurationPane {
+  params: IParameterDefinition[]
+}
+
+export function ConfigurationPane({ params }: IConfigurationPane) {
   const paneContainer = useRef<HTMLDivElement>(null)
 
   const controller = useParams(params, paneContainer)
 
-  console.log('controller')
-
   const handleReset = () => {
     controller.setParam("factor", 1000)
   }
-  const handleChangeSelectedOption = (value: any) => {
-    setSelectedOption(value)
-  }
 
-
-  const p = useMemo(() => ["factor"], [])
+  console.log(controller)
 
   return (
     <div>
       <div ref={paneContainer} />
-
-      <div className={classes.selectContainer}>
-        <Select
-          classNameRoot={classes.select}
-          className={classes.select}
-          value={selectedOption}
-          options={options}
-          onChange={handleChangeSelectedOption}
-        />
-        <button>add</button>
-      </div>
+      <Pane params={["number_id"]} />
+      {/*
       <Pane params={["factor"]} />
       <Pane params={["factor", "title"]} />
       <Pane params={["factor"]} />
       <Pane params={["factor"]} />
+       */}
     </div>
   )
 }

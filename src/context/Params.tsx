@@ -9,27 +9,35 @@ import React, {
   MutableRefObject,
   useMemo,
 } from "react"
-import { Pane, InputParams, TpChangeEvent } from "tweakpane"
+import { Pane, TpChangeEvent } from "tweakpane"
+import {
+  createFxPane,
+  IParameterDefinition,
+  ParameterDefinitions,
+  ParameterValueMap,
+} from "./tweakpane"
+import {
+  createParameterDictFromList,
+  filterParameterDefinitioDict,
+} from "./tweakpane/utils"
 
-export type ParamsSchema = Record<string, unknown>
-
-interface IParamsContext<CustomParams = ParamsSchema> {
+interface IParamsContext<CustomParams = ParameterValueMap> {
   pane?: Pane | undefined
-  params?: CustomParams | undefined
+  params?: ParameterDefinitions | undefined
   data?: CustomParams | undefined
   values?: MutableRefObject<CustomParams> | undefined
-  addParams: (params: CustomParams) => void
+  registerParams: (params: IParameterDefinition[]) => void
   setParam: (key: string, value: any) => void
   setPaneContainer: (container?: HTMLDivElement) => void
 }
 
-interface IPaneConfiguration<CustomParams = ParamsSchema> {
+interface IPaneConfiguration<CustomParams = ParameterValueMap> {
   name?: string
   params?: CustomParams
 }
 
 const defaultProperties: IParamsContext = {
-  addParams: () => {},
+  registerParams: () => {},
   setParam: () => {},
   setPaneContainer: () => {},
 }
@@ -41,30 +49,16 @@ const defaultCtx: IParamsContext = {
 export const ParamsContext = React.createContext<IParamsContext>(defaultCtx)
 
 export function useParams(
-  parameters: ParamsSchema,
+  parameters: IParameterDefinition[],
   paneContainerRef: RefObject<HTMLDivElement>
 ) {
-  const params = useContext(ParamsContext)
+  const controller = useContext(ParamsContext)
+  const { registerParams, setPaneContainer } = controller
   useEffect(() => {
-    params.addParams(parameters)
-    if (paneContainerRef?.current)
-      params.setPaneContainer(paneContainerRef?.current)
-  }, [parameters, paneContainerRef])
-  return params
-}
-
-const filterParams = (
-  params: ParamsSchema | undefined,
-  filter: (parameter: unknown, key: string) => boolean
-) => {
-  if (!params) return
-  const paramsCopy = JSON.parse(JSON.stringify(params))
-  return Object.keys(paramsCopy).reduce((acc: ParamsSchema, key: string) => {
-    if (filter(paramsCopy[key], key)) {
-      acc[key] = paramsCopy[key]
-    }
-    return acc
-  }, {})
+    registerParams(parameters)
+    if (paneContainerRef?.current) setPaneContainer(paneContainerRef?.current)
+  }, [parameters, paneContainerRef, setPaneContainer, registerParams])
+  return controller
 }
 
 interface PaneSettings {
@@ -72,10 +66,10 @@ interface PaneSettings {
 }
 
 function usePaneStable(
-  params: ParamsSchema | undefined,
+  params: ParameterDefinitions | undefined,
   settings: PaneSettings
 ) {
-  const values = useRef<ParamsSchema>({})
+  const values = useRef<ParameterValueMap>({})
   const pane = useRef<Pane>()
   const {
     setParam,
@@ -84,16 +78,12 @@ function usePaneStable(
   } = useContext(ParamsContext)
   useEffect(() => {
     if (!settings.container || !params) return
-    const p = new Pane({ container: settings.container })
-    Object.keys(params).map((key) => {
-      p.addInput(params, key)
-    })
+    const [p, pValues] = createFxPane(settings.container, params)
     p.on("change", (e: TpChangeEvent<unknown>) => {
       setParam(e.presetKey as string, e.value)
     })
-
     pane.current = p
-    values.current = params
+    values.current = pValues
     return () => {
       p.dispose()
     }
@@ -114,8 +104,11 @@ export function usePaneOfParams(
   container: RefObject<HTMLElement | null>
 ) {
   const pContext = useContext(ParamsContext)
-  const params = useMemo(
-    () => filterParams(pContext.params, (p, key) => paramsKeys.includes(key)),
+  const params = useMemo<ParameterDefinitions | undefined>(
+    () =>
+      filterParameterDefinitioDict(pContext.params, (p: IParameterDefinition) =>
+        paramsKeys.includes(p.id)
+      ),
     [pContext.params, paramsKeys]
   )
 
@@ -124,24 +117,24 @@ export function usePaneOfParams(
       container: container.current,
     }
   }, [container.current])
-  const data = usePaneStable(params, settings)
+  usePaneStable(params, settings)
   return pContext.data
 }
 
 export function ParamsProvider({ children }: PropsWithChildren<{}>) {
   const paneContainerRef = useRef<HTMLDivElement>(null)
-  const values = useRef<ParamsSchema>({})
+  const values = useRef<ParameterValueMap>({})
   const [pane, setPane] = useState<Pane>()
   const [paneContainer, setPaneContainer] = useState<HTMLElement>()
-  const [params, setParams] = useState<ParamsSchema>({})
+  const [params, setParams] = useState<ParameterDefinitions>({})
   const [data, setData] = useState({})
 
-  const addParams = useCallback(
-    (params: ParamsSchema) => {
-      setParams((p) => ({ ...p, ...params }))
-      setData((d) => ({ ...d, ...params }))
+  const registerParams = useCallback(
+    (params: IParameterDefinition[]) => {
+      setParams((p) => ({ ...p, ...createParameterDictFromList(params) }))
+      // setData((d) => ({ ...d, ...params }))
     },
-    [setParams, setData]
+    [setParams]
   )
 
   const setParam = useCallback(
@@ -157,15 +150,12 @@ export function ParamsProvider({ children }: PropsWithChildren<{}>) {
   useEffect(() => {
     const container = paneContainer || paneContainerRef?.current
     if (!container) return
-    const p = new Pane({ container })
-    Object.keys(params).map((key) => {
-      p.addInput(params, key)
-    })
+    const [p, pValues] = createFxPane(container, params)
     p.on("change", (e: TpChangeEvent<unknown>) => {
       setData((d) => ({ ...d, [e.presetKey as string]: e.value }))
     })
     setPane(p)
-    values.current = params
+    values.current = pValues
     return () => {
       p.dispose()
     }
@@ -173,7 +163,7 @@ export function ParamsProvider({ children }: PropsWithChildren<{}>) {
 
   const contextValue = useMemo(
     () => ({
-      addParams,
+      registerParams,
       setParam,
       setPaneContainer,
       data,
@@ -182,7 +172,16 @@ export function ParamsProvider({ children }: PropsWithChildren<{}>) {
       setData,
       values,
     }),
-    [addParams, setPaneContainer, data, pane, setData, values, params, setParam]
+    [
+      registerParams,
+      setPaneContainer,
+      data,
+      pane,
+      setData,
+      values,
+      params,
+      setParam,
+    ]
   )
 
   return (
