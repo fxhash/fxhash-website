@@ -1,4 +1,4 @@
-import { formatDistance } from "date-fns"
+import { formatDistance, format } from "date-fns"
 import { useMemo } from "react"
 
 interface Props {
@@ -11,5 +11,5 @@ export const DateDistance = ({ timestamptz, append = false }: Props) => {
       formatDistance(new Date(timestamptz), new Date(), { addSuffix: true }),
     []
   )
-  return <span>{dist}</span>
+  return <span title={format(new Date(timestamptz), 'MMM dd, yyyy')}>{dist}</span>
 }
