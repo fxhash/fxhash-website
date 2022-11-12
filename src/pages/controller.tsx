@@ -57,7 +57,7 @@ const TEST_PARAMS: IParameterDefinition[] = [
     id: "number_id",
     default: "0",
     options: {
-      maxLength: 4
+      maxLength: 4,
     },
   },
   {

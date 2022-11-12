@@ -8,6 +8,7 @@ import {
   ParamsParsers,
   parseParams,
   ValueMap,
+  Constraint
 } from "@tweakpane/core"
 import { FxStringInputController } from "./controller"
 
@@ -24,8 +25,8 @@ export interface IFxStringInputPluginParams extends BaseInputParams {
 // - P is the type of the parsed parameters
 //
 export const FxStringInputPlugin: InputBindingPlugin<
-  number,
-  number,
+  string,
+  string,
   IFxStringInputPluginParams
 > = {
   id: "fx-string-input-template",
@@ -35,7 +36,10 @@ export const FxStringInputPlugin: InputBindingPlugin<
   // - 'monitor': Monitor binding
   type: "input",
 
-  accept(exValue: unknown, params: Record<string, unknown>) {
+  accept(value: unknown, params: Record<string, unknown>) {
+    if (typeof value !== "string") {
+      return null
+    }
     // Parse parameters object
     const p = ParamsParsers
     const result = parseParams<IFxStringInputPluginParams>(params, {
@@ -48,7 +52,7 @@ export const FxStringInputPlugin: InputBindingPlugin<
     }
     // Return a typed value and params to accept the user input
     return {
-      initialValue: exValue,
+      initialValue: value,
       params: result,
     }
   },
@@ -57,13 +61,13 @@ export const FxStringInputPlugin: InputBindingPlugin<
     reader(_args) {
       return (exValue: unknown): string => {
         // Convert an external unknown value into the internal value
-        return exValue
+        return String(exValue)
       }
     },
 
     constraint(args) {
       // Create a value constraint from the user input
-      const constraints = []
+      const constraints: Constraint<string>[] = []
       // Use `CompositeConstraint` to combine multiple constraints
       return new CompositeConstraint(constraints)
     },
