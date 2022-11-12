@@ -1,4 +1,5 @@
 import * as DotsPlugin from "./plugins/DotsPlugin/index"
+import * as StringInputPlugin from "./plugins/StringInputPlugin/index"
 import { Pane } from "tweakpane"
 
 export interface IParameterDefinition {
@@ -68,7 +69,7 @@ export const parameterControlsDefinition: Record<
   [EParameterType.number]: {
     type: EParameterType.number,
     controller: {
-      view: EParameterControllerView.number,
+      view: EParameterControllerView.string,
       parseValue: (v: string) => Number(v),
     },
   },
@@ -87,8 +88,9 @@ export function createFxPane(
   container: HTMLElement,
   params: ParameterDefinitions
 ): [Pane, ParameterValueMap] {
-  const p = new Pane({ container })
-  p.registerPlugin(DotsPlugin)
+  const pane = new Pane({ container })
+  pane.registerPlugin(DotsPlugin)
+  pane.registerPlugin(StringInputPlugin)
   const valueMap = Object.keys(params).reduce((acc, key: string) => {
     const paramDefinition = params[key]
     const { controller } =
@@ -101,7 +103,10 @@ export function createFxPane(
     if (!paramDefinition) return
     const { controller } =
       parameterControlsDefinition[paramDefinition.type as EParameterType]
-    p.addInput(valueMap, key, { view: controller.view })
+    pane.addInput(valueMap, key, {
+      view: controller.view,
+      ...paramDefinition.options,
+    })
   })
-  return [p, valueMap]
+  return [pane, valueMap]
 }

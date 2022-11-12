@@ -48,6 +48,7 @@ export class PluginController implements Controller<PluginView> {
 
   private onPoint_(ev: PointerHandlerEvent) {
     const data = ev.data
+    console.log(data)
     if (!data.point) {
       return
     }

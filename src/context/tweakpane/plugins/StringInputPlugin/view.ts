@@ -1,0 +1,47 @@
+import { mapRange, Value, View, ViewProps, ClassName } from "@tweakpane/core"
+import style from "./style.module.scss"
+
+interface Config {
+  value: Value<number>
+  viewProps: ViewProps
+}
+
+const className = ClassName("txt")
+
+// Custom view class should implement `View` interface
+export class FxStringInputView implements View {
+  public readonly element: HTMLElement
+  private value_: Value<number>
+  private dotElems_: HTMLElement[] = []
+  private textElem_: HTMLElement
+  constructor(doc: Document, config: Config<T>) {
+    this.onChange_ = this.onChange_.bind(this)
+
+    this.element = doc.createElement("div")
+    this.element.classList.add(className())
+    config.viewProps.bindClassModifiers(this.element)
+
+    this.props_ = config.props
+    this.props_.emitter.on("change", this.onChange_)
+
+    const inputElem = doc.createElement("input")
+    inputElem.classList.add(className("i"))
+    inputElem.type = "text"
+    config.viewProps.bindDisabled(inputElem)
+    this.element.appendChild(inputElem)
+    this.inputElement = inputElem
+    config.value.emitter.on("change", this.onChange_)
+    this.value_ = config.value
+
+    this.refresh()
+  }
+
+  public refresh(): void {
+    this.inputElement.maxLength = this.props_.get("maxLength") || 524288
+    this.inputElement.value = this.value_.rawValue
+  }
+
+  private onChange_(): void {
+    this.refresh()
+  }
+}

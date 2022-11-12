@@ -1,7 +1,7 @@
 import React, { useRef, useState, useMemo } from "react"
 import { useParams, usePaneOfParams } from "../../context/Params"
 import { IParameterDefinition } from "../../context/tweakpane"
-
+import classes from "./ConfigurationPane.module.scss"
 const options = [
   {
     value: "number",
@@ -30,11 +30,10 @@ interface IPaneProps {
 }
 
 export function Pane(props: IPaneProps) {
-  const params = useMemo(() => props.params, [JSON.stringify(props.params)])
+  const params = useMemo(() => props.params, [JSON.stringify(props.params)]) 
   const pane = useRef<HTMLDivElement>(null)
   const data = usePaneOfParams(params, pane)
-  console.log(data)
-  return <div ref={pane} />
+  return <div ref={pane} className={classes.pane} />
 }
 
 interface IConfigurationPane {
@@ -49,8 +48,6 @@ export function ConfigurationPane({ params }: IConfigurationPane) {
   const handleReset = () => {
     controller.setParam("factor", 1000)
   }
-
-  console.log(controller)
 
   return (
     <div>
