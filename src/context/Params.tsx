@@ -15,11 +15,11 @@ import {
   IParameterDefinition,
   ParameterDefinitions,
   ParameterValueMap,
-} from "./tweakpane"
+} from "../components/Params/tweakpane"
 import {
   createParameterDictFromList,
   filterParameterDefinitioDict,
-} from "./tweakpane/utils"
+} from "../components/Params/tweakpane/utils"
 
 interface IParamsContext<CustomParams = ParameterValueMap> {
   pane?: Pane | undefined

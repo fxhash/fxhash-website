@@ -1,7 +1,9 @@
 import React, { useRef, useState, useMemo } from "react"
 import { useParams, usePaneOfParams } from "../../context/Params"
-import { IParameterDefinition } from "../../context/tweakpane"
+import { IParameterDefinition } from "../../components/Params/tweakpane"
+import { Pane } from "../../components/Params/Pane"
 import classes from "./ConfigurationPane.module.scss"
+
 const options = [
   {
     value: "number",
@@ -24,17 +26,6 @@ const options = [
     label: "select",
   },
 ]
-
-interface IPaneProps {
-  params: string[]
-}
-
-export function Pane(props: IPaneProps) {
-  const params = useMemo(() => props.params, [JSON.stringify(props.params)]) 
-  const pane = useRef<HTMLDivElement>(null)
-  const data = usePaneOfParams(params, pane)
-  return <div ref={pane} className={classes.pane} />
-}
 
 interface IConfigurationPane {
   params: IParameterDefinition[]

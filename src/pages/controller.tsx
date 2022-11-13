@@ -8,7 +8,7 @@ import { useParams } from "../context/Params"
 import { InputParams } from "tweakpane"
 import { SectionWrapper } from "../components/Layout/SectionWrapper"
 import { ConfigurationPane } from "../containers/Params/ConfigurationPane"
-import { IParameterDefinition } from "../context/tweakpane/index"
+import { IParameterDefinition } from "../components/Params/tweakpane/index"
 
 interface Props {
   params: IParameterDefinition[]

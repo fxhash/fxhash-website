@@ -1,4 +1,3 @@
-import * as DotsPlugin from "./plugins/DotsPlugin/index"
 import * as StringInputPlugin from "./plugins/StringInputPlugin/index"
 import { Pane } from "tweakpane"
 
@@ -35,7 +34,6 @@ enum EParameterControllerView {
   string = "string",
   number = "number",
   boolean = "boolean",
-  dots = "dots",
 }
 
 interface IParameterController {
@@ -89,7 +87,6 @@ export function createFxPane(
   params: ParameterDefinitions
 ): [Pane, ParameterValueMap] {
   const pane = new Pane({ container })
-  pane.registerPlugin(DotsPlugin)
   pane.registerPlugin(StringInputPlugin)
   const valueMap = Object.keys(params).reduce((acc, key: string) => {
     const paramDefinition = params[key]
