@@ -1,6 +1,6 @@
 # Params 
 
-We are using a custom tweakpane reaction integration using react.context. You can register new ParameterDefinitions into the context that are used as the single source of truth. Those parameters are bound to one single "master" pane. You can register "sub" panes that just register a listener on the "master" pane changes and changes on the "sub" pane are broadcasted to the "master" pane. This way we maintain a very performant two directional parameter update flow. 
+We are using a custom tweakpane react integration using react.context. You can register new ParameterDefinitions into the context that are used as the single source of truth. Those parameters are bound to one single "master" pane. You can register "sub" panes that just register a listener on the "master" pane changes and changes on the "sub" pane are broadcasted to the "master" pane. This way we maintain a very performant two directional parameter update flow. 
 
 ## `/Params/tweakpane/index` 
 
