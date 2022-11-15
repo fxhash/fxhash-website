@@ -17,9 +17,7 @@ import { MediaImage } from "../../types/entities/MediaImage"
 
 // a list of common sizes which will be used to fetch the resource, ensuring
 // we hit the cache as often as possible
-const sizes = [
-  8, 16, 32, 64, 128, 256, 512, 768, 1024, 1536, 2048, 2560, 3072, 4196,
-]
+const sizes = [8, 16, 32, 64, 128, 256, 512, 768, 1024, 1400]
 
 // the image display mode, depends on the context of the parent and how the
 // image should be displayed, required to display a proper blur effect
@@ -109,6 +107,11 @@ function SimpleImage({
   )
 }
 
+interface ImageLoaded {
+  cid: string
+  highestWidth: number
+}
+
 function ReactiveImage({
   image,
   ipfsUri,
@@ -130,17 +133,19 @@ function ReactiveImage({
     [ipfsUri]
   )
 
-  // keep a reference to the highest size loaded
-  const highestWidth = useRef(0)
+  // keep a reference to the image loaded (cid & highest width)
+  const imageLoaded = useRef<ImageLoaded | null>(null)
 
   // returns the viewport available space based on the wrapper viewport
   // dimensions, or [1, 1] if ref doesn't exist
   const getViewportSpace: () => ISize = useCallback(() => {
     if (ref.current) {
       const bounds = ref.current.getBoundingClientRect()
+      const devicePixelRatio =
+        (window.devicePixelRatio > 2 ? 2 : window.devicePixelRatio) || 1
       return {
-        width: bounds.width * (window.devicePixelRatio || 1),
-        height: bounds.height * (window.devicePixelRatio || 1),
+        width: bounds.width * devicePixelRatio,
+        height: bounds.height * devicePixelRatio,
       }
     }
     return {
@@ -151,8 +156,8 @@ function ReactiveImage({
 
   const updateImageUrl = useCallback(() => {
     // no media element = pull image from IPFS directly
-    if (!image) {
-      setUrl(ipfsGatewayUrl(ipfsUri, EGatewayIpfs.FXHASH))
+    if (!image || trueResolution) {
+      setUrl(gatewayUrl)
       return
     }
 
@@ -167,13 +172,18 @@ function ReactiveImage({
       }
     }
 
-    // if target size is greater than the highest size loaded, we update
-    if (width > highestWidth.current) {
-      highestWidth.current = width
-      const imageUrl = getImageApiUrl(image?.cid, width)
-      setUrl(imageUrl)
+    // if target size is greater than the highest size loaded, or if there is no
+    // image currently loaded or if CIDs don't match
+    const loaded = imageLoaded.current
+    if (!loaded || loaded.cid !== image.cid || loaded.highestWidth < width) {
+      imageLoaded.current = {
+        cid: image.cid,
+        highestWidth: width,
+      }
+      if (loaded?.cid !== image.cid) setLoaded(false)
+      setUrl(getImageApiUrl(image.cid, width))
     }
-  }, [])
+  }, [getViewportSpace, image, ipfsUri])
 
   // attach a resize observer to the element, which will eventually fetch a
   // higher resolution image if needed
@@ -194,12 +204,12 @@ function ReactiveImage({
         ref.current && observer.disconnect()
       }
     }
-  }, [image, ipfsUri, gatewayUrl])
+  }, [image, ipfsUri, gatewayUrl, trueResolution, updateImageUrl])
 
   // triggers an error if an image has not yet been loaded
   const triggerError = useCallback(() => {
     !loaded && onError?.()
-  }, [loaded])
+  }, [loaded, onError])
 
   // when the image is loaded
   const isLoaded = useCallback(() => {

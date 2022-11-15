@@ -44,10 +44,8 @@ export const Qu_genTokens = gql`
     $filters: GenerativeTokenFilter
   ) {
     generativeTokens(skip: $skip, take: $take, sort: $sort, filters: $filters) {
+      id
       ...TokenInfo
-      reserves {
-        amount
-      }
     }
   }
 `

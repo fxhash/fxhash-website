@@ -4,6 +4,13 @@ import {
   InMemoryCache,
 } from "@apollo/client"
 
+const client = new ApolloClient({
+  uri: process.env.NEXT_PUBLIC_API_ROOT,
+  cache: new InMemoryCache(),
+  ssrMode: true,
+  ssrForceFetchDelay: 1000,
+})
+
 /**
  * Given a set of existing data, incoming data and pagination arguments,
  * merges incoming with existing **while ignoring incoming duplicates already
@@ -96,6 +103,10 @@ export const clientSideClient = new ApolloClient({
             merge: cacheMergePaginatedField,
           },
           listings: {
+            keyArgs: ["sort", "filters"],
+            merge: cacheMergePaginatedField,
+          },
+          users: {
             keyArgs: ["sort", "filters"],
             merge: cacheMergePaginatedField,
           },

@@ -24,10 +24,16 @@ export const Qu_user = gql`
 
 export const Qu_users = gql`
   ${Frag_UserBadge}
-  query Users($filters: UserFilter) {
-    users(filters: $filters, skip: 0, take: 500) {
-      ...UserBadgeInfos
+  query Users(
+    $skip: Int
+    $take: Int
+    $sort: UserSortInput
+    $filters: UserFilter
+  ) {
+    users(filters: $filters, skip: $skip, take: $take, sort: $sort) {
+      id
       type
+      ...UserBadgeInfos
     }
   }
 `

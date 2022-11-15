@@ -67,7 +67,7 @@ export interface Props {
   tabsClassName?: string
   contentClassName?: string
   tabWrapperComponent?: React.ReactNode
-  onClickTab?: (index: number) => void
+  onClickTab?: (index: number, def: TabDefinition) => void
   checkIsTabActive?: IsTabActiveHandler
 }
 /**
@@ -100,7 +100,7 @@ export function Tabs({
               definition={def}
               layout={tabsLayout}
               wrapperComponent={tabWrapperComponent}
-              onClick={() => onClickTab?.(idx)}
+              onClick={() => onClickTab?.(idx, def)}
             />
           )
         })}

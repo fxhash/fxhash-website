@@ -10,7 +10,7 @@ body {
 }
 
 :root {
-  --main-padding-sm: 30px;
+  --main-padding-sm: 20px;
 
   --color-primary: #FF005C;
   --color-secondary: #7000FF;
@@ -190,4 +190,9 @@ button {
   input {
     color: white;
   }
+}
+
+.modal-open {
+  height: 100vh;
+  overflow: hidden;
 }

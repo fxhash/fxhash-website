@@ -1,5 +1,4 @@
-import { useState } from "react"
-import { gql, useQuery } from "@apollo/client"
+import { useQuery } from "@apollo/client"
 import {
   GenerativeToken,
   GenerativeTokenFilters,
@@ -8,15 +7,18 @@ import {
 import { CardsContainer } from "../components/Card/CardsContainer"
 import { GenerativeTokenCard } from "../components/Card/GenerativeTokenCard"
 import { InfiniteScrollTrigger } from "../components/Utils/InfiniteScrollTrigger"
-import { useCallback, useContext, useEffect, useMemo, useRef } from "react"
+import {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react"
 import { CardsLoading } from "../components/Card/CardsLoading"
 import { SettingsContext } from "../context/Theme"
 import { ExploreTagDef } from "../components/Exploration/ExploreTags"
 import { GenerativeFilters } from "./Generative/GenerativeFilters"
-import {
-  Frag_GenAuthor,
-  Frag_GenPricing,
-} from "../queries/fragments/generative-token"
 import { getTagsFromFiltersObject } from "../utils/filters"
 import useSort from "../hooks/useSort"
 import { sortOptionsGenerativeTokens } from "../utils/sort"
@@ -26,9 +28,15 @@ import { Qu_genTokens } from "../queries/generative-token"
 
 const ITEMS_PER_PAGE = 20
 
-interface Props {}
+interface ExploreGenerativeTokensProps {
+  initialSearchQuery?: string
+  onChangeSearch?: (value: string) => void
+}
 
-export const ExploreGenerativeTokens = ({}: Props) => {
+export const ExploreGenerativeTokens = ({
+  initialSearchQuery,
+  onChangeSearch,
+}: ExploreGenerativeTokensProps) => {
   const [hasNothingToFetch, setHasNothingToFetch] = useState(false)
   const {
     sortValue,
@@ -37,31 +45,39 @@ export const ExploreGenerativeTokens = ({}: Props) => {
     restoreSort,
     setSearchSortOptions,
     sortOptions,
-  } = useSort(sortOptionsGenerativeTokens, "mintOpensAt-desc")
+  } = useSort(sortOptionsGenerativeTokens, {
+    defaultSort: initialSearchQuery ? "relevance-desc" : "mintOpensAt-desc",
+  })
   const { filters, setFilters, addFilter, removeFilter } =
     useFilters<GenerativeTokenFilters>({
+      onAdd: (filter, updatedFilters) => {
+        if (filter === "searchQuery_eq") {
+          setSearchSortOptions()
+          onChangeSearch?.(updatedFilters[filter] || "")
+        }
+      },
       onRemove: (filter) => {
         if (filter === "searchQuery_eq") {
           restoreSort()
+          onChangeSearch?.("")
         }
       },
+      initialFilters: initialSearchQuery
+        ? {
+            searchQuery_eq: initialSearchQuery,
+          }
+        : null,
+      defaultFilters: {
+        mintOpened_eq: true,
+        flag_in: [GenTokFlag.CLEAN, GenTokFlag.NONE],
+      },
     })
-
-  // we have some default filters on top of that
-  const filtersWithDefaults = useMemo<GenerativeTokenFilters>(
-    () => ({
-      ...filters,
-      mintOpened_eq: true,
-      flag_in: [GenTokFlag.CLEAN, GenTokFlag.NONE],
-    }),
-    [filters]
-  )
 
   // reference to an element at the top to scroll back
   const topMarkerRef = useRef<HTMLDivElement>(null)
   const settingsCtx = useContext(SettingsContext)
 
-  const { data, loading, fetchMore, refetch } = useQuery<{
+  const { data, loading, fetchMore } = useQuery<{
     generativeTokens: GenerativeToken[]
   }>(Qu_genTokens, {
     notifyOnNetworkStatusChange: true,
@@ -69,7 +85,7 @@ export const ExploreGenerativeTokens = ({}: Props) => {
       skip: 0,
       take: ITEMS_PER_PAGE,
       sort: sortVariable,
-      filters: filtersWithDefaults,
+      filters,
     },
     fetchPolicy: "network-only",
     nextFetchPolicy: "cache-and-network",
@@ -106,31 +122,25 @@ export const ExploreGenerativeTokens = ({}: Props) => {
     if (window.scrollY > top) {
       window.scrollTo(0, top)
     }
-
-    refetch?.({
-      skip: 0,
-      take: ITEMS_PER_PAGE,
-      sort: sortVariable,
-      filters: filtersWithDefaults,
-    })
-  }, [sortVariable, filtersWithDefaults, refetch])
+    setHasNothingToFetch(false)
+  }, [sortVariable, filters])
 
   const handleSearch = useCallback(
     (value) => {
       if (value) {
-        setSearchSortOptions()
         addFilter("searchQuery_eq", value)
       } else {
         removeFilter("searchQuery_eq")
       }
     },
-    [addFilter, removeFilter, setSearchSortOptions]
+    [addFilter, removeFilter]
   )
 
   const handleClearTags = useCallback(() => {
     setFilters({})
     restoreSort()
-  }, [restoreSort, setFilters])
+    onChangeSearch?.("")
+  }, [onChangeSearch, restoreSort, setFilters])
 
   // build the list of filters
   const filterTags = useMemo<ExploreTagDef[]>(
@@ -155,6 +165,7 @@ export const ExploreGenerativeTokens = ({}: Props) => {
     <div ref={topMarkerRef}>
       <SortAndFilters
         cardSizeScope="explore"
+        initialSearchQuery={initialSearchQuery}
         sort={sort}
         filterTags={filterTags}
         onClearAllTags={handleClearTags}
@@ -170,17 +181,20 @@ export const ExploreGenerativeTokens = ({}: Props) => {
             canTrigger={!hasNothingToFetch && !loading}
           >
             <CardsContainer ref={refCardsContainer}>
-              {generativeTokens && generativeTokens.length > 0 && generativeTokens.map(token => (
-                <GenerativeTokenCard
-                  key={token.id}
-                  token={token}
-                  displayPrice={settingsCtx.displayPricesCard}
-                  displayDetails={settingsCtx.displayInfosGenerativeCard}
-                />
-              ))}
-              {loading && CardsLoading({
-                number: ITEMS_PER_PAGE,
-              })}
+              {generativeTokens &&
+                generativeTokens.length > 0 &&
+                generativeTokens.map((token) => (
+                  <GenerativeTokenCard
+                    key={token.id}
+                    token={token}
+                    displayPrice={settingsCtx.displayPricesCard}
+                    displayDetails={settingsCtx.displayInfosGenerativeCard}
+                  />
+                ))}
+              {loading &&
+                CardsLoading({
+                  number: ITEMS_PER_PAGE,
+                })}
             </CardsContainer>
           </InfiniteScrollTrigger>
         )}

@@ -8,12 +8,14 @@ import {
   ReactElement,
   ReactNode,
   useMemo,
+  useCallback,
 } from "react"
 import { useRouter } from "next/router"
 import NextNprogress from "nextjs-progressbar"
 import Head from "next/head"
 import { Root } from "../containers/Root"
 import { NextPage } from "next"
+import { disableIosTextFieldZoom } from "../utils/mobile"
 
 const ROUTES_TO_RETAIN = [
   "/explore",
@@ -38,6 +40,16 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
   const retainedComponents = useRef<any>({})
 
   const isRetainableRoute = ROUTES_TO_RETAIN.includes(router.pathname)
+
+  const handlePageLoad = useCallback(() => {
+    const isIOS =
+      /iPad|iPhone|iPod/.test(navigator.userAgent) &&
+      !(window as any)["MSStream"]
+    if (isIOS) {
+      disableIosTextFieldZoom()
+    }
+    document.body.classList.remove("modal-open")
+  }, [])
 
   // if the current route is stored in memory and is loaded now, reset its index
   if (retainedComponents.current[router.pathname]) {
@@ -89,6 +101,16 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
     }
   }, [Component, pageProps])
 
+  useEffect(() => {
+    router.events.on("routeChangeComplete", handlePageLoad)
+    return () => {
+      router.events.off("routeChangeComplete", handlePageLoad)
+    }
+  }, [handlePageLoad, router.events])
+  useEffect(() => {
+    handlePageLoad()
+  }, [handlePageLoad])
+
   // custom layout for the components
   const subLayout = Component.getLayout ?? ((page) => page)
 
@@ -130,7 +152,10 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
           property="og:image"
           content="https://www.fxhash.xyz/images/og/og1.jpg"
         />
-
+        <meta
+          name="viewport"
+          content="width=device-width, height=device-height, initial-scale=1.0"
+        />
         <link
           rel="apple-touch-icon"
           sizes="180x180"
@@ -159,7 +184,7 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
       {process.env.NEXT_PUBLIC_MAINTENANCE_MODE === "1" ? (
         <Component {...pageProps} />
       ) : (
-        <Root>
+        <Root {...pageProps}>
           <>
             <div style={{ display: isRetainableRoute ? "block" : "none" }}>
               {sortedRetainedComponentEntries.map(([path, c]: any) => (

@@ -1,8 +1,8 @@
 import style from "./Layout.module.scss"
 import { PropsWithChildren } from "react"
-import { Footer } from "../containers/Footer/Footer"
+import { Footer } from "../../containers/Footer/Footer"
 import { Header } from "./Header"
-import { TopBanner } from "./TopBanner"
+import { TopBanner } from "../TopBanner"
 
 export function Layout({ children }: PropsWithChildren<{}>) {
   return (

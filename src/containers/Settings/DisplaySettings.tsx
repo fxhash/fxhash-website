@@ -101,7 +101,7 @@ export function DisplaySettings({ settings, className }: Props) {
           <div className={style.masonry_container}>
             <CContainer 
               cardSize={SIZE_MASONRY_BOXES}
-              addDivs={false}
+              emptyDivs={0}
               style={{
                 gap: "calc(var(--cards-gap) * 0.5)",
               }}
