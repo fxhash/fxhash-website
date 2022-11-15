@@ -63,7 +63,7 @@
   font-size: 20px;
   padding: 0;
 
-  i {
+  i:not(:global(.fa-badge-check)) {
     color: var(--color-gray);
   }
 }

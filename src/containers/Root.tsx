@@ -10,21 +10,32 @@ import { UserProvider } from "./UserProvider"
 import { SettingsProvider } from "../context/Theme"
 import { CyclesProvider } from "../context/Cycles"
 import { MessageCenterProvider } from "../context/MessageCenter"
-import { ArticlesProvider } from "../context/Articles";
-import { matchRule } from "../utils/regex";
-
-const EXCLUDE_LAYOUT= [
+import { ArticlesProvider } from "../context/Articles"
+import { matchRule } from "../utils/regex"
+import { IndexerStatusProvider } from "../context/IndexerStatus"
+import { IndexerStatus, NetworkStatus } from "../types/IndexerStatus"
+import { ModalProvider } from "../context/Modal"
+const EXCLUDE_LAYOUT = [
   "/generative/[id]/enjoy",
   "/u/[name]/collection/enjoy",
   "/pkh/[id]/collection/enjoy",
-  "/live-minting/*"
+  "/live-minting/*",
 ]
 
-export function Root({ children }: PropsWithChildren<{}>) {
+export function Root({
+  children,
+  indexerStatus,
+  networkStatus,
+}: PropsWithChildren<{
+  indexerStatus?: IndexerStatus
+  networkStatus?: NetworkStatus
+}>) {
   const router = useRouter()
 
   // should the page be renderer with the layout ?
-  const LayoutWrapper = (EXCLUDE_LAYOUT.some((rule) => matchRule(rule, router.pathname)))
+  const LayoutWrapper = EXCLUDE_LAYOUT.some((rule) =>
+    matchRule(rule, router.pathname)
+  )
     ? Fragment
     : Layout
 
@@ -33,13 +44,18 @@ export function Root({ children }: PropsWithChildren<{}>) {
       <SettingsProvider>
         <UserProvider>
           <MessageCenterProvider>
-            <CyclesProvider>
-              <ArticlesProvider>
-                <LayoutWrapper>
-                  {children}
-                </LayoutWrapper>
-              </ArticlesProvider>
-            </CyclesProvider>
+            <IndexerStatusProvider
+              indexerStatus={indexerStatus}
+              networkStatus={networkStatus}
+            >
+              <CyclesProvider>
+                <ModalProvider>
+                  <ArticlesProvider>
+                    <LayoutWrapper>{children}</LayoutWrapper>
+                  </ArticlesProvider>
+                </ModalProvider>
+              </CyclesProvider>
+            </IndexerStatusProvider>
           </MessageCenterProvider>
         </UserProvider>
       </SettingsProvider>

@@ -256,10 +256,7 @@ export function GenerativeIterations({ token }: Props) {
             padding="small-sm-big"
           />
           <section
-            className={cs(
-              layout.cards_explorer,
-              layout["padding-small-sm-big"]
-            )}
+            className={cs(layout.cards_explorer, layout["padding-small"])}
           >
             <FiltersPanel
               open={filtersVisible}
@@ -273,7 +270,6 @@ export function GenerativeIterations({ token }: Props) {
                 setObjtkFilters={setObjtkFilters}
               />
             </FiltersPanel>
-
             <div style={{ width: "100%" }}>
               {filterTags.length > 0 && (
                 <>

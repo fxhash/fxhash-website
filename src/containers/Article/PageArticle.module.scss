@@ -198,9 +198,11 @@
       width: 100%;
       margin: auto;
       audio {
+        display: block;
         width: 100%;
       }
       figcaption {
+        margin-top: 4px;
         text-align: center;
         font-weight: bold;
         font-size: var(--font-size-small);
@@ -213,6 +215,7 @@
 
       img,
       video {
+        display: block;
         max-height: calc(100vh - 64px);
         max-width: 100%;
         margin-left: auto;
@@ -220,6 +223,7 @@
       }
 
       figcaption {
+        margin-top: 4px;
         text-align: center;
         font-weight: bold;
         font-size: var(--font-size-small);

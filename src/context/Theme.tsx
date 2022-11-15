@@ -111,7 +111,7 @@ const defaultProperties: ISettingsProperties = {
   topBannerMessage: "",
   nsfw: false,
   epilepsy: hasReducedMotion && hasReducedMotion.matches,
-  layoutMasonry: true,
+  layoutMasonry: false,
 }
 
 const defaultCtx: ISettingsContext = {
@@ -174,11 +174,17 @@ export function SettingsProvider({ children }: PropsWithChildren<{}>) {
     root.style.setProperty("--cards-gap", `${context.spaceBetweenCards}px`)
   }, [context])
 
+  useEffect(() => {
+    if (context.darkTheme) {
+      document.body.classList.add("dark")
+    } else {
+      document.body.classList.remove("dark")
+    }
+  }, [context.darkTheme])
+
   return (
     <SettingsContext.Provider value={context}>
-      <div className={cs(style.root_wrapper, { dark: context.darkTheme })}>
-        {children}
-      </div>
+      <div className={cs(style.root_wrapper)}>{children}</div>
     </SettingsContext.Provider>
   )
 }
