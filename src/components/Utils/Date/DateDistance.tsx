@@ -14,6 +14,6 @@ export const DateDistance = ({ timestamptz, append = false }: Props) => {
         addSuffix: true,
       }),
     }
-  }, [])
+  }, [timestamptz])
   return <span title={data.title}>{data.dist}</span>
 }
