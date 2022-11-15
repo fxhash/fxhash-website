@@ -39,15 +39,15 @@ export const MasonryCardsContainer = forwardRef<
       const cardsGap = +getComputedStyle(document.documentElement)
         .getPropertyValue("--cards-gap")
         .replace("px", "")
-      const numCols = Math.max(
+      const numColsNew = Math.max(
         1,
         Math.floor(
           (elementRef.current.offsetWidth + cardsGap) / (cardSize + cardsGap)
         )
       )
-      setNumCols(numCols)
+      if (numColsNew !== numCols) setNumCols(numColsNew)
     }
-  }, [cardSize, setNumCols])
+  }, [cardSize, setNumCols, numCols])
 
   useImperativeHandle(ref, () => elementRef.current as HTMLDivElement, [
     elementRef,
@@ -55,11 +55,18 @@ export const MasonryCardsContainer = forwardRef<
   useEffect(resizeHandler, [resizeHandler])
 
   useEffect(() => {
-    window.addEventListener("resize", resizeHandler)
-    return () => {
-      window.removeEventListener("resize", resizeHandler)
+    if (elementRef.current) {
+      const observer = new ResizeObserver(() => {
+        resizeHandler()
+      })
+      observer.observe(elementRef.current)
+
+      return () => {
+        elementRef.current && observer.disconnect()
+      }
     }
-  }, [resizeHandler])
+  }, [elementRef, resizeHandler])
+
   return (
     <div
       {...props}
