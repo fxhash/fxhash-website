@@ -49,7 +49,9 @@ export const MasonryCardsContainer = forwardRef<
     }
   }, [cardSize, setNumCols])
 
-  useImperativeHandle(ref, () => elementRef.current as HTMLDivElement)
+  useImperativeHandle(ref, () => elementRef.current as HTMLDivElement, [
+    elementRef,
+  ])
   useEffect(resizeHandler, [resizeHandler])
 
   useEffect(() => {
