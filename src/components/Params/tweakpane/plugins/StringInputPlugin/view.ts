@@ -11,6 +11,7 @@ import style from "./style.module.scss"
 export type TextProps<T> = ValueMap<{
   view: "string"
   maxLength?: number
+  minLength?: number
 }>
 
 interface Config {
@@ -38,7 +39,7 @@ export class FxStringInputView implements View {
     this.props_.emitter.on("change", this.onChange_)
 
     const inputElem = doc.createElement("input")
-    inputElem.classList.add(className("i"))
+    inputElem.classList.add(className("i"), style.input)
     inputElem.type = "text"
     config.viewProps.bindDisabled(inputElem)
     this.element.appendChild(inputElem)
@@ -50,8 +51,12 @@ export class FxStringInputView implements View {
   }
 
   public refresh(): void {
-    this.inputElement.maxLength = this.props_.get("maxLength") || 524288
-    this.inputElement.value = this.value_.rawValue
+    const minLength = this.props_.get("minLength") || 0
+    const maxLength = this.props_.get("maxLength") || 524288
+
+    this.inputElement.minLength = minLength
+    this.inputElement.maxLength = maxLength
+    this.inputElement.value = this.value_.rawValue.substr(0, maxLength)
   }
 
   private onChange_(): void {

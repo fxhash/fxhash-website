@@ -49,22 +49,30 @@ const TEST_PARAMS: IParameterDefinition[] = [
     type: "string",
     id: "string_id",
     default: "hello world",
-    options: {},
+    options: {
+      maxLength: 4,
+      minLength: 2,
+    },
   },
   {
     name: "number_name",
     type: "number",
     id: "number_id",
     default: "0",
-    options: {
-      maxLength: 4,
-    },
+    options: {},
   },
   {
     name: "boolean_name",
     type: "boolean",
     id: "boolean_id",
     default: "false",
+    options: {},
+  },
+  {
+    name: "color_name",
+    type: "color",
+    id: "color_id",
+    default: '{"r":255,"g":0,"b":55}',
     options: {},
   },
 ]

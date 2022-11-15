@@ -54,7 +54,7 @@ export const parameterControlsDefinition: Record<
     type: EParameterType.color,
     controller: {
       view: EParameterControllerView.color,
-      parseValue: (v: string) => v,
+      parseValue: (v: string) => JSON.parse(v),
     },
   },
   [EParameterType.string]: {
@@ -102,6 +102,7 @@ export function createFxPane(
       parameterControlsDefinition[paramDefinition.type as EParameterType]
     pane.addInput(valueMap, key, {
       view: controller.view,
+      label: paramDefinition.name,
       ...paramDefinition.options,
     })
   })

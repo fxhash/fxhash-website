@@ -92,7 +92,6 @@ function usePaneStable(
     contextPane?.on?.("change", (e: TpChangeEvent<unknown>) => {
       const key = e.presetKey as string
       const value = e.value
-      if (values.current[key] === value) return
       values.current[key] = value
       pane.current?.refresh()
     })
@@ -140,7 +139,6 @@ export function ParamsProvider({ children }: PropsWithChildren<{}>) {
   const setParam = useCallback(
     (key: string, value: any) => {
       if (!values.current) return
-      if (values?.current?.[key] === value) return
       values.current[key] = value
       pane?.refresh()
     },

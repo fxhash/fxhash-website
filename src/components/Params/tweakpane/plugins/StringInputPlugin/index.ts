@@ -46,6 +46,7 @@ export const FxStringInputPlugin: InputBindingPlugin<
       // `view` option may be useful to provide a custom control for primitive values
       view: p.required.constant("string"),
       maxLength: p.optional.number,
+      minLength: p.optional.number,
     })
     if (!result) {
       return null
