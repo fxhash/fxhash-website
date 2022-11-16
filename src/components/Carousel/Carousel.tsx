@@ -60,20 +60,20 @@ const _Carousel = ({
     const currentX = e.changedTouches[0].screenX
     const move = currentX - refTouch.current.start
     requestAnimationFrame(() => {
-      setSwipeOffset(move)
+      requestAnimationFrame(() => setSwipeOffset(move))
     })
   }, [])
   const handleSwipeEnd = useCallback(
     (e: TouchEvent) => {
       const move = e.changedTouches[0].screenX - refTouch.current.start
-      if (move < 0) {
+      if (move < -50) {
         handleOnClickNext()
-      } else if (move > 0) {
+      } else if (move > 50) {
         handleOnClickPrev()
       }
       refTouch.current.start = 0
       requestAnimationFrame(() => {
-        setSwipeOffset(0)
+        requestAnimationFrame(() => setSwipeOffset(0))
       })
     },
     [handleOnClickNext, handleOnClickPrev]

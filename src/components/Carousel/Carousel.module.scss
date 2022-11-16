@@ -3,7 +3,7 @@
 .pages {
   position: relative;
   width: 100%;
-  touch-action: none;
+  touch-action: pan-y;
   .page {
     top: 0;
     left: 0;
