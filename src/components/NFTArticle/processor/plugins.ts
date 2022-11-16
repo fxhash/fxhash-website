@@ -9,6 +9,7 @@ import { tezosStorageProcessor } from "../elements/TezosStorage/TezosStorageProc
 import { videoProcessor } from "../elements/Video/VideoProcessor"
 import { findAndReplace } from "mdast-util-find-and-replace"
 import { mentionProcessor } from "../elements/Mention/MentionProcessor"
+import { audioProcessor } from "../elements/Audio/AudioProcessor"
 
 // declare module 'mdast' {
 //   interface Mention extends Parent {
@@ -31,6 +32,7 @@ export const customNodes: CustomArticleElementsByType = {
     "tezos-storage-pointer": tezosStorageProcessor,
     "embed-media": embedProcessor,
     video: videoProcessor,
+    audio: audioProcessor,
   },
   textDirective: {},
   containerDirective: {},
@@ -90,6 +92,25 @@ export function mdastFlattenListItemParagraphs(): Transformer<Root, Root> {
         listItem.children[0].type === "paragraph"
       ) {
         listItem.children = listItem.children[0].children
+      }
+      return listItem
+    })
+    return ast
+  }
+}
+
+export function mdastNestListItemWithParagraphs(): Transformer<Root, Root> {
+  return (ast) => {
+    visit<any, any>(ast, "listItem", (listItem: any) => {
+      if (
+        !(
+          listItem.children.length === 1 &&
+          listItem.children[0].type === "paragraph"
+        )
+      ) {
+        const t = u("paragraph", listItem.children)
+        listItem = u("listItem", [t])
+        //listItem.children = u("paragraph", listItem.children)
       }
       return listItem
     })

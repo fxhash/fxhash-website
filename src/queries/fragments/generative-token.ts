@@ -1,5 +1,7 @@
-import { gql } from "@apollo/client";
-import { Frag_ArticleInfos } from "./article";
+import { gql } from "@apollo/client"
+import { Frag_ArticleInfos } from "./article"
+import { Frag_MediaImage } from "./media"
+import { Frag_UserBadge } from "./user"
 
 export const Frag_GenPricing = gql`
   fragment Pricing on GenerativeToken {
@@ -18,46 +20,38 @@ export const Frag_GenPricing = gql`
 `
 
 export const Frag_GenAuthor = gql`
+  ${Frag_MediaImage}
+  ${Frag_UserBadge}
   fragment Author on GenerativeToken {
     author {
-      id
-      name
+      ...UserBadgeInfos
       type
-      avatarUri
-      flag
       collaborators {
-        id
-        name
-        avatarUri
-        flag
+        ...UserBadgeInfos
       }
     }
   }
 `
 
 export const Frag_GenSplitsPrimary = gql`
+  ${Frag_UserBadge}
   fragment SplitsPrimary on GenerativeToken {
     splitsPrimary {
       pct
       user {
-        id
-        name
-        avatarUri
-        flag
+        ...UserBadgeInfos
       }
     }
   }
 `
 
 export const Frag_GenSplitsSecondary = gql`
+  ${Frag_UserBadge}
   fragment SplitsSecondary on GenerativeToken {
     splitsSecondary {
       pct
       user {
-        id
-        name
-        avatarUri
-        flag
+        ...UserBadgeInfos
       }
     }
   }
@@ -83,5 +77,42 @@ export const Frag_GenArticleMentions = gql`
         ...ArticleInfos
       }
     }
+  }
+`
+
+export const Frag_GenTokenBadge = gql`
+  ${Frag_GenAuthor}
+  ${Frag_MediaImage}
+  fragment TokenBadge on GenerativeToken {
+    id
+    name
+    thumbnailUri
+    displayUri
+    captureMedia {
+      ...MediaImage
+    }
+    ...Author
+  }
+`
+
+export const Frag_GenTokenInfo = gql`
+  ${Frag_GenPricing}
+  ${Frag_GenTokenBadge}
+  fragment TokenInfo on GenerativeToken {
+    ...TokenBadge
+    id
+    slug
+    flag
+    labels
+    supply
+    originalSupply
+    balance
+    enabled
+    royalties
+    createdAt
+    reserves {
+      amount
+    }
+    ...Pricing
   }
 `

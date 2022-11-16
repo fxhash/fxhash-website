@@ -1,4 +1,5 @@
-const contractAddressRegex = /^KT1[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{33}$/
+const contractAddressRegex =
+  /^KT1[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{33}$/
 
 /**
  * Checks whether a string is a valid contract address.

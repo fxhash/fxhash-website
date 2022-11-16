@@ -1,20 +1,25 @@
 import style from "./Card.module.scss"
-import effect from "../../styles/Effects.module.scss"
 import cs from "classnames"
 import {
   PropsWithChildren,
   ReactNode,
+  useCallback,
   useContext,
   useMemo,
   useState,
 } from "react"
-import { ipfsGatewayUrl } from "../../services/Ipfs"
-import { useClientAsyncEffect } from "../../utils/hookts"
-import { Loader } from "../Utils/Loader"
-import { useInView } from "react-intersection-observer"
+
 import { SettingsContext } from "../../context/Theme"
+import { GenTokLabel } from "../../types/entities/GenerativeToken"
+import { getGenTokWarning } from "../../utils/generative-token"
+import { Button } from "../Button"
+import { MediaImage } from "../../types/entities/MediaImage"
+import { Image } from "../Image"
+import { WarningLayer } from "../Warning/WarningLayer"
 
 interface Props {
+  tokenLabels?: GenTokLabel[] | null
+  image?: MediaImage
   thumbnailUri?: string | null
   undesirable?: boolean
   displayDetails?: boolean
@@ -22,58 +27,43 @@ interface Props {
 }
 
 export function Card({
+  tokenLabels,
+  image,
   thumbnailUri,
   undesirable = false,
   displayDetails = true,
   thumbInfosComp,
   children,
 }: PropsWithChildren<Props>) {
-  const [loaded, setLoaded] = useState<string | null>(null)
   const [error, setError] = useState<boolean>(false)
-  const url = useMemo(
-    () => thumbnailUri && ipfsGatewayUrl(thumbnailUri),
-    [thumbnailUri]
-  )
-  const { ref, inView } = useInView()
   const settings = useContext(SettingsContext)
 
-  // lazy load the image
-  useClientAsyncEffect(
-    (isMounted) => {
-      if (inView && !loaded && url && !error) {
-        const img = new Image()
-        img.onload = () => {
-          if (isMounted()) {
-            setLoaded(img.src)
-          }
-        }
-        img.onerror = () => {
-          // we fallback to the IPFS gateway
-          // img.src = ipfsGatewayUrl(thumbnailUri)
-          setError(true)
-        }
-        img.src = url
-      }
-    },
-    [inView]
-  )
+  const warning = useMemo(() => {
+    if (!tokenLabels || tokenLabels.length === 0) return false
+    return getGenTokWarning(tokenLabels, settings, "preview")
+  }, [settings, tokenLabels])
 
   return (
     <div
       className={cs(style.container, {
         [style.hover_effect]: settings.hoverEffectCard,
       })}
-      ref={ref}
     >
       <div
         className={cs(style["thumbnail-container"], {
-          [style.undesirable]: undesirable,
-          [effect.placeholder]: !loaded && !error,
+          [style.blur]: undesirable,
         })}
-        style={{
-          backgroundImage: loaded ? `url(${loaded})` : "none",
-        }}
       >
+        {!undesirable && (
+          <Image
+            ipfsUri={thumbnailUri!}
+            image={image}
+            alt=""
+            onError={() => setError(true)}
+            className={style.thumbnail}
+            position="absolute"
+          />
+        )}
         {error && (
           <div className={cs(style.error)}>
             <i aria-hidden className="fa-solid fa-bug" />
@@ -86,6 +76,7 @@ export function Card({
             <span>undesirable content</span>
           </div>
         )}
+        {!undesirable && warning && <WarningLayer warning={warning} />}
         {thumbInfosComp && (
           <div className={cs(style.thumbinfos)}>{thumbInfosComp}</div>
         )}

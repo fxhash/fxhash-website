@@ -6,11 +6,12 @@ body {
   padding: 0;
   margin: 0;
   font-family: "Fira Code", monospace;
-  background: white;
+  background: var(--color-white);
+  color: var(--color-black);
 }
 
 :root {
-  --main-padding-sm: 30px;
+  --main-padding-sm: 20px;
 
   --color-primary: #FF005C;
   --color-secondary: #7000FF;
@@ -190,4 +191,9 @@ button {
   input {
     color: white;
   }
+}
+
+.modal-open {
+  height: 100vh;
+  overflow: hidden;
 }

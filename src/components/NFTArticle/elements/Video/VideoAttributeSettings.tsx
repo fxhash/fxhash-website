@@ -63,6 +63,7 @@ export const VideoAttributeSettings: TEditAttributeComp = ({ onEdit }) => {
                 onChange={handleAddFile}
                 accepted={acceptedVideoFiles}
                 className={cs(style.dropzone)}
+                maxSizeMb={50}
                 textDefault={
                   <div className={cs(style.dropzone__content)}>
                     <i className="fa-solid fa-video" aria-hidden />

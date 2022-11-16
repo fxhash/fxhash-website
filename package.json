@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "lint:fix": "next lint --fix"
+    "lint:fix": "next lint --fix",
+    "local:unix": "echo \"Your local server is `ipconfig getifaddr en0`:3000\""
   },
   "dependencies": {
     "@apollo/client": "^3.4.16",

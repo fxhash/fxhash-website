@@ -69,6 +69,12 @@
   }
 }
 
+.collect {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .infos {
   max-width: 900px;
   margin: 150px auto 0;
@@ -187,13 +193,29 @@
       margin-bottom: 2em;
     }
 
-    figure.article_image,
-    figure.article_video {
+    figure.article_audio {
+      max-width: 900px;
+      width: 100%;
+      margin: auto;
+      audio {
+        display: block;
+        width: 100%;
+      }
+      figcaption {
+        margin-top: 4px;
+        text-align: center;
+        font-weight: bold;
+        font-size: var(--font-size-small);
+      }
+    }
+
+    figure.article_image, figure.article_video,  {
       width: fit-content;
       margin: 0 auto;
 
       img,
       video {
+        display: block;
         max-height: calc(100vh - 64px);
         max-width: 100%;
         margin-left: auto;
@@ -201,6 +223,7 @@
       }
 
       figcaption {
+        margin-top: 4px;
         text-align: center;
         font-weight: bold;
         font-size: var(--font-size-small);

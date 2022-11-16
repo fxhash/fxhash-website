@@ -19,6 +19,7 @@ import { ALL_TEXT_FORMATS } from "../index"
 import { isFormatActive, lookupElementByType } from "../utils"
 import { imageDefinition } from "../../elements/Image/ImageDefinition"
 import { videoDefinition } from "../../elements/Video/VideoDefinition"
+import { audioDefinition } from "../../elements/Audio/AudioDefinition"
 
 // a list of operation types which can mutate the list of medias
 const mediaMutableOperations: BaseOperation["type"][] = [
@@ -26,7 +27,7 @@ const mediaMutableOperations: BaseOperation["type"][] = [
   "remove_node",
   "set_node",
 ]
-const mediaTypes = ["image", "video"]
+const mediaTypes = ["image", "video", "audio"]
 const mediaTypesWithFigure = [...mediaTypes, "figure"]
 
 function insertImage(editor: Editor, url: string) {
@@ -39,6 +40,12 @@ function insertVideo(editor: Editor, src: string) {
   Transforms.insertNodes(
     editor,
     videoDefinition.instanciateElement!({ src, caption: "" })
+  )
+}
+function insertAudio(editor: Editor, src: string) {
+  Transforms.insertNodes(
+    editor,
+    audioDefinition.instanciateElement!({ src, caption: "" })
   )
 }
 
@@ -61,6 +68,11 @@ function getEditorMedias(editor: FxEditor): IEditorMediaFile[] {
       medias.push({
         uri: node.src,
         type: "video",
+      })
+    } else if (node.type === "audio" && node.src && node.src !== "") {
+      medias.push({
+        uri: node.src,
+        type: "audio",
       })
     }
   }
@@ -138,6 +150,9 @@ export const withMediaSupport: EnhanceEditorWith = (
         } else if (fileType === "video") {
           const src = URL.createObjectURL(file)
           insertVideo(editor, src)
+        } else if (fileType === "audio") {
+          const src = URL.createObjectURL(file)
+          insertAudio(editor, src)
         }
       }
     }
@@ -158,7 +173,7 @@ export const withMediaSupport: EnhanceEditorWith = (
       if (
         !node.children.find(
           (node: Node) =>
-            ["image", "video", "figcaption"].indexOf(node.type) > -1
+            ["image", "video", "audio", "figcaption"].indexOf(node.type) > -1
         )
       ) {
         Transforms.removeNodes(editor, {
@@ -247,6 +262,16 @@ export const withMediaSupport: EnhanceEditorWith = (
             }
           )
         } else if (node.type === "video" && node.src === target.uri) {
+          Transforms.setNodes(
+            editor,
+            {
+              src: uri,
+            },
+            {
+              at: path,
+            }
+          )
+        } else if (node.type === "audio" && node.src === target.uri) {
           Transforms.setNodes(
             editor,
             {

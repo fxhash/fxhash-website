@@ -1,6 +1,7 @@
 import { ArticleMetadata } from "../Metadata"
 import { Action } from "./Action"
 import { GenerativeToken } from "./GenerativeToken"
+import {MediaImage} from "./MediaImage"
 import { Split } from "./Split"
 import { User } from "./User"
 
@@ -40,6 +41,7 @@ export type NFTArticleInfos = Pick<
   | "flag"
   | "slug"
   | "thumbnailUri"
+  | "thumbnailMedia"
   | "description"
   | "tags"
   | "author"
@@ -68,6 +70,7 @@ export interface NFTArticle {
   displayUri: string
   thumbnailUri: string
   thumbnailCaption: string
+  thumbnailMedia?: MediaImage
   platforms?: string[] | null
   createdAt: string
   editions: number
