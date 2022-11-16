@@ -185,6 +185,18 @@ export const UserDonationAliases: Record<string, Partial<User>> = {
     donationAddress: true,
     flag: UserFlag.VERIFIED,
   },
+
+  KT1KYfj97fpdomqyKsZSBdSVvh9afh93b4Ge: {
+    id: "KT1KYfj97fpdomqyKsZSBdSVvh9afh93b4Ge",
+    name: "Tezos for Iran",
+    descriptionLight:
+      "A charity fundraiser in solidarity with the protests and to raise awareness for womens' rights in Iran.",
+    description:
+      "A charity fundraiser in solidarity with the protests and to raise awareness for womens' rights in Iran.",
+    avatarUri: "ipfs://QmWyaMu6H6WaGgTjM52pbwdUVj5AE3FLQT7f17hjLpmqyj",
+    donationAddress: true,
+    flag: UserFlag.VERIFIED,
+  },
 }
 
 // a list of User aliases
