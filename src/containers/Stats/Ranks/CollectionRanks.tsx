@@ -57,11 +57,11 @@ export function CollectionRanks({}: Props) {
     setSortValue(newSortValue)
     setPage(0)
   }, [])
-  const { data } = useQuery(Qu_marketStatsCollections, {
+  const { data, loading } = useQuery(Qu_marketStatsCollections, {
     notifyOnNetworkStatusChange: true,
     variables: {
       skip: 0,
-      take: 45,
+      take: 50,
       sort,
     },
   })
@@ -126,14 +126,24 @@ export function CollectionRanks({}: Props) {
         />
       </div>
       <Spacing size="x-large" />
-      <Carousel
-        className={style.pages}
-        page={page}
-        totalPages={pages.length}
-        onChangePage={setPage}
-        renderSlide={renderPageStats}
-        options={options}
-      />
+      {loading ? (
+        <Ranks className={style.placeholder}>
+          {Array(isMobile ? 6 : 15)
+            .fill(0)
+            .map((_, idx) => (
+              <RankPlaceholder key={idx} />
+            ))}
+        </Ranks>
+      ) : (
+        <Carousel
+          className={style.pages}
+          page={page}
+          totalPages={pages.length}
+          onChangePage={setPage}
+          renderSlide={renderPageStats}
+          options={options}
+        />
+      )}
     </>
   )
 }

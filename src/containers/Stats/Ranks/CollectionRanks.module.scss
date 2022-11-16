@@ -12,35 +12,10 @@
   }
 }
 .pages {
-  position: relative;
-  width: 100%;
   height: 365px;
-  .page {
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    width: 100%;
-    position: absolute;
-    transition: all 0.5s;
-  }
 }
-.controls {
-  margin-top: 32px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  align-self: flex-end;
-  font-weight: 700;
-  gap: 8px;
-  .button {
-    height: 48px;
-    width: 48px;
-    font-size: var(--font-size-big);
-  }
-}
-.dots {
-  display: none;
+.placeholder {
+  margin-bottom: 81px;
 }
 @media (max-width: $breakpoint-md) {
   .pages {
@@ -49,29 +24,10 @@
 }
 
 @media (max-width: $breakpoint-sm) {
-  .controls {
-    display: none;
-  }
   .pages {
     height: 462px;
   }
-  .dots {
-    margin-top: 24px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    height: 6px;
-    width: 100%;
-    gap: 8px;
-    .page_control {
-      flex: 1;
-      background-color: var(--color-gray-light);
-      height: 3px;
-      transition: 0.5s all ease-in;
-      &--active {
-        height: 6px;
-        background-color: var(--color-secondary);
-      }
-    }
+  .placeholder {
+    margin-bottom: 30px;
   }
 }
