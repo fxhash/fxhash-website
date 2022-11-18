@@ -14,12 +14,13 @@ export type ButtonSize =
   | "very-small"
   | "very-large"
   | "large-x"
+  | "custom"
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   iconComp?: React.ReactNode
   state?: ButtonState
   size?: ButtonSize
-  color?: "black" | "primary" | "secondary" | "transparent"
+  color?: "black" | "white" | "primary" | "secondary" | "transparent"
   className?: string
   iconSide?: "left" | "right" | null
   isLink?: boolean
