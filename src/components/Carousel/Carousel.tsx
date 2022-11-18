@@ -1,4 +1,5 @@
 import React, {
+  CSSProperties,
   memo,
   useCallback,
   useEffect,
@@ -9,6 +10,10 @@ import React, {
 import style from "./Carousel.module.scss"
 import { Button } from "../Button"
 import cs from "classnames"
+
+interface ContainerCSSProperties extends CSSProperties {
+  "--pages-nb": number
+}
 
 export interface CarouselOptions {
   loop?: boolean
@@ -36,79 +41,84 @@ const _Carousel = ({
     showDots: false,
   },
 }: CarouselProps) => {
-  const [swipeOffset, setSwipeOffset] = useState(0)
-  const refPages = useRef<HTMLDivElement>(null)
-  const refTouch = useRef<{ start: number }>({
-    start: 0,
-  })
+  // reference to the container of the pages
+  const container = useRef<HTMLDivElement>(null)
+
+  // because we need to update the page on scroll AND update the scroll when the
+  // page changes, we need to know when to disable the later when scrolling
+  const preventScrollOnPageChange = useRef<boolean>(false)
+
   const handleOnClickNext = useCallback(() => {
     onChangePage(page + 1 > totalPages - 1 ? 0 : page + 1)
   }, [onChangePage, page, totalPages])
+
   const handleOnClickPrev = useCallback(() => {
     onChangePage(page - 1 < 0 ? totalPages - 1 : page - 1)
   }, [onChangePage, page, totalPages])
+
   const handleClickGoToPage = useCallback(
     (goToPage) => () => {
       onChangePage(goToPage)
     },
     [onChangePage]
   )
-  const handleSwipeStart = useCallback((e: TouchEvent) => {
-    refTouch.current.start = e.changedTouches[0].screenX
-  }, [])
-  const handleSwipeMove = useCallback((e: TouchEvent) => {
-    const currentX = e.changedTouches[0].screenX
-    const move = currentX - refTouch.current.start
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => setSwipeOffset(move))
-    })
-  }, [])
-  const handleSwipeEnd = useCallback(
-    (e: TouchEvent) => {
-      const move = e.changedTouches[0].screenX - refTouch.current.start
-      if (move < -50) {
-        handleOnClickNext()
-      } else if (move > 50) {
-        handleOnClickPrev()
-      }
-      refTouch.current.start = 0
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => setSwipeOffset(0))
-      })
-    },
-    [handleOnClickNext, handleOnClickPrev]
-  )
+
   const arrayTotalPages = useMemo(() => [...Array(totalPages)], [totalPages])
+
+  // syncs the scroll position with the page, if not during a scroll
   useEffect(() => {
-    const el = refPages.current
-    if (el) {
-      el.addEventListener("touchstart", handleSwipeStart)
-      el.addEventListener("touchmove", handleSwipeMove)
-      el.addEventListener("touchend", handleSwipeEnd)
-    }
-    return () => {
+    if (preventScrollOnPageChange.current) {
+      preventScrollOnPageChange.current = false
+    } else {
+      const el = container.current
       if (el) {
-        el.removeEventListener("touchstart", handleSwipeStart)
-        el.removeEventListener("touchmove", handleSwipeMove)
-        el.removeEventListener("touchend", handleSwipeEnd)
+        const pos = (page / arrayTotalPages.length) * el.scrollWidth
+        el.scroll({
+          left: pos,
+          behavior: "auto",
+        })
       }
     }
-  }, [handleSwipeEnd, handleSwipeMove, handleSwipeStart])
+  }, [page, arrayTotalPages])
+
+  // updates the page when scrolling in the container
+  const onScroll = useCallback(
+    (evt) => {
+      const el = container.current
+      if (el) {
+        const idx = Math.floor(
+          (el.scrollLeft / el.scrollWidth + 0.05) * arrayTotalPages.length
+        )
+        if (page !== idx) {
+          preventScrollOnPageChange.current = true
+          onChangePage(idx)
+        }
+      }
+    },
+    [page, onChangePage, arrayTotalPages]
+  )
+
   return (
     <>
-      <div className={cs(style.pages, className)} ref={refPages}>
-        {arrayTotalPages.map((_, idx) => {
-          const pageOffset = (idx - page) * 100
-          const pageStyle = {
-            transform: `translateX(calc(${pageOffset}vw + ${swipeOffset}px))`,
+      <div className={cs(style.pages_wrapper)}>
+        <div
+          className={cs(style.pages, className)}
+          ref={container}
+          onScroll={onScroll}
+          style={
+            {
+              "--pages-nb": arrayTotalPages.length,
+            } as ContainerCSSProperties
           }
-          return (
-            <div key={idx} className={style.page} style={pageStyle}>
+        >
+          {arrayTotalPages.map((_, idx) => (
+            <div key={idx} className={style.page}>
               {renderSlide(idx)}
             </div>
-          )
-        })}
+          ))}
+        </div>
       </div>
+
       {options?.showDots && (
         <div className={style.dots}>
           {arrayTotalPages.map((_, idx) => {
@@ -125,6 +135,7 @@ const _Carousel = ({
           })}
         </div>
       )}
+
       {options?.showButtonControls && (
         <div className={style.controls}>
           <Button

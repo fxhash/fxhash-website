@@ -1,20 +1,31 @@
 @import "../../styles/Variables";
 
-.pages {
-  position: relative;
+.pages_wrapper {
   width: 100%;
-  touch-action: pan-y;
+}
+
+.pages {
+  --page-gap: 15vw;
+  --pages-nb: 4;
+
+  display: grid;
+  grid-template-columns: repeat(var(--pages-nb), 100%);
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  scroll-snap-type: x mandatory;
+  gap: var(--page-gap);
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
   .page {
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    width: 100%;
-    position: absolute;
-    will-change: transform;
-    transition: all 0.5s;
+    scroll-snap-align: center;
   }
 }
+
 .controls {
   margin-top: 32px;
   display: flex;
