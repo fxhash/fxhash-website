@@ -8,11 +8,11 @@ export const paragraphDefinition: IArticleBlockDefinition<any> = {
     <p {...attributes}>{children}</p>
   ),
   hasUtilityWrapper: true,
-  instanciateElement: () => ({
+  instanciateElement: (text?: string) => ({
     type: "paragraph",
     children: [
       {
-        text: "",
+        text: text || "",
       },
     ],
   }),

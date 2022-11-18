@@ -61,6 +61,8 @@ export function ProposalDetailsUpdateIssuerExpanded({
         filters: {
           id_in: userIds,
         },
+        skip: 0,
+        take: 500,
       },
     })
   }, [unpacked])

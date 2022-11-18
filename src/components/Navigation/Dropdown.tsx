@@ -16,6 +16,7 @@ interface Props {
   btnClassName?: string
   closeOnClick?: boolean
   mobileMenuAbsolute?: boolean
+  renderComp?: any
 }
 
 export function Dropdown({
@@ -26,6 +27,7 @@ export function Dropdown({
   closeOnClick = true,
   children,
   mobileMenuAbsolute,
+  renderComp,
 }: PropsWithChildren<Props>) {
   const [opened, setOpened] = useState<boolean>(false)
 
@@ -64,8 +66,17 @@ export function Dropdown({
       }
     }
   }, [opened])
-
-  return (
+  const RenderComponent = renderComp
+  return RenderComponent ? (
+    <RenderComponent
+      btnClassName={btnClassName}
+      itemComp={itemComp}
+      onToggle={toggle}
+      open={opened}
+    >
+      {children}
+    </RenderComponent>
+  ) : (
     <div
       className={cs(style.container, "dropdown_root", {
         "avoid-close-event": opened,

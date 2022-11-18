@@ -63,9 +63,9 @@ export function UserListings({
             />
           ))}
         </CardsContainer>
-        {loading && (
-          <CardsLoading number={20} />
-        )}
+        {loading && CardsLoading({
+          number: ITEMS_PER_PAGE,
+        })}
       </InfiniteScrollTrigger>
     </div>
   )

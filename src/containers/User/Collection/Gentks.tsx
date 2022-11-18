@@ -249,7 +249,7 @@ export function UserCollectionGentks({ user }: Props) {
             }
           >
             <SearchInputControlled
-              minimizeOnMobile
+              minimizeBehavior="mobile"
               onMinimize={setIsSearchMinimized}
               onSearch={(value) => {
                 if (value) {
@@ -309,7 +309,10 @@ export function UserCollectionGentks({ user }: Props) {
                       showRarity={sort.rarity != null}
                     />
                   ))}
-                  {loading && <CardsLoading number={ITEMS_PER_PAGE} />}
+                  {loading &&
+                    CardsLoading({
+                      number: ITEMS_PER_PAGE,
+                    })}
                 </CardsContainer>
               </InfiniteScrollTrigger>
             </div>

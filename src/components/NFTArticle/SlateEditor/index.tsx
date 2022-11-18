@@ -1,4 +1,3 @@
-import "katex/dist/katex.min.css"
 import React, {
   forwardRef,
   KeyboardEvent,
@@ -88,7 +87,7 @@ const renderLeaf = ({ attributes, children, leaf }: RenderLeafProps) => {
   return <span {...attributes}>{children}</span>
 }
 
-interface SlateEditorProps {
+export interface SlateEditorProps {
   initialValue: Descendant[]
   placeholder?: string
   onMediasUpdate: (medias: IEditorMediaFile[]) => void

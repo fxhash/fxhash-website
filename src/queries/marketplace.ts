@@ -1,10 +1,13 @@
 import { gql } from "@apollo/client"
-
+import { Frag_UserBadge } from "./fragments/user"
+import { Frag_MediaImage } from "./fragments/media"
 
 /**
  * Get a Generative Token active listings
  */
 export const Qu_genTokListings = gql`
+  ${Frag_MediaImage}
+  ${Frag_UserBadge}
   query GenTokActiveListings(
     $id: Float!, $filters: ObjktFilter, $sort: ObjktsSortInput, $skip: Int, $take: Int
   ) {
@@ -17,22 +20,51 @@ export const Qu_genTokListings = gql`
         slug
         duplicate
         metadata
+        captureMedia {
+          ...MediaImage
+        }
         activeListing {
           id
           version
           price
           issuer {
-            id
-            name
-            flag
-            avatarUri
+            ...UserBadgeInfos
           }
         }
         owner {
+          ...UserBadgeInfos
+        }
+      }
+    }
+  }
+`
+
+export const Qu_genTokActions = gql`
+  ${Frag_UserBadge}
+  query GenTokActions($id: Float!, $skip: Int, $take: Int, $filters: ActionFilter) {
+    generativeToken(id: $id) {
+      id,
+      actions(skip: $skip, take: $take, filters: $filters) {
+        id
+        type
+        opHash
+        numericValue
+        metadata
+        createdAt
+        issuer {
+          ...UserBadgeInfos
+        }
+        target {
+          ...UserBadgeInfos
+        }
+        objkt {
           id
           name
-          flag
-          avatarUri
+          iteration
+        }
+        token {
+          id
+          name
         }
       }
     }
