@@ -15,16 +15,8 @@ const _GentksActions = ({ user }: GentksActionsProps) => {
   return (
     <Dropdown
       mobileMenuAbsolute
-      itemComp={
-        <Button
-          isLink={true}
-          iconComp={<i aria-hidden className="fa-solid fa-ellipsis-vertical" />}
-          size="regular"
-          color="transparent"
-          iconSide={null}
-          className={style.open_btn}
-        />
-      }
+      itemComp={<i aria-hidden className="fa-solid fa-ellipsis-vertical" />}
+      btnClassName={style.open_btn}
       className={style.dropdown}
     >
       <div>

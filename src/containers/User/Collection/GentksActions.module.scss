@@ -5,8 +5,14 @@
 }
 .open_btn {
   border: 3px solid var(--color-black);
+  padding-left: 0;
+  padding-right: 0;
+  height: 50px;
+  width: 50px;
+
   &:hover {
-    border: 3px solid var(--color-black);
+    border-color: var(--color-secondary);
+    color: var(--color-secondary);
   }
 }
 .opt {
