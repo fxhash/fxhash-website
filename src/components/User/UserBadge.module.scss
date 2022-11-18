@@ -42,6 +42,29 @@
       flex-direction: row-reverse;
     }
   }
+  &.side-top {
+    flex-direction: column;
+    gap: 16px;
+  }
+}
+
+.container_size_xl {
+  font-size: var(--font-size-small);
+  
+  .user_infos {
+    margin-left: 0;
+  }
+
+  .user_name {
+    text-align: center;
+    flex-direction: column-reverse;
+    align-items: center;
+
+    i {
+      margin-top: -25px;
+      font-size: 22px;
+    }
+  }
 }
 
 .no_avatar {
@@ -89,6 +112,11 @@
   height: 50px;
 }
 
+.avatar-xl {
+  width: 160px;
+  height: 160px;
+}
+
 .avatar-inline {
   width: 26px;
   height: 26px;
@@ -115,4 +143,8 @@
 
 .avatar_donation {
   border: 3px solid var(--color-donator);
+}
+
+.avatar_loading {
+  border-radius: 50%;
 }

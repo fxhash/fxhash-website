@@ -25,11 +25,33 @@
   &:focus-within {
     border-color: var(--color-secondary);
   }
+
+  &--icon-right {
+    flex-direction: row-reverse;
+    padding: 0 4px 0 10px;
+  }
+
+  &--minimize {
+    box-shadow: none;
+    padding-left: 0;
+    padding-right: 0;
+    border-color: transparent;
+    input {
+      transition: 0.2s all ease-out;
+      width: 0;
+      padding: 0;
+    }
+    &:focus-within {
+      border-color: transparent;
+    }
+  }
 }
 
 .search-icon {
+  padding: 0 6px;
   font-size: 25px;
   color: var(--color-border-input);
+  cursor: pointer;
 }
 
 .large_search {
@@ -40,13 +62,15 @@
 @media (max-width: $breakpoint-sm) {
   .search {
     transition: 0.2s all ease-out;
-    &--minimize {
+    &--minimize-mobile {
       box-shadow: none;
       padding-left: 0;
+      padding-right: 0;
       border-color: transparent;
       input {
         transition: 0.2s all ease-out;
         width: 0;
+        padding: 0;
       }
       &:focus-within {
         border-color: transparent;

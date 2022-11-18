@@ -46,6 +46,8 @@ const ArticlePreviewPage: NextPage<ArticlePreviewPageProps> = ({ origin }) => {
                 (royalty) => royalty.address
               ),
             },
+            skip: 0,
+            take: 500,
           },
         })
         const newArticle = generateNftArticleFromDraft(

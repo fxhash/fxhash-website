@@ -1,0 +1,23 @@
+.statusWrapper {
+  width: 100%;
+  position: relative;
+  height: 40px;
+  overflow: hidden;
+}
+.blockchain {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-position: right;
+  color: var(--color-gray-light)
+}
+.statusDone {
+  left: 0;
+  color: var(--color-success);
+}
+.medium {
+  color: var(--color-warning)
+}
+.high {
+  color: var(--color-error)
+}

@@ -22,6 +22,7 @@ interface SortAndFiltersProps {
     options: IOptions[]
     onChange: (value: string) => void
   }
+  initialSearchQuery?: string
   renderFilters?: () => any
   filterTags: ExploreTagDef[]
   onClearAllTags: () => void
@@ -32,6 +33,7 @@ interface SortAndFiltersProps {
 const _SortAndFilters = ({
   children,
   sort,
+  initialSearchQuery,
   renderFilters,
   onSearch,
   noResults,
@@ -66,7 +68,8 @@ const _SortAndFilters = ({
             }
           >
             <SearchInputControlled
-              minimizeOnMobile
+              minimizeBehavior="mobile"
+              initialValue={initialSearchQuery}
               onMinimize={setIsSearchMinimized}
               onSearch={onSearch}
               className={styleSearch.large_search}

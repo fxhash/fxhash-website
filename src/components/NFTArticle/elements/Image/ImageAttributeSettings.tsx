@@ -51,6 +51,7 @@ export const ImageAttributeSettings: TEditAttributeComp = ({
               onChange={(files) => files && files[0] && onAddFile(files[0])}
               accepted={["image/jpeg", "image/png", "image/gif"]}
               className={cs(style.dropzone)}
+              maxSizeMb={20}
               textDefault={
                 <div className={cs(style.dropzone__content)}>
                   <i className="fa-solid fa-image" aria-hidden />

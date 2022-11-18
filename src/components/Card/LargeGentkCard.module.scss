@@ -1,3 +1,9 @@
+.root {
+  &:hover {
+    text-decoration: none;
+  }
+}
+
 .topper {
   display: flex;
   justify-content: space-between;

@@ -2,7 +2,6 @@ import { gql } from "@apollo/client"
 import {
   Frag_GenArticleMentions,
   Frag_GenAuthor,
-  Frag_GenPricing,
   Frag_GenReserves,
   Frag_GenSplitsPrimary,
   Frag_GenSplitsSecondary,
@@ -44,10 +43,24 @@ export const Qu_genTokens = gql`
     $filters: GenerativeTokenFilter
   ) {
     generativeTokens(skip: $skip, take: $take, sort: $sort, filters: $filters) {
+      id
       ...TokenInfo
-      reserves {
-        amount
-      }
+    }
+  }
+`
+
+export const Qu_genTokensIncoming = gql`
+  ${Frag_GenTokenInfo}
+  query GenerativeTokensIncoming(
+    $skip: Int
+    $take: Int
+    $sort: GenerativeSortInput
+    $filters: GenerativeTokenFilter
+  ) {
+    generativeTokens(skip: $skip, take: $take, sort: $sort, filters: $filters) {
+      id
+      ...TokenInfo
+      lockEnd
     }
   }
 `
@@ -140,6 +153,10 @@ export const Qu_genTokenIterations = gql`
         id
         version
         iteration
+        issuer {
+          flag
+          labels
+        }
         owner {
           ...UserBadgeInfos
         }
@@ -160,6 +177,7 @@ export const Qu_genTokenIterations = gql`
 `
 
 export const Qu_genTokenAllIterations = gql`
+  ${Frag_MediaImage}
   query GenerativeTokenIterations($id: Float!) {
     generativeToken(id: $id) {
       id
@@ -169,6 +187,9 @@ export const Qu_genTokenAllIterations = gql`
         iteration
         name
         metadata
+        captureMedia {
+          ...MediaImage
+        }
       }
     }
   }
@@ -221,6 +242,8 @@ export const Qu_genTokOwners = gql`
 `
 
 export const Qu_genTokOffers = gql`
+  ${Frag_MediaImage}
+  ${Frag_UserBadge}
   query GetGenTokOffers($id: Float) {
     generativeToken(id: $id) {
       id
@@ -232,15 +255,17 @@ export const Qu_genTokOffers = gql`
         cancelledAt
         acceptedAt
         buyer {
-          id
-          name
+          ...UserBadgeInfos
         }
         objkt {
           id
           iteration
           metadata
+          captureMedia {
+            ...MediaImage
+          }
           owner {
-            id
+            ...UserBadgeInfos
           }
         }
       }
@@ -250,7 +275,7 @@ export const Qu_genTokOffers = gql`
 
 export const Qu_searchGenTok = gql`
   ${Frag_GenAuthor}
-
+  ${Frag_MediaImage}
   query SearchGenerativeToken(
     $skip: Int
     $take: Int
@@ -261,6 +286,9 @@ export const Qu_searchGenTok = gql`
       id
       name
       thumbnailUri
+      captureMedia {
+        ...MediaImage
+      }
       ...Author
     }
   }

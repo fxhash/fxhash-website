@@ -412,7 +412,9 @@ export class WalletManager {
 
       // call the contract (open wallet)
       statusCallback && statusCallback(ContractOperationStatus.CALLING)
-      const opSend = await modContract.methodsObject.report(data.tokenId).send()
+      const opSend = await modContract.methodsObject.report({
+        token_id: data.tokenId
+      }).send()
 
       // wait for confirmation
       statusCallback && statusCallback(ContractOperationStatus.WAITING_CONFIRMATION)
@@ -450,7 +452,7 @@ export class WalletManager {
       // call the contract (open wallet)
       statusCallback && statusCallback(ContractOperationStatus.CALLING)
       const opSend = await modContract.methodsObject.moderate({
-        id: data.tokenId,
+        token_id: data.tokenId,
         state: data.state
       }).send()
 

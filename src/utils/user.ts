@@ -1,15 +1,24 @@
-import { Collaboration, ConnectedUser, User, UserAlias, UserAuthorization, UserFlag, UserItems, UserType } from "../types/entities/User"
+import {
+  Collaboration,
+  ConnectedUser,
+  User,
+  UserAlias,
+  UserAuthorization,
+  UserFlag,
+  UserItems,
+  UserType,
+} from "../types/entities/User"
 import { truncateMiddle } from "./strings"
 
 export function userHasName(user: ConnectedUser): boolean {
-  return !!(user.name && user.name.length>0)
+  return !!(user.name && user.name.length > 0)
 }
 
 /**
  * if user has a name, then url uses its name, otherwise it uses its tkh
  */
 export function getUserProfileLink(user: ConnectedUser): string {
-  return userHasName(user) 
+  return userHasName(user)
     ? `/u/${encodeURIComponent(user.name!)}`
     : `/pkh/${user.id}`
 }
@@ -19,9 +28,13 @@ export function getUserProfileLink(user: ConnectedUser): string {
  * then returns its pkh but truncated in the middle, with triple dots
  */
 export function getUserName(user: User, truncateLength?: number): string {
-  return userHasName(user) 
-    ? user.name!.length > 64 ? user.name!.substring(0, 64) : user.name!
-    : (truncateLength ? truncateMiddle(user.id, truncateLength) : user.id)
+  return userHasName(user)
+    ? user.name!.length > 64
+      ? user.name!.substring(0, 64)
+      : user.name!
+    : truncateLength
+    ? truncateMiddle(user.id, truncateLength)
+    : user.id
 }
 
 /**
@@ -48,7 +61,7 @@ export function isUserArticleModerator(user: User): boolean {
  * (accepts collaboration contracts in which case it checks the verified status
  * of all the users)
  */
-export function isEntityVerified(entity: User|Collaboration): boolean {
+export function isEntityVerified(entity: User | Collaboration): boolean {
   if ((entity as Collaboration).collaborators) {
     for (const user of (entity as Collaboration).collaborators) {
       if (!isUserVerified(user)) {
@@ -56,8 +69,7 @@ export function isEntityVerified(entity: User|Collaboration): boolean {
       }
     }
     return true
-  }
-  else {
+  } else {
     return isUserVerified(entity)
   }
 }
@@ -75,31 +87,30 @@ export function isDonator(user: User): boolean {
 
 export interface TzProfile {
   twitter?: {
-    handle: string|undefined|null,
-    url: string|undefined|null,
-  } | null,
+    handle: string | undefined | null
+    url: string | undefined | null
+  } | null
   website?: {
-    handle?: string,
+    handle?: string
     url?: string
   }
 }
 
-export function processUrl(url: string): { handle?: string, url?: string } {
+export function processUrl(url: string): { handle?: string; url?: string } {
   if (new RegExp("^(http|https)://").test(url)) {
     return {
-      handle: url.replace(/(^\w+:|^)\/\//, ''),
-      url
+      handle: url.replace(/(^\w+:|^)\/\//, ""),
+      url,
     }
-  }
-  else {
+  } else {
     return {
       handle: url,
-      url: `https://${url}`
+      url: `https://${url}`,
     }
   }
 }
 
-export function processTzProfile(data: any): TzProfile|null {
+export function processTzProfile(data: any): TzProfile | null {
   try {
     let pData: TzProfile = {}
     for (const verif of data) {
@@ -109,49 +120,80 @@ export function processTzProfile(data: any): TzProfile|null {
         if (verifData?.type?.includes("TwitterVerification")) {
           pData.twitter = {
             handle: verifData?.evidence?.handle,
-            url: verifData?.credentialSubject?.sameAs
+            url: verifData?.credentialSubject?.sameAs,
           }
         }
         // is it website ?
         if (verifData?.type?.includes("BasicProfile")) {
-          pData.website = (verifData?.credentialSubject?.website && processUrl(verifData.credentialSubject.website)) || undefined
+          pData.website =
+            (verifData?.credentialSubject?.website &&
+              processUrl(verifData.credentialSubject.website)) ||
+            undefined
         }
       }
     }
     return pData.twitter || pData.website ? pData : null
-  }
-  catch {
+  } catch {
     return null
   }
 }
 
 export const UserDonationAliases: Record<string, Partial<User>> = {
-  "tz1aPHze1U5BEEKrGYt3dvY6aAQEeiWm8jjK": {
+  tz1aPHze1U5BEEKrGYt3dvY6aAQEeiWm8jjK: {
     id: "tz1aPHze1U5BEEKrGYt3dvY6aAQEeiWm8jjK",
     name: "Processing Foundation",
-    descriptionLight: "The Processing Foundation's mission is to promote software literacy within the visual arts. They are developping p5.js",
-    description: "The Processing Foundation's mission is to promote software literacy within the visual arts, and visual literacy within technology-related fields — and to make these fields accessible to diverse communities. They are developping and distributing a group of related software projects, which includes Processing (Java), p5.js (JavaScript), and Processing.py (Python)",
+    descriptionLight:
+      "The Processing Foundation's mission is to promote software literacy within the visual arts. They are developping p5.js",
+    description:
+      "The Processing Foundation's mission is to promote software literacy within the visual arts, and visual literacy within technology-related fields — and to make these fields accessible to diverse communities. They are developping and distributing a group of related software projects, which includes Processing (Java), p5.js (JavaScript), and Processing.py (Python)",
     avatarUri: "ipfs://QmXEjnYw9R7TWpdSeh5Txg2QeTGvstDShY9Neigj3nxFuL",
     donationAddress: true,
     flag: UserFlag.VERIFIED,
   },
-  
-  "tz1ZUohCAkGjp7vPjQcC4VWcpgYZR1t3Si5C": {
+
+  tz1ZUohCAkGjp7vPjQcC4VWcpgYZR1t3Si5C: {
     id: "tz1ZUohCAkGjp7vPjQcC4VWcpgYZR1t3Si5C",
     name: "Three.js",
-    descriptionLight: "Three.js is an easy to use, lightweight, cross-browser, general purpose 3D library.",
-    description: "Three.js is an easy to use, lightweight, cross-browser, general purpose 3D library.",
+    descriptionLight:
+      "Three.js is an easy to use, lightweight, cross-browser, general purpose 3D library.",
+    description:
+      "Three.js is an easy to use, lightweight, cross-browser, general purpose 3D library.",
     avatarUri: "ipfs://QmZbR1AVihDaj5WRSnbxwzVmKR5DoKMP9E1CY6fXJABCmZ",
     donationAddress: true,
     flag: UserFlag.VERIFIED,
   },
 
-  "tz1V1WKxhK9g5UFbhRNUnQMmDnnL2vtBzoZJ": {
+  tz1V1WKxhK9g5UFbhRNUnQMmDnnL2vtBzoZJ: {
     id: "tz1V1WKxhK9g5UFbhRNUnQMmDnnL2vtBzoZJ",
     name: "Hydra",
-    descriptionLight: "Hydra is a set of tools for livecoding networked visuals. Inspired by analog modular synthesizers.",
-    description: "Hydra is a set of tools for livecoding networked visuals. Inspired by analog modular synthesizers.",
+    descriptionLight:
+      "Hydra is a set of tools for livecoding networked visuals. Inspired by analog modular synthesizers.",
+    description:
+      "Hydra is a set of tools for livecoding networked visuals. Inspired by analog modular synthesizers.",
     avatarUri: "ipfs://QmZUUcAw82oTGLVcB5ekGX7kLWMSdY3P9nxj3TtwFRBCNt",
+    donationAddress: true,
+    flag: UserFlag.VERIFIED,
+  },
+
+  KT1Jpf2TAcZS7QfBraQMBeCxjFhH6kAdDL4z: {
+    id: "KT1Jpf2TAcZS7QfBraQMBeCxjFhH6kAdDL4z",
+    name: "Savepakistan",
+    descriptionLight:
+      "Savepakistan - Cross-platform Tezos Flood Relief Fundraiser.",
+    description: "Tezos Flood Relief Fundraiser for Pakistan.",
+    avatarUri: "ipfs://Qma8bVd3213ZaWUFkRdxCwnCq52fbtzgykDUnniQ36gEuh",
+    donationAddress: true,
+    flag: UserFlag.VERIFIED,
+  },
+
+  KT1KYfj97fpdomqyKsZSBdSVvh9afh93b4Ge: {
+    id: "KT1KYfj97fpdomqyKsZSBdSVvh9afh93b4Ge",
+    name: "Tezos for Iran",
+    descriptionLight:
+      "A charity fundraiser in solidarity with the protests and to raise awareness for womens' rights in Iran.",
+    description:
+      "A charity fundraiser in solidarity with the protests and to raise awareness for womens' rights in Iran.",
+    avatarUri: "ipfs://QmWyaMu6H6WaGgTjM52pbwdUVj5AE3FLQT7f17hjLpmqyj",
     donationAddress: true,
     flag: UserFlag.VERIFIED,
   },
@@ -209,7 +251,7 @@ export function userAliases(user: User): User {
   if (UserAliases[user.id]) {
     return {
       ...user,
-      ...UserAliases[user.id]
+      ...UserAliases[user.id],
     }
   }
   return user
@@ -225,16 +267,12 @@ export function isUserVerified(user: User): boolean {
 /**
  * Is a given user the user provided OR a collaborator in the entity provided
  */
-export function isUserOrCollaborator(
-  user: User,
-  entity: User
-): boolean {
+export function isUserOrCollaborator(user: User, entity: User): boolean {
   if (entity.type === UserType.COLLAB_CONTRACT_V1) {
     return !!(entity as Collaboration).collaborators.find(
-      entity => entity.id === user.id
+      (entity) => entity.id === user.id
     )
-  }
-  else {
+  } else {
     return entity.id === user.id
   }
 }

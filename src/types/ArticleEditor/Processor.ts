@@ -1,3 +1,4 @@
+import { SlateBuilder } from "remark-slate-transformer/lib/transformers/slate-to-mdast"
 import { Node } from "unist"
 
 export interface IArticleElementProcessor {
@@ -7,6 +8,6 @@ export interface IArticleElementProcessor {
     node: Node,
     properties: any
   ) => Omit<any, "children"> | null
-  transformSlateToMarkdownMdhast?: (node: any) => object
+  transformSlateToMarkdownMdhast?: SlateBuilder
   transformMarkdownMdhastToSlate?: (node: any) => object
 }

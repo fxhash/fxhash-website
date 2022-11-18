@@ -1,18 +1,24 @@
 import style from "./Card.module.scss"
-import effect from "../../styles/Effects.module.scss"
 import cs from "classnames"
 import {
   PropsWithChildren,
   ReactNode,
+  useCallback,
   useContext,
   useMemo,
   useState,
 } from "react"
+
 import { SettingsContext } from "../../context/Theme"
+import { GenTokLabel } from "../../types/entities/GenerativeToken"
+import { getGenTokWarning } from "../../utils/generative-token"
+import { Button } from "../Button"
 import { MediaImage } from "../../types/entities/MediaImage"
 import { Image } from "../Image"
+import { WarningLayer } from "../Warning/WarningLayer"
 
 interface Props {
+  tokenLabels?: GenTokLabel[] | null
   image?: MediaImage
   thumbnailUri?: string | null
   undesirable?: boolean
@@ -21,6 +27,7 @@ interface Props {
 }
 
 export function Card({
+  tokenLabels,
   image,
   thumbnailUri,
   undesirable = false,
@@ -31,6 +38,11 @@ export function Card({
   const [error, setError] = useState<boolean>(false)
   const settings = useContext(SettingsContext)
 
+  const warning = useMemo(() => {
+    if (!tokenLabels || tokenLabels.length === 0) return false
+    return getGenTokWarning(tokenLabels, settings, "preview")
+  }, [settings, tokenLabels])
+
   return (
     <div
       className={cs(style.container, {
@@ -39,7 +51,7 @@ export function Card({
     >
       <div
         className={cs(style["thumbnail-container"], {
-          [style.undesirable]: undesirable,
+          [style.blur]: undesirable,
         })}
       >
         {!undesirable && (
@@ -64,6 +76,7 @@ export function Card({
             <span>undesirable content</span>
           </div>
         )}
+        {!undesirable && warning && <WarningLayer warning={warning} />}
         {thumbInfosComp && (
           <div className={cs(style.thumbinfos)}>{thumbInfosComp}</div>
         )}

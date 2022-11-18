@@ -185,7 +185,7 @@ export const MarketplaceCollections = ({}: Props) => {
             }
           >
             <SearchInputControlled
-              minimizeOnMobile
+              minimizeBehavior="mobile"
               onMinimize={setIsSearchMinimized}
               onSearch={handleSearch}
               className={styleSearch.large_search}

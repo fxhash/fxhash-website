@@ -7,39 +7,9 @@ import { useState, useRef, useEffect, useContext, useCallback } from 'react'
 import { Spacing } from '../../components/Layout/Spacing'
 import { CardsLoading } from '../../components/Card/CardsLoading'
 import { SettingsContext } from '../../context/Theme'
-import { Frag_GenAuthor, Frag_GenPricing } from '../../queries/fragments/generative-token'
-
+import { Qu_genTokensIncoming } from '../../queries/generative-token'
 
 const ITEMS_PER_PAGE = 20
-
-const Qu_genTokens = gql`
-  ${Frag_GenAuthor}
-  ${Frag_GenPricing}
-  query GenerativeTokensIncoming($skip: Int, $take: Int, $sort: GenerativeSortInput, $filters: GenerativeTokenFilter) {
-    generativeTokens(
-      skip: $skip, take: $take, sort: $sort, filters: $filters
-    ) {
-      id
-      name
-      slug
-      flag
-      labels
-      thumbnailUri
-      ...Pricing
-      supply
-      originalSupply
-      balance
-      enabled
-      lockEnd
-      royalties
-      createdAt
-      reserves {
-        amount
-      }
-      ...Author
-    }
-  }
-`
 
 interface Props {
 }
@@ -48,7 +18,7 @@ export const ExploreIncomingTokens = ({ }: Props) => {
   const [hasNothingToFetch, setHasNothingToFetch] = useState(false);
   const settingsCtx = useContext(SettingsContext)
 
-  const { data, loading, fetchMore } = useQuery<{ generativeTokens: GenerativeToken[] | null }>(Qu_genTokens, {
+  const { data, loading, fetchMore } = useQuery<{ generativeTokens: GenerativeToken[] | null }>(Qu_genTokensIncoming, {
     notifyOnNetworkStatusChange: true,
     variables: {
       skip: 0,
@@ -105,9 +75,9 @@ export const ExploreIncomingTokens = ({ }: Props) => {
               lockedUntil={token.lockEnd as any}
             />
           ))}
-          {loading && (
-            <CardsLoading number={ITEMS_PER_PAGE} />
-          )}
+          {loading && CardsLoading({
+            number: ITEMS_PER_PAGE,
+          })}
         </CardsContainer>
       </InfiniteScrollTrigger>
     </>
