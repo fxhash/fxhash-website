@@ -18,10 +18,6 @@
   .root {
     grid-template-rows: repeat(7, 1fr);
     grid-template-columns: repeat(2, 1fr);
-
-    & > *:nth-child(15) {
-      display: none;
-    }
   }
 }
 
@@ -37,7 +33,7 @@
       padding-top: 8px;
     }
 
-    & > *:nth-child(15) {
+    & > *:last-child {
       border-bottom: none;
       display: flex;
     }
