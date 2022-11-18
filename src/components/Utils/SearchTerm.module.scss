@@ -1,0 +1,14 @@
+.container {
+  height: 50px;
+  display: flex;
+  background-color: var(--color-black);
+  padding-left: 20px;
+  color: var(--color-white);
+  align-items: center;
+
+  i {
+    cursor: pointer;
+    padding: 15px;
+    margin-left: 5px;
+  }
+}
