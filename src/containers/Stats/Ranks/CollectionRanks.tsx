@@ -68,15 +68,24 @@ export function CollectionRanks({}: Props) {
 
   const stats: GenerativeTokenMarketStats[] =
     data?.marketStats?.generativeTokens
+
   const isMobile = useMemo(
     () => width !== undefined && width <= breakpoints.sm,
     [width]
   )
+
   const pages = useMemo<GenerativeTokenMarketStats[][]>(() => {
     if (!stats || stats.length === 0) return []
-    const pageSize = isMobile ? 6 : 15
+    const pageSize = width
+      ? width <= breakpoints.sm
+        ? 6
+        : width <= breakpoints.md
+        ? 14
+        : 15
+      : 15
     return arrayIntoChunks<GenerativeTokenMarketStats>(stats, pageSize)
-  }, [isMobile, stats])
+  }, [width, stats])
+
   const renderPageStats = useCallback(
     (idx) => {
       const pageStats = pages[idx]
