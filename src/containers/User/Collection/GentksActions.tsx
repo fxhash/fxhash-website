@@ -5,7 +5,7 @@ import { getUserProfileLink } from "../../../utils/user"
 import { User } from "../../../types/entities/User"
 import Link from "next/link"
 import { Button } from "../../../components/Button"
-import { iconClubNft } from "../../../components/Icons/custom";
+import { iconClubNft } from "../../../components/Icons/custom"
 
 interface GentksActionsProps {
   user: User
@@ -43,7 +43,7 @@ const _GentksActions = ({ user }: GentksActionsProps) => {
           className={style.opt}
         >
           <i aria-hidden>{iconClubNft}</i>
-          <span>save collection (ClubNFT)</span>
+          <span>backup collection (ClubNFT)</span>
         </a>
       </div>
     </Dropdown>
