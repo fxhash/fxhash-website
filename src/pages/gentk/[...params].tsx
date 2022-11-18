@@ -44,7 +44,7 @@ import { ObjktTabs } from "../../containers/Objkt/ObjktTabs"
 import { Labels } from "../../components/GenerativeToken/Label/Labels"
 import { MarketplaceActions } from "../../containers/Objkt/MarketplaceActions"
 import { ListingAccept } from "../../containers/Objkt/ListingAccept"
-import { Image } from "../../components/Image"
+import { getImageApiUrl, Image, OG_IMAGE_SIZE } from "../../components/Image"
 
 interface Props {
   objkt: Objkt
@@ -58,7 +58,8 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
   const settings = useContext(SettingsContext)
   // get the display url for og:image
   const displayUrl =
-    objkt.metadata?.displayUri && ipfsGatewayUrl(objkt.metadata?.displayUri)
+    objkt.captureMedia?.cid &&
+    getImageApiUrl(objkt.captureMedia.cid, OG_IMAGE_SIZE)
   // used to run code if mode image is active
   const [running, setRunning] = useState<boolean>(false)
 

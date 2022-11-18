@@ -350,6 +350,16 @@ export const genTokLabelDefinitions: Record<
     shortLabel: "PFP",
     group: GenTokLabelGroup.DETAILS,
   },
+  104: {
+    label: "Audio",
+    shortLabel: "Audio",
+    group: GenTokLabelGroup.DETAILS,
+  },
+  105: {
+    label: "Includes prerendered components",
+    shortLabel: "Prerendered components",
+    group: GenTokLabelGroup.DETAILS,
+  },
 }
 
 export const getGenTokLabelDefinition = (

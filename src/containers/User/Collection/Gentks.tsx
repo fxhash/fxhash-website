@@ -13,7 +13,10 @@ import { IOptions, Select } from "../../../components/Input/Select"
 import { SearchInputControlled } from "../../../components/Input/SearchInputControlled"
 import { FiltersPanel } from "../../../components/Exploration/FiltersPanel"
 import { UserCollectionFilters } from "../UserCollectionFilters"
-import { ExploreTagDef, ExploreTags } from "../../../components/Exploration/ExploreTags"
+import {
+  ExploreTagDef,
+  ExploreTags,
+} from "../../../components/Exploration/ExploreTags"
 import { Spacing } from "../../../components/Layout/Spacing"
 import { InfiniteScrollTrigger } from "../../../components/Utils/InfiniteScrollTrigger"
 import { CardsContainer } from "../../../components/Card/CardsContainer"
@@ -23,18 +26,18 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useQuery } from "@apollo/client"
 import { Qu_userObjkts } from "../../../queries/user"
 import { Objkt } from "../../../types/entities/Objkt"
-
+import { GentksActions } from "./GentksActions"
 
 const ITEMS_PER_PAGE = 40
 
 const generalSortOptions: IOptions[] = [
   {
     label: "recently minted",
-    value: "id-desc"
+    value: "id-desc",
   },
   {
     label: "oldest minted",
-    value: "id-asc"
+    value: "id-asc",
   },
   {
     label: "recently bought",
@@ -55,24 +58,22 @@ const searchSortOptions: IOptions[] = [
     label: "search relevance",
     value: "relevance-desc",
   },
-  ...generalSortOptions
+  ...generalSortOptions,
 ]
 
 function sortValueToSortVariable(val: string) {
   if (val === "pertinence") return {}
   const split = val.split("-")
   return {
-    [split[0]]: split[1].toUpperCase()
+    [split[0]]: split[1].toUpperCase(),
   }
 }
 
 interface Props {
   user: User
 }
-export function UserCollectionGentks({
-  user,
-}: Props) {
-  const [hasNothingToFetch, setHasNothingToFetch] = useState(false);
+export function UserCollectionGentks({ user }: Props) {
+  const [hasNothingToFetch, setHasNothingToFetch] = useState(false)
 
   // sort variables
   const [sortValue, setSortValue] = useState<string>("id-desc")
@@ -98,35 +99,44 @@ export function UserCollectionGentks({
   // reference to an element at the top to scroll back
   const topMarkerRef = useRef<HTMLDivElement>(null)
 
-  const { data, loading, fetchMore, refetch } = useQuery<{ user: User }>(Qu_userObjkts, {
-    notifyOnNetworkStatusChange: true,
-    variables: {
-      id: user.id,
-      skip: 0,
-      take: ITEMS_PER_PAGE,
-      filters,
-      sort,
-    },
-    onCompleted: (newData) => {
-      if (!newData?.user?.objkts?.length || newData.user.objkts.length < ITEMS_PER_PAGE) {
-        setHasNothingToFetch(true);
-      }
+  const { data, loading, fetchMore, refetch } = useQuery<{ user: User }>(
+    Qu_userObjkts,
+    {
+      notifyOnNetworkStatusChange: true,
+      variables: {
+        id: user.id,
+        skip: 0,
+        take: ITEMS_PER_PAGE,
+        filters,
+        sort,
+      },
+      onCompleted: (newData) => {
+        if (
+          !newData?.user?.objkts?.length ||
+          newData.user.objkts.length < ITEMS_PER_PAGE
+        ) {
+          setHasNothingToFetch(true)
+        }
+      },
     }
-  })
+  )
 
   // safe access to gentks
   const objkts = data?.user?.objkts || null
 
   const handleFetchMore = useCallback(async () => {
-    if (loading || hasNothingToFetch) return false;
+    if (loading || hasNothingToFetch) return false
     const { data: newData } = await fetchMore({
       variables: {
         skip: objkts?.length || 0,
         take: ITEMS_PER_PAGE,
       },
-    });
-    if (!newData?.user?.objkts?.length || newData.user.objkts.length < ITEMS_PER_PAGE) {
-      setHasNothingToFetch(true);
+    })
+    if (
+      !newData?.user?.objkts?.length ||
+      newData.user.objkts.length < ITEMS_PER_PAGE
+    ) {
+      setHasNothingToFetch(true)
     }
   }, [fetchMore, hasNothingToFetch, loading, objkts?.length])
 
@@ -148,7 +158,7 @@ export function UserCollectionGentks({
   const addFilter = (filter: string, value: any) => {
     setFilters({
       ...filters,
-      [filter]: value
+      [filter]: value,
     })
   }
 
@@ -165,7 +175,7 @@ export function UserCollectionGentks({
   const filterTags = useMemo<ExploreTagDef[]>(() => {
     const tags: ExploreTagDef[] = []
     for (const key in filters) {
-      let value: string|null = null
+      let value: string | null = null
       // @ts-ignore
       if (filters[key] !== undefined) {
         switch (key) {
@@ -197,7 +207,7 @@ export function UserCollectionGentks({
         if (value) {
           tags.push({
             value,
-            onClear: () => removeFilter(key)
+            onClear: () => removeFilter(key),
           })
         }
       }
@@ -216,7 +226,7 @@ export function UserCollectionGentks({
         isSearchMinimized,
       }) => (
         <>
-          <div ref={topMarkerRef}/>
+          <div ref={topMarkerRef} />
 
           <SearchHeader
             hasFilters
@@ -224,22 +234,13 @@ export function UserCollectionGentks({
             showFiltersOnMobile={inViewCardsContainer}
             onToggleFilters={() => setFiltersVisible(!filtersVisible)}
             sortSelectComp={
-		          <div className={style.select_comp_container}>
-		            <Link
-                  href={`${getUserProfileLink(user)}/collection/enjoy`}
-                  passHref
-                >
-                  <Button
-                    isLink={true}
-                    iconComp={<i aria-hidden className="fa-sharp fa-solid fa-circle-play"/>}
-                    size="regular"
-                    iconSide={null}
-                  />
-		            </Link>
+              <div
+                className={cs(style.select_comp_container, {
+                  [styleCardsExplorer["hide-sort"]]: !isSearchMinimized,
+                })}
+              >
+                <GentksActions user={user} />
                 <Select
-                  classNameRoot={cs({
-                    [styleCardsExplorer['hide-sort']]: !isSearchMinimized
-                  })}
                   value={sortValue}
                   options={sortOptions}
                   onChange={setSortValue}
@@ -255,8 +256,7 @@ export function UserCollectionGentks({
                   setSortOptions(searchSortOptions)
                   setSortValue("relevance-desc")
                   addFilter("searchQuery_eq", value)
-                }
-                else {
+                } else {
                   removeFilter("searchQuery_eq")
                   setSortOptions(generalSortOptions)
                   if (sortValue === "relevance-desc") {
@@ -266,24 +266,22 @@ export function UserCollectionGentks({
               }}
               className={styleSearch.large_search}
             />
-		      </SearchHeader>
+          </SearchHeader>
 
-		      <div className={cs(layout.cards_explorer, layout['padding-big'])}>
-		        {filtersVisible && (
-		          <FiltersPanel
-                onClose={() => setFiltersVisible(false)}
-              >
-		            <UserCollectionFilters
+          <div className={cs(layout.cards_explorer, layout["padding-big"])}>
+            {filtersVisible && (
+              <FiltersPanel onClose={() => setFiltersVisible(false)}>
+                <UserCollectionFilters
                   user={user}
                   filters={filters}
                   setFilters={setFilters}
-		            />
-		          </FiltersPanel>
-		        )}
+                />
+              </FiltersPanel>
+            )}
 
-		        <div style={{width: "100%"}}>
-		          {filterTags.length > 0 && (
-		            <>
+            <div style={{ width: "100%" }}>
+              {filterTags.length > 0 && (
+                <>
                   <ExploreTags
                     terms={filterTags}
                     onClearAll={() => {
@@ -292,20 +290,18 @@ export function UserCollectionGentks({
                       setSortValue(sortBeforeSearch.current)
                     }}
                   />
-                  <Spacing size="regular"/>
+                  <Spacing size="regular" />
                 </>
               )}
 
-              {!loading && objkts?.length === 0 && (
-                <span>No results</span>
-              )}
+              {!loading && objkts?.length === 0 && <span>No results</span>}
 
               <InfiniteScrollTrigger
                 onTrigger={handleFetchMore}
                 canTrigger={!loading && !hasNothingToFetch}
               >
                 <CardsContainer ref={refCardsContainer}>
-                  {objkts?.map(objkt => (
+                  {objkts?.map((objkt) => (
                     <ObjktCard
                       key={objkt.id}
                       objkt={objkt}
@@ -313,11 +309,12 @@ export function UserCollectionGentks({
                       showRarity={sort.rarity != null}
                     />
                   ))}
-                  {loading && CardsLoading({
-                    number: ITEMS_PER_PAGE,
-                  })}
-	      	      </CardsContainer>
-		          </InfiniteScrollTrigger>
+                  {loading &&
+                    CardsLoading({
+                      number: ITEMS_PER_PAGE,
+                    })}
+                </CardsContainer>
+              </InfiniteScrollTrigger>
             </div>
           </div>
         </>

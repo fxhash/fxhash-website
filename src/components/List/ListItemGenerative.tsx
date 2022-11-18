@@ -1,22 +1,22 @@
 import style from "./ListItemGenerative.module.scss"
 import cs from "classnames"
 import { GenerativeToken } from "../../types/entities/GenerativeToken"
-import { ipfsGatewayUrl } from "../../services/Ipfs"
+import { Image } from "../Image"
 
 interface Props {
   token: GenerativeToken
 }
 export function ListItemGenerative({ token }: Props) {
+  console.log(token)
   return (
     <div className={cs(style.root)}>
-      <div
-        className={cs(style.icon)}
-        style={{
-          backgroundImage: `url(${ipfsGatewayUrl(
-            token.metadata.thumbnailUri
-          )})`,
-        }}
-      />
+      <div className={style.icon}>
+        <Image
+          ipfsUri={token.metadata.thumbnailUri}
+          image={token.captureMedia}
+          alt=""
+        />
+      </div>
       <span>{token.name}</span>
     </div>
   )

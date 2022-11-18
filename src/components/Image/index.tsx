@@ -15,6 +15,8 @@ import {
 } from "../../services/Ipfs"
 import { MediaImage } from "../../types/entities/MediaImage"
 
+export const OG_IMAGE_SIZE = 1200
+
 // a list of common sizes which will be used to fetch the resource, ensuring
 // we hit the cache as often as possible
 const sizes = [8, 16, 32, 64, 128, 256, 512, 768, 1024, 1400]
@@ -28,7 +30,7 @@ const sizes = [8, 16, 32, 64, 128, 256, 512, 768, 1024, 1400]
 //               proportionnal to its size
 type TImageMode = "contain" | "cover" | "responsive"
 
-const getImageApiUrl = (cid: string, width: number) =>
+export const getImageApiUrl = (cid: string, width: number) =>
   `${process.env.NEXT_PUBLIC_API_MEDIA_ROOT}/w_${width}/${cid}`
 
 interface ISize {

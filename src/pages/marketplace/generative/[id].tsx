@@ -11,7 +11,6 @@ import { GenerativeToken } from "../../../types/entities/GenerativeToken"
 import { Spacing } from "../../../components/Layout/Spacing"
 import { MintProgress } from "../../../components/Artwork/MintProgress"
 import { Button } from "../../../components/Button"
-import { ipfsGatewayUrl } from "../../../services/Ipfs"
 import { ClientOnlyEmpty } from "../../../components/Utils/ClientOnly"
 import { truncateEnd } from "../../../utils/strings"
 import { useState } from "react"
@@ -28,6 +27,7 @@ import { EntityBadge } from "../../../components/User/EntityBadge"
 import { TabsContainer } from "../../../components/Layout/TabsContainer"
 import { GenerativeListings } from "../../../containers/Marketplace/GenerativeListings"
 import { GenerativeOffers } from "../../../containers/Marketplace/GenerativeOffers"
+import { getImageApiUrl, OG_IMAGE_SIZE } from "../../../components/Image"
 
 interface Props {
   token: GenerativeToken
@@ -65,7 +65,8 @@ const GenerativeTokenMarketplace: NextPage<Props> = ({ token }) => {
 
   // get the display url for og:image
   const displayUrl =
-    token.metadata?.displayUri && ipfsGatewayUrl(token.metadata?.displayUri)
+    token.captureMedia?.cid &&
+    getImageApiUrl(token.captureMedia.cid, OG_IMAGE_SIZE)
 
   return (
     <>

@@ -110,6 +110,7 @@ export const Qu_userEntireCollection = gql`
 export const Qu_userObjkts = gql`
   ${Frag_GenAuthor}
   ${Frag_MediaImage}
+  ${Frag_UserBadge}
   query UserCollection(
     $id: String!
     $take: Int
@@ -131,10 +132,7 @@ export const Qu_userObjkts = gql`
         }
         metadata
         owner {
-          id
-          name
-          flag
-          avatarUri
+          ...UserBadgeInfos
         }
         issuer {
           name
@@ -172,6 +170,7 @@ export const Qu_userArticlesOwned = gql`
 
 export const Qu_userObjktsSubResults = gql`
   ${Frag_UserBadge}
+  ${Frag_MediaImage}
   query Query(
     $id: String!
     $generativeFilters: ObjktFilter
@@ -181,6 +180,9 @@ export const Qu_userObjktsSubResults = gql`
       generativeTokensFromObjktFilters(filters: $generativeFilters) {
         id
         name
+        captureMedia {
+          ...MediaImage
+        }
         metadata
       }
       authorsFromObjktFilters(filters: $authorFilters) {

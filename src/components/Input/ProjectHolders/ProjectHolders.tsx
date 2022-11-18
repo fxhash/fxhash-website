@@ -19,6 +19,7 @@ import { Submit } from "../../Form/Submit"
 import { Button } from "../../Button"
 import { Qu_genTokOwners } from "../../../queries/generative-token"
 import { ISplit } from "../../../types/entities/Split"
+import { Image } from "../../Image"
 
 enum EImportStrategy {
   FULL = "FULL",
@@ -211,7 +212,11 @@ export function ProjectHolders({ onClose, onImport }: Props) {
                       [style.selected]: selected,
                     })}
                   >
-                    <img src={ipfsGatewayUrl(itemProps.thumbnailUri)} />
+                    <Image
+                      ipfsUri={itemProps.thumbnailUri}
+                      image={itemProps.captureMedia}
+                      alt=""
+                    />
                     {itemProps.name}
                   </div>
                 )}

@@ -3,7 +3,6 @@ import { GetServerSideProps } from "next"
 import layout from "../../../../styles/Layout.module.scss"
 import cs from "classnames"
 import { GenerativeToken } from "../../../../types/entities/GenerativeToken"
-import { ipfsGatewayUrl } from "../../../../services/Ipfs"
 import { truncateEnd } from "../../../../utils/strings"
 import { Qu_genToken } from "../../../../queries/generative-token"
 import { createApolloClient } from "../../../../services/ApolloClient"
@@ -13,6 +12,7 @@ import { Spacing } from "../../../../components/Layout/Spacing"
 import { useCallback, useContext } from "react"
 import { LiveMintingLayout } from "../../../../containers/LiveMinting/LiveMintingLayout"
 import { LiveMintingContext } from "../../../../context/LiveMinting"
+import { getImageApiUrl, OG_IMAGE_SIZE } from "../../../../components/Image"
 
 interface Props {
   eventId: string
@@ -33,7 +33,8 @@ const GenerativeTokenDetails: NextPageWithLayout<Props> = ({
 
   // get the display url for og:image
   const displayUrl =
-    token.metadata?.displayUri && ipfsGatewayUrl(token.metadata?.displayUri)
+    token.captureMedia?.cid &&
+    getImageApiUrl(token.captureMedia.cid, OG_IMAGE_SIZE)
 
   return (
     <>
