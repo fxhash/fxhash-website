@@ -21,7 +21,6 @@ import { Button } from "../../components/Button"
 import { ArticlesContext } from "../../context/Articles"
 import dynamic from "next/dynamic"
 import { LoaderBlock } from "../../components/Layout/LoaderBlock"
-import { ipfsGatewayUrl } from "../../services/Ipfs"
 import { UserGuard } from "../../components/Guards/UserGuard"
 import { ArticleModeration } from "./Moderation/ArticleModeration"
 import { ArticleFlagBanner } from "./Moderation/FlagBanner"
@@ -32,6 +31,7 @@ import { TabsContainer } from "../../components/Layout/TabsContainer"
 import { useContractOperation } from "../../hooks/useContractOperation"
 import { LockArticleOperation } from "../../services/contract-operations/LockArticle"
 import { ArticleQuickCollect } from "./Infos/ArticleQuickCollect"
+import { getImageApiUrl, OG_IMAGE_SIZE } from "../../components/Image"
 
 const NftArticle = dynamic<NftArticleProps>(
   () =>
@@ -110,6 +110,9 @@ const _PageArticle = ({ article, originUrl, isPreview }: PageArticleProps) => {
     lockArticle({ article })
   }, [article.id])
 
+  const ogImageUrl =
+    article.thumbnailMedia?.cid &&
+    getImageApiUrl(article.thumbnailMedia.cid, OG_IMAGE_SIZE)
   // todo [#392] remove article.metadata?.thumbnailCaption
   const thumbnailCaption =
     article.metadata?.thumbnailCaption || article.thumbnailCaption
@@ -136,19 +139,12 @@ const _PageArticle = ({ article, originUrl, isPreview }: PageArticleProps) => {
           content={article.description}
         />
         <meta key="og:type" property="og:type" content="website" />
-        <meta
-          key="og:image"
-          property="og:image"
-          content={ipfsGatewayUrl(article.thumbnailUri)}
-        />
+        <meta key="og:image" property="og:image" content={ogImageUrl} />
         <meta name="twitter:site" content="@fx_hash_" />
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:title" content={title} />
         <meta name="twitter:description" content={article.description} />
-        <meta
-          name="twitter:image"
-          content={ipfsGatewayUrl(article.thumbnailUri)}
-        />
+        <meta name="twitter:image" content={ogImageUrl} />
 
         <link href="/highlight/prism-dracula.css" rel="stylesheet" />
         <link rel="stylesheet" href="/highlight/dracula.css" />
@@ -234,9 +230,7 @@ const _PageArticle = ({ article, originUrl, isPreview }: PageArticleProps) => {
           <h1 className={cs(style.title)}>{title}</h1>
           <ArticleQuickCollect article={article}>
             {({ collectAction }) => (
-              <div className={cs(style.collect)}>
-                {collectAction}
-              </div>
+              <div className={cs(style.collect)}>{collectAction}</div>
             )}
           </ArticleQuickCollect>
           <p className={cs(style.description, style.awidth)}>{description}</p>

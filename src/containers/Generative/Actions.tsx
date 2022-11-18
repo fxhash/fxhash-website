@@ -4,6 +4,7 @@ import { InfiniteScrollTrigger } from "../../components/Utils/InfiniteScrollTrig
 import { gql, useQuery } from "@apollo/client"
 import { useState, useCallback } from "react"
 import { GenerativeToken } from "../../types/entities/GenerativeToken"
+import {Qu_genTokActions} from '../../queries/marketplace'
 
 interface Props {
   token: GenerativeToken
@@ -12,43 +13,6 @@ interface Props {
 }
 
 const ITEMS_PER_PAGE = 20
-
-const Qu_genTokActions = gql`
-  query Query ($id: Float!, $skip: Int, $take: Int, $filters: ActionFilter) {
-    generativeToken(id: $id) {
-      id,
-      actions(skip: $skip, take: $take, filters: $filters) {
-        id
-        type
-        opHash
-        numericValue
-        metadata
-        createdAt
-        issuer {
-          id
-          name
-          flag
-          avatarUri
-        }
-        target {
-          id
-          name
-          flag
-          avatarUri
-        }
-        objkt {
-          id
-          name
-          iteration
-        }
-        token {
-          id
-          name
-        }
-      }
-    }
-  }
-`
 
 export function GenerativeActions({
   token,
