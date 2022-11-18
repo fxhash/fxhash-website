@@ -1,0 +1,77 @@
+@import "../../styles/Variables";
+
+.pages_wrapper {
+  width: 100%;
+}
+
+.pages {
+  --page-gap: 15vw;
+  --pages-nb: 4;
+
+  display: grid;
+  grid-template-columns: repeat(var(--pages-nb), 100%);
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  scroll-snap-type: x mandatory;
+  gap: var(--page-gap);
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  .page {
+    scroll-snap-align: center;
+  }
+}
+
+.controls {
+  margin-top: 32px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  align-self: flex-end;
+  font-weight: 700;
+  gap: 8px;
+  .button {
+    height: 48px;
+    width: 48px;
+    font-size: var(--font-size-big);
+  }
+}
+.dots {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 6px;
+  width: 100%;
+  gap: 8px;
+  .page_control {
+    flex: 1;
+    background-color: var(--color-gray-light);
+    height: 3px;
+    transition: 0.5s all ease-in;
+    position: relative;
+    &:before {
+      content: "";
+      cursor: pointer;
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -10px;
+      top: -10px;
+    }
+    &--active {
+      height: 6px;
+      background-color: var(--color-secondary);
+    }
+  }
+}
+
+@media (max-width: $breakpoint-md) {
+  .pages .page {
+    transition: 0.2s all;
+  }
+}
