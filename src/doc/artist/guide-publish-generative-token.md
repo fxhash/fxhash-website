@@ -64,7 +64,8 @@ fxhash requires you to insert the following code snippet in the `<head>` section
 <script id="fxhash-snippet">
   //---- do not edit the following code (you can indent as you wish)
   let alphabet = "123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ"
-  var fxhash = "oo" + Array(49).fill(0).map(_=>alphabet[(Math.random()*alphabet.length)|0]).join('')
+  let search = new URLSearchParams(window.location.search)
+  var fxhash = search.get('fxhash') || "oo" + Array(49).fill(0).map(_=>alphabet[(Math.random()*alphabet.length)|0]).join('')
   let b58dec = str=>[...str].reduce((p,c)=>p*alphabet.length+alphabet.indexOf(c)|0, 0)
   let fxhashTrunc = fxhash.slice(2)
   let regex = new RegExp(".{" + ((fxhashTrunc.length/4)|0) + "}", 'g')
@@ -84,7 +85,7 @@ fxhash requires you to insert the following code snippet in the `<head>` section
   var fxrand = sfc32(...hashes)
   // true if preview mode active, false otherwise
   // you can append preview=1 to the URL to simulate preview active
-  var isFxpreview = new URLSearchParams(window.location.search).get('preview') === "1"
+  var isFxpreview = search.get('preview') === "1"
   // call this method to trigger the preview
   function fxpreview() {
     console.log("fxhash: TRIGGER PREVIEW")
