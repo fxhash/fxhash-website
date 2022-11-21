@@ -3,7 +3,7 @@ import { CollabBadge } from "./CollabBadge"
 import { UserBadge } from "./UserBadge"
 
 export interface IProps {
-  user: User | undefined
+  user: User
   size?: "small" | "regular" | "big" | "xl"
   prependText?: string
   hasLink?: boolean
