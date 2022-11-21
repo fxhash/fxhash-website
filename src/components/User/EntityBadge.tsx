@@ -3,7 +3,7 @@ import { CollabBadge } from "./CollabBadge"
 import { UserBadge } from "./UserBadge"
 
 export interface IProps {
-  user: User
+  user: User | undefined
   size?: "small" | "regular" | "big" | "xl"
   prependText?: string
   hasLink?: boolean
@@ -26,7 +26,7 @@ export interface IProps {
  */
 export function EntityBadge(props: IProps) {
   const { user } = props
-
+  if (!user) return null
   return user.type === UserType.COLLAB_CONTRACT_V1 ? (
     <CollabBadge {...props} user={props.user as Collaboration} />
   ) : (
