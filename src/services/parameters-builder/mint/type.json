@@ -1,0 +1,38 @@
+{
+  "prim": "pair",
+  "args": [
+    {
+      "prim": "nat",
+      "annots": [
+        "%issuer_id"
+      ]
+    },
+    {
+      "prim": "pair",
+      "args": [
+        {
+          "prim": "option",
+          "args": [
+            {
+              "prim": "address"
+            }
+          ],
+          "annots": [
+            "%referrer"
+          ]
+        },
+        {
+          "prim": "option",
+          "args": [
+            {
+              "prim": "bytes"
+            }
+          ],
+          "annots": [
+            "%reserve_input"
+          ]
+        }
+      ]
+    }
+  ]
+}
