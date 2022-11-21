@@ -156,6 +156,7 @@ export function GenerativeDisplay({ token, offlineMode = false }: Props) {
                 <span className={cs(text.info)}>{"/"}</span>
               )}
             </span>
+            <hr />
             <strong>Metadata</strong>
             <a
               target="_blank"

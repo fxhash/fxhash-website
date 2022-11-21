@@ -1,5 +1,4 @@
 import style from "./ToggableInfo.module.scss"
-import text from "../../styles/Text.module.css"
 import cs from "classnames"
 import { PropsWithChildren, ReactNode, useEffect, useState } from "react"
 
@@ -22,6 +21,21 @@ export function ToggableInfo({
     toggled && onToggled?.()
   }, [toggled])
 
+  const renderPlaceholder = (isMobile: boolean) => (
+    <span
+      className={cs(style.placeholder, style.mobile_align_right, {
+        [style.placeholder_mobile]: isMobile,
+      })}
+      onClick={() => setOpened(!opened)}
+    >
+      {placeholder}
+      <i
+        className={`fa-solid fa-caret-${opened ? "up" : "down"}`}
+        aria-hidden
+      />
+    </span>
+  )
+
   return (
     <>
       <button
@@ -39,14 +53,12 @@ export function ToggableInfo({
       </button>
 
       {opened ? (
-        <span className={style.children}>{children}</span>
+        <>
+          {renderPlaceholder(true)}
+          <span className={style.children}>{children}</span>
+        </>
       ) : (
-        <span
-          className={cs(style.placeholder, style.mobile_align_right)}
-          onClick={() => setOpened(!opened)}
-        >
-          {placeholder}
-        </span>
+        renderPlaceholder(false)
       )}
     </>
   )

@@ -137,6 +137,10 @@
   // & > *:nth-child(2n):not(a) {
   //   opacity: 0.6;
   // }
+
+  hr {
+    display: none;
+  }
 }
 
 .features_wrapper {
@@ -232,6 +236,7 @@
     grid-column: span 2;
   }
   .mobile_align_right {
+    color: var(--color-gray);
     width: 100%;
     text-align: right;
   }
@@ -240,5 +245,15 @@
   }
   .labels {
     margin-top: 8px;
+  }
+  .extra_details {
+    grid-template-columns: repeat(2, 1fr);
+    hr {
+      width: 100%;
+      border: 1.5px solid var(--color-gray-vvlight);
+      margin: 0;
+      grid-column: span 2;
+      display: initial;
+    }
   }
 }

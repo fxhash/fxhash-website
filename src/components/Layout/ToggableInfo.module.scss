@@ -31,16 +31,26 @@
 .placeholder {
   font-size: var(--font-size-small);
   color: var(--color-gray);
+  i {
+    margin-left: 8px;
+  }
+}
+.placeholder_mobile {
+  display: none;
+}
+.children {
+
 }
 @media (max-width: $breakpoint-sm) {
   .btn_toggle {
     left: 0;
+    padding-left: 0;
     i {
+      display: none;
       font-size: 14px;
       color: var(--color-black);
     }
     &_opened {
-      grid-column: span 2;
     }
   }
   .mobile_align_right {
@@ -50,7 +60,14 @@
   .placeholder {
     font-size: var(--font-size-regular);
   }
+  .placeholder_mobile {
+    display: initial;
+  }
   .children {
     grid-column: span 2;
+    background-color: var(--color-gray-vvvlight);
+    color: var(--color-black);
+    width: 100%;
+    padding: 4px 16px 4px 8px;
   }
 }

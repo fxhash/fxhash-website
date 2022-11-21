@@ -256,7 +256,10 @@ export function GenerativeIterations({ token }: Props) {
             padding="small-sm-big"
           />
           <section
-            className={cs(layout.cards_explorer, layout["padding-small"])}
+            className={cs(
+              layout.cards_explorer,
+              layout["padding-small-sm-big"]
+            )}
           >
             <FiltersPanel
               open={filtersVisible}

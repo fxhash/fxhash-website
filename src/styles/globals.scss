@@ -29,6 +29,7 @@ body {
   --color-gray-vdark: #363636;
   --color-black: #000000;
   --color-white: #FFFFFF;
+  --rgb-white: 255, 255, 255;
   --color-border: #000000;
   --color-border-input: #000000;
   --color-donator: #3496eb;
@@ -67,6 +68,7 @@ body {
 
 .dark {
   --color-white: #242424;
+  --rgb-white: 36, 36, 36;
   --color-black: white;
   --color-gray: #a5a5a5;
   --color-gray-vvvlight: #2b2b2b;
