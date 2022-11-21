@@ -38,8 +38,6 @@ export function Root({
     ? Fragment
     : Layout
 
-console.log(indexerStatus, networkStatus)
-
   return (
     <ApolloProvider client={clientSideClient}>
       <SettingsProvider>
