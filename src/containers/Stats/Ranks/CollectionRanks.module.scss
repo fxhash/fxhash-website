@@ -1,11 +1,33 @@
+@import "../../../styles/Variables";
+
 .selector {
   display: flex;
   flex-direction: row;
   align-items: center;
   font-weight: bold;
-  
+
   & > span {
     font-size: var(--font-size-h5);
     margin-right: 12px;
+  }
+}
+.pages {
+  height: 365px;
+}
+.placeholder {
+  margin-bottom: 81px;
+}
+@media (max-width: $breakpoint-md) {
+  .pages {
+    height: 550px;
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .pages {
+    height: 462px;
+  }
+  .placeholder {
+    margin-bottom: 30px;
   }
 }

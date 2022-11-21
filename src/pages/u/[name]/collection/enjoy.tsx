@@ -2,18 +2,19 @@ import { NextPage } from "next"
 import { User } from "../../../../types/entities/User"
 import { getUserName } from "../../../../utils/user"
 import Head from "next/head"
-import { ipfsGatewayUrl } from "../../../../services/Ipfs"
 import { truncateEnd } from "../../../../utils/strings"
 import { ClientOnlyEmpty } from "../../../../components/Utils/ClientOnly"
 import { UserCollectionEnjoy } from "../../../../containers/User/Enjoy/UserCollectionEnjoy"
 import { getServerSidePropsUserByName } from "../../../../services/ServerSideProps/ServerSidePropsUser"
+import { getImageApiUrl, OG_IMAGE_SIZE } from "../../../../components/Image"
 
 interface Props {
   user: User
 }
 
 const UserCollectionEnjoyPage: NextPage<Props> = ({ user }) => {
-  const userImage = user.avatarUri && ipfsGatewayUrl(user.avatarUri)
+  const userImage =
+    user.avatarMedia?.cid && getImageApiUrl(user.avatarMedia.cid, OG_IMAGE_SIZE)
 
   return (
     <>

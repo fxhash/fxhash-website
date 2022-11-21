@@ -17,41 +17,9 @@ import {
 } from "../../queries/fragments/generative-token"
 import { CardsExplorer } from "../../components/Exploration/CardsExplorer"
 import { CardSizeSelect } from "../../components/Input/CardSizeSelect"
+import { Qu_genTokensIncoming } from "../../queries/generative-token"
 
 const ITEMS_PER_PAGE = 20
-
-const Qu_genTokens = gql`
-  ${Frag_GenAuthor}
-  ${Frag_GenPricing}
-  query GenerativeTokensIncoming(
-    $skip: Int
-    $take: Int
-    $sort: GenerativeSortInput
-    $filters: GenerativeTokenFilter
-  ) {
-    generativeTokens(skip: $skip, take: $take, sort: $sort, filters: $filters) {
-      id
-      name
-      slug
-      flag
-      labels
-      thumbnailUri
-      displayUri
-      ...Pricing
-      supply
-      originalSupply
-      balance
-      enabled
-      lockEnd
-      royalties
-      createdAt
-      reserves {
-        amount
-      }
-      ...Author
-    }
-  }
-`
 
 interface Props {}
 
@@ -61,7 +29,7 @@ export const ExploreIncomingTokens = ({}: Props) => {
 
   const { data, loading, fetchMore } = useQuery<{
     generativeTokens: GenerativeToken[] | null
-  }>(Qu_genTokens, {
+  }>(Qu_genTokensIncoming, {
     notifyOnNetworkStatusChange: true,
     variables: {
       skip: 0,
@@ -127,9 +95,10 @@ export const ExploreIncomingTokens = ({}: Props) => {
                     lockedUntil={token.lockEnd as any}
                   />
                 ))}
-              {loading && CardsLoading({
-                number: ITEMS_PER_PAGE,
-              })}
+              {loading &&
+                CardsLoading({
+                  number: ITEMS_PER_PAGE,
+                })}
             </CardsContainer>
           </InfiniteScrollTrigger>
         </>

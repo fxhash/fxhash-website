@@ -7,6 +7,7 @@
   grid-template-columns: repeat(3, 1fr);
   grid-auto-flow: column;
   gap: 16px 32px;
+  height: 100%;
 
   :global .price {
     color: var(--color-secondary);
@@ -17,16 +18,12 @@
   .root {
     grid-template-rows: repeat(7, 1fr);
     grid-template-columns: repeat(2, 1fr);
-
-    & > *:nth-child(15) {
-      display: none;
-    }
   }
 }
 
 @media (max-width: $breakpoint-sm) {
   .root {
-    grid-template-rows: repeat(15, 1fr);
+    grid-template-rows: repeat(6, 1fr);
     grid-template-columns: repeat(1, 1fr);
     gap: 0;
 
@@ -35,8 +32,8 @@
       padding-bottom: 8px;
       padding-top: 8px;
     }
-    
-    & > *:nth-child(15) {
+
+    & > *:last-child {
       border-bottom: none;
       display: flex;
     }

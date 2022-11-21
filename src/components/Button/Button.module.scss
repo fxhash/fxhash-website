@@ -50,6 +50,10 @@
 
 .font-regular {}
 
+.size-custom {
+  padding-left: 0;
+  padding-right: 0;
+}
 .size-very-small {
   height: 36px;
   padding-left: 8px !important;
@@ -165,7 +169,7 @@
   color: black !important;
 }
 
-.color-transparent {
+.color-transparent, .color-white {
   background-color: transparent;
   color: var(--color-black) !important;
   // box-shadow: 0px 2px 8px -4px rgba(0, 0, 0, 0.3);
@@ -187,6 +191,18 @@
     background-color: transparent;
     opacity: 0.3;
     box-shadow: none;
+  }
+}
+
+.color-white {
+  color: var(--color-black) !important;
+  border: 3px solid currentColor;
+  background: transparent;
+  &:hover {
+    border: 3px solid currentColor;
+  }
+  &:disabled {
+    background: transparent;
   }
 }
 
