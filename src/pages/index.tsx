@@ -33,6 +33,7 @@ import {
   Frag_GenTokenInfo,
 } from "../queries/fragments/generative-token"
 import { Frag_MediaImage } from "../queries/fragments/media"
+import { Frag_UserBadge } from "../queries/fragments/user"
 import { Clamp } from "../components/Clamp/Clamp"
 
 interface Props {
@@ -236,6 +237,7 @@ export async function getServerSideProps() {
       ${Frag_GenAuthor}
       ${Frag_MediaImage}
       ${Frag_GenTokenInfo}
+      ${Frag_UserBadge}
       query Query($skip: Int, $take: Int, $filters: GenerativeTokenFilter) {
         randomGenerativeToken {
           ...TokenInfo
@@ -261,10 +263,7 @@ export async function getServerSideProps() {
               ...Author
             }
             owner {
-              id
-              name
-              flag
-              avatarUri
+              ...UserBadgeInfos
             }
             activeListing {
               id

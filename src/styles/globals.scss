@@ -6,7 +6,8 @@ body {
   padding: 0;
   margin: 0;
   font-family: "Fira Code", monospace;
-  background: white;
+  background: var(--color-white);
+  color: var(--color-black);
 }
 
 :root {

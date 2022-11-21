@@ -83,7 +83,9 @@ export class LogoEffect {
   constructor(canvas: HTMLCanvasElement, fontSize: number) {
     this.cvs = canvas
     this.fontSize = fontSize
-    this.ctx = this.cvs.getContext("2d", { willReadFrequently: true })!
+    this.ctx = this.cvs.getContext("2d", {
+      willReadFrequently: true,
+    })!
     this.walkers = []
     this.env = new Float32Array(this.cvs.width * this.cvs.height)
   }

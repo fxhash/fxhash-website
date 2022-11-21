@@ -4,13 +4,13 @@ import layout from "../../styles/Layout.module.scss"
 import cs from "classnames"
 import { createApolloClient } from "../../services/ApolloClient"
 import { Spacing } from "../../components/Layout/Spacing"
-import { ipfsGatewayUrl } from "../../services/Ipfs"
 import { Objkt } from "../../types/entities/Objkt"
 import { truncateEnd } from "../../utils/strings"
 import { Qu_objkt } from "../../queries/objkt"
 import { GenerativeFlagBanner } from "../../containers/Generative/FlagBanner"
 import { ObjktTabs } from "../../containers/Objkt/ObjktTabs"
 import { GenerativeDisplayIteration } from "../../containers/Generative/Display/GenerativeDisplayIteration"
+import { getImageApiUrl, OG_IMAGE_SIZE } from "../../components/Image"
 
 interface Props {
   objkt: Objkt
@@ -19,7 +19,8 @@ interface Props {
 const ObjktDetails: NextPage<Props> = ({ objkt }) => {
   // get the display url for og:image
   const displayUrl =
-    objkt.metadata?.displayUri && ipfsGatewayUrl(objkt.metadata?.displayUri)
+    objkt.captureMedia?.cid &&
+    getImageApiUrl(objkt.captureMedia.cid, OG_IMAGE_SIZE)
 
   return (
     <>

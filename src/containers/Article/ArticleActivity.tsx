@@ -1,50 +1,16 @@
 import style from "./ArticleActivity.module.scss"
 import { Activity } from "../../components/Activity/Activity"
 import { InfiniteScrollTrigger } from "../../components/Utils/InfiniteScrollTrigger"
-import { gql, useQuery } from "@apollo/client"
+import { useQuery } from "@apollo/client"
 import { useState, useCallback } from "react"
 import { NFTArticle } from "../../types/entities/Article"
-import { Frag_ArticleInfosAction } from "../../queries/fragments/article"
-
+import { Qu_articleActions } from "../../queries/articles"
 interface Props {
   article: NFTArticle
   filters?: any
 }
 
 const ITEMS_PER_PAGE = 20
-
-const Qu_articleActions = gql`
-  query Query($id: Int!, $skip: Int, $take: Int, $filters: ActionFilter) {
-    article(id: $id) {
-      id
-      actions(skip: $skip, take: $take, filters: $filters) {
-        id
-        type
-        opHash
-        numericValue
-        metadata
-        createdAt
-        issuer {
-          id
-          name
-          flag
-          avatarUri
-        }
-        target {
-          id
-          name
-          flag
-          avatarUri
-        }
-        article {
-          id
-          ...ArticleInfosAction
-        }
-      }
-    }
-  }
-  ${Frag_ArticleInfosAction}
-`
 
 export function ArticleActivity({ article, filters }: Props) {
   const [hasNothingToFetch, setHasNothingToFetch] = useState(false)

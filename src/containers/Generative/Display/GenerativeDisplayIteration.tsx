@@ -54,6 +54,7 @@ const _GenerativeDisplayIteration = ({
     }
   }, [objkt])
   const gentkUrl = useMemo(() => gentkLiveUrl(objkt), [objkt])
+
   return (
     <>
       <div className={cs(style.artwork_header_mobile, layout.break_words)}>

@@ -5,12 +5,12 @@ import layout from "../../styles/Layout.module.scss"
 import { HTMLAttributes, PropsWithChildren, useMemo } from "react"
 import { Spacing } from "../../components/Layout/Spacing"
 import { checkIsTabKeyActive, Tabs } from "../../components/Layout/Tabs"
-import { ipfsGatewayUrl } from "../../services/Ipfs"
 import { User } from "../../types/entities/User"
 import { truncateEnd } from "../../utils/strings"
 import { getUserName, getUserProfileLink } from "../../utils/user"
 import { UserHeader } from "./UserHeader"
 import { UserFlagBanner } from "./FlagBanner"
+import { getImageApiUrl, OG_IMAGE_SIZE } from "../../components/Image"
 
 type TabWrapperProps = PropsWithChildren<LinkProps> &
   HTMLAttributes<HTMLAnchorElement>
@@ -33,14 +33,14 @@ export function UserProfileLayout({
 }: PropsWithChildren<Props>) {
   // find the lastest work/item of the user
   const ogImageUrl = useMemo<string | null>(() => {
-    let url = null
+    let cid = null
     if (user.generativeTokens && user.generativeTokens?.length > 0) {
-      url = user.generativeTokens[0].metadata.displayUri
+      cid = user.generativeTokens[0].captureMedia?.cid
     }
-    if (!url && user.objkts && user.objkts.length > 0) {
-      url = user.objkts[0].metadata?.displayUri
+    if (!cid && user.objkts && user.objkts.length > 0) {
+      cid = user.objkts[0].captureMedia?.cid
     }
-    return (url && ipfsGatewayUrl(url)) || null
+    return (cid && getImageApiUrl(cid, OG_IMAGE_SIZE)) || null
   }, [])
 
   // TABS href are computed using the user profile URL

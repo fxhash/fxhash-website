@@ -26,7 +26,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useQuery } from "@apollo/client"
 import { Qu_userObjkts } from "../../../queries/user"
 import { Objkt } from "../../../types/entities/Objkt"
-
+import { GentksActions } from "./GentksActions"
 const ITEMS_PER_PAGE = 40
 
 const generalSortOptions: IOptions[] = [
@@ -233,23 +233,11 @@ export function UserCollectionGentks({ user }: Props) {
             showFiltersOnMobile={inViewCardsContainer}
             onToggleFilters={() => setFiltersVisible(!filtersVisible)}
             sortSelectComp={
-              <div className={style.select_comp_container}>
-                <Link
-                  href={`${getUserProfileLink(user)}/collection/enjoy`}
-                  passHref
-                >
-                  <Button
-                    isLink={true}
-                    iconComp={
-                      <i
-                        aria-hidden
-                        className="fa-sharp fa-solid fa-circle-play"
-                      />
-                    }
-                    size="regular"
-                    iconSide={null}
-                  />
-                </Link>
+              <div className={cs(style.select_comp_container, {
+                [styleCardsExplorer["hide-sort"]]: !isSearchMinimized,
+                })}
+              >
+                <GentksActions user={user} />
                 <Select
                   classNameRoot={cs({
                     [styleCardsExplorer["hide-sort"]]: !isSearchMinimized,

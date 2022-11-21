@@ -1,4 +1,3 @@
-import { CSSProperties } from "react"
 import { GenerativeTokenMetadata } from "../Metadata"
 import { Action } from "./Action"
 import { ArticleGenerativeTokenMention } from "./ArticleGenerativeTokenMention"
@@ -6,7 +5,7 @@ import { Objkt } from "./Objkt"
 import { IPricingDutchAuction, IPricingFixed } from "./Pricing"
 import { Report } from "./Report"
 import { IReserve } from "./Reserve"
-import { ISplit, Split } from "./Split"
+import { Split } from "./Split"
 import { User } from "./User"
 import { ISettingsContext } from "../../context/Theme"
 import { MediaImage } from "./MediaImage"
@@ -33,6 +32,8 @@ export enum GenTokLabel {
   ANIMATED = 101,
   INTERACTIVE = 102,
   PFP = 103,
+  AUDIO = 104,
+  INCLUDE_PRERENDERED_COMPONENTS = 105,
 }
 
 export enum GenTokLabelGroup {

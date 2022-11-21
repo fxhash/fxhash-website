@@ -29,6 +29,18 @@
     display: flex;
     flex-direction: column;
     font-size: var(--font-size-small);
+    strong {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    span {
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
   }
 
   .metric {
@@ -40,10 +52,4 @@
 }
 
 @media (max-width: $breakpoint-sm) {
-  .root {
-    .icon {
-      width: 64px;
-      height: 64px;
-    }
-  }
 }

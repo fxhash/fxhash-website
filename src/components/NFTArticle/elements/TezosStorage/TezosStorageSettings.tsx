@@ -15,19 +15,17 @@ import {
   Qu_genTokenAllIterations,
   Qu_searchGenTok,
 } from "../../../../queries/generative-token"
-import { ipfsGatewayUrl } from "../../../../services/Ipfs"
 import { EntityBadge } from "../../../User/EntityBadge"
 import { Spacing } from "../../../Layout/Spacing"
 import { ModalTitle } from "../../SlateEditor/UI/ModalTitle"
 import { Objkt } from "../../../../types/entities/Objkt"
 import { LoaderBlock } from "../../../Layout/LoaderBlock"
-import { ImageIpfs } from "../../../Medias/ImageIpfs"
 import {
   generativeTokenTezosStoragePointer,
   gentkTezosStoragePointer,
 } from "../../../../utils/tezos-storage"
 import { TEditAttributeComp } from "../../../../types/ArticleEditor/BlockDefinition"
-
+import { Image } from "../../../Image"
 export const TezosStorageSettings: TEditAttributeComp = ({
   element,
   onEdit,
@@ -239,11 +237,13 @@ interface IProjectRendererOneLineProps {
 function ProjectRendererOneLine({ project }: IProjectRendererOneLineProps) {
   return (
     <div className={cs(style.project_one_liner)}>
-      <img
-        src={ipfsGatewayUrl(project.thumbnailUri)}
-        alt={project.name}
-        className={cs(style.thumbnail)}
-      />
+      <div className={style.thumbnail}>
+        <Image
+          image={project.captureMedia}
+          ipfsUri={project.thumbnailUri}
+          alt={project.name}
+        />
+      </div>
       <div className={cs(style.details)}>
         <div>
           #{project.id} <strong>{project.name}</strong>
@@ -300,7 +300,12 @@ function ProjectIterationPicker({
             >
               <div className={cs(style.iteration__border)} />
               <div className={cs(style.thumbnail_wrapper)}>
-                <ImageIpfs src={item.metadata!.thumbnailUri} />
+                <Image
+                  image={item.captureMedia}
+                  ipfsUri={item.metadata!.thumbnailUri}
+                  mode="cover"
+                  alt=""
+                />
               </div>
               <span>#{item.iteration}</span>
             </button>

@@ -11,8 +11,25 @@
     margin-right: 12px;
   }
 }
+.pages {
+  height: 365px;
+}
+.placeholder {
+  margin-bottom: 81px;
+}
+@media (max-width: $breakpoint-md) {
+  .pages {
+    height: 550px;
+  }
+}
 
 @media (max-width: $breakpoint-sm) {
+  .pages {
+    height: 462px;
+  }
+  .placeholder {
+    margin-bottom: 30px;
+  }
   .selector {
     width: 100%;
     justify-content: space-between;
