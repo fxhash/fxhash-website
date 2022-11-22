@@ -66,8 +66,8 @@ export function CollaborationCreate({
         // get the address from the operation result
         if (results.length > 0) {
           try {
-            // @ts-ignore
             const internalResults =
+              // @ts-ignore
               results[0].metadata.internal_operation_results
             const address = internalResults[0].result.originated_contracts[0]
             if (address) {
