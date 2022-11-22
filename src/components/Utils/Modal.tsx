@@ -1,11 +1,17 @@
 import style from "./Modal.module.scss"
 import cs from "classnames"
 import { Cover } from "./Cover"
-import { PropsWithChildren, useCallback, useContext, useEffect, useRef } from "react"
+import {
+  PropsWithChildren,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+} from "react"
 import effects from "../../styles/Effects.module.scss"
 import ReactDOM from "react-dom"
 import { ModalContext } from "../../context/Modal"
-import { nanoid } from "nanoid";
+import { nanoid } from "nanoid"
 
 export interface Props {
   title: string
