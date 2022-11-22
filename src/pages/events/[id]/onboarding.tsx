@@ -9,28 +9,36 @@ import { createEventsClient } from "../../../services/EventsClient"
 import { mdToHtml } from "../../../services/Markdown"
 import { LiveMintingEvent } from "../../../types/entities/LiveMinting"
 import { Spacing } from "../../../components/Layout/Spacing"
+import Head from "next/head"
 
 type Props = {
   event: LiveMintingEvent
 }
 const EventsOnboardingPage: NextPage<Props> = ({ event }) => {
   return (
-    <main className={cs(layout["padding-small"])}>
-      <Spacing size="3x-large" />
-      <ArticleContent
-        content={event.onboarding!.description}
-        className={cs(style.body)}
-      />
-      {event.onboarding!.components.map((comp, idx) => (
+    <>
+      <Head>
+        <title>fxhash — {event.name} onboarding</title>
+        <meta name="description" content={event.description} />
+      </Head>
+
+      <main className={cs(layout["padding-small"])}>
+        <Spacing size="3x-large" />
         <ArticleContent
-          key={idx}
-          content={comp.component.content}
+          content={event.onboarding!.description}
           className={cs(style.body)}
         />
-      ))}
-      <Spacing size="6x-large" />
-      <Spacing size="6x-large" />
-    </main>
+        {event.onboarding!.components.map((comp, idx) => (
+          <ArticleContent
+            key={idx}
+            content={comp.component.content}
+            className={cs(style.body)}
+          />
+        ))}
+        <Spacing size="6x-large" />
+        <Spacing size="6x-large" />
+      </main>
+    </>
   )
 }
 
