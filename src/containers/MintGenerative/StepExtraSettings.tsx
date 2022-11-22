@@ -12,7 +12,10 @@ import { Checkbox } from "../../components/Input/Checkbox"
 import { Button } from "../../components/Button"
 import { cloneDeep } from "@apollo/client/utilities"
 import { HashTest } from "../../components/Testing/HashTest"
-import { ArtworkIframe, ArtworkIframeRef } from "../../components/Artwork/PreviewIframe"
+import {
+  ArtworkIframe,
+  ArtworkIframeRef,
+} from "../../components/Artwork/PreviewIframe"
 import { ipfsGatewayUrl } from "../../services/Ipfs"
 import { SquareContainer } from "../../components/Layout/SquareContainer"
 import { Select } from "../../components/Input/Select"
@@ -20,7 +23,6 @@ import { HashList } from "../../components/Utils/HashList"
 import { generateFxHash } from "../../utils/hash"
 import { ipfsUrlWithHash } from "../../utils/ipfs"
 import { LinkGuide } from "../../components/Link/LinkGuide"
-
 
 const initialSettings: Partial<GenTokenSettings> = {
   exploration: {
@@ -32,29 +34,32 @@ const initialSettings: Partial<GenTokenSettings> = {
       enabled: true,
       hashConstraints: null,
     },
-  }
+  },
 }
 
 const ExploreOptions = [
   {
     label: "Infinite",
-    value: "infinite"
+    value: "infinite",
   },
   {
     label: "Constrained to a list of hashes",
-    value: "constrained"
-  }
+    value: "constrained",
+  },
 ]
 
 export const StepExtraSettings: StepComponent = ({ state, onNext }) => {
   // STATES
   // form state (since not much data its ok to store there)
-  const [settings, setSettings] = useState(state.settings ? cloneDeep(state.settings) : initialSettings)
-  // current hash 
+  const [settings, setSettings] = useState(
+    state.settings ? cloneDeep(state.settings) : initialSettings
+  )
+  // current hash
   const [hash, setHash] = useState<string>(generateFxHash())
   // the explore options
   const [preExploreOptions, setPreExploreOptions] = useState<string>("infinite")
-  const [postExploreOptions, setPostExploreOptions] = useState<string>("infinite")
+  const [postExploreOptions, setPostExploreOptions] =
+    useState<string>("infinite")
 
   // REFERENCES
   const iframeRef = useRef<ArtworkIframeRef>(null)
@@ -67,21 +72,25 @@ export const StepExtraSettings: StepComponent = ({ state, onNext }) => {
 
   // FUNCTIONS
   // some setters to update the settings easily
-  const updateExplorationSetting = (target: "preMint"|"postMint", setting: "enabled"|"hashConstraints", value: any) => {
+  const updateExplorationSetting = (
+    target: "preMint" | "postMint",
+    setting: "enabled" | "hashConstraints",
+    value: any
+  ) => {
     setSettings({
       ...settings,
       exploration: {
         ...settings.exploration,
         [target]: {
           ...settings.exploration![target],
-          [setting]: value
-        }
-      }
+          [setting]: value,
+        },
+      },
     })
   }
 
   // add the current hash to the list of hashes of a mint category
-  const addCurrentHash = (target: "preMint"|"postMint") => {
+  const addCurrentHash = (target: "preMint" | "postMint") => {
     const current = settings.exploration?.[target]?.hashConstraints || []
     if (!current.includes(hash)) {
       current.push(hash)
@@ -95,10 +104,16 @@ export const StepExtraSettings: StepComponent = ({ state, onNext }) => {
 
     const cloned = cloneDeep(settings)
     // if explore options are set to infinite, we force hash list to be null
-    if (preExploreOptions === "infinite" && cloned.exploration?.preMint?.hashConstraints) {
+    if (
+      preExploreOptions === "infinite" &&
+      cloned.exploration?.preMint?.hashConstraints
+    ) {
       cloned.exploration.preMint.hashConstraints = null
     }
-    if (postExploreOptions === "infinite" && cloned.exploration?.postMint?.hashConstraints) {
+    if (
+      postExploreOptions === "infinite" &&
+      cloned.exploration?.postMint?.hashConstraints
+    ) {
       cloned.exploration.postMint.hashConstraints = null
     }
     // we can send the update of the settings to the next component in the tree
@@ -113,37 +128,58 @@ export const StepExtraSettings: StepComponent = ({ state, onNext }) => {
     <div className={cs(style.container)}>
       <h3>Explore variations settings</h3>
 
-      <p>These settings will help you define how much freedom users will have in exploring the variety of your Generative Token. When they land on the page of your Generative Token, a <strong>variations</strong> button can give them the ability to see more variations than the one you provided for the preview. These settings are independant from the random outputs collectors will generate when minting.</p>
+      <p>
+        These settings will help you define how much freedom users will have in
+        exploring the variety of your Generative Token. When they land on the
+        page of your Generative Token, a <strong>variations</strong> button can
+        give them the ability to see more variations than the one you provided
+        for the preview. These settings are independant from the random outputs
+        collectors will generate when minting.
+      </p>
 
-      <p>If exploration is <strong>disabled</strong>, the variations buttons will be disabled on the Generative Token page.</p>
+      <p>
+        If exploration is <strong>disabled</strong>, the variations buttons will
+        be disabled on the Generative Token page.
+      </p>
 
-      <LinkGuide
-        href="/doc/artist/explore-variation-settings"
-        newTab
-      >
+      <LinkGuide href="/doc/artist/explore-variation-settings" newTab>
         read more on the explore variation settings
       </LinkGuide>
 
-      <Spacing size="x-large"/>
+      <Spacing size="x-large" />
 
       <Form onSubmit={onSubmit}>
         <div className={cs(layout.cols2)}>
           <div>
             <Fieldset>
               <h4>Pre-mint</h4>
-              <p><em>Will be applied if your Generative Token is not fully minted.</em></p>
+              <p>
+                <em>
+                  Will be applied if your Generative Token is not fully minted.
+                </em>
+              </p>
               <Field className={cs(style.checkbox)}>
                 <Checkbox
                   name="premint-enabled"
                   value={preMintSettings?.enabled || false}
-                  onChange={(_, event) => updateExplorationSetting("preMint", "enabled", !preMintSettings?.enabled)}
+                  onChange={(_, event) =>
+                    updateExplorationSetting(
+                      "preMint",
+                      "enabled",
+                      !preMintSettings?.enabled
+                    )
+                  }
                 >
                   exploration enabled
                 </Checkbox>
               </Field>
 
-              <div className={cs({ [style.field_disabled]: !preMintSettings?.enabled })}>
-                <Spacing size="regular"/>
+              <div
+                className={cs({
+                  [style.field_disabled]: !preMintSettings?.enabled,
+                })}
+              >
+                <Spacing size="regular" />
                 <Field>
                   <label>Number of variations</label>
                   <Select
@@ -162,26 +198,44 @@ export const StepExtraSettings: StepComponent = ({ state, onNext }) => {
                         color="black"
                         size="small"
                         onClick={() => addCurrentHash("preMint")}
-                        iconComp={<i aria-hidden className="fas fa-plus-circle"/>}
+                        iconComp={
+                          <i aria-hidden className="fas fa-plus-circle" />
+                        }
                       >
                         Add current hash (on right) to list
                       </Button>
                     </div>
-                    <div className={cs(style.hashlist_wrapper, {
-                      [style.no_hash]: !(preMintSettings?.hashConstraints && preMintSettings?.hashConstraints.length)
-                    })}>
-                      {preMintSettings?.hashConstraints && preMintSettings?.hashConstraints.length > 0 ?(
+                    <div
+                      className={cs(style.hashlist_wrapper, {
+                        [style.no_hash]: !(
+                          preMintSettings?.hashConstraints &&
+                          preMintSettings?.hashConstraints.length
+                        ),
+                      })}
+                    >
+                      {preMintSettings?.hashConstraints &&
+                      preMintSettings?.hashConstraints.length > 0 ? (
                         <HashList
                           className={cs(style.hashlist)}
                           hashes={preMintSettings?.hashConstraints || []}
                           activeHash={hash}
-                          onChange={(hashes) => updateExplorationSetting("preMint", "hashConstraints", hashes)}
+                          onChange={(hashes) =>
+                            updateExplorationSetting(
+                              "preMint",
+                              "hashConstraints",
+                              hashes
+                            )
+                          }
                           onHashClick={setHash}
                         />
-                      ):(
+                      ) : (
                         <span>
-                          <em>No hash</em><br/>
-                          <span>You must add a hash if using a constrained list of hashes</span>
+                          <em>No hash</em>
+                          <br />
+                          <span>
+                            You must add a hash if using a constrained list of
+                            hashes
+                          </span>
                         </span>
                       )}
                     </div>
@@ -190,23 +244,38 @@ export const StepExtraSettings: StepComponent = ({ state, onNext }) => {
               </div>
             </Fieldset>
 
-            <Spacing size="x-large"/>
+            <Spacing size="x-large" />
 
             <Fieldset>
               <h4>Post-mint</h4>
-              <p><em>Will only be applied when your Generative Token is fully minted.</em></p>
+              <p>
+                <em>
+                  Will only be applied when your Generative Token is fully
+                  minted.
+                </em>
+              </p>
               <Field className={cs(style.checkbox)}>
                 <Checkbox
                   name="postmint-enabled"
                   value={postMintSettings?.enabled || false}
-                  onChange={(_, event) => updateExplorationSetting("postMint", "enabled", !postMintSettings?.enabled)}
+                  onChange={(_, event) =>
+                    updateExplorationSetting(
+                      "postMint",
+                      "enabled",
+                      !postMintSettings?.enabled
+                    )
+                  }
                 >
                   exploration enabled
                 </Checkbox>
               </Field>
 
-              <div className={cs({ [style.field_disabled]: !postMintSettings?.enabled })}>
-                <Spacing size="regular"/>
+              <div
+                className={cs({
+                  [style.field_disabled]: !postMintSettings?.enabled,
+                })}
+              >
+                <Spacing size="regular" />
                 <Field>
                   <label>Number of variations</label>
                   <Select
@@ -225,26 +294,44 @@ export const StepExtraSettings: StepComponent = ({ state, onNext }) => {
                         color="black"
                         size="small"
                         onClick={() => addCurrentHash("postMint")}
-                        iconComp={<i aria-hidden className="fas fa-plus-circle"/>}
+                        iconComp={
+                          <i aria-hidden className="fas fa-plus-circle" />
+                        }
                       >
                         Add current hash (on right) to list
                       </Button>
                     </div>
-                    <div className={cs(style.hashlist_wrapper, {
-                      [style.no_hash]: !(postMintSettings?.hashConstraints && postMintSettings?.hashConstraints.length)
-                    })}>
-                      {postMintSettings?.hashConstraints && postMintSettings?.hashConstraints.length > 0 ?(
+                    <div
+                      className={cs(style.hashlist_wrapper, {
+                        [style.no_hash]: !(
+                          postMintSettings?.hashConstraints &&
+                          postMintSettings?.hashConstraints.length
+                        ),
+                      })}
+                    >
+                      {postMintSettings?.hashConstraints &&
+                      postMintSettings?.hashConstraints.length > 0 ? (
                         <HashList
                           className={cs(style.hashlist)}
                           hashes={postMintSettings?.hashConstraints || []}
                           activeHash={hash}
-                          onChange={(hashes) => updateExplorationSetting("postMint", "hashConstraints", hashes)}
+                          onChange={(hashes) =>
+                            updateExplorationSetting(
+                              "postMint",
+                              "hashConstraints",
+                              hashes
+                            )
+                          }
                           onHashClick={setHash}
                         />
-                      ):(
+                      ) : (
                         <span>
-                          <em>No hash</em><br/>
-                          <span>You must add a hash if using a constrained list of hashes</span>
+                          <em>No hash</em>
+                          <br />
+                          <span>
+                            You must add a hash if using a constrained list of
+                            hashes
+                          </span>
                         </span>
                       )}
                     </div>
@@ -263,36 +350,37 @@ export const StepExtraSettings: StepComponent = ({ state, onNext }) => {
                 iframeRef.current?.reloadIframe()
               }}
             />
-            <Spacing size="regular"/>
+            <Spacing size="regular" />
             <SquareContainer>
-                <ArtworkIframe
-                  ref={iframeRef}
-                  url={iframeUrl}
-                  textWaiting="looking for content on IPFS"
-                  // onLoaded={iframeLoaded}
-                />
+              <ArtworkIframe
+                ref={iframeRef}
+                url={iframeUrl}
+                textWaiting="looking for content on IPFS"
+                // onLoaded={iframeLoaded}
+              />
             </SquareContainer>
           </div>
         </div>
 
-        <Spacing size="3x-large"/>
-        
+        <Spacing size="3x-large" sm="x-large" />
+
         <div className={cs(layout.y_centered)}>
           <Button
             type="submit"
             size="large"
             color="secondary"
-            iconComp={<i aria-hidden className="fas fa-arrow-right"/>}
+            iconComp={<i aria-hidden className="fas fa-arrow-right" />}
             iconSide="right"
+            className={style.button}
           >
             next step
           </Button>
         </div>
       </Form>
 
-      <Spacing size="3x-large"/>
-      <Spacing size="3x-large"/>
-      <Spacing size="3x-large"/>
+      <Spacing size="3x-large" />
+      <Spacing size="3x-large" sm="none" />
+      <Spacing size="3x-large" sm="none" />
     </div>
   )
 }

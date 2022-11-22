@@ -15,10 +15,11 @@
   align-items: center;
   justify-content: space-between;
   box-sizing: border-box;
-  
+
   & > span {
     padding: 8px 12px;
     cursor: pointer;
+    word-break: break-all;
 
     &:hover {
       color: var(--color-success);

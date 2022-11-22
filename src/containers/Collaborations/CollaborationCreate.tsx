@@ -13,7 +13,10 @@ import { isTezosAddress } from "../../utils/strings"
 import { ISplit } from "../../types/entities/Split"
 import { InputSplits } from "../../components/Input/InputSplits"
 import { useContractOperation } from "../../hooks/useContractOperation"
-import { CreateCollabOperation, TCreateCollabParams } from "../../services/contract-operations/CreateCollab"
+import {
+  CreateCollabOperation,
+  TCreateCollabParams,
+} from "../../services/contract-operations/CreateCollab"
 import { ContractFeedback } from "../../components/Feedback/ContractFeedback"
 import { useValidate } from "../../hooks/useValidate"
 import { validateCollabSplits } from "../../utils/validation/collab-splits"
@@ -35,15 +38,17 @@ export function CollaborationCreate({
   // display the modal
   const [show, setShow] = useState<boolean>(false)
   // the initial collaborators is set to current user
-  const [splits, setSplits] = useState<ISplit[]>([{
-    address: userCtx.user!.id,
-    pct: 1,
-  }])
+  const [splits, setSplits] = useState<ISplit[]>([
+    {
+      address: userCtx.user!.id,
+      pct: 1,
+    },
+  ])
   // deferrer validation
   const { errors, validate } = useValidate(splits, validateCollabSplits)
 
-  const { call, state, error, success, loading, clear, operation } 
-  = useContractOperation<TCreateCollabParams>(CreateCollabOperation)
+  const { call, state, error, success, loading, clear, operation } =
+    useContractOperation<TCreateCollabParams>(CreateCollabOperation)
 
   const createCollab = () => {
     clear()
@@ -54,44 +59,50 @@ export function CollaborationCreate({
     }
   }
 
-  useAsyncEffect(async (isMounted) => {
-    if (operation) {
-      const results = await operation.operationResults()
-      // get the address from the operation result
-      if (results.length > 0) {
-        try {
-          // @ts-ignore
-          const internalResults = results[0].metadata.internal_operation_results
-          const address = internalResults[0].result.originated_contracts[0]
-          if (address) {
-            if (isMounted()) {
-              if (hideOnCreate) {
-                setShow(false)
-              }
-              if (onCreate) {
-                onCreate({
-                  id: address,
-                  createdAt: new Date(),
-                  type: UserType.COLLAB_CONTRACT_V1,
-                  collaborators: splits.map(split => ({
-                    id: split.address,
-                  }) as User)
-                } as Collaboration)
+  useAsyncEffect(
+    async (isMounted) => {
+      if (operation) {
+        const results = await operation.operationResults()
+        // get the address from the operation result
+        if (results.length > 0) {
+          try {
+            // @ts-ignore
+            const internalResults =
+              results[0].metadata.internal_operation_results
+            const address = internalResults[0].result.originated_contracts[0]
+            if (address) {
+              if (isMounted()) {
+                if (hideOnCreate) {
+                  setShow(false)
+                }
+                if (onCreate) {
+                  onCreate({
+                    id: address,
+                    createdAt: new Date(),
+                    type: UserType.COLLAB_CONTRACT_V1,
+                    collaborators: splits.map(
+                      (split) =>
+                        ({
+                          id: split.address,
+                        } as User)
+                    ),
+                  } as Collaboration)
+                }
               }
             }
-          }
+          } catch {}
         }
-        catch {}
       }
-    }
-  }, [operation])
+    },
+    [operation]
+  )
 
   return (
     <>
       <Button
         size={buttonSize}
         type="button"
-        iconComp={<i aria-hidden className="fa-solid fa-plus"/>}
+        iconComp={<i aria-hidden className="fa-solid fa-plus" />}
         onClick={() => setShow(true)}
       >
         create new collaboration
@@ -103,21 +114,31 @@ export function CollaborationCreate({
           onClose={() => setShow(false)}
         >
           <em className={cs(style.desc)}>
-            This module lets you originate a new collaboration contract with other artists.<br/>
-            Read more in <LinkGuide href="/doc/artist/collaborations" newTab>the documentation about collaborations</LinkGuide>
+            This module lets you originate a new collaboration contract with
+            other artists.
+            <br />
+            Read more in{" "}
+            <LinkGuide href="/doc/artist/collaborations" newTab>
+              the documentation about collaborations
+            </LinkGuide>
           </em>
 
-          <Spacing size="regular"/>
+          <Spacing size="regular" />
 
           <h6>Collaborators</h6>
-          <Spacing size="8px"/>
+          <Spacing size="8px" />
           <em className={cs(style.desc)}>
-            Shares are used when withdrawing funds from the contract if somehow some tezos were sent to it (external marketplaces for instance).
-            <br/>
-            <strong>It's an uncommon operation and we recommend leaving the default values</strong>.
+            Shares are used when withdrawing funds from the contract if somehow
+            some tezos were sent to it (external marketplaces for instance).
+            <br />
+            <strong>
+              It's an uncommon operation and we recommend leaving the default
+              values
+            </strong>
+            .
           </em>
-          <Spacing size="small"/>
-          <div className={cs(layout.y_centered)}>
+          <Spacing size="small" />
+          <div className={cs(layout.y_centered, style.splits)}>
             <InputSplits
               value={splits}
               onChange={setSplits}
@@ -127,15 +148,13 @@ export function CollaborationCreate({
             />
           </div>
 
-          <Spacing size="x-large"/>
+          <Spacing size="x-large" />
 
           <div className={cs(layout.y_centered)}>
             {errors && errors.length > 0 && (
               <>
-                <strong className={cs(colors.error)}>
-                  {errors[0]}
-                </strong>
-                <Spacing size="x-small"/>
+                <strong className={cs(colors.error)}>{errors[0]}</strong>
+                <Spacing size="x-small" />
               </>
             )}
             <ContractFeedback

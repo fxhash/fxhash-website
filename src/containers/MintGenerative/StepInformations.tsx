@@ -13,9 +13,11 @@ import { InputText } from "../../components/Input/InputText"
 import { Spacing } from "../../components/Layout/Spacing"
 import { InputTextarea } from "../../components/Input/InputTextarea"
 import { Button } from "../../components/Button"
-import { InputMultiList, MultiListItem } from "../../components/Input/InputMultiList"
+import {
+  InputMultiList,
+  MultiListItem,
+} from "../../components/Input/InputMultiList"
 import { genTokLabelDefinitions } from "../../utils/generative-token"
-
 
 const initialForm: GenTokenInformationsForm = {
   name: "",
@@ -25,14 +27,15 @@ const initialForm: GenTokenInformationsForm = {
   labels: [],
 }
 
-const labelsList: MultiListItem[] = Object.keys(genTokLabelDefinitions)
-  .map(id => ({
+const labelsList: MultiListItem[] = Object.keys(genTokLabelDefinitions).map(
+  (id) => ({
     value: parseInt(id),
     props: {
       // @ts-ignore
-      label: genTokLabelDefinitions[id].label, 
-    }
-  }))
+      label: genTokLabelDefinitions[id].label,
+    },
+  })
+)
 
 const validation = Yup.object().shape({
   name: Yup.string()
@@ -42,18 +45,15 @@ const validation = Yup.object().shape({
   description: Yup.string()
     .max(4096, "Max 4096 characters")
     .required("Required"),
-  childrenDescription: Yup.string()
-    .max(4096, "Max 4096 characters"),
+  childrenDescription: Yup.string().max(4096, "Max 4096 characters"),
 })
 
 export const StepInformations: StepComponent = ({ state, onNext }) => {
-  const initialState = useMemo(
-    () => state.informations || initialForm
-  , [])
+  const initialState = useMemo(() => state.informations || initialForm, [])
 
   const next = (values: GenTokenInformationsForm) => {
     onNext({
-      informations: values
+      informations: values,
     })
   }
 
@@ -61,7 +61,7 @@ export const StepInformations: StepComponent = ({ state, onNext }) => {
     <div className={cs(style.container)}>
       <h4>Project details</h4>
 
-      <Spacing size="3x-large"/>
+      <Spacing size="3x-large" sm="x-large" />
 
       <Formik
         initialValues={initialState}
@@ -70,8 +70,18 @@ export const StepInformations: StepComponent = ({ state, onNext }) => {
           next(values)
         }}
       >
-        {({ values, handleChange, setFieldValue, handleBlur, handleSubmit, errors }) => (
-          <Form className={cs(layout.smallform, style.form)} onSubmit={handleSubmit}>
+        {({
+          values,
+          handleChange,
+          setFieldValue,
+          handleBlur,
+          handleSubmit,
+          errors,
+        }) => (
+          <Form
+            className={cs(layout.smallform, style.form)}
+            onSubmit={handleSubmit}
+          >
             <Field error={errors.name}>
               <label htmlFor="name">
                 Name of the piece
@@ -87,9 +97,7 @@ export const StepInformations: StepComponent = ({ state, onNext }) => {
             </Field>
 
             <Field error={errors.description}>
-              <label htmlFor="description">
-                Generative Token description
-              </label>
+              <label htmlFor="description">Generative Token description</label>
               <InputTextarea
                 name="description"
                 value={values.description}
@@ -134,32 +142,29 @@ export const StepInformations: StepComponent = ({ state, onNext }) => {
             <Field>
               <label>
                 Labels
-                <small>
-                  Can be edited by the moderators at any time
-                </small>
+                <small>Can be edited by the moderators at any time</small>
               </label>
               <InputMultiList
                 listItems={labelsList}
                 selected={values.labels || []}
-                onChangeSelected={n => setFieldValue("labels", n)}
+                onChangeSelected={(n) => setFieldValue("labels", n)}
                 className={cs(style.labels_container)}
               >
                 {({ itemProps }) => (
-                  <span className={cs(style.label)}>
-                    { itemProps.label }
-                  </span>
+                  <span className={cs(style.label)}>{itemProps.label}</span>
                 )}
               </InputMultiList>
             </Field>
 
-            <Spacing size="3x-large"/>
+            <Spacing size="3x-large" sm="x-large" />
 
             <Button
               type="submit"
               color="secondary"
-              iconComp={<i aria-hidden className="fas fa-arrow-right"/>}
+              iconComp={<i aria-hidden className="fas fa-arrow-right" />}
               iconSide="right"
               size="large"
+              className={style.button}
               disabled={Object.keys(errors).length > 0}
             >
               final preview
@@ -168,9 +173,9 @@ export const StepInformations: StepComponent = ({ state, onNext }) => {
         )}
       </Formik>
 
-      <Spacing size="3x-large"/>
-      <Spacing size="3x-large"/>
-      <Spacing size="3x-large"/>
+      <Spacing size="3x-large" />
+      <Spacing size="3x-large" sm="none" />
+      <Spacing size="3x-large" sm="none" />
     </div>
   )
 }

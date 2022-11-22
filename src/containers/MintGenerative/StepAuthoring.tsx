@@ -146,7 +146,7 @@ export const StepAuthoring: StepComponent = ({ state, onNext }) => {
 
         {authorType === 1 && (
           <Field className={cs(layout.y_centered, layout.w100)}>
-            <div className={cs(layout.flex_space_between)}>
+            <div className={cs(style.select_collaboration)}>
               <h5>Select the collaboration</h5>
               <CollaborationCreate
                 buttonSize="small"

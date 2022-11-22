@@ -117,9 +117,9 @@ export const StepDistribution: StepComponent = ({ state, onNext }) => {
 
   return (
     <div className={cs(style.container)}>
-      <h5>How will your piece be sold</h5>
+      <h5 className={style.title}>How will your piece be sold</h5>
 
-      <Spacing size="3x-large" />
+      <Spacing size="3x-large" sm="regular" />
 
       <span>
         Read more{" "}
@@ -127,7 +127,7 @@ export const StepDistribution: StepComponent = ({ state, onNext }) => {
           about pricing your project
         </LinkGuide>
       </span>
-      <Spacing size="3x-large" />
+      <Spacing size="3x-large" sm="regular" />
 
       <Formik
         initialValues={distribution}
@@ -153,7 +153,7 @@ export const StepDistribution: StepComponent = ({ state, onNext }) => {
               except if stated otherwise on the corresponding fields.
             </em>
 
-            <Spacing size="3x-large" />
+            <Spacing size="3x-large" sm="regular" />
 
             <Field error={errors.editions}>
               <label htmlFor="editions">
@@ -197,19 +197,21 @@ export const StepDistribution: StepComponent = ({ state, onNext }) => {
                   addresses
                 </small>
               </label>
-              <InputSplits
-                value={values.splitsPrimary}
-                onChange={(splits) => setFieldValue("splitsPrimary", splits)}
-                sharesTransformer={transformSplitsSum1000}
-                textShares="Shares (out of 1000)"
-                errors={errors.splitsPrimary as any}
-              >
-                {({ addAddress }) => (
-                  <div className={cs(style.royalties_last_row)}>
-                    <Donations onClickDonation={addAddress} />
-                  </div>
-                )}
-              </InputSplits>
+              <div className={style.splits}>
+                <InputSplits
+                  value={values.splitsPrimary}
+                  onChange={(splits) => setFieldValue("splitsPrimary", splits)}
+                  sharesTransformer={transformSplitsSum1000}
+                  textShares="Shares (out of 1000)"
+                  errors={errors.splitsPrimary as any}
+                >
+                  {({ addAddress }) => (
+                    <div className={cs(style.royalties_last_row)}>
+                      <Donations onClickDonation={addAddress} />
+                    </div>
+                  )}
+                </InputSplits>
+              </div>
             </Field>
 
             <Field error={errors.royalties}>
@@ -242,35 +244,39 @@ export const StepDistribution: StepComponent = ({ state, onNext }) => {
                   will be divided between the addresses)
                 </small>
               </label>
-              <InputSplits
-                value={values.splitsSecondary}
-                onChange={(splits) => setFieldValue("splitsSecondary", splits)}
-                sharesTransformer={transformSplitsSum1000}
-                textShares="Shares (out of 1000)"
-                errors={errors.splitsSecondary as any}
-              >
-                {({ addAddress }) => (
-                  <div className={cs(style.royalties_last_row)}>
-                    {!values.splitsSecondary.find(
-                      (split) => split.address === FxhashContracts.GENTK_V2
-                    ) && (
-                      <Button
-                        type="button"
-                        size="very-small"
-                        iconComp={
-                          <i className="fa-solid fa-plus" aria-hidden />
-                        }
-                        onClick={() => {
-                          addAddress(FxhashContracts.GENTK_V2)
-                        }}
-                      >
-                        royalties to the minter
-                      </Button>
-                    )}
-                    <Donations onClickDonation={addAddress} />
-                  </div>
-                )}
-              </InputSplits>
+              <div className={style.splits}>
+                <InputSplits
+                  value={values.splitsSecondary}
+                  onChange={(splits) =>
+                    setFieldValue("splitsSecondary", splits)
+                  }
+                  sharesTransformer={transformSplitsSum1000}
+                  textShares="Shares (out of 1000)"
+                  errors={errors.splitsSecondary as any}
+                >
+                  {({ addAddress }) => (
+                    <div className={cs(style.royalties_last_row)}>
+                      {!values.splitsSecondary.find(
+                        (split) => split.address === FxhashContracts.GENTK_V2
+                      ) && (
+                        <Button
+                          type="button"
+                          size="very-small"
+                          iconComp={
+                            <i className="fa-solid fa-plus" aria-hidden />
+                          }
+                          onClick={() => {
+                            addAddress(FxhashContracts.GENTK_V2)
+                          }}
+                        >
+                          royalties to the minter
+                        </Button>
+                      )}
+                      <Donations onClickDonation={addAddress} />
+                    </div>
+                  )}
+                </InputSplits>
+              </div>
             </Field>
 
             <Fieldset
@@ -300,7 +306,7 @@ export const StepDistribution: StepComponent = ({ state, onNext }) => {
               />
             </Fieldset>
 
-            <Spacing size="3x-large" />
+            <Spacing size="3x-large" sm="x-large" />
 
             <Field className={cs(style.checkbox)}>
               <Checkbox
@@ -319,7 +325,7 @@ export const StepDistribution: StepComponent = ({ state, onNext }) => {
               You will have to enable it manually afterwards.
             </span>
 
-            <Spacing size="3x-large" />
+            <Spacing size="3x-large" sm="x-large" />
 
             <Button
               type="submit"
@@ -328,6 +334,7 @@ export const StepDistribution: StepComponent = ({ state, onNext }) => {
               color="secondary"
               size="large"
               disabled={Object.keys(errors).length > 0}
+              className={style.button}
             >
               next step
             </Button>
@@ -336,8 +343,8 @@ export const StepDistribution: StepComponent = ({ state, onNext }) => {
       </Formik>
 
       <Spacing size="3x-large" />
-      <Spacing size="3x-large" />
-      <Spacing size="3x-large" />
+      <Spacing size="3x-large" sm="none" />
+      <Spacing size="3x-large" sm="none" />
     </div>
   )
 }
