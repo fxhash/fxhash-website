@@ -1,11 +1,11 @@
 import fs from "fs"
-import { h } from 'hastscript'
+import { h } from "hastscript"
 import path from "path"
 import matter from "gray-matter"
 import remarkToc from "remark-toc"
 import remarkParse from "remark-parse"
 import remarkGfm from "remark-gfm"
-import remarkDirective from 'remark-directive'
+import remarkDirective from "remark-directive"
 import { unified } from "unified"
 import remarkRehype from "remark-rehype"
 import rehypeFormat from "rehype-format"
@@ -14,7 +14,7 @@ import slug from "rehype-slug"
 import rehypeHighlight from "rehype-highlight"
 import { visit } from "unist-util-visit"
 import { retextEnvVariables } from "../utils/retext/retext-env"
-import {remarkToSlate} from "remark-slate-transformer"
+import { remarkToSlate } from "remark-slate-transformer"
 
 /**
  * The LocalFiles service provide a way to get the contents of the files on the local system
@@ -29,9 +29,9 @@ export function getArticles() {
   // get the file names in the directory
   const filenames = fs.readdirSync(articlesDir)
   // create the array of articles to return
-  const articlesData = filenames.map(name => {
+  const articlesData = filenames.map((name) => {
     // id is derived from the filename
-    const id = name.replace(/\.md$/, '')
+    const id = name.replace(/\.md$/, "")
     // read contents
     const contents = fs.readFileSync(path.join(articlesDir, name), "utf-8")
     // use gray-matter to parse the metadata
@@ -39,7 +39,7 @@ export function getArticles() {
     // return id & data
     return {
       id,
-      ...metadata.data
+      ...metadata.data,
     }
   })
   return articlesData
@@ -49,18 +49,18 @@ export function getArticleIds() {
   // get the file names in the directory
   const filenames = fs.readdirSync(articlesDir)
   // return a list of params for getStaticPaths
-  return filenames.map(name => {
+  return filenames.map((name) => {
     return {
       params: {
-        id: name.replace(/\.md$/, "")
-      }
+        id: name.replace(/\.md$/, ""),
+      },
     }
   })
 }
 
 export async function getArticleData(id: string) {
   const fullPath = path.join(articlesDir, `${id}.md`)
-  const fileContents = fs.readFileSync(fullPath, 'utf8')
+  const fileContents = fs.readFileSync(fullPath, "utf8")
   // Use gray-matter to parse the post metadata section
   const matterResult = matter(fileContents)
   const processed = await unified()
@@ -80,10 +80,9 @@ export async function getArticleData(id: string) {
   return {
     id,
     ...matterResult.data,
-    contentHtml
+    contentHtml,
   }
 }
-
 
 /**
  * TODO: REMOVE WHAT'S ABOVE
@@ -132,12 +131,14 @@ export async function getDocIds() {
   const file = await getDocDefinition()
   let ids: any[] = []
   for (const cat of file.categories) {
-    ids = ids.concat(cat.articles.map(article => ({
-      params: {
-        category: cat.link,
-        article: article.link
-      }
-    })))
+    ids = ids.concat(
+      cat.articles.map((article) => ({
+        params: {
+          category: cat.link,
+          article: article.link,
+        },
+      }))
+    )
   }
   return ids
 }
@@ -149,15 +150,15 @@ export async function getDocIds() {
 export async function getArticle(category: string, article: string) {
   try {
     const filePath = path.join(docDir, category, `${article}.md`)
-    const fileContents = fs.readFileSync(filePath, 'utf8')
+    const fileContents = fs.readFileSync(filePath, "utf8")
 
     // Use gray-matter to parse the post metadata section
     const matterResult = matter(fileContents)
     const processed = await unified()
       .use(retextEnvVariables as any)
       .use(remarkParse)
-    .use(remarkDirective)
-    .use(myRemarkPlugin)
+      .use(remarkDirective)
+      .use(myRemarkPlugin)
       .use(remarkGfm)
       .use(remarkToc, {
         maxDepth: 1,
@@ -174,47 +175,48 @@ export async function getArticle(category: string, article: string) {
     return {
       id: `/${category}/${article}`,
       ...matterResult.data,
-      contentHtml
+      contentHtml,
     }
-  }
-  catch {
+  } catch {
     return null
   }
 }
-function myRemarkPlugin(): import('unified').Transformer<import('mdast').Root, import('mdast').Root> {
+function myRemarkPlugin(): import("unified").Transformer<
+  import("mdast").Root,
+  import("mdast").Root
+> {
   return (tree: any) => {
     visit(tree, (node) => {
       if (
-        node.type === 'textDirective' ||
-        node.type === 'leafDirective' ||
-        node.type === 'containerDirective'
+        node.type === "textDirective" ||
+        node.type === "leafDirective" ||
+        node.type === "containerDirective"
       ) {
-	      if (node.name !== 'tezos-storage-pointer') return;
+        if (node.name !== "tezos-storage-pointer") return
         const data = node.data || (node.data = {})
         const hast: any = h(node.name, node.attributes)
         if (hast.properties.key) {
-          hast.properties.pKey = hast.properties.key;
-          delete hast.properties.key;
+          hast.properties.pKey = hast.properties.key
+          delete hast.properties.key
         }
         if (hast.properties.type) {
-          hast.properties.pType = hast.properties.type;
-          delete hast.properties.type;
+          hast.properties.pType = hast.properties.type
+          delete hast.properties.type
         }
         data.hName = hast.tagName
-	      data.hProperties = hast.properties
+        data.hProperties = hast.properties
       }
     })
   }
 }
 export async function getSlateArticle(category: string, article: string) {
   const filePath = path.join(docDir, category, `${article}.md`)
-  const fileContents = fs.readFileSync(filePath, 'utf8')
+  const fileContents = fs.readFileSync(filePath, "utf8")
   // Use gray-matter to parse the post metadata section
   const matterResult = matter(fileContents)
 
   const createDirectiveNode = (node: any) => {
-    return ({type: node.name, children: [{text:node.children[0].value}] })
-
+    return { type: node.name, children: [{ text: node.children[0].value }] }
   }
   const processed = await unified()
     .use(remarkParse)
@@ -222,9 +224,9 @@ export async function getSlateArticle(category: string, article: string) {
     .use(myRemarkPlugin)
     .use(remarkToSlate, {
       overrides: {
-	textDirective:  createDirectiveNode,
-	leafDirective:  createDirectiveNode,
-	containerDirective:  createDirectiveNode,
+        textDirective: createDirectiveNode,
+        leafDirective: createDirectiveNode,
+        containerDirective: createDirectiveNode,
       },
     })
     .process(matterResult.content)
@@ -234,7 +236,6 @@ export async function getSlateArticle(category: string, article: string) {
   return {
     id: `/${category}/${article}`,
     ...matterResult.data,
-    slate
+    slate,
   }
 }
-

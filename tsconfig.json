@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "target": "es2015",
+    "baseUrl": "./src/",
     "lib": [
       "dom",
       "dom.iterable",
@@ -27,5 +28,6 @@
   ],
   "exclude": [
     "node_modules"
-  ]
+  ],
+
 }
