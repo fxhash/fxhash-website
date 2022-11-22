@@ -11,3 +11,16 @@
 .buttons_wrapper {
   gap: 12px;
 }
+
+.success {
+  font-weight: bold;
+  color: var(--color-success);
+  font-size: var(--font-size-small);
+  margin-bottom: 12px;
+}
+
+.infos {
+  color: var(--color-gray);
+  font-size: var(--font-size-small);
+  margin-bottom: 12px;
+}

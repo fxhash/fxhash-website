@@ -24,7 +24,7 @@ const baseSecurityHeaders = [
   },
 ]
 
-const articlesAllowedDomains = "https://*.spotify.com/ https://spotify.com https://*.youtube.com/ https://youtube.com https://*.twitter.com/ https://twitter.com"
+const articlesAllowedDomains = "https://*.spotify.com/ https://spotify.com https://*.youtube.com/ https://youtube.com https://*.twitter.com/ https://twitter.com https://sandbox-winter-checkout.onrender.com/"
 
 
 /** @type {import('next').NextConfig} */

@@ -5,7 +5,7 @@ import cs from "classnames"
 import { GenerativeToken } from "../../types/entities/GenerativeToken"
 import { Spacing } from "../Layout/Spacing"
 import { Button } from "../../components/Button"
-import { PropsWithChildren, useContext, useEffect, useMemo } from "react"
+import { PropsWithChildren, useContext, useState } from "react"
 import { ContractFeedback } from "../Feedback/ContractFeedback"
 import { DisplayTezos } from "../Display/DisplayTezos"
 import { useContractOperation } from "../../hooks/useContractOperation"
@@ -17,12 +17,9 @@ import {
 import { MintingState } from "./MintingState/MintingState"
 import { useMintingState } from "../../hooks/useMintingState"
 import { UserContext } from "../../containers/UserProvider"
-import {
-  reserveEligibleAmount,
-  reserveSize,
-} from "../../utils/generative-token"
-import { User } from "../../types/entities/User"
 import { MintButton } from "./MintButton"
+import WinterCheckout from "components/CreditCard/WinterCheckout"
+import { ButtonIcon } from "components/Button/ButtonIcon"
 
 interface Props {
   token: GenerativeToken
@@ -33,7 +30,6 @@ interface Props {
     hash: string | null
   }) => string
   hideMintButtonAfterReveal?: boolean
-  onReveal?: (hash: string) => void
   className?: string
 }
 
@@ -54,19 +50,27 @@ export function MintController({
   forceReserveConsumption = false,
   hideMintButtonAfterReveal = false,
   generateRevealUrl,
-  onReveal,
   className,
   children,
 }: PropsWithChildren<Props>) {
+  const { user } = useContext(UserContext)
+
   // the mint context, handles display logic
   const mintingState = useMintingState(token, forceDisabled)
   const { hidden, enabled, locked, price } = mintingState
 
+  // the credit card minting state
+  const [showCC, setShowCC] = useState<boolean>(false)
+  const [loadingCC, setLoadingCC] = useState<boolean>(false)
+  const [opHashCC, setOpHashCC] = useState<string | null>(null)
+
   // hook to interact with the contract
-  const { state, loading, success, call, error, opHash } =
+  const { state, loading, success, call, error, opHash, clear } =
     useContractOperation<TMintOperationParams>(MintOperation)
 
+  // can be used to call the mint entry point of the smart contract
   const mint = (reserveConsumption: IReserveConsumption | null) => {
+    setOpHashCC(null) // reset CC op hash in case of new direct BC transaction
     call({
       token: token,
       price: price,
@@ -74,16 +78,31 @@ export function MintController({
     })
   }
 
+  // called to open the credit card window
+  const openCreditCard = () => {
+    clear()
+    setLoadingCC(true)
+    setOpHashCC(null)
+    setShowCC(true)
+  }
+  const closeCreditCard = () => {
+    setLoadingCC(false)
+    setShowCC(false)
+  }
+
+  // when the credit card payment is successful
+  const onCreditCardSuccess = (hash: string, usd: number) => {
+    setLoadingCC(false)
+    setOpHashCC(hash)
+  }
+
+  // derive the op hash of interest from the CC or BC transaction hash
+  const finalOpHash = opHashCC || opHash
+  const finalLoading = loading || loadingCC
+
   const revealUrl = generateRevealUrl
-    ? generateRevealUrl({ tokenId: token.id, hash: opHash })
-    : `/reveal/${token.id}/${opHash}`
-  // whenever there is a transaction hash, we can tell the mint was
-  // successful
-  useEffect(() => {
-    if (opHash) {
-      onReveal?.(opHash)
-    }
-  }, [opHash])
+    ? generateRevealUrl({ tokenId: token.id, hash: finalOpHash })
+    : `/reveal/${token.id}/${finalOpHash}`
 
   return (
     <div className={cs(className || style.root)}>
@@ -91,15 +110,25 @@ export function MintController({
         <MintingState token={token} existingState={mintingState} verbose />
       )}
 
-      <ContractFeedback
-        state={state}
-        error={error}
-        success={success}
-        loading={loading}
-        className={cs(style.contract_feedback)}
-      />
+      {loadingCC && (
+        <span className={cs(style.infos)}>Opening credit card widget</span>
+      )}
 
-      {opHash && (
+      {opHashCC ? (
+        <span className={cs(style.success)}>
+          You have purchased your unqiue iteration!
+        </span>
+      ) : (
+        <ContractFeedback
+          state={state}
+          error={error}
+          success={success}
+          loading={loading}
+          className={cs(style.contract_feedback)}
+        />
+      )}
+
+      {finalOpHash && (
         <>
           <Link href={revealUrl} passHref>
             <Button
@@ -142,24 +171,48 @@ export function MintController({
           )}
         >
           {!hidden && (
-            <MintButton
-              token={token}
-              loading={loading}
-              disabled={!enabled || locked}
-              onMint={mint}
-              forceReserveConsumption={forceReserveConsumption}
-            >
-              mint iteration&nbsp;&nbsp;
-              <DisplayTezos
-                mutez={price}
-                tezosSize="regular"
-                formatBig={false}
-              />
-            </MintButton>
+            <>
+              <MintButton
+                token={token}
+                loading={finalLoading}
+                disabled={!enabled || locked}
+                onMint={mint}
+                forceReserveConsumption={forceReserveConsumption}
+              >
+                mint iteration&nbsp;&nbsp;
+                <DisplayTezos
+                  mutez={price}
+                  tezosSize="regular"
+                  formatBig={false}
+                />
+              </MintButton>
+
+              {!finalLoading && (
+                <ButtonIcon
+                  type="button"
+                  icon="fa-sharp fa-solid fa-credit-card"
+                  onClick={openCreditCard}
+                  color="white"
+                  title="Pay with you credit card"
+                />
+              )}
+            </>
           )}
 
           {children}
         </div>
+      )}
+
+      {user && (
+        <WinterCheckout
+          showModal={showCC}
+          production={false}
+          projectId={8044}
+          gentkId={token.id}
+          walletAddress={user.id}
+          onClose={closeCreditCard}
+          onSuccess={onCreditCardSuccess}
+        />
       )}
     </div>
   )
