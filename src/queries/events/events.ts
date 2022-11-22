@@ -15,6 +15,33 @@ export const Qu_event = gql`
   }
 `
 
+export const Qu_eventDetails = gql`
+  query EventDetails($where: EventWhereUniqueInput!) {
+    event(where: $where) {
+      id
+      name
+      description
+      createdAt
+      updatedAt
+      startsAt
+      endsAt
+      projectIds
+      onboarding {
+        id
+        enabled
+        description
+        components(orderBy: { index: desc }) {
+          index
+          component {
+            id
+            content
+          }
+        }
+      }
+    }
+  }
+`
+
 export const Qu_eventMintPass = gql`
   query MintPass($where: MintPassWhereUniqueInput!) {
     mintPass(where: $where) {
