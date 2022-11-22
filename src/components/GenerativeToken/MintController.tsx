@@ -203,17 +203,15 @@ export function MintController({
         </div>
       )}
 
-      {user && (
-        <WinterCheckout
-          showModal={showCC}
-          production={false}
-          projectId={8044}
-          gentkId={token.id}
-          walletAddress={user.id}
-          onClose={closeCreditCard}
-          onSuccess={onCreditCardSuccess}
-        />
-      )}
+      <WinterCheckout
+        showModal={showCC}
+        production={false}
+        projectId={8044}
+        gentkId={token.id}
+        walletAddress={user?.id}
+        onClose={closeCreditCard}
+        onSuccess={onCreditCardSuccess}
+      />
     </div>
   )
 }
