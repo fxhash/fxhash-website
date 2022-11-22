@@ -168,14 +168,16 @@ const _GenerativeDisplayIteration = ({
             )}
           >
             <strong>Royalties</strong>
-            <span className={style.mobile_align_right}>
+            <span className={cs(style.mobile_align_right, style.mobile_gray)}>
               {displayRoyalties(objkt.royalties)}
             </span>
             <ListSplits name="Royalties split" splits={objkt.royaltiesSplit} />
             {objkt.features && objkt.features.length > 0 && objkt.rarity && (
               <>
                 <strong>Rarity</strong>
-                <span className={style.mobile_align_right}>
+                <span
+                  className={cs(style.mobile_align_right, style.mobile_gray)}
+                >
                   {displayPercentage(objkt.rarity)}% (lower is rarer)
                 </span>
               </>
@@ -194,6 +196,7 @@ const _GenerativeDisplayIteration = ({
               </span>{" "}
               <i className="fas fa-external-link-square" aria-hidden />
             </a>
+            <hr />
             <strong>Metadata</strong>
             {objkt.assigned ? (
               <a

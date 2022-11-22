@@ -34,12 +34,19 @@
   gap: 10px 5px;
   /* prevents children elements from streching */
   justify-items: start;
+  hr {
+    display: none;
+  }
 }
 
 .project_infos {
   h4 {
     font-size: var(--font-size-regular);
   }
+}
+
+.mobile_align_right {
+
 }
 
 @media (max-width: $breakpoint-md) {
@@ -67,10 +74,20 @@
   }
   .extra_details {
     grid-template-columns: repeat(2, 1fr);
+    hr {
+      width: 100%;
+      border: 1.5px solid var(--color-gray-vvlight);
+      margin: 0;
+      grid-column: span 2;
+      display: initial;
+    }
   }
   .mobile_align_right {
     width: 100%;
     text-align: right;
+  }
+  .mobile_gray {
+    color: var(--color-gray);
   }
   .project_infos {
     h4 {

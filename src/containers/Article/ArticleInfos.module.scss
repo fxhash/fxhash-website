@@ -57,7 +57,6 @@
 
 .details {
   margin-top: $spacing-4x-large;
-
   .locked {
     font-weight: bold;
     i {
@@ -77,6 +76,10 @@
   // & > *:nth-child(2n):not(a) {
   //   opacity: 0.6;
   // }
+
+  hr {
+    display: none;
+  }
 }
 .collect {
   grid-column: span 3;
@@ -116,6 +119,13 @@
   }
   .details_list {
     grid-template-columns: repeat(2, 1fr);
+    hr {
+      width: 100%;
+      border: 1.5px solid var(--color-gray-vvlight);
+      margin: 0;
+      grid-column: span 2;
+      display: initial;
+    }
   }
   .mobile_align_right {
     width: 100%;
@@ -123,6 +133,9 @@
   }
   .mobile_grid_two {
     grid-column: span 2;
+  }
+  .mobile_gray {
+    color: var(--color-gray);
   }
   .metadata {
     font-size: var(--font-size-regular);

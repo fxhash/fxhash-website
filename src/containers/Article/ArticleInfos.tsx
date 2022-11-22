@@ -72,7 +72,7 @@ export function ArticleInfos({
           )}
         >
           <strong>Royalties</strong>
-          <span className={style.mobile_align_right}>
+          <span className={cs(style.mobile_align_right, style.mobile_gray)}>
             {displayRoyalties(article.royalties)}
           </span>
 
@@ -86,7 +86,7 @@ export function ArticleInfos({
               <span className={cs(text.info)}>{"/"}</span>
             )}
           </span>
-
+          <hr />
           <strong>Metadata</strong>
           <div className={cs(text.info, style.mobile_align_right)}>
             {article.metadataLocked && (
