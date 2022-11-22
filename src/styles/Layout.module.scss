@@ -164,14 +164,11 @@
   width: 100%;
 }
 
-@media (max-width: $breakpoint-sm) {
-  .hide_sm {
-    display: none;
-  }
+header.mobile_section_header_col {
+}
 
-  .show_sm {
-    display: initial;
-  }
+.text_centered {
+  text-align: center;
 }
 
 @media (max-width: $breakpoint-md) {
@@ -184,6 +181,18 @@
   }
 }
 
-.text_centered {
-  text-align: center;
+@media (max-width: $breakpoint-sm) {
+  .hide_sm {
+    display: none;
+  }
+
+  .show_sm {
+    display: initial;
+  }
+
+  header.mobile_section_header_col {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
 }

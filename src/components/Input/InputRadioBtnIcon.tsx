@@ -14,7 +14,7 @@ interface Props extends Omit<PropsInpRadBtn<any, IOptProps>, "children"> {}
  */
 export function InputRadioBtnIcon(props: Props) {
   return (
-    <InputRadioButtons {...props} layout="fixed-size">
+    <InputRadioButtons {...props} layout="group" btnClassname={style.button}>
       {({ option, active }) => (
         <div
           className={cs(style.item, {

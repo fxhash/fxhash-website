@@ -14,7 +14,7 @@ export const TitleHyphen: FunctionComponent<Props> = ({
 
   return (
     <Htag className={cs(style.title)}>
-      <span>—</span>
+      <span className={style.hyphen}>—</span>
       <span>{children}</span>
     </Htag>
   )

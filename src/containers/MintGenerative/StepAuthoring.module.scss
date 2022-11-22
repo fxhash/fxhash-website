@@ -1,5 +1,7 @@
+@import "../../styles/Variables";
+
 .root {
-  
+
 }
 
 .select {
@@ -34,5 +36,14 @@
   .address, .date {
     font-size: 0.8em;
     color: var(--color-gray);
+  }
+}
+.radios {
+  max-width: 375px;
+  width: 100%;
+}
+@media (max-width: $breakpoint-sm) {
+  .button {
+    width: 100%;
   }
 }

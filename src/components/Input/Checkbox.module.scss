@@ -1,5 +1,4 @@
 .container {
-  display: block;
   padding-left: 35px;
   cursor: pointer;
   user-select: none;
@@ -22,10 +21,11 @@
 }
 
 .checkmark {
+  background-color: var(--color-gray-vvlight);
+  flex-shrink: 0;
   height: 26px;
   width: 26px;
   display: block;
-  background-color: transparent;
   border: 3px solid var(--color-border-input);
   overflow: hidden;
   position: relative;
@@ -39,10 +39,6 @@
 /* On mouse-over, add a grey background color */
 .container:hover input ~ .checkmark {
   border-color: var(--color-secondary);
-
-  &:after, &:before {
-    background-color: var(--color-secondary);
-  }
 }
 
 /* Show the checkmark when checked */
@@ -58,20 +54,14 @@
 
 /* Style the checkmark/indicator */
 .container .checkmark {
-  &:after, &:before {
+  &:after {
     content: "";
     position: absolute;
     display: none;
-    left: 50%;
-    top: 50%;
-    width: 30px;
-    height: 3px;
-    background-color: var(--color-border-input);
-  }
-  &:after {
-    transform: translate(-50%, -50%) rotate(-45deg);
-  }
-  &:before {
-    transform: translate(-50%, -50%) rotate(45deg);
+    top: 2px;
+    bottom: 2px;
+    left: 2px;
+    right: 2px;
+    background-color: var(--color-primary);
   }
 }
