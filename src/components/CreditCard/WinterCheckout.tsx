@@ -24,6 +24,7 @@ interface Props {
   appearance?: Record<string, string | number | undefined>
   onClose?: () => void
   onSuccess?: TSuccess
+  onReveal: () => void
 }
 
 const WinterCheckout: FunctionComponent<Props> = ({
@@ -47,6 +48,7 @@ const WinterCheckout: FunctionComponent<Props> = ({
   tokenId,
   fillSource,
   orderSource,
+  onReveal,
 }) => {
   const [projectUrl, setProjectUrl] = useState("")
 
@@ -56,24 +58,17 @@ const WinterCheckout: FunctionComponent<Props> = ({
         const { data } = e
         if (data === "closeWinterCheckoutModal") {
           onClose?.()
+        } else if (data.reveal) {
+          onReveal()
         } else if (data.name === "successfulWinterCheckout") {
-          const {
-            transactionHash,
-            email,
-            nftQuantity,
-            amountUSD,
-            nftTokenIds,
-            nftUrls,
-            openseaUrls,
-          } = data
-
+          const { transactionHash, amountUSD } = data
           onSuccess?.(transactionHash, amountUSD)
         }
       }
       window.addEventListener("message", handleWindowEvent)
       return () => window.removeEventListener("message", handleWindowEvent)
     }
-  }, [onClose, onSuccess])
+  }, [onClose, onSuccess, onReveal])
 
   useEffect(() => {
     let queryString = ""

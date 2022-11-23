@@ -20,6 +20,7 @@ import { UserContext } from "../../containers/UserProvider"
 import { MintButton } from "./MintButton"
 import WinterCheckout from "components/CreditCard/WinterCheckout"
 import { ButtonIcon } from "components/Button/ButtonIcon"
+import { Router, useRouter } from "next/router"
 
 interface Props {
   token: GenerativeToken
@@ -54,6 +55,7 @@ export function MintController({
   children,
 }: PropsWithChildren<Props>) {
   const { user } = useContext(UserContext)
+  const router = useRouter()
 
   // the mint context, handles display logic
   const mintingState = useMintingState(token, forceDisabled)
@@ -211,6 +213,19 @@ export function MintController({
         walletAddress={user?.id}
         onClose={closeCreditCard}
         onSuccess={onCreditCardSuccess}
+        onReveal={() => {
+          router.push(revealUrl)
+          setShowCC(false)
+        }}
+        appearance={{
+          buttonColor: "#7000ff",
+          buttonTextColor: "#fff",
+          primaryTextColor: "#000000",
+          secondaryTextColor: "#727272",
+          buttonAndInputBoxShadow: "0 3px 6px 1px rgba(0, 0, 0, 0.05)",
+          buttonAndInputFocusBoxShadow: "0 3px 6px 1px rgba(0, 0, 0, 0.15)",
+          buttonClipLoaderColor: "#727272",
+        }}
       />
     </div>
   )

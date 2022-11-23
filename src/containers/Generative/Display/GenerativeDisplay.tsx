@@ -38,40 +38,31 @@ interface Props {
   token: GenerativeToken
   offlineMode?: boolean
 }
-export function GenerativeDisplay({
-  token,
-  offlineMode = false,
-}: Props) {
+export function GenerativeDisplay({ token, offlineMode = false }: Props) {
   return (
     <>
       <div className={cs(style.artwork_header_mobile, layout.break_words)}>
-        <EntityBadge
-          user={token.author}
-          size="regular"
-          toggeable
-        />
-        <Spacing size="2x-small"/>
-        <h3>{ token.name }</h3>
-        <Spacing size="x-large"/>
+        <EntityBadge user={token.author} size="regular" toggeable />
+        <Spacing size="2x-small" />
+        <h3>{token.name}</h3>
+        <Spacing size="x-large" />
       </div>
 
-      <div 
+      <div
         className={cs(
-          style.presentation, layout.cols2, layout['responsive-reverse']
-        )
-      }>
+          style.presentation,
+          layout.cols2,
+          layout["responsive-reverse"]
+        )}
+      >
         <div className={cs(style.presentation_details)}>
           <div className={cs(style.artwork_header)}>
-            <EntityBadge 
-              user={token.author}
-              size="big"
-              toggeable
-            />
-            <Spacing size="x-large"/>
-            <h3>{ token.name }</h3>
+            <EntityBadge user={token.author} size="big" toggeable />
+            <Spacing size="x-large" />
+            <h3>{token.name}</h3>
           </div>
 
-          <Spacing size="x-large"/>
+          <Spacing size="x-large" />
 
           {!offlineMode && (
             <ClientOnly>
@@ -82,30 +73,20 @@ export function GenerativeDisplay({
           )}
 
           <div className={cs(style.artwork_details)}>
-            <MintProgress
-              token={token}
-              showReserve
-            />
+            <MintProgress token={token} showReserve />
           </div>
 
-          <Spacing size="x-large"/>
-          
-          <MintController
-            token={token}
-            forceDisabled={offlineMode}
-          >
+          <Spacing size="x-large" />
+
+          <MintController token={token} forceDisabled={offlineMode}>
             <Link href={getGenerativeTokenMarketplaceUrl(token)} passHref>
-              <Button
-                isLink={true}
-                size="regular"
-                disabled={offlineMode}
-              >
-                open marketplace 
+              <Button isLink={true} size="regular" disabled={offlineMode}>
+                open marketplace
               </Button>
             </Link>
           </MintController>
 
-          <Spacing size="4x-large"/>
+          <Spacing size="4x-large" />
 
           <div className={cs(style.multilines)}>
             <div className={cs(layout.buttons_inline)}>
@@ -119,72 +100,61 @@ export function GenerativeDisplay({
               )}
             </div>
             <span className={cs(text.info)}>
-              Published on { format(new Date(token.createdAt), "MMMM d, yyyy' at 'HH:mm") }
+              Published on{" "}
+              {format(new Date(token.createdAt), "MMMM d, yyyy' at 'HH:mm")}
             </span>
-            <Labels labels={token.labels!}/>
+            <Labels labels={token.labels!} />
           </div>
 
-          <Spacing size="large"/>
+          <Spacing size="large" />
 
-          <p>{ nl2br(token.metadata?.description) }</p>
+          <p>{nl2br(token.metadata?.description)}</p>
 
-          <Spacing size="2x-large"/>
+          <Spacing size="2x-large" />
 
-          <div className={cs(
-            style.multilines,
-            layout.break_words,
-            style.extra_details,
-          )}>
-            <GenerativePricing
-              token={token}
-            />
-            <ListSplits
-              name="Primary split"
-              splits={token.splitsPrimary}
-            />
+          <div
+            className={cs(
+              style.multilines,
+              layout.break_words,
+              style.extra_details
+            )}
+          >
+            <GenerativePricing token={token} />
+            <ListSplits name="Primary split" splits={token.splitsPrimary} />
             <strong>Royalties</strong>
             <span>{displayRoyalties(token.royalties)}</span>
-            <ListSplits
-              name="Royalties split"
-              splits={token.splitsSecondary}
-            />
+            <ListSplits name="Royalties split" splits={token.splitsSecondary} />
             <strong>Tags</strong>
             <span>
               {token.tags && token.tags.length > 0 ? (
-                <Tags tags={token.tags}/>
-              ):(
+                <Tags tags={token.tags} />
+              ) : (
                 <span className={cs(text.info)}>{"/"}</span>
               )}
             </span>
             <strong>Metadata</strong>
-            <a 
+            <a
               target="_blank"
               referrerPolicy="no-referrer"
               href={ipfsGatewayUrl(token.metadataUri)}
               className={cs(text.info_link)}
             >
-              view on IPFS <i className="fas fa-external-link-square" aria-hidden/>
+              view on IPFS{" "}
+              <i className="fas fa-external-link-square" aria-hidden />
             </a>
-            <ListReserves
-              reserves={token.reserves}
-              token={token}
-            />
+            <ListReserves reserves={token.reserves} token={token} />
           </div>
 
           {token.articleMentions && token.articleMentions.length > 0 && (
             <>
-              <Spacing size="2x-large"/>
-              <GenTokArticleMentions
-                mentions={token.articleMentions}
-              />
+              <Spacing size="2x-large" />
+              <GenTokArticleMentions mentions={token.articleMentions} />
             </>
           )}
         </div>
 
         <div className={cs(style.presentation_artwork)}>
-          <GenerativeArtwork
-            token={token}
-          />
+          <GenerativeArtwork token={token} />
         </div>
       </div>
     </>
