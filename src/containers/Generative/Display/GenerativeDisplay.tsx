@@ -54,7 +54,7 @@ export function GenerativeDisplay({ token, offlineMode = false }: Props) {
         />
         <Spacing size="2x-small" sm="regular" />
         <h3>{token.name}</h3>
-        <Spacing size="x-large" sm="regular" />
+        <Spacing size="x-large" />
       </div>
 
       <div
@@ -113,11 +113,13 @@ export function GenerativeDisplay({ token, offlineMode = false }: Props) {
                 </ClientOnly>
               )}
             </div>
-            <span className={cs(colors.gray)}>
+            <span className={cs(colors.gray, text.small)}>
               Published on{" "}
               {format(new Date(token.createdAt), "MMMM d, yyyy' at 'HH:mm")}
             </span>
-            {token.labels && <Labels className={style.labels} labels={token.labels!} />}
+            {token.labels && (
+              <Labels className={style.labels} labels={token.labels!} />
+            )}
           </div>
 
           <Spacing size="large" sm="regular" />
@@ -148,8 +150,21 @@ export function GenerativeDisplay({ token, offlineMode = false }: Props) {
               {displayRoyalties(token.royalties)}
             </span>
             <ListSplits name="Royalties split" splits={token.splitsSecondary} />
-            <strong className={style.mobile_grid_two}>Tags</strong>
-            <span className={style.mobile_grid_two}>
+            <strong
+              className={cs({
+                [style.mobile_grid_two]: token.tags && token.tags.length > 0,
+              })}
+            >
+              Tags
+            </strong>
+            <span
+              className={cs({
+                [style.mobile_grid_two]: token.tags && token.tags.length > 0,
+                [style.mobile_align_right]: !(
+                  token.tags && token.tags.length > 0
+                ),
+              })}
+            >
               {token.tags && token.tags.length > 0 ? (
                 <Tags tags={token.tags} />
               ) : (

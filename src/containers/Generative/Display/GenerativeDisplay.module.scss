@@ -199,14 +199,11 @@
     }
   }
   .presentation {
-    gap: 32px;
+    gap: 50px;
   }
   .author_avatar {
     width: 50px;
     height: 50px;
-  }
-  .artwork_details {
-    font-size: 20px;
   }
   .button {
     width: 100%;
@@ -229,9 +226,6 @@
     -webkit-line-clamp: unset;
     max-height: 100%;
   }
-  .multilines {
-    gap: 16px;
-  }
   .mobile_grid_two {
     grid-column: span 2;
   }
@@ -243,14 +237,13 @@
   .metadata {
     font-size: var(--font-size-regular);
   }
-  .labels {
-    margin-top: 8px;
-  }
   .extra_details {
     grid-template-columns: repeat(2, 1fr);
     hr {
       width: 100%;
-      border: 1.5px solid var(--color-gray-vvlight);
+      border: none;
+      height: 3px;
+      background-color: var(--color-gray-vvlight);
       margin: 0;
       grid-column: span 2;
       display: initial;
