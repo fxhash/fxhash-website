@@ -1,7 +1,8 @@
 import Head from "next/head"
 import Link, { LinkProps } from "next/link"
-import cs from "classnames"
+import style from "./UserProfileLayout.module.scss"
 import layout from "../../styles/Layout.module.scss"
+import cs from "classnames"
 import { HTMLAttributes, PropsWithChildren, useMemo } from "react"
 import { Spacing } from "../../components/Layout/Spacing"
 import { checkIsTabKeyActive, Tabs } from "../../components/Layout/Tabs"
@@ -122,22 +123,21 @@ export function UserProfileLayout({
 
       <Spacing size="x-large" sm="3x-large" />
 
-      <div className={layout["padding-big"]}>
-        <Tabs
-          tabDefinitions={TABS}
-          checkIsTabActive={checkIsTabKeyActive}
-          activeIdx={activeTab}
-          tabsLayout="fixed-size"
-          tabWrapperComponent={TabWrapper}
-        />
-      </div>
+      <Tabs
+        tabDefinitions={TABS}
+        className={cs(style.tabs)}
+        checkIsTabActive={checkIsTabKeyActive}
+        activeIdx={activeTab}
+        tabsLayout="fixed-size"
+        tabWrapperComponent={TabWrapper}
+      />
 
       {!hideSectionSpacing && <Spacing size="x-large" />}
 
       <section>{children}</section>
 
-      <Spacing size="6x-large" sm="3x-large" />
-      <Spacing size="6x-large" sm="none" />
+      <Spacing size="6x-large" />
+      <Spacing size="6x-large" />
     </>
   )
 }

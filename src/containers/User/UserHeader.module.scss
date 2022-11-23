@@ -75,6 +75,9 @@
       text-align: center;
     }
   }
+  .tz_link {
+    font-size: var(--font-size-vsmall);
+  }
   .name {
     margin-top: $spacing-x-small;
   }
@@ -103,6 +106,8 @@
   }
   .container_verification {
     margin-top: 8px;
+    font-size: var(--font-size-small);
+    margin-bottom: 8px;
   }
   .button_edit {
     width: 100%;

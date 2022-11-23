@@ -41,7 +41,12 @@ export function UserHeader({ user }: Props) {
       />
       <div className={cs(style.infos)}>
         {user.id && (
-          <a href={"https://tzkt.io/" + user.id} className={cs(style.tz_link)}>
+          <a
+            href={"https://tzkt.io/" + user.id}
+            className={cs(style.tz_link)}
+            target="__blank"
+            title="Tezos wallet address"
+          >
             {user.id}
           </a>
         )}
