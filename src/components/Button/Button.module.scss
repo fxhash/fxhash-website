@@ -1,4 +1,5 @@
 @use "sass:math";
+@import "../../styles/Variables";
 
 .button {
   background: var(--color-border);
@@ -223,8 +224,8 @@
 }
 
 .state-loading {
-  width: 30px;
-  height: 30px;
+  width: 30px !important;
+  height: 30px !important;
   pointer-events: none;
   overflow: hidden;
   padding: 0 !important;
@@ -233,5 +234,26 @@
 
   &>* {
     opacity: 0;
+  }
+}
+
+
+@media (max-width: $breakpoint-md) {
+  // .size-small, .size-regular, .size-medium {
+  //   font-size: var(--font-size-big);
+  // }
+  .button {
+    .btn_content {
+      justify-content: center;
+      width: 100%;
+    }
+  }
+  .children {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    flex: 1;
+    justify-content: center;
+    gap: 0 8px;
   }
 }

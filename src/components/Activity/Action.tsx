@@ -8,14 +8,17 @@ import { TActionLinkFn } from "./Actions/Action"
 import { DateDistance } from "../Utils/Date/DateDistance"
 import { ActionDefinitions } from "./ActionDefinitions"
 
-interface Props {
+interface ActionReferenceProps {
   action: ActionType
-  verbose: boolean
+  className?: string
 }
-export const ActionReference = ({ action }: { action: ActionType }) => {
+export const ActionReference = ({
+  className,
+  action,
+}: ActionReferenceProps) => {
   return (
     <a
-      className={cs(style.date)}
+      className={cs(style.date, className)}
       href={`https://tzkt.io/${action.opHash}`}
       target="_blank"
       rel="noreferrer"
@@ -46,6 +49,10 @@ function LinkWrapper({ action, linkFn, children }: ILinkWrapperProps) {
   )
 }
 
+interface Props {
+  action: ActionType
+  verbose: boolean
+}
 export function Action({ action, verbose }: Props) {
   const def = useMemo(() => ActionDefinitions[action.type], [action.type])
 

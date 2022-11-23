@@ -9,7 +9,10 @@ import { Button } from "../../components/Button"
 import { UserContext } from "../UserProvider"
 import { useContractCall } from "../../utils/hookts"
 import { ModerateCall, ReportCall } from "../../types/ContractCalls"
-import { GenerativeToken, GenTokFlag } from "../../types/entities/GenerativeToken"
+import {
+  GenerativeToken,
+  GenTokFlag,
+} from "../../types/entities/GenerativeToken"
 import { ContractFeedback } from "../../components/Feedback/ContractFeedback"
 import { Select } from "../../components/Input/Select"
 import { Form } from "../../components/Form/Form"
@@ -22,19 +25,14 @@ import { InputModerationReason } from "../../components/Input/InputModerationRea
 import { ModerationModal } from "../../components/Moderation/Modal/ModerationModal"
 import { EditLabelsModal } from "./Moderation/EditLabelsModal"
 
-
 function OpenButton() {
-  return (
-    <i aria-hidden className="fas fa-ellipsis-h"/>
-  )
+  return <i aria-hidden className="fas fa-ellipsis-h" />
 }
 
 interface Props {
   token: GenerativeToken
 }
-export function GenerativeExtraActions({
-  token,
-}: Props) {
+export function GenerativeExtraActions({ token }: Props) {
   const userCtx = useContext(UserContext)
   const user = userCtx.user!
 
@@ -42,12 +40,17 @@ export function GenerativeExtraActions({
   const [moderateModal, setModerateModal] = useState<boolean>(false)
   const [editLabelsModal, setEditLabelsModal] = useState<boolean>(false)
 
-  const { state: callState, loading: contractLoading, success, call, error: contractError } =
-    useContractCall<ReportCall>(userCtx.walletManager!.report)
+  const {
+    state: callState,
+    loading: contractLoading,
+    success,
+    call,
+    error: contractError,
+  } = useContractCall<ReportCall>(userCtx.walletManager!.report)
 
   const report = () => {
     call({
-      tokenId: token.id
+      tokenId: token.id,
     })
   }
 
@@ -58,9 +61,15 @@ export function GenerativeExtraActions({
           title="Do you want to report this Generative Token ?"
           onClose={() => setReportModal(false)}
         >
-          <em className={cs(colors.gray)}>Thank you for taking the time to make the platform a safer place for the community !</em>
+          <em className={cs(colors.gray)}>
+            Thank you for taking the time to make the platform a safer place for
+            the community !
+          </em>
           <p>
-            If 10 users report this Generative Token over a 1 hour period, then it will be removed from the front-end until a trusted member moderates the Token and assert if whether or not it violates the code of conduct of the platform.
+            If 10 users report this Generative Token over a 1 hour period, then
+            it will be removed from the front-end until a trusted member
+            moderates the Token and assert if whether or not it violates the
+            code of conduct of the platform.
           </p>
 
           <div className={cs(style.reports_bottom)}>
@@ -101,7 +110,7 @@ export function GenerativeExtraActions({
           moderationContract="token"
           flags={Object.keys(GenTokFlag).map((flag, idx) => ({
             label: flag,
-            value: idx
+            value: idx,
           }))}
           title="Manual moderation of a Token"
           infoText='With this utility you can force the moderation of a Generative Token. This action can be reversed at any point in time. In case of a doubt, setting the flag "REPORTED" will put the Token in the "Awaiting Moderation" list for further deliberation.'
@@ -122,12 +131,13 @@ export function GenerativeExtraActions({
           itemComp={<OpenButton />}
           className={style.btns_container}
           btnClassName={style.open_btn}
+          mobileMenuAbsolute
         >
           <button
             className={cs(style.btn_action)}
             onClick={() => setReportModal(true)}
           >
-            <i aria-hidden className="fas fa-exclamation-triangle"/>
+            <i aria-hidden className="fas fa-exclamation-triangle" />
             <span>report token</span>
           </button>
 
@@ -136,7 +146,7 @@ export function GenerativeExtraActions({
               className={cs(style.btn_action)}
               onClick={() => setModerateModal(true)}
             >
-              <i aria-hidden className="fas fa-gavel"/>
+              <i aria-hidden className="fas fa-gavel" />
               <span>moderate token</span>
             </button>
           )}
@@ -146,7 +156,7 @@ export function GenerativeExtraActions({
               className={cs(style.btn_action)}
               onClick={() => setEditLabelsModal(true)}
             >
-              <i aria-hidden className="fas fa-tags"/>
+              <i aria-hidden className="fas fa-tags" />
               <span>edit labels</span>
             </button>
           )}

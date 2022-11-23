@@ -1,3 +1,4 @@
+import style from "./ExploreTabs.module.scss"
 import { PropsWithChildren } from "react"
 import Link from "next/link"
 import { TabDefinition, Tabs } from "../../components/Layout/Tabs"
@@ -10,7 +11,7 @@ const definition: TabDefinition[] = [
 ]
 
 interface TabProps {
-  href: string,
+  href: string
   className: string
 }
 export function ExploreTab({
@@ -20,7 +21,7 @@ export function ExploreTab({
 }: PropsWithChildren<TabProps>) {
   return (
     <Link href={href} scroll={false}>
-      <a className={className}>{ children }</a>
+      <a className={className}>{children}</a>
     </Link>
   )
 }
@@ -31,6 +32,7 @@ interface Props {
 export function ExploreTabs({ active }: Props) {
   return (
     <Tabs
+      className={style.tabs}
       tabDefinitions={definition}
       activeIdx={active}
       tabsLayout="fixed-size"

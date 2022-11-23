@@ -1,5 +1,7 @@
+@import "../../styles/Variables";
+
 .root {
-  
+
 }
 
 .select {
@@ -34,5 +36,23 @@
   .address, .date {
     font-size: 0.8em;
     color: var(--color-gray);
+  }
+}
+.radios {
+  max-width: 375px;
+  width: 100%;
+}
+.select_collaboration {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+@media (max-width: $breakpoint-sm) {
+  .button {
+    width: 100%;
   }
 }

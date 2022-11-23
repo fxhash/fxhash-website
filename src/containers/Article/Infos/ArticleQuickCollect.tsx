@@ -17,25 +17,22 @@ interface Props {
   article: NFTArticle
   children: (props: ChildrenProps) => JSX.Element
 }
-export function ArticleQuickCollect({
-  article,
-  children,
-}: Props) {
+export function ArticleQuickCollect({ article, children }: Props) {
   const { user } = useContext(UserContext)
   // check if we need to render a CTA (if possible by availability)
   const { data, loading } = useQuery(Qu_articleListingsById, {
     variables: {
-      id: article.id
-    }
+      id: article.id,
+    },
   })
 
-  const listingHighlight = useMemo<Listing|null>(() => {
+  const listingHighlight = useMemo<Listing | null>(() => {
     if (data?.article?.activeListings) {
       let listings: Listing[] = data.article.activeListings
       if (listings?.length === 0) return null
       // first filter the listings from the author, if any we only get those
       const fromAuthor = listings.filter(
-        listing => listing.issuer.id === article.author!.id
+        (listing) => listing.issuer.id === article.author!.id
       )
       if (fromAuthor.length > 0) listings = fromAuthor
       // sort the listings by price
@@ -60,12 +57,8 @@ export function ArticleQuickCollect({
   return children({
     collectAction: (
       <>
-        <Spacing size="small"/>
-        <ArticleQuickCollectionAction
-          article={article}
-          listing={listing}
-        />
+        <ArticleQuickCollectionAction article={article} listing={listing} />
       </>
-    )
+    ),
   })
 }

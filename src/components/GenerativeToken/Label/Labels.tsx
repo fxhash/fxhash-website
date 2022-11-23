@@ -6,14 +6,15 @@ import { Label } from "./Label"
 
 interface Props {
   labels: number[]
+  className?: string
 }
-export function Labels({ labels }: Props) {
+export function Labels({ className, labels }: Props) {
   const defs = useMemo(() => {
     return getGenTokLabelDefinitions(labels)
   }, [labels])
 
   return defs.length > 0 ? (
-    <div className={cs(style.root)}>
+    <div className={cs(style.root, className)}>
       {defs.map((def, idx) => (
         <Label key={idx} definition={def} />
       ))}

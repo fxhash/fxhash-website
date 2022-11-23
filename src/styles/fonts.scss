@@ -1,3 +1,5 @@
+@import "./Variables";
+
 @mixin font-family-primary {
   font-family: "Fira Code", monospace;
 }
@@ -17,6 +19,9 @@
 
 @mixin font-size-secondary {
   font-size: 1.3rem;
+  @media (max-width: $breakpoint-sm) {
+    font-size: 1.125rem;
+  }
 }
 
 @mixin font-secondary {

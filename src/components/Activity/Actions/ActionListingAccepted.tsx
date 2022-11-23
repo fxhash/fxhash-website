@@ -12,20 +12,20 @@ export const ActionListingAccepted: TActionComp = ({ action, verbose }) => (
       user={action.issuer!}
       size="small"
     />
-    <span>
+    <>
       bought{" "}
       <strong>
         {verbose ? action.objkt!.name : `#${action.objkt!.iteration}`}
       </strong>{" "}
       from
-    </span>
+    </>
     <UserBadge
       className={cs(style.user)}
       hasLink={true}
       user={action.target!}
       size="small"
     />
-    <span>
+    <>
       <span>for </span>
       <span className={cs(style.price)}>
         <DisplayTezos
@@ -34,6 +34,6 @@ export const ActionListingAccepted: TActionComp = ({ action, verbose }) => (
           tezosSize="regular"
         />
       </span>
-    </span>
+    </>
   </>
 )

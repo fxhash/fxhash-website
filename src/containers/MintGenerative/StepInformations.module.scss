@@ -1,3 +1,4 @@
+@import "../../styles/Variables";
 .container {
   display: flex;
   flex-direction: column;
@@ -25,9 +26,22 @@
 
   .label {
     padding: 4px 8px;
+    text-align: left;
   }
 
   button {
     margin-top: 0 !important;
+  }
+}
+
+.button {}
+@media (max-width: $breakpoint-sm) {
+  .container {
+    & > h4 {
+      width: 100%;
+    }
+  }
+  .button {
+    width: 100%;
   }
 }

@@ -1,3 +1,8 @@
+@import "../../styles/Variables";
+.item {
+  display: flex;
+  flex-direction: row;
+}
 .user {
   color: var(--color-black) !important;
   font-weight: normal !important;
@@ -6,4 +11,8 @@
 
 .pct {
   color: var(--color-gray);
+}
+
+@media (max-width: $breakpoint-sm) {
+
 }

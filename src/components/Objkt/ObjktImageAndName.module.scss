@@ -1,3 +1,5 @@
+@import "../../styles/Variables";
+
 .container {
   display: flex;
   flex-direction: row;
@@ -9,13 +11,31 @@
     text-decoration: underline;
   }
 }
-
-.name {
+.container_name {
+  display: flex;
+  flex-direction: column;
   margin-left: 8px;
+}
+.label {
+  display: none;
+  font-weight: 400;
+}
+.name {
   font-weight: bold;
 }
-
 .thumbnail_container {
+  flex-shrink: 0;
   width: 50px;
   height: 50px;
+}
+@media (max-width: $breakpoint-sm) {
+  .label {
+    width: 100%;
+    display: block;
+    color: var(--color-gray);
+    font-size: var(--font-size-small);
+  }
+  .name {
+    font-size: var(--font-size-regular);
+  }
 }

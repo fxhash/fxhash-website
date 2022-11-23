@@ -2,24 +2,25 @@
 
 .root {
   width: 900px;
+  height: 100%;
 }
 
 .tab {
-  padding-top: 10px !important;
-  padding-bottom: 10px !important;
+  padding-top: 0px !important;
+  padding-bottom: 30px !important;
   font-size: var(--font-size-small);
 }
 
 .content {
-  padding-top: 5px;
-  height: 500px;
+  flex: 1;
+  padding: 8px 16px;
   overflow-y: auto;
   overscroll-behavior: contain;
-  margin-top: 8px;
+  margin: 8px -16px -16px;
   display: flex;
   flex-direction: column;
   gap: 12px;
-  font-size: var(--font-size-small);
+  font-size: var(--font-size-regular);
 }
 
 .info_bottom {
@@ -41,7 +42,13 @@
     left: 0;
   }
 
-  .content { 
-    height: calc(100vh - 150px)
+  .tab {
+    padding-bottom: 10px !important;
+    font-size: var(--font-size-regular);
+  }
+
+  .content {
+    padding: 8px 20px 20px;
+    margin: 8px -20px -20px;
   }
 }

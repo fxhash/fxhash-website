@@ -14,22 +14,21 @@ import { AvatarUpload } from "../components/User/AvatarUpload"
 import { Spacing } from "../components/Layout/Spacing"
 import { CachePolicies, useFetch } from "use-http"
 import { ProfileUploadError, ProfileUploadResponse } from "../types/Responses"
-import useAsyncEffect from "use-async-effect"
-import { useContractCall, useTzProfileVerification } from "../utils/hookts"
-import { ProfileUpdateCallData } from "../types/ContractCalls"
+import { useTzProfileVerification } from "../utils/hookts"
 import { ContractFeedback } from "../components/Feedback/ContractFeedback"
 import { UserVerification } from "./User/UserVerification"
 import { useContractOperation } from "../hooks/useContractOperation"
-import { TUpdateProfileParams, UpdateProfileOperation } from "../services/contract-operations/UpdateProfile"
-
+import {
+  TUpdateProfileParams,
+  UpdateProfileOperation,
+} from "../services/contract-operations/UpdateProfile"
 
 const Schema = Yup.object().shape({
   name: Yup.string()
-    .min(3, 'Min 3 characters')
-    .max(64, 'Max 64 characters')
-    .required('Min 3 characters'),
-  description: Yup.string()
-    .max(250, 'Max 250 characters')
+    .min(3, "Min 3 characters")
+    .max(64, "Max 64 characters")
+    .required("Min 3 characters"),
+  description: Yup.string().max(250, "Max 250 characters"),
 })
 
 export function EditProfile() {
@@ -39,40 +38,56 @@ export function EditProfile() {
   // hack Formik
   const userName = useRef<string>(user.name || "")
 
-  const { tzProfileData, loading: loadingTz } = useTzProfileVerification(user.id)
+  const { tzProfileData, loading: loadingTz } = useTzProfileVerification(
+    user.id
+  )
 
-  const { post, loading: fileLoading, error, data: fetchData } = 
-    useFetch<ProfileUploadResponse|ProfileUploadError>(`${process.env.NEXT_PUBLIC_API_FILE_ROOT}/profile`, {
-      cachePolicy: CachePolicies.NO_CACHE
-    })
-  
+  const {
+    post,
+    loading: fileLoading,
+    error,
+    data: fetchData,
+  } = useFetch<ProfileUploadResponse | ProfileUploadError>(
+    `${process.env.NEXT_PUBLIC_API_FILE_ROOT}/profile`,
+    {
+      cachePolicy: CachePolicies.NO_CACHE,
+    }
+  )
+
   // this variable ensures that we can safely access its data regardless of the state of the queries
-  const safeData: ProfileUploadResponse|false|undefined = !error && !fileLoading && (fetchData as ProfileUploadResponse)
+  const safeData: ProfileUploadResponse | false | undefined =
+    !error && !fileLoading && (fetchData as ProfileUploadResponse)
 
   // comment je voudrais l'utiliser ?
-  const { state, loading: contractLoading, error: contractError, success, call, clear } = 
-    useContractOperation<TUpdateProfileParams>(UpdateProfileOperation)
+  const {
+    state,
+    loading: contractLoading,
+    error: contractError,
+    success,
+    call,
+    clear,
+  } = useContractOperation<TUpdateProfileParams>(UpdateProfileOperation)
 
   useEffect(() => {
     if (safeData && userCtx.walletManager) {
       clear()
       call({
         name: userName.current,
-        metadata: safeData.metadataUri
+        metadata: safeData.metadataUri,
       })
     }
   }, [safeData])
 
-  const [avatarFile, setAvatarFile] = useState<File|null>(null)
+  const [avatarFile, setAvatarFile] = useState<File | null>(null)
   const [data, setData] = useState({
-    name: user.name||"",
-    description: user.description||""
+    name: user.name || "",
+    description: user.description || "",
   })
 
   useEffect(() => {
     setData({
-      name: user.name||"",
-      description: user.description||""
+      name: user.name || "",
+      description: user.description || "",
     })
     userName.current = user.name || ""
   }, [user])
@@ -89,19 +104,18 @@ export function EditProfile() {
         onSubmit={(values) => {
           const f = new FormData()
           if (avatarFile) {
-            f.append('avatarFile', avatarFile)
+            f.append("avatarFile", avatarFile)
+          } else if (user.avatarUri) {
+            f.append("avatarIpfs", user.avatarUri)
           }
-          else if (user.avatarUri) {
-            f.append('avatarIpfs', user.avatarUri)
-          }
-          f.append('description', values.description)
+          f.append("description", values.description)
           userName.current = values.name
           post(f)
         }}
       >
         {({ values, handleChange, handleBlur, handleSubmit, errors }) => (
           <Form className={cs(style.form)} onSubmit={handleSubmit}>
-            <div className={cs(style['form-header'])}>
+            <div className={cs(style["form-header"])}>
               <AvatarUpload
                 currentIpfs={user.avatarUri}
                 file={avatarFile}
@@ -136,7 +150,7 @@ export function EditProfile() {
               </div>
             </div>
 
-            <Spacing size="3x-large"/>
+            <Spacing size="3x-large" sm="x-large" />
 
             <ContractFeedback
               state={state}
@@ -146,28 +160,39 @@ export function EditProfile() {
               successMessage="Your profile update is now on the blockchain !"
             />
 
-            <Button 
+            <Button
               type="submit"
               disabled={loading}
+              className={style.button}
               state={loading ? "loading" : "default"}
             >
-              Submit
+              submit
             </Button>
 
-            <Spacing size="6x-large"/>
-      
+            <Spacing size="6x-large" sm="x-large" />
+
             <div>
               <span>
                 <span>You can verify your social media platforms using </span>
-                <a href="https://tzprofiles.com" target="_blank" referrerPolicy="no-referrer">tzprofiles</a>
-                <Spacing size="x-small"/>
+                <a
+                  href="https://tzprofiles.com"
+                  target="_blank"
+                  referrerPolicy="no-referrer"
+                  rel="noreferrer"
+                >
+                  tzprofiles
+                </a>
+                <Spacing size="x-small" sm="regular" />
                 <div>
-                  {(tzProfileData||loadingTz) && (
+                  {(tzProfileData || loadingTz) && (
                     <>
-                      <UserVerification profile={tzProfileData} loading={loadingTz} />
+                      <UserVerification
+                        profile={tzProfileData}
+                        loading={loadingTz}
+                      />
                     </>
                   )}
-                  {(!loadingTz && !tzProfileData) && (
+                  {!loadingTz && !tzProfileData && (
                     <em>No profile on tzprofile</em>
                   )}
                 </div>
@@ -177,10 +202,9 @@ export function EditProfile() {
         )}
       </Formik>
 
-
-      <Spacing size="3x-large"/>
-      <Spacing size="3x-large"/>
-      <Spacing size="3x-large"/>
+      <Spacing size="3x-large" sm="none" />
+      <Spacing size="3x-large" sm="none" />
+      <Spacing size="3x-large" />
     </>
   )
 }

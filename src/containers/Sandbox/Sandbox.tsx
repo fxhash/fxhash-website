@@ -16,26 +16,25 @@ import { RawTokenFeatures } from "../../types/Metadata"
 import { RawFeatures } from "../../components/Features/RawFeatures"
 import { ArtworkFrame } from "../../components/Artwork/ArtworkFrame"
 
-
 export function Sandbox() {
   const artworkIframeRef = useRef<ArtworkIframeRef>(null)
-  const [file, setFile] = useState<File|null>(null)
+  const [file, setFile] = useState<File | null>(null)
   const [hash, setHash] = useState<string>(generateFxHash())
-  const [filesRecord, setFilesRecord] = useState<SandboxFiles|null>(null)
-  const [error, setError] = useState<string|null>(null)
-  const [url, setUrl] = useState<string|null>(null)
+  const [filesRecord, setFilesRecord] = useState<SandboxFiles | null>(null)
+  const [error, setError] = useState<string | null>(null)
+  const [url, setUrl] = useState<string | null>(null)
   const [features, setFeatures] = useState<RawTokenFeatures | null>(null)
 
-  const fileList = useMemo<string[]|null>(() => (
-    filesRecord ? Object.keys(filesRecord) : null
-  ), [filesRecord])
+  const fileList = useMemo<string[] | null>(
+    () => (filesRecord ? Object.keys(filesRecord) : null),
+    [filesRecord]
+  )
 
   const processFile = async (file: File) => {
     try {
       const record = await processZipSandbox(file)
       setFilesRecord(record)
-    }
-    catch (err) {
+    } catch (err) {
       // todo: process error
       console.error(err)
     }
@@ -47,7 +46,7 @@ export function Sandbox() {
     }
   }
 
-  const updateFile = async (file: File|null) => {
+  const updateFile = async (file: File | null) => {
     if (file) {
       setFile(file)
       processFile(file)
@@ -63,8 +62,7 @@ export function Sandbox() {
           // @ts-ignore
           // process the raw features
           setFeatures(iframe.contentWindow?.$fxhashFeatures)
-        }
-        else {
+        } else {
           setFeatures(null)
         }
       }
@@ -72,100 +70,110 @@ export function Sandbox() {
   }
 
   return (
-    <section className={cs(style.container, {
-      [style['artwork-view']]: !!filesRecord
-    })}>
+    <section
+      className={cs(style.container, {
+        [style["artwork-view"]]: !!filesRecord,
+      })}
+    >
       <div>
         {error && (
           <>
             <div className={cs(style.error)}>
-              <i aria-hidden className="fas fa-exclamation-triangle"/>
+              <i aria-hidden className="fas fa-exclamation-triangle" />
               <span>
                 <strong>An error occurred when uploading your project</strong>
                 <p>{error}</p>
               </span>
             </div>
-            <Spacing size="regular"/>
+            <Spacing size="regular" />
           </>
         )}
 
         {filesRecord ? (
           <div className={cs(style.testing)}>
-            <div className={cs(style['files-header'])}>
+            <div className={cs(style["files-header"])}>
               <h5>Files</h5>
-              <span><i aria-hidden className="fas fa-file-archive"/> { file?.name }</span>
+              <span>
+                <i aria-hidden className="fas fa-file-archive" /> {file?.name}
+              </span>
             </div>
-            <Spacing size="3x-small"/>
+            <Spacing size="3x-small" />
             <FileList files={fileList} />
-            <Spacing size="2x-small"/>
-            <ButtonFile 
+            <Spacing size="2x-small" />
+            <ButtonFile
               state={"default"}
-              accepted={[ "application/zip", "application/x-zip-compressed" ]}
+              accepted={["application/zip", "application/x-zip-compressed"]}
               onFile={updateFile}
               size="small"
               style={{
-                alignSelf: "flex-start"
+                alignSelf: "flex-start",
               }}
             >
               update .zip
             </ButtonFile>
 
-            <Spacing size="2x-large"/>
+            <Spacing size="2x-large" />
 
             <div>
               <h5>Testing</h5>
               <p>You need to verify that:</p>
               <ul>
-                <li>a same hash will <strong>always</strong> generate the same output</li>
-                <li>different hashes generate <strong>different</strong> outputs</li>
+                <li>
+                  a same hash will <strong>always</strong> generate the same
+                  output
+                </li>
+                <li>
+                  different hashes generate <strong>different</strong> outputs
+                </li>
               </ul>
 
               <HashTest
                 autoGenerate={false}
                 value={hash}
-                onHashUpdate={hash => setHash(hash)}
+                onHashUpdate={(hash) => setHash(hash)}
                 onRetry={() => {
                   artworkIframeRef.current?.reloadIframe()
                 }}
               />
             </div>
 
-            <Spacing size="2x-large"/>
+            <Spacing size="2x-large" />
 
             <div>
               <h5>Features</h5>
-              <Spacing size="small"/>
+              <Spacing size="small" />
               <RawFeatures rawFeatures={features} />
             </div>
           </div>
-        ):(
-          <div className={cs(style['drag-container'])}>
+        ) : (
+          <div className={cs(style["drag-container"])}>
             <Dropzone
               className={cs(style.drag)}
               textDefault="Drag 'n' drop your ZIP file here"
-              accepted={[ "application/zip", "application/x-zip-compressed" ]}
-              onChange={(files: File[]|null) => {
+              accepted={["application/zip", "application/x-zip-compressed"]}
+              onChange={(files: File[] | null) => {
                 setFile(files && files.length > 0 ? files[0] : null)
               }}
-              files={file ? [ file ] : null}
+              files={file ? [file] : null}
             />
             <Button
-              color="secondary"
+              color="primary"
               state={"default"}
+              className={style.button}
               disabled={!file}
               onClick={() => uploadFile()}
             >
-              start tests 
+              start tests
             </Button>
           </div>
         )}
       </div>
 
       <div className={cs(style.artwork)}>
-        <div className={cs(style['iframe-container'])}>
-          <div className={cs(style['iframe-wrapper'])}>
+        <div className={cs(style["iframe-container"])}>
+          <div className={cs(style["iframe-wrapper"])}>
             <ArtworkFrame>
-              <SandboxPreview 
+              <SandboxPreview
                 hash={hash}
                 ref={artworkIframeRef}
                 record={filesRecord || undefined}
@@ -176,15 +184,16 @@ export function Sandbox() {
             </ArtworkFrame>
           </div>
         </div>
-        
+
         {url && (
           <Button
             isLink
             // @ts-ignore
-            href={url} 
+            href={url}
             target="_blank"
             size="small"
-            iconComp={<i aria-hidden className="fas fa-external-link-alt"/>}
+            className={style.button}
+            iconComp={<i aria-hidden className="fas fa-external-link-alt" />}
             iconSide="right"
           >
             open live

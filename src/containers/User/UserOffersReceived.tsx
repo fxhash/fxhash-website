@@ -1,8 +1,8 @@
-import React, { memo, useMemo } from 'react';
-import { User } from "../../types/entities/User";
-import { useQuery } from "@apollo/client";
-import { Qu_userOffersReceived } from "../../queries/user";
-import { TableUserOffersReceived } from "../../components/Tables/TableOffersReceived";
+import React, { memo, useMemo } from "react"
+import { User } from "../../types/entities/User"
+import { useQuery } from "@apollo/client"
+import { Qu_userOffersReceived } from "../../queries/user"
+import { TableUserOffersReceived } from "../../components/Tables/TableOffersReceived"
 
 interface UserOffersReceivedProps {
   user: User
@@ -14,20 +14,20 @@ const _UserOffersReceived = ({ user }: UserOffersReceivedProps) => {
     variables: {
       id: user.id,
       filters: {
-        active_eq: true
-      }
-    }
+        active_eq: true,
+      },
+    },
   })
-  const offers = useMemo(() => data?.user?.offersReceived || [], [data?.user?.offersReceived])
+  const offers = useMemo(
+    () => data?.user?.offersReceived || [],
+    [data?.user?.offersReceived]
+  )
   // todo intinite loader
   return (
     <div>
-      <TableUserOffersReceived
-        loading={loading}
-        offers={offers}
-      />
+      <TableUserOffersReceived loading={loading} offers={offers} />
     </div>
-  );
-};
+  )
+}
 
-export const UserOffersReceived = memo(_UserOffersReceived);
+export const UserOffersReceived = memo(_UserOffersReceived)

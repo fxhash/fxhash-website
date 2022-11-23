@@ -32,18 +32,18 @@ const Explore: NextPage = () => {
           content="https://www.fxhash.xyz/images/og/og1.jpg"
         />
       </Head>
-      <Spacing size="3x-large" />
+      <Spacing size="3x-large" sm="x-large" />
 
       <section>
-        <SectionHeader layout="center">
+        <SectionHeader layout="center" sm="left">
           <SectionTitle>incoming projects</SectionTitle>
         </SectionHeader>
 
-        <Spacing size="3x-large" />
+        <Spacing size="3x-large" sm="2x-large" />
 
         <ExploreTabs active={1} />
 
-        <Spacing size="x-large" />
+        <Spacing size="x-large" sm="regular" />
 
         <main className={cs(layout["padding-big"])}>
           <p>These tokens cannot be minted yet</p>
