@@ -29,6 +29,8 @@ import { Objkt } from "../../../types/entities/Objkt"
 import { GenerativeArtwork } from "../../../components/GenerativeToken/GenerativeArtwork"
 import { Clamp } from "../../../components/Clamp/Clamp"
 import { truncateMiddle } from "../../../utils/strings"
+import { HoverTitle } from "../../../components/Utils/HoverTitle"
+import { Icon } from "../../../components/Icons/Icon"
 
 interface GenerativeDisplayIterationProps {
   objkt: Objkt
@@ -178,7 +180,13 @@ const _GenerativeDisplayIteration = ({
                 <span
                   className={cs(style.mobile_align_right, style.mobile_gray)}
                 >
-                  {displayPercentage(objkt.rarity)}% (lower is rarer)
+                  {displayPercentage(objkt.rarity)}%{" "}
+                  <HoverTitle
+                    message="Lower is rarer"
+                    className={cs(style.tooltip)}
+                  >
+                    <Icon icon="infos-circle" />
+                  </HoverTitle>
                 </span>
               </>
             )}

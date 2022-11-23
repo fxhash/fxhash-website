@@ -124,3 +124,12 @@
     gap: 16px;
   }
 }
+
+.tooltip {
+  display: inline-block;
+
+  i {
+    color: var(--color-gray);
+    font-size: var(--font-size-small);
+  }
+}
