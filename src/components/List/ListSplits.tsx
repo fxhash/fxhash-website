@@ -22,7 +22,7 @@ export function ListSplits({ name, splits, toggled }: Props) {
     >
       <ConnectedList items={splits}>
         {({ item }) => (
-          <div className={style.item}>
+          <>
             <span className={cs(style.pct)}>
               {displayPercentage(item.pct / 1000)}%
             </span>
@@ -34,7 +34,7 @@ export function ListSplits({ name, splits, toggled }: Props) {
                 displayAvatar={false}
               />
             </div>
-          </div>
+          </>
         )}
       </ConnectedList>
     </ToggableInfo>
