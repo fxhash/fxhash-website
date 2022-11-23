@@ -68,14 +68,7 @@
       flex-direction: column;
       align-items: flex-start;
       text-align: center;
-      .token_id {
-        font-size: var(--font-size-regular);
-        margin-bottom: 8px;
-      }
-      .avatar {
-        width: 50px;
-        height: 50px;
-      }
+      
       .artwork_details {
         width: 100%;
       }
@@ -84,13 +77,12 @@
     .preview_wrapper {
       margin-bottom: 32px;
       margin-right: 0;
-      width: 100%;
+      width: 50%;
       height: 100%;
     }
 
     .progress_container {
       width: 100%;
-      font-size: var(--font-size-h5);
     }
   }
   .button {

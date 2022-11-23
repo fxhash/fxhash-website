@@ -134,7 +134,7 @@ export function GenerativeDisplay({ token, offlineMode = false }: Props) {
             {nl2br(token.metadata?.description)}
           </Clamp>
 
-          <Spacing size="2x-large" sm="x-large" />
+          <Spacing size="2x-large" sm="3x-large" />
 
           <div
             className={cs(

@@ -138,17 +138,17 @@ const GenerativeTokenMarketplace: NextPage<Props> = ({ token }) => {
               <div className={cs(style.progress_container)}>
                 <MintProgress token={token} />
               </div>
-              <Spacing size="x-small" sm="regular" />
+              <Spacing size="small" sm="regular" />
               <Link href={getGenerativeTokenUrl(token)} passHref>
                 <Button isLink={true} className={style.button} size="small">
-                  see generative token
+                  open project page
                 </Button>
               </Link>
             </div>
           </div>
         </header>
 
-        <Spacing size="3x-large" sm="x-large" />
+        <Spacing size="3x-large" />
 
         <div className={cs(style.metrics)}>
           <article className={cs(style.metric)}>
@@ -250,7 +250,7 @@ const GenerativeTokenMarketplace: NextPage<Props> = ({ token }) => {
         </div>
       </section>
 
-      <Spacing size="4x-large" sm="x-large" />
+      <Spacing size="4x-large" sm="5x-large" />
 
       <TabsContainer
         className={style.tabs}
