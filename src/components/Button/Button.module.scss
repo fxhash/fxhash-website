@@ -224,8 +224,8 @@
 }
 
 .state-loading {
-  width: 30px;
-  height: 30px;
+  width: 30px !important;
+  height: 30px !important;
   pointer-events: none;
   overflow: hidden;
   padding: 0 !important;

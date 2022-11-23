@@ -70,7 +70,7 @@ const _GenerativeDisplayIteration = ({
           centered
           size="regular"
         />
-        <Spacing size="2x-small" sm="regular" />
+        <Spacing size="2x-small" />
         <UserBadge
           classNameAvatar={style.avatar}
           prependText="owned by"
@@ -139,7 +139,7 @@ const _GenerativeDisplayIteration = ({
             <h4>
               Project #{objkt.issuer.id} — iteration #{objkt.iteration}
             </h4>
-            <span className={cs(style.minted)}>
+            <span className={cs(style.minted, text.small)}>
               Minted on{" "}
               {format(new Date(objkt.createdAt), "MMMM d, yyyy' at 'HH:mm")}
             </span>
@@ -212,7 +212,7 @@ const _GenerativeDisplayIteration = ({
                 referrerPolicy="no-referrer"
                 href={ipfsGatewayUrl(objkt.metadataUri)}
                 rel="noreferrer"
-                className={style.mobile_align_right}
+                className={cs(style.mobile_align_right, text.very_small)}
               >
                 view on IPFS{" "}
                 <i className="fas fa-external-link-square" aria-hidden />
@@ -244,9 +244,9 @@ const _GenerativeDisplayIteration = ({
 
       {objkt.features && objkt.features.length > 0 && (
         <div className={cs(style.features_wrapper, layout.show_md)}>
-          <Spacing size="3x-large" sm="x-large" />
+          <Spacing size="3x-large" />
           <h4>Features</h4>
-          <Spacing size="small" sm="large" />
+          <Spacing size="small" />
           <Features features={objkt.features} />
         </div>
       )}

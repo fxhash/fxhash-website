@@ -68,10 +68,6 @@
 }
 
 @media (max-width: $breakpoint-sm) {
-  .avatar {
-    width: 50px;
-    height: 50px;
-  }
   .extra_details {
     grid-template-columns: repeat(2, 1fr);
     hr {
@@ -97,13 +93,10 @@
     }
   }
   .buttons {
-    gap: 16px;
+    gap: 12px;
     button {
       width: 100%;
     }
-  }
-  .minted {
-    font-size: var(--font-size-regular);
   }
   .description {
     display: -webkit-box;
@@ -115,9 +108,6 @@
   .description_opened {
     -webkit-line-clamp: unset;
     max-height: 100%;
-  }
-  .labels {
-    margin-top: 8px;
   }
   .button {
     width: 100%;

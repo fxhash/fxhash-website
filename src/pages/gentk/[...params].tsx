@@ -68,13 +68,13 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
         <GenerativeDisplayIteration objkt={objkt} />
       </section>
 
-      <Spacing size="6x-large" sm="2x-large" />
+      <Spacing size="6x-large" />
       <Spacing size="6x-large" sm="none" />
 
       <ObjktTabs objkt={objkt} />
 
       <Spacing size="6x-large" />
-      <Spacing size="6x-large" sm="none" />
+      <Spacing size="6x-large" />
     </>
   )
 }

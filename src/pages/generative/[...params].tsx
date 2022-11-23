@@ -83,7 +83,7 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
         <GenerativeDisplay token={token} />
       </section>
 
-      <Spacing size="6x-large" sm="2x-large" />
+      <Spacing size="6x-large" />
       <Spacing size="6x-large" sm="none" />
 
       <Tabs
@@ -103,8 +103,8 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
         </main>
       )}
 
-      <Spacing size="6x-large" sm="3x-large" />
-      <Spacing size="6x-large" sm="none" />
+      <Spacing size="6x-large" />
+      <Spacing size="6x-large" />
     </>
   )
 }
