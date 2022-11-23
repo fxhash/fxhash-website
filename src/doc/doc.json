@@ -70,10 +70,6 @@
           "link": "one"
         },
         {
-          "title": "Roadmap",
-          "link": "roadmap"
-        },
-        {
           "title": "Moderation system",
           "link": "moderation"
         },
@@ -84,10 +80,6 @@
         {
           "title": "Integration guide",
           "link": "integration-guide"
-        },
-        {
-          "title": "Changelog",
-          "link": "changelog"
         }
       ]
     },
@@ -99,18 +91,6 @@
         {
           "title": "Articles",
           "link": "articles"
-        },
-        {
-          "title": "FXH token & DAO",
-          "link": "token-dao"
-        },
-        {
-          "title": "Sub-DAOs",
-          "link": "subdaos"
-        },
-        {
-          "title": "Curation",
-          "link": "curation"
         }
       ]
     }

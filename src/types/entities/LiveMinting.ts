@@ -7,6 +7,7 @@ export interface LiveMintingEvent {
   startsAt: string
   endsAt: string
   projectIds: number[]
+  onboarding?: EventOnboarding
 }
 
 export interface LiveMintingPassGroup {
@@ -21,4 +22,22 @@ export interface LiveMintingPass {
   token: string
   group: LiveMintingPassGroup
   expiresAt: string
+}
+
+export interface OnboardingComponent {
+  id: number
+  description: string
+  content: string
+}
+
+export interface EventOnboardingOnComponent {
+  component: OnboardingComponent
+  index: number
+}
+
+export interface EventOnboarding {
+  id: number
+  enabled: boolean
+  description: string
+  components: EventOnboardingOnComponent[]
 }
