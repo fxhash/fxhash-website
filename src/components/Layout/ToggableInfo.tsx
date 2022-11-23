@@ -30,7 +30,10 @@ export function ToggableInfo({
     >
       {placeholder}
       <i
-        className={`fa-solid fa-caret-${opened ? "up" : "down"}`}
+        className={cs(
+          `fa-solid fa-caret-${opened ? "up" : "down"}`,
+          style.caret
+        )}
         aria-hidden
       />
     </span>
@@ -54,7 +57,6 @@ export function ToggableInfo({
 
       {opened ? (
         <>
-          {renderPlaceholder(true)}
           <span className={style.children}>{children}</span>
         </>
       ) : (
