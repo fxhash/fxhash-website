@@ -12,6 +12,7 @@ import { useMemo } from "react"
 import SocialMediaShare from "../../components/SocialMediaShare/SocialMediaShare"
 import { ArticleRevisions } from "./Infos/ArticleRevisions"
 import { ArticleQuickCollect } from "./Infos/ArticleQuickCollect"
+import { Spacing } from "../../components/Layout/Spacing"
 
 interface ArticleInfosProps {
   article: NFTArticle

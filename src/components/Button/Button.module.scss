@@ -239,9 +239,9 @@
 
 
 @media (max-width: $breakpoint-md) {
-  .size-small, .size-regular, .size-medium {
-    font-size: var(--font-size-big);
-  }
+  // .size-small, .size-regular, .size-medium {
+  //   font-size: var(--font-size-big);
+  // }
   .button {
     .btn_content {
       justify-content: center;

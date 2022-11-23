@@ -284,28 +284,32 @@
     }
 
     @media (max-width: $breakpoint-sm) {
+      p {
+        line-height: 140%;
+      }
+
       h6 {
-        font-size: 1.25rem;
+        font-size: 1.16rem;
       }
 
       h5 {
-        font-size: 1.375rem;
+        font-size: 1.32rem;
       }
 
       h4 {
-        font-size: 1.5625rem;
+        font-size: 1.48rem;
       }
 
       h3 {
-        font-size: 1.875rem;
+        font-size: 1.64rem;
       }
 
       h2 {
-        font-size: 2.1875rem;
+        font-size: 1.80rem;
       }
 
       h1 {
-        font-size: 2.375rem;
+        font-size: 2rem;
       }
     }
   }

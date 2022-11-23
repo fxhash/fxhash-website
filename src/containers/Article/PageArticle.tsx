@@ -251,6 +251,7 @@ const _PageArticle = ({ article, originUrl, isPreview }: PageArticleProps) => {
             isPreview={isPreview}
           />
         </div>
+        <Spacing size="3x-large" />
         {relatedArticles?.length > 0 && (
           <div className={style["related-articles"]}>
             <h2 className={text.small_title}>Related articles</h2>
