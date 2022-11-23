@@ -61,7 +61,7 @@ export function Navigation({ onChangeSearchVisibility }: NavigationProps) {
   const handleCloseModal = useCallback(() => {
     setSettingsModal(false)
     if (refButtonSettings.current) {
-      refButtonSettings.current.focus();
+      refButtonSettings.current.focus()
     }
   }, [])
   const routerRoot = useMemo<string>(() => {

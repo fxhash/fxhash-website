@@ -7,7 +7,7 @@ import React, {
   useRef,
 } from "react"
 import Link, { LinkProps } from "next/link"
-import { onKeydownAccessibleButton } from "../../utils/accessibility";
+import { onKeydownAccessibleButton } from "../../utils/accessibility"
 
 const DefaultTabWrapper = ({
   children,
