@@ -2,11 +2,17 @@
 
 .container {
   width: 100%;
-  display: grid; 
+  display: grid;
   grid-template-columns: repeat(auto-fit, minmax(var(--cards-size), 1fr));
   gap: var(--cards-gap);
 
   & > a {
     text-decoration: none !important;
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .container {
+    gap: 32px;
   }
 }

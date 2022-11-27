@@ -1,3 +1,5 @@
+@import "../../styles/Variables";
+
 .btn_toggle {
   border: none;
   background: transparent;
@@ -14,7 +16,7 @@
     position: absolute;
     left: 0;
     top: 50%;
-    transform: translateY(calc(-50% + 1px));
+    transform: translateY(calc(-50% - 1px));
     font-size: 10px;
     color: var(--color-gray);
     transition: all 0.15s;
@@ -24,5 +26,54 @@
     i {
       color: var(--color-black);
     }
+  }
+}
+.placeholder {
+  font-size: var(--font-size-small);
+  color: var(--color-gray);
+  
+  .caret {
+    margin-left: 4px;
+    display: none;
+    font-size: 12px;
+    position: relative;
+    top: -2px;
+  }
+}
+.children {
+
+}
+@media (max-width: $breakpoint-sm) {
+  .btn_toggle {
+    left: 0;
+    padding-left: 0;
+    i {
+      display: none;
+      font-size: 14px;
+      color: var(--color-black);
+    }
+    &_opened {
+    }
+  }
+  .mobile_align_right {
+    width: 100%;
+    text-align: right;
+  }
+  .placeholder {
+    font-size: var(--font-size-regular);
+
+    .caret {
+      display: inline;
+    }
+  }
+  .placeholder_mobile {
+    display: initial;
+  }
+  .children {
+    grid-column: span 2;
+    background-color: var(--color-gray-vvvlight);
+    color: var(--color-black);
+    width: 100%;
+    padding: 4px 16px 4px 8px;
   }
 }

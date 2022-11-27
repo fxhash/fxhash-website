@@ -1,5 +1,4 @@
 import style from "./ToggableInfo.module.scss"
-import text from "../../styles/Text.module.css"
 import cs from "classnames"
 import { PropsWithChildren, ReactNode, useEffect, useState } from "react"
 
@@ -22,26 +21,46 @@ export function ToggableInfo({
     toggled && onToggled?.()
   }, [toggled])
 
+  const renderPlaceholder = (isMobile: boolean) => (
+    <span
+      className={cs(style.placeholder, style.mobile_align_right, {
+        [style.placeholder_mobile]: isMobile,
+      })}
+      onClick={() => setOpened(!opened)}
+    >
+      {placeholder}
+      <i
+        className={cs(
+          `fa-solid fa-caret-${opened ? "up" : "down"}`,
+          style.caret
+        )}
+        aria-hidden
+      />
+    </span>
+  )
+
   return (
     <>
       <button
         type="button"
         onClick={() => setOpened(!opened)}
-        className={cs(style.btn_toggle)}
+        className={cs(style.btn_toggle, {
+          [style.btn_toggle_opened]: opened,
+        })}
       >
         <i
-          className={`fa-solid fa-angle-${opened ? "up" : "down"}`}
+          className={`fa-solid fa-caret-${opened ? "up" : "down"}`}
           aria-hidden
         />
         <strong>{label}</strong>
       </button>
 
       {opened ? (
-        children
+        <>
+          <span className={style.children}>{children}</span>
+        </>
       ) : (
-        <span className={cs(text.info)} onClick={() => setOpened(!opened)}>
-          {placeholder}
-        </span>
+        renderPlaceholder(false)
       )}
     </>
   )

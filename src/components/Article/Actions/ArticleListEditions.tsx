@@ -57,6 +57,7 @@ export function ArticleListEditions({ ledger, article }: Props) {
         type="button"
         size="very-small"
         color="secondary"
+        className={style.button}
         onClick={() => setShowModal(true)}
       >
         list
@@ -111,7 +112,7 @@ export function ArticleListEditions({ ledger, article }: Props) {
                   />
                 </Field>
 
-                <Spacing size="2x-large" />
+                <Spacing size="2x-large" sm="none" />
 
                 <Submit layout="center-vertical">
                   <ContractFeedback

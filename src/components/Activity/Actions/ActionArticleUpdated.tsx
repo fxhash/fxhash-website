@@ -44,12 +44,12 @@ export const ActionArticleUpdated: TActionComp = ({ action, verbose }) => {
         user={action.issuer!}
         size="small"
       />
-      <span>
+      <>
         updated article {` `}
         <ArticleRevisionLink revision={revisionFrom!} />
         {` `} to {` `}
         <ArticleRevisionLink revision={revisionTo!} />
-      </span>
+      </>
     </>
   )
 }

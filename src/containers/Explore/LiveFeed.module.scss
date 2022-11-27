@@ -1,6 +1,22 @@
+@import "../../styles/Variables";
+
 .reveal_container {
   display: flex;
   align-items: center;
   flex-direction: column;
   text-align: center;
+}
+
+.progress_bar {
+  width: min(250px, 50vw);
+}
+
+@media (max-width: $breakpoint-sm) {
+  .avatar {
+    width: 37px;
+    height: 37px;
+  }
+  .progress_bar {
+    width: 100%;
+  }
 }

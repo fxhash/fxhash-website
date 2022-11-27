@@ -15,25 +15,28 @@ import { isTokenModerator } from "../../utils/user"
 interface Props {
   token: GenerativeToken
 }
-export function ModeratorActions({
-  token,
-}: Props) {
+export function ModeratorActions({ token }: Props) {
   const userCtx = useContext(UserContext)
   const user = userCtx.user
 
-  const { state: callState, loading: contractLoading, success, call, error: contractError } = 
-    useContractCall<ModerateCall>(userCtx.walletManager!.moderateToken)
+  const {
+    state: callState,
+    loading: contractLoading,
+    success,
+    call,
+    error: contractError,
+  } = useContractCall<ModerateCall>(userCtx.walletManager!.moderateToken)
 
-  const moderate = (state: 1|4) => {
+  const moderate = (state: 1 | 4) => {
     call({
       tokenId: token.id,
-      state: state
+      state: state,
     })
   }
-  
+
   return user && isTokenModerator(user as User) ? (
     <>
-      <Spacing size="x-small"/>
+      <Spacing size="x-small" />
 
       <ContractFeedback
         state={callState}
@@ -43,7 +46,7 @@ export function ModeratorActions({
         successMessage="Token was moderated !"
       />
 
-      <div className={cs(layout['x-inline'])}>
+      <div className={cs(layout["x-inline"])}>
         <Button
           color="primary"
           size="small"
@@ -62,5 +65,5 @@ export function ModeratorActions({
         </Button>
       </div>
     </>
-  ):null
+  ) : null
 }

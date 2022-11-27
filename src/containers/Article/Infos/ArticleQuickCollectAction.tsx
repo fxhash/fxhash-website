@@ -1,3 +1,4 @@
+import style from "./ArticleQuickCollectAction.module.scss"
 import { Button } from "../../../components/Button"
 import { DisplayTezos } from "../../../components/Display/DisplayTezos"
 import { ContractFeedback } from "../../../components/Feedback/ContractFeedback"
@@ -31,6 +32,7 @@ export function ArticleQuickCollectionAction({ article, listing }: Props) {
         size="regular"
         state={loading ? "loading" : "default"}
         disabled={loading}
+        className={style.button}
         onClick={() => {
           call({
             listing: listing,

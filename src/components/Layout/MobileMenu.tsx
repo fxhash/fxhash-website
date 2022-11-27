@@ -1,4 +1,12 @@
-import React, { memo, useCallback, useEffect, useMemo, useState } from "react"
+import React, {
+  memo,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react"
 import style from "./MobileMenu.module.scss"
 import { NavigationLink, NavigationLinkSingle } from "./navigationLinks"
 import cs from "classnames"
@@ -12,6 +20,7 @@ import { UserFromAddress } from "../User/UserFromAddress"
 import { UserBadge } from "../User/UserBadge"
 import ReactDOM from "react-dom"
 import { MobileMenuUser } from "./MobileMenuUser"
+import { ModalContext } from "../../context/Modal"
 
 interface MobileMenuProps {
   open: boolean
@@ -32,6 +41,7 @@ const _MobileMenu = ({
   onClickDisconnect,
   user,
 }: MobileMenuProps) => {
+  const { openModalId, closeModalId } = useContext(ModalContext)
   const [showProfile, setShowProfile] = useState(false)
   const router = useRouter()
   const routerRoot = useMemo<string>(() => {
@@ -43,14 +53,14 @@ const _MobileMenu = ({
   )
   useEffect(() => {
     if (open) {
-      document.body.classList.add("modal-open")
+      openModalId("mobile-menu")
     } else {
-      document.body.classList.remove("modal-open")
+      closeModalId("mobile-menu")
     }
     return () => {
-      document.body.classList.remove("modal-open")
+      closeModalId("mobile-menu")
     }
-  }, [open])
+  }, [closeModalId, open, openModalId])
   return ReactDOM.createPortal(
     <div
       className={cs(style.container, {

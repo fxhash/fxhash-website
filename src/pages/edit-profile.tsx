@@ -21,7 +21,7 @@ const EditProfilePage: NextPage = () => {
         />
       </Head>
 
-      <Spacing size="6x-large" />
+      <Spacing size="6x-large" sm="x-large" />
 
       <section>
         <SectionHeader>

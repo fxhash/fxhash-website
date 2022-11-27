@@ -111,7 +111,7 @@ const GenerativeTokenMarketplace: NextPage<Props> = ({ token }) => {
 
       <GenerativeFlagBanner token={token} />
 
-      <Spacing size="3x-large" />
+      <Spacing size="3x-large" sm="x-large" />
 
       <section className={cs(style.presentation, layout["padding-big"])}>
         <header className={cs(style.presentation_header)}>
@@ -122,19 +122,26 @@ const GenerativeTokenMarketplace: NextPage<Props> = ({ token }) => {
             />
           </div>
           <div className={cs(style.presentation_details)}>
-            <small className={cs(colors.gray)}>#{token.id}</small>
+            <small className={cs(colors.gray, style.token_id)}>
+              #{token.id}
+            </small>
             <h3>{token.name}</h3>
-            <Spacing size="3x-small" />
-            <EntityBadge user={token.author} size="regular" toggeable />
+            <Spacing size="3x-small" sm="x-small" />
+            <EntityBadge
+              classNameAvatar={style.avatar}
+              user={token.author}
+              size="regular"
+              toggeable
+            />
             <Spacing size="small" />
             <div className={cs(style.artwork_details)}>
               <div className={cs(style.progress_container)}>
                 <MintProgress token={token} />
               </div>
-              <Spacing size="x-small" />
+              <Spacing size="small" sm="regular" />
               <Link href={getGenerativeTokenUrl(token)} passHref>
-                <Button isLink={true} size="small">
-                  See Generative Token
+                <Button isLink={true} className={style.button} size="small">
+                  open project page
                 </Button>
               </Link>
             </div>
@@ -243,12 +250,16 @@ const GenerativeTokenMarketplace: NextPage<Props> = ({ token }) => {
         </div>
       </section>
 
-      <Spacing size="4x-large" />
+      <Spacing size="4x-large" sm="5x-large" />
 
-      <TabsContainer tabDefinitions={tabs} tabsLayout="fixed-size">
+      <TabsContainer
+        className={style.tabs}
+        tabDefinitions={tabs}
+        tabsLayout="fixed-size"
+      >
         {({ tabIndex }) => (
           <section className={cs(layout["padding-big"])}>
-            <Spacing size="3x-large" />
+            <Spacing size="3x-large" sm="x-large" />
             {tabIndex === 0 ? (
               <ClientOnlyEmpty>
                 <GenerativeListings token={token} />

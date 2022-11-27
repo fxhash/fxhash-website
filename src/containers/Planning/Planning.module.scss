@@ -22,7 +22,11 @@
 }
 
 @media (max-width: $breakpoint-sm) {
+  .title {
+    font-size: var(--font-size-h4);
+  }
   .selects {
+    gap: $spacing;
     .select_timezone {
       width: 100%;
     }
@@ -31,6 +35,12 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+    }
+    .input_days_wrapper {
+      width: 100%;
+      input {
+        width: 100%;
+      }
     }
   }
 }

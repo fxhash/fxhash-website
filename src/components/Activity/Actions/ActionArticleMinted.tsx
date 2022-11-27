@@ -11,8 +11,8 @@ export const ActionArticleMinted: TActionComp = ({ action, verbose }) => (
       user={action.issuer!}
       size="small"
     />
-    <span>
+    <>
       minted article <strong>{action.article!.title}</strong>
-    </span>
+    </>
   </>
 )

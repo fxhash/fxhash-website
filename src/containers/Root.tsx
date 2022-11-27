@@ -14,6 +14,7 @@ import { ArticlesProvider } from "../context/Articles"
 import { matchRule } from "../utils/regex"
 import { IndexerStatusProvider } from "../context/IndexerStatus"
 import { IndexerStatus, NetworkStatus } from "../types/IndexerStatus"
+import { ModalProvider } from "../context/Modal"
 const EXCLUDE_LAYOUT = [
   "/generative/[id]/enjoy",
   "/u/[name]/collection/enjoy",
@@ -48,9 +49,11 @@ export function Root({
               networkStatus={networkStatus}
             >
               <CyclesProvider>
-                <ArticlesProvider>
-                  <LayoutWrapper>{children}</LayoutWrapper>
-                </ArticlesProvider>
+                <ModalProvider>
+                  <ArticlesProvider>
+                    <LayoutWrapper>{children}</LayoutWrapper>
+                  </ArticlesProvider>
+                </ModalProvider>
               </CyclesProvider>
             </IndexerStatusProvider>
           </MessageCenterProvider>

@@ -11,13 +11,13 @@ export const ActionMintedFrom: TActionComp = ({ action, verbose }) => (
       user={action.issuer!}
       size="small"
     />
-    <span>
+    <>
       <span>minted </span>
       {verbose ? (
         <strong>{action.objkt!.name}</strong>
       ) : (
         <strong>#{action.objkt!.iteration}</strong>
       )}
-    </span>
+    </>
   </>
 )

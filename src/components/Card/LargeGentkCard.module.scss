@@ -1,3 +1,5 @@
+@import "../../styles/Variables";
+
 .root {
   &:hover {
     text-decoration: none;
@@ -30,4 +32,10 @@
   font-weight: normal !important;
   overflow-wrap: break-word;
   word-break: break-word;
+}
+
+@media (max-width: $breakpoint-sm) {
+  .topper {
+    font-size: var(--font-size-regular);
+  }
 }

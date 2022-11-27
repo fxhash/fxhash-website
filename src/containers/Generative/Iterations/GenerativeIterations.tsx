@@ -1,3 +1,4 @@
+import style from "./GenerativeIterations.module.scss"
 import layout from "../../../styles/Layout.module.scss"
 import cs from "classnames"
 import { GenerativeToken } from "../../../types/entities/GenerativeToken"
@@ -237,10 +238,13 @@ export function GenerativeIterations({ token }: Props) {
           <div ref={topMarkerRef} />
           <SearchHeader
             hasFilters
+            filtersOpened={filtersVisible}
             showFiltersOnMobile={inViewCardsContainer}
             onToggleFilters={() => setFiltersVisible(!filtersVisible)}
             sortSelectComp={
               <Select
+                className={style.select}
+                classNameRoot={style.select_root}
                 value={sortValue}
                 options={sortOptions}
                 onChange={setSortValue}
@@ -249,23 +253,26 @@ export function GenerativeIterations({ token }: Props) {
             sizeSelectComp={
               <CardSizeSelect value={cardSize} onChange={setCardSize} />
             }
-            padding="small"
+            padding="small-sm-big"
           />
           <section
-            className={cs(layout.cards_explorer, layout["padding-small"])}
-          >
-            {filtersVisible && (
-              <FiltersPanel onClose={() => setFiltersVisible(false)}>
-                <GenerativeIterationsFilters
-                  token={token}
-                  featureFilters={featureFilters}
-                  setFeatureFilters={setFeatureFilters}
-                  objtkFilters={objtkFilters}
-                  setObjtkFilters={setObjtkFilters}
-                />
-              </FiltersPanel>
+            className={cs(
+              layout.cards_explorer,
+              layout["padding-small-sm-big"]
             )}
-
+          >
+            <FiltersPanel
+              open={filtersVisible}
+              onClose={() => setFiltersVisible(false)}
+            >
+              <GenerativeIterationsFilters
+                token={token}
+                featureFilters={featureFilters}
+                setFeatureFilters={setFeatureFilters}
+                objtkFilters={objtkFilters}
+                setObjtkFilters={setObjtkFilters}
+              />
+            </FiltersPanel>
             <div style={{ width: "100%" }}>
               {filterTags.length > 0 && (
                 <>

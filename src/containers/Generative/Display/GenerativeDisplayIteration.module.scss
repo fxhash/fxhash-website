@@ -1,0 +1,127 @@
+@import '../../../styles/Variables.scss';
+
+.artwork_header {
+}
+
+.artwork_header_mobile {
+  display: none;
+}
+
+.presentation-artwork {
+  align-self: flex-start;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+  gap: var(--layout-margin-small-sm);
+  align-items: flex-start;
+  width: 100%;
+}
+
+.features_wrapper {
+  width: 100%;
+}
+
+.extra_details {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  align-items: baseline;
+  gap: 10px 5px;
+  /* prevents children elements from streching */
+  justify-items: start;
+  hr {
+    display: none;
+  }
+}
+
+.project_infos {
+  h4 {
+    font-size: var(--font-size-regular);
+  }
+}
+
+.mobile_align_right {
+
+}
+
+@media (max-width: $breakpoint-md) {
+  .artwork_header {
+    display: none;
+  }
+
+  .artwork_header_mobile {
+    display: flex;
+    width: 100%;
+    align-items: flex-start;
+    flex-direction: column;
+    text-align: center;
+  }
+}
+.minted {
+  font-size: var(--font-size-small);
+  color: var(--color-gray);
+}
+
+@media (max-width: $breakpoint-sm) {
+  .extra_details {
+    grid-template-columns: repeat(2, 1fr);
+    hr {
+      width: 100%;
+      border: none;
+      margin: 0;
+      height: 3px;
+      background-color: var(--color-gray-vvlight);
+      grid-column: span 2;
+      display: initial;
+    }
+  }
+  .mobile_align_right {
+    width: 100%;
+    text-align: right;
+  }
+  .mobile_gray {
+    color: var(--color-gray);
+  }
+  .project_infos {
+    h4 {
+      font-size: var(--font-size-h5);
+    }
+  }
+  .buttons {
+    gap: 12px;
+    button {
+      width: 100%;
+    }
+  }
+  .description {
+    display: -webkit-box;
+    -webkit-line-clamp: 6;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    color: var(--color-gray);
+  }
+  .description_opened {
+    -webkit-line-clamp: unset;
+    max-height: 100%;
+  }
+  .button {
+    width: 100%;
+  }
+  .actions {
+    gap: 16px;
+  }
+}
+
+.tooltip {
+  display: inline-block;
+
+  i {
+    color: var(--color-gray);
+    font-size: var(--font-size-small);
+  }
+}

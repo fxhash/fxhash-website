@@ -31,19 +31,23 @@ export function ContractsOpened() {
         <Loader size="small" />
       ) : !cyclesState.opened ? (
         <div className={cs(style.state, style.state_closed)}>
-          <span>Publishing new projects closed for </span>
-          <span>
-            <Countdown until={cyclesState.nextOpening} onEnd={onEnd} />
-          </span>
-          <div />
+          <div className={style.text}>
+            <span>Publishing new projects closed for </span>
+            <span>
+              <Countdown until={cyclesState.nextOpening} onEnd={onEnd} />
+            </span>
+          </div>
+          <div className={style.circle} />
         </div>
       ) : (
         <div className={cs(style.state)}>
-          <span>Publishing new projects opened for </span>
-          <span>
-            <Countdown until={cyclesState.nextClosing} onEnd={onEnd} />
-          </span>
-          <div />
+          <div className={style.text}>
+            <span>Publishing new projects opened for </span>
+            <span>
+              <Countdown until={cyclesState.nextClosing} onEnd={onEnd} />
+            </span>
+          </div>
+          <div className={style.circle} />
         </div>
       )}
     </>

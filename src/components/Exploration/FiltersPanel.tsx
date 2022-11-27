@@ -1,29 +1,40 @@
 import style from "./FiltersPanel.module.scss"
 import cs from "classnames"
-import { PropsWithChildren, useEffect, useMemo } from "react"
+import { PropsWithChildren, useContext, useEffect, useMemo } from "react"
 import useWindowSize, { breakpoints } from "../../hooks/useWindowsSize"
+import { ModalContext } from "../../context/Modal"
 
 interface Props {
+  open?: boolean
   onClose?: () => void
 }
-export function FiltersPanel({ onClose, children }: PropsWithChildren<Props>) {
+export function FiltersPanel({
+  open = true,
+  onClose,
+  children,
+}: PropsWithChildren<Props>) {
+  const { openModalId, closeModalId } = useContext(ModalContext)
   const { width } = useWindowSize()
   const isMobile = useMemo(
     () => width !== undefined && width <= breakpoints.sm,
     [width]
   )
   useEffect(() => {
-    if (isMobile) {
-      document.body.classList.add("modal-open")
+    if (isMobile && open) {
+      openModalId("filters")
     } else {
-      document.body.classList.remove("modal-open")
+      closeModalId("filters")
     }
     return () => {
-      document.body.classList.remove("modal-open")
+      closeModalId("filters")
     }
-  }, [isMobile])
+  }, [closeModalId, isMobile, open, openModalId])
   return (
-    <div className={cs(style.root)}>
+    <div
+      className={cs(style.root, {
+        [style.visible]: open,
+      })}
+    >
       <div className={cs(style.mobile_header)}>
         <h4>Filters</h4>
         <button type="button" onClick={onClose}>

@@ -1,13 +1,11 @@
 import style from "./MarketplaceActions.module.scss"
 import cs from "classnames"
-import { useContext, useState } from "react"
+import { useState } from "react"
 import { Button } from "../../components/Button"
 import { InputTextUnit } from "../../components/Input/InputTextUnit"
 import { Objkt } from "../../types/entities/Objkt"
-import { UserContext } from "../UserProvider"
 import { ContractFeedback } from "../../components/Feedback/ContractFeedback"
 import { useContractOperation } from "../../hooks/useContractOperation"
-import { ListingOperation, TListingOperationParams } from "../../services/contract-operations/Listing"
 import { IconTezos } from "../../components/Icons/IconTezos"
 import { OfferOperation } from "../../services/contract-operations/Offer"
 
@@ -19,15 +17,19 @@ export function OfferCreate({ objkt }: Props) {
   const [opened, setOpened] = useState<boolean>(false)
   const [price, setPrice] = useState<string>("")
 
-  const { state, loading: contractLoading, error: contractError, success, call, clear } = 
-    useContractOperation(OfferOperation)
+  const {
+    state,
+    loading: contractLoading,
+    error: contractError,
+    success,
+    call,
+  } = useContractOperation(OfferOperation)
 
   const callContract = () => {
     const mutez = Math.floor(parseFloat(price) * 1000000)
     if (isNaN(mutez)) {
       alert("Invalid price")
-    }
-    else {
+    } else {
       call({
         token: objkt,
         price: mutez,
@@ -48,11 +50,11 @@ export function OfferCreate({ objkt }: Props) {
       {opened ? (
         <div className={cs(style.inputs)}>
           <InputTextUnit
-            unit={<IconTezos size="regular"/>}
+            unit={<IconTezos size="regular" />}
             type="text"
             sizeX="small"
             value={price}
-            onChange={evt => setPrice(evt.target.value)}
+            onChange={(evt) => setPrice(evt.target.value)}
             min={0}
             step={0.0000001}
           />
@@ -65,7 +67,7 @@ export function OfferCreate({ objkt }: Props) {
             make offer
           </Button>
         </div>
-      ):(
+      ) : (
         <Button
           color={opened ? "primary" : "secondary"}
           onClick={() => setOpened(!opened)}

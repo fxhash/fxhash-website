@@ -5,7 +5,6 @@ import cs from "classnames"
 import { Spacing } from "../../components/Layout/Spacing"
 import { SectionHeader } from "../../components/Layout/SectionHeader"
 import ClientOnly from "../../components/Utils/ClientOnly"
-import { TitleHyphen } from "../../components/Layout/TitleHyphen"
 import { ExploreTabs } from "../../containers/Explore/ExploreTabs"
 import { LiveFeed } from "../../containers/Explore/LiveFeed"
 import { SectionTitle } from "../../components/Layout/SectionTitle"
@@ -33,18 +32,18 @@ const ExploreRevealFeed: NextPage = () => {
           content="https://www.fxhash.xyz/images/og/og1.jpg"
         />
       </Head>
-      <Spacing size="3x-large" />
+      <Spacing size="3x-large" sm="x-large" />
 
       <section>
-        <SectionHeader layout="center">
+        <SectionHeader layout="center" sm="left">
           <SectionTitle>reveal feed</SectionTitle>
         </SectionHeader>
 
-        <Spacing size="3x-large" />
+        <Spacing size="3x-large" sm="2x-large" />
 
         <ExploreTabs active={3} />
 
-        <Spacing size="x-large" />
+        <Spacing size="x-large" sm="none" />
 
         <main className={cs(layout["padding-big"])}>
           <ClientOnly>

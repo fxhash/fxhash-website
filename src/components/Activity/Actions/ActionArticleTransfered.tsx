@@ -14,7 +14,7 @@ export const ActionArticleEditionsTransfered: TActionComp = ({
       user={action.issuer!}
       size="small"
     />
-    <span>
+    <>
       transfered <strong>{action.numericValue}</strong> editions{" "}
       {verbose && (
         <>
@@ -22,7 +22,7 @@ export const ActionArticleEditionsTransfered: TActionComp = ({
         </>
       )}{" "}
       to
-    </span>
+    </>
     <UserBadge
       className={cs(style.user)}
       hasLink={true}

@@ -1,3 +1,4 @@
+import style from "./ArticleListingActions.module.scss"
 import { FunctionComponent, useContext } from "react"
 import { Button } from "../Button"
 import { Listing } from "../../types/entities/Listing"
@@ -36,6 +37,7 @@ export function ArticleListingActions({
         size="very-small"
         state={loading ? "loading" : "default"}
         disabled={disabled}
+        className={style.button}
         onClick={() => onCancelListing(listing)}
       >
         <DisplayTezos
@@ -52,6 +54,7 @@ export function ArticleListingActions({
         size="very-small"
         state={loading ? "loading" : "default"}
         disabled={disabled}
+        className={style.button}
         onClick={() => onAcceptListing(listing)}
       >
         <DisplayTezos

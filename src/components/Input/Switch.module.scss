@@ -1,8 +1,8 @@
 .root {
   position: relative;
   display: inline-block;
-  width: 60px;
-  height: 34px;
+  width: 46px;
+  height: 24px;
 
   input {
     opacity: 0;
@@ -17,36 +17,34 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: var(--color-white);
+    background-color: var(--color-gray-vvlight);
     transition: .1s;
     border-radius: 100px;
-    border: 3px solid var(--color-black);
   }
-  
+
   .slider:before {
-    border: 3px solid var(--color-border);
     box-sizing: border-box;
     position: absolute;
     content: "";
-    height: 26px;
-    width: 26px;
-    left: 2px;
+    height: 22px;
+    width: 22px;
+    left: 1.33px;
     bottom: 1px;
-    background-color: white;
+    background-color: var(--color-black);
     transition: .1s;
     border-radius: 100px;
     box-shadow: 0px 3px 15px -5px rgba(0, 0, 0, 0.5);
   }
 
   input:checked + .slider {
-    background-color: var(--color-black);
   }
-  
+
   input:focus + .slider {
     box-shadow: 0 0 1px #2196F3;
   }
-  
+
   input:checked + .slider:before {
-    transform: translateX(25px);
+    background-color: var(--color-primary);
+    transform: translateX(22px);
   }
 }

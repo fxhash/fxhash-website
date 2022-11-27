@@ -1,9 +1,17 @@
 import style from "./Modal.module.scss"
 import cs from "classnames"
 import { Cover } from "./Cover"
-import { PropsWithChildren, useCallback, useEffect } from "react"
+import {
+  PropsWithChildren,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+} from "react"
 import effects from "../../styles/Effects.module.scss"
 import ReactDOM from "react-dom"
+import { ModalContext } from "../../context/Modal"
+import { nanoid } from "nanoid"
 
 export interface Props {
   title: string
@@ -18,16 +26,19 @@ export function Modal({
   className,
   children,
 }: PropsWithChildren<Props>) {
+  const refModalId = useRef(`modal-${nanoid(11)}`)
+  const { openModalId, closeModalId } = useContext(ModalContext)
   const handleClose = useCallback(() => {
-    document.body.classList.remove("modal-open")
+    closeModalId(refModalId.current)
     onClose()
-  }, [onClose])
+  }, [closeModalId, onClose])
   useEffect(() => {
-    document.body.classList.add("modal-open")
+    const modalId = refModalId.current
+    openModalId(modalId)
     return () => {
-      document.body.classList.remove("modal-open")
+      closeModalId(modalId)
     }
-  }, [])
+  }, [closeModalId, openModalId])
   return ReactDOM.createPortal(
     <>
       <Cover onClick={handleClose} index={index} />

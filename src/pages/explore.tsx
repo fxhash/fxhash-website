@@ -31,14 +31,14 @@ const Explore: NextPage = () => {
         />
       </Head>
 
-      <Spacing size="3x-large" />
+      <Spacing size="3x-large" sm="x-large" />
 
       <section>
-        <SectionHeader layout="center">
+        <SectionHeader layout="center" sm="left">
           <SectionTitle>explore generators</SectionTitle>
         </SectionHeader>
 
-        <Spacing size="3x-large" />
+        <Spacing size="3x-large" sm="2x-large" />
 
         <ExploreTabs active={0} />
 

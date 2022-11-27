@@ -1,9 +1,9 @@
-import React, { memo } from 'react';
-import { NFTArticle } from "../../types/entities/Article";
+import React, { memo } from "react"
+import { NFTArticle } from "../../types/entities/Article"
 import style from "./ArticleActions.module.scss"
-import { useQuery } from "@apollo/client";
-import { Qu_articleActionsById } from "../../queries/articles";
-import { TableArticleListings } from "../../components/Tables/TableArticleListings";
+import { useQuery } from "@apollo/client"
+import { Qu_articleActionsById } from "../../queries/articles"
+import { TableArticleListings } from "../../components/Tables/TableArticleListings"
 
 interface ArticleActionsProps {
   article: NFTArticle
@@ -12,12 +12,12 @@ interface ArticleActionsProps {
 const _ArticleActions = ({ article }: ArticleActionsProps) => {
   const { data, loading } = useQuery(Qu_articleActionsById, {
     variables: {
-      id: article.id
-    }
+      id: article.id,
+    },
   })
   return (
     <div className={style.container}>
-      {data?.article &&
+      {data?.article && (
         <div className={style.center}>
           <TableArticleListings
             article={data.article}
@@ -26,9 +26,9 @@ const _ArticleActions = ({ article }: ArticleActionsProps) => {
             loading={loading}
           />
         </div>
-      }
+      )}
     </div>
-  );
-};
+  )
+}
 
-export const ArticleActions = memo(_ArticleActions);
+export const ArticleActions = memo(_ArticleActions)

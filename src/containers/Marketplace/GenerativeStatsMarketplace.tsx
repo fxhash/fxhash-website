@@ -1,18 +1,25 @@
 import style from "./GenerativeStatsMarketplace.module.scss"
 import cs from "classnames"
 import colors from "../../styles/Colors.module.css"
-import { GenerativeToken, GenerativeTokenMarketStats, GenerativeTokenMarketStatsHistory } from "../../types/entities/GenerativeToken"
+import {
+  GenerativeToken,
+  GenerativeTokenMarketStats,
+  GenerativeTokenMarketStatsHistory,
+} from "../../types/entities/GenerativeToken"
 import { useQuery } from "@apollo/client"
 import { Qu_genTokenMarketHistory } from "../../queries/generative-token"
 import { useMemo, useState } from "react"
 import { subDays } from "date-fns"
 import { useClientAsyncEffect } from "../../utils/hookts"
 import { MarketChart } from "../../components/Charts/MarketChart"
-import { aggregateBatchesGeneratorMarketStatHistory, aggregateGeneratorMarketStatHistory, cleanGeneratorMarketStatHistory } from "../../utils/stats"
+import {
+  aggregateBatchesGeneratorMarketStatHistory,
+  aggregateGeneratorMarketStatHistory,
+  cleanGeneratorMarketStatHistory,
+} from "../../utils/stats"
 import { cloneDeep } from "@apollo/client/utilities"
 import { IOptions, Select } from "../../components/Input/Select"
 import { Loader } from "../../components/Utils/Loader"
-
 
 const MetricOptions: IOptions[] = [
   {
@@ -65,10 +72,13 @@ const PeriodOptions: IOptions[] = [
   {
     label: "All time",
     value: 100000,
-  }
+  },
 ]
 
-function getStatFromMetric(stat: GenerativeTokenMarketStatsHistory, metric: string): number {
+function getStatFromMetric(
+  stat: GenerativeTokenMarketStatsHistory,
+  metric: string
+): number {
   switch (metric) {
     case "secVolumeTz":
     case "floor":
@@ -87,9 +97,7 @@ function getStatFromMetric(stat: GenerativeTokenMarketStatsHistory, metric: stri
 interface Props {
   token: GenerativeToken
 }
-export function GenerativeStatsMarketplace({
-  token,
-}: Props) {
+export function GenerativeStatsMarketplace({ token }: Props) {
   const [period, setPeriod] = useState<number>(30)
   const [metric, setMetric] = useState<string>("secVolumeTz")
 
@@ -105,16 +113,18 @@ export function GenerativeStatsMarketplace({
       id: token.id,
       filters: {
         from,
-        to
-      }
-    }
+        to,
+      },
+    },
   })
 
   // format the data
   const formatted = useMemo(() => {
     if (!data || !data.generativeToken.marketStatsHistory) return null
-    const history: GenerativeTokenMarketStatsHistory[] = cleanGeneratorMarketStatHistory(cloneDeep(data.generativeToken.marketStatsHistory))
-
+    const history: GenerativeTokenMarketStatsHistory[] =
+      cleanGeneratorMarketStatHistory(
+        cloneDeep(data.generativeToken.marketStatsHistory)
+      )
 
     const batched = aggregateBatchesGeneratorMarketStatHistory(history, 20)
     // const batched24 = aggregateBatchesGeneratorMarketStatHistory(history, 24)
@@ -131,6 +141,7 @@ export function GenerativeStatsMarketplace({
         <div className={cs(style.input_wrapper)}>
           <span>Period:</span>
           <Select
+            classNameRoot={style.select_root}
             className={cs(style.select)}
             options={PeriodOptions}
             value={period}
@@ -140,6 +151,7 @@ export function GenerativeStatsMarketplace({
         <div className={cs(style.input_wrapper)}>
           <span>Metric:</span>
           <Select
+            classNameRoot={style.select_root}
             className={cs(style.select)}
             options={MetricOptions}
             value={metric}
@@ -149,15 +161,8 @@ export function GenerativeStatsMarketplace({
       </div>
 
       <div className={cs(style.chart_container, { [style.loading]: loading })}>
-        <MarketChart
-          data={formatted}
-        />
-        {loading && (
-          <Loader
-            size="small"
-            className={cs(style.loader)}
-          />
-        )}
+        <MarketChart data={formatted} />
+        {loading && <Loader size="small" className={cs(style.loader)} />}
       </div>
     </div>
   )

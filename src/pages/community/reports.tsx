@@ -4,20 +4,17 @@ import style from "./Reports.module.scss"
 import { NextPage } from "next"
 import dynamic from "next/dynamic"
 import Link from "next/link"
-import colors from "../../styles/Colors.module.css"
 import { SectionHeader } from "../../components/Layout/SectionHeader"
 import { TitleHyphen } from "../../components/Layout/TitleHyphen"
 import { Spacing } from "../../components/Layout/Spacing"
 import Head from "next/head"
-import gql from "graphql-tag"
 import { createApolloClient } from "../../services/ApolloClient"
 import {
   GenerativeToken,
   GenTokFlag,
 } from "../../types/entities/GenerativeToken"
 import { GenerativeTokenCard } from "../../components/Card/GenerativeTokenCard"
-import { useState, useMemo } from "react"
-import { useClientEffect } from "../../utils/hookts"
+import { useMemo } from "react"
 import ClientOnly from "../../components/Utils/ClientOnly"
 import { UserGuard } from "../../components/Guards/UserGuard"
 import { ModeratorActions } from "../../containers/Community/ModeratorActions"
@@ -69,14 +66,14 @@ const ReportsPage: NextPage<Props> = ({ tokens }) => {
         />
       </Head>
 
-      <Spacing size="6x-large" sm="3x-large" />
+      <Spacing size="6x-large" sm="x-large" />
 
       <section>
         <SectionHeader>
           <TitleHyphen>community reports</TitleHyphen>
         </SectionHeader>
 
-        <Spacing size="3x-large" />
+        <Spacing size="3x-large" sm="regular" />
 
         <main className={cs(layout["padding-big"])}>
           <p>
@@ -97,10 +94,10 @@ const ReportsPage: NextPage<Props> = ({ tokens }) => {
             application until a statement is decided.
           </p>
 
-          <Spacing size="3x-large" />
+          <Spacing size="3x-large" sm="x-large" />
 
           <h4>Generative Tokens awaiting for moderation</h4>
-          <Spacing size="large" />
+          <Spacing size="large" sm="x-large" />
 
           {awaitingMod.length > 0 ? (
             <div className={cs(style.reports)}>
@@ -110,7 +107,7 @@ const ReportsPage: NextPage<Props> = ({ tokens }) => {
                     token={token}
                     className={cs(style.token)}
                   />
-                  <div>
+                  <div className={style.total_reports}>
                     <strong>Total reports: {token.reports?.length || 0}</strong>
                     {Chart && token.reports && token.reports.length > 0 && (
                       <Chart
@@ -131,18 +128,20 @@ const ReportsPage: NextPage<Props> = ({ tokens }) => {
             <em>No tokens are awaiting for moderation.</em>
           )}
 
-          <Spacing size="6x-large" />
+          <Spacing size="6x-large" sm="3x-large" />
 
           <h4>Tokens rejected by the moderators</h4>
-          <Spacing size="large" />
+          <Spacing size="large" sm="x-large" />
 
-          <CardsContainer>
+          <CardsContainer
+            emptyDivs={malicious.length > 8 ? 0 : 8 - malicious.length}
+          >
             {malicious.map((tok) => (
               <GenerativeTokenCard key={tok.id} token={tok} />
             ))}
           </CardsContainer>
 
-          <Spacing size="6x-large" />
+          <Spacing size="6x-large" sm="2x-large" />
         </main>
       </section>
     </>

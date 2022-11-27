@@ -16,7 +16,6 @@ import {
   Carousel,
   CarouselOptions,
 } from "../../../components/Carousel/Carousel"
-
 const sortOptions: IOptions[] = [
   {
     label: "24 hours",

@@ -1,3 +1,4 @@
+@import "../../styles/Variables";
 .input {
   border: 3px solid var(--color-border-input);
   background-color: var(--color-white);
@@ -48,4 +49,17 @@
 .texarea {
   resize: vertical;
   min-height: 150px;
+}
+
+@media (max-width: $breakpoint-sm) {
+  .textunit {
+
+    span {
+      width: auto;
+    }
+    &.size-regular {
+      width: auto;
+    }
+  }
+
 }

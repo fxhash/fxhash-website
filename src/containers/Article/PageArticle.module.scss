@@ -284,24 +284,28 @@
     }
 
     @media (max-width: $breakpoint-sm) {
+      p {
+        line-height: 140%;
+      }
+
       h6 {
-        font-size: 1rem;
+        font-size: 1.16rem;
       }
 
       h5 {
-        font-size: 1.125rem;
+        font-size: 1.32rem;
       }
 
       h4 {
-        font-size: 1.25rem;
+        font-size: 1.48rem;
       }
 
       h3 {
-        font-size: 1.5rem;
+        font-size: 1.64rem;
       }
 
       h2 {
-        font-size: 1.75rem;
+        font-size: 1.80rem;
       }
 
       h1 {
@@ -338,13 +342,58 @@
 @media (max-width: $breakpoint-sm) {
   .header {
     text-align: left;
+    .title {
+      font-size: 2.1875rem;
+      margin-top: $spacing-3x-large;
+    }
+    .description {
+      margin-top: $spacing-3x-large;
+      margin-bottom: $spacing;
+    }
+    .thumbnail {
+      margin-top: $spacing;
+    }
   }
-
-  .title {
-    font-size: var(--font-size-h4);
+  .infos {
+    margin-top: $spacing-x-large;
   }
-
   .related-articles_list {
     grid-template-columns: repeat(1, 1fr);
+  }
+  .tabs {
+    margin: 0 20px;
+  }
+  .body {
+    overflow-wrap: break-word;
+    word-break: break-word;
+
+    &>* {
+      margin-top: 0.88889em;
+      margin-bottom: 0;
+    }
+
+    :global {
+
+      pre {
+        margin-top: 2.5em !important;
+        margin-bottom: 0 !important;
+      }
+
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6,
+      figure {
+        margin-top: 1em !important;
+      }
+
+      .embed_media,
+      .tezos_storage {
+        margin-top: 2em;
+        margin-bottom: 2em;
+      }
+    }
   }
 }

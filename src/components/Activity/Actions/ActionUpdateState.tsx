@@ -15,8 +15,8 @@ export const ActionUpdateState: TActionComp = ({ action }) => {
         user={action.issuer!}
         size="small"
       />
-      <span>updated state:</span>
-      <span>
+      <>updated state:</>
+      <>
         {changes.enabled !== undefined && (
           <span>
             <strong
@@ -35,7 +35,7 @@ export const ActionUpdateState: TActionComp = ({ action }) => {
             royalties
           </span>
         )}
-      </span>
+      </>
     </>
   )
 }

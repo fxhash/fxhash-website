@@ -3,6 +3,7 @@
   flex-direction: row;
   align-items: center;
   gap: 10px;
+  flex-wrap: wrap;
 
   :global {
     .react-datepicker {
@@ -26,12 +27,12 @@
         font-size: inherit;
         color: inherit;
         height: 50px;
-    
+
         &:focus {
           border-color: var(--color-secondary);
         }
       }
-  
+
       &-popper {
         padding-top: 0 !important;
         padding-bottom: 0 !important;
@@ -45,7 +46,7 @@
           }
         }
       }
-  
+
       &__triangle {
         display: none;
       }

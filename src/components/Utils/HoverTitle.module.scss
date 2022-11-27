@@ -5,16 +5,18 @@
     background: black;
     color: white;
     position: absolute;
-    width: 300px;
     text-align: center;
     font-size: var(--font-size-small);
-    padding: 4px;
+    padding: 4px 8px;
     left: 50%;
     bottom: 50%;
     transform: translateX(-50%);
     pointer-events: none;
     opacity: 0;
     transition: all 0.15s ease-out;
+    word-break: break-word;
+    width: max-content;
+    max-width: 300px;
   }
 
   &.hover_enabled:hover {
