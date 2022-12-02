@@ -12,7 +12,7 @@ import { Cover } from "../Utils/Cover"
 import { useClientAsyncEffect } from "../../utils/hookts"
 import { InputText } from "./InputText"
 import type FuzzySearchType from "fuzzy-search"
-
+import useClickOutside from "hooks/useClickOutside"
 export interface IOptions {
   label: string
   value: any
@@ -45,6 +45,7 @@ export function Select({
   ...props
 }: Props) {
   const selectRef = useRef<HTMLDivElement>(null)
+  const buttonRef = useRef<HTMLDivElement>(null)
   const [searchString, setSearchString] = useState<string>("")
   const searcherRef = useRef<FuzzySearchType<any> | null>(null)
   const [searchResults, setSearchResults] = useState<IOptions[] | null>(null)
@@ -115,6 +116,9 @@ export function Select({
   // what are the options displayed ?
   const displayOptions = searchResults || options
 
+
+  useClickOutside(selectRef, () => setOpened(false), false)
+
   return (
     <>
       <div
@@ -122,6 +126,7 @@ export function Select({
         ref={selectRef}
       >
         <button
+          ref={buttonRef}
           className={cs(style.select, className, { [style.opened]: opened })}
           onClick={toggleOpened}
           type="button"
@@ -176,9 +181,6 @@ export function Select({
           </div>
         )}
       </div>
-      {opened && (
-        <Cover onClick={() => setOpened(false)} opacity={0} index={10} />
-      )}
     </>
   )
 }
