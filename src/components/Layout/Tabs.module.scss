@@ -6,10 +6,16 @@
     display: flex;
     flex-direction: row;
   }
-
+  
   &.layout-fixed-size {
     nav {
       justify-content: center;
+    }
+  }
+
+  &.layout-fixed-size-narrow {
+    nav {
+      justify-content: flex-start;
     }
   }
 
@@ -86,6 +92,12 @@
   white-space: nowrap;
   padding-left: 80px;
   padding-right: 80px;
+}
+
+.tab-fixed-size-narrow {
+  white-space: nowrap;
+  margin-right: 20px;
+  padding-bottom: 32px;
 }
 
 .tab-full-width {
