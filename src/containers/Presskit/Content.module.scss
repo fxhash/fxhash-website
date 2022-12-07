@@ -1,0 +1,82 @@
+@import "../../styles/Variables";
+
+@media (max-width: $breakpoint-sm) {
+  .tabs {
+    margin: 0 20px;
+  }
+}
+.txtRoot {
+  @media (min-width: $breakpoint-md) {
+    max-width: 880px;
+  }
+  mark {
+    background: transparent;
+    color: var(--color-secondary);
+    font-weight: bold;
+  }
+}
+
+.downloadBox {
+  flex: 1;
+  flex-direction: column;
+  img {
+    width: 100%;
+    height: 300px;
+    background: red;
+  }
+  .buttons {
+    display: flex;
+    margin-top: $spacing;
+    gap: $spacing-x-large;
+  }
+  p {
+    margin-bottom: 0;
+  }
+}
+
+.rootLogo {
+  h2 {
+    font-size: var(--font-size-h3);
+    margin-bottom: $spacing-x-large;
+  }
+  article {
+    section {
+      margin-bottom: $spacing-x-large;
+      background: var(--color-gray-vvlight);
+      padding: $spacing-x-large $spacing-x-large $spacing $spacing-x-large;
+      display: flex;
+      gap: $spacing-x-large;
+      &.nobg {
+        background: transparent;
+        padding: 0;
+      }
+    }
+  }
+}
+
+.rootMedia {
+  display: flex;
+  justify-content: space-between;
+  gap: $spacing-x-large;
+  h2 {
+    font-size: var(--font-size-h3);
+    margin-bottom: $spacing-x-large;
+  }
+  section {
+    flex: 1;
+  }
+  ul {
+    margin: 0;
+    padding: 0;
+    li {
+      cursor: pointer;
+      margin-bottom: $spacing;
+      list-style: none;
+      a {
+        i {
+          margin-left: $spacing-small;
+        }
+      }
+    }
+  }
+}
