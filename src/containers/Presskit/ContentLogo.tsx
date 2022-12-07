@@ -1,7 +1,11 @@
 import { Button } from "components/Button"
 import classes from "./Content.module.scss"
 
-function DownloadBox(props) {
+interface DownloadBoxProps {
+  caption: string
+}
+
+function DownloadBox(props: DownloadBoxProps) {
   const { caption } = props
   return (
     <div className={classes.downloadBox}>
