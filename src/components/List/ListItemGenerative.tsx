@@ -7,7 +7,6 @@ interface Props {
   token: GenerativeToken
 }
 export function ListItemGenerative({ token }: Props) {
-  console.log(token)
   return (
     <div className={cs(style.root)}>
       <div className={style.icon}>
