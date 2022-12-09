@@ -11,6 +11,8 @@ import { GenerativeFlagBanner } from "../../containers/Generative/FlagBanner"
 import { ObjktTabs } from "../../containers/Objkt/ObjktTabs"
 import { GenerativeDisplayIteration } from "../../containers/Generative/Display/GenerativeDisplayIteration"
 import { getImageApiUrl, OG_IMAGE_SIZE } from "../../components/Image"
+import { MetaHead } from "components/Utils/MetaHead"
+import { getUserName } from "utils/user"
 
 interface Props {
   objkt: Objkt
@@ -24,41 +26,11 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
 
   return (
     <>
-      <Head>
-        <title>fxhash — {objkt.name}</title>
-        <meta
-          key="og:title"
-          property="og:title"
-          content={`${objkt.name} — fxhash`}
-        />
-        <meta
-          key="description"
-          name="description"
-          content={truncateEnd(objkt.metadata?.description || "", 200, "")}
-        />
-        <meta
-          key="og:description"
-          property="og:description"
-          content={truncateEnd(objkt.metadata?.description || "", 200, "")}
-        />
-        <meta key="og:type" property="og:type" content="website" />
-        <meta
-          key="og:image"
-          property="og:image"
-          content={displayUrl || "https://www.fxhash.xyz/images/og/og1.jpg"}
-        />
-        <meta name="twitter:site" content="@fx_hash_" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={`${objkt.name} — fxhash`} />
-        <meta
-          name="twitter:description"
-          content={truncateEnd(objkt.metadata?.description || "", 200, "")}
-        />
-        <meta
-          name="twitter:image"
-          content={displayUrl || "https://www.fxhash.xyz/images/og/og1.jpg"}
-        />
-      </Head>
+      <MetaHead
+        title={`${objkt.name} — ${getUserName(objkt.issuer.author)}`}
+        description={truncateEnd(objkt.metadata?.description || "", 200, "")}
+        image={displayUrl}
+      />
 
       <GenerativeFlagBanner token={objkt.issuer} />
 

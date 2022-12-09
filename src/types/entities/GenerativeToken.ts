@@ -9,6 +9,7 @@ import { Split } from "./Split"
 import { User } from "./User"
 import { ISettingsContext } from "../../context/Theme"
 import { MediaImage } from "./MediaImage"
+import { Redeemable } from "./Redeemable"
 
 export enum GenTokFlag {
   NONE = "NONE",
@@ -124,6 +125,7 @@ export interface GenerativeToken {
   entireCollection?: Objkt[]
   articleMentions?: ArticleGenerativeTokenMention[]
   captureMedia?: MediaImage
+  redeemables: Redeemable[]
 }
 
 export interface GenerativeTokenWithCollection extends GenerativeToken {

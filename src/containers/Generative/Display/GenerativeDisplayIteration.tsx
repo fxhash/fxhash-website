@@ -1,6 +1,7 @@
 import React, { memo, useCallback, useMemo, useState } from "react"
 import cs from "classnames"
 import style from "./GenerativeDisplayIteration.module.scss"
+import colors from "styles/Colors.module.css"
 import layout from "../../../styles/Layout.module.scss"
 import { Spacing } from "../../../components/Layout/Spacing"
 import { EntityBadge } from "../../../components/User/EntityBadge"
@@ -31,6 +32,7 @@ import { Clamp } from "../../../components/Clamp/Clamp"
 import { truncateMiddle } from "../../../utils/strings"
 import { HoverTitle } from "../../../components/Utils/HoverTitle"
 import { Icon } from "../../../components/Icons/Icon"
+import { gentkRedeemables } from "utils/gentk"
 
 interface GenerativeDisplayIterationProps {
   objkt: Objkt
@@ -56,6 +58,9 @@ const _GenerativeDisplayIteration = ({
     }
   }, [objkt])
   const gentkUrl = useMemo(() => gentkLiveUrl(objkt), [objkt])
+
+  // get a list of redeemables available for this Gentk
+  const redeemables = useMemo(() => gentkRedeemables(objkt), [objkt])
 
   return (
     <>
@@ -101,8 +106,7 @@ const _GenerativeDisplayIteration = ({
             {objkt.activeListing && (
               <ListingAccept listing={objkt.activeListing} objkt={objkt} />
             )}
-            {/* @ts-ignore */}
-            <ClientOnlyEmpty style={{ width: "100%" }}>
+            <ClientOnlyEmpty>
               <UserGuard forceRedirect={false}>
                 <MarketplaceActions objkt={objkt} />
               </UserGuard>
@@ -143,6 +147,13 @@ const _GenerativeDisplayIteration = ({
               Minted on{" "}
               {format(new Date(objkt.createdAt), "MMMM d, yyyy' at 'HH:mm")}
             </span>
+            {redeemables && redeemables.length > 0 && (
+              <Link href={`/gentk/${objkt.id}/redeem`}>
+                <a className={cs(colors.success, text.small)}>
+                  <Icon icon="sparkles" /> Redeemable
+                </a>
+              </Link>
+            )}
             {objkt.issuer.labels && (
               <Labels className={style.labels} labels={objkt.issuer.labels} />
             )}

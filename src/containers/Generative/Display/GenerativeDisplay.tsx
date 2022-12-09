@@ -28,6 +28,7 @@ import { ListReserves } from "../../../components/List/ListReserves"
 import { GenTokArticleMentions } from "./GenTokArticleMentions"
 import { Clamp } from "../../../components/Clamp/Clamp"
 import { useCallback, useState } from "react"
+import { Icon } from "components/Icons/Icon"
 
 /**
  * This is the Core component resposible for the display logic of a Generative
@@ -117,6 +118,13 @@ export function GenerativeDisplay({ token, offlineMode = false }: Props) {
               Published on{" "}
               {format(new Date(token.createdAt), "MMMM d, yyyy' at 'HH:mm")}
             </span>
+            {token.redeemables && token.redeemables.length > 0 && (
+              <Link href={`/generative/${token.id}/redeem`}>
+                <a className={cs(colors.success, text.small)}>
+                  <Icon icon="sparkles" /> Redeemable
+                </a>
+              </Link>
+            )}
             {token.labels && (
               <Labels className={style.labels} labels={token.labels!} />
             )}

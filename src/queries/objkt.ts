@@ -1,11 +1,15 @@
 import { gql } from "@apollo/client"
-import { Frag_GenAuthor } from "./fragments/generative-token"
+import {
+  Frag_GenAuthor,
+  Frag_GenTokenRedeemables,
+} from "./fragments/generative-token"
 import { Frag_MediaImage } from "./fragments/media"
 import { Frag_UserBadge } from "./fragments/user"
 export const Qu_objkt = gql`
   ${Frag_GenAuthor}
   ${Frag_MediaImage}
   ${Frag_UserBadge}
+  ${Frag_GenTokenRedeemables}
   query Gentk($id: Float, $slug: String) {
     objkt(id: $id, slug: $slug) {
       id
@@ -35,6 +39,7 @@ export const Qu_objkt = gql`
           floor
         }
         ...Author
+        ...Redeemables
       }
       metadata
       metadataUri

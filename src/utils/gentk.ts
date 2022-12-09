@@ -1,14 +1,11 @@
+import { Redeemable } from "types/entities/Redeemable"
 import { FxhashContracts } from "../types/Contracts"
 import { DeepPartial } from "../types/DeepPartial"
-import { GenerativeToken } from "../types/entities/GenerativeToken"
 import { Objkt } from "../types/entities/Objkt"
-import { User } from "../types/entities/User"
-import { ObjktMetadata } from "../types/Metadata"
 
 export function getGentkUrl(gentk: Objkt): string {
   return gentk.slug ? `/gentk/slug/${gentk.slug}` : `/gentk/${gentk.id}`
 }
-
 
 export const fakeGentk: DeepPartial<Objkt> = {
   id: 0,
@@ -16,7 +13,7 @@ export const fakeGentk: DeepPartial<Objkt> = {
   owner: {
     id: "tz1fepn7jZsCYBqCDhpM63hzh9g2Ytqk4Tpv",
     name: "fxhash",
-    avatarUri: "ipfs://QmURUAU4YPa6Wwco3JSVrcN7WfCrFBZH7hY51BLrc87WjM"
+    avatarUri: "ipfs://QmURUAU4YPa6Wwco3JSVrcN7WfCrFBZH7hY51BLrc87WjM",
   },
   metadata: {
     name: "[WAITING TO BE SIGNED]",
@@ -25,7 +22,7 @@ export const fakeGentk: DeepPartial<Objkt> = {
     displayUri: "ipfs://QmYwSwa5hP4346GqD7hAjutwJSmeYTdiLQ7Wec2C7Cez1D",
     thumbnailUri: "ipfs://QmbvEAn7FLMeYBDroYwBP8qWc3d3VVWbk19tTB83LCMB5S",
     symbol: "GENTK",
-    decimals: 0
+    decimals: 0,
   },
   iteration: 37,
   activeListing: null,
@@ -33,18 +30,27 @@ export const fakeGentk: DeepPartial<Objkt> = {
     author: {
       id: "tz1fepn7jZsCYBqCDhpM63hzh9g2Ytqk4Tpv",
       name: "fxhash",
-      avatarUri: "ipfs://QmURUAU4YPa6Wwco3JSVrcN7WfCrFBZH7hY51BLrc87WjM"
+      avatarUri: "ipfs://QmURUAU4YPa6Wwco3JSVrcN7WfCrFBZH7hY51BLrc87WjM",
     },
   },
   rarity: null,
-  duplicate: false
+  duplicate: false,
 }
 
 export function getGentkFA2Contract(gentk: Objkt): string {
   if (gentk.version === 0) {
     return FxhashContracts.GENTK_V1
-  }
-  else {
+  } else {
     return FxhashContracts.GENTK_V2
   }
+}
+
+/**
+ * Given a gentk, outputs a list of Redeemables for which the Gentk can be
+ * redeemed, based on the Generative Token redeemables state and the Gentk
+ * Redemptions
+ */
+export function gentkRedeemables(gentk: Objkt): Redeemable[] {
+  // todo: check the redemptions to see if still redeemable
+  return gentk.issuer.redeemables
 }

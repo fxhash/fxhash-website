@@ -116,3 +116,13 @@ export const Frag_GenTokenInfo = gql`
     ...Pricing
   }
 `
+
+export const Frag_GenTokenRedeemables = gql`
+  fragment Redeemables on GenerativeToken {
+    redeemables {
+      address
+      baseAmount
+      maxConsumptionsPerToken
+    }
+  }
+`

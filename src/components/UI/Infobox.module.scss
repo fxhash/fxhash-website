@@ -1,0 +1,13 @@
+.root {
+  display: flex;
+  flex-direction: row;
+  background-color: var(--color-gray-vvvlight);
+  padding: 10px;
+  gap: 10px;
+  font-size: var(--font-size-small);
+  border: 1px solid var(--color-gray-vvlight);
+
+  .icon {
+    font-size: 28px;
+  }
+}
