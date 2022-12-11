@@ -1,27 +1,25 @@
-import { BeaconWallet } from '@taquito/beacon-wallet'
-import { ContractAbstraction, MichelsonMap, OpKind, TezosToolkit, Wallet } from '@taquito/taquito'
+import { BeaconWallet } from "@taquito/beacon-wallet"
+import { ContractAbstraction, TezosToolkit, Wallet } from "@taquito/taquito"
+import { char2Bytes } from "@taquito/utils"
 import {
   BurnSupplyCallData,
-  CancelOfferCall,
-  CollectCall,
-  MintCall,
   MintGenerativeCallData,
   ModerateCall,
   ModerateUserStateCall,
-  PlaceOfferCall,
   ProfileUpdateCallData,
   ReportCall,
-  UpdateGenerativeCallData
-} from '../types/ContractCalls'
+  UpdateGenerativeCallData,
+} from "../types/ContractCalls"
 import {
   ContractInteractionMethod,
   ContractOperationCallback,
   ContractOperationStatus,
   FxhashContracts,
-} from '../types/Contracts'
-import { stringToByteString } from '../utils/convert'
-import { isOperationApplied } from './Blockchain'
-import { ContractOperation, TContractOperation } from './contract-operations/ContractOperation'
+} from "../types/Contracts"
+import { stringToByteString } from "../utils/convert"
+import { isOperationApplied } from "./Blockchain"
+import { TContractOperation } from "./contract-operations/ContractOperation"
+import { RequestSignPayloadInput, SigningType } from "@airgap/beacon-sdk"
 
 // the different operations which can be performed by the wallet
 export enum EWalletOperations {
@@ -47,16 +45,16 @@ export enum EWalletOperations {
  * It is responsible for handlinf interactions with the contracts as well
  */
 export class WalletManager {
-  beaconWallet: BeaconWallet|null = null
+  beaconWallet: BeaconWallet | null = null
   tezosToolkit: TezosToolkit
-  contracts: Record<string, ContractAbstraction<Wallet>|null> = {}
+  contracts: Record<string, ContractAbstraction<Wallet> | null> = {}
   rpcNodes: string[]
 
   constructor() {
     // !todo: REMOVE THE SHUFFLE once tests are done
     // for now 1/2 of the traffic is going to go through the fxhash RPC endpoint
     // to test if it works properly with some pretty high traffic
-    let RPCS = [...(process.env.NEXT_PUBLIC_RPC_NODES!).split(',')]
+    let RPCS = [...process.env.NEXT_PUBLIC_RPC_NODES!.split(",")]
     // 1/2 chances to shuffle the array, and so it's about 1/2 to always have the
     // fxhash RPC first
     // if (Math.random() < 1) {
@@ -70,7 +68,7 @@ export class WalletManager {
   instanciateBeaconWallet() {
     this.beaconWallet = new BeaconWallet({
       name: "fxhash",
-      iconUrl: 'https://tezostaquito.io/img/favicon.png',
+      iconUrl: "https://tezostaquito.io/img/favicon.png",
       // @ts-ignore
       preferredNetwork: process.env.NEXT_PUBLIC_TZ_NET,
     })
@@ -87,18 +85,16 @@ export class WalletManager {
    * If a beacon session can be found in the storage, then we can assume that the user is still connected
    * to the platform and thus register its wallet to the tezos toolkit
    */
-  async connectFromStorage(): Promise<string|false> {
+  async connectFromStorage(): Promise<string | false> {
     try {
       const pkh = await this.getBeaconWallet().getPKH()
       if (pkh) {
         this.tezosToolkit.setWalletProvider(this.getBeaconWallet())
         return pkh
-      }
-      else {
+      } else {
         return false
       }
-    }
-    catch (err) {
+    } catch (err) {
       return false
     }
   }
@@ -110,21 +106,20 @@ export class WalletManager {
     this.contracts = {}
   }
 
-  async connect(): Promise<string|false> {
+  async connect(): Promise<string | false> {
     try {
       await this.getBeaconWallet().requestPermissions({
         network: {
           // @ts-ignore
-          type: process.env.NEXT_PUBLIC_TZ_NET
-        }
+          type: process.env.NEXT_PUBLIC_TZ_NET,
+        },
       })
 
       const userAddress = await this.getBeaconWallet().getPKH()
       this.tezosToolkit.setWalletProvider(this.getBeaconWallet())
 
       return userAddress
-    }
-    catch (err) {
+    } catch (err) {
       return false
     }
   }
@@ -139,7 +134,12 @@ export class WalletManager {
 
   // given an error, returns true if request can be cycled to another RPC node
   canErrorBeCycled(err: any): boolean {
-    return err && (err.name === "HttpRequestFailed" || err.status === 500 || err.status === 408)
+    return (
+      err &&
+      (err.name === "HttpRequestFailed" ||
+        err.status === 500 ||
+        err.status === 408)
+    )
   }
 
   /**
@@ -150,14 +150,14 @@ export class WalletManager {
   async runContractOperation<Params>(
     OperationClass: TContractOperation<Params>,
     params: Params,
-    statusCallback: ContractOperationCallback,
+    statusCallback: ContractOperationCallback
   ) {
     // instanciate the class
     const contractOperation = new OperationClass(this, params)
 
     // we create a loop over the number of available nodes, representing retry
     // operations on failure. (exits under certain criteria)
-    for (let i = 0; i < this.rpcNodes.length+2; i++) {
+    for (let i = 0; i < this.rpcNodes.length + 2; i++) {
       try {
         // run the preparations
         statusCallback?.(ContractOperationStatus.CALLING)
@@ -178,8 +178,7 @@ export class WalletManager {
           operationType: EWalletOperations.UPDATE_PROFILE,
           message: contractOperation.success(),
         })
-      }
-      catch(err: any) {
+      } catch (err: any) {
         console.log({ err })
 
         // if network error, and the nodes have not been all tried
@@ -187,8 +186,7 @@ export class WalletManager {
           this.cycleRpcNode()
           // retry after RPCs were swapped
           continue
-        }
-        else {
+        } else {
           // we just fail, and exit the loop
           return statusCallback?.(
             ContractOperationStatus.ERROR,
@@ -196,6 +194,41 @@ export class WalletManager {
           )
         }
       }
+    }
+  }
+
+  /**
+   * Sign a bytes payload with the wallet currently synced
+   */
+  async signPayload(bytes: string) {
+    const payload: RequestSignPayloadInput = {
+      signingType: SigningType.MICHELINE,
+      payload: bytes,
+      sourceAddress: await this.tezosToolkit.wallet.pkh(),
+    }
+    return await this.beaconWallet?.client.requestSignPayload(payload)
+  }
+
+  /**
+   * Crafts a string to enhance the payload with application, time and generic
+   * sign payload message.
+   */
+  private stringPayloadCraft(string: string) {
+    return `Tezos Signed Message: fxhash ${new Date().toISOString()} ${string}`
+  }
+
+  /**
+   * Sign a string payload with the wallet currently synced
+   */
+  async signString(string: string) {
+    const payload = this.stringPayloadCraft(string)
+    const bytes = char2Bytes(payload)
+    const payloadBytes = `050100${char2Bytes("" + bytes.length)}${bytes}`
+
+    return {
+      payload,
+      payloadBytes,
+      signature: await this.signPayload(payloadBytes),
     }
   }
 
@@ -217,39 +250,49 @@ export class WalletManager {
   /**
    * Updates the profile
    */
-  updateProfile: ContractInteractionMethod<ProfileUpdateCallData> = async (profileData, statusCallback, currentTry = 1) => {
+  updateProfile: ContractInteractionMethod<ProfileUpdateCallData> = async (
+    profileData,
+    statusCallback,
+    currentTry = 1
+  ) => {
     try {
       // get/create the contract interface
       const userContract = await this.getContract(FxhashContracts.REGISTER)
 
       // call the contract (open wallet)
       statusCallback && statusCallback(ContractOperationStatus.CALLING)
-      const opSend = await userContract.methodsObject.update_profile({
-        metadata: stringToByteString(profileData.metadata),
-        name: stringToByteString(profileData.name)
-      }).send()
+      const opSend = await userContract.methodsObject
+        .update_profile({
+          metadata: stringToByteString(profileData.metadata),
+          name: stringToByteString(profileData.name),
+        })
+        .send()
 
       // wait for confirmation
-      statusCallback && statusCallback(ContractOperationStatus.WAITING_CONFIRMATION)
+      statusCallback &&
+        statusCallback(ContractOperationStatus.WAITING_CONFIRMATION)
       await isOperationApplied(opSend.opHash)
 
       // OK, injected
-      statusCallback && statusCallback(ContractOperationStatus.INJECTED, {
-        hash: opSend.opHash,
-        operationType: EWalletOperations.UPDATE_PROFILE,
-      })
-    }
-    catch(err: any) {
-      console.log({err})
+      statusCallback &&
+        statusCallback(ContractOperationStatus.INJECTED, {
+          hash: opSend.opHash,
+          operationType: EWalletOperations.UPDATE_PROFILE,
+        })
+    } catch (err: any) {
+      console.log({ err })
 
       // if network error, and the nodes have not been all tried
       if (this.canErrorBeCycled(err) && currentTry < this.rpcNodes.length) {
         this.cycleRpcNode()
         await this.updateProfile(profileData, statusCallback, currentTry++)
-      }
-      else {
+      } else {
         // any error
-        statusCallback && statusCallback(ContractOperationStatus.ERROR, err.description || err.message || null)
+        statusCallback &&
+          statusCallback(
+            ContractOperationStatus.ERROR,
+            err.description || err.message || null
+          )
       }
     }
   }
@@ -257,36 +300,46 @@ export class WalletManager {
   /**
    * Mint a Generative Token
    */
-  mintGenerative: ContractInteractionMethod<MintGenerativeCallData> = async (tokenData, statusCallback, currentTry = 1) => {
+  mintGenerative: ContractInteractionMethod<MintGenerativeCallData> = async (
+    tokenData,
+    statusCallback,
+    currentTry = 1
+  ) => {
     try {
       // get/create the contract interface
       const issuerContract = await this.getContract(FxhashContracts.ISSUER)
 
       // call the contract (open wallet)
       statusCallback && statusCallback(ContractOperationStatus.CALLING)
-      const opSend = await issuerContract.methodsObject.mint_issuer(tokenData).send()
+      const opSend = await issuerContract.methodsObject
+        .mint_issuer(tokenData)
+        .send()
 
       // wait for confirmation
-      statusCallback && statusCallback(ContractOperationStatus.WAITING_CONFIRMATION)
+      statusCallback &&
+        statusCallback(ContractOperationStatus.WAITING_CONFIRMATION)
       await isOperationApplied(opSend.opHash)
 
       // OK, injected
-      statusCallback && statusCallback(ContractOperationStatus.INJECTED, {
-        hash: opSend.opHash,
-        operationType: EWalletOperations.PUBLISH_GENERATIVE,
-      })
-    }
-    catch(err: any) {
-      console.log({err})
+      statusCallback &&
+        statusCallback(ContractOperationStatus.INJECTED, {
+          hash: opSend.opHash,
+          operationType: EWalletOperations.PUBLISH_GENERATIVE,
+        })
+    } catch (err: any) {
+      console.log({ err })
 
       // if network error, and the nodes have not been all tried
       if (this.canErrorBeCycled(err) && currentTry < this.rpcNodes.length) {
         this.cycleRpcNode()
         await this.mintGenerative(tokenData, statusCallback, currentTry++)
-      }
-      else {
+      } else {
         // any error
-        statusCallback && statusCallback(ContractOperationStatus.ERROR, err.description || err.message || null)
+        statusCallback &&
+          statusCallback(
+            ContractOperationStatus.ERROR,
+            err.description || err.message || null
+          )
       }
     }
   }
@@ -294,44 +347,59 @@ export class WalletManager {
   /**
    * Updates the profile
    */
-  updateGenerativeToken: ContractInteractionMethod<UpdateGenerativeCallData> = async (genData, statusCallback, currentTry = 1) => {
-    try {
-      // get/create the contract interface
-      const issuerContract = await this.getContract(FxhashContracts.ISSUER)
+  updateGenerativeToken: ContractInteractionMethod<UpdateGenerativeCallData> =
+    async (genData, statusCallback, currentTry = 1) => {
+      try {
+        // get/create the contract interface
+        const issuerContract = await this.getContract(FxhashContracts.ISSUER)
 
-      // call the contract (open wallet)
-      statusCallback && statusCallback(ContractOperationStatus.CALLING)
-      const opSend = await issuerContract.methodsObject.update_issuer(genData).send()
+        // call the contract (open wallet)
+        statusCallback && statusCallback(ContractOperationStatus.CALLING)
+        const opSend = await issuerContract.methodsObject
+          .update_issuer(genData)
+          .send()
 
-      // wait for confirmation
-      statusCallback && statusCallback(ContractOperationStatus.WAITING_CONFIRMATION)
-      await isOperationApplied(opSend.opHash)
+        // wait for confirmation
+        statusCallback &&
+          statusCallback(ContractOperationStatus.WAITING_CONFIRMATION)
+        await isOperationApplied(opSend.opHash)
 
-      // OK, injected
-      statusCallback && statusCallback(ContractOperationStatus.INJECTED, {
-        hash: opSend.opHash,
-        operationType: EWalletOperations.UPDATE_GENERATIVE,
-      })
-    }
-    catch(err: any) {
-      console.log({err})
+        // OK, injected
+        statusCallback &&
+          statusCallback(ContractOperationStatus.INJECTED, {
+            hash: opSend.opHash,
+            operationType: EWalletOperations.UPDATE_GENERATIVE,
+          })
+      } catch (err: any) {
+        console.log({ err })
 
-      // if network error, and the nodes have not been all tried
-      if (this.canErrorBeCycled(err) && currentTry < this.rpcNodes.length) {
-        this.cycleRpcNode()
-        await this.updateGenerativeToken(genData, statusCallback, currentTry++)
+        // if network error, and the nodes have not been all tried
+        if (this.canErrorBeCycled(err) && currentTry < this.rpcNodes.length) {
+          this.cycleRpcNode()
+          await this.updateGenerativeToken(
+            genData,
+            statusCallback,
+            currentTry++
+          )
+        } else {
+          // any error
+          statusCallback &&
+            statusCallback(
+              ContractOperationStatus.ERROR,
+              err.description || err.message || null
+            )
+        }
       }
-      else {
-        // any error
-        statusCallback && statusCallback(ContractOperationStatus.ERROR, err.description || err.message || null)
-      }
     }
-  }
 
   /**
    * Burn a Token
    */
-  burnGenerativeToken: ContractInteractionMethod<number> = async (tokenID, statusCallback, currentTry = 1) => {
+  burnGenerativeToken: ContractInteractionMethod<number> = async (
+    tokenID,
+    statusCallback,
+    currentTry = 1
+  ) => {
     try {
       // get/create the contract interface
       const issuerContract = await this.getContract(FxhashContracts.ISSUER)
@@ -341,26 +409,30 @@ export class WalletManager {
       const opSend = await issuerContract.methodsObject.burn(tokenID).send()
 
       // wait for confirmation
-      statusCallback && statusCallback(ContractOperationStatus.WAITING_CONFIRMATION)
+      statusCallback &&
+        statusCallback(ContractOperationStatus.WAITING_CONFIRMATION)
       await isOperationApplied(opSend.opHash)
 
       // OK, injected
-      statusCallback && statusCallback(ContractOperationStatus.INJECTED, {
-        hash: opSend.opHash,
-        operationType: EWalletOperations.BURN_GENERATIVE,
-      })
-    }
-    catch(err: any) {
-      console.log({err})
+      statusCallback &&
+        statusCallback(ContractOperationStatus.INJECTED, {
+          hash: opSend.opHash,
+          operationType: EWalletOperations.BURN_GENERATIVE,
+        })
+    } catch (err: any) {
+      console.log({ err })
 
       // if network error, and the nodes have not been all tried
       if (this.canErrorBeCycled(err) && currentTry < this.rpcNodes.length) {
         this.cycleRpcNode()
         await this.burnGenerativeToken(tokenID, statusCallback, currentTry++)
-      }
-      else {
+      } else {
         // any error
-        statusCallback && statusCallback(ContractOperationStatus.ERROR, err.description || err.message || null)
+        statusCallback &&
+          statusCallback(
+            ContractOperationStatus.ERROR,
+            err.description || err.message || null
+          )
       }
     }
   }
@@ -368,7 +440,11 @@ export class WalletManager {
   /**
    * Burn N editions of a token
    */
-  burnSupply: ContractInteractionMethod<BurnSupplyCallData> = async (data, statusCallback, currentTry = 1) => {
+  burnSupply: ContractInteractionMethod<BurnSupplyCallData> = async (
+    data,
+    statusCallback,
+    currentTry = 1
+  ) => {
     try {
       // get/create the contract interface
       const issuerContract = await this.getContract(FxhashContracts.ISSUER)
@@ -378,26 +454,30 @@ export class WalletManager {
       const opSend = await issuerContract.methodsObject.burn_supply(data).send()
 
       // wait for confirmation
-      statusCallback && statusCallback(ContractOperationStatus.WAITING_CONFIRMATION)
+      statusCallback &&
+        statusCallback(ContractOperationStatus.WAITING_CONFIRMATION)
       await isOperationApplied(opSend.opHash)
 
       // OK, injected
-      statusCallback && statusCallback(ContractOperationStatus.INJECTED, {
-        hash: opSend.opHash,
-        operationType: EWalletOperations.BURN_GENERATIVE_SUPPLY,
-      })
-    }
-    catch(err: any) {
-      console.log({err})
+      statusCallback &&
+        statusCallback(ContractOperationStatus.INJECTED, {
+          hash: opSend.opHash,
+          operationType: EWalletOperations.BURN_GENERATIVE_SUPPLY,
+        })
+    } catch (err: any) {
+      console.log({ err })
 
       // if network error, and the nodes have not been all tried
       if (this.canErrorBeCycled(err) && currentTry < this.rpcNodes.length) {
         this.cycleRpcNode()
         await this.burnSupply(data, statusCallback, currentTry++)
-      }
-      else {
+      } else {
         // any error
-        statusCallback && statusCallback(ContractOperationStatus.ERROR, err.description || err.message || null)
+        statusCallback &&
+          statusCallback(
+            ContractOperationStatus.ERROR,
+            err.description || err.message || null
+          )
       }
     }
   }
@@ -405,38 +485,52 @@ export class WalletManager {
   /**
    * Trigger a report
    */
-  report: ContractInteractionMethod<ReportCall> = async (data, statusCallback, currentTry = 1) => {
+  report: ContractInteractionMethod<ReportCall> = async (
+    data,
+    statusCallback,
+    currentTry = 1
+  ) => {
     try {
       // get/create the contract interface
       const modContract = await this.getContract(FxhashContracts.MODERATION)
 
       // call the contract (open wallet)
       statusCallback && statusCallback(ContractOperationStatus.CALLING)
-      const opSend = await modContract.methodsObject.report({
-        token_id: data.tokenId
-      }).send()
+      const opSend = await modContract.methodsObject
+        .report({
+          token_id: data.tokenId,
+        })
+        .send()
 
       // wait for confirmation
-      statusCallback && statusCallback(ContractOperationStatus.WAITING_CONFIRMATION)
+      statusCallback &&
+        statusCallback(ContractOperationStatus.WAITING_CONFIRMATION)
       await isOperationApplied(opSend.opHash)
 
       // OK, injected
-      statusCallback && statusCallback(ContractOperationStatus.INJECTED, {
-        hash: opSend.opHash,
-        operationType: EWalletOperations.REPORT,
-      })
-    }
-    catch(err: any) {
-      console.log({err})
+      statusCallback &&
+        statusCallback(ContractOperationStatus.INJECTED, {
+          hash: opSend.opHash,
+          operationType: EWalletOperations.REPORT,
+        })
+    } catch (err: any) {
+      console.log({ err })
 
       // if network error, and the nodes have not been all tried
-      if (err && err.name === "HttpRequestFailed" && currentTry < this.rpcNodes.length) {
+      if (
+        err &&
+        err.name === "HttpRequestFailed" &&
+        currentTry < this.rpcNodes.length
+      ) {
         this.cycleRpcNode()
         await this.report(data, statusCallback, currentTry++)
-      }
-      else {
+      } else {
         // any error
-        statusCallback && statusCallback(ContractOperationStatus.ERROR, err.description || err.message || null)
+        statusCallback &&
+          statusCallback(
+            ContractOperationStatus.ERROR,
+            err.description || err.message || null
+          )
       }
     }
   }
@@ -444,39 +538,53 @@ export class WalletManager {
   /**
    * Trigger a report
    */
-  moderateToken: ContractInteractionMethod<ModerateCall> = async (data, statusCallback, currentTry = 1) => {
+  moderateToken: ContractInteractionMethod<ModerateCall> = async (
+    data,
+    statusCallback,
+    currentTry = 1
+  ) => {
     try {
       // get/create the contract interface
       const modContract = await this.getContract(FxhashContracts.MODERATION)
 
       // call the contract (open wallet)
       statusCallback && statusCallback(ContractOperationStatus.CALLING)
-      const opSend = await modContract.methodsObject.moderate({
-        token_id: data.tokenId,
-        state: data.state
-      }).send()
+      const opSend = await modContract.methodsObject
+        .moderate({
+          token_id: data.tokenId,
+          state: data.state,
+        })
+        .send()
 
       // wait for confirmation
-      statusCallback && statusCallback(ContractOperationStatus.WAITING_CONFIRMATION)
+      statusCallback &&
+        statusCallback(ContractOperationStatus.WAITING_CONFIRMATION)
       await isOperationApplied(opSend.opHash)
 
       // OK, injected
-      statusCallback && statusCallback(ContractOperationStatus.INJECTED, {
-        hash: opSend.opHash,
-        operationType: EWalletOperations.MODERATE_TOKEN,
-      })
-    }
-    catch(err: any) {
-      console.log({err})
+      statusCallback &&
+        statusCallback(ContractOperationStatus.INJECTED, {
+          hash: opSend.opHash,
+          operationType: EWalletOperations.MODERATE_TOKEN,
+        })
+    } catch (err: any) {
+      console.log({ err })
 
       // if network error, and the nodes have not been all tried
-      if (err && err.name === "HttpRequestFailed" && currentTry < this.rpcNodes.length) {
+      if (
+        err &&
+        err.name === "HttpRequestFailed" &&
+        currentTry < this.rpcNodes.length
+      ) {
         this.cycleRpcNode()
         await this.moderateToken(data, statusCallback, currentTry++)
-      }
-      else {
+      } else {
         // any error
-        statusCallback && statusCallback(ContractOperationStatus.ERROR, err.description || err.message || null)
+        statusCallback &&
+          statusCallback(
+            ContractOperationStatus.ERROR,
+            err.description || err.message || null
+          )
       }
     }
   }
@@ -484,39 +592,55 @@ export class WalletManager {
   /**
    * Moderates a user using generic endpoint (address, state)
    */
-  moderateUser: ContractInteractionMethod<ModerateUserStateCall> = async (data, statusCallback, currentTry = 1) => {
+  moderateUser: ContractInteractionMethod<ModerateUserStateCall> = async (
+    data,
+    statusCallback,
+    currentTry = 1
+  ) => {
     try {
       // get/create the contract interface
-      const modContract = await this.getContract(FxhashContracts.USER_MODERATION)
+      const modContract = await this.getContract(
+        FxhashContracts.USER_MODERATION
+      )
 
       // call the contract (open wallet)
       statusCallback && statusCallback(ContractOperationStatus.CALLING)
-      const opSend = await modContract.methodsObject.moderate({
-        address: data.address,
-        state: data.state
-      }).send()
+      const opSend = await modContract.methodsObject
+        .moderate({
+          address: data.address,
+          state: data.state,
+        })
+        .send()
 
       // wait for confirmation
-      statusCallback && statusCallback(ContractOperationStatus.WAITING_CONFIRMATION)
+      statusCallback &&
+        statusCallback(ContractOperationStatus.WAITING_CONFIRMATION)
       await isOperationApplied(opSend.opHash)
 
       // OK, injected
-      statusCallback && statusCallback(ContractOperationStatus.INJECTED, {
-        hash: opSend.opHash,
-        operationType: EWalletOperations.MODERATE_USER,
-      })
-    }
-    catch(err: any) {
-      console.log({err})
+      statusCallback &&
+        statusCallback(ContractOperationStatus.INJECTED, {
+          hash: opSend.opHash,
+          operationType: EWalletOperations.MODERATE_USER,
+        })
+    } catch (err: any) {
+      console.log({ err })
 
       // if network error, and the nodes have not been all tried
-      if (err && err.name === "HttpRequestFailed" && currentTry < this.rpcNodes.length) {
+      if (
+        err &&
+        err.name === "HttpRequestFailed" &&
+        currentTry < this.rpcNodes.length
+      ) {
         this.cycleRpcNode()
         await this.moderateUser(data, statusCallback, currentTry++)
-      }
-      else {
+      } else {
         // any error
-        statusCallback && statusCallback(ContractOperationStatus.ERROR, err.description || err.message || null)
+        statusCallback &&
+          statusCallback(
+            ContractOperationStatus.ERROR,
+            err.description || err.message || null
+          )
       }
     }
   }
@@ -525,36 +649,50 @@ export class WalletManager {
    * Verifies a user by calling the entry point verify(address)
    * This entry point is a shortcut for moderate(address, verify_state)
    */
-  verifyUser: ContractInteractionMethod<string> = async (address, statusCallback, currentTry = 1) => {
+  verifyUser: ContractInteractionMethod<string> = async (
+    address,
+    statusCallback,
+    currentTry = 1
+  ) => {
     try {
       // get/create the contract interface
-      const modContract = await this.getContract(FxhashContracts.USER_MODERATION)
+      const modContract = await this.getContract(
+        FxhashContracts.USER_MODERATION
+      )
 
       // call the contract (open wallet)
       statusCallback && statusCallback(ContractOperationStatus.CALLING)
       const opSend = await modContract.methods.verify(address).send()
 
       // wait for confirmation
-      statusCallback && statusCallback(ContractOperationStatus.WAITING_CONFIRMATION)
+      statusCallback &&
+        statusCallback(ContractOperationStatus.WAITING_CONFIRMATION)
       await isOperationApplied(opSend.opHash)
 
       // OK, injected
-      statusCallback && statusCallback(ContractOperationStatus.INJECTED, {
-        hash: opSend.opHash,
-        operationType: EWalletOperations.VERIFY_USER,
-      })
-    }
-    catch(err: any) {
-      console.log({err})
+      statusCallback &&
+        statusCallback(ContractOperationStatus.INJECTED, {
+          hash: opSend.opHash,
+          operationType: EWalletOperations.VERIFY_USER,
+        })
+    } catch (err: any) {
+      console.log({ err })
 
       // if network error, and the nodes have not been all tried
-      if (err && err.name === "HttpRequestFailed" && currentTry < this.rpcNodes.length) {
+      if (
+        err &&
+        err.name === "HttpRequestFailed" &&
+        currentTry < this.rpcNodes.length
+      ) {
         this.cycleRpcNode()
         await this.verifyUser(address, statusCallback, currentTry++)
-      }
-      else {
+      } else {
         // any error
-        statusCallback && statusCallback(ContractOperationStatus.ERROR, err.description || err.message || null)
+        statusCallback &&
+          statusCallback(
+            ContractOperationStatus.ERROR,
+            err.description || err.message || null
+          )
       }
     }
   }
@@ -563,36 +701,50 @@ export class WalletManager {
    * Bans a user by calling the entry point verify(address)
    * This entry point is a shortcut for moderate(address, malicious_state)
    */
-  banUser: ContractInteractionMethod<string> = async (address, statusCallback, currentTry = 1) => {
+  banUser: ContractInteractionMethod<string> = async (
+    address,
+    statusCallback,
+    currentTry = 1
+  ) => {
     try {
       // get/create the contract interface
-      const modContract = await this.getContract(FxhashContracts.USER_MODERATION)
+      const modContract = await this.getContract(
+        FxhashContracts.USER_MODERATION
+      )
 
       // call the contract (open wallet)
       statusCallback && statusCallback(ContractOperationStatus.CALLING)
       const opSend = await modContract.methods.ban(address).send()
 
       // wait for confirmation
-      statusCallback && statusCallback(ContractOperationStatus.WAITING_CONFIRMATION)
+      statusCallback &&
+        statusCallback(ContractOperationStatus.WAITING_CONFIRMATION)
       await isOperationApplied(opSend.opHash)
 
       // OK, injected
-      statusCallback && statusCallback(ContractOperationStatus.INJECTED, {
-        hash: opSend.opHash,
-        operationType: EWalletOperations.BAN_USER,
-      })
-    }
-    catch(err: any) {
-      console.log({err})
+      statusCallback &&
+        statusCallback(ContractOperationStatus.INJECTED, {
+          hash: opSend.opHash,
+          operationType: EWalletOperations.BAN_USER,
+        })
+    } catch (err: any) {
+      console.log({ err })
 
       // if network error, and the nodes have not been all tried
-      if (err && err.name === "HttpRequestFailed" && currentTry < this.rpcNodes.length) {
+      if (
+        err &&
+        err.name === "HttpRequestFailed" &&
+        currentTry < this.rpcNodes.length
+      ) {
         this.cycleRpcNode()
         await this.banUser(address, statusCallback, currentTry++)
-      }
-      else {
+      } else {
         // any error
-        statusCallback && statusCallback(ContractOperationStatus.ERROR, err.description || err.message || null)
+        statusCallback &&
+          statusCallback(
+            ContractOperationStatus.ERROR,
+            err.description || err.message || null
+          )
       }
     }
   }

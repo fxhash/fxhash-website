@@ -45,6 +45,12 @@
   }
 }
 
+.w900 {
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .explore_header {
   display: flex;
   gap: var(--layout-gap-small-lg);

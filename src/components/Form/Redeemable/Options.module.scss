@@ -1,0 +1,10 @@
+.option {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+
+  .price {
+    color: var(--color-secondary);
+    font-weight: bold;
+  }
+}

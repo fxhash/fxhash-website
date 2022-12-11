@@ -21,10 +21,10 @@
     margin-right: var(--layout-gap-small-lg);
     flex-shrink: 0;
   }
+}
 
-  .progress_container {
-    width: 250px;
-  }
+.progress_container {
+  width: 250px;
 }
 
 .metrics {
@@ -84,10 +84,9 @@
       width: 50%;
       height: 100%;
     }
-
-    .progress_container {
-      width: 100%;
-    }
+  }
+  .progress_container {
+    width: 100%;
   }
   .button {
     width: 100%;
