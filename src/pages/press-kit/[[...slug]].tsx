@@ -41,7 +41,7 @@ const PressKitTabPage: NextPage<PresskitPageProps> = ({ tab }) => {
 export async function getStaticPaths() {
   const paths = pressKitTabs.map((tab) => ({
     params: {
-      slug: [tab],
+      slug: [tab == "fxhash" ? "" : tab],
     },
   }))
   return {
