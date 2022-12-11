@@ -1,4 +1,4 @@
-import { NextPage, GetServerSideProps } from "next"
+import { NextPage, GetStaticProps } from "next"
 import Head from "next/head"
 import PressKitPage, {
   PressKitTabKey,
@@ -37,9 +37,22 @@ const PressKitTabPage: NextPage<PresskitPageProps> = ({ tab }) => {
   )
 }
 
-export const getServerSideProps: GetServerSideProps<
-  PresskitPageProps
-> = async ({ params }) => {
+// Generates `/posts/1` and `/posts/2`
+export async function getStaticPaths() {
+  const paths = pressKitTabs.map((tab) => ({
+    params: {
+      slug: [tab],
+    },
+  }))
+  return {
+    paths,
+    fallback: false, // can also be true or 'blocking'
+  }
+}
+
+export const getStaticProps: GetStaticProps<PresskitPageProps> = async ({
+  params,
+}) => {
   const tab = (params?.slug?.[0] || "fxhash") as PressKitTabKey
   if (pressKitTabs.indexOf(tab) > -1) {
     return {
