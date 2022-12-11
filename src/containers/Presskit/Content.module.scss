@@ -5,6 +5,26 @@
     margin: 0 20px;
   }
 }
+.root {
+  h2 {
+    font-size: var(--font-size-h3);
+    margin-bottom: $spacing-x-large;
+  }
+  h3 {
+    font-size: var(--font-size-h5);
+    margin-bottom: $spacing-large;
+  }
+  h4 {
+    font-size: var(--font-size-h6);
+    font-weight: var(--font-weight-regular);
+  }
+  h5 {
+    font-size: var(--font-size-h6);
+    margin-bottom: $spacing;
+  }
+
+}
+
 .txtRoot {
   @media (min-width: $breakpoint-md) {
     max-width: 880px;
@@ -16,36 +36,42 @@
   }
 }
 
-.downloadBox {
+.logoBox {
   flex: 1;
   flex-direction: column;
-  img {
-    width: 100%;
-    height: 300px;
-    background: red;
+  .img {
+    object-position: left;
+    @media (max-width: $breakpoint-md) {
+      object-position: center;
+    }
   }
   .buttons {
     display: flex;
     margin-top: $spacing;
     gap: $spacing-x-large;
+    @media (max-width: $breakpoint-md) {
+      justify-content: center;
+    }
   }
   p {
     margin-bottom: 0;
+    @media (max-width: $breakpoint-md) {
+      text-align: center;
+    }
   }
 }
 
 .rootLogo {
-  h2 {
-    font-size: var(--font-size-h3);
-    margin-bottom: $spacing-x-large;
-  }
   article {
     section {
       margin-bottom: $spacing-x-large;
       background: var(--color-gray-vvlight);
-      padding: $spacing-x-large $spacing-x-large $spacing $spacing-x-large;
+      padding: $spacing-large $spacing-x-large $spacing $spacing-x-large;
       display: flex;
       gap: $spacing-x-large;
+      @media (max-width: $breakpoint-md) {
+        flex-direction: column;
+      }
       &.nobg {
         background: transparent;
         padding: 0;
@@ -58,25 +84,66 @@
   display: flex;
   justify-content: space-between;
   gap: $spacing-x-large;
-  h2 {
-    font-size: var(--font-size-h3);
-    margin-bottom: $spacing-x-large;
+  @media (max-width: $breakpoint-md) {
+    flex-direction: column;
   }
-  section {
+  section, aside {
     flex: 1;
   }
   ul {
     margin: 0;
     padding: 0;
     li {
-      cursor: pointer;
       margin-bottom: $spacing;
       list-style: none;
-      a {
-        i {
-          margin-left: $spacing-small;
-        }
-      }
     }
+  }
+}
+.link {
+  cursor: pointer;
+  i {
+    margin-left: $spacing-small;
+  }
+}
+.eventSection {
+  margin-bottom: $spacing-3x-large;
+}
+.eventHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  padding-bottom: $spacing;
+  margin-bottom: $spacing-large;
+  border-bottom: 1px solid currentColor;
+}
+.eventContent {
+  margin-bottom: $spacing-x-large;
+}
+.mediaGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: $spacing;
+  figure {
+    height: 100%;
+    margin: 0;
+    & > span {
+      height: 100% !important;
+    }
+  }
+  :global(.full) {
+    grid-column: span 2;
+  }
+
+}
+.embed {
+  position: relative;
+  padding-top: 56.25%;
+  iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
   }
 }
