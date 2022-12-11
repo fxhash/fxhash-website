@@ -98,8 +98,8 @@ function Event(props: EventProps) {
   }
   return (
     <section>
-      <div className={classes.eventHeader}>
-        <h4 onClick={toggleIsOpen}>{title}</h4>
+      <div className={classes.eventHeader} onClick={toggleIsOpen}>
+        <h4>{title}</h4>
         <i
           className={cx("fa-regular", {
             "fa-angle-down": !isOpen,
