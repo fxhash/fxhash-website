@@ -37,7 +37,6 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
     token.captureMedia?.cid &&
     getImageApiUrl(token.captureMedia.cid, OG_IMAGE_SIZE)
 
-  console.log(token);
   return (
     <>
       <Head>
