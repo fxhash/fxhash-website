@@ -5,12 +5,11 @@ import type { WalletManager } from "../services/Wallet"
 import { ConnectedUser } from "../types/entities/User"
 import { useClientAsyncEffect, useClientEffect } from "../utils/hookts"
 
-
 export interface UserContextType {
   autoConnectChecked: boolean
-  user: ConnectedUser|null
+  user: ConnectedUser | null
   userFetched: boolean
-  walletManager: WalletManager|null
+  walletManager: WalletManager | null
   connect: () => Promise<void>
   disconnect: () => void
 }
@@ -20,8 +19,8 @@ const defaultCtx: UserContextType = {
   user: null,
   userFetched: false,
   walletManager: null,
-  connect: () => new Promise(r => r()),
-  disconnect: () => {}
+  connect: () => new Promise((r) => r()),
+  disconnect: () => {},
 }
 
 export const UserContext = React.createContext<UserContextType>(defaultCtx)
@@ -32,7 +31,7 @@ export function UserProvider({ children }: PropsWithChildren<{}>) {
   const ctxRef = useRef<UserContextType>(context)
 
   const [getUser, { data: userData }] = useLazyQuery(Qu_user, {
-    fetchPolicy: "no-cache"
+    fetchPolicy: "no-cache",
   })
 
   // keep ctxRef in-sync with the context state
@@ -52,34 +51,33 @@ export function UserProvider({ children }: PropsWithChildren<{}>) {
   }, [userData])
 
   // asks the manager for a connection
-  const connect = () => new Promise<void>(async (resolve, reject) => {
-    const ctx = ctxRef.current
+  const connect = () =>
+    new Promise<void>(async (resolve, reject) => {
+      const ctx = ctxRef.current
 
-    if (ctx.walletManager) {
-      const pkh = await ctx.walletManager.connect()
-      if (pkh) {
-        // user is connected, we can update context and request gql api for user data
-        const nCtx = { ...ctx }
-        nCtx.user = {
-          id: pkh,
-          authorizations: [],
-        }
-        setContext(nCtx)
-        getUser({
-          variables: {
-            id: pkh
+      if (ctx.walletManager) {
+        const pkh = await ctx.walletManager.connect()
+        if (pkh) {
+          // user is connected, we can update context and request gql api for user data
+          const nCtx = { ...ctx }
+          nCtx.user = {
+            id: pkh,
+            authorizations: [],
           }
-        })
-        resolve()
-      }
-      else {
+          setContext(nCtx)
+          getUser({
+            variables: {
+              id: pkh,
+            },
+          })
+          resolve()
+        } else {
+          reject()
+        }
+      } else {
         reject()
       }
-    }
-    else {
-      reject()
-    }
-  })
+    })
 
   // asks the manager for a disconnect & clears the context
   const disconnect = async () => {
@@ -113,8 +111,8 @@ export function UserProvider({ children }: PropsWithChildren<{}>) {
       }
       getUser({
         variables: {
-          id: pkh
-        }
+          id: pkh,
+        },
       })
     }
 
@@ -124,9 +122,5 @@ export function UserProvider({ children }: PropsWithChildren<{}>) {
     setContext(initCtx)
   }, [])
 
-  return (
-    <UserContext.Provider value={context}>
-      { children }
-    </UserContext.Provider>
-  )
+  return <UserContext.Provider value={context}>{children}</UserContext.Provider>
 }
