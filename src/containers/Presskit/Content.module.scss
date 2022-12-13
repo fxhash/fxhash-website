@@ -78,6 +78,11 @@
       }
     }
   }
+  .packageArticle {
+    display: flex;
+    align-items: center;
+    gap: $spacing-x-large;
+  }
 }
 
 .rootMedia {

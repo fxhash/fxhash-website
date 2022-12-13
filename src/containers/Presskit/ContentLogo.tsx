@@ -1,6 +1,6 @@
 import { Button } from "components/Button"
 import classes from "./Content.module.scss"
-import cx from 'classnames';
+import cx from "classnames"
 import Image from "next/image"
 import FxFullLogoBlackTransparentBg from "../../../public/fxhash-press-kit/png/Black full logo on transparent background.png"
 import FxFullLogoWhiteTransparentBg from "../../../public/fxhash-press-kit/png/White full logo on transparent background.png"
@@ -22,7 +22,7 @@ interface LogoBoxProps {
 function LogoBox(props: LogoBoxProps) {
   const { caption, assetId, img } = props
   return (
-    <div className={cx(classes.logoBox, classes.root)}>
+    <div className={cx(classes.logoBox)}>
       <Image
         className={classes.img}
         src={img}
@@ -63,7 +63,7 @@ function LogoBox(props: LogoBoxProps) {
 
 export function ContentLogo() {
   return (
-    <div className={classes.rootLogo}>
+    <div className={cx(classes.rootLogo, classes.root)}>
       <h2>full logo</h2>
       <article>
         <section>
@@ -124,6 +124,19 @@ export function ContentLogo() {
           <LogoBox img={FxFullLogoWhiteBlackBg} />
           <LogoBox img={FxSquareLogoWhiteBlackBg} />
         </section>
+      </article>
+      <article className={classes.packageArticle}>
+        <p>Download the full presskit at once.</p>
+        <Button
+          title="Download press kit package"
+          isLink
+          size="very-small"
+          // @ts-ignore
+          href="/fxhash-press-kit/fxhash_logopack.zip"
+          download
+        >
+          Download .zip
+        </Button>
       </article>
     </div>
   )
