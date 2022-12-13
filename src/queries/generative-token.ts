@@ -171,6 +171,9 @@ export const Qu_genTokenIterations = gql`
           version
           price
         }
+        availableRedeemables {
+          address
+        }
         captureMedia {
           ...MediaImage
         }

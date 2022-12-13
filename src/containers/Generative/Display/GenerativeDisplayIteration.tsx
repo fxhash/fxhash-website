@@ -59,9 +59,6 @@ const _GenerativeDisplayIteration = ({
   }, [objkt])
   const gentkUrl = useMemo(() => gentkLiveUrl(objkt), [objkt])
 
-  // get a list of redeemables available for this Gentk
-  const redeemables = useMemo(() => gentkRedeemables(objkt), [objkt])
-
   return (
     <>
       <div className={cs(style.artwork_header_mobile, layout.break_words)}>
@@ -102,7 +99,7 @@ const _GenerativeDisplayIteration = ({
 
           <Spacing size="x-large" sm="none" />
 
-          <div className={cs(style.buttons)}>
+          <div className={cs(style.buttons_marketplace)}>
             {objkt.activeListing && (
               <ListingAccept listing={objkt.activeListing} objkt={objkt} />
             )}
@@ -147,7 +144,7 @@ const _GenerativeDisplayIteration = ({
               Minted on{" "}
               {format(new Date(objkt.createdAt), "MMMM d, yyyy' at 'HH:mm")}
             </span>
-            {redeemables && redeemables.length > 0 && (
+            {objkt.availableRedeemables?.length > 0 && (
               <Link href={`/gentk/${objkt.id}/redeem`}>
                 <a className={cs(colors.success, text.small)}>
                   <Icon icon="sparkles" /> Redeemable

@@ -18,18 +18,6 @@ interface Props {
   redeemable: RedeemableDetails
 }
 export function RedeemGentk({ gentk, redeemable }: Props) {
-  console.log({ gentk, redeemable })
-  // todo
-  // * summary of redeemable
-  // * add a "hint" prop on the options (to give details about a particular option)
-  // * same for every value of the options
-  // * list the different options
-  // * user inputs derived from definition (parametric validation, & form builder)
-  // * sign data with wallet
-  // * send payload to the backend for authentication, and backend validates inputs
-  // * backend responds with a payload + signature
-  // * make the contract call to redeem the token
-
   return (
     <PageLayout padding="small" columnCentered>
       <InlineTokenCard

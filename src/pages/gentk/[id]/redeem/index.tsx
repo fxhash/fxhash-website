@@ -36,14 +36,11 @@ interface Props {
 
 const ObjktRedeem: NextPage<Props> = ({ objkt, redeemableDetails }) => {
   const { user } = useContext(UserContext)
-  console.log({ objkt, redeemableDetails, user })
 
   // get the display url for og:image
   const displayUrl =
     objkt.captureMedia?.cid &&
     getImageApiUrl(objkt.captureMedia.cid, OG_IMAGE_SIZE)
-
-  const redeemables = useMemo(() => gentkRedeemables(objkt), [objkt])
 
   return (
     <>
@@ -86,7 +83,9 @@ const ObjktRedeem: NextPage<Props> = ({ objkt, redeemableDetails }) => {
           <div key={details.address}>
             <RedeemableDetailsView details={details} />
             <Spacing size="x-large" />
-            {redeemables.find((r) => r.address === details.address) &&
+            {objkt.availableRedeemables.find(
+              (r) => r.address === details.address
+            ) &&
               (user?.id === objkt.owner!.id ? (
                 objkt.activeListing ? (
                   <strong>
@@ -141,25 +140,27 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       if (data) {
         objkt = data.objkt
 
-        // now we query the events API to get details about the redeemables
-        const { data: data2 } = await createEventsClient().query({
-          query: Qu_redeemableDetails,
-          fetchPolicy: "no-cache",
-          variables: {
-            where: {
-              address: {
-                in: objkt.issuer.redeemables.map((red: any) => red.address),
+        if (objkt.availableRedeemables?.length > 0) {
+          // now we query the events API to get details about the redeemables
+          const { data: data2 } = await createEventsClient().query({
+            query: Qu_redeemableDetails,
+            fetchPolicy: "no-cache",
+            variables: {
+              where: {
+                address: {
+                  in: objkt.availableRedeemables.map((red: any) => red.address),
+                },
               },
             },
-          },
-        })
-        if (data2) {
-          redeemableDetails = data2.consumables
-          // process the markdown strings and replace strings from the object
-          // clone deep so that we can mutate the object
-          redeemableDetails = cloneDeep(redeemableDetails)
-          for (const details of redeemableDetails) {
-            details.description = await mdToHtml(details.description)
+          })
+          if (data2) {
+            redeemableDetails = data2.consumables
+            // process the markdown strings and replace strings from the object
+            // clone deep so that we can mutate the object
+            redeemableDetails = cloneDeep(redeemableDetails)
+            for (const details of redeemableDetails) {
+              details.description = await mdToHtml(details.description)
+            }
           }
         }
       }

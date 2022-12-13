@@ -1,6 +1,7 @@
 // import style from "./GenerativeTokenCard.module.scss"
 import Link from "next/link"
 import style from "./LargeGentkCard.module.scss"
+import colors from "styles/Colors.module.css"
 import cs from "classnames"
 import { AnchorForward } from "../Utils/AnchorForward"
 import { UserBadge } from "../User/UserBadge"
@@ -12,6 +13,8 @@ import { useContext } from "react"
 import { SettingsContext } from "../../context/Theme"
 import { DisplayTezos } from "../Display/DisplayTezos"
 import { LargeCard } from "./LargeCard"
+import { HoverTitle } from "components/Utils/HoverTitle"
+import { Icon } from "components/Icons/Icon"
 
 interface Props {
   objkt: Objkt
@@ -37,7 +40,17 @@ export function LargeGentkCard({
           displayDetails={settings.displayInfosGentkCard}
           topper={
             <div className={cs(style.topper)}>
-              <span>#{objkt.iteration}</span>
+              <div className={cs(style.left_topper)}>
+                <span>#{objkt.iteration}</span>
+                {objkt.availableRedeemables?.length > 0 && (
+                  <HoverTitle message="Redeemable">
+                    <Icon
+                      icon="sparkles"
+                      className={cs(colors["gray-light"])}
+                    />
+                  </HoverTitle>
+                )}
+              </div>
               {objkt.duplicate && (
                 <div className={cs(style.dup_flag)}>[WARNING: DUPLICATE]</div>
               )}

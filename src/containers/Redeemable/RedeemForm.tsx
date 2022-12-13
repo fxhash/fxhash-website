@@ -69,8 +69,6 @@ export function RedeemForm({ redeemable, gentk }: Props) {
     [redeemable]
   )
 
-  console.log({ initialValues })
-
   const validation = useMemo(
     () => generateValidationSchema(redeemable),
     [redeemable]

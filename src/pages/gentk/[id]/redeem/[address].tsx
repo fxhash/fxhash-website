@@ -110,15 +110,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     objkt = data.objkt as Objkt
 
     // check if the issuer contains the address in the URL as redeemable
-    if (!objkt.issuer.redeemables.find((red) => red.address === address)) {
+    if (!objkt.availableRedeemables?.find((red) => red.address === address)) {
       throw new Error(
         "Invalid redeemable address, does not exist with this token."
       )
     }
-
-    // todo
-    // check if the gentk has already been redeemed for this particular
-    // redeemable
 
     // query the events API to get details about the redeemables
     const { data: data2 } = await createEventsClient().query({

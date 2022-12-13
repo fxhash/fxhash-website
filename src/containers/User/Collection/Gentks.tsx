@@ -233,8 +233,9 @@ export function UserCollectionGentks({ user }: Props) {
             showFiltersOnMobile={inViewCardsContainer}
             onToggleFilters={() => setFiltersVisible(!filtersVisible)}
             sortSelectComp={
-              <div className={cs(style.select_comp_container, {
-                [styleCardsExplorer["hide-sort"]]: !isSearchMinimized,
+              <div
+                className={cs(style.select_comp_container, {
+                  [styleCardsExplorer["hide-sort"]]: !isSearchMinimized,
                 })}
               >
                 <GentksActions user={user} />

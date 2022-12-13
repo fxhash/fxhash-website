@@ -94,12 +94,6 @@ const GenerativeTokenRedeem: NextPage<Props> = ({
   )
 }
 
-// TODOS
-// * add details about the redeemables
-// * on the gentk page, add button to redeem if possible
-// * page to redeem a token, with details about redeemable
-// * implement the redeem flow
-
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const idStr = context.params?.id
   let token = null

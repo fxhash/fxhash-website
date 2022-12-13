@@ -1,4 +1,5 @@
 import style from "./RedeemTotalCost.module.scss"
+import text from "styles/Text.module.css"
 import cs from "classnames"
 import { RedeemableDetails } from "types/entities/Redeemable"
 import { DisplayTezos } from "components/Display/DisplayTezos"
@@ -26,7 +27,12 @@ export function RedeemTotalCost({ redeemable, selected }: Props) {
           <Fragment key={idx}>
             <span className={cs(style.property)}>
               <span className={cs(style.name)}>
-                {opt.label}: {sel ? sel.label : "TODO"}
+                {opt.label}:{" "}
+                {sel ? (
+                  sel.label
+                ) : (
+                  <span className={cs(text.info)}>Please select</span>
+                )}
               </span>
             </span>
             <span className={cs(style.price)}>

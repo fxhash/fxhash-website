@@ -6,12 +6,14 @@ import { Offer } from "./Offer"
 import { Split } from "./Split"
 import { User } from "./User"
 import { MediaImage } from "./MediaImage"
+import { Redemption } from "./Redemption"
+import { Redeemable } from "./Redeemable"
 
 export interface Objkt {
   id: number
-  version: 0|1
+  version: 0 | 1
   issuer: GenerativeToken
-  owner?: User|null
+  owner?: User | null
   assigned?: boolean
   generationHash?: string
   duplicate?: boolean
@@ -21,17 +23,19 @@ export interface Objkt {
   slug?: string
   metadata?: ObjktMetadata
   features?: TokenFeature[] | null
-  rarity?: number|null
+  rarity?: number | null
   metadataUri: string
   royalties: number
   royaltiesSplit: Split[]
-  activeListing?: Listing|null
+  activeListing?: Listing | null
   offers?: Offer[]
   actions: Action[]
   createdAt: string
   updatedAt: string
-  assignedAt: string|null
-  captureMedia?: MediaImage 
+  assignedAt: string | null
+  captureMedia?: MediaImage
+  redemptions: Redemption[]
+  availableRedeemables: Redeemable[]
 }
 
 export interface ObjktFilters {
@@ -39,9 +43,9 @@ export interface ObjktFilters {
 }
 
 export enum EObjktFeatureType {
-  BOOLEAN              = "BOOLEAN",
-  STRING               = "STRING",
-  NUMBER               = "NUMBER",
+  BOOLEAN = "BOOLEAN",
+  STRING = "STRING",
+  NUMBER = "NUMBER",
 }
 
 export interface IObjktFeatureFilter {
@@ -55,5 +59,4 @@ export function objktFeatureType(value: any): EObjktFeatureType {
   if (type === "boolean") return EObjktFeatureType.BOOLEAN
   else if (type === "number") return EObjktFeatureType.NUMBER
   else return EObjktFeatureType.STRING
-
 }

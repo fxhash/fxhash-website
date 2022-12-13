@@ -51,6 +51,11 @@ export function getGentkFA2Contract(gentk: Objkt): string {
  * Redemptions
  */
 export function gentkRedeemables(gentk: Objkt): Redeemable[] {
-  // todo: check the redemptions to see if still redeemable
-  return gentk.issuer.redeemables
+  // filter redeemables to see which are still available based on redemptions
+  return gentk.issuer.redeemables.filter((redeemable) => {
+    const redemptions = gentk.redemptions.filter(
+      (r) => r.redeemable.address === redeemable.address
+    )
+    return redemptions.length < redeemable.maxConsumptionsPerToken
+  })
 }

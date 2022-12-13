@@ -9,7 +9,6 @@ export const Qu_objkt = gql`
   ${Frag_GenAuthor}
   ${Frag_MediaImage}
   ${Frag_UserBadge}
-  ${Frag_GenTokenRedeemables}
   query Gentk($id: Float, $slug: String) {
     objkt(id: $id, slug: $slug) {
       id
@@ -39,7 +38,6 @@ export const Qu_objkt = gql`
           floor
         }
         ...Author
-        ...Redeemables
       }
       metadata
       metadataUri
@@ -53,6 +51,9 @@ export const Qu_objkt = gql`
       iteration
       generationHash
       createdAt
+      availableRedeemables {
+        address
+      }
       activeListing {
         id
         version
@@ -90,6 +91,9 @@ export const Qu_objkt = gql`
           name
           id
           iteration
+        }
+        redeemable {
+          address
         }
       }
     }

@@ -1,5 +1,6 @@
 // import style from "./GenerativeTokenCard.module.scss"
 import Link from "next/link"
+import text from "styles/Text.module.css"
 import colors from "../../styles/Colors.module.css"
 import cs from "classnames"
 import { AnchorForward } from "../Utils/AnchorForward"
@@ -15,6 +16,7 @@ import { useContext } from "react"
 import { SettingsContext } from "../../context/Theme"
 import { DisplayTezos } from "../Display/DisplayTezos"
 import { EntityBadge } from "../User/EntityBadge"
+import { Icon } from "components/Icons/Icon"
 
 interface Props {
   objkt: Objkt
@@ -63,6 +65,15 @@ export function ObjktCard({
           </div>
 
           <Spacing size="small" sm="x-small" />
+
+          {objkt.availableRedeemables?.length > 0 && (
+            <>
+              <span className={cs(text.small, colors.gray)}>
+                <Icon icon="sparkles" /> Redeemable
+              </span>
+              <Spacing size="small" sm="x-small" />
+            </>
+          )}
 
           <div className={cs(style.bottom)}>
             <div className={cs(style.bottom_left)}>

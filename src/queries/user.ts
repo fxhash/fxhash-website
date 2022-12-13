@@ -148,6 +148,9 @@ export const Qu_userObjkts = gql`
           version
           price
         }
+        availableRedeemables {
+          address
+        }
       }
     }
   }
@@ -225,6 +228,9 @@ export const Qu_userListings = gql`
             labels
             ...Author
           }
+          availableRedeemables {
+            address
+          }
         }
       }
     }
@@ -248,6 +254,9 @@ export const Qu_userActions = gql`
         }
         target {
           ...UserBadgeInfos
+        }
+        redeemable {
+          address
         }
         token {
           id
@@ -290,7 +299,7 @@ export const Qu_userSales = gql`
           id
           name
           metadata
-          captureMedia { 
+          captureMedia {
             ...MediaImage
           }
         }

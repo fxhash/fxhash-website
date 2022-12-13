@@ -16,6 +16,7 @@ import { DisplayTezos } from "components/Display/DisplayTezos"
 import { useContractOperation } from "hooks/useContractOperation"
 import { RedeemTokenOperation } from "services/contract-operations/RedeemToken"
 import { ContractFeedback } from "components/Feedback/ContractFeedback"
+import { Error as ErrorFeedback } from "components/Error/Error"
 
 interface PrepareRedemptionPayload {
   payload: {
@@ -44,6 +45,7 @@ export function RedeemModal({
   const { walletManager: wallet, user } = useContext(UserContext)
   const [redemptionPayload, setRedemptionPayload] =
     useState<PrepareRedemptionPayload | null>(null)
+  const [signError, setSignError] = useState<string | null>(null)
 
   const { call, state, loading, error, success } =
     useContractOperation(RedeemTokenOperation)
@@ -57,6 +59,7 @@ export function RedeemModal({
     if (!wallet || !user) return
     try {
       setRedemptionPayload(null)
+      setSignError(null)
 
       // prepare and sign the inputs to authenticate those on the backend
       const data = JSON.stringify(inputs)
@@ -85,11 +88,16 @@ export function RedeemModal({
           }),
         }
       )
+
+      if (response.status !== 200) {
+        const err = await response.json()
+        throw new Error(err?.error)
+      }
+
       const backendData: PrepareRedemptionPayload = await response.json()
       setRedemptionPayload(backendData)
-    } catch (error) {
-      // todo: process error more properly
-      console.log(error)
+    } catch (error: any) {
+      setSignError(error?.message || "Unknown error")
     }
   }
 
@@ -126,6 +134,8 @@ export function RedeemModal({
         on the second step, our backend will match your inputs with the
         redemption event.
       </p>
+
+      {signError && <ErrorFeedback>{signError}</ErrorFeedback>}
 
       <Submit>
         <Button
