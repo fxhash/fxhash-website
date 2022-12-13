@@ -18,6 +18,7 @@ import {
 import { EntityBadge } from "../User/EntityBadge"
 import { MintingState } from "../GenerativeToken/MintingState/MintingState"
 import { DisplayTezos } from "../Display/DisplayTezos"
+import { Icon } from "components/Icons/Icon"
 
 interface Props {
   token: GenerativeToken
@@ -65,6 +66,16 @@ export function GenerativeTokenCard({
             <Spacing size="2x-small" sm="x-small" />
             {token.balance > 0 && <MintingState token={token} />}
           </div>
+
+          {token.redeemables?.length > 0 && (
+            <>
+              <Spacing size="8px" />
+              <span className={cs(text.small, text.bold, colors.success)}>
+                <Icon icon="sparkles" /> Redeemable
+              </span>
+              <Spacing size="8px" />
+            </>
+          )}
 
           <div className={style.mint_progress}>
             <MintProgress token={token}>

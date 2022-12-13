@@ -71,6 +71,9 @@ export const Qu_userGenTokens = gql`
         reserves {
           amount
         }
+        redeemables {
+          address
+        }
       }
     }
   }

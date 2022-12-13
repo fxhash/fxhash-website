@@ -114,6 +114,9 @@ export const Frag_GenTokenInfo = gql`
       amount
     }
     ...Pricing
+    redeemables {
+      address
+    }
   }
 `
 
