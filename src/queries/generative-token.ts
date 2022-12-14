@@ -159,7 +159,6 @@ export const Qu_genTokenIterations = gql`
           labels
         }
         owner {
-          id
           ...UserBadgeInfos
         }
         name
