@@ -14,7 +14,7 @@ p.not_found {
   margin: var(--layout-margin-small-sm) 0;
 }
 
-.youtube {
+.youtube, .open_processing {
   overflow: hidden;
   position: relative;
   width: 100%;
@@ -43,4 +43,15 @@ p.not_found {
 }
 .twitter_loading {
   margin-top: 16px;
+}
+
+.codepen {
+  width: 100%;
+  height: 300px;
+}
+
+.open_processing {
+  &:after {
+    padding-top: 75%;
+  }
 }

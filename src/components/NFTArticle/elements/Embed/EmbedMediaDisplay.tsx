@@ -6,9 +6,13 @@ import EmbedTwitter from "./EmbedTwitter"
 import style from "./Embed.module.scss"
 import text from "../../../../styles/Text.module.css"
 import {
+  getCodepenFromUrl,
+  getOpenProcessingIdFromUrl,
   getTweetIdFromUrl,
   getYoutubeCodeFromUrl,
 } from "../../../../utils/embed"
+import EmbedCodepen from "./EmbedCodepen"
+import EmbedOpenProcessing from "./EmbedOpenProcessing"
 
 export interface EmbedElementProps {
   href: string
@@ -22,6 +26,14 @@ export const mediaPlayers: Record<string, UrlPlayer> = {
   spotify: {
     check: (href) => href.startsWith("https://open.spotify.com/"),
     component: EmbedSpotify,
+  },
+  codepen: {
+    check: (href) => !!getCodepenFromUrl(href),
+    component: EmbedCodepen,
+  },
+  openProcessing: {
+    check: (href) => !!getOpenProcessingIdFromUrl(href),
+    component: EmbedOpenProcessing,
   },
   youtube: {
     check: (href) => !!getYoutubeCodeFromUrl(href),
