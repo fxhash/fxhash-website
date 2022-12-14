@@ -8,3 +8,15 @@
   display: flex;
   align-items: flex-start;
 }
+
+.carousel {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+
+  img {
+    width: 200px;
+    height: 200px;
+    object-fit: contain;
+  }
+}

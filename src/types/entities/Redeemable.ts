@@ -1,4 +1,5 @@
 import { IAddress } from "components/Input/InputAddress"
+import { EventMedia } from "./EventMedia"
 import { GenerativeToken } from "./GenerativeToken"
 import { Redemption } from "./Redemption"
 import { ISplit, Split } from "./Split"
@@ -52,6 +53,10 @@ export interface RedeemableDetails {
   options: RedeemableOption[]
   publicDefinition: RedeemablePublicDefinition
   splits: ISplit[]
+  medias: {
+    index: number
+    media: EventMedia
+  }[]
 }
 
 // type of the Redeemable user action options

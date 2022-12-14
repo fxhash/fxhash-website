@@ -33,6 +33,14 @@ export const Qu_redeemableDetails = gql`
       publicDefinition
       splits
       successInfos
+      medias {
+        index
+        media {
+          s3key
+          name
+          url
+        }
+      }
     }
   }
 `

@@ -12,6 +12,11 @@ export function RedeemableDetailsView({ details }: Props) {
   return (
     <div className={cs(style.root)}>
       <h3>{details.name}</h3>
+      <div className={cs(style.carousel)}>
+        {details.medias.map((med) => (
+          <img key={med.index} src={med.media.url} alt={med.media.name} />
+        ))}
+      </div>
       <p>
         Every iteration of this project can be redeemed{" "}
         <strong>

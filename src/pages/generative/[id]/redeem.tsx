@@ -33,7 +33,6 @@ const GenerativeTokenRedeem: NextPage<Props> = ({
   token,
   redeemableDetails,
 }) => {
-  console.log({ token, redeemableDetails })
   // get the display url for og:image
   const displayUrl =
     token.captureMedia?.cid &&
