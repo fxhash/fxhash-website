@@ -61,7 +61,7 @@ function GridItemVideo(props: { src: string; full?: boolean }) {
   const { full = false, src } = props
   return (
     <figure className={cx({ full })}>
-      <VideoPolymorphic uri={src} controls showLoadingError />
+      <VideoPolymorphic uri={src} controls />
     </figure>
   )
 }
