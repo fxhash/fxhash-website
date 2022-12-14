@@ -1,26 +1,33 @@
 @import "../../styles/Variables";
 
-@media (max-width: $breakpoint-sm) {
-  .tabs {
-    margin: 0 20px;
-  }
-}
 .root {
   h2 {
     font-size: var(--font-size-h3);
     margin-bottom: $spacing-x-large;
+    @media (max-width: $breakpoint-sm) {
+      font-size: var(--font-size-h5);    
+    }
   }
   h3 {
     font-size: var(--font-size-h5);
     margin-bottom: $spacing-large;
+    @media (max-width: $breakpoint-sm) {
+      font-size: var(--font-size-h6);    
+    }
   }
   h4 {
     font-size: var(--font-size-h6);
     font-weight: var(--font-weight-regular);
+    @media (max-width: $breakpoint-sm) {
+      font-size: var(--font-size-h6);    
+    }
   }
   h5 {
     font-size: var(--font-size-h6);
     margin-bottom: $spacing;
+    @media (max-width: $breakpoint-sm) {
+      font-size: var(--font-size-h6);    
+    }
   }
 
 }
@@ -52,6 +59,10 @@
     @media (max-width: $breakpoint-md) {
       justify-content: center;
     }
+    @media (max-width: $breakpoint-sm) {
+      text-align: center;
+      gap: $spacing;
+    }
   }
   p {
     margin-bottom: 0;
@@ -72,6 +83,9 @@
       @media (max-width: $breakpoint-md) {
         flex-direction: column;
       }
+      @media (max-width: $breakpoint-sm) {
+        padding: $spacing;
+      }
       &.nobg {
         background: transparent;
         padding: 0;
@@ -82,6 +96,14 @@
     display: flex;
     align-items: center;
     gap: $spacing-x-large;
+    @media (max-width: $breakpoint-sm) {
+      flex-direction: column;
+      text-align: center;
+      gap: $spacing;
+      & a {
+        width: 100%;
+      }
+    }
   }
 }
 

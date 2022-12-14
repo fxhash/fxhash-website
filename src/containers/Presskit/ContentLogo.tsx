@@ -36,7 +36,7 @@ function LogoBox(props: LogoBoxProps) {
         <div className={classes.buttons}>
           <Button
             title={`Download ${caption} svg`}
-            size="very-small"
+            size="small"
             isLink
             // @ts-ignore
             href={`/fxhash-press-kit/svg/${assetId}.svg`}
@@ -46,7 +46,7 @@ function LogoBox(props: LogoBoxProps) {
           </Button>
           <Button
             title={`Download ${caption} png`}
-            size="very-small"
+            size="small"
             isLink
             // @ts-ignore
             href={`/fxhash-press-kit/png/${assetId}.png`}
@@ -130,7 +130,7 @@ export function ContentLogo() {
         <Button
           title="Download press kit package"
           isLink
-          size="very-small"
+          size="small"
           // @ts-ignore
           href="/fxhash-press-kit/fxhash_logopack.zip"
           download
