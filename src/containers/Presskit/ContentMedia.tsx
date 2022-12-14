@@ -23,6 +23,7 @@ import nftnyc3 from "./images/nftnyc03.jpeg"
 import nfclsb1 from "./images/nfclsb01.png"
 import abhk1 from "./images/abhk01.png"
 import { Spacing } from "components/Layout/Spacing"
+import { VideoPolymorphic } from "components/Medias/VideoPolymorphic"
 
 interface MediaGridProps {
   children: ReactNode
@@ -50,13 +51,21 @@ function GridItemImg(props: GridItemProps) {
 function GridItemYoutube(props: GridItemProps) {
   const { full = false, src, className } = props
   return (
-    <div className={cx(classes.embed, props.className, { full })}>
+    <div className={cx(classes.embed, className, { full })}>
       <iframe
-        src={props.src as string}
+        src={src as string}
         frameBorder="0"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowFullScreen
       />
+    </div>
+  )
+}
+function GridItemVideo(props: GridItemProps) {
+  const { full = false, src, className } = props
+  return (
+    <div className={cx(className, { full })}>
+      <VideoPolymorphic uri={src as string} controls showLoadingError />
     </div>
   )
 }
@@ -194,11 +203,12 @@ export function ContentMedia() {
               - his new generative art collection being Live Minted today at 6
               PM during the @brtmoments presents fx(hash) event!
             </p>
-            <ul>
-              <NewsLink href="https://twitter.com/fx_hash_/status/1578082605399883776?ref_src=twsrc%5Etfw%7Ctwcamp%5Etweetembed&ref_url=https%3A%2F%2Fwww.notion.so%2Ffxhash%2FPast-Event-Showcase-a23c42d2a25648f6b4a7b56609a52ecf">
-                Watch on twitter
-              </NewsLink>
-            </ul>
+            <MediaGrid>
+              <GridItemYoutube
+                full
+                src="https://www.youtube.com/embed/hRuHLY0-Vvs"
+              />
+            </MediaGrid>
           </Event>
         </EventSection>
         <EventSection title="Art Basel">
@@ -243,7 +253,12 @@ export function ContentMedia() {
               </NewsLink>
             </ul>
             <MediaGrid>
-              <GridItemImg src={abhk1} full />
+              <GridItemVideo
+                full
+                src="ipfs://QmQ2cgKW8fS83yH8Gyy4JFtxAuToGzLDhY7x3ZuydT3d4d"
+              />
+              <GridItemVideo src="ipfs://QmWuSzvMxeaPNomxmGamuVJ4h5ioZZFrwkHgp93k3hKuCr" />
+              <GridItemImg src={abhk1} />
             </MediaGrid>
           </Event>
           <Event title="Art Basel Basel">
@@ -385,6 +400,10 @@ export function ContentMedia() {
               </NewsLink>
             </ul>
             <MediaGrid>
+              <GridItemVideo
+                full
+                src="ipfs://QmUycvuuk2TCcBoW2MayKxpFAA5yBQWgeq4n9qzvB1SEQg"
+              />
               <GridItemYoutube
                 src="https://www.youtube.com/embed/JErFZZ6fe1w"
                 full
@@ -400,6 +419,46 @@ export function ContentMedia() {
           </Event>
         </EventSection>
         <EventSection title="NFT Events">
+          <Event title="Proof of People">
+            <p>
+              The fxhash live minting experience is an interactive, real-time
+              exhibit that lets anyone mint & own unique pieces of generative
+              art. This is our first visit to London, so please give us a warm
+              welcome by showing up in person & hitting the mint button
+            </p>
+            <Spacing size="large" />
+            <h5>Projects released at Proof of People</h5>
+            <ul>
+              <NewsLink href="https://www.fxhash.xyz/generative/slug/a-burroughs-quote">
+                A Burroughs Quote - Lisa Orth
+              </NewsLink>
+              <NewsLink href="https://www.fxhash.xyz/generative/slug/gen22:-personalized-generative-fashion-1">
+                Gen22: Personalized Generative Fashion - fraguada x GenCloth x
+                elizabeth
+              </NewsLink>
+              <NewsLink href="https://www.fxhash.xyz/generative/slug/polar-grid">
+                Polar Grid - sableralph
+              </NewsLink>
+              <NewsLink href="https://www.fxhash.xyz/generative/slug/grid-studies">
+                Grid Studies - rudxane
+              </NewsLink>
+              <NewsLink href="https://www.fxhash.xyz/generative/slug/smooth-brained">
+                Smooth-brained - Murat Atimtay x Matthew Hawtin
+              </NewsLink>
+              <NewsLink href="https://www.fxhash.xyz/generative/slug/ersbla">
+                Ersbla - Studio Yorktown
+              </NewsLink>
+              <NewsLink href="https://www.fxhash.xyz/generative/slug/swtbd-london-prototype">
+                SWTBD - London Prototype - wblut
+              </NewsLink>
+            </ul>
+            <MediaGrid>
+              <GridItemYoutube
+                src="https://www.youtube.com/embed/-BLTAc_cEs8"
+                full
+              />
+            </MediaGrid>
+          </Event>
           <Event title="NFT.NYC">
             <MediaGrid>
               <GridItemImg src={nftnyc1} full />
