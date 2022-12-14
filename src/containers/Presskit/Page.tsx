@@ -1,4 +1,10 @@
-import React, { ElementType, memo, useCallback, useState } from "react"
+import React, {
+  ElementType,
+  memo,
+  useCallback,
+  useEffect,
+  useState,
+} from "react"
 import cs from "classnames"
 import {
   checkIsTabKeyActive,
@@ -12,8 +18,8 @@ import { TitleHyphen } from "../../components/Layout/TitleHyphen"
 import { Spacing } from "../../components/Layout/Spacing"
 import { ContentFxHash } from "./ContentFxHash"
 import { ContentBrand } from "./ContentBrand"
-import {ContentLogo} from "./ContentLogo"
-import {ContentMedia} from "./ContentMedia"
+import { ContentLogo } from "./ContentLogo"
+import { ContentMedia } from "./ContentMedia"
 
 export const pressKitTabs = ["fxhash", "brand", "logo", "media"] as const
 
@@ -71,6 +77,11 @@ const PressKitPage = ({ tab }: PagePressKitProps) => {
     },
     [handleChangeTab]
   )
+  useEffect(() => {
+    if (!router?.query?.slug?.[0]) return
+    if (router.query.slug[0] !== activeIdx)
+      setActiveIdx(router.query.slug[0] as PressKitTabKey)
+  }, [router.query, activeIdx, handleChangeTab])
   const Component = tabs[activeIdx] ? tabs[activeIdx].component : null
   return (
     <>
