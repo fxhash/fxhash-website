@@ -45,7 +45,6 @@ export const Frag_ListingCardInfos = gql`
         avatarUri
       }
       issuer {
-        id
         flag
         name
         ...Author
