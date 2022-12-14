@@ -114,16 +114,20 @@
   margin-bottom: $spacing-3x-large;
 }
 .eventHeader {
+  z-index: 1;
+  position:sticky;
+  top:0;
   display: flex;
   justify-content: space-between;
   align-items: center;
   cursor: pointer;
   padding-bottom: $spacing;
-  margin-bottom: $spacing-large;
+  padding-top:$spacing;
   border-bottom: 1px solid currentColor;
+  background: var(--color-white)
 }
 .eventContent {
-  margin-bottom: $spacing-x-large;
+  margin-bottom: $spacing-large;
 }
 .mediaGrid {
   display: grid;
