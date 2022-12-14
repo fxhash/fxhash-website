@@ -24,6 +24,7 @@ import nfclsb1 from "./images/nfclsb01.png"
 import abhk1 from "./images/abhk01.png"
 import { Spacing } from "components/Layout/Spacing"
 import { VideoPolymorphic } from "components/Medias/VideoPolymorphic"
+import EmbedYoutube from "components/NFTArticle/elements/Embed/EmbedYoutube"
 
 interface MediaGridProps {
   children: ReactNode
@@ -36,37 +37,27 @@ function MediaGrid(props: MediaGridProps) {
 interface GridItemProps {
   full?: boolean
   src: string | StaticImageData
-  className?: string
 }
 
 function GridItemImg(props: GridItemProps) {
-  const { full = false, className, src, ...rest } = props
+  const { full = false, src, ...rest } = props
   return (
-    <figure className={cx(className, { full })}>
+    <figure className={cx({ full })}>
       <Image placeholder="blur" objectFit="cover" src={src} alt="" {...rest} />
     </figure>
   )
 }
 
-function GridItemYoutube(props: GridItemProps) {
-  const { full = false, src, className } = props
-  return (
-    <div className={cx(classes.embed, className, { full })}>
-      <iframe
-        src={src as string}
-        frameBorder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowFullScreen
-      />
-    </div>
-  )
+function GridItemYoutube(props: { full?: boolean; src: string }) {
+  const { full = false, src } = props
+  return <EmbedYoutube className={cx({ full })} href={src as string} />
 }
 function GridItemVideo(props: GridItemProps) {
-  const { full = false, src, className } = props
+  const { full = false, src } = props
   return (
-    <div className={cx(className, { full })}>
+    <figure className={cx({ full })}>
       <VideoPolymorphic uri={src as string} controls showLoadingError />
-    </div>
+    </figure>
   )
 }
 
@@ -343,9 +334,9 @@ export function ContentMedia() {
               </NewsLink>
             </ul>
             <MediaGrid>
-              <GridItemImg className="full" src={abp1} />
+              <GridItemImg full src={abp1} />
               <GridItemYoutube
-                className="full"
+                full
                 src="https://www.youtube.com/embed/H9j61asNRiA"
               />
             </MediaGrid>
