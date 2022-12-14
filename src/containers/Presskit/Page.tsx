@@ -1,3 +1,4 @@
+import Head from "next/head"
 import React, {
   ElementType,
   memo,
@@ -22,6 +23,13 @@ import { ContentLogo } from "./ContentLogo"
 import { ContentMedia } from "./ContentMedia"
 
 export const pressKitTabs = ["fxhash", "brand", "logo", "media"] as const
+
+export const pressKitTabLabel = {
+  fxhash: "",
+  brand: "brand",
+  logo: "logo",
+  media: "media",
+}
 
 export type PressKitTabKey = typeof pressKitTabs[number]
 
@@ -54,7 +62,7 @@ interface PagePressKitProps {
 }
 const PressKitPage = ({ tab }: PagePressKitProps) => {
   const router = useRouter()
-  const [activeIdx, setActiveIdx] = useState(tab || "fxhash")
+  const [activeTab, setActiveTab] = useState(tab || "fxhash")
   const handleReplaceUrl = useCallback(
     (sectionKey) => {
       const section = sectionKey === "fxhash" ? "" : sectionKey
@@ -66,7 +74,7 @@ const PressKitPage = ({ tab }: PagePressKitProps) => {
   )
   const handleChangeTab = useCallback(
     (newTab) => {
-      setActiveIdx(newTab)
+      setActiveTab(newTab)
       handleReplaceUrl(newTab)
     },
     [handleReplaceUrl]
@@ -79,12 +87,37 @@ const PressKitPage = ({ tab }: PagePressKitProps) => {
   )
   useEffect(() => {
     if (!router?.query?.slug?.[0]) return
-    if (router.query.slug[0] !== activeIdx)
-      setActiveIdx(router.query.slug[0] as PressKitTabKey)
-  }, [router.query, activeIdx, handleChangeTab])
-  const Component = tabs[activeIdx] ? tabs[activeIdx].component : null
+    if (router.query.slug[0] !== activeTab)
+      setActiveTab(router.query.slug[0] as PressKitTabKey)
+  }, [router.query, activeTab, handleChangeTab])
+  const Component = tabs[activeTab] ? tabs[activeTab].component : null
+  const tabLabel = pressKitTabLabel[activeTab]
   return (
     <>
+      <Head>
+        <title>fxhash — press kit</title>
+        <meta
+          key="og:title"
+          property="og:title"
+          content={`fxhash — press kit ${tabLabel}`}
+        />
+        <meta
+          key="description"
+          name="description"
+          content={`The press kit of fxhash - ${tabLabel}`}
+        />
+        <meta
+          key="og:description"
+          property="og:description"
+          content={`The press kit of fxhash - ${tabLabel}`}
+        />
+        <meta key="og:type" property="og:type" content="website" />
+        <meta
+          key="og:image"
+          property="og:image"
+          content="https://www.fxhash.xyz/images/og/og1.jpg"
+        />
+      </Head>
       <Spacing size="large" sm="x-large" />
 
       <section>
@@ -103,7 +136,7 @@ const PressKitPage = ({ tab }: PagePressKitProps) => {
             onClickTab={handleClickTab}
             checkIsTabActive={checkIsTabKeyActive}
             tabDefinitions={tabsDefinitions}
-            activeIdx={activeIdx}
+            activeTab={activeTab}
           />
           <Spacing size="large" sm="x-large" />
           {Component && <Component />}

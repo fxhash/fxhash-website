@@ -1,5 +1,4 @@
 import { NextPage, GetStaticProps } from "next"
-import Head from "next/head"
 import PressKitPage, {
   PressKitTabKey,
   pressKitTabs,
@@ -10,31 +9,7 @@ interface PresskitPageProps {
 }
 
 const PressKitTabPage: NextPage<PresskitPageProps> = ({ tab }) => {
-  return (
-    <>
-      <Head>
-        <title>fxhash — press kit</title>
-        <meta key="og:title" property="og:title" content="fxhash — press kit" />
-        <meta
-          key="description"
-          name="description"
-          content="The press kit of fxhash"
-        />
-        <meta
-          key="og:description"
-          property="og:description"
-          content="The press kit of fxhash"
-        />
-        <meta key="og:type" property="og:type" content="website" />
-        <meta
-          key="og:image"
-          property="og:image"
-          content="https://www.fxhash.xyz/images/og/og1.jpg"
-        />
-      </Head>
-      <PressKitPage tab={tab} />
-    </>
-  )
+  return <PressKitPage tab={tab} />
 }
 
 // Generates `/posts/1` and `/posts/2`
