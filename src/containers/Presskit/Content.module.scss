@@ -162,6 +162,9 @@
   figure {
     height: 100%;
     margin: 0;
+    a {
+      cursor: pointer;
+    }
     & > span {
       height: 100% !important;
     }

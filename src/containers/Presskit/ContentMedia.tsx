@@ -34,16 +34,20 @@ function MediaGrid(props: MediaGridProps) {
   return <div className={classes.mediaGrid}>{props.children}</div>
 }
 
-interface GridItemProps {
-  full?: boolean
-  src: string | StaticImageData
-}
-
-function GridItemImg(props: GridItemProps) {
+function GridItemImg(props: { src: StaticImageData, full?: boolean }) {
   const { full = false, src, ...rest } = props
+  console.log(src)
   return (
     <figure className={cx({ full })}>
-      <Image placeholder="blur" objectFit="cover" src={src} alt="" {...rest} />
+      <a href={src.src} target="_blank" rel="noopener nofollow noreferrer">
+        <Image
+          placeholder="blur"
+          objectFit="cover"
+          src={src}
+          alt=""
+          {...rest}
+        />
+      </a>
     </figure>
   )
 }
@@ -52,11 +56,12 @@ function GridItemYoutube(props: { full?: boolean; src: string }) {
   const { full = false, src } = props
   return <EmbedYoutube className={cx({ full })} href={src as string} />
 }
-function GridItemVideo(props: GridItemProps) {
+
+function GridItemVideo(props: { src: string; full?: boolean }) {
   const { full = false, src } = props
   return (
     <figure className={cx({ full })}>
-      <VideoPolymorphic uri={src as string} controls showLoadingError />
+      <VideoPolymorphic uri={src} controls showLoadingError />
     </figure>
   )
 }

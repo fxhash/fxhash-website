@@ -136,7 +136,7 @@ const PressKitPage = ({ tab }: PagePressKitProps) => {
             onClickTab={handleClickTab}
             checkIsTabActive={checkIsTabKeyActive}
             tabDefinitions={tabsDefinitions}
-            activeTab={activeTab}
+            activeIdx={activeTab}
           />
           <Spacing size="large" sm="x-large" />
           {Component && <Component />}
