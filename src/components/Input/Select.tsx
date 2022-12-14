@@ -8,10 +8,10 @@ import {
   useRef,
   useEffect,
 } from "react"
-import { Cover } from "../Utils/Cover"
 import { useClientAsyncEffect } from "../../utils/hookts"
 import { InputText } from "./InputText"
 import type FuzzySearchType from "fuzzy-search"
+import useClickOutside from "hooks/useClickOutside"
 
 export interface IOptions {
   label: string
@@ -115,6 +115,8 @@ export function Select({
   // what are the options displayed ?
   const displayOptions = searchResults || options
 
+  useClickOutside(selectRef, () => setOpened(false), !opened)
+
   return (
     <>
       <div
@@ -176,9 +178,6 @@ export function Select({
           </div>
         )}
       </div>
-      {opened && (
-        <Cover onClick={() => setOpened(false)} opacity={0} index={10} />
-      )}
     </>
   )
 }
