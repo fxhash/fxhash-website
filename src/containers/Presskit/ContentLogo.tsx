@@ -2,14 +2,14 @@ import { Button } from "components/Button"
 import classes from "./Content.module.scss"
 import cx from "classnames"
 import Image from "next/image"
-import FxFullLogoBlackTransparentBg from "../../../public/fxhash-press-kit/png/Black full logo on transparent background.png"
-import FxFullLogoWhiteTransparentBg from "../../../public/fxhash-press-kit/png/White full logo on transparent background.png"
-import FxFullLogoBlackWhiteBg from "../../../public/fxhash-press-kit/png/Black full logo on white background.png"
-import FxFullLogoWhiteBlackBg from "../../../public/fxhash-press-kit/png/White full logo on dark background.png"
-import FxSquareLogoBlackTransparentBg from "../../../public/fxhash-press-kit/png/Black square logo on transparent background.png"
-import FxSquareLogoWhiteTransparentBg from "../../../public/fxhash-press-kit/png/White square logo on transparent background.png"
-import FxSquareLogoBlackWhiteBg from "../../../public/fxhash-press-kit/png/Black square logo on white background.png"
-import FxSquareLogoWhiteBlackBg from "../../../public/fxhash-press-kit/png/White square logo on dark background.png"
+import FxFullLogoBlackTransparentBg from "../../../public/fxhash-press-kit/png/fxhash_Black full logo on transparent background.png"
+import FxFullLogoWhiteTransparentBg from "../../../public/fxhash-press-kit/png/fxhash_White full logo on transparent background.png"
+import FxFullLogoBlackWhiteBg from "../../../public/fxhash-press-kit/png/fxhash_Black full logo on white background.png"
+import FxFullLogoWhiteBlackBg from "../../../public/fxhash-press-kit/png/fxhash_White full logo on dark background.png"
+import FxSquareLogoBlackTransparentBg from "../../../public/fxhash-press-kit/png/fx_Black square logo on transparent background.png"
+import FxSquareLogoWhiteTransparentBg from "../../../public/fxhash-press-kit/png/fx_White square logo on transparent background.png"
+import FxSquareLogoBlackWhiteBg from "../../../public/fxhash-press-kit/png/fx_Black square logo on white background.png"
+import FxSquareLogoWhiteBlackBg from "../../../public/fxhash-press-kit/png/fx_White square logo on dark background.png"
 import FxFullLogoClearSpace from "../../../public/fxhash-press-kit/fxhash_full_min-clear-spacing.png"
 import FxSquareLogoClearSpace from "../../../public/fxhash-press-kit/fxhash_square_min-clear-spacing.png"
 
@@ -69,24 +69,24 @@ export function ContentLogo() {
         <section>
           <LogoBox
             img={FxFullLogoBlackTransparentBg}
-            assetId="Black full logo on transparent background"
+            assetId="fxhash_Black full logo on transparent background"
             caption="Black logo on transparent background"
           />
           <LogoBox
             img={FxFullLogoWhiteTransparentBg}
-            assetId="White full logo on transparent background"
+            assetId="fxhash_White full logo on transparent background"
             caption="White logo on transparent background"
           />
         </section>
         <section>
           <LogoBox
             img={FxFullLogoBlackWhiteBg}
-            assetId="Black full logo on white background"
+            assetId="fxhash_Black full logo on white background"
             caption="Black logo on white background"
           />
           <LogoBox
             img={FxFullLogoWhiteBlackBg}
-            assetId="White full logo on dark background"
+            assetId="fxhash_White full logo on dark background"
             caption="White logo on dark background"
           />
         </section>
@@ -96,24 +96,24 @@ export function ContentLogo() {
         <section>
           <LogoBox
             img={FxSquareLogoBlackTransparentBg}
-            assetId="Black square logo on transparent background"
+            assetId="fx_Black square logo on transparent background"
             caption="Black logo on transparent background"
           />
           <LogoBox
             img={FxSquareLogoWhiteTransparentBg}
-            assetId="White square logo on transparent background"
+            assetId="fx_White square logo on transparent background"
             caption="White logo on transparent background"
           />
         </section>
         <section>
           <LogoBox
             img={FxSquareLogoBlackWhiteBg}
-            assetId="Black square logo on white background"
+            assetId="fx_Black square logo on white background"
             caption="Black logo on white background"
           />
           <LogoBox
             img={FxSquareLogoWhiteBlackBg}
-            assetId="White square logo on dark background"
+            assetId="fx_White square logo on dark background"
             caption="White logo on dark background"
           />
         </section>
@@ -121,8 +121,8 @@ export function ContentLogo() {
       <h2>clearspace</h2>
       <article>
         <section className={classes.nobg}>
-          <LogoBox img={FxFullLogoWhiteBlackBg} />
-          <LogoBox img={FxSquareLogoWhiteBlackBg} />
+          <LogoBox img={FxFullLogoClearSpace} />
+          <LogoBox img={FxSquareLogoClearSpace} />
         </section>
       </article>
       <article className={classes.packageArticle}>
