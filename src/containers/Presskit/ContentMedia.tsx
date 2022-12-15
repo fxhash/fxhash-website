@@ -478,13 +478,6 @@ export function ContentMedia() {
               />
             </MediaGrid>
           </Event>
-          <Event title="NFT.NYC" datetime="2022-06-20">
-            <MediaGrid>
-              <GridItemImg src={nftnyc1} full />
-              <GridItemImg src={nftnyc2} full />
-              <GridItemImg src={nftnyc3} full />
-            </MediaGrid>
-          </Event>
           <Event title="TezDev paris" datetime="2022-07-21">
             <p>
               TezDev Paris is a hub where ideas flow freely, connecting a
