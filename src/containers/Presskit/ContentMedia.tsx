@@ -195,22 +195,6 @@ export function ContentMedia() {
             </MediaGrid>
           </Event>
         </EventSection>
-        <EventSection title="Artist Interview Series">
-          <Event title="Piter Pasma">
-            <p>
-              Get to know @piterpasma in the first of our artist interview
-              series ✨ In this teaser, Pasma discusses 'Industrial Devolution'
-              - his new generative art collection being Live Minted today at 6
-              PM during the @brtmoments presents fx(hash) event!
-            </p>
-            <MediaGrid>
-              <GridItemYoutube
-                full
-                src="https://www.youtube.com/embed/hRuHLY0-Vvs"
-              />
-            </MediaGrid>
-          </Event>
-        </EventSection>
         <EventSection title="Art Basel">
           <Event title="Art Basel Hongkong">
             <p>
@@ -419,6 +403,20 @@ export function ContentMedia() {
           </Event>
         </EventSection>
         <EventSection title="NFT Events">
+          <Event title="Piter Pasma">
+            <p>
+              Get to know @piterpasma in the first of our artist interview
+              series ✨ In this teaser, Pasma discusses 'Industrial Devolution'
+              - his new generative art collection being Live Minted today at 6
+              PM during the @brtmoments presents fx(hash) event!
+            </p>
+            <MediaGrid>
+              <GridItemYoutube
+                full
+                src="https://www.youtube.com/embed/hRuHLY0-Vvs"
+              />
+            </MediaGrid>
+          </Event>
           <Event title="Proof of People">
             <p>
               The fxhash live minting experience is an interactive, real-time
