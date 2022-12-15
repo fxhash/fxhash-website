@@ -1,4 +1,10 @@
-import React, { ReactNode, useRef, useState, MutableRefObject } from "react"
+import React, {
+  ReactNode,
+  useRef,
+  useState,
+  MutableRefObject,
+  useMemo,
+} from "react"
 import classes from "./Content.module.scss"
 import cx from "classnames"
 import Image, { ImageProps } from "next/image"
@@ -25,6 +31,7 @@ import abhk1 from "./images/abhk01.png"
 import { Spacing } from "components/Layout/Spacing"
 import { VideoPolymorphic } from "components/Medias/VideoPolymorphic"
 import EmbedYoutube from "components/NFTArticle/elements/Embed/EmbedYoutube"
+import ClientOnly, { ClientOnlyEmpty } from "components/Utils/ClientOnly"
 
 interface MediaGridProps {
   children: ReactNode
@@ -92,12 +99,20 @@ function NewsLink(props: NewsLinkProps) {
 interface EventProps {
   title: string
   children: ReactNode
+  datetime: string
 }
 
 function Event(props: EventProps) {
   const sectionRef = useRef() as MutableRefObject<HTMLElement>
-  const { title, children } = props
+  const { title, children, datetime } = props
   const [isOpen, setIsOpen] = useState<boolean>()
+  const formattedDate = useMemo(
+    () =>
+      new Intl.DateTimeFormat(global?.navigator?.language || "en-GB").format(
+        new Date(datetime)
+      ),
+    [datetime]
+  )
   const toggleIsOpen = () => {
     setIsOpen(!isOpen)
     if (isOpen) {
@@ -109,6 +124,9 @@ function Event(props: EventProps) {
     <section ref={sectionRef}>
       <div className={classes.eventHeader} onClick={toggleIsOpen}>
         <h4>{title}</h4>
+        <ClientOnlyEmpty>
+          {datetime && <time dateTime={datetime}>{formattedDate}</time>}
+        </ClientOnlyEmpty>
         <i
           className={cx("fa-regular", {
             "fa-angle-down": !isOpen,
@@ -156,7 +174,7 @@ export function ContentMedia() {
       <section>
         <h2>past event showcase</h2>
         <EventSection title="Galleries/Museums">
-          <Event title="Bright Moments - Venice, USA">
+          <Event title="Bright Moments - Venice, USA" datetime="2022-10-06">
             <p>
               A Year of Rapid Innovation in Generative Art: a gallery show
               curated by Tender at Bright Moments Venice Beach, coinciding with
@@ -173,7 +191,7 @@ export function ContentMedia() {
               <GridItemImg src={bm4} />
             </MediaGrid>
           </Event>
-          <Event title="Dekabinett - Berlin, Germany">
+          <Event title="Dekabinett - Berlin, Germany" datetime="2022-07-26">
             <p>
               fxhash is an open platform for generative art Tezos blockchain.
               Generative art bridges the gap between artists and collectors: the
@@ -196,7 +214,7 @@ export function ContentMedia() {
           </Event>
         </EventSection>
         <EventSection title="Art Basel">
-          <Event title="Art Basel Hongkong">
+          <Event title="Art Basel Hongkong" datetime="2022-05-25">
             <p>
               Pioneering Asian and global generative NFT artists are set to
               illuminate Art Basel Hong Kong 2022 at a 250m² Tezos NFT
@@ -245,7 +263,7 @@ export function ContentMedia() {
               <GridItemImg src={abhk1} />
             </MediaGrid>
           </Event>
-          <Event title="Art Basel Basel">
+          <Event title="Art Basel Basel" datetime="2022-06-14">
             <p>
               The Tezos art exhibition encourages visitors to immerse themselves
               in this environment and learn first-hand about the importance of
@@ -288,7 +306,7 @@ export function ContentMedia() {
               />
             </MediaGrid>
           </Event>
-          <Event title="Art Basel Paris">
+          <Event title="Art Basel Paris" datetime="2022-10-18">
             <p>
               The Tezos exhibition will bring together three components of the
               digital art world - curation, ownership and exhibition. It will
@@ -334,7 +352,7 @@ export function ContentMedia() {
               />
             </MediaGrid>
           </Event>
-          <Event title="Art Basel Miami Beach">
+          <Event title="Art Basel Miami Beach" datetime="2022-11-29">
             <p>
               In 2021, the Tezos exhibition made headlines as the first
               interactive NFT exhibition in the history of Art Basel Miami and
@@ -403,7 +421,10 @@ export function ContentMedia() {
           </Event>
         </EventSection>
         <EventSection title="NFT Events">
-          <Event title="Piter Pasma">
+          <Event
+            title="Piter Pasma x fx(hash) for Bright Moments"
+            datetime="2022-10-06"
+          >
             <p>
               Get to know @piterpasma in the first of our artist interview
               series ✨ In this teaser, Pasma discusses 'Industrial Devolution'
@@ -417,7 +438,7 @@ export function ContentMedia() {
               />
             </MediaGrid>
           </Event>
-          <Event title="Proof of People">
+          <Event title="Proof of People" datetime="2022-07-06">
             <p>
               The fxhash live minting experience is an interactive, real-time
               exhibit that lets anyone mint & own unique pieces of generative
@@ -457,14 +478,14 @@ export function ContentMedia() {
               />
             </MediaGrid>
           </Event>
-          <Event title="NFT.NYC">
+          <Event title="NFT.NYC" datetime="2022-06-20">
             <MediaGrid>
               <GridItemImg src={nftnyc1} full />
               <GridItemImg src={nftnyc2} full />
               <GridItemImg src={nftnyc3} full />
             </MediaGrid>
           </Event>
-          <Event title="TezDev paris">
+          <Event title="TezDev paris" datetime="2022-07-21">
             <p>
               TezDev Paris is a hub where ideas flow freely, connecting a
               community of Tezos blockchain enthusiasts. Register today to join
@@ -478,7 +499,7 @@ export function ContentMedia() {
               />
             </MediaGrid>
           </Event>
-          <Event title="NFC Lisbon">
+          <Event title="NFC Lisbon" datetime="2022-04-04">
             <p>
               NFC Lisbon was our first official conference we attended. We used
               our speaking slot to showcase what we build in our beta and gave

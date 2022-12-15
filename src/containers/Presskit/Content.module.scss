@@ -148,7 +148,12 @@
   padding-bottom: $spacing;
   padding-top:$spacing;
   border-bottom: 1px solid currentColor;
-  background: var(--color-white)
+  background: var(--color-white);
+  gap: $spacing;
+  time {
+    margin-left: auto;
+    font-size: var(--font-size-small)
+  }
 }
 .eventContent {
   margin-bottom: $spacing-large;
