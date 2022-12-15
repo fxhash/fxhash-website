@@ -95,7 +95,7 @@ const PressKitPage = ({ tab }: PagePressKitProps) => {
   return (
     <>
       <Head>
-        <title>fxhash — press kit</title>
+        <title>fxhash — press kit {tabLabel}</title>
         <meta
           key="og:title"
           property="og:title"
