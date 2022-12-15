@@ -17,6 +17,7 @@ import EmbedOpenProcessing from "./EmbedOpenProcessing"
 export interface EmbedElementProps {
   href: string
   caption?: string
+  className?: string
 }
 interface UrlPlayer {
   check: (href: string) => boolean
