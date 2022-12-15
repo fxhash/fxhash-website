@@ -29,7 +29,9 @@
       font-size: var(--font-size-h6);    
     }
   }
-
+  p {
+    word-break: break-word;
+  }
 }
 
 .txtRoot {
