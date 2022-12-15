@@ -32,6 +32,7 @@ import { Spacing } from "components/Layout/Spacing"
 import { VideoPolymorphic } from "components/Medias/VideoPolymorphic"
 import EmbedYoutube from "components/NFTArticle/elements/Embed/EmbedYoutube"
 import ClientOnly, { ClientOnlyEmpty } from "components/Utils/ClientOnly"
+import { DateFormatted } from "components/Utils/Date/DateFormat"
 
 interface MediaGridProps {
   children: ReactNode
@@ -99,20 +100,14 @@ function NewsLink(props: NewsLinkProps) {
 interface EventProps {
   title: string
   children: ReactNode
-  datetime: string
+  startDate: string
+  endDate: string
 }
 
 function Event(props: EventProps) {
   const sectionRef = useRef() as MutableRefObject<HTMLElement>
-  const { title, children, datetime } = props
+  const { title, children, startDate, endDate } = props
   const [isOpen, setIsOpen] = useState<boolean>()
-  const formattedDate = useMemo(
-    () =>
-      new Intl.DateTimeFormat(global?.navigator?.language || "en-GB").format(
-        new Date(datetime)
-      ),
-    [datetime]
-  )
   const toggleIsOpen = () => {
     setIsOpen(!isOpen)
     if (isOpen) {
@@ -124,9 +119,11 @@ function Event(props: EventProps) {
     <section ref={sectionRef}>
       <div className={classes.eventHeader} onClick={toggleIsOpen}>
         <h4>{title}</h4>
-        <ClientOnlyEmpty>
-          {datetime && <time dateTime={datetime}>{formattedDate}</time>}
-        </ClientOnlyEmpty>
+        {startDate && (
+          <time dateTime={startDate}>
+            <DateFormatted format="MMM d, yyyy" date={startDate} />
+          </time>
+        )}
         <i
           className={cx("fa-regular", {
             "fa-angle-down": !isOpen,
@@ -134,7 +131,18 @@ function Event(props: EventProps) {
           })}
         />
       </div>
-      <div className={classes.eventContent}>{isOpen && children}</div>
+      <div className={classes.eventContent}>
+        {isOpen && (
+          <>
+            <Spacing size="large" />
+            <h6>
+              <DateFormatted format="do - " date={startDate} />
+              <DateFormatted format="do MMMM, yyyy" date={endDate} />
+            </h6>
+            {children}
+          </>
+        )}
+      </div>
     </section>
   )
 }
@@ -174,7 +182,11 @@ export function ContentMedia() {
       <section>
         <h2>past event showcase</h2>
         <EventSection title="Galleries/Museums">
-          <Event title="Bright Moments - Venice, USA" datetime="2022-10-06">
+          <Event
+            title="Bright Moments - Venice, USA"
+            startDate="2022-10-06"
+            endDate="2022-10-07"
+          >
             <p>
               A Year of Rapid Innovation in Generative Art: a gallery show
               curated by Tender at Bright Moments Venice Beach, coinciding with
@@ -191,7 +203,11 @@ export function ContentMedia() {
               <GridItemImg src={bm4} />
             </MediaGrid>
           </Event>
-          <Event title="Dekabinett - Berlin, Germany" datetime="2022-07-26">
+          <Event
+            title="Dekabinett - Berlin, Germany"
+            startDate="2022-07-26"
+            endDate="2022-08-05"
+          >
             <p>
               fxhash is an open platform for generative art Tezos blockchain.
               Generative art bridges the gap between artists and collectors: the
@@ -214,7 +230,11 @@ export function ContentMedia() {
           </Event>
         </EventSection>
         <EventSection title="Art Basel">
-          <Event title="Art Basel Hongkong" datetime="2022-05-25">
+          <Event
+            title="Art Basel Hongkong"
+            startDate="2022-05-25"
+            endDate="2022-05-29"
+          >
             <p>
               Pioneering Asian and global generative NFT artists are set to
               illuminate Art Basel Hong Kong 2022 at a 250m² Tezos NFT
@@ -263,7 +283,11 @@ export function ContentMedia() {
               <GridItemImg src={abhk1} />
             </MediaGrid>
           </Event>
-          <Event title="Art Basel Basel" datetime="2022-06-14">
+          <Event
+            title="Art Basel Basel"
+            startDate="2022-06-14"
+            endDate="2022-06-19"
+          >
             <p>
               The Tezos art exhibition encourages visitors to immerse themselves
               in this environment and learn first-hand about the importance of
@@ -306,7 +330,11 @@ export function ContentMedia() {
               />
             </MediaGrid>
           </Event>
-          <Event title="Art Basel Paris" datetime="2022-10-18">
+          <Event
+            title="Art Basel Paris"
+            startDate="2022-10-18"
+            endDate="2022-10-22"
+          >
             <p>
               The Tezos exhibition will bring together three components of the
               digital art world - curation, ownership and exhibition. It will
@@ -352,7 +380,11 @@ export function ContentMedia() {
               />
             </MediaGrid>
           </Event>
-          <Event title="Art Basel Miami Beach" datetime="2022-11-29">
+          <Event
+            title="Art Basel Miami Beach"
+            startDate="2022-11-29"
+            endDate="2022-12-03"
+          >
             <p>
               In 2021, the Tezos exhibition made headlines as the first
               interactive NFT exhibition in the history of Art Basel Miami and
@@ -423,7 +455,8 @@ export function ContentMedia() {
         <EventSection title="NFT Events">
           <Event
             title="Piter Pasma x fx(hash) for Bright Moments"
-            datetime="2022-10-06"
+            startDate="2022-10-06"
+            endDate="2022-07-10"
           >
             <p>
               Get to know @piterpasma in the first of our artist interview
@@ -438,7 +471,11 @@ export function ContentMedia() {
               />
             </MediaGrid>
           </Event>
-          <Event title="Proof of People" datetime="2022-07-06">
+          <Event
+            title="Proof of People"
+            startDate="2022-07-06"
+            endDate="2022-07-08"
+          >
             <p>
               The fxhash live minting experience is an interactive, real-time
               exhibit that lets anyone mint & own unique pieces of generative
@@ -478,7 +515,11 @@ export function ContentMedia() {
               />
             </MediaGrid>
           </Event>
-          <Event title="TezDev paris" datetime="2022-07-21">
+          <Event
+            title="TezDev paris"
+            startDate="2022-07-21"
+            endDate="2022-07-23"
+          >
             <p>
               TezDev Paris is a hub where ideas flow freely, connecting a
               community of Tezos blockchain enthusiasts. Register today to join
@@ -492,7 +533,7 @@ export function ContentMedia() {
               />
             </MediaGrid>
           </Event>
-          <Event title="NFC Lisbon" datetime="2022-04-04">
+          <Event title="NFC Lisbon" startDate="2022-04-04" endDate="2022-04-05">
             <p>
               NFC Lisbon was our first official conference we attended. We used
               our speaking slot to showcase what we build in our beta and gave

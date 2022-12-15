@@ -29,6 +29,10 @@
       font-size: var(--font-size-h6);    
     }
   }
+  h6 {
+    font-weight: var(--font-weight-regular);
+    font-size: var(--font-size-small)
+  }
   p {
     word-break: break-word;
   }
@@ -150,7 +154,11 @@
   border-bottom: 1px solid currentColor;
   background: var(--color-white);
   gap: $spacing;
+  @media (max-width: $breakpoint-md) {
+    gap: $spacing-small;
+  }
   time {
+    white-space: nowrap;
     margin-left: auto;
     font-size: var(--font-size-small)
   }
