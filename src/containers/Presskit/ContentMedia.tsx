@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from "react"
+import React, { ReactNode, useRef, useState, MutableRefObject } from "react"
 import classes from "./Content.module.scss"
 import cx from "classnames"
 import Image, { ImageProps } from "next/image"
@@ -95,13 +95,18 @@ interface EventProps {
 }
 
 function Event(props: EventProps) {
+  const sectionRef = useRef() as MutableRefObject<HTMLElement>
   const { title, children } = props
   const [isOpen, setIsOpen] = useState<boolean>()
   const toggleIsOpen = () => {
     setIsOpen(!isOpen)
+    if (isOpen) {
+      if (window.scrollY < sectionRef.current.offsetTop) return
+      window.scrollTo(0, sectionRef.current.offsetTop)
+    }
   }
   return (
-    <section>
+    <section ref={sectionRef}>
       <div className={classes.eventHeader} onClick={toggleIsOpen}>
         <h4>{title}</h4>
         <i
