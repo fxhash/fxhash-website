@@ -34,9 +34,8 @@ function MediaGrid(props: MediaGridProps) {
   return <div className={classes.mediaGrid}>{props.children}</div>
 }
 
-function GridItemImg(props: { src: StaticImageData, full?: boolean }) {
+function GridItemImg(props: { src: StaticImageData; full?: boolean }) {
   const { full = false, src, ...rest } = props
-  console.log(src)
   return (
     <figure className={cx({ full })}>
       <a href={src.src} target="_blank" rel="noopener nofollow noreferrer">
