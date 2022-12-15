@@ -33,6 +33,7 @@ import { VideoPolymorphic } from "components/Medias/VideoPolymorphic"
 import EmbedYoutube from "components/NFTArticle/elements/Embed/EmbedYoutube"
 import ClientOnly, { ClientOnlyEmpty } from "components/Utils/ClientOnly"
 import { DateFormatted } from "components/Utils/Date/DateFormat"
+import { DateRange } from "components/Utils/Date/DateRange"
 
 interface MediaGridProps {
   children: ReactNode
@@ -104,6 +105,7 @@ interface EventProps {
   endDate: string
 }
 
+
 function Event(props: EventProps) {
   const sectionRef = useRef() as MutableRefObject<HTMLElement>
   const { title, children, startDate, endDate } = props
@@ -136,8 +138,7 @@ function Event(props: EventProps) {
           <>
             <Spacing size="large" />
             <h6>
-              <DateFormatted format="do - " date={startDate} />
-              <DateFormatted format="do MMMM, yyyy" date={endDate} />
+              <DateRange startDate={startDate} endDate={endDate} />
             </h6>
             {children}
           </>
