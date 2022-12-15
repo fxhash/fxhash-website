@@ -46,8 +46,13 @@ function MediaGrid(props: MediaGridProps) {
 function GridItemImg(props: { src: StaticImageData; full?: boolean }) {
   const { full = false, src, ...rest } = props
   return (
-    <figure className={cx({ full })}>
-      <a href={src.src} target="_blank" rel="noopener nofollow noreferrer">
+    <a
+      href={src.src}
+      target="_blank"
+      rel="noopener nofollow noreferrer"
+      className={cx({ full })}
+    >
+      <figure>
         <Image
           placeholder="blur"
           objectFit="cover"
@@ -55,8 +60,8 @@ function GridItemImg(props: { src: StaticImageData; full?: boolean }) {
           alt=""
           {...rest}
         />
-      </a>
-    </figure>
+      </figure>
+    </a>
   )
 }
 
@@ -104,7 +109,6 @@ interface EventProps {
   startDate: string
   endDate: string
 }
-
 
 function Event(props: EventProps) {
   const sectionRef = useRef() as MutableRefObject<HTMLElement>
