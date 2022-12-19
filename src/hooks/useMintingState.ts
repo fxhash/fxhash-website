@@ -42,7 +42,7 @@ export interface IModLockState {
 export enum EMintingState {
   MOD_LOCK = "MOD_LOCK",
   DUTCH_AUCTION = "DUTCH_AUCTION",
-  FIXED_PRICING = "FIXED_PRICING", 
+  FIXED_PRICING = "FIXED_PRICING",
 }
 
 export interface IMintingState {
@@ -79,7 +79,7 @@ function deriveMintingStateFromToken(
   forceDisabled: boolean
 ): IMintingState {
   // should the minting button be hidden ?
-  const hidden = [GenTokFlag.MALICIOUS, GenTokFlag.HIDDEN].includes(token.flag) 
+  const hidden = [GenTokFlag.MALICIOUS, GenTokFlag.HIDDEN].includes(token.flag)
     || token.balance === 0
 
   // is the token enabled for the current user
@@ -134,7 +134,7 @@ function deriveMintingStateFromToken(
     const ended = isAfter(now, endsAt)
     // is the auction active ? now € [start, ends]
     const active = started && !ended
-    
+
     // set a basic state with required values
     daState = {
       active,
@@ -166,7 +166,7 @@ function deriveMintingStateFromToken(
     price = da.levels[levelIdx]
 
     // check if the dutch auction state needs to prevail
-    if (!refreshTimer 
+    if (!refreshTimer
       || (isAfter(activeTimer, refreshTimer)) && isBefore(unlocksAt, opensAt)
     ) {
       activeMintingState = EMintingState.DUTCH_AUCTION
@@ -189,7 +189,7 @@ function deriveMintingStateFromToken(
       fixedState.active = isAfter(now, opensAt)
 
       // check if the pricing fixed state needs to prevail
-      if (!refreshTimer 
+      if (!refreshTimer
         || (isAfter(opensAt, refreshTimer) && isBefore(unlocksAt, opensAt))
       ) {
         activeMintingState = EMintingState.FIXED_PRICING
@@ -229,11 +229,11 @@ function deriveMintingStateFromToken(
 
 /**
  * The Minting State Hook provides utilities to have a managed local state
- * to both control the UI related to the minting state of a token as well as 
+ * to both control the UI related to the minting state of a token as well as
  * some values required for contract calls (such as the current price).
- * 
+ *
  * It re-renders the component when the UI needs to be updated.
- * 
+ *
  * When a Minting State is instaciated in the tree, it will spawn up the
  * eventual timeouts related to updates based on timings, which in turn will
  * update the state.
