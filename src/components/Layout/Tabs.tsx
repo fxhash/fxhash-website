@@ -7,6 +7,7 @@ import React, {
   useRef,
 } from "react"
 import Link, { LinkProps } from "next/link"
+import { onKeydownAccessibleButton } from "../../utils/accessibility"
 
 const DefaultTabWrapper = ({
   children,
@@ -27,7 +28,13 @@ export type TabDefinition = {
   name: string
   props?: any
 }
-type TabsLayout = "full-width" | "fixed-size" | "subtabs" | "subtabs-vertical"
+type TabsLayout =
+  | "full-width"
+  | "fixed-size"
+  | "subtabs"
+  | "subtabs-vertical"
+  | "fixed-size-narrow"
+
 interface TabProps {
   layout: TabsLayout
   definition: TabDefinition
@@ -52,6 +59,9 @@ export function Tab({
       })}
       onClick={onClick}
       {...definition.props}
+      role="button"
+      tabIndex={0}
+      onKeyDown={onKeydownAccessibleButton(onClick)}
     >
       {definition.name}
     </Wrapper>

@@ -4,7 +4,7 @@ import text from "../../styles/Text.module.css"
 import effects from "../../styles/Effects.module.scss"
 import cs from "classnames"
 import { Button } from "../Button"
-import { useCallback, useContext, useMemo } from "react"
+import { useCallback, useContext, useMemo, useRef } from "react"
 import { UserContext } from "../../containers/UserProvider"
 import { Dropdown } from "../Navigation/Dropdown"
 import { Avatar } from "../User/Avatar"
@@ -21,6 +21,7 @@ interface NavigationProps {
   onChangeSearchVisibility: (isVisible: boolean) => void
 }
 export function Navigation({ onChangeSearchVisibility }: NavigationProps) {
+  const refButtonSettings = useRef<HTMLButtonElement>(null)
   const userCtx = useContext(UserContext)
   const router = useRouter()
   const [opened, setOpened] = useState(false)
@@ -57,6 +58,12 @@ export function Navigation({ onChangeSearchVisibility }: NavigationProps) {
   const handleClickDisconnect = useCallback(() => {
     userCtx.disconnect()
   }, [userCtx])
+  const handleCloseModal = useCallback(() => {
+    setSettingsModal(false)
+    if (refButtonSettings.current) {
+      refButtonSettings.current.focus()
+    }
+  }, [])
   const routerRoot = useMemo<string>(() => {
     return router.pathname.split("/")[1]
   }, [router.pathname])
@@ -143,6 +150,7 @@ export function Navigation({ onChangeSearchVisibility }: NavigationProps) {
             aria-label="Open settings modal"
             onClick={() => setSettingsModal(!settingsModal)}
             className={cs(style.nav_button, style.btn_icon)}
+            ref={refButtonSettings}
           >
             <i aria-hidden className="fas fa-cog" />
           </button>
@@ -214,9 +222,7 @@ export function Navigation({ onChangeSearchVisibility }: NavigationProps) {
           />
         )}
       </ClientOnly>
-      {settingsModal && (
-        <SettingsModal onClose={() => setSettingsModal(false)} />
-      )}
+      {settingsModal && <SettingsModal onClose={handleCloseModal} />}
     </>
   )
 }

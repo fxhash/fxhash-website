@@ -62,8 +62,8 @@ export function Footer() {
             <Link href="https://join.com/companies/fxhash">
               <a target="_blank">Career opportunities</a>
             </Link>
-            <Link href="https://fxhash.notion.site/Press-kit-689f9fec091f43eea35970c80f172fec">
-              <a target="_blank">Press kit</a>
+            <Link href="/press-kit">
+              <a>Press kit</a>
             </Link>
             <Link href="/status">
               <a>
