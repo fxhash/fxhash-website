@@ -2,10 +2,9 @@ import {
   BaseInputParams,
   BindingTarget,
   CompositeConstraint,
-  createRangeConstraint,
-  createStepConstraint,
   InputBindingPlugin,
   ParamsParsers,
+  ParamsParser,
   parseParams,
   ValueMap,
   Constraint,
@@ -14,8 +13,8 @@ import {
   ListController,
   createListConstraint,
   ListParamsOptions,
-  parseListOptions,
   findListItems,
+  ObjectStyleListOptions,
 } from "@tweakpane/core"
 import { FxStringInputController } from "./controller"
 
@@ -23,6 +22,25 @@ export interface IFxStringInputPluginParams extends BaseInputParams {
   view: "string"
   maxLength?: number
   options?: ListParamsOptions<string>
+}
+
+export function parseListOptions<T>(
+  value: unknown
+): ListParamsOptions<T> | undefined {
+  const p = ParamsParsers
+  if (Array.isArray(value)) {
+    return (p.required.raw as ParamsParser<ObjectStyleListOptions<T>>)(
+      value.reduce((acc, v, i) => {
+        acc[v] = i
+        return acc
+      }, {})
+    ).value
+  }
+  if (typeof value === "object") {
+    return (p.required.raw as ParamsParser<ObjectStyleListOptions<T>>)(value)
+      .value
+  }
+  return undefined
 }
 
 // NOTE: You can see JSDoc comments of `InputBindingPlugin` for details about each property
