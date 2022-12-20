@@ -1,4 +1,13 @@
-.root {}
+.root {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+.right {
+  position: sticky;
+  top: 32px;
+}
 
 .description {
   max-width: 600px;
