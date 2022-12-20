@@ -154,6 +154,7 @@ export function ParamsProvider({ children }: PropsWithChildren<{}>) {
     })
     setPane(p)
     values.current = pValues
+    setData({ ...pValues })
     return () => {
       p.dispose()
     }
