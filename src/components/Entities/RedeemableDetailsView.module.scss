@@ -1,12 +1,19 @@
+@import "../../styles/Variables";
+
 .root {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
+  gap: 24px;
+  & > div {
+    flex: 1;
+  }
 }
 
 .right {
   position: sticky;
   top: 32px;
+  width: 100%;
 }
 
 .description {
@@ -19,13 +26,33 @@
 }
 
 .carousel {
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
-
-  img {
-    width: 200px;
-    height: 200px;
-    object-fit: contain;
+  aspect-ratio: 87 / 49;
+  height: 100%;
+  .container_img {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+    }
   }
+}
+.dots {
+  max-width: 335px;
+}
+.options {
+  margin-top: $spacing-x-large;
+}
+.options_grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: $spacing-x-large;
 }

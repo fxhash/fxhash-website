@@ -42,19 +42,6 @@ const _GenerativeRedeem = ({
             token={token}
           />
         ))}
-        <div>
-          <Infobox>
-            The iterations of this project can be redeemed to activate an event.
-            <br />
-            Redeeming a token will not destroy it, and owners will keep the
-            ownership of their token.
-            <br />
-            <br />
-            <LinkGuide href="/docs">
-              Learn more about Redeemable tokens
-            </LinkGuide>
-          </Infobox>
-        </div>
       </div>
       <Spacing size="x-large" />
       {renderBackToProject}
