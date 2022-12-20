@@ -115,7 +115,6 @@ export const Qu_objktsFeed = gql`
       name
       slug
       issuer {
-        id
         name
         slug
         labels

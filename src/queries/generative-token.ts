@@ -157,6 +157,7 @@ export const Qu_genTokenIterations = gql`
         version
         iteration
         issuer {
+          id
           flag
           labels
         }
