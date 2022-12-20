@@ -108,7 +108,6 @@ export function createFxPane(
     if (!paramDefinition) return
     const { controller } =
       parameterControlsDefinition[paramDefinition.type as EParameterType]
-    console.log(paramDefinition);
     pane.addInput(valueMap, key, {
       view: controller.view,
       label: paramDefinition.name,
