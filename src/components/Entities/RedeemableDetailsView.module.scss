@@ -4,7 +4,7 @@
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  gap: 24px;
+  gap: 32px;
   & > div {
     flex: 1;
   }
@@ -17,37 +17,13 @@
 }
 
 .description {
-  max-width: 600px;
+  max-width: 800px;
+}
+.info {
+  max-width: 800px;
+  margin-top: $spacing-x-large;
 }
 
-.back_wrapper {
-  display: flex;
-  align-items: flex-start;
-}
-
-.carousel {
-  aspect-ratio: 87 / 49;
-  height: 100%;
-  .container_img {
-    width: 100%;
-    height: 100%;
-    position: relative;
-    img {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      object-position: center;
-    }
-  }
-}
-.dots {
-  max-width: 335px;
-}
 .options {
   margin-top: $spacing-x-large;
 }
@@ -55,4 +31,33 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: $spacing-x-large;
+}
+.options_list {
+  p {
+    text-transform: lowercase;
+    margin: $spacing 0 0 0;
+  }
+  ul {
+    padding: $spacing-x-small 0 0 0;
+    margin: 0;
+    list-style-type: none;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 8px;
+    li {
+      padding: $spacing-3x-small $spacing;
+      background: var(--color-gray-vvlight);
+      color: var(--color-gray);
+    }
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .root {
+    flex-direction: column;
+  }
+  .right {
+    position: static;
+  }
 }

@@ -16,6 +16,10 @@
   }
 }
 
+.input {
+  width: 100%;
+}
+
 @media (max-width: $breakpoint-sm) {
   .root {
     & > * + * {

@@ -1,0 +1,9 @@
+@import "../../styles/Variables";
+.button {
+
+}
+@media (max-width: $breakpoint-sm) {
+  .button {
+    width: 100%;
+  }
+}

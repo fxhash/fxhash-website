@@ -1,4 +1,4 @@
-import { HTMLAttributes, PropsWithChildren } from "react"
+import { PropsWithChildren } from "react"
 import style from "./Button.module.scss"
 import cs from "classnames"
 import { ButtonOrLink } from "./ButtonOrLink"

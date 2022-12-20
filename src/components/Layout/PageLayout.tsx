@@ -24,8 +24,8 @@ export function PageLayout({
       >
         {children}
       </main>
-      <Spacing size="6x-large" />
-      <Spacing size="6x-large" />
+      <Spacing size="6x-large" sm="3x-large" />
+      <Spacing size="6x-large" sm="none" />
     </>
   )
 }

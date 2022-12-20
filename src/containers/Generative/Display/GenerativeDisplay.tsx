@@ -165,7 +165,10 @@ export function GenerativeDisplay({ token, offlineMode = false }: Props) {
             )}
           >
             <GenerativePricing token={token} />
-            <GenerativeRedeemable token={token} />
+            <GenerativeRedeemable
+              isRedeemable={token.redeemables && token.redeemables.length > 0}
+              urlRedeemable={`/generative/${token.id}/redeem`}
+            />
             <ListSplits name="Primary split" splits={token.splitsPrimary} />
             <strong>Royalties</strong>
             <span className={style.mobile_align_right}>

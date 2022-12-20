@@ -6,7 +6,7 @@
     display: flex;
     flex-direction: row;
   }
-  
+
   &.layout-fixed-size {
     nav {
       justify-content: center;
@@ -50,6 +50,9 @@
   &.active {
     color: var(--color-black);
     border-bottom-color: var(--color-black);
+  }
+  &.disable_click {
+    cursor: auto;
   }
 
   &:hover {
@@ -108,6 +111,8 @@
   display: flex;
   justify-content: center;
 }
+
+
 @media (max-width: $breakpoint-lg) {
   .container.layout-fixed-size nav {
     justify-content: center;

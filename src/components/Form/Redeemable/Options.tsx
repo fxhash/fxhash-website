@@ -2,11 +2,9 @@ import style from "./Options.module.scss"
 import cs from "classnames"
 import { DisplayTezos } from "components/Display/DisplayTezos"
 import { InputSelectFromItems } from "components/Input/InputSelectFromItems"
-import { Select } from "components/Input/Select"
-import { FormikErrors, useField } from "formik"
+import { useField } from "formik"
 import { useUpdateFormArray } from "hooks/useFormUpdate"
 import { RedeemableOption } from "types/entities/Redeemable"
-import { InputProps } from "types/Inputs"
 import { Field } from "../Field"
 
 interface Props {

@@ -137,6 +137,9 @@ export const Qu_objktsFeed = gql`
         version
         price
       }
+      availableRedeemables {
+        address
+      }
     }
   }
 `

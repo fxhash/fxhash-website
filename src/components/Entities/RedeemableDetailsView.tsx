@@ -4,24 +4,34 @@ import { RedeemableDetails } from "types/entities/Redeemable"
 import { plural } from "utils/strings"
 import { ArticleContent } from "components/Article/ArticleContent"
 import { DisplayTezos } from "components/Display/DisplayTezos"
-import { GenerativeToken } from "../../types/entities/GenerativeToken"
 import { Infobox } from "../UI/Infobox"
 import { LinkGuide } from "../Link/LinkGuide"
-import React, { useState } from "react"
+import React from "react"
 import { Spacing } from "../Layout/Spacing"
-import { Carousel } from "../Carousel/Carousel"
-import { Image } from "../Image"
+import { Button } from "../Button"
+import { Icon } from "../Icons/Icon"
+import Link from "next/link"
+import { Error } from "../Error/Error"
+import { CarouselRedeemable } from "../Redeemable/CarouselRedeemable";
 
 interface Props {
-  token: GenerativeToken
+  title: string
   details: RedeemableDetails
+  info: any
+  urlRedeem?: string
+  error?: string | false
 }
-export function RedeemableDetailsView({ details, token }: Props) {
-  const [pageMedias, setPageMedias] = useState(0)
+export function RedeemableDetailsView({
+  details,
+  title,
+  info,
+  urlRedeem,
+  error,
+}: Props) {
   return (
     <div className={cs(style.root)}>
       <div>
-        <h3>{token.name}</h3>
+        <h3>{title}</h3>
         <Spacing size="x-large" />
         <h4>{details.name}</h4>
         <p>
@@ -39,41 +49,45 @@ export function RedeemableDetailsView({ details, token }: Props) {
             // className={cs(style.body)}
           />
         </div>
-        <Infobox>
-          The iterations of this project can be redeemed to activate an event. Redeeming a token will not destroy it, and owners will keep the
-          ownership of their token.
+        <Infobox className={style.info}>
+          {info}
           <br />
           <br />
           <LinkGuide href="/docs">Learn more about Redeemable tokens</LinkGuide>
         </Infobox>
+        {urlRedeem && !error && (
+          <>
+            <Spacing size="x-large" />
+            <Link href={urlRedeem}>
+              <Button
+                isLink
+                iconComp={<Icon icon="sparkles" />}
+                color="secondary"
+              >
+                redeem your token
+              </Button>
+            </Link>
+          </>
+        )}
+        {error && (
+          <>
+            <Spacing size="x-large" />
+            <Error>{error}</Error>
+          </>
+        )}
       </div>
       <div className={style.right}>
-        <Carousel
-          className={style.carousel}
-          classNameDots={style.dots}
-          page={pageMedias}
-          totalPages={details.medias.length}
-          onChangePage={setPageMedias}
-          options={{
-            showButtonControls: false,
-            showDots: true,
-          }}
-          renderSlide={(page) => {
-            const med = details.medias[page]
-            return (
-              <div className={style.container_img}>
-                <img alt={med.media.name} src={med.media.url} />
-              </div>
-            )
-          }}
-        />
+        <CarouselRedeemable medias={details.medias} />
         {details.options?.length > 0 && (
           <div className={style.options}>
             <span>The following options are available:</span>
             <div className={style.options_grid}>
               {details.options.map((option, idx) => (
-                <ul key={idx}>
-                  <li>{option.label}</li>
+                <div
+                  className={style.options_list}
+                  key={`${option.label}${idx}`}
+                >
+                  <p>{option.label}:</p>
                   <ul>
                     {option.values.map((value, idx) => (
                       <li key={idx}>
@@ -81,7 +95,7 @@ export function RedeemableDetailsView({ details, token }: Props) {
                       </li>
                     ))}
                   </ul>
-                </ul>
+                </div>
               ))}
             </div>
           </div>

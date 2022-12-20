@@ -4,17 +4,21 @@ import Link from "next/link"
 import { Icon } from "../Icons/Icon"
 
 interface Props {
-  token: GenerativeToken
+  isRedeemable: boolean
+  urlRedeemable?: string
 }
 
-export function GenerativeRedeemable({ token }: Props) {
+export function GenerativeRedeemable({
+  isRedeemable,
+  urlRedeemable = "",
+}: Props) {
   return (
     <>
-      {token.redeemables && token.redeemables.length > 0 && (
+      {isRedeemable && (
         <>
           <strong>Redeemable</strong>
           <span className={style.mobile_align_right}>
-            <Link href={`/generative/${token.id}/redeem`}>
+            <Link href={urlRedeemable}>
               <a>
                 <Icon icon="sparkles" />
                 <span> Yes</span>

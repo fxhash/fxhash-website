@@ -63,29 +63,25 @@ export function ListingAccept({ listing, objkt }: Props) {
         successMessage="You have collected this token !"
       />
 
-      <div className={cs(style.lock_container)}>
-        {!isOwner && (
-          <>
-            <Button
-              state={contractLoading ? "loading" : "default"}
-              color="secondary"
-              onClick={callContract}
-              disabled={locked}
-            >
-              purchase token -{" "}
-              <DisplayTezos
-                mutez={listing.price}
-                tezosSize="regular"
-                formatBig={false}
-              />
-            </Button>
+      {!isOwner && (
+        <div className={cs(style.lock_container)}>
+          <Button
+            state={contractLoading ? "loading" : "default"}
+            color="secondary"
+            onClick={callContract}
+            disabled={locked}
+          >
+            purchase token -{" "}
+            <DisplayTezos
+              mutez={listing.price}
+              tezosSize="regular"
+              formatBig={false}
+            />
+          </Button>
 
-            {locked && (
-              <Unlock locked={true} onClick={() => setLocked(false)} />
-            )}
-          </>
-        )}
-      </div>
+          {locked && <Unlock locked={true} onClick={() => setLocked(false)} />}
+        </div>
+      )}
     </>
   )
 }
