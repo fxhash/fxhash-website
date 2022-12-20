@@ -31,7 +31,7 @@ export function parseListOptions<T>(
   if (Array.isArray(value)) {
     return (p.required.raw as ParamsParser<ObjectStyleListOptions<T>>)(
       value.reduce((acc, v, i) => {
-        acc[v] = i
+        acc[v] = v
         return acc
       }, {})
     ).value
