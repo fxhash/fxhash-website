@@ -54,7 +54,7 @@ export const parameterControlsDefinition: Record<
     type: EParameterType.color,
     controller: {
       view: EParameterControllerView.color,
-      parseValue: (v: string) => JSON.parse(v),
+      parseValue: (v: string) => `#${v}`,
     },
   },
   [EParameterType.string]: {

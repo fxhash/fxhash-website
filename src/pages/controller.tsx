@@ -72,7 +72,7 @@ const TEST_PARAMS: IParameterDefinition[] = [
     name: "color_name",
     type: "color",
     id: "color_id",
-    default: '{"r":255,"g":0,"b":55}',
+    default: "ff0000ff",
     options: {},
   },
 ]
