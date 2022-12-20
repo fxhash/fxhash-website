@@ -55,6 +55,19 @@ const TEST_PARAMS: IParameterDefinition[] = [
     },
   },
   {
+    name: "select_name",
+    type: "select",
+    id: "select_id",
+    default: "apple",
+    options: {
+      options: {
+        apple: "apple",
+        orange: "orange",
+        pear: "pear",
+      },
+    },
+  },
+  {
     name: "number_name",
     type: "number",
     id: "number_id",

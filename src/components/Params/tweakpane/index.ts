@@ -27,6 +27,7 @@ enum EParameterType {
   number = "number",
   color = "color",
   boolean = "boolean",
+  select = "select",
 }
 
 enum EParameterControllerView {
@@ -78,6 +79,13 @@ export const parameterControlsDefinition: Record<
       parseValue: (v: string) => (v === "false" ? false : true),
     },
   },
+  [EParameterType.select]: {
+    type: EParameterType.select,
+    controller: {
+      view: EParameterControllerView.string,
+      parseValue: (v: string) => String(v),
+    },
+  },
 }
 
 export type ParameterValueMap = Record<string, unknown>
@@ -100,6 +108,7 @@ export function createFxPane(
     if (!paramDefinition) return
     const { controller } =
       parameterControlsDefinition[paramDefinition.type as EParameterType]
+    console.log(paramDefinition);
     pane.addInput(valueMap, key, {
       view: controller.view,
       label: paramDefinition.name,

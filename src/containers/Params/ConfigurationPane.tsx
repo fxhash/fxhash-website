@@ -43,7 +43,7 @@ export function ConfigurationPane({ params }: IConfigurationPane) {
   return (
     <div>
       <div ref={paneContainer} />
-      <Pane params={["number_id", "string_id", "boolean_id", "color_id"]} />
+      <Pane params={["number_id", "select_id", "string_id", "boolean_id", "color_id"]} />
       {/*
       <Pane params={["factor"]} />
       <Pane params={["factor", "title"]} />

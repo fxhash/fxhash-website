@@ -9,12 +9,20 @@ import {
   parseParams,
   ValueMap,
   Constraint,
+  findConstraint,
+  ListConstraint,
+  ListController,
+  createListConstraint,
+  ListParamsOptions,
+  parseListOptions,
+  findListItems,
 } from "@tweakpane/core"
 import { FxStringInputController } from "./controller"
 
 export interface IFxStringInputPluginParams extends BaseInputParams {
   view: "string"
   maxLength?: number
+  options?: ListParamsOptions<string>
 }
 
 // NOTE: You can see JSDoc comments of `InputBindingPlugin` for details about each property
@@ -47,6 +55,7 @@ export const FxStringInputPlugin: InputBindingPlugin<
       view: p.required.constant("string"),
       maxLength: p.optional.number,
       minLength: p.optional.number,
+      options: p.optional.custom<ListParamsOptions<string>>(parseListOptions),
     })
     if (!result) {
       return null
@@ -69,6 +78,10 @@ export const FxStringInputPlugin: InputBindingPlugin<
     constraint(args) {
       // Create a value constraint from the user input
       const constraints: Constraint<string>[] = []
+      const lc = createListConstraint<string>(args.params.options)
+      if (lc) {
+        constraints.push(lc)
+      }
       // Use `CompositeConstraint` to combine multiple constraints
       return new CompositeConstraint(constraints)
     },
@@ -84,6 +97,15 @@ export const FxStringInputPlugin: InputBindingPlugin<
 
   controller(args) {
     // Create a controller for the plugin
+    if (args.constraint && findConstraint(args.constraint, ListConstraint)) {
+      return new ListController(args.document, {
+        props: ValueMap.fromObject({
+          options: findListItems(args.constraint) ?? [],
+        }),
+        value: args.value,
+        viewProps: args.viewProps,
+      })
+    }
     return new FxStringInputController(args.document, {
       value: args.value,
       props: ValueMap.fromObject({
