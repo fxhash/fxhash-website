@@ -86,9 +86,9 @@ const PressKitPage = ({ tab }: PagePressKitProps) => {
     [handleChangeTab]
   )
   useEffect(() => {
-    if (!router?.query?.slug?.[0]) return
-    if (router.query.slug[0] !== activeTab)
-      setActiveTab(router.query.slug[0] as PressKitTabKey)
+    const nextTab = router?.query?.slug?.[0] || "fxhash"
+    if (nextTab === activeTab) return
+    setActiveTab(nextTab as PressKitTabKey)
   }, [router.query, activeTab, handleChangeTab])
   const Component = tabs[activeTab] ? tabs[activeTab].component : null
   const tabLabel = pressKitTabLabel[activeTab]
