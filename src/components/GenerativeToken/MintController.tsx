@@ -207,7 +207,7 @@ export function MintController({
 
       <WinterCheckout
         showModal={showCC}
-        production={false}
+        production={true}
         projectId={8044}
         gentkId={token.id}
         walletAddress={user?.id}
