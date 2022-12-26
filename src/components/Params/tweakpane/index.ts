@@ -166,11 +166,19 @@ export function createFxPane(
         ...paramDefinition.options,
       })
     } else {
-      if (inputBinding.controller_.props.get("label") !== paramDefinition.name) {
+      if (
+        inputBinding.controller_.props.get("label") !== paramDefinition.name
+      ) {
         inputBinding.controller_.props.set("label", paramDefinition.name)
       }
       controller.updateBinding?.(inputBinding, paramDefinition, p, valueMap)
     }
+  })
+  pane.children.forEach((input) => {
+    const coldBinding = !Object.keys(params).includes(
+      (input as InputBindingApi<any, any>).controller_.binding.target.key
+    )
+    if (coldBinding) pane.remove(input)
   })
   return [pane, valueMap]
 }
