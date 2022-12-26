@@ -142,7 +142,7 @@ export function ParamsProvider({ children }: PropsWithChildren<{}>) {
 
   const registerParams = useCallback(
     (params: FxParamDefinition<any>[]) => {
-      setParams((p) => ({ ...p, ...createParameterDictFromList(params) }))
+      setParams((p) => ({ ...createParameterDictFromList(params) }))
       // setData((d) => ({ ...d, ...params }))
     },
     [setParams]
