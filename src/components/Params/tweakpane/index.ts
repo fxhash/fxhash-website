@@ -166,6 +166,9 @@ export function createFxPane(
         ...paramDefinition.options,
       })
     } else {
+      if (inputBinding.controller_.props.get("label") !== paramDefinition.name) {
+        inputBinding.controller_.props.set("label", paramDefinition.name)
+      }
       controller.updateBinding?.(inputBinding, paramDefinition, p, valueMap)
     }
   })
