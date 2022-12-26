@@ -8,10 +8,10 @@ import { useParams } from "../context/Params"
 import { InputParams } from "tweakpane"
 import { SectionWrapper } from "../components/Layout/SectionWrapper"
 import { ConfigurationPane } from "../containers/Params/ConfigurationPane"
-import { IParameterDefinition } from "../components/Params/tweakpane/index"
+import { FxParamDefinition } from "../components/Params/types"
 
 interface Props {
-  params: IParameterDefinition[]
+  params: FxParamDefinition<any>[]
 }
 
 const ControllerPage: NextPage<Props> = ({ params }) => {
@@ -43,7 +43,7 @@ const ControllerPage: NextPage<Props> = ({ params }) => {
   )
 }
 
-const TEST_PARAMS: IParameterDefinition[] = [
+const TEST_PARAMS: FxParamDefinition<any>[] = [
   {
     name: "string_name",
     type: "string",

@@ -11,4 +11,3 @@ export function Pane(props: IPaneProps) {
   const data = usePaneOfParams(params, pane)
   return <div ref={pane} className={classes.pane} />
 }
-

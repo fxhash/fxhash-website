@@ -1,6 +1,7 @@
 import * as StringInputPlugin from "./plugins/StringInputPlugin/index"
 import { Pane, BladeApi } from "tweakpane"
 import { FxParamDefinition, FxParamOptionsMap } from "../types"
+
 import {
   BladeController,
   InputBindingApi,
@@ -8,8 +9,6 @@ import {
   View,
 } from "@tweakpane/core"
 import { FxStringInputController } from "./plugins/StringInputPlugin/controller"
-
-export type ParameterDefinitions = Record<string, FxParamDefinition<any>>
 
 enum EParameterType {
   string = "string",
@@ -132,36 +131,42 @@ export const parameterControlsDefinition: Record<
 
 export type ParameterValueMap = Record<string, any>
 
+export function consolidateParamValues(
+  params: FxParamDefinition<any>[],
+  data?: ParameterValueMap
+) {
+  return params.reduce((acc, paramDefinition) => {
+    const { type, id } = paramDefinition
+    const { controller } = parameterControlsDefinition[type as EParameterType]
+    const value =
+      typeof data?.[id] !== "undefined"
+        ? (data as ParameterValueMap)?.[id]
+        : controller.parseValue(paramDefinition.default)
+    acc[id] = value
+    return acc
+  }, data || ({} as ParameterValueMap))
+}
+
 export function createFxPane(
   container: HTMLElement,
-  params: ParameterDefinitions,
+  params: FxParamDefinition<any>[],
   p?: Pane,
   v?: ParameterValueMap
 ): [Pane, ParameterValueMap] {
   const pane = p || new Pane({ container })
   pane.registerPlugin(StringInputPlugin)
-  const valueMap = Object.keys(params).reduce((acc, key: string) => {
-    const paramDefinition = params[key]
-    const { controller } =
-      parameterControlsDefinition[paramDefinition.type as EParameterType]
-    const value =
-      (v as ParameterValueMap)?.[key] ||
-      controller.parseValue(params[key].default)
-    acc[key] = value
-    return acc
-  }, v || ({} as ParameterValueMap))
-  Object.keys(params).forEach((key: string) => {
-    const paramDefinition = params[key]
-    if (!paramDefinition) return
+  const valueMap = consolidateParamValues(params, v)
+  params.forEach((paramDefinition) => {
+    const { id } = paramDefinition
     const { controller } =
       parameterControlsDefinition[paramDefinition.type as EParameterType]
     const inputBinding = pane.children.find(
       (input) =>
         (input as InputBindingApi<any, any>).controller_.binding.target.key ===
-        key
+        id
     ) as InputBindingApi<any, any>
     if (!inputBinding) {
-      pane.addInput(valueMap, key, {
+      pane.addInput(valueMap, id, {
         view: controller.view,
         label: paramDefinition.name,
         ...paramDefinition.options,
@@ -176,9 +181,11 @@ export function createFxPane(
     }
   })
   pane.children.forEach((input) => {
-    const coldBinding = !Object.keys(params).includes(
-      (input as InputBindingApi<any, any>).controller_.binding.target.key
-    )
+    const coldBinding = !params
+      .map((p) => p.id)
+      .includes(
+        (input as InputBindingApi<any, any>).controller_.binding.target.key
+      )
     if (coldBinding) pane.remove(input)
   })
   return [pane, valueMap]
