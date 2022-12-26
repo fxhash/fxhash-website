@@ -12,7 +12,6 @@ import React, {
 import { Pane, TpChangeEvent } from "tweakpane"
 import {
   createFxPane,
-  IParameterDefinition,
   ParameterDefinitions,
   ParameterValueMap,
 } from "../components/Params/tweakpane"
@@ -20,13 +19,15 @@ import {
   createParameterDictFromList,
   filterParameterDefinitioDict,
 } from "../components/Params/tweakpane/utils"
+import { FxParamDefinition } from "../components/Params/types"
 
 interface IParamsContext<CustomParams = ParameterValueMap> {
-  pane?: Pane | undefined
-  params?: ParameterDefinitions | undefined
+  pane?: Pane
+  params?: ParameterDefinitions
+  paramsList?: FxParamDefinition<any>[]
   data?: CustomParams | undefined
   values?: MutableRefObject<CustomParams> | undefined
-  registerParams: (params: IParameterDefinition[]) => void
+  registerParams: (params: FxParamDefinition<any>[]) => void
   setParam: (key: string, value: any) => void
   setPaneContainer: (container?: HTMLDivElement) => void
 }
@@ -49,7 +50,7 @@ const defaultCtx: IParamsContext = {
 export const ParamsContext = React.createContext<IParamsContext>(defaultCtx)
 
 export function useParams(
-  parameters: IParameterDefinition[],
+  parameters: FxParamDefinition<any>[],
   paneContainerRef: RefObject<HTMLDivElement>
 ) {
   const controller = useContext(ParamsContext)
@@ -78,14 +79,19 @@ function usePaneStable(
   } = useContext(ParamsContext)
   useEffect(() => {
     if (!settings.container || !params) return
-    const [p, pValues] = createFxPane(settings.container, params)
+    const [p, pValues] = createFxPane(
+      settings.container,
+      params,
+      pane.current,
+      values.current
+    )
     p.on("change", (e: TpChangeEvent<unknown>) => {
       setParam(e.presetKey as string, e.value)
     })
     pane.current = p
     values.current = pValues
     return () => {
-      p.dispose()
+      // p.dispose()
     }
   }, [params, settings, setParam, contextValues])
   useEffect(() => {
@@ -99,14 +105,15 @@ function usePaneStable(
 }
 
 export function usePaneOfParams(
-  paramsKeys: string[],
+  paramsKeys: string[] | undefined,
   container: RefObject<HTMLElement | null>
 ) {
   const pContext = useContext(ParamsContext)
   const params = useMemo<ParameterDefinitions | undefined>(
     () =>
-      filterParameterDefinitioDict(pContext.params, (p: IParameterDefinition) =>
-        paramsKeys.includes(p.id)
+      filterParameterDefinitioDict(
+        pContext.params,
+        (p: FxParamDefinition<any>) => !paramsKeys || paramsKeys.includes(p.id)
       ),
     [pContext.params, paramsKeys]
   )
@@ -126,10 +133,15 @@ export function ParamsProvider({ children }: PropsWithChildren<{}>) {
   const [pane, setPane] = useState<Pane>()
   const [paneContainer, setPaneContainer] = useState<HTMLElement>()
   const [params, setParams] = useState<ParameterDefinitions>({})
-  const [data, setData] = useState({})
+  const [data, setData] = useState<ParameterValueMap>({})
+
+  const paramsList = useMemo(
+    () => Object.keys(params).map((paramId) => params[paramId]),
+    [params]
+  )
 
   const registerParams = useCallback(
-    (params: IParameterDefinition[]) => {
+    (params: FxParamDefinition<any>[]) => {
       setParams((p) => ({ ...p, ...createParameterDictFromList(params) }))
       // setData((d) => ({ ...d, ...params }))
     },
@@ -148,24 +160,29 @@ export function ParamsProvider({ children }: PropsWithChildren<{}>) {
   useEffect(() => {
     const container = paneContainer || paneContainerRef?.current
     if (!container) return
-    const [p, pValues] = createFxPane(container, params)
+    const [p, pValues] = createFxPane(container, params, pane, values.current)
     p.on("change", (e: TpChangeEvent<unknown>) => {
       setData((d) => ({ ...d, [e.presetKey as string]: e.value }))
     })
     setPane(p)
     values.current = pValues
     return () => {
-      p.dispose()
+      //   p.dispose()
     }
   }, [params, paneContainer])
+
+  useEffect(() => {
+    return () => pane?.dispose()
+  }, [])
 
   const contextValue = useMemo(
     () => ({
       registerParams,
       setParam,
       setPaneContainer,
-      data,
+      data: { ...values.current, ...data },
       params,
+      paramsList,
       pane,
       setData,
       values,
@@ -178,6 +195,7 @@ export function ParamsProvider({ children }: PropsWithChildren<{}>) {
       setData,
       values,
       params,
+      paramsList,
       setParam,
     ]
   )

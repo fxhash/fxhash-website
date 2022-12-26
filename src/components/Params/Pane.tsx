@@ -3,7 +3,7 @@ import { usePaneOfParams } from "../../context/Params"
 import classes from "./Pane.module.scss"
 
 interface IPaneProps {
-  params: string[]
+  params?: string[]
 }
 export function Pane(props: IPaneProps) {
   const params = useMemo(() => props.params, [JSON.stringify(props.params)])
@@ -11,3 +11,4 @@ export function Pane(props: IPaneProps) {
   const data = usePaneOfParams(params, pane)
   return <div ref={pane} className={classes.pane} />
 }
+
