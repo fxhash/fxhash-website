@@ -75,9 +75,10 @@ export const parameterControlsDefinition: Record<
         if (!p || !v) return
         const controller = binding.controller_
           .valueController as SliderTextController
-        // you cannot update the step of a number controller so we need to re-init the input
-        // @ts-ignore
         if (
+          // you cannot update the step of a number controller so we need to re-init the input
+          // fixable with custom number control plugin
+          // @ts-ignore
           controller.sliderController.baseStep_ !== definition.options?.step
         ) {
           const index = p.children.findIndex(
