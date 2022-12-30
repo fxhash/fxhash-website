@@ -81,10 +81,6 @@
 
 .redeemable {
   margin-top: $spacing-2x-small;
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: row;
-  align-items: center;
   gap: 0 8px;
   color: var(--color-gray);
   font-weight: bold;

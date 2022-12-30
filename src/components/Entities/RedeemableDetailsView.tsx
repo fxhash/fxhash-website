@@ -1,4 +1,5 @@
 import style from "./RedeemableDetailsView.module.scss"
+import text from "../../styles/Text.module.css"
 import cs from "classnames"
 import { RedeemableDetails } from "types/entities/Redeemable"
 import { plural } from "utils/strings"
@@ -12,7 +13,8 @@ import { Button } from "../Button"
 import { Icon } from "../Icons/Icon"
 import Link from "next/link"
 import { Error } from "../Error/Error"
-import { CarouselRedeemable } from "../Redeemable/CarouselRedeemable";
+import { CarouselRedeemable } from "../Redeemable/CarouselRedeemable"
+import { DateFormatted } from "components/Utils/Date/DateFormat"
 
 interface Props {
   title: string
@@ -34,14 +36,20 @@ export function RedeemableDetailsView({
         <h3>{title}</h3>
         <Spacing size="x-large" />
         <h4>{details.name}</h4>
-        <p>
+        <p className={cs(text.info)}>
           Every iteration of this project can be redeemed{" "}
           <strong>
             {details.maxConsumptions} {plural("time", details.maxConsumptions)}
           </strong>
-          .<br />
-          The base cost to redeem iterations of this project is{" "}
-          <DisplayTezos mutez={details.amount} />
+          <br />
+          Base redemption cost is{" "}
+          <DisplayTezos mutez={details.amount} tezosSize="regular" />
+          {details.expiresAt && (
+            <>
+              <br />
+              Redeemable until <DateFormatted date={details.expiresAt} />
+            </>
+          )}
         </p>
         <div className={cs(style.description)}>
           <ArticleContent
