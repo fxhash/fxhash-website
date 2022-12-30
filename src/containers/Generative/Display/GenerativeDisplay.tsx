@@ -58,11 +58,9 @@ export function GenerativeDisplay({ token, offlineMode = false }: Props) {
         <h3>{token.name}</h3>
         {token.redeemables && token.redeemables.length > 0 && (
           <div className={cs(style.redeemable)}>
-            <span>
-              <Icon icon="sparkles" /> This project can be redeemed
-            </span>
+            <Icon icon="sparkles" /> <span>This project can be redeemed</span>{" "}
             <Link href={`/generative/${token.id}/redeem`}>
-              <a className={cs(colors.primary, text.regular)}>see more</a>
+              <a className={cs(text.regular)}>see more</a>
             </Link>
           </div>
         )}

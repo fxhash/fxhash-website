@@ -35,7 +35,30 @@ export function RedeemableDetailsView({
       <div>
         <h3>{title}</h3>
         <Spacing size="x-large" />
+
+        {urlRedeem && !error && (
+          <>
+            <div className={cs(style.redeem_btn_wrapper)}>
+              <Link href={urlRedeem}>
+                <Button
+                  isLink
+                  iconComp={<Icon icon="sparkles" />}
+                  color="secondary"
+                >
+                  redeem your token
+                </Button>
+              </Link>
+            </div>
+            <Spacing size="large" />
+          </>
+        )}
+
         <h4>{details.name}</h4>
+
+        <div className={cs(style.medias_mobile)}>
+          <CarouselRedeemable medias={details.medias} />
+        </div>
+
         <p className={cs(text.info)}>
           Every iteration of this project can be redeemed{" "}
           <strong>
@@ -85,21 +108,26 @@ export function RedeemableDetailsView({
         )}
       </div>
       <div className={style.right}>
-        <CarouselRedeemable medias={details.medias} />
+        <div className={cs(style.medias_desktop)}>
+          <CarouselRedeemable medias={details.medias} />
+        </div>
         {details.options?.length > 0 && (
           <div className={style.options}>
             <span>The following options are available:</span>
+            <Spacing size="regular" />
             <div className={style.options_grid}>
               {details.options.map((option, idx) => (
                 <div
                   className={style.options_list}
                   key={`${option.label}${idx}`}
                 >
-                  <p>{option.label}:</p>
+                  <strong>{option.label}</strong>
                   <ul>
                     {option.values.map((value, idx) => (
                       <li key={idx}>
-                        {value.label}: <DisplayTezos mutez={value.amount} />
+                        {value.label}{" "}
+                        <span className={cs(style.option_dash)}>—</span>{" "}
+                        <DisplayTezos mutez={value.amount} formatBig={false} />
                       </li>
                     ))}
                   </ul>

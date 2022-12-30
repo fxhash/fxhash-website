@@ -1,3 +1,5 @@
+@import "../../styles/Variables";
+
 .carousel {
   aspect-ratio: 87 / 49;
   height: 100%;
@@ -20,4 +22,11 @@
 }
 .dots {
   max-width: 335px;
+}
+
+@media (max-width: $breakpoint-sm) {
+  .dots {
+    width: 100%;
+    max-width: none;
+  }
 }

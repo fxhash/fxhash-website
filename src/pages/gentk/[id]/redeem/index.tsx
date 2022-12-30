@@ -57,7 +57,7 @@ const ObjktRedeem: NextPage<Props> = ({ objkt, redeemableDetails }) => {
       <PageLayout padding="big">
         <div className={cs(layout.flex_column_left)}>
           <Link href={getGentkUrl(objkt)}>
-            <Button isLink iconComp={<Icon icon="arrow-left" />}>
+            <Button isLink iconComp={<Icon icon="arrow-left" />} size="small">
               back to gentk
             </Button>
           </Link>
@@ -93,7 +93,7 @@ const ObjktRedeem: NextPage<Props> = ({ objkt, redeemableDetails }) => {
 
         <div className={cs(layout.flex_column_left)}>
           <Link href={getGentkUrl(objkt)}>
-            <Button isLink iconComp={<Icon icon="arrow-left" />}>
+            <Button isLink iconComp={<Icon icon="arrow-left" />} size="small">
               back to gentk
             </Button>
           </Link>

@@ -101,7 +101,7 @@ export function RedeemForm({ redeemable, gentk }: Props) {
             )}
 
             <Spacing size="x-large" />
-            <Divider color="gray" />
+            <Divider color="gray-vvlight" />
             <Spacing size="x-large" />
 
             <span className={cs(text.info)}>
@@ -112,7 +112,7 @@ export function RedeemForm({ redeemable, gentk }: Props) {
             </span>
 
             <Spacing size="x-large" />
-            <Divider color="gray" />
+            <Divider color="gray-vvlight" />
             <Spacing size="regular" />
 
             <RedeemTotalCost

@@ -30,16 +30,16 @@ export function RedeemGentk({ gentk, redeemable }: Props) {
       </div>
       <Spacing size="x-large" />
       <div className={style.titles}>
-        <div>
+        <div className={cs(style.titles_infos)}>
           <UserBadge user={gentk.issuer.author} size="big" />
-          <Spacing size="x-large" sm="regular" />
+          <Spacing size="x-large" sm="2x-small" />
           <h3>{gentk.name}</h3>
         </div>
         <div className={layout.hide_sm}>
           <h4>Redeem for: {redeemable.name}</h4>
         </div>
       </div>
-      <Spacing size="2x-large" sm="x-large" />
+      <Spacing size="2x-large" sm="2x-small" />
       <div className={style.content}>
         <div className={style.content_left}>
           <ArtworkPreview

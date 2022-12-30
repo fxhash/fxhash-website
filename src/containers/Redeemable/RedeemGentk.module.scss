@@ -23,6 +23,14 @@
   }
   .content_left {
     position: static;
-    width: 100%;
+    width: 200px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .titles_infos {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   }
 }

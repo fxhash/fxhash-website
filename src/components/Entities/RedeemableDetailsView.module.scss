@@ -16,9 +16,14 @@
   width: 100%;
 }
 
+.redeem_btn_wrapper {
+  display: flex;
+}
+
 .description {
   max-width: 800px;
 }
+
 .info {
   max-width: 800px;
   margin-top: $spacing-x-large;
@@ -53,11 +58,31 @@
   }
 }
 
+.option_dash {
+  opacity: 0.35;
+}
+
+.medias_mobile {
+  display: none;
+  margin-top: 1.5em;
+  margin-bottom: 1.5em;
+}
+
 @media (max-width: $breakpoint-sm) {
   .root {
     flex-direction: column;
   }
   .right {
     position: static;
+  }
+  .medias_mobile {
+    display: block;
+  }
+  .medias_desktop {
+    display: none;
+  }
+
+  .options {
+    margin-top: 0;
   }
 }

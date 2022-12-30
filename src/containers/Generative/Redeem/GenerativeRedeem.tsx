@@ -23,7 +23,7 @@ const _GenerativeRedeem = ({
   const renderBackToProject = (
     <div className={cs(layout.flex_column_left)}>
       <Link href={getGenerativeTokenUrl(token)}>
-        <Button isLink iconComp={<Icon icon="arrow-left" />}>
+        <Button isLink iconComp={<Icon icon="arrow-left" />} size="small">
           back to project
         </Button>
       </Link>

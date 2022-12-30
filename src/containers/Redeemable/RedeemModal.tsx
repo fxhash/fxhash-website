@@ -59,6 +59,7 @@ export function RedeemModal({
   const [redemptionPayload, setRedemptionPayload] =
     useState<PrepareRedemptionPayload | null>(null)
   const [signError, setSignError] = useState<string | null>(null)
+  const [signLoading, setSignLoading] = useState(false)
 
   const { call, state, loading, error, success } =
     useContractOperation(RedeemTokenOperation)
@@ -73,6 +74,7 @@ export function RedeemModal({
     try {
       setRedemptionPayload(null)
       setSignError(null)
+      setSignLoading(true)
 
       // prepare and sign the inputs to authenticate those on the backend
       const data = JSON.stringify(inputs)
@@ -110,8 +112,10 @@ export function RedeemModal({
       const backendData: PrepareRedemptionPayload = await response.json()
       setRedemptionPayload(backendData)
       setActiveTabIdx(1)
+      setSignLoading(false)
     } catch (error: any) {
       setSignError(error?.message || "Unknown error")
+      setSignLoading(false)
     }
   }
 
@@ -165,6 +169,7 @@ export function RedeemModal({
               size="small"
               onClick={() => sign()}
               disabled={!!redemptionPayload}
+              state={signLoading ? "loading" : "default"}
             >
               Sign your inputs
             </Button>
@@ -180,6 +185,8 @@ export function RedeemModal({
             just received.
           </p>
 
+          <Spacing size="large" />
+
           <ContractFeedback
             state={state}
             loading={loading}
@@ -188,7 +195,7 @@ export function RedeemModal({
             successMessage={redeemable.successInfos}
           />
 
-          <Submit>
+          <Submit className={cs(style.submit)}>
             <Button
               type="button"
               color="secondary"
