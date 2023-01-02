@@ -78,7 +78,11 @@ export const parameterControlsDefinition: Record<
           // you cannot update the step of a number controller so we need to re-init the input
           // fixable with custom number control plugin
           // @ts-ignore
-          controller.sliderController.baseStep_ !== definition.options?.step
+          controller.sliderController.baseStep_ !== definition.options?.step ||
+          controller.sliderController.props.get("minValue") !==
+            definition.options?.min ||
+          controller.sliderController.props.get("maxValue") !==
+            definition.options.max
         ) {
           const index = p.children.findIndex(
             (input) =>
@@ -92,23 +96,6 @@ export const parameterControlsDefinition: Record<
             index,
             ...definition.options,
           })
-        } else {
-          const { min, max } = definition?.options
-          controller.sliderController.props.set(
-            "minValue",
-            definition.options?.min
-          )
-          controller.sliderController.props.set(
-            "maxValue",
-            definition.options?.max
-          )
-          if (v[definition.id] > max) {
-            v[definition.id] = max
-            binding.refresh()
-          } else if (v[definition.id] < min) {
-            v[definition.id] = min
-            binding.refresh()
-          }
         }
       },
     },
