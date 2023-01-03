@@ -16,6 +16,7 @@ const ActionsPredecescence: Record<TokenActionType, number> = {
   MINTED: 0,
   MINTED_FROM: 1,
   GENTK_SIGNED: 1,
+  GENTK_REDEEMED: 2,
   COMPLETED: 20,
   TRANSFERED: 1,
   LISTING_V1: 4,

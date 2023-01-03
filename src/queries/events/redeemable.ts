@@ -26,6 +26,7 @@ export const Qu_redeemableDetails = gql`
       active
       amount
       createdAt
+      expiresAt
       description
       fa2
       maxConsumptions

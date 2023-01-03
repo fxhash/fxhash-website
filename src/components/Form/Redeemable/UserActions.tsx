@@ -4,6 +4,8 @@ import { RedeemableUserAction } from "types/entities/Redeemable"
 import { redeemableUserActionDefinitions } from "definitions/Redeemable/UserActions"
 import { useField } from "formik"
 import { useUpdateFormObject } from "hooks/useFormUpdate"
+import { Spacing } from "../../Layout/Spacing"
+import { Fragment } from "react"
 
 interface Props {
   id: string
@@ -19,13 +21,15 @@ export function FormRedeemableUserActions({ id, userActions }: Props) {
         const def = redeemableUserActionDefinitions[userAction.type]
         const err = (error as any)?.[userAction.id]
         return (
-          <def.input
-            key={userAction.id}
-            value={value[userAction.id]}
-            onChange={(val) => update(userAction.id, val)}
-            options={userAction.options}
-            error={err}
-          />
+          <Fragment key={userAction.id}>
+            <Spacing size="x-large" sm="2x-large" />
+            <def.input
+              value={value[userAction.id]}
+              onChange={(val) => update(userAction.id, val)}
+              options={userAction.options}
+              error={err}
+            />
+          </Fragment>
         )
       })}
     </>

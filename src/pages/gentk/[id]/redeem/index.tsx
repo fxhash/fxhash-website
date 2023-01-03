@@ -1,14 +1,9 @@
 import layout from "styles/Layout.module.scss"
 import cs from "classnames"
-import { gql } from "@apollo/client"
-import Head from "next/head"
 import Link from "next/link"
 import { GetServerSideProps, NextPage } from "next"
 import { createApolloClient } from "../../../../services/ApolloClient"
-import { GenerativeToken } from "../../../../types/entities/GenerativeToken"
-import { Frag_UserBadge } from "../../../../queries/fragments/user"
 import { getImageApiUrl, OG_IMAGE_SIZE } from "../../../../components/Image"
-import { Frag_GenTokenRedeemables } from "queries/fragments/generative-token"
 import { MetaHead } from "components/Utils/MetaHead"
 import { createEventsClient } from "services/EventsClient"
 import { Qu_redeemableDetails } from "queries/events/redeemable"
@@ -22,10 +17,9 @@ import { cloneDeep } from "@apollo/client/utilities"
 import { mdToHtml } from "services/Markdown"
 import { Button } from "components/Button"
 import { Icon } from "components/Icons/Icon"
-import { getGenerativeTokenUrl } from "utils/generative-token"
 import { Qu_objkt } from "queries/objkt"
 import { Objkt } from "types/entities/Objkt"
-import { gentkRedeemables, getGentkUrl } from "utils/gentk"
+import { getGentkUrl } from "utils/gentk"
 import { useContext, useMemo } from "react"
 import { UserContext } from "containers/UserProvider"
 
@@ -42,6 +36,16 @@ const ObjktRedeem: NextPage<Props> = ({ objkt, redeemableDetails }) => {
     objkt.captureMedia?.cid &&
     getImageApiUrl(objkt.captureMedia.cid, OG_IMAGE_SIZE)
 
+  const redeemableError = useMemo<string | false>(() => {
+    if (!(user?.id === objkt.owner!.id)) {
+      return "Only the owner can redeem this token."
+    }
+    if (objkt.activeListing) {
+      return "You cannot redeem this token if it's currently listed."
+    }
+    return false
+  }, [objkt.activeListing, objkt.owner, user?.id])
+
   return (
     <>
       <MetaHead
@@ -53,66 +57,43 @@ const ObjktRedeem: NextPage<Props> = ({ objkt, redeemableDetails }) => {
       <PageLayout padding="big">
         <div className={cs(layout.flex_column_left)}>
           <Link href={getGentkUrl(objkt)}>
-            <Button isLink iconComp={<Icon icon="arrow-left" />}>
+            <Button isLink iconComp={<Icon icon="arrow-left" />} size="small">
               back to gentk
             </Button>
           </Link>
         </div>
+        <Spacing size="x-large" />
+        {redeemableDetails.map((details) => {
+          const urlRedeem = objkt.availableRedeemables.find(
+            (r) => r.address === details.address
+          )
+            ? `/gentk/${objkt.id}/redeem/${details.address}`
+            : undefined
+          return (
+            <div key={details.address}>
+              <RedeemableDetailsView
+                title={objkt.name || ""}
+                details={details}
+                info={
+                  <span>
+                    This gentk can be redeemed to activate an effect.
+                    <br />
+                    Redeeming this token will not destroy it, and owners will
+                    keep the ownership of their token.
+                  </span>
+                }
+                urlRedeem={urlRedeem}
+                error={redeemableError}
+              />
+            </div>
+          )
+        })}
 
-        <Spacing size="3x-large" />
-
-        <div>
-          <h2>Gentk: {objkt.name}</h2>
-        </div>
-
-        <Spacing size="3x-large" />
-
-        <Infobox>
-          This gentk can be redeemed to activate an effect.
-          <br />
-          Redeeming this token will not destroy it, and owners will keep the
-          ownership of their token.
-          <br />
-          <br />
-          <LinkGuide href="/docs">Learn more about Redeemable tokens</LinkGuide>
-        </Infobox>
-
-        <Spacing size="3x-large" />
-
-        {redeemableDetails.map((details) => (
-          <div key={details.address}>
-            <RedeemableDetailsView details={details} />
-            <Spacing size="x-large" />
-            {objkt.availableRedeemables.find(
-              (r) => r.address === details.address
-            ) &&
-              (user?.id === objkt.owner!.id ? (
-                objkt.activeListing ? (
-                  <strong>
-                    You cannot redeem this token if it's currently listed.
-                  </strong>
-                ) : (
-                  <Link href={`/gentk/${objkt.id}/redeem/${details.address}`}>
-                    <Button
-                      isLink
-                      iconComp={<Icon icon="sparkles" />}
-                      color="secondary"
-                    >
-                      redeem your token
-                    </Button>
-                  </Link>
-                )
-              ) : (
-                <strong>only the owner can redeem this token</strong>
-              ))}
-          </div>
-        ))}
-
-        <Spacing size="3x-large" />
+        <Spacing size="x-large" />
 
         <div className={cs(layout.flex_column_left)}>
           <Link href={getGentkUrl(objkt)}>
-            <Button isLink iconComp={<Icon icon="arrow-left" />}>
+            <Button isLink iconComp={<Icon icon="arrow-left" />} size="small">
               back to gentk
             </Button>
           </Link>

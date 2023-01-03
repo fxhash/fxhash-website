@@ -32,7 +32,7 @@ import { Clamp } from "../../../components/Clamp/Clamp"
 import { truncateMiddle } from "../../../utils/strings"
 import { HoverTitle } from "../../../components/Utils/HoverTitle"
 import { Icon } from "../../../components/Icons/Icon"
-import { gentkRedeemables } from "utils/gentk"
+import { GenerativeRedeemable } from "../../../components/GenerativeToken/GenerativeRedeemable"
 
 interface GenerativeDisplayIterationProps {
   objkt: Objkt
@@ -144,13 +144,6 @@ const _GenerativeDisplayIteration = ({
               Minted on{" "}
               {format(new Date(objkt.createdAt), "MMMM d, yyyy' at 'HH:mm")}
             </span>
-            {objkt.availableRedeemables?.length > 0 && (
-              <Link href={`/gentk/${objkt.id}/redeem`}>
-                <a className={cs(colors.success, text.small)}>
-                  <Icon icon="sparkles" /> Redeemable
-                </a>
-              </Link>
-            )}
             {objkt.issuer.labels && (
               <Labels className={style.labels} labels={objkt.issuer.labels} />
             )}
@@ -177,6 +170,10 @@ const _GenerativeDisplayIteration = ({
               style.extra_details
             )}
           >
+            <GenerativeRedeemable
+              isRedeemable={objkt.availableRedeemables?.length > 0}
+              urlRedeemable={`/gentk/${objkt.id}/redeem`}
+            />
             <strong>Royalties</strong>
             <span className={cs(style.mobile_align_right, style.mobile_gray)}>
               {displayRoyalties(objkt.royalties)}

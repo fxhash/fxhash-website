@@ -22,6 +22,7 @@ export interface CarouselOptions {
 }
 interface CarouselProps {
   className?: string
+  classNameDots?: string
   page: number
   totalPages: number
   onChangePage: (page: number) => void
@@ -31,6 +32,7 @@ interface CarouselProps {
 
 const _Carousel = ({
   className,
+  classNameDots,
   page,
   totalPages,
   onChangePage,
@@ -120,7 +122,7 @@ const _Carousel = ({
       </div>
 
       {options?.showDots && (
-        <div className={style.dots}>
+        <div className={cs(style.dots, classNameDots)}>
           {arrayTotalPages.map((_, idx) => {
             return (
               <div

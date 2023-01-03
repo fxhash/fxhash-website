@@ -17,6 +17,18 @@ import { useContractOperation } from "hooks/useContractOperation"
 import { RedeemTokenOperation } from "services/contract-operations/RedeemToken"
 import { ContractFeedback } from "components/Feedback/ContractFeedback"
 import { Error as ErrorFeedback } from "components/Error/Error"
+import { Tabs } from "../../components/Layout/Tabs"
+
+const tabs = [
+  {
+    key: "sign",
+    name: "1. Sign your inputs",
+  },
+  {
+    key: "redeem",
+    name: "2. Redeem your token",
+  },
+]
 
 interface PrepareRedemptionPayload {
   payload: {
@@ -42,10 +54,12 @@ export function RedeemModal({
   redeemable,
   inputs,
 }: Props) {
+  const [activeTabIdx, setActiveTabIdx] = useState(0)
   const { walletManager: wallet, user } = useContext(UserContext)
   const [redemptionPayload, setRedemptionPayload] =
     useState<PrepareRedemptionPayload | null>(null)
   const [signError, setSignError] = useState<string | null>(null)
+  const [signLoading, setSignLoading] = useState(false)
 
   const { call, state, loading, error, success } =
     useContractOperation(RedeemTokenOperation)
@@ -60,6 +74,7 @@ export function RedeemModal({
     try {
       setRedemptionPayload(null)
       setSignError(null)
+      setSignLoading(true)
 
       // prepare and sign the inputs to authenticate those on the backend
       const data = JSON.stringify(inputs)
@@ -96,8 +111,11 @@ export function RedeemModal({
 
       const backendData: PrepareRedemptionPayload = await response.json()
       setRedemptionPayload(backendData)
+      setActiveTabIdx(1)
+      setSignLoading(false)
     } catch (error: any) {
       setSignError(error?.message || "Unknown error")
+      setSignLoading(false)
     }
   }
 
@@ -124,63 +142,74 @@ export function RedeemModal({
 
       <Spacing size="x-large" />
 
-      <h4>1. Sign your inputs</h4>
+      <div>
+        <Tabs
+          tabDefinitions={tabs}
+          activeIdx={activeTabIdx}
+          tabsLayout="full-width"
+        />
+      </div>
+      {activeTabIdx === 0 && (
+        <>
+          <p className={cs(text.small)}>
+            Because some of the data required to redeem your token is sensitive,
+            it will not be sent on the blockchain. Instead, this data will be
+            stored on our backend. Signing the data ensures that your wallet was
+            responsible for sending your inputs to our servers. Once you will
+            redeem your token on the second step, our backend will match your
+            inputs with the redemption event.
+          </p>
 
-      <p className={cs(text.small)}>
-        Because some of the data required to redeem your token is sensitive, it
-        will not be sent on the blockchain. Instead, this data will be stored on
-        our backend. Signing the data ensures that your wallet was responsible
-        for sending your inputs to our servers. Once you will redeem your token
-        on the second step, our backend will match your inputs with the
-        redemption event.
-      </p>
+          {signError && <ErrorFeedback>{signError}</ErrorFeedback>}
 
-      {signError && <ErrorFeedback>{signError}</ErrorFeedback>}
+          <Submit>
+            <Button
+              type="button"
+              color="secondary"
+              size="small"
+              onClick={() => sign()}
+              disabled={!!redemptionPayload}
+              state={signLoading ? "loading" : "default"}
+            >
+              Sign your inputs
+            </Button>
+          </Submit>
+        </>
+      )}
+      {activeTabIdx === 1 && (
+        <>
+          <p className={cs(text.small)}>
+            Now that we have properly received your inputs on our servers, you
+            can redeem the token. This will make a call to the Smart Contract to
+            mark this token as redeemed, and we will link it to the inputs we've
+            just received.
+          </p>
 
-      <Submit>
-        <Button
-          type="button"
-          color="secondary"
-          size="small"
-          onClick={() => sign()}
-          disabled={!!redemptionPayload}
-        >
-          Sign your inputs
-        </Button>
-      </Submit>
+          <Spacing size="large" />
 
-      <Spacing size="3x-large" />
+          <ContractFeedback
+            state={state}
+            loading={loading}
+            success={success}
+            error={error}
+            successMessage={redeemable.successInfos}
+          />
 
-      <h4>2. Redeem your token</h4>
-
-      <p className={cs(text.small)}>
-        Now that we have properly received your inputs on our servers, you can
-        redeem the token. This will make a call to the Smart Contract to mark
-        this token as redeemed, and we will link it to the inputs we've just
-        received.
-      </p>
-
-      <ContractFeedback
-        state={state}
-        loading={loading}
-        success={success}
-        error={error}
-        successMessage={redeemable.successInfos}
-      />
-
-      <Submit>
-        <Button
-          type="button"
-          color="secondary"
-          size="small"
-          disabled={!redemptionPayload}
-          state={loading ? "loading" : "default"}
-          onClick={redeem}
-        >
-          Redeem your token&nbsp;&nbsp;
-          <DisplayTezos mutez={cost} formatBig={false} />
-        </Button>
-      </Submit>
+          <Submit className={cs(style.submit)}>
+            <Button
+              type="button"
+              color="secondary"
+              size="small"
+              disabled={!redemptionPayload}
+              state={loading ? "loading" : "default"}
+              onClick={redeem}
+            >
+              Redeem your token&nbsp;&nbsp;
+              <DisplayTezos mutez={cost} formatBig={false} />
+            </Button>
+          </Submit>
+        </>
+      )}
     </Modal>
   )
 }

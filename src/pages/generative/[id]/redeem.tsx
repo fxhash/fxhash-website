@@ -1,8 +1,4 @@
-import layout from "styles/Layout.module.scss"
-import cs from "classnames"
 import { gql } from "@apollo/client"
-import Head from "next/head"
-import Link from "next/link"
 import { GetServerSideProps, NextPage } from "next"
 import { createApolloClient } from "../../../services/ApolloClient"
 import { GenerativeToken } from "../../../types/entities/GenerativeToken"
@@ -14,15 +10,9 @@ import { createEventsClient } from "services/EventsClient"
 import { Qu_redeemableDetails } from "queries/events/redeemable"
 import { RedeemableDetails } from "types/entities/Redeemable"
 import { PageLayout } from "components/Layout/PageLayout"
-import { Infobox } from "components/UI/Infobox"
-import { LinkGuide } from "components/Link/LinkGuide"
-import { Spacing } from "components/Layout/Spacing"
-import { RedeemableDetailsView } from "components/Entities/RedeemableDetailsView"
 import { cloneDeep } from "@apollo/client/utilities"
 import { mdToHtml } from "services/Markdown"
-import { Button } from "components/Button"
-import { Icon } from "components/Icons/Icon"
-import { getGenerativeTokenUrl } from "utils/generative-token"
+import { GenerativeRedeem } from "../../../containers/Generative/Redeem/GenerativeRedeem"
 
 interface Props {
   token: GenerativeToken
@@ -47,47 +37,7 @@ const GenerativeTokenRedeem: NextPage<Props> = ({
       />
 
       <PageLayout padding="big">
-        <div className={cs(layout.flex_column_left)}>
-          <Link href={getGenerativeTokenUrl(token)}>
-            <Button isLink iconComp={<Icon icon="arrow-left" />}>
-              back to project
-            </Button>
-          </Link>
-        </div>
-
-        <Spacing size="3x-large" />
-
-        <div>
-          <h2>Generative token: {token.name}</h2>
-        </div>
-
-        <Spacing size="3x-large" />
-
-        <Infobox>
-          The iterations of this project can be redeemed to activate an event.
-          <br />
-          Redeeming a token will not destroy it, and owners will keep the
-          ownership of their token.
-          <br />
-          <br />
-          <LinkGuide href="/docs">Learn more about Redeemable tokens</LinkGuide>
-        </Infobox>
-
-        <Spacing size="3x-large" />
-
-        {redeemableDetails.map((details) => (
-          <RedeemableDetailsView key={details.address} details={details} />
-        ))}
-
-        <Spacing size="3x-large" />
-
-        <div className={cs(layout.flex_column_left)}>
-          <Link href={getGenerativeTokenUrl(token)}>
-            <Button isLink iconComp={<Icon icon="arrow-left" />}>
-              back to project
-            </Button>
-          </Link>
-        </div>
+        <GenerativeRedeem token={token} redeemableDetails={redeemableDetails} />
       </PageLayout>
     </>
   )

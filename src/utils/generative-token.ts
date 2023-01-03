@@ -152,6 +152,7 @@ export function generativeFromMintParams(
     objkts: [],
     actions: [],
     createdAt: new Date().toISOString(),
+    redeemables: [],
   }
 }
 
@@ -292,6 +293,7 @@ export function generativeFromMintForm(
     objkts: [],
     actions: [],
     createdAt: new Date().toISOString(),
+    redeemables: [],
   }
 }
 

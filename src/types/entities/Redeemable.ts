@@ -46,6 +46,7 @@ export interface RedeemableDetails {
   active: boolean
   amount: number
   createdAt: Date
+  expiresAt: string | null
   description: string
   successInfos: string
   fa2: string

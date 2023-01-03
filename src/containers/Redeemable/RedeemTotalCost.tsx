@@ -41,7 +41,10 @@ export function RedeemTotalCost({ redeemable, selected }: Props) {
           </Fragment>
         )
       })}
-
+      <span className={cs(style.property)}>
+        <span className={cs(style.name)}>Shipping</span>
+      </span>
+      <span className={style.price}>Free</span>
       <strong className={cs(style.property, style.total)}>
         <span className={cs(style.name)}>Total</span>
       </strong>

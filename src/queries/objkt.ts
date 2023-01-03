@@ -115,7 +115,6 @@ export const Qu_objktsFeed = gql`
       name
       slug
       issuer {
-        id
         name
         slug
         labels
@@ -137,6 +136,9 @@ export const Qu_objktsFeed = gql`
         id
         version
         price
+      }
+      availableRedeemables {
+        address
       }
     }
   }

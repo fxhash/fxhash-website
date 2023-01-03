@@ -13,6 +13,12 @@
     }
   }
 
+  &.layout-fixed-size-narrow {
+    nav {
+      justify-content: flex-start;
+    }
+  }
+
   &.layout-subtabs {
     nav {
       border-bottom: 3px solid var(--color-black);
@@ -44,6 +50,9 @@
   &.active {
     color: var(--color-black);
     border-bottom-color: var(--color-black);
+  }
+  &.disable_click {
+    cursor: auto;
   }
 
   &:hover {
@@ -88,11 +97,22 @@
   padding-right: 80px;
 }
 
+.tab-fixed-size-narrow {
+  white-space: nowrap;
+  margin-right: 20px;
+  padding-top: 15px 5px 32px 15px;
+  @media (max-width: $breakpoint-sm) {
+    padding: 0px 5px 16px 5px !important;
+  }
+}
+
 .tab-full-width {
   flex: 1 1 0px;
   display: flex;
   justify-content: center;
 }
+
+
 @media (max-width: $breakpoint-lg) {
   .container.layout-fixed-size nav {
     justify-content: center;

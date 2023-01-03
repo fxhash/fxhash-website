@@ -2,9 +2,10 @@
   display: flex;
   flex-direction: row;
   background-color: var(--color-gray-vvvlight);
-  padding: 10px;
-  gap: 10px;
+  padding: 16px;
+  gap: 20px;
   font-size: var(--font-size-small);
+  line-height: 1.625;
   border: 1px solid var(--color-gray-vvlight);
 
   .icon {

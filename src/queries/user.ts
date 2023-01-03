@@ -340,6 +340,7 @@ export const Qu_userOffersReceived = gql`
             id
           }
           issuer {
+            id
             marketStats {
               floor
             }

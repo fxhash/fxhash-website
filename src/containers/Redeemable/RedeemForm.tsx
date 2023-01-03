@@ -1,11 +1,9 @@
-import style from "./RedeemForm.module.scss"
 import text from "styles/Text.module.css"
 import cs from "classnames"
 import { RedeemableDetails } from "types/entities/Redeemable"
 import { Form, Formik } from "formik"
-import { Field } from "components/Form/Field"
 import { FormRedeemableOptions } from "components/Form/Redeemable/Options"
-import { useMemo, useState } from "react"
+import React, { useMemo, useState } from "react"
 import { array, number, object, SchemaOf } from "yup"
 import { Submit } from "components/Form/Submit"
 import { Button } from "components/Button"
@@ -16,6 +14,9 @@ import { FormRedeemableUserActions } from "components/Form/Redeemable/UserAction
 import { redeemableUserActionDefinitions } from "definitions/Redeemable/UserActions"
 import { RedeemModal } from "./RedeemModal"
 import { Objkt } from "types/entities/Objkt"
+import { Infobox } from "../../components/UI/Infobox"
+import { LinkGuide } from "../../components/Link/LinkGuide"
+import style from "./RedeemForm.module.scss"
 
 export interface Inputs {
   options: (number | null)[]
@@ -86,7 +87,6 @@ export function RedeemForm({ redeemable, gentk }: Props) {
       >
         {({ isSubmitting, isValid, values, errors, setFieldValue }) => (
           <Form>
-            {console.log({ errors })}
             <FormRedeemableOptions
               id="options"
               options={redeemable.options}
@@ -100,9 +100,9 @@ export function RedeemForm({ redeemable, gentk }: Props) {
               />
             )}
 
-            <Spacing size="3x-large" />
+            <Spacing size="x-large" />
             <Divider color="gray-vvlight" />
-            <Spacing size="3x-large" />
+            <Spacing size="x-large" />
 
             <span className={cs(text.info)}>
               Your data will be kept securely on our servers and will not be
@@ -111,7 +111,7 @@ export function RedeemForm({ redeemable, gentk }: Props) {
               permanently.
             </span>
 
-            <Spacing size="3x-large" />
+            <Spacing size="x-large" />
             <Divider color="gray-vvlight" />
             <Spacing size="regular" />
 
@@ -119,10 +119,24 @@ export function RedeemForm({ redeemable, gentk }: Props) {
               redeemable={redeemable}
               selected={values.options}
             />
-
-            <Spacing size="2x-large" />
+            <Spacing size="x-large" />
+            <Infobox>
+              This page lets you redeem your token to activate its effect.
+              <br />
+              <strong>You will keep the ownership of your token.</strong>
+              <br />
+              <br />
+              <LinkGuide href="/doc">
+                Read more about redeemable tokens
+              </LinkGuide>
+            </Infobox>
             <Submit layout="center">
-              <Button type="submit" color="secondary" disabled={!isValid}>
+              <Button
+                type="submit"
+                className={style.button}
+                color="secondary"
+                disabled={!isValid}
+              >
                 redeem token
               </Button>
             </Submit>

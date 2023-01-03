@@ -5,12 +5,12 @@ import { Spacing } from "./Spacing"
 
 type Props = PropsWithChildren<{
   padding: "big" | "small"
-  marginTop?: "3x-large" | "6x-large"
+  marginTop?: "2x-large" | "3x-large" | "6x-large"
   columnCentered?: boolean
 }>
 export function PageLayout({
   padding,
-  marginTop = "3x-large",
+  marginTop = "2x-large",
   columnCentered = false,
   children,
 }: Props) {
@@ -24,8 +24,8 @@ export function PageLayout({
       >
         {children}
       </main>
-      <Spacing size="6x-large" />
-      <Spacing size="6x-large" />
+      <Spacing size="6x-large" sm="3x-large" />
+      <Spacing size="6x-large" sm="none" />
     </>
   )
 }

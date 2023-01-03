@@ -1,17 +1,18 @@
-import style from "./RedeemGentk.module.scss"
 import cs from "classnames"
 import { Objkt } from "types/entities/Objkt"
 import { RedeemableDetails } from "types/entities/Redeemable"
-import { InlineTokenCard } from "components/Views/InlineTokenCard"
-import { PageLayout } from "components/Layout/PageLayout"
 import { getGentkUrl } from "utils/gentk"
 import { Button } from "components/Button"
 import { Icon } from "components/Icons/Icon"
 import Link from "next/link"
-import { Infobox } from "components/UI/Infobox"
 import { Spacing } from "components/Layout/Spacing"
-import { LinkGuide } from "components/Link/LinkGuide"
 import { RedeemForm } from "./RedeemForm"
+import layout from "../../styles/Layout.module.scss"
+import React from "react"
+import style from "./RedeemGentk.module.scss"
+import { ArtworkPreview } from "../../components/Artwork/Preview"
+import { UserBadge } from "../../components/User/UserBadge"
+import { CarouselRedeemable } from "../../components/Redeemable/CarouselRedeemable"
 
 interface Props {
   gentk: Objkt
@@ -19,38 +20,43 @@ interface Props {
 }
 export function RedeemGentk({ gentk, redeemable }: Props) {
   return (
-    <PageLayout padding="small" columnCentered>
-      <InlineTokenCard
-        ipfsUri={gentk.metadata?.thumbnailUri}
-        image={gentk.captureMedia}
-        identifier="Redeem:"
-        title={gentk.name!}
-        author={gentk.issuer.author}
-      >
+    <>
+      <div className={cs(layout.flex_column_left)}>
         <Link href={getGentkUrl(gentk)}>
           <Button isLink size="small" iconComp={<Icon icon="arrow-left" />}>
             back to token page
           </Button>
         </Link>
-      </InlineTokenCard>
-
-      <Spacing size="2x-large" />
-
-      <Infobox>
-        This page lets you redeem your token to activate its effect.
-        <br />
-        <strong>You will keep the ownership of your token.</strong>
-        <br />
-        <LinkGuide href="/doc">Read more about redeemable tokens</LinkGuide>
-      </Infobox>
-
-      <Spacing size="2x-large" />
-
-      <h4>Redeem for: {redeemable.name}</h4>
-
-      <Spacing size="2x-large" />
-
-      <RedeemForm redeemable={redeemable} gentk={gentk} />
-    </PageLayout>
+      </div>
+      <Spacing size="x-large" />
+      <div className={style.titles}>
+        <div className={cs(style.titles_infos)}>
+          <UserBadge user={gentk.issuer.author} size="big" />
+          <Spacing size="x-large" sm="2x-small" />
+          <h3>{gentk.name}</h3>
+        </div>
+        <div className={layout.hide_sm}>
+          <h4>Redeem for: {redeemable.name}</h4>
+        </div>
+      </div>
+      <Spacing size="2x-large" sm="2x-small" />
+      <div className={style.content}>
+        <div className={style.content_left}>
+          <ArtworkPreview
+            image={gentk.captureMedia}
+            ipfsUri={gentk.metadata?.thumbnailUri}
+          />
+        </div>
+        <div>
+          <div className={layout.show_sm}>
+            <h4>Redeem for: {redeemable.name}</h4>
+            <Spacing size="x-large" />
+          </div>
+          <CarouselRedeemable medias={redeemable.medias} />
+          <Spacing size="x-large" />
+          <RedeemForm redeemable={redeemable} gentk={gentk} />
+        </div>
+      </div>
+    </>
   )
 }

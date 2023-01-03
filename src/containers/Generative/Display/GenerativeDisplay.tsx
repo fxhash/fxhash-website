@@ -29,6 +29,7 @@ import { GenTokArticleMentions } from "./GenTokArticleMentions"
 import { Clamp } from "../../../components/Clamp/Clamp"
 import { useCallback, useState } from "react"
 import { Icon } from "components/Icons/Icon"
+import { GenerativeRedeemable } from "../../../components/GenerativeToken/GenerativeRedeemable"
 
 /**
  * This is the Core component resposible for the display logic of a Generative
@@ -55,6 +56,14 @@ export function GenerativeDisplay({ token, offlineMode = false }: Props) {
         />
         <Spacing size="2x-small" sm="regular" />
         <h3>{token.name}</h3>
+        {token.redeemables && token.redeemables.length > 0 && (
+          <div className={cs(style.redeemable)}>
+            <Icon icon="sparkles" /> <span>This project can be redeemed</span>{" "}
+            <Link href={`/generative/${token.id}/redeem`}>
+              <a className={cs(text.regular)}>see more</a>
+            </Link>
+          </div>
+        )}
         <Spacing size="x-large" />
       </div>
 
@@ -71,6 +80,14 @@ export function GenerativeDisplay({ token, offlineMode = false }: Props) {
             <Spacing size="x-large" />
             <h3>{token.name}</h3>
           </div>
+          {token.redeemables && token.redeemables.length > 0 && (
+            <div className={cs(style.redeemable, style["redeemable--hide-md"])}>
+              <Icon icon="sparkles" /> <span>This project can be redeemed</span>{" "}
+              <Link href={`/generative/${token.id}/redeem`}>
+                <a className={cs(text.regular)}>see more</a>
+              </Link>
+            </div>
+          )}
 
           <Spacing size="x-large" sm="none" />
 
@@ -118,13 +135,6 @@ export function GenerativeDisplay({ token, offlineMode = false }: Props) {
               Published on{" "}
               {format(new Date(token.createdAt), "MMMM d, yyyy' at 'HH:mm")}
             </span>
-            {token.redeemables && token.redeemables.length > 0 && (
-              <Link href={`/generative/${token.id}/redeem`}>
-                <a className={cs(colors.success, text.small)}>
-                  <Icon icon="sparkles" /> Redeemable
-                </a>
-              </Link>
-            )}
             {token.labels && (
               <Labels className={style.labels} labels={token.labels!} />
             )}
@@ -152,6 +162,10 @@ export function GenerativeDisplay({ token, offlineMode = false }: Props) {
             )}
           >
             <GenerativePricing token={token} />
+            <GenerativeRedeemable
+              isRedeemable={token.redeemables && token.redeemables.length > 0}
+              urlRedeemable={`/generative/${token.id}/redeem`}
+            />
             <ListSplits name="Primary split" splits={token.splitsPrimary} />
             <strong>Royalties</strong>
             <span className={style.mobile_align_right}>
