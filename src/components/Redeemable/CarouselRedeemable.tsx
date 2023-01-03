@@ -1,7 +1,7 @@
 import React, { memo, useCallback, useState } from "react"
 import { Carousel } from "../Carousel/Carousel"
 import style from "./CarouselRedeemable.module.scss"
-import { EventMedia } from "../../types/entities/EventMedia";
+import { EventMedia } from "../../types/entities/EventMedia"
 
 const carouselOpts = {
   showButtonControls: false,

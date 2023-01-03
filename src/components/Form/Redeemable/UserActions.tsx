@@ -4,8 +4,8 @@ import { RedeemableUserAction } from "types/entities/Redeemable"
 import { redeemableUserActionDefinitions } from "definitions/Redeemable/UserActions"
 import { useField } from "formik"
 import { useUpdateFormObject } from "hooks/useFormUpdate"
-import { Spacing } from "../../Layout/Spacing";
-import { Fragment } from "react";
+import { Spacing } from "../../Layout/Spacing"
+import { Fragment } from "react"
 
 interface Props {
   id: string
