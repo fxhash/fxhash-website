@@ -11,24 +11,31 @@ import { Spacing } from "../Layout/Spacing"
 import { Objkt } from "../../types/entities/Objkt"
 import { getObjktUrl } from "../../utils/objkt"
 import { GenTokFlag } from "../../types/entities/GenerativeToken"
-import { useContext } from "react"
+import React, { useContext, useMemo } from "react"
 import { SettingsContext } from "../../context/Theme"
 import { DisplayTezos } from "../Display/DisplayTezos"
 import { EntityBadge } from "../User/EntityBadge"
+import { format } from "date-fns"
 
 interface Props {
   objkt: Objkt
   showOwner?: boolean
   showRarity?: boolean
+  sold?: {
+    date: Date
+    price: number
+  }
 }
 
 export function ObjktCard({
   objkt,
+  sold,
   showOwner = true,
   showRarity = false,
 }: Props) {
   const url = getObjktUrl(objkt)
   const settings = useContext(SettingsContext)
+  const soldDate = useMemo(() => sold?.date && new Date(sold.date), [sold])
   return (
     <Link href={url} passHref>
       <AnchorForward style={{ height: "100%" }}>
@@ -43,6 +50,14 @@ export function ObjktCard({
             {objkt.duplicate && (
               <div className={cs(styleObjkt.dup_flag)}>
                 [WARNING: DUPLICATE]
+              </div>
+            )}
+            {soldDate && (
+              <div className={style.sold}>
+                <span>Sold </span>
+                <time dateTime={format(soldDate, "yyyy/MM/dd")}>
+                  {format(soldDate, "d MMM yyyy @ HH:mm")}
+                </time>
               </div>
             )}
             <h5 className={styleObjkt.title}>{objkt.name}</h5>
@@ -67,12 +82,13 @@ export function ObjktCard({
           <div className={cs(style.bottom)}>
             <div className={cs(style.bottom_left)}>
               <div className={cs(style.price)}>
-                {objkt.activeListing && (
+                {objkt.activeListing && !sold && (
                   <DisplayTezos
                     mutez={objkt.activeListing.price!}
                     formatBig={false}
                   />
                 )}
+                {sold && <DisplayTezos mutez={sold.price} formatBig={false} />}
               </div>
             </div>
             {objkt.issuer && (

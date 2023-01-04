@@ -16,6 +16,24 @@ const sortOptionWithCustomLabel = (
     label: newLabel,
   }
 }
+export const getSortFromUrlQuery = (
+  urlQuery: Record<string, string>,
+  searchSortOptions: IOptions[],
+  defaultSortOptions: IOptions[]
+) => {
+  const { search, sort } = urlQuery
+
+  // if there is a sort value in the url, pre-select it in the sort input
+  // else, select the default value
+  let defaultSortValue = search ? "relevance-desc" : "createdAt-desc"
+  if (sort) {
+    let sortValues = search ? searchSortOptions : defaultSortOptions
+    return sortValues.map(({ value }) => value).includes(sort)
+      ? sort
+      : defaultSortValue
+  }
+  return defaultSortValue
+}
 
 export const getSortOptionsWithSearchOption = (
   currentSortOptions: IOptions[]
@@ -113,6 +131,12 @@ export const sortOptionsMarketplace: IOptions[] = [
   sortOptions["price-desc"],
   sortOptions["price-asc"],
   sortOptionWithCustomLabel(sortOptions["createdAt-asc"], "oldest listed"),
+]
+
+export const sortOptionsMarketplaceSold: IOptions[] = [
+  // acceptedAt
+  sortOptions["price-desc"],
+  sortOptions["price-asc"],
 ]
 
 export const sortOptionsUsers: IOptions[] = [

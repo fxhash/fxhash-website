@@ -21,6 +21,7 @@ const ROUTES_TO_RETAIN = [
   "/explore/incoming",
   "/explore/articles",
   "/marketplace",
+  "/marketplace/sold",
   "/marketplace/collections",
 ]
 

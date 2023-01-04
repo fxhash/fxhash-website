@@ -13,6 +13,7 @@ import { SortAndFilters } from "../SortAndFilters/SortAndFilters"
 import { getTagsFromFiltersObject } from "../../utils/filters"
 import { ExploreTagDef } from "../Exploration/ExploreTags"
 import { MarketplaceFilters } from "../../containers/Marketplace/MarketplaceFilters"
+import { IOptions } from "../Input/Select"
 
 const ITEMS_PER_PAGE = 40
 
@@ -20,18 +21,22 @@ interface Props {
   initialSearchQuery?: string
   initialSort?: string
   initialFilters?: ListingFilters
+  defaultFilters?: ListingFilters
   onChangeSearch?: (value: string) => void
   onChangeFilters?: (updatedFilters: ListingFilters) => void
   onChangeSort?: (updatedSort: string) => void
+  defaultSortOptions?: IOptions[]
 }
 
 export const GalleryMarketplace = ({
   initialSearchQuery,
   initialSort,
   initialFilters,
+  defaultFilters,
   onChangeSearch,
   onChangeFilters,
   onChangeSort,
+  defaultSortOptions = sortOptionsMarketplace,
 }: Props) => {
   const [hasNothingToFetch, setHasNothingToFetch] = useState(false)
   const {
@@ -41,7 +46,7 @@ export const GalleryMarketplace = ({
     restoreSort,
     setSearchSortOptions,
     sortOptions,
-  } = useSort(sortOptionsMarketplace, {
+  } = useSort(defaultSortOptions, {
     defaultSort: initialSort,
     defaultWithSearchOptions:
       initialFilters && !!initialFilters["searchQuery_eq"],
@@ -64,6 +69,7 @@ export const GalleryMarketplace = ({
         onChangeFilters?.(updatedFilters)
       },
       initialFilters,
+      defaultFilters,
     })
 
   // reference to an element at the top to scroll back
@@ -161,7 +167,6 @@ export const GalleryMarketplace = ({
     options: sortOptions,
     onChange: handleChangeSort,
   }
-
   return (
     <div ref={topMarkerRef}>
       <SortAndFilters
@@ -183,9 +188,14 @@ export const GalleryMarketplace = ({
             <CardsContainer ref={refCardsContainer}>
               {listings &&
                 listings.length > 0 &&
-                listings.map((offer) => (
-                  <ObjktCard key={offer.id} objkt={offer.objkt} />
-                ))}
+                listings.map((offer) => {
+                  const sold = offer.acceptedAt
+                    ? { date: offer.acceptedAt, price: offer.price }
+                    : undefined
+                  return (
+                    <ObjktCard sold={sold} key={offer.id} objkt={offer.objkt} />
+                  )
+                })}
               {loading &&
                 CardsLoading({
                   number: ITEMS_PER_PAGE,

@@ -23,6 +23,7 @@ export const Frag_ListingCardInfos = gql`
     id
     version
     price
+    acceptedAt
     objkt {
       id
       version
