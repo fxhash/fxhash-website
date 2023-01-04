@@ -1,0 +1,80 @@
+@import "../../styles/Variables.scss";
+
+.search {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border: 3px solid var(--color-border-input);
+  background-color: var(--color-white);
+  height: 50px;
+  padding: 0 10px 0 4px;
+
+  button {
+    border: none;
+    background: transparent;
+  }
+
+  input {
+    background: transparent;
+    border: 0;
+    font-family: inherit;
+    outline: none;
+    width: 100%;
+  }
+
+  &:focus-within {
+    border-color: var(--color-secondary);
+  }
+
+  &--icon-right {
+    flex-direction: row-reverse;
+    padding: 0 4px 0 10px;
+  }
+
+  &--minimize {
+    box-shadow: none;
+    padding-left: 0;
+    padding-right: 0;
+    border-color: transparent;
+    input {
+      transition: 0.2s all ease-out;
+      width: 0;
+      padding: 0;
+    }
+    &:focus-within {
+      border-color: transparent;
+    }
+  }
+}
+
+.search-icon {
+  padding: 0 6px;
+  font-size: 25px;
+  color: var(--color-border-input);
+  cursor: pointer;
+}
+
+.large_search {
+  flex-grow: 2;
+  max-width: 800px;
+}
+
+@media (max-width: $breakpoint-sm) {
+  .search {
+    transition: 0.2s all ease-out;
+    &--minimize-mobile {
+      box-shadow: none;
+      padding-left: 0;
+      padding-right: 0;
+      border-color: transparent;
+      input {
+        transition: 0.2s all ease-out;
+        width: 0;
+        padding: 0;
+      }
+      &:focus-within {
+        border-color: transparent;
+      }
+    }
+  }
+}
