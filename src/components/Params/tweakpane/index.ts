@@ -9,7 +9,6 @@ import {
   View,
 } from "@tweakpane/core"
 import { FxStringInputController } from "./plugins/StringInputPlugin/controller"
-
 enum EParameterType {
   string = "string",
   number = "number",
@@ -74,6 +73,7 @@ export const parameterControlsDefinition: Record<
         if (!p || !v) return
         const controller = binding.controller_
           .valueController as SliderTextController
+        if (!controller.sliderController) return
         if (
           // you cannot update the step of a number controller so we need to re-init the input
           // fixable with custom number control plugin

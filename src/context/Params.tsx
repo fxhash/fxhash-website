@@ -16,6 +16,7 @@ import {
   consolidateParamValues,
 } from "../components/Params/tweakpane"
 import { FxParamDefinition } from "../components/Params/types"
+
 interface IParamsContext<CustomParams = ParameterValueMap> {
   pane?: Pane
   params?: FxParamDefinition<any>[]
@@ -92,10 +93,16 @@ function usePaneStable(
       values.current[key] = value
       pane.current?.refresh()
     })
-    return () => {
-      pane.current?.dispose()
-    }
   }, [contextPane, pane, values])
+  useEffect(() => {
+    if (!pane?.current) return
+    pane?.current?.on("change", (e: TpChangeEvent<unknown>) => {
+      setParam(e.presetKey as string, e.value)
+    })
+    return () => {
+      pane?.current?.dispose()
+    }
+  }, [pane, setParam])
   return pane
 }
 
@@ -124,10 +131,12 @@ export function usePaneOfParams(
 export function ParamsProvider({ children }: PropsWithChildren<{}>) {
   const paneContainerRef = useRef<HTMLDivElement>(null)
   const values = useRef<ParameterValueMap>({})
-  const [pane, setPane] = useState<Pane>()
+  const pane = useRef<Pane>()
   const [paneContainer, setPaneContainer] = useState<HTMLElement>()
   const [params, setParams] = useState<FxParamDefinition<any>[]>([])
-  const [data, setData] = useState<ParameterValueMap>({})
+  const [data, setData] = useState<ParameterValueMap>(() =>
+    consolidateParamValues(params, values)
+  )
 
   const registerParams = useCallback(
     (params: FxParamDefinition<any>[]) => {
@@ -142,7 +151,7 @@ export function ParamsProvider({ children }: PropsWithChildren<{}>) {
     (key: string, value: any) => {
       if (!values.current) return
       values.current[key] = value
-      pane?.refresh()
+      pane?.current?.refresh()
     },
     [pane, values]
   )
@@ -150,18 +159,23 @@ export function ParamsProvider({ children }: PropsWithChildren<{}>) {
   useEffect(() => {
     const container = paneContainer || paneContainerRef?.current
     if (!container) return
-    const [p, pValues] = createFxPane(container, params, pane, values.current)
-    setPane(p)
+    const [p, pValues] = createFxPane(
+      container,
+      params,
+      pane.current,
+      values.current
+    )
+    pane.current = p
     values.current = pValues
   }, [params, paneContainer])
 
   useEffect(() => {
-    if (!pane) return
-    pane.on("change", (e: TpChangeEvent<unknown>) => {
+    if (!pane?.current) return
+    pane?.current?.on("change", (e: TpChangeEvent<unknown>) => {
       setData((d) => ({ ...d, [e.presetKey as string]: e.value }))
     })
     return () => {
-      pane?.dispose()
+      pane?.current?.dispose()
     }
   }, [pane, setData])
 
@@ -172,7 +186,7 @@ export function ParamsProvider({ children }: PropsWithChildren<{}>) {
       setPaneContainer,
       data,
       params,
-      pane,
+      pane: pane.current,
       setData,
       values,
     }),
