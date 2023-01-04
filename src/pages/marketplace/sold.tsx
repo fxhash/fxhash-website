@@ -4,9 +4,9 @@ import { ClientOnlyEmpty } from "../../components/Utils/ClientOnly"
 import { Marketplace } from "../../containers/Marketplace"
 import Head from "next/head"
 import { MarketplaceTabs } from "../../containers/Marketplace/Tabs"
-import { SectionHeader } from "../../components/Layout/SectionHeader";
-import { SectionTitle } from "../../components/Layout/SectionTitle";
-import { MarketplaceSold } from "../../containers/Marketplace/MarketplaceSold";
+import { SectionHeader } from "../../components/Layout/SectionHeader"
+import { SectionTitle } from "../../components/Layout/SectionTitle"
+import { MarketplaceSold } from "../../containers/Marketplace/MarketplaceSold"
 
 const MarketplacePage: NextPage = ({ query }: any) => {
   return (
