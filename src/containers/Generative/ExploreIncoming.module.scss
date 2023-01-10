@@ -13,3 +13,9 @@
     margin-top: 0;
   }
 }
+
+@media (max-width: $breakpoint-sm) {
+  .date_separator {
+    margin: 0 0 $spacing-small 0;
+  }
+}
