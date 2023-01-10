@@ -6,7 +6,7 @@ import { PropsWithChildren } from "react"
 interface Props {
   layout?: "left" | "center"
   sm?: "left" | "center"
-  className?: string,
+  className?: string
   noPadding?: boolean
 }
 
