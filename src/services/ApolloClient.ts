@@ -45,6 +45,14 @@ export const clientSideClient = new ApolloClient({
   uri: process.env.NEXT_PUBLIC_API_ROOT,
   cache: new InMemoryCache({
     typePolicies: {
+      Article: {
+        fields: {
+          actions: {
+            keyArgs: ["filters"],
+            merge: cacheMergePaginatedField,
+          },
+        },
+      },
       GenerativeToken: {
         fields: {
           actions: {
