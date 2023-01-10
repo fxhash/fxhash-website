@@ -7,7 +7,7 @@ import { SettingsContext } from "../../context/Theme"
 import cs from "classnames"
 import { UserBadge } from "../User/UserBadge"
 import Link from "next/link"
-import { getArticleUrl } from "../../utils/entities/articles";
+import { getArticleUrl } from "../../utils/entities/articles"
 
 interface CardSmallNftArticleProps {
   article: NFTArticle
