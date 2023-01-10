@@ -9,6 +9,7 @@ import {
 } from "react"
 import { SettingsContext } from "../../context/Theme"
 import { useInView } from "react-intersection-observer"
+import { useRouter } from "next/router"
 
 const DEFAULT_SIZE = 270
 
@@ -27,7 +28,7 @@ interface PropsChildren {
   isSearchMinimized: boolean
   setIsSearchMinimized: (state: boolean) => void
   cardSize: number
-  setCardSize: (size: number | null) => void
+  setCardSize: (size: number) => void
 }
 
 interface Props {
@@ -35,12 +36,14 @@ interface Props {
   cardSizeScope?: string
   children: FunctionComponent<PropsChildren>
 }
+
 export function CardsExplorer({
   filtersVisibleDefault = false,
   cardSizeScope,
   children,
 }: Props) {
   const settings = useContext(SettingsContext)
+  const router = useRouter()
 
   const { ref: refCardsContainer, inView: inViewCardsContainer } = useInView({
     rootMargin: "-300px 0px -100px",
@@ -52,20 +55,33 @@ export function CardsExplorer({
   )
   // is the search loading ?
   const [searchLoading, setSearchLoading] = useState<boolean>(false)
+
   // get cardSize from scope or use default
   const cardSize = useMemo<number>(
-    () => (!cardSizeScope ? DEFAULT_SIZE : settings.cardSize),
-    [settings.cardSize, cardSizeScope]
+    () =>
+      !cardSizeScope || !settings.cardSize[cardSizeScope]
+        ? DEFAULT_SIZE
+        : settings.cardSize[cardSizeScope],
+    [cardSizeScope, settings.cardSize]
   )
 
+  const handleSetCardSize = (value: number) => {
+    settings.update("cardSize", {
+      ...settings.cardSize,
+      [cardSizeScope!]: value,
+    })
+  }
+
   useEffect(() => {
+    // cardSize scopes need to match the basePath to prevent race conditions
+    // when updating cardSize for retained routes
     const root = document.documentElement
     root.style.setProperty("--cards-size", `${cardSize}px`)
     // Reset to default size when cleanup
     return () => {
       root.style.setProperty("--cards-size", `${DEFAULT_SIZE}px`)
     }
-  }, [cardSize])
+  }, [cardSize, router.pathname])
 
   // is search minimized on mobile
   const [isSearchMinimized, setIsSearchMinimized] = useState<boolean>(true)
@@ -78,7 +94,7 @@ export function CardsExplorer({
     searchLoading,
     setSearchLoading,
     cardSize,
-    setCardSize: (value) => settings.update("cardSize", value),
+    setCardSize: handleSetCardSize,
     isSearchMinimized,
     setIsSearchMinimized,
   })

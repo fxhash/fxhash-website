@@ -25,7 +25,7 @@ const defaultCardSizeOptions: ISizeOption[] = [
 interface Props {
   options?: ISizeOption[]
   value?: number | null
-  onChange: (size: number | null) => void
+  onChange: (size: number) => void
 }
 
 export function CardSizeSelect({

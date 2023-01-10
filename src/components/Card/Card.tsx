@@ -3,12 +3,10 @@ import cs from "classnames"
 import {
   PropsWithChildren,
   ReactNode,
-  useCallback,
   useContext,
-  useMemo,
   useState,
+  useMemo,
 } from "react"
-
 import { SettingsContext } from "../../context/Theme"
 import { GenTokLabel } from "../../types/entities/GenerativeToken"
 import { getGenTokWarning } from "../../utils/generative-token"
