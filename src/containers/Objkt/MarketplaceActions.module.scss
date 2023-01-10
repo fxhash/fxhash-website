@@ -1,0 +1,21 @@
+@import "../../styles/Variables";
+
+.inputs {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.lock_container {
+  display: flex;
+  align-items: center;
+}
+
+@media (max-width: $breakpoint-sm) {
+  .inputs {
+    flex-wrap: wrap;
+  }
+  .lock_container {
+    width: 100%;
+  }
+}
