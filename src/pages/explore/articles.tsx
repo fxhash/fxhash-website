@@ -4,8 +4,6 @@ import { Spacing } from "../../components/Layout/Spacing"
 import { SectionHeader } from "../../components/Layout/SectionHeader"
 import { ExploreTabs } from "../../containers/Explore/ExploreTabs"
 import { ExploreArticles } from "../../containers/Explore/ExploreArticles"
-import cs from "classnames"
-import layout from "../../styles/Layout.module.scss"
 import { TitleHyphen } from "../../components/Layout/TitleHyphen"
 
 const ExploreRevealFeed: NextPage = () => {

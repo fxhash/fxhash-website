@@ -7,7 +7,6 @@ import ClientOnly from "../../components/Utils/ClientOnly"
 import Head from "next/head"
 import { ExploreTabs } from "../../containers/Explore/ExploreTabs"
 import { ExploreIncomingTokens } from "../../containers/Generative/ExploreIncoming"
-import { SectionTitle } from "../../components/Layout/SectionTitle"
 import { TitleHyphen } from "../../components/Layout/TitleHyphen"
 import React from "react"
 

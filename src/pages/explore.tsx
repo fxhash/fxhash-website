@@ -5,10 +5,7 @@ import ClientOnly from "../components/Utils/ClientOnly"
 import { ExploreGenerativeTokens } from "../containers/ExploreGenerativeTokens"
 import Head from "next/head"
 import { ExploreTabs } from "../containers/Explore/ExploreTabs"
-import { SectionTitle } from "../components/Layout/SectionTitle"
-import cs from "classnames"
-import layout from "../styles/Layout.module.scss"
-import { TitleHyphen } from "../components/Layout/TitleHyphen";
+import { TitleHyphen } from "../components/Layout/TitleHyphen"
 
 const Explore: NextPage = () => {
   return (

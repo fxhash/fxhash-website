@@ -15,7 +15,7 @@ export function MintingStateTimer({
   return (
     <div className={cs(style.root)}>
       <i className={icon} aria-hidden />
-      {children} <Countdown until={until} />
+      {children} <Countdown className={style.countdown} until={until} />
     </div>
   )
 }

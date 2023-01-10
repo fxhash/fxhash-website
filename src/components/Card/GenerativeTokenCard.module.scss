@@ -1,5 +1,13 @@
 @import "../../styles/Variables";
 
+.anchor {
+  height: 100%;
+  display: inline-flex;
+  flex-direction: column;
+}
+.card {
+  flex: 1;
+}
 .animated {
   background-color: rgba(0, 0, 0, 0.8);
   padding: 3px 3px 1px 6px;
@@ -10,6 +18,10 @@
   i {
     font-size: 14px;
   }
+}
+.minting_state_top {
+  margin-top: 10px;
+  font-weight: normal;
 }
 
 .mint_progress {

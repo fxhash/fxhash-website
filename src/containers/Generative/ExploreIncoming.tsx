@@ -1,5 +1,5 @@
 import style from "./ExploreIncoming.module.scss"
-import { gql, useQuery } from "@apollo/client"
+import { useQuery } from "@apollo/client"
 import {
   GenerativeToken,
   GenTokFlag,
@@ -7,19 +7,23 @@ import {
 import { CardsContainer } from "../../components/Card/CardsContainer"
 import { GenerativeTokenCard } from "../../components/Card/GenerativeTokenCard"
 import { InfiniteScrollTrigger } from "../../components/Utils/InfiniteScrollTrigger"
-import { useState, useRef, useEffect, useContext, useCallback } from "react"
-import { Spacing } from "../../components/Layout/Spacing"
+import { useState, useContext, useCallback, Fragment, useMemo } from "react"
 import { CardsLoading } from "../../components/Card/CardsLoading"
 import { SettingsContext } from "../../context/Theme"
-import {
-  Frag_GenAuthor,
-  Frag_GenPricing,
-} from "../../queries/fragments/generative-token"
 import { CardsExplorer } from "../../components/Exploration/CardsExplorer"
 import { CardSizeSelect } from "../../components/Input/CardSizeSelect"
 import { Qu_genTokensIncoming } from "../../queries/generative-token"
+import {
+  getDateSeparator,
+  getNewDateSeparatorTracking,
+} from "../../utils/date-separator"
 
 const ITEMS_PER_PAGE = 20
+
+type GenerativeTokenWithSeparator = {
+  generativeToken: GenerativeToken
+  separatorLabel?: string | null
+}
 
 interface Props {}
 
@@ -71,6 +75,34 @@ export const ExploreIncomingTokens = ({}: Props) => {
     }
   }, [fetchMore, generativeTokens?.length, hasNothingToFetch, loading])
 
+  const generativeTokensWithDateSeparator = useMemo<
+    GenerativeTokenWithSeparator[] | null | undefined | false
+  >(() => {
+    let dataSeparatorTracking = getNewDateSeparatorTracking()
+    const todayDate = new Date()
+    return (
+      generativeTokens &&
+      generativeTokens?.length > 0 &&
+      generativeTokens.map((token) => {
+        const dateSeparatorData = token.mintOpensAt
+          ? getDateSeparator(
+              dataSeparatorTracking,
+              todayDate,
+              new Date(token.mintOpensAt)
+            )
+          : null
+        if (dateSeparatorData) {
+          dataSeparatorTracking = {
+            ...dateSeparatorData.dateSeparatorTracking,
+          }
+        }
+        return {
+          generativeToken: token,
+          separatorLabel: dateSeparatorData?.separatorLabel,
+        }
+      })
+    )
+  }, [generativeTokens])
   return (
     <CardsExplorer cardSizeScope="explore">
       {({ cardSize, setCardSize }) => (
@@ -78,23 +110,35 @@ export const ExploreIncomingTokens = ({}: Props) => {
           <div className={style.top_bar}>
             <CardSizeSelect value={cardSize} onChange={setCardSize} />
           </div>
-          <Spacing size="large" />
           <InfiniteScrollTrigger
             onTrigger={handleFetchMore}
             canTrigger={!!data && !loading}
           >
             <CardsContainer>
-              {generativeTokens &&
-                generativeTokens?.length > 0 &&
-                generativeTokens.map((token) => (
-                  <GenerativeTokenCard
-                    key={token.id}
-                    token={token}
-                    displayPrice={settingsCtx.displayPricesCard}
-                    displayDetails={settingsCtx.displayInfosGenerativeCard}
-                    lockedUntil={token.lockEnd as any}
-                  />
-                ))}
+              {generativeTokensWithDateSeparator &&
+                generativeTokensWithDateSeparator.map(
+                  ({ generativeToken, separatorLabel }) => {
+                    return (
+                      <Fragment key={generativeToken.id}>
+                        {separatorLabel && (
+                          <div className={style.date_separator}>
+                            {separatorLabel}
+                          </div>
+                        )}
+                        <GenerativeTokenCard
+                          key={generativeToken.id}
+                          token={generativeToken}
+                          positionMintingState="top"
+                          displayPrice={settingsCtx.displayPricesCard}
+                          displayDetails={
+                            settingsCtx.displayInfosGenerativeCard
+                          }
+                          lockedUntil={generativeToken.lockEnd as any}
+                        />
+                      </Fragment>
+                    )
+                  }
+                )}
               {loading &&
                 CardsLoading({
                   number: ITEMS_PER_PAGE,
