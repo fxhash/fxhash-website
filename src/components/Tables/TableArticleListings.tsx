@@ -139,20 +139,45 @@ const _TableArticleListings = ({
                           listing.id === listingOperated?.id,
                       })}
                     >
-                      <td className={style["td-gentk"]}>
+                      <td
+                        className={cs(
+                          style["td-gentk"],
+                          style["td_mobile_fullwidth"]
+                        )}
+                      >
                         <UserBadge hasLink user={listing.issuer} size="small" />
                       </td>
                       <td
-                        className={cs(style["td-editions"], style["td-center"])}
+                        className={cs(
+                          style["td-editions"],
+                          style["td-center"],
+                          style["td_mobile_fullwidth"],
+                          style["td_space_between"],
+                          style["td_listing_spacing"]
+                        )}
+                        data-label="Editions"
                       >
                         <span className={text.bold}>{listing.amount}</span>
                       </td>
-                      <td className={cs(style["td-time"], style["td-center"])}>
+                      <td
+                        className={cs(
+                          style["td-time"],
+                          style["td-center"],
+                          style["td_mobile_fullwidth"],
+                          style["td_space_between"],
+                          style["td_listing_spacing"]
+                        )}
+                        data-label="Time"
+                      >
                         <div className={cs(text.info)}>
                           <DateDistance timestamptz={listing.createdAt} />
                         </div>
                       </td>
-                      <td>
+                      <td
+                        className={cs({
+                          [style.td_mobile_hide]: !buttons,
+                        })}
+                      >
                         <div className={style.article_actions}>{buttons}</div>
                       </td>
                     </tr>
@@ -162,7 +187,10 @@ const _TableArticleListings = ({
             ))
           ) : (
             <tr>
-              <td className={style.empty} colSpan={4}>
+              <td
+                className={cs(style.empty, style.td_mobile_fullwidth)}
+                colSpan={4}
+              >
                 No listings found
               </td>
             </tr>
@@ -174,14 +202,31 @@ const _TableArticleListings = ({
             (ledgers.length > 0 &&
               ledgers.map((ledger, idx) => (
                 <tr key={ledger.owner?.id || idx}>
-                  <td className={style["td-gentk"]}>
+                  <td
+                    className={cs(
+                      style["td-gentk"],
+                      style["td_mobile_fullwidth"]
+                    )}
+                  >
                     <UserBadge hasLink user={ledger.owner} size="small" />
                   </td>
-                  <td className={cs(style["td-editions"], style["td-center"])}>
+                  <td
+                    className={cs(
+                      style["td-editions"],
+                      style["td-center"],
+                      style["td_mobile_fullwidth"],
+                      style["td_space_between"]
+                    )}
+                    data-label="Editions"
+                  >
                     <span className={text.bold}>{ledger.amount}</span>
                   </td>
-                  <td colSpan={1} />
-                  <td>
+                  <td colSpan={1} className={style.td_mobile_hide} />
+                  <td
+                    className={cs({
+                      [style.td_mobile_hide]: !(user?.id === ledger.owner.id),
+                    })}
+                  >
                     <div className={style.article_actions}>
                       {user?.id === ledger.owner.id && (
                         <ArticleListEditions

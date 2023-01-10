@@ -18,7 +18,7 @@
   align-items: center;
   font-size: var(--font-size-h5);
   font-weight: bold;
-  
+
   i {
     display: none;
     margin-right: 15px;
@@ -29,8 +29,8 @@
 @media (max-width: $breakpoint-md) {
   .content {
     display: none;
-    padding: 6px;
-    border: 3px solid var(--color-gray-vvlight);
+    padding: 8px;
+    border: 3px solid var(--color-gray-vvvlight);
     margin-top: 0;
     border-top: none;
   }
@@ -39,11 +39,13 @@
     cursor: pointer;
     pointer-events: all;
     width: 100%;
-    background: var(--color-gray-vvlight);
-    padding: 5px 10px;
-  
+    background: var(--color-gray-vvvlight);
+    padding: 12px 8px;
+
     i {
       display: block;
+      font-size: 18px;
+      margin-right: 16px;
     }
   }
 

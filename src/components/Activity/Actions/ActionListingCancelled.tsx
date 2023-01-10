@@ -11,8 +11,6 @@ export const ActionListingCancelled: TActionComp = ({ action }) => (
       user={action.issuer!}
       size="small"
     />
-    <span>
-      cancelled their listing on <strong>#{action.objkt!.iteration}</strong>
-    </span>
+    cancelled their listing on <strong>#{action.objkt!.iteration}</strong>
   </>
 )

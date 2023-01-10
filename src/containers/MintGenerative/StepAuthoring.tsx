@@ -12,7 +12,11 @@ import { UserContext } from "../UserProvider"
 import { IOptions, Select } from "../../components/Input/Select"
 import { useQuery } from "@apollo/client"
 import { Qu_userCollaborations } from "../../queries/user"
-import { InputMultiList, MultiListItem, MultiListItemProps } from "../../components/Input/InputMultiList"
+import {
+  InputMultiList,
+  MultiListItem,
+  MultiListItemProps,
+} from "../../components/Input/InputMultiList"
 import { Collaboration } from "../../types/entities/User"
 import { UserBadge } from "../../components/User/UserBadge"
 import { format } from "date-fns"
@@ -21,21 +25,20 @@ import { UserFromAddress } from "../../components/User/UserFromAddress"
 import { RadioOption } from "../../components/Input/InputRadioButtons"
 import { InputRadioBtnIcon } from "../../components/Input/InputRadioBtnIcon"
 
-
 const AuthoringOptions: RadioOption[] = [
   {
     value: 0,
     label: "You",
     optProps: {
-      icon: <i aria-hidden className="fa-solid fa-user-cowboy"/>
-    }
+      icon: <i aria-hidden className="fa-solid fa-user-cowboy" />,
+    },
   },
   {
     value: 1,
     label: "Collaboration",
     optProps: {
-      icon: <i aria-hidden className="fa-solid fa-people-carry-box"/>
-    }
+      icon: <i aria-hidden className="fa-solid fa-people-carry-box" />,
+    },
   },
 ]
 
@@ -53,8 +56,8 @@ export const StepAuthoring: StepComponent = ({ state, onNext }) => {
   // query the user collaboration contracts in prevision
   const { data, loading } = useQuery(Qu_userCollaborations, {
     variables: {
-      id: user.id
-    }
+      id: user.id,
+    },
   })
 
   // 0: user, 1: collaboration
@@ -63,7 +66,7 @@ export const StepAuthoring: StepComponent = ({ state, onNext }) => {
   )
 
   // the selected collaboration address
-  const [selectedCollab, setSelectedCollab] = useState<string|undefined>(
+  const [selectedCollab, setSelectedCollab] = useState<string | undefined>(
     state.collaboration ? state.collaboration.id : undefined
   )
 
@@ -71,8 +74,7 @@ export const StepAuthoring: StepComponent = ({ state, onNext }) => {
   const collaborations = useMemo<Collaboration[]>(() => {
     if (!data || !data.user || !data.user.collaborationContracts) {
       return []
-    }
-    else {
+    } else {
       return data.user.collaborationContracts
     }
   }, [data])
@@ -80,34 +82,33 @@ export const StepAuthoring: StepComponent = ({ state, onNext }) => {
   // a list of the collaborations created on-demand with the module
   const [createdCollabs, setCreatedCollabs] = useState<Collaboration[]>([])
 
-
   // build the list items from the collaboration contract
   const collaborationsListItem = useMemo<MultiListItem[]>(() => {
     return [
-      ...createdCollabs.map(collab => ({
+      ...createdCollabs.map((collab) => ({
         value: collab.id,
         props: {
           collab: collab,
           fresh: true,
-        }
+        },
       })),
-      ...collaborations.map(collab => ({
+      ...collaborations.map((collab) => ({
         value: collab.id,
         props: {
           collab: collab,
           fresh: false,
-        }
-      }))
+        },
+      })),
     ]
   }, [collaborations, createdCollabs])
 
   const handleSubmit = (evt: any) => {
     evt.preventDefault()
-    let collab: Collaboration|null = null
+    let collab: Collaboration | null = null
     if (authorType === 1) {
       // build the full list of collaborations (using created ones too)
       const collabs = [...collaborations, ...createdCollabs]
-      collab = collabs.find(c => c.id === selectedCollab)!
+      collab = collabs.find((c) => c.id === selectedCollab)!
     }
     onNext({
       collaboration: collab,
@@ -115,10 +116,7 @@ export const StepAuthoring: StepComponent = ({ state, onNext }) => {
   }
 
   const onCreateCollab = (collab: Collaboration) => {
-    setCreatedCollabs([
-      collab,
-      ...createdCollabs,
-    ])
+    setCreatedCollabs([collab, ...createdCollabs])
     setSelectedCollab(collab.id)
   }
 
@@ -127,46 +125,44 @@ export const StepAuthoring: StepComponent = ({ state, onNext }) => {
 
   return (
     <div className={cs(style.container)}>
-      <Spacing size="6x-large"/>
+      <Spacing size="6x-large" sm="none" />
 
-      <Form 
-        className={cs(layout.smallform, style.form, layout.w100)} 
+      <Form
+        className={cs(layout.smallform, style.form, layout.w100)}
         onSubmit={handleSubmit}
       >
         <Field className={cs(layout.y_centered)}>
           <label htmlFor="authoring-type">
-            Who's authoring the piece ?
+            Who&apos;s authoring the piece ?
           </label>
+          <Spacing size="none" sm="regular" />
           <InputRadioBtnIcon
             value={authorType}
             onChange={setAuthorType}
             options={AuthoringOptions}
-            className={cs(layout.w100, layout.grid_center)}
+            className={cs(layout.grid_center, style.radios)}
           />
         </Field>
 
         {authorType === 1 && (
           <Field className={cs(layout.y_centered, layout.w100)}>
-            <div className={cs(layout.flex_space_between)}>
-              <h5>
-                Select the collaboration
-              </h5>
+            <div className={cs(style.select_collaboration)}>
+              <h5>Select the collaboration</h5>
               <CollaborationCreate
                 buttonSize="small"
                 onCreate={onCreateCollab}
                 hideOnCreate
               />
             </div>
-            <Spacing size="x-small"/>
+            <Spacing size="x-small" />
             <InputMultiList<string>
               placeholder="This account isn't linked to any collaboration contract. You need to create a collaboration first."
               listItems={collaborationsListItem}
-              selected={selectedCollab ? [ selectedCollab ] : []}
+              selected={selectedCollab ? [selectedCollab] : []}
               onChangeSelected={(collab) => {
                 if (collab.length > 0) {
                   setSelectedCollab(collab[0])
-                }
-                else {
+                } else {
                   setSelectedCollab(undefined)
                 }
               }}
@@ -180,12 +176,9 @@ export const StepAuthoring: StepComponent = ({ state, onNext }) => {
                     {itemProps.collab.id}
                   </span>
                   <div className={cs(style.users)}>
-                    {itemProps.collab.collaborators.map(user => (
+                    {itemProps.collab.collaborators.map((user) =>
                       itemProps.fresh ? (
-                        <UserFromAddress
-                          key={user.id}
-                          address={user.id}
-                        >
+                        <UserFromAddress key={user.id} address={user.id}>
                           {({ user }) => (
                             <UserBadge
                               size="small"
@@ -194,7 +187,7 @@ export const StepAuthoring: StepComponent = ({ state, onNext }) => {
                             />
                           )}
                         </UserFromAddress>
-                      ):(
+                      ) : (
                         <UserBadge
                           key={user.id}
                           size="small"
@@ -202,12 +195,15 @@ export const StepAuthoring: StepComponent = ({ state, onNext }) => {
                           hasLink={false}
                         />
                       )
-                    ))}
+                    )}
                   </div>
                   <span className={cs(style.date)}>
                     <strong>Created on: </strong>
                     <span>
-                      {format(new Date(itemProps.collab.createdAt), "MMMM d, yyyy' at 'HH:mm")}
+                      {format(
+                        new Date(itemProps.collab.createdAt),
+                        "MMMM d, yyyy' at 'HH:mm"
+                      )}
                     </span>
                   </span>
                 </div>
@@ -216,23 +212,24 @@ export const StepAuthoring: StepComponent = ({ state, onNext }) => {
           </Field>
         )}
 
-        <Spacing size="6x-large"/>
+        <Spacing size="6x-large" sm="x-large" />
 
         <Button
           type="submit"
-          iconComp={<i aria-hidden className="fas fa-arrow-right"/>}
+          iconComp={<i aria-hidden className="fas fa-arrow-right" />}
           iconSide="right"
           color="secondary"
           size="large"
           disabled={!isValid}
+          className={style.button}
         >
           next step
         </Button>
       </Form>
 
-      <Spacing size="3x-large"/>
-      <Spacing size="3x-large"/>
-      <Spacing size="3x-large"/>
+      <Spacing size="3x-large" />
+      <Spacing size="3x-large" sm="none" />
+      <Spacing size="3x-large" sm="none" />
     </div>
   )
 }

@@ -36,9 +36,10 @@ export const MasonryCardsContainer = forwardRef<
 
   const resizeHandler = useCallback(() => {
     if (elementRef.current) {
-      const cardsGap = +getComputedStyle(document.documentElement)
-        .getPropertyValue("--cards-gap")
-        .replace("px", "")
+      const cardsGap =
+        +getComputedStyle(document.documentElement)
+          .getPropertyValue("--cards-gap")
+          .replace("px", "") || 0
       const numColsNew = Math.max(
         1,
         Math.floor(

@@ -1,7 +1,6 @@
 import style from "./ObjktTabs.module.scss"
 import layout from "../../styles/Layout.module.scss"
 import cs from "classnames"
-import { useState } from "react"
 import { Objkt } from "../../types/entities/Objkt"
 import { Spacing } from "../../components/Layout/Spacing"
 import { TabsContainer } from "../../components/Layout/TabsContainer"
@@ -12,24 +11,23 @@ import { SectionWrapper } from "../../components/Layout/SectionWrapper"
 interface Props {
   objkt: Objkt
 }
-export function ObjktTabs({
-  objkt,
-}: Props) {
+export function ObjktTabs({ objkt }: Props) {
   return (
     <TabsContainer
       tabDefinitions={[
         {
-          name: "activity"
+          name: "activity",
         },
         {
-          name: `offers (${objkt.offers?.length || 0})`
-        }
+          name: `offers (${objkt.offers?.length || 0})`,
+        },
       ]}
+      className={style.tabs}
       tabsLayout="fixed-size"
     >
       {({ tabIndex }) => (
-        <section className={cs(layout['padding-big'])}>
-          <Spacing size="3x-large" />
+        <section className={cs(layout["padding-big"])}>
+          <Spacing size="3x-large" sm="regular" />
           {tabIndex === 0 ? (
             <SectionWrapper layout="fixed-width-centered">
               <Activity
@@ -37,7 +35,7 @@ export function ObjktTabs({
                 className={cs(style.activity)}
               />
             </SectionWrapper>
-          ):tabIndex === 1 ? (
+          ) : tabIndex === 1 ? (
             <SectionWrapper layout="fixed-width-centered">
               <ListOffers
                 objkt={objkt}
@@ -46,7 +44,7 @@ export function ObjktTabs({
                 className={cs(style.activity)}
               />
             </SectionWrapper>
-          ):null}
+          ) : null}
         </section>
       )}
     </TabsContainer>

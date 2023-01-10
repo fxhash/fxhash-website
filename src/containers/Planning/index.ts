@@ -1,3 +1,3 @@
-import { Planning } from './Planning'
+import { Planning } from "./Planning"
 
-export default Planning;
+export default Planning

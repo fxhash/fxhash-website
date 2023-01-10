@@ -30,4 +30,15 @@
   .placeholder {
     margin-bottom: 30px;
   }
+  .selector {
+    width: 100%;
+    justify-content: space-between;
+    & > span {
+      font-size: 24px;
+      margin-right: 8px;
+    }
+  }
+  .select {
+    flex-shrink: 0;
+  }
 }

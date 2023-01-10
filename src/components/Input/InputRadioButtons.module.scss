@@ -8,25 +8,31 @@
     grid-template-columns: repeat(auto-fit, 200px);
   }
 
-  button {
-    border: 3px solid var(--color-border-input);
-    background: var(--color-white);
-    color: var(--color-black);
-    cursor: pointer;
-    transition: all 0.15s;
-    padding: 0;
-
-    &:hover {
-      border-color: var(--color-black);
-    }
-    
-    &.active {
-      border-color: var(--color-secondary);
-      font-weight: bold;
-    }
+  &.layout_group {
+    border: 3px solid var(--color-black);
+    padding: 8px;
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
 .opt_default_renderer_root {
   padding: 7px 0;
+}
+
+.button {
+  border: 3px solid var(--color-border-input);
+  background: var(--color-white);
+  color: var(--color-black);
+  cursor: pointer;
+  transition: all 0.15s;
+  padding: 0;
+
+  &:hover {
+    border-color: var(--color-black);
+  }
+
+  &.active {
+    border-color: var(--color-secondary);
+    font-weight: bold;
+  }
 }

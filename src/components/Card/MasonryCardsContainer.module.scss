@@ -2,7 +2,7 @@
 
 .container {
   width: 100%;
-  display: grid; 
+  display: grid;
   grid-template-columns: repeat(auto-fit, minmax(var(--cards-size), 1fr));
   gap: var(--cards-gap);
   grid-auto-flow: column;
@@ -10,8 +10,17 @@
   & > a {
     text-decoration: none !important;
   }
- 
+
 }
 .col > a > div, .col > div {
   margin-bottom: var(--cards-gap);
+}
+
+@media (max-width: $breakpoint-sm) {
+  .container {
+    gap: 32px;
+  }
+  .col > a > div, .col > div {
+    margin-bottom: 32px;
+  }
 }

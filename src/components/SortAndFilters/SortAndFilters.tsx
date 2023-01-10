@@ -87,11 +87,12 @@ const _SortAndFilters = ({
           </SearchHeader>
 
           <div className={cs(layout.cards_explorer, layout["padding-big"])}>
-            {filtersVisible && (
-              <FiltersPanel onClose={() => setFiltersVisible(false)}>
-                {renderFilters?.()}
-              </FiltersPanel>
-            )}
+            <FiltersPanel
+              open={filtersVisible}
+              onClose={() => setFiltersVisible(false)}
+            >
+              {renderFilters?.()}
+            </FiltersPanel>
 
             <div style={{ width: "100%" }}>
               {(filterTags || []).length > 0 && (

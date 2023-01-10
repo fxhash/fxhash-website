@@ -5,14 +5,11 @@ import { PropsWithChildren } from "react"
 interface Props {
   title: string
 }
-export function SettingsGroup({
-  title,
-  children,
-}: PropsWithChildren<Props>) {
+export function SettingsGroup({ title, children }: PropsWithChildren<Props>) {
   return (
     <div className={cs(style.root)}>
-      <div className={cs(style.title)}>{ title }</div>
-      <div className={cs(style.content)}>{ children }</div>
+      <h5 className={cs(style.title)}>{title}</h5>
+      <div className={cs(style.content)}>{children}</div>
     </div>
   )
 }

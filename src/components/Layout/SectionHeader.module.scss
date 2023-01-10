@@ -32,5 +32,15 @@
       padding-right: 15px !important;
       height: 48px;
     }
+
+    &.sm_left {
+      text-align: left;
+      align-items: flex-start;
+      justify-content: space-between;
+    }
+    &.sm_center {
+      justify-content: center;
+      text-align: center;
+    }
   }
 }

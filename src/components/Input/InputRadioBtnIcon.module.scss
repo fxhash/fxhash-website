@@ -1,7 +1,7 @@
-.root {
-  button {
-    width: 150px;
-  }
+
+button.button {
+  width: 100%;
+  border: none;
 }
 
 .item {
@@ -15,8 +15,10 @@
     font-size: 32px;
   }
 
+
   &.active {
-    background-color: var(--color-secondary);
+    background-color: var(--color-primary);
     color: var(--color-white);
   }
 }
+

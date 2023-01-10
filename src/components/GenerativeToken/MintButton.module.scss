@@ -1,3 +1,5 @@
+@import "../../styles/Variables";
+
 .root {
   position: relative;
 }
@@ -29,5 +31,14 @@
     &:hover {
       background-color: var(--color-gray-vlight);
     }
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .root {
+    width: 100%;
+  }
+  .button {
+    width: 100%;
   }
 }

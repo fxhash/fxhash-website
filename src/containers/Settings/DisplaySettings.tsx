@@ -1,9 +1,9 @@
 import style from "./DisplaySettings.module.scss"
 import styleSettings from "./Settings.module.scss"
 import cs from "classnames"
-import { useContext, useEffect, useMemo, useRef, useState } from "react"
+import { useMemo } from "react"
 import { Switch } from "../../components/Input/Switch"
-import { ISettingsContext, SettingsContext } from "../../context/Theme"
+import { ISettingsContext } from "../../context/Theme"
 import { SettingsGroup } from "./SettingsGroup"
 import { GenerativeTokenCard } from "../../components/Card/GenerativeTokenCard"
 import { fakeGenerativeToken } from "../../utils/generative-token"
@@ -46,7 +46,9 @@ export function DisplaySettings({ settings, className }: Props) {
         <div className={cs(styleSettings.toggle_line)}>
           <span>
             <span>Image previews</span>
-            <em>Display image previews instead of real-time code</em>
+            <span className={styleSettings.toggle_line_description}>
+              Display image previews instead of real-time code
+            </span>
           </span>
           <Switch
             onChange={(value) => settings.update("quality", value ? 0 : 1)}
@@ -56,9 +58,9 @@ export function DisplaySettings({ settings, className }: Props) {
         <div className={cs(styleSettings.toggle_line)}>
           <span>
             <span>NSFW</span>
-            <em>
+            <span className={styleSettings.toggle_line_description}>
               Hide content that contains nudity, violence and sensitive content.
-            </em>
+            </span>
           </span>
           <Switch
             onChange={(value) => settings.update("nsfw", value)}
@@ -68,7 +70,10 @@ export function DisplaySettings({ settings, className }: Props) {
         <div className={cs(styleSettings.toggle_line)}>
           <span>
             <span>Epilepsy</span>
-            <em>Hide tokens that contain epilepsy, vestibular and photosensitive triggers</em>
+            <span className={styleSettings.toggle_line_description}>
+              Hide tokens that contain epilepsy, vestibular and photosensitive
+              triggers
+            </span>
           </span>
           <Switch
             onChange={(value) => settings.update("epilepsy", value)}
@@ -76,6 +81,7 @@ export function DisplaySettings({ settings, className }: Props) {
           />
         </div>
       </SettingsGroup>
+      <hr />
       <SettingsGroup title="Layout">
         <div className={style.settings_layout}>
           <div className={style.layout_controls}>
@@ -99,7 +105,7 @@ export function DisplaySettings({ settings, className }: Props) {
             </div>
           </div>
           <div className={style.masonry_container}>
-            <CContainer 
+            <CContainer
               cardSize={SIZE_MASONRY_BOXES}
               emptyDivs={0}
               style={{
@@ -109,8 +115,8 @@ export function DisplaySettings({ settings, className }: Props) {
               {randomSizes.map((size, i) => (
                 <div
                   key={`mini_card-${size}-${i}`}
-                  className={cs(style.mini_card ,{
-                    [style.mini_card_masonry]: settings.layoutMasonry
+                  className={cs(style.mini_card, {
+                    [style.mini_card_masonry]: settings.layoutMasonry,
                   })}
                   style={{
                     height: SIZE_MASONRY_BOXES + size * SIZE_MASONRY_BOXES,
@@ -121,7 +127,7 @@ export function DisplaySettings({ settings, className }: Props) {
           </div>
         </div>
       </SettingsGroup>
-
+      <hr />
       <SettingsGroup title="Cards design">
         <div className={cs(style.settings_card)}>
           <div className={cs(style.settings_controls)}>
@@ -168,7 +174,7 @@ export function DisplaySettings({ settings, className }: Props) {
           </div>
         </div>
       </SettingsGroup>
-
+      <hr />
       <SettingsGroup title="Generative token cards">
         <div className={cs(style.settings_card)}>
           <div className={cs(style.settings_controls)}>
@@ -215,7 +221,7 @@ export function DisplaySettings({ settings, className }: Props) {
           </div>
         </div>
       </SettingsGroup>
-
+      <hr />
       <SettingsGroup title="Gentk cards">
         <div className={cs(style.settings_card)}>
           <div className={cs(style.settings_controls)}>

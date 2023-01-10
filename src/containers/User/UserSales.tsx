@@ -1,8 +1,8 @@
-import React, { memo, useCallback, useMemo, useState } from 'react';
-import { User } from "../../types/entities/User";
-import { useQuery } from "@apollo/client";
-import { Qu_userSales } from "../../queries/user";
-import { TableUserSales } from "../../components/Tables";
+import React, { memo, useCallback, useMemo, useState } from "react"
+import { User } from "../../types/entities/User"
+import { useQuery } from "@apollo/client"
+import { Qu_userSales } from "../../queries/user"
+import { TableUserSales } from "../../components/Tables"
 
 interface UserSalesTableProps {
   user: User
@@ -11,7 +11,7 @@ interface UserSalesTableProps {
 const ITEMS_PER_PAGE = 30
 
 const _UserSalesTable = ({ user }: UserSalesTableProps) => {
-  const [hasNothingToFetch, setHasNothingToFetch] = useState(false);
+  const [hasNothingToFetch, setHasNothingToFetch] = useState(false)
   const { data, loading, fetchMore } = useQuery<{ user: User }>(Qu_userSales, {
     notifyOnNetworkStatusChange: true,
     variables: {
@@ -20,22 +20,28 @@ const _UserSalesTable = ({ user }: UserSalesTableProps) => {
       take: ITEMS_PER_PAGE,
     },
     onCompleted: (newData) => {
-      if (!newData?.user?.sales?.length || newData.user.sales.length < ITEMS_PER_PAGE) {
-        setHasNothingToFetch(true);
+      if (
+        !newData?.user?.sales?.length ||
+        newData.user.sales.length < ITEMS_PER_PAGE
+      ) {
+        setHasNothingToFetch(true)
       }
-    }
+    },
   })
   const sales = useMemo(() => data?.user?.sales || [], [data?.user?.sales])
   const handleFetchMore = useCallback(async () => {
-    if (loading || hasNothingToFetch) return false;
+    if (loading || hasNothingToFetch) return false
     const { data: newData } = await fetchMore({
       variables: {
         skip: sales.length,
-        take: ITEMS_PER_PAGE
+        take: ITEMS_PER_PAGE,
       },
-    });
-    if (!newData?.user?.sales?.length || newData.user.sales.length < ITEMS_PER_PAGE) {
-      setHasNothingToFetch(true);
+    })
+    if (
+      !newData?.user?.sales?.length ||
+      newData.user.sales.length < ITEMS_PER_PAGE
+    ) {
+      setHasNothingToFetch(true)
     }
   }, [loading, hasNothingToFetch, fetchMore, sales.length])
   return (
@@ -46,7 +52,7 @@ const _UserSalesTable = ({ user }: UserSalesTableProps) => {
         onScrollToBottom={handleFetchMore}
       />
     </div>
-  );
-};
+  )
+}
 
-export const UserSales = memo(_UserSalesTable);
+export const UserSales = memo(_UserSalesTable)

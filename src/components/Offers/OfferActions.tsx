@@ -1,6 +1,5 @@
-// import style from "./OfferActions.module.scss"
-import cs from "classnames"
-import { FunctionComponent, useContext, useMemo } from "react"
+import style from "./OfferActions.module.scss"
+import { FunctionComponent, useContext } from "react"
 import { UserContext } from "../../containers/UserProvider"
 import { useContractOperation } from "../../hooks/useContractOperation"
 import { OfferAcceptOperation } from "../../services/contract-operations/OfferAccept"
@@ -74,6 +73,7 @@ export function OfferActions({ offer, objkt, children }: Props) {
         type="button"
         color="primary"
         size="very-small"
+        className={style.button}
         onClick={() => cancelOffer(offer)}
         state={
           cancelLoading && cancelParams?.offer.id === offer.id
@@ -88,6 +88,7 @@ export function OfferActions({ offer, objkt, children }: Props) {
         type="button"
         color="secondary"
         size="very-small"
+        className={style.button}
         onClick={() => acceptOffer(offer)}
         state={
           acceptLoading && acceptParams?.offer.id === offer.id

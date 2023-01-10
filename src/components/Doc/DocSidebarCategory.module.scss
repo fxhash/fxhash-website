@@ -1,3 +1,5 @@
+@import "../../styles/Variables";
+
 .root {
   .content {
     display: flex;
@@ -5,7 +7,7 @@
     padding-left: 31px;
     margin-top: 3px;
     margin-bottom: 6px;
-  
+
     a {
       padding: 6px 8px;
       font-weight: normal;
@@ -22,7 +24,7 @@
       }
     }
   }
-  
+
   .title {
     display: flex;
     flex-direction: row;
@@ -33,24 +35,23 @@
     border: none;
     background: transparent;
     color: inherit;
-  
+
     i:first-child {
       width: 30px;
     }
-  
+
     i:last-child {
-      opacity: 0.3;
-      display: none;
+      font-size: 14px;
     }
-  
+
     span {
       flex-grow: 2;
     }
-  
+
     &:hover {
       cursor: pointer;
       background: var(--color-gray-vvlight);
-  
+
       i:last-child {
         display: block;
       }
@@ -60,6 +61,19 @@
   &.opened {
     .title {
       font-weight: bold;
+    }
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .root {
+    .content {
+      a {
+        padding: 2.5px 8px;
+        &.active {
+          color: var(--color-black);
+        }
+      }
     }
   }
 }

@@ -31,17 +31,17 @@ const MintGenerative: NextPage = () => {
         />
       </Head>
 
-      <Spacing size="6x-large" />
+      <Spacing size="6x-large" sm="x-large" />
 
       <section ref={anchorRef}>
-        <SectionHeader>
+        <SectionHeader className={layout.mobile_section_header_col}>
           <TitleHyphen>mint a Generative Token</TitleHyphen>
           <ClientOnly>
             <ContractsOpened />
           </ClientOnly>
         </SectionHeader>
 
-        <Spacing size="x-large" />
+        <Spacing size="x-large" sm="regular" />
 
         <main className={cs(layout["padding-big"])}>
           <ClientOnly>

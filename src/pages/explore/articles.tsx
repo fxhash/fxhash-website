@@ -1,13 +1,8 @@
 import type { NextPage } from "next"
 import Head from "next/head"
-import layout from "../../styles/Layout.module.scss"
-import cs from "classnames"
 import { Spacing } from "../../components/Layout/Spacing"
 import { SectionHeader } from "../../components/Layout/SectionHeader"
-import ClientOnly from "../../components/Utils/ClientOnly"
-import { TitleHyphen } from "../../components/Layout/TitleHyphen"
 import { ExploreTabs } from "../../containers/Explore/ExploreTabs"
-import { LiveFeed } from "../../containers/Explore/LiveFeed"
 import { SectionTitle } from "../../components/Layout/SectionTitle"
 import { ExploreArticles } from "../../containers/Explore/ExploreArticles"
 
@@ -34,14 +29,14 @@ const ExploreRevealFeed: NextPage = () => {
           content="https://www.fxhash.xyz/images/og/og1.jpg"
         />
       </Head>
-      <Spacing size="3x-large" />
+      <Spacing size="3x-large" sm="x-large" />
 
       <section>
-        <SectionHeader layout="center">
+        <SectionHeader layout="center" sm="left">
           <SectionTitle>explore articles</SectionTitle>
         </SectionHeader>
 
-        <Spacing size="3x-large" />
+        <Spacing size="3x-large" sm="2x-large" />
 
         <ExploreTabs active={2} />
 

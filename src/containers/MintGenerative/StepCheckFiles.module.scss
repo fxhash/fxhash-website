@@ -1,3 +1,5 @@
+@import "../../styles/Variables";
+
 .container {
   display: flex;
   flex-direction: row;
@@ -30,4 +32,19 @@
   display: flex;
   align-items: center;
   flex-direction: column;
+}
+.button {
+
+}
+
+@media (max-width: $breakpoint-sm) {
+  .container {
+    flex-direction: column;
+  }
+  .checkboxes {
+    width: 100%;
+  }
+  .button {
+    width: 100%;
+  }
 }

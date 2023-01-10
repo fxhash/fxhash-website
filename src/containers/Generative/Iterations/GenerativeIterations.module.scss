@@ -1,0 +1,6 @@
+@import "../../../styles/Variables";
+@media (max-width: $breakpoint-sm) {
+  .select, .select_root {
+    width: 100%;
+  }
+}

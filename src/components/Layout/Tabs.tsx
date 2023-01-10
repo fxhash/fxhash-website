@@ -1,7 +1,13 @@
 import style from "./Tabs.module.scss"
 import cs from "classnames"
-import React, { HTMLAttributes, PropsWithChildren } from "react"
+import React, {
+  HTMLAttributes,
+  PropsWithChildren,
+  useEffect,
+  useRef,
+} from "react"
 import Link, { LinkProps } from "next/link"
+import { onKeydownAccessibleButton } from "../../utils/accessibility"
 
 const DefaultTabWrapper = ({
   children,
@@ -22,7 +28,13 @@ export type TabDefinition = {
   name: string
   props?: any
 }
-type TabsLayout = "full-width" | "fixed-size" | "subtabs" | "subtabs-vertical"
+type TabsLayout =
+  | "full-width"
+  | "fixed-size"
+  | "subtabs"
+  | "subtabs-vertical"
+  | "fixed-size-narrow"
+
 interface TabProps {
   layout: TabsLayout
   definition: TabDefinition
@@ -43,9 +55,13 @@ export function Tab({
     <Wrapper
       className={cs(style.tab, style[`tab-${layout}`], {
         [style.active]: active,
+        ["tab-active"]: active,
       })}
       onClick={onClick}
       {...definition.props}
+      role="button"
+      tabIndex={0}
+      onKeyDown={onKeydownAccessibleButton(onClick)}
     >
       {definition.name}
     </Wrapper>
@@ -61,6 +77,7 @@ type IsTabActiveHandler = (
 export const checkIsTabKeyActive: IsTabActiveHandler = (def, activeIdx) =>
   def.key === activeIdx
 export interface Props {
+  className?: string
   tabsLayout?: TabsLayout
   tabDefinitions: TabDefinition[]
   activeIdx: number | string
@@ -76,6 +93,7 @@ export interface Props {
  * components to usee it higher in the hierarchy
  */
 export function Tabs({
+  className,
   tabDefinitions,
   tabsLayout = "full-width",
   activeIdx,
@@ -86,8 +104,35 @@ export function Tabs({
   tabWrapperComponent,
   children,
 }: PropsWithChildren<Props>) {
+  const refContainer = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    const elContainer = refContainer.current
+    if (elContainer) {
+      const elNav = elContainer.querySelector("nav")
+      const elActive: HTMLElement | null =
+        elContainer.querySelector(".tab-active")
+      if (
+        elNav &&
+        elActive &&
+        elActive.offsetLeft + elActive.clientWidth > elContainer.clientWidth
+      ) {
+        const paddingLeft = window
+          ? parseFloat(
+              window
+                .getComputedStyle(elNav, null)
+                .getPropertyValue("padding-left")
+            )
+          : 0
+        elContainer.scrollLeft =
+          elActive.offsetLeft - elContainer.offsetLeft - paddingLeft
+      }
+    }
+  }, [])
   return (
-    <div className={cs(style.container, style[`layout-${tabsLayout}`])}>
+    <div
+      ref={refContainer}
+      className={cs(style.container, style[`layout-${tabsLayout}`], className)}
+    >
       <nav className={cs(tabsClassName)}>
         {tabDefinitions.map((def, idx) => {
           const isActive = checkIsTabActive

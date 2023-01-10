@@ -1,3 +1,5 @@
+@import "../../styles/Variables";
+
 .reports {
   display: flex;
   flex-direction: column;
@@ -17,7 +19,8 @@
 }
 
 .token {
-  width: 300px;
+  max-width: 300px;
+  width: 100%;
   display: block;
 
   &:hover {
@@ -28,4 +31,16 @@
 .chart {
   height: 250px;
   width: 500px;
+}
+
+@media (max-width: $breakpoint-sm) {
+  .report {
+    flex-direction: column;
+    .total_reports {
+      margin-top: 16px;
+      max-width: 300px;
+      width: 100%;
+      margin-left: 0;
+    }
+  }
 }

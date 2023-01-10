@@ -1,3 +1,5 @@
+@import "../../styles/Variables";
+
 .root {
   display: flex;
   flex-direction: column;
@@ -10,4 +12,20 @@
 
 .buttons_wrapper {
   gap: 12px;
+}
+
+@media (max-width: $breakpoint-sm) {
+  .buttons_wrapper {
+    gap: 16px;
+    width: 100%;
+  }
+  .button {
+    width: 100%;
+  }
+  .mint {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex: 1;
+  }
 }

@@ -2,7 +2,10 @@ import style from "./Pricing.module.scss"
 import text from "../../styles/Text.module.css"
 import layout from "../../styles/Layout.module.scss"
 import cs from "classnames"
-import { IInputDatetimeFastBtn, InputDatetime } from "../../components/Input/InputDatetime"
+import {
+  IInputDatetimeFastBtn,
+  InputDatetime,
+} from "../../components/Input/InputDatetime"
 import { IPricingDutchAuction } from "../../types/entities/Pricing"
 import { InputProps } from "../../types/Inputs"
 import { InputTextUnit } from "../../components/Input/InputTextUnit"
@@ -18,19 +21,18 @@ import { Spacing } from "../../components/Layout/Spacing"
 import { TextWarning } from "../../components/Text/TextWarning"
 import { UserContext } from "../UserProvider"
 
-
 const dutchAucDateFast: IInputDatetimeFastBtn[] = [
   {
     label: "end of next hour",
-    generate: () => addHours(startOfHour(new Date()), 2)
+    generate: () => addHours(startOfHour(new Date()), 2),
   },
   {
     label: "+1h",
-    generate: (date) => date ? addHours(date, 1) : addHours(new Date(), 1)
+    generate: (date) => (date ? addHours(date, 1) : addHours(new Date(), 1)),
   },
   {
     label: "-1h",
-    generate: (date) => date ? addHours(date, -1) : addHours(new Date(), -1)
+    generate: (date) => (date ? addHours(date, -1) : addHours(new Date(), -1)),
   },
 ]
 
@@ -38,7 +40,7 @@ interface Props extends InputProps<Partial<IPricingDutchAuction<string>>> {
   onBlur?: FocusEventHandler<HTMLInputElement>
   errors?: FormikErrors<IPricingDutchAuction>
   lockWarning?: boolean
-  collaboration?: Collaboration|null
+  collaboration?: Collaboration | null
 }
 export function InputPricingDutchAuction({
   value,
@@ -48,7 +50,6 @@ export function InputPricingDutchAuction({
   lockWarning = false,
   collaboration,
 }: Props) {
-
   const { user } = useContext(UserContext)
 
   const update = (key: keyof IPricingDutchAuction, nval: any) => {
@@ -60,14 +61,12 @@ export function InputPricingDutchAuction({
 
   return (
     <>
-      <Field error={
-        (typeof errors?.levels === "string") ? errors.levels : undefined}
+      <Field
+        error={typeof errors?.levels === "string" ? errors.levels : undefined}
       >
         <label htmlFor="price">
           Price steps
-          <small>
-            In descending order
-          </small>
+          <small>In descending order</small>
         </label>
 
         <div className={cs(style.levels)}>
@@ -75,12 +74,12 @@ export function InputPricingDutchAuction({
             size="small"
             type="button"
             color="transparent"
-            iconComp={<i aria-hidden className="fa-solid fa-circle-plus"/>}
+            iconComp={<i aria-hidden className="fa-solid fa-circle-plus" />}
             onClick={() => {
               const levels = value.levels!
               let V = 50
               if (levels?.length >= 1) {
-                V = Math.floor(parseFloat(levels[0])*2)
+                V = Math.floor(parseFloat(levels[0]) * 2)
               }
               update("levels", levels ? [V, ...levels] : [V])
             }}
@@ -89,23 +88,21 @@ export function InputPricingDutchAuction({
           </Button>
 
           {value.levels?.map((price, idx) => (
-            <div
-              key={idx}
-              className={cs(layout.flex_row)}
-            >
+            <div key={idx} className={cs(layout.flex_row)}>
               <InputTextUnit
                 unit="tez"
                 type="text"
                 name="price"
                 value={price}
-                onChange={evt => {
+                onChange={(evt) => {
                   const nlevels = [...value.levels!]
                   nlevels[idx] = evt.target.value as any
                   update("levels", nlevels)
                 }}
                 // onBlur={onBlur}
                 error={
-                  !(typeof errors?.levels === "string") && !!errors?.levels?.[idx]
+                  !(typeof errors?.levels === "string") &&
+                  !!errors?.levels?.[idx]
                 }
               />
               <ButtonDelete
@@ -118,11 +115,11 @@ export function InputPricingDutchAuction({
                 }}
                 disabled={value.levels!.length <= 2}
               />
-              {errors?.levels && !(typeof errors.levels === "string") && errors.levels[idx] && (
-                <span className={cs(style.error)}>
-                  {errors.levels[idx]}
-                </span>
-              )}
+              {errors?.levels &&
+                !(typeof errors.levels === "string") &&
+                errors.levels[idx] && (
+                  <span className={cs(style.error)}>{errors.levels[idx]}</span>
+                )}
             </div>
           ))}
 
@@ -130,12 +127,12 @@ export function InputPricingDutchAuction({
             size="small"
             type="button"
             color="transparent"
-            iconComp={<i aria-hidden className="fa-solid fa-circle-plus"/>}
+            iconComp={<i aria-hidden className="fa-solid fa-circle-plus" />}
             onClick={() => {
               const levels = value.levels!
               let V = 50
               if (levels?.length >= 1) {
-                V = Math.floor(parseFloat(levels[levels.length-1])*50) / 100
+                V = Math.floor(parseFloat(levels[levels.length - 1]) * 50) / 100
               }
               update("levels", levels ? [...levels, V] : [V])
             }}
@@ -152,22 +149,20 @@ export function InputPricingDutchAuction({
         </label>
         <InputDatetime
           value={value.opensAt!}
-          onChange={val => update("opensAt", val)}
+          onChange={(val) => update("opensAt", val)}
           error={!!errors?.opensAt}
           fastBtns={dutchAucDateFast}
         />
         {!isEntityVerified(collaboration || (user as User)) && (
           <>
-            <Spacing size="2x-small"/>
+            <Spacing size="2x-small" />
             <TextWarning>
               Because
-              {collaboration ? (
-                " not all the members of the collaboration are "
-              ):(
-                " you are not "
-              )}
+              {collaboration
+                ? " not all the members of the collaboration are "
+                : " you are not "}
               verified, your project will be locked for 3 hours.
-              <br/>
+              <br />
               You may want to schedule an opening time in more than 3 hours.
             </TextWarning>
           </>
@@ -175,15 +170,13 @@ export function InputPricingDutchAuction({
       </Field>
 
       <Field error={errors?.decrementDuration}>
-        <label htmlFor="price">
-          Time between steps
-        </label>
+        <label htmlFor="price">Time between steps</label>
         <InputTextUnit
           unit="minutes"
           type="text"
           name="price"
           value={value?.decrementDuration ?? ""}
-          onChange={evt => update("decrementDuration", evt.target.value)}
+          onChange={(evt) => update("decrementDuration", evt.target.value)}
           // onBlur={onBlur}
           error={!!errors?.decrementDuration}
         />

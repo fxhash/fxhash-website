@@ -48,7 +48,6 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
     if (isIOS) {
       disableIosTextFieldZoom()
     }
-    document.body.classList.remove("modal-open")
   }, [])
 
   // if the current route is stored in memory and is loaded now, reset its index

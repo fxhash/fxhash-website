@@ -1,3 +1,5 @@
+@import "../../styles/Variables";
+
 .root {
   .avatars {
     display: flex;
@@ -78,6 +80,9 @@
       margin-top: -40px;
       opacity: 0;
       transition: all 0.3s ease-out;
+      @media (max-width: $breakpoint-sm) {
+        margin-top: -50px;
+      }
     }
   }
 

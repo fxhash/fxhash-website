@@ -59,14 +59,14 @@ export function GenerativeTokenCard({
           }
         >
           <div>
-            <h5>{token.name}</h5>
-            <Spacing size="2x-small" />
+            <h5 className={style.title}>{token.name}</h5>
+            <Spacing size="2x-small" sm="x-small" />
             <EntityBadge user={token.author} size="regular" hasLink={false} />
-            <Spacing size="2x-small" />
+            <Spacing size="2x-small" sm="x-small" />
             {token.balance > 0 && <MintingState token={token} />}
           </div>
 
-          <div className={cs(text.small)}>
+          <div className={style.mint_progress}>
             <MintProgress token={token}>
               {displayPrice && (
                 <div>
@@ -81,7 +81,8 @@ export function GenerativeTokenCard({
                     <i
                       className={cs(
                         "fa-solid fa-arrow-down-right",
-                        colors["gray-light"]
+                        colors["gray-light"],
+                        style.mint_progress_icon
                       )}
                     />
                   )}

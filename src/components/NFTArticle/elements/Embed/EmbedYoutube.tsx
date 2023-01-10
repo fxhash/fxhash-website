@@ -4,13 +4,16 @@ import cs from "classnames"
 import { getYoutubeCodeFromUrl } from "../../../../utils/embed"
 import { EmbedElementProps } from "./EmbedMediaDisplay"
 
-const EmbedYoutube = memo<EmbedElementProps>(({ href }) => {
+const EmbedYoutube = memo<EmbedElementProps>(({ href, className }) => {
   const embedUrl = useMemo(() => {
     const code = getYoutubeCodeFromUrl(href)
     return `https://www.youtube.com/embed/${code}`
   }, [href])
   return (
-    <div className={cs(style.youtube, "embed_media")} contentEditable={false}>
+    <div
+      className={cs(className, style.youtube, "embed_media")}
+      contentEditable={false}
+    >
       <iframe
         src={embedUrl}
         title="YouTube video player"

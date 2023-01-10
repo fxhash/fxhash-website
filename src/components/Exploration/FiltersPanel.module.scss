@@ -1,6 +1,7 @@
 @import "../../styles/Variables.scss";
 
 .root {
+  display: none;
   width: 320px;
   min-width: 320px;
   position: sticky;
@@ -15,6 +16,9 @@
   &:hover {
     opacity: 1;
   }
+}
+.visible {
+  display: block;
 }
 
 .mobile_header {
@@ -33,6 +37,7 @@
 
 @media (max-width: $breakpoint-sm) {
   .root {
+    display: block;
     position: fixed;
     top: 0;
     left: 0;
@@ -43,6 +48,12 @@
     z-index: 10;
     overscroll-behavior: contain;
     max-height: none;
+    transition: 0.3s all ease-out;
+    transform: translateY(100%);
+  }
+
+  .visible {
+    transform: translateY(0);
   }
 
   .content {

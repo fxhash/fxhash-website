@@ -24,7 +24,6 @@ import { useQuery } from "@apollo/client"
 import { Qu_userObjkts } from "../../../queries/user"
 import { CardSizeSelect } from "../../../components/Input/CardSizeSelect"
 import { GentksActions } from "./GentksActions"
-
 const ITEMS_PER_PAGE = 40
 
 const generalSortOptions: IOptions[] = [
@@ -233,13 +232,15 @@ export function UserCollectionGentks({ user }: Props) {
             showFiltersOnMobile={inViewCardsContainer}
             onToggleFilters={() => setFiltersVisible(!filtersVisible)}
             sortSelectComp={
-              <div
-                className={cs(style.select_comp_container, {
-                  [styleCardsExplorer["hide-sort"]]: !isSearchMinimized,
+              <div className={cs(style.select_comp_container, {
+                [styleCardsExplorer["hide-sort"]]: !isSearchMinimized,
                 })}
               >
                 <GentksActions user={user} />
                 <Select
+                  classNameRoot={cs({
+                    [styleCardsExplorer["hide-sort"]]: !isSearchMinimized,
+                  })}
                   value={sortValue}
                   options={sortOptions}
                   onChange={setSortValue}

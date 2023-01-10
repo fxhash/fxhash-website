@@ -5,11 +5,13 @@ import { PropsWithChildren } from "react"
 
 interface Props {
   layout?: "left" | "center"
+  sm?: "left" | "center"
   className?: string
 }
 
 export function SectionHeader({
   layout = "left",
+  sm,
   className,
   children,
 }: PropsWithChildren<Props>) {
@@ -18,7 +20,10 @@ export function SectionHeader({
       className={cs(
         style.container,
         style[`layout_${layout}`],
-        layoutStyle["padding-small"],
+        {
+          [style[`sm_${sm}`]]: !!sm,
+        },
+        layoutStyle["padding-big"],
         className
       )}
     >

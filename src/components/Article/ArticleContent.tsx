@@ -3,12 +3,13 @@ import cs from "classnames"
 
 interface Props {
   content: string
+  className?: string
 }
 
-export function ArticleContent({ content }: Props) {
+export function ArticleContent({ content, className }: Props) {
   return (
     <article
-      className={cs(style.article)}
+      className={cs(style.article, className)}
       dangerouslySetInnerHTML={{
         __html: content,
       }}

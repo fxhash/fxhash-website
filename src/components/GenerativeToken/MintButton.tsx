@@ -78,6 +78,7 @@ export function MintButton({
           type="button"
           color="secondary"
           size="regular"
+          className={style.button}
           state={loading ? "loading" : "default"}
           disabled={disabled}
           onClick={() => {

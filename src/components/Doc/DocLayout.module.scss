@@ -33,13 +33,12 @@
   .root {
     flex-direction: column;
   }
-  
+
   .content {
     border-left: none;
-    max-width: auto;
     width: 100%;
     max-width: none;
-    margin-top: 20px;
+    margin-top: 2px;
   }
 
   .sidebar {

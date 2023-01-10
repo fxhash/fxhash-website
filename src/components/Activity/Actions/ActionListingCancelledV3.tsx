@@ -12,7 +12,7 @@ const ActionListingArticleCancelledV3: TActionComp = ({ action, verbose }) => (
       user={action.issuer!}
       size="small"
     />
-    <span>
+    <>
       cancelled listing of <strong>{action.metadata.amount}</strong> editions{" "}
       {verbose && (
         <>
@@ -28,7 +28,7 @@ const ActionListingArticleCancelledV3: TActionComp = ({ action, verbose }) => (
         />
       </span>
       <span> each</span>
-    </span>
+    </>
   </>
 )
 

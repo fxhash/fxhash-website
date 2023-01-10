@@ -17,6 +17,7 @@ interface TabContainerProps extends Omit<TabsProps, "activeIdx"> {
  * pass down the active tab to the children component
  */
 export function TabsContainer({
+  className,
   initialIdx,
   checkIsTabActive,
   onClickTab,
@@ -39,6 +40,7 @@ export function TabsContainer({
   return (
     <>
       <Tabs
+        className={className}
         activeIdx={index}
         checkIsTabActive={checkIsTabActive}
         onClickTab={handleClickTab}

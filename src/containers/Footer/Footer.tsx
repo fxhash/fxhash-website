@@ -59,6 +59,9 @@ export function Footer() {
             <Link href="https://feedback.fxhash.xyz">
               <a target="_blank">Feature request</a>
             </Link>
+            <Link href="/press-kit">
+              <a>Press kit</a>
+            </Link>
             <Link href="/status">
               <a>
                 <IndexerStatusLabel

@@ -9,7 +9,7 @@ import { HoverTitle } from "../Utils/HoverTitle"
 import { SettingsContext } from "../../context/Theme"
 
 interface Props {
-  token: GenerativeToken
+  token: Pick<GenerativeToken, "metadata" | "balance">
   previewHash?: string | null
   onChangeHash: (hash: string) => void
 }

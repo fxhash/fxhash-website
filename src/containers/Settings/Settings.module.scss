@@ -1,8 +1,15 @@
 @import "../../styles/Variables";
 
 .page {
+
   & > *+* {
     margin-top: 16px;
+  }
+  hr {
+    height: 1px;
+    border-style: none;
+    background-color: var(--color-gray-light);
+    margin: 16px 0 0 0;
   }
 }
 
@@ -12,17 +19,17 @@
   align-items: center;
 
   & > *:first-child {
-    width: 60%;
+    flex: 1;
   }
 
   & > span {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-
-    em {
-      color: var(--color-gray);
-    }
+  }
+  &_description {
+    font-size: var(--font-size-small);
+    color: var(--color-gray);
   }
 }
 

@@ -1,6 +1,8 @@
+@import "../../styles/Variables";
+
 .root {
   color: var(--color-black);
-  
+
   .thumbnail_wrapper {
     width: 100%;
     position: relative;
@@ -74,4 +76,13 @@
 
 .content {
   margin-top: 8px;
+}
+
+@media (max-width: $breakpoint-sm) {
+  .content {
+    margin-top: 16px;
+  }
+  .topper {
+    margin-bottom: 8px;
+  }
 }

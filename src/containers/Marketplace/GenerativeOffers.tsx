@@ -1,5 +1,3 @@
-import style from "./GenerativeOffers.module.scss"
-import cs from "classnames"
 import { SectionWrapper } from "../../components/Layout/SectionWrapper"
 import { GenerativeToken } from "../../types/entities/GenerativeToken"
 import { useQuery } from "@apollo/client"
@@ -9,13 +7,11 @@ import { ListOffers } from "../../components/List/ListOffers"
 interface Props {
   token: GenerativeToken
 }
-export function GenerativeOffers({
-  token,
-}: Props) {
+export function GenerativeOffers({ token }: Props) {
   const { data, loading } = useQuery(Qu_genTokOffers, {
     variables: {
-      id: token.id
-    }
+      id: token.id,
+    },
   })
 
   const offers = data?.generativeToken?.offers

@@ -20,7 +20,11 @@ const UserPageDashboardTab = ({ user, tab }: Props) => {
 
 UserPageDashboardTab.getLayout = function getLayout(page: ReactElement) {
   return (
-    <UserProfileLayout user={page.props.user} activeTab="dashboard">
+    <UserProfileLayout
+      hideSectionSpacing
+      user={page.props.user}
+      activeTab="dashboard"
+    >
       {page}
     </UserProfileLayout>
   )
