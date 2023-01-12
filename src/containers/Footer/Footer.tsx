@@ -59,6 +59,9 @@ export function Footer() {
             <Link href="https://feedback.fxhash.xyz">
               <a target="_blank">Feature request</a>
             </Link>
+            <Link href="https://join.com/companies/fxhash">
+              <a target="_blank">Career opportunities</a>
+            </Link>
             <Link href="/press-kit">
               <a>Press kit</a>
             </Link>
