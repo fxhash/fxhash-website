@@ -1,11 +1,30 @@
 import style from "./MarketplaceTabs.module.scss"
 import { PropsWithChildren } from "react"
 import Link from "next/link"
-import { TabDefinition, Tabs } from "../../components/Layout/Tabs"
+import {
+  checkIsTabKeyActive,
+  TabDefinition,
+  Tabs,
+} from "../../components/Layout/Tabs"
 
 const definition: TabDefinition[] = [
-  { name: "listed", props: { href: "/marketplace" } },
-  { name: "collections", props: { href: "/marketplace/collections" } },
+  {
+    key: "listed",
+    name: "listed",
+    props: {
+      href: "/marketplace",
+    },
+  },
+  {
+    key: "sold",
+    name: "sold",
+    props: { href: "/marketplace/sold" },
+  },
+  {
+    key: "collections",
+    name: "collections",
+    props: { href: "/marketplace/collections" },
+  },
 ]
 
 interface TabProps {
@@ -25,14 +44,15 @@ export function MarketplaceTab({
 }
 
 interface Props {
-  active: number
+  activeKey: "listed" | "sold" | "collections"
 }
-export function MarketplaceTabs({ active }: Props) {
+export function MarketplaceTabs({ activeKey }: Props) {
   return (
     <Tabs
       className={style.tabs}
       tabDefinitions={definition}
-      activeIdx={active}
+      checkIsTabActive={checkIsTabKeyActive}
+      activeIdx={activeKey}
       tabsLayout="fixed-size"
       tabWrapperComponent={MarketplaceTab}
     />

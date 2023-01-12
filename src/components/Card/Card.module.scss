@@ -130,6 +130,14 @@
   z-index: 1;
 }
 
+.sold {
+  font-size: 12px;
+  color: var(--color-dark-green);
+  font-weight: bold;
+
+  margin-bottom: 2px;
+}
+
 @media (max-width: $breakpoint-sm) {
   .content {
     padding: 5px;

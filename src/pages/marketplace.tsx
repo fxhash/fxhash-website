@@ -1,6 +1,6 @@
 import type { NextPage } from "next"
 import { Spacing } from "../components/Layout/Spacing"
-import ClientOnly, { ClientOnlyEmpty } from "../components/Utils/ClientOnly"
+import { ClientOnlyEmpty } from "../components/Utils/ClientOnly"
 import { Marketplace } from "../containers/Marketplace"
 import Head from "next/head"
 import { MarketplaceTabs } from "../containers/Marketplace/Tabs"
@@ -44,7 +44,7 @@ const MarketplacePage: NextPage = ({ query }: any) => {
       <Spacing size="6x-large" sm="2x-large" />
 
       <section>
-        <MarketplaceTabs active={0} />
+        <MarketplaceTabs activeKey="listed" />
 
         <ClientOnlyEmpty>
           <Marketplace urlQuery={query} />

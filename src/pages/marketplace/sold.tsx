@@ -1,31 +1,32 @@
 import type { NextPage } from "next"
 import { Spacing } from "../../components/Layout/Spacing"
-import { SectionHeader } from "../../components/Layout/SectionHeader"
 import { ClientOnlyEmpty } from "../../components/Utils/ClientOnly"
+import { Marketplace } from "../../containers/Marketplace"
 import Head from "next/head"
 import { MarketplaceTabs } from "../../containers/Marketplace/Tabs"
-import { MarketplaceCollections } from "../../containers/Marketplace/Collections"
+import { SectionHeader } from "../../components/Layout/SectionHeader"
 import { SectionTitle } from "../../components/Layout/SectionTitle"
+import { MarketplaceSold } from "../../containers/Marketplace/MarketplaceSold"
 
-const MarketplaceCollectionPage: NextPage = () => {
+const MarketplacePage: NextPage = ({ query }: any) => {
   return (
     <>
       <Head>
-        <title>fxhash — marketplace collections</title>
+        <title>fxhash — marketplace sold listings</title>
         <meta
           key="og:title"
           property="og:title"
-          content="fxhash — marketplace collections"
+          content="fxhash — marketplace sold listings"
         />
         <meta
           key="description"
           name="description"
-          content="Explore the collections in the marketplace"
+          content="Explore sold listings of the fxhash marketplace"
         />
         <meta
           key="og:description"
           property="og:description"
-          content="Explore the collections in the marketplace"
+          content="Explore sold listings of the fxhash marketplace"
         />
         <meta key="og:type" property="og:type" content="website" />
         <meta
@@ -36,18 +37,15 @@ const MarketplaceCollectionPage: NextPage = () => {
       </Head>
 
       <Spacing size="3x-large" sm="x-large" />
-
       <section>
         <SectionHeader layout="center" sm="left">
-          <SectionTitle>marketplace / collections</SectionTitle>
+          <SectionTitle>marketplace / sold</SectionTitle>
         </SectionHeader>
-
         <Spacing size="3x-large" sm="2x-large" />
-
-        <MarketplaceTabs activeKey="collections" />
+        <MarketplaceTabs activeKey="sold" />
         <main>
           <ClientOnlyEmpty>
-            <MarketplaceCollections />
+            <MarketplaceSold urlQuery={query} />
           </ClientOnlyEmpty>
         </main>
       </section>
@@ -59,4 +57,9 @@ const MarketplaceCollectionPage: NextPage = () => {
   )
 }
 
-export default MarketplaceCollectionPage
+// get url parameters
+MarketplacePage.getInitialProps = async ({ query }) => {
+  return { query }
+}
+
+export default MarketplacePage

@@ -14,9 +14,11 @@ export interface Listing {
   createdAt: Date
   updatedAt: Date
   article: NFTArticle
+  acceptedAt: Date
 }
 
 export interface ListingFilters {
+  acceptedAt_exist?: boolean
   price_gte?: string
   price_lte?: string
   fullyMinted_eq?: boolean
