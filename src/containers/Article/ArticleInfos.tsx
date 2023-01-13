@@ -13,6 +13,7 @@ import SocialMediaShare from "../../components/SocialMediaShare/SocialMediaShare
 import { ArticleRevisions } from "./Infos/ArticleRevisions"
 import { ArticleQuickCollect } from "./Infos/ArticleQuickCollect"
 import { Spacing } from "../../components/Layout/Spacing"
+import { getArticleUrl } from "../../utils/entities/articles";
 
 interface ArticleInfosProps {
   article: NFTArticle
@@ -26,8 +27,8 @@ export function ArticleInfos({
 }: ArticleInfosProps) {
   const urlIpfs = useMemo(() => ipfsGatewayUrl(article.metadataUri), [])
   const urlShare = useMemo(() => {
-    return `${originUrl}/article/${article.slug}`
-  }, [article.slug, originUrl])
+    return `${originUrl}${getArticleUrl(article)}`
+  }, [article, originUrl])
   return (
     <div className={cs(style.presentation_details)}>
       <div className={style.base}>
