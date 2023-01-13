@@ -1,14 +1,19 @@
-import { addMinutes } from "date-fns/esm"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import useAsyncEffect from "use-async-effect"
 import { distanceSecondsClamped } from "../../utils/time"
 
 interface Props {
+  className?: string
   until: Date
   showFull?: boolean
   onEnd?: () => void
 }
-export function Countdown({ until, showFull = false, onEnd }: Props) {
+export function Countdown({
+  className,
+  until,
+  showFull = false,
+  onEnd,
+}: Props) {
   const [distanceSeconds, setDistanceSeconds] = useState<number>(
     distanceSecondsClamped(new Date(), until)
   )
@@ -48,7 +53,7 @@ export function Countdown({ until, showFull = false, onEnd }: Props) {
   const days = Math.floor(distanceSeconds / (60 * 60 * 24))
 
   return (
-    <span>
+    <span className={className}>
       {days > 0 && <span>{days}d </span>}
       {hours > 0 && <span>{hours}h </span>}
       {days < 1 && minutes > 0 && <span>{minutes}min </span>}

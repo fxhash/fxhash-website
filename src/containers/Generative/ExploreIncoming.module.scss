@@ -1,4 +1,21 @@
+@import "../../styles/Variables";
+
 .top_bar {
   display: flex;
   justify-content: flex-end;
+}
+.date_separator {
+  font-weight: bold;
+  font-size: var(--font-size-h4);
+  grid-column: 1 / -1;
+  margin: $spacing-x-large 0 $spacing-2x-large;
+  &:first-child {
+    margin-top: 0;
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .date_separator {
+    margin: 0 0 $spacing-small 0;
+  }
 }
