@@ -161,9 +161,10 @@ export function MintButton({
           <Button
             type="button"
             size="regular"
+            disabled={disabled}
             onClick={openCreditCard}
             color="secondary"
-            title="Pay with you credit card"
+            title="Pay with your credit card"
             className={cs(style.credit_card_btn)}
           >
             <i className={cs("fa-sharp fa-solid fa-credit-card")} aria-hidden />
