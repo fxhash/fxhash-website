@@ -76,6 +76,13 @@ export function MintButton({
   const isMintButton =
     !isMintDropdown && ((userEligible && onlyReserveLeft) || !onlyReserveLeft)
 
+  console.log({
+    hasCreditCardOption,
+    loading,
+    userEligible,
+    onlyReserveLeft,
+  })
+
   return isMintButton || isMintDropdown ? (
     <>
       <div className={cs(style.btns_wrapper)}>
@@ -150,7 +157,7 @@ export function MintButton({
           )}
         </div>
 
-        {hasCreditCardOption && !loading && userEligible && !onlyReserveLeft && (
+        {hasCreditCardOption && !loading && !(userEligible && onlyReserveLeft) && (
           <Button
             type="button"
             size="regular"
