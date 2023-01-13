@@ -31,7 +31,7 @@ const _TableUserSales = ({
   return (
     <>
       <div ref={refWrapper} className={cs(style.wrapper)}>
-        <table className={style.table}>
+        <table className={cs(style.table)}>
           <thead>
             <tr>
               <th className={style["th-gentk"]}>Gentk</th>
@@ -44,52 +44,64 @@ const _TableUserSales = ({
           <tbody>
             {loading || sales.length > 0 ? (
               sales.map((sale) => (
-                <tr key={sale.id}>
-                  <td className={style["td-gentk"]}>
-                    {sale.objkt && (
-                      <div className={cs(style.link_wrapper)}>
-                        <ObjktImageAndName objkt={sale.objkt} imagePriority />
-                      </div>
-                    )}
-                  </td>
-                  <td className={style["td-price"]}>
-                    <DisplayTezos
-                      className={style.price}
-                      formatBig={false}
-                      mutez={sale.numericValue}
-                      tezosSize="regular"
-                    />
-                  </td>
-                  <td className={style["td-user"]}>
-                    <UserBadge
-                      hasLink
-                      user={getActionBuyer(sale)}
-                      size="small"
-                      displayAvatar={false}
-                      className={cs({
-                        [text.bold]: userInCtx?.id === getActionBuyer(sale).id,
-                      })}
-                    />
-                  </td>
-                  <td className={style["td-user"]}>
-                    <UserBadge
-                      hasLink
-                      user={getActionSeller(sale)}
-                      size="small"
-                      displayAvatar={false}
-                      className={cs({
-                        [text.bold]: userInCtx?.id === getActionSeller(sale).id,
-                      })}
-                    />
-                  </td>
-                  <td className={style["td-time"]}>
-                    <ActionReference action={sale} />
-                  </td>
-                </tr>
+                <>
+                  <tr key={sale.id}>
+                    <td
+                      className={cs(
+                        style["td-gentk"],
+                        style.td_mobile_fullwidth
+                      )}
+                    >
+                      {sale.objkt && (
+                        <div className={cs(style.link_wrapper)}>
+                          <ObjktImageAndName objkt={sale.objkt} />
+                        </div>
+                      )}
+                    </td>
+                    <td data-label="Price" className={style["td-price"]}>
+                      <DisplayTezos
+                        className={style.price}
+                        formatBig={false}
+                        mutez={sale.numericValue}
+                        tezosSize="regular"
+                      />
+                    </td>
+                    <td data-label="Buyer" className={style["td-user"]}>
+                      <UserBadge
+                        hasLink
+                        user={getActionBuyer(sale)}
+                        size="small"
+                        displayAvatar={false}
+                        className={cs({
+                          [text.bold]:
+                            userInCtx?.id === getActionBuyer(sale).id,
+                        })}
+                      />
+                    </td>
+                    <td data-label="Seller" className={style["td-user"]}>
+                      <UserBadge
+                        hasLink
+                        user={getActionSeller(sale)}
+                        size="small"
+                        displayAvatar={false}
+                        className={cs({
+                          [text.bold]:
+                            userInCtx?.id === getActionSeller(sale).id,
+                        })}
+                      />
+                    </td>
+                    <td data-label="Time" className={style["td-time"]}>
+                      <ActionReference className={style.date} action={sale} />
+                    </td>
+                  </tr>
+                </>
               ))
             ) : (
               <tr>
-                <td className={style.empty} colSpan={5}>
+                <td
+                  className={cs(style.empty, style.td_mobile_fullwidth)}
+                  colSpan={5}
+                >
                   No sales found
                 </td>
               </tr>
@@ -107,16 +119,16 @@ const _TableUserSales = ({
                       <Skeleton height="25px" width="100%" />
                     </div>
                   </td>
-                  <td className={style["td-user"]}>
+                  <td data-label="Price" className={style["td-user"]}>
                     <Skeleton height="25px" />
                   </td>
-                  <td className={style["td-user"]}>
+                  <td data-label="Buyer" className={style["td-user"]}>
                     <Skeleton height="25px" />
                   </td>
-                  <td className={style["td-price"]}>
+                  <td data-label="Seller" className={style["td-user"]}>
                     <Skeleton height="25px" />
                   </td>
-                  <td className={style["td-time"]}>
+                  <td data-label="Time" className={style["td-time"]}>
                     <Skeleton height="25px" />
                   </td>
                 </tr>

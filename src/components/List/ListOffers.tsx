@@ -1,24 +1,20 @@
 import style from "./ListOffers.module.scss"
 import cs from "classnames"
-import { Offer } from "../../types/entities/Offer"
+import { Offer as IOffer } from "../../types/entities/Offer"
 import { Fragment, useContext } from "react"
-import { UserBadge } from "../User/UserBadge"
-import { DisplayTezos } from "../Display/DisplayTezos"
-import { DateDistance } from "../Utils/Date/DateDistance"
 import { UserContext } from "../../containers/UserProvider"
 import { Objkt } from "../../types/entities/Objkt"
-import { Button } from "../Button"
 import { useContractOperation } from "../../hooks/useContractOperation"
 import { OfferCancelOperation } from "../../services/contract-operations/OfferCancel"
 import { ContractFeedback } from "../Feedback/ContractFeedback"
 import { OfferAcceptOperation } from "../../services/contract-operations/OfferAccept"
-import { ObjktImageAndName } from "../Objkt/ObjktImageAndName"
 import Skeleton from "../Skeleton"
-import { FloorDifference } from "../Display/FloorDifference"
+import { Offer } from "./Offer"
+import { OfferMobile } from "./OfferMobile"
 
 interface Props {
   objkt?: Objkt
-  offers: Offer[]
+  offers: IOffer[]
   className?: string
   showObjkt?: boolean
   loading?: boolean
@@ -43,7 +39,7 @@ export function ListOffers({
     params: cancelParams,
   } = useContractOperation(OfferCancelOperation)
 
-  const cancelOffer = (offer: Offer) => {
+  const cancelOffer = (offer: IOffer) => {
     cancelCall({
       offer: offer,
       objkt: objkt || offer.objkt,
@@ -59,7 +55,7 @@ export function ListOffers({
     params: acceptParams,
   } = useContractOperation(OfferAcceptOperation)
 
-  const acceptOffer = (offer: Offer) => {
+  const acceptOffer = (offer: IOffer) => {
     acceptCall({
       offer: offer,
       token: objkt || offer.objkt,
@@ -95,60 +91,44 @@ export function ListOffers({
               />
             </div>
           )}
-          <div
-            className={cs(style.offer, {
-              [style.small_padding]: !!showObjkt,
-            })}
-          >
-            {showObjkt && (
-              <div className={cs(style.objkt)}>
-                <ObjktImageAndName objkt={offer.objkt} size={50} shortName />
-              </div>
-            )}
-            <div className={cs(style.user_badge_wrapper)}>
-              <UserBadge user={offer.buyer} size="small" />
-            </div>
-            <DisplayTezos
-              mutez={offer.price}
-              formatBig={false}
-              className={cs(style.price)}
-            />
-            <FloorDifference price={offer.price} floor={floor} append="floor" />
-            <div className={cs(style.call_btn)}>
-              {offer.buyer.id === user?.id ? (
-                <Button
-                  type="button"
-                  color="primary"
-                  size="very-small"
-                  onClick={() => cancelOffer(offer)}
-                  state={
-                    cancelLoading && cancelParams?.offer.id === offer.id
-                      ? "loading"
-                      : "default"
-                  }
-                >
-                  cancel
-                </Button>
-              ) : (objkt?.owner?.id || offer.objkt?.owner?.id) === user?.id ? (
-                <Button
-                  type="button"
-                  color="secondary"
-                  size="very-small"
-                  onClick={() => acceptOffer(offer)}
-                  state={
-                    acceptLoading && acceptParams?.offer.id === offer.id
-                      ? "loading"
-                      : "default"
-                  }
-                >
-                  accept
-                </Button>
-              ) : null}
-            </div>
-            <div className={cs(style.date)}>
-              <DateDistance timestamptz={offer.createdAt} />
-            </div>
-          </div>
+          <Offer
+            user={user}
+            showObjkt={showObjkt}
+            objkt={objkt}
+            floor={floor}
+            offer={offer}
+            onClickCancel={cancelOffer}
+            onClickAccept={acceptOffer}
+            cancelState={
+              cancelLoading && cancelParams?.offer.id === offer.id
+                ? "loading"
+                : "default"
+            }
+            acceptState={
+              acceptLoading && acceptParams?.offer.id === offer.id
+                ? "loading"
+                : "default"
+            }
+          />
+          <OfferMobile
+            user={user}
+            showObjkt={showObjkt}
+            objkt={objkt}
+            floor={floor}
+            offer={offer}
+            onClickCancel={cancelOffer}
+            onClickAccept={acceptOffer}
+            cancelState={
+              cancelLoading && cancelParams?.offer.id === offer.id
+                ? "loading"
+                : "default"
+            }
+            acceptState={
+              acceptLoading && acceptParams?.offer.id === offer.id
+                ? "loading"
+                : "default"
+            }
+          />
         </Fragment>
       ))}
       {loading &&

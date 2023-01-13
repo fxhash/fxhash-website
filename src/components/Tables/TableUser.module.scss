@@ -4,7 +4,7 @@
   display: block;
   width: 100%;
   max-height: 500px;
-  overflow-y: scroll;
+  overflow-y: auto;
   overscroll-behavior: contain;
 }
 
@@ -46,6 +46,9 @@
     border-bottom: 1px solid var(--color-gray-vlight);
     &:first-child {
       border-left: 1px solid var(--color-gray-vlight);
+    }
+    &:last-child {
+      border-right: 1px solid var(--color-gray-vlight);
     }
     &>* {
       vertical-align: middle;
@@ -112,6 +115,7 @@ td.td-right {
 }
 
 .td-gentk {
+  word-break: break-word;
   .link_wrapper {
     display: flex;
   }
@@ -140,6 +144,7 @@ td.td-right {
 .price {
   color: var(--color-secondary);
   font-weight: bold;
+  word-break: break-all;
 }
 
 .date {
@@ -183,8 +188,89 @@ td.td-right {
   border-top-color: var(--color-gray-vvvlight) !important;
 }
 
+.mobile {
+  display: none;
+}
 
 @media (max-width: $breakpoint-sm) {
+  .table {
+    padding-top: $spacing;
+    min-width: 0;
+    thead {
+      display: none;
+    }
+    tbody, td, tr {
+      display: block;
+    }
+    tr {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      margin-bottom: $spacing-x-small;
+      padding: 0 2px;
+    }
+    td {
+      height: auto;
+      width: 50%;
+      display: inline-block;
+      border: none;
+      padding: 8px 6px;
+      margin-top: 2px;
+
+      &.td_mobile_fullwidth {
+        width: 100%;
+      }
+      &.td_mobile_hide {
+        display: none;
+      }
+      &:before {
+        content: attr(data-label);
+        display: block;
+        color: var(--color-gray);
+        font-size: var(--font-size-small);
+        margin-bottom: $spacing-2x-small;
+      }
+      &:first-child {
+        margin-top: 0;
+        border-left: none;
+      }
+      &:last-child {
+        border-right: none;
+      }
+      &.td_space_between {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        &:before {
+          margin-bottom: 0;
+        }
+      }
+      &.td_listing_spacing {
+        padding-top: 0;
+        padding-bottom: 0;
+        margin-top: 4px;
+      }
+    }
+    .date {
+      font-size: var(--font-size-regular);
+      color: var(--color-black);
+    }
+    .td-center, .td-right {
+      text-align: left;
+    }
+  }
+
+  .td-price {
+    font-size: var(--font-size-h4);
+  }
+  .td-user {
+    font-size: var(--font-size-regular);
+  }
+  .td-time {
+    font-size: var(--font-size-regular);
+  }
+
   .wrapper {
     height: auto;
     max-height: 400px;

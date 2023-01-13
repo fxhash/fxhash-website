@@ -1,3 +1,5 @@
+@import "../../styles/Variables";
+
 .container {
   display: flex;
   flex-direction: column;
@@ -25,4 +27,22 @@
   flex-direction: row;
   justify-content: flex-end;
   gap: 8px;
+}
+
+.title {}
+
+.splits {
+  overflow: auto;
+}
+
+.button {}
+
+@media (max-width: $breakpoint-sm) {
+  .title {
+    text-align: left;
+    width: 100%;
+  }
+  .button {
+    width: 100%;
+  }
 }

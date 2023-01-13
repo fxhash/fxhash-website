@@ -47,6 +47,7 @@ export const Frag_ListingCardInfos = gql`
       issuer {
         flag
         name
+        labels
         ...Author
       }
     }

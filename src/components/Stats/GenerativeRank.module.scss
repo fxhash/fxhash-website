@@ -1,3 +1,5 @@
+@import "../../styles/Variables";
+
 .root {
   display: flex;
   flex-direction: row;
@@ -47,4 +49,7 @@
     font-size: 1.1em;
     font-weight: bold;
   }
+}
+
+@media (max-width: $breakpoint-sm) {
 }

@@ -45,10 +45,10 @@ export function ObjktCard({
                 [WARNING: DUPLICATE]
               </div>
             )}
-            <h5>{objkt.name}</h5>
+            <h5 className={styleObjkt.title}>{objkt.name}</h5>
             {showOwner && (
               <>
-                <Spacing size="2x-small" />
+                <Spacing size="2x-small" sm="x-small" />
                 <UserBadge user={objkt.owner!} size="regular" hasLink={false} />
               </>
             )}
@@ -62,7 +62,7 @@ export function ObjktCard({
             )}
           </div>
 
-          <Spacing size="small" />
+          <Spacing size="small" sm="x-small" />
 
           <div className={cs(style.bottom)}>
             <div className={cs(style.bottom_left)}>
@@ -79,6 +79,7 @@ export function ObjktCard({
               <div className={cs(style.badge)}>
                 <span className={cs(colors["gray-dark"])}>created by</span>
                 <EntityBadge
+                  className={styleObjkt.entity}
                   user={objkt.issuer.author!}
                   size="regular"
                   hasLink={false}

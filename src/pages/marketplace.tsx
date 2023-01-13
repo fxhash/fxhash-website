@@ -35,13 +35,13 @@ const MarketplacePage: NextPage = ({ query }: any) => {
         />
       </Head>
 
-      <Spacing size="3x-large" />
+      <Spacing size="3x-large" sm="large" />
 
       <HeaderRanks>
         <CollectionRanks />
       </HeaderRanks>
 
-      <Spacing size="6x-large" />
+      <Spacing size="6x-large" sm="2x-large" />
 
       <section>
         <MarketplaceTabs active={0} />

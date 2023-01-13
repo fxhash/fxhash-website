@@ -1,11 +1,13 @@
-import { useContext } from "react"
 import { Button } from "../../components/Button"
 import { Objkt } from "../../types/entities/Objkt"
 import { ContractFeedback } from "../../components/Feedback/ContractFeedback"
 import { Listing } from "../../types/entities/Listing"
 import { displayMutez } from "../../utils/units"
 import { useContractOperation } from "../../hooks/useContractOperation"
-import { ListingCancelOperation, TListingCancelOperationParams } from "../../services/contract-operations/ListingCancel"
+import {
+  ListingCancelOperation,
+  TListingCancelOperationParams,
+} from "../../services/contract-operations/ListingCancel"
 
 interface Props {
   listing: Listing
@@ -13,8 +15,15 @@ interface Props {
 }
 
 export function ListingCancel({ listing, objkt }: Props) {
-  const { state, loading: contractLoading, error: contractError, success, call, clear } = 
-    useContractOperation<TListingCancelOperationParams>(ListingCancelOperation)
+  const {
+    state,
+    loading: contractLoading,
+    error: contractError,
+    success,
+    call,
+  } = useContractOperation<TListingCancelOperationParams>(
+    ListingCancelOperation
+  )
 
   const callContract = () => {
     call({

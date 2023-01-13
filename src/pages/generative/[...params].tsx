@@ -6,7 +6,6 @@ import cs from "classnames"
 import { createApolloClient } from "../../services/ApolloClient"
 import { GenerativeToken } from "../../types/entities/GenerativeToken"
 import { Spacing } from "../../components/Layout/Spacing"
-import { ipfsGatewayUrl } from "../../services/Ipfs"
 import { truncateEnd } from "../../utils/strings"
 import { useState } from "react"
 import { Qu_genToken } from "../../queries/generative-token"
@@ -78,16 +77,17 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
 
       <GenerativeFlagBanner token={token} />
 
-      <Spacing size="3x-large" />
+      <Spacing size="3x-large" sm="x-large" />
 
       <section className={cs(layout["padding-big"])}>
         <GenerativeDisplay token={token} />
       </section>
 
       <Spacing size="6x-large" />
-      <Spacing size="6x-large" />
+      <Spacing size="6x-large" sm="none" />
 
       <Tabs
+        className={style.tabs}
         activeIdx={tabActive}
         tabDefinitions={tabs}
         tabsLayout="fixed-size"

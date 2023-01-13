@@ -1,3 +1,13 @@
+@import "../../styles/Variables";
+
+.anchor {
+  height: 100%;
+  display: inline-flex;
+  flex-direction: column;
+}
+.card {
+  flex: 1;
+}
 .animated {
   background-color: rgba(0, 0, 0, 0.8);
   padding: 3px 3px 1px 6px;
@@ -7,5 +17,24 @@
 
   i {
     font-size: 14px;
+  }
+}
+.minting_state_top {
+  margin-top: 10px;
+  font-weight: normal;
+}
+
+.mint_progress {
+  font-size: var(--font-size-small);
+}
+
+@media (max-width: $breakpoint-sm) {
+  .title {
+    font-size: var(--font-size-h5);
+  }
+  .mint_progress {
+    & i {
+      font-size: 0.8em;
+    }
   }
 }

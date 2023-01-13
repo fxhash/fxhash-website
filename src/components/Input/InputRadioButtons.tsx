@@ -2,7 +2,7 @@ import style from "./InputRadioButtons.module.scss"
 import cs from "classnames"
 import { FunctionComponent } from "react"
 
-type TLayout = "default" | "fixed-size"
+type TLayout = "default" | "fixed-size" | "group"
 
 export interface RadioOption<T = any, OptProps = any> {
   value: T
@@ -26,6 +26,7 @@ export interface Props<T = any, OptProps = any> {
   options: RadioOption<T, OptProps>[]
   layout?: TLayout
   className?: string
+  btnClassname?: string
   children?: FunctionComponent<PropsOptionRenderer<T>>
 }
 export function InputRadioButtons<T = any, OptProps = any>({
@@ -34,6 +35,7 @@ export function InputRadioButtons<T = any, OptProps = any>({
   options,
   layout = "default",
   className,
+  btnClassname,
   children = OptionRendererDefault,
 }: Props<T, OptProps>) {
   return (
@@ -42,9 +44,13 @@ export function InputRadioButtons<T = any, OptProps = any>({
         <button
           key={option.value ?? ("undefined" as any)}
           type="button"
-          className={cs({
-            [style.active]: option.value === value,
-          })}
+          className={cs(
+            {
+              [style.active]: option.value === value,
+            },
+            style.button,
+            btnClassname
+          )}
           onClick={() => option.value !== value && onChange(option.value)}
         >
           {children({

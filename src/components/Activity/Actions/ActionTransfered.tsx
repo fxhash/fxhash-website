@@ -11,11 +11,11 @@ export const ActionTransfered: TActionComp = ({ action, verbose }) => (
       user={action.issuer!}
       size="small"
     />
-    <span>
+    <>
       transfered{" "}
       <strong>#{verbose ? action.objkt!.name : action.objkt!.iteration}</strong>{" "}
       to
-    </span>
+    </>
     <UserBadge
       className={cs(style.user)}
       hasLink={true}

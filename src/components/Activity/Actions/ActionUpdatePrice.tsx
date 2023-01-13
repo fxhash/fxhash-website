@@ -12,8 +12,8 @@ export const ActionUpdatePrice: TActionComp = ({ action }) => (
       user={action.issuer!}
       size="small"
     />
-    <span>updated price:</span>
-    <span>
+    <>updated price:</>
+    <>
       <span className={cs(style.price)}>
         <DisplayTezos
           formatBig={false}
@@ -29,6 +29,6 @@ export const ActionUpdatePrice: TActionComp = ({ action }) => (
           tezosSize="regular"
         />
       </span>
-    </span>
+    </>
   </>
 )

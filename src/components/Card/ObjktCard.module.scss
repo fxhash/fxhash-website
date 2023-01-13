@@ -1,3 +1,5 @@
+@import "../../styles/Variables";
+
 .dup_flag {
   color: var(--color-error);
   font-weight: bold;
@@ -7,4 +9,13 @@
 .rarity {
   font-size: var(--font-size-small);
   color: var(--color-gray);
+}
+
+@media (max-width: $breakpoint-sm) {
+  .title {
+    font-size: var(--font-size-h5);
+  }
+  .entity {
+    font-size: var(--font-size-regular);
+  }
 }

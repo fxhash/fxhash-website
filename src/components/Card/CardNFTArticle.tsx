@@ -157,7 +157,7 @@ const _CardNftArticle = ({
           <div className={style.description}>
             <p>{description}</p>
           </div>
-          <Tags tags={tags} />
+          <Tags className={style.tags} tags={tags} />
         </div>
       </div>
     </div>

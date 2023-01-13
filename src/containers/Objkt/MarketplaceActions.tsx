@@ -9,7 +9,6 @@ import { ListingCreate } from "./ListingCreate"
 import { OfferCancel } from "./OfferCancel"
 import { OfferCreate } from "./OfferCreate"
 
-
 interface Props {
   objkt: Objkt
 }
@@ -26,8 +25,8 @@ export function MarketplaceActions({ objkt }: Props) {
   const owner: User = objkt.owner!
 
   // check if the user has an active offer on the token
-  const activeOffer = useMemo<Offer|null>(
-    () => objkt.offers?.find(offer => offer.buyer.id === user.id) || null,
+  const activeOffer = useMemo<Offer | null>(
+    () => objkt.offers?.find((offer) => offer.buyer.id === user.id) || null,
     [user, objkt]
   )
 
@@ -35,27 +34,18 @@ export function MarketplaceActions({ objkt }: Props) {
     <>
       {owner.id === user.id ? (
         objkt.activeListing ? (
-          <ListingCancel
-            listing={objkt.activeListing}
-            objkt={objkt}
-          />
-        ):(
+          <ListingCancel listing={objkt.activeListing} objkt={objkt} />
+        ) : (
           <ListingCreate objkt={objkt} />
         )
-      ):null}
+      ) : null}
 
-      {owner.id !== user.id && (
-        activeOffer ? (
-          <OfferCancel
-            offer={activeOffer}
-            objkt={objkt}
-          />
-        ):(
-          <OfferCreate
-            objkt={objkt}
-          />
-        )
-      )}
+      {owner.id !== user.id &&
+        (activeOffer ? (
+          <OfferCancel offer={activeOffer} objkt={objkt} />
+        ) : (
+          <OfferCreate objkt={objkt} />
+        ))}
     </>
   )
 }

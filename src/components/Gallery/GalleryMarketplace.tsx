@@ -165,6 +165,7 @@ export const GalleryMarketplace = ({
   return (
     <div ref={topMarkerRef}>
       <SortAndFilters
+        cardSizeScope="marketplace"
         initialSearchQuery={initialSearchQuery}
         sort={sort}
         filterTags={filterTags}

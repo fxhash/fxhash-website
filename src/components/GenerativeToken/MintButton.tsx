@@ -85,6 +85,7 @@ export function MintButton({
             color="secondary"
             size="regular"
             state={loading ? "loading" : "default"}
+            className={style.button}
             disabled={disabled}
             onClick={() => {
               if (isMintButton) {

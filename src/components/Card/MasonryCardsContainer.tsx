@@ -36,28 +36,36 @@ export const MasonryCardsContainer = forwardRef<
 
   const resizeHandler = useCallback(() => {
     if (elementRef.current) {
-      const cardsGap = +getComputedStyle(document.documentElement)
-        .getPropertyValue("--cards-gap")
-        .replace("px", "")
-      const numCols = Math.max(
+      const cardsGap =
+        +getComputedStyle(document.documentElement)
+          .getPropertyValue("--cards-gap")
+          .replace("px", "") || 0
+      const numColsNew = Math.max(
         1,
         Math.floor(
           (elementRef.current.offsetWidth + cardsGap) / (cardSize + cardsGap)
         )
       )
-      setNumCols(numCols)
+      if (numColsNew !== numCols) setNumCols(numColsNew)
     }
-  }, [cardSize, setNumCols])
+  }, [cardSize, setNumCols, numCols])
 
-  useImperativeHandle(ref, () => elementRef.current as HTMLDivElement)
+  useImperativeHandle(ref, () => elementRef.current as HTMLDivElement, [])
   useEffect(resizeHandler, [resizeHandler])
 
   useEffect(() => {
-    window.addEventListener("resize", resizeHandler)
-    return () => {
-      window.removeEventListener("resize", resizeHandler)
+    if (elementRef.current) {
+      const observer = new ResizeObserver(() => {
+        resizeHandler()
+      })
+      observer.observe(elementRef.current)
+
+      return () => {
+        elementRef.current && observer.disconnect()
+      }
     }
-  }, [resizeHandler])
+  }, [elementRef, resizeHandler])
+
   return (
     <div
       {...props}

@@ -1,5 +1,15 @@
+@import "../../../styles/Variables";
+
 .modal_content {
   font-size: var(--font-size-regular);
   width: min(600px, 100vw);
   padding: 8px;
+}
+@media(max-width: $breakpoint-sm) {
+  .button {
+    width: 100%;
+  }
+  .modal_content {
+    width: 100%;
+  }
 }

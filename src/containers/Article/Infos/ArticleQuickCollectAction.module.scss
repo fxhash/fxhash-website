@@ -1,0 +1,10 @@
+@import "../../../styles/Variables";
+
+@media (max-width: $breakpoint-sm) {
+  .button {
+    width: 100%;
+    & > div > span {
+      justify-content: space-between;
+    }
+  }
+}

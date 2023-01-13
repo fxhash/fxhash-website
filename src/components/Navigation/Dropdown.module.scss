@@ -52,6 +52,10 @@
   visibility: visible;
 }
 
+.mobile_static_menu {
+  // avoid undefined error
+}
+
 @media (max-width: $breakpoint-md) {
   .mobile_static_menu {
     &.container {

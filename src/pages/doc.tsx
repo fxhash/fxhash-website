@@ -4,14 +4,11 @@ import cs from "classnames"
 import style from "../styles/pages/about.module.scss"
 import { Spacing } from "../components/Layout/Spacing"
 import { SectionHeader } from "../components/Layout/SectionHeader"
-import ClientOnly from "../components/Utils/ClientOnly"
-import { ExploreGenerativeTokens } from "../containers/ExploreGenerativeTokens"
 import Head from "next/head"
-import { TitleHyphen } from "../components/Layout/TitleHyphen"
-import { ExploreTabs } from "../containers/Explore/ExploreTabs"
 import { SectionTitle } from "../components/Layout/SectionTitle"
 import { getDocDefinition, IDocPage } from "../services/LocalFiles"
 import { DocHomeCategory } from "../components/Doc/DocHomeCategory"
+import { TitleHyphen } from "../components/Layout/TitleHyphen"
 
 interface IProps {
   definition: IDocPage
@@ -40,19 +37,26 @@ const Explore: NextPage<IProps> = ({ definition }) => {
         />
       </Head>
 
-      <Spacing size="3x-large" />
+      <Spacing size="3x-large" sm="x-large" />
 
       <section>
-        <SectionHeader layout="center">
-          <SectionTitle>{definition.title}</SectionTitle>
-        </SectionHeader>
+        <div className={layout.hide_sm}>
+          <SectionHeader layout="center">
+            <SectionTitle>{definition.title}</SectionTitle>
+          </SectionHeader>
+        </div>
+        <div className={layout.show_sm}>
+          <SectionHeader layout="left">
+            <TitleHyphen>{definition.title}</TitleHyphen>
+          </SectionHeader>
+        </div>
 
-        <Spacing size="large" />
+        <Spacing size="large" sm="regular" />
 
         <div className={cs(style.content, layout["padding-big"])}>
           <p className={cs(style.description)}>{definition.description}</p>
 
-          <Spacing size="4x-large" />
+          <Spacing size="4x-large" sm="x-large" />
 
           <div className={cs(style.categories)}>
             {definition.categories.map((category, idx) => (

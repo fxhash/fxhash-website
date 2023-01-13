@@ -25,6 +25,7 @@ interface Props {
   displayPrice?: boolean
   displayDetails?: boolean
   lockedUntil?: string
+  positionMintingState?: "top" | "inside"
 }
 
 export function GenerativeTokenCard({
@@ -32,64 +33,76 @@ export function GenerativeTokenCard({
   displayPrice = false,
   displayDetails = true,
   className,
+  positionMintingState = "inside",
   lockedUntil,
 }: Props) {
   const url = getGenerativeTokenUrl(token)
   return (
     <Link href={url} passHref>
-      <AnchorForward style={{ height: "100%" }} className={className}>
-        <Card
-          tokenLabels={token.labels}
-          image={token.captureMedia}
-          thumbnailUri={token.thumbnailUri}
-          displayDetails={displayDetails}
-          thumbInfosComp={
-            token.labels?.includes(GenTokLabel.INTERACTIVE) ? (
-              <div className={cs(style.animated)}>
-                Interactive{" "}
-                <i className="fa-solid fa-hand-pointer" aria-hidden />
-              </div>
-            ) : (
-              token.labels?.includes(GenTokLabel.ANIMATED) && (
+      <AnchorForward className={cs(className, style.anchor)}>
+        <>
+          {token.balance > 0 && positionMintingState === "top" && (
+            <div className={cs(style.minting_state_top)}>
+              <MintingState token={token} />
+            </div>
+          )}
+          <Card
+            className={style.card}
+            tokenLabels={token.labels}
+            image={token.captureMedia}
+            thumbnailUri={token.thumbnailUri}
+            displayDetails={displayDetails}
+            thumbInfosComp={
+              token.labels?.includes(GenTokLabel.INTERACTIVE) ? (
                 <div className={cs(style.animated)}>
-                  Animated <i className="fa-solid fa-film" aria-hidden />
+                  Interactive{" "}
+                  <i className="fa-solid fa-hand-pointer" aria-hidden />
                 </div>
+              ) : (
+                token.labels?.includes(GenTokLabel.ANIMATED) && (
+                  <div className={cs(style.animated)}>
+                    Animated <i className="fa-solid fa-film" aria-hidden />
+                  </div>
+                )
               )
-            )
-          }
-        >
-          <div>
-            <h5>{token.name}</h5>
-            <Spacing size="2x-small" />
-            <EntityBadge user={token.author} size="regular" hasLink={false} />
-            <Spacing size="2x-small" />
-            {token.balance > 0 && <MintingState token={token} />}
-          </div>
-
-          <div className={cs(text.small)}>
-            <MintProgress token={token}>
-              {displayPrice && (
-                <div>
-                  <strong className={cs(colors.secondary, text.regular)}>
-                    <DisplayTezos
-                      mutez={genTokCurrentPrice(token)}
-                      formatBig={false}
-                      tezosSize="regular"
-                    />
-                  </strong>
-                  {!!token.pricingDutchAuction && (
-                    <i
-                      className={cs(
-                        "fa-solid fa-arrow-down-right",
-                        colors["gray-light"]
-                      )}
-                    />
-                  )}
-                </div>
+            }
+          >
+            <div>
+              <h5 className={style.title}>{token.name}</h5>
+              <Spacing size="2x-small" sm="x-small" />
+              <EntityBadge user={token.author} size="regular" hasLink={false} />
+              <Spacing size="2x-small" sm="x-small" />
+              {token.balance > 0 && positionMintingState === "inside" && (
+                <MintingState token={token} />
               )}
-            </MintProgress>
-          </div>
-        </Card>
+            </div>
+
+            <div className={style.mint_progress}>
+              <MintProgress token={token}>
+                {displayPrice && (
+                  <div>
+                    <strong className={cs(colors.secondary, text.regular)}>
+                      <DisplayTezos
+                        mutez={genTokCurrentPrice(token)}
+                        formatBig={false}
+                        tezosSize="regular"
+                      />
+                    </strong>
+                    {!!token.pricingDutchAuction && (
+                      <i
+                        className={cs(
+                          "fa-solid fa-arrow-down-right",
+                          colors["gray-light"],
+                          style.mint_progress_icon
+                        )}
+                      />
+                    )}
+                  </div>
+                )}
+              </MintProgress>
+            </div>
+          </Card>
+        </>
       </AnchorForward>
     </Link>
   )

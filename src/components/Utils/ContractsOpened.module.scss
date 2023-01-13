@@ -1,3 +1,5 @@
+@import "../../styles/Variables";
+
 .state {
   display: flex;
   align-items: center;
@@ -7,7 +9,7 @@
     margin-left: 8px;
   }
 
-  div {
+  .circle {
     width: 26px;
     height: 26px;
     background-color: var(--color-success);
@@ -15,10 +17,25 @@
     border: 3px solid black;
     flex-shrink: 0;
   }
-  
+
   &.state_closed {
-    div {
+    .circle {
       background-color: var(--color-error);
+    }
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .state {
+    & > *+* {
+      margin-left: 24px;
+    }
+    .text {
+      flex: 1;
+    }
+    .circle {
+      width: 42px;
+      height: 42px;
     }
   }
 }

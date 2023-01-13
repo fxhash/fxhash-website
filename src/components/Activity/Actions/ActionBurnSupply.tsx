@@ -14,12 +14,12 @@ export const ActionBurnSupply: TActionComp = ({ action }) => {
         user={action.issuer!}
         size="small"
       />
-      <span>burnt some supply:</span>
-      <span>
+      <>burnt some supply:</>
+      <>
         <strong className={cs(colors.secondary)}>{metadata.from}</strong>
         {" -> "}
         <strong className={cs(colors.secondary)}>{metadata.to}</strong>
-      </span>
+      </>
     </>
   )
 }

@@ -61,6 +61,7 @@ export function AvatarUpload({
         onClick={onClick}
       >
         <span>upload {url ? "a new" : "an"} image</span>
+        {url && <i className="fa-solid fa-arrow-up-from-bracket" />}
       </button>
       <input
         ref={inputFileRef}

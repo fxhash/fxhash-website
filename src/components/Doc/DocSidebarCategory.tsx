@@ -26,9 +26,9 @@ export function DocSidebarCategory({
         <i className={category.icon} aria-hidden />
         <span>{category.title}</span>
         {opened ? (
-          <i className="far fa-minus" aria-hidden />
+          <i className="fa-solid fa-caret-up" aria-hidden />
         ) : (
-          <i className="far fa-plus" aria-hidden />
+          <i className="fa-solid fa-caret-down" aria-hidden />
         )}
       </button>
       {opened && (

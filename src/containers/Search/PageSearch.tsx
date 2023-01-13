@@ -12,6 +12,7 @@ import { SearchArticles } from "./SearchArticles"
 import { SearchMarketplace } from "./SearchMarketplace"
 import Head from "next/head"
 import { Spacing } from "../../components/Layout/Spacing"
+import style from "./PageSearch.module.scss"
 
 export const searchTabs = [
   "summary",
@@ -122,8 +123,9 @@ const _PageSearch = ({ query: queryUrl, tab }: PageSearchProps) => {
           content="https://www.fxhash.xyz/images/og/og1.jpg"
         />
       </Head>
-      <Spacing size="3x-large"/>
+      <Spacing size="3x-large" sm="x-large" />
       <Tabs
+        className={style.tabs}
         onClickTab={handleClickTab}
         checkIsTabActive={checkIsTabKeyActive}
         tabDefinitions={tabsDefinitions}

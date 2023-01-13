@@ -7,7 +7,8 @@ import ClientOnly from "../../components/Utils/ClientOnly"
 import Head from "next/head"
 import { ExploreTabs } from "../../containers/Explore/ExploreTabs"
 import { ExploreIncomingTokens } from "../../containers/Generative/ExploreIncoming"
-import { SectionTitle } from "../../components/Layout/SectionTitle"
+import { TitleHyphen } from "../../components/Layout/TitleHyphen"
+import React from "react"
 
 const Explore: NextPage = () => {
   return (
@@ -32,18 +33,17 @@ const Explore: NextPage = () => {
           content="https://www.fxhash.xyz/images/og/og1.jpg"
         />
       </Head>
-      <Spacing size="3x-large" />
+      <Spacing size="2x-large" sm="x-large" />
 
+      <SectionHeader layout="left" sm="left">
+        <TitleHyphen>incoming projects</TitleHyphen>
+      </SectionHeader>
       <section>
-        <SectionHeader layout="center">
-          <SectionTitle>incoming projects</SectionTitle>
-        </SectionHeader>
-
-        <Spacing size="3x-large" />
+        <Spacing size="x-large" sm="2x-large" />
 
         <ExploreTabs active={1} />
 
-        <Spacing size="x-large" />
+        <Spacing size="x-large" sm="regular" />
 
         <main className={cs(layout["padding-big"])}>
           <p>These tokens cannot be minted yet</p>

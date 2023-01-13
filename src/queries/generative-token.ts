@@ -61,6 +61,7 @@ export const Qu_genTokensIncoming = gql`
       id
       ...TokenInfo
       lockEnd
+      mintOpensAt
     }
   }
 `
@@ -154,6 +155,7 @@ export const Qu_genTokenIterations = gql`
         version
         iteration
         issuer {
+          id
           flag
           labels
         }

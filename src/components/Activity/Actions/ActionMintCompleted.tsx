@@ -8,6 +8,6 @@ export const ActionCompleted: TActionComp = ({ action }) => (
   <>
     <strong className={cs(colors.success)}>completed</strong>
     <span>—</span>
-    <span>Generative Token fully minted</span>
+    <>Generative Token fully minted</>
   </>
 )

@@ -20,8 +20,19 @@ interface Props {
 export function GenerativePricing({ token }: Props) {
   return (
     <>
-      <strong>Price</strong>
-      <span>
+      <strong
+        className={cs({
+          [style.mobile_grid_two]: !!token.pricingDutchAuction,
+        })}
+      >
+        Price
+      </strong>
+      <span
+        className={cs({
+          [style.mobile_align_right]: !token.pricingDutchAuction,
+          [style.mobile_grid_two]: !!token.pricingDutchAuction,
+        })}
+      >
         {token.pricingFixed && (
           <DisplayTezos
             mutez={token.pricingFixed.price}
@@ -59,7 +70,7 @@ export function GenerativePricing({ token }: Props) {
       {token.pricingFixed?.opensAt && (
         <>
           <strong>Minting opens</strong>
-          <span>
+          <span className={style.mobile_align_right}>
             {format(
               new Date(token.pricingFixed.opensAt),
               "MMMM d, yyyy' at 'HH:mm"
@@ -71,7 +82,7 @@ export function GenerativePricing({ token }: Props) {
       {token.pricingDutchAuction && (
         <>
           <strong>Auction starts</strong>
-          <span>
+          <span className={style.mobile_align_right}>
             {format(
               new Date(token.pricingDutchAuction.opensAt!),
               "MMMM d, yyyy' at 'HH:mm"

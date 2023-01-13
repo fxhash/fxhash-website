@@ -24,7 +24,6 @@ import { LoaderBlock } from "../../components/Layout/LoaderBlock"
 import { UserGuard } from "../../components/Guards/UserGuard"
 import { ArticleModeration } from "./Moderation/ArticleModeration"
 import { ArticleFlagBanner } from "./Moderation/FlagBanner"
-import { checkIsTabKeyActive } from "../../components/Layout/Tabs"
 import { ArticleActivity } from "./ArticleActivity"
 import { ArticleActions } from "./ArticleActions"
 import { TabsContainer } from "../../components/Layout/TabsContainer"
@@ -152,7 +151,7 @@ const _PageArticle = ({ article, originUrl, isPreview }: PageArticleProps) => {
 
       <ArticleFlagBanner article={article} />
 
-      <Spacing size="small" />
+      <Spacing size="small" sm="x-large" />
 
       <main className={cs(layout["padding-big"])}>
         <div className={style.header}>
@@ -230,7 +229,10 @@ const _PageArticle = ({ article, originUrl, isPreview }: PageArticleProps) => {
           <h1 className={cs(style.title)}>{title}</h1>
           <ArticleQuickCollect article={article}>
             {({ collectAction }) => (
-              <div className={cs(style.collect)}>{collectAction}</div>
+              <>
+                <Spacing size="small" sm="regular" />
+                <div className={cs(style.collect)}>{collectAction}</div>
+              </>
             )}
           </ArticleQuickCollect>
           <p className={cs(style.description, style.awidth)}>{description}</p>
@@ -249,6 +251,7 @@ const _PageArticle = ({ article, originUrl, isPreview }: PageArticleProps) => {
             isPreview={isPreview}
           />
         </div>
+        <Spacing size="3x-large" />
         {relatedArticles?.length > 0 && (
           <div className={style["related-articles"]}>
             <h2 className={text.small_title}>Related articles</h2>
@@ -262,11 +265,11 @@ const _PageArticle = ({ article, originUrl, isPreview }: PageArticleProps) => {
       </main>
       {!isPreview && (
         <>
-          <Spacing size="6x-large" />
+          <Spacing size="6x-large" sm="x-large" />
           <TabsContainer
+            className={style.tabs}
             tabDefinitions={TABS}
             tabsLayout="fixed-size"
-            tabsClassName={cs(layout["padding-big"])}
           >
             {({ tabIndex }) => (
               <div className={layout["padding-big"]}>

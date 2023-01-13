@@ -63,9 +63,13 @@
 
 @media (max-width: $breakpoint-sm) {
   .search_header {
-    padding-top: 40px;
+    top: -22px;
+    padding-top: 32px;
     padding-bottom: 10px;
     gap: 10px;
+    &--remove_gap {
+      gap: 0;
+    }
   }
 
   .filter_btn {

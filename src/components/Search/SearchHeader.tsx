@@ -9,7 +9,7 @@ interface Props {
   hasFilters?: boolean
   onToggleFilters?: () => void
   filtersOpened?: boolean
-  padding?: "big" | "small"
+  padding?: "big" | "small" | "small-sm-big"
   showFiltersOnMobile?: boolean
 }
 export const SearchHeader = forwardRef<
@@ -31,7 +31,13 @@ export const SearchHeader = forwardRef<
   ) => {
     return (
       <div
-        className={cs(style.search_header, layout[`padding-${padding}`])}
+        className={cs(
+          style.search_header,
+          {
+            [style["search_header--remove_gap"]]: !children,
+          },
+          layout[`padding-${padding}`]
+        )}
         ref={ref}
       >
         <div className={cs(style.search_wrapper)}>

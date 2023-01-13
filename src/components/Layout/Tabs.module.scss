@@ -4,11 +4,18 @@
   nav {
     border-bottom: 3px solid var(--color-gray-light);
     display: flex;
+    flex-direction: row;
   }
 
   &.layout-fixed-size {
     nav {
       justify-content: center;
+    }
+  }
+
+  &.layout-fixed-size-narrow {
+    nav {
+      justify-content: flex-start;
     }
   }
 
@@ -20,6 +27,7 @@
 
   &.layout-subtabs-vertical {
     nav {
+      padding: 8px 0;
       justify-content: center;
       border-bottom: none;
     }
@@ -52,7 +60,7 @@
 
 .tab-subtabs {
   padding: 8px 16px;
-  background: var(--color-gray-vvlight);
+  background: var(--color-gray-vlight);
   margin-bottom: 0;
   border: none;
   font-size: var(--font-size-small);
@@ -69,7 +77,6 @@
 
 .tab-subtabs-vertical {
   padding: 10px $spacing-large;
-  margin-top: 8px;
   margin-bottom: 0;
   border: none;
   font-size: var(--font-size-small);
@@ -82,16 +89,15 @@
 }
 
 .tab-fixed-size {
+  white-space: nowrap;
   padding-left: 80px;
   padding-right: 80px;
+}
 
-  @media (max-width: $breakpoint-lg) {
-    padding-left: 0;
-    padding-right: 0;
-    flex: 1 1 0px;
-    display: flex;
-    justify-content: center;
-  }
+.tab-fixed-size-narrow {
+  white-space: nowrap;
+  margin-right: 32px;
+  padding: 0 0 30px 0;
 }
 
 .tab-full-width {
@@ -99,48 +105,120 @@
   display: flex;
   justify-content: center;
 }
+@media (max-width: $breakpoint-lg) {
+  .container.layout-fixed-size nav {
+    justify-content: center;
+  }
+  .tab-fixed-size {
+    text-align: center;
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+}
+
 
 @media (max-width: $breakpoint-sm) {
+  .container {
+    overflow-x: auto;
+    -ms-overflow-style: none; /* for Internet Explorer, Edge */
+    scrollbar-width: none;
+    &::-webkit-scrollbar {
+      display: none; /* for Chrome, Safari, and Opera */
+    }
+  }
   .container nav {
-    flex-direction: column;
-    align-items: flex-start;
-    border: none;
-    border-left: 3px solid var(--color-gray-light);
-    padding: 3px 0;
+    min-width: fit-content;
+  }
+
+  .container.layout-full-width nav {
+    justify-content: flex-start;
+  }
+
+  .container.layout-fixed-size nav {
+    justify-content: flex-start;
   }
 
   .container.layout-subtabs nav {
-    display: grid;
-    align-items: stretch;
-    padding: 0;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 4px;
     border: none;
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .container.layout-subtabs-vertical nav {
+    padding: 10px 0;
+  }
+
   .tab {
-    padding-left: var(--layout-margin-big-sm);
+    padding: 0 16px 10px 0;
+    margin-bottom: 0;
     position: relative;
-    left: -3px;
     border: none;
-    width: 100%;
-    justify-content: flex-start;
+    white-space: nowrap;
+    text-align: left;
+    &:last-child {
+      padding-right: 0;
+    }
 
     &.active {
       border: none;
-      border-left: 3px solid var(--color-black);
+      &:after {
+        content: "";
+        position: absolute;
+        bottom: -3px;
+        left: 0;
+        right: 0;
+        height: 3px;
+        z-index: 10;
+        background-color: var(--color-black);
+        width: 100%;
+      }
     }
   }
 
+  .tab-full-width {
+    text-align: left;
+    flex: 0;
+  }
+
   .tab-subtabs {
+    padding: 8px 12px;
+    position: relative;
+    border: none;
     left: 0;
+    flex: 1 0 auto;
     display: inline-flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
-
+    font-size: var(--font-size-big);
     &+& {
       margin-left: 0;
     }
+    &:after {
+      display: none;
+    }
+    &:last-child {
+      padding-right: 12px;
+    }
+  }
+
+  .tab-subtabs-vertical {
+    padding: 0 20px;
+    font-size: var(--font-size-small);
+    &:after {
+      display: none;
+    }
+    &+&.active {
+      border-left: 3px solid var(--color-gray-vvvlight);
+    }
+  }
+
+  .tab-fixed-size-narrow {
+    margin-right: 0;
+    padding: 0 16px 10px 0;
   }
 }

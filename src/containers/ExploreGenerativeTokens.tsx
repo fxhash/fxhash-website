@@ -17,9 +17,7 @@ import {
 } from "react"
 import { CardsLoading } from "../components/Card/CardsLoading"
 import { SettingsContext } from "../context/Theme"
-import {
-  ExploreTagDef,
-} from "../components/Exploration/ExploreTags"
+import { ExploreTagDef } from "../components/Exploration/ExploreTags"
 import { GenerativeFilters } from "./Generative/GenerativeFilters"
 import { getTagsFromFiltersObject } from "../utils/filters"
 import useSort from "../hooks/useSort"
@@ -166,6 +164,7 @@ export const ExploreGenerativeTokens = ({
   return (
     <div ref={topMarkerRef}>
       <SortAndFilters
+        cardSizeScope="explore"
         initialSearchQuery={initialSearchQuery}
         sort={sort}
         filterTags={filterTags}
@@ -182,17 +181,20 @@ export const ExploreGenerativeTokens = ({
             canTrigger={!hasNothingToFetch && !loading}
           >
             <CardsContainer ref={refCardsContainer}>
-              {generativeTokens && generativeTokens.length > 0 && generativeTokens.map(token => (
-                <GenerativeTokenCard
-                  key={token.id}
-                  token={token}
-                  displayPrice={settingsCtx.displayPricesCard}
-                  displayDetails={settingsCtx.displayInfosGenerativeCard}
-                />
-              ))}
-              {loading && CardsLoading({
-                number: ITEMS_PER_PAGE,
-              })}
+              {generativeTokens &&
+                generativeTokens.length > 0 &&
+                generativeTokens.map((token) => (
+                  <GenerativeTokenCard
+                    key={token.id}
+                    token={token}
+                    displayPrice={settingsCtx.displayPricesCard}
+                    displayDetails={settingsCtx.displayInfosGenerativeCard}
+                  />
+                ))}
+              {loading &&
+                CardsLoading({
+                  number: ITEMS_PER_PAGE,
+                })}
             </CardsContainer>
           </InfiniteScrollTrigger>
         )}

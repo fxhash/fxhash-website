@@ -1,4 +1,4 @@
-import { gql, useQuery } from "@apollo/client"
+import { useQuery } from "@apollo/client"
 import {
   GenerativeToken,
   GenerativeTokenFilters,
@@ -21,11 +21,7 @@ import {
   ExploreTagDef,
   ExploreTags,
 } from "../../components/Exploration/ExploreTags"
-import {
-  getTagsFromFiltersObject,
-  ITagsFilters,
-  tagsFilters,
-} from "../../utils/filters"
+import { getTagsFromFiltersObject } from "../../utils/filters"
 import { FiltersPanel } from "../../components/Exploration/FiltersPanel"
 import { GenerativeFilters } from "../Generative/GenerativeFilters"
 import style from "./Collections.module.scss"

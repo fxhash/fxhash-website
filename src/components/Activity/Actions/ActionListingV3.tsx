@@ -12,7 +12,7 @@ const ActionListingArticle: TActionComp = ({ action, verbose }) => (
       user={action.issuer!}
       size="small"
     />
-    <span>
+    <>
       listed <strong>{action.metadata.amount}</strong> editions{" "}
       {verbose && (
         <>
@@ -20,7 +20,7 @@ const ActionListingArticle: TActionComp = ({ action, verbose }) => (
         </>
       )}{" "}
       for
-    </span>
+    </>
     <span className={cs(style.price)}>
       <DisplayTezos
         formatBig={false}

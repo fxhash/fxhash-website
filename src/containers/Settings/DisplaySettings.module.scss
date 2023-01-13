@@ -2,9 +2,10 @@
 
 .settings_card {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   width: 100%;
   min-height: 470px;
+  gap: 32px;
 
   .settings_controls {
     flex-grow: 2;
@@ -28,7 +29,8 @@
 .settings_layout {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
+  gap: 32px;
 }
 
 .layout_controls {
@@ -36,20 +38,21 @@
   flex-direction: column;
   flex-grow: 1;
 
-    & > * {
-      min-height: 34px;
-    }
+  & > * {
+    min-height: 34px;
+  }
 
-    & > *+* {
-      margin-top: 12px;
-    }
+  & > *+* {
+    margin-top: 12px;
+  }
 }
 .masonry_container {
-  width: 360px; 
-}
-.mini_card { 
+  max-width: 360px;
   width: 100%;
-  background: black;
+}
+.mini_card {
+  width: 100%;
+  background: var(--color-gray-vlight);
 }
 .mini_card_masonry:not(:last-child) {
   margin-bottom: calc(var(--cards-gap) * 0.5);
@@ -59,13 +62,27 @@
 }
 
 @media (max-width: $breakpoint-sm) {
-  .settings_controls {
+  .settings_layout {
+    flex-direction: column;
+    gap: 16px;
+  }
+  .layout_controls {
     width: 100%;
+    & > * {
+      min-height: auto;
+    }
   }
   .settings_card {
+    gap: 16px;
     flex-direction: column;
+    .settings_controls {
+      width: 100%;
+      & > * {
+        min-height: auto;
+      }
+    }
   }
   .card_wrapper {
-    margin-top: 16px;
+    align-self: center;
   }
 }

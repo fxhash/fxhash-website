@@ -1,6 +1,9 @@
+import style from "./ExploreTabs.module.scss"
 import { PropsWithChildren } from "react"
 import Link from "next/link"
 import { TabDefinition, Tabs } from "../../components/Layout/Tabs"
+import cs from "classnames"
+import layout from "../../styles/Layout.module.scss"
 
 const definition: TabDefinition[] = [
   { name: "gallery", props: { href: "/explore" } },
@@ -10,7 +13,7 @@ const definition: TabDefinition[] = [
 ]
 
 interface TabProps {
-  href: string,
+  href: string
   className: string
 }
 export function ExploreTab({
@@ -20,7 +23,7 @@ export function ExploreTab({
 }: PropsWithChildren<TabProps>) {
   return (
     <Link href={href} scroll={false}>
-      <a className={className}>{ children }</a>
+      <a className={className}>{children}</a>
     </Link>
   )
 }
@@ -30,11 +33,13 @@ interface Props {
 }
 export function ExploreTabs({ active }: Props) {
   return (
-    <Tabs
-      tabDefinitions={definition}
-      activeIdx={active}
-      tabsLayout="fixed-size"
-      tabWrapperComponent={ExploreTab}
-    />
+    <div className={cs(layout["padding-big"])}>
+      <Tabs
+        tabDefinitions={definition}
+        activeIdx={active}
+        tabsLayout="fixed-size-narrow"
+        tabWrapperComponent={ExploreTab}
+      />
+    </div>
   )
 }

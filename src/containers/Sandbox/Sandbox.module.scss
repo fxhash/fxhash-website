@@ -82,3 +82,12 @@
 .artwork-view {
   align-items: flex-start;
 }
+
+@media (max-width: $breakpoint-sm) {
+  .container {
+    gap: 32px;
+  }
+  .button {
+    width: 100%;
+  }
+}

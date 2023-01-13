@@ -25,7 +25,7 @@ import { ObjktCard } from "../components/Card/ObjktCard"
 import nl2br from "react-nl2br"
 import { TitleHyphen } from "../components/Layout/TitleHyphen"
 import { getGenerativeTokenUrl } from "../utils/generative-token"
-import { useContext } from "react"
+import React, { useCallback, useContext, useState } from "react"
 import { SettingsContext } from "../context/Theme"
 import { PresentationHeader } from "../containers/Home/PresentationHeader"
 import {
@@ -34,6 +34,7 @@ import {
 } from "../queries/fragments/generative-token"
 import { Frag_MediaImage } from "../queries/fragments/media"
 import { Frag_UserBadge } from "../queries/fragments/user"
+import { Clamp } from "../components/Clamp/Clamp"
 
 interface Props {
   randomGenerativeToken: GenerativeToken | null
@@ -47,6 +48,8 @@ const Home: NextPage<Props> = ({
   listings,
 }) => {
   const settings = useContext(SettingsContext)
+  const [showDescription, setShowDescription] = useState(false)
+  const handleShowDescription = useCallback(() => setShowDescription(true), [])
 
   return (
     <>
@@ -75,13 +78,13 @@ const Home: NextPage<Props> = ({
         />
       </Head>
 
-      <Spacing size="3x-large" />
+      <Spacing size="3x-large" sm="x-large" />
 
       <section className={cs(layout["padding-big"])}>
         <PresentationHeader />
       </section>
 
-      <Spacing size="6x-large" />
+      <Spacing size="6x-large" sm="3x-large" />
 
       {randomGenerativeToken && (
         <>
@@ -96,32 +99,44 @@ const Home: NextPage<Props> = ({
               <span className={cs(styles["section-subtitle"], Colors.gray)}>
                 — a random artwork
               </span>
-              <Spacing size="4x-large" />
+              <Spacing size="4x-large" sm="regular" />
               <div>
                 <h3>{randomGenerativeToken.name}</h3>
-                <Spacing size="x-small" />
+                <Spacing size="x-small" sm="regular" />
                 <UserBadge user={randomGenerativeToken.author} size="big" />
-                <Spacing size="x-small" />
+                <Spacing size="x-small" sm="regular" />
 
                 <div className={cs(styles["artwork-details"])}>
                   <div className={cs(styles.mint_progress)}>
                     <MintProgress token={randomGenerativeToken} />
                   </div>
 
-                  <Spacing size="2x-large" />
+                  <Spacing size="2x-large" sm="regular" />
 
                   <Link
                     href={getGenerativeTokenUrl(randomGenerativeToken)}
                     passHref
                   >
-                    <Button isLink={true} size="regular">
+                    <Button
+                      className={styles.button}
+                      isLink={true}
+                      size="regular"
+                    >
                       open project
                     </Button>
                   </Link>
 
-                  <Spacing size="large" />
+                  <Spacing size="large" sm="regular" />
 
-                  <p>{nl2br(randomGenerativeToken.metadata.description)}</p>
+                  <Clamp
+                    className={cs(styles.description, {
+                      [styles.description_opened]: showDescription,
+                    })}
+                    onClickCTA={handleShowDescription}
+                    labelCTA="read more"
+                  >
+                    {nl2br(randomGenerativeToken.metadata.description)}
+                  </Clamp>
                 </div>
               </div>
             </div>
@@ -135,8 +150,8 @@ const Home: NextPage<Props> = ({
             </div>
           </section>
 
-          <Spacing size="6x-large" />
-          <Spacing size="6x-large" />
+          <Spacing size="6x-large" sm="3x-large" />
+          <Spacing size="6x-large" sm="none" />
         </>
       )}
 
@@ -155,7 +170,7 @@ const Home: NextPage<Props> = ({
           </Link>
         </SectionHeader>
 
-        <Spacing size="3x-large" />
+        <Spacing size="3x-large" sm="regular" />
 
         <main className={cs(layout["padding-big"])}>
           <CardsContainer className={cs(styles["row-responsive-limiter"])}>
@@ -177,7 +192,7 @@ const Home: NextPage<Props> = ({
       <section>
         <SectionHeader className={cs(styles.section_header)}>
           <div>
-            <small>late to the party ?</small>
+            <div className={styles.late_party}>late to the party ?</div>
             <TitleHyphen>marketplace</TitleHyphen>
           </div>
           <Link href="/marketplace" passHref>
@@ -192,7 +207,7 @@ const Home: NextPage<Props> = ({
           </Link>
         </SectionHeader>
 
-        <Spacing size="3x-large" />
+        <Spacing size="3x-large" sm="regular" />
 
         <main className={cs(layout["padding-big"])}>
           <CardsContainer className={cs(styles["row-responsive-limiter"])}>

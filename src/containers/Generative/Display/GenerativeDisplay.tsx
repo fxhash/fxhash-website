@@ -1,9 +1,9 @@
 import style from "./GenerativeDisplay.module.scss"
 import layout from "../../../styles/Layout.module.scss"
 import text from "../../../styles/Text.module.css"
+import colors from "../../../styles/Colors.module.css"
 import cs from "classnames"
 import { GenerativeToken } from "../../../types/entities/GenerativeToken"
-import { UserBadge } from "../../../components/User/UserBadge"
 import { Spacing } from "../../../components/Layout/Spacing"
 import ClientOnly from "../../../components/Utils/ClientOnly"
 import { UserGuard } from "../../../components/Guards/UserGuard"
@@ -16,7 +16,7 @@ import { Button } from "../../../components/Button"
 import { GenerativeExtraActions } from "../ExtraActions"
 import { format } from "date-fns"
 import nl2br from "react-nl2br"
-import { displayMutez, displayRoyalties } from "../../../utils/units"
+import { displayRoyalties } from "../../../utils/units"
 import { ipfsGatewayUrl } from "../../../services/Ipfs"
 import { GenerativeArtwork } from "../../../components/GenerativeToken/GenerativeArtwork"
 import { ListSplits } from "../../../components/List/ListSplits"
@@ -26,6 +26,8 @@ import { Tags } from "../../../components/Tags/Tags"
 import { Labels } from "../../../components/GenerativeToken/Label/Labels"
 import { ListReserves } from "../../../components/List/ListReserves"
 import { GenTokArticleMentions } from "./GenTokArticleMentions"
+import { Clamp } from "../../../components/Clamp/Clamp"
+import { useCallback, useState } from "react"
 
 /**
  * This is the Core component resposible for the display logic of a Generative
@@ -39,11 +41,18 @@ interface Props {
   offlineMode?: boolean
 }
 export function GenerativeDisplay({ token, offlineMode = false }: Props) {
+  const [showDescription, setShowDescription] = useState(false)
+  const handleShowDescription = useCallback(() => setShowDescription(true), [])
   return (
     <>
       <div className={cs(style.artwork_header_mobile, layout.break_words)}>
-        <EntityBadge user={token.author} size="regular" toggeable />
-        <Spacing size="2x-small" />
+        <EntityBadge
+          user={token.author}
+          classNameAvatar={style.author_avatar}
+          size="regular"
+          toggeable
+        />
+        <Spacing size="2x-small" sm="regular" />
         <h3>{token.name}</h3>
         <Spacing size="x-large" />
       </div>
@@ -62,7 +71,7 @@ export function GenerativeDisplay({ token, offlineMode = false }: Props) {
             <h3>{token.name}</h3>
           </div>
 
-          <Spacing size="x-large" />
+          <Spacing size="x-large" sm="none" />
 
           {!offlineMode && (
             <ClientOnly>
@@ -76,21 +85,26 @@ export function GenerativeDisplay({ token, offlineMode = false }: Props) {
             <MintProgress token={token} showReserve />
           </div>
 
-          <Spacing size="x-large" />
+          <Spacing size="x-large" sm="regular" />
 
           <MintController token={token} forceDisabled={offlineMode}>
             <Link href={getGenerativeTokenMarketplaceUrl(token)} passHref>
-              <Button isLink={true} size="regular" disabled={offlineMode}>
+              <Button
+                isLink={true}
+                size="regular"
+                disabled={offlineMode}
+                className={style.button}
+              >
                 open marketplace
               </Button>
             </Link>
           </MintController>
 
-          <Spacing size="4x-large" />
+          <Spacing size="4x-large" sm="x-large" />
 
           <div className={cs(style.multilines)}>
-            <div className={cs(layout.buttons_inline)}>
-              <strong>Project #{token.id}</strong>
+            <div className={cs(style.project_infos)}>
+              <h3>Project #{token.id}</h3>
               {!offlineMode && (
                 <ClientOnly>
                   <UserGuard forceRedirect={false}>
@@ -99,18 +113,28 @@ export function GenerativeDisplay({ token, offlineMode = false }: Props) {
                 </ClientOnly>
               )}
             </div>
-            <span className={cs(text.info)}>
+            <span className={cs(colors.gray, text.small)}>
               Published on{" "}
               {format(new Date(token.createdAt), "MMMM d, yyyy' at 'HH:mm")}
             </span>
-            <Labels labels={token.labels!} />
+            {token.labels && (
+              <Labels className={style.labels} labels={token.labels!} />
+            )}
           </div>
 
-          <Spacing size="large" />
+          <Spacing size="large" sm="regular" />
 
-          <p>{nl2br(token.metadata?.description)}</p>
+          <Clamp
+            className={cs(style.description, {
+              [style.description_opened]: showDescription,
+            })}
+            onClickCTA={handleShowDescription}
+            labelCTA="read more"
+          >
+            {nl2br(token.metadata?.description)}
+          </Clamp>
 
-          <Spacing size="2x-large" />
+          <Spacing size="2x-large" sm="3x-large" />
 
           <div
             className={cs(
@@ -122,22 +146,39 @@ export function GenerativeDisplay({ token, offlineMode = false }: Props) {
             <GenerativePricing token={token} />
             <ListSplits name="Primary split" splits={token.splitsPrimary} />
             <strong>Royalties</strong>
-            <span>{displayRoyalties(token.royalties)}</span>
+            <span className={style.mobile_align_right}>
+              {displayRoyalties(token.royalties)}
+            </span>
             <ListSplits name="Royalties split" splits={token.splitsSecondary} />
-            <strong>Tags</strong>
-            <span>
+            <strong
+              className={cs({
+                [style.mobile_grid_two]: token.tags && token.tags.length > 0,
+              })}
+            >
+              Tags
+            </strong>
+            <span
+              className={cs({
+                [style.mobile_grid_two]: token.tags && token.tags.length > 0,
+                [style.mobile_align_right]: !(
+                  token.tags && token.tags.length > 0
+                ),
+              })}
+            >
               {token.tags && token.tags.length > 0 ? (
                 <Tags tags={token.tags} />
               ) : (
                 <span className={cs(text.info)}>{"/"}</span>
               )}
             </span>
+            <hr />
             <strong>Metadata</strong>
             <a
               target="_blank"
               referrerPolicy="no-referrer"
               href={ipfsGatewayUrl(token.metadataUri)}
-              className={cs(text.info_link)}
+              className={cs(style.metadata, style.mobile_align_right)}
+              rel="noreferrer"
             >
               view on IPFS{" "}
               <i className="fas fa-external-link-square" aria-hidden />
@@ -147,7 +188,7 @@ export function GenerativeDisplay({ token, offlineMode = false }: Props) {
 
           {token.articleMentions && token.articleMentions.length > 0 && (
             <>
-              <Spacing size="2x-large" />
+              <Spacing size="2x-large" sm="x-large" />
               <GenTokArticleMentions mentions={token.articleMentions} />
             </>
           )}

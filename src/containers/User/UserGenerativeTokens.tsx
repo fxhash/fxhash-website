@@ -60,7 +60,7 @@ export function UserGenerativeTokens({
         onTrigger={handleFetchMore}
         canTrigger={!loading && !hasNothingToFetch}
       >
-        <CardsContainer>
+        <CardsContainer cardSize={270}>
           {genToks?.map(token => (
             <GenerativeTokenCard
               key={token.id}
