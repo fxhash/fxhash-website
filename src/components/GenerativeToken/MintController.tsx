@@ -173,32 +173,22 @@ export function MintController({
           )}
         >
           {!hidden && (
-            <>
-              <MintButton
-                token={token}
-                loading={finalLoading}
-                disabled={!enabled || locked}
-                onMint={mint}
-                forceReserveConsumption={forceReserveConsumption}
-              >
-                mint iteration&nbsp;&nbsp;
-                <DisplayTezos
-                  mutez={price}
-                  tezosSize="regular"
-                  formatBig={false}
-                />
-              </MintButton>
-
-              {!finalLoading && (
-                <ButtonIcon
-                  type="button"
-                  icon="fa-sharp fa-solid fa-credit-card"
-                  onClick={openCreditCard}
-                  color="white"
-                  title="Pay with you credit card"
-                />
-              )}
-            </>
+            <MintButton
+              token={token}
+              loading={finalLoading}
+              disabled={!enabled || locked}
+              onMint={mint}
+              forceReserveConsumption={forceReserveConsumption}
+              hasCreditCardOption
+              openCreditCard={openCreditCard}
+            >
+              mint iteration&nbsp;&nbsp;
+              <DisplayTezos
+                mutez={price}
+                tezosSize="regular"
+                formatBig={false}
+              />
+            </MintButton>
           )}
 
           {children}
@@ -207,7 +197,7 @@ export function MintController({
 
       <WinterCheckout
         showModal={showCC}
-        production={false}
+        production={process.env.NEXT_PUBLIC_TZ_NET === "mainnet"}
         projectId={8044}
         gentkId={token.id}
         walletAddress={user?.id}
