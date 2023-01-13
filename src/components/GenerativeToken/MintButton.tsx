@@ -161,6 +161,7 @@ export function MintButton({
           <Button
             type="button"
             size="regular"
+            disabled={disabled}
             onClick={openCreditCard}
             color="secondary"
             title="Pay with you credit card"
