@@ -35,7 +35,6 @@ const _CardNftArticle = ({
   const {
     id,
     title,
-    slug,
     thumbnailUri,
     thumbnailMedia,
     description,
