@@ -1,0 +1,44 @@
+@import "../../styles/Variables";
+
+.button {
+  text-decoration: underline;
+  text-align: left;
+  padding: 0;
+  background: none;
+  border: none;
+  font-weight: bold;
+  color: var(--color-gray);
+  font-size: var(--font-size-regular);
+}
+
+.container {
+  position: relative;
+}
+
+.container_clamping {
+  &:after {
+    content: '';
+    position: absolute;
+    z-index: 1;
+    bottom: 0;
+    left: 0;
+    pointer-events: none;
+    background-image : linear-gradient(to bottom,
+            rgba(var(--rgb-white), 0),
+            rgba(var(--rgb-white), 1) 90%);
+    width: 100%;
+    height: 4em;
+  }
+}
+//:global .dark :local .container_clamping:after {
+//  background-image : linear-gradient(to bottom,
+//          rgba(0,0,0, 0),
+//          rgba(0,0,0, 1) 90%);
+//}
+
+
+@media (max-width: $breakpoint-sm) {
+  .button {
+    width: 100%;
+  }
+}

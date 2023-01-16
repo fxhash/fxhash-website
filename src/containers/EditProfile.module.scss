@@ -1,0 +1,45 @@
+@import "../styles/Variables.scss";
+
+.form {
+  align-items: center;
+  max-width: 1000px;
+  margin: auto;
+}
+
+.fields {
+  flex-grow: 1;
+}
+
+.input {
+  width: 100%;
+}
+
+.avatar {
+  width: 256px;
+  height: 256px;
+  margin-top: 40px;
+}
+
+.form-header {
+  display: flex;
+  flex-direction: row;
+  gap: var(--layout-margin-big-lg);
+  width: 100%;
+
+  @media (max-width: $breakpoint-md) {
+    flex-direction: column;
+  }
+}
+@media (max-width: $breakpoint-sm) {
+  .form-header {
+    gap: 32px;
+  }
+  .avatar {
+    width: 162px;
+    height: 162px;
+    margin-top: 0;
+  }
+  .button {
+    width: 100%;
+  }
+}
