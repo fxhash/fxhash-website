@@ -15,7 +15,7 @@ import {
 } from "../queries/fragments/generative-token"
 import { Frag_MediaImage } from "../queries/fragments/media"
 import { Frag_UserBadge } from "../queries/fragments/user"
-import { Homepage } from "../containers/Homepage/Homepage";
+import { Homepage } from "../containers/Homepage/Homepage"
 
 interface Props {
   randomGenerativeToken: GenerativeToken | null

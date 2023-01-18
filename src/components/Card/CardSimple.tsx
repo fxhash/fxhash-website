@@ -7,7 +7,7 @@ import style from "./CardSimple.module.scss"
 import { getGenerativeTokenUrl } from "../../utils/generative-token"
 import Link from "next/link"
 import { EntityBadge } from "../User/EntityBadge"
-import cs from "classnames";
+import cs from "classnames"
 
 interface CardSimpleProps {
   className?: string
