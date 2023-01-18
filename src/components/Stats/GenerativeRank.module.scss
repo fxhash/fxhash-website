@@ -29,13 +29,13 @@
     display: flex;
     flex-direction: column;
     font-size: var(--font-size-small);
-    strong {
+    .name {
       display: -webkit-box;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
       overflow: hidden;
     }
-    span {
+    .author {
       display: -webkit-box;
       -webkit-line-clamp: 1;
       -webkit-box-orient: vertical;

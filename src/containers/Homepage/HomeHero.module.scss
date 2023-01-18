@@ -1,0 +1,31 @@
+.container {
+  border-left: 80px solid var(--color-primary);
+  padding-right: 80px;
+  padding-bottom: 102px;
+  display: flex;
+  flex-direction: row;
+  gap: 32px;
+}
+.text {
+  width: 44.7%;
+  padding-left: 64px;
+  & h1 {
+    font-size: 64px;
+    line-height: 1.3125
+  }
+  .description {
+    margin-top: 16px;
+    font-size: var(--font-size-paragraph);
+    line-height: 1.67;
+  }
+}
+.stuff {
+  background-color: gray;
+  flex: 1;
+  aspect-ratio: 1/1;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid black;
+}

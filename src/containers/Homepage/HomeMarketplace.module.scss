@@ -1,0 +1,65 @@
+@import "../../styles/Variables";
+
+.bg {
+  padding-top: 109px;
+  padding-bottom: 80px;
+  background-color: var(--color-gray-vvvlight);
+  .ranks {
+    margin-top: 133px;
+    grid-auto-flow: row;
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+.top {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 80px 32px;
+  margin-top: 32px;
+  & > * {
+    width: 100%;
+  }
+  & > *:not(:nth-child(1n+5)) {
+    grid-column: span 3;
+  }
+  & > *:nth-child(1n+5) {
+    grid-column: span 2;
+  }
+}
+.card_big {
+  font-size: var(--font-size-h4);
+}
+.container_show_more {
+  margin-top: 48px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 24px;
+  hr {
+    flex: 1;
+    border-left: 0;
+    border-top: 3px solid var(--color-gray-vlight);
+  }
+  button {
+    flex-shrink: 0;
+    padding: 0;
+    border: 0;
+    height: auto;
+    background-color: transparent;
+    cursor: pointer;
+    color: var(--color-secondary);
+    font-weight: bold;
+    font-size: var(--font-size-paragraph);
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .bg .ranks {
+    grid-template-columns: repeat(1, 1fr);
+  }
+  .top {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}

@@ -1,0 +1,33 @@
+.bg {
+  padding-top: 145px;
+  padding-bottom: 159px;
+  background-color: var(--color-gray-vvvlight);
+}
+.docs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  margin-top: 56px;
+  & a {
+    display: inline-flex;
+    flex-direction: column;
+    font-size: var(--font-size-h4);
+    & .doc_title span {
+      margin-right: 0.5em;
+    }
+    & .doc_description {
+      margin-top: 18px;
+      text-decoration: none;
+      color: var(--color-black);
+      font-size: var(--font-size-paragraph);
+      line-height: 1.67;
+      font-weight: 400;
+    }
+    &:hover {
+      text-decoration: none;
+      & .doc_title {
+        text-decoration: underline;
+      }
+    }
+  }
+}
