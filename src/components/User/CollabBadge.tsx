@@ -25,6 +25,7 @@ export function CollabBadge(props: Props) {
   } = props
   const [collaborators, setCollaborators] = useState(user.collaborators)
   const [isInitialized, setIsInitialized] = useState(false)
+  const collaboratorsLimit = 3
 
   const [opened, setOpened] = useState<boolean>(false)
   useEffect(() => {
@@ -52,7 +53,7 @@ export function CollabBadge(props: Props) {
         onClick={() => setOpened(!opened)}
         disabled={!toggeable}
       >
-        {collaborators.map((user) => (
+        {collaborators.slice(0, collaboratorsLimit).map((user) => (
           <div key={user.id} className={cs(style.avatar_wrapper)}>
             <Avatar
               image={user.avatarMedia}
