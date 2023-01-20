@@ -43,7 +43,7 @@
       position: relative;
 
       &:not(:first-child) {
-        margin-left: -28px;
+        margin-left: -25px;
       }
 
       .user_name {
@@ -210,17 +210,13 @@
       .avatars {
 
         .overflow_counter {
-          margin-right: -15px;
+          margin-right: -27px;
         }
         .avatars_list {
           margin-left: 37px;
         }
         .avatar_wrapper {
           margin-left: -37px;
-  
-          &.link {
-            margin-left: -75px;
-          }
         }
 
       }
