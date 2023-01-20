@@ -54,36 +54,50 @@ export function CollabBadge(props: Props) {
         onClick={() => setOpened(!opened)}
         disabled={!toggeable}
       >
+        <div className={cs(style.avatars_list)}>
+          {collaborators.slice(0, collaboratorsLimit).map((user) => (
+            <div key={user.id} className={cs(style.avatar_wrapper)}>
+              <Avatar
+                image={user.avatarMedia}
+                uri={user.avatarUri}
+                className={cs(
+                  badgeStyle.avatar,
+                  badgeStyle[`avatar-${size}`],
+                  style.avatar,
+                  classNameAvatar
+                )}
+              />
+              <span className={cs(style.user_name)}>
+                <span className={cs(style.user_name_content)}>
+                  {getUserName(user, 10)}
+                  {isUserVerified(user) && (
+                    <i
+                      aria-hidden
+                      className={cs("fas", "fa-badge-check", style.verified)}
+                    />
+                  )}
+                </span>
+              </span>
+            </div>
+          ))}
+        </div>
+
         {collaborators.length > collaboratorsLimit && (
-          <div className={cs(style.overflow_counter, colors["gray-dark"])}>
+          <div
+            className={cs(
+              style.overflow_counter,
+              colors["gray-dark"],
+              badgeStyle.avatar,
+              badgeStyle[`avatar-${size}`],
+              style.avatar,
+              style.avatar_wrapper,
+              style.link
+            )}
+          >
             +{collaborators.length - collaboratorsLimit}
           </div>
         )}
-        {collaborators.slice(0, collaboratorsLimit).map((user) => (
-          <div key={user.id} className={cs(style.avatar_wrapper)}>
-            <Avatar
-              image={user.avatarMedia}
-              uri={user.avatarUri}
-              className={cs(
-                badgeStyle.avatar,
-                badgeStyle[`avatar-${size}`],
-                style.avatar,
-                classNameAvatar
-              )}
-            />
-            <span className={cs(style.user_name)}>
-              <span className={cs(style.user_name_content)}>
-                {getUserName(user, 10)}
-                {isUserVerified(user) && (
-                  <i
-                    aria-hidden
-                    className={cs("fas", "fa-badge-check", style.verified)}
-                  />
-                )}
-              </span>
-            </span>
-          </div>
-        ))}
+
         <div
           className={cs(
             badgeStyle.avatar,
