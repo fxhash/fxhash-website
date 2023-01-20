@@ -19,6 +19,11 @@
       }
     }
 
+    .overflow_counter {
+      display: flex;
+      margin-left: 25px;
+    }
+
     .avatar_wrapper {
       transition: all 0.3s;
       position: relative;
