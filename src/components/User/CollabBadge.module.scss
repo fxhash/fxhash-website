@@ -22,6 +22,7 @@
     .overflow_counter {
       display: flex;
       margin-left: 25px;
+      word-break: keep-all;
     }
 
     .avatar_wrapper {
