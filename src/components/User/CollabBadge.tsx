@@ -53,6 +53,20 @@ export function CollabBadge(props: Props) {
         onClick={() => setOpened(!opened)}
         disabled={!toggeable}
       >
+        {!toggeable && (
+          <div
+            className={cs(
+              badgeStyle.avatar,
+              badgeStyle[`avatar-${size}`],
+              style.avatar,
+              style.avatar_wrapper,
+              style.link
+            )}
+          >
+            <i className="fa-solid fa-link" aria-hidden />
+          </div>
+        )}
+
         <div className={cs(style.avatars_list)}>
           {collaborators.slice(0, collaboratorsLimit).map((user) => (
             <div key={user.id} className={cs(style.avatar_wrapper)}>
