@@ -1,6 +1,5 @@
 import style from "./CollabBadge.module.scss"
 import badgeStyle from "./UserBadge.module.scss"
-import colors from "../../styles/Colors.module.css"
 import cs from "classnames"
 import { IProps as IEntityBadgeProps } from "./EntityBadge"
 import { Collaboration } from "../../types/entities/User"
@@ -86,7 +85,6 @@ export function CollabBadge(props: Props) {
           <div
             className={cs(
               style.overflow_counter,
-              colors["gray-dark"],
               badgeStyle.avatar,
               badgeStyle[`avatar-${size}`],
               style.avatar,
