@@ -256,6 +256,10 @@
     .avatars {
       flex-direction: row;
 
+      .link:first-of-type {
+        z-index: 1;
+      }
+
       .link:last-of-type {
         display: none;
       }
@@ -273,10 +277,7 @@
 
         .avatar_wrapper {
           margin-left: -20px;
-
-          &:last-child {
-            margin-left: 0;
-          }
+          flex-direction: inherit;
         }
       }
 
@@ -286,7 +287,7 @@
           .user_name {
             margin-left: 10px;
             position: relative;
-            margin-right: -30px;
+            margin-right: -33px;
             width: auto;
           }
         }
