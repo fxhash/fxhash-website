@@ -76,9 +76,6 @@
 
   &.opened {
     .avatars {
-      .overflow_counter {
-        margin-right: -15px;
-      }
       .avatars_list {
         margin-left: 50px;
       }
@@ -86,7 +83,15 @@
         margin-left: -50px;
 
         &.link {
-          margin-left: -75px;
+          margin-left: -50px;
+        }
+
+        &.overflow_counter {
+          margin-right: -35px;
+        }
+
+        &.link.toggler {
+          margin-left: -30px;
         }
       }
     }
@@ -139,6 +144,10 @@
 
     .avatars {
       pointer-events: all;
+    }
+
+    .link.toggler {
+      margin-left: -10px;
     }
   }
 
@@ -208,13 +217,13 @@
       .avatars {
 
         .overflow_counter {
-          margin-right: -27px;
+          margin-right: -35px;
         }
         .avatars_list {
-          margin-left: 37px;
+          margin-left: 35px;
         }
         .avatar_wrapper {
-          margin-left: -37px;
+          margin-left: -33px;
         }
 
       }
