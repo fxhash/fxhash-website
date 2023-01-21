@@ -112,6 +112,7 @@ export function CollabBadge(props: Props) {
 
         <div
           className={cs(
+            style.toggler,
             badgeStyle.avatar,
             badgeStyle[`avatar-${size}`],
             style.avatar,
