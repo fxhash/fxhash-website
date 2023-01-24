@@ -30,6 +30,9 @@
     flex-direction: column;
   }
 }
+.warn {
+  max-width: 800px;
+}
 @media (max-width: $breakpoint-sm) {
   .form-header {
     gap: 32px;
