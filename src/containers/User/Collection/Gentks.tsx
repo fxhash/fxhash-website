@@ -297,7 +297,7 @@ export function UserCollectionGentks({ user }: Props) {
                 </>
               )}
 
-              {!loading && objkts?.length === 0 && <span>No results</span>}
+              {!loading && !objkts?.length && <span>No results</span>}
 
               <InfiniteScrollTrigger
                 onTrigger={handleFetchMore}
