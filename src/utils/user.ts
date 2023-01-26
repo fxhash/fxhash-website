@@ -152,6 +152,18 @@ export const UserDonationAliases: Record<string, Partial<User>> = {
     flag: UserFlag.VERIFIED,
   },
 
+  tz1WnJ5Qk4buxdp6taz2hfWGRLBag7SxtKnV: {
+    id: "tz1WnJ5Qk4buxdp6taz2hfWGRLBag7SxtKnV",
+    name: "Cure Parkinson's",
+    descriptionLight:
+      "Tezos donation address for Cure Parkinson's, a charity which funds research that slows, stops or reverses Parkinson’s",
+    description:
+      "Tezos donation address for Cure Parkinson's, a charity which funds research that slows, stops or reverses Parkinson’s",
+    avatarUri: "ipfs://QmWYEXAF2QAqMqraArxucTg2Rc2batNwrm9dDzdTUC2vs8",
+    donationAddress: true,
+    flag: UserFlag.VERIFIED,
+  },
+
   tz1aPHze1U5BEEKrGYt3dvY6aAQEeiWm8jjK: {
     id: "tz1aPHze1U5BEEKrGYt3dvY6aAQEeiWm8jjK",
     name: "Processing Foundation",

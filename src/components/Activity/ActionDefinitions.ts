@@ -18,6 +18,7 @@ import { ActionUpdateState } from "./Actions/ActionUpdateState"
 import { ActionBurnSupply } from "./Actions/ActionBurnSupply"
 import { ActionOffer } from "./Actions/ActionOffer"
 import { ActionOfferAccepted } from "./Actions/ActionOfferAccepted"
+import { ActionOfferCancelled } from "./Actions/ActionOfferCancelled"
 import { ActionArticleMinted } from "./Actions/ActionArticleMinted"
 import { ActionArticleEditionsTransfered } from "./Actions/ActionArticleTransfered"
 import { ActionArticleUpdated } from "./Actions/ActionArticleUpdated"
@@ -180,7 +181,7 @@ export const ActionDefinitions: Record<TokenActionType, ActionDefinition> = {
   OFFER_CANCELLED: {
     icon: "fa-solid fa-xmark",
     iconColor: "error",
-    render: ActionListingCancelled,
+    render: ActionOfferCancelled,
     predecescence: 0,
     link: ActionLinks.gentk,
   },

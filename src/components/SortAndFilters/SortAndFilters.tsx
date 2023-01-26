@@ -10,6 +10,7 @@ import { FiltersPanel } from "../Exploration/FiltersPanel"
 import { CardsExplorer } from "../Exploration/CardsExplorer"
 import { ExploreTagDef, ExploreTags } from "../Exploration/ExploreTags"
 import { Spacing } from "../Layout/Spacing"
+import { CardSizeSelect } from "../Input/CardSizeSelect"
 
 interface SortAndFiltersChildren {
   refCardsContainer: (node?: Element | null | undefined) => void
@@ -28,6 +29,7 @@ interface SortAndFiltersProps {
   onClearAllTags: () => void
   onSearch: (query: string) => void
   noResults: boolean
+  cardSizeScope?: string
 }
 
 const _SortAndFilters = ({
@@ -39,9 +41,10 @@ const _SortAndFilters = ({
   noResults,
   filterTags,
   onClearAllTags,
+  cardSizeScope,
 }: SortAndFiltersProps) => {
   return (
-    <CardsExplorer>
+    <CardsExplorer cardSizeScope={cardSizeScope}>
       {({
         filtersVisible,
         setFiltersVisible,
@@ -49,6 +52,8 @@ const _SortAndFilters = ({
         refCardsContainer,
         isSearchMinimized,
         setIsSearchMinimized,
+        cardSize,
+        setCardSize,
       }) => (
         <>
           <SearchHeader
@@ -65,6 +70,11 @@ const _SortAndFilters = ({
                 options={sort.options}
                 onChange={sort.onChange}
               />
+            }
+            sizeSelectComp={
+              cardSizeScope && (
+                <CardSizeSelect value={cardSize} onChange={setCardSize} />
+              )
             }
           >
             <SearchInputControlled

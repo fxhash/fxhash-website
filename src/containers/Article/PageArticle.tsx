@@ -115,6 +115,7 @@ const _PageArticle = ({ article, originUrl, isPreview }: PageArticleProps) => {
   // todo [#392] remove article.metadata?.thumbnailCaption
   const thumbnailCaption =
     article.metadata?.thumbnailCaption || article.thumbnailCaption
+
   return (
     <>
       <Head>

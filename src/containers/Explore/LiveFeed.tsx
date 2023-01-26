@@ -181,7 +181,7 @@ export function LiveFeed() {
 
       <Spacing size="6x-large" sm="2x-large" />
 
-      <SectionHeader>
+      <SectionHeader noPadding>
         <TitleHyphen>Recently revealed</TitleHyphen>
       </SectionHeader>
 

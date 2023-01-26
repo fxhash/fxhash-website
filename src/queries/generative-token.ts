@@ -61,6 +61,7 @@ export const Qu_genTokensIncoming = gql`
       id
       ...TokenInfo
       lockEnd
+      mintOpensAt
     }
   }
 `

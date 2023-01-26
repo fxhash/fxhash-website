@@ -3,12 +3,10 @@ import cs from "classnames"
 import {
   PropsWithChildren,
   ReactNode,
-  useCallback,
   useContext,
-  useMemo,
   useState,
+  useMemo,
 } from "react"
-
 import { SettingsContext } from "../../context/Theme"
 import { GenTokLabel } from "../../types/entities/GenerativeToken"
 import { getGenTokWarning } from "../../utils/generative-token"
@@ -18,6 +16,7 @@ import { Image } from "../Image"
 import { WarningLayer } from "../Warning/WarningLayer"
 
 interface Props {
+  className?: string
   tokenLabels?: GenTokLabel[] | null
   image?: MediaImage
   thumbnailUri?: string | null
@@ -27,6 +26,7 @@ interface Props {
 }
 
 export function Card({
+  className,
   tokenLabels,
   image,
   thumbnailUri,
@@ -45,9 +45,13 @@ export function Card({
 
   return (
     <div
-      className={cs(style.container, {
-        [style.hover_effect]: settings.hoverEffectCard,
-      })}
+      className={cs(
+        style.container,
+        {
+          [style.hover_effect]: settings.hoverEffectCard,
+        },
+        className
+      )}
     >
       <div
         className={cs(style["thumbnail-container"], {

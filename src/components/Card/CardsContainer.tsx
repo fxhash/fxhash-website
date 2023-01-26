@@ -1,6 +1,6 @@
 import style from "./CardsContainer.module.scss"
 import cs from "classnames"
-import { forwardRef, HTMLAttributes, PropsWithChildren } from "react"
+import { forwardRef } from "react"
 import { ICardContainerProps } from "../../types/Components/CardsContainer"
 
 interface Props extends ICardContainerProps {}

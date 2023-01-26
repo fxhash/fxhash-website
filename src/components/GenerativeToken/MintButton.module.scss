@@ -1,5 +1,10 @@
 @import "../../styles/Variables";
 
+.btns_wrapper {
+  display: flex;
+  gap: 4px;
+}
+
 .root {
   position: relative;
 }
@@ -31,6 +36,15 @@
     &:hover {
       background-color: var(--color-gray-vlight);
     }
+  }
+}
+
+.credit_card_btn {
+  padding-left: 20px !important;
+  padding-right: 20px !important;
+
+  i {
+    margin-right: 0;
   }
 }
 
