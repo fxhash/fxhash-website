@@ -21,7 +21,7 @@ import { MintButton } from "./MintButton"
 import WinterCheckout from "components/CreditCard/WinterCheckout"
 import { ButtonIcon } from "components/Button/ButtonIcon"
 import { Router, useRouter } from "next/router"
-import { winterCheckoutAppearance } from "../../utils/winter";
+import { winterCheckoutAppearance } from "../../utils/winter"
 
 interface Props {
   token: GenerativeToken
