@@ -31,7 +31,7 @@ interface Props {
   appearance?: Record<string, string | number | undefined>
   onClose?: () => void
   onSuccess?: TSuccess
-  onFinish: () => void
+  onFinish: (data: any) => void
 }
 
 const WinterCheckout: FunctionComponent<Props> = (props) => {
@@ -55,7 +55,7 @@ const WinterCheckout: FunctionComponent<Props> = (props) => {
           onClose?.()
         } else if (data.reveal || data.viewNFTs) {
           console.log(e)
-          onFinish()
+          onFinish(data)
         } else if (data.name === "successfulWinterCheckout") {
           const { transactionHash, amountUSD } = data
           onSuccess?.(transactionHash, amountUSD)

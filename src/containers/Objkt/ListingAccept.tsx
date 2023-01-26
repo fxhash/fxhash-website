@@ -56,12 +56,15 @@ export function ListingAccept({ listing, objkt }: Props) {
     []
   )
 
-  const handleGoToCollection = useCallback(() => {
-    setShowWinterCheckout(false)
-    if (userCtx.user) {
-      router.push(`${getUserProfileLink(userCtx.user)}/collection`)
-    }
-  }, [router, userCtx.user])
+  const handleGoToCollection = useCallback(
+    (data) => {
+      setShowWinterCheckout(false)
+      if (data.tzAddress) {
+        router.push(`/pkh/${data.tzAddress}/collection`)
+      }
+    },
+    [router]
+  )
 
   const callContract = () => {
     call({
