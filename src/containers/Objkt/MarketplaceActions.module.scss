@@ -9,6 +9,13 @@
 .lock_container {
   display: flex;
   align-items: center;
+  gap: 4px;
+}
+
+.infos {
+  color: var(--color-gray);
+  font-size: var(--font-size-small);
+  margin-bottom: 12px;
 }
 
 @media (max-width: $breakpoint-sm) {
