@@ -20,6 +20,7 @@ const EXCLUDE_LAYOUT = [
   "/u/[name]/collection/enjoy",
   "/pkh/[id]/collection/enjoy",
   "/live-minting/*",
+  "/password-protection",
 ]
 
 export function Root({

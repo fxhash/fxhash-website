@@ -71,6 +71,7 @@ export function OfferCreate({ objkt }: Props) {
         <Button
           color={opened ? "primary" : "secondary"}
           onClick={() => setOpened(!opened)}
+          size="regular"
         >
           make offer
         </Button>

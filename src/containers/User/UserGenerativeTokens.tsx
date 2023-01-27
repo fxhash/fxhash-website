@@ -13,55 +13,65 @@ import { GenerativeToken } from "../../types/entities/GenerativeToken"
 import { User } from "../../types/entities/User"
 import { CardsLoading } from "../../components/Card/CardsLoading"
 
-const ITEMS_PER_PAGE = 20;
+const ITEMS_PER_PAGE = 20
 interface Props {
   user: User
 }
-export function UserGenerativeTokens({
-  user,
-}: Props) {
-  const [hasNothingToFetch, setHasNothingToFetch] = useState(false);
+export function UserGenerativeTokens({ user }: Props) {
+  const [hasNothingToFetch, setHasNothingToFetch] = useState(false)
 
   const settings = useContext(SettingsContext)
 
-  const { data, loading, fetchMore } = useQuery<{ user: User }>(Qu_userGenTokens, {
-    notifyOnNetworkStatusChange: true,
-    variables: {
-      id: user.id,
-      skip: 0,
-      take: ITEMS_PER_PAGE
-    },
-    onCompleted: (newData) => {
-      if (!newData?.user?.generativeTokens?.length || newData.user.generativeTokens.length < ITEMS_PER_PAGE) {
-        setHasNothingToFetch(true);
-      }
+  const { data, loading, fetchMore } = useQuery<{ user: User }>(
+    Qu_userGenTokens,
+    {
+      notifyOnNetworkStatusChange: true,
+      variables: {
+        id: user.id,
+        skip: 0,
+        take: ITEMS_PER_PAGE,
+      },
+      onCompleted: (newData) => {
+        if (
+          !newData?.user?.generativeTokens?.length ||
+          newData.user.generativeTokens.length < ITEMS_PER_PAGE
+        ) {
+          setHasNothingToFetch(true)
+        }
+      },
     }
-  })
+  )
 
   // safe access to gentoks
   const genToks = data?.user?.generativeTokens || null
 
   const handleFetchMore = useCallback(async () => {
-    if (loading || hasNothingToFetch) return false;
+    if (loading || hasNothingToFetch) return false
     const { data: newData } = await fetchMore({
       variables: {
         skip: genToks?.length || 0,
         take: ITEMS_PER_PAGE,
       },
-    });
-    if (!newData?.user?.generativeTokens?.length || newData.user.generativeTokens.length < ITEMS_PER_PAGE) {
-      setHasNothingToFetch(true);
+    })
+    if (
+      !newData?.user?.generativeTokens?.length ||
+      newData.user.generativeTokens.length < ITEMS_PER_PAGE
+    ) {
+      setHasNothingToFetch(true)
     }
   }, [fetchMore, genToks?.length, hasNothingToFetch, loading])
 
   return (
-    <div className={cs(layout['padding-big'])}>
+    <div className={cs(layout["padding-big"])}>
+      {!loading && !genToks?.length && (
+        <div>No generative art token made yet</div>
+      )}
       <InfiniteScrollTrigger
         onTrigger={handleFetchMore}
         canTrigger={!loading && !hasNothingToFetch}
       >
         <CardsContainer cardSize={270}>
-          {genToks?.map(token => (
+          {genToks?.map((token) => (
             <GenerativeTokenCard
               key={token.id}
               token={token}
@@ -69,9 +79,10 @@ export function UserGenerativeTokens({
               displayDetails={settings.displayInfosGenerativeCard}
             />
           ))}
-          {loading && CardsLoading({
-            number: ITEMS_PER_PAGE,
-          })}
+          {loading &&
+            CardsLoading({
+              number: ITEMS_PER_PAGE,
+            })}
         </CardsContainer>
       </InfiniteScrollTrigger>
     </div>

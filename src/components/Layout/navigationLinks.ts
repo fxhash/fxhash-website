@@ -45,6 +45,11 @@ export const getProfileLinks = (user: ConnectedUser) => [
     key: "mint-generative",
     label: "mint generative token",
   },
+  {
+    href: "/article/editor/local/new",
+    key: "article-new",
+    label: "mint article",
+  },
   { href: `${getUserProfileLink(user)}`, key: "creations", label: "creations" },
   {
     href: `${getUserProfileLink(user)}/articles`,
