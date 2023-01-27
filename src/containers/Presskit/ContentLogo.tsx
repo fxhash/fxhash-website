@@ -12,6 +12,7 @@ import FxSquareLogoBlackWhiteBg from "../../../public/fxhash-press-kit/png/fx_Bl
 import FxSquareLogoWhiteBlackBg from "../../../public/fxhash-press-kit/png/fx_White square logo on dark background.png"
 import FxFullLogoClearSpace from "../../../public/fxhash-press-kit/fxhash_full_min-clear-spacing.png"
 import FxSquareLogoClearSpace from "../../../public/fxhash-press-kit/fxhash_square_min-clear-spacing.png"
+import { StaticImageData } from "next/image"
 
 interface LogoBoxProps {
   caption?: string
