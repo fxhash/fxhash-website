@@ -98,6 +98,8 @@ export function ListingAccept({ listing, objkt }: Props) {
               size="regular"
               onClick={callContract}
               disabled={locked}
+              className={style.button_purchase}
+              classNameChildren={style.button_purchase_content}
             >
               purchase token -{" "}
               <DisplayTezos
