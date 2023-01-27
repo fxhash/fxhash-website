@@ -13,6 +13,8 @@ import { CardsLoading } from "../../components/Card/CardsLoading"
 import { Qu_genTokListings } from "../../queries/marketplace"
 import { CardsExplorer } from "../../components/Exploration/CardsExplorer"
 import { CardSizeSelect } from "../../components/Input/CardSizeSelect"
+import { useRouter } from "next/router"
+import { buildUrlFromQuery } from "../../utils/url"
 
 const ITEMS_PER_PAGE = 20
 
@@ -45,14 +47,48 @@ function sortValueToSortVariable(val: string) {
 
 interface Props {
   token: GenerativeToken
+  urlQuery: Record<string, string>
 }
 
-export const GenerativeListings = ({ token }: Props) => {
-  const [sortValue, setSortValue] = useState<string>("listingCreatedAt-desc")
+const localStorageKey = "marketplace_generative_sort"
+const getSortFromUrlQuery = (urlQuery: Record<string, string>) => {
+  const { sort } = urlQuery
+
+  // if there is a sort value in the url, pre-select it in the sort input
+  // else, select the default value
+  const loadSortValueFromLocalStorage = localStorage.getItem(localStorageKey)
+  let defaultSortValue =
+    sortOptions.find(
+      (sortOption) => sortOption.value === loadSortValueFromLocalStorage
+    )?.value ?? "listingCreatedAt-desc"
+  if (sort) {
+    return sortOptions.map(({ value }) => value).includes(sort)
+      ? sort
+      : defaultSortValue
+  }
+
+  return defaultSortValue
+}
+
+export const GenerativeListings = ({ token, urlQuery }: Props) => {
+  const [sortValue, setSortValue] = useState(getSortFromUrlQuery(urlQuery))
+  localStorage.setItem(localStorageKey, sortValue)
+  const router = useRouter()
   const sort = useMemo<Record<string, any>>(
     () => sortValueToSortVariable(sortValue),
     [sortValue]
   )
+
+  useEffect(() => {
+    const query: any = {}
+    query.id = router.query.id
+    const sort = encodeURIComponent(sortValue)
+    router.push(
+      { pathname: router.pathname, query },
+      buildUrlFromQuery(router.pathname, { sort: sort }),
+      { shallow: true }
+    )
+  }, [sortValue])
 
   // use to know when to stop loading
   const currentLength = useRef<number>(0)

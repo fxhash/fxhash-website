@@ -31,6 +31,7 @@ import { getImageApiUrl, OG_IMAGE_SIZE } from "../../../components/Image"
 
 interface Props {
   token: GenerativeToken
+  urlQuery: Record<string, string>
 }
 
 const tabs: TabDefinition[] = [
@@ -60,7 +61,7 @@ const actionFilters = {
   type_in: actionTypeFilters,
 }
 
-const GenerativeTokenMarketplace: NextPage<Props> = ({ token }) => {
+const GenerativeTokenMarketplace: NextPage<Props> = ({ token, urlQuery }) => {
   const [tabActive, setTabActive] = useState<number>(0)
 
   // get the display url for og:image
@@ -262,7 +263,7 @@ const GenerativeTokenMarketplace: NextPage<Props> = ({ token }) => {
             <Spacing size="3x-large" sm="x-large" />
             {tabIndex === 0 ? (
               <ClientOnlyEmpty>
-                <GenerativeListings token={token} />
+                <GenerativeListings token={token} urlQuery={urlQuery} />
               </ClientOnlyEmpty>
             ) : tabIndex === 1 ? (
               <ClientOnlyEmpty>
@@ -297,6 +298,7 @@ const GenerativeTokenMarketplace: NextPage<Props> = ({ token }) => {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   let idStr = context.params?.id
+  let urlQuery = context.query
   let token: GenerativeToken | null = null
 
   if (idStr) {
@@ -317,6 +319,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: {
       token: token,
+      urlQuery,
     },
     notFound: !token,
   }
