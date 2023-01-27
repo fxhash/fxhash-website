@@ -54,7 +54,6 @@ const WinterCheckout: FunctionComponent<Props> = (props) => {
         if (data === "closeWinterCheckoutModal") {
           onClose?.()
         } else if (data.reveal || data.viewNFTs) {
-          console.log(e)
           onFinish(data)
         } else if (data.name === "successfulWinterCheckout") {
           const { transactionHash, amountUSD } = data
