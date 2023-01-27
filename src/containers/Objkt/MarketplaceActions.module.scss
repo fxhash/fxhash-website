@@ -17,6 +17,8 @@
   font-size: var(--font-size-small);
   margin-bottom: 12px;
 }
+.button_purchase {}
+.button_purchase_content {}
 
 @media (max-width: $breakpoint-sm) {
   .inputs {
@@ -24,5 +26,11 @@
   }
   .lock_container {
     width: 100%;
+  }
+  .button_purchase {
+    flex: 1;
+  }
+  .button_purchase_content {
+    display: block;
   }
 }
