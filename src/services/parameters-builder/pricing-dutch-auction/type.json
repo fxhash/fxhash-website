@@ -1,0 +1,32 @@
+{
+  "prim": "pair",
+  "args": [
+    { 
+      "prim": "nat",
+      "annots": [
+        "%decrement_duration"
+      ]
+    },
+    { 
+      "prim": "pair", 
+      "args": [
+        { 
+          "prim": "map", 
+          "args": [
+            { "prim": "nat" },
+            { "prim": "mutez" } 
+          ],
+          "annots": [
+            "%levels"
+          ]
+        }, 
+        { 
+          "prim": "timestamp",
+          "annots": [
+            "%opens_at"
+          ]
+        } 
+      ]
+    }
+  ]
+}
