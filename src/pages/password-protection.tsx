@@ -62,13 +62,17 @@ const PasswordProtection: NextPage = () => {
             <p>This deployment requires authentication.</p>
           </div>
           <div className={style.section}>
+            {error && <p className={style.error}>{error}</p>}
             <form onSubmit={handleLogIn}>
-              <input type="password" onChange={handleChangePassword} />
+              <input
+                type="password"
+                onChange={handleChangePassword}
+                placeholder="password"
+              />
               <button disabled={loading}>
-                {loading ? "loading..." : "Log-In"}
+                {loading ? "loading..." : "login"}
               </button>
             </form>
-            {error && <p className={style.error}>{error}</p>}
           </div>
         </div>
       </main>
