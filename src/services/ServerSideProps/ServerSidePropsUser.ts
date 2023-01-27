@@ -67,7 +67,7 @@ export const getServerSidePropsUserById = async (
       user = {
         id: pkh as string,
         description:
-          "This account has not interacted with fxhsh contracts yet.",
+          "This account has not interacted with fxhash contracts yet.",
         type: UserType.REGULAR,
         authorizations: [],
         flag: UserFlag.NONE,
