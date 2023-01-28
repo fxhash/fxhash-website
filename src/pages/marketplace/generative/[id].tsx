@@ -29,9 +29,13 @@ import { GenerativeListings } from "../../../containers/Marketplace/GenerativeLi
 import { GenerativeOffers } from "../../../containers/Marketplace/GenerativeOffers"
 import { getImageApiUrl, OG_IMAGE_SIZE } from "../../../components/Image"
 
+interface Query {
+  sort: string
+}
+
 interface Props {
   token: GenerativeToken
-  urlQuery: Record<string, string>
+  query: Query
 }
 
 const tabs: TabDefinition[] = [
@@ -61,7 +65,7 @@ const actionFilters = {
   type_in: actionTypeFilters,
 }
 
-const GenerativeTokenMarketplace: NextPage<Props> = ({ token, urlQuery }) => {
+const GenerativeTokenMarketplace: NextPage<Props> = ({ token, query }) => {
   const [tabActive, setTabActive] = useState<number>(0)
 
   // get the display url for og:image
@@ -263,7 +267,7 @@ const GenerativeTokenMarketplace: NextPage<Props> = ({ token, urlQuery }) => {
             <Spacing size="3x-large" sm="x-large" />
             {tabIndex === 0 ? (
               <ClientOnlyEmpty>
-                <GenerativeListings token={token} urlQuery={urlQuery} />
+                <GenerativeListings token={token} query={query} />
               </ClientOnlyEmpty>
             ) : tabIndex === 1 ? (
               <ClientOnlyEmpty>
@@ -298,7 +302,8 @@ const GenerativeTokenMarketplace: NextPage<Props> = ({ token, urlQuery }) => {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   let idStr = context.params?.id
-  let urlQuery = context.query
+  const query: any = {}
+  query.sort = context.query
   let token: GenerativeToken | null = null
 
   if (idStr) {
@@ -319,7 +324,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: {
       token: token,
-      urlQuery,
+      query,
     },
     notFound: !token,
   }

@@ -28,6 +28,7 @@ export interface ISettingsProperties {
   nsfw: boolean
   epilepsy: boolean
   layoutMasonry: boolean
+  preferredMarketplaceSorting: boolean
 }
 
 const Colors = {
@@ -112,6 +113,7 @@ const defaultProperties: ISettingsProperties = {
   nsfw: false,
   epilepsy: hasReducedMotion && hasReducedMotion.matches,
   layoutMasonry: false,
+  preferredMarketplaceSorting: true,
 }
 
 const defaultCtx: ISettingsContext = {

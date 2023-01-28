@@ -44,15 +44,18 @@ function sortValueToSortVariable(val: string) {
     [split[0]]: split[1].toUpperCase(),
   }
 }
+interface Query {
+  sort: string
+}
 
 interface Props {
   token: GenerativeToken
-  urlQuery: Record<string, string>
+  query: Query
 }
 
 const localStorageKey = "marketplace_generative_sort"
-const getSortFromUrlQuery = (urlQuery: Record<string, string>) => {
-  const { sort } = urlQuery
+const getSortFromUrlQuery = (query: Query) => {
+  const { sort } = query
 
   // if there is a sort value in the url, pre-select it in the sort input
   // else, select the default value
@@ -70,8 +73,8 @@ const getSortFromUrlQuery = (urlQuery: Record<string, string>) => {
   return defaultSortValue
 }
 
-export const GenerativeListings = ({ token, urlQuery }: Props) => {
-  const [sortValue, setSortValue] = useState(getSortFromUrlQuery(urlQuery))
+export const GenerativeListings = ({ token, query }: Props) => {
+  const [sortValue, setSortValue] = useState(getSortFromUrlQuery(query))
   localStorage.setItem(localStorageKey, sortValue)
   const router = useRouter()
   const sort = useMemo<Record<string, any>>(
