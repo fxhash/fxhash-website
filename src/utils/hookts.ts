@@ -60,7 +60,7 @@ export const useClientEffect = (
   dependencies?: DependencyList
 ): void => {
   if (typeof window !== "undefined") {
-    useEffect(effect, dependencies)
+    useEffect(effect, dependencies) // eslint-disable-line
   }
 }
 
@@ -69,7 +69,7 @@ export const useClientAsyncEffect = (
   dependencies?: any[]
 ): void => {
   if (typeof window !== "undefined") {
-    useAsyncEffect(effect, dependencies)
+    useAsyncEffect(effect, dependencies) // eslint-disable-line
   }
 }
 
