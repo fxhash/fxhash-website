@@ -1,0 +1,34 @@
+@import "../../styles/Variables";
+
+.presentation {
+  max-width: calc(min(100%, 570px));
+
+  i {
+    font-size: 20px;
+  }
+}
+
+.button-cont {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.button {
+  text-align: left;
+
+  i {
+    margin-left: 20px;
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .button-cont {
+    align-items: flex-start;
+  }
+  .button {
+    width: 100%;
+    height: 44px;
+  }
+}
