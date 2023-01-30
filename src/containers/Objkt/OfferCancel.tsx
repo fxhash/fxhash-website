@@ -12,8 +12,14 @@ interface Props {
 }
 
 export function OfferCancel({ offer, objkt }: Props) {
-  const { state, loading: contractLoading, error: contractError, success, call, clear } = 
-    useContractOperation(OfferCancelOperation)
+  const {
+    state,
+    loading: contractLoading,
+    error: contractError,
+    success,
+    call,
+    clear,
+  } = useContractOperation(OfferCancelOperation)
 
   const callContract = () => {
     call({

@@ -30,9 +30,7 @@ export function generativeTokenTezosStoragePointer(
 /**
  * Given a Gentk, outputs the Tezos Storage Pointer properties
  */
-export function gentkTezosStoragePointer(
-  gentk: Objkt
-): ITezosStoragePointer {
+export function gentkTezosStoragePointer(gentk: Objkt): ITezosStoragePointer {
   return {
     contract: getGentkFA2Contract(gentk),
     path: `token_metadata::${gentk.id}`,

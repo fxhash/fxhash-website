@@ -130,9 +130,10 @@ export const GenerativeListings = ({ token }: Props) => {
                   objkts.map((objkt) => (
                     <ObjktCard key={objkt.id} objkt={objkt} />
                   ))}
-                {loading && CardsLoading({
-                  number: ITEMS_PER_PAGE,
-                })}
+                {loading &&
+                  CardsLoading({
+                    number: ITEMS_PER_PAGE,
+                  })}
                 {!loading && objkts?.length === 0 && (
                   <p>No items currently listed</p>
                 )}

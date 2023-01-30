@@ -1,11 +1,15 @@
-import { TzktOperation } from "../../types/Tzkt";
-import { fetchRetry } from "../../utils/network";
-import { API_BLOCKCHAIN_CONTRACT_DETAILS, API_BLOCKCHAIN_CONTRACT_OPERATIONS, API_BLOCKCHAIN_CONTRACT_STORAGE } from "../Blockchain";
-import { ContractIndexingHandler } from "./contract-handlers/ContractHandler";
+import { TzktOperation } from "../../types/Tzkt"
+import { fetchRetry } from "../../utils/network"
+import {
+  API_BLOCKCHAIN_CONTRACT_DETAILS,
+  API_BLOCKCHAIN_CONTRACT_OPERATIONS,
+  API_BLOCKCHAIN_CONTRACT_STORAGE,
+} from "../Blockchain"
+import { ContractIndexingHandler } from "./contract-handlers/ContractHandler"
 
 /**
  * A generic-purpose indexer designed to query Tzkt to process the operations
- * of a contract. It requires to be instanciated with a ContractHandler which 
+ * of a contract. It requires to be instanciated with a ContractHandler which
  * is an object implementing a set of keymethods called at certain moments
  * during the indexing cycle.
  */
@@ -26,7 +30,7 @@ export class Indexer<Result> {
   constructor(
     address: string,
     contractHandler: ContractIndexingHandler<Result>,
-    batchSize: number = 100,
+    batchSize: number = 100
   ) {
     this.address = address
     this.contractHandler = contractHandler
@@ -79,10 +83,9 @@ export class Indexer<Result> {
    */
   async indexOperation(op: TzktOperation) {
     // call the handler corresponding to the EP and update the result
-    const newResult = await this.contractHandler.handlers[op.parameter.entrypoint](
-      op,
-      this.result,
-    )
+    const newResult = await this.contractHandler.handlers[
+      op.parameter.entrypoint
+    ](op, this.result)
     // update the cursor
     this.cursor = op.id
     // eventually trigger an update
@@ -94,7 +97,7 @@ export class Indexer<Result> {
   }
 
   /**
-   * Called to start the indexing process, will only resolve once all the 
+   * Called to start the indexing process, will only resolve once all the
    * operations are indexed
    */
   index(): Promise<Result> {
@@ -107,7 +110,7 @@ export class Indexer<Result> {
             this.address,
             this.cursor,
             Object.keys(this.contractHandler.handlers),
-            this.batchSize,
+            this.batchSize
           )
         )
         const data = await response.json()
@@ -116,7 +119,7 @@ export class Indexer<Result> {
         if (!data || data.length === 0) break
 
         await this.indexOperations(data)
-        
+
         // if the number of operations returned is less than the batch size, we
         // have reached the end
         if (data.length < this.batchSize) {

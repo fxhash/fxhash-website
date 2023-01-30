@@ -5,11 +5,11 @@ import { Button } from "../../components/Button"
 import { Spacing } from "../../components/Layout/Spacing"
 import { StepComponent } from "../../types/Steps"
 import { LinkGuide } from "../../components/Link/LinkGuide"
-import { Checkbox } from "../../components/Input/Checkbox";
-import { useState } from "react";
+import { Checkbox } from "../../components/Input/Checkbox"
+import { useState } from "react"
 
 export const StepHome: StepComponent = ({ onNext }) => {
-  const [confirm, setConfirm] = useState(false);
+  const [confirm, setConfirm] = useState(false)
   return (
     <>
       <p className={cs(style.presentation)}>

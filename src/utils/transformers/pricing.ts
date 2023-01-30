@@ -1,18 +1,21 @@
-import { IPricingDutchAuction, IPricingFixed } from "../../types/entities/Pricing";
-import { GenTokPricingForm } from "../../types/Mint";
+import {
+  IPricingDutchAuction,
+  IPricingFixed,
+} from "../../types/entities/Pricing"
+import { GenTokPricingForm } from "../../types/Mint"
 
 /**
  * Turns a string tezos input into an int number
  */
 export function transformTezosInputToMutezNumber(input: string) {
-  return Math.floor(parseFloat(input)*1000000)
+  return Math.floor(parseFloat(input) * 1000000)
 }
 
 /**
  * Turns a tezos mutez price int into a string/1000000
  */
 export function transformTezosMutezToInputString(mutez: number) {
-  return (mutez/1000000).toString()
+  return (mutez / 1000000).toString()
 }
 
 /**
@@ -23,7 +26,7 @@ export function transformPricingFixedInputToNumbers(
 ): IPricingFixed<number> {
   return {
     price: transformTezosInputToMutezNumber(input.price),
-    opensAt: input.opensAt
+    opensAt: input.opensAt,
   }
 }
 
@@ -42,25 +45,25 @@ export function transformPricingFixedNumbersToString(
 /**
  * Turns the strings in the pricing dutch auction into mutez numbers
  */
- export function transformPricingDutchInputToNumbers(
+export function transformPricingDutchInputToNumbers(
   input: IPricingDutchAuction<string>
 ): IPricingDutchAuction<number> {
   return {
-    levels: input.levels.map(v => transformTezosInputToMutezNumber(v)),
+    levels: input.levels.map((v) => transformTezosInputToMutezNumber(v)),
     decrementDuration: parseInt(input.decrementDuration),
-    opensAt: input.opensAt
+    opensAt: input.opensAt,
   }
 }
 
 /**
  * Turns the mutez numbers in the pricing dutch auction into string tez
  */
- export function transformPricingDutchNumbersToString(
+export function transformPricingDutchNumbersToString(
   input: IPricingDutchAuction<number>
 ): IPricingDutchAuction<string> {
   return {
-    levels: input.levels.map(v => transformTezosMutezToInputString(v)),
-    decrementDuration: (input.decrementDuration/60).toFixed(0),
+    levels: input.levels.map((v) => transformTezosMutezToInputString(v)),
+    decrementDuration: (input.decrementDuration / 60).toFixed(0),
     opensAt: input.opensAt ? new Date(input.opensAt as any) : null,
   }
 }
@@ -73,13 +76,16 @@ export function transformPricingFormToNumbers(
 ): GenTokPricingForm<number> {
   return {
     ...input,
-    pricingFixed: input.pricingFixed ? transformPricingFixedInputToNumbers(
-      input.pricingFixed as IPricingFixed<string>
-    ):null as any,
+    pricingFixed: input.pricingFixed
+      ? transformPricingFixedInputToNumbers(
+          input.pricingFixed as IPricingFixed<string>
+        )
+      : (null as any),
     pricingDutchAuction: input.pricingDutchAuction
-    ? transformPricingDutchInputToNumbers(
-      input.pricingDutchAuction as IPricingDutchAuction<string>
-    ):null as any
+      ? transformPricingDutchInputToNumbers(
+          input.pricingDutchAuction as IPricingDutchAuction<string>
+        )
+      : (null as any),
   }
 }
 
@@ -96,6 +102,6 @@ export function transformPricingNumbersToString(
     ),
     pricingDutchAuction: transformPricingDutchNumbersToString(
       input.pricingDutchAuction as IPricingDutchAuction<number>
-    )
+    ),
   }
 }

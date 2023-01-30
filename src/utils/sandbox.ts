@@ -10,22 +10,21 @@ export async function processZipSandbox(file: File): Promise<SandboxFiles> {
     throw SandboxFileError.WRONG_FORMAT
   }
 
-  // unzip the file 
+  // unzip the file
   let files
   try {
     files = await unzipFile(file)
-  }
-  catch(err) {
+  } catch (err) {
     throw SandboxFileError.FAILED_UNZIP
   }
 
   // assert there is an index.html
-  if (!files['index.html']) {
+  if (!files["index.html"]) {
     throw SandboxFileError.NO_INDEX_HTML
   }
 
   // parse the contents of the HTML using DOMParser API
-  const indexContents = await files['index.html'].text()
+  const indexContents = await files["index.html"].text()
   const parser = new DOMParser()
   const doc = parser.parseFromString(indexContents, "text/html")
 
@@ -48,7 +47,7 @@ export async function processZipSandbox(file: File): Promise<SandboxFiles> {
       files[name] = files[name].slice(0, files[name].size, "image/svg+xml")
     }
     record[name] = {
-      url: URL.createObjectURL(files[name])
+      url: URL.createObjectURL(files[name]),
     }
     if (name === "index.html") {
       record[name].blob = files[name]

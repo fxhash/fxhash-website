@@ -1,14 +1,20 @@
 import { addSeconds, isBefore } from "date-fns"
 import { utcToZonedTime } from "date-fns-tz"
 import { Cycle, CyclesState } from "../types/Cycles"
-import { TimeZone } from "@vvo/tzdb";
+import { TimeZone } from "@vvo/tzdb"
 
 /**
  * Given a Date (with its timezone), and a cycle, outputs true if the cycle is opened
  * at the given date, and false otherwie
  */
-export function isCycleOpenedAt(date: Date, cycle: Cycle, timezone?: TimeZone): boolean {
-  const reference = timezone ? utcToZonedTime(cycle.start, timezone.name) : cycle.start
+export function isCycleOpenedAt(
+  date: Date,
+  cycle: Cycle,
+  timezone?: TimeZone
+): boolean {
+  const reference = timezone
+    ? utcToZonedTime(cycle.start, timezone.name)
+    : cycle.start
 
   // get seconds between the 2 dates
   const diff = (date.getTime() - reference.getTime()) / 1000
@@ -33,7 +39,7 @@ export function isCycleOpenedAt(date: Date, cycle: Cycle, timezone?: TimeZone): 
 export function areCyclesOpenedAt(
   date: Date,
   cycles: Cycle[][],
-  timezone?: TimeZone,
+  timezone?: TimeZone
 ): boolean {
   if (cycles.length === 0) return false
   let opened = false
@@ -48,17 +54,25 @@ export function areCyclesOpenedAt(
 }
 
 export function getCycleIdAt(date: Date, cycle: Cycle): number {
-  return (date.getTime() - cycle.start.getTime()) / 1000 / (cycle.closing+cycle.opening) | 0
+  return (
+    ((date.getTime() - cycle.start.getTime()) /
+      1000 /
+      (cycle.closing + cycle.opening)) |
+    0
+  )
 }
 
 /**
  * Given a cycle, and a time (default = now), returns the Date of the closest
  * closing
  */
-export function getCycleNextClosingTime(cycle: Cycle, time: Date = new Date()): Date {
+export function getCycleNextClosingTime(
+  cycle: Cycle,
+  time: Date = new Date()
+): Date {
   const duration = cycle.opening + cycle.closing
-  const diff = (time.getTime()-cycle.start.getTime()) / 1000 | 0
-  const rem = cycle.opening - diff % duration
+  const diff = ((time.getTime() - cycle.start.getTime()) / 1000) | 0
+  const rem = cycle.opening - (diff % duration)
   // if we are in an opening, then the next closing is during this cycle
   if (rem > 0) {
     return addSeconds(time, rem)
@@ -73,9 +87,12 @@ export function getCycleNextClosingTime(cycle: Cycle, time: Date = new Date()): 
  * Given a cycle, and a time (default = now), returns the Date of the closest
  * opening
  */
-export function getCycleNextOpeningTime(cycle: Cycle, time: Date = new Date()): Date {
+export function getCycleNextOpeningTime(
+  cycle: Cycle,
+  time: Date = new Date()
+): Date {
   const duration = cycle.opening + cycle.closing
-  const diff = (time.getTime()-cycle.start.getTime()) / 1000 | 0
+  const diff = ((time.getTime() - cycle.start.getTime()) / 1000) | 0
   const mod = diff % duration
   return addSeconds(time, duration - mod)
 }
@@ -104,16 +121,13 @@ export function getCyclesState(cycles: Cycle[][]): CyclesState {
   // find the min of each list
 
   // record the closest opening/closing where all the cycles are opened/closed
-  let closestOpening: Date|null = null
-  let closestClosing: Date|null = null
+  let closestOpening: Date | null = null
+  let closestClosing: Date | null = null
 
   // a list of cycles: [[]] => []
   const cyclesList = cycles.reduce((prev, curr) => prev.concat(curr), [])
 
-  let duration,
-      time,
-      closestCycleOpening,
-      closestCycleClosing
+  let duration, time, closestCycleOpening, closestCycleClosing
 
   for (const cycle of cyclesList) {
     // get the closest next opening & closing
@@ -175,12 +189,13 @@ export function getCycleTimeState(
   }
 }
 
-
 /**
  * Returns a number which is how many parts an hour must be sliced to be displayed correctly
  */
-export function getHourDividerFromTimezoneOffset(offsetInMinutes: number): number {
-  if (offsetInMinutes % 60 === 0) return 1;
-  if (offsetInMinutes % 30 === 0) return 2;
-  return 4;
+export function getHourDividerFromTimezoneOffset(
+  offsetInMinutes: number
+): number {
+  if (offsetInMinutes % 60 === 0) return 1
+  if (offsetInMinutes % 30 === 0) return 2
+  return 4
 }

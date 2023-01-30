@@ -11,13 +11,13 @@ interface IMintPassPayload {
 
 export async function apiEventsSignPayload(payload: IMintPassPayload) {
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_EVENTS_ROOT!}/sign-payload`, 
+    `${process.env.NEXT_PUBLIC_API_EVENTS_ROOT!}/sign-payload`,
     {
       method: "POST",
       body: JSON.stringify(payload),
       headers: {
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     }
   )
   if (response.status === 200) {

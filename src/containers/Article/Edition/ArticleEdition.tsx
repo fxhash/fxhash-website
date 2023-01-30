@@ -1,5 +1,11 @@
 import { ArticleEditor } from "../../../containers/Article/Editor/ArticleEditor"
-import React, { FunctionComponent, useCallback, useContext, useEffect, useState } from "react"
+import React, {
+  FunctionComponent,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react"
 import { ArticlesContext } from "../../../context/Articles"
 import { useRouter } from "next/router"
 import { LoaderBlock } from "../../../components/Layout/LoaderBlock"
@@ -12,29 +18,29 @@ interface Props {
   article: NFTArticle
   origin?: string
 }
-const ArticleEdition: FunctionComponent<Props> = ({
-  article,
-  origin,
-}) => {
+const ArticleEdition: FunctionComponent<Props> = ({ article, origin }) => {
   const [hasLoadUpToDate, setHasLoadUpToDate] = useState(false)
   const router = useRouter()
   const { state, dispatch } = useContext(ArticlesContext)
-  const id = ""+article!.id
+  const id = "" + article!.id
 
-  const handleSubmit = useCallback((values) => {
-    dispatch({
-      type: 'save',
-      payload: {
-        id: id,
-        articleForm: values,
-        minted: true,
-      }
-    })
-    router.push(`/article/editor/${id}/preview`)
-  }, [dispatch, router])
+  const handleSubmit = useCallback(
+    (values) => {
+      dispatch({
+        type: "save",
+        payload: {
+          id: id,
+          articleForm: values,
+          minted: true,
+        },
+      })
+      router.push(`/article/editor/${id}/preview`)
+    },
+    [dispatch, router]
+  )
 
   useInit(() => {
-    dispatch({ type: 'loadAll' })
+    dispatch({ type: "loadAll" })
     setHasLoadUpToDate(true)
   })
 
@@ -51,7 +57,7 @@ const ArticleEdition: FunctionComponent<Props> = ({
             id: id,
             articleForm: draft as NFTArticleForm,
             minted: true,
-          }
+          },
         })
       }
     }
@@ -69,11 +75,8 @@ const ArticleEdition: FunctionComponent<Props> = ({
       onSubmit={handleSubmit}
       editMinted
     />
-  ):(
-    <LoaderBlock
-      size="small"
-      height="60vh"
-    />
+  ) : (
+    <LoaderBlock size="small" height="60vh" />
   )
 }
 

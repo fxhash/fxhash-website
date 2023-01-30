@@ -1,4 +1,9 @@
-import { ContractAbstraction, OpKind, Wallet, WalletOperation } from "@taquito/taquito"
+import {
+  ContractAbstraction,
+  OpKind,
+  Wallet,
+  WalletOperation,
+} from "@taquito/taquito"
 import { FxhashContracts } from "../../types/Contracts"
 import { Objkt } from "../../types/entities/Objkt"
 import { displayMutez } from "../../utils/units"
@@ -13,7 +18,7 @@ export type TOfferOperationParams = {
  * List a gentk on the Marketplace
  */
 export class OfferOperation extends ContractOperation<TOfferOperationParams> {
-  marketplaceContract: ContractAbstraction<Wallet>|null = null
+  marketplaceContract: ContractAbstraction<Wallet> | null = null
 
   async prepare() {
     this.marketplaceContract = await this.manager.getContract(
@@ -30,11 +35,13 @@ export class OfferOperation extends ContractOperation<TOfferOperationParams> {
       price: this.params.price,
     }).send({
       mutez: true,
-      amount: this.params.price
+      amount: this.params.price,
     })
   }
 
   success(): string {
-    return `You have made an offer of ${displayMutez(this.params.price)} tez on ${this.params.token.name}`
+    return `You have made an offer of ${displayMutez(
+      this.params.price
+    )} tez on ${this.params.token.name}`
   }
 }

@@ -4,11 +4,8 @@ import { LiveMintingProvider } from "../../context/LiveMinting"
 import { MessageCenterContext } from "../../context/MessageCenter"
 import { LiveMintingGuard } from "./LiveMintingGuard"
 
-type Props = PropsWithChildren<{
-}>
-export function LiveMintingRoot({
-  children,
-}: Props) {
+type Props = PropsWithChildren<{}>
+export function LiveMintingRoot({ children }: Props) {
   // we hide the warnings in the message center to make a better flow
   const messageCenter = useContext(MessageCenterContext)
   useEffect(() => {
@@ -20,9 +17,7 @@ export function LiveMintingRoot({
   return (
     <LiveMintingProvider>
       <LiveMintingGuard>
-        <LiveMintingWalletGuard>
-          {children}
-        </LiveMintingWalletGuard>
+        <LiveMintingWalletGuard>{children}</LiveMintingWalletGuard>
       </LiveMintingGuard>
     </LiveMintingProvider>
   )
