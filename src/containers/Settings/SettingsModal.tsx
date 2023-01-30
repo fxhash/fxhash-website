@@ -12,10 +12,15 @@ interface PropsTabWrapper {
 }
 function TabWrapper({
   children,
+  onClick,
   ...props
 }: PropsWithChildren<PropsTabWrapper>) {
   return (
-    <div {...props} className={cs(props.className, style.tab)}>
+    <div
+      {...props}
+      className={cs(props.className, style.tab)}
+      onClick={onClick}
+    >
       {children}
     </div>
   )

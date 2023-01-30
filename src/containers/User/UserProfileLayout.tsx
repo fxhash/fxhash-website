@@ -15,9 +15,11 @@ import { getImageApiUrl, OG_IMAGE_SIZE } from "../../components/Image"
 
 type TabWrapperProps = PropsWithChildren<LinkProps> &
   HTMLAttributes<HTMLAnchorElement>
-const TabWrapper = ({ children, ...props }: TabWrapperProps) => (
+const TabWrapper = ({ children, onClick, ...props }: TabWrapperProps) => (
   <Link {...props}>
-    <a className={props.className}>{children}</a>
+    <a className={props.className} onClick={onClick}>
+      {children}
+    </a>
   </Link>
 )
 
