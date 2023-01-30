@@ -1,5 +1,8 @@
 import type { BigNumber } from "bignumber.js"
-import { TInputReserve, TInputUpdateReserve } from "../../services/parameters-builder/update-reserve/input"
+import {
+  TInputReserve,
+  TInputUpdateReserve,
+} from "../../services/parameters-builder/update-reserve/input"
 
 export function transformReserveBigNumbers(
   input: TInputReserve<BigNumber>
@@ -16,8 +19,8 @@ export function transformUpdateReserveBigNumbers(
 ): TInputUpdateReserve<number> {
   return {
     issuer_id: bnInput.issuer_id.toNumber(),
-    reserves: bnInput.reserves.map(
-      reserve => transformReserveBigNumbers(reserve)
-    )
+    reserves: bnInput.reserves.map((reserve) =>
+      transformReserveBigNumbers(reserve)
+    ),
   }
 }

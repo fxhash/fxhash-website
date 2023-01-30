@@ -156,7 +156,6 @@ export function Tabs({
           )
         })}
       </nav>
-
     </div>
   )
 }

@@ -3,4 +3,6 @@ export interface IValidationOutput {
   errors?: string[]
 }
 
-export type TValidationFunction<InputType> = (input: InputType) => IValidationOutput
+export type TValidationFunction<InputType> = (
+  input: InputType
+) => IValidationOutput

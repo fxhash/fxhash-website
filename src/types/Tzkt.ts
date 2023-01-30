@@ -1,28 +1,28 @@
 export type TzktBigmapAction = "add_key" | "update_key" | "remove_key"
 
 export interface TzktBigmapUpdate<T> {
-  id: number,
-  level: number,
-  timestamp: string,
-  bigmap: number,
+  id: number
+  level: number
+  timestamp: string
+  bigmap: number
   contract: {
-    alias: string,
-    address: string,
-  },
-  path: string,
-  action: TzktBigmapAction,
+    alias: string
+    address: string
+  }
+  path: string
+  action: TzktBigmapAction
   content: T
 }
 
 export interface TzktBigmapOfferContent {
-  hash: string,
-  key: string,
+  hash: string
+  key: string
   value: {
-    price: string,
-    issuer: string,
-    creator: string,
-    objkt_id: string,
-    royalties: string,
+    price: string
+    issuer: string
+    creator: string
+    objkt_id: string
+    royalties: string
     objkt_amount: string
   }
 }

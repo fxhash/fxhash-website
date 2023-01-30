@@ -1,4 +1,9 @@
-import { ContractAbstraction, OpKind, Wallet, WalletOperation } from "@taquito/taquito"
+import {
+  ContractAbstraction,
+  OpKind,
+  Wallet,
+  WalletOperation,
+} from "@taquito/taquito"
 import { Listing } from "../../types/entities/Listing"
 import { Objkt } from "../../types/entities/Objkt"
 import { getListingAcceptEp, getListingFA2Contract } from "../../utils/listing"
@@ -29,11 +34,13 @@ export class ListingAcceptOperation extends ContractOperation<TListingAcceptOper
       this.params.listing.id
     ).send({
       amount: this.params.listing.price,
-      mutez: true
+      mutez: true,
     })
   }
 
   success(): string {
-    return `You have bought ${this.params.objkt.name} for ${displayMutez(this.params.listing.price)} tez`
+    return `You have bought ${this.params.objkt.name} for ${displayMutez(
+      this.params.listing.price
+    )} tez`
   }
 }

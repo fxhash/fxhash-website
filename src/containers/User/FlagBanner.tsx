@@ -1,7 +1,9 @@
-import { GenerativeToken, GenTokFlag } from "../../types/entities/GenerativeToken"
+import {
+  GenerativeToken,
+  GenTokFlag,
+} from "../../types/entities/GenerativeToken"
 import { FlagBanner } from "../../components/Flag/FlagBanner"
 import { User, UserFlag } from "../../types/entities/User"
-
 
 function getFlagText(flag: UserFlag): string {
   switch (flag) {
@@ -18,20 +20,22 @@ function getFlagText(flag: UserFlag): string {
 interface Props {
   user: User
 }
-export function UserFlagBanner({
-  user
-}: Props) {
-  const flagged = [UserFlag.MALICIOUS, UserFlag.REVIEW, UserFlag.SUSPICIOUS].includes(user.flag)
+export function UserFlagBanner({ user }: Props) {
+  const flagged = [
+    UserFlag.MALICIOUS,
+    UserFlag.REVIEW,
+    UserFlag.SUSPICIOUS,
+  ].includes(user.flag)
 
   return flagged ? (
     <FlagBanner>
       <h4>Warning ! This User has been flagged</h4>
-      <p>{ getFlagText(user.flag) }</p>
+      <p>{getFlagText(user.flag)}</p>
       {user.moderationReason && (
         <span>
           <strong>Reason:</strong> {user.moderationReason}
         </span>
       )}
     </FlagBanner>
-  ):null
+  ) : null
 }

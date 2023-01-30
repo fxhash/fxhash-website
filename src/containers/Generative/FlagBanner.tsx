@@ -1,6 +1,8 @@
-import { GenerativeToken, GenTokFlag } from "../../types/entities/GenerativeToken"
+import {
+  GenerativeToken,
+  GenTokFlag,
+} from "../../types/entities/GenerativeToken"
 import { FlagBanner } from "../../components/Flag/FlagBanner"
-
 
 function getFlagText(flag: GenTokFlag): string {
   switch (flag) {
@@ -19,9 +21,7 @@ function getFlagText(flag: GenTokFlag): string {
 interface Props {
   token: GenerativeToken
 }
-export function GenerativeFlagBanner({
-  token
-}: Props) {
+export function GenerativeFlagBanner({ token }: Props) {
   const flagged = [
     GenTokFlag.AUTO_DETECT_COPY,
     GenTokFlag.MALICIOUS,
@@ -32,12 +32,12 @@ export function GenerativeFlagBanner({
   return flagged ? (
     <FlagBanner>
       <h4>Warning ! This Generative Token has been flagged</h4>
-      <p>{ getFlagText(token.flag) }</p>
+      <p>{getFlagText(token.flag)}</p>
       {token.moderationReason && (
         <span>
           <strong>Reason</strong>: {token.moderationReason}
         </span>
       )}
     </FlagBanner>
-  ):null
+  ) : null
 }

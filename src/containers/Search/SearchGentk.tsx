@@ -1,6 +1,6 @@
 import React, { memo } from "react"
 import { ExploreGenerativeTokens } from "../ExploreGenerativeTokens"
-import { TabSearchComponentProps } from "./PageSearch";
+import { TabSearchComponentProps } from "./PageSearch"
 
 const _SearchGentk = ({ query, onChangeQuery }: TabSearchComponentProps) => {
   return (

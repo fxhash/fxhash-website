@@ -1,4 +1,8 @@
-import { ContractAbstraction, TransactionWalletOperation, Wallet } from "@taquito/taquito"
+import {
+  ContractAbstraction,
+  TransactionWalletOperation,
+  Wallet,
+} from "@taquito/taquito"
 import { Collaboration } from "../../types/entities/User"
 import { CollaborationProposal } from "../indexing/contract-handlers/CollaborationHandler"
 import { ContractOperation } from "./ContractOperation"
@@ -13,12 +17,10 @@ export type TCollabVoteProposalParams = {
  * Vote for a proposal
  */
 export class CollabVoteProposalOperation extends ContractOperation<TCollabVoteProposalParams> {
-  contract: ContractAbstraction<Wallet>|null = null
+  contract: ContractAbstraction<Wallet> | null = null
 
   async prepare() {
-    this.contract = await this.manager.getContract(
-      this.params.collaboration.id
-    )
+    this.contract = await this.manager.getContract(this.params.collaboration.id)
   }
 
   async call(): Promise<TransactionWalletOperation> {
@@ -29,6 +31,8 @@ export class CollabVoteProposalOperation extends ContractOperation<TCollabVotePr
   }
 
   success(): string {
-    return `You have ${this.params.approval ? "approved" : "rejected"} the proposal for the execution of an operation in your collaboration.`
+    return `You have ${
+      this.params.approval ? "approved" : "rejected"
+    } the proposal for the execution of an operation in your collaboration.`
   }
 }

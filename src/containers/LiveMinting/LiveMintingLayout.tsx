@@ -9,4 +9,3 @@ export const LiveMintingLayout: TPageLayoutComponent = (page) => {
     </LayoutMinimalist>
   )
 }
-

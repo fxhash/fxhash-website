@@ -1,6 +1,6 @@
 export interface IPricingFixed<GNumber = number, GDate = Date> {
   price: GNumber
-  opensAt?: GDate|null
+  opensAt?: GDate | null
 }
 
 export interface IPricingDutchAuction<N = number> {
@@ -8,5 +8,5 @@ export interface IPricingDutchAuction<N = number> {
   restingPrice?: number
   finalPrice?: number
   decrementDuration: N
-  opensAt?: Date|null
+  opensAt?: Date | null
 }

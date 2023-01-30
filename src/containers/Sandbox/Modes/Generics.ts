@@ -9,19 +9,19 @@ import { SandboxFiles } from "../../../types/Sandbox"
 // the list of the different modes the Sandbox can take
 export enum SandboxMode {
   // user provides a full zip file
-  UPLOADED_ZIP    = "UPLOADED_ZIP",
+  UPLOADED_ZIP = "UPLOADED_ZIP",
   // user edits the files in the web browser, starting from a template
-  EDITOR          = "EDITOR" 
+  EDITOR = "EDITOR",
 }
 
 // the list of states the ready state can be
 export enum SandboxReadyState {
   // void state
-  NONE          = "NONE",
+  NONE = "NONE",
   // user provided some input but it's invalid
-  INVALID       = "INVALID",
+  INVALID = "INVALID",
   // user provided some input and it's valid, ready to be minted
-  READY         = "READY"
+  READY = "READY",
 }
 
 export interface SandboxModeProps {

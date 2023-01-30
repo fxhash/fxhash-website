@@ -19,25 +19,28 @@ import { UpdateArticleOperation } from "../../../services/contract-operations/Up
 interface Props {
   article: NFTArticle
 }
-export function ButtonsEditArticle({
-  article,
-}: Props) {
+export function ButtonsEditArticle({ article }: Props) {
   const { user } = useContext(UserContext)
   const { dispatch } = useContext(ArticlesContext)
-  const {
-    post: uploadMetadata,
-    loading: postMetadataLoading
-  } = useFetch<any>(API_FILE__ARTICLE_UPLOAD_METADATA, {
-    cachePolicy: CachePolicies.NO_CACHE,
-  })
+  const { post: uploadMetadata, loading: postMetadataLoading } = useFetch<any>(
+    API_FILE__ARTICLE_UPLOAD_METADATA,
+    {
+      cachePolicy: CachePolicies.NO_CACHE,
+    }
+  )
 
   const {
-    state, success, call: updateArticle, error, loading: mintLoading
+    state,
+    success,
+    call: updateArticle,
+    error,
+    loading: mintLoading,
   } = useContractOperation(UpdateArticleOperation)
 
   const handleClickMint = useCallback(async () => {
     const metadata = {
-      thumbnailCid: article.displayUri && ipfsCidFromUriOrCid(article.displayUri),
+      thumbnailCid:
+        article.displayUri && ipfsCidFromUriOrCid(article.displayUri),
       articleBody: article.body,
       metadata: {
         name: article.title,
@@ -45,7 +48,7 @@ export function ButtonsEditArticle({
         minter: article.metadata.minter,
         tags: article.tags,
         thumbnailCaption: article.thumbnailCaption,
-      }
+      },
     }
     try {
       const { metadataCID } = await uploadMetadata(metadata)
@@ -61,8 +64,8 @@ export function ButtonsEditArticle({
   useEffect(() => {
     if (success) {
       dispatch({
-        type: 'delete',
-        payload: { id: ""+article.id }
+        type: "delete",
+        payload: { id: "" + article.id },
       })
     }
   }, [dispatch, success])
@@ -84,13 +87,8 @@ export function ButtonsEditArticle({
         <div className={style.buttons}>
           {!loading && (
             <Link href={`/article/editor/${article.id}`} passHref>
-              <Button
-                isLink
-                type="button"
-                size="large"
-                color="transparent"
-              >
-                {'< edit'}
+              <Button isLink type="button" size="large" color="transparent">
+                {"< edit"}
               </Button>
             </Link>
           )}
@@ -98,13 +96,13 @@ export function ButtonsEditArticle({
             type="submit"
             size="large-x"
             color="secondary"
-            state={loading ? 'loading' : 'default'}
+            state={loading ? "loading" : "default"}
             onClick={handleClickMint}
           >
             update
           </Button>
         </div>
-      ):(
+      ) : (
         <Submit layout="center">
           <Link href={`${getUserProfileLink(user as User)}/articles`}>
             <Button
@@ -112,7 +110,7 @@ export function ButtonsEditArticle({
               type="button"
               size="large"
               color="secondary"
-              iconComp={<i aria-hidden className="fas fa-arrow-right"/>}
+              iconComp={<i aria-hidden className="fas fa-arrow-right" />}
               iconSide="right"
             >
               open your profile

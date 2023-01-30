@@ -30,10 +30,10 @@ export function LaunchCountdown({
     if (active) {
       const list = (evt: MouseEvent) => {
         if (buttonRef.current && !buttonHovered.current) {
-          const X = (evt.clientX/window.innerWidth) - .5 
-          const Y = (evt.clientY/window.innerHeight) - .5
-          const a = Math.atan2(Y, X) - Math.PI*0.5
-          const W = Math.min(window.innerWidth * 0.3, window.innerHeight*0.4)
+          const X = evt.clientX / window.innerWidth - 0.5
+          const Y = evt.clientY / window.innerHeight - 0.5
+          const a = Math.atan2(Y, X) - Math.PI * 0.5
+          const W = Math.min(window.innerWidth * 0.3, window.innerHeight * 0.4)
           const X2 = Math.cos(a) * W
           const Y2 = Math.sin(a) * W
           trickPos.current.x = lerp(trickPos.current.x, X2, 0.02)
@@ -58,10 +58,7 @@ export function LaunchCountdown({
   )
 
   // are we on a documentation page ?
-  const isDoc = useMemo(
-    () => /^\/doc/.test(router.pathname),
-    [router.pathname]
-  )
+  const isDoc = useMemo(() => /^\/doc/.test(router.pathname), [router.pathname])
 
   return (
     <>
@@ -76,12 +73,12 @@ export function LaunchCountdown({
               style={{
                 transition: "none !important",
               }}
-              onMouseOver={() => buttonHovered.current = true}
-              onMouseLeave={() => buttonHovered.current = false}
+              onMouseOver={() => (buttonHovered.current = true)}
+              onMouseLeave={() => (buttonHovered.current = false)}
             >
               enter fxhash 1.0
             </Button>
-          ):(
+          ) : (
             <>
               <h1>fxhash 1.0 is coming soon</h1>
               <span className={cs(style.countdown)}>
@@ -91,13 +88,11 @@ export function LaunchCountdown({
                   showFull
                 />
               </span>
-              <LinkGuide href="/doc">
-                documentation
-              </LinkGuide>
+              <LinkGuide href="/doc">documentation</LinkGuide>
             </>
           )}
         </div>
-      ):(
+      ) : (
         children
       )}
     </>

@@ -1,9 +1,9 @@
-import { TransactionWalletOperation, WalletOperation } from "@taquito/taquito";
-import { BatchWalletOperation } from "@taquito/taquito/dist/types/wallet/batch-operation";
-import { WalletManager } from "../Wallet";
+import { TransactionWalletOperation, WalletOperation } from "@taquito/taquito"
+import { BatchWalletOperation } from "@taquito/taquito/dist/types/wallet/batch-operation"
+import { WalletManager } from "../Wallet"
 
 /**
- * A Contract Operation defines a set of operations to run at different 
+ * A Contract Operation defines a set of operations to run at different
  * moments of the lifecycle of an operation. When an operation needs to be sent,
  * its corresponding class is instanciated with the operation parameters and
  * the following steps are performed:
@@ -23,7 +23,7 @@ export abstract class ContractOperation<Params> {
     this.manager = manager
     this.params = params
   }
-  
+
   /**
    * Runs the required preparations (such as fetching the contracts to get
    * the entrypoints signature), or any other sync/async operation considered
@@ -31,7 +31,7 @@ export abstract class ContractOperation<Params> {
    * Can store required values in the members of the instance.
    */
   abstract prepare(): Promise<void>
-  
+
   /**
    * The actual calls to the contracts, which results in some Transaction
    * Wallet Operation and can be observed to track the success/failure of
@@ -49,5 +49,7 @@ export abstract class ContractOperation<Params> {
 }
 
 // a generic type for ContractOperation polymorphism
-export type TContractOperation<Params> = 
-  new (manager: WalletManager, params: Params) => ContractOperation<Params>
+export type TContractOperation<Params> = new (
+  manager: WalletManager,
+  params: Params
+) => ContractOperation<Params>
