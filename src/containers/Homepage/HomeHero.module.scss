@@ -1,31 +1,90 @@
+@import "../../styles/Variables";
+
 .container {
-  border-left: 80px solid var(--color-primary);
+  border-left: 40px solid var(--color-primary);
   padding-right: 80px;
-  padding-bottom: 102px;
+  padding-bottom: 0;
+  margin-bottom: 128px;
   display: flex;
   flex-direction: row;
-  gap: 32px;
+  gap: 16px;
 }
 .text {
-  width: 44.7%;
-  padding-left: 64px;
-  & h1 {
-    font-size: 64px;
-    line-height: 1.3125
+  display: flex;
+  flex-direction: column;
+  width: 57%;
+  padding-left: 40px;
+  h1 {
+    max-width: 480px;
   }
   .description {
     margin-top: 16px;
-    font-size: var(--font-size-paragraph);
-    line-height: 1.67;
+    font-size: var(--font-size-regular);
+    line-height: 1.33;
+  }
+  .button {
+    width: fit-content;
+    margin-top: 48px;
+  }
+  .articles {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-top: 36px;
+    h6 {
+      margin-bottom: 8px;
+      font-weight: 400;
+    }
+    a {
+      font-size: var(--font-size-h4);
+    }
+    i {
+      margin-left: 0.5em;
+    }
   }
 }
-.stuff {
-  background-color: gray;
+.right {
   flex: 1;
-  aspect-ratio: 1/1;
+  max-width: 700px;
   display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  border: 3px solid black;
+  flex-direction: column;
+}
+
+@media (max-width: $breakpoint-md) {
+  .container {
+    border-left-width: 25px;
+    padding-right: 50px;
+  }
+  .text {
+    padding-left: 25px;
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .container {
+    border-left: none;
+    padding: 0 20px 20px;
+    flex-direction: column;
+    margin-bottom: 50px;
+  }
+  .text {
+    width: 100%;
+    padding-left: 0;
+    h1 {
+      font-size: var(--font-size-h3);
+    }
+    .button {
+      width: 100%;
+      margin-top: 36px;
+    }
+    .articles a {
+      font-size: var(--font-size-h5);
+    }
+  }
+  .right {
+    max-width: 400px;
+    width: 100%;
+    margin: 48px auto 0;
+  }
 }

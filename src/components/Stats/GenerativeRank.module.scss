@@ -24,6 +24,7 @@
   }
 
   .details {
+    width: 100%;
     overflow-wrap: break-word;
     word-break: break-word;
     display: flex;
@@ -40,6 +41,9 @@
       -webkit-line-clamp: 1;
       -webkit-box-orient: vertical;
       overflow: hidden;
+    }
+    .author_badge {
+      width: 100%;
     }
   }
 

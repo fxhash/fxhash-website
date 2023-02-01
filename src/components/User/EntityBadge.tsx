@@ -6,6 +6,7 @@ export interface IProps {
   user: User
   size?: "small" | "regular" | "big" | "xl"
   prependText?: string
+  topText?: string
   hasLink?: boolean
   hasVerified?: boolean
   className?: string

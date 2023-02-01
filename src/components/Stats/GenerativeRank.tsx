@@ -40,7 +40,7 @@ export function GenerativeRank({
         <div className={cs(style.details)}>
           <strong className={style.name}>{token.name}</strong>
           {showAuthorBadge ? (
-            <div>
+            <div className={style.author_badge}>
               <EntityBadge user={token.author} hasLink size="small" />
             </div>
           ) : (

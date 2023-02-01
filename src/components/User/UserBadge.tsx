@@ -72,6 +72,7 @@ const WrapperDiv = ({
 
 export function UserBadge({
   user,
+  topText,
   prependText,
   size = "regular",
   hasLink = true,
@@ -125,6 +126,7 @@ export function UserBadge({
       )}
 
       <Container className={cs(style.user_infos)}>
+        {topText && <span className={cs(style.user_address)}>{topText}</span>}
         <span className={cs(style.user_name)}>
           {prependText && (
             <span className={cs(style.prepend)}>{prependText}</span>

@@ -1,0 +1,48 @@
+@import "../../styles/Variables";
+
+.cycler {
+  position: relative;
+  padding-top: calc(100% + 105px);
+  & > div {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    transition: 0.3s $timing-cubic all;
+    scale: 0.7;
+    opacity: 0.1;
+    transform-origin: right;
+    will-change: transform, opacity, scale;
+    pointer-events: none;
+    .details {
+      opacity: 0;
+    }
+    .title_url {
+      color: var(--color-black);
+    }
+    h4 {
+      margin-top: 16px;
+    }
+    .iteration {
+      color: var(--color-gray-light);
+    }
+    .users {
+      display: flex;
+      flex-direction: row;
+      margin-top: 14px;
+      flex-wrap: wrap;
+      & > div {
+        flex-shrink: 0;
+        flex-basis: 50%;
+      }
+    }
+    &.is_active {
+      pointer-events: initial;
+      opacity: 1;
+      scale: 1;
+      .details {
+        opacity: 1;
+      }
+    }
+  }
+}

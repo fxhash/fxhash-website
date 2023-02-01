@@ -1,26 +1,24 @@
 @import "../../styles/Variables";
 
 .container {
-  padding-top: 152px;
-  padding-bottom: 60px;
+  padding-top: 96px;
+  padding-bottom: 80px;
 }
 
 .subtitle {
   margin-top: 20px;
-  margin-left: 44px;
-  font-size: var(--font-size-paragraph);
-  line-height: 1.67;
-  @media (max-width: $breakpoint-sm) {
-    margin-left: 0;
-  }
+  margin-bottom: 32px;
+  font-size: var(--font-size-regular);
 }
 
 .cta {
-  margin-top: $spacing-4x-large;
-  margin-bottom: 105px;
+  margin-top: $spacing-x-large;
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
+}
+.explore_more {
+  color: var(--color-black);
 }
 
 .row-responsive-limiter {
@@ -48,7 +46,24 @@
   }
   @media (max-width: $breakpoint-sm) {
     grid-template-columns: repeat(auto-fit, minmax(var(--cards-size), 1fr));
-    & > *:nth-child(1n+3) {
+    & > *:nth-child(1n+5) {
+      display: none;
+    }
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .container {
+    padding-top: 80px;
+    padding-bottom: 68px;
+  }
+  .explore_more {
+    background-color: var(--color-black);
+    width: 100%;
+    color: var(--color-white);
+    text-align: center;
+    padding: 12px 8px;
+    i {
       display: none;
     }
   }

@@ -9,6 +9,8 @@ import { GenerativeTokenMarketStats } from "../../types/entities/GenerativeToken
 import { CardSimple } from "../../components/Card/CardSimple"
 import { Ranks } from "../../components/Stats/Ranks"
 import { GenerativeRank } from "../../components/Stats/GenerativeRank"
+import Skeleton from "../../components/Skeleton"
+import { CardSimpleSkeleton } from "../../components/Card/CardSimpleSkeleton"
 
 type Display = {
   top: GenerativeTokenMarketStats[]
@@ -17,11 +19,11 @@ type Display = {
 const _HomeMarketplace = () => {
   const [showMore, setShowMore] = useState(false)
   const handleToggleShowMore = useCallback(() => setShowMore((old) => !old), [])
-  const { data } = useQuery(Qu_marketStatsCollections, {
+  const { data, loading } = useQuery(Qu_marketStatsCollections, {
     notifyOnNetworkStatusChange: true,
     variables: {
       skip: 0,
-      take: 50,
+      take: 33,
       sort: { secVolumeTz7d: "DESC" },
     },
     pollInterval: 10000,
@@ -32,8 +34,8 @@ const _HomeMarketplace = () => {
     return !stats
       ? { top: [], more: [] }
       : {
-          top: stats.slice(0, 10),
-          more: stats.slice(11),
+          top: stats.slice(0, 9),
+          more: stats.slice(9),
         }
   }, [stats])
 
@@ -45,7 +47,7 @@ const _HomeMarketplace = () => {
           if (!generativeToken) return null
           return (
             <CardSimple
-              className={cs({
+              className={cs(style.card, {
                 [style.card_big]: idx < 4,
               })}
               key={generativeToken.id}
@@ -53,6 +55,9 @@ const _HomeMarketplace = () => {
             />
           )
         })}
+        {loading &&
+          display.top.length === 0 &&
+          [...Array(9)].map((_, idx) => <CardSimpleSkeleton key={idx} />)}
       </div>
       {display.more && (
         <>

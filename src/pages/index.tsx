@@ -26,7 +26,7 @@ interface Props {
 const Home: NextPage<Props> = ({
   randomGenerativeToken,
   generativeTokens,
-  listings,
+  //  listings,
 }) => {
   return (
     <>
@@ -54,7 +54,10 @@ const Home: NextPage<Props> = ({
           content="https://www.fxhash.xyz/images/og/og1.jpg"
         />
       </Head>
-      <Homepage generativeTokens={generativeTokens} />
+      <Homepage
+        randomGenerativeToken={randomGenerativeToken}
+        generativeTokens={generativeTokens}
+      />
     </>
   )
 }
@@ -74,9 +77,21 @@ export async function getServerSideProps() {
       ${Frag_UserBadge}
       query Query($skip: Int, $take: Int, $filters: GenerativeTokenFilter) {
         randomGenerativeToken {
-          ...TokenInfo
-          metadata
-          metadataUri
+          id
+          name
+          ...Author
+          objkts(take: 10) {
+            id
+            iteration
+            slug
+            metadata
+            captureMedia {
+              ...MediaImage
+            }
+            owner {
+              ...UserBadgeInfos
+            }
+          }
         }
         generativeTokens(skip: $skip, take: $take, filters: $filters) {
           ...TokenInfo

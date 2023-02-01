@@ -1,0 +1,14 @@
+@import "../../styles/Variables";
+.progress {
+  position: relative;
+  &_color {
+    position: absolute;
+    overflow: hidden;
+    color: var(--color-primary);
+    will-change: width;
+    transition: 0.3s width $timing-cubic;
+  }
+  &_back {
+    color: inherit;
+  }
+}
