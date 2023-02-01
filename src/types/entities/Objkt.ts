@@ -16,6 +16,7 @@ export interface Objkt {
   generationHash?: string
   duplicate?: boolean
   iteration?: number
+  mintedPrice?: number
   tags: string[]
   name?: string
   slug?: string
@@ -31,7 +32,7 @@ export interface Objkt {
   createdAt: string
   updatedAt: string
   assignedAt: string|null
-  captureMedia?: MediaImage 
+  captureMedia?: MediaImage
 }
 
 export interface ObjktFilters {

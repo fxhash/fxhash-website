@@ -11,6 +11,7 @@ export const Qu_objkt = gql`
       id
       version
       royalties
+      mintedPrice
       royaltiesSplit {
         pct
         user {
