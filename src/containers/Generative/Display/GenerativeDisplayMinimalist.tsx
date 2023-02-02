@@ -13,7 +13,10 @@ import { Labels } from "../../../components/GenerativeToken/Label/Labels"
 import { MintProgress } from "../../../components/Artwork/MintProgress"
 
 interface Props {
-  generateRevealUrl?: (params: { tokenId: number, hash: string | null }) => string,
+  generateRevealUrl?: (params: {
+    tokenId: number
+    hash: string | null
+  }) => string
   token: GenerativeToken
   offlineMode?: boolean
 }
@@ -22,36 +25,29 @@ export function GenerativeDisplayMinimalist({
   token,
   offlineMode = false,
 }: Props) {
-
   return (
     <>
       <div className={cs(style.artwork_header_mobile, layout.break_words)}>
-        <EntityBadge
-          user={token.author}
-          size="regular"
-          toggeable
-        />
-        <Spacing size="2x-small"/>
-        <h3>{ token.name }</h3>
-        <Spacing size="x-large"/>
+        <EntityBadge user={token.author} size="regular" toggeable />
+        <Spacing size="2x-small" />
+        <h3>{token.name}</h3>
+        <Spacing size="x-large" />
       </div>
 
       <div
         className={cs(
-          style.presentation, layout.cols2, layout['responsive-reverse']
-        )
-      }>
+          style.presentation,
+          layout.cols2,
+          layout["responsive-reverse"]
+        )}
+      >
         <div className={cs(style.presentation_details)}>
           <div className={cs(style.artwork_header)}>
-            <EntityBadge
-              user={token.author}
-              size="big"
-              toggeable
-            />
-            <Spacing size="x-large"/>
-            <h3>{ token.name }</h3>
+            <EntityBadge user={token.author} size="big" toggeable />
+            <Spacing size="x-large" />
+            <h3>{token.name}</h3>
           </div>
-          <Spacing size="x-large" sm="none"/>
+          <Spacing size="x-large" sm="none" />
           <div className={style.centered_mint}>
             <MintController
               token={token}
@@ -63,37 +59,32 @@ export function GenerativeDisplayMinimalist({
             />
           </div>
 
-          <Spacing size="4x-large"/>
+          <Spacing size="4x-large" />
 
           <div className={cs(style.multilines)}>
             <div className={cs(layout.buttons_inline)}>
               <strong>Project #{token.id}</strong>
             </div>
             <span className={cs(text.info)}>
-              Published on { format(new Date(token.createdAt), "MMMM d, yyyy' at 'HH:mm") }
+              Published on{" "}
+              {format(new Date(token.createdAt), "MMMM d, yyyy' at 'HH:mm")}
             </span>
-            <Labels labels={token.labels!}/>
+            <Labels labels={token.labels!} />
           </div>
 
-          <Spacing size="regular"/>
+          <Spacing size="regular" />
 
           <div className={cs(style.artwork_details)}>
-            <MintProgress
-              token={token}
-              showReserve
-            />
+            <MintProgress token={token} showReserve />
           </div>
 
-          <Spacing size="large"/>
+          <Spacing size="large" />
 
-          <p>{ nl2br(token.metadata?.description) }</p>
-
+          <p>{nl2br(token.metadata?.description)}</p>
         </div>
 
         <div className={cs(style.presentation_artwork)}>
-          <GenerativeArtwork
-            token={token}
-          />
+          <GenerativeArtwork token={token} />
         </div>
       </div>
     </>

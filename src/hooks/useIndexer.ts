@@ -3,10 +3,9 @@ import useAsyncEffect from "use-async-effect"
 import { ContractIndexingHandler } from "../services/indexing/contract-handlers/ContractHandler"
 import { Indexer } from "../services/indexing/Indexer"
 
-
 export interface IIndexerHookReturn<Result> {
   loading: boolean
-  data: Result|null
+  data: Result | null
   error: boolean
   reIndex: () => Promise<void>
 }
@@ -27,16 +26,16 @@ export interface IIndexerHookReturn<Result> {
 export function useIndexer<Result>(
   contractAddress: string,
   contractHandler: ContractIndexingHandler<Result>,
-  refreshInterval: number|false = false,
+  refreshInterval: number | false = false
 ): IIndexerHookReturn<Result> {
   // true until indexing is fully done
   const [loading, setLoading] = useState<boolean>(true)
   // will be populated with indexing data
-  const [data, setData] = useState<Result|null>(null)
+  const [data, setData] = useState<Result | null>(null)
   // if there's any error, it's set there
   const [error, setError] = useState<boolean>(false)
   // reference to the indexer instance
-  const indexerRef = useRef<Indexer<Result>|null>(null)
+  const indexerRef = useRef<Indexer<Result> | null>(null)
 
   // a function to trigger manually the indexer
   const reIndex = async () => {
@@ -59,26 +58,22 @@ export function useIndexer<Result>(
     }
 
     // instanciates an Indexer with the given contract handler
-    const indexer = new Indexer(
-      contractAddress,
-      contractHandler,
-    )
+    const indexer = new Indexer(contractAddress, contractHandler)
     indexerRef.current = indexer
 
     // stores the indexing result, mostly in case of a periodic refresh
     let result: Result
-    
+
     try {
       // first initialized the indexer (fetches the storage if defined in handler)
       await indexer.init()
-  
+
       // runs the indexing and eventually get some data
       result = await indexer.index()
 
       // the state can be updated with the output data
       isMounted() && updateData(result)
-    }
-    catch(err) {
+    } catch (err) {
       console.error(err)
       isMounted() && setError(true)
     }

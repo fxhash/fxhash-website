@@ -13,7 +13,7 @@ import SocialMediaShare from "../../components/SocialMediaShare/SocialMediaShare
 import { ArticleRevisions } from "./Infos/ArticleRevisions"
 import { ArticleQuickCollect } from "./Infos/ArticleQuickCollect"
 import { Spacing } from "../../components/Layout/Spacing"
-import { getArticleUrl } from "../../utils/entities/articles";
+import { getArticleUrl } from "../../utils/entities/articles"
 
 interface ArticleInfosProps {
   article: NFTArticle

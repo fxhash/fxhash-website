@@ -290,7 +290,7 @@ export const Qu_userSales = gql`
           id
           name
           metadata
-          captureMedia { 
+          captureMedia {
             ...MediaImage
           }
         }

@@ -1,5 +1,12 @@
-import { ContractAbstraction, TransactionWalletOperation, Wallet } from "@taquito/taquito"
-import { FxhashCollabFactoryCalls, FxhashContracts } from "../../types/Contracts"
+import {
+  ContractAbstraction,
+  TransactionWalletOperation,
+  Wallet,
+} from "@taquito/taquito"
+import {
+  FxhashCollabFactoryCalls,
+  FxhashContracts,
+} from "../../types/Contracts"
 import { GenerativeToken } from "../../types/entities/GenerativeToken"
 import { EBuildableParams, pack } from "../parameters-builder/BuildParameters"
 import { ContractOperation } from "./ContractOperation"
@@ -14,18 +21,16 @@ export type TUpdateTokenModOperationParams = {
  * issuer > update_issuer
  */
 export class UpdateTokenModOperation extends ContractOperation<TUpdateTokenModOperationParams> {
-  contract: ContractAbstraction<Wallet>|null = null
+  contract: ContractAbstraction<Wallet> | null = null
 
   async prepare() {
-    this.contract = await this.manager.getContract(
-      FxhashContracts.ISSUER
-    )
+    this.contract = await this.manager.getContract(FxhashContracts.ISSUER)
   }
 
   async call(): Promise<TransactionWalletOperation> {
     return this.contract!.methodsObject.update_token_mod({
       issuer_id: this.params.token.id,
-      tags: this.params.tags
+      tags: this.params.tags,
     }).send()
   }
 

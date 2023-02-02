@@ -13,7 +13,7 @@ export interface HistoryMetadata {
 }
 
 export interface TokenFormat {
-  uri: string,
+  uri: string
   mimeType: string
 }
 
@@ -30,7 +30,7 @@ export interface CaptureSettings {
 export type RawTokenFeatures = Record<string, any>
 
 // only types allowed for token features
-export type TokenFeatureValueType = string|number|boolean
+export type TokenFeatureValueType = string | number | boolean
 
 export interface TokenMetadataFeature {
   name: string
@@ -45,15 +45,17 @@ export interface TokenFeature {
 
 // errors which can be returned during processing RawTokenFeatures into TokenFeatures
 export enum ProcessRawTokenFeatureErrorType {
-  UNKNOWN                     = "UNKNOWN",
-  INVALID_PROPERTY_TYPE       = "INVALID_PROPERTY_TYPE",
-  INVALID_FEATURES_SIGNATURE  = "INVALID_FEATURES_SIGNATURE"
+  UNKNOWN = "UNKNOWN",
+  INVALID_PROPERTY_TYPE = "INVALID_PROPERTY_TYPE",
+  INVALID_FEATURES_SIGNATURE = "INVALID_FEATURES_SIGNATURE",
 }
-export const ProcessRawTokenFeatureErrorTypes = Object.values(ProcessRawTokenFeatureErrorType)
+export const ProcessRawTokenFeatureErrorTypes = Object.values(
+  ProcessRawTokenFeatureErrorType
+)
 
 // the error thrown during Raw Token Features processing
 export type ProcessRawTokenFeatureError = {
-  type: ProcessRawTokenFeatureErrorType,
+  type: ProcessRawTokenFeatureErrorType
   extra?: string
 }
 
@@ -73,9 +75,9 @@ export interface GenerativeTokenMetadata {
   // an authenticity hash given by the backend
   authenticityHash: string
   capture: CaptureSettings
-  settings?: GenTokenSettings|null
-  decimals: number,
-  symbol: string,
+  settings?: GenTokenSettings | null
+  decimals: number
+  symbol: string
   // ADDED STARTING FROM v0.2
   // a fake transaction hash used for the preview
   previewHash?: string
@@ -85,7 +87,6 @@ export interface GenerativeTokenMetadata {
 export interface ObjktMetadata extends GenerativeTokenMetadata {
   features?: TokenMetadataFeature[] | null
 }
-
 
 //
 // Articles

@@ -1,6 +1,5 @@
 import { visit } from "unist-util-visit"
 
-
 /**
  * Replaces the `{{process.env.NAME}}` strings by `process.env.NAME` where
  * process.env is the environment variable array.

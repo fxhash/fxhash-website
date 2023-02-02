@@ -1,8 +1,13 @@
-import { ContractAbstraction, MichelsonMap, TransactionWalletOperation, Wallet } from "@taquito/taquito"
+import {
+  ContractAbstraction,
+  MichelsonMap,
+  TransactionWalletOperation,
+  Wallet,
+} from "@taquito/taquito"
 import { FxhashContracts } from "../../types/Contracts"
 import { ContractOperation } from "./ContractOperation"
 
-type TModContractKey = "user"|"token"|"article"
+type TModContractKey = "user" | "token" | "article"
 
 export type TModerateParams = {
   contract: TModContractKey
@@ -21,7 +26,7 @@ export const mapModKtKeyToContract: Record<TModContractKey, string> = {
  * Updates user profile
  */
 export class ModerateOperation extends ContractOperation<TModerateParams> {
-  contract: ContractAbstraction<Wallet>|null = null
+  contract: ContractAbstraction<Wallet> | null = null
 
   async prepare() {
     this.contract = await this.manager.getContract(
@@ -42,8 +47,7 @@ export class ModerateOperation extends ContractOperation<TModerateParams> {
     // now build contextual parameters based on target contract
     if (contract === "token" || contract === "article") {
       params.token_id = entityId
-    }
-    else {
+    } else {
       params.address = entityId
     }
 

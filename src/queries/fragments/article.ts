@@ -1,7 +1,7 @@
-import { gql } from "@apollo/client";
-import { Frag_UserBadge } from "./user";
-import { Frag_RoyaltySplit } from "./split";
-import { Frag_MediaImage } from "./media";
+import { gql } from "@apollo/client"
+import { Frag_UserBadge } from "./user"
+import { Frag_RoyaltySplit } from "./split"
+import { Frag_MediaImage } from "./media"
 
 export const Frag_ArticleInfosAction = gql`
   fragment ArticleInfosAction on Article {

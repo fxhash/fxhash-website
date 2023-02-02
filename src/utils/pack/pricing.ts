@@ -1,21 +1,21 @@
-import { MichelsonMap } from "@taquito/taquito";
-import { EBuildableParams, pack } from "../../services/parameters-builder/BuildParameters";
-import { TInputPricingDutchAuction } from "../../services/parameters-builder/pricing-dutch-auction/input";
-import { TInputPricingFixed } from "../../services/parameters-builder/pricing-fixed/input";
-import { TInputPricing } from "../../services/parameters-builder/pricing/input";
-import { GenTokPricing } from "../../types/entities/GenerativeToken";
-import { IPricingFixed } from "../../types/entities/Pricing";
-import { GenTokPricingForm } from "../../types/Mint";
-import { genTokPricingToId } from "../generative-token";
-import { transformPricingFixedInputToNumbers } from "../transformers/pricing";
-
+import { MichelsonMap } from "@taquito/taquito"
+import {
+  EBuildableParams,
+  pack,
+} from "../../services/parameters-builder/BuildParameters"
+import { TInputPricingDutchAuction } from "../../services/parameters-builder/pricing-dutch-auction/input"
+import { TInputPricingFixed } from "../../services/parameters-builder/pricing-fixed/input"
+import { TInputPricing } from "../../services/parameters-builder/pricing/input"
+import { GenTokPricing } from "../../types/entities/GenerativeToken"
+import { IPricingFixed } from "../../types/entities/Pricing"
+import { GenTokPricingForm } from "../../types/Mint"
+import { genTokPricingToId } from "../generative-token"
+import { transformPricingFixedInputToNumbers } from "../transformers/pricing"
 
 /**
  * Packs the Pricing details of a PricingFixed form data
  */
-export function packPricingFixed(
-  input: TInputPricingFixed<number>
-): string {
+export function packPricingFixed(input: TInputPricingFixed<number>): string {
   return pack(input, EBuildableParams.PRICING_FIXED)
 }
 
@@ -29,9 +29,7 @@ export function packPricingDutchAuction(
  * Takes some Pricing details as an input and outputs some data ready to be
  * sent to a contract
  */
-export function packPricing(
-  input: GenTokPricingForm<number>
-): TInputPricing {
+export function packPricing(input: GenTokPricingForm<number>): TInputPricing {
   // we pack the pricing details depending on the pricing method
   let details: string
   if (input.pricingMethod === GenTokPricing.FIXED) {
@@ -44,8 +42,7 @@ export function packPricing(
       price: input.pricingFixed.price!,
       opens_at: opens_at,
     })
-  }
-  else if (input.pricingMethod === GenTokPricing.DUTCH_AUCTION) {
+  } else if (input.pricingMethod === GenTokPricing.DUTCH_AUCTION) {
     const levels = new MichelsonMap<number, number>()
     for (let i = 0; i < input.pricingDutchAuction.levels!.length; i++) {
       levels.set(i, input.pricingDutchAuction.levels![i])
@@ -59,6 +56,6 @@ export function packPricing(
 
   return {
     pricing_id: genTokPricingToId(input.pricingMethod!),
-    details: details!
+    details: details!,
   }
 }

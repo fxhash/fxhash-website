@@ -200,7 +200,11 @@ export function EditProfile() {
             </div>
             <Spacing size="3x-large" sm="x-large" />
             <div className={style.warn}>
-              <strong>tzProfiles</strong> can take a while to synchronize, sometimes up to 1 day.<br/>If you've updated your tzProfile recently but the changes are not reflected here, please wait a little bit.
+              <strong>tzProfiles</strong> can take a while to synchronize,
+              sometimes up to 1 day.
+              <br />
+              If you've updated your tzProfile recently but the changes are not
+              reflected here, please wait a little bit.
             </div>
           </Form>
         )}

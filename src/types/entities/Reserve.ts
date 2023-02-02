@@ -1,13 +1,13 @@
 export enum EReserveMethod {
-  WHITELIST         = "WHITELIST",
+  WHITELIST = "WHITELIST",
   // TOKEN_STAKERS     = "TOKEN_STAKERS",
-  MINT_PASS         = "MINT_PASS",
+  MINT_PASS = "MINT_PASS",
 }
 
 export interface IReserve<GNumber = number> {
   data: any
   amount: GNumber
-  method: EReserveMethod,
+  method: EReserveMethod
 }
 
 export interface IReserveMintInput {

@@ -2,7 +2,7 @@ import { TzktOperation } from "../../../types/Tzkt"
 
 export type ContractOperationHandler<Result> = (
   op: TzktOperation,
-  current: Readonly<Result>,
+  current: Readonly<Result>
 ) => Promise<Result>
 
 export interface ContractIndexingHandler<Result> {

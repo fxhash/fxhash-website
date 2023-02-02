@@ -1,4 +1,9 @@
-import { ContractAbstraction, MichelsonMap, TransactionWalletOperation, Wallet } from "@taquito/taquito"
+import {
+  ContractAbstraction,
+  MichelsonMap,
+  TransactionWalletOperation,
+  Wallet,
+} from "@taquito/taquito"
 import { NFTArticle } from "../../types/entities/Article"
 import { FxhashContracts } from "../../types/Contracts"
 import { stringToByteString } from "../../utils/convert"
@@ -13,12 +18,10 @@ export type TUpdateArticleOperationParams = {
  * Mint an unique iteration of a Generative Token
  */
 export class UpdateArticleOperation extends ContractOperation<TUpdateArticleOperationParams> {
-  contract: ContractAbstraction<Wallet>|null = null
+  contract: ContractAbstraction<Wallet> | null = null
 
   async prepare() {
-    this.contract = await this.manager.getContract(
-      FxhashContracts.ARTICLES
-    )
+    this.contract = await this.manager.getContract(FxhashContracts.ARTICLES)
   }
 
   async call(): Promise<TransactionWalletOperation> {
@@ -28,7 +31,7 @@ export class UpdateArticleOperation extends ContractOperation<TUpdateArticleOper
 
     return this.contract!.methodsObject.update_metadata({
       token_id: this.params.article.id,
-      metadata: metadata
+      metadata: metadata,
     }).send()
   }
 

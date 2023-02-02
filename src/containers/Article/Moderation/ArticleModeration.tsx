@@ -7,9 +7,7 @@ import { ArticleFlag, NFTArticle } from "../../../types/entities/Article"
 interface Props {
   article: NFTArticle
 }
-export function ArticleModeration({
-  article,
-}: Props) {
+export function ArticleModeration({ article }: Props) {
   const [show, setShow] = useState<boolean>(false)
 
   return (
@@ -17,7 +15,7 @@ export function ArticleModeration({
       <Button
         type="button"
         size="small"
-        iconComp={<i aria-hidden className="fas fa-gavel"/>}
+        iconComp={<i aria-hidden className="fas fa-gavel" />}
         color="primary"
         onClick={() => setShow(!show)}
       >
@@ -30,7 +28,7 @@ export function ArticleModeration({
           moderationContract="article"
           flags={Object.keys(ArticleFlag).map((flag, idx) => ({
             label: flag,
-            value: idx
+            value: idx,
           }))}
           title="Moderate this Article"
           infoText='With this utility you can force the moderation of this Article. This action can be reversed at any point in time. In case of a doubt, setting the flag "REVIEW" will put the Article in the "Awaiting Moderation" list for further deliberation.'
