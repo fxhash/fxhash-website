@@ -2,12 +2,12 @@ import effect from "../../styles/Effects.module.scss"
 import style from "./Avatar.module.scss"
 import cs from "classnames"
 import { ipfsGatewayUrl } from "../../services/Ipfs"
-import { MouseEventHandler, useMemo, useRef } from "react"
+import { MouseEventHandler, useCallback, useMemo, useRef } from "react"
 
 interface Props {
   currentIpfs?: string
-  file?: File | null
-  onChange: (file: File) => void
+  file?: File | "ipfs" | null
+  onChange: (file: File | null) => void
   className?: string
 }
 
@@ -23,10 +23,15 @@ export function AvatarUpload({
   // - is there a file ? if so get a local url to display it
   // - is there a current ipfs url to display url
   // - url is empty
-  const url = useMemo<string | null>(
-    () => (file ? URL.createObjectURL(file) : ipfsGatewayUrl(currentIpfs)),
-    [currentIpfs, file]
-  )
+  const url = useMemo<string | null>(() => {
+    if (file && file !== "ipfs") {
+      return URL.createObjectURL(file)
+    }
+    if (file === "ipfs") {
+      return ipfsGatewayUrl(currentIpfs)
+    }
+    return null
+  }, [currentIpfs, file])
 
   const onFileChange = () => {
     if (inputFileRef.current) {
@@ -42,8 +47,11 @@ export function AvatarUpload({
     inputFileRef.current?.click()
   }
 
+  const handleRemovePicture = useCallback(() => {
+    onChange(null)
+  }, [onChange])
   return (
-    <>
+    <div className={style.wrapper}>
       <button
         type="button"
         className={cs(
@@ -63,6 +71,15 @@ export function AvatarUpload({
         <span>upload {url ? "a new" : "an"} image</span>
         {url && <i className="fa-solid fa-arrow-up-from-bracket" />}
       </button>
+      {url && (
+        <button
+          type="button"
+          className={style.remove}
+          onClick={handleRemovePicture}
+        >
+          remove image
+        </button>
+      )}
       <input
         ref={inputFileRef}
         type="file"
@@ -71,6 +88,6 @@ export function AvatarUpload({
         accept="image/*"
         onChange={onFileChange}
       />
-    </>
+    </div>
   )
 }

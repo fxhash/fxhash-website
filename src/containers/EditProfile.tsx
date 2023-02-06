@@ -78,7 +78,7 @@ export function EditProfile() {
     }
   }, [safeData])
 
-  const [avatarFile, setAvatarFile] = useState<File | null>(null)
+  const [avatarFile, setAvatarFile] = useState<File | "ipfs" | null>("ipfs")
   const [data, setData] = useState({
     name: user.name || "",
     description: user.description || "",
@@ -103,9 +103,9 @@ export function EditProfile() {
         validationSchema={Schema}
         onSubmit={(values) => {
           const f = new FormData()
-          if (avatarFile) {
+          if (avatarFile && avatarFile !== "ipfs") {
             f.append("avatarFile", avatarFile)
-          } else if (user.avatarUri) {
+          } else if (avatarFile === "ipfs" && user.avatarUri) {
             f.append("avatarIpfs", user.avatarUri)
           }
           f.append("description", values.description)
@@ -200,7 +200,11 @@ export function EditProfile() {
             </div>
             <Spacing size="3x-large" sm="x-large" />
             <div className={style.warn}>
-              <strong>tzProfiles</strong> can take a while to synchronize, sometimes up to 1 day.<br/>If you've updated your tzProfile recently but the changes are not reflected here, please wait a little bit.
+              <strong>tzProfiles</strong> can take a while to synchronize,
+              sometimes up to 1 day.
+              <br />
+              If you've updated your tzProfile recently but the changes are not
+              reflected here, please wait a little bit.
             </div>
           </Form>
         )}

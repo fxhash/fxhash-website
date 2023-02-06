@@ -1,5 +1,9 @@
 @import "../../styles/Variables";
 
+.wrapper {
+  display: flex;
+  flex-direction: column;
+}
 .container {
   border-radius: 999px;
   overflow: hidden;
@@ -70,7 +74,26 @@
   }
 }
 
+.remove {
+  background: none;
+  border: none;
+  color: var(--color-black);
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 4px;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+@media (max-width: $breakpoint-md) {
+  .remove {
+    max-width: 250px;
+  }
+}
 @media (max-width: $breakpoint-sm) {
+  .remove {
+    max-width: 162px;
+  }
   .avatar-upload {
     i {
       height: 48px;
