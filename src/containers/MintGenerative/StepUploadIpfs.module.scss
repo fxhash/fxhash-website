@@ -1,0 +1,23 @@
+@import "../../styles/Variables";
+.btn-cont {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 100%;
+}
+
+.dropzone {
+  padding: 60px 0;
+  width: calc(min(100%, 600px));
+}
+
+@media (max-width: $breakpoint-sm) {
+  .dropzone {
+    padding: 16px;
+    min-height: 0;
+  }
+  .button {
+    width: 100%;
+  }
+}
