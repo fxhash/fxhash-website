@@ -2,6 +2,7 @@
 .progress {
   position: relative;
   &_color {
+    left: 0;
     position: absolute;
     overflow: hidden;
     color: var(--color-primary);

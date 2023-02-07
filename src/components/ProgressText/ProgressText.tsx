@@ -14,10 +14,10 @@ const _ProgressText = ({ children, percent }: ProgressTextProps) => {
   }, [percent])
   return (
     <span className={style.progress}>
+      <span className={style.progress_back}>{children}</span>
       <span className={style.progress_color} style={spanStyle}>
         {children}
       </span>
-      <span className={style.progress_back}>{children}</span>
     </span>
   )
 }

@@ -1,7 +1,6 @@
 @import "../../styles/Variables";
 
 .container {
-  border-left: 40px solid var(--color-primary);
   padding-right: 80px;
   padding-bottom: 0;
   margin-bottom: 128px;
@@ -9,40 +8,10 @@
   flex-direction: row;
   gap: 16px;
 }
-.text {
+.left {
   display: flex;
   flex-direction: column;
-  width: 57%;
-  padding-left: 40px;
-  h1 {
-    max-width: 480px;
-  }
-  .description {
-    margin-top: 16px;
-    font-size: var(--font-size-regular);
-    line-height: 1.33;
-  }
-  .button {
-    width: fit-content;
-    margin-top: 48px;
-  }
-  .articles {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    padding-top: 36px;
-    h6 {
-      margin-bottom: 8px;
-      font-weight: 400;
-    }
-    a {
-      font-size: var(--font-size-h4);
-    }
-    i {
-      margin-left: 0.5em;
-    }
-  }
+  width: 52.76%;
 }
 .right {
   flex: 1;
@@ -50,26 +19,70 @@
   display: flex;
   flex-direction: column;
 }
-
+.text {
+  border-left: 16px solid var(--color-primary);
+  padding-left: 64px;
+  padding-bottom: 48px;
+  padding-top: 30px;
+  h1 {
+    max-width: 480px;
+  }
+  .socials {
+    margin-top: 48px;
+    color: var(--color-gray);
+    font-size: var(--font-size-small);
+  }
+  .description {
+    margin-top: 48px;
+    font-size: var(--font-size-regular);
+    line-height: 1.33;
+    max-width: 400px;
+  }
+  .button {
+    width: fit-content;
+    margin-top: 48px;
+  }
+}
+.articles {
+  padding-left: 80px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding-top: 36px;
+  h6 {
+    margin-bottom: 8px;
+    font-weight: 400;
+  }
+  a {
+    font-size: var(--font-size-h4);
+  }
+  i {
+    margin-left: 0.5em;
+  }
+}
 @media (max-width: $breakpoint-md) {
   .container {
-    border-left-width: 25px;
-    padding-right: 50px;
   }
   .text {
-    padding-left: 25px;
+    padding-left: 34px;
+  }
+  .articles {
+    padding-left: 50px;
   }
 }
 
 @media (max-width: $breakpoint-sm) {
   .container {
-    border-left: none;
     padding: 0 20px 20px;
     flex-direction: column;
     margin-bottom: 50px;
   }
-  .text {
+  .left {
     width: 100%;
+  }
+  .text {
+    border-left: none;
     padding-left: 0;
     h1 {
       font-size: var(--font-size-h3);
@@ -81,6 +94,9 @@
     .articles a {
       font-size: var(--font-size-h5);
     }
+  }
+  .articles {
+    padding-left: 0;
   }
   .right {
     max-width: 400px;
