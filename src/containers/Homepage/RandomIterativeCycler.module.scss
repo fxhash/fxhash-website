@@ -14,6 +14,7 @@
     transform-origin: right;
     will-change: transform, opacity, scale;
     pointer-events: none;
+    z-index: 1;
     .details {
       opacity: 0;
     }
