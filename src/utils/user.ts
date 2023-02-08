@@ -152,6 +152,18 @@ export const UserDonationAliases: Record<string, Partial<User>> = {
     flag: UserFlag.VERIFIED,
   },
 
+  KT1X1jyohFrZyDYWvCPXw9KvWxk2VDwxyg2g: {
+    id: "KT1X1jyohFrZyDYWvCPXw9KvWxk2VDwxyg2g",
+    name: "#TezQuakeAid",
+    descriptionLight:
+      "A Tezos community fundraiser to support relief efforts following the devastating earthquakes in Turkey and Syria.",
+    description:
+      "A Tezos community fundraiser to support relief efforts following the devastating earthquakes in Turkey and Syria.",
+    avatarUri: "ipfs://Qma8htuC4aZQkPW75Mtj5izwFrJcvna1giCbCg3ztC1e9y",
+    donationAddress: true,
+    flag: UserFlag.VERIFIED,
+  },
+
   tz1WnJ5Qk4buxdp6taz2hfWGRLBag7SxtKnV: {
     id: "tz1WnJ5Qk4buxdp6taz2hfWGRLBag7SxtKnV",
     name: "Cure Parkinson's",
