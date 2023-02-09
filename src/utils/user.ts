@@ -139,6 +139,18 @@ export function processTzProfile(data: any): TzProfile | null {
 }
 
 export const UserDonationAliases: Record<string, Partial<User>> = {
+  KT1X1jyohFrZyDYWvCPXw9KvWxk2VDwxyg2g: {
+    id: "KT1X1jyohFrZyDYWvCPXw9KvWxk2VDwxyg2g",
+    name: "#TezQuakeAid",
+    descriptionLight:
+      "A Tezos community fundraiser to support relief efforts following the devastating earthquakes in Turkey and Syria.",
+    description:
+      "A Tezos community fundraiser to support relief efforts following the devastating earthquakes in Turkey and Syria.",
+    avatarUri: "ipfs://Qma8htuC4aZQkPW75Mtj5izwFrJcvna1giCbCg3ztC1e9y",
+    donationAddress: true,
+    flag: UserFlag.VERIFIED,
+  },
+
   tz2JuyvKDbsBvoFfaww7rcUb3qDpvTcZngeD: {
     id: "tz2JuyvKDbsBvoFfaww7rcUb3qDpvTcZngeD",
     name: "Girls Who Code",
@@ -148,18 +160,6 @@ export const UserDonationAliases: Record<string, Partial<User>> = {
       "Girls Who Code is on a mission to close the gender gap in technology and to change the image of what a programmer looks like and does.\n" +
       "With the support of our community, we've been able to reach 500,000 students to date! Your gift helps keep our 3rd–12th grade Clubs running throughout the year and helps fund new pilot programs for our 115,000 college-age alumni.",
     avatarUri: "ipfs://QmUpfKohCAM8A54ero7mUu67UoNyuLeYNoRAMWeh9MmmjD",
-    donationAddress: true,
-    flag: UserFlag.VERIFIED,
-  },
-
-  KT1X1jyohFrZyDYWvCPXw9KvWxk2VDwxyg2g: {
-    id: "KT1X1jyohFrZyDYWvCPXw9KvWxk2VDwxyg2g",
-    name: "#TezQuakeAid",
-    descriptionLight:
-      "A Tezos community fundraiser to support relief efforts following the devastating earthquakes in Turkey and Syria.",
-    description:
-      "A Tezos community fundraiser to support relief efforts following the devastating earthquakes in Turkey and Syria.",
-    avatarUri: "ipfs://Qma8htuC4aZQkPW75Mtj5izwFrJcvna1giCbCg3ztC1e9y",
     donationAddress: true,
     flag: UserFlag.VERIFIED,
   },
