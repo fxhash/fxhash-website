@@ -2,7 +2,14 @@ import style from "./ArticleEditor.module.scss"
 import articleStyle from "../../../components/NFTArticle/NFTArticle.module.scss"
 import cs from "classnames"
 import TextareaAutosize from "react-textarea-autosize"
-import React, { forwardRef, useCallback, useContext, useMemo, useRef, useState } from "react"
+import React, {
+  forwardRef,
+  useCallback,
+  useContext,
+  useMemo,
+  useRef,
+  useState,
+} from "react"
 import { Dropzone } from "../../../components/Input/Dropzone"
 import { Spacing } from "../../../components/Layout/Spacing"
 import { Field } from "../../../components/Form/Field"
@@ -18,28 +25,30 @@ import { FxEditor, NFTArticleForm } from "../../../types/ArticleEditor/Editor"
 import { EditorMedias } from "./EditorMedias"
 import { ImagePolymorphic } from "../../../components/Medias/ImagePolymorphic"
 import { arrayRemoveDuplicates } from "../../../utils/array"
-import { AutosaveArticle } from "./AutosaveArticle";
-import { debounce } from "../../../utils/debounce";
-import { Descendant } from "slate";
-import { LoaderBlock } from "../../../components/Layout/LoaderBlock";
-import useInit from "../../../hooks/useInit";
-import { isUrlLocal } from "../../../utils/files";
-import useConfirmLeavingPage from "../../../hooks/useConfirmLeavingPage";
-import * as Yup from "yup";
-import { countWords, tagsFromString } from "../../../utils/strings";
+import { AutosaveArticle } from "./AutosaveArticle"
+import { debounce } from "../../../utils/debounce"
+import { Descendant } from "slate"
+import { LoaderBlock } from "../../../components/Layout/LoaderBlock"
+import useInit from "../../../hooks/useInit"
+import { isUrlLocal } from "../../../utils/files"
+import useConfirmLeavingPage from "../../../hooks/useConfirmLeavingPage"
+import * as Yup from "yup"
+import { countWords, tagsFromString } from "../../../utils/strings"
 import { UserContext } from "../../UserProvider"
 import { ErrorBlock } from "../../../components/Error/ErrorBlock"
 import { YupSplits } from "../../../utils/yup/splits"
-import { InputText } from "../../../components/Input/InputText";
-import NftArticleEditor from "../../../components/NFTArticle/NFTArticleEditor";
+import { InputText } from "../../../components/Input/InputText"
+import NftArticleEditor from "../../../components/NFTArticle/NFTArticleEditor"
 
 const editorDefaultValue = [
   {
     type: "paragraph",
-    children: [{
-      text: ""
-    }]
-  }
+    children: [
+      {
+        text: "",
+      },
+    ],
+  },
 ]
 
 const defaultValues: NFTArticleForm = {
@@ -51,42 +60,43 @@ const defaultValues: NFTArticleForm = {
   editions: "",
   royalties: "",
   royaltiesSplit: [],
-  tags: []
+  tags: [],
 }
 
 // base schema, common for any kind of edition
 const baseSchemaNftArticleForm = Yup.object().shape({
-  title: Yup.string().required('Required'),
+  title: Yup.string().required("Required"),
   abstract: Yup.string()
-    .required('Required')
-    .test('nbWords', 'Max 500 words', val => countWords(val || '') <= 500),
-  body: Yup.string().required('Required'),
+    .required("Required")
+    .test("nbWords", "Max 500 words", (val) => countWords(val || "") <= 500),
+  body: Yup.string().required("Required"),
   thumbnailUri: Yup.mixed()
     .required("Required")
     .test("thumbnail", "Invalid type", (value) => {
       return typeof value === "string"
     }),
-  thumbnailCaption: Yup.string().nullable()
+  thumbnailCaption: Yup.string().nullable(),
 })
 
 // full schema, used when creating a new article
 const schemaNftArticleForm = baseSchemaNftArticleForm.shape({
-  editions: Yup.number()
-    .required('Required')
-    .min(1, "Min 1 edition"),
+  editions: Yup.number().required("Required").min(1, "Min 1 edition"),
   royalties: Yup.number()
-    .required('Required')
+    .required("Required")
     .min(0, "Min 0%")
     .max(25, "Max 25%"),
   royaltiesSplit: YupSplits,
-  tags: Yup.array().of(Yup.string())
+  tags: Yup.array().of(Yup.string()),
 })
 
 interface ArticleEditorProps {
   localId?: string
   hasLocalAutosave?: boolean
   initialValues?: NFTArticleForm
-  onSubmit: (values: NFTArticleForm, formikHelpers: FormikHelpers<NFTArticleForm>) => (void | Promise<any>)
+  onSubmit: (
+    values: NFTArticleForm,
+    formikHelpers: FormikHelpers<NFTArticleForm>
+  ) => void | Promise<any>
   editMinted?: boolean
 }
 export function ArticleEditor({
@@ -102,23 +112,30 @@ export function ArticleEditor({
   const formik = useFormik({
     initialValues: (() => {
       if (editMinted) {
-        return immutableInitialValues || {...defaultValues}
-      }
-      else {
-        return immutableInitialValues || {
-          ...defaultValues,
-          // we add the user as default target to royalties split
-          royaltiesSplit: user ? [{
-            address: user.id,
-            pct: 1000,
-          }]:[]
-        }
+        return immutableInitialValues || { ...defaultValues }
+      } else {
+        return (
+          immutableInitialValues || {
+            ...defaultValues,
+            // we add the user as default target to royalties split
+            royaltiesSplit: user
+              ? [
+                  {
+                    address: user.id,
+                    pct: 1000,
+                  },
+                ]
+              : [],
+          }
+        )
       }
     })(),
     onSubmit,
-    validationSchema: editMinted ? baseSchemaNftArticleForm : schemaNftArticleForm,
+    validationSchema: editMinted
+      ? baseSchemaNftArticleForm
+      : schemaNftArticleForm,
     validateOnMount: true,
-  });
+  })
   const { values, errors, touched, setFieldValue, setFieldTouched } = formik
   const [medias, setMedias] = useState<IEditorMediaFile[]>([])
   const [initialBody, setInitialBody] = useState<Descendant[] | null>(null)
@@ -134,79 +151,106 @@ export function ArticleEditor({
     }
   }, [])
 
-  const handleChangeBody = useCallback(async (nodes: Descendant[]) => {
-    const getMarkdownFromSlateEditorState = (await import('../../../components/NFTArticle/processor')).getMarkdownFromSlateEditorState
-    const markdown = await getMarkdownFromSlateEditorState(nodes);
-    setFieldTouched('body');
-    await setFieldValue('body', markdown);
-  }, [setFieldTouched, setFieldValue])
-  const debouncedChangeBody = useMemo(() => debounce(handleChangeBody, 800), [handleChangeBody])
+  const handleChangeBody = useCallback(
+    async (nodes: Descendant[]) => {
+      const getMarkdownFromSlateEditorState = (
+        await import("../../../components/NFTArticle/processor")
+      ).getMarkdownFromSlateEditorState
+      const markdown = await getMarkdownFromSlateEditorState(nodes)
+      setFieldTouched("body")
+      await setFieldValue("body", markdown)
+    },
+    [setFieldTouched, setFieldValue]
+  )
+  const debouncedChangeBody = useMemo(
+    () => debounce(handleChangeBody, 800),
+    [handleChangeBody]
+  )
   const handleInitEditor = useCallback((editor) => {
-    setMedias(editor.getUploadedMedias() || []);
+    setMedias(editor.getUploadedMedias() || [])
   }, [])
-  const handleChangeTags = useCallback((e) => {
-    setFieldValue("tags", tagsFromString(e.target.value))
-  }, [setFieldValue])
+  const handleChangeTags = useCallback(
+    (e) => {
+      setFieldValue("tags", tagsFromString(e.target.value))
+    },
+    [setFieldValue]
+  )
 
   // shortcut to the thumbnail uri
   const thumbnail = values.thumbnailUri
 
   // update the thumbnail by creating a local URL from a given file
-  const updateThumbnail = useCallback((file: File|null) => {
-    setFieldValue(
-      "thumbnailUri",
-      file ? URL.createObjectURL(file) : null
-    )
-  }, [setFieldValue])
+  const updateThumbnail = useCallback(
+    (file: File | null) => {
+      setFieldValue("thumbnailUri", file ? URL.createObjectURL(file) : null)
+    },
+    [setFieldValue]
+  )
 
   // add the thumbnail to the list of medias
   const mediasWithThumbnail = useMemo(
-    () => thumbnail ?
-      arrayRemoveDuplicates([
-        {
-          uri: thumbnail,
-          type: "image"
-        } as IEditorMediaFile,
-        ...medias
-      ],
-      (a, b) => a.uri === b.uri
-      ) : medias,
+    () =>
+      thumbnail
+        ? arrayRemoveDuplicates(
+            [
+              {
+                uri: thumbnail,
+                type: "image",
+              } as IEditorMediaFile,
+              ...medias,
+            ],
+            (a, b) => a.uri === b.uri
+          )
+        : medias,
     [thumbnail, medias]
   )
 
   // when a media uri is updated (via IPFS upload)
-  const onMediaUriUpdate = useCallback((target: IEditorMediaFile, uri: string) => {
-    // should the thumbnail be updated ?
-    if (thumbnail === target.uri) {
-      setFieldValue("thumbnailUri", uri);
-    }
-    // update the medias in the editor
+  const onMediaUriUpdate = useCallback(
+    (target: IEditorMediaFile, uri: string) => {
+      // should the thumbnail be updated ?
+      if (thumbnail === target.uri) {
+        setFieldValue("thumbnailUri", uri)
+      }
+      // update the medias in the editor
 
-    editorStateRef.current?.updateMediaUrl(
-      target,
-      uri
-    )
-  }, [setFieldValue, thumbnail])
+      editorStateRef.current?.updateMediaUrl(target, uri)
+    },
+    [setFieldValue, thumbnail]
+  )
 
   useInit(async () => {
-    const getSlateEditorStateFromMarkdown = (await import('../../../components/NFTArticle/processor')).getSlateEditorStateFromMarkdown
-    const editorFromMd = values.body ? await getSlateEditorStateFromMarkdown(values.body) : null;
-    setInitialBody(editorFromMd ? editorFromMd.editorState : editorDefaultValue);
+    const getSlateEditorStateFromMarkdown = (
+      await import("../../../components/NFTArticle/processor")
+    ).getSlateEditorStateFromMarkdown
+    const editorFromMd = values.body
+      ? await getSlateEditorStateFromMarkdown(values.body)
+      : null
+    setInitialBody(editorFromMd ? editorFromMd.editorState : editorDefaultValue)
   })
 
-  const tagsAsString = useMemo(() => (values.tags || []).join(','), [values.tags])
+  const tagsAsString = useMemo(
+    () => (values.tags || []).join(","),
+    [values.tags]
+  )
 
-  const hasLocalMedias = useMemo(() => mediasWithThumbnail.some(media => isUrlLocal(media.uri)), [mediasWithThumbnail]);
-  useConfirmLeavingPage(hasLocalMedias, 'You have unsaved medias, please ensure you upload everything before leaving the page. Are you sure you want to leave?');
+  const hasLocalMedias = useMemo(
+    () => mediasWithThumbnail.some((media) => isUrlLocal(media.uri)),
+    [mediasWithThumbnail]
+  )
+  useConfirmLeavingPage(
+    hasLocalMedias,
+    "You have unsaved medias, please ensure you upload everything before leaving the page. Are you sure you want to leave?"
+  )
 
   // create a list of errors
   const errorsList = useMemo<string[]>(() => {
-    const requiredActions: string[] = [];
+    const requiredActions: string[] = []
 
     if (hasLocalMedias) {
       requiredActions.push("there are medias not uploaded to IPFS")
     }
-    const errorsEntries = Object.entries(errors);
+    const errorsEntries = Object.entries(errors)
     if (errorsEntries.length > 0) {
       errorsEntries.forEach(([key, value]) => {
         requiredActions.push(`${key}: ${value}`)
@@ -221,12 +265,12 @@ export function ArticleEditor({
 
   return (
     <form
-      onSubmit={event => {
+      onSubmit={(event) => {
         event.preventDefault()
         event.stopPropagation()
       }}
     >
-      {hasLocalAutosave && localId &&
+      {hasLocalAutosave && localId && (
         <AutosaveArticle
           id={localId}
           formValues={values}
@@ -234,16 +278,14 @@ export function ArticleEditor({
           onMediasUnsavedClick={scrollToMediasSave}
           isMinted={!!editMinted}
         />
-      }
+      )}
       <Field
         className={style.field}
         classNameError={style.field_error}
         error={touched.title ? errors.title : undefined}
       >
         <div className={cs(style.section_title)}>
-          <span>
-            TITLE
-          </span>
+          <span>TITLE</span>
         </div>
         <TextareaAutosize
           value={values.title}
@@ -256,11 +298,13 @@ export function ArticleEditor({
         />
       </Field>
 
-      <Field className={style.field} classNameError={style.field_error} error={touched.abstract && errors.abstract}>
+      <Field
+        className={style.field}
+        classNameError={style.field_error}
+        error={touched.abstract && errors.abstract}
+      >
         <div className={cs(style.section_title)}>
-          <span>
-            ABSTRACT
-          </span>
+          <span>ABSTRACT</span>
         </div>
         <TextareaAutosize
           name="abstract"
@@ -273,43 +317,37 @@ export function ArticleEditor({
         />
       </Field>
 
-      <Field className={style.field} classNameError={style.field_error} error={errors.thumbnailUri}>
+      <Field
+        className={style.field}
+        classNameError={style.field_error}
+        error={errors.thumbnailUri}
+      >
         <div className={cs(style.section_title)}>
-          <span>
-            THUMBNAIL
-          </span>
+          <span>THUMBNAIL</span>
         </div>
         <Dropzone
           className={cs(style.thumbnail_dropzone, {
-            [style.image_loaded]: !!thumbnail
+            [style.image_loaded]: !!thumbnail,
           })}
           maxSizeMb={20}
           onChange={(files) => updateThumbnail(files?.[0] || null)}
           textDefault={
             thumbnail ? (
-              <ImagePolymorphic
-                uri={thumbnail}
-              />
-            ):(
+              <ImagePolymorphic uri={thumbnail} />
+            ) : (
               <div className={cs(style.placeholder_wrapper)}>
-                <i className="fa-solid fa-image" aria-hidden/>
-                <span>
-                  Select a thumbnail (20mb max)
-                </span>
+                <i className="fa-solid fa-image" aria-hidden />
+                <span>Select a thumbnail (20mb max)</span>
               </div>
             )
           }
           textDrag={
             thumbnail ? (
-              <ImagePolymorphic
-                uri={thumbnail}
-              />
-            ):(
+              <ImagePolymorphic uri={thumbnail} />
+            ) : (
               <div className={cs(style.placeholder_wrapper)}>
-                <i className="fa-solid fa-image" aria-hidden/>
-                <span>
-                  Drop your image
-                </span>
+                <i className="fa-solid fa-image" aria-hidden />
+                <span>Drop your image</span>
               </div>
             )
           }
@@ -326,14 +364,16 @@ export function ArticleEditor({
         />
       </Field>
 
-      <Field className={style.field} classNameError={style.field_error} error={touched.body && errors.body}>
+      <Field
+        className={style.field}
+        classNameError={style.field_error}
+        error={touched.body && errors.body}
+      >
         <div className={cs(style.section_title)}>
-          <span>
-            BODY
-          </span>
+          <span>BODY</span>
         </div>
         <div className={cs(articleStyle.article_wrapper)}>
-          {initialBody ?
+          {initialBody ? (
             <NftArticleEditor
               ref={editorStateRef}
               initialValue={initialBody}
@@ -342,23 +382,27 @@ export function ArticleEditor({
               onChange={debouncedChangeBody}
               onInit={handleInitEditor}
             />
-            : <LoaderBlock size="small" height="20px" />
-          }
+          ) : (
+            <LoaderBlock size="small" height="20px" />
+          )}
         </div>
       </Field>
 
-      <Spacing size="6x-large"/>
+      <Spacing size="6x-large" />
 
-      <div className={cs(style.sep)}/>
+      <div className={cs(style.sep)} />
 
-      <Spacing size="6x-large"/>
+      <Spacing size="6x-large" />
 
       <div className={cs(style.w900)}>
         <Field>
-          <div ref={mediasMarkerRef} className={cs(style.medias_save_marker)}/>
+          <div ref={mediasMarkerRef} className={cs(style.medias_save_marker)} />
           <label>
             Medias ({mediasWithThumbnail.length})
-            <small>Before the article can be published, all the medias within the article must be uploaded to IPFS</small>
+            <small>
+              Before the article can be published, all the medias within the
+              article must be uploaded to IPFS
+            </small>
           </label>
           <EditorMedias
             medias={mediasWithThumbnail}
@@ -369,9 +413,7 @@ export function ArticleEditor({
         <Field>
           <label htmlFor="tags">
             Tags
-            <small>
-              A list of comma-separated values
-            </small>
+            <small>A list of comma-separated values</small>
           </label>
           <InputText
             name="tags"
@@ -420,52 +462,50 @@ export function ArticleEditor({
             </Field>
 
             <Field
-              error={typeof errors.royaltiesSplit === "string"
-                ? errors.royaltiesSplit
-                : undefined
+              error={
+                typeof errors.royaltiesSplit === "string"
+                  ? errors.royaltiesSplit
+                  : undefined
               }
             >
               <label>
                 Royalties Splits
                 <small>
-                  You can also split the proceeds on the secondary (royalties will be divided between the addresses)
+                  You can also split the proceeds on the secondary (royalties
+                  will be divided between the addresses)
                 </small>
               </label>
               <InputSplits
                 value={values.royaltiesSplit}
-                onChange={splits => setFieldValue("royaltiesSplit", splits)}
+                onChange={(splits) => setFieldValue("royaltiesSplit", splits)}
                 sharesTransformer={transformSplitsSum1000}
                 textShares="Shares (out of 1000)"
                 errors={errors.royaltiesSplit as any}
               >
-                {(({ addAddress }) => (
+                {({ addAddress }) => (
                   <div className={cs(style.royalties_last_row)}>
-                    <Donations
-                      onClickDonation={addAddress}
-                    />
+                    <Donations onClickDonation={addAddress} />
                   </div>
-                ))}
+                )}
               </InputSplits>
             </Field>
           </>
         )}
 
-        <Spacing size="3x-large"/>
+        <Spacing size="3x-large" />
 
-        {hasErrors &&
+        {hasErrors && (
           <ErrorBlock
             title="You need to resolve the following errors before you can mint:"
             align="left"
           >
             <ul>
               {errorsList.map((err, idx) => (
-                <li key={idx}>
-                  {err}
-                </li>
+                <li key={idx}>{err}</li>
               ))}
             </ul>
           </ErrorBlock>
-        }
+        )}
         <Submit layout="center">
           <Button
             type="button"

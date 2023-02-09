@@ -1,17 +1,22 @@
-import { ContractAbstraction, MichelsonMap, TransactionWalletOperation, Wallet } from "@taquito/taquito"
+import {
+  ContractAbstraction,
+  MichelsonMap,
+  TransactionWalletOperation,
+  Wallet,
+} from "@taquito/taquito"
 import { ContractOperation } from "./ContractOperation"
 import { mapModKtKeyToContract } from "./Moderate"
 
 export type TResonAddParams = {
   reason: string
-  contract: "user"|"token"|"article"
+  contract: "user" | "token" | "article"
 }
 
 /**
  * Updates user profile
  */
 export class ResonAddOperation extends ContractOperation<TResonAddParams> {
-  contract: ContractAbstraction<Wallet>|null = null
+  contract: ContractAbstraction<Wallet> | null = null
 
   async prepare() {
     this.contract = await this.manager.getContract(
@@ -20,9 +25,7 @@ export class ResonAddOperation extends ContractOperation<TResonAddParams> {
   }
 
   async call(): Promise<TransactionWalletOperation> {
-    return this.contract!.methodsObject.reason_add(
-      this.params.reason
-    ).send()
+    return this.contract!.methodsObject.reason_add(this.params.reason).send()
   }
 
   success(): string {

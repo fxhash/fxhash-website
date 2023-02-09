@@ -1,4 +1,8 @@
-import { ContractAbstraction, TransactionWalletOperation, Wallet } from "@taquito/taquito"
+import {
+  ContractAbstraction,
+  TransactionWalletOperation,
+  Wallet,
+} from "@taquito/taquito"
 import { Collaboration } from "../../types/entities/User"
 import { CollaborationProposal } from "../indexing/contract-handlers/CollaborationHandler"
 import { ContractOperation } from "./ContractOperation"
@@ -11,12 +15,10 @@ export type TCollabWithdrawParams = {
  * Vote for a proposal
  */
 export class CollabWithdrawOperation extends ContractOperation<TCollabWithdrawParams> {
-  contract: ContractAbstraction<Wallet>|null = null
+  contract: ContractAbstraction<Wallet> | null = null
 
   async prepare() {
-    this.contract = await this.manager.getContract(
-      this.params.collaboration.id
-    )
+    this.contract = await this.manager.getContract(this.params.collaboration.id)
   }
 
   async call(): Promise<TransactionWalletOperation> {

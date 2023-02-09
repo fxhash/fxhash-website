@@ -1,17 +1,22 @@
-import { ParseResult } from "papaparse";
+import { ParseResult } from "papaparse"
 
-export const hasCsvMissedColumns = (results: ParseResult<any>, cols: string[]): false | string[] => {
-  if (!results?.meta?.fields) return cols;
+export const hasCsvMissedColumns = (
+  results: ParseResult<any>,
+  cols: string[]
+): false | string[] => {
+  if (!results?.meta?.fields) return cols
   const missingCols = cols.reduce((acc, col) => {
     if (results.meta.fields!.indexOf(col) === -1) {
-      acc.push(col);
+      acc.push(col)
     }
-    return acc;
+    return acc
   }, [] as string[])
-  return missingCols.length > 0 ? missingCols : false;
+  return missingCols.length > 0 ? missingCols : false
 }
-export const getDataFromCsvFile = async (file: File): Promise<ParseResult<any>> => {
-  const Papa = await import('papaparse');
+export const getDataFromCsvFile = async (
+  file: File
+): Promise<ParseResult<any>> => {
+  const Papa = await import("papaparse")
   return new Promise((resolve, reject) => {
     Papa.parse(file, {
       header: true,
@@ -19,15 +24,15 @@ export const getDataFromCsvFile = async (file: File): Promise<ParseResult<any>> 
         return header.trim()
       },
       transform: (col) => {
-        return col.trim();
+        return col.trim()
       },
       skipEmptyLines: true,
-      complete (results, file) {
+      complete(results, file) {
         resolve(results)
       },
-      error (err, file) {
+      error(err, file) {
         reject(err)
-      }
+      },
     })
   })
 }

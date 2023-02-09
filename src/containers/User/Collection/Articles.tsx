@@ -7,7 +7,7 @@ import { NTFArticleLedger } from "../../../types/entities/Article"
 import { User } from "../../../types/entities/User"
 import { CardNftArticle } from "../../../components/Card/CardNFTArticle"
 import { CardNftArticleSkeleton } from "../../../components/Card/CardNFTArticleSkeleton"
-import React from "react";
+import React from "react"
 
 interface Props {
   user: User

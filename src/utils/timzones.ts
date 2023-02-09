@@ -1,6 +1,6 @@
-import { getTimeZones, TimeZone } from "@vvo/tzdb";
+import { getTimeZones, TimeZone } from "@vvo/tzdb"
 
-export const timezones = getTimeZones({ includeUtc: true });
+export const timezones = getTimeZones({ includeUtc: true })
 
 export const timezoneSearchKeys = [
   "name",
@@ -16,17 +16,17 @@ export const timezoneSearchKeys = [
 export function getLocalTimezone(): TimeZone {
   try {
     const localeTzName = Intl.DateTimeFormat().resolvedOptions().timeZone
-    const found = timezones.find(timezone => timezone.name === localeTzName)
+    const found = timezones.find((timezone) => timezone.name === localeTzName)
     if (found) return found
-  }
-  catch {}
-
+  } catch {}
 
   // if we could not identify with the timezone string indicator, use shift
-  const offsetHr = -((new Date().getTimezoneOffset())) | 0
-  const found = timezones.find(timezone => timezone.currentTimeOffsetInMinutes === offsetHr)
+  const offsetHr = -new Date().getTimezoneOffset() | 0
+  const found = timezones.find(
+    (timezone) => timezone.currentTimeOffsetInMinutes === offsetHr
+  )
   if (found) return found
 
   // otherwise simply return UTC
-  return timezones.find(tz => tz.name === "UTC")!
+  return timezones.find((tz) => tz.name === "UTC")!
 }

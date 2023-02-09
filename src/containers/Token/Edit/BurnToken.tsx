@@ -13,32 +13,34 @@ import { getUserProfileLink } from "../../../utils/user"
 import { BurnTokenOperation } from "../../../services/contract-operations/BurnToken"
 import { useContractOperation } from "../../../hooks/useContractOperation"
 
-
 interface Props {
   token: GenerativeToken
 }
 
 export function BurnToken({ token }: Props) {
-  const {
-    call,
-    loading,
-    error,
-    success,
-    state,
-  } = useContractOperation(BurnTokenOperation)
-    
+  const { call, loading, error, success, state } =
+    useContractOperation(BurnTokenOperation)
+
   return (
-    <div className={cs(style.container, {
-      [style.disabled]: !canTokenBeBurned(token)
-    })}>
+    <div
+      className={cs(style.container, {
+        [style.disabled]: !canTokenBeBurned(token),
+      })}
+    >
       <h3 className={cs(colors.primary)}>Burn token</h3>
 
       {canTokenBeBurned(token) ? (
         <p>
-          <strong>This action is irreversible. Token will be deleted from the contract and the indexer. You will be able to mint another token right away.</strong>
+          <strong>
+            This action is irreversible. Token will be deleted from the contract
+            and the indexer. You will be able to mint another token right away.
+          </strong>
         </p>
-      ):(
-        <p>This action is not available anymore because token was minted {token.supply-token.balance} times</p>
+      ) : (
+        <p>
+          This action is not available anymore because token was minted{" "}
+          {token.supply - token.balance} times
+        </p>
       )}
 
       <ContractFeedback
@@ -51,9 +53,11 @@ export function BurnToken({ token }: Props) {
       <Button
         color="primary"
         size="medium"
-        onClick={() => call({
-          token: token,
-        })}
+        onClick={() =>
+          call({
+            token: token,
+          })
+        }
         state={loading ? "loading" : "default"}
         disabled={!canTokenBeBurned(token)}
       >

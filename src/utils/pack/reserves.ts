@@ -1,15 +1,20 @@
 import { MichelsonMap } from "@taquito/michelson-encoder"
-import { EBuildableParams, pack } from "../../services/parameters-builder/BuildParameters"
-import { EReserveMethod, IReserve, IReserveMintInput } from "../../types/entities/Reserve"
+import {
+  EBuildableParams,
+  pack,
+} from "../../services/parameters-builder/BuildParameters"
+import {
+  EReserveMethod,
+  IReserve,
+  IReserveMintInput,
+} from "../../types/entities/Reserve"
 import { mapReserveDefinition } from "../generative-token"
 
 /**
  * Given a reserve from an input form, packs the data of the reserve and outputs
  * it. The packing strategy depends on the reserve method.
  */
-export function packReserveData(
-  input: IReserve<number>
-): string {
+export function packReserveData(input: IReserve<number>): string {
   let packed: string
   switch (input.method) {
     case EReserveMethod.WHITELIST: {
@@ -33,7 +38,7 @@ export function packReserveData(
  */
 export function packMintReserveInput(input: IReserveMintInput) {
   // we pack the reserve input data
-  let packedInput: string|null = null
+  let packedInput: string | null = null
   switch (input.method) {
     case EReserveMethod.WHITELIST: {
       packedInput = null
@@ -46,10 +51,13 @@ export function packMintReserveInput(input: IReserveMintInput) {
   }
 
   // now we pack an input
-  const packed = pack({
-    method_id: mapReserveDefinition[input.method].id,
-    input: packedInput
-  }, EBuildableParams.RESERVE_MINT_INPUT)
+  const packed = pack(
+    {
+      method_id: mapReserveDefinition[input.method].id,
+      input: packedInput,
+    },
+    EBuildableParams.RESERVE_MINT_INPUT
+  )
 
   return packed
 }

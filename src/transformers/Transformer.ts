@@ -1,14 +1,13 @@
-
 // the different states in which an object can be
 export enum ETransformState {
   // data is the result of unpacking
-  UNPACKED      = "UNPACKED", 
+  UNPACKED = "UNPACKED",
   // data can be packed
-  PACKABLE      = "PACKABLE",
+  PACKABLE = "PACKABLE",
   // the generic data used everywhere
-  GENERIC       = "GENERIC", 
+  GENERIC = "GENERIC",
   // data when it needs to be within a form
-  INPUTREADY    = "INPUTREADY",
+  INPUTREADY = "INPUTREADY",
 }
 
 // a transformer has to implement a set of functions to be usable
@@ -28,13 +27,11 @@ export type TTransformer<GUnpacked, GPackable, GGeneric, GInputReady> = {
 // the type definition for an object transformation definition
 export type TObjectTransformerDefinition<GObject> = {
   fields: {
-    [key in (keyof GObject)]: TTransformer<any, any, any, any> 
-        | TObjectTransformerDefinition<any>
+    [key in keyof GObject]:
+      | TTransformer<any, any, any, any>
+      | TObjectTransformerDefinition<any>
   }
-  properties?: Record<
-    ETransformState,
-    string
-  >
+  properties?: Record<ETransformState, string>
 }
 
 // typedef for the generic transformation function
@@ -44,4 +41,3 @@ export type TTransformFn<GInput, GOutput> = (
   inputState: ETransformState,
   outputState: ETransformState
 ) => GOutput
-

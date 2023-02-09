@@ -3,16 +3,16 @@ import { DateTransformer } from "../DateTransformer"
 import { MutezTransformer } from "../MutezTransformer"
 import { TObjectTransformerDefinition } from "../Transformer"
 
-export const PricingFixedTransformDefinition: 
-TObjectTransformerDefinition<IPricingFixed> = {
-  fields: {
-    price: MutezTransformer,
-    opensAt: DateTransformer,
-  },
-  // properties: {
+export const PricingFixedTransformDefinition: TObjectTransformerDefinition<IPricingFixed> =
+  {
+    fields: {
+      price: MutezTransformer,
+      opensAt: DateTransformer,
+    },
+    // properties: {
 
-  // }
-}
+    // }
+  }
 
 // todo: write the Transformation function
 // todo: test on small sections of the app to see how it integrates

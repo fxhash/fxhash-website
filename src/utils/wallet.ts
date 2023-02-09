@@ -1,4 +1,4 @@
-import { EWalletOperations } from "../services/Wallet";
+import { EWalletOperations } from "../services/Wallet"
 
 /**
  * Given a wallet operation, returns the text that corresponds

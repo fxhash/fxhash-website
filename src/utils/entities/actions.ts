@@ -1,5 +1,5 @@
-import { Action, TokenActionType } from "../../types/entities/Action";
-import { User } from "../../types/entities/User";
+import { Action, TokenActionType } from "../../types/entities/Action"
+import { User } from "../../types/entities/User"
 
 /**
  * Given the type of the action, outputs the buyer
@@ -13,7 +13,7 @@ export function getActionBuyer(action: Action): User {
 /**
  * Given the type of the action, outputs the seller
  */
- export function getActionSeller(action: Action): User {
+export function getActionSeller(action: Action): User {
   return action.type === TokenActionType.OFFER_ACCEPTED
     ? action.issuer!
     : action.target!

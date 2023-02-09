@@ -3,9 +3,13 @@
  * equal to [length] / 2. [join] is added between the sides
  * If string.length <= [length], returns string
  */
-export function truncateMiddle(str: string, length: number, join: string = "...") {
+export function truncateMiddle(
+  str: string,
+  length: number,
+  join: string = "..."
+) {
   if (str.length <= length) return str
-  const sl = (length*0.5)|0
+  const sl = (length * 0.5) | 0
   return str.slice(0, sl) + join + str.slice(-sl)
 }
 
@@ -16,7 +20,11 @@ export function truncateMiddle(str: string, length: number, join: string = "..."
  * @param append optional string section to add at the end of the truncated string
  * @returns either the whole string if length < maxLength or a truncated section if not
  */
-export function truncateEnd(str: string, maxLength: number, append: string = "...") {
+export function truncateEnd(
+  str: string,
+  maxLength: number,
+  append: string = "..."
+) {
   if (str.length > maxLength) {
     str = str.slice(0, maxLength) + append
   }
@@ -24,7 +32,10 @@ export function truncateEnd(str: string, maxLength: number, append: string = "..
 }
 
 export function tagsFromString(str: string): string[] {
-  return str.split(",").map(tag => tag.trim()).filter(tag => tag.length > 0)
+  return str
+    .split(",")
+    .map((tag) => tag.trim())
+    .filter((tag) => tag.length > 0)
 }
 
 /**
@@ -35,9 +46,9 @@ export function isTezosAddress(str: string): boolean {
 }
 
 export function countWords(str: string): number {
-  return str.match(/\w+/g)?.length || 0;
+  return str.match(/\w+/g)?.length || 0
 }
 
 export function stringBytesSize(str: string): number {
   return new Blob([str]).size
-};
+}

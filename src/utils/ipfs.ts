@@ -6,13 +6,13 @@ export function getIpfsSlash(cid: string): string {
 
 /**
  * Generic method to get a display url based on a CID and a hash.
- * This function also accepts a transform method so that the base URL can be 
+ * This function also accepts a transform method so that the base URL can be
  * formed in any way using the cid
  */
 export function ipfsUrlWithHash(
   cid: string,
   hash: string,
-  transform: ((cid: string) => string) = ipfsGatewayUrl
+  transform: (cid: string) => string = ipfsGatewayUrl
 ) {
   return `${transform(cid)}/?fxhash=${hash}`
 }
