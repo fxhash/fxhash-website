@@ -1,4 +1,13 @@
-import { isThisMonth, isToday, isTomorrow, format, isSameDay, isThisYear, isSameMonth, isSameYear } from "date-fns"
+import {
+  isThisMonth,
+  isToday,
+  isTomorrow,
+  format,
+  isSameDay,
+  isThisYear,
+  isSameMonth,
+  isSameYear,
+} from "date-fns"
 
 /**
  * Given a date and a DateSeparator tracking data, it will calculate if you need to display a separator

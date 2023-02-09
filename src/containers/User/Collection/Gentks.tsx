@@ -232,8 +232,9 @@ export function UserCollectionGentks({ user }: Props) {
             showFiltersOnMobile={inViewCardsContainer}
             onToggleFilters={() => setFiltersVisible(!filtersVisible)}
             sortSelectComp={
-              <div className={cs(style.select_comp_container, {
-                [styleCardsExplorer["hide-sort"]]: !isSearchMinimized,
+              <div
+                className={cs(style.select_comp_container, {
+                  [styleCardsExplorer["hide-sort"]]: !isSearchMinimized,
                 })}
               >
                 <GentksActions user={user} />
@@ -297,7 +298,7 @@ export function UserCollectionGentks({ user }: Props) {
                 </>
               )}
 
-              {!loading && objkts?.length === 0 && <span>No results</span>}
+              {!loading && !objkts?.length && <span>No results</span>}
 
               <InfiniteScrollTrigger
                 onTrigger={handleFetchMore}

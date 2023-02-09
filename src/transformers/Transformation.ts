@@ -1,5 +1,9 @@
-import { ETransformState, TObjectTransformerDefinition, TTransformer, TTransformFn } from "./Transformer"
-
+import {
+  ETransformState,
+  TObjectTransformerDefinition,
+  TTransformer,
+  TTransformFn,
+} from "./Transformer"
 
 /**
  * Transforms some input data (which has a given type) into some other data

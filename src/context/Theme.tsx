@@ -16,7 +16,7 @@ export interface ISettingsProperties {
   spaceBetweenCards: number
   displayPricesCard: boolean
   displayBurntCard: boolean
-  cardSize: {[scope: string]: number }
+  cardSize: { [scope: string]: number }
   displayInfosGenerativeCard: boolean
   displayInfosGentkCard: boolean
   borderWidthCards: number

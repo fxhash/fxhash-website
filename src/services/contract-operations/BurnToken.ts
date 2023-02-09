@@ -1,5 +1,12 @@
-import { ContractAbstraction, TransactionWalletOperation, Wallet } from "@taquito/taquito"
-import { FxhashCollabFactoryCalls, FxhashContracts } from "../../types/Contracts"
+import {
+  ContractAbstraction,
+  TransactionWalletOperation,
+  Wallet,
+} from "@taquito/taquito"
+import {
+  FxhashCollabFactoryCalls,
+  FxhashContracts,
+} from "../../types/Contracts"
 import { GenerativeToken } from "../../types/entities/GenerativeToken"
 import { Collaboration, UserType } from "../../types/entities/User"
 import { EBuildableParams, pack } from "../parameters-builder/BuildParameters"
@@ -14,7 +21,7 @@ export type TBurnTokenOperationParams = {
  * issuer > update_issuer
  */
 export class BurnTokenOperation extends ContractOperation<TBurnTokenOperationParams> {
-  contract: ContractAbstraction<Wallet>|null = null
+  contract: ContractAbstraction<Wallet> | null = null
   collab: boolean = false
 
   async prepare() {
@@ -25,7 +32,6 @@ export class BurnTokenOperation extends ContractOperation<TBurnTokenOperationPar
   }
 
   async call(): Promise<TransactionWalletOperation> {
-
     const params = this.params.token.id
 
     // if the author is a collab contract, we have to call the collab contract
@@ -36,15 +42,14 @@ export class BurnTokenOperation extends ContractOperation<TBurnTokenOperationPar
         call_id: FxhashCollabFactoryCalls.BURN,
         call_params: packed,
       }).send()
-    }
-    else { 
+    } else {
       return this.contract!.methodsObject.burn(params).send()
     }
   }
 
   success(): string {
     return this.collab
-     ? `A proposal to burn ${this.params.token.name} was successfully sent`
-     : `You have burnt ${this.params.token.name}. [insert dramatic music]`
+      ? `A proposal to burn ${this.params.token.name} was successfully sent`
+      : `You have burnt ${this.params.token.name}. [insert dramatic music]`
   }
 }

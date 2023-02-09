@@ -21,6 +21,7 @@ import { MintButton } from "./MintButton"
 import WinterCheckout from "components/CreditCard/WinterCheckout"
 import { ButtonIcon } from "components/Button/ButtonIcon"
 import { Router, useRouter } from "next/router"
+import { winterCheckoutAppearance } from "../../utils/winter"
 
 interface Props {
   token: GenerativeToken
@@ -113,7 +114,7 @@ export function MintController({
       )}
 
       {loadingCC && (
-        <span className={cs(style.infos)}>Opening credit card widget</span>
+        <span className={cs(style.infos)}>Opening payment card widget</span>
       )}
 
       {opHashCC ? (
@@ -206,19 +207,11 @@ export function MintController({
         walletAddress={user?.id}
         onClose={closeCreditCard}
         onSuccess={onCreditCardSuccess}
-        onReveal={() => {
+        onFinish={() => {
           router.push(revealUrl)
           setShowCC(false)
         }}
-        appearance={{
-          buttonColor: "#7000ff",
-          buttonTextColor: "#fff",
-          primaryTextColor: "#000000",
-          secondaryTextColor: "#727272",
-          buttonAndInputBoxShadow: "0 3px 6px 1px rgba(0, 0, 0, 0.05)",
-          buttonAndInputFocusBoxShadow: "0 3px 6px 1px rgba(0, 0, 0, 0.15)",
-          buttonClipLoaderColor: "#727272",
-        }}
+        appearance={winterCheckoutAppearance}
       />
     </div>
   )

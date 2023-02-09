@@ -11,9 +11,7 @@ import { Spacing } from "../../components/Layout/Spacing"
 interface Props {
   onClickDonation: (address: string) => void
 }
-export function Donations({
-  onClickDonation,
-}: Props) {
+export function Donations({ onClickDonation }: Props) {
   const [showModal, setShowModal] = useState(false)
 
   return (
@@ -21,7 +19,7 @@ export function Donations({
       <Button
         type="button"
         size="very-small"
-        iconComp={<i className="fa-solid fa-plus" aria-hidden/>}
+        iconComp={<i className="fa-solid fa-plus" aria-hidden />}
         onClick={() => setShowModal(!showModal)}
       >
         donations
@@ -33,13 +31,14 @@ export function Donations({
           onClose={() => setShowModal(false)}
         >
           <span className={cs(text.info)}>
-            These addresses are endorsed by fxhash as belonging to their respective organisations.
+            These addresses are endorsed by fxhash as belonging to their
+            respective organisations.
           </span>
 
-          <Spacing size="regular"/>
+          <Spacing size="regular" />
 
           <div className={cs(style.buttons_container)}>
-            {Object.keys(UserDonationAliases).map(address => (
+            {Object.keys(UserDonationAliases).map((address) => (
               <button
                 key={address}
                 onClick={() => {
@@ -47,7 +46,7 @@ export function Donations({
                   setShowModal(false)
                 }}
               >
-                <img 
+                <img
                   alt={`${UserDonationAliases[address].name} logo`}
                   src={ipfsGatewayUrl(UserDonationAliases[address].avatarUri)}
                 />

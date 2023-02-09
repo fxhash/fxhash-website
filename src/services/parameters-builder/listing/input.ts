@@ -1,7 +1,7 @@
 export type TInputListing = {
   gentk: {
-    id: number,
+    id: number
     version: number
-  },
+  }
   price: number
 }

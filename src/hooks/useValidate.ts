@@ -1,5 +1,8 @@
 import { useState } from "react"
-import { IValidationOutput, TValidationFunction } from "../utils/validation/validation"
+import {
+  IValidationOutput,
+  TValidationFunction,
+} from "../utils/validation/validation"
 
 export interface IValidationHook<InputType> {
   errors?: string[]
@@ -10,18 +13,18 @@ export interface IValidationHook<InputType> {
  * A deferrer validation hook which updates the state only when the `validate`
  * function is called. Before triggering an event, the validate function should
  * be called and it will pass the input to the validation function.
- * 
+ *
  * ```js
  * const [input, setInput] = useState("something...")
  * const { errors, validate } = useValidation(input, validationFunction)
- * 
+ *
  * const doSomething = () => {
  *    if (validate()) {
  *      // trigger some operation
  *    }
  * }
  * ```
- * 
+ *
  * @param input the input to be validated
  * @param validationFn the validation function
  */

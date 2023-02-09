@@ -13,21 +13,12 @@ import { SliderWithTextInput } from "../../../components/Input/SliderWithTextInp
 import { FormEventHandler, useState } from "react"
 import { BurnSupplyOperation } from "../../../services/contract-operations/BurnSupply"
 
-
 interface Props {
   token: GenerativeToken
 }
-export function BurnEditions({
-  token,
-}: Props) {
-
-  const {
-    call,
-    loading,
-    error,
-    success,
-    state,
-  } = useContractOperation(BurnSupplyOperation)
+export function BurnEditions({ token }: Props) {
+  const { call, loading, error, success, state } =
+    useContractOperation(BurnSupplyOperation)
 
   const [editions, setEditions] = useState<number>(0)
 
@@ -40,45 +31,41 @@ export function BurnEditions({
       token: token,
     })
   }
-  
+
   return (
-    <Form
-      onSubmit={update}
-    >
+    <Form onSubmit={update}>
       <Fieldset
         className={cs({
-          [style.disabled]: disabled
+          [style.disabled]: disabled,
         })}
       >
         <h4>Burn editions</h4>
-        <Spacing size="large"/>
+        <Spacing size="large" />
 
         {disabled && (
           <>
             <span className={cs(style.disabled_message)}>
               You cannot burn editions once minting is completed.
             </span>
-            <Spacing size="large"/>
+            <Spacing size="large" />
           </>
         )}
 
         <Field>
-          <label htmlFor="price">
-            Number of editions to burn
-          </label>
+          <label htmlFor="price">Number of editions to burn</label>
           <SliderWithTextInput
             min={0}
             max={token.balance}
             step={1}
             value={editions}
             onChange={setEditions}
-            textTransform={val => val.toFixed(0)}
+            textTransform={(val) => val.toFixed(0)}
             unit=""
           />
         </Field>
 
-        <Spacing size="3x-large"/>
-        
+        <Spacing size="3x-large" />
+
         <div className={cs(layout.y_centered)}>
           <ContractFeedback
             state={state}

@@ -94,7 +94,7 @@
   }
   .buttons {
     gap: 12px;
-    button {
+    & > button {
       width: 100%;
     }
   }

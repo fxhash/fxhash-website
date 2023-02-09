@@ -1,4 +1,8 @@
-import { ContractAbstraction, TransactionWalletOperation, Wallet } from "@taquito/taquito"
+import {
+  ContractAbstraction,
+  TransactionWalletOperation,
+  Wallet,
+} from "@taquito/taquito"
 import { FxhashContracts } from "../../types/Contracts"
 import { stringToByteString } from "../../utils/convert"
 import { ContractOperation } from "./ContractOperation"
@@ -12,7 +16,7 @@ export type TUpdateProfileParams = {
  * Updates user profile
  */
 export class UpdateProfileOperation extends ContractOperation<TUpdateProfileParams> {
-  userRegister: ContractAbstraction<Wallet>|null = null
+  userRegister: ContractAbstraction<Wallet> | null = null
 
   async prepare() {
     this.userRegister = await this.manager.getContract(FxhashContracts.REGISTER)
@@ -21,7 +25,7 @@ export class UpdateProfileOperation extends ContractOperation<TUpdateProfilePara
   async call(): Promise<TransactionWalletOperation> {
     return this.userRegister!.methodsObject.update_profile({
       metadata: stringToByteString(this.params.metadata),
-      name: stringToByteString(this.params.name)
+      name: stringToByteString(this.params.name),
     }).send()
   }
 

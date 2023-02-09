@@ -3,7 +3,10 @@ import layout from "../../../styles/Layout.module.scss"
 import text from "../../../styles/Text.module.css"
 import cs from "classnames"
 import * as Yup from "yup"
-import { GenerativeToken, GenTokPricing } from "../../../types/entities/GenerativeToken"
+import {
+  GenerativeToken,
+  GenTokPricing,
+} from "../../../types/entities/GenerativeToken"
 import { Formik } from "formik"
 import { Form } from "../../../components/Form/Form"
 import { Fieldset } from "../../../components/Form/Fieldset"
@@ -12,7 +15,10 @@ import { Button } from "../../../components/Button"
 import { useContractOperation } from "../../../hooks/useContractOperation"
 import { ContractFeedback } from "../../../components/Feedback/ContractFeedback"
 import { UpdatePricingOperation } from "../../../services/contract-operations/UpdatePricing"
-import { YupPricingDutchAuction, YupPricingFixed } from "../../../utils/yup/price"
+import {
+  YupPricingDutchAuction,
+  YupPricingFixed,
+} from "../../../utils/yup/price"
 import { useMemo } from "react"
 import { IReserve } from "../../../types/entities/Reserve"
 import { transformReserveGenericToInput } from "../../../utils/transformers/reserves"
@@ -22,30 +28,27 @@ import { YupReserves } from "../../../utils/yup/reserves"
 import { UpdateReservesOperation } from "../../../services/contract-operations/UpdateReserve"
 import { LinkGuide } from "../../../components/Link/LinkGuide"
 
-
 interface Props {
   token: GenerativeToken
 }
-export function EditReserves({
-  token,
-}: Props) {
+export function EditReserves({ token }: Props) {
   // the data in the reserves is not form-ready, so we need to transform it
   const reserveForm = useMemo<IReserve<string>[]>(() => {
     return transformReserveGenericToInput(token.reserves)
   }, [token])
 
   // we must define the validation because there's a dynamic value
-  const validation = useMemo(() => Yup.object({
-    reserves: YupReserves(() => token.originalSupply),
-  }), [])
+  const validation = useMemo(
+    () =>
+      Yup.object({
+        reserves: YupReserves(() => token.originalSupply),
+      }),
+    []
+  )
 
-  const {
-    call,
-    loading,
-    error,
-    success,
-    state,
-  } = useContractOperation(UpdateReservesOperation)
+  const { call, loading, error, success, state } = useContractOperation(
+    UpdateReservesOperation
+  )
 
   const update = (values: any) => {
     call({
@@ -55,16 +58,16 @@ export function EditReserves({
   }
 
   const disabled = token.balance === 0 || token.enabled
-  
+
   return (
     <Formik
       initialValues={{
-        reserves: reserveForm
+        reserves: reserveForm,
       }}
       onSubmit={update}
       validationSchema={validation}
     >
-      {({ 
+      {({
         values,
         setFieldValue,
         handleSubmit,
@@ -72,55 +75,50 @@ export function EditReserves({
         handleBlur,
         errors,
       }) => (
-        <Form
-          onSubmit={handleSubmit}
-        >
+        <Form onSubmit={handleSubmit}>
           <Fieldset
             className={cs({
-              [style.disabled]: disabled
+              [style.disabled]: disabled,
             })}
-            error={typeof errors.reserves === "string" 
-              ? errors.reserves
-              : undefined
+            error={
+              typeof errors.reserves === "string" ? errors.reserves : undefined
             }
           >
             <h4>Reserves</h4>
-            <Spacing size="large"/>
+            <Spacing size="large" />
 
             {disabled && (
               <>
                 <span className={cs(style.disabled_message)}>
-                  {token.enabled 
+                  {token.enabled
                     ? "You must disable the token to edit its reserve."
-                    : "You cannot update the reserves once the token is fully minted."
-                  }
+                    : "You cannot update the reserves once the token is fully minted."}
                 </span>
-                <Spacing size="large"/>
+                <Spacing size="large" />
               </>
             )}
 
             <span className={cs(text.info)}>
-              You can reserve a certain amount of editions using different constraints.<br/>
+              You can reserve a certain amount of editions using different
+              constraints.
+              <br />
               We recommend{" "}
-              <LinkGuide
-                href="/doc/artist/reserves#updating-a-reserve"
-                newTab
-              >
+              <LinkGuide href="/doc/artist/reserves#updating-a-reserve" newTab>
                 reading how to update the reserves properly
               </LinkGuide>
             </span>
 
-            <Spacing size="regular"/>
+            <Spacing size="regular" />
 
             <InputReserves
               maxSize={token.originalSupply}
               value={values.reserves}
-              onChange={reserves => setFieldValue("reserves", reserves)}
+              onChange={(reserves) => setFieldValue("reserves", reserves)}
               errors={errors.reserves as any}
             />
 
-            <Spacing size="3x-large"/>
-            
+            <Spacing size="3x-large" />
+
             <div className={cs(layout.y_centered)}>
               <ContractFeedback
                 state={state}
