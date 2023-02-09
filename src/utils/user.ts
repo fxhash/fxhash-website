@@ -139,6 +139,18 @@ export function processTzProfile(data: any): TzProfile | null {
 }
 
 export const UserDonationAliases: Record<string, Partial<User>> = {
+  KT1X1jyohFrZyDYWvCPXw9KvWxk2VDwxyg2g: {
+    id: "KT1X1jyohFrZyDYWvCPXw9KvWxk2VDwxyg2g",
+    name: "#TezQuakeAid",
+    descriptionLight:
+      "A Tezos community fundraiser to support relief efforts following the devastating earthquakes in Turkey and Syria.",
+    description:
+      "A Tezos community fundraiser to support relief efforts following the devastating earthquakes in Turkey and Syria.",
+    avatarUri: "ipfs://Qma8htuC4aZQkPW75Mtj5izwFrJcvna1giCbCg3ztC1e9y",
+    donationAddress: true,
+    flag: UserFlag.VERIFIED,
+  },
+
   tz2JuyvKDbsBvoFfaww7rcUb3qDpvTcZngeD: {
     id: "tz2JuyvKDbsBvoFfaww7rcUb3qDpvTcZngeD",
     name: "Girls Who Code",
