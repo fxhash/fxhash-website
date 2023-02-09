@@ -1,12 +1,21 @@
-import { addHours, addSeconds, differenceInSeconds, isAfter, isBefore, subHours } from "date-fns"
+import {
+  addHours,
+  addSeconds,
+  differenceInSeconds,
+  isAfter,
+  isBefore,
+  subHours,
+} from "date-fns"
 import { useContext, useEffect, useRef, useState } from "react"
 import { UserContext } from "../containers/UserProvider"
 import { ILiveMintingContext, LiveMintingContext } from "../context/LiveMinting"
 import { GenerativeToken, GenTokFlag } from "../types/entities/GenerativeToken"
 import { ConnectedUser, User } from "../types/entities/User"
-import { getReservesAmount, reserveEligibleAmount } from "../utils/generative-token"
+import {
+  getReservesAmount,
+  reserveEligibleAmount,
+} from "../utils/generative-token"
 import { clamp } from "../utils/math"
-
 
 // an object which describes the state for Dutch Auction tokens
 export interface IDutchAuctionState {
@@ -56,16 +65,16 @@ export interface IMintingState {
   // is the token enabled for the current user ?
   enabled: boolean
   // the state of the dutch auction, if null it's not a dutch auction
-  dutchAuctionState: IDutchAuctionState|null
+  dutchAuctionState: IDutchAuctionState | null
   // the state of a fixed pricing; if null, it's not a fixed pricing
-  fixedPricingState: IFixedPricingState|null
+  fixedPricingState: IFixedPricingState | null
   // the state of the moderation lock
   modLockState: IModLockState
   // the active state - the one which makes sense to represent on the UI
-  activeState: EMintingState|null
+  activeState: EMintingState | null
   // when the state will require a new computation; basically it also stores
   // the furthest locking/updating timer - if null we will never need to refresh
-  nextRefreshTimer: Date|null
+  nextRefreshTimer: Date | null
 }
 
 /**
@@ -74,22 +83,23 @@ export interface IMintingState {
  */
 function deriveMintingStateFromToken(
   token: Readonly<GenerativeToken>,
-  user: Readonly<ConnectedUser>|null,
+  user: Readonly<ConnectedUser> | null,
   liveMintingContext: ILiveMintingContext,
   forceDisabled: boolean
 ): IMintingState {
   // should the minting button be hidden ?
-  const hidden = [GenTokFlag.MALICIOUS, GenTokFlag.HIDDEN].includes(token.flag)
-    || token.balance === 0
+  const hidden =
+    [GenTokFlag.MALICIOUS, GenTokFlag.HIDDEN].includes(token.flag) ||
+    token.balance === 0
 
   // is the token enabled for the current user
-  const enabled = !forceDisabled
-    && (token.enabled || token.author.id === user?.id)
+  const enabled =
+    !forceDisabled && (token.enabled || token.author.id === user?.id)
 
   // initialize the price - it will be set afterwards
   let price = 0
   // initialize the refresh timer (null = no need to refresh)
-  let refreshTimer: Date|null = null
+  let refreshTimer: Date | null = null
   // initialize the locking state
   let locked = false
 
@@ -101,11 +111,11 @@ function deriveMintingStateFromToken(
     locked: false,
   }
   // the state of the dutch auction
-  let daState: IDutchAuctionState|null = null
+  let daState: IDutchAuctionState | null = null
   // the state of a fixed pricing
-  let fixedState: IFixedPricingState|null = null
+  let fixedState: IFixedPricingState | null = null
   // the minting state of interest
-  let activeMintingState: EMintingState|null = null
+  let activeMintingState: EMintingState | null = null
 
   // check if moderation lock is active
   const unlocksAt = new Date(token.lockEnd)
@@ -127,7 +137,7 @@ function deriveMintingStateFromToken(
     // when will the resting price be met ?
     const endsAt = addSeconds(
       opensAt,
-      (da.levels.length-1) * da.decrementDuration,
+      (da.levels.length - 1) * da.decrementDuration
     )
     // is the auction started/ended ?
     const started = isAfter(now, opensAt)
@@ -146,14 +156,14 @@ function deriveMintingStateFromToken(
     const diffSec = differenceInSeconds(now, opensAt)
     // get the level for the current time
     const levelIdx = clamp(
-      Math.floor(diffSec/da.decrementDuration),
+      Math.floor(diffSec / da.decrementDuration),
       0,
-      da.levels.length-1
+      da.levels.length - 1
     )
 
     // if auction is active, then we need to populate the rest
     if (active) {
-      const nextLevelIdx = levelIdx+1
+      const nextLevelIdx = levelIdx + 1
       daState.nextPrice = da.levels[nextLevelIdx]
       daState.nextStepAt = addSeconds(
         opensAt,
@@ -166,8 +176,9 @@ function deriveMintingStateFromToken(
     price = da.levels[levelIdx]
 
     // check if the dutch auction state needs to prevail
-    if (!refreshTimer
-      || (isAfter(activeTimer, refreshTimer)) && isBefore(unlocksAt, opensAt)
+    if (
+      !refreshTimer ||
+      (isAfter(activeTimer, refreshTimer) && isBefore(unlocksAt, opensAt))
     ) {
       activeMintingState = EMintingState.DUTCH_AUCTION
       refreshTimer = activeTimer
@@ -189,8 +200,9 @@ function deriveMintingStateFromToken(
       fixedState.active = isAfter(now, opensAt)
 
       // check if the pricing fixed state needs to prevail
-      if (!refreshTimer
-        || (isAfter(opensAt, refreshTimer) && isBefore(unlocksAt, opensAt))
+      if (
+        !refreshTimer ||
+        (isAfter(opensAt, refreshTimer) && isBefore(unlocksAt, opensAt))
       ) {
         activeMintingState = EMintingState.FIXED_PRICING
         refreshTimer = opensAt
@@ -241,7 +253,7 @@ function deriveMintingStateFromToken(
  */
 export function useMintingState(
   token: GenerativeToken,
-  forceDisabled: boolean = false,
+  forceDisabled: boolean = false
 ) {
   // we need the user to derive certain states
   const userContext = useContext(UserContext)
@@ -254,7 +266,7 @@ export function useMintingState(
       token,
       userContext.user,
       liveMintContext,
-      forceDisabled,
+      forceDisabled
     )
   )
   // keep a reference to the active timer in timeouts
@@ -282,7 +294,7 @@ export function useMintingState(
                 token,
                 userContext.user,
                 liveMintContext,
-                forceDisabled,
+                forceDisabled
               )
             )
           }, triggerIn + 10)
@@ -303,7 +315,7 @@ export function useMintingState(
         token,
         userContext.user,
         liveMintContext,
-        forceDisabled,
+        forceDisabled
       )
     )
   }, [userContext.user])

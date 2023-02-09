@@ -1,4 +1,4 @@
-import { ContractAbstraction, Wallet, WalletOperation } from "@taquito/taquito";
+import { ContractAbstraction, Wallet, WalletOperation } from "@taquito/taquito"
 import { FxhashContracts } from "../../types/Contracts"
 import { NFTArticle } from "../../types/entities/Article"
 import { Listing } from "../../types/entities/Listing"
@@ -14,7 +14,7 @@ export type TListingV3CancelOperationParams = {
  * List a gentk on the Marketplace
  */
 export class ListingV3CancelOperation extends ContractOperation<TListingV3CancelOperationParams> {
-  contract: ContractAbstraction<Wallet>|null = null
+  contract: ContractAbstraction<Wallet> | null = null
   ep: string = ""
 
   async prepare() {
@@ -30,6 +30,10 @@ export class ListingV3CancelOperation extends ContractOperation<TListingV3Cancel
   }
 
   success(): string {
-    return `You have cancelled your listing of ${this.params.listing.amount} editions for ${displayMutez(this.params.listing.price)} tez each on ${this.params.article.title}`
+    return `You have cancelled your listing of ${
+      this.params.listing.amount
+    } editions for ${displayMutez(this.params.listing.price)} tez each on ${
+      this.params.article.title
+    }`
   }
 }

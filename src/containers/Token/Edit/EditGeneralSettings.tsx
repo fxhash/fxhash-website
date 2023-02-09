@@ -23,7 +23,6 @@ import { YupRoyalties } from "../../../utils/yup/royalties"
 import { YupSplits } from "../../../utils/yup/splits"
 import { Donations } from "../../Input/Donations"
 
-
 const validation = Yup.object().shape({
   royalties: YupRoyalties,
   splitsPrimary: YupSplits,
@@ -33,17 +32,10 @@ const validation = Yup.object().shape({
 interface Props {
   token: GenerativeToken
 }
-export function EditGeneralSettings({
-  token,
-}: Props) {
-
-  const {
-    call,
-    loading,
-    error,
-    success,
-    state,
-  } = useContractOperation(UpdateIssuerOperation)
+export function EditGeneralSettings({ token }: Props) {
+  const { call, loading, error, success, state } = useContractOperation(
+    UpdateIssuerOperation
+  )
 
   const update = (values: UpdateIssuerForm<string>) => {
     call({
@@ -53,17 +45,17 @@ export function EditGeneralSettings({
   }
 
   const disabled = token.balance === 0
-  
+
   return (
     <Formik
       initialValues={{
         enabled: token.enabled,
-        royalties: ""+token.royalties/10,
-        splitsPrimary: token.splitsPrimary.map(split => ({
+        royalties: "" + token.royalties / 10,
+        splitsPrimary: token.splitsPrimary.map((split) => ({
           address: split.user.id,
           pct: split.pct,
         })),
-        splitsSecondary: token.splitsSecondary.map(split => ({
+        splitsSecondary: token.splitsSecondary.map((split) => ({
           address: split.user.id,
           pct: split.pct,
         })),
@@ -71,7 +63,7 @@ export function EditGeneralSettings({
       onSubmit={update}
       validationSchema={validation}
     >
-      {({ 
+      {({
         values,
         setFieldValue,
         handleSubmit,
@@ -79,23 +71,22 @@ export function EditGeneralSettings({
         handleBlur,
         errors,
       }) => (
-        <Form
-          onSubmit={handleSubmit}
-        >
+        <Form onSubmit={handleSubmit}>
           <Fieldset
             className={cs({
-              [editStyle.disabled]: disabled
+              [editStyle.disabled]: disabled,
             })}
           >
             <h4>General settings</h4>
-            <Spacing size="large"/>
+            <Spacing size="large" />
 
             {disabled && (
               <>
                 <span className={cs(editStyle.disabled_message)}>
-                  You cannot edit the general settings once minting is completed.
+                  You cannot edit the general settings once minting is
+                  completed.
                 </span>
-                <Spacing size="large"/>
+                <Spacing size="large" />
               </>
             )}
 
@@ -109,32 +100,32 @@ export function EditGeneralSettings({
               </Checkbox>
             </Field>
 
-            <Field 
-              error={typeof errors.splitsPrimary === "string"
-                ? errors.splitsPrimary
-                : undefined
+            <Field
+              error={
+                typeof errors.splitsPrimary === "string"
+                  ? errors.splitsPrimary
+                  : undefined
               }
             >
               <label>
                 Primary Splits
                 <small>
-                  You can split the proceeds on primary between different addresses
+                  You can split the proceeds on primary between different
+                  addresses
                 </small>
               </label>
               <InputSplits
                 value={values.splitsPrimary}
-                onChange={splits => setFieldValue("splitsPrimary", splits)}
+                onChange={(splits) => setFieldValue("splitsPrimary", splits)}
                 sharesTransformer={transformSplitsSum1000}
                 textShares="Shares (out of 1000)"
                 errors={errors.splitsPrimary as any}
               >
-                {(({ addAddress }) => (
+                {({ addAddress }) => (
                   <div className={cs(editStyle.royalties_last_row)}>
-                    <Donations
-                      onClickDonation={addAddress}
-                    />
+                    <Donations onClickDonation={addAddress} />
                   </div>
-                ))}
+                )}
               </InputSplits>
             </Field>
 
@@ -147,41 +138,45 @@ export function EditGeneralSettings({
                 unit="%"
                 type="text"
                 name="royalties"
-                value={values.royalties||""}
+                value={values.royalties || ""}
                 onChange={handleChange}
                 onBlur={handleBlur}
                 error={!!errors.royalties}
               />
             </Field>
 
-            <Field 
-              error={typeof errors.splitsSecondary === "string"
-                ? errors.splitsSecondary
-                : undefined
+            <Field
+              error={
+                typeof errors.splitsSecondary === "string"
+                  ? errors.splitsSecondary
+                  : undefined
               }
             >
               <label>
                 Secondary Splits
                 <small>
-                  You can also split the proceeds on the secondary (royalties will be divided between the addresses)
+                  You can also split the proceeds on the secondary (royalties
+                  will be divided between the addresses)
                 </small>
               </label>
               <InputSplits
                 value={values.splitsSecondary}
-                onChange={splits => setFieldValue("splitsSecondary", splits)}
+                onChange={(splits) => setFieldValue("splitsSecondary", splits)}
                 sharesTransformer={transformSplitsSum1000}
                 textShares="Shares (out of 1000)"
                 errors={errors.splitsSecondary as any}
               >
-                {(({ addAddress }) => (
+                {({ addAddress }) => (
                   <div className={cs(editStyle.royalties_last_row)}>
                     {!values.splitsSecondary.find(
-                      split => split.address === FxhashContracts.GENTK_V2
+                      (split) => split.address === FxhashContracts.GENTK_V2
                     ) && (
                       <Button
                         type="button"
                         size="very-small"
-                        iconComp={<i className="fa-solid fa-plus" aria-hidden/>}
+                        iconComp={
+                          <i className="fa-solid fa-plus" aria-hidden />
+                        }
                         onClick={() => {
                           addAddress(FxhashContracts.GENTK_V2)
                         }}
@@ -189,16 +184,14 @@ export function EditGeneralSettings({
                         royalties to the minter
                       </Button>
                     )}
-                    <Donations
-                      onClickDonation={addAddress}
-                    />
+                    <Donations onClickDonation={addAddress} />
                   </div>
-                ))}
+                )}
               </InputSplits>
             </Field>
 
-            <Spacing size="3x-large"/>
-            
+            <Spacing size="3x-large" />
+
             <div className={cs(layout.y_centered)}>
               <ContractFeedback
                 state={state}

@@ -7,6 +7,7 @@ import { SettingsContext } from "../../context/Theme"
 import cs from "classnames"
 import { UserBadge } from "../User/UserBadge"
 import Link from "next/link"
+import { getArticleUrl } from "../../utils/entities/articles"
 
 interface CardSmallNftArticleProps {
   article: NFTArticle
@@ -15,11 +16,12 @@ interface CardSmallNftArticleProps {
 }
 
 const _CardSmallNftArticle = ({
-  article: { title, slug, description, thumbnailUri, thumbnailMedia, author },
+  article,
   imagePriority,
   className,
 }: CardSmallNftArticleProps) => {
   const settings = useContext(SettingsContext)
+  const { title, description, thumbnailUri, thumbnailMedia, author } = article
   return (
     <div
       className={cs(style.container, className, {
@@ -31,7 +33,7 @@ const _CardSmallNftArticle = ({
       </div>
       <div className={style.infos}>
         <UserBadge user={author!} size="regular" />
-        <Link href={`/article/${slug}`}>
+        <Link href={getArticleUrl(article)}>
           <a className={style.title}>
             <h5>{title}</h5>
           </a>

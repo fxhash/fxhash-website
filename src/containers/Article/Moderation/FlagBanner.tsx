@@ -2,7 +2,6 @@ import { FlagBanner } from "../../../components/Flag/FlagBanner"
 import { ArticleFlag, NFTArticle } from "../../../types/entities/Article"
 import { isArticleFlagged } from "../../../utils/entities/articles"
 
-
 function getFlagText(flag: ArticleFlag): string {
   switch (flag) {
     case ArticleFlag.AUTO_DETECT_COPY:
@@ -20,18 +19,16 @@ function getFlagText(flag: ArticleFlag): string {
 interface Props {
   article: NFTArticle
 }
-export function ArticleFlagBanner({
-  article
-}: Props) {
+export function ArticleFlagBanner({ article }: Props) {
   return isArticleFlagged(article) ? (
     <FlagBanner>
       <h4>Warning ! This Article has been flagged</h4>
-      <p>{ getFlagText(article.flag) }</p>
+      <p>{getFlagText(article.flag)}</p>
       {article.moderationReason && (
         <span>
           <strong>Reason</strong>: {article.moderationReason}
         </span>
       )}
     </FlagBanner>
-  ):null
+  ) : null
 }

@@ -1,4 +1,9 @@
-import { ContractAbstraction, MichelsonMap, TransactionWalletOperation, Wallet } from "@taquito/taquito"
+import {
+  ContractAbstraction,
+  MichelsonMap,
+  TransactionWalletOperation,
+  Wallet,
+} from "@taquito/taquito"
 import { FxhashContracts } from "../../types/Contracts"
 import { ISplit } from "../../types/entities/Split"
 import { stringToByteString } from "../../utils/convert"
@@ -12,7 +17,7 @@ export type TCreateCollabParams = {
  * Updates user profile
  */
 export class CreateCollabOperation extends ContractOperation<TCreateCollabParams> {
-  collabContract: ContractAbstraction<Wallet>|null = null
+  collabContract: ContractAbstraction<Wallet> | null = null
 
   async prepare() {
     this.collabContract = await this.manager.getContract(
@@ -26,7 +31,7 @@ export class CreateCollabOperation extends ContractOperation<TCreateCollabParams
       shares.set(split.address, split.pct)
     }
     return this.collabContract!.methodsObject.create_collab_contract({
-      collaborators: this.params.splits.map(split => split.address),
+      collaborators: this.params.splits.map((split) => split.address),
       shares: shares,
     }).send()
   }

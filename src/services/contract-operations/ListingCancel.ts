@@ -1,9 +1,17 @@
-import { ContractAbstraction, OpKind, Wallet, WalletOperation } from "@taquito/taquito"
+import {
+  ContractAbstraction,
+  OpKind,
+  Wallet,
+  WalletOperation,
+} from "@taquito/taquito"
 import { FxhashContracts } from "../../types/Contracts"
 import { Listing } from "../../types/entities/Listing"
 import { Objkt } from "../../types/entities/Objkt"
 import { getListingCancelEp, getListingFA2Contract } from "../../utils/listing"
-import { buildParameters, EBuildableParams } from "../parameters-builder/BuildParameters"
+import {
+  buildParameters,
+  EBuildableParams,
+} from "../parameters-builder/BuildParameters"
 import { TInputListingCancel } from "../parameters-builder/listing-cancel/input"
 import { ContractOperation } from "./ContractOperation"
 
@@ -16,7 +24,7 @@ export type TListingCancelOperationParams = {
  * List a gentk on the Marketplace
  */
 export class ListingCancelOperation extends ContractOperation<TListingCancelOperationParams> {
-  contract: ContractAbstraction<Wallet>|null = null
+  contract: ContractAbstraction<Wallet> | null = null
   ep: string = ""
 
   async prepare() {
@@ -27,9 +35,7 @@ export class ListingCancelOperation extends ContractOperation<TListingCancelOper
   }
 
   async call(): Promise<WalletOperation> {
-    return this.contract!.methodsObject[this.ep](
-      this.params.listing.id
-    ).send()
+    return this.contract!.methodsObject[this.ep](this.params.listing.id).send()
   }
 
   success(): string {

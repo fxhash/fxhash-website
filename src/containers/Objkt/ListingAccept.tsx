@@ -1,5 +1,5 @@
 import style from "./MarketplaceActions.module.scss"
-import { useContext, useState } from "react"
+import { useCallback, useContext, useState } from "react"
 import { Button } from "../../components/Button"
 import { Objkt } from "../../types/entities/Objkt"
 import cs from "classnames"
@@ -15,6 +15,10 @@ import {
   TListingAcceptOperationParams,
 } from "../../services/contract-operations/ListingAccept"
 import { DisplayTezos } from "../../components/Display/DisplayTezos"
+import { ButtonPaymentCard } from "../../components/Utils/ButtonPaymentCard"
+import WinterCheckout from "../../components/CreditCard/WinterCheckout"
+import { winterCheckoutAppearance } from "../../utils/winter"
+import { getUserProfileLink } from "../../utils/user"
 
 interface Props {
   listing: Listing
@@ -22,6 +26,7 @@ interface Props {
 }
 
 export function ListingAccept({ listing, objkt }: Props) {
+  const [showWinterCheckout, setShowWinterCheckout] = useState(false)
   const userCtx = useContext(UserContext)
   const router = useRouter()
 
@@ -44,6 +49,23 @@ export function ListingAccept({ listing, objkt }: Props) {
     ListingAcceptOperation
   )
 
+  const handleToggleWinterCheckout = useCallback(
+    (newState) => () => {
+      setShowWinterCheckout(newState)
+    },
+    []
+  )
+
+  const handleGoToCollection = useCallback(
+    (data) => {
+      setShowWinterCheckout(false)
+      if (data.tzAddress) {
+        router.push(`/pkh/${data.tzAddress}/collection`)
+      }
+    },
+    [router]
+  )
+
   const callContract = () => {
     call({
       listing: listing,
@@ -52,7 +74,6 @@ export function ListingAccept({ listing, objkt }: Props) {
   }
 
   const isOwner = objkt.owner?.id === userCtx.user?.id
-
   return (
     <>
       <ContractFeedback
@@ -62,15 +83,23 @@ export function ListingAccept({ listing, objkt }: Props) {
         error={contractError}
         successMessage="You have collected this token !"
       />
+      {showWinterCheckout && (
+        <span className={cs(style.infos)}>Opening payment card widget</span>
+      )}
 
       <div className={cs(style.lock_container)}>
         {!isOwner && (
           <>
             <Button
-              state={contractLoading ? "loading" : "default"}
+              state={
+                contractLoading || showWinterCheckout ? "loading" : "default"
+              }
               color="secondary"
+              size="regular"
               onClick={callContract}
               disabled={locked}
+              className={style.button_purchase}
+              classNameChildren={style.button_purchase_content}
             >
               purchase token -{" "}
               <DisplayTezos
@@ -79,13 +108,28 @@ export function ListingAccept({ listing, objkt }: Props) {
                 formatBig={false}
               />
             </Button>
-
+            {!contractLoading && !showWinterCheckout && (
+              <ButtonPaymentCard
+                onClick={handleToggleWinterCheckout(true)}
+                disabled={locked}
+              />
+            )}
             {locked && (
               <Unlock locked={true} onClick={() => setLocked(false)} />
             )}
           </>
         )}
       </div>
+      <WinterCheckout
+        showModal={showWinterCheckout}
+        production={process.env.NEXT_PUBLIC_TZ_NET === "mainnet"}
+        walletAddress={userCtx.user?.id}
+        contractVersion={listing.version}
+        listingId={listing.id}
+        onClose={handleToggleWinterCheckout(false)}
+        onFinish={handleGoToCollection}
+        appearance={winterCheckoutAppearance}
+      />
     </>
   )
 }

@@ -7,21 +7,18 @@ import { ImagePolymorphic } from "../../../components/Medias/ImagePolymorphic"
 import { NFTArticle } from "../../../types/entities/Article"
 import { getUserName } from "../../../utils/user"
 import { useMemo, useState } from "react"
+import { getArticleUrl } from "../../../utils/entities/articles"
 
 const MAX_MENTIONS = 5
 
 interface Props {
   mentions: ArticleGenerativeTokenMention[]
 }
-export function GenTokArticleMentions({
-  mentions,
-}: Props) {
+export function GenTokArticleMentions({ mentions }: Props) {
   const [showAll, setShowAll] = useState(false)
 
   const mentionsShown = useMemo(() => {
-    return showAll
-      ? mentions
-      : mentions.slice(0, MAX_MENTIONS)
+    return showAll ? mentions : mentions.slice(0, MAX_MENTIONS)
   }, [mentions, showAll])
 
   return (
@@ -31,10 +28,7 @@ export function GenTokArticleMentions({
       </span>
       <div className={cs(style.mentions)}>
         {mentionsShown.map((mention, idx) => (
-          <ArticleMention
-            key={idx}
-            article={mention.article}
-          />
+          <ArticleMention key={idx} article={mention.article} />
         ))}
         {mentionsShown.length < mentions.length && (
           <button
@@ -42,8 +36,8 @@ export function GenTokArticleMentions({
             onClick={() => setShowAll(true)}
             className={cs(style.expand_btn)}
           >
-            <i className="fa-solid fa-angles-down" aria-hidden/>
-            show all ({mentions.length-mentionsShown.length})
+            <i className="fa-solid fa-angles-down" aria-hidden />
+            show all ({mentions.length - mentionsShown.length})
           </button>
         )}
       </div>
@@ -54,11 +48,9 @@ export function GenTokArticleMentions({
 interface SingleProps {
   article: NFTArticle
 }
-function ArticleMention({
-  article,
-}: SingleProps) {
+function ArticleMention({ article }: SingleProps) {
   return (
-    <Link href={`/article/${article.slug}`}>
+    <Link href={getArticleUrl(article)}>
       <a className={cs(style.mention)}>
         <ImagePolymorphic
           uri={article.thumbnailUri}
@@ -66,7 +58,8 @@ function ArticleMention({
           className={cs(style.thumbnail)}
         />
         <div>
-          <strong>{article.title}</strong><br/>
+          <strong>{article.title}</strong>
+          <br />
           {getUserName(article.author!)}
         </div>
       </a>

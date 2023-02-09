@@ -1,10 +1,18 @@
-import { ArticleFlag, NFTArticle } from "../types/entities/Article";
-import { DraftNFTArticle, NFTArticleForm } from "../types/ArticleEditor/Editor";
-import { User } from "../types/entities/User";
+import { ArticleFlag, NFTArticle } from "../types/entities/Article"
+import { DraftNFTArticle, NFTArticleForm } from "../types/ArticleEditor/Editor"
+import { User } from "../types/entities/User"
 
-type GenerateNftArticleFromDraft = (id: string, draft: DraftNFTArticle, user?: User) => NFTArticle;
-export const generateNftArticleFromDraft: GenerateNftArticleFromDraft = (id, draft, user) => {
-  return ({
+type GenerateNftArticleFromDraft = (
+  id: string,
+  draft: DraftNFTArticle,
+  user?: User
+) => NFTArticle
+export const generateNftArticleFromDraft: GenerateNftArticleFromDraft = (
+  id,
+  draft,
+  user
+) => {
+  return {
     id,
     slug: `preview-${id}`,
     flag: ArticleFlag.NONE,
@@ -18,8 +26,8 @@ export const generateNftArticleFromDraft: GenerateNftArticleFromDraft = (id, dra
     description: draft.form.abstract,
     body: draft.form.body,
     tags: draft.form.tags,
-    language: 'en',
-    metadataUri: '',
+    language: "en",
+    metadataUri: "",
     relatedArticles: [],
     metadata: {
       decimals: 0,
@@ -31,24 +39,24 @@ export const generateNftArticleFromDraft: GenerateNftArticleFromDraft = (id, dra
       contributors: [],
       type: "article",
       tags: draft.form.tags,
-      language: 'en',
-      artifactUri: '',
-      displayUri: draft.form.thumbnailUri || '',
-      thumbnailUri: draft.form.thumbnailUri || '',
+      language: "en",
+      artifactUri: "",
+      displayUri: draft.form.thumbnailUri || "",
+      thumbnailUri: draft.form.thumbnailUri || "",
       thumbnailCaption: draft.form.thumbnailCaption,
-      platforms: []
+      platforms: [],
     },
     metadataLocked: false,
-    artifactUri: '',
-    displayUri: draft.form.thumbnailUri || '',
-    thumbnailUri: draft.form.thumbnailUri || '',
-    thumbnailCaption: draft.form.thumbnailCaption || '',
+    artifactUri: "",
+    displayUri: draft.form.thumbnailUri || "",
+    thumbnailUri: draft.form.thumbnailUri || "",
+    thumbnailCaption: draft.form.thumbnailCaption || "",
     platforms: null,
     createdAt: draft.lastSavedAt,
     editions: parseInt(draft.form.editions),
     royalties: parseFloat(draft.form.royalties) * 10,
-    mintOpHash: ''
-  })
+    mintOpHash: "",
+  }
 }
 
 /**
@@ -61,7 +69,8 @@ export function generateNFTArticleDraft(
     title: article.title,
     thumbnailUri: article.displayUri,
     // todo [#392] remove article.metadata?.thumbnailCaption
-    thumbnailCaption: article.metadata?.thumbnailCaption || article.thumbnailCaption,
+    thumbnailCaption:
+      article.metadata?.thumbnailCaption || article.thumbnailCaption,
     body: article.body,
     abstract: article.description,
     tags: article.tags,

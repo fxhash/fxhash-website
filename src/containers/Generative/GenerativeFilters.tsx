@@ -3,10 +3,12 @@ import cs from "classnames"
 import { FiltersGroup } from "../../components/Exploration/FiltersGroup"
 import { InputText } from "../../components/Input/InputText"
 import { useState } from "react"
-import { InputRadioButtons, RadioOption } from "../../components/Input/InputRadioButtons"
+import {
+  InputRadioButtons,
+  RadioOption,
+} from "../../components/Input/InputRadioButtons"
 import { Button } from "../../components/Button"
 import { GenerativeTokenFilters } from "../../types/entities/GenerativeToken"
-
 
 const MintProgresOptions: RadioOption[] = [
   {
@@ -46,17 +48,18 @@ interface Props {
   filters: GenerativeTokenFilters
   setFilters: (filters: GenerativeTokenFilters) => void
 }
-export function GenerativeFilters({
-  filters,
-  setFilters,
-}: Props) {
+export function GenerativeFilters({ filters, setFilters }: Props) {
   const [minPrice, setMinPrice] = useState<string>("")
   const [maxPrice, setMaxPrice] = useState<string>("")
 
   const updatePriceFilters = (evt: any) => {
     evt.preventDefault()
-    const minp = minPrice ? Math.floor(parseFloat(minPrice) * 1000000) : undefined
-    const maxp = maxPrice ? Math.floor(parseFloat(maxPrice) * 1000000) : undefined
+    const minp = minPrice
+      ? Math.floor(parseFloat(minPrice) * 1000000)
+      : undefined
+    const maxp = maxPrice
+      ? Math.floor(parseFloat(maxPrice) * 1000000)
+      : undefined
     setFilters({
       ...filters,
       price_gte: minp,
@@ -85,13 +88,13 @@ export function GenerativeFilters({
           <div className={cs(style.price_range)}>
             <InputText
               value={minPrice}
-              onChange={evt => setMinPrice(evt.target.value)}
+              onChange={(evt) => setMinPrice(evt.target.value)}
               placeholder="Min"
             />
             <span>to</span>
             <InputText
               value={maxPrice}
-              onChange={evt => setMaxPrice(evt.target.value)}
+              onChange={(evt) => setMaxPrice(evt.target.value)}
               placeholder="Max"
             />
           </div>
@@ -109,7 +112,9 @@ export function GenerativeFilters({
       <FiltersGroup title="Mint progress">
         <InputRadioButtons
           value={filters.mintProgress_eq}
-          onChange={(value) => setFilters({ ...filters, mintProgress_eq: value })}
+          onChange={(value) =>
+            setFilters({ ...filters, mintProgress_eq: value })
+          }
           options={MintProgresOptions}
         />
       </FiltersGroup>
@@ -119,13 +124,13 @@ export function GenerativeFilters({
           <div className={cs(style.price_range)}>
             <InputText
               value={minTokenSupply}
-              onChange={evt => setMinTokenSupply(evt.target.value)}
+              onChange={(evt) => setMinTokenSupply(evt.target.value)}
               placeholder="Min"
             />
             <span>to</span>
             <InputText
               value={maxTokenSupply}
-              onChange={evt => setMaxTokenSupply(evt.target.value)}
+              onChange={(evt) => setMaxTokenSupply(evt.target.value)}
               placeholder="Max"
             />
           </div>
@@ -143,7 +148,9 @@ export function GenerativeFilters({
       <FiltersGroup title="Artist">
         <InputRadioButtons
           value={filters.authorVerified_eq}
-          onChange={(value) => setFilters({ ...filters, authorVerified_eq: value })}
+          onChange={(value) =>
+            setFilters({ ...filters, authorVerified_eq: value })
+          }
           options={ArtistVerificationOptions}
         />
       </FiltersGroup>

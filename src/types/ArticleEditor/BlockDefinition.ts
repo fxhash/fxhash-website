@@ -1,8 +1,11 @@
-import { FunctionComponent, PropsWithChildren, ReactNode } from "react";
-import { RenderElementProps } from "slate-react";
+import { FunctionComponent, PropsWithChildren, ReactNode } from "react"
+import { RenderElementProps } from "slate-react"
 import { Element } from "slate"
-import { TEditNodeFnFactory } from "./Transforms";
-import { EBreakBehavior, InsertBreakFunction } from "../../components/NFTArticle/SlateEditor/Plugins/SlateBreaksPlugin";
+import { TEditNodeFnFactory } from "./Transforms"
+import {
+  EBreakBehavior,
+  InsertBreakFunction,
+} from "../../components/NFTArticle/SlateEditor/Plugins/SlateBreaksPlugin"
 
 /**
  * The Instanciation Component can be displayed to enter informations about a
@@ -22,7 +25,9 @@ export type TAttributesEditorWrapperProps = {
   onClose: () => void
   className: string
 }
-export type TAttributesEditorWrapper = FunctionComponent<PropsWithChildren<TAttributesEditorWrapperProps>>
+export type TAttributesEditorWrapper = FunctionComponent<
+  PropsWithChildren<TAttributesEditorWrapperProps>
+>
 
 export interface IArticleBlockDefinition<InstanciateOpts> {
   name: string
@@ -30,7 +35,7 @@ export interface IArticleBlockDefinition<InstanciateOpts> {
   buttonInstantiable?: boolean
   render: (props: RenderElementProps) => ReactNode
   hasUtilityWrapper: boolean
-  inlineMenu?: undefined|null|Array<string>
+  inlineMenu?: undefined | null | Array<string>
   instanciateElement?: (opts?: InstanciateOpts) => Element
   editAttributeComp?: TEditAttributeComp
   editAttributeWrapper?: TAttributesEditorWrapper

@@ -11,20 +11,20 @@ export function transformMintIssuerBigNumbers(
     enabled: bnInput.enabled,
     metadata: bnInput.metadata,
     pricing: transformPricingBigNumber(bnInput.pricing),
-    primary_split: bnInput.primary_split.map(split => ({
+    primary_split: bnInput.primary_split.map((split) => ({
       address: split.address,
       pct: split.pct.toNumber(),
     })),
-    reserves: bnInput.reserves.map(reserve => ({
+    reserves: bnInput.reserves.map((reserve) => ({
       amount: reserve.amount.toNumber(),
       data: reserve.data,
       method_id: reserve.method_id.toNumber(),
     })),
     royalties: bnInput.royalties.toNumber(),
-    royalties_split: bnInput.royalties_split.map(split => ({
+    royalties_split: bnInput.royalties_split.map((split) => ({
       address: split.address,
       pct: split.pct.toNumber(),
     })),
-    tags: bnInput.tags.map(tag => tag.toNumber()),
+    tags: bnInput.tags.map((tag) => tag.toNumber()),
   }
 }

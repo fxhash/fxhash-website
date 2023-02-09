@@ -2,7 +2,6 @@ import style from "./FileList.module.scss"
 import cs from "classnames"
 import { useMemo, Fragment } from "react"
 
-
 interface FileStructure {
   [key: string]: false | FileStructure
 }
@@ -15,19 +14,18 @@ function StructureRenderer({ structure }: { structure: FileStructure }) {
   const keys = Object.keys(structure)
   return (
     <>
-      {keys.map(key => (
-        structure[key] 
-          ? (
-            <Fragment key={key}>
-              <li>{ key }</li>
-              <ul>
-                <StructureRenderer structure={structure[key] as FileStructure} />
-              </ul>
-            </Fragment>
-          ):(
-            <li key={key}>{ key }</li>
-          )
-      ))}
+      {keys.map((key) =>
+        structure[key] ? (
+          <Fragment key={key}>
+            <li>{key}</li>
+            <ul>
+              <StructureRenderer structure={structure[key] as FileStructure} />
+            </ul>
+          </Fragment>
+        ) : (
+          <li key={key}>{key}</li>
+        )
+      )}
     </>
   )
 }
@@ -38,17 +36,17 @@ export function FileList({ files }: Props) {
     const S: FileStructure = {}
     if (files) {
       for (const F of files) {
-        let dirs = F.split('/')
+        let dirs = F.split("/")
         let pos = S
         // build directories
-        for (let i = 0; i < dirs.length-1; i++) {
+        for (let i = 0; i < dirs.length - 1; i++) {
           if (typeof pos[dirs[i]] === "undefined") {
             pos[dirs[i]] = {}
           }
           pos = pos[dirs[i]] as FileStructure
         }
         // add file
-        pos[dirs[dirs.length-1]] = false
+        pos[dirs[dirs.length - 1]] = false
       }
     }
     return S

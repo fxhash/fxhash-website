@@ -12,10 +12,7 @@ interface Props {
   article: NFTArticle
   origin: string
 }
-export function ArticleEditionPreview({
-  article,
-  origin,
-}: Props) {
+export function ArticleEditionPreview({ article, origin }: Props) {
   const id = article.id
   const { state, dispatch } = useContext(ArticlesContext)
 
@@ -24,7 +21,7 @@ export function ArticleEditionPreview({
 
   // initial load of all the articles from the state
   useInit(() => {
-    dispatch({ type: 'loadAll' })
+    dispatch({ type: "loadAll" })
     setHasLoadUpToDate(true)
   })
 
@@ -51,21 +48,12 @@ export function ArticleEditionPreview({
 
   return editedArticle ? (
     <>
-      <PageArticle
-        article={editedArticle}
-        isPreview
-        originUrl={origin}
-      />
+      <PageArticle article={editedArticle} isPreview originUrl={origin} />
       <Spacing size="6x-large" />
-      <ButtonsEditArticle
-        article={editedArticle}
-      />
+      <ButtonsEditArticle article={editedArticle} />
       <Spacing size="6x-large" />
     </>
-  ):(
-    <LoaderBlock
-      size="small"
-      height="60vh"
-    />
+  ) : (
+    <LoaderBlock size="small" height="60vh" />
   )
 }

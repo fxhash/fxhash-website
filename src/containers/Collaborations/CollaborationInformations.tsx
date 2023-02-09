@@ -17,18 +17,13 @@ interface Props {
   collaboration: Collaboration
   state: CollaborationContractState
 }
-export function CollaborationInformations({
-  collaboration,
-  state,
-}: Props) {
+export function CollaborationInformations({ collaboration, state }: Props) {
   // turn shares into a list of splits
   const splits = useMemo<Split[]>(() => {
-    const sum = Object.values(state.shares).reduce((a, b) => a+b, 0)
-    return Object.keys(state.shares).map(share => ({
-      pct: Math.floor(state.shares[share]/sum * 1000),
-      user: collaboration.collaborators.find(
-        c => c.id === share
-      )!
+    const sum = Object.values(state.shares).reduce((a, b) => a + b, 0)
+    return Object.keys(state.shares).map((share) => ({
+      pct: Math.floor((state.shares[share] / sum) * 1000),
+      user: collaboration.collaborators.find((c) => c.id === share)!,
     }))
   }, [state, collaboration])
 
@@ -45,24 +40,18 @@ export function CollaborationInformations({
     <div>
       <h5>Additionnal information</h5>
 
-      <Spacing size="large"/>
+      <Spacing size="large" />
 
       <div className={cs(style.root)}>
         <strong>Address</strong>
         <LinkIcon
-          iconComp={
-            <i aria-hidden className="fas fa-external-link-square"/>
-          }
+          iconComp={<i aria-hidden className="fas fa-external-link-square" />}
           href={`https://tzkt.io/${collaboration.id}`}
           newTab
         >
           {collaboration.id}
         </LinkIcon>
-        <ListSplits
-          name="Shares"
-          splits={splits}
-          toggled
-        />
+        <ListSplits name="Shares" splits={splits} toggled />
         <strong>Contract balance</strong>
         <DisplayTezos
           mutez={state.balance!}
@@ -70,8 +59,8 @@ export function CollaborationInformations({
           tezosSize="regular"
         />
       </div>
-      
-      <Spacing size="regular"/>
+
+      <Spacing size="regular" />
       <ContractFeedback
         state={callState}
         loading={loading}
@@ -86,7 +75,7 @@ export function CollaborationInformations({
         state={loading ? "loading" : "default"}
         onClick={() => {
           call({
-            collaboration
+            collaboration,
           })
         }}
       >

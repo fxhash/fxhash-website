@@ -14,15 +14,15 @@ export interface GenerativeTokenInformations {
 }
 
 export enum CaptureTriggerMode {
-  DELAY             = "DELAY",
-  FN_TRIGGER        = "FN_TRIGGER",
+  DELAY = "DELAY",
+  FN_TRIGGER = "FN_TRIGGER",
 }
 export const CaptureTriggerModeList = Object.values(CaptureTriggerMode)
 
 export enum CaptureMode {
-  CANVAS          = "CANVAS",
-  CUSTOM          = "CUSTOM",
-  VIEWPORT        = "VIEWPORT",
+  CANVAS = "CANVAS",
+  CUSTOM = "CUSTOM",
+  VIEWPORT = "VIEWPORT",
 }
 export const CaptureModeList = Object.values(CaptureMode)
 
@@ -38,7 +38,7 @@ export interface CaptureSettings {
 
 export interface MintGenerativeData<N = string> {
   // if the project is authored as a collaboration
-  collaboration?: Collaboration|null
+  collaboration?: Collaboration | null
   // the ipfs uri pointing to the project with URL params
   cidUrlParams?: string
   // a hash to verify that the first matches
@@ -68,11 +68,11 @@ export interface GenTokenSettings {
     preMint?: {
       enabled: boolean
       hashConstraints?: string[] | null
-    },
+    }
     postMint?: {
       enabled: boolean
       hashConstraints?: string[] | null
-    },
+    }
   }
 }
 
