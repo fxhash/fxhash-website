@@ -16,7 +16,11 @@ import { CardSizeSelect } from "../../components/Input/CardSizeSelect"
 
 const ITEMS_PER_PAGE = 20
 
-const sortOptions: IOptions[] = [
+export type MarketplaceSortOption =
+  | "listingCreatedAt-desc"
+  | "listingPrice-desc"
+  | "listingPrice-asc"
+  | "listingCreatedAt-asc"
   {
     label: "recently listed",
     value: "listingCreatedAt-desc",
