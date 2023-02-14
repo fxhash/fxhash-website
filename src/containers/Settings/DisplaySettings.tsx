@@ -15,6 +15,8 @@ import { fakeGentk } from "../../utils/gentk"
 import { Objkt } from "../../types/entities/Objkt"
 import { MasonryCardsContainer } from "../../components/Card/MasonryCardsContainer"
 import { CardsContainer } from "../../components/Card/CardsContainer"
+import { Select } from "components/Input/Select"
+import { marketplaceSortOptions } from "containers/Marketplace/GenerativeListings"
 
 interface Props {
   settings: ISettingsContext
@@ -78,6 +80,21 @@ export function DisplaySettings({ settings, className }: Props) {
           <Switch
             onChange={(value) => settings.update("epilepsy", value)}
             value={settings.epilepsy}
+          />
+        </div>
+        <div className={cs(styleSettings.toggle_line)}>
+          <span>
+            <span>Default marketplace sorting</span>
+            <span className={styleSettings.toggle_line_description}>
+              The default sort order for marketplace listings
+            </span>
+          </span>
+          <Select
+            value={settings.preferredMarketplaceSorting}
+            options={marketplaceSortOptions}
+            onChange={(value) =>
+              settings.update("preferredMarketplaceSorting", value)
+            }
           />
         </div>
       </SettingsGroup>
