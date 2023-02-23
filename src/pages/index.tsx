@@ -16,16 +16,19 @@ import {
 import { Frag_MediaImage } from "../queries/fragments/media"
 import { Frag_UserBadge } from "../queries/fragments/user"
 import { Homepage } from "../containers/Homepage/Homepage"
+import { NFTArticle } from "../types/entities/Article"
 
 interface Props {
   randomGenerativeToken: GenerativeToken | null
   generativeTokens: GenerativeToken[]
+  articles: NFTArticle[]
   listings: Listing[]
 }
 
 const Home: NextPage<Props> = ({
   randomGenerativeToken,
   generativeTokens,
+  articles,
   //  listings,
 }) => {
   return (
@@ -55,6 +58,7 @@ const Home: NextPage<Props> = ({
         />
       </Head>
       <Homepage
+        articles={articles}
         randomGenerativeToken={randomGenerativeToken}
         generativeTokens={generativeTokens}
       />
@@ -80,6 +84,7 @@ export async function getServerSideProps() {
           id
           name
           ...Author
+          supply
           objkts(take: 10) {
             id
             iteration
@@ -120,6 +125,14 @@ export async function getServerSideProps() {
             }
           }
         }
+        articles(take: 2, sort: { createdAt: "DESC" }) {
+          id
+          title
+          slug
+          author {
+            ...UserBadgeInfos
+          }
+        }
       }
     `,
     fetchPolicy: "no-cache",
@@ -138,6 +151,7 @@ export async function getServerSideProps() {
       randomGenerativeToken: data.randomGenerativeToken,
       generativeTokens: data.generativeTokens,
       listings: data.listings,
+      articles: data.articles,
     },
   }
 }

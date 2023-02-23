@@ -7,7 +7,7 @@
   min-height: 140px;
   padding: 18px var(--layout-margin-big-lg);
 
-  @media (max-width: $breakpoint-md) {
+  @media (max-width: $breakpoint-lg) {
     min-height: 90px;
     padding-left: var(--layout-margin-big-md);
     padding-right: var(--layout-margin-big-md);

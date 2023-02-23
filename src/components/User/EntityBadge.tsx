@@ -14,6 +14,7 @@ export interface IProps {
   classNameAvatar?: string
   displayAddress?: boolean
   displayAvatar?: boolean
+  displayName?: boolean
   toggeable?: boolean
   newTab?: boolean
   isInline?: boolean
