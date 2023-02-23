@@ -5,8 +5,7 @@ import { Logo } from "./Logo"
 import { IndexerStatusLabel } from "../../components/Status/IndexerStatusLabel"
 import { useIndexerStatusSeverity } from "../../hooks/useIndexerStatusSeverity"
 import layout from "../../styles/Layout.module.scss"
-import { ConnectWithUs } from "../../components/ConnectWithUs/ConnectWithUs";
-
+import { ConnectWithUs } from "../../components/ConnectWithUs/ConnectWithUs"
 
 export function Footer() {
   const severity = useIndexerStatusSeverity()
