@@ -3,14 +3,18 @@ import { useContext, useRef, useState } from "react"
 import { UserContext } from "../containers/UserProvider"
 import { MessageCenterContext } from "../context/MessageCenter"
 import { TContractOperation } from "../services/contract-operations/ContractOperation"
-import { ContractOperationCallback, ContractOperationStatus, TContractOperationHookReturn } from "../types/Contracts"
+import {
+  ContractOperationCallback,
+  ContractOperationStatus,
+  TContractOperationHookReturn,
+} from "../types/Contracts"
 import { useIsMounted } from "../utils/hookts"
 
 /**
  * A
  */
 export function useContractOperation<Params>(
-  OperationClass: TContractOperation<Params>,
+  OperationClass: TContractOperation<Params>
 ): TContractOperationHookReturn<Params> {
   const [state, setState] = useState<ContractOperationStatus>(
     ContractOperationStatus.NONE
@@ -18,9 +22,9 @@ export function useContractOperation<Params>(
   const [loading, setLoading] = useState<boolean>(false)
   const [success, setSuccess] = useState<boolean>(false)
   const [error, setError] = useState<boolean>(false)
-  const [opHash, setOpHash] = useState<string|null>(null)
-  const [operation, setOperation] = useState<WalletOperation|null>(null)
-  const [params, setParams] = useState<Params|null>(null)
+  const [opHash, setOpHash] = useState<string | null>(null)
+  const [operation, setOperation] = useState<WalletOperation | null>(null)
+  const [params, setParams] = useState<Params | null>(null)
   const counter = useRef<number>(0)
   const isMounted = useIsMounted()
   const userContext = useContext(UserContext)
@@ -46,7 +50,7 @@ export function useContractOperation<Params>(
     setOperation(null)
     setParams(params)
     setState(ContractOperationStatus.NONE)
-    
+
     // assign the ID to this call and increment it to prevent overlaps
     counter.current++
     const id = counter.current
@@ -66,8 +70,7 @@ export function useContractOperation<Params>(
           if (data?.operation) {
             setOperation(data.operation)
           }
-        }
-        else if (status === ContractOperationStatus.ERROR) {
+        } else if (status === ContractOperationStatus.ERROR) {
           setLoading(false)
           setError(true)
         }
@@ -79,16 +82,16 @@ export function useContractOperation<Params>(
           {
             type: "warning",
             title: "Indexer delay",
-            content: "We've added a 2 minutes delay to our indexer to protect against blockchain rollbacks occuring since last protocol update. It will take about 2 minutes for your operation to be visible on the website."
+            content:
+              "We've added a 2 minutes delay to our indexer to protect against blockchain rollbacks occuring since last protocol update. It will take about 2 minutes for your operation to be visible on the website.",
           },
           {
             type: "success",
             title: `Operation applied`,
-            content: `${data.message}`
-          }
+            content: `${data.message}`,
+          },
         ])
-      }
-      else if (status === ContractOperationStatus.ERROR) {
+      } else if (status === ContractOperationStatus.ERROR) {
         messageCenter.addMessage({
           type: "error",
           title: "An error occured",
@@ -101,10 +104,9 @@ export function useContractOperation<Params>(
     if (!userContext.user || !userContext.walletManager) {
       try {
         await userContext.connect()
-      }
-      catch (err) {
+      } catch (err) {
         statusCallback(
-          ContractOperationStatus.ERROR, 
+          ContractOperationStatus.ERROR,
           "Wallet needs to be synced to run operations"
         )
         return
@@ -128,6 +130,6 @@ export function useContractOperation<Params>(
     success,
     call,
     clear,
-    error
+    error,
   }
 }

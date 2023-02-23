@@ -1,8 +1,16 @@
-import React, { PropsWithChildren, useState, useCallback, useRef, useEffect } from "react"
+import React, {
+  PropsWithChildren,
+  useState,
+  useCallback,
+  useRef,
+  useEffect,
+} from "react"
 import { useClientAsyncEffect, useClientEffect } from "../utils/hookts"
 import { Cycle } from "../types/Cycles"
-import { API_BLOCKCHAIN_CONTRACT_STORAGE, API_CYCLES_LIST } from "../services/Blockchain"
-
+import {
+  API_BLOCKCHAIN_CONTRACT_STORAGE,
+  API_CYCLES_LIST,
+} from "../services/Blockchain"
 
 interface ICyclesContext {
   loading: boolean
@@ -13,7 +21,7 @@ interface ICyclesContext {
 const defaultProperties: ICyclesContext = {
   loading: true,
   error: false,
-  cycles: [],  
+  cycles: [],
 }
 
 const defaultCtx: ICyclesContext = {
@@ -30,13 +38,13 @@ export function CyclesProvider({ children }: PropsWithChildren<{}>) {
       // get the cycles
       const cycleUpdatesData = await fetch(API_CYCLES_LIST)
       const cycleUpdates = await cycleUpdatesData.json()
-  
+
       const cycles: Cycle[] = cycleUpdates.map((update: any) => ({
         start: new Date(update.content.value.start),
         opening: parseInt(update.content.value.opening_duration),
         closing: parseInt(update.content.value.closing_duration),
       }))
-  
+
       // get the storage of the mint_issuer_allowed contract (to get the IDs of the cycles opened)
       const allowedStorageData = await fetch(
         API_BLOCKCHAIN_CONTRACT_STORAGE(
@@ -46,31 +54,26 @@ export function CyclesProvider({ children }: PropsWithChildren<{}>) {
       const allowedStorage = await allowedStorageData.json()
 
       // finally get the active cycles
-      const activeCycles = allowedStorage.cycle_ids.map(
-        (ids: string[]) => ids.map(
-          (id: string) => cycles[parseInt(id)]
-        )
+      const activeCycles = allowedStorage.cycle_ids.map((ids: string[]) =>
+        ids.map((id: string) => cycles[parseInt(id)])
       )
 
       setContext({
         loading: false,
         error: false,
-        cycles: activeCycles
+        cycles: activeCycles,
       })
-    }
-    catch {
+    } catch {
       if (isMounted()) {
         setContext({
           ...context,
-          error: true
+          error: true,
         })
       }
     }
   }, [])
 
   return (
-    <CyclesContext.Provider value={context}>
-      {children}
-    </CyclesContext.Provider>
+    <CyclesContext.Provider value={context}>{children}</CyclesContext.Provider>
   )
 }

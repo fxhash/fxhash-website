@@ -1,9 +1,17 @@
-import { ContractAbstraction, OpKind, Wallet, WalletOperation } from "@taquito/taquito"
+import {
+  ContractAbstraction,
+  OpKind,
+  Wallet,
+  WalletOperation,
+} from "@taquito/taquito"
 import { FxhashContracts } from "../../types/Contracts"
 import { Objkt } from "../../types/entities/Objkt"
 import { getGentkFA2Contract } from "../../utils/gentk"
 import { displayMutez } from "../../utils/units"
-import { buildParameters, EBuildableParams } from "../parameters-builder/BuildParameters"
+import {
+  buildParameters,
+  EBuildableParams,
+} from "../parameters-builder/BuildParameters"
 import { ContractOperation } from "./ContractOperation"
 
 export type TListingOperationParams = {
@@ -15,8 +23,8 @@ export type TListingOperationParams = {
  * List a gentk on the Marketplace
  */
 export class ListingOperation extends ContractOperation<TListingOperationParams> {
-  gentkContract: ContractAbstraction<Wallet>|null = null
-  marketplaceContract: ContractAbstraction<Wallet>|null = null
+  gentkContract: ContractAbstraction<Wallet> | null = null
+  marketplaceContract: ContractAbstraction<Wallet> | null = null
 
   async prepare() {
     this.gentkContract = await this.manager.getContract(
@@ -28,13 +36,15 @@ export class ListingOperation extends ContractOperation<TListingOperationParams>
   }
 
   async call(): Promise<WalletOperation> {
-    const updateOperatorsParams = [{
-      add_operator: {
-        owner: this.params.token.owner!.id,
-        operator: FxhashContracts.MARKETPLACE_V2,
-        token_id: this.params.token.id,
-      }
-    }]
+    const updateOperatorsParams = [
+      {
+        add_operator: {
+          owner: this.params.token.owner!.id,
+          operator: FxhashContracts.MARKETPLACE_V2,
+          token_id: this.params.token.id,
+        },
+      },
+    ]
 
     const listingParams = {
       gentk: {
@@ -44,7 +54,8 @@ export class ListingOperation extends ContractOperation<TListingOperationParams>
       price: this.params.price,
     }
 
-    return this.manager.tezosToolkit.wallet.batch()
+    return this.manager.tezosToolkit.wallet
+      .batch()
       .with([
         {
           kind: OpKind.TRANSACTION,
@@ -55,7 +66,7 @@ export class ListingOperation extends ContractOperation<TListingOperationParams>
             value: buildParameters(
               updateOperatorsParams,
               EBuildableParams.UPDATE_OPERATORS
-            )
+            ),
           },
           storageLimit: 300,
         },
@@ -65,18 +76,17 @@ export class ListingOperation extends ContractOperation<TListingOperationParams>
           amount: 0,
           parameter: {
             entrypoint: "listing",
-            value: buildParameters(
-              listingParams,
-              EBuildableParams.LISTING
-            )
+            value: buildParameters(listingParams, EBuildableParams.LISTING),
           },
-          storageLimit: 450
-        }
+          storageLimit: 450,
+        },
       ])
       .send()
   }
 
   success(): string {
-    return `You have listed ${this.params.token.name} for ${displayMutez(this.params.price)} tez`
+    return `You have listed ${this.params.token.name} for ${displayMutez(
+      this.params.price
+    )} tez`
   }
 }

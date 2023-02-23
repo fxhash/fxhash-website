@@ -1,4 +1,4 @@
-import { EReserveMethod, IReserve } from "../../types/entities/Reserve";
+import { EReserveMethod, IReserve } from "../../types/entities/Reserve"
 
 /**
  * Turns a Reserve in the input form into a reserve in the correct format
@@ -6,7 +6,7 @@ import { EReserveMethod, IReserve } from "../../types/entities/Reserve";
 export function transformReserveInputToGeneric(
   input: IReserve<string>[]
 ): IReserve<number>[] {
-  return input.map(reserve => {
+  return input.map((reserve) => {
     let data: any
     switch (reserve.method) {
       case EReserveMethod.WHITELIST: {
@@ -35,7 +35,7 @@ export function transformReserveInputToGeneric(
 export function transformReserveGenericToInput(
   input: IReserve<number>[]
 ): IReserve<string>[] {
-  return input.map(reserve => {
+  return input.map((reserve) => {
     let data: any
     if (reserve.method === EReserveMethod.WHITELIST) {
       data = []
@@ -45,8 +45,7 @@ export function transformReserveGenericToInput(
           pct: reserve.data[address],
         })
       }
-    }
-    else if (reserve.method === EReserveMethod.MINT_PASS) {
+    } else if (reserve.method === EReserveMethod.MINT_PASS) {
       data = reserve.data
     }
     return {

@@ -28,28 +28,28 @@ import { packData, packDataBytes, unpackDataBytes } from "@taquito/michel-codec"
  * An Enumeration of the different parameter builders available
  */
 export enum EBuildableParams {
-  UPDATE_OPERATORS      = "UPDATE_OPERATORS",
-  LISTING               = "LISTING",
-  LISTING_CANCEL        = "LISTING_CANCEL",
-  LISTING_ACCEPT        = "LISTING_ACCEPT",
-  LISTING_V3            = "LISTING_V3",
+  UPDATE_OPERATORS = "UPDATE_OPERATORS",
+  LISTING = "LISTING",
+  LISTING_CANCEL = "LISTING_CANCEL",
+  LISTING_ACCEPT = "LISTING_ACCEPT",
+  LISTING_V3 = "LISTING_V3",
   // LISTING_CANCEL        = "LISTING_CANCEL",
   // LISTING_ACCEPT        = "LISTING_ACCEPT",
-  OFFER_ACCEPT          = "OFFER_ACCEPT",
-  MINT                  = "MINT",
-  MINT_ISSUER           = "MINT_ISSUER",
-  PRICING_FIXED         = "PRICING_FIXED",
+  OFFER_ACCEPT = "OFFER_ACCEPT",
+  MINT = "MINT",
+  MINT_ISSUER = "MINT_ISSUER",
+  PRICING_FIXED = "PRICING_FIXED",
   PRICING_DUTCH_AUCTION = "PRICING_DUTCH_AUCTION",
-  UPDATE_ISSUER         = "UPDATE_ISSUER",
-  UPDATE_PRICE          = "UPDATE_PRICE",
-  UPDATE_RESERVE        = "UPDATE_RESERVE",
-  BURN_SUPPLY           = "BURN_SUPPLY",
-  BURN                  = "BURN",
-  RESERVE_WHITELIST     = "RESERVE_WHITELIST",
-  RESERVE_MINT_PASS     = "RESERVE_MINT_PASS",
-  RESERVE_MINT_PASS_INPUT= "RESERVE_MINT_PASS_INPUT",
-  RESERVE_MINT_INPUT    = "RESERVE_MINT_INPUT",
-  MINT_PASS_CONSUME     = "MINT_PASS_CONSUME",
+  UPDATE_ISSUER = "UPDATE_ISSUER",
+  UPDATE_PRICE = "UPDATE_PRICE",
+  UPDATE_RESERVE = "UPDATE_RESERVE",
+  BURN_SUPPLY = "BURN_SUPPLY",
+  BURN = "BURN",
+  RESERVE_WHITELIST = "RESERVE_WHITELIST",
+  RESERVE_MINT_PASS = "RESERVE_MINT_PASS",
+  RESERVE_MINT_PASS_INPUT = "RESERVE_MINT_PASS_INPUT",
+  RESERVE_MINT_INPUT = "RESERVE_MINT_INPUT",
+  MINT_PASS_CONSUME = "MINT_PASS_CONSUME",
 }
 
 // maps a builadable param type with the actual type in json
@@ -102,7 +102,7 @@ export function unpackBytes<T = any>(bytes: string, type: EBuildableParams): T {
 }
 
 /**
- * Given some data to pack represented as a **clean** js object (no extra 
+ * Given some data to pack represented as a **clean** js object (no extra
  * properties than those allowed by the type) and its corresponding type
  * (identified by its EBuildableParams key enum), outputs the data packed as
  * bytes string, ready to be sent to the contract

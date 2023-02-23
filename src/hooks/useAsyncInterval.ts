@@ -20,23 +20,26 @@ export function useAsyncInterval(
     savedCallback.current = callback
   }, [callback])
 
-  useClientAsyncEffect(async (isMounted) => {
-    let id: any = null
+  useClientAsyncEffect(
+    async (isMounted) => {
+      let id: any = null
 
-    const tick = async () => {
-      if (savedCallback.current) {
-        const fn = await savedCallback.current()
-        if (isMounted()) {
-          fn()
+      const tick = async () => {
+        if (savedCallback.current) {
+          const fn = await savedCallback.current()
+          if (isMounted()) {
+            fn()
+          }
         }
+        id = setTimeout(tick, delayMs)
       }
-      id = setTimeout(tick, delayMs)
-    }
 
-    tick()
+      tick()
 
-    return () => {
-      if (id !== null) clearTimeout(id)
-    }
-  }, [delayMs, ...deps])
+      return () => {
+        if (id !== null) clearTimeout(id)
+      }
+    },
+    [delayMs, ...deps]
+  )
 }

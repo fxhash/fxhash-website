@@ -11,23 +11,22 @@ import { getUserProfileLink } from "../../../utils/user"
 interface Props {
   user: User
 }
-export function UserCollectionEnjoy({
-  user,
-}: Props) {
+export function UserCollectionEnjoy({ user }: Props) {
   const { data, loading } = useQuery(Qu_userEntireCollection, {
     notifyOnNetworkStatusChange: true,
     variables: {
       id: user.id,
-    }
+    },
   })
 
-  const entireCollection: Objkt[]|null = useMemo(
-    () => data?.user?.entireCollection
-      ? data.user.entireCollection.map((gentk: Objkt) => ({
-        ...gentk,
-        owner: user,
-      }))
-      : null,
+  const entireCollection: Objkt[] | null = useMemo(
+    () =>
+      data?.user?.entireCollection
+        ? data.user.entireCollection.map((gentk: Objkt) => ({
+            ...gentk,
+            owner: user,
+          }))
+        : null,
     [data]
   )
 

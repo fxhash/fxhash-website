@@ -10,13 +10,11 @@ import { ipfsGatewayUrl } from "../../../services/Ipfs"
 interface Props {
   revisions: NFTArticleRevision[]
 }
-export function ArticleRevisions({
-  revisions
-}: Props) {
+export function ArticleRevisions({ revisions }: Props) {
   return (
     <ToggableInfo
       label="Revisions"
-      placeholder={`(${revisions.length-1})`}
+      placeholder={`(${revisions.length - 1})`}
       toggled={false}
     >
       <div className={cs(style.root)}>
@@ -29,15 +27,13 @@ export function ArticleRevisions({
             referrerPolicy="no-referrer"
           >
             <span>
-              {rev.iteration === 0 
-                ? "Initial mint" 
-                : getNumberWithOrdinal(rev.iteration) + " revision"
-              }
+              {rev.iteration === 0
+                ? "Initial mint"
+                : getNumberWithOrdinal(rev.iteration) + " revision"}
             </span>
             {", "}
-            <DateFormatted date={rev.createdAt}/>
-            {" "}
-            <i className="fas fa-external-link-square" aria-hidden/>
+            <DateFormatted date={rev.createdAt} />{" "}
+            <i className="fas fa-external-link-square" aria-hidden />
           </a>
         ))}
       </div>

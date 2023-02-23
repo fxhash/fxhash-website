@@ -16,7 +16,7 @@ export interface Step {
   title?: string
   hideTabs?: boolean
   // a list of the properties which the step must be set in the generative data
-  // state before reaching the step. 
+  // state before reaching the step.
   // it will be used to validate current data & clear data down
   requiredProps: (keyof MintGenerativeData)[]
 }
