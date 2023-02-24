@@ -160,6 +160,7 @@ export function ListingAccept({ listing, objkt }: Props) {
         onClose={handleToggleWinterCheckout(false)}
         onFinish={handleGoToCollection}
         appearance={winterCheckoutAppearance}
+        fillSource="fxhash.xyz"
         paymentMethod={winterPaymentMethod || ""}
       />
     </>
