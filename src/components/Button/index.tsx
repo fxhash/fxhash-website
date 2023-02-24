@@ -20,7 +20,13 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   iconComp?: React.ReactNode
   state?: ButtonState
   size?: ButtonSize
-  color?: "black" | "white" | "primary" | "secondary" | "transparent"
+  color?:
+    | "black"
+    | "white"
+    | "primary"
+    | "secondary"
+    | "secondary-inverted"
+    | "transparent"
   className?: string
   classNameChildren?: string
   iconSide?: "left" | "right" | null

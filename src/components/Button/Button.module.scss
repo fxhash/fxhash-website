@@ -207,6 +207,11 @@
   }
 }
 
+.color-secondary-inverted {
+  color: var(--color-secondary) !important;
+  background-color: var(--color-white);
+}
+
 .state-default {}
 
 @keyframes turn {

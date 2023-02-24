@@ -40,6 +40,32 @@
   &.size-small {
     width: calc(min(100%, 230px));
   }
+
+  &.size-fill {
+    width: 100%;
+  }
+}
+
+.inside {
+  position: relative;
+  span {
+    position: absolute;
+    top: 50%;
+    left: 8px;
+    width: 24px;
+    overflow: hidden;
+    transform: translateY(-50%);
+    line-height: 1;
+    pointer-events: none;
+  }
+  input {
+    padding-left: 40px;
+  }
+  &:focus-within {
+    span {
+      color: var(--color-secondary);
+    }
+  }
 }
 
 .error {
@@ -61,5 +87,9 @@
       width: auto;
     }
   }
-
+  .inside {
+    span {
+      width: 24px;
+    }
+  }
 }

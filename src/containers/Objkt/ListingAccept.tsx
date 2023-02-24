@@ -27,6 +27,11 @@ interface Props {
 
 export function ListingAccept({ listing, objkt }: Props) {
   const [showWinterCheckout, setShowWinterCheckout] = useState(false)
+  const [showWinterPaymentOptions, setShowWinterPaymentOptions] =
+    useState(false)
+  const [winterPaymentMethod, setWinterPaymentMethod] = useState<
+    false | string
+  >(false)
   const userCtx = useContext(UserContext)
   const router = useRouter()
 
@@ -52,6 +57,19 @@ export function ListingAccept({ listing, objkt }: Props) {
   const handleToggleWinterCheckout = useCallback(
     (newState) => () => {
       setShowWinterCheckout(newState)
+    },
+    []
+  )
+  const handleToggleWinterPaymentOptions = useCallback(
+    (newState) => () => {
+      setShowWinterPaymentOptions(newState)
+    },
+    []
+  )
+  const handleClickWinterPay = useCallback(
+    (paymentMethod: string | false) => () => {
+      setWinterPaymentMethod(paymentMethod)
+      setShowWinterCheckout(true)
     },
     []
   )
@@ -86,18 +104,20 @@ export function ListingAccept({ listing, objkt }: Props) {
       {showWinterCheckout && (
         <span className={cs(style.infos)}>Opening payment card widget</span>
       )}
-
-      <div className={cs(style.lock_container)}>
-        {!isOwner && (
-          <>
+      {(contractLoading || showWinterCheckout) && (
+        <div>
+          <Button state="loading" color="secondary" />
+        </div>
+      )}
+      {!isOwner && (
+        <div className={style.listing_container}>
+          <div className={cs(style.lock_container)}>
             <Button
-              state={
-                contractLoading || showWinterCheckout ? "loading" : "default"
-              }
+              state={"default"}
               color="secondary"
               size="regular"
               onClick={callContract}
-              disabled={locked}
+              disabled={locked || contractLoading || showWinterCheckout}
               className={style.button_purchase}
               classNameChildren={style.button_purchase_content}
             >
@@ -110,16 +130,27 @@ export function ListingAccept({ listing, objkt }: Props) {
             </Button>
             {!contractLoading && !showWinterCheckout && (
               <ButtonPaymentCard
-                onClick={handleToggleWinterCheckout(true)}
+                onClick={handleToggleWinterPaymentOptions(
+                  !showWinterPaymentOptions
+                )}
                 disabled={locked}
+                hasDropdown={showWinterPaymentOptions ? "up" : "down"}
               />
             )}
             {locked && (
               <Unlock locked={true} onClick={() => setLocked(false)} />
             )}
-          </>
-        )}
-      </div>
+          </div>
+          <div
+            className={cs(style.buttons_pay, {
+              [style.open]: showWinterPaymentOptions,
+            })}
+          >
+            <button onClick={handleClickWinterPay(false)}>pay with USD</button>
+            <button onClick={handleClickWinterPay("ETH")}>pay with ETH</button>
+          </div>
+        </div>
+      )}
       <WinterCheckout
         showModal={showWinterCheckout}
         production={process.env.NEXT_PUBLIC_TZ_NET === "mainnet"}
@@ -129,6 +160,7 @@ export function ListingAccept({ listing, objkt }: Props) {
         onClose={handleToggleWinterCheckout(false)}
         onFinish={handleGoToCollection}
         appearance={winterCheckoutAppearance}
+        paymentMethod={winterPaymentMethod || ""}
       />
     </>
   )

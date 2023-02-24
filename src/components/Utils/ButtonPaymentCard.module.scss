@@ -1,8 +1,25 @@
 .credit_card_btn {
-  padding-left: 20px !important;
-  padding-right: 20px !important;
-
+  padding-left: 12px !important;
+  padding-right: 12px !important;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  &_children {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
   i {
     margin-right: 0;
+  }
+  .icon_winter {
+    font-size: 24px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  .caret {
+    margin-left: 12px;
   }
 }

@@ -2,19 +2,20 @@ import style from "./MarketplaceActions.module.scss"
 import cs from "classnames"
 import { useState } from "react"
 import { Button } from "../../components/Button"
-import { InputTextUnit } from "../../components/Input/InputTextUnit"
 import { Objkt } from "../../types/entities/Objkt"
 import { ContractFeedback } from "../../components/Feedback/ContractFeedback"
 import { useContractOperation } from "../../hooks/useContractOperation"
 import { IconTezos } from "../../components/Icons/IconTezos"
 import { OfferOperation } from "../../services/contract-operations/Offer"
+import { InputText } from "../../components/Input/InputText";
+import { InputTextUnit } from "../../components/Input/InputTextUnit";
 
 interface Props {
   objkt: Objkt
 }
 
 export function OfferCreate({ objkt }: Props) {
-  const [opened, setOpened] = useState<boolean>(false)
+  const [opened, setOpened] = useState<boolean>(true)
   const [price, setPrice] = useState<string>("")
 
   const {
@@ -50,19 +51,23 @@ export function OfferCreate({ objkt }: Props) {
       {opened ? (
         <div className={cs(style.inputs)}>
           <InputTextUnit
+            type="number"
             unit={<IconTezos size="regular" />}
-            type="text"
-            sizeX="small"
+            positionUnit="inside-left"
+            sizeX="fill"
             value={price}
             onChange={(evt) => setPrice(evt.target.value)}
             min={0}
             step={0.0000001}
+            className={style.input}
           />
           <Button
             state={contractLoading ? "loading" : "default"}
             color="secondary"
             onClick={callContract}
             size="regular"
+            className={style.button_listing}
+            disabled={!price}
           >
             make offer
           </Button>
