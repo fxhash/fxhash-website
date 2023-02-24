@@ -90,7 +90,7 @@ const WinterCheckout: FunctionComponent<Props> = (props) => {
       "gentkId",
       "listingId",
       "assetId",
-      "paymentMethod"
+      "paymentMethod",
     ]
     paramsStr.forEach((param) => {
       const propValue = props[param as keyof PropsWithChildren<Props>]

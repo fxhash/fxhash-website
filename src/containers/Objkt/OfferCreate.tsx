@@ -7,8 +7,8 @@ import { ContractFeedback } from "../../components/Feedback/ContractFeedback"
 import { useContractOperation } from "../../hooks/useContractOperation"
 import { IconTezos } from "../../components/Icons/IconTezos"
 import { OfferOperation } from "../../services/contract-operations/Offer"
-import { InputText } from "../../components/Input/InputText";
-import { InputTextUnit } from "../../components/Input/InputTextUnit";
+import { InputText } from "../../components/Input/InputText"
+import { InputTextUnit } from "../../components/Input/InputTextUnit"
 
 interface Props {
   objkt: Objkt
