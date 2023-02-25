@@ -72,7 +72,11 @@ export function CardsExplorer({
     })
   }
 
-  useEffect(() => setFiltersVisible(!isMobile), [isMobile])
+  useEffect(() => {
+    if (isMobile && filtersVisibleDefault) {
+      setFiltersVisible(false)
+    }
+  }, [isMobile])
 
   useEffect(() => {
     // cardSize scopes need to match the basePath to prevent race conditions
