@@ -47,6 +47,7 @@ interface Props {
   objtkFilters: ObjktFilters
   setObjtkFilters: Dispatch<SetStateAction<ObjktFilters>>
 }
+
 export function GenerativeIterationsFilters({
   token,
   featureFilters,
@@ -107,6 +108,11 @@ export function GenerativeIterationsFilters({
     setFeatureFilters(newFilters)
   }
 
+  // get flat array of feature names for initial filters
+  const enabledFilters: string[] = featureFilters.map(
+    (featureFilter) => featureFilter.name
+  )
+
   return (
     <>
       <FiltersGroup title="Features">
@@ -114,7 +120,11 @@ export function GenerativeIterationsFilters({
           <LoaderBlock size="small" />
         ) : processedFeatures && processedFeatures.length > 0 ? (
           processedFeatures?.map((feature) => (
-            <FiltersSubGroup key={feature.name} title={feature.name}>
+            <FiltersSubGroup
+              key={feature.name}
+              title={feature.name}
+              expandDefault={enabledFilters.includes(feature.name)}
+            >
               <InputMultiList
                 listItems={feature.listItems}
                 selected={
@@ -127,7 +137,7 @@ export function GenerativeIterationsFilters({
                 className={cs(style.multi_list)}
                 btnClassName={cs(style.feature_trait_wrapper)}
               >
-                {({ itemProps, selected }) => (
+                {({ itemProps }) => (
                   <div className={cs(style.feature_trait)}>
                     <span>{"" + itemProps.name}</span>
                     <em>({itemProps.occur})</em>

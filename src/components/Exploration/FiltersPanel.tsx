@@ -1,7 +1,7 @@
 import style from "./FiltersPanel.module.scss"
 import cs from "classnames"
-import { PropsWithChildren, useContext, useEffect, useMemo } from "react"
-import useWindowSize, { breakpoints } from "../../hooks/useWindowsSize"
+import { PropsWithChildren, useContext, useEffect } from "react"
+import useIsMobile from "../../hooks/useIsMobile"
 import { ModalContext } from "../../context/Modal"
 
 interface Props {
@@ -14,11 +14,7 @@ export function FiltersPanel({
   children,
 }: PropsWithChildren<Props>) {
   const { openModalId, closeModalId } = useContext(ModalContext)
-  const { width } = useWindowSize()
-  const isMobile = useMemo(
-    () => width !== undefined && width <= breakpoints.sm,
-    [width]
-  )
+  const isMobile = useIsMobile()
   useEffect(() => {
     if (isMobile && open) {
       openModalId("filters")

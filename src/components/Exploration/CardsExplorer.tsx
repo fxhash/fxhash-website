@@ -1,5 +1,3 @@
-import style from "./CardsExplorer.module.scss"
-import cs from "classnames"
 import {
   FunctionComponent,
   useState,
@@ -10,6 +8,7 @@ import {
 import { SettingsContext } from "../../context/Theme"
 import { useInView } from "react-intersection-observer"
 import { useRouter } from "next/router"
+import useIsMobile from "../../hooks/useIsMobile"
 
 const DEFAULT_SIZE = 270
 
@@ -44,6 +43,7 @@ export function CardsExplorer({
 }: Props) {
   const settings = useContext(SettingsContext)
   const router = useRouter()
+  const isMobile = useIsMobile()
 
   const { ref: refCardsContainer, inView: inViewCardsContainer } = useInView({
     rootMargin: "-300px 0px -100px",
@@ -71,6 +71,8 @@ export function CardsExplorer({
       [cardSizeScope!]: value,
     })
   }
+
+  useEffect(() => setFiltersVisible(!isMobile), [isMobile])
 
   useEffect(() => {
     // cardSize scopes need to match the basePath to prevent race conditions

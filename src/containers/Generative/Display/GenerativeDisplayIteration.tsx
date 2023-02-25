@@ -236,7 +236,7 @@ const _GenerativeDisplayIteration = ({
               <Spacing size="3x-large" />
               <h4>Features</h4>
               <Spacing size="small" />
-              <Features features={objkt.features} />
+              <Features features={objkt.features} objkt={objkt} />
             </div>
           )}
         </div>
@@ -247,7 +247,7 @@ const _GenerativeDisplayIteration = ({
           <Spacing size="3x-large" />
           <h4>Features</h4>
           <Spacing size="small" />
-          <Features features={objkt.features} />
+          <Features features={objkt.features} objkt={objkt} />
         </div>
       )}
     </>

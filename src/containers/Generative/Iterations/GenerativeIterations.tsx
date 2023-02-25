@@ -3,12 +3,14 @@ import layout from "../../../styles/Layout.module.scss"
 import cs from "classnames"
 import { GenerativeToken } from "../../../types/entities/GenerativeToken"
 import { useQuery } from "@apollo/client"
+import { useRouter } from "next/router"
 import { Qu_genTokenIterations } from "../../../queries/generative-token"
 import { MasonryCardsContainer } from "../../../components/Card/MasonryCardsContainer"
 import { CardsContainer } from "../../../components/Card/CardsContainer"
 import {
   IObjktFeatureFilter,
   Objkt,
+  objktFeatureType,
   ObjktFilters,
 } from "../../../types/entities/Objkt"
 import { CardsLoading } from "../../../components/Card/CardsLoading"
@@ -73,11 +75,43 @@ function sortValueToSortVariable(val: string) {
   }
 }
 
+function extractFeatureFilter(queryString: string | string[]) {
+  // wrap in try-catch to prevent app break from incorrect JSON exceptions
+  try {
+    const featureParams: Record<string, string> = JSON.parse(
+      queryString.toString()
+    )
+
+    return Object.keys(featureParams).map((featureParam) => ({
+      name: featureParam,
+      values: [featureParams[featureParam]],
+      type: objktFeatureType(featureParams[featureParam]),
+    }))
+  } catch (err) {
+    // do nothing
+  }
+
+  return []
+}
+
 interface Props {
   token: GenerativeToken
 }
 export function GenerativeIterations({ token }: Props) {
   const settings = useContext(SettingsContext)
+  //const isMobile: boolean = useIsMobile()
+  const router = useRouter()
+  const { pathname, query } = router
+
+  let featureFiltersParams: IObjktFeatureFilter[] = []
+  if (query.features) {
+    featureFiltersParams = extractFeatureFilter(query.features)
+    // clean-up browser url
+    router.replace({ pathname, query: { params: query.params } }, undefined, {
+      shallow: true,
+    })
+  }
+
   //
   // REFS / STATE
   //
@@ -95,9 +129,8 @@ export function GenerativeIterations({ token }: Props) {
     [sortValue]
   )
   // the filters on the features, default no filters
-  const [featureFilters, setFeatureFilters] = useState<IObjktFeatureFilter[]>(
-    []
-  )
+  const [featureFilters, setFeatureFilters] =
+    useState<IObjktFeatureFilter[]>(featureFiltersParams)
   const [objtkFilters, setObjtkFilters] = useState<ObjktFilters>({})
 
   const removeObjtkFilter = useCallback((key: keyof ObjktFilters) => {
@@ -225,7 +258,10 @@ export function GenerativeIterations({ token }: Props) {
     : CardsContainer
 
   return (
-    <CardsExplorer cardSizeScope="generative-iteration">
+    <CardsExplorer
+      cardSizeScope="generative-iteration"
+      filtersVisibleDefault={featureFilters.length > 0}
+    >
       {({
         filtersVisible,
         setFiltersVisible,

@@ -27,7 +27,7 @@ export function FiltersSubGroup({
         <span>{title}</span>
         <i className={`fas fa-caret-${expanded ? "down" : "left"}`} />
       </button>
-      {expanded && <main>{children}</main>}
+      {expanded && <div>{children}</div>}
     </div>
   )
 }
