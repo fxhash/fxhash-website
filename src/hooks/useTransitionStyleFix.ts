@@ -53,7 +53,6 @@ export const useTransitionStyleFix = () =>
         (entries, entry) => {
           const { element, href } = entry
           const styleExists = href && fixedStyleHrefs[href]
-
           if (styleExists) {
             element.remove()
           } else {

@@ -11,17 +11,16 @@
     flex-direction: row;
     align-items: center;
   }
-  i {
-    margin-right: 0;
-  }
   .icon_winter {
     font-size: 24px;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
+    margin-right: 0;
   }
   .caret {
     margin-left: 12px;
+    margin-right: 0;
   }
 }
