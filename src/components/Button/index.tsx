@@ -75,9 +75,11 @@ export const Button = React.forwardRef<
       >
         <div className={cs(style.btn_content)}>
           {iconComp}
-          <span className={cs(style.children, classNameChildren)}>
-            {children}
-          </span>
+          {children && (
+            <span className={cs(style.children, classNameChildren)}>
+              {children}
+            </span>
+          )}
         </div>
       </ButtonOrLink>
     )
