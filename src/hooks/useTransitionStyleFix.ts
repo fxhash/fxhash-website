@@ -17,7 +17,7 @@ export const useTransitionStyleFix = () =>
       element.removeAttribute("data-n-p")
     )
 
-    const fixedStyleHrefs: string[] = []
+    const fixedStyleHrefs: Record<string, any> = {}
 
     const mutationHandler = (mutations: any) => {
       // Gather all <style data-n-href="/..."> elements.
@@ -36,15 +36,14 @@ export const useTransitionStyleFix = () =>
       // - Remove the element if it's already present.
       newStyleEntries.forEach(
         ({ element, href }: { element: any; href: string }) => {
-          const styleExists = fixedStyleHrefs.includes(href)
+          const styleExists = fixedStyleHrefs[href]
 
           if (styleExists) {
-            element.remove()
-          } else {
-            element.setAttribute("data-fouc-fix-n-href", href)
-            element.removeAttribute("data-n-href")
-            fixedStyleHrefs.push(href)
+            styleExists.remove()
           }
+          element.setAttribute("data-fouc-fix-n-href", href)
+          element.removeAttribute("data-n-href")
+          fixedStyleHrefs[href] = element
         }
       )
 
@@ -53,7 +52,7 @@ export const useTransitionStyleFix = () =>
       ssrPageStyleSheetsEntries = ssrPageStyleSheetsEntries.reduce(
         (entries, entry) => {
           const { element, href } = entry
-          const styleExists = href && fixedStyleHrefs.includes(href)
+          const styleExists = href && fixedStyleHrefs[href]
 
           if (styleExists) {
             element.remove()

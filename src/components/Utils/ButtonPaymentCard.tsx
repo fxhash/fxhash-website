@@ -20,7 +20,7 @@ const _ButtonPaymentCard = ({
   return (
     <Button
       type="button"
-      size="regular"
+      size="custom"
       onClick={onClick}
       disabled={disabled}
       color="secondary-inverted"
