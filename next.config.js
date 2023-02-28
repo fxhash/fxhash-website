@@ -29,8 +29,8 @@ const baseSecurityHeaders = [
   },
 ]
 
-const articlesAllowedDomains =
-  "https://*.spotify.com/ https://spotify.com https://*.youtube.com/ https://youtube.com https://*.twitter.com/ https://twitter.com https://codepen.io https://openprocessing.org"
+const winterUrl = process.env.NODE_ENV === "development" ? "https://sandbox-winter-checkout.onrender.com/" : "https://checkout.usewinter.com/"
+const articlesAllowedDomains = `https://*.spotify.com/ https://spotify.com https://*.youtube.com/ https://youtube.com https://*.twitter.com/ https://twitter.com https://codepen.io https://openprocessing.org ${winterUrl}`
 
 /** @type {import('next').NextConfig} */
 module.exports = withBundleAnalyzer({

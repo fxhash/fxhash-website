@@ -14,7 +14,7 @@ class PerformanceTimingsClass {
     }
     this.timings[id] = {
       started: performance.now(),
-      name
+      name,
     }
     return id
   }

@@ -30,7 +30,7 @@ import {
   HasMoreResultsState,
   reducerHasMoreResults,
 } from "./SearchSummaryReducer"
-import useWindowSize from "../../hooks/useWindowsSize";
+import useWindowSize from "../../hooks/useWindowsSize"
 
 export interface SearchQuery {
   users: User[]
@@ -49,7 +49,7 @@ const _SearchSummary = ({
     React.Reducer<HasMoreResultsState, HasMoreResultsAction>
   >(reducerHasMoreResults, defaultHasMoreResults)
   const settingsCtx = useContext(SettingsContext)
-  const { width } = useWindowSize();
+  const { width } = useWindowSize()
   const handleChangeQuery = useCallback(
     (newQuery) => {
       onChangeQuery(newQuery)

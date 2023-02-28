@@ -58,7 +58,11 @@
   }
 
   code {
-    font-family: inherit;
+    font-family: var(--font-family-primary);
+    font-size: 1.125rem;
+    @media (max-width: $breakpoint-sm) {
+      font-size: 1rem;
+    }
     background-color: var(--color-gray-vvlight);
     border: 1px solid var(--color-gray-vlight);
     padding: 0 4px;

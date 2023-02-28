@@ -1,5 +1,5 @@
-import { gql } from "@apollo/client";
-import { Frag_GenAuthor } from "./generative-token";
+import { gql } from "@apollo/client"
+import { Frag_GenAuthor } from "./generative-token"
 
 export const Frag_ListingArticle = gql`
   fragment ListingArticle on Listing {
@@ -15,7 +15,7 @@ export const Frag_ListingArticle = gql`
       flag
     }
   }
-`;
+`
 
 export const Frag_ListingCardInfos = gql`
   ${Frag_GenAuthor}
@@ -47,6 +47,7 @@ export const Frag_ListingCardInfos = gql`
       issuer {
         flag
         name
+        labels
         ...Author
       }
     }

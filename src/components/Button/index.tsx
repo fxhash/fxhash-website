@@ -22,6 +22,7 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   size?: ButtonSize
   color?: "black" | "white" | "primary" | "secondary" | "transparent"
   className?: string
+  classNameChildren?: string
   iconSide?: "left" | "right" | null
   isLink?: boolean
   disabled?: boolean
@@ -41,6 +42,7 @@ export const Button = React.forwardRef<
       isLink = false,
       disabled = false,
       className,
+      classNameChildren,
       children,
       ...props
     },
@@ -67,7 +69,9 @@ export const Button = React.forwardRef<
       >
         <div className={cs(style.btn_content)}>
           {iconComp}
-          <span className={style.children}>{children}</span>
+          <span className={cs(style.children, classNameChildren)}>
+            {children}
+          </span>
         </div>
       </ButtonOrLink>
     )

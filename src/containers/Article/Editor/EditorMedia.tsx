@@ -8,7 +8,7 @@ import { forwardRef, useCallback, useImperativeHandle, useMemo } from "react"
 import { isUrlLocal } from "../../../utils/files"
 import useFetch, { CachePolicies } from "use-http"
 import { API_FILE__ARTICLE_UPLOAD_FILE } from "../../../services/apis/file-api.service"
-import { VideoPolymorphic } from "../../../components/Medias/VideoPolymorphic";
+import { VideoPolymorphic } from "../../../components/Medias/VideoPolymorphic"
 
 const UPLOAD_DEFAULT_ERROR = "Unknown error."
 
@@ -19,101 +19,86 @@ interface Props {
   media: IEditorMediaFile
   onChangeUri: (uri: string) => void
 }
-export const EditorMedia = forwardRef<Ref, Props>(({
-  media,
-  onChangeUri,
-}, ref) => {
-  const isLocal = useMemo(
-    () => isUrlLocal(media.uri),
-    [media.uri]
-  )
+export const EditorMedia = forwardRef<Ref, Props>(
+  ({ media, onChangeUri }, ref) => {
+    const isLocal = useMemo(() => isUrlLocal(media.uri), [media.uri])
 
-  const { post, loading, error, data } =
-    useFetch<any>(API_FILE__ARTICLE_UPLOAD_FILE, {
-      cachePolicy: CachePolicies.NO_CACHE,
-      onNewData: (curr, data) => {
-        if (data.cid) {
-          // pull the uri update up
-          onChangeUri(`ipfs://${data.cid}`)
-        }
+    const { post, loading, error, data } = useFetch<any>(
+      API_FILE__ARTICLE_UPLOAD_FILE,
+      {
+        cachePolicy: CachePolicies.NO_CACHE,
+        onNewData: (curr, data) => {
+          if (data.cid) {
+            // pull the uri update up
+            onChangeUri(`ipfs://${data.cid}`)
+          }
+        },
       }
-    })
+    )
 
-  const uploadFile = useCallback(async () => {
-    if (isLocal && !loading) {
-      const file = await (await fetch(media.uri)).blob()
-      const form = new FormData()
-      form.set("file", file)
-      post(form)
-    }
-  }, [isLocal, loading, media, post])
+    const uploadFile = useCallback(async () => {
+      if (isLocal && !loading) {
+        const file = await (await fetch(media.uri)).blob()
+        const form = new FormData()
+        form.set("file", file)
+        post(form)
+      }
+    }, [isLocal, loading, media, post])
 
-  const errorMessage = error && (data?.error || UPLOAD_DEFAULT_ERROR)
+    const errorMessage = error && (data?.error || UPLOAD_DEFAULT_ERROR)
 
-  // map the ref
-  useImperativeHandle(ref, () => ({
-    uploadIpfs: uploadFile
-  }), [uploadFile])
+    // map the ref
+    useImperativeHandle(
+      ref,
+      () => ({
+        uploadIpfs: uploadFile,
+      }),
+      [uploadFile]
+    )
 
-  return (
-    <div
-      key={media.uri}
-      className={cs(style.entry)}
-    >
-      <div className={cs(style.image__wrapper)}>
-        {media.type === "image" &&
-          <ImagePolymorphic
-            uri={media.uri}
-            className={cs(style.media)}
+    return (
+      <div key={media.uri} className={cs(style.entry)}>
+        <div className={cs(style.image__wrapper)}>
+          {media.type === "image" && (
+            <ImagePolymorphic uri={media.uri} className={cs(style.media)} />
+          )}
+          {media.type === "video" && (
+            <VideoPolymorphic uri={media.uri} className={cs(style.media)} />
+          )}
+          {media.type === "audio" && (
+            <div className={style.media_audio}>
+              <i className="fa-solid fa-music" aria-hidden />
+            </div>
+          )}
+        </div>
+        <span className={cs(style.uri)}>
+          {errorMessage ? (
+            <span className={cs(text.error)}>Upload error: {errorMessage}</span>
+          ) : isLocal ? (
+            <span className={cs(text.info)}>Not uploaded yet</span>
+          ) : (
+            <strong>{media.uri}</strong>
+          )}
+        </span>
+        {!isLocal ? (
+          <i
+            className={cs("fa-solid fa-circle-check", text.success, text.h4)}
+            aria-hidden
           />
-        }
-        {media.type === "video" &&
-          <VideoPolymorphic
-            uri={media.uri}
-            className={cs(style.media)}
-          />
-        }
-        {media.type === "audio" &&
-          <div className={style.media_audio}>
-            <i className="fa-solid fa-music" aria-hidden/>
-          </div>
-        }
-      </div>
-      <span className={cs(style.uri)}>
-        {errorMessage ? (
-          <span
-            className={cs(text.error)}
+        ) : (
+          <Button
+            type="button"
+            color="secondary"
+            size="very-small"
+            onClick={uploadFile}
+            state={loading ? "loading" : "default"}
           >
-            Upload error: {errorMessage}
-          </span>
-        ):isLocal ? (
-          <span className={cs(text.info)}>
-            Not uploaded yet
-          </span>
-        ):(
-          <strong>
-            {media.uri}
-          </strong>
+            upload
+          </Button>
         )}
-      </span>
-      {!isLocal ? (
-        <i
-          className={cs("fa-solid fa-circle-check", text.success, text.h4)}
-          aria-hidden
-        />
-      ):(
-        <Button
-          type="button"
-          color="secondary"
-          size="very-small"
-          onClick={uploadFile}
-          state={loading ? "loading" : "default"}
-        >
-          upload
-        </Button>
-      )}
-    </div>
-  )
-})
+      </div>
+    )
+  }
+)
 
 EditorMedia.displayName = "EditorMedia"

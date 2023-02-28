@@ -29,14 +29,14 @@ export function SyncRedirect({ target }: Props) {
       router.replace(target)
     }
   }, [userCtx.user])
-  
+
   return (
     <div className={cs(style.container)}>
       <h4>You must sync your wallet to access this page/feature</h4>
       <Button
         size="large"
         className="btn-sync"
-        iconComp={<i aria-hidden className="fas fa-wallet"/>}
+        iconComp={<i aria-hidden className="fas fa-wallet" />}
         onClick={() => {
           userCtx.connect()
         }}

@@ -11,10 +11,20 @@ import { Objkt } from "../../types/entities/Objkt"
 import { InfiniteScrollTrigger } from "../../components/Utils/InfiniteScrollTrigger"
 import { CardsLoading } from "../../components/Card/CardsLoading"
 import { Qu_genTokListings } from "../../queries/marketplace"
+import { CardsExplorer } from "../../components/Exploration/CardsExplorer"
+import { CardSizeSelect } from "../../components/Input/CardSizeSelect"
+import { useRouter } from "next/router"
+import { useSettingsContext } from "context/Theme"
 
 const ITEMS_PER_PAGE = 20
 
-const sortOptions: IOptions[] = [
+export type MarketplaceSortOption =
+  | "listingCreatedAt-desc"
+  | "listingPrice-desc"
+  | "listingPrice-asc"
+  | "listingCreatedAt-asc"
+
+export const marketplaceSortOptions: IOptions<MarketplaceSortOption>[] = [
   {
     label: "recently listed",
     value: "listingCreatedAt-desc",
@@ -46,7 +56,12 @@ interface Props {
 }
 
 export const GenerativeListings = ({ token }: Props) => {
-  const [sortValue, setSortValue] = useState<string>("listingCreatedAt-desc")
+  const settings = useSettingsContext()
+  const router = useRouter()
+  const { sort: sortQueryParam = settings.preferredMarketplaceSorting } =
+    router.query
+
+  const [sortValue, setSortValue] = useState<string>(sortQueryParam as string)
   const sort = useMemo<Record<string, any>>(
     () => sortValueToSortVariable(sortValue),
     [sortValue]
@@ -93,9 +108,22 @@ export const GenerativeListings = ({ token }: Props) => {
       })
   }
 
+  const setSortQueryParam = (sort: string) =>
+    router.replace(
+      {
+        query: {
+          ...router.query,
+          sort,
+        },
+      },
+      undefined,
+      { shallow: true }
+    )
+
   useEffect(() => {
     currentLength.current = 0
     ended.current = false
+    setSortQueryParam(sortValue)
     refetch?.({
       filters: {},
       id: token.id,
@@ -106,36 +134,43 @@ export const GenerativeListings = ({ token }: Props) => {
   }, [sort])
 
   return (
-    <>
-      <div className={cs(style.top_bar)}>
-        <Select
-          value={sortValue}
-          options={sortOptions}
-          onChange={setSortValue}
-        />
-      </div>
+    <CardsExplorer cardSizeScope="marketplace">
+      {({ cardSize, setCardSize }) => (
+        <>
+          <div className={cs(style.top_bar)}>
+            <CardSizeSelect value={cardSize} onChange={setCardSize} />
+            <Select
+              value={sortValue}
+              options={marketplaceSortOptions}
+              onChange={setSortValue}
+            />
+          </div>
 
-      <Spacing size="large" />
+          <Spacing size="large" />
 
-      <InfiniteScrollTrigger
-        onTrigger={infiniteScrollFetch}
-        canTrigger={!!data && !loading}
-      >
-        <CardsContainer>
-          <>
-            {objkts &&
-              objkts?.length > 0 &&
-              objkts.map((objkt) => <ObjktCard key={objkt.id} objkt={objkt} />)}
-            {loading &&
-              CardsLoading({
-                number: ITEMS_PER_PAGE,
-              })}
-            {!loading && objkts?.length === 0 && (
-              <p>No items currently listed</p>
-            )}
-          </>
-        </CardsContainer>
-      </InfiniteScrollTrigger>
-    </>
+          <InfiniteScrollTrigger
+            onTrigger={infiniteScrollFetch}
+            canTrigger={!!data && !loading}
+          >
+            <CardsContainer>
+              <>
+                {objkts &&
+                  objkts?.length > 0 &&
+                  objkts.map((objkt) => (
+                    <ObjktCard key={objkt.id} objkt={objkt} />
+                  ))}
+                {loading &&
+                  CardsLoading({
+                    number: ITEMS_PER_PAGE,
+                  })}
+                {!loading && objkts?.length === 0 && (
+                  <p>No items currently listed</p>
+                )}
+              </>
+            </CardsContainer>
+          </InfiniteScrollTrigger>
+        </>
+      )}
+    </CardsExplorer>
   )
 }

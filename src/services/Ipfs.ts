@@ -1,14 +1,14 @@
 export enum EGatewayIpfs {
-  FXHASH =        "FXHASH",
-  FXHASH_SAFE =   "FXHASH_SAFE",
-  IPFSIO =        "IPFSIO",
+  FXHASH = "FXHASH",
+  FXHASH_SAFE = "FXHASH_SAFE",
+  IPFSIO = "IPFSIO",
 }
 
 /**
  * Given a gateway enum, outputs the http url root of the gateway
  */
 export function ipfsGatewayRoot(gateway: EGatewayIpfs): string {
-  switch(gateway) {
+  switch (gateway) {
     case EGatewayIpfs.FXHASH:
       return process.env.NEXT_PUBLIC_IPFS_GATEWAY!
     case EGatewayIpfs.FXHASH_SAFE:
@@ -20,8 +20,8 @@ export function ipfsGatewayRoot(gateway: EGatewayIpfs): string {
 }
 
 // takes a stringas parameter, and if it matches an ipfs url returns the ID of the IPFS ressource
-const ipfsRegex = new RegExp("^ipfs:\/\/")
-export function ipfsUrlToID(url: string): string|null {
+const ipfsRegex = new RegExp("^ipfs://")
+export function ipfsUrlToID(url: string): string | null {
   if (!ipfsRegex.test(url)) return null
   return url.slice(7)
 }
@@ -41,8 +41,8 @@ export function ipfsCidFromUriOrCid(resource: string): string {
  * @param gateway the gateway URL to use for the resource
  */
 export function ipfsGatewayUrl(
-  resource: string|null|undefined,
-  gateway: EGatewayIpfs = EGatewayIpfs.FXHASH_SAFE,
+  resource: string | null | undefined,
+  gateway: EGatewayIpfs = EGatewayIpfs.FXHASH_SAFE
 ): string {
   if (!resource) return ""
   const cid = ipfsCidFromUriOrCid(resource)

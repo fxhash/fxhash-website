@@ -4,7 +4,7 @@ const flagged: ArticleFlag[] = [
   ArticleFlag.AUTO_DETECT_COPY,
   ArticleFlag.HIDDEN,
   ArticleFlag.MALICIOUS,
-  ArticleFlag.REPORTED
+  ArticleFlag.REPORTED,
 ]
 
 export function getArticleUrl(article: NFTArticleInfos): string {
@@ -18,5 +18,5 @@ export function isArticleFlagged(article: NFTArticleInfos): boolean {
 }
 
 export function isValidSlug(slug: string): boolean {
-  return !(!slug || (slug[0] === '.' && slug.length === 1));
+  return !(!slug || (slug[0] === "." && slug.length === 1))
 }

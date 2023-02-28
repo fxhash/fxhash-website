@@ -1,5 +1,12 @@
-import { ContractAbstraction, TransactionWalletOperation, Wallet } from "@taquito/taquito"
-import { FxhashCollabFactoryCalls, FxhashContracts } from "../../types/Contracts"
+import {
+  ContractAbstraction,
+  TransactionWalletOperation,
+  Wallet,
+} from "@taquito/taquito"
+import {
+  FxhashCollabFactoryCalls,
+  FxhashContracts,
+} from "../../types/Contracts"
 import { GenerativeToken } from "../../types/entities/GenerativeToken"
 import { Collaboration, UserType } from "../../types/entities/User"
 import { GenerativeTokenMetadata } from "../../types/Metadata"
@@ -20,7 +27,7 @@ export type TUpdatePricingOperationParams = {
  * Updates the pricing of a Generative Token
  */
 export class UpdatePricingOperation extends ContractOperation<TUpdatePricingOperationParams> {
-  contract: ContractAbstraction<Wallet>|null = null
+  contract: ContractAbstraction<Wallet> | null = null
   collab: boolean = false
 
   async prepare() {
@@ -31,7 +38,6 @@ export class UpdatePricingOperation extends ContractOperation<TUpdatePricingOper
   }
 
   async call(): Promise<TransactionWalletOperation> {
-
     // transform the string values in the form into some numbers so that
     // it can be sent to contract correctly (or packed)
     const numbered = transformPricingFormToNumbers(this.params.data)
@@ -52,15 +58,14 @@ export class UpdatePricingOperation extends ContractOperation<TUpdatePricingOper
         call_id: FxhashCollabFactoryCalls.UPDATE_PRICE,
         call_params: packed,
       }).send()
-    }
-    else { 
+    } else {
       return this.contract!.methodsObject.update_price(params).send()
     }
   }
 
   success(): string {
     return this.collab
-     ? `A request to update the pricing of ${this.params.token.name} was successfully sent`
-     : `The pricing of ${this.params.token.name} was successfully updated`
+      ? `A request to update the pricing of ${this.params.token.name} was successfully sent`
+      : `The pricing of ${this.params.token.name} was successfully updated`
   }
 }

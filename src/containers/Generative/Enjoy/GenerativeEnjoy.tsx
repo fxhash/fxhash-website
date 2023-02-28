@@ -11,8 +11,8 @@ import { gentkLiveUrl, getObjktUrl } from "../../../utils/objkt"
 import { Modal } from "../../../components/Utils/Modal"
 import { SliderWithText } from "../../../components/Input/SliderWithText"
 import { Loader } from "../../../components/Utils/Loader"
-import { getGenTokWarning } from "../../../utils/generative-token";
-import { SettingsContext } from "../../../context/Theme";
+import { getGenTokWarning } from "../../../utils/generative-token"
+import { SettingsContext } from "../../../context/Theme"
 
 const DEFAULT_TIME_PER_ITERATION_MS = 20000
 const TRANSITION_DURATION_MS = 3000
@@ -39,7 +39,7 @@ export function GenerativeEnjoy({
   requestData,
   loading,
 }: Props) {
-  const settings = useContext(SettingsContext);
+  const settings = useContext(SettingsContext)
   // ref to elements manipulated directly
   const barRef = useRef<HTMLDivElement>(null)
   const frameContainerRef = useRef<HTMLDivElement>(null)

@@ -17,9 +17,15 @@ const DefaultTabWrapper = ({
 )
 type LinkTabWrapperProps = PropsWithChildren<LinkProps> &
   HTMLAttributes<HTMLAnchorElement>
-export const LinkTabWrapper = ({ children, ...props }: LinkTabWrapperProps) => (
+export const LinkTabWrapper = ({
+  children,
+  onClick,
+  ...props
+}: LinkTabWrapperProps) => (
   <Link {...props}>
-    <a className={props.className}>{children}</a>
+    <a className={props.className} onClick={onClick}>
+      {children}
+    </a>
   </Link>
 )
 

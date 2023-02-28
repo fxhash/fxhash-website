@@ -17,13 +17,11 @@ interface Props {
   user: User
   onClose: () => void
 }
-export function UserModerationModal({
-  user,
-  onClose,
-}: Props) {
+export function UserModerationModal({ user, onClose }: Props) {
   const userCtx = useContext(UserContext)
   const [flag, setFlag] = useState<UserFlag>(UserFlag.NONE)
-  const { state, loading, success, call, error } = useContractCall<ModerateUserStateCall>(userCtx.walletManager!.moderateUser)
+  const { state, loading, success, call, error } =
+    useContractCall<ModerateUserStateCall>(userCtx.walletManager!.moderateUser)
 
   const moderate = (evt: any) => {
     evt.preventDefault()
@@ -34,12 +32,10 @@ export function UserModerationModal({
   }
 
   return (
-    <Modal
-      title="Moderate user account"
-      onClose={onClose}
-    >
+    <Modal title="Moderate user account" onClose={onClose}>
       <p>
-        This modal lets you attribute a specific state to a user, among the list of all the available states.
+        This modal lets you attribute a specific state to a user, among the list
+        of all the available states.
       </p>
 
       <div className={cs(style.modal_bottom)}>
@@ -59,11 +55,11 @@ export function UserModerationModal({
                 onChange={setFlag}
                 options={Object.keys(UserFlag).map((flag, idx) => ({
                   label: flag,
-                  value: flag
+                  value: flag,
                 }))}
               />
             </Field>
-            <Spacing size="x-small"/>
+            <Spacing size="x-small" />
             <Button
               color="primary"
               size="regular"

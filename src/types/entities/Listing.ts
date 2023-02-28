@@ -1,13 +1,13 @@
-import { Objkt } from './Objkt'
-import { User } from './User'
-import { NFTArticle } from "./Article";
+import { Objkt } from "./Objkt"
+import { User } from "./User"
+import { NFTArticle } from "./Article"
 
 export interface Listing {
   id: number
   version: number
   amount: number
   issuer: User
-	issuerId: number
+  issuerId: number
   objkt: Objkt
   price: number
   royalties: number

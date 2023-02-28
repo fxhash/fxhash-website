@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from "react"
 
 const useInit = (callback: Function, ...args: any[]) => {
   const [mounted, setMounted] = useState(false)
@@ -6,12 +6,12 @@ const useInit = (callback: Function, ...args: any[]) => {
   const resetInit = () => setMounted(false)
 
   useEffect(() => {
-    if(!mounted) {
-      setMounted(true);
-      callback(...args);
+    if (!mounted) {
+      setMounted(true)
+      callback(...args)
     }
-  },[mounted, callback]);
+  }, [mounted, callback])
 
   return [resetInit]
 }
-export default useInit;
+export default useInit

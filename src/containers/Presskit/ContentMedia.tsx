@@ -34,7 +34,7 @@ import EmbedYoutube from "components/NFTArticle/elements/Embed/EmbedYoutube"
 import ClientOnly, { ClientOnlyEmpty } from "components/Utils/ClientOnly"
 import { DateFormatted } from "components/Utils/Date/DateFormat"
 import { DateRange } from "components/Utils/Date/DateRange"
-
+import { StaticImageData } from "next/image"
 interface MediaGridProps {
   children: ReactNode
 }
@@ -461,7 +461,7 @@ export function ContentMedia() {
           <Event
             title="Piter Pasma x fx(hash) for Bright Moments"
             startDate="2022-10-06"
-            endDate="2022-07-10"
+            endDate="2022-10-07"
           >
             <p>
               Get to know @piterpasma in the first of our artist interview

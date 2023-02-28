@@ -1,7 +1,7 @@
 import { ArticleMetadata } from "../Metadata"
 import { Action } from "./Action"
 import { GenerativeToken } from "./GenerativeToken"
-import {MediaImage} from "./MediaImage"
+import { MediaImage } from "./MediaImage"
 import { Split } from "./Split"
 import { User } from "./User"
 

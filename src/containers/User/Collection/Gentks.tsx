@@ -6,9 +6,6 @@ import cs from "classnames"
 import { IUserCollectionFilters, User } from "../../../types/entities/User"
 import { CardsExplorer } from "../../../components/Exploration/CardsExplorer"
 import { SearchHeader } from "../../../components/Search/SearchHeader"
-import Link from "next/link"
-import { getUserProfileLink } from "../../../utils/user"
-import { Button } from "../../../components/Button"
 import { IOptions, Select } from "../../../components/Input/Select"
 import { SearchInputControlled } from "../../../components/Input/SearchInputControlled"
 import { FiltersPanel } from "../../../components/Exploration/FiltersPanel"
@@ -25,7 +22,7 @@ import { CardsLoading } from "../../../components/Card/CardsLoading"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useQuery } from "@apollo/client"
 import { Qu_userObjkts } from "../../../queries/user"
-import { Objkt } from "../../../types/entities/Objkt"
+import { CardSizeSelect } from "../../../components/Input/CardSizeSelect"
 import { GentksActions } from "./GentksActions"
 const ITEMS_PER_PAGE = 40
 
@@ -215,7 +212,7 @@ export function UserCollectionGentks({ user }: Props) {
   }, [filters])
 
   return (
-    <CardsExplorer>
+    <CardsExplorer cardSizeScope="user-collection">
       {({
         filtersVisible,
         setFiltersVisible,
@@ -223,6 +220,8 @@ export function UserCollectionGentks({ user }: Props) {
         inViewCardsContainer,
         setIsSearchMinimized,
         isSearchMinimized,
+        cardSize,
+        setCardSize,
       }) => (
         <>
           <div ref={topMarkerRef} />
@@ -248,6 +247,9 @@ export function UserCollectionGentks({ user }: Props) {
                   onChange={setSortValue}
                 />
               </div>
+            }
+            sizeSelectComp={
+              <CardSizeSelect value={cardSize} onChange={setCardSize} />
             }
           >
             <SearchInputControlled
@@ -296,7 +298,7 @@ export function UserCollectionGentks({ user }: Props) {
                 </>
               )}
 
-              {!loading && objkts?.length === 0 && <span>No results</span>}
+              {!loading && !objkts?.length && <span>No results</span>}
 
               <InfiniteScrollTrigger
                 onTrigger={handleFetchMore}

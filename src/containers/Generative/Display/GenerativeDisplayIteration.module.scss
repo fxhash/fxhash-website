@@ -52,6 +52,10 @@
   }
 }
 
+.description {
+  word-break: break-word;
+}
+
 .mobile_align_right {
 
 }
@@ -101,8 +105,7 @@
   }
   .buttons_marketplace {
     gap: 12px;
-    flex-direction: column;
-    button, a {
+    & > button {
       width: 100%;
     }
   }

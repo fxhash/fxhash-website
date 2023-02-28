@@ -9,6 +9,7 @@ import { useClientEffect } from "../utils/hookts"
 import style from "./Theme.module.scss"
 import cs from "classnames"
 import isMobile from "is-mobile"
+import { MarketplaceSortOption } from "containers/Marketplace/GenerativeListings"
 
 export interface ISettingsProperties {
   // display
@@ -16,7 +17,7 @@ export interface ISettingsProperties {
   spaceBetweenCards: number
   displayPricesCard: boolean
   displayBurntCard: boolean
-  cardSize: number
+  cardSize: { [scope: string]: number }
   displayInfosGenerativeCard: boolean
   displayInfosGentkCard: boolean
   borderWidthCards: number
@@ -28,6 +29,7 @@ export interface ISettingsProperties {
   nsfw: boolean
   epilepsy: boolean
   layoutMasonry: boolean
+  preferredMarketplaceSorting: MarketplaceSortOption
 }
 
 const Colors = {
@@ -101,7 +103,7 @@ const defaultProperties: ISettingsProperties = {
   spaceBetweenCards: 30,
   borderWidthCards: 3,
   shadowCards: 19,
-  cardSize: 270,
+  cardSize: {},
   displayInfosGenerativeCard: true,
   displayInfosGentkCard: true,
   displayPricesCard: false,
@@ -112,6 +114,7 @@ const defaultProperties: ISettingsProperties = {
   nsfw: false,
   epilepsy: hasReducedMotion && hasReducedMotion.matches,
   layoutMasonry: false,
+  preferredMarketplaceSorting: "listingCreatedAt-desc",
 }
 
 const defaultCtx: ISettingsContext = {
@@ -123,6 +126,9 @@ const defaultCtx: ISettingsContext = {
 }
 
 export const SettingsContext = React.createContext<ISettingsContext>(defaultCtx)
+
+export const useSettingsContext = () =>
+  React.useContext<ISettingsContext>(SettingsContext)
 
 export function SettingsProvider({ children }: PropsWithChildren<{}>) {
   const [context, setContext] = useState<ISettingsContext>(defaultCtx)

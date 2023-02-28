@@ -1,6 +1,6 @@
 import { BeaconWallet } from "@taquito/beacon-wallet"
-import { ContractAbstraction, TezosToolkit, Wallet } from "@taquito/taquito"
 import { char2Bytes } from "@taquito/utils"
+import { ContractAbstraction, TezosToolkit, Wallet } from "@taquito/taquito"
 import {
   BurnSupplyCallData,
   MintGenerativeCallData,
@@ -18,8 +18,8 @@ import {
 } from "../types/Contracts"
 import { stringToByteString } from "../utils/convert"
 import { isOperationApplied } from "./Blockchain"
-import { TContractOperation } from "./contract-operations/ContractOperation"
 import { RequestSignPayloadInput, SigningType } from "@airgap/beacon-sdk"
+import { TContractOperation } from "./contract-operations/ContractOperation"
 
 // the different operations which can be performed by the wallet
 export enum EWalletOperations {

@@ -1,5 +1,12 @@
-import { ContractAbstraction, TransactionWalletOperation, Wallet } from "@taquito/taquito"
-import { FxhashCollabFactoryCalls, FxhashContracts } from "../../types/Contracts"
+import {
+  ContractAbstraction,
+  TransactionWalletOperation,
+  Wallet,
+} from "@taquito/taquito"
+import {
+  FxhashCollabFactoryCalls,
+  FxhashContracts,
+} from "../../types/Contracts"
 import { GenerativeToken } from "../../types/entities/GenerativeToken"
 import { IReserve } from "../../types/entities/Reserve"
 import { Collaboration, UserType } from "../../types/entities/User"
@@ -20,7 +27,7 @@ export type TUpdateReservesOperationParams = {
  * Updates the pricing of a Generative Token
  */
 export class UpdateReservesOperation extends ContractOperation<TUpdateReservesOperationParams> {
-  contract: ContractAbstraction<Wallet>|null = null
+  contract: ContractAbstraction<Wallet> | null = null
   collab: boolean = false
 
   async prepare() {
@@ -32,7 +39,7 @@ export class UpdateReservesOperation extends ContractOperation<TUpdateReservesOp
 
   async call(): Promise<TransactionWalletOperation> {
     // let's build the reserve array (by packing)
-    const reserves = this.params.reserves.map(reserve => ({
+    const reserves = this.params.reserves.map((reserve) => ({
       amount: reserve.amount,
       method_id: mapReserveDefinition[reserve.method].id,
       data: packReserveData(reserve as any),
@@ -51,15 +58,14 @@ export class UpdateReservesOperation extends ContractOperation<TUpdateReservesOp
         call_id: FxhashCollabFactoryCalls.UPDATE_RESERVE,
         call_params: packed,
       }).send()
-    }
-    else { 
+    } else {
       return this.contract!.methodsObject.update_reserve(params).send()
     }
   }
 
   success(): string {
     return this.collab
-     ? `A request to update the reserves of ${this.params.token.name} was successfully sent`
-     : `The reserves of ${this.params.token.name} was successfully updated`
+      ? `A request to update the reserves of ${this.params.token.name} was successfully sent`
+      : `The reserves of ${this.params.token.name} was successfully updated`
   }
 }

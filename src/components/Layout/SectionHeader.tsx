@@ -7,6 +7,7 @@ interface Props {
   layout?: "left" | "center"
   sm?: "left" | "center"
   className?: string
+  noPadding?: boolean
 }
 
 export function SectionHeader({
@@ -14,6 +15,7 @@ export function SectionHeader({
   sm,
   className,
   children,
+  noPadding,
 }: PropsWithChildren<Props>) {
   return (
     <header
@@ -22,8 +24,8 @@ export function SectionHeader({
         style[`layout_${layout}`],
         {
           [style[`sm_${sm}`]]: !!sm,
+          [layoutStyle["padding-big"]]: !noPadding,
         },
-        layoutStyle["padding-big"],
         className
       )}
     >

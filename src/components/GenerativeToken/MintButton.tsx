@@ -14,6 +14,7 @@ import { User } from "../../types/entities/User"
 import { Cover } from "../Utils/Cover"
 import { LiveMintingContext } from "../../context/LiveMinting"
 import { IReserveConsumption } from "../../services/contract-operations/Mint"
+import { ButtonPaymentCard } from "../Utils/ButtonPaymentCard"
 
 /**
  * The Mint Button displays a mint button component with specific display rules
@@ -34,6 +35,8 @@ interface Props {
   disabled: boolean
   onMint: (reserveConsumption: IReserveConsumption | null) => void
   forceReserveConsumption?: boolean
+  hasCreditCardOption?: boolean
+  openCreditCard?: () => void
 }
 export function MintButton({
   token,
@@ -41,6 +44,8 @@ export function MintButton({
   disabled,
   onMint,
   forceReserveConsumption = false,
+  hasCreditCardOption = false,
+  openCreditCard,
   children,
 }: PropsWithChildren<Props>) {
   // user ctx
@@ -73,75 +78,83 @@ export function MintButton({
 
   return isMintButton || isMintDropdown ? (
     <>
-      <div className={cs(style.root)}>
-        <Button
-          type="button"
-          color="secondary"
-          size="regular"
-          className={style.button}
-          state={loading ? "loading" : "default"}
-          disabled={disabled}
-          onClick={() => {
-            if (isMintButton) {
-              onMint(
-                // to trigger reserve, user must be eligible
-                (userEligible &&
-                  // there must only be reserve or reserve forced
-                  (onlyReserveLeft || forceReserveConsumption) &&
-                  // returns the consumption method
-                  getReserveConsumptionMethod(
-                    token,
-                    user as User,
-                    liveMintingContext
-                  )) ||
-                  // fallback to null
-                  null
-              )
-            } else {
-              setShowDropdown(!showDropdown)
-            }
-          }}
-        >
-          {children}
-          {isMintDropdown && (
-            <i
-              aria-hidden
-              className={cs(`fas fa-caret-down`, style.caret)}
-              style={{
-                transform: showDropdown ? "rotate(180deg)" : "none",
-              }}
-            />
-          )}
-        </Button>
-
-        {showDropdown && (
-          <div className={cs(style.dropdown)}>
-            <button
-              type="button"
-              onClick={() => {
-                setShowDropdown(false)
+      <div className={cs(style.btns_wrapper)}>
+        <div className={cs(style.root)}>
+          <Button
+            type="button"
+            color="secondary"
+            size="regular"
+            state={loading ? "loading" : "default"}
+            className={style.button}
+            disabled={disabled}
+            onClick={() => {
+              if (isMintButton) {
                 onMint(
-                  getReserveConsumptionMethod(
-                    token,
-                    user as User,
-                    liveMintingContext
-                  )
+                  // to trigger reserve, user must be eligible
+                  (userEligible &&
+                    // there must only be reserve or reserve forced
+                    (onlyReserveLeft || forceReserveConsumption) &&
+                    // returns the consumption method
+                    getReserveConsumptionMethod(
+                      token,
+                      user as User,
+                      liveMintingContext
+                    )) ||
+                    // fallback to null
+                    null
                 )
-              }}
-            >
-              using your reserve
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                setShowDropdown(false)
-                onMint(null)
-              }}
-            >
-              without reserve
-            </button>
-          </div>
-        )}
+              } else {
+                setShowDropdown(!showDropdown)
+              }
+            }}
+          >
+            {children}
+            {isMintDropdown && (
+              <i
+                aria-hidden
+                className={cs(`fas fa-caret-down`, style.caret)}
+                style={{
+                  transform: showDropdown ? "rotate(180deg)" : "none",
+                }}
+              />
+            )}
+          </Button>
+
+          {showDropdown && (
+            <div className={cs(style.dropdown)}>
+              <button
+                type="button"
+                onClick={() => {
+                  setShowDropdown(false)
+                  onMint(
+                    getReserveConsumptionMethod(
+                      token,
+                      user as User,
+                      liveMintingContext
+                    )
+                  )
+                }}
+              >
+                using your reserve
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setShowDropdown(false)
+                  onMint(null)
+                }}
+              >
+                without reserve
+              </button>
+            </div>
+          )}
+        </div>
+
+        {hasCreditCardOption &&
+          !loading &&
+          !(userEligible && onlyReserveLeft) && (
+            <ButtonPaymentCard onClick={openCreditCard} disabled={disabled} />
+          )}
       </div>
 
       {showDropdown && (

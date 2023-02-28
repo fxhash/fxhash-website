@@ -164,6 +164,7 @@ export const ExploreGenerativeTokens = ({
   return (
     <div ref={topMarkerRef}>
       <SortAndFilters
+        cardSizeScope="explore"
         initialSearchQuery={initialSearchQuery}
         sort={sort}
         filterTags={filterTags}

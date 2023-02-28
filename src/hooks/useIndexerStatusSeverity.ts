@@ -10,8 +10,7 @@ export function useIndexerStatusSeverity(): IndexerStatusSeverity | null {
   const severity = useMemo(() => {
     if (!indexerStatus || !networkStatus) return null
     const blocksBehind = networkStatus.level - indexerStatus.level
-    if (blocksBehind <= NUM_BLOCKS_MEDIUM_SEVERITY)
-      return "low"
+    if (blocksBehind <= NUM_BLOCKS_MEDIUM_SEVERITY) return "low"
     if (blocksBehind <= NUM_BLOCKS_HIGH_SEVERITY) return "medium"
     return "high"
   }, [indexerStatus, networkStatus])
