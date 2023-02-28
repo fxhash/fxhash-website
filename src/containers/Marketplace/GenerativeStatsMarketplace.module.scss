@@ -1,0 +1,52 @@
+@import "../../styles/Variables";
+
+.inputs {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 24px;
+
+  .input_wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+  }
+}
+
+.chart_container {
+  position: relative;
+  transition: all 0.2s;
+
+  &.loading {
+    opacity: 0.3;
+  }
+
+  .loader {
+    position: absolute;
+    top: calc(50% - 20px);
+    left: calc(50% - 20px);
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .inputs {
+    flex-direction: column;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 8px;
+    .input_wrapper {
+      width: 100%;
+      gap: 24px;
+    }
+  }
+  .select_root {
+    width: 100%;
+  }
+  .select {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+  }
+}
