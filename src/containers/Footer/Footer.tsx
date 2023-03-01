@@ -56,8 +56,8 @@ export function Footer() {
             <Link href="/doc/legal/referencement.pdf">
               <a target="_blank">Referencing (english soon)</a>
             </Link>
-            <Link href="https://feedback.fxhash.xyz">
-              <a target="_blank">Feature request</a>
+            <Link href="/doc/legal/privacy-policy-02-2023.pdf">
+              <a target="_blank">Privacy policy</a>
             </Link>
             <Link href="https://join.com/companies/fxhash">
               <a target="_blank">Career opportunities</a>
