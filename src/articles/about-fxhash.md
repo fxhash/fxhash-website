@@ -21,7 +21,7 @@ The philosophy of fxhash is simple: provide tools so that generative artists can
 
 # What happens when we mint one iteration of a Generative Token ?
 
-A random hash is generated, and injected into the project provided by the artist. Then, the project is stored immutably on the blockchain. This design ensures that each token generated is **independant**, **self-contained**, and **immutable**. If fxhash were to go down, owners of fxhash tokens could still open their tokens and see it in their own browsers. Also, virtual galleries can safely display the tokens as real-time art pieces as the token is simply hosted on the IPFS network.
+A random hash is generated, and injected into the project provided by the artist. Then, the project is stored immutably on the blockchain. This design ensures that each token generated is **independent**, **self-contained**, and **immutable**. If fxhash were to go down, owners of fxhash tokens could still open their tokens and see it in their own browsers. Also, virtual galleries can safely display the tokens as real-time art pieces as the token is simply hosted on the IPFS network.
 
 
 # Join the community !
