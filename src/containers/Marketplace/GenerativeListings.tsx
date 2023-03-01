@@ -15,6 +15,7 @@ import { CardsExplorer } from "../../components/Exploration/CardsExplorer"
 import { CardSizeSelect } from "../../components/Input/CardSizeSelect"
 import { useRouter } from "next/router"
 import { useSettingsContext } from "context/Theme"
+import { useEffectAfterRender } from "hooks/useEffectAfterRender"
 
 const ITEMS_PER_PAGE = 20
 
@@ -117,7 +118,7 @@ export const GenerativeListings = ({ token }: Props) => {
       { shallow: true }
     )
 
-  useEffect(() => {
+  useEffectAfterRender(() => {
     currentLength.current = 0
     ended.current = false
     setSortQueryParam(sortValue)
