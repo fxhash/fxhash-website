@@ -13,9 +13,9 @@ import { InputText } from "./InputText"
 import type FuzzySearchType from "fuzzy-search"
 import useClickOutside from "hooks/useClickOutside"
 
-export interface IOptions {
+export interface IOptions<T = any> {
   label: string
-  value: any
+  value: T
   disabled?: boolean
 }
 
