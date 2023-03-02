@@ -2,7 +2,7 @@ import style from "./Sandbox.module.scss"
 import cs from "classnames"
 import { ArtworkIframeRef } from "../../components/Artwork/PreviewIframe"
 import { Dropzone } from "../../components/Input/Dropzone"
-import { useState, useMemo, useRef } from "react"
+import { useState, useMemo, useRef, useEffect, useCallback } from "react"
 import { Button } from "../../components/Button"
 import { Spacing } from "../../components/Layout/Spacing"
 import { FileList } from "./FileList"
@@ -15,6 +15,9 @@ import { generateFxHash } from "../../utils/hash"
 import { RawTokenFeatures } from "../../types/Metadata"
 import { RawFeatures } from "../../components/Features/RawFeatures"
 import { ArtworkFrame } from "../../components/Artwork/ArtworkFrame"
+import { Controls } from "components/FxParams/Controls"
+import { serializeParams } from "components/FxParams/utils"
+import { ControlsTest } from "components/Testing/ControlsTest"
 
 export function Sandbox() {
   const artworkIframeRef = useRef<ArtworkIframeRef>(null)
@@ -24,6 +27,8 @@ export function Sandbox() {
   const [error, setError] = useState<string | null>(null)
   const [url, setUrl] = useState<string | null>(null)
   const [features, setFeatures] = useState<RawTokenFeatures | null>(null)
+  const [params, setParams] = useState<any | null>(null)
+  const [data, setData] = useState<Record<string, any>>({})
 
   const fileList = useMemo<string[] | null>(
     () => (filesRecord ? Object.keys(filesRecord) : null),
@@ -53,21 +58,51 @@ export function Sandbox() {
     }
   }
 
-  const iframeLoaded = () => {
-    if (artworkIframeRef.current) {
-      const iframe = artworkIframeRef.current.getHtmlIframe()
-      if (iframe) {
-        // @ts-ignore
-        if (iframe.contentWindow?.$fxhashFeatures) {
-          // @ts-ignore
-          // process the raw features
-          setFeatures(iframe.contentWindow?.$fxhashFeatures)
-        } else {
-          setFeatures(null)
+  const handleSubmitParams = (params: Record<string, any>) => {
+    setData(params)
+  }
+
+  useEffect(() => {
+    const listener = (e: any) => {
+      if (e.data) {
+        if (e.data.id === "fxhash_getHash") {
+          if (e.data.data) {
+          } else {
+          }
+        }
+        if (e.data.id === "fxhash_getFeatures") {
+          if (e.data.data) {
+            setFeatures(e.data.data)
+          } else {
+            setFeatures(null)
+          }
+        }
+        if (e.data.id === "fxhash_getParams") {
+          if (e.data.data) {
+            setParams(e.data.data)
+          } else {
+            setParams(null)
+          }
         }
       }
     }
-  }
+    window.addEventListener("message", listener, false)
+
+    return () => {
+      window.removeEventListener("message", listener, false)
+    }
+  }, [])
+
+  const handleOnIframeLoad = useCallback(() => {
+    if (artworkIframeRef.current) {
+      const iframe = artworkIframeRef.current.getHtmlIframe()
+      if (iframe) {
+        iframe.contentWindow?.postMessage("fxhash_getFeatures", "*")
+        iframe.contentWindow?.postMessage("fxhash_getParams", "*")
+        iframe.contentWindow?.postMessage("fxhash_getHash", "*")
+      }
+    }
+  }, [artworkIframeRef.current])
 
   return (
     <section
@@ -136,14 +171,21 @@ export function Sandbox() {
                 }}
               />
             </div>
-
+            {params && (
+              <div>
+                <Spacing size="2x-large" />
+                <h5>Params</h5>
+                <Spacing size="small" />
+                <ControlsTest params={params} onSubmit={handleSubmitParams} />
+              </div>
+            )}
             <Spacing size="2x-large" />
-
             <div>
               <h5>Features</h5>
               <Spacing size="small" />
               <RawFeatures rawFeatures={features} />
             </div>
+            <Spacing size="2x-large" />
           </div>
         ) : (
           <div className={cs(style["drag-container"])}>
@@ -168,37 +210,39 @@ export function Sandbox() {
           </div>
         )}
       </div>
-
-      <div className={cs(style.artwork)}>
-        <div className={cs(style["iframe-container"])}>
-          <div className={cs(style["iframe-wrapper"])}>
-            <ArtworkFrame>
-              <SandboxPreview
-                hash={hash}
-                ref={artworkIframeRef}
-                record={filesRecord || undefined}
-                textWaiting="Waiting for content to be reachable"
-                onUrlUpdate={setUrl}
-                onLoaded={iframeLoaded}
-              />
-            </ArtworkFrame>
+      <div className={cs(style.artworkWrapper)}>
+        <div className={cs(style.artwork)}>
+          <div className={cs(style["iframe-container"])}>
+            <div className={cs(style["iframe-wrapper"])}>
+              <ArtworkFrame>
+                <SandboxPreview
+                  hash={hash}
+                  fxparams={data && params && serializeParams(data, params)}
+                  ref={artworkIframeRef}
+                  record={filesRecord || undefined}
+                  textWaiting="Waiting for content to be reachable"
+                  onUrlUpdate={setUrl}
+                  onLoaded={handleOnIframeLoad}
+                />
+              </ArtworkFrame>
+            </div>
           </div>
-        </div>
 
-        {url && (
-          <Button
-            isLink
-            // @ts-ignore
-            href={url}
-            target="_blank"
-            size="small"
-            className={style.button}
-            iconComp={<i aria-hidden className="fas fa-external-link-alt" />}
-            iconSide="right"
-          >
-            open live
-          </Button>
-        )}
+          {url && (
+            <Button
+              isLink
+              // @ts-ignore
+              href={url}
+              target="_blank"
+              size="small"
+              className={style.button}
+              iconComp={<i aria-hidden className="fas fa-external-link-alt" />}
+              iconSide="right"
+            >
+              open live
+            </Button>
+          )}
+        </div>
       </div>
     </section>
   )
