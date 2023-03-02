@@ -264,9 +264,9 @@ export const StepExtraSettings: StepComponent = ({ state, onNext }) => {
 
       <Spacing size="x-large" />
 
-      <Form onSubmit={onSubmit}>
-        <div className={cs(layout.cols2)}>
-          <div>
+      <div className={cs(layout.cols2)}>
+        <div>
+          <Form>
             <Tabs
               onClickTab={handleClickTab}
               checkIsTabActive={checkIsTabKeyActive}
@@ -300,61 +300,62 @@ export const StepExtraSettings: StepComponent = ({ state, onNext }) => {
                 onAdd={addCurrentVariant}
               />
             )}
-            <Spacing size="x-large" />
-            <h4>Variant Configuration</h4>
-            <Spacing size="regular" />
-            <HashTest
-              autoGenerate={false}
-              value={hash}
-              onHashUpdate={setHash}
-              onRetry={() => {
-                iframeRef.current?.reloadIframe()
-              }}
-            />
-            {usesParams && (
-              <>
-                <Spacing size="x-large" />
-                <ControlsTest
-                  ref={controlsTestRef}
-                  params={params}
-                  onSubmit={handleSubmitParams}
+          </Form>
+          <Spacing size="x-large" />
+          <h4>Variant Configuration</h4>
+          <Spacing size="regular" />
+          <HashTest
+            autoGenerate={false}
+            value={hash}
+            onHashUpdate={setHash}
+            onRetry={() => {
+              iframeRef.current?.reloadIframe()
+            }}
+          />
+          {usesParams && (
+            <>
+              <Spacing size="x-large" />
+              <ControlsTest
+                ref={controlsTestRef}
+                params={params}
+                onSubmit={handleSubmitParams}
+              />
+            </>
+          )}
+        </div>
+
+        <div>
+          <Spacing size="regular" />
+          <div className={style.artworkWrapper}>
+            <ArtworkFrame>
+              <SquareContainer>
+                <ArtworkIframe
+                  ref={iframeRef}
+                  url={iframeUrl}
+                  textWaiting="looking for content on IPFS"
+                  onLoaded={handleOnIframeLoad}
                 />
-              </>
-            )}
-          </div>
-
-          <div>
-            <Spacing size="regular" />
-            <div className={style.artworkWrapper}>
-              <ArtworkFrame>
-                <SquareContainer>
-                  <ArtworkIframe
-                    ref={iframeRef}
-                    url={iframeUrl}
-                    textWaiting="looking for content on IPFS"
-                    onLoaded={handleOnIframeLoad}
-                  />
-                </SquareContainer>
-              </ArtworkFrame>
-            </div>
+              </SquareContainer>
+            </ArtworkFrame>
           </div>
         </div>
+      </div>
 
-        <Spacing size="3x-large" sm="x-large" />
+      <Spacing size="3x-large" sm="x-large" />
 
-        <div className={cs(layout.y_centered)}>
-          <Button
-            type="submit"
-            size="large"
-            color="secondary"
-            iconComp={<i aria-hidden className="fas fa-arrow-right" />}
-            iconSide="right"
-            className={style.button}
-          >
-            next step
-          </Button>
-        </div>
-      </Form>
+      <div className={cs(layout.y_centered)}>
+        <Button
+          onClick={onSubmit}
+          type="submit"
+          size="large"
+          color="secondary"
+          iconComp={<i aria-hidden className="fas fa-arrow-right" />}
+          iconSide="right"
+          className={style.button}
+        >
+          next step
+        </Button>
+      </div>
 
       <Spacing size="3x-large" />
       <Spacing size="3x-large" sm="none" />
