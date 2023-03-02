@@ -5,7 +5,7 @@ import {
   Frag_GenReserves,
   Frag_GenSplitsPrimary,
   Frag_GenSplitsSecondary,
-  Frag_GenTokenInfo,
+  Frag_GenTokenInfo, Frag_GenTokenMintTickets,
 } from "./fragments/generative-token"
 import { Frag_UserBadge } from "./fragments/user"
 import { Frag_MediaImage } from "./fragments/media"
@@ -16,8 +16,9 @@ export const Qu_genToken = gql`
   ${Frag_GenSplitsSecondary}
   ${Frag_GenReserves}
   ${Frag_GenArticleMentions}
+  ${Frag_GenTokenMintTickets}
 
-  query Query($id: Float, $slug: String) {
+  query Query($id: TokenId, $slug: String) {
     generativeToken(id: $id, slug: $slug) {
       ...TokenInfo
       tags
@@ -30,6 +31,7 @@ export const Qu_genToken = gql`
       ...SplitsSecondary
       ...Reserves
       ...ArticleMentions
+      ...MintTickets
     }
   }
 `
@@ -105,7 +107,7 @@ export const Qu_genTokensReported = gql`
 export const Qu_genTokenMarketplace = gql`
   ${Frag_GenTokenInfo}
   ${Frag_GenReserves}
-  query Query($id: Float, $slug: String) {
+  query Query($id: TokenId, $slug: String) {
     generativeToken(id: $id, slug: $slug) {
       ...TokenInfo
       moderationReason
@@ -135,7 +137,7 @@ export const Qu_genTokenIterations = gql`
   ${Frag_MediaImage}
   ${Frag_UserBadge}
   query GenerativeTokenIterations(
-    $id: Float
+    $id: TokenId
     $take: Int
     $skip: Int
     $sort: ObjktsSortInput
@@ -180,7 +182,7 @@ export const Qu_genTokenIterations = gql`
 
 export const Qu_genTokenAllIterations = gql`
   ${Frag_MediaImage}
-  query GenerativeTokenIterations($id: Float!) {
+  query GenerativeTokenIterations($id: TokenId!) {
     generativeToken(id: $id) {
       id
       entireCollection {
@@ -198,7 +200,7 @@ export const Qu_genTokenAllIterations = gql`
 `
 
 export const Qu_genTokenFeatures = gql`
-  query GenerativeTokenFeatures($id: Float) {
+  query GenerativeTokenFeatures($id: TokenId) {
     generativeToken(id: $id) {
       features
     }
@@ -207,7 +209,7 @@ export const Qu_genTokenFeatures = gql`
 
 export const Qu_genTokenMarketHistory = gql`
   query GenerativeTokenMarketHistory(
-    $id: Float
+    $id: TokenId
     $filters: MarketStatsHistoryInput!
   ) {
     generativeToken(id: $id) {
@@ -246,7 +248,7 @@ export const Qu_genTokOwners = gql`
 export const Qu_genTokOffers = gql`
   ${Frag_MediaImage}
   ${Frag_UserBadge}
-  query GetGenTokOffers($id: Float) {
+  query GetGenTokOffers($id: TokenId) {
     generativeToken(id: $id) {
       id
       offers(filters: { active_eq: true }) {

@@ -116,3 +116,28 @@ export const Frag_GenTokenInfo = gql`
     ...Pricing
   }
 `
+
+export const Frag_GenTokenMintTickets = gql`
+  ${Frag_UserBadge}
+  fragment MintTickets on GenerativeToken {
+    id
+    mintTicketSettings {
+      gracingPeriod
+    }
+    mintTickets {
+      id
+      taxationLocked
+      taxationStart
+      price
+      taxationPaidUntil
+      token {
+        id
+        name
+      }
+      owner {
+        id
+        ...UserBadgeInfos
+      }
+    }
+  }
+`

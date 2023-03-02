@@ -6,11 +6,19 @@ import { ReactNode } from "react"
 interface Props extends InputProps {
   unit: ReactNode
   sizeX?: "regular" | "small"
+  classNameContainer?: string
 }
 
-export function InputTextUnit({ unit, sizeX = "regular", ...props }: Props) {
+export function InputTextUnit({
+  unit,
+  classNameContainer,
+  sizeX = "regular",
+  ...props
+}: Props) {
   return (
-    <div className={cs(style.textunit, style[`size-${sizeX}`])}>
+    <div
+      className={cs(style.textunit, style[`size-${sizeX}`], classNameContainer)}
+    >
       <InputText {...props} />
       <span>{unit}</span>
     </div>
