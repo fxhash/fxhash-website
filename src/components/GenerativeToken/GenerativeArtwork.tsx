@@ -9,11 +9,17 @@ import { Spacing } from "../Layout/Spacing"
 import { ButtonVariations } from "../Button/ButtonVariations"
 import { Button } from "../Button"
 import Link from "next/link"
-import { useContext, useEffect, useMemo, useRef, useState } from "react"
+import {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react"
 import { SettingsContext } from "../../context/Theme"
 import { ipfsGatewayUrl } from "../../services/Ipfs"
 import { Image } from "../Image"
-
 interface Props {
   token: Pick<
     GenerativeToken,
@@ -35,11 +41,15 @@ export function GenerativeArtwork({
   artifactUrl: artworkArtifactUrl,
 }: Props) {
   const settings = useContext(SettingsContext)
-  const iframeRef = useRef<ArtworkIframeRef>(null)
+  const artworkIframeRef = useRef<ArtworkIframeRef>(null)
 
+  const [params, setParams] = useState<any | null>(null)
   // used to preview the token in the iframe with different hashes
   const [previewHash, setPreviewHash] = useState<string | null>(
     token.metadata.previewHash || null
+  )
+  const [previewInputBytes, setPreviewInputBytes] = useState<string | null>(
+    token.metadata.previewInputBytes || null
   )
   // forcing image display as a state
   const [displayImage, setDisplayImage] = useState(
@@ -52,8 +62,8 @@ export function GenerativeArtwork({
   }, [settings.quality])
 
   const reload = () => {
-    if (iframeRef.current) {
-      iframeRef.current.reloadIframe()
+    if (artworkIframeRef.current) {
+      artworkIframeRef.current.reloadIframe()
     }
   }
 
@@ -65,11 +75,44 @@ export function GenerativeArtwork({
       return ipfsGatewayUrl(token.metadata.artifactUri)
     } else {
       // there is a forced hash, add it to the generative URL
-      return `${ipfsGatewayUrl(
+      let url = `${ipfsGatewayUrl(
         token.metadata.generativeUri
       )}/?fxhash=${previewHash}`
+      if (previewInputBytes) {
+        url += `&fxparams=${previewInputBytes}`
+      }
+      return url
     }
-  }, [previewHash])
+  }, [previewHash, previewInputBytes])
+
+  useEffect(() => {
+    const listener = (e: any) => {
+      if (e.data) {
+        if (e.data.id === "fxhash_getParams") {
+          if (e.data.data) {
+            setParams(e.data.data)
+          } else {
+            setParams(null)
+          }
+        }
+      }
+    }
+    window.addEventListener("message", listener, false)
+
+    return () => {
+      window.removeEventListener("message", listener, false)
+    }
+  }, [])
+
+  const handleOnIframeLoad = useCallback(() => {
+    if (artworkIframeRef.current) {
+      const iframe = artworkIframeRef.current.getHtmlIframe()
+      if (iframe) {
+        iframe.contentWindow?.postMessage("fxhash_getFeatures", "*")
+        iframe.contentWindow?.postMessage("fxhash_getParams", "*")
+      }
+    }
+  }, [artworkIframeRef.current])
 
   return (
     <>
@@ -85,9 +128,10 @@ export function GenerativeArtwork({
           ) : (
             <ArtworkIframe
               tokenLabels={token.labels}
-              ref={iframeRef}
+              ref={artworkIframeRef}
               url={artifactUrl}
               hasLoading={false}
+              onLoaded={handleOnIframeLoad}
             />
           )}
         </ArtworkFrame>
@@ -100,9 +144,11 @@ export function GenerativeArtwork({
           <ButtonVariations
             token={token}
             previewHash={previewHash}
-            onChangeHash={(hash) => {
+            params={params}
+            onChangeHash={(hash, inputBytes) => {
               setDisplayImage(false)
               setPreviewHash(hash)
+              if (inputBytes) setPreviewInputBytes(inputBytes)
             }}
           />
         )}

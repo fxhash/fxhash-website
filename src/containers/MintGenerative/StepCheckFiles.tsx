@@ -7,7 +7,7 @@ import {
   ArtworkIframe,
   ArtworkIframeRef,
 } from "../../components/Artwork/PreviewIframe"
-import { useMemo, useState, useRef, useEffect } from "react"
+import { useMemo, useState, useRef, useEffect, useCallback } from "react"
 import { generateFxHash } from "../../utils/hash"
 import { HashTest } from "../../components/Testing/HashTest"
 import { Checkbox } from "../../components/Input/Checkbox"
@@ -15,8 +15,9 @@ import { Button } from "../../components/Button"
 import { RawTokenFeatures } from "../../types/Metadata"
 import { RawFeatures } from "../../components/Features/RawFeatures"
 import { ArtworkFrame } from "../../components/Artwork/ArtworkFrame"
-import { ipfsGatewayUrl } from "../../services/Ipfs"
-import { ipfsUrlWithHash } from "../../utils/ipfs"
+import { ipfsUrlWithHashAndParams } from "../../utils/ipfs"
+import { ControlsTest } from "components/Testing/ControlsTest"
+import { serializeParams } from "components/FxParams/utils"
 
 export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
   const [hash, setHash] = useState<string>(
@@ -26,58 +27,80 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
   const [check2, setCheck2] = useState<boolean>(false)
   const artworkIframeRef = useRef<ArtworkIframeRef>(null)
   const [features, setFeatures] = useState<RawTokenFeatures | null>(null)
+  const [params, setParams] = useState<any | null>([])
+  const [data, setData] = useState<Record<string, any>>({})
+
+  const inputBytes = useMemo<string | null>(() => {
+    const serialized = serializeParams(data, params)
+    if (serialized.length === 0) return null
+    return serialized
+  }, [data, params])
 
   const url = useMemo<string>(() => {
-    return ipfsUrlWithHash(state.cidUrlParams!, hash)
-  }, [hash])
+    return ipfsUrlWithHashAndParams(state.cidUrlParams!, hash, inputBytes)
+  }, [hash, inputBytes])
 
   const nextStep = () => {
     onNext({
       previewHash: hash,
+      previewInputBytes: inputBytes,
     })
   }
 
-  // attach event to window to get messages from
   useEffect(() => {
     const listener = (e: any) => {
-      if (e.data && e.data.id === "fxhash_getFeatures") {
-        if (e.data.data) {
-          setFeatures(e.data.data)
-        } else {
-          setFeatures(null)
+      if (e.data) {
+        if (e.data.id === "fxhash_getFeatures") {
+          if (e.data.data) {
+            setFeatures(e.data.data)
+          } else {
+            setFeatures(null)
+          }
+        }
+        if (e.data.id === "fxhash_getParams") {
+          if (e.data.data) {
+            setParams(e.data.data)
+          } else {
+            setParams(null)
+          }
         }
       }
     }
-    // Listen to message from child window
     window.addEventListener("message", listener, false)
 
-    // remove listener when component unmounts
     return () => {
       window.removeEventListener("message", listener, false)
     }
   }, [])
 
-  const iframeLoaded = () => {
+  const handleOnIframeLoad = useCallback(() => {
     if (artworkIframeRef.current) {
       const iframe = artworkIframeRef.current.getHtmlIframe()
       if (iframe) {
         iframe.contentWindow?.postMessage("fxhash_getFeatures", "*")
+        iframe.contentWindow?.postMessage("fxhash_getParams", "*")
       }
     }
+  }, [artworkIframeRef.current])
+
+  const handleSubmitParams = (data: any) => {
+    setData(data)
   }
 
   const renderArtwork = () => (
-    <div className={cs(style.artwork)}>
-      <div className={cs(style["preview-cont"])}>
-        <div className={cs(style["preview-wrapper"])}>
-          <ArtworkFrame>
-            <ArtworkIframe
-              ref={artworkIframeRef}
-              url={url}
-              textWaiting="looking for content on IPFS"
-              onLoaded={iframeLoaded}
-            />
-          </ArtworkFrame>
+    <div className={cs(style.artworkWrapper)}>
+      <div className={cs(style.artwork)}>
+        <div className={cs(style["preview-cont"])}>
+          <div className={cs(style["preview-wrapper"])}>
+            <ArtworkFrame>
+              <ArtworkIframe
+                ref={artworkIframeRef}
+                url={url}
+                textWaiting="looking for content on IPFS"
+                onLoaded={handleOnIframeLoad}
+              />
+            </ArtworkFrame>
+          </div>
         </div>
       </div>
     </div>
@@ -126,9 +149,15 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
               artworkIframeRef.current?.reloadIframe()
             }}
           />
-
           <Spacing size="2x-large" sm="x-large" />
-
+          {inputBytes && params && (
+            <div>
+              <h5>Params</h5>
+              <Spacing size="small" />
+              <ControlsTest params={params} onSubmit={handleSubmitParams} />
+            </div>
+          )}
+          <Spacing size="2x-large" sm="x-large" />
           <div>
             <h5>Features</h5>
             <Spacing size="small" />
@@ -143,7 +172,7 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
       <div className={cs(style.checkboxes)}>
         <div>
           <Checkbox value={check1} paddingLeft={false} onChange={setCheck1}>
-            I want to keep this hash for the preview of my project
+            I want to keep this settings for the preview of my project
           </Checkbox>
           <Checkbox value={check2} paddingLeft={false} onChange={setCheck2}>
             My Generative Token works properly

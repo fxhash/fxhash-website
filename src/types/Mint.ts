@@ -45,6 +45,8 @@ export interface MintGenerativeData<N = string> {
   authHash1?: string
   // the hash selector for the preview
   previewHash?: string
+  // the byte string of param values for the preview
+  previewInputBytes?: string | null
   // the ipfs uri to the preview
   cidPreview?: string
   // the ipfs uri to the thumbnail
@@ -68,10 +70,12 @@ export interface GenTokenSettings {
     preMint?: {
       enabled: boolean
       hashConstraints?: string[] | null
+      paramsConstraints?: string[] | null
     }
     postMint?: {
       enabled: boolean
       hashConstraints?: string[] | null
+      paramsConstraints?: string[] | null
     }
   }
 }
@@ -90,6 +94,7 @@ export interface GenTokDistributionForm<N> {
   splitsPrimary: ISplit[]
   splitsSecondary: ISplit[]
   reserves: IReserve<N>[]
+  gracingPeriod?: N
 }
 
 export interface GenTokenInformationsForm {
