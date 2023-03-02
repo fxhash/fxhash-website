@@ -52,8 +52,6 @@
 .font-regular {}
 
 .size-custom {
-  padding-left: 0;
-  padding-right: 0;
 }
 .size-very-small {
   height: 36px;
@@ -205,6 +203,11 @@
   &:disabled {
     background: transparent;
   }
+}
+
+.color-secondary-inverted {
+  color: var(--color-secondary) !important;
+  background-color: var(--color-white);
 }
 
 .state-default {}

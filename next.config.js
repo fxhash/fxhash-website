@@ -29,7 +29,7 @@ const baseSecurityHeaders = [
   },
 ]
 
-const winterUrl = process.env.NODE_ENV === "development" ? "https://sandbox-winter-checkout.onrender.com/" : "https://checkout.usewinter.com/"
+const winterUrl = process.env.NEXT_PUBLIC_TZ_NET === "mainnet" ? "https://checkout.usewinter.com/" : "https://sandbox-winter-checkout.onrender.com/"
 const articlesAllowedDomains = `https://*.spotify.com/ https://spotify.com https://*.youtube.com/ https://youtube.com https://*.twitter.com/ https://twitter.com https://codepen.io https://openprocessing.org ${winterUrl}`
 
 /** @type {import('next').NextConfig} */

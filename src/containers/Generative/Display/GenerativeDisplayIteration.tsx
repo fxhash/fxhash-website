@@ -97,7 +97,7 @@ const _GenerativeDisplayIteration = ({
 
           <Spacing size="x-large" sm="none" />
 
-          <div className={cs(style.buttons)}>
+          <div className={cs(style.buttons, style.actions)}>
             {objkt.activeListing && (
               <ListingAccept listing={objkt.activeListing} objkt={objkt} />
             )}
@@ -107,35 +107,29 @@ const _GenerativeDisplayIteration = ({
                 <MarketplaceActions objkt={objkt} />
               </UserGuard>
             </ClientOnlyEmpty>
+            <div className={cs(layout.buttons_inline, layout.flex_wrap)}>
+              <Link href={getGenerativeTokenUrl(objkt.issuer)} passHref>
+                <Button isLink={true} className={style.button} size="regular">
+                  open project
+                </Button>
+              </Link>
+              <Link
+                href={getGenerativeTokenMarketplaceUrl(objkt.issuer)}
+                passHref
+              >
+                <Button
+                  isLink={true}
+                  className={cs(style.button, style.button_marketplace)}
+                  size="regular"
+                >
+                  open marketplace
+                </Button>
+              </Link>
+            </div>
           </div>
-
-          <Spacing size="regular" />
-
-          <div
-            className={cs(
-              layout.buttons_inline,
-              layout.flex_wrap,
-              style.actions
-            )}
-          >
-            <Link href={getGenerativeTokenUrl(objkt.issuer)} passHref>
-              <Button isLink={true} className={style.button} size="regular">
-                open project
-              </Button>
-            </Link>
-            <Link
-              href={getGenerativeTokenMarketplaceUrl(objkt.issuer)}
-              passHref
-            >
-              <Button isLink={true} className={style.button} size="regular">
-                open marketplace
-              </Button>
-            </Link>
-          </div>
-
           <Spacing size="4x-large" sm="x-large" />
 
-          <div className={cs(style.buttons, style.project_infos)}>
+          <div className={cs(style.project_infos)}>
             <h4>
               Project #{objkt.issuer.id} — iteration #{objkt.iteration}
             </h4>

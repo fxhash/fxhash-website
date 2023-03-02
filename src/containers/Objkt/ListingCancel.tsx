@@ -8,6 +8,7 @@ import {
   ListingCancelOperation,
   TListingCancelOperationParams,
 } from "../../services/contract-operations/ListingCancel"
+import style from "./MarketplaceActions.module.scss"
 
 interface Props {
   listing: Listing
@@ -46,6 +47,7 @@ export function ListingCancel({ listing, objkt }: Props) {
         state={contractLoading ? "loading" : "default"}
         color="primary"
         onClick={callContract}
+        className={style.button}
       >
         cancel listing ({displayMutez(listing.price)} tez)
       </Button>
