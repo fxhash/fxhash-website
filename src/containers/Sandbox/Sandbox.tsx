@@ -16,7 +16,7 @@ import { RawTokenFeatures } from "../../types/Metadata"
 import { RawFeatures } from "../../components/Features/RawFeatures"
 import { ArtworkFrame } from "../../components/Artwork/ArtworkFrame"
 import { Controls } from "components/FxParams/Controls"
-import { serializeParams } from "components/FxParams/utils"
+import { serializeParams, strinigfyParams } from "components/FxParams/utils"
 import { ControlsTest } from "components/Testing/ControlsTest"
 
 export function Sandbox() {
@@ -103,6 +103,10 @@ export function Sandbox() {
       }
     }
   }, [artworkIframeRef.current])
+
+  const fxparamsBytes = useMemo(() => {
+    return serializeParams(data, params)
+  }, [strinigfyParams(data)])
 
   return (
     <section
@@ -217,7 +221,7 @@ export function Sandbox() {
               <ArtworkFrame>
                 <SandboxPreview
                   hash={hash}
-                  fxparams={data && params && serializeParams(data, params)}
+                  fxparams={fxparamsBytes}
                   ref={artworkIframeRef}
                   record={filesRecord || undefined}
                   textWaiting="Waiting for content to be reachable"

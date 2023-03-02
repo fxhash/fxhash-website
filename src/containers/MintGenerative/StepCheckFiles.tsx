@@ -17,7 +17,7 @@ import { RawFeatures } from "../../components/Features/RawFeatures"
 import { ArtworkFrame } from "../../components/Artwork/ArtworkFrame"
 import { ipfsUrlWithHashAndParams } from "../../utils/ipfs"
 import { ControlsTest } from "components/Testing/ControlsTest"
-import { serializeParams } from "components/FxParams/utils"
+import { serializeParams, strinigfyParams } from "components/FxParams/utils"
 
 export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
   const [hash, setHash] = useState<string>(
@@ -34,7 +34,7 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
     const serialized = serializeParams(data, params)
     if (serialized.length === 0) return null
     return serialized
-  }, [data, params])
+  }, [strinigfyParams(data)])
 
   const url = useMemo<string>(() => {
     return ipfsUrlWithHashAndParams(state.cidUrlParams!, hash, inputBytes)
@@ -150,7 +150,7 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
             }}
           />
           <Spacing size="2x-large" sm="x-large" />
-          {inputBytes && params && (
+          {params && (
             <div>
               <h5>Params</h5>
               <Spacing size="small" />
