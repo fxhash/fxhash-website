@@ -10,7 +10,7 @@ import {
 import { sortValueToSortVariable } from "../utils/sort"
 import { IOptions } from "../components/Input/Select"
 
-interface UseSortPayload {
+export interface UseSortPayload {
   sortValue: string
   sortVariable: Record<string, string>
   setSortValue: Dispatch<SetStateAction<string>>
@@ -19,7 +19,7 @@ interface UseSortPayload {
   restoreSort: () => void
   setSearchSortOptions: () => void
 }
-interface UseSortParams {
+export interface UseSortParams {
   defaultSort?: string
   defaultWithSearchOptions?: boolean
 }
