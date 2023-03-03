@@ -17,7 +17,7 @@ Articles are similar to Hic et Nunc multi-editions "NFTs". When a writer mints a
 
 ## Mutable metadata
 
-While *traditionnal* NFTs are designed to be immutable, we believe this paradigm shouldn't apply to articles. At the pace at which our world changes, and because articles are going to be a core building block for educationnal content among other sensitive applications, it doesn't make sense to lock these at a given point in time. As such, it will be possible for writers to update their articles even after it was minted.
+While *traditionnal* NFTs are designed to be immutable, we believe this paradigm shouldn't apply to articles. At the pace at which our world changes, and because articles are going to be a core building block for educational content among other sensitive applications, it doesn't make sense to lock these at a given point in time. As such, it will be possible for writers to update their articles even after it was minted.
 
 
 # Dynamic content & Tezos interoperability
@@ -30,7 +30,7 @@ We wanted articles to have the ability to point to NFTs stored in Tezos Smart Co
 
 ## Extended markdown
 
-Articles are stored on IPFS as a markdown string, with an extension to the markdown specification. First of all, we use the [Github Flavored Markdown](https://github.github.com/gfm/) specification as a base layer, which allows for the insertion of some more complexe blocks such as tables and math formulas. This is a widely used spec, and as such its integration into existing application should be trivial.
+Articles are stored on IPFS as a markdown string, with an extension to the markdown specification. First of all, we use the [Github Flavored Markdown](https://github.github.com/gfm/) specification as a base layer, which allows for the insertion of some more complex blocks such as tables and math formulas. This is a widely used spec, and as such its integration into existing application should be trivial.
 
 In order to add custom blocks to the markdown (such as tezos storage pointers), we decided to use the directives specification extension ([proposal](https://talk.commonmark.org/t/generic-directives-plugins-syntax/444), [syntax](https://github.com/micromark/micromark-extension-directive#syntax)) because it provides a very high level of modularity and many markdown parsers have a plugin for this spec. We hope that it will facilitate its integration into other applications.
 
