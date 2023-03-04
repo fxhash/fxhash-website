@@ -51,18 +51,10 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
     const listener = (e: any) => {
       if (e.data) {
         if (e.data.id === "fxhash_getFeatures") {
-          if (e.data.data) {
-            setFeatures(e.data.data)
-          } else {
-            setFeatures(null)
-          }
+          setFeatures(e.data.data || null)
         }
         if (e.data.id === "fxhash_getParams") {
-          if (e.data.data) {
-            setParams(e.data.data)
-          } else {
-            setParams(null)
-          }
+          setParams(e.data.data || null)
         }
       }
     }
