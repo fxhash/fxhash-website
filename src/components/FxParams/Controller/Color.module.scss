@@ -33,7 +33,7 @@ $height: 30px;
   position: absolute;
   bottom: 0;
   transform: translate(0, calc(100% + var(--fxl-spacing-xxs)));
-  z-index: 1;
+  z-index: 10;
 }
 
 .picker {
