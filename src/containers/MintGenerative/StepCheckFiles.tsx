@@ -164,7 +164,7 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
       <div className={cs(style.checkboxes)}>
         <div>
           <Checkbox value={check1} paddingLeft={false} onChange={setCheck1}>
-            I want to keep this settings for the preview of my project
+            I want to keep these settings for the preview of my project
           </Checkbox>
           <Checkbox value={check2} paddingLeft={false} onChange={setCheck2}>
             My Generative Token works properly
