@@ -77,7 +77,10 @@ export const SandboxPreview = forwardRef<ArtworkIframeRef, Props>(
     // the URL of the iframe gets updated whenever ID / hash changes
     useEffect(() => {
       if (iframeRef.current && id !== "0") {
-        const previewUrl = `${location.origin}/sandbox/preview.html?id=${id}&fxhash=${hash}&fxparams=${fxparams}`
+        let previewUrl = `${location.origin}/sandbox/preview.html?id=${id}&fxhash=${hash}`
+        if (fxparams) {
+          previewUrl += `&fxparams=${fxparams}`
+        }
         // load the sandbox preview into the iframe, then service workers do the job
         iframeRef.current.src = previewUrl
         onUrlUpdate && onUrlUpdate(previewUrl)
