@@ -17,7 +17,11 @@ import { RawFeatures } from "../../components/Features/RawFeatures"
 import { ArtworkFrame } from "../../components/Artwork/ArtworkFrame"
 import { ipfsUrlWithHashAndParams } from "../../utils/ipfs"
 import { ControlsTest } from "components/Testing/ControlsTest"
-import { serializeParams, strinigfyParams } from "components/FxParams/utils"
+import {
+  consolidateParams,
+  serializeParams,
+  strinigfyParams,
+} from "components/FxParams/utils"
 
 export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
   const [hash, setHash] = useState<string>(
@@ -28,7 +32,7 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
   const artworkIframeRef = useRef<ArtworkIframeRef>(null)
   const [features, setFeatures] = useState<RawTokenFeatures | null>(null)
   const [params, setParams] = useState<any | null>([])
-  const [data, setData] = useState<Record<string, any>>({})
+  const [data, setData] = useState<Record<string, any> | null>(null)
 
   const inputBytes = useMemo<string | null>(() => {
     const serialized = serializeParams(data, params)
@@ -55,6 +59,9 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
         }
         if (e.data.id === "fxhash_getParams") {
           setParams(e.data.data || null)
+          if (!data && e.data.data) {
+            setData(consolidateParams(e.data.data, {}))
+          }
         }
       }
     }
@@ -63,7 +70,7 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
     return () => {
       window.removeEventListener("message", listener, false)
     }
-  }, [])
+  }, [data])
 
   const handleOnIframeLoad = useCallback(() => {
     if (artworkIframeRef.current) {
