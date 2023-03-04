@@ -156,29 +156,15 @@ export const StepExtraSettings: StepComponent = ({ state, onNext }) => {
 
     const cloned = cloneDeep(settings)
     // if explore options are set to infinite, we force hash list to be null
-    if (
-      preExploreOptions === "infinite" &&
-      cloned.exploration?.preMint?.hashConstraints
-    ) {
-      cloned.exploration.preMint.hashConstraints = null
+    if (preExploreOptions === "infinite") {
+      const preMint = cloned.exploration?.preMint
+      if (preMint?.hashConstraints) preMint.hashConstraints = null
+      if (preMint?.paramsConstraints) preMint.paramsConstraints = null
     }
-    if (
-      preExploreOptions === "infinite" &&
-      cloned.exploration?.preMint?.paramsConstraints
-    ) {
-      cloned.exploration.preMint.paramsConstraints = null
-    }
-    if (
-      postExploreOptions === "infinite" &&
-      cloned.exploration?.postMint?.hashConstraints
-    ) {
-      cloned.exploration.postMint.hashConstraints = null
-    }
-    if (
-      postExploreOptions === "infinite" &&
-      cloned.exploration?.postMint?.paramsConstraints
-    ) {
-      cloned.exploration.postMint.paramsConstraints = null
+    if (postExploreOptions === "infinite") {
+      const postMint = cloned.exploration?.postMint
+      if (postMint?.hashConstraints) postMint.hashConstraints = null
+      if (postMint?.paramsConstraints) postMint.paramsConstraints = null
     }
     // we can send the update of the settings to the next component in the tree
     onNext({ settings })
