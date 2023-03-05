@@ -12,6 +12,7 @@ import {
 } from "../../services/contract-operations/Listing"
 import { TextWarning } from "../../components/Text/TextWarning"
 import { DisplayTezos } from "../../components/Display/DisplayTezos"
+import { IconTezos } from "../../components/Icons/IconTezos"
 
 interface Props {
   objkt: Objkt
@@ -68,19 +69,23 @@ export function ListingCreate({ objkt }: Props) {
           )}
           <div className={cs(style.inputs)}>
             <InputTextUnit
-              unit="tez"
+              unit={<IconTezos size="regular" />}
+              positionUnit="inside-left"
               type="number"
-              sizeX="small"
+              sizeX="fill"
               value={price}
               onChange={(evt) => setPrice(evt.target.value)}
               min={0}
               step={0.0000001}
+              className={style.input}
             />
             <Button
               state={contractLoading ? "loading" : "default"}
               color="secondary"
               onClick={callContract}
               size="regular"
+              disabled={!price}
+              className={style.button_listing}
             >
               list
             </Button>
@@ -90,6 +95,7 @@ export function ListingCreate({ objkt }: Props) {
         <Button
           color={opened ? "primary" : "secondary"}
           onClick={() => setOpened(!opened)}
+          className={style.button}
         >
           list for trade
         </Button>
