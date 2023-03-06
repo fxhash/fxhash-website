@@ -317,7 +317,10 @@ export const snippetFromUrl = `
         if (event.data === "fxhash_getParams") {
           parent.postMessage({
             id: "fxhash_getParams",
-            data: window.$fx.getDefinitions()
+            data: {
+              definitions: window.$fx.getDefinitions(),
+              values: window.$fx.getRawParams(),
+            }
           }, "*")
         }
       })

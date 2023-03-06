@@ -9,17 +9,11 @@ import { Spacing } from "../Layout/Spacing"
 import { ButtonVariations } from "../Button/ButtonVariations"
 import { Button } from "../Button"
 import Link from "next/link"
-import {
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react"
+import { useContext, useEffect, useMemo, useRef, useState } from "react"
 import { SettingsContext } from "../../context/Theme"
 import { ipfsGatewayUrl } from "../../services/Ipfs"
 import { Image } from "../Image"
+import { useReceiveTokenInfos } from "hooks/useReceiveTokenInfos"
 interface Props {
   token: Pick<
     GenerativeToken,
@@ -43,7 +37,9 @@ export function GenerativeArtwork({
   const settings = useContext(SettingsContext)
   const artworkIframeRef = useRef<ArtworkIframeRef>(null)
 
-  const [params, setParams] = useState<any | null>(null)
+  const { params, onIframeLoaded } = useReceiveTokenInfos(
+    artworkIframeRef.current
+  )
   // used to preview the token in the iframe with different hashes
   const [previewHash, setPreviewHash] = useState<string | null>(
     token.metadata.previewHash || null
@@ -85,35 +81,6 @@ export function GenerativeArtwork({
     }
   }, [previewHash, previewInputBytes])
 
-  useEffect(() => {
-    const listener = (e: any) => {
-      if (e.data) {
-        if (e.data.id === "fxhash_getParams") {
-          if (e.data.data) {
-            setParams(e.data.data)
-          } else {
-            setParams(null)
-          }
-        }
-      }
-    }
-    window.addEventListener("message", listener, false)
-
-    return () => {
-      window.removeEventListener("message", listener, false)
-    }
-  }, [])
-
-  const handleOnIframeLoad = useCallback(() => {
-    if (artworkIframeRef.current) {
-      const iframe = artworkIframeRef.current.getHtmlIframe()
-      if (iframe) {
-        iframe.contentWindow?.postMessage("fxhash_getFeatures", "*")
-        iframe.contentWindow?.postMessage("fxhash_getParams", "*")
-      }
-    }
-  }, [artworkIframeRef.current])
-
   return (
     <>
       <SquareContainer>
@@ -131,7 +98,7 @@ export function GenerativeArtwork({
               ref={artworkIframeRef}
               url={artifactUrl}
               hasLoading={false}
-              onLoaded={handleOnIframeLoad}
+              onLoaded={onIframeLoaded}
             />
           )}
         </ArtworkFrame>

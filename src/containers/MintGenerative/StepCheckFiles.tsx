@@ -7,12 +7,11 @@ import {
   ArtworkIframe,
   ArtworkIframeRef,
 } from "../../components/Artwork/PreviewIframe"
-import { useMemo, useState, useRef, useEffect, useCallback } from "react"
+import { useMemo, useState, useRef } from "react"
 import { generateFxHash } from "../../utils/hash"
 import { HashTest } from "../../components/Testing/HashTest"
 import { Checkbox } from "../../components/Input/Checkbox"
 import { Button } from "../../components/Button"
-import { RawTokenFeatures } from "../../types/Metadata"
 import { RawFeatures } from "../../components/Features/RawFeatures"
 import { ArtworkFrame } from "../../components/Artwork/ArtworkFrame"
 import { ipfsUrlWithHashAndParams } from "../../utils/ipfs"
@@ -22,6 +21,7 @@ import {
   serializeParams,
   strinigfyParams,
 } from "components/FxParams/utils"
+import { useReceiveTokenInfos } from "hooks/useReceiveTokenInfos"
 
 export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
   const [hash, setHash] = useState<string>(
@@ -30,15 +30,17 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
   const [check1, setCheck1] = useState<boolean>(false)
   const [check2, setCheck2] = useState<boolean>(false)
   const artworkIframeRef = useRef<ArtworkIframeRef>(null)
-  const [features, setFeatures] = useState<RawTokenFeatures | null>(null)
-  const [params, setParams] = useState<any | null>([])
-  const [data, setData] = useState<Record<string, any> | null>(null)
+  const { onIframeLoaded, features, params } = useReceiveTokenInfos(
+    artworkIframeRef.current
+  )
+
+  const [data, setData] = useState<Record<string, any> | null>({})
 
   const inputBytes = useMemo<string | null>(() => {
-    const serialized = serializeParams(data, params)
+    const serialized = serializeParams(data, params || [])
     if (serialized.length === 0) return null
     return serialized
-  }, [strinigfyParams(data)])
+  }, [strinigfyParams(data), params])
 
   const url = useMemo<string>(() => {
     return ipfsUrlWithHashAndParams(state.cidUrlParams!, hash, inputBytes)
@@ -50,37 +52,6 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
       previewInputBytes: inputBytes,
     })
   }
-
-  useEffect(() => {
-    const listener = (e: any) => {
-      if (e.data) {
-        if (e.data.id === "fxhash_getFeatures") {
-          setFeatures(e.data.data || null)
-        }
-        if (e.data.id === "fxhash_getParams") {
-          setParams(e.data.data || null)
-          if (!data && e.data.data) {
-            setData(consolidateParams(e.data.data, {}))
-          }
-        }
-      }
-    }
-    window.addEventListener("message", listener, false)
-
-    return () => {
-      window.removeEventListener("message", listener, false)
-    }
-  }, [data])
-
-  const handleOnIframeLoad = useCallback(() => {
-    if (artworkIframeRef.current) {
-      const iframe = artworkIframeRef.current.getHtmlIframe()
-      if (iframe) {
-        iframe.contentWindow?.postMessage("fxhash_getFeatures", "*")
-        iframe.contentWindow?.postMessage("fxhash_getParams", "*")
-      }
-    }
-  }, [artworkIframeRef.current])
 
   const handleSubmitParams = (data: any) => {
     setData(data)
@@ -96,7 +67,7 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
                 ref={artworkIframeRef}
                 url={url}
                 textWaiting="looking for content on IPFS"
-                onLoaded={handleOnIframeLoad}
+                onLoaded={onIframeLoaded}
               />
             </ArtworkFrame>
           </div>
