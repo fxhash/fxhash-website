@@ -44,7 +44,7 @@ export function Controller(props: ControllerProps) {
   } = props
   return (
     <div className={cx(classes.controller, classes[layout], className)}>
-      {label && id && <label htmlFor={id}>{label}</label>}
+      {id && <label htmlFor={id}>{label || id}</label>}
       <div className={classes.inputContainer} {...inputContainerProps}>
         {props.children}
       </div>
