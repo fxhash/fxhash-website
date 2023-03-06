@@ -285,16 +285,7 @@ export const snippetFromUrl = `
           return this._rawValues
         },
         getDefinitions: function() {
-          if (!this._params) return undefined
-          return this._params.map(p => {
-            let v
-            if (typeof p.default === "undefined") v = this._rawValues[p.id]
-            else v = p.default
-            return ({
-              ...p, 
-              default: v
-            })
-          })
+          return this._params;
         },
         stringifyParams: function(params) {
           return JSON.stringify(
