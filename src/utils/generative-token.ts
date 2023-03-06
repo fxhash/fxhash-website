@@ -212,7 +212,8 @@ export function generativeMetadataFromMintForm(
     settings: data.settings ?? null,
     symbol: "FXGEN",
     decimals: 0,
-    version: "0.2",
+    version: "0.3",
+    params: data.params!,
   }
 }
 

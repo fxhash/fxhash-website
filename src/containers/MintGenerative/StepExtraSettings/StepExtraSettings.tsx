@@ -259,7 +259,7 @@ export const StepExtraSettings: StepComponent = ({ state, onNext }) => {
               tabDefinitions={tabsDefinitions}
               activeIdx={activeTab}
             />
-            <Spacing size="x-large" />
+            <Spacing size="x-small" />
             {activeTab === "preMint" && (
               <VariantForm
                 withParams={usesParams}

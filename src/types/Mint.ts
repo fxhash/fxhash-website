@@ -36,6 +36,14 @@ export interface CaptureSettings {
   gpu?: boolean
 }
 
+// object defining the fx(params) when minting a Generative Token
+export interface MintGenerativeParams {
+  // JSON definition of the params
+  definition: any
+  // number of bytes required when minting params
+  inputBytesSize: number
+}
+
 export interface MintGenerativeData<N = string> {
   // if the project is authored as a collaboration
   collaboration?: Collaboration | null
@@ -59,6 +67,8 @@ export interface MintGenerativeData<N = string> {
   captureSettings?: CaptureSettings
   // general settings
   settings?: GenTokenSettings
+  // fx(params) settings
+  params?: MintGenerativeParams
   // general informations about the token
   informations?: GenTokenInformationsForm
   // minted successful

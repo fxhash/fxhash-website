@@ -21,6 +21,7 @@ import {
   consolidateParams,
   serializeParams,
   strinigfyParams,
+  sumBytesParams,
 } from "components/FxParams/utils"
 
 export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
@@ -44,10 +45,17 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
     return ipfsUrlWithHashAndParams(state.cidUrlParams!, hash, inputBytes)
   }, [hash, inputBytes])
 
+  console.log({ data })
+
   const nextStep = () => {
     onNext({
       previewHash: hash,
       previewInputBytes: inputBytes,
+      params: {
+        definition: data,
+        // TODO: remove any here
+        inputBytesSize: sumBytesParams(data as any),
+      },
     })
   }
 
@@ -58,9 +66,9 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
           setFeatures(e.data.data || null)
         }
         if (e.data.id === "fxhash_getParams") {
-          setParams(e.data.data || null)
-          if (!data && e.data.data) {
-            setData(consolidateParams(e.data.data, {}))
+          setParams(e.data?.data?.definitions || null)
+          if (!data && e.data?.data?.definitions) {
+            setData(consolidateParams(e.data.data.definitions, {}))
           }
         }
       }

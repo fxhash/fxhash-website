@@ -7,6 +7,7 @@ import { Field } from "components/Form/Field"
 import { forwardRef, useState, ReactNode } from "react"
 import cs from "classnames"
 import style from "./StepExtraSettings.module.scss"
+import text from "../../../styles/Text.module.css"
 import { Button } from "components/Button"
 import layout from "../../../styles/Layout.module.scss"
 import { VariantSettingsTabKey } from "./StepExtraSettings"
@@ -111,9 +112,8 @@ export function VariantForm(props: VariantFormProps) {
   const { hashConstraints, paramsConstraints } = settings || {}
 
   return (
-    <Fieldset>
-      <h4>{TARGET_HEADLINE[target]}</h4>
-      <p>
+    <>
+      <p className={cs(text.info)}>
         <em>{TARGET_DESCRIPTIONS[target]}</em>
       </p>
       <Field className={cs(style.checkbox)}>
@@ -191,6 +191,6 @@ export function VariantForm(props: VariantFormProps) {
           </Field>
         )}
       </div>
-    </Fieldset>
+    </>
   )
 }

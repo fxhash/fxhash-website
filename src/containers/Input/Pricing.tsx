@@ -55,8 +55,7 @@ export function InputPricing({
         <label>
           Pricing method
           <small>
-            You will not be able to update the pricing method after publication,
-            only its pricing settings
+            You will be able to update the pricing method after publication
           </small>
         </label>
         <InputRadioBtnIcon

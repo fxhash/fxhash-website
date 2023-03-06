@@ -287,6 +287,7 @@ export function deserializeParams(
 // Consolidates parameters from both a params object provided by the token
 // and the dat object of params, which is stored by the controls component.
 export function consolidateParams(params: any, data: any) {
+  console.log({ params })
   if (!params) return []
 
   const rtn = [...params]
@@ -329,6 +330,7 @@ export function getRandomParamValues(
 export function sumBytesParams(
   definitions: FxParamDefinition<FxParamType>[]
 ): number {
+  console.log({ definitions })
   return (
     definitions?.reduce(
       (acc, def) =>

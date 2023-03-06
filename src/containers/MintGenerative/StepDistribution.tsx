@@ -56,7 +56,10 @@ const validation = Yup.object().shape({
 })
 
 const validationWithGracing = validation.shape({
-  gracingPeriod: Yup.number().min(1, "At least one day").required("Required"),
+  gracingPeriod: Yup.number()
+    .integer("Must be integer")
+    .min(1, "At least one day")
+    .required("Required"),
 })
 
 const defaultDistribution = (
@@ -280,23 +283,43 @@ export const StepDistribution: StepComponent = ({ state, onNext }) => {
                 </InputSplits>
               </div>
             </Field>
-            {usesParams && (
-              <Field error={errors.gracingPeriod}>
-                <label htmlFor="gracingPeriod">
-                  Gracing period
-                  <small>in number of days</small>
+
+            <Fieldset>
+              <Field>
+                <label>
+                  Ticket settings
+                  <small>
+                    Because your project has some params defined, minting will
+                    happen as a 2-step process. First collections will mint a
+                    ticket, then they will exchange their ticket with an
+                    iteration once they have settled on the parameters they
+                    want.
+                  </small>
                 </label>
-                <InputTextUnit
-                  unit="day(s)"
-                  type="text"
-                  name="gracingPeriod"
-                  value={values.gracingPeriod || ""}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  error={!!errors.gracingPeriod}
-                />
               </Field>
-            )}
+
+              {usesParams && (
+                <Field error={errors.gracingPeriod}>
+                  <label htmlFor="gracingPeriod">
+                    Gracing period
+                    <small>
+                      Period during which collectors won't have to pay a tax to
+                      keep their ticket (recommended: 7)
+                    </small>
+                  </label>
+                  <InputTextUnit
+                    unit="day(s)"
+                    type="text"
+                    name="gracingPeriod"
+                    value={values.gracingPeriod || ""}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    error={!!errors.gracingPeriod}
+                  />
+                </Field>
+              )}
+            </Fieldset>
+
             <Fieldset
               error={
                 typeof errors.reserves === "string"
