@@ -53,6 +53,11 @@ export const Controls = ({
   lockedParamIds,
   onChangeData,
 }: ControlsProps) => {
+  console.log("--------------")
+  console.log("Controls > params")
+  console.log({ params })
+  console.log("--------------")
+
   const consolidatedParams = consolidateParams(params, data)
 
   const p: React.RefObject<HTMLDivElement> = createRef()

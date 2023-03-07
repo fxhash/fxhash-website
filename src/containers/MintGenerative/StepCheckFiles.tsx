@@ -31,9 +31,14 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
   const [check1, setCheck1] = useState<boolean>(false)
   const [check2, setCheck2] = useState<boolean>(false)
   const artworkIframeRef = useRef<ArtworkIframeRef>(null)
-  const { onIframeLoaded, features, params } = useReceiveTokenInfos(
-    artworkIframeRef.current
-  )
+  const { onIframeLoaded, features, params, paramsDefinition } =
+    useReceiveTokenInfos(artworkIframeRef.current)
+
+  console.log({
+    features,
+    params,
+    paramsDefinition,
+  })
 
   const [data, setData] = useState<Record<string, any> | null>({})
 
@@ -46,6 +51,7 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
   const url = useMemo<string>(() => {
     return ipfsUrlWithHashAndParams(state.cidUrlParams!, hash, inputBytes)
   }, [hash, inputBytes])
+  console.log({ url })
 
   console.log({ data })
 
@@ -54,9 +60,9 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
       previewHash: hash,
       previewInputBytes: inputBytes,
       params: {
-        definition: params,
+        definition: paramsDefinition,
         // TODO: remove any here
-        inputBytesSize: sumBytesParams(params as any),
+        inputBytesSize: sumBytesParams(paramsDefinition as any),
       },
     })
   }

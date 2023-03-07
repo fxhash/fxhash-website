@@ -4,23 +4,29 @@ import { RawTokenFeatures } from "types/Metadata"
 import { ArtworkIframeRef } from "components/Artwork/PreviewIframe"
 import { FxParamDefinition, FxParamType } from "components/FxParams/types"
 
-export function useReceiveTokenInfos(
-  ref: ArtworkIframeRef | null,
-  options?: { initialHash?: string }
-): {
+interface IFrameTokenInfos {
   onIframeLoaded: () => void
   hash: string
   setHash: (h: string) => void
   features: RawTokenFeatures | null
   setFeatures: (f: RawTokenFeatures) => void
+  // params enhanced with values as executed in the token
   params: any
   setParams: (p: any) => void
-} {
+  // raw param definition directly from the script
+  paramsDefinition: any
+}
+
+export function useReceiveTokenInfos(
+  ref: ArtworkIframeRef | null,
+  options?: { initialHash?: string }
+): IFrameTokenInfos {
   const [hash, setHash] = useState<string>(
     options?.initialHash || generateFxHash()
   )
   const [features, setFeatures] = useState<RawTokenFeatures | null>(null)
   const [params, setParams] = useState<any | null>(null)
+  const [paramsDefinition, setParamsDefinition] = useState<any | null>(null)
 
   useEffect(() => {
     const listener = (e: any) => {
@@ -39,7 +45,6 @@ export function useReceiveTokenInfos(
           }
         }
         if (e.data.id === "fxhash_getParams") {
-          console.log(e.data.data)
           if (e.data.data) {
             const { definitions, values } = e.data.data
             if (definitions) {
@@ -49,6 +54,7 @@ export function useReceiveTokenInfos(
                   default: values?.[d.id],
                 })
               )
+              setParamsDefinition(definitions)
               setParams(definitionsWithDefaults)
             }
           } else {
@@ -83,5 +89,6 @@ export function useReceiveTokenInfos(
     setHash,
     setParams,
     setFeatures,
+    paramsDefinition,
   }
 }
