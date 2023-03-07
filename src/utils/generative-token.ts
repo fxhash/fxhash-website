@@ -187,20 +187,27 @@ export function generativeMetadataFromMintForm(
     // we don't need to add anything
   }
 
+  let artifactUri = `${getIpfsSlash(data.cidUrlParams!)}?fxhash=${
+    data.previewHash
+  }`
+
+  if (data.previewInputBytes) {
+    artifactUri += `&fxparams=${data.previewInputBytes}`
+  }
+
   return {
     name: data.informations!.name,
     description: data.informations!.description,
     childrenDescription:
       data.informations!.childrenDescription || data.informations!.description,
     tags: tagsFromString(data.informations!.tags),
-    artifactUri: `${getIpfsSlash(data.cidUrlParams!)}?fxhash=${
-      data.previewHash
-    }`,
+    artifactUri,
     displayUri: getIpfsSlash(data.cidPreview!),
     thumbnailUri: getIpfsSlash(data.cidThumbnail!),
     generativeUri: getIpfsSlash(data.cidUrlParams!),
     authenticityHash: data.authHash2!,
     previewHash: data.previewHash!,
+    previewInputBytes: data.previewInputBytes!,
     capture,
     settings: data.settings ?? null,
     symbol: "FXGEN",
