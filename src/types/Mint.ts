@@ -94,6 +94,7 @@ export interface GenTokPricingForm<N> {
   pricingMethod?: GenTokPricing
   pricingFixed: Partial<IPricingFixed<N>>
   pricingDutchAuction: Partial<IPricingDutchAuction<N>>
+  lockForReserves: boolean
 }
 
 export interface GenTokDistributionForm<N> {

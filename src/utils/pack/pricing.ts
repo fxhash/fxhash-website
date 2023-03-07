@@ -56,7 +56,7 @@ export function packPricing(input: GenTokPricingForm<number>): TInputPricing {
 
   return {
     pricing_id: genTokPricingToId(input.pricingMethod!),
-    lock_for_reserves: false,
+    lock_for_reserves: input.lockForReserves || false,
     details: details!,
   }
 }

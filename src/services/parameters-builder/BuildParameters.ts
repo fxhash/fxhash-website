@@ -9,10 +9,12 @@ import listingV3Type from "./listing-v3/type.json"
 import offerAcceptType from "./offer-accept/type.json"
 import mintIssuerType from "./mint-issuer/type.json"
 import mintType from "./mint/type.json"
+import mintV3Type from "./mint-v3/type.json"
 import pricingFixedType from "./pricing-fixed/type.json"
 import pricingDutchAuctionType from "./pricing-dutch-auction/type.json"
 import updateIssuerType from "./update-issuer/type.json"
 import updatePriceType from "./update-price/type.json"
+import updatePriceV3Type from "./update-price-v3/type.json"
 import updateReserveType from "./update-reserve/type.json"
 import burnSupplyType from "./burn-supply/type.json"
 import burnType from "./burn/type.json"
@@ -37,11 +39,13 @@ export enum EBuildableParams {
   // LISTING_ACCEPT        = "LISTING_ACCEPT",
   OFFER_ACCEPT = "OFFER_ACCEPT",
   MINT = "MINT",
+  MINT_V3 = "MINT_V3",
   MINT_ISSUER = "MINT_ISSUER",
   PRICING_FIXED = "PRICING_FIXED",
   PRICING_DUTCH_AUCTION = "PRICING_DUTCH_AUCTION",
   UPDATE_ISSUER = "UPDATE_ISSUER",
   UPDATE_PRICE = "UPDATE_PRICE",
+  UPDATE_PRICE_V3 = "UPDATE_PRICE_V3",
   UPDATE_RESERVE = "UPDATE_RESERVE",
   BURN_SUPPLY = "BURN_SUPPLY",
   BURN = "BURN",
@@ -64,10 +68,12 @@ const buildableParamTypes: Record<EBuildableParams, MichelsonV1Expression> = {
   OFFER_ACCEPT: offerAcceptType,
   MINT_ISSUER: mintIssuerType,
   MINT: mintType,
+  MINT_V3: mintV3Type,
   PRICING_FIXED: pricingFixedType,
   PRICING_DUTCH_AUCTION: pricingDutchAuctionType,
   UPDATE_ISSUER: updateIssuerType,
   UPDATE_PRICE: updatePriceType,
+  UPDATE_PRICE_V3: updatePriceV3Type,
   UPDATE_RESERVE: updateReserveType,
   BURN_SUPPLY: burnSupplyType,
   BURN: burnType,
