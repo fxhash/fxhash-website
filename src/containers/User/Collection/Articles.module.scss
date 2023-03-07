@@ -6,6 +6,11 @@
   margin: auto;
 }
 
+.header {
+  display: flex;
+  justify-content: flex-end;
+}
+
 .article {
   margin-bottom: $spacing-x-large;
 

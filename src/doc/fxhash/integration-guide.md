@@ -47,7 +47,7 @@ fxhash exposes a public GraphQL API. The API is exposed under the following URL:
 
 Some GraphQL clients facilitate the implementation of GraphQL requests:
 * [graphql-request](https://www.npmjs.com/package/graphql-request) [JS]: minimal GraphQL client supporting Node and browsers for scripts or simple apps
-* [Apollo Client](https://www.apollographql.com/docs/react/) [JS]: used by the fxhand frontend, state management, cache... some robust and versatile components fore more complexe applications
+* [Apollo Client](https://www.apollographql.com/docs/react/) [JS]: used by the fxhand frontend, state management, cache... some robust and versatile components for more complex applications
 * [graphql-python/gql](https://github.com/graphql-python/gql) [Python]: simple library
 
 The API enables [introspection](https://graphql.org/learn/introspection/), which means that you can use any tool to inspect the schema and explore a way to get the resources you need for your use-case:

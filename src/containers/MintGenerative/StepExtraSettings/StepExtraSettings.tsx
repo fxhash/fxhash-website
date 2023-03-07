@@ -2,14 +2,7 @@ import style from "./StepExtraSettings.module.scss"
 import layout from "../../../styles/Layout.module.scss"
 import cs from "classnames"
 import { StepComponent } from "../../../types/Steps"
-import {
-  useMemo,
-  useRef,
-  useState,
-  useCallback,
-  ElementType,
-  useEffect,
-} from "react"
+import { useMemo, useRef, useState, useCallback, ElementType } from "react"
 import { cloneDeep } from "@apollo/client/utilities"
 import { GenTokenSettings } from "../../../types/Mint"
 import { Form } from "../../../components/Form/Form"
@@ -33,6 +26,7 @@ import { deserializeParams, serializeParams } from "components/FxParams/utils"
 import { ControlsTest, ControlsTestRef } from "components/Testing/ControlsTest"
 import { ArtworkFrame } from "components/Artwork/ArtworkFrame"
 import { VariantForm } from "./VariantForm"
+import { useReceiveTokenInfos } from "hooks/useReceiveTokenInfos"
 
 const variantSettingsTabs = ["preMint", "postMint"] as const
 
@@ -75,25 +69,26 @@ const ExploreOptions = [
 
 export const StepExtraSettings: StepComponent = ({ state, onNext }) => {
   const usesParams = !!state.previewInputBytes
+  // REFERENCES
+  const iframeRef = useRef<ArtworkIframeRef>(null)
   const controlsTestRef = useRef<ControlsTestRef>(null)
   // STATES
   // form state (since not much data its ok to store there)
   const [settings, setSettings] = useState(
     state.settings ? cloneDeep(state.settings) : initialSettings
   )
-  // current hash
+
+  const { params, onIframeLoaded } = useReceiveTokenInfos(iframeRef.current)
+
   const [hash, setHash] = useState<string>(
     state.previewHash || generateFxHash()
   )
-  const [params, setParams] = useState<any | null>([])
+  // current hash
   const [data, setData] = useState<Record<string, any> | null>(null)
   // the explore options
   const [preExploreOptions, setPreExploreOptions] = useState<string>("infinite")
   const [postExploreOptions, setPostExploreOptions] =
     useState<string>("infinite")
-
-  // REFERENCES
-  const iframeRef = useRef<ArtworkIframeRef>(null)
 
   const inputBytes =
     useMemo<string | null>(() => {
@@ -167,7 +162,7 @@ export const StepExtraSettings: StepComponent = ({ state, onNext }) => {
       if (postMint?.paramsConstraints) postMint.paramsConstraints = null
     }
     // we can send the update of the settings to the next component in the tree
-    onNext({ settings })
+    onNext({ settings: cloned })
   }
 
   const [activeTab, setActiveTab] = useState<VariantSettingsTabKey>("preMint")
@@ -182,34 +177,6 @@ export const StepExtraSettings: StepComponent = ({ state, onNext }) => {
   // ALIASES
   const preMintSettings = settings.exploration?.preMint
   const postMintSettings = settings.exploration?.postMint
-
-  useEffect(() => {
-    const listener = (e: any) => {
-      if (e.data) {
-        if (e.data.id === "fxhash_getParams") {
-          if (e.data.data) {
-            setParams(e.data.data)
-          } else {
-            setParams(null)
-          }
-        }
-      }
-    }
-    window.addEventListener("message", listener, false)
-
-    return () => {
-      window.removeEventListener("message", listener, false)
-    }
-  }, [])
-
-  const handleOnIframeLoad = useCallback(() => {
-    if (iframeRef.current) {
-      const iframe = iframeRef.current.getHtmlIframe()
-      if (iframe) {
-        iframe.contentWindow?.postMessage("fxhash_getParams", "*")
-      }
-    }
-  }, [iframeRef.current])
 
   const setVariant = (hash: string, paramBytes?: string) => {
     setHash(hash)
@@ -319,7 +286,7 @@ export const StepExtraSettings: StepComponent = ({ state, onNext }) => {
                   ref={iframeRef}
                   url={iframeUrl}
                   textWaiting="looking for content on IPFS"
-                  onLoaded={handleOnIframeLoad}
+                  onLoaded={onIframeLoaded}
                 />
               </SquareContainer>
             </ArtworkFrame>

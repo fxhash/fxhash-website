@@ -35,10 +35,12 @@ import { LargeGentkCard } from "../../../components/Card/LargeGentkCard"
 import { CardSizeSelect } from "../../../components/Input/CardSizeSelect"
 import { getTagsFromFiltersObject } from "../../../utils/filters"
 import { SettingsContext } from "../../../context/Theme"
+import useSort from "hooks/useSort"
+import { useQueryParamSort } from "hooks/useQueryParamSort"
 
 const ITEMS_PER_PAGE = 20
 
-const sortOptions: IOptions[] = [
+const generativeIterationsSortOptions: IOptions[] = [
   {
     label: "# (low to high)",
     value: "iteration-asc",
@@ -65,14 +67,6 @@ const sortOptions: IOptions[] = [
   },
 ]
 
-function sortValueToSortVariable(val: string) {
-  if (val === "pertinence") return {}
-  const split = val.split("-")
-  return {
-    [split[0]]: split[1].toUpperCase(),
-  }
-}
-
 interface Props {
   token: GenerativeToken
 }
@@ -89,11 +83,10 @@ export function GenerativeIterations({ token }: Props) {
   const ended = useRef<boolean>(false)
 
   // the sort value
-  const [sortValue, setSortValue] = useState<string>("iteration-asc")
-  const sort = useMemo<Record<string, any>>(
-    () => sortValueToSortVariable(sortValue),
-    [sortValue]
-  )
+  const { sortValue, sortVariable, sortOptions, setSortValue } =
+    useQueryParamSort(generativeIterationsSortOptions, {
+      defaultSort: "iteration-asc",
+    })
   // the filters on the features, default no filters
   const [featureFilters, setFeatureFilters] = useState<IObjktFeatureFilter[]>(
     []
@@ -139,7 +132,7 @@ export function GenerativeIterations({ token }: Props) {
         id: token.id,
         skip: 0,
         take: ITEMS_PER_PAGE,
-        sort,
+        sort: sortVariable,
         featureFilters: serializedFeatureFilters,
         filters: objtkFilters,
       },
@@ -204,10 +197,10 @@ export function GenerativeIterations({ token }: Props) {
     refetch?.({
       skip: 0,
       take: ITEMS_PER_PAGE,
-      sort,
+      sort: sortVariable,
       featureFilters: serializedFeatureFilters,
     })
-  }, [sort, serializedFeatureFilters])
+  }, [sortVariable, serializedFeatureFilters])
 
   // prevents reloading on scroll if we have reached the end
   useEffect(() => {
@@ -295,7 +288,7 @@ export function GenerativeIterations({ token }: Props) {
                     <LargeGentkCard
                       key={gentk.id}
                       objkt={gentk}
-                      showRarity={sort.rarity != null}
+                      showRarity={sortVariable.rarity != null}
                     />
                   ))}
                   {loading &&

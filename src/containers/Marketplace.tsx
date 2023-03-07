@@ -1,12 +1,7 @@
 import { ListingFilters } from "../types/entities/Listing"
 import { useRouter } from "next/router"
-import {
-  getSortOptionsWithSearchOption,
-  sortOptionsMarketplace,
-} from "../utils/sort"
 import { GalleryMarketplace } from "../components/Gallery/GalleryMarketplace"
 import { useEffect, useState } from "react"
-import { buildUrlFromQuery } from "../utils/url"
 
 interface Props {
   urlQuery: Record<string, string>
@@ -80,29 +75,12 @@ const getFiltersFromUrlQuery = (urlQuery: Record<string, string>) => {
   return loadedFilters
 }
 
-const searchSortOptions = getSortOptionsWithSearchOption(sortOptionsMarketplace)
-const getSortFromUrlQuery = (urlQuery: Record<string, string>) => {
-  const { search, sort } = urlQuery
-
-  // if there is a sort value in the url, pre-select it in the sort input
-  // else, select the default value
-  let defaultSortValue = search ? "relevance-desc" : "createdAt-desc"
-  if (sort) {
-    let sortValues = search ? searchSortOptions : sortOptionsMarketplace
-    return sortValues.map(({ value }) => value).includes(sort)
-      ? sort
-      : defaultSortValue
-  }
-
-  return defaultSortValue
-}
-
 export const Marketplace = ({ urlQuery }: Props) => {
+  const router = useRouter()
   const [filters, setFilters] = useState<ListingFilters>(
     getFiltersFromUrlQuery(urlQuery)
   )
-  const [sort, setSort] = useState(getSortFromUrlQuery(urlQuery))
-  const router = useRouter()
+  const { search } = urlQuery
 
   useEffect(() => {
     const query: any = {}
@@ -117,22 +95,27 @@ export const Marketplace = ({ urlQuery }: Props) => {
       }
     }
 
-    query.sort = encodeURIComponent(sort)
+    if (Object.keys(query).length === 0) return
 
     router.push(
-      { pathname: router.pathname, query },
-      buildUrlFromQuery(router.pathname, query),
+      {
+        pathname: router.pathname,
+        query: {
+          ...router.query,
+          ...query,
+        },
+      },
+      undefined,
       { shallow: true }
     )
-  }, [filters, sort])
+  }, [filters])
 
   return (
     <GalleryMarketplace
       initialSearchQuery={urlQuery.search}
       initialFilters={filters}
-      initialSort={sort}
+      initialSort={search ? "relevance-desc" : "createdAt-desc"}
       onChangeFilters={setFilters}
-      onChangeSort={setSort}
     />
   )
 }

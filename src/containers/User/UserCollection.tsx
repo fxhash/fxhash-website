@@ -59,12 +59,7 @@ export function UserCollection({ user, activeTab }: Props) {
 
       {activeTab === "gentk" && <UserCollectionGentks user={user} />}
 
-      {activeTab === "articles" && (
-        <>
-          <Spacing size="x-large" />
-          <UserCollectionArticles user={user} />
-        </>
-      )}
+      {activeTab === "articles" && <UserCollectionArticles user={user} />}
     </>
   )
 }

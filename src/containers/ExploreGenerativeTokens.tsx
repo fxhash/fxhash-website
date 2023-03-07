@@ -25,6 +25,7 @@ import { sortOptionsGenerativeTokens } from "../utils/sort"
 import useFilters from "../hooks/useFilters"
 import { SortAndFilters } from "../components/SortAndFilters/SortAndFilters"
 import { Qu_genTokens } from "../queries/generative-token"
+import { useQueryParamSort } from "hooks/useQueryParamSort"
 
 const ITEMS_PER_PAGE = 20
 
@@ -45,7 +46,7 @@ export const ExploreGenerativeTokens = ({
     restoreSort,
     setSearchSortOptions,
     sortOptions,
-  } = useSort(sortOptionsGenerativeTokens, {
+  } = useQueryParamSort(sortOptionsGenerativeTokens, {
     defaultSort: initialSearchQuery ? "relevance-desc" : "mintOpensAt-desc",
   })
   const { filters, setFilters, addFilter, removeFilter } =

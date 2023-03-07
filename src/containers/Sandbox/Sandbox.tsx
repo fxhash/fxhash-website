@@ -17,17 +17,19 @@ import { RawFeatures } from "../../components/Features/RawFeatures"
 import { ArtworkFrame } from "../../components/Artwork/ArtworkFrame"
 import { Controls } from "components/FxParams/Controls"
 import { serializeParams, strinigfyParams } from "components/FxParams/utils"
-import { ControlsTest } from "components/Testing/ControlsTest"
+import { ControlsTest, ControlsTestRef } from "components/Testing/ControlsTest"
+import { FxParamDefinition, FxParamType } from "components/FxParams/types"
+import { useReceiveTokenInfos } from "hooks/useReceiveTokenInfos"
 
 export function Sandbox() {
   const artworkIframeRef = useRef<ArtworkIframeRef>(null)
+  const paramControlsRef = useRef<ControlsTestRef>(null)
+  const { onIframeLoaded, params, hash, features, setHash } =
+    useReceiveTokenInfos(artworkIframeRef?.current)
   const [file, setFile] = useState<File | null>(null)
-  const [hash, setHash] = useState<string>(generateFxHash())
   const [filesRecord, setFilesRecord] = useState<SandboxFiles | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [url, setUrl] = useState<string | null>(null)
-  const [features, setFeatures] = useState<RawTokenFeatures | null>(null)
-  const [params, setParams] = useState<any | null>(null)
   const [data, setData] = useState<Record<string, any>>({})
 
   const fileList = useMemo<string[] | null>(
@@ -61,48 +63,6 @@ export function Sandbox() {
   const handleSubmitParams = (params: Record<string, any>) => {
     setData(params)
   }
-
-  useEffect(() => {
-    const listener = (e: any) => {
-      if (e.data) {
-        if (e.data.id === "fxhash_getHash") {
-          if (e.data.data) {
-          } else {
-          }
-        }
-        if (e.data.id === "fxhash_getFeatures") {
-          if (e.data.data) {
-            setFeatures(e.data.data)
-          } else {
-            setFeatures(null)
-          }
-        }
-        if (e.data.id === "fxhash_getParams") {
-          if (e.data.data) {
-            setParams(e.data.data)
-          } else {
-            setParams(null)
-          }
-        }
-      }
-    }
-    window.addEventListener("message", listener, false)
-
-    return () => {
-      window.removeEventListener("message", listener, false)
-    }
-  }, [])
-
-  const handleOnIframeLoad = useCallback(() => {
-    if (artworkIframeRef.current) {
-      const iframe = artworkIframeRef.current.getHtmlIframe()
-      if (iframe) {
-        iframe.contentWindow?.postMessage("fxhash_getFeatures", "*")
-        iframe.contentWindow?.postMessage("fxhash_getParams", "*")
-        iframe.contentWindow?.postMessage("fxhash_getHash", "*")
-      }
-    }
-  }, [artworkIframeRef.current])
 
   const fxparamsBytes = useMemo(() => {
     return serializeParams(data, params)
@@ -180,7 +140,11 @@ export function Sandbox() {
                 <Spacing size="2x-large" />
                 <h5>Params</h5>
                 <Spacing size="small" />
-                <ControlsTest params={params} onSubmit={handleSubmitParams} />
+                <ControlsTest
+                  params={params}
+                  onSubmit={handleSubmitParams}
+                  ref={paramControlsRef}
+                />
               </div>
             )}
             <Spacing size="2x-large" />
@@ -226,7 +190,7 @@ export function Sandbox() {
                   record={filesRecord || undefined}
                   textWaiting="Waiting for content to be reachable"
                   onUrlUpdate={setUrl}
-                  onLoaded={handleOnIframeLoad}
+                  onLoaded={onIframeLoaded}
                 />
               </ArtworkFrame>
             </div>
