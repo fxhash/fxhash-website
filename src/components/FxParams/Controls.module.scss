@@ -1,0 +1,18 @@
+.controls {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  gap: var(--fxl-spacing-xxs);
+}
+.blade {
+  display: flex;
+  gap: var(--fxl-spacing-xxs);
+  align-items: center;
+  & > div {
+    flex-grow: 1;
+  }
+  .lockButton {
+    align-self: flex-start;
+  }
+}
+
