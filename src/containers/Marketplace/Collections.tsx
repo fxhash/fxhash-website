@@ -11,7 +11,7 @@ import { CardListsContainer } from "../../components/Card/CardListsContainer"
 import { GenerativeTokenCardList } from "../../components/Card/GenerativeTokenCardList"
 import { getGenerativeTokenMarketplaceUrl } from "../../utils/generative-token"
 import { SearchHeader } from "../../components/Search/SearchHeader"
-import { IOptions, Select } from "../../components/Input/Select"
+import { Select } from "../../components/Input/Select"
 import { SearchInputControlled } from "../../components/Input/SearchInputControlled"
 import styleSearch from "../../components/Input/SearchInput.module.scss"
 import { CardsExplorer } from "../../components/Exploration/CardsExplorer"
@@ -26,28 +26,30 @@ import { FiltersPanel } from "../../components/Exploration/FiltersPanel"
 import { GenerativeFilters } from "../Generative/GenerativeFilters"
 import style from "./Collections.module.scss"
 import {
-  sortOptions,
   sortOptionsCollections,
   sortValueToSortVariable,
 } from "../../utils/sort"
 import styleCardsExplorer from "../../components/Exploration/CardsExplorer.module.scss"
 import { Qu_genTokensMarketplaceCollections } from "../../queries/generative-token"
+import { useQueryParamSort } from "hooks/useQueryParamSort"
 
 const ITEMS_PER_PAGE = 10
-
-const searchSortOptions: IOptions[] = [
-  sortOptions["relevance-desc"],
-  ...sortOptionsCollections,
-]
 
 interface Props {}
 
 export const MarketplaceCollections = ({}: Props) => {
   const [hasNothingToFetch, setHasNothingToFetch] = useState(false)
-  const [sortValue, setSortValue] = useState<string>("mintOpensAt-desc")
-  const [sortOptions, setSortOptions] = useState<IOptions[]>(
-    sortOptionsCollections
-  )
+
+  const {
+    sortValue,
+    sortOptions,
+    setSortValue,
+    setSearchSortOptions,
+    restoreSort,
+  } = useQueryParamSort(sortOptionsCollections, {
+    defaultSort: "mintOpensAt-desc",
+  })
+
   const [filters, setFilters] = useState<GenerativeTokenFilters>({})
 
   const sortBeforeSearch = useRef<string>(sortValue)
@@ -94,8 +96,7 @@ export const MarketplaceCollections = ({}: Props) => {
       addFilter(filter, undefined)
       // if the filter is search string, we reset the sort to what ti was
       if (filter === "searchQuery_eq" && sortValue === "relevance-desc") {
-        setSortValue(sortBeforeSearch.current)
-        setSortOptions(sortOptionsCollections)
+        restoreSort()
       }
     },
     [addFilter, sortValue]
@@ -104,15 +105,11 @@ export const MarketplaceCollections = ({}: Props) => {
   const handleSearch = useCallback(
     (value) => {
       if (value) {
-        setSortOptions(searchSortOptions)
-        setSortValue("relevance-desc")
+        setSearchSortOptions()
         addFilter("searchQuery_eq", value)
       } else {
         removeFilter("searchQuery_eq")
-        setSortOptions(sortOptionsCollections)
-        if (sortValue === "relevance-desc") {
-          setSortValue(sortBeforeSearch.current)
-        }
+        restoreSort()
       }
     },
     [addFilter, removeFilter, sortValue]
@@ -203,8 +200,7 @@ export const MarketplaceCollections = ({}: Props) => {
                     terms={filterTags}
                     onClearAll={() => {
                       setFilters({})
-                      setSortOptions(sortOptionsCollections)
-                      setSortValue(sortBeforeSearch.current)
+                      restoreSort()
                     }}
                   />
                   <Spacing size="regular" />

@@ -4,13 +4,10 @@ import colors from "../../styles/Colors.module.css"
 import text from "../../styles/Text.module.css"
 import cs from "classnames"
 import { StepComponent } from "../../types/Steps"
-import { useContext, useEffect, useMemo, useState } from "react"
+import { useContext, useMemo } from "react"
 import { Formik } from "formik"
 import * as Yup from "yup"
-import {
-  GenTokDistributionForm,
-  GenTokenInformationsForm,
-} from "../../types/Mint"
+import { GenTokDistributionForm } from "../../types/Mint"
 import { Form } from "../../components/Form/Form"
 import { Field } from "../../components/Form/Field"
 import { InputText } from "../../components/Input/InputText"
@@ -32,7 +29,6 @@ import { YupSplits } from "../../utils/yup/splits"
 import { FxhashContracts } from "../../types/Contracts"
 import { Fieldset } from "../../components/Form/Fieldset"
 import { InputReserves } from "../../components/Input/Reserves/InputReserves"
-import { LinkIcon } from "../../components/Link/LinkIcon"
 import { YupReserves } from "../../utils/yup/reserves"
 import { LinkGuide } from "../../components/Link/LinkGuide"
 import { Donations } from "../Input/Donations"
@@ -57,6 +53,13 @@ const validation = Yup.object().shape({
   splitsPrimary: YupSplits,
   splitsSecondary: YupSplits,
   reserves: YupReserves(),
+})
+
+const validationWithGracing = validation.shape({
+  gracingPeriod: Yup.number()
+    .integer("Must be integer")
+    .min(1, "At least one day")
+    .required("Required"),
 })
 
 const defaultDistribution = (
@@ -90,6 +93,7 @@ const defaultDistribution = (
         decrementDuration: "10",
         levels: ["50", "30", "20", "10", "5"],
       },
+      lockForReserves: false,
     },
     enabled: false,
     splitsPrimary: cloneDeep(splits),
@@ -101,6 +105,8 @@ const defaultDistribution = (
 export const StepDistribution: StepComponent = ({ state, onNext }) => {
   const userCtx = useContext(UserContext)
   const user = userCtx.user! as User
+
+  const usesParams = !!state.previewInputBytes
 
   // the object built at this step
   const distribution = useMemo<GenTokDistributionForm<string>>(
@@ -131,7 +137,7 @@ export const StepDistribution: StepComponent = ({ state, onNext }) => {
 
       <Formik
         initialValues={distribution}
-        validationSchema={validation}
+        validationSchema={usesParams ? validationWithGracing : validation}
         onSubmit={(values) => {
           next(values)
         }}
@@ -278,6 +284,42 @@ export const StepDistribution: StepComponent = ({ state, onNext }) => {
                 </InputSplits>
               </div>
             </Field>
+
+            <Fieldset>
+              <Field>
+                <label>
+                  Ticket settings
+                  <small>
+                    Because your project has some params defined, minting will
+                    happen as a 2-step process. First collections will mint a
+                    ticket, then they will exchange their ticket with an
+                    iteration once they have settled on the parameters they
+                    want.
+                  </small>
+                </label>
+              </Field>
+
+              {usesParams && (
+                <Field error={errors.gracingPeriod}>
+                  <label htmlFor="gracingPeriod">
+                    Gracing period
+                    <small>
+                      Period during which collectors won't have to pay a tax to
+                      keep their ticket (recommended: 7)
+                    </small>
+                  </label>
+                  <InputTextUnit
+                    unit="day(s)"
+                    type="text"
+                    name="gracingPeriod"
+                    value={values.gracingPeriod || ""}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    error={!!errors.gracingPeriod}
+                  />
+                </Field>
+              )}
+            </Fieldset>
 
             <Fieldset
               error={

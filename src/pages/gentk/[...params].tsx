@@ -93,8 +93,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     token = null
 
   if (idStr) {
-    const id = parseInt(idStr as string)
-    if (id === 0 || id) {
+    const id = idStr as string
+    if (id.length) {
       variables.id = id
     }
   } else if (slug) {

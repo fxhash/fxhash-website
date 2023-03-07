@@ -6,7 +6,7 @@ export const Qu_objkt = gql`
   ${Frag_GenAuthor}
   ${Frag_MediaImage}
   ${Frag_UserBadge}
-  query Gentk($id: Float, $slug: String) {
+  query Gentk($id: ObjktId, $slug: String) {
     objkt(id: $id, slug: $slug) {
       id
       version

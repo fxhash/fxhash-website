@@ -1,4 +1,4 @@
-@import "../../styles/Variables";
+@import "../../../styles/Variables";
 
 .container {
   display: flex;
@@ -58,6 +58,11 @@
   }
 }
 .button {}
+
+.artworkWrapper {
+  position: sticky;
+  top: 0;
+}
 
 @media (max-width: $breakpoint-sm) {
   .button {
