@@ -9,7 +9,7 @@ export const Qu_genTokListings = gql`
   ${Frag_MediaImage}
   ${Frag_UserBadge}
   query GenTokActiveListings(
-    $id: Float!
+    $id: TokenId!
     $filters: ObjktFilter
     $sort: ObjktsSortInput
     $skip: Int
@@ -51,7 +51,7 @@ export const Qu_genTokListings = gql`
 export const Qu_genTokActions = gql`
   ${Frag_UserBadge}
   query GenTokActions(
-    $id: Float!
+    $id: TokenId!
     $skip: Int
     $take: Int
     $filters: ActionFilter
