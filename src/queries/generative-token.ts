@@ -5,7 +5,7 @@ import {
   Frag_GenReserves,
   Frag_GenSplitsPrimary,
   Frag_GenSplitsSecondary,
-  Frag_GenTokenInfo,
+  Frag_GenTokenInfo, Frag_GenTokenMintTickets,
 } from "./fragments/generative-token"
 import { Frag_UserBadge } from "./fragments/user"
 import { Frag_MediaImage } from "./fragments/media"
@@ -16,6 +16,7 @@ export const Qu_genToken = gql`
   ${Frag_GenSplitsSecondary}
   ${Frag_GenReserves}
   ${Frag_GenArticleMentions}
+  ${Frag_GenTokenMintTickets}
 
   query Query($id: TokenId, $slug: String) {
     generativeToken(id: $id, slug: $slug) {
@@ -30,6 +31,7 @@ export const Qu_genToken = gql`
       ...SplitsSecondary
       ...Reserves
       ...ArticleMentions
+      ...MintTickets
     }
   }
 `
