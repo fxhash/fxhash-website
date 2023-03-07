@@ -19,9 +19,14 @@ export function InputTextUnit({
 }: Props) {
   return (
     <div
-      className={cs(style.textunit, style[`size-${sizeX}`], classNameContainer, {
-        [style.inside]: positionUnit === "inside-left",
-      })}
+      className={cs(
+        style.textunit,
+        style[`size-${sizeX}`],
+        classNameContainer,
+        {
+          [style.inside]: positionUnit === "inside-left",
+        }
+      )}
     >
       <InputText {...props} />
       <span>{unit}</span>

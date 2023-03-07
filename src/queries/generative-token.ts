@@ -5,7 +5,8 @@ import {
   Frag_GenReserves,
   Frag_GenSplitsPrimary,
   Frag_GenSplitsSecondary,
-  Frag_GenTokenInfo, Frag_GenTokenMintTickets,
+  Frag_GenTokenInfo,
+  Frag_GenTokenMintTickets,
 } from "./fragments/generative-token"
 import { Frag_UserBadge } from "./fragments/user"
 import { Frag_MediaImage } from "./fragments/media"

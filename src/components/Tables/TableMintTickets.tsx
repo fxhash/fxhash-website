@@ -7,8 +7,8 @@ import useHasScrolledToBottom from "../../hooks/useHasScrolledToBottom"
 import { MintTicket } from "../../types/entities/MintTicket"
 import { format, formatDistanceToNow } from "date-fns"
 import { ButtonClaimMintTicket } from "../MintTicket/ButtonClaimMintTicket"
-import { ButtonMintTicketPurchase } from "../MintTicket/ButtonMintTicketPurchase";
-import { ButtonUpdatePriceMintTicket } from "../MintTicket/ButtonUpdatePriceMintTicket";
+import { ButtonMintTicketPurchase } from "../MintTicket/ButtonMintTicketPurchase"
+import { ButtonUpdatePriceMintTicket } from "../MintTicket/ButtonUpdatePriceMintTicket"
 
 interface TableMintTicketsProps {
   firstColName?: string
