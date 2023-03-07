@@ -1,3 +1,4 @@
+import { MintTicket } from "./../../types/entities/MintTicket"
 import {
   ContractAbstraction,
   TransactionWalletOperation,
@@ -13,7 +14,7 @@ export interface ITaxationSettings {
 }
 
 export type TTicketUpdatePriceV3OperationParams = {
-  ticket: any
+  ticket: MintTicket
   amount: number
   taxationSettings: ITaxationSettings
 }
@@ -41,6 +42,6 @@ export class TicketUpdatePriceV3Operation extends ContractOperation<TTicketUpdat
   }
 
   success(): string {
-    return `You have successfully updated the ticket ${this.params.ticket} pricing settings.`
+    return `You have successfully updated the ticket pricing settings.`
   }
 }
