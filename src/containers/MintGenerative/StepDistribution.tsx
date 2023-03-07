@@ -285,21 +285,21 @@ export const StepDistribution: StepComponent = ({ state, onNext }) => {
               </div>
             </Field>
 
-            <Fieldset>
-              <Field>
-                <label>
-                  Ticket settings
-                  <small>
-                    Because your project has some params defined, minting will
-                    happen as a 2-step process. First collections will mint a
-                    ticket, then they will exchange their ticket with an
-                    iteration once they have settled on the parameters they
-                    want.
-                  </small>
-                </label>
-              </Field>
+            {usesParams && (
+              <Fieldset>
+                <Field>
+                  <label>
+                    Ticket settings
+                    <small>
+                      Because your project has some params defined, minting will
+                      happen as a 2-step process. First collections will mint a
+                      ticket, then they will exchange their ticket with an
+                      iteration once they have settled on the parameters they
+                      want.
+                    </small>
+                  </label>
+                </Field>
 
-              {usesParams && (
                 <Field error={errors.gracingPeriod}>
                   <label htmlFor="gracingPeriod">
                     Gracing period
@@ -318,8 +318,8 @@ export const StepDistribution: StepComponent = ({ state, onNext }) => {
                     error={!!errors.gracingPeriod}
                   />
                 </Field>
-              )}
-            </Fieldset>
+              </Fieldset>
+            )}
 
             <Fieldset
               error={
