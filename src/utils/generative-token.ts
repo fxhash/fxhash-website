@@ -152,6 +152,9 @@ export function generativeFromMintParams(
     objkts: [],
     actions: [],
     createdAt: new Date().toISOString(),
+    mintTickets: [],
+    mintTicketSettings: null,
+    inputBytesSize: 0,
   }
 }
 
@@ -300,6 +303,9 @@ export function generativeFromMintForm(
     objkts: [],
     actions: [],
     createdAt: new Date().toISOString(),
+    mintTickets: [],
+    mintTicketSettings: null,
+    inputBytesSize: 0,
   }
 }
 
