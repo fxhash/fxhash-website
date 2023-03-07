@@ -56,7 +56,7 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
       params: {
         definition: params,
         // TODO: remove any here
-        inputBytesSize: sumBytesParams(data as any),
+        inputBytesSize: sumBytesParams(params as any),
       },
     })
   }

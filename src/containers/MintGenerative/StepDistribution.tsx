@@ -93,6 +93,7 @@ const defaultDistribution = (
         decrementDuration: "10",
         levels: ["50", "30", "20", "10", "5"],
       },
+      lockForReserves: false,
     },
     enabled: false,
     splitsPrimary: cloneDeep(splits),
