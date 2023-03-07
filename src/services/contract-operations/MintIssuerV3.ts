@@ -67,7 +67,7 @@ export class MintIssuerV3Operation extends ContractOperation<TMintIssuerV3Operat
       royalties_split: distribution.splitsSecondary,
       tags: informations.labels,
       mint_ticket_settings: {
-        gracing_period: 7,
+        gracing_period: this.params.data.distribution?.gracingPeriod || 7,
         metadata: this.params.ticketMetadataBytes,
       },
       open_editions: null,
