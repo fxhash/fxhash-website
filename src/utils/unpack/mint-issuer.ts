@@ -10,13 +10,11 @@ import { unpackPricingDetails } from "./pricing"
 import { unpackReserve } from "./reserve"
 
 export function unpackMintIssuer(
-  bytes: string
+  bytes: string,
+  type: EBuildableParams = EBuildableParams.MINT_ISSUER
 ): TInputMintIssuer<number, TInputPricingDetails<number>> {
   // unpack (get BigNumbers)
-  const unpacked = unpackBytes<TInputMintIssuer<BigNumber, string>>(
-    bytes,
-    EBuildableParams.MINT_ISSUER
-  )
+  const unpacked = unpackBytes<TInputMintIssuer<BigNumber, string>>(bytes, type)
 
   // unpack the pricing too (still big numbers)
   const withPricingUnpacked: TInputMintIssuer<
