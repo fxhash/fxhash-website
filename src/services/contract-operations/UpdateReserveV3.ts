@@ -43,7 +43,7 @@ export class UpdateReservesV3Operation extends ContractOperation<TUpdateReserves
     }))
 
     const params = {
-      issuer_id: this.params.token.id,
+      issuer_id: this.params.token.id - 26000,
       reserves: reserves,
     }
 
@@ -62,7 +62,7 @@ export class UpdateReservesV3Operation extends ContractOperation<TUpdateReserves
 
   success(): string {
     return this.collab
-      ? `A request to update the reserves of ${this.params.token.name} was successfully sent`
-      : `The reserves of ${this.params.token.name} was successfully updated`
+      ? `A request to update the reserves of "${this.params.token.name}" was successfully sent`
+      : `The reserves of "${this.params.token.name}" were successfully updated`
   }
 }

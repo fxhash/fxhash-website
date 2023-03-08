@@ -32,6 +32,7 @@ import { InputReserves } from "../../components/Input/Reserves/InputReserves"
 import { YupReserves } from "../../utils/yup/reserves"
 import { LinkGuide } from "../../components/Link/LinkGuide"
 import { Donations } from "../Input/Donations"
+import { generateInitialPricingDutchAuction } from "utils/generate/pricing"
 
 const validation = Yup.object().shape({
   editions: Yup.number()
@@ -89,10 +90,7 @@ const defaultDistribution = (
     pricing: {
       pricingMethod: GenTokPricing.FIXED,
       pricingFixed: {},
-      pricingDutchAuction: {
-        decrementDuration: "10",
-        levels: ["50", "30", "20", "10", "5"],
-      },
+      pricingDutchAuction: generateInitialPricingDutchAuction(),
       lockForReserves: false,
     },
     enabled: false,

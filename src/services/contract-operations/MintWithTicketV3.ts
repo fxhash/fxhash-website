@@ -5,7 +5,6 @@ import {
   TransactionWalletOperation,
   Wallet,
 } from "@taquito/taquito"
-import { NFTArticle } from "../../types/entities/Article"
 import { FxhashContracts } from "../../types/Contracts"
 import { ContractOperation } from "./ContractOperation"
 

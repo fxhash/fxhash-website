@@ -41,7 +41,7 @@ export class UpdateIssuerV3Operation extends ContractOperation<TUpdateIssuerV3Op
     const numbered = transformUpdateIssuerFormToNumbers(this.params.data)
 
     const params = {
-      issuer_id: this.params.token.id,
+      issuer_id: this.params.token.id - 26000,
       enabled: numbered.enabled,
       royalties: numbered.royalties,
       primary_split: numbered.splitsPrimary,
@@ -64,7 +64,7 @@ export class UpdateIssuerV3Operation extends ContractOperation<TUpdateIssuerV3Op
 
   success(): string {
     return this.collab
-      ? `A proposal to update ${this.params.token.name} was successfully sent`
-      : `Your project ${this.params.token.name} was updated`
+      ? `A proposal to update "${this.params.token.name}" was successfully sent`
+      : `Your project "${this.params.token.name}" was updated`
   }
 }

@@ -52,6 +52,11 @@ export interface GenTokLabelDefinition {
   showWarningOn?: "preview" | "run"
 }
 
+export enum GenTokVersion {
+  PRE_V3 = "PRE_V3",
+  V3 = "V3",
+}
+
 export interface GenerativeTokenMarketStats {
   floor: number | null
   median: number | null
@@ -128,6 +133,7 @@ export interface GenerativeToken {
   mintTickets: MintTicket[]
   mintTicketSettings: MintTicketSettings | null
   inputBytesSize: number
+  version: GenTokVersion
 }
 
 export interface GenerativeTokenWithCollection extends GenerativeToken {

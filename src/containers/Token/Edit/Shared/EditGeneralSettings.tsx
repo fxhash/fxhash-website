@@ -1,27 +1,27 @@
-import style from "../EditToken.module.scss"
+import style from "containers/Token/EditToken.module.scss"
 import editStyle from "./EditStyle.module.scss"
-import layout from "../../../styles/Layout.module.scss"
+import layout from "styles/Layout.module.scss"
 import cs from "classnames"
 import * as Yup from "yup"
-import { GenerativeToken } from "../../../types/entities/GenerativeToken"
+import { GenerativeToken } from "types/entities/GenerativeToken"
 import { Formik } from "formik"
-import { Form } from "../../../components/Form/Form"
-import { Fieldset } from "../../../components/Form/Fieldset"
-import { Field } from "../../../components/Form/Field"
-import { Checkbox } from "../../../components/Input/Checkbox"
-import { Spacing } from "../../../components/Layout/Spacing"
-import { InputTextUnit } from "../../../components/Input/InputTextUnit"
-import { InputSplits } from "../../../components/Input/InputSplits"
-import { transformSplitsSum1000 } from "../../../utils/transformers/splits"
-import { FxhashContracts } from "../../../types/Contracts"
-import { Button } from "../../../components/Button"
-import { useContractOperation } from "../../../hooks/useContractOperation"
-import { UpdateIssuerOperation } from "../../../services/contract-operations/UpdateIssuer"
-import { UpdateIssuerForm } from "../../../types/UpdateIssuer"
-import { ContractFeedback } from "../../../components/Feedback/ContractFeedback"
-import { YupRoyalties } from "../../../utils/yup/royalties"
-import { YupSplits } from "../../../utils/yup/splits"
-import { Donations } from "../../Input/Donations"
+import { Form } from "components/Form/Form"
+import { Fieldset } from "components/Form/Fieldset"
+import { Field } from "components/Form/Field"
+import { Checkbox } from "components/Input/Checkbox"
+import { Spacing } from "components/Layout/Spacing"
+import { InputTextUnit } from "components/Input/InputTextUnit"
+import { InputSplits } from "components/Input/InputSplits"
+import { transformSplitsSum1000 } from "utils/transformers/splits"
+import { FxhashContracts } from "types/Contracts"
+import { Button } from "components/Button"
+import { useContractOperation } from "hooks/useContractOperation"
+import { UpdateIssuerForm } from "types/UpdateIssuer"
+import { ContractFeedback } from "components/Feedback/ContractFeedback"
+import { YupRoyalties } from "utils/yup/royalties"
+import { YupSplits } from "utils/yup/splits"
+import { Donations } from "containers/Input/Donations"
+import { TContractOperation } from "services/contract-operations/ContractOperation"
 
 const validation = Yup.object().shape({
   royalties: YupRoyalties,
@@ -31,11 +31,11 @@ const validation = Yup.object().shape({
 
 interface Props {
   token: GenerativeToken
+  contractOperation: TContractOperation<any>
 }
-export function EditGeneralSettings({ token }: Props) {
-  const { call, loading, error, success, state } = useContractOperation(
-    UpdateIssuerOperation
-  )
+export function EditGeneralSettings({ token, contractOperation }: Props) {
+  const { call, loading, error, success, state } =
+    useContractOperation(contractOperation)
 
   const update = (values: UpdateIssuerForm<string>) => {
     call({

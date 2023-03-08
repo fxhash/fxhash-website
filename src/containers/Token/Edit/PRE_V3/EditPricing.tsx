@@ -1,31 +1,25 @@
-import style from "./EditStyle.module.scss"
-import layout from "../../../styles/Layout.module.scss"
+import style from "../Shared/EditStyle.module.scss"
+import layout from "styles/Layout.module.scss"
 import cs from "classnames"
 import * as Yup from "yup"
-import {
-  GenerativeToken,
-  GenTokPricing,
-} from "../../../types/entities/GenerativeToken"
+import { GenerativeToken, GenTokPricing } from "types/entities/GenerativeToken"
 import { Formik } from "formik"
-import { Form } from "../../../components/Form/Form"
-import { Fieldset } from "../../../components/Form/Fieldset"
-import { Spacing } from "../../../components/Layout/Spacing"
-import { Button } from "../../../components/Button"
-import { useContractOperation } from "../../../hooks/useContractOperation"
-import { ContractFeedback } from "../../../components/Feedback/ContractFeedback"
-import { InputPricingFixed } from "../../Input/PricingFixed"
+import { Form } from "components/Form/Form"
+import { Fieldset } from "components/Form/Fieldset"
+import { Spacing } from "components/Layout/Spacing"
+import { Button } from "components/Button"
+import { useContractOperation } from "hooks/useContractOperation"
+import { ContractFeedback } from "components/Feedback/ContractFeedback"
+import { InputPricingFixed } from "containers/Input/PricingFixed"
 import {
   transformPricingDutchNumbersToString,
   transformPricingFixedNumbersToString,
-} from "../../../utils/transformers/pricing"
-import { InputPricingDutchAuction } from "../../Input/PricingDutchAuction"
-import { UpdatePricingOperation } from "../../../services/contract-operations/UpdatePricing"
+} from "utils/transformers/pricing"
+import { InputPricingDutchAuction } from "containers/Input/PricingDutchAuction"
+import { UpdatePricingOperation } from "services/contract-operations/UpdatePricing"
 import { isAfter } from "date-fns"
-import {
-  YupPricingDutchAuction,
-  YupPricingFixed,
-} from "../../../utils/yup/price"
-import { TextWarning } from "../../../components/Text/TextWarning"
+import { YupPricingDutchAuction, YupPricingFixed } from "utils/yup/price"
+import { TextWarning } from "components/Text/TextWarning"
 
 const validation = Yup.object({
   pricingFixed: YupPricingFixed.nullable(),
