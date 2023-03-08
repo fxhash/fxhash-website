@@ -5,8 +5,8 @@ import { DisplayTezos } from "../Display/DisplayTezos"
 import { Modal } from "../Utils/Modal"
 import { InputTextUnit } from "../Input/InputTextUnit"
 import style from "./MintTicketModal.module.scss"
-import colors from "../../styles/Colors.module.css";
-import cs from "classnames";
+import colors from "../../styles/Colors.module.css"
+import cs from "classnames"
 
 interface ButtonClaimMintTicketProps {
   mintTicket: MintTicket

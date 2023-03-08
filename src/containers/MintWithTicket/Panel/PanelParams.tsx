@@ -24,6 +24,7 @@ import { IParamsHistoryEntry } from "components/FxParams/ParamsHistory"
 import { BaseButton, IconButton } from "components/FxParams/BaseInput"
 
 interface Props {
+  data?: FxParamsData
   params: FxParamDefinition<FxParamType>[]
   onChangeData: (d: FxParamsData) => void
   onClickLockButton?: (id: string) => void

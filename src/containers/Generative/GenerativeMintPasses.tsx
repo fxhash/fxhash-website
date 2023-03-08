@@ -1,6 +1,6 @@
 import React, { memo } from "react"
 import { GenerativeToken } from "../../types/entities/GenerativeToken"
-import { TableMintTickets } from "../../components/Tables/TableMintTickets";
+import { TableMintTickets } from "../../components/Tables/TableMintTickets"
 
 interface GenerativeMintPassesProps {
   token: GenerativeToken

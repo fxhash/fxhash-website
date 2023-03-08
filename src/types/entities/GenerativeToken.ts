@@ -9,7 +9,7 @@ import { Split } from "./Split"
 import { User } from "./User"
 import { ISettingsContext } from "../../context/Theme"
 import { MediaImage } from "./MediaImage"
-import { MintTicket, MintTicketSettings } from "./MintTicket";
+import { MintTicket, MintTicketSettings } from "./MintTicket"
 
 export enum GenTokFlag {
   NONE = "NONE",

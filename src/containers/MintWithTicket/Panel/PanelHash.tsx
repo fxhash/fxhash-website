@@ -2,7 +2,11 @@ import styles from "./PanelHash.module.scss"
 import { useContext } from "react"
 import { faRotate } from "@fortawesome/free-solid-svg-icons"
 import { PanelGroup } from "./PanelGroup"
-import { BaseInput, BaseButton, IconButton } from "components/FxParams/BaseInput"
+import {
+  BaseInput,
+  BaseButton,
+  IconButton,
+} from "components/FxParams/BaseInput"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { generateFxHash } from "utils/hash"
 

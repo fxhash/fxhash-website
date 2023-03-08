@@ -5,7 +5,7 @@ import { Listing } from "./Listing"
 import { Offer } from "./Offer"
 import { NFTArticle } from "./Article"
 import { MediaImage } from "./MediaImage"
-import { MintTicket } from "./MintTicket";
+import { MintTicket } from "./MintTicket"
 
 export interface UserItems {
   generativeTokens?: GenerativeToken[]

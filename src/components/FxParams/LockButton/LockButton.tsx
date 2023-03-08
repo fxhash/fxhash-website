@@ -24,4 +24,3 @@ export function LockButton(props: LockButtonProps) {
     </IconButton>
   )
 }
-

@@ -1,6 +1,4 @@
 import style from "./PanelFeatures.module.scss"
-import cs from "classnames"
-import { MainContext } from "context/MainContext"
 import { PanelGroup } from "./PanelGroup"
 
 interface Props {
