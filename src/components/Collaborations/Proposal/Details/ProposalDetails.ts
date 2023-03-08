@@ -23,6 +23,10 @@ import {
   ProposalDetailsUpdatePriceHeader,
 } from "./UpdatePrice"
 import {
+  ProposalDetailsUpdatePriceV3Expanded,
+  ProposalDetailsUpdatePriceV3Header,
+} from "./UpdatePriceV3"
+import {
   ProposalDetailsUpdateReserveExpanded,
   ProposalDetailsUpdateReserveHeader,
 } from "./UpdateReserve"
@@ -73,5 +77,9 @@ export const ProposalDetails: Record<number, IProposalDetails> = {
   7: {
     header: ProposalDetailsUpdateIssuerHeader,
     expanded: ProposalDetailsUpdateIssuerExpanded,
+  },
+  8: {
+    header: ProposalDetailsUpdatePriceV3Header,
+    expanded: ProposalDetailsUpdatePriceV3Expanded,
   },
 }

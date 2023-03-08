@@ -2,8 +2,7 @@
   padding: 15px;
   font-size: var(--font-size-small);
   background-color: var(--color-gray-vlight);
-
-  & > *+* {
-    margin-top: 8px;
-  }
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 10px;
 }
