@@ -25,7 +25,7 @@ export function Sandbox() {
   const artworkIframeRef = useRef<ArtworkIframeRef>(null)
   const paramControlsRef = useRef<ControlsTestRef>(null)
   const { onIframeLoaded, params, hash, features, setHash } =
-    useReceiveTokenInfos(artworkIframeRef?.current)
+    useReceiveTokenInfos(artworkIframeRef)
   const [file, setFile] = useState<File | null>(null)
   const [filesRecord, setFilesRecord] = useState<SandboxFiles | null>(null)
   const [error, setError] = useState<string | null>(null)

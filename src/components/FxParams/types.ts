@@ -71,3 +71,5 @@ export interface FxParamProcessor<Type extends FxParamType> {
 export type FxParamProcessors = {
   [T in FxParamType]: FxParamProcessor<T>
 }
+
+export type FxParamsData = Record<string, any>

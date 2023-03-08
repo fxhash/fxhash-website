@@ -32,7 +32,7 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
   const [check2, setCheck2] = useState<boolean>(false)
   const artworkIframeRef = useRef<ArtworkIframeRef>(null)
   const { onIframeLoaded, features, params, paramsDefinition } =
-    useReceiveTokenInfos(artworkIframeRef.current)
+    useReceiveTokenInfos(artworkIframeRef)
 
   console.log({
     features,

@@ -1,0 +1,14 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  .scrollWrapper {
+    flex-grow: 1;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    padding: var(--fxl-spacing) var(--fxl-spacing) 0 var(--fxl-spacing);
+  }
+  .body {
+    flex-grow: 1;
+  }
+}
