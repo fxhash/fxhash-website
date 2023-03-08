@@ -10,7 +10,7 @@ import { MintWithTicketPage } from "containers/MintWithTicket/MintWithTicketPage
 
 interface Props {
   token: GenerativeToken
-  passId: string
+  ticketId: string
 }
 
 const MintWithTicket: NextPage<Props> = ({ token }) => {
@@ -61,7 +61,7 @@ const MintWithTicket: NextPage<Props> = ({ token }) => {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { passId, slug } = context?.params || {}
+  const { ticketId, slug } = context?.params || {}
   let token = null
   const apolloClient = createApolloClient()
   if (slug) {
@@ -78,9 +78,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: {
       token: token,
-      passId,
+      ticketId,
     },
-    notFound: !token || !passId,
+    notFound: !token || !ticketId,
   }
 }
 
