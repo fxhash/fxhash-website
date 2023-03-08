@@ -11,8 +11,5 @@ export function transformUpdateIssuerFormToNumbers(
     ...input,
     editions: parseInt(input.editions!),
     royalties: Math.floor(parseFloat(input.royalties!) * 10),
-    gracingPeriod: input.gracingPeriod
-      ? parseInt(input.gracingPeriod)
-      : undefined,
   }
 }

@@ -33,22 +33,25 @@ export class UpdatePricingV3Operation extends ContractOperation<TUpdatePricingV3
   async prepare() {
     this.collab = this.params.token.author.type === UserType.COLLAB_CONTRACT_V1
     this.contract = await this.manager.getContract(
-      this.collab ? this.params.token.author.id : FxhashContracts.ISSUER
+      this.collab ? this.params.token.author.id : FxhashContracts.ISSUER_V3
     )
   }
 
   async call(): Promise<TransactionWalletOperation> {
+    console.log(this.params.data)
     // transform the string values in the form into some numbers so that
     // it can be sent to contract correctly (or packed)
     const numbered = transformPricingFormToNumbers(this.params.data)
+    console.log({ numbered })
 
     // let's pack the pricing (only sub-field "details" gets packed)
     const packedPricing = packPricing(numbered)
 
     const params = {
-      issuer_id: this.params.token.id,
+      issuer_id: this.params.token.id - 26000,
       pricing: packedPricing,
     }
+    console.log(params)
 
     // if the author is a collab contract, we have to call the collab contract
     // proposal EP instead
@@ -65,7 +68,7 @@ export class UpdatePricingV3Operation extends ContractOperation<TUpdatePricingV3
 
   success(): string {
     return this.collab
-      ? `A request to update the pricing of ${this.params.token.name} was successfully sent`
-      : `The pricing of ${this.params.token.name} was successfully updated`
+      ? `A request to update the pricing of "${this.params.token.name}" was successfully sent`
+      : `The pricing of "${this.params.token.name}" was successfully updated`
   }
 }

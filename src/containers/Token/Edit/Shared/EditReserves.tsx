@@ -1,37 +1,29 @@
 import style from "./EditStyle.module.scss"
-import layout from "../../../styles/Layout.module.scss"
-import text from "../../../styles/Text.module.css"
+import layout from "styles/Layout.module.scss"
+import text from "styles/Text.module.css"
 import cs from "classnames"
 import * as Yup from "yup"
-import {
-  GenerativeToken,
-  GenTokPricing,
-} from "../../../types/entities/GenerativeToken"
+import { GenerativeToken } from "types/entities/GenerativeToken"
 import { Formik } from "formik"
-import { Form } from "../../../components/Form/Form"
-import { Fieldset } from "../../../components/Form/Fieldset"
-import { Spacing } from "../../../components/Layout/Spacing"
-import { Button } from "../../../components/Button"
-import { useContractOperation } from "../../../hooks/useContractOperation"
-import { ContractFeedback } from "../../../components/Feedback/ContractFeedback"
-import { UpdatePricingOperation } from "../../../services/contract-operations/UpdatePricing"
-import {
-  YupPricingDutchAuction,
-  YupPricingFixed,
-} from "../../../utils/yup/price"
+import { Form } from "components/Form/Form"
+import { Fieldset } from "components/Form/Fieldset"
+import { Spacing } from "components/Layout/Spacing"
+import { Button } from "components/Button"
+import { useContractOperation } from "hooks/useContractOperation"
+import { ContractFeedback } from "components/Feedback/ContractFeedback"
 import { useMemo } from "react"
-import { IReserve } from "../../../types/entities/Reserve"
-import { transformReserveGenericToInput } from "../../../utils/transformers/reserves"
-import { LinkIcon } from "../../../components/Link/LinkIcon"
-import { InputReserves } from "../../../components/Input/Reserves/InputReserves"
-import { YupReserves } from "../../../utils/yup/reserves"
-import { UpdateReservesOperation } from "../../../services/contract-operations/UpdateReserve"
-import { LinkGuide } from "../../../components/Link/LinkGuide"
+import { IReserve } from "types/entities/Reserve"
+import { transformReserveGenericToInput } from "utils/transformers/reserves"
+import { InputReserves } from "components/Input/Reserves/InputReserves"
+import { YupReserves } from "utils/yup/reserves"
+import { LinkGuide } from "components/Link/LinkGuide"
+import { TContractOperation } from "services/contract-operations/ContractOperation"
 
 interface Props {
   token: GenerativeToken
+  contractOperation: TContractOperation<any>
 }
-export function EditReserves({ token }: Props) {
+export function EditReserves({ token, contractOperation }: Props) {
   // the data in the reserves is not form-ready, so we need to transform it
   const reserveForm = useMemo<IReserve<string>[]>(() => {
     return transformReserveGenericToInput(token.reserves)
@@ -46,9 +38,8 @@ export function EditReserves({ token }: Props) {
     []
   )
 
-  const { call, loading, error, success, state } = useContractOperation(
-    UpdateReservesOperation
-  )
+  const { call, loading, error, success, state } =
+    useContractOperation(contractOperation)
 
   const update = (values: any) => {
     call({

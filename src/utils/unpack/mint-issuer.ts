@@ -27,6 +27,7 @@ export function unpackMintIssuer(
     pricing: {
       pricing_id: unpacked.pricing.pricing_id,
       details: unpackPricingDetails(unpacked.pricing),
+      lock_for_reserves: false,
     },
   }
 

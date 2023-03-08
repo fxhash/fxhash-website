@@ -66,10 +66,13 @@ export class MintIssuerV3Operation extends ContractOperation<TMintIssuerV3Operat
       royalties: distribution.royalties!,
       royalties_split: distribution.splitsSecondary,
       tags: informations.labels,
-      mint_ticket_settings: {
-        gracing_period: this.params.data.distribution?.gracingPeriod || 7,
-        metadata: this.params.ticketMetadataBytes,
-      },
+      mint_ticket_settings:
+        this.params.data.params!.inputBytesSize > 0
+          ? {
+              gracing_period: this.params.data.distribution?.gracingPeriod || 7,
+              metadata: this.params.ticketMetadataBytes,
+            }
+          : null,
       open_editions: null,
       codex: {
         codex_entry: {

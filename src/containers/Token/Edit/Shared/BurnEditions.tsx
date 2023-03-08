@@ -1,24 +1,25 @@
 import style from "./EditStyle.module.scss"
-import layout from "../../../styles/Layout.module.scss"
+import layout from "styles/Layout.module.scss"
 import cs from "classnames"
-import { GenerativeToken } from "../../../types/entities/GenerativeToken"
-import { Form } from "../../../components/Form/Form"
-import { Fieldset } from "../../../components/Form/Fieldset"
-import { Field } from "../../../components/Form/Field"
-import { Spacing } from "../../../components/Layout/Spacing"
-import { Button } from "../../../components/Button"
-import { useContractOperation } from "../../../hooks/useContractOperation"
-import { ContractFeedback } from "../../../components/Feedback/ContractFeedback"
-import { SliderWithTextInput } from "../../../components/Input/SliderWithTextInput"
+import { GenerativeToken } from "types/entities/GenerativeToken"
+import { Form } from "components/Form/Form"
+import { Fieldset } from "components/Form/Fieldset"
+import { Field } from "components/Form/Field"
+import { Spacing } from "components/Layout/Spacing"
+import { Button } from "components/Button"
+import { useContractOperation } from "hooks/useContractOperation"
+import { ContractFeedback } from "components/Feedback/ContractFeedback"
+import { SliderWithTextInput } from "components/Input/SliderWithTextInput"
 import { FormEventHandler, useState } from "react"
-import { BurnSupplyOperation } from "../../../services/contract-operations/BurnSupply"
+import { TContractOperation } from "services/contract-operations/ContractOperation"
 
 interface Props {
   token: GenerativeToken
+  contractOperation: TContractOperation<any>
 }
-export function BurnEditions({ token }: Props) {
+export function BurnEditions({ token, contractOperation }: Props) {
   const { call, loading, error, success, state } =
-    useContractOperation(BurnSupplyOperation)
+    useContractOperation(contractOperation)
 
   const [editions, setEditions] = useState<number>(0)
 
