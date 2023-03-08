@@ -16,6 +16,7 @@ import { IndexerStatusProvider } from "../context/IndexerStatus"
 import { IndexerStatus, NetworkStatus } from "../types/IndexerStatus"
 import { ModalProvider } from "../context/Modal"
 const EXCLUDE_LAYOUT = [
+  "/generative/slug/[slug]/pass/[passId]/mint",
   "/generative/[id]/enjoy",
   "/u/[name]/collection/enjoy",
   "/pkh/[id]/collection/enjoy",
