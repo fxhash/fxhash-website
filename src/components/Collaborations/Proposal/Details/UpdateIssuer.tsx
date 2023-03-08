@@ -122,25 +122,24 @@ export function ProposalDetailsUpdateIssuerExpanded({
               <Spacing size="8px" />
 
               <div className={cs(style.details)}>
-                <div>
-                  <strong>Enabled: </strong>
-                  <strong
-                    className={cs(
-                      unpacked.enabled ? colors.success : colors.error
-                    )}
-                  >
-                    {unpacked.enabled ? "true" : "false"}
-                  </strong>
-                </div>
+                <strong>Enabled: </strong>
+                <strong
+                  className={cs(
+                    unpacked.enabled ? colors.success : colors.error
+                  )}
+                >
+                  {unpacked.enabled ? "true" : "false"}
+                </strong>
+
                 <ListSplits
                   name="Primary split"
                   splits={splits.primary as any}
                   toggled
                 />
-                <div>
-                  <strong>Royalties: </strong>
-                  <span>{displayRoyalties(unpacked.royalties)}</span>
-                </div>
+
+                <strong>Royalties: </strong>
+                <span>{displayRoyalties(unpacked.royalties)}</span>
+
                 <ListSplits
                   name="Secondary split"
                   splits={splits.secondary as any}
@@ -155,25 +154,24 @@ export function ProposalDetailsUpdateIssuerExpanded({
                 <Spacing size="8px" />
 
                 <div className={cs(style.details)}>
-                  <div>
-                    <strong>Enabled: </strong>
-                    <strong
-                      className={cs(
-                        token.enabled ? colors.success : colors.error
-                      )}
-                    >
-                      {token.enabled ? "true" : "false"}
-                    </strong>
-                  </div>
+                  <strong>Enabled: </strong>
+                  <strong
+                    className={cs(
+                      token.enabled ? colors.success : colors.error
+                    )}
+                  >
+                    {token.enabled ? "true" : "false"}
+                  </strong>
+
                   <ListSplits
                     name="Primary split"
                     splits={token.splitsPrimary}
                     toggled
                   />
-                  <div>
-                    <strong>Royalties: </strong>
-                    <span>{displayRoyalties(token.royalties)}</span>
-                  </div>
+
+                  <strong>Royalties: </strong>
+                  <span>{displayRoyalties(token.royalties)}</span>
+
                   <ListSplits
                     name="Secondary split"
                     splits={token.splitsSecondary}
