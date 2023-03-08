@@ -101,6 +101,8 @@ export const Frag_GenTokenInfo = gql`
   fragment TokenInfo on GenerativeToken {
     ...TokenBadge
     id
+    version
+    inputBytesSize
     slug
     flag
     labels
@@ -130,9 +132,13 @@ export const Frag_GenTokenMintTickets = gql`
       taxationStart
       price
       taxationPaidUntil
+      settings {
+        gracingPeriod
+      }
       token {
         id
         name
+        slug
       }
       owner {
         id

@@ -8,7 +8,7 @@ import { Spacing } from "../../components/Layout/Spacing"
 import { GenerativeActions } from "./Actions"
 import { GenerativeToken } from "../../types/entities/GenerativeToken"
 import { TabsContainer } from "../../components/Layout/TabsContainer"
-import { GenerativeMintPasses } from "./GenerativeMintPasses";
+import { GenerativeMintTickets } from "./GenerativeMintTickets";
 
 const defaultTabs: TabDefinition[] = [
   {
@@ -29,8 +29,8 @@ const _GenerativeTokenTabs = ({ token }: GenerativeTokenTabsProps) => {
     const dynamicTabs = [...defaultTabs]
     if (token.mintTicketSettings) {
       dynamicTabs.push({
-        key: "mint-passes",
-        name: "mint passes",
+        key: "mint-tickets",
+        name: "mint tickets",
       })
     }
     return dynamicTabs
@@ -51,10 +51,10 @@ const _GenerativeTokenTabs = ({ token }: GenerativeTokenTabsProps) => {
               <GenerativeActions token={token} className={style.activity} />
             </main>
           )}
-          {tabKey === "mint-passes" && (
+          {tabKey === "mint-tickets" && (
             <main className={cs(layout["padding-big"])}>
               <Spacing size="x-large" />
-              <GenerativeMintPasses token={token} />
+              <GenerativeMintTickets token={token} />
             </main>
           )}
         </>

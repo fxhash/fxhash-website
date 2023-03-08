@@ -26,10 +26,17 @@
   margin-bottom: 0;
 }
 .container_inputs {
-  margin-top: 16px;
   display: flex;
   flex-direction: column;
   gap: 16px 0;
+}
+.field {
+  display: flex;
+  flex-direction: column;
+  .error {
+    text-align: left;
+    margin: 4px 0;
+  }
 }
 .container_input {
   width: 100%;
@@ -50,6 +57,7 @@
   }
   .label_subtitle {
     max-width: 500px;
+    font-weight: 400;
   }
   .input {
     max-width: 180px;

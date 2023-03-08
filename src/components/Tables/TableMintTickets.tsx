@@ -1,4 +1,4 @@
-import React, { memo, useRef } from "react"
+import React, { memo, useContext, useRef } from "react"
 import style from "./TableUser.module.scss"
 import { UserBadge } from "../User/UserBadge"
 import Skeleton from "../Skeleton"
@@ -7,8 +7,11 @@ import useHasScrolledToBottom from "../../hooks/useHasScrolledToBottom"
 import { MintTicket } from "../../types/entities/MintTicket"
 import { format, formatDistanceToNow } from "date-fns"
 import { ButtonClaimMintTicket } from "../MintTicket/ButtonClaimMintTicket"
-import { ButtonMintTicketPurchase } from "../MintTicket/ButtonMintTicketPurchase";
-import { ButtonUpdatePriceMintTicket } from "../MintTicket/ButtonUpdatePriceMintTicket";
+import { ButtonMintTicketPurchase } from "../MintTicket/ButtonMintTicketPurchase"
+import { ButtonUpdatePriceMintTicket } from "../MintTicket/ButtonUpdatePriceMintTicket"
+import { UserContext } from "../../containers/UserProvider"
+import Link from "next/link"
+import { Button } from "../Button"
 
 interface TableMintTicketsProps {
   firstColName?: string
@@ -22,6 +25,7 @@ const _TableMintTickets = ({
   loading,
   onScrollToBottom,
 }: TableMintTicketsProps) => {
+  const { user } = useContext(UserContext)
   const refWrapper = useRef<HTMLDivElement>(null)
   useHasScrolledToBottom(refWrapper, {
     onScrollToBottom,
@@ -73,9 +77,20 @@ const _TableMintTickets = ({
                         data-label="Actions"
                         className={style["td-mint-actions"]}
                       >
-                        <ButtonClaimMintTicket mintTicket={mintTicket} />
-                        <ButtonMintTicketPurchase mintTicket={mintTicket} />
-                        <ButtonUpdatePriceMintTicket mintTicket={mintTicket} />
+                        {user?.id === mintTicket.owner.id ? (
+                          <>
+                            <Link
+                              href={`/generative/slug/${mintTicket.token.slug}/ticket/${mintTicket.id}`}
+                            >
+                              <Button isLink>mint iteration</Button>
+                            </Link>
+                            <ButtonUpdatePriceMintTicket
+                              mintTicket={mintTicket}
+                            />
+                          </>
+                        ) : (
+                          <ButtonClaimMintTicket mintTicket={mintTicket} />
+                        )}
                       </td>
                     </tr>
                   </>
@@ -87,7 +102,7 @@ const _TableMintTickets = ({
                   className={cs(style.empty, style.td_mobile_fullwidth)}
                   colSpan={5}
                 >
-                  No mint passes found
+                  No mint tickets found
                 </td>
               </tr>
             )}

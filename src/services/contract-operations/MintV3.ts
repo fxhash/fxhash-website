@@ -31,10 +31,12 @@ export type TMintV3OperationParams = {
   inputBytes: string
 }
 
+// todo remove offset when contract updated
+const OFFSET_V3_ID = 26000
 /**
  * Mint an unique iteration of a Generative Token
  */
-export class MintOperation extends ContractOperation<TMintV3OperationParams> {
+export class MintV3Operation extends ContractOperation<TMintV3OperationParams> {
   issuerContract: ContractAbstraction<Wallet> | null = null
   reserveInput: string | null = null
   payloadPacked: string | null = null
@@ -106,7 +108,7 @@ export class MintOperation extends ContractOperation<TMintV3OperationParams> {
         entrypoint: "mint",
         value: buildParameters(
           {
-            issuer_id: this.params.token.id,
+            issuer_id: this.params.token.id - OFFSET_V3_ID,
             referrer: null,
             reserve_input: this.reserveInput,
             create_ticket: this.params.createTicket ? "" : null,

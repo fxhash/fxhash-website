@@ -2,7 +2,10 @@ import style from "./MintController.module.scss"
 import layout from "../../styles/Layout.module.scss"
 import Link from "next/link"
 import cs from "classnames"
-import { GenerativeToken } from "../../types/entities/GenerativeToken"
+import {
+  GenerativeToken,
+  GenerativeTokenVersion,
+} from "../../types/entities/GenerativeToken"
 import { Spacing } from "../Layout/Spacing"
 import { Button } from "../../components/Button"
 import { PropsWithChildren, useContext, useState } from "react"
@@ -19,9 +22,14 @@ import { useMintingState } from "../../hooks/useMintingState"
 import { UserContext } from "../../containers/UserProvider"
 import { MintButton } from "./MintButton"
 import WinterCheckout from "components/CreditCard/WinterCheckout"
-import { ButtonIcon } from "components/Button/ButtonIcon"
-import { Router, useRouter } from "next/router"
+import { useRouter } from "next/router"
 import { winterCheckoutAppearance } from "../../utils/winter"
+import { TContractOperation } from "../../services/contract-operations/ContractOperation"
+import {
+  MintV3Operation,
+  TMintV3OperationParams,
+} from "../../services/contract-operations/MintV3"
+import { numberToHex, stringToByteString } from "../../utils/convert"
 
 interface Props {
   token: GenerativeToken
@@ -33,6 +41,41 @@ interface Props {
   }) => string
   hideMintButtonAfterReveal?: boolean
   className?: string
+}
+
+interface MintTransformer<T> {
+  operation: TContractOperation<T>
+  getParams: (data: {
+    token: GenerativeToken
+    price: number
+    reserveConsumption: IReserveConsumption | null
+  }) => T
+}
+const mintOpsByVersion: Record<GenerativeTokenVersion, MintTransformer<any>> = {
+  PRE_V3: {
+    operation: MintOperation,
+    getParams: (data) => {
+      return {
+        token: data.token,
+        price: data.price,
+        consumeReserve: data.reserveConsumption,
+      }
+    },
+  } as MintTransformer<TMintOperationParams>,
+  V3: {
+    operation: MintV3Operation,
+    getParams: (data) => {
+      return {
+        token: data.token,
+        price: data.price,
+        consumeReserve: data.reserveConsumption,
+        createTicket: data.token.inputBytesSize > 0,
+        inputBytes: data.token.inputBytesSize
+          ? stringToByteString(data.token.inputBytesSize.toString())
+          : "",
+      }
+    },
+  } as MintTransformer<TMintV3OperationParams>,
 }
 
 /**
@@ -67,18 +110,24 @@ export function MintController({
   const [loadingCC, setLoadingCC] = useState<boolean>(false)
   const [opHashCC, setOpHashCC] = useState<string | null>(null)
 
+  const mintOperation = mintOpsByVersion[token.version]
+
   // hook to interact with the contract
   const { state, loading, success, call, error, opHash, clear } =
-    useContractOperation<TMintOperationParams>(MintOperation)
+    useContractOperation<TMintOperationParams | TMintV3OperationParams>(
+      mintOperation.operation
+    )
 
   // can be used to call the mint entry point of the smart contract
   const mint = (reserveConsumption: IReserveConsumption | null) => {
     setOpHashCC(null) // reset CC op hash in case of new direct BC transaction
-    call({
-      token: token,
-      price: price,
-      consumeReserve: reserveConsumption,
-    })
+    call(
+      mintOperation.getParams({
+        token: token,
+        price: price,
+        reserveConsumption,
+      })
+    )
   }
 
   // called to open the credit card window

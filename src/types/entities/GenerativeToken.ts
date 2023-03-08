@@ -85,8 +85,13 @@ export interface GenerativeTokenMarketStatsHistory {
   to: string
 }
 
+export enum GenerativeTokenVersion {
+  "PRE_V3" = "PRE_V3",
+  V3 = "V3",
+}
 export interface GenerativeToken {
   id: number
+  version: GenerativeTokenVersion
   author: User
   name: string
   flag: GenTokFlag

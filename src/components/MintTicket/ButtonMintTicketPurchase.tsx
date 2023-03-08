@@ -26,11 +26,11 @@ const _ButtonMintTicketPurchase = ({
         size="small"
         onClick={handleToggleModal(true)}
       >
-        mint pass
+        mint ticket
       </Button>
       {showModal && (
         <Modal
-          title={`You have purchased a mint pass for “${mintTicket.token?.name}”`}
+          title={`You have purchased a mint ticket for “${mintTicket.token?.name}”`}
           onClose={handleToggleModal(false)}
         >
           <p className={style.p}>
@@ -53,7 +53,9 @@ const _ButtonMintTicketPurchase = ({
                   don’t pay a tax
                 </div>
               </label>
-              <div className={text.bold}>7 days</div>
+              <div className={text.bold}>
+                {mintTicket.settings.gracingPeriod} days
+              </div>
             </div>
             <div className={style.container_input}>
               <label>
@@ -65,7 +67,7 @@ const _ButtonMintTicketPurchase = ({
               </label>
               <div className={text.bold}>
                 <DisplayTezos
-                  mutez={4000000}
+                  mutez={mintTicket.price}
                   formatBig={false}
                   tezosSize="regular"
                 />

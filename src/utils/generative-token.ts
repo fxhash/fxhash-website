@@ -11,6 +11,7 @@ import { TInputMintIssuer } from "../services/parameters-builder/mint-issuer/inp
 import { TInputPricingDetails } from "../services/parameters-builder/pricing/input"
 import {
   GenerativeToken,
+  GenerativeTokenVersion,
   GenTokFlag,
   GenTokLabel,
   GenTokLabelDefinition,
@@ -21,18 +22,11 @@ import { IPricingDutchAuction, IPricingFixed } from "../types/entities/Pricing"
 import { EReserveMethod, IReserve } from "../types/entities/Reserve"
 import { User } from "../types/entities/User"
 import { CaptureSettings, GenerativeTokenMetadata } from "../types/Metadata"
-import {
-  CaptureMode,
-  CaptureTriggerMode,
-  MintGenerativeData,
-} from "../types/Mint"
+import { CaptureMode, CaptureTriggerMode, MintGenerativeData, } from "../types/Mint"
 import { getIpfsSlash } from "./ipfs"
 import { clamp } from "./math"
 import { tagsFromString } from "./strings"
-import {
-  transformPricingDutchInputToNumbers,
-  transformPricingFixedInputToNumbers,
-} from "./transformers/pricing"
+import { transformPricingDutchInputToNumbers, transformPricingFixedInputToNumbers, } from "./transformers/pricing"
 import { transformReserveInputToGeneric } from "./transformers/reserves"
 import { isUserOrCollaborator } from "./user"
 import { ISettingsContext } from "../context/Theme"
@@ -96,6 +90,7 @@ export function generativeFromMintParams(
 ): GenerativeToken {
   return {
     id: 0,
+    version: GenerativeTokenVersion.V3,
     author: author,
     name: metadata.name,
     flag: GenTokFlag.NONE,
@@ -246,6 +241,7 @@ export function generativeFromMintForm(
 
   return {
     id: 0,
+    version: GenerativeTokenVersion.V3,
     author: data.collaboration ?? user,
     name: data.informations!.name,
     flag: GenTokFlag.NONE,
