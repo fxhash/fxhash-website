@@ -54,7 +54,7 @@ export class UpdateIssuerV3Operation extends ContractOperation<TUpdateIssuerV3Op
       const packed = pack(params, EBuildableParams.UPDATE_ISSUER)
 
       return this.contract!.methodsObject.make_proposal({
-        call_id: FxhashCollabFactoryCalls.UPDATE_ISSUER,
+        call_id: FxhashCollabFactoryCalls.UPDATE_ISSUER_V3,
         call_params: packed,
       }).send()
     } else {

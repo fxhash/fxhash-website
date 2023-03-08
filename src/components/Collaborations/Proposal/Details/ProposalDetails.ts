@@ -70,4 +70,8 @@ export const ProposalDetails: Record<number, IProposalDetails> = {
     header: ProposalDetailsMintIssuerV3Header,
     expanded: ProposalDetailsMintIssuerV3Expanded,
   },
+  7: {
+    header: ProposalDetailsUpdateIssuerHeader,
+    expanded: ProposalDetailsUpdateIssuerExpanded,
+  },
 }

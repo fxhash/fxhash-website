@@ -52,7 +52,7 @@ export class UpdateReservesV3Operation extends ContractOperation<TUpdateReserves
     if (this.collab) {
       const packed = pack(params, EBuildableParams.UPDATE_RESERVE)
       return this.contract!.methodsObject.make_proposal({
-        call_id: FxhashCollabFactoryCalls.UPDATE_RESERVE,
+        call_id: FxhashCollabFactoryCalls.UPDATE_RESERVE_V3,
         call_params: packed,
       }).send()
     } else {

@@ -55,7 +55,7 @@ export class UpdatePricingV3Operation extends ContractOperation<TUpdatePricingV3
     if (this.collab) {
       const packed = pack(params, EBuildableParams.UPDATE_PRICE_V3)
       return this.contract!.methodsObject.make_proposal({
-        call_id: FxhashCollabFactoryCalls.UPDATE_PRICE,
+        call_id: FxhashCollabFactoryCalls.UPDATE_PRICE_V3,
         call_params: packed,
       }).send()
     } else {
