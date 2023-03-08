@@ -86,4 +86,12 @@ export const ProposalDetails: Record<number, IProposalDetails> = {
     header: ProposalDetailsUpdateReserveHeader,
     expanded: ProposalDetailsUpdateReserveExpanded,
   },
+  10: {
+    header: ProposalDetailsBurnSupplyHeader,
+    expanded: ProposalDetailsBurnSupplyExpanded,
+  },
+  11: {
+    header: ProposalDetailsBurnHeader,
+    expanded: ProposalDetailsBurnExpanded,
+  },
 }
