@@ -13,10 +13,11 @@ import { useFormik } from "formik"
 import { Spacing } from "../Layout/Spacing"
 import { Error } from "../Error/Error"
 import { getMintTicketHarbergerTax } from "../../utils/math"
+import { YupDaysCoverage } from "../../utils/yup/ticket"
 
 const validation = Yup.object({
   price: YupPrice,
-  days: YupPrice,
+  days: YupDaysCoverage,
 })
 
 interface ModalClaimMintTicketProps {

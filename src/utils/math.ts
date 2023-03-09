@@ -27,6 +27,15 @@ export function getNumberWithOrdinal(n: number) {
   return n + (s[(v - 20) % 10] || s[v] || s[0])
 }
 
+const getDailyHarbergerTax = (price: number) => {
+  return price * 0.0014
+}
 export function getMintTicketHarbergerTax(price: number, days: number) {
-  return price * 0.0014 * days
+  return getDailyHarbergerTax(price) * days
+}
+export function getDaysCoveredByHarbergerTax(
+  totalTaxPaid: number,
+  price: number
+) {
+  return totalTaxPaid / getDailyHarbergerTax(price)
 }
