@@ -223,4 +223,5 @@ export const ActionDefinitions: Record<TokenActionType, ActionDefinition> = {
   AUCTION_BID: ActionTodoDefinition,
   AUCTION_CANCELLED: ActionTodoDefinition,
   AUCTION_FULFILLED: ActionTodoDefinition,
+  CODEX_UPDATED: ActionTodoDefinition,
 }

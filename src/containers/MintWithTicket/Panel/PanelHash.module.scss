@@ -1,0 +1,15 @@
+.hashControls {
+  display: flex;
+
+  button img {
+    color: var(--fxl-color-text-primary);
+    height: 100%;
+    width: 100%;
+  }
+}
+
+.hashInput {
+  flex-grow: 1;
+  margin-right: var(--fxl-spacing-xs);
+  font-size: var(--fxl-font-size-xs);
+}

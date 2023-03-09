@@ -40,6 +40,8 @@ export function ProposalDetailsBurnSupplyExpanded({
   // easier
   const token: GenerativeToken = data?.generativeToken
 
+  console.log(token)
+
   return (
     <div>
       {loading ? (
@@ -52,29 +54,27 @@ export function ProposalDetailsBurnSupplyExpanded({
           {token && (
             <>
               <div className={cs(style.details)}>
-                <div>
-                  <strong>Token: </strong>
-                  <LinkIcon
-                    iconComp={
-                      <i aria-hidden className="fas fa-external-link-square" />
-                    }
-                    href={getGenerativeTokenUrl(token)}
-                    newTab
-                  >
-                    {token.name}
-                  </LinkIcon>
-                </div>
-                <div>
-                  <strong>Burn amount: </strong>
-                  {unpacked.amount}
-                </div>
+                <strong>Token: </strong>
+                <LinkIcon
+                  iconComp={
+                    <i aria-hidden className="fas fa-external-link-square" />
+                  }
+                  href={getGenerativeTokenUrl(token)}
+                  newTab
+                >
+                  {token.name}
+                </LinkIcon>
+                <strong>Burn amount: </strong>
+                {unpacked.amount}
                 {showOldSettings && (
-                  <div>
+                  <>
                     <strong>Balance: </strong>
-                    {token.balance}
-                    {" -> "}
-                    {token.balance - unpacked.amount}
-                  </div>
+                    <div>
+                      {token.balance}
+                      {" -> "}
+                      {token.balance - unpacked.amount}
+                    </div>
+                  </>
                 )}
               </div>
             </>

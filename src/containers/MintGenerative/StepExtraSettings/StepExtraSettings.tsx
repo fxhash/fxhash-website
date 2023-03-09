@@ -78,7 +78,7 @@ export const StepExtraSettings: StepComponent = ({ state, onNext }) => {
     state.settings ? cloneDeep(state.settings) : initialSettings
   )
 
-  const { params, onIframeLoaded } = useReceiveTokenInfos(iframeRef.current)
+  const { params, onIframeLoaded } = useReceiveTokenInfos(iframeRef)
 
   const [hash, setHash] = useState<string>(
     state.previewHash || generateFxHash()

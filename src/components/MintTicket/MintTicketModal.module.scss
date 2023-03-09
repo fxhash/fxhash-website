@@ -44,6 +44,9 @@
   flex-direction: row;
   align-items: center;
   gap: 8px;
+  background-color: var(--color-gray-vvvlight);
+  padding: 8px 12px;
+
   label {
     flex: 1;
   }
@@ -79,10 +82,9 @@
   }
 }
 .container_buttons {
-  margin-top: 16px;
   display: flex;
   flex-direction: row;
-  justify-content: flex-end;
+  justify-content: center;
   gap: 16px;
 }
 .progress_bar {

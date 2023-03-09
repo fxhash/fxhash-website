@@ -42,7 +42,7 @@ export class BurnSupplyV3Operation extends ContractOperation<TBurnSupplyV3Operat
     if (this.collab) {
       const packed = pack(params, EBuildableParams.BURN_SUPPLY)
       return this.contract!.methodsObject.make_proposal({
-        call_id: FxhashCollabFactoryCalls.BURN_SUPPLY,
+        call_id: FxhashCollabFactoryCalls.BURN_SUPPLY_V3,
         call_params: packed,
       }).send()
     } else {

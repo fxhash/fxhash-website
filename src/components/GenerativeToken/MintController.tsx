@@ -8,7 +8,7 @@ import {
 } from "../../types/entities/GenerativeToken"
 import { Spacing } from "../Layout/Spacing"
 import { Button } from "../../components/Button"
-import { PropsWithChildren, useContext, useState } from "react"
+import { PropsWithChildren, useContext, useMemo, useState } from "react"
 import { ContractFeedback } from "../Feedback/ContractFeedback"
 import { DisplayTezos } from "../Display/DisplayTezos"
 import { useContractOperation } from "../../hooks/useContractOperation"
@@ -32,6 +32,8 @@ import {
 import { numberToHex, stringToByteString } from "../../utils/convert"
 import { ButtonMintTicketPurchase } from "../MintTicket/ButtonMintTicketPurchase"
 import { User } from "../../types/entities/User"
+import { FxhashContracts } from "types/Contracts"
+import { getDiffByPath } from "utils/indexing"
 
 interface Props {
   token: GenerativeToken
@@ -72,9 +74,7 @@ const mintOpsByVersion: Record<GenerativeTokenVersion, MintTransformer<any>> = {
         price: data.price,
         consumeReserve: data.reserveConsumption,
         createTicket: data.token.inputBytesSize > 0,
-        inputBytes: data.token.inputBytesSize
-          ? stringToByteString(data.token.inputBytesSize.toString())
-          : "",
+        inputBytes: "",
       }
     },
   } as MintTransformer<TMintV3OperationParams>,
@@ -114,7 +114,7 @@ export function MintController({
 
   const mintOperation = mintOpsByVersion[token.version]
   // hook to interact with the contract
-  const { state, loading, success, call, error, opHash, operation, clear } =
+  const { state, loading, success, call, error, opHash, opData, clear } =
     useContractOperation<TMintOperationParams | TMintV3OperationParams>(
       mintOperation.operation
     )
@@ -155,9 +155,27 @@ export function MintController({
 
   const revealUrl = generateRevealUrl
     ? generateRevealUrl({ tokenId: token.id, hash: finalOpHash })
-    : `/reveal/${token.id}/${finalOpHash}`
+    : `/reveal/${token.id}/?fxhash=${finalOpHash}`
 
   const isTicketMinted = token.inputBytesSize > 0
+
+  // if ticket minted, and op data, extract ticket_id from tzkt operations
+  const ticketId = useMemo<null | number>(() => {
+    if (!isTicketMinted) return null
+    if (!opData) return null
+    // find mint operation on tickets contract
+    const ticketMintOp = opData.find(
+      (op) =>
+        op.parameter?.entrypoint === "mint" &&
+        op.target?.address === FxhashContracts.MINT_TICKETS_V3
+    )
+    if (!ticketMintOp) return null
+    // find the diff in ledger storage
+    const ledgerDiff = getDiffByPath(ticketMintOp?.diffs, "ledger")
+    if (!ledgerDiff) return null
+    // return token ID, key of the ledger diff update
+    return parseInt(ledgerDiff.content.key)
+  }, [isTicketMinted, opData])
 
   return (
     <div className={cs(className || style.root)}>
@@ -189,7 +207,8 @@ export function MintController({
             <ButtonMintTicketPurchase
               gracingPeriod={token.mintTicketSettings?.gracingPeriod || 1}
               price={price}
-              tokenName={token.name}
+              token={token}
+              ticketId={ticketId}
             />
           ) : (
             <Link href={revealUrl} passHref>

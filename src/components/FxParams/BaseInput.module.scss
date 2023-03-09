@@ -24,11 +24,11 @@ $height: 30px;
 
 .baseButton {
   cursor: pointer;
-  background: var(--fxl-color-light);
-  color: var(--fxl-color-dark);
+  background: var(--fxl-color-background2);
+  color: var(--fxl-color-text-primary);
   font-weight: 700;
   &:hover {
-    background: var(--fxl-color-dark);
+    background: var(--fxl-color-background3);
     color: var(--fxl-color-light);
     outline: 1px solid var(--fxl-color-primary);
   }

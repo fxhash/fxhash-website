@@ -179,12 +179,13 @@ export class WalletManager {
 
         // wait for the confirmation of the operation
         statusCallback?.(ContractOperationStatus.WAITING_CONFIRMATION)
-        await isOperationApplied(op.opHash)
+        const opData = await isOperationApplied(op.opHash)
 
         // operation is injected, display a success message and exits loop
         return statusCallback?.(ContractOperationStatus.INJECTED, {
           hash: op.opHash,
           operation: op,
+          opData: opData,
           // todo: remove this
           operationType: EWalletOperations.UPDATE_PROFILE,
           message: contractOperation.success(),

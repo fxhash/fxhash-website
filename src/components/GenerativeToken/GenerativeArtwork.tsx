@@ -37,9 +37,7 @@ export function GenerativeArtwork({
   const settings = useContext(SettingsContext)
   const artworkIframeRef = useRef<ArtworkIframeRef>(null)
 
-  const { params, onIframeLoaded } = useReceiveTokenInfos(
-    artworkIframeRef.current
-  )
+  const { params, onIframeLoaded } = useReceiveTokenInfos(artworkIframeRef)
   // used to preview the token in the iframe with different hashes
   const [previewHash, setPreviewHash] = useState<string | null>(
     token.metadata.previewHash || null

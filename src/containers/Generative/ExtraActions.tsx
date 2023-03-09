@@ -1,27 +1,20 @@
 import style from "./ExtraActions.module.scss"
 import cs from "classnames"
 import colors from "../../styles/Colors.module.css"
-import text from "../../styles/Text.module.css"
 import { Dropdown } from "../../components/Navigation/Dropdown"
 import { useContext, useState } from "react"
 import { Modal } from "../../components/Utils/Modal"
 import { Button } from "../../components/Button"
 import { UserContext } from "../UserProvider"
 import { useContractCall } from "../../utils/hookts"
-import { ModerateCall, ReportCall } from "../../types/ContractCalls"
+import { ReportCall } from "../../types/ContractCalls"
 import {
   GenerativeToken,
   GenTokFlag,
 } from "../../types/entities/GenerativeToken"
 import { ContractFeedback } from "../../components/Feedback/ContractFeedback"
-import { Select } from "../../components/Input/Select"
-import { Form } from "../../components/Form/Form"
-import { Field } from "../../components/Form/Field"
-import { Spacing } from "../../components/Layout/Spacing"
 import { isTokenModerator } from "../../utils/user"
 import { User } from "../../types/entities/User"
-import Link from "next/link"
-import { InputModerationReason } from "../../components/Input/InputModerationReason"
 import { ModerationModal } from "../../components/Moderation/Modal/ModerationModal"
 import { EditLabelsModal } from "./Moderation/EditLabelsModal"
 

@@ -1,5 +1,6 @@
 import "../styles/globals.scss"
 import "../styles/fonts.css"
+import "@fortawesome/fontawesome-svg-core/styles.css"
 import { AppProps } from "next/app"
 import { useRouter } from "next/router"
 import dynamic from "next/dynamic"

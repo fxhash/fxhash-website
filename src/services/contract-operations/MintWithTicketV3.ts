@@ -9,7 +9,7 @@ import { FxhashContracts } from "../../types/Contracts"
 import { ContractOperation } from "./ContractOperation"
 
 export type TMintWithTicketOperationParams = {
-  ticket: MintTicket
+  ticketId: number
   token: GenerativeToken
   inputBytes: string
 }
@@ -26,8 +26,8 @@ export class MintWithTicketOperation extends ContractOperation<TMintWithTicketOp
 
   async call(): Promise<TransactionWalletOperation> {
     return this.contract!.methodsObject.mint_with_ticket({
-      issuer_id: this.params.token.id,
-      ticket_id: this.params.ticket.id,
+      issuer_id: this.params.token.id - 26000,
+      ticket_id: this.params.ticketId,
       input_bytes: this.params.inputBytes,
       recipient: null,
     }).send()

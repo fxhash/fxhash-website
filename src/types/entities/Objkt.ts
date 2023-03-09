@@ -14,6 +14,7 @@ export interface Objkt {
   owner?: User | null
   assigned?: boolean
   generationHash?: string
+  inputBytes?: string | null
   duplicate?: boolean
   iteration?: number
   tags: string[]

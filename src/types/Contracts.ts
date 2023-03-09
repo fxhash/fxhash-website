@@ -1,3 +1,4 @@
+import { TzktOperation } from "./Tzkt"
 import type { WalletOperation } from "@taquito/taquito"
 
 // a value for the state of the transaction
@@ -41,12 +42,20 @@ export const FxhashContracts = {
 }
 
 export const FxhashCollabFactoryCalls = {
+  // PRE_V3 contracts
   MINT_ISSUER: 0,
   UPDATE_ISSUER: 1,
   UPDATE_PRICE: 2,
   UPDATE_RESERVE: 3,
   BURN_SUPPLY: 4,
   BURN: 5,
+  // V3 contracts
+  MINT_ISSUER_V3: 6,
+  UPDATE_ISSUER_V3: 7,
+  UPDATE_PRICE_V3: 8,
+  UPDATE_RESERVE_V3: 9,
+  BURN_SUPPLY_V3: 10,
+  BURN_V3: 11,
 }
 
 export type ContractCallHookReturn<T> = {
@@ -66,6 +75,7 @@ export type TContractOperationHookReturn<Params> = {
   error: boolean
   opHash: string | null
   operation: WalletOperation | null
+  opData: TzktOperation[] | null
   params: Params | null
   call: (data: Params) => void
   clear: () => void
