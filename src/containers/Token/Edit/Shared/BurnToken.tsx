@@ -1,25 +1,21 @@
 import style from "./BurnToken.module.scss"
-import colors from "../../../styles/Colors.module.css"
+import colors from "styles/Colors.module.css"
 import cs from "classnames"
-import { GenerativeToken } from "../../../types/entities/GenerativeToken"
-import { canTokenBeBurned } from "../../../utils/tokens"
-import { Button } from "../../../components/Button"
-import { useContext, useEffect } from "react"
-import { UserContext } from "../../UserProvider"
-import { useContractCall } from "../../../utils/hookts"
-import { ContractFeedback } from "../../../components/Feedback/ContractFeedback"
-import { useRouter } from "next/router"
-import { getUserProfileLink } from "../../../utils/user"
-import { BurnTokenOperation } from "../../../services/contract-operations/BurnToken"
-import { useContractOperation } from "../../../hooks/useContractOperation"
+import { GenerativeToken } from "types/entities/GenerativeToken"
+import { canTokenBeBurned } from "utils/tokens"
+import { Button } from "components/Button"
+import { ContractFeedback } from "components/Feedback/ContractFeedback"
+import { useContractOperation } from "hooks/useContractOperation"
+import { TContractOperation } from "services/contract-operations/ContractOperation"
 
 interface Props {
   token: GenerativeToken
+  contractOperation: TContractOperation<any>
 }
 
-export function BurnToken({ token }: Props) {
+export function BurnToken({ token, contractOperation }: Props) {
   const { call, loading, error, success, state } =
-    useContractOperation(BurnTokenOperation)
+    useContractOperation(contractOperation)
 
   return (
     <div

@@ -28,6 +28,7 @@ export const Qu_genToken = gql`
       lockEnd
       metadata
       metadataUri
+      version
       ...SplitsPrimary
       ...SplitsSecondary
       ...Reserves

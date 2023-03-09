@@ -7,7 +7,6 @@ import useHasScrolledToBottom from "../../hooks/useHasScrolledToBottom"
 import { MintTicket } from "../../types/entities/MintTicket"
 import { format, formatDistanceToNow } from "date-fns"
 import { ButtonClaimMintTicket } from "../MintTicket/ButtonClaimMintTicket"
-import { ButtonMintTicketPurchase } from "../MintTicket/ButtonMintTicketPurchase"
 import { ButtonUpdatePriceMintTicket } from "../MintTicket/ButtonUpdatePriceMintTicket"
 import { UserContext } from "../../containers/UserProvider"
 import Link from "next/link"
@@ -47,42 +46,49 @@ const _TableMintTickets = ({
               mintTickets.map((mintTicket) => {
                 const dateTaxPaidUntil = new Date(mintTicket.taxationPaidUntil)
                 return (
-                  <>
-                    <tr key={mintTicket.id}>
-                      <td
-                        className={cs(
-                          style["td-gentk"],
-                          style.td_mobile_fullwidth
-                        )}
-                      >
-                        <UserBadge
-                          hasLink
-                          user={mintTicket.owner}
-                          size="small"
-                          displayAvatar={true}
-                        />
-                      </td>
+                  <tr key={mintTicket.id}>
+                    <td
+                      className={cs(
+                        style["td-gentk"],
+                        style.td_mobile_fullwidth
+                      )}
+                    >
+                      <UserBadge
+                        hasLink
+                        user={mintTicket.owner}
+                        size="small"
+                        displayAvatar={true}
+                      />
+                    </td>
 
-                      <td
-                        data-label="Tax paid until"
-                        className={style["td-date"]}
-                      >
-                        {format(dateTaxPaidUntil, "dd/MM/yy")} (
-                        {formatDistanceToNow(dateTaxPaidUntil, {
-                          addSuffix: true,
-                        })}
-                        )
-                      </td>
-                      <td
-                        data-label="Actions"
-                        className={style["td-mint-actions"]}
-                      >
+                    <td
+                      data-label="Tax paid until"
+                      className={style["td-date"]}
+                    >
+                      {format(dateTaxPaidUntil, "dd/MM/yy")} (
+                      {formatDistanceToNow(dateTaxPaidUntil, {
+                        addSuffix: true,
+                      })}
+                      )
+                    </td>
+                    <td
+                      data-label="Actions"
+                      className={style["td-mint-actions"]}
+                    >
+                      <div className={style.actions}>
                         {user?.id === mintTicket.owner.id ? (
                           <>
                             <Link
-                              href={`/generative/slug/${mintTicket.token.slug}/ticket/${mintTicket.id}`}
+                              href={`/generative/slug/${mintTicket.token.slug}/ticket/${mintTicket.id}/mint`}
                             >
-                              <Button isLink>mint iteration</Button>
+                              <Button
+                                isLink
+                                type="button"
+                                color="secondary"
+                                size="small"
+                              >
+                                mint iteration
+                              </Button>
                             </Link>
                             <ButtonUpdatePriceMintTicket
                               mintTicket={mintTicket}
@@ -91,9 +97,9 @@ const _TableMintTickets = ({
                         ) : (
                           <ButtonClaimMintTicket mintTicket={mintTicket} />
                         )}
-                      </td>
-                    </tr>
-                  </>
+                      </div>
+                    </td>
+                  </tr>
                 )
               })
             ) : (

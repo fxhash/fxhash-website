@@ -41,7 +41,7 @@
 
   td {
     vertical-align: middle;
-    padding: 4px 6px;
+    padding: 4px 4px;
     height: 50px;
     border-bottom: 1px solid var(--color-gray-vlight);
     &:first-child {
@@ -111,7 +111,7 @@ td.td-right {
 }
 
 .th-mint-actions {
-  width: 300px;
+  width: 400px;
 }
 
 .th-time {
@@ -198,6 +198,14 @@ td.td-right {
 
 .mobile {
   display: none;
+}
+
+.actions {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 @media (max-width: $breakpoint-sm) {

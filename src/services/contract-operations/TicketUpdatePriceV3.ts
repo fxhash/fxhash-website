@@ -1,3 +1,4 @@
+import { MintTicket } from "./../../types/entities/MintTicket"
 import {
   ContractAbstraction,
   TransactionWalletOperation,
@@ -13,7 +14,7 @@ export interface ITaxationSettings {
 }
 
 export type TTicketUpdatePriceV3OperationParams = {
-  ticket: any
+  ticketId: number
   amount: number
   taxationSettings: ITaxationSettings
 }
@@ -32,7 +33,7 @@ export class TicketUpdatePriceV3Operation extends ContractOperation<TTicketUpdat
 
   async call(): Promise<TransactionWalletOperation> {
     return this.contract!.methodsObject.update_price({
-      token_id: this.params.ticket.id,
+      token_id: this.params.ticketId,
       taxation: this.params.taxationSettings,
     }).send({
       amount: this.params.amount,
@@ -41,6 +42,6 @@ export class TicketUpdatePriceV3Operation extends ContractOperation<TTicketUpdat
   }
 
   success(): string {
-    return `You have successfully updated the ticket ${this.params.ticket} pricing settings.`
+    return `You have successfully updated the ticket pricing settings.`
   }
 }

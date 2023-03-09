@@ -17,6 +17,7 @@ import {
   GenTokLabelDefinition,
   GenTokLabelGroup,
   GenTokPricing,
+  GenTokVersion,
 } from "../types/entities/GenerativeToken"
 import { IPricingDutchAuction, IPricingFixed } from "../types/entities/Pricing"
 import { EReserveMethod, IReserve } from "../types/entities/Reserve"
@@ -150,6 +151,7 @@ export function generativeFromMintParams(
     mintTickets: [],
     mintTicketSettings: null,
     inputBytesSize: 0,
+    version: GenTokVersion.V3,
   }
 }
 
@@ -302,6 +304,7 @@ export function generativeFromMintForm(
     mintTickets: [],
     mintTicketSettings: null,
     inputBytesSize: 0,
+    version: GenTokVersion.V3,
   }
 }
 

@@ -118,6 +118,7 @@ const _ModalClaimMintTicket = ({
           />
         </div>
       </div>
+      <Spacing size="small" />
       <div className={style.row_with_unit}>
         <div className={style.row_label}>Harberger tax</div>
         <div className={style.unit}>
@@ -132,6 +133,7 @@ const _ModalClaimMintTicket = ({
           )}
         </div>
       </div>
+      <Spacing size="small" />
       <div className={style.row_with_unit}>
         <div className={cs(style.row_label, colors.black)}>Total</div>
         <div className={style.unit}>

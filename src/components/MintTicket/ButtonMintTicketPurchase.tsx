@@ -5,13 +5,18 @@ import { DisplayTezos } from "../Display/DisplayTezos"
 import { Modal } from "../Utils/Modal"
 import style from "./MintTicketModal.module.scss"
 import text from "../../styles/Text.module.css"
+import { Spacing } from "../Layout/Spacing";
 
 interface ButtonMintTicketPurchaseProps {
-  mintTicket: MintTicket
+  tokenName: string
+  gracingPeriod: number
+  price: number
 }
 
 const _ButtonMintTicketPurchase = ({
-  mintTicket,
+  tokenName,
+  gracingPeriod,
+  price,
 }: ButtonMintTicketPurchaseProps) => {
   const [showModal, setShowModal] = useState(false)
   const handleToggleModal = useCallback(
@@ -30,7 +35,7 @@ const _ButtonMintTicketPurchase = ({
       </Button>
       {showModal && (
         <Modal
-          title={`You have purchased a mint ticket for “${mintTicket.token?.name}”`}
+          title={`You have purchased a mint ticket for “${tokenName}”`}
           onClose={handleToggleModal(false)}
         >
           <p className={style.p}>
@@ -44,6 +49,7 @@ const _ButtonMintTicketPurchase = ({
             potenti maecenas aliquet consectetur duis. In arcu convallis vel
             feugiat dolor varius risus.
           </p>
+          <Spacing size="regular" />
           <div className={style.container_inputs}>
             <div className={style.container_input}>
               <label>
@@ -53,9 +59,7 @@ const _ButtonMintTicketPurchase = ({
                   don’t pay a tax
                 </div>
               </label>
-              <div className={text.bold}>
-                {mintTicket.settings.gracingPeriod} days
-              </div>
+              <div className={text.bold}>{gracingPeriod} days</div>
             </div>
             <div className={style.container_input}>
               <label>
@@ -67,7 +71,7 @@ const _ButtonMintTicketPurchase = ({
               </label>
               <div className={text.bold}>
                 <DisplayTezos
-                  mutez={mintTicket.price}
+                  mutez={price}
                   formatBig={false}
                   tezosSize="regular"
                 />

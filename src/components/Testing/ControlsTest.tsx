@@ -3,6 +3,7 @@ import { Button } from "components/Button"
 import { Controls } from "components/FxParams/Controls"
 import { getRandomParamValues } from "components/FxParams/utils"
 import classes from "./ControlsTest.module.scss"
+
 interface ControlsTestProps {
   params: any
   onSubmit: (data: Record<string, any>) => void

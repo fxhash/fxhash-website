@@ -30,6 +30,8 @@ import {
   TMintV3OperationParams,
 } from "../../services/contract-operations/MintV3"
 import { numberToHex, stringToByteString } from "../../utils/convert"
+import { ButtonMintTicketPurchase } from "../MintTicket/ButtonMintTicketPurchase"
+import { User } from "../../types/entities/User"
 
 interface Props {
   token: GenerativeToken
@@ -111,9 +113,8 @@ export function MintController({
   const [opHashCC, setOpHashCC] = useState<string | null>(null)
 
   const mintOperation = mintOpsByVersion[token.version]
-
   // hook to interact with the contract
-  const { state, loading, success, call, error, opHash, clear } =
+  const { state, loading, success, call, error, opHash, operation, clear } =
     useContractOperation<TMintOperationParams | TMintV3OperationParams>(
       mintOperation.operation
     )
@@ -156,6 +157,8 @@ export function MintController({
     ? generateRevealUrl({ tokenId: token.id, hash: finalOpHash })
     : `/reveal/${token.id}/${finalOpHash}`
 
+  const isTicketMinted = token.inputBytesSize > 0
+
   return (
     <div className={cs(className || style.root)}>
       {token.balance > 0 && (
@@ -168,7 +171,7 @@ export function MintController({
 
       {opHashCC ? (
         <span className={cs(style.success)}>
-          You have purchased your unqiue iteration!
+          You have purchased your unique iteration!
         </span>
       ) : (
         <ContractFeedback
@@ -182,18 +185,26 @@ export function MintController({
 
       {finalOpHash && (
         <>
-          <Link href={revealUrl} passHref>
-            <Button
-              className={style.button}
-              isLink
-              color="secondary"
-              iconComp={<i aria-hidden className="fas fa-arrow-right" />}
-              iconSide="right"
-              size="regular"
-            >
-              reveal
-            </Button>
-          </Link>
+          {isTicketMinted ? (
+            <ButtonMintTicketPurchase
+              gracingPeriod={token.mintTicketSettings?.gracingPeriod || 1}
+              price={price}
+              tokenName={token.name}
+            />
+          ) : (
+            <Link href={revealUrl} passHref>
+              <Button
+                className={style.button}
+                isLink
+                color="secondary"
+                iconComp={<i aria-hidden className="fas fa-arrow-right" />}
+                iconSide="right"
+                size="regular"
+              >
+                reveal
+              </Button>
+            </Link>
+          )}
           <Spacing size="regular" />
         </>
       )}
@@ -234,7 +245,7 @@ export function MintController({
               openCreditCard={openCreditCard}
             >
               <span className={style.mint}>
-                mint iteration&nbsp;&nbsp;
+                mint {isTicketMinted ? "ticket" : "iteration"}&nbsp;&nbsp;
                 <DisplayTezos
                   mutez={price}
                   tezosSize="regular"

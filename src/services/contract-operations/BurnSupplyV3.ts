@@ -33,7 +33,7 @@ export class BurnSupplyV3Operation extends ContractOperation<TBurnSupplyV3Operat
 
   async call(): Promise<TransactionWalletOperation> {
     const params = {
-      issuer_id: this.params.token.id,
+      issuer_id: this.params.token.id - 26000,
       amount: this.params.supply,
     }
 
@@ -52,7 +52,7 @@ export class BurnSupplyV3Operation extends ContractOperation<TBurnSupplyV3Operat
 
   success(): string {
     return this.collab
-      ? `A proposal to burn ${this.params.supply} editions of ${this.params.token.name} was successfully sent`
-      : `You have burnt ${this.params.supply} editions of ${this.params.token.name}`
+      ? `A proposal to burn ${this.params.supply} editions of "${this.params.token.name}" was successfully sent`
+      : `You have burnt ${this.params.supply} editions of "${this.params.token.name}"`
   }
 }
