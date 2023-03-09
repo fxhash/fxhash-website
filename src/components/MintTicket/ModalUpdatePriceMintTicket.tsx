@@ -353,6 +353,7 @@ const _ModalUpdatePriceMintTicket = ({
             type="submit"
             size="small"
             state={loading ? "loading" : "default"}
+            disabled={!values.price || !values.days}
           >
             update ({absTotalToPayOrClaim.type}:{" "}
             <DisplayTezos
