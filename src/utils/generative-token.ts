@@ -17,17 +17,23 @@ import {
   GenTokLabelDefinition,
   GenTokLabelGroup,
   GenTokPricing,
-  GenTokVersion,
 } from "../types/entities/GenerativeToken"
 import { IPricingDutchAuction, IPricingFixed } from "../types/entities/Pricing"
 import { EReserveMethod, IReserve } from "../types/entities/Reserve"
 import { User } from "../types/entities/User"
 import { CaptureSettings, GenerativeTokenMetadata } from "../types/Metadata"
-import { CaptureMode, CaptureTriggerMode, MintGenerativeData, } from "../types/Mint"
+import {
+  CaptureMode,
+  CaptureTriggerMode,
+  MintGenerativeData,
+} from "../types/Mint"
 import { getIpfsSlash } from "./ipfs"
 import { clamp } from "./math"
 import { tagsFromString } from "./strings"
-import { transformPricingDutchInputToNumbers, transformPricingFixedInputToNumbers, } from "./transformers/pricing"
+import {
+  transformPricingDutchInputToNumbers,
+  transformPricingFixedInputToNumbers,
+} from "./transformers/pricing"
 import { transformReserveInputToGeneric } from "./transformers/reserves"
 import { isUserOrCollaborator } from "./user"
 import { ISettingsContext } from "../context/Theme"
@@ -151,7 +157,6 @@ export function generativeFromMintParams(
     mintTickets: [],
     mintTicketSettings: null,
     inputBytesSize: 0,
-    version: GenTokVersion.V3,
   }
 }
 
@@ -304,7 +309,6 @@ export function generativeFromMintForm(
     mintTickets: [],
     mintTicketSettings: null,
     inputBytesSize: 0,
-    version: GenTokVersion.V3,
   }
 }
 

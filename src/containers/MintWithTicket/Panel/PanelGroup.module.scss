@@ -1,7 +1,26 @@
 .root {
   margin-bottom: var(--fxl-spacing-l);
+
+  .header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .title_wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+  }
+
   .title {
     font-size: var(--font-size-h5);
+  }
+
+  .info_icon {
+    color: var(--color-gray-dark);
   }
 
   .description {

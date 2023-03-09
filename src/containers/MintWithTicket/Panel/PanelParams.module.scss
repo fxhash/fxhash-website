@@ -9,11 +9,14 @@
   display: flex;
   padding: var(--fxl-spacing-xs) 0;
   width: 100%;
-  gap: var(--fxl-spacing-xs);
+  gap: calc(var(--fxl-spacing) * 0.5);
   background: var(--fxl-color-background);
+  justify-content: flex-end;
+
   .randomButton{
     flex-grow: 1;
   }
+
   .undoRedoContainer {
     display: flex;
     gap: var(--fxl-spacing-xxs);
