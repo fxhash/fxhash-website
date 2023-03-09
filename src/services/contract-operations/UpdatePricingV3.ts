@@ -45,7 +45,7 @@ export class UpdatePricingV3Operation extends ContractOperation<TUpdatePricingV3
     const packedPricing = packPricing(numbered)
 
     const params = {
-      issuer_id: this.params.token.id - 26000,
+      issuer_id: this.params.token.id,
       pricing: packedPricing,
     }
     console.log(params)

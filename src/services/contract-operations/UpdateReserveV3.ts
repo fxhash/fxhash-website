@@ -43,7 +43,7 @@ export class UpdateReservesV3Operation extends ContractOperation<TUpdateReserves
     }))
 
     const params = {
-      issuer_id: this.params.token.id - 26000,
+      issuer_id: this.params.token.id,
       reserves: reserves,
     }
 

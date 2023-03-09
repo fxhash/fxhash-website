@@ -26,7 +26,7 @@ export class MintWithTicketOperation extends ContractOperation<TMintWithTicketOp
 
   async call(): Promise<TransactionWalletOperation> {
     return this.contract!.methodsObject.mint_with_ticket({
-      issuer_id: this.params.token.id - 26000,
+      issuer_id: this.params.token.id,
       ticket_id: this.params.ticketId,
       input_bytes: this.params.inputBytes,
       recipient: null,

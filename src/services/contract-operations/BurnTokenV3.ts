@@ -32,7 +32,7 @@ export class BurnTokenV3Operation extends ContractOperation<TBurnTokenV3Operatio
   }
 
   async call(): Promise<TransactionWalletOperation> {
-    const params = this.params.token.id - 26000
+    const params = this.params.token.id
 
     // if the author is a collab contract, we have to call the collab contract
     // proposal EP instead
