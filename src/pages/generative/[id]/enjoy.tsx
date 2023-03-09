@@ -97,7 +97,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       const { data, error } = await apolloClient.query({
         query: gql`
           ${Frag_UserBadge}
-          query Query($id: TokenId!) {
+          query Query($id: Float!) {
             generativeToken(id: $id) {
               id
               name
