@@ -120,50 +120,53 @@ export const PanelParams = forwardRef<PanelParamsRef, Props>(
     return (
       <PanelGroup
         title="Params"
-        description={`Choose the fx(params) for your personal iteration.`}
+        description={`Pick params for your iteration`}
         descriptionClassName={classes.description}
+        headerComp={
+          <div className={classes.randomContainer}>
+            <IconButton
+              title="Randomize"
+              onClick={handleRandomizeParams}
+              disabled={allLocked}
+            >
+              <i className="fa-sharp fa-solid fa-shuffle" aria-hidden />
+            </IconButton>
+            <IconButton
+              title="Previous"
+              onClick={onUndo}
+              disabled={
+                !!history &&
+                typeof historyOffset !== "undefined" &&
+                (history?.length === 0 ||
+                  (historyOffset >= 0 && historyOffset === history?.length - 1))
+              }
+            >
+              <FontAwesomeIcon icon={faRotateLeft} />
+            </IconButton>
+            <IconButton
+              title="Next"
+              onClick={onRedo}
+              disabled={
+                history && (history?.length === 0 || historyOffset === -1)
+              }
+            >
+              <FontAwesomeIcon icon={faRotateRight} />
+            </IconButton>
+            {withParamLocking && (
+              <div>
+                <LockButton
+                  title="toggle lock all params"
+                  isLocked={allLocked}
+                  onClick={handleToggleLockAllParams}
+                  className={cx(classes.lockAllButton, {
+                    [classes.primary]: allLocked,
+                  })}
+                />
+              </div>
+            )}
+          </div>
+        }
       >
-        <div className={classes.randomContainer}>
-          <BaseButton
-            color="primary"
-            className={classes.randomButton}
-            onClick={handleRandomizeParams}
-            disabled={allLocked}
-          >
-            Randomize Params
-          </BaseButton>
-          <IconButton
-            onClick={onUndo}
-            disabled={
-              !!history &&
-              typeof historyOffset !== "undefined" &&
-              (history?.length === 0 ||
-                (historyOffset >= 0 && historyOffset === history?.length - 1))
-            }
-          >
-            <FontAwesomeIcon icon={faRotateLeft} />
-          </IconButton>
-          <IconButton
-            onClick={onRedo}
-            disabled={
-              history && (history?.length === 0 || historyOffset === -1)
-            }
-          >
-            <FontAwesomeIcon icon={faRotateRight} />
-          </IconButton>
-          {withParamLocking && (
-            <div>
-              <LockButton
-                title="toggle lock all params"
-                isLocked={allLocked}
-                onClick={handleToggleLockAllParams}
-                className={cx(classes.lockAllButton, {
-                  [classes.primary]: allLocked,
-                })}
-              />
-            </div>
-          )}
-        </div>
         <Controls
           params={params}
           data={localData}
@@ -174,7 +177,7 @@ export const PanelParams = forwardRef<PanelParamsRef, Props>(
           }
         />
         <BaseButton className={classes.submitButton} onClick={handleSubmitData}>
-          Submit Params
+          submit params
         </BaseButton>
       </PanelGroup>
     )

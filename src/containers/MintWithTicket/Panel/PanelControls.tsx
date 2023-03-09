@@ -27,7 +27,7 @@ export function PanelControls(props: Props) {
     onClickBack,
     onOpenNewTab,
     onSubmit,
-    submitLabel = "Mint Token",
+    submitLabel = "mint",
   } = props
 
   return (
@@ -56,10 +56,10 @@ export function PanelControls(props: Props) {
           </IconButton>
         )}
         <BaseButton
-          color="primary"
+          color="main"
           onClick={onSubmit}
           className={style.submitButton}
-          title={`Submit ${submitLabel}`}
+          title={submitLabel}
         >
           {submitLabel}
         </BaseButton>
