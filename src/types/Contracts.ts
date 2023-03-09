@@ -1,3 +1,4 @@
+import { TzktOperation } from "./Tzkt"
 import type { WalletOperation } from "@taquito/taquito"
 
 // a value for the state of the transaction
@@ -74,6 +75,7 @@ export type TContractOperationHookReturn<Params> = {
   error: boolean
   opHash: string | null
   operation: WalletOperation | null
+  opData: TzktOperation[] | null
   params: Params | null
   call: (data: Params) => void
   clear: () => void
