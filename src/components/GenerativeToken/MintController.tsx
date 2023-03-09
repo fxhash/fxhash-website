@@ -74,9 +74,7 @@ const mintOpsByVersion: Record<GenerativeTokenVersion, MintTransformer<any>> = {
         price: data.price,
         consumeReserve: data.reserveConsumption,
         createTicket: data.token.inputBytesSize > 0,
-        inputBytes: data.token.inputBytesSize
-          ? stringToByteString(data.token.inputBytesSize.toString())
-          : "",
+        inputBytes: "",
       }
     },
   } as MintTransformer<TMintV3OperationParams>,
