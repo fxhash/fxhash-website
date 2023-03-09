@@ -87,6 +87,20 @@
   justify-content: center;
   gap: 16px;
 }
+.container_period {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  .label_bar {
+    width: 80px;
+    color: var(--color-gray);
+    font-size: var(--font-size-small);
+    line-height: 1;
+  }
+  .container_bar {
+    flex: 1;
+  }
+}
 .progress_bar {
   height: 16px;
   width: 100%;
@@ -101,15 +115,16 @@
   }
 }
 .new {
-  outline: 2px solid var(--color-success);
 }
 .contract_feedback {
   display: flex;
   flex-direction: row;
-  justify-content: flex-end;
+  justify-content: center;
   text-align: right;
 }
-
+.claim {
+  font-weight: bold;
+}
 @media (max-width: $breakpoint-sm) {
   .container_input {
     flex-direction: column;

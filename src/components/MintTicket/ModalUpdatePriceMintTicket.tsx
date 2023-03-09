@@ -16,12 +16,11 @@ import * as Yup from "yup"
 import { YupPrice } from "../../utils/yup/price"
 import { Error } from "../Error/Error"
 import {
+  addDays,
   differenceInDays,
   differenceInHours,
   differenceInSeconds,
-  formatDuration,
-  intervalToDuration,
-  isBefore,
+  format,
   set,
   subDays,
 } from "date-fns"
@@ -32,6 +31,8 @@ import {
   getMintTicketHarbergerTax,
 } from "../../utils/math"
 import { ContractFeedback } from "../Feedback/ContractFeedback"
+import colors from "../../styles/Colors.module.css"
+import { plural } from "../../utils/strings"
 
 const getTicketLastDayConsumed = (createdAt: Date) => {
   const dateCreatedAt = new Date(createdAt)
@@ -101,7 +102,7 @@ const _ModalUpdatePriceMintTicket = ({
       call({
         ticketId: mintTicket.id,
         taxationSettings: {
-          coverage: +submittedValues.days + remainingGracingPeriodInDays,
+          coverage: remainingGracingPeriodInDays + submittedValues.days,
           price: tzPrice,
         },
         amount: amount < 0 ? 0 : amount,
@@ -110,25 +111,26 @@ const _ModalUpdatePriceMintTicket = ({
     validationSchema: validation,
   })
 
-  const handleFormatHours = useCallback(
-    (hours: number) =>
-      formatDuration(
-        intervalToDuration({
-          start: 0,
-          end: hours * 3600000,
-        }),
-        { format: ["days", "hours"] }
-      ),
-    []
-  )
+  const handleFormatHours = useCallback((hours: number) => {
+    const absHours = Math.abs(hours)
+    const days = Math.floor(absHours / 24)
+    const hoursRemaining = absHours % 24
+    const strArr = []
+    if (days) {
+      strArr.push(`${days} day${plural(days)}`)
+    }
+    if (hoursRemaining) {
+      strArr.push(`${hoursRemaining} hour${plural(hoursRemaining)}`)
+    }
+    return strArr.join(" ")
+  }, [])
+
   const nowDate = new Date()
   const taxStart = new Date(mintTicket.taxationStart)
-  const remainingGracingPeriod = isBefore(nowDate, taxStart)
-    ? differenceInHours(taxStart, nowDate)
-    : 0
-  const consumedTaxDaysInHours = isBefore(nowDate, taxStart)
-    ? 0
-    : differenceInHours(taxStart, nowDate)
+  const remainingGracingPeriod =
+    nowDate < taxStart ? differenceInHours(taxStart, nowDate) : 0
+  const consumedTaxDaysInHours =
+    nowDate < taxStart ? 0 : differenceInHours(taxStart, nowDate)
   const daysCoveredInHours =
     getDaysCoveredByHarbergerTax(
       parseInt(mintTicket.taxationLocked),
@@ -145,8 +147,6 @@ const _ModalUpdatePriceMintTicket = ({
   const formattedTotal = handleFormatHours(totalCoveredInHours)
   const percentGracingPeriod =
     (remainingGracingPeriod * 100) / totalCoveredInHours
-  const percentTaxCoverage =
-    (remainingTaxCoverageInHours * 100) / totalCoveredInHours
   const styleGracingPeriod = {
     width: `${percentGracingPeriod}%`,
   }
@@ -158,6 +158,8 @@ const _ModalUpdatePriceMintTicket = ({
   const styleNewGracingPeriod = {
     width: `${percentNewGracingPeriod}%`,
   }
+  const lastDayConsumed = getTicketLastDayConsumed(mintTicket.createdAt)
+  const newEndDate = addDays(lastDayConsumed, values.days)
 
   const totalToPayOrClaim = getUpdatedPriceAmountToPayOrClaim(
     mintTicket,
@@ -168,6 +170,22 @@ const _ModalUpdatePriceMintTicket = ({
     total: Math.abs(totalToPayOrClaim),
     type: totalToPayOrClaim < 0 ? "claim" : "cost",
   }
+
+  const differenceBetweenNewAndCurrentCover =
+    totalCoveredInHours - newTotalCoveredInHours
+  const isNewLongerCover = differenceBetweenNewAndCurrentCover < 0
+  const formattedDifferenceBetweenCurrentAndNewCover = handleFormatHours(
+    differenceBetweenNewAndCurrentCover
+  )
+  const progressBarsWidth = isNewLongerCover
+    ? {
+        current: (totalCoveredInHours * 100) / newTotalCoveredInHours,
+        new: 100,
+      }
+    : {
+        current: 100,
+        new: (newTotalCoveredInHours * 100) / totalCoveredInHours,
+      }
   return (
     <Modal
       title={`Update price for “${mintTicket.token?.name}”`}
@@ -185,9 +203,23 @@ const _ModalUpdatePriceMintTicket = ({
           <div className={style.row_label}>
             You will keep ownership of your pass:
           </div>
-          <div className={style.unit}>{formattedTotal}</div>
+          <div className={style.unit}>
+            <span>{formattedTotal}</span>
+            {values.days > 0 && differenceBetweenNewAndCurrentCover !== 0 && (
+              <span
+                className={cs({
+                  [colors.success]: isNewLongerCover,
+                  [colors.error]: !isNewLongerCover,
+                })}
+              >
+                {` (${
+                  isNewLongerCover ? "+" : "-"
+                }${formattedDifferenceBetweenCurrentAndNewCover})`}
+              </span>
+            )}
+          </div>
         </div>
-        <Spacing size="small" />
+        <Spacing size="regular" />
         <div className={style.row_with_unit}>
           <div className={style.row_label}>
             Gracing period{" "}
@@ -198,21 +230,47 @@ const _ModalUpdatePriceMintTicket = ({
             <span>{formattedRemainingTaxCoverage || "0 day"}</span>
           </div>
         </div>
-        <div className={style.progress_bar}>
-          <div className={style.left} style={styleGracingPeriod} />
-          <div className={style.right} />
-        </div>
-        <Spacing size="small" />
-        <div className={cs(style.progress_bar, style.new)}>
-          <div className={style.left} style={styleNewGracingPeriod} />
-          <div className={style.right} />
-        </div>
-        <div className={style.row_with_unit}>
-          <div className={style.row_label} />
-          <div className={style.unit}>
-            <span className={style.p}>End on</span> <span>xxx</span>
+        <Spacing size="2x-small" />
+        <div className={style.container_period}>
+          <div className={style.label_bar}>Current</div>
+          <div className={style.container_bar}>
+            <div
+              className={style.progress_bar}
+              style={{
+                width: `${progressBarsWidth.current}%`,
+              }}
+            >
+              <div className={style.left} style={styleGracingPeriod} />
+              <div className={style.right} />
+            </div>
           </div>
         </div>
+        {values.days > 0 && (
+          <>
+            <div className={style.container_period}>
+              <div className={style.label_bar}>New</div>
+              <div className={style.container_bar}>
+                <div
+                  className={cs(style.progress_bar, style.new)}
+                  style={{
+                    width: `${progressBarsWidth.new}%`,
+                  }}
+                >
+                  <div className={style.left} style={styleNewGracingPeriod} />
+                  <div className={style.right} />
+                </div>
+              </div>
+            </div>
+            <Spacing size="2x-small" />
+            <div className={style.row_with_unit}>
+              <div className={style.row_label} />
+              <div className={style.unit}>
+                <span className={style.p}>Will end on</span>{" "}
+                <span>{format(newEndDate, "dd/MM/yy 'at' H:m")}</span>
+              </div>
+            </div>
+          </>
+        )}
         <hr className={style.hr2} />
         <Spacing size="regular" />
         <div className={style.container_inputs}>
@@ -227,6 +285,7 @@ const _ModalUpdatePriceMintTicket = ({
               <InputTextUnit
                 error={!!errors.price}
                 name="price"
+                type="number"
                 value={values.price}
                 onChange={handleChange}
                 onBlur={handleBlur}
@@ -258,6 +317,7 @@ const _ModalUpdatePriceMintTicket = ({
                 onChange={handleChange}
                 onBlur={handleBlur}
                 sizeX="small"
+                type="number"
                 unit="days"
                 id="days"
               />
@@ -270,11 +330,16 @@ const _ModalUpdatePriceMintTicket = ({
         <hr className={style.hr} />
         <p className={style.p}>
           Based on these new settings, you will{" "}
-          <strong>
+          <span
+            className={cs(style.claim, {
+              [colors.success]: absTotalToPayOrClaim.type === "claim",
+              [colors.secondary]: absTotalToPayOrClaim.type === "cost",
+            })}
+          >
             {absTotalToPayOrClaim.type === "claim"
               ? "claim back"
               : "have to pay"}
-          </strong>{" "}
+          </span>{" "}
           <DisplayTezos
             mutez={absTotalToPayOrClaim.total}
             formatBig={false}
@@ -282,6 +347,7 @@ const _ModalUpdatePriceMintTicket = ({
           />{" "}
           tez
         </p>
+        <Spacing size="small" />
         <div className={style.container_buttons}>
           <Button
             type="submit"

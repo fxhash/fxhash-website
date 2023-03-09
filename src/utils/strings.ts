@@ -52,3 +52,7 @@ export function countWords(str: string): number {
 export function stringBytesSize(str: string): number {
   return new Blob([str]).size
 }
+
+export function plural(nb: number): string {
+  return nb === 1 ? "" : "s"
+}
