@@ -21,11 +21,18 @@ import {
 } from "components/FxParams/ParamsHistory"
 import { PanelParamsRef } from "./Panel/PanelParams"
 import { useRouter } from "next/router"
+import { useContractOperation } from "hooks/useContractOperation"
+import { MintWithTicketOperation } from "services/contract-operations/MintWithTicketV3"
+import { ContractFeedback } from "components/Feedback/ContractFeedback"
+import { Loader } from "components/Utils/Loader"
+import Link from "next/link"
+import { Button } from "components/Button"
 
 interface Props {
   token: GenerativeToken
+  ticketId: number
 }
-export function MintWithTicketPageRoot({ token }: Props) {
+export function MintWithTicketPageRoot({ token, ticketId }: Props) {
   const panelParamsRef = useRef<PanelParamsRef>(null)
   const historyContext = useContext(ParamsHistoryContext)
   const artworkIframeRef = useRef<ArtworkIframeRef>(null)
@@ -39,6 +46,10 @@ export function MintWithTicketPageRoot({ token }: Props) {
   const [data, setData] = useState({})
   const { params, features, onIframeLoaded } =
     useReceiveTokenInfos(artworkIframeRef)
+
+  const { call, success, loading, state, error, opHash } = useContractOperation(
+    MintWithTicketOperation
+  )
 
   const inputBytes = useMemo<string | null>(() => {
     const serialized = serializeParams(data, params || [])
@@ -84,7 +95,15 @@ export function MintWithTicketPageRoot({ token }: Props) {
   }
 
   // TODO: Call contract v3 mint with ticket
-  const handleClickSubmit = () => {}
+  const handleClickSubmit = () => {
+    if (inputBytes) {
+      call({
+        token: token,
+        ticketId: ticketId,
+        inputBytes: inputBytes,
+      })
+    }
+  }
 
   useEffect(() => {
     historyContext.registerAction("params-update", (value: any) => {
@@ -128,6 +147,40 @@ export function MintWithTicketPageRoot({ token }: Props) {
           onClickBack={handleClickBack}
           onClickSubmit={handleClickSubmit}
         />
+        {(loading || success) && (
+          <div
+            className={cs(style.mint_overlay, {
+              [style.has_success]: success,
+            })}
+          >
+            <div className={cs(style.kt_feedback)}>
+              <ContractFeedback
+                state={state}
+                success={success}
+                loading={loading}
+                error={error}
+                successMessage="Your iteration is minted!"
+              />
+            </div>
+            {loading && <Loader size="small" color="currentColor" />}
+            {success && (
+              <Link
+                href={`/reveal/${token.id}/?fxhash=${opHash}&fxparams=${inputBytes}`}
+                passHref
+              >
+                <Button
+                  isLink
+                  size="regular"
+                  color="secondary"
+                  iconComp={<i aria-hidden className="fas fa-arrow-right" />}
+                  iconSide="right"
+                >
+                  final reveal
+                </Button>
+              </Link>
+            )}
+          </div>
+        )}
       </div>
       <div className={cs(style.frame)}>
         <ArtworkIframe
@@ -143,7 +196,7 @@ export function MintWithTicketPageRoot({ token }: Props) {
 export function MintWithTicketPage(props: Props) {
   return (
     <ParamsHistoryProvider>
-      <MintWithTicketPageRoot token={props.token} />
+      <MintWithTicketPageRoot {...props} />
     </ParamsHistoryProvider>
   )
 }

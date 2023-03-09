@@ -1,26 +1,31 @@
 import { GetServerSideProps, NextPage } from "next"
 import Head from "next/head"
-import { Spacing } from "../../../components/Layout/Spacing"
-import layout from "../../../styles/Layout.module.scss"
-import text from "../../../styles/Text.module.css"
-import color from "../../../styles/Colors.module.css"
+import { Spacing } from "components/Layout/Spacing"
+import layout from "styles/Layout.module.scss"
+import text from "styles/Text.module.css"
+import color from "styles/Colors.module.css"
 import cs from "classnames"
-import { createApolloClient } from "../../../services/ApolloClient"
-import { Reveal } from "../../../containers/Reveal/Reveal"
-import { GenerativeToken } from "../../../types/entities/GenerativeToken"
-import { Qu_genToken } from "../../../queries/generative-token"
-import { Article } from "../../../components/Article/Article"
-import { UserBadge } from "../../../components/User/UserBadge"
+import { createApolloClient } from "services/ApolloClient"
+import { Reveal } from "containers/Reveal/Reveal"
+import { GenerativeToken } from "types/entities/GenerativeToken"
+import { Qu_genToken } from "queries/generative-token"
+import { Article } from "components/Article/Article"
+import { UserBadge } from "components/User/UserBadge"
 import Link from "next/link"
-import { Button } from "../../../components/Button"
-import { EntityBadge } from "../../../components/User/EntityBadge"
+import { Button } from "components/Button"
+import { EntityBadge } from "components/User/EntityBadge"
+import { useRouter } from "next/router"
 
 interface Props {
-  hash: string
   token: GenerativeToken
 }
 
-const RevealPage: NextPage<Props> = ({ hash, token }) => {
+const RevealPage: NextPage<Props> = ({ token }) => {
+  const { query } = useRouter()
+  const { fxhash, fxparams } = query
+
+  console.log({ fxhash, fxparams })
+
   return (
     <>
       <Head>
@@ -51,7 +56,11 @@ const RevealPage: NextPage<Props> = ({ hash, token }) => {
       <section>
         <Spacing size="3x-large" />
         <main className={cs(layout["padding-big"])}>
-          <Reveal hash={hash} generativeUri={token.metadata.generativeUri} />
+          <Reveal
+            hash={fxhash as string}
+            params={fxparams as string}
+            generativeUri={token.metadata.generativeUri}
+          />
 
           <Spacing size="3x-large" />
 
@@ -73,9 +82,9 @@ const RevealPage: NextPage<Props> = ({ hash, token }) => {
           <Article className={cs(layout.small_centered)}>
             <p>
               Your token will now have to go through a{" "}
-              <strong>signing process</strong>. No more actions are required
-              from yourself, this happens automatically in the back stage !
-              Until this process is finished, your token will appear as{" "}
+              <strong>signing process</strong>. No more actions are required on
+              your end, this happens automatically in the back stage ! Until
+              this process is finished, your token will appear as{" "}
               <strong>[waiting to be signed]</strong> in your wallet and on
               fxhash.
             </p>
@@ -91,10 +100,6 @@ const RevealPage: NextPage<Props> = ({ hash, token }) => {
               </li>
               <li>features need to be extracted from the program</li>
             </ul>
-            <p>
-              The signing of the metadata can only happen once, and once done
-              your token become immutable on the blockchain.
-            </p>
           </Article>
 
           <Spacing size="6x-large" />
@@ -122,11 +127,12 @@ const RevealPage: NextPage<Props> = ({ hash, token }) => {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const hash = context.params?.hash
   const id = context.params?.id && parseInt(context.params?.id as string)
+  const query = context.query
+
   let token = null
 
-  if (hash != null && id != null) {
+  if (id != null) {
     const apolloClient = createApolloClient()
     const { data, error } = await apolloClient.query({
       query: Qu_genToken,
@@ -142,10 +148,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   return {
     props: {
-      hash,
       token: token,
     },
-    notFound: !token || !hash,
+    notFound: !token || !query?.fxhash,
   }
 }
 

@@ -13,7 +13,7 @@ interface Props {
   ticketId: string
 }
 
-const MintWithTicket: NextPage<Props> = ({ token }) => {
+const MintWithTicket: NextPage<Props> = ({ token, ticketId }) => {
   // get the display url for og:image
   const displayUrl =
     token.captureMedia?.cid &&
@@ -55,7 +55,7 @@ const MintWithTicket: NextPage<Props> = ({ token }) => {
           content={displayUrl || "https://www.fxhash.xyz/images/og/og1.jpg"}
         />
       </Head>
-      <MintWithTicketPage token={token} />
+      <MintWithTicketPage token={token} ticketId={parseInt(ticketId)} />
     </>
   )
 }
