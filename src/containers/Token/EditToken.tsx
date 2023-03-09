@@ -2,7 +2,7 @@ import layout from "../../styles/Layout.module.scss"
 import cs from "classnames"
 import {
   GenerativeToken,
-  GenTokVersion,
+  GenerativeTokenVersion,
 } from "../../types/entities/GenerativeToken"
 import { SectionHeader } from "../../components/Layout/SectionHeader"
 import { useContext, useEffect, useMemo } from "react"
@@ -38,7 +38,9 @@ export function EditToken({ token }: Props) {
 
   const EditTokenComp = useMemo(
     () =>
-      token.version === GenTokVersion.PRE_V3 ? EditTokenPreV3 : EditTokenV3,
+      token.version === GenerativeTokenVersion.PRE_V3
+        ? EditTokenPreV3
+        : EditTokenV3,
     [token.version]
   )
 

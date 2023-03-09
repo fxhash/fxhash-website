@@ -8,7 +8,7 @@ import { Spacing } from "../../components/Layout/Spacing"
 import { GenerativeActions } from "./Actions"
 import { GenerativeToken } from "../../types/entities/GenerativeToken"
 import { TabsContainer } from "../../components/Layout/TabsContainer"
-import { GenerativeMintTickets } from "./GenerativeMintTickets";
+import { GenerativeMintTickets } from "./GenerativeMintTickets"
 
 const defaultTabs: TabDefinition[] = [
   {
