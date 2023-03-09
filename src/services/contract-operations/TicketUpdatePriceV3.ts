@@ -1,10 +1,8 @@
-import { MintTicket } from "./../../types/entities/MintTicket"
 import {
   ContractAbstraction,
   TransactionWalletOperation,
   Wallet,
 } from "@taquito/taquito"
-import { NFTArticle } from "../../types/entities/Article"
 import { FxhashContracts } from "../../types/Contracts"
 import { ContractOperation } from "./ContractOperation"
 
@@ -20,7 +18,7 @@ export type TTicketUpdatePriceV3OperationParams = {
 }
 
 /**
- * Mint an unique iteration of a Generative Token
+ * Update the ticket price to extend or remove day coverage
  */
 export class TicketUpdatePriceV3Operation extends ContractOperation<TTicketUpdatePriceV3OperationParams> {
   contract: ContractAbstraction<Wallet> | null = null
@@ -32,6 +30,7 @@ export class TicketUpdatePriceV3Operation extends ContractOperation<TTicketUpdat
   }
 
   async call(): Promise<TransactionWalletOperation> {
+    console.log(this.params)
     return this.contract!.methodsObject.update_price({
       token_id: this.params.ticketId,
       taxation: this.params.taxationSettings,

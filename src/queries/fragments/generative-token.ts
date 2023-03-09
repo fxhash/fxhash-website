@@ -126,8 +126,9 @@ export const Frag_GenTokenMintTickets = gql`
     mintTicketSettings {
       gracingPeriod
     }
-    mintTickets {
+    mintTickets(sort: { taxationPaidUntil: "ASC" }) {
       id
+      createdAt
       taxationLocked
       taxationStart
       price
