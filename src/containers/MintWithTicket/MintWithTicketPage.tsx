@@ -10,7 +10,7 @@ import { useContext, useEffect, useMemo, useRef, useState } from "react"
 import {
   deserializeParams,
   serializeParams,
-  strinigfyParams,
+  stringifyParamsData,
 } from "components/FxParams/utils"
 import { useReceiveTokenInfos } from "hooks/useReceiveTokenInfos"
 import { PanelRoot } from "./Panel/PanelRoot"
@@ -45,7 +45,7 @@ export function MintWithTicketPageRoot({ token }: Props) {
     if (serialized.length === 0)
       return token.metadata?.previewInputBytes || null
     return serialized
-  }, [strinigfyParams(data), params])
+  }, [stringifyParamsData(data), params])
 
   const url = useMemo<string>(() => {
     return ipfsUrlWithHashAndParams(
@@ -58,7 +58,9 @@ export function MintWithTicketPageRoot({ token }: Props) {
   const handleChangeData = (newData: Record<string, any>) => {
     historyContext.pushHistory({
       type: "params-update",
-      oldValue: deserializeParams(inputBytes || "", params, {}),
+      oldValue: deserializeParams(inputBytes || "", params, {
+        withTransform: true,
+      }),
       newValue: newData,
     })
     setData(newData)

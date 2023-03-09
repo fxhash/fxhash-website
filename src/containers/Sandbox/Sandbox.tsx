@@ -16,7 +16,7 @@ import { RawTokenFeatures } from "../../types/Metadata"
 import { RawFeatures } from "../../components/Features/RawFeatures"
 import { ArtworkFrame } from "../../components/Artwork/ArtworkFrame"
 import { Controls } from "components/FxParams/Controls"
-import { serializeParams, strinigfyParams } from "components/FxParams/utils"
+import { serializeParams, stringifyParamsData } from "components/FxParams/utils"
 import { ControlsTest, ControlsTestRef } from "components/Testing/ControlsTest"
 import { FxParamDefinition, FxParamType } from "components/FxParams/types"
 import { useReceiveTokenInfos } from "hooks/useReceiveTokenInfos"
@@ -66,7 +66,7 @@ export function Sandbox() {
 
   const fxparamsBytes = useMemo(() => {
     return serializeParams(data, params)
-  }, [strinigfyParams(data)])
+  }, [stringifyParamsData(data)])
 
   return (
     <section

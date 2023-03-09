@@ -5,6 +5,7 @@ import {
   FxParamProcessors,
   FxParamTypeMap,
   FxParamType,
+  FxParamsData,
 } from "./types"
 
 export function rgbaToHex(r: number, g: number, b: number, a: number): string {
@@ -347,7 +348,7 @@ export function sumBytesParams(
   )
 }
 
-export function strinigfyParams(data: any) {
+export function stringifyParamsData(data: FxParamsData) {
   return JSON.stringify(data, (key, value) => {
     if (typeof value === "bigint") return value.toString()
     return value

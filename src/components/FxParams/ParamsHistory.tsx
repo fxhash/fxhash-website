@@ -8,9 +8,10 @@ import {
 } from "react"
 import { createContext } from "react"
 import debounce from "lodash.debounce"
-import { strinigfyParams } from "./utils"
+import { stringifyParamsData } from "./utils"
 
-const isEqual = (a: any, b: any) => strinigfyParams(a) === strinigfyParams(b)
+const isEqual = (a: any, b: any) =>
+  stringifyParamsData(a) === stringifyParamsData(b)
 
 type ParamsHistoryActionType = "params-update" | "hash-update"
 

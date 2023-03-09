@@ -32,22 +32,15 @@ export function PanelControls(props: Props) {
 
   return (
     <div className={style.controlPanel}>
-      {
-        // TODO: There is an issue with undo/redo stack when we use auto update
-        false && (
-          <div className={style.checkboxWrapper}>
-            <BaseInput
-              id="updateCheckbox"
-              type="checkbox"
-              checked={withAutoUpdate}
-              onChange={() => onChangeWithAutoUpdate(!withAutoUpdate)}
-            />
-            <label htmlFor="updateCheckbox">
-              auto-apply on settings update
-            </label>
-          </div>
-        )
-      }
+      <div className={style.checkboxWrapper}>
+        <BaseInput
+          id="updateCheckbox"
+          type="checkbox"
+          checked={withAutoUpdate}
+          onChange={() => onChangeWithAutoUpdate(!withAutoUpdate)}
+        />
+        <label htmlFor="updateCheckbox">auto-apply on settings update</label>
+      </div>
       <div className={style.buttonsWrapper}>
         {onClickBack && (
           <IconButton onClick={onClickBack} title="go back to project page">
