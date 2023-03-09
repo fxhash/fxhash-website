@@ -33,7 +33,7 @@ export class BurnSupplyV3Operation extends ContractOperation<TBurnSupplyV3Operat
 
   async call(): Promise<TransactionWalletOperation> {
     const params = {
-      issuer_id: this.params.token.id - 26000,
+      issuer_id: this.params.token.id,
       amount: this.params.supply,
     }
 

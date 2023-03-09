@@ -41,7 +41,7 @@ export class UpdateIssuerV3Operation extends ContractOperation<TUpdateIssuerV3Op
     const numbered = transformUpdateIssuerFormToNumbers(this.params.data)
 
     const params = {
-      issuer_id: this.params.token.id - 26000,
+      issuer_id: this.params.token.id,
       enabled: numbered.enabled,
       royalties: numbered.royalties,
       primary_split: numbered.splitsPrimary,
