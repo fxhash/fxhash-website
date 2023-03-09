@@ -19,10 +19,11 @@ import { ControlsTest } from "components/Testing/ControlsTest"
 import {
   consolidateParams,
   serializeParams,
-  strinigfyParams,
+  stringifyParamsData,
   sumBytesParams,
 } from "components/FxParams/utils"
 import { useReceiveTokenInfos } from "hooks/useReceiveTokenInfos"
+import { FxParamsData } from "components/FxParams/types"
 
 export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
   const [hash, setHash] = useState<string>(
@@ -32,7 +33,7 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
   const [check2, setCheck2] = useState<boolean>(false)
   const artworkIframeRef = useRef<ArtworkIframeRef>(null)
   const { onIframeLoaded, features, params, paramsDefinition } =
-    useReceiveTokenInfos(artworkIframeRef.current)
+    useReceiveTokenInfos(artworkIframeRef)
 
   console.log({
     features,
@@ -40,13 +41,13 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
     paramsDefinition,
   })
 
-  const [data, setData] = useState<Record<string, any> | null>({})
+  const [data, setData] = useState<FxParamsData>({})
 
   const inputBytes = useMemo<string | null>(() => {
     const serialized = serializeParams(data, params || [])
     if (serialized.length === 0) return null
     return serialized
-  }, [strinigfyParams(data), params])
+  }, [stringifyParamsData(data), params])
 
   const url = useMemo<string>(() => {
     return ipfsUrlWithHashAndParams(state.cidUrlParams!, hash, inputBytes)

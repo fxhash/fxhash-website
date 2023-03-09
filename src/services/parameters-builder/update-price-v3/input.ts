@@ -1,5 +1,8 @@
-export type TInputUpdatePrice<N = number> = {
-  details: string
+export type TInputUpdatePriceV3<N = number> = {
   issuer_id: N
-  lockForReserves: boolean
+  pricing: {
+    pricing_id: N
+    details: string
+    lock_for_reserves: boolean
+  }
 }

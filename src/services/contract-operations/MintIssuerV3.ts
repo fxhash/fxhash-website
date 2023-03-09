@@ -3,6 +3,10 @@ import {
   TransactionWalletOperation,
   Wallet,
 } from "@taquito/taquito"
+import {
+  EBuildableParams,
+  pack,
+} from "services/parameters-builder/BuildParameters"
 import { stringToByteString } from "utils/convert"
 import { getIpfsSlash } from "utils/ipfs"
 import {
@@ -88,9 +92,9 @@ export class MintIssuerV3Operation extends ContractOperation<TMintIssuerV3Operat
     // if the author is a collab contract, we have to call the collab contract
     // proposal EP instead
     if (this.params.data.collaboration) {
-      const packed = packMintIssuer(params)
+      const packed = pack(params, EBuildableParams.MINT_ISSUER_V3)
       return this.contract!.methodsObject.make_proposal({
-        call_id: FxhashCollabFactoryCalls.MINT_ISSUER,
+        call_id: FxhashCollabFactoryCalls.MINT_ISSUER_V3,
         call_params: packed,
       }).send()
     } else {

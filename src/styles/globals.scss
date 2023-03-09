@@ -65,6 +65,15 @@ body {
   --cards-gap: 30px;
   --cards-size: 270px;
 
+  --fxl-color-light: #ffffff;
+  --fxl-color-light1: #727272;
+  --fxl-color-light2: #363636;
+  --fxl-color-dark: #000000;
+  --fxl-color-dark1: #181818;
+  --fxl-color-dark2: #1c1c1c;
+  --fxl-color-background2: var(--color-gray-vvvlight);
+  --fxl-color-background3: var(--color-gray-vvlight);
+
   --fxl-font-family: var(--font-family-primary);
   --fxl-color-primary: var(--color-primary);
   --fxl-color-primary-light: var(--color-primary);
@@ -75,20 +84,13 @@ body {
   --fxl-color-text-primary: var(--color-black);
   --fxl-color-text-secondary: var(--color-black);
 
+  --fxl-color-panel-background: var(--fxl-color-dark);
+
   --fxl-font-size-xs: var(--font-size-vsmall);
   --fxl-font-size-s: var(--font-size-small);
   --fxl-font-size-regular: var(--font-size-regular);
   --fxl-font-size-m: var(--font-size-big);
   --fxl-font-size-l: var(--font-size-h4);
-
-  --fxl-color-light: #ffffff;
-  --fxl-color-light1: #727272;
-  --fxl-color-light2: #363636;
-  --fxl-color-dark: #000000;
-  --fxl-color-dark1: #181818;
-  --fxl-color-dark2: #1c1c1c;
-  --fxl-color-background2: var(--color-gray-vvvlight);
-  --fxl-color-background3: var(--color-gray-vvlight);
   
   --fxl-spacing: #{$spacing};
   --fxl-spacing-sm: #{$spacing-small};

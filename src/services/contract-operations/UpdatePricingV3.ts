@@ -8,12 +8,9 @@ import {
   FxhashContracts,
 } from "../../types/Contracts"
 import { GenerativeToken } from "../../types/entities/GenerativeToken"
-import { Collaboration, UserType } from "../../types/entities/User"
-import { GenerativeTokenMetadata } from "../../types/Metadata"
-import { GenTokPricingForm, MintGenerativeData } from "../../types/Mint"
-import { packMintIssuer } from "../../utils/pack/mint-issuer"
+import { UserType } from "../../types/entities/User"
+import { GenTokPricingForm } from "../../types/Mint"
 import { packPricing } from "../../utils/pack/pricing"
-import { transformGenTokFormToNumbers } from "../../utils/transformers/gen-tok-input-form"
 import { transformPricingFormToNumbers } from "../../utils/transformers/pricing"
 import { EBuildableParams, pack } from "../parameters-builder/BuildParameters"
 import { ContractOperation } from "./ContractOperation"
@@ -58,7 +55,7 @@ export class UpdatePricingV3Operation extends ContractOperation<TUpdatePricingV3
     if (this.collab) {
       const packed = pack(params, EBuildableParams.UPDATE_PRICE_V3)
       return this.contract!.methodsObject.make_proposal({
-        call_id: FxhashCollabFactoryCalls.UPDATE_PRICE,
+        call_id: FxhashCollabFactoryCalls.UPDATE_PRICE_V3,
         call_params: packed,
       }).send()
     } else {

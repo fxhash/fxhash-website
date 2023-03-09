@@ -14,6 +14,7 @@ const ActionsPredecescence: Record<TokenActionType, number> = {
   UPDATE_PRICING: 0,
   BURN_SUPPLY: 0,
   MINTED: 0,
+  CODEX_UPDATED: 0,
   MINTED_FROM: 1,
   GENTK_SIGNED: 1,
   COMPLETED: 20,

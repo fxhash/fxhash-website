@@ -39,7 +39,7 @@ export class BurnTokenV3Operation extends ContractOperation<TBurnTokenV3Operatio
     if (this.collab) {
       const packed = pack(params, EBuildableParams.BURN)
       return this.contract!.methodsObject.make_proposal({
-        call_id: FxhashCollabFactoryCalls.BURN,
+        call_id: FxhashCollabFactoryCalls.BURN_V3,
         call_params: packed,
       }).send()
     } else {

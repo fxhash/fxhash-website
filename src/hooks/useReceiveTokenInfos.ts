@@ -18,7 +18,7 @@ interface IFrameTokenInfos {
 }
 
 export function useReceiveTokenInfos(
-  ref: ArtworkIframeRef | null,
+  ref: React.RefObject<ArtworkIframeRef | null>,
   options?: { initialHash?: string }
 ): IFrameTokenInfos {
   const [hash, setHash] = useState<string>(
@@ -45,6 +45,7 @@ export function useReceiveTokenInfos(
           }
         }
         if (e.data.id === "fxhash_getParams") {
+          console.log("??")
           if (e.data.data) {
             const { definitions, values } = e.data.data
             if (definitions) {
@@ -71,8 +72,8 @@ export function useReceiveTokenInfos(
   }, [])
 
   const onIframeLoaded = useCallback(() => {
-    if (ref) {
-      const iframe = ref.getHtmlIframe()
+    if (ref.current) {
+      const iframe = ref.current.getHtmlIframe()
       if (iframe) {
         iframe.contentWindow?.postMessage("fxhash_getFeatures", "*")
         iframe.contentWindow?.postMessage("fxhash_getParams", "*")

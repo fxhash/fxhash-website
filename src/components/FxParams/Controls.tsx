@@ -1,5 +1,8 @@
 import { createRef, useEffect, useMemo, useState } from "react"
-import { consolidateParams } from "components/FxParams/utils"
+import {
+  consolidateParams,
+  stringifyParamsData,
+} from "components/FxParams/utils"
 import { ParameterController } from "./Controller/Param"
 import { LockButton } from "./LockButton/LockButton"
 import classes from "./Controls.module.scss"
@@ -68,7 +71,8 @@ export const Controls = ({
       consolidatedParams.forEach((p: any) => {
         ps[p.id] = p.value
       })
-      onChangeData(ps)
+      if (stringifyParamsData(data) !== stringifyParamsData(ps))
+        onChangeData(ps)
     }
   }, [params])
 

@@ -1,0 +1,42 @@
+.description {
+  margin-bottom: var(--fxl-spacing-xs);
+}
+
+.randomContainer {
+  position: sticky;
+  z-index: 20;
+  top: calc(var(--fxl-spacing) * -1);
+  display: flex;
+  padding: var(--fxl-spacing-xs) 0;
+  width: 100%;
+  gap: var(--fxl-spacing-xs);
+  background: var(--fxl-color-background);
+  .randomButton{
+    flex-grow: 1;
+  }
+  .undoRedoContainer {
+    display: flex;
+    gap: var(--fxl-spacing-xxs);
+  }
+}
+
+.submitButton {
+  width: 100%;
+  margin-top: var(--fxl-spacing);
+}
+
+.controlsWrapper {
+  display: flex;
+  gap: var(--fxl-spacing-xs);
+  .lockButtons {
+    display: flex;
+    flex-direction: column;
+    gap: var(--fxl-spacing-xxs);
+  }
+}
+
+.lockAllButton {
+  &.primary {
+    color: var(--fxl-color-light) !important;
+  }
+}
