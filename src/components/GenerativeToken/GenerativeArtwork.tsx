@@ -77,7 +77,7 @@ export function GenerativeArtwork({
       }
       return url
     }
-  }, [previewHash, previewInputBytes])
+  }, [previewHash, previewInputBytes, artworkArtifactUrl])
 
   return (
     <>

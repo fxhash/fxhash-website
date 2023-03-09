@@ -14,8 +14,9 @@ export function gentkLiveUrl({
   generationHash,
   inputBytes,
 }: Objkt): string {
-  const query = inputBytes
-    ? `/?fxhash=${generationHash}&fxparams=${inputBytes}`
-    : `/?fxhash=${generationHash}`
+  let query = `?fxhash=${generationHash}`
+  if (inputBytes) {
+    query += `&fxparams=${inputBytes}`
+  }
   return ipfsGatewayUrl(`${issuer.generativeUri}/${query}`)
 }
