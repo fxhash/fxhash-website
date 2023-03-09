@@ -47,6 +47,7 @@ export const Qu_objkt = gql`
       duplicate
       iteration
       generationHash
+      inputBytes
       createdAt
       activeListing {
         id
@@ -118,6 +119,7 @@ export const Qu_objktsFeed = gql`
       assigned
       iteration
       generationHash
+      inputBytes
       createdAt
       assignedAt
       captureMedia {

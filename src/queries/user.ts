@@ -88,6 +88,7 @@ export const Qu_userEntireCollection = gql`
         rarity
         iteration
         generationHash
+        inputBytes
         issuer {
           name
           flag
