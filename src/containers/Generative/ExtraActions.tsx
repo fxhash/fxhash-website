@@ -10,6 +10,7 @@ import { useContractCall } from "../../utils/hookts"
 import { ReportCall } from "../../types/ContractCalls"
 import {
   GenerativeToken,
+  GenerativeTokenVersion,
   GenTokFlag,
 } from "../../types/entities/GenerativeToken"
 import { ContractFeedback } from "../../components/Feedback/ContractFeedback"
@@ -100,7 +101,11 @@ export function GenerativeExtraActions({ token }: Props) {
       {moderateModal && (
         <ModerationModal
           entityId={token.id}
-          moderationContract="token"
+          moderationContract={
+            token.version === GenerativeTokenVersion.PRE_V3
+              ? "token"
+              : "token_v3"
+          }
           flags={Object.keys(GenTokFlag).map((flag, idx) => ({
             label: flag,
             value: idx,
