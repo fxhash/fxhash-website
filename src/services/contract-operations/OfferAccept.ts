@@ -27,17 +27,7 @@ export type TOfferAcceptOperationParams = {
  * List a gentk on the Marketplace
  */
 export class OfferAcceptOperation extends ContractOperation<TOfferAcceptOperationParams> {
-  gentkContract: ContractAbstraction<Wallet> | null = null
-  marketplaceContract: ContractAbstraction<Wallet> | null = null
-
-  async prepare() {
-    this.gentkContract = await this.manager.getContract(
-      getGentkFA2Contract(this.params.token)
-    )
-    this.marketplaceContract = await this.manager.getContract(
-      FxhashContracts.MARKETPLACE_V2
-    )
-  }
+  async prepare() {}
 
   async call(): Promise<WalletOperation> {
     const updateOperatorsParams = [
