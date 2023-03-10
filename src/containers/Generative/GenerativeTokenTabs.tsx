@@ -40,7 +40,7 @@ const _GenerativeTokenTabs = ({ token }: GenerativeTokenTabsProps) => {
       className={style.tabs}
       tabDefinitions={tabs}
       tabsLayout="fixed-size"
-      initialIdx={token.mintTicketSettings ? 2 : 0}
+      initialIdx={0}
     >
       {({ tabKey }) => (
         <>
