@@ -43,20 +43,3 @@
     color: var(--color-error);
   }
 }
-
-.report_btns {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  &>*+* {
-    margin-left: 8px;
-  }
-}
-
-.reports_bottom {
-  margin-top: 30px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
