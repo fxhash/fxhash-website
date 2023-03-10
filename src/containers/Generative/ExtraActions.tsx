@@ -44,6 +44,7 @@ export function GenerativeExtraActions({ token }: Props) {
   const report = () => {
     call({
       tokenId: token.id,
+      version: token.version,
     })
   }
 

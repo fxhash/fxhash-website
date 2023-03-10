@@ -1,4 +1,5 @@
 import { MichelsonMap } from "@taquito/michelson-encoder"
+import { GenerativeTokenVersion } from "./entities/GenerativeToken"
 
 export interface ProfileUpdateCallData {
   metadata: string
@@ -49,10 +50,12 @@ export interface CollectCall {
 
 export interface ReportCall {
   tokenId: number
+  version: GenerativeTokenVersion
 }
 
 export interface ModerateCall {
   tokenId: number
+  version: GenerativeTokenVersion
   state: number
 }
 

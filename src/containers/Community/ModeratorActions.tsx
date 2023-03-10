@@ -30,6 +30,7 @@ export function ModeratorActions({ token }: Props) {
   const moderate = (state: 1 | 4) => {
     call({
       tokenId: token.id,
+      version: token.version,
       state: state,
     })
   }
