@@ -6,6 +6,7 @@ import {
   TezosToolkit,
   Wallet,
 } from "@taquito/taquito"
+import { GenerativeTokenVersion } from "types/entities/GenerativeToken"
 import {
   BurnSupplyCallData,
   CancelOfferCall,
@@ -469,7 +470,11 @@ export class WalletManager {
   ) => {
     try {
       // get/create the contract interface
-      const modContract = await this.getContract(FxhashContracts.MODERATION)
+      const modContract = await this.getContract(
+        data.version === GenerativeTokenVersion.PRE_V3
+          ? FxhashContracts.MODERATION
+          : FxhashContracts.MODERATION_V3
+      )
 
       // call the contract (open wallet)
       statusCallback && statusCallback(ContractOperationStatus.CALLING)
@@ -522,7 +527,11 @@ export class WalletManager {
   ) => {
     try {
       // get/create the contract interface
-      const modContract = await this.getContract(FxhashContracts.MODERATION)
+      const modContract = await this.getContract(
+        data.version === GenerativeTokenVersion.PRE_V3
+          ? FxhashContracts.MODERATION
+          : FxhashContracts.MODERATION_V3
+      )
 
       // call the contract (open wallet)
       statusCallback && statusCallback(ContractOperationStatus.CALLING)
