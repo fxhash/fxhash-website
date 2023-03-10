@@ -10,7 +10,7 @@ export function getGentkUrl(gentk: Objkt): string {
 }
 
 export const fakeGentk: DeepPartial<Objkt> = {
-  id: 0,
+  id: "0",
   name: "[WAITING TO BE SIGNED]",
   owner: {
     id: "tz1fepn7jZsCYBqCDhpM63hzh9g2Ytqk4Tpv",
