@@ -3,7 +3,6 @@ import React, {
   useCallback,
   useContext,
   useEffect,
-  useRef,
   useState,
 } from "react"
 import style from "./TableUser.module.scss"
@@ -23,14 +22,17 @@ import { ButtonUpdatePriceMintTicket } from "../MintTicket/ButtonUpdatePriceMint
 import { UserContext } from "../../containers/UserProvider"
 import Link from "next/link"
 import { Button } from "../Button"
+import { Image } from "components/Image"
 
 interface TableMintTicketsProps {
   firstColName?: string
+  displayTokenPreview?: boolean
   mintTickets: MintTicket[]
   loading?: boolean
 }
 const _TableMintTickets = ({
   firstColName = "owner",
+  displayTokenPreview,
   mintTickets,
   loading,
 }: TableMintTicketsProps) => {
@@ -54,7 +56,6 @@ const _TableMintTickets = ({
     },
     []
   )
-
   useEffect(() => {
     const interval = setInterval(() => {
       setNow(new Date())
@@ -85,12 +86,29 @@ const _TableMintTickets = ({
                 <td
                   className={cs(style["td-gentk"], style.td_mobile_fullwidth)}
                 >
-                  <UserBadge
-                    hasLink
-                    user={mintTicket.owner}
-                    size="small"
-                    displayAvatar={true}
-                  />
+                  {displayTokenPreview ? (
+                    <Link href={`/generative/slug/${mintTicket.token.slug}`}>
+                      <a className={style.ticketToken}>
+                        <div className={cs(style.icon)}>
+                          <Image
+                            ipfsUri={mintTicket.token.thumbnailUri!}
+                            image={mintTicket.token.captureMedia}
+                            alt=""
+                          />
+                        </div>
+                        <div className={style.name}>
+                          {mintTicket.token.name}
+                        </div>
+                      </a>
+                    </Link>
+                  ) : (
+                    <UserBadge
+                      hasLink
+                      user={mintTicket.owner}
+                      size="small"
+                      displayAvatar={true}
+                    />
+                  )}
                 </td>
 
                 <td data-label="Tax paid until" className={style["td-date"]}>

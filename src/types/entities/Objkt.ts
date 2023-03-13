@@ -8,7 +8,7 @@ import { User } from "./User"
 import { MediaImage } from "./MediaImage"
 
 export interface Objkt {
-  id: number
+  id: string
   version: 0 | 1
   issuer: GenerativeToken
   owner?: User | null
