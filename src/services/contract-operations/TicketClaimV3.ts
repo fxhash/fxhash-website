@@ -14,7 +14,7 @@ export interface ITaxationSettings {
 }
 
 export type TTicketClaimV3OperationParams = {
-  ticket: MintTicket
+  ticketId: number
   amount: number
   taxationSettings: ITaxationSettings
 }
@@ -33,7 +33,7 @@ export class TicketClaimV3Operation extends ContractOperation<TTicketClaimV3Oper
 
   async call(): Promise<TransactionWalletOperation> {
     return this.contract!.methodsObject.claim({
-      token_id: this.params.ticket.id,
+      token_id: this.params.ticketId,
       transfer_to: null,
       taxation: this.params.taxationSettings,
     }).send({

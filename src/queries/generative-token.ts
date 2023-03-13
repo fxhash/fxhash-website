@@ -6,10 +6,10 @@ import {
   Frag_GenSplitsPrimary,
   Frag_GenSplitsSecondary,
   Frag_GenTokenInfo,
-  Frag_GenTokenMintTickets,
 } from "./fragments/generative-token"
 import { Frag_UserBadge } from "./fragments/user"
 import { Frag_MediaImage } from "./fragments/media"
+import { Frag_MintTicketFull } from "./fragments/mint-ticket"
 
 export const Qu_genToken = gql`
   ${Frag_GenTokenInfo}
@@ -17,7 +17,6 @@ export const Qu_genToken = gql`
   ${Frag_GenSplitsSecondary}
   ${Frag_GenReserves}
   ${Frag_GenArticleMentions}
-  ${Frag_GenTokenMintTickets}
 
   query Query($id: Float, $slug: String) {
     generativeToken(id: $id, slug: $slug) {
@@ -33,7 +32,6 @@ export const Qu_genToken = gql`
       ...SplitsSecondary
       ...Reserves
       ...ArticleMentions
-      ...MintTickets
     }
   }
 `
@@ -178,6 +176,40 @@ export const Qu_genTokenIterations = gql`
           ...MediaImage
         }
       }
+    }
+  }
+`
+
+export const Qu_genTokenMintTickets = gql`
+  ${Frag_MintTicketFull}
+  query Query(
+    $id: Float
+    $slug: String
+    $ownerId: String
+    $skip: Int
+    $take: Int
+    $now: String
+  ) {
+    generativeToken(id: $id, slug: $slug) {
+      id
+      mintTicketSettings {
+        gracingPeriod
+      }
+      mintTickets(
+        sort: { taxationPaidUntil: "ASC" }
+        skip: $skip
+        take: $take
+      ) {
+        ...MintTicketFull
+      }
+    }
+    userMintTickets: mintTickets(
+      sort: { taxationPaidUntil: "ASC" }
+      filters: { owner_eq: $ownerId, token_eq: $id, taxationPaidUntil_gt: $now }
+      take: 50
+      skip: 0
+    ) {
+      ...MintTicketFull
     }
   }
 `
