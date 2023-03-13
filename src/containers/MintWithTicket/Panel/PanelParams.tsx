@@ -167,15 +167,17 @@ export const PanelParams = forwardRef<PanelParamsRef, Props>(
           </div>
         }
       >
-        <Controls
-          params={params}
-          data={localData}
-          onChangeData={handleChangeData}
-          lockedParamIds={lockedParamIds}
-          onClickLockButton={
-            withParamLocking ? handleClickLockButton : undefined
-          }
-        />
+        <div className={classes.controlsWrapper}>
+          <Controls
+            params={params}
+            data={localData}
+            onChangeData={handleChangeData}
+            lockedParamIds={lockedParamIds}
+            onClickLockButton={
+              withParamLocking ? handleClickLockButton : undefined
+            }
+          />
+        </div>
         <BaseButton className={classes.submitButton} onClick={handleSubmitData}>
           submit params
         </BaseButton>

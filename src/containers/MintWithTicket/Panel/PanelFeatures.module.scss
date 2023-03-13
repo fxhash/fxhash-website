@@ -7,9 +7,11 @@
     display: flex;
     margin-bottom: var(--fxl-spacing-sm);
     align-items: center;
-
+    // padding: var(--fxl-spacing-xs);
+    // background: var(--fxl-color-dark1);
     & :first-child {
       flex-grow: 1;
+      color: var(--fxl-color-light1);
     }
     & :last-child {
       margin-left: 10px;

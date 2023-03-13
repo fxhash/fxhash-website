@@ -14,6 +14,7 @@ import { IParamsHistoryEntry } from "components/FxParams/ParamsHistory"
 import { MutableRefObject, RefObject } from "react"
 import { PanelControls } from "./PanelControls"
 import { withAutoFormat } from "components/NFTArticle/SlateEditor/Plugins/AutoFormatPlugin"
+import { Spacing } from "components/Layout/Spacing"
 
 interface Props {
   data: Record<string, any>
@@ -62,8 +63,11 @@ export function PanelRoot(props: Props) {
   return (
     <div className={cs(style.root)}>
       <div className={cs(style.scrollWrapper)}>
-        <PanelHeader title={token.name} description={` `} />
-
+        <PanelHeader
+          title={token.name}
+          description={`by ${token.author.name}`}
+        />
+        <Spacing size="regular" />
         <div className={cs(style.body)}>
           <PanelHash hash={hash} onChangeHash={onChangeHash} />
           <PanelParams

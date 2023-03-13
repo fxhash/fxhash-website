@@ -31,6 +31,7 @@
 .controlsWrapper {
   display: flex;
   gap: var(--fxl-spacing-xs);
+  color: var(--fxl-color-light1);
   .lockButtons {
     display: flex;
     flex-direction: column;
