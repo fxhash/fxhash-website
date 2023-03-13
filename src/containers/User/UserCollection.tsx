@@ -8,6 +8,7 @@ import { getUserProfileLink } from "../../utils/user"
 import { checkIsTabKeyActive, Tabs } from "../../components/Layout/Tabs"
 import { UserCollectionGentks } from "./Collection/Gentks"
 import { UserCollectionArticles } from "./Collection/Articles"
+import { UserCollectionTickets } from "./Collection/Tickets"
 
 type TabWrapperProps = PropsWithChildren<LinkProps> &
   HTMLAttributes<HTMLAnchorElement>
@@ -21,7 +22,7 @@ const TabWrapper = ({ children, onClick, ...props }: TabWrapperProps) => (
 
 interface Props {
   user: User
-  activeTab: "gentk" | "articles"
+  activeTab: "gentk" | "articles" | "tickets"
 }
 export function UserCollection({ user, activeTab }: Props) {
   // TABS href are computed using the user profile URL
@@ -42,6 +43,14 @@ export function UserCollection({ user, activeTab }: Props) {
         href: `${getUserProfileLink(user)}/collection/articles/`,
       },
     },
+    {
+      key: "tickets",
+      name: "tickets",
+      props: {
+        scroll: false,
+        href: `${getUserProfileLink(user)}/collection/tickets/`,
+      },
+    },
   ]
 
   return (
@@ -60,6 +69,8 @@ export function UserCollection({ user, activeTab }: Props) {
       {activeTab === "gentk" && <UserCollectionGentks user={user} />}
 
       {activeTab === "articles" && <UserCollectionArticles user={user} />}
+
+      {activeTab === "tickets" && <UserCollectionTickets user={user} />}
     </>
   )
 }
