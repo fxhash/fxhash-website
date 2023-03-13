@@ -2,7 +2,7 @@ import { gql } from "@apollo/client"
 import { Frag_ArticleInfos } from "./article"
 import { Frag_MediaImage } from "./media"
 import { Frag_UserBadge } from "./user"
-import { Frag_MintTicketFull } from "./mint-ticket";
+import { Frag_MintTicketFull } from "./mint-ticket"
 
 export const Frag_GenPricing = gql`
   fragment Pricing on GenerativeToken {
@@ -119,4 +119,3 @@ export const Frag_GenTokenInfo = gql`
     ...Pricing
   }
 `
-
