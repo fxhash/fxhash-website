@@ -27,14 +27,14 @@ interface GenerativeTokenTabsProps {
 const _GenerativeTokenTabs = ({ token }: GenerativeTokenTabsProps) => {
   const tabs = useMemo(() => {
     const dynamicTabs = [...defaultTabs]
-    if (token.mintTicketSettings) {
+    if (token.inputBytesSize > 0) {
       dynamicTabs.push({
         key: "mint-tickets",
         name: "mint tickets",
       })
     }
     return dynamicTabs
-  }, [token.mintTicketSettings])
+  }, [token.inputBytesSize])
   return (
     <TabsContainer
       className={style.tabs}
@@ -54,7 +54,7 @@ const _GenerativeTokenTabs = ({ token }: GenerativeTokenTabsProps) => {
           {tabKey === "mint-tickets" && (
             <main className={cs(layout["padding-big"])}>
               <Spacing size="x-large" />
-              <GenerativeMintTickets token={token} />
+              <GenerativeMintTickets tokenId={token.id} />
             </main>
           )}
         </>

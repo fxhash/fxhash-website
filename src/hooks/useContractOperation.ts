@@ -11,11 +11,16 @@ import {
 } from "../types/Contracts"
 import { useIsMounted } from "../utils/hookts"
 
+interface OptionsContractOperation {
+  onSuccess?: (data: any) => void
+}
+
 /**
  * A
  */
 export function useContractOperation<Params>(
-  OperationClass: TContractOperation<Params>
+  OperationClass: TContractOperation<Params>,
+  options: OptionsContractOperation = {}
 ): TContractOperationHookReturn<Params> {
   const [state, setState] = useState<ContractOperationStatus>(
     ContractOperationStatus.NONE
@@ -76,6 +81,9 @@ export function useContractOperation<Params>(
           }
           if (data?.opData) {
             setOpData(data.opData)
+          }
+          if (options.onSuccess) {
+            options.onSuccess(data)
           }
         } else if (status === ContractOperationStatus.ERROR) {
           setLoading(false)

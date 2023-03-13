@@ -1,29 +1,74 @@
-import React, { memo, useContext, useMemo } from "react"
-import { GenerativeToken } from "../../types/entities/GenerativeToken"
+import React, { memo, useCallback, useContext, useMemo, useState } from "react"
 import { TableMintTickets } from "../../components/Tables/TableMintTickets"
 import { isBefore } from "date-fns"
 import { MintTicket } from "../../types/entities/MintTicket"
 import { UserContext } from "../UserProvider"
 import style from "./GenerativeMintTickets.module.scss"
+import { useQuery } from "@apollo/client"
+import { Qu_genTokenMintTickets } from "../../queries/generative-token"
+import { GenerativeToken } from "../../types/entities/GenerativeToken"
+import { InfiniteScrollTrigger } from "../../components/Utils/InfiniteScrollTrigger"
 
+const ITEMS_PER_PAGE = 20
 type MintTicketsBySection = {
-  userValidTickets: MintTicket[]
   auctionTickets: MintTicket[]
   unusedTickets: MintTicket[]
 }
-interface GenerativeMintTicketsProps {
-  token: GenerativeToken
+type GenerativeTokenWithUserMintTickets = GenerativeToken & {
+  loggedUserMintTickets: MintTicket[]
 }
-const _GenerativeMintTickets = ({ token }: GenerativeMintTicketsProps) => {
+interface GenerativeMintTicketsProps {
+  tokenId: number
+}
+const _GenerativeMintTickets = ({ tokenId }: GenerativeMintTicketsProps) => {
+  const [hasNoMintTicketsToFetch, setHasNoMintTicketsToFetch] = useState(false)
   const { user } = useContext(UserContext)
+  const now = useMemo(() => new Date(), [])
+  const { data, loading, fetchMore } = useQuery<{
+    generativeToken: GenerativeTokenWithUserMintTickets
+    userMintTickets: MintTicket[]
+  }>(Qu_genTokenMintTickets, {
+    variables: {
+      id: tokenId,
+      ownerId: user ? user.id : "not-logged",
+      skip: 0,
+      take: ITEMS_PER_PAGE,
+      now: now.toISOString(),
+    },
+    fetchPolicy: "cache-and-network",
+  })
+
+  const mintTickets = useMemo(
+    () => data?.generativeToken?.mintTickets || [],
+    [data?.generativeToken]
+  )
+  const userMintTickets = useMemo(
+    () => data?.userMintTickets || [],
+    [data?.userMintTickets]
+  )
+
+  const handleFetchMoreTickets = useCallback(async () => {
+    if (loading || hasNoMintTicketsToFetch) return false
+    const { data: newData } = await fetchMore({
+      variables: {
+        skip: mintTickets?.length,
+        take: ITEMS_PER_PAGE,
+      },
+    })
+    if (
+      !newData?.generativeToken.mintTickets?.length ||
+      newData.generativeToken.mintTickets.length < ITEMS_PER_PAGE
+    ) {
+      setHasNoMintTicketsToFetch(true)
+    }
+  }, [loading, hasNoMintTicketsToFetch, fetchMore, mintTickets?.length])
+
   const mintTicketsBySection = useMemo<MintTicketsBySection>(() => {
     const now = new Date()
-    return token.mintTickets.reduce(
+    return mintTickets.reduce(
       (acc, ticket) => {
         if (isBefore(now, new Date(ticket.taxationPaidUntil))) {
-          if (ticket.owner.id === user?.id) {
-            acc.userValidTickets.push(ticket)
-          } else {
+          if (ticket.owner.id !== user?.id) {
             acc.unusedTickets.push(ticket)
           }
         } else {
@@ -32,33 +77,41 @@ const _GenerativeMintTickets = ({ token }: GenerativeMintTicketsProps) => {
         return acc
       },
       {
-        userValidTickets: [],
         auctionTickets: [],
         unusedTickets: [],
       } as MintTicketsBySection
     )
-  }, [token.mintTickets, user?.id])
+  }, [mintTickets, user?.id])
   return (
     <div className={style.container}>
-      {mintTicketsBySection.userValidTickets.length > 0 && (
+      {userMintTickets.length > 0 && (
         <div>
           <TableMintTickets
             firstColName="Your tickets"
-            mintTickets={mintTicketsBySection.userValidTickets}
+            mintTickets={userMintTickets}
+            loading={loading}
+          />
+        </div>
+      )}
+      {(!loading || mintTickets.length > 0) && (
+        <div>
+          <TableMintTickets
+            firstColName="Under auction (holder failed to pay tax)"
+            mintTickets={mintTicketsBySection.auctionTickets}
           />
         </div>
       )}
       <div>
-        <TableMintTickets
-          firstColName="Under auction (holder failed to pay tax)"
-          mintTickets={mintTicketsBySection.auctionTickets}
-        />
-      </div>
-      <div>
-        <TableMintTickets
-          firstColName="Unused passes"
-          mintTickets={mintTicketsBySection.unusedTickets}
-        />
+        <InfiniteScrollTrigger
+          onTrigger={handleFetchMoreTickets}
+          canTrigger={!hasNoMintTicketsToFetch}
+        >
+          <TableMintTickets
+            firstColName="Unused passes"
+            mintTickets={mintTicketsBySection.unusedTickets}
+            loading={loading}
+          />
+        </InfiniteScrollTrigger>
       </div>
     </div>
   )

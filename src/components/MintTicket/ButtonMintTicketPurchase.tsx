@@ -10,6 +10,7 @@ import { Spacing } from "../Layout/Spacing"
 import Link from "next/link"
 import { getGenerativeTokenUrl } from "utils/generative-token"
 import { GenerativeToken } from "types/entities/GenerativeToken"
+import { plural } from "../../utils/strings"
 
 interface ButtonMintTicketPurchaseProps {
   token: GenerativeToken
@@ -70,7 +71,9 @@ const _ButtonMintTicketPurchase = ({
                   don’t pay a tax
                 </div>
               </label>
-              <div className={cs(text.bold, text.h4)}>{gracingPeriod} days</div>
+              <div className={cs(text.bold, text.h4)}>
+                {gracingPeriod} day{plural(gracingPeriod)}
+              </div>
             </div>
             <div className={style.container_input}>
               <label>

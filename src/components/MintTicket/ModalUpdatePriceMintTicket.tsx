@@ -1,4 +1,4 @@
-import React, { memo, useCallback } from "react"
+import React, { memo, useCallback, useMemo, useState } from "react"
 import { Button } from "../Button"
 import { MintTicket } from "../../types/entities/MintTicket"
 import { DisplayTezos } from "../Display/DisplayTezos"
@@ -33,6 +33,7 @@ import {
 import { ContractFeedback } from "../Feedback/ContractFeedback"
 import colors from "../../styles/Colors.module.css"
 import { plural } from "../../utils/strings"
+import { getDiffByPath } from "../../utils/indexing"
 
 const getTicketLastDayConsumed = (createdAt: Date) => {
   const dateCreatedAt = new Date(createdAt)
@@ -78,29 +79,51 @@ const _ModalUpdatePriceMintTicket = ({
   mintTicket,
   onClose,
 }: ModalUpdatePriceMintTicketProps) => {
+  const [currentMintTicket, setCurrentMintTicket] = useState(mintTicket)
   const { state, error, call, loading, success } =
     useContractOperation<TTicketUpdatePriceV3OperationParams>(
-      TicketUpdatePriceV3Operation
+      TicketUpdatePriceV3Operation,
+      {
+        onSuccess: (data) => {
+          const diffTokenData = getDiffByPath(
+            data.opData[0].diffs,
+            "token_data"
+          )
+          setCurrentMintTicket((oldTicket) => {
+            return {
+              ...oldTicket,
+              ...(diffTokenData
+                ? {
+                    price: diffTokenData.content.value.price,
+                    taxationStart: diffTokenData.content.value.taxation_start,
+                    taxationLocked: diffTokenData.content.value.taxation_locked,
+                  }
+                : {}),
+            }
+          })
+        },
+      }
     )
   const { handleChange, handleBlur, handleSubmit, values, errors } = useFormik({
     initialValues: {
-      price: mintTicket.price / 1000000,
+      price: currentMintTicket.price / 1000000,
       days: 0,
     },
     onSubmit: (submittedValues) => {
       const tzPrice = submittedValues.price * 1000000
       const daysSinceCreated = Math.floor(
-        differenceInSeconds(new Date(), new Date(mintTicket.createdAt)) / 86400
+        differenceInSeconds(new Date(), new Date(currentMintTicket.createdAt)) /
+          86400
       )
       const remainingGracingPeriodInDays =
-        mintTicket.settings.gracingPeriod - daysSinceCreated
+        currentMintTicket.settings.gracingPeriod - daysSinceCreated
       const amount = getUpdatedPriceAmountToPayOrClaim(
-        mintTicket,
+        currentMintTicket,
         tzPrice,
         submittedValues.days
       )
       call({
-        ticketId: mintTicket.id,
+        ticketId: currentMintTicket.id,
         taxationSettings: {
           coverage: remainingGracingPeriodInDays + submittedValues.days,
           price: tzPrice,
@@ -111,7 +134,7 @@ const _ModalUpdatePriceMintTicket = ({
     validationSchema: validation,
   })
 
-  const handleFormatHours = useCallback((hours: number) => {
+  const formatHours = useCallback((hours: number) => {
     const absHours = Math.abs(hours)
     const days = Math.floor(absHours / 24)
     const hoursRemaining = absHours % 24
@@ -125,70 +148,108 @@ const _ModalUpdatePriceMintTicket = ({
     return strArr.join(" ")
   }, [])
 
-  const nowDate = new Date()
-  const taxStart = new Date(mintTicket.taxationStart)
-  const remainingGracingPeriod =
-    nowDate < taxStart ? differenceInHours(taxStart, nowDate) : 0
-  const consumedTaxDaysInHours =
-    nowDate < taxStart ? 0 : differenceInHours(taxStart, nowDate)
-  const daysCoveredInHours =
-    getDaysCoveredByHarbergerTax(
-      parseInt(mintTicket.taxationLocked),
-      mintTicket.price
-    ) * 24
-  const remainingTaxCoverageInHours =
-    daysCoveredInHours - consumedTaxDaysInHours
-  const totalCoveredInHours =
-    remainingGracingPeriod + remainingTaxCoverageInHours
-  const formattedGracingPeriod = handleFormatHours(remainingGracingPeriod)
-  const formattedRemainingTaxCoverage = handleFormatHours(
-    remainingTaxCoverageInHours
+  const getStyleGracingPeriodProgress = useCallback(
+    (remainingInHours, totalInHours) => {
+      const percentGracingPeriod = (remainingInHours * 100) / totalInHours
+      return {
+        width: `${percentGracingPeriod}%`,
+      }
+    },
+    []
   )
-  const formattedTotal = handleFormatHours(totalCoveredInHours)
-  const percentGracingPeriod =
-    (remainingGracingPeriod * 100) / totalCoveredInHours
-  const styleGracingPeriod = {
-    width: `${percentGracingPeriod}%`,
-  }
 
-  const newDaysCoveredInHours = (values.days || 0) * 24
-  const newTotalCoveredInHours = remainingGracingPeriod + newDaysCoveredInHours
-  const percentNewGracingPeriod =
-    (remainingGracingPeriod * 100) / newTotalCoveredInHours
-  const styleNewGracingPeriod = {
-    width: `${percentNewGracingPeriod}%`,
-  }
-  const lastDayConsumed = getTicketLastDayConsumed(mintTicket.createdAt)
-  const newEndDate = addDays(lastDayConsumed, values.days)
+  const currentCoverageInHours = useMemo(() => {
+    const nowDate = new Date()
+    const taxStart = new Date(currentMintTicket.taxationStart)
+    const remainingGracingPeriodInHours =
+      nowDate < taxStart ? differenceInHours(taxStart, nowDate) : 0
+    const consumedTaxDaysInHours =
+      nowDate < taxStart ? 0 : differenceInHours(taxStart, nowDate)
+    const daysCoveredInHours =
+      getDaysCoveredByHarbergerTax(
+        parseInt(currentMintTicket.taxationLocked),
+        currentMintTicket.price
+      ) * 24
+    const remainingTaxCoverageInHours =
+      daysCoveredInHours - consumedTaxDaysInHours
+    const totalCoveredInHours =
+      remainingGracingPeriodInHours + remainingTaxCoverageInHours
+    return {
+      remainingGracingPeriod: remainingGracingPeriodInHours,
+      remainingTax: remainingTaxCoverageInHours,
+      total: totalCoveredInHours,
+    }
+  }, [
+    currentMintTicket.price,
+    currentMintTicket.taxationLocked,
+    currentMintTicket.taxationStart,
+  ])
 
-  const totalToPayOrClaim = getUpdatedPriceAmountToPayOrClaim(
-    mintTicket,
-    values.price * 1000000,
-    values.days
+  const newCoverageInHours = useMemo(() => {
+    const newDaysCoveredInHours = (values.days || 0) * 24
+    const newTotalCoveredInHours =
+      currentCoverageInHours.remainingGracingPeriod + newDaysCoveredInHours
+    const lastDayConsumed = getTicketLastDayConsumed(
+      currentMintTicket.createdAt
+    )
+    const newEndDate = addDays(lastDayConsumed, values.days)
+    return {
+      total: newTotalCoveredInHours,
+      endDate: newEndDate,
+    }
+  }, [
+    currentCoverageInHours.remainingGracingPeriod,
+    currentMintTicket.createdAt,
+    values.days,
+  ])
+
+  const absTotalToPayOrClaim = useMemo(() => {
+    const totalToPayOrClaim = getUpdatedPriceAmountToPayOrClaim(
+      currentMintTicket,
+      values.price * 1000000,
+      values.days
+    )
+    return {
+      total: Math.abs(totalToPayOrClaim),
+      type: totalToPayOrClaim < 0 ? "claim" : "cost",
+    }
+  }, [currentMintTicket, values.days, values.price])
+
+  const formattedGracingPeriod = formatHours(
+    currentCoverageInHours.remainingGracingPeriod
   )
-  const absTotalToPayOrClaim = {
-    total: Math.abs(totalToPayOrClaim),
-    type: totalToPayOrClaim < 0 ? "claim" : "cost",
-  }
-
+  const formattedRemainingTaxCoverage = formatHours(
+    currentCoverageInHours.remainingTax
+  )
+  const formattedTotal = formatHours(currentCoverageInHours.total)
   const differenceBetweenNewAndCurrentCover =
-    totalCoveredInHours - newTotalCoveredInHours
+    currentCoverageInHours.total - newCoverageInHours.total
   const isNewLongerCover = differenceBetweenNewAndCurrentCover < 0
-  const formattedDifferenceBetweenCurrentAndNewCover = handleFormatHours(
+  const formattedDifferenceBetweenCurrentAndNewCover = formatHours(
     differenceBetweenNewAndCurrentCover
+  )
+
+  const styleGracingPeriod = getStyleGracingPeriodProgress(
+    currentCoverageInHours.remainingGracingPeriod,
+    currentCoverageInHours.total
+  )
+  const styleNewGracingPeriod = getStyleGracingPeriodProgress(
+    currentCoverageInHours.remainingGracingPeriod,
+    newCoverageInHours.total
   )
   const progressBarsWidth = isNewLongerCover
     ? {
-        current: (totalCoveredInHours * 100) / newTotalCoveredInHours,
+        current:
+          (currentCoverageInHours.total * 100) / newCoverageInHours.total,
         new: 100,
       }
     : {
         current: 100,
-        new: (newTotalCoveredInHours * 100) / totalCoveredInHours,
+        new: (newCoverageInHours.total * 100) / currentCoverageInHours.total,
       }
   return (
     <Modal
-      title={`Update price for “${mintTicket.token?.name}”`}
+      title={`Update price for “${currentMintTicket.token?.name}”`}
       onClose={onClose}
     >
       <form onSubmit={handleSubmit}>
@@ -223,7 +284,9 @@ const _ModalUpdatePriceMintTicket = ({
         <div className={style.row_with_unit}>
           <div className={style.row_label}>
             Gracing period{" "}
-            <span className={style.regular}>{formattedGracingPeriod}</span>
+            <span className={style.regular}>
+              {formattedGracingPeriod || "0 day"}
+            </span>
           </div>
           <div className={style.unit}>
             <span className={style.p}>Tax paid</span>{" "}
@@ -266,7 +329,9 @@ const _ModalUpdatePriceMintTicket = ({
               <div className={style.row_label} />
               <div className={style.unit}>
                 <span className={style.p}>Will end on</span>{" "}
-                <span>{format(newEndDate, "dd/MM/yy 'at' H:m")}</span>
+                <span>
+                  {format(newCoverageInHours.endDate, "dd/MM/yy 'at' H:m")}
+                </span>
               </div>
             </div>
           </>

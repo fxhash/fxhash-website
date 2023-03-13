@@ -2,6 +2,7 @@ import { gql } from "@apollo/client"
 import { Frag_ArticleInfos } from "./article"
 import { Frag_MediaImage } from "./media"
 import { Frag_UserBadge } from "./user"
+import { Frag_MintTicketFull } from "./mint-ticket";
 
 export const Frag_GenPricing = gql`
   fragment Pricing on GenerativeToken {
@@ -119,32 +120,3 @@ export const Frag_GenTokenInfo = gql`
   }
 `
 
-export const Frag_GenTokenMintTickets = gql`
-  ${Frag_UserBadge}
-  fragment MintTickets on GenerativeToken {
-    id
-    mintTicketSettings {
-      gracingPeriod
-    }
-    mintTickets(sort: { taxationPaidUntil: "ASC" }) {
-      id
-      createdAt
-      taxationLocked
-      taxationStart
-      price
-      taxationPaidUntil
-      settings {
-        gracingPeriod
-      }
-      token {
-        id
-        name
-        slug
-      }
-      owner {
-        id
-        ...UserBadgeInfos
-      }
-    }
-  }
-`
