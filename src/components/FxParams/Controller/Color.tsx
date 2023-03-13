@@ -57,7 +57,15 @@ export function ColorController(props: FxParamControllerProps<"color">) {
         className={cx(classes.squaredButton, { [classes.active]: showPicker })}
         onClick={handleToggleShowPicker}
       >
-        <div className={cx(classes.square)} style={{ background: value }} />
+        <div
+          className={cx(classes.square, classes.leftTop)}
+          style={{
+            background: `linear-gradient(-45deg, ${value} 0%, ${value} 50%, ${value.slice(
+              0,
+              7
+            )} 50%, ${value.slice(0, 7)} 100%)`,
+          }}
+        />
       </BaseButton>
       <BaseParamsInput
         type="text"
