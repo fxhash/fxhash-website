@@ -1,4 +1,4 @@
-import React, { memo, useContext, useRef } from "react"
+import React, { memo, ReactNode, useContext, useRef } from "react"
 import style from "./TableUser.module.scss"
 import { UserBadge } from "../User/UserBadge"
 import Skeleton from "../Skeleton"
@@ -11,15 +11,18 @@ import { ButtonUpdatePriceMintTicket } from "../MintTicket/ButtonUpdatePriceMint
 import { UserContext } from "../../containers/UserProvider"
 import Link from "next/link"
 import { Button } from "../Button"
+import { Image } from "components/Image"
 
 interface TableMintTicketsProps {
   firstColName?: string
+  displayTokenPreview?: boolean
   mintTickets: MintTicket[]
   loading?: boolean
   onScrollToBottom?: () => void
 }
 const _TableMintTickets = ({
   firstColName = "owner",
+  displayTokenPreview,
   mintTickets,
   loading,
   onScrollToBottom,
@@ -30,6 +33,7 @@ const _TableMintTickets = ({
     onScrollToBottom,
     offsetBottom: 100,
   })
+
   return (
     <>
       <div ref={refWrapper}>
@@ -53,12 +57,31 @@ const _TableMintTickets = ({
                         style.td_mobile_fullwidth
                       )}
                     >
-                      <UserBadge
-                        hasLink
-                        user={mintTicket.owner}
-                        size="small"
-                        displayAvatar={true}
-                      />
+                      {displayTokenPreview ? (
+                        <Link
+                          href={`/generative/slug/${mintTicket.token.slug}`}
+                        >
+                          <a className={style.ticketToken}>
+                            <div className={cs(style.icon)}>
+                              <Image
+                                ipfsUri={mintTicket.token.thumbnailUri!}
+                                image={mintTicket.token.captureMedia}
+                                alt=""
+                              />
+                            </div>
+                            <div className={style.name}>
+                              {mintTicket.token.name}
+                            </div>
+                          </a>
+                        </Link>
+                      ) : (
+                        <UserBadge
+                          hasLink
+                          user={mintTicket.owner}
+                          size="small"
+                          displayAvatar={true}
+                        />
+                      )}
                     </td>
 
                     <td

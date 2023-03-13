@@ -129,6 +129,16 @@ td.td-right {
   }
 }
 
+.ticketToken {
+  color: var(--color-black);
+  display: flex;
+  align-items: center;
+  gap: $spacing;
+  .name {
+    font-weight: bold;
+  }
+}
+
 .td-user {
   overflow-wrap: break-word;
   word-break: break-word;
@@ -293,3 +303,14 @@ td.td-right {
     overscroll-behavior: auto;
   }
 }
+  .icon {
+    width: 60px;
+    height: 60px;
+    background-position: center;
+    background-size: cover;
+    background-color: black;
+    flex-shrink: 0;
+    border: 3px solid var(--color-border);
+    transition: all 0.2s;
+    position: relative;
+  }
