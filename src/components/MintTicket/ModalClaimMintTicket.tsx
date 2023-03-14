@@ -155,7 +155,7 @@ const _ModalClaimMintTicket = ({
                 </div>
                 <div className={style.label_subtitle}>
                   For how long do you want your token to be secured at this
-                  price? Not including the gracing period.
+                  price? Not including the grace period.
                 </div>
               </label>
               <InputTextUnit

@@ -58,7 +58,7 @@ const _ButtonClaimMintTicket = ({
       </Button>
       {isGracingPeriod && (
         <HoverTitle
-          message={`Tickets can't be claim during gracing period. Period ends on ${format(
+          message={`Tickets can't be claim during grace period. Period ends on ${format(
             dateTaxationStart,
             "d/MM/yy 'at' H:mm"
           )}`}

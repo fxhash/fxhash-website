@@ -301,7 +301,7 @@ const _ModalUpdatePriceMintTicket = ({
         <Spacing size="regular" />
         <div className={style.row_with_unit}>
           <div className={style.row_label}>
-            Gracing period{" "}
+            Grace period{" "}
             <span className={style.regular}>
               {formattedGracingPeriod || "0 day"}
             </span>
@@ -390,7 +390,7 @@ const _ModalUpdatePriceMintTicket = ({
                 </div>
                 <div className={style.label_subtitle}>
                   For how long do you want your token to be secured at this
-                  price? Not including the gracing period.
+                  price? Not including the grace period.
                 </div>
               </label>
               <InputTextUnit
