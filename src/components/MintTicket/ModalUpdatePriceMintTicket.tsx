@@ -101,39 +101,49 @@ const _ModalUpdatePriceMintTicket = ({
                 : {}),
             }
           })
+          handleResetForm()
         },
       }
     )
-  const { handleChange, handleBlur, handleSubmit, values, errors } = useFormik({
-    initialValues: {
-      price: currentMintTicket.price / 1000000,
-      days: 0,
-    },
-    onSubmit: (submittedValues) => {
-      const tzPrice = submittedValues.price * 1000000
-      const daysSinceCreated = Math.floor(
-        differenceInSeconds(new Date(), new Date(currentMintTicket.createdAt)) /
-          86400
-      )
-      const remainingGracingPeriodInDays =
-        currentMintTicket.settings.gracingPeriod - daysSinceCreated
-      const amount = getUpdatedPriceAmountToPayOrClaim(
-        currentMintTicket,
-        tzPrice,
-        submittedValues.days
-      )
-      call({
-        ticketId: currentMintTicket.id,
-        taxationSettings: {
-          coverage: remainingGracingPeriodInDays + submittedValues.days,
-          price: tzPrice,
-        },
-        amount: amount < 0 ? 0 : amount,
-      })
-    },
-    validationSchema: validation,
-  })
+  const { handleChange, handleBlur, handleSubmit, values, errors, resetForm } =
+    useFormik({
+      initialValues: {
+        price: currentMintTicket.price / 1000000,
+        days: 0,
+      },
+      onSubmit: (submittedValues) => {
+        const daysCoverageWithExtraDay = submittedValues.days + 1
+        const tzPrice = submittedValues.price * 1000000
+        const daysSinceCreated = Math.floor(
+          differenceInSeconds(
+            new Date(),
+            new Date(currentMintTicket.createdAt)
+          ) / 86400
+        )
+        const remainingGracingPeriodInDays = Math.max(
+          0,
+          currentMintTicket.settings.gracingPeriod - daysSinceCreated
+        )
+        const amount = getUpdatedPriceAmountToPayOrClaim(
+          currentMintTicket,
+          tzPrice,
+          daysCoverageWithExtraDay
+        )
+        call({
+          ticketId: currentMintTicket.id,
+          taxationSettings: {
+            coverage: remainingGracingPeriodInDays + daysCoverageWithExtraDay,
+            price: tzPrice,
+          },
+          amount: amount < 0 ? 0 : amount,
+        })
+      },
+      validationSchema: validation,
+    })
 
+  const handleResetForm = useCallback(() => {
+    resetForm()
+  }, [resetForm])
   const formatHours = useCallback((hours: number) => {
     const absHours = Math.abs(hours)
     const days = Math.floor(absHours / 24)
@@ -164,7 +174,7 @@ const _ModalUpdatePriceMintTicket = ({
     const remainingGracingPeriodInHours =
       nowDate < taxStart ? differenceInHours(taxStart, nowDate) : 0
     const consumedTaxDaysInHours =
-      nowDate < taxStart ? 0 : differenceInHours(taxStart, nowDate)
+      nowDate < taxStart ? 0 : differenceInHours(nowDate, taxStart)
     const daysCoveredInHours =
       getDaysCoveredByHarbergerTax(
         parseInt(currentMintTicket.taxationLocked),
@@ -185,35 +195,43 @@ const _ModalUpdatePriceMintTicket = ({
     currentMintTicket.taxationStart,
   ])
 
+  const coverageWithExtraDay = useMemo(
+    () => (values.days || 0) + 1,
+    [values.days]
+  )
   const newCoverageInHours = useMemo(() => {
-    const newDaysCoveredInHours = (values.days || 0) * 24
-    const newTotalCoveredInHours =
-      currentCoverageInHours.remainingGracingPeriod + newDaysCoveredInHours
+    const newDaysCoveredInHours = coverageWithExtraDay * 24
     const lastDayConsumed = getTicketLastDayConsumed(
       currentMintTicket.createdAt
     )
-    const newEndDate = addDays(lastDayConsumed, values.days)
+    const consumedTodayHours = differenceInHours(new Date(), lastDayConsumed)
+    const newTotalCoveredInHours =
+      currentCoverageInHours.remainingGracingPeriod +
+      newDaysCoveredInHours -
+      consumedTodayHours
+
+    const newEndDate = addDays(lastDayConsumed, coverageWithExtraDay)
     return {
       total: newTotalCoveredInHours,
       endDate: newEndDate,
     }
   }, [
+    coverageWithExtraDay,
     currentCoverageInHours.remainingGracingPeriod,
     currentMintTicket.createdAt,
-    values.days,
   ])
 
   const absTotalToPayOrClaim = useMemo(() => {
     const totalToPayOrClaim = getUpdatedPriceAmountToPayOrClaim(
       currentMintTicket,
       values.price * 1000000,
-      values.days
+      coverageWithExtraDay
     )
     return {
       total: Math.abs(totalToPayOrClaim),
       type: totalToPayOrClaim < 0 ? "claim" : "cost",
     }
-  }, [currentMintTicket, values.days, values.price])
+  }, [currentMintTicket, coverageWithExtraDay, values.price])
 
   const formattedGracingPeriod = formatHours(
     currentCoverageInHours.remainingGracingPeriod

@@ -107,7 +107,7 @@ const _GenerativeMintTickets = ({ tokenId }: GenerativeMintTicketsProps) => {
           canTrigger={!hasNoMintTicketsToFetch}
         >
           <TableMintTickets
-            firstColName="Unused passes"
+            firstColName="Unused tickets"
             mintTickets={mintTicketsBySection.unusedTickets}
             loading={loading}
           />
