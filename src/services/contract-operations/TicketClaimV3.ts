@@ -32,12 +32,18 @@ export class TicketClaimV3Operation extends ContractOperation<TTicketClaimV3Oper
   }
 
   async call(): Promise<TransactionWalletOperation> {
+    console.log({
+      token_id: this.params.ticketId,
+      transfer_to: null,
+      taxation: this.params.taxationSettings,
+      amount: this.params.amount,
+    })
     return this.contract!.methodsObject.claim({
       token_id: this.params.ticketId,
       transfer_to: null,
       taxation: this.params.taxationSettings,
     }).send({
-      amount: this.params.amount,
+      amount: Math.floor(this.params.amount),
       mutez: true,
     })
   }
