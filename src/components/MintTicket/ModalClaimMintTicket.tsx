@@ -55,7 +55,8 @@ const _ModalClaimMintTicket = ({
       call({
         ticketId: mintTicket.id,
         taxationSettings: {
-          coverage: +submittedValues.days,
+          // add extra day to cover for end of period
+          coverage: submittedValues.days + 1,
           price: tzPrice,
         },
         amount,
