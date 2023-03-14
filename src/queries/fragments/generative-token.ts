@@ -116,6 +116,9 @@ export const Frag_GenTokenInfo = gql`
     reserves {
       amount
     }
+    mintTicketSettings {
+      gracingPeriod
+    }
     ...Pricing
   }
 `
