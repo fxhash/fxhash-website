@@ -300,7 +300,7 @@ export const StepDistribution: StepComponent = ({ state, onNext }) => {
 
                 <Field error={errors.gracingPeriod}>
                   <label htmlFor="gracingPeriod">
-                    Gracing period
+                    Grace period
                     <small>
                       Period during which collectors won't have to pay a tax to
                       keep their ticket (recommended: 7)
