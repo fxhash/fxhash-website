@@ -29,11 +29,10 @@ import {
   MintV3Operation,
   TMintV3OperationParams,
 } from "../../services/contract-operations/MintV3"
-import { numberToHex, stringToByteString } from "../../utils/convert"
 import { ButtonMintTicketPurchase } from "../MintTicket/ButtonMintTicketPurchase"
 import { User } from "../../types/entities/User"
-import { FxhashContracts } from "types/Contracts"
-import { getDiffByPath } from "utils/indexing"
+import { MintTicket } from "../../types/entities/MintTicket"
+import { generateMintTicketFromMintAction } from "../../utils/mint-ticket"
 
 interface Props {
   token: GenerativeToken
@@ -159,23 +158,11 @@ export function MintController({
 
   const isTicketMinted = token.inputBytesSize > 0
 
-  // if ticket minted, and op data, extract ticket_id from tzkt operations
-  const ticketId = useMemo<null | number>(() => {
+  const mintedTicket = useMemo<MintTicket | null>(() => {
     if (!isTicketMinted) return null
     if (!opData) return null
-    // find mint operation on tickets contract
-    const ticketMintOp = opData.find(
-      (op) =>
-        op.parameter?.entrypoint === "mint" &&
-        op.target?.address === FxhashContracts.MINT_TICKETS_V3
-    )
-    if (!ticketMintOp) return null
-    // find the diff in ledger storage
-    const ledgerDiff = getDiffByPath(ticketMintOp?.diffs, "ledger")
-    if (!ledgerDiff) return null
-    // return token ID, key of the ledger diff update
-    return parseInt(ledgerDiff.content.key)
-  }, [isTicketMinted, opData])
+    return generateMintTicketFromMintAction(opData, token, user as User)
+  }, [isTicketMinted, opData, token, user])
 
   return (
     <div className={cs(className || style.root)}>
@@ -203,13 +190,8 @@ export function MintController({
 
       {finalOpHash && (
         <>
-          {isTicketMinted ? (
-            <ButtonMintTicketPurchase
-              gracingPeriod={token.mintTicketSettings?.gracingPeriod || 1}
-              price={price}
-              token={token}
-              ticketId={ticketId}
-            />
+          {isTicketMinted && mintedTicket ? (
+            <ButtonMintTicketPurchase mintTicket={mintedTicket} />
           ) : (
             <Link href={revealUrl} passHref>
               <Button

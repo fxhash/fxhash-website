@@ -1,4 +1,4 @@
-import React, { memo, useMemo } from "react"
+import React, { memo, useCallback, useMemo, useState } from "react"
 import { Button } from "../Button"
 import { MintTicket } from "../../types/entities/MintTicket"
 import { DisplayTezos } from "../Display/DisplayTezos"
@@ -22,6 +22,9 @@ import {
 import { ContractFeedback } from "../Feedback/ContractFeedback"
 import { HoverTitle } from "../Utils/HoverTitle"
 import { Icon } from "../Icons/Icon"
+import Link from "next/link"
+import { getGenerativeTokenUrl } from "../../utils/generative-token"
+import { getDiffByPath } from "../../utils/indexing"
 
 const validation = Yup.object({
   price: YupPrice,
@@ -32,31 +35,58 @@ interface ModalClaimMintTicketProps {
   mintTicket: MintTicket
   price: number
   onClose: () => void
+  onClickUpdatePrice: (claimedTicket: MintTicket) => void
 }
 
 const _ModalClaimMintTicket = ({
   mintTicket,
   price,
   onClose,
+  onClickUpdatePrice,
 }: ModalClaimMintTicketProps) => {
+  const [claimedTicket, setClaimedTicket] = useState<MintTicket | null>(null)
   const { call, success, state, error, loading } =
-    useContractOperation<TTicketClaimV3OperationParams>(TicketClaimV3Operation)
+    useContractOperation<TTicketClaimV3OperationParams>(
+      TicketClaimV3Operation,
+      {
+        onSuccess: (data) => {
+          const diffTokenData = getDiffByPath(
+            data.opData[0].diffs,
+            "token_data"
+          )
+          setClaimedTicket({
+            ...mintTicket,
+            ...(diffTokenData
+              ? {
+                  price: diffTokenData.content.value.price,
+                  taxationStart: diffTokenData.content.value.taxation_start,
+                  taxationLocked: diffTokenData.content.value.taxation_locked,
+                }
+              : {}),
+          })
+        },
+      }
+    )
   const { handleSubmit, handleChange, handleBlur, values, errors } = useFormik({
     initialValues: {
       price: mintTicket.price / 1000000,
       days: 7,
     },
     onSubmit: (submittedValues) => {
+      // add extra day to cover for end of period
+      const daysCoverageWithExtraDay = submittedValues.days + 1
       const tzPrice = submittedValues.price * 1000000
       const amount =
-        getMintTicketHarbergerTax(submittedValues.price, submittedValues.days) *
+        getMintTicketHarbergerTax(
+          submittedValues.price,
+          daysCoverageWithExtraDay
+        ) *
           1000000 +
         price
       call({
         ticketId: mintTicket.id,
         taxationSettings: {
-          // add extra day to cover for end of period
-          coverage: submittedValues.days + 1,
+          coverage: daysCoverageWithExtraDay,
           price: tzPrice,
         },
         amount,
@@ -64,6 +94,11 @@ const _ModalClaimMintTicket = ({
     },
     validationSchema: validation,
   })
+  const handleClickUpdatePrice = useCallback(() => {
+    if (claimedTicket) {
+      onClickUpdatePrice(claimedTicket)
+    }
+  }, [claimedTicket, onClickUpdatePrice])
   const harbergerTax = useMemo(() => {
     if (values.price > 0 && values.days > 0) {
       return getMintTicketHarbergerTax(values.price, values.days)
@@ -181,21 +216,44 @@ const _ModalClaimMintTicket = ({
             />
           </div>
         </div>
+        <Spacing size="small" />
         <div className={style.container_buttons}>
-          <Button
-            type="submit"
-            color="secondary"
-            size="small"
-            state={loading ? "loading" : "default"}
-            disabled={!values.price || !values.days}
-          >
-            purchase mint ticket{" "}
-            <DisplayTezos
-              mutez={totalToPay}
-              formatBig={false}
-              tezosSize="regular"
-            />
-          </Button>
+          {claimedTicket ? (
+            <>
+              <Button
+                type="button"
+                size="small"
+                onClick={handleClickUpdatePrice}
+              >
+                update the price
+              </Button>
+              <Link
+                href={`${getGenerativeTokenUrl(claimedTicket.token)}/ticket/${
+                  claimedTicket.id
+                }/mint`}
+                passHref
+              >
+                <Button type="button" color="secondary" size="small" isLink>
+                  mint your iteration
+                </Button>
+              </Link>
+            </>
+          ) : (
+            <Button
+              type="submit"
+              color="secondary"
+              size="small"
+              state={loading ? "loading" : "default"}
+              disabled={!values.price || !values.days}
+            >
+              purchase mint ticket{" "}
+              <DisplayTezos
+                mutez={totalToPay}
+                formatBig={false}
+                tezosSize="regular"
+              />
+            </Button>
+          )}
         </div>
         <div className={style.contract_feedback}>
           <ContractFeedback
