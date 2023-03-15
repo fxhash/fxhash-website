@@ -4,7 +4,6 @@ import {
   useMemo,
   forwardRef,
   useImperativeHandle,
-  useEffect,
   useCallback,
 } from "react"
 import debounce from "lodash.debounce"
@@ -21,7 +20,11 @@ import cx from "classnames"
 import { Controls } from "components/FxParams/Controls"
 import { getRandomParamValues } from "components/FxParams/utils"
 import { IParamsHistoryEntry } from "components/FxParams/ParamsHistory"
-import { BaseButton, IconButton } from "components/FxParams/BaseInput"
+import {
+  BaseInput,
+  BaseButton,
+  IconButton,
+} from "components/FxParams/BaseInput"
 
 interface Props {
   data?: FxParamsData
@@ -35,6 +38,7 @@ interface Props {
   onUndo?: () => void
   onRedo?: () => void
   withAutoUpdate?: boolean
+  onChangeWithAutoUpdate: (state: boolean) => void
 }
 
 export interface PanelParamsRef {
@@ -54,6 +58,7 @@ export const PanelParams = forwardRef<PanelParamsRef, Props>(
       onUndo,
       onRedo,
       withAutoUpdate,
+      onChangeWithAutoUpdate,
     },
     ref
   ) => {
@@ -178,14 +183,25 @@ export const PanelParams = forwardRef<PanelParamsRef, Props>(
             }
           />
         </div>
-        {!withAutoUpdate && (
+        <div className={classes.submitRow}>
+          <div className={classes.checkboxWrapper}>
+            <label htmlFor="updateCheckbox">
+              auto-apply on settings update
+            </label>
+            <BaseInput
+              id="updateCheckbox"
+              type="checkbox"
+              checked={withAutoUpdate}
+              onChange={() => onChangeWithAutoUpdate(!withAutoUpdate)}
+            />
+          </div>
           <BaseButton
             className={classes.submitButton}
             onClick={handleSubmitData}
           >
-            submit params
+            refresh
           </BaseButton>
-        )}
+        </div>
       </PanelGroup>
     )
   }

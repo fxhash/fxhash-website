@@ -82,6 +82,7 @@ export function PanelRoot(props: Props) {
             onUndo={onUndo}
             onRedo={onRedo}
             withAutoUpdate={withAutoUpdate}
+            onChangeWithAutoUpdate={onChangeWithAutoUpdate}
           />
           <PanelFeatures features={features} />
         </div>
@@ -89,8 +90,6 @@ export function PanelRoot(props: Props) {
       <PanelControls
         onSubmit={onClickSubmit}
         onOpenNewTab={onOpenNewTab}
-        withAutoUpdate={withAutoUpdate}
-        onChangeWithAutoUpdate={onChangeWithAutoUpdate}
         onClickBack={onClickBack}
       />
     </div>

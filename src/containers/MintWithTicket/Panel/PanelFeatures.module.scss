@@ -5,10 +5,13 @@
 
   li {
     display: flex;
-    margin-bottom: var(--fxl-spacing-sm);
+    margin-bottom: var(--fxl-spacing-xxs);
     align-items: center;
-    // padding: var(--fxl-spacing-xs);
-    // background: var(--fxl-color-dark1);
+    padding: var(--fxl-spacing-xxs) 0 var(--fxl-spacing-xxs) var(--fxl-spacing-xxs);
+    background: var(--fxl-color-dark0);
+    &:hover {
+      background: var(--fxl-color-dark1);
+    }
     & :first-child {
       flex-grow: 1;
       color: var(--fxl-color-light0);

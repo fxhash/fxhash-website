@@ -8,6 +8,12 @@
   display: flex;
   gap: var(--fxl-spacing-xxs);
   align-items: center;
+  background: var(--fxl-color-dark0);
+  padding: 0 0 0 var(--fxl-spacing-xxs);
+  &:hover {
+  background: var(--fxl-color-dark1);
+
+  }
   & > div {
     flex-grow: 1;
   }

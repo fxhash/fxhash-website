@@ -14,13 +14,23 @@ $slider-thumb-border-radius: 0px;
 	display: flex;
 	align-items: center;
   gap: var(--fxl-spacing-xxs);
+  color: var(--fxl-color-text-primary);
+  &:hover {
+    color: var(--fxl-color-text-primary-hover);
+    input[type="range"]{
+      background: var(--fxl-color-light1);
+    }
+  }
 	label {
-    color: inherit;
+    color: currentColor;
 		flex: 1;
     font-size: 1rem;
     word-break: break-all;
     font-size: var(--fxl-font-size-s);
 	}
+  input {
+    color: currentColor;   
+  }
   .inputContainer {
     width: 200px;
     display: flex;

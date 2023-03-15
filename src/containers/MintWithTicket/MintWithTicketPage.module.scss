@@ -1,7 +1,7 @@
 .root {
 
   --fxl-color-light: #ffffff;
-  --fxl-color-light1: #727272;
+  --fxl-color-light1: #525252;
   --fxl-color-light2: #363636;
   --fxl-color-dark: #000000;
   --fxl-color-dark1: #181818;
@@ -20,7 +20,7 @@
   --fxl-color-text-primary-hover: var(--fxl-color-light);
   --fxl-color-text-secondary: var(--fxl-color-light1);
 
-  color: var(--fxl-color-text-primary);
+  color: var(--fxl-color-light);
 
   width: 100%;
   height: 100vh;

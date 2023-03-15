@@ -72,6 +72,7 @@ body {
   --fxl-color-light1: #727272;
   --fxl-color-light2: #363636;
   --fxl-color-dark: #000000;
+  --fxl-color-dark0: #111111;
   --fxl-color-dark1: #181818;
   --fxl-color-dark2: #1c1c1c;
   --fxl-color-background2: var(--color-gray-vvvlight);
@@ -96,7 +97,7 @@ body {
   --fxl-font-size-m: var(--font-size-big);
   --fxl-font-size-l: var(--font-size-h4);
   
-  --fxl-spacing: #{$spacing-x-small};
+  --fxl-spacing: #{$spacing};
   --fxl-spacing-sm: #{$spacing-small};
   --fxl-spacing-xs: #{$spacing-x-small};
   --fxl-spacing-xxs: #{$spacing-2x-small};
