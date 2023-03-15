@@ -178,9 +178,14 @@ export const PanelParams = forwardRef<PanelParamsRef, Props>(
             }
           />
         </div>
-        <BaseButton className={classes.submitButton} onClick={handleSubmitData}>
-          submit params
-        </BaseButton>
+        {!withAutoUpdate && (
+          <BaseButton
+            className={classes.submitButton}
+            onClick={handleSubmitData}
+          >
+            submit params
+          </BaseButton>
+        )}
       </PanelGroup>
     )
   }
