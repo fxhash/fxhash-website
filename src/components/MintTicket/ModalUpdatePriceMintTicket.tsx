@@ -311,7 +311,7 @@ const _ModalUpdatePriceMintTicket = ({
             <span>{formattedRemainingTaxCoverage || "0 day"}</span>
           </div>
         </div>
-        <Spacing size="2x-small" />
+        <Spacing size="2x-small" sm="small" />
         <div className={style.container_period}>
           <div className={style.label_bar}>Current</div>
           <div className={style.container_bar}>
@@ -328,6 +328,7 @@ const _ModalUpdatePriceMintTicket = ({
         </div>
         {values.days > 0 && (
           <>
+            <Spacing size="none" sm="x-small" />
             <div className={style.container_period}>
               <div className={style.label_bar}>New</div>
               <div className={style.container_bar}>
@@ -342,7 +343,7 @@ const _ModalUpdatePriceMintTicket = ({
                 </div>
               </div>
             </div>
-            <Spacing size="2x-small" />
+            <Spacing size="2x-small" sm="small" />
             <div className={style.row_with_unit}>
               <div className={style.row_label} />
               <div className={style.unit}>
@@ -414,13 +415,8 @@ const _ModalUpdatePriceMintTicket = ({
         </div>
         <hr className={style.hr} />
         <p className={style.p}>
-          Based on these new settings, you will{" "}
-          <span
-            className={cs(style.claim, {
-              [colors.success]: absTotalToPayOrClaim.type === "claim",
-              [colors.secondary]: absTotalToPayOrClaim.type === "cost",
-            })}
-          >
+          Based on these new settings, you&nbsp;will&nbsp;
+          <span className={cs(style.claim)}>
             {absTotalToPayOrClaim.type === "claim"
               ? "claim back"
               : "have to pay"}
