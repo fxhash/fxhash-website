@@ -1,4 +1,5 @@
 import React, { memo, useCallback, useContext, useMemo, useState } from "react"
+import autonomyIRL from "autonomy-irl-js"
 import cs from "classnames"
 import style from "./ConnectWallet.module.scss"
 import { Button } from "../Button"
@@ -28,105 +29,63 @@ const _ConnectWallet = () => {
 
   const liveMinting = useContext(LiveMintingContext)
 
-  const openNaaN = () => {
-    window.open(
-      `fxhash://${window.location.host}/live-minting/${liveMinting.event?.id}/?token=${liveMinting.mintPass?.token}&sync=naan`,
-      "_blank"
-    )
-  }
+  const isFreeLiveMint = true
 
-  const handleChangeWallet = useCallback(
-    (value) => () => setWalletType(value),
-    []
-  )
   const handleClickConnect = useCallback(() => {
-    // if (walletType === "custom") {
-    //   userCtx.connect()
-    // } else if (walletType === "naan") {
-    //   openNaaN()
-    // } else {
-    //   userCtx.connect()
-    // }
     userCtx.connect()
   }, [userCtx, walletType])
 
-  // check if this is device is iOS
-  const isIos = useMemo(
-    () =>
-      typeof window !== "undefined" &&
-      /iPad|iPhone|iPod/.test(navigator.userAgent),
-    []
-  )
+  const getAutonomyAddress = async () => {
+    const result = await autonomyIRL.getAddress({
+      chain: autonomyIRL.chain.tez,
+      // params: params,
+    })
 
-  const router = useRouter()
-  const isFocus = !!(router.query?.sync === "naan")
+    console.log(result)
+  }
 
   return (
-    <div
-      className={cs(style.container, {
-        [style.center]: isFocus,
-      })}
-    >
-      {isFocus ? (
-        <div className={cs(style.welcome)}>
-          Please sync fxhash with NaaN wallet
-        </div>
-      ) : (
-        <div className={cs(style.welcome)}>
-          Welcome to our Live Minting experience at{" "}
-          <strong>{liveMinting.event?.name}</strong>
-        </div>
-      )}
+    <div className={cs(style.container)}>
+      <div className={cs(style.welcome)}>
+        Welcome to our Live Minting experience at{" "}
+        <strong>{liveMinting.event?.name}</strong>
+      </div>
 
-      {!isFocus && (
-        <div className={style.container_button}>
-          <Link
-            href={
-              // isIos
-              //   ? "https://apps.apple.com/us/app/naan-a-tasty-tezos-wallet/id1573210354"
-              //   : "https://play.google.com/store/apps/details?id=com.naan&hl=en&gl=US"
-              "https://wallet.kukai.app/"
-            }
-            passHref
-          >
-            <Button
-              isLink
-              // @ts-ignore
-              target="_blank"
-              color="secondary"
-              className={style.button}
-            >
-              create wallet with kukai
-            </Button>
-          </Link>
-          <div className={style.purchase}>
-            You can purchase{" "}
-            <span className={style.tezos}>
-              <IconTezos />
-              tezos
-            </span>{" "}
-            from the wallet application
-          </div>
-        </div>
-      )}
       <div className={style.container_button}>
-        {/* {!isFocus && (
+        {isFreeLiveMint ? (
+          <Button
+            color="secondary"
+            className={style.button}
+            onClick={getAutonomyAddress}
+          >
+            sync Autonomy wallet
+          </Button>
+        ) : (
           <>
-            {options.map((opt) => (
-              <Checkbox
-                key={opt.value}
-                value={opt.value === walletType}
-                onChange={handleChangeWallet(opt.value)}
-                paddingLeft={false}
-                isRadio
-                className={style.radio}
+            <Link href={"https://wallet.kukai.app/"} passHref>
+              <Button
+                isLink
+                // @ts-ignore
+                target="_blank"
+                color="secondary"
+                className={style.button}
               >
-                {opt.label}
-              </Checkbox>
-            ))}
-            <Spacing size="x-small" />
+                sync with autonomy wallet
+              </Button>
+            </Link>
+            <div className={style.purchase}>
+              You can purchase{" "}
+              <span className={style.tezos}>
+                <IconTezos />
+                tezos
+              </span>{" "}
+              from the wallet application
+            </div>
           </>
-        )} */}
+        )}
+      </div>
+
+      <div className={style.container_button}>
         <Button
           type="button"
           // disabled={!walletType && !isFocus}
