@@ -12,6 +12,7 @@ $height: 30px;
 
   &:hover {
     background: var(--fxl-color-background3);
+    color: var(--fxl-color-text-primary-hover);
   }
 
   &:focus-visible {

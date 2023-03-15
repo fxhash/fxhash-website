@@ -16,7 +16,8 @@
   --fxl-color-secondary-light: var(--color-secondary-light);
   --fxl-color-background: var(--fxl-color-dark);
   --fxl-color-background-hover: var(--color-white);
-  --fxl-color-text-primary: var(--color-white);
+  --fxl-color-text-primary: var(--fxl-color-light0);
+  --fxl-color-text-primary-hover: var(--fxl-color-light);
   --fxl-color-text-secondary: var(--fxl-color-light1);
 
   color: var(--fxl-color-text-primary);
