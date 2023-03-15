@@ -122,7 +122,23 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
               different hashes generate <strong>different</strong> outputs
             </li>
           </ul>
-          <div className={layout.show_sm}>{renderArtwork()}</div>
+          <div className={layout.show_sm}>
+            <div className={cs(style.artworkWrapper)}>
+              <div className={cs(style.artwork)}>
+                <div className={cs(style["preview-cont"])}>
+                  <div className={cs(style["preview-wrapper"])}>
+                    <ArtworkFrame>
+                      <ArtworkIframe
+                        url={url}
+                        textWaiting="looking for content on IPFS"
+                        onLoaded={onIframeLoaded}
+                      />
+                    </ArtworkFrame>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
 
           <Spacing size="3x-large" sm="x-large" />
 
@@ -149,7 +165,24 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
             <RawFeatures rawFeatures={features} />
           </div>
         </div>
-        <div className={layout.hide_sm}>{renderArtwork()}</div>
+        <div className={layout.hide_sm}>
+          <div className={cs(style.artworkWrapper)}>
+            <div className={cs(style.artwork)}>
+              <div className={cs(style["preview-cont"])}>
+                <div className={cs(style["preview-wrapper"])}>
+                  <ArtworkFrame>
+                    <ArtworkIframe
+                      ref={artworkIframeRef}
+                      url={url}
+                      textWaiting="looking for content on IPFS"
+                      onLoaded={onIframeLoaded}
+                    />
+                  </ArtworkFrame>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <Spacing size="6x-large" sm="x-large" />
