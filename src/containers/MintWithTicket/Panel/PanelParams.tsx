@@ -186,7 +186,7 @@ export const PanelParams = forwardRef<PanelParamsRef, Props>(
         <div className={classes.submitRow}>
           <div className={classes.checkboxWrapper}>
             <label htmlFor="updateCheckbox">
-              auto-apply on settings update
+              auto-refresh on settings update
             </label>
             <BaseInput
               id="updateCheckbox"
