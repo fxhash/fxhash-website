@@ -280,7 +280,7 @@ const _ModalUpdatePriceMintTicket = ({
         <div className={style.title}>with the current settings:</div>
         <div className={style.row_with_unit}>
           <div className={style.row_label}>
-            You will keep ownership of your pass:
+            You will keep ownership of your ticket:
           </div>
           <div className={style.unit}>
             <span>{formattedTotal}</span>
@@ -311,7 +311,7 @@ const _ModalUpdatePriceMintTicket = ({
             <span>{formattedRemainingTaxCoverage || "0 day"}</span>
           </div>
         </div>
-        <Spacing size="2x-small" />
+        <Spacing size="2x-small" sm="small" />
         <div className={style.container_period}>
           <div className={style.label_bar}>Current</div>
           <div className={style.container_bar}>
@@ -328,6 +328,7 @@ const _ModalUpdatePriceMintTicket = ({
         </div>
         {values.days > 0 && (
           <>
+            <Spacing size="none" sm="x-small" />
             <div className={style.container_period}>
               <div className={style.label_bar}>New</div>
               <div className={style.container_bar}>
@@ -342,7 +343,7 @@ const _ModalUpdatePriceMintTicket = ({
                 </div>
               </div>
             </div>
-            <Spacing size="2x-small" />
+            <Spacing size="2x-small" sm="small" />
             <div className={style.row_with_unit}>
               <div className={style.row_label} />
               <div className={style.unit}>
@@ -362,7 +363,7 @@ const _ModalUpdatePriceMintTicket = ({
               <label htmlFor="price">
                 <div className={style.label_title}>price</div>
                 <div className={style.label_subtitle}>
-                  Anyone paying this price can claim your pass at any time
+                  Anyone paying this price can claim your ticket at any time
                 </div>
               </label>
               <InputTextUnit
@@ -376,6 +377,7 @@ const _ModalUpdatePriceMintTicket = ({
                 sizeX="small"
                 unit="tez"
                 id="price"
+                min={0.1}
               />
             </div>
             {errors.price && (
@@ -403,6 +405,7 @@ const _ModalUpdatePriceMintTicket = ({
                 type="number"
                 unit="days"
                 id="days"
+                min={0}
               />
             </div>
             {errors.days && (
@@ -412,13 +415,8 @@ const _ModalUpdatePriceMintTicket = ({
         </div>
         <hr className={style.hr} />
         <p className={style.p}>
-          Based on these new settings, you will{" "}
-          <span
-            className={cs(style.claim, {
-              [colors.success]: absTotalToPayOrClaim.type === "claim",
-              [colors.secondary]: absTotalToPayOrClaim.type === "cost",
-            })}
-          >
+          Based on these new settings, you&nbsp;will&nbsp;
+          <span className={cs(style.claim)}>
             {absTotalToPayOrClaim.type === "claim"
               ? "claim back"
               : "have to pay"}

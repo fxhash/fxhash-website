@@ -47,7 +47,7 @@ const _ModalMintTicketPurchase = ({
           <label>
             <div className={style.label_title_regular}>Grace period</div>
             <div className={style.label_subtitle}>
-              Your pass cannot be claimed during this period even of you don’t
+              Your ticket cannot be claimed during this period even if you don’t
               pay a tax
             </div>
           </label>

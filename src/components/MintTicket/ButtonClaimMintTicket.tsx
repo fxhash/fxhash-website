@@ -53,12 +53,12 @@ const _ButtonClaimMintTicket = ({
         onClick={handleToggleModal(true)}
         disabled={isGracingPeriod}
       >
-        claim pass{" "}
+        claim ticket{" "}
         <DisplayTezos mutez={price} formatBig={false} tezosSize="regular" />
       </Button>
       {isGracingPeriod && (
         <HoverTitle
-          message={`Tickets can't be claim during grace period. Period ends on ${format(
+          message={`Tickets can't be claimed during grace period. Period ends on ${format(
             dateTaxationStart,
             "d/MM/yy 'at' H:mm"
           )}`}

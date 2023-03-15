@@ -74,8 +74,11 @@
   display: flex;
   flex-direction: row;
   align-items: center;
+  gap: 4px 8px;
+  flex-wrap: wrap;
   .row_label {
     flex: 1;
+    min-width: fit-content;
   }
   .unit {
     color: var(--color-black);
@@ -125,6 +128,7 @@
 }
 .claim {
   font-weight: bold;
+  color: var(--color-black);
 }
 .tooltip {
   display: inline-block;
@@ -145,6 +149,15 @@
   }
   .container_buttons {
     flex-direction: column;
-
+  }
+  .row_with_unit .unit, .regular {
+    font-size: var(--font-size-small);
+  }
+  .container_period {
+    flex-direction: column;
+    align-items: flex-start;
+    .container_bar {
+      width: 100%;
+    }
   }
 }
