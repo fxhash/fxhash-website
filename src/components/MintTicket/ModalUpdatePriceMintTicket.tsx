@@ -376,6 +376,7 @@ const _ModalUpdatePriceMintTicket = ({
                 sizeX="small"
                 unit="tez"
                 id="price"
+                min={0.1}
               />
             </div>
             {errors.price && (
@@ -403,6 +404,7 @@ const _ModalUpdatePriceMintTicket = ({
                 type="number"
                 unit="days"
                 id="days"
+                min={0}
               />
             </div>
             {errors.days && (

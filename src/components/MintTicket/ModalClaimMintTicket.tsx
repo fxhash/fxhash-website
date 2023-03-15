@@ -117,8 +117,8 @@ const _ModalClaimMintTicket = ({
         <p className={style.p}>
           Before purchasing this mint ticket, you must define the price at witch
           it will appear next, as well the days during which you want to hold
-          the asset. If you are going to use this ticket less then 24 hours after
-          your purchase, the tax will fully be reimbursed.
+          the asset. If you are going to use this ticket less then 24 hours
+          after your purchase, the tax will fully be reimbursed.
         </p>
         <Spacing size="regular" />
         <div className={style.container_inputs}>
@@ -135,6 +135,7 @@ const _ModalClaimMintTicket = ({
                 name="price"
                 type="number"
                 value={values.price}
+                min={0.1}
                 onChange={handleChange}
                 onBlur={handleBlur}
                 classNameContainer={style.input}
@@ -160,6 +161,7 @@ const _ModalClaimMintTicket = ({
               </label>
               <InputTextUnit
                 name="days"
+                min={0}
                 type="number"
                 classNameContainer={style.input}
                 value={values.days}
