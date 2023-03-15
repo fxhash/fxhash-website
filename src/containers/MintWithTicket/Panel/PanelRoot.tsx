@@ -11,7 +11,8 @@ import {
 } from "components/FxParams/types"
 import { GenerativeToken } from "types/entities/GenerativeToken"
 import { IParamsHistoryEntry } from "components/FxParams/ParamsHistory"
-import { MutableRefObject, RefObject } from "react"
+import { MutableRefObject, RefObject, useMemo } from "react"
+import { getUserName } from "utils/user"
 import { PanelControls } from "./PanelControls"
 import { withAutoFormat } from "components/NFTArticle/SlateEditor/Plugins/AutoFormatPlugin"
 import { Spacing } from "components/Layout/Spacing"
@@ -60,13 +61,11 @@ export function PanelRoot(props: Props) {
     withAutoUpdate,
     onChangeWithAutoUpdate,
   } = props
+  const name = useMemo(() => getUserName(token.author, 15), [token])
   return (
     <div className={cs(style.root)}>
       <div className={cs(style.scrollWrapper)}>
-        <PanelHeader
-          title={token.name}
-          description={`by ${token.author.name}`}
-        />
+        <PanelHeader title={token.name} description={`by ${name}`} />
         <Spacing size="regular" />
         <div className={cs(style.body)}>
           <PanelHash hash={hash} onChangeHash={onChangeHash} />
