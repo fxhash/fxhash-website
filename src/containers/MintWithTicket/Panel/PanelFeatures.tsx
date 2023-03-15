@@ -7,6 +7,7 @@ interface Props {
 
 export function PanelFeatures(props: Props) {
   const { features } = props
+  if (!features || features?.length === 0) return null 
   return (
     <PanelGroup title="Features" description="Current features for this piece.">
       <ul className={style.featureList}>
