@@ -1,0 +1,12 @@
+.root {
+  margin-bottom: var(--fxl-spacing);
+  h1 {
+    display: block;
+    font-size: var(--font-size-h4);
+    margin-bottom: var(--fxl-spacing);
+  }
+  small {
+    font-size: var(font-size-small);
+    color: var(--fxl-color-text-secondary);
+  }
+}

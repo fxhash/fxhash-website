@@ -1,0 +1,98 @@
+.root {
+
+  --fxl-color-light: #ffffff;
+  --fxl-color-light1: #727272;
+  --fxl-color-light2: #363636;
+  --fxl-color-dark: #000000;
+  --fxl-color-dark1: #181818;
+  --fxl-color-dark2: #1c1c1c;
+  --fxl-color-background2: var(--fxl-color-dark1);
+  --fxl-color-background3: var(--fxl-color-dark2);
+
+  --fxl-font-family: var(--font-family-primary);
+  --fxl-color-primary: var(--color-primary);
+  --fxl-color-primary-light: var(--color-primary);
+  --fxl-color-secondary: var(--color-secondary);
+  --fxl-color-secondary-light: var(--color-secondary-light);
+  --fxl-color-background: var(--fxl-color-dark);
+  --fxl-color-background-hover: var(--color-white);
+  --fxl-color-text-primary: var(--color-white);
+  --fxl-color-text-secondary: var(--fxl-color-light1);
+
+  color: var(--fxl-color-text-primary);
+
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+
+  .panel {
+    width: 400px;
+    height: 100%;
+    background: var(--fxl-color-panel-background);
+    position: relative;
+
+    .mint_overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 1000;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(12px);
+      gap: 8px;
+      text-align: center;
+      padding: 12px;
+
+      .kt_feedback {
+        * {
+          color: #eeeeee;
+        }
+      }
+      
+      &.has_success {
+        .kt_feedback {
+          * {
+            color: var(--color-success);
+          }
+        }
+      }
+    }
+  }
+
+  .frame {
+    flex-grow: 2;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  ::selection {
+    color: var(--fxl-color-background);
+    background: var(--fxl-color-primary);
+  }
+  ::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--fxl-color-light2);
+
+    &:hover {
+      background: var(--fxl-color-light1);
+    }
+
+    &:active {
+      background: var(--fxl-color-primary);
+    }
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--fxl-color-dark2);
+  }
+}
