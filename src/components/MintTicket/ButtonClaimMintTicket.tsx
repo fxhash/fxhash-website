@@ -53,7 +53,7 @@ const _ButtonClaimMintTicket = ({
         onClick={handleToggleModal(true)}
         disabled={isGracingPeriod}
       >
-        claim pass{" "}
+        claim ticket{" "}
         <DisplayTezos mutez={price} formatBig={false} tezosSize="regular" />
       </Button>
       {isGracingPeriod && (

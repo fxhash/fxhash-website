@@ -280,7 +280,7 @@ const _ModalUpdatePriceMintTicket = ({
         <div className={style.title}>with the current settings:</div>
         <div className={style.row_with_unit}>
           <div className={style.row_label}>
-            You will keep ownership of your pass:
+            You will keep ownership of your ticket:
           </div>
           <div className={style.unit}>
             <span>{formattedTotal}</span>
@@ -362,7 +362,7 @@ const _ModalUpdatePriceMintTicket = ({
               <label htmlFor="price">
                 <div className={style.label_title}>price</div>
                 <div className={style.label_subtitle}>
-                  Anyone paying this price can claim your pass at any time
+                  Anyone paying this price can claim your ticket at any time
                 </div>
               </label>
               <InputTextUnit

@@ -115,9 +115,9 @@ const _ModalClaimMintTicket = ({
     >
       <form onSubmit={handleSubmit}>
         <p className={style.p}>
-          Before purchasing this mint pass, you must define the price at witch
+          Before purchasing this mint ticket, you must define the price at witch
           it will appear next, as well the days during which you want to hold
-          the asset. If you are going to use this pass less then 24 hours after
+          the asset. If you are going to use this ticket less then 24 hours after
           your purchase, the tax will fully be reimbursed.
         </p>
         <Spacing size="regular" />
@@ -127,7 +127,7 @@ const _ModalClaimMintTicket = ({
               <label htmlFor="price">
                 <div className={style.label_title}>price</div>
                 <div className={style.label_subtitle}>
-                  Anyone paying this price can claim your pass at any time
+                  Anyone paying this price can claim your ticket at any time
                 </div>
               </label>
               <InputTextUnit
