@@ -10,7 +10,8 @@
   display: flex;
   align-items: center;
   label {
-    margin-left: var(--fxl-spacing-sm)
+    font-size: var(--fxl-font-size-xs);
+    margin-left: var(--fxl-spacing-sm);
   }
 }
 .buttonsWrapper {
