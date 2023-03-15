@@ -1,6 +1,9 @@
 import styles from "./PanelHash.module.scss"
-import { useContext } from "react"
-import { faRotate } from "@fortawesome/free-solid-svg-icons"
+import { useContext, useRef, useState } from "react"
+import {
+  faRotate,
+  faTriangleExclamation,
+} from "@fortawesome/free-solid-svg-icons"
 import { PanelGroup } from "./PanelGroup"
 import {
   BaseInput,
@@ -9,7 +12,8 @@ import {
 } from "components/FxParams/BaseInput"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { generateFxHash } from "utils/hash"
-
+import cx from "classnames"
+import { useAriaTooltip } from "hooks/useAriaTooltip"
 interface Props {
   hash: string
   onChangeHash: (h: string) => void
@@ -17,6 +21,8 @@ interface Props {
 
 export function PanelHash(props: Props) {
   const { hash, onChangeHash } = props
+  const { hoverElement, wasHovered, showTooltip, handleEnter, handleLeave } =
+    useAriaTooltip()
   const handleChange = (e: any) => {
     onChangeHash(e.target.value)
   }
@@ -37,9 +43,39 @@ export function PanelHash(props: Props) {
           onChange={handleChange}
           className={styles.hashInput}
         />
-        <IconButton onClick={handleRefresh}>
-          <FontAwesomeIcon icon={faRotate} />
-        </IconButton>
+        <div className={styles.refreshWrapper}>
+          <IconButton onClick={handleRefresh}>
+            <FontAwesomeIcon icon={faRotate} />
+          </IconButton>
+          <div
+            onMouseEnter={handleEnter}
+            onMouseLeave={handleLeave}
+            className={cx(styles.warningWrapper, {
+              [styles.wasHovered]: wasHovered,
+            })}
+          >
+            <FontAwesomeIcon
+              ref={hoverElement}
+              tabIndex={0}
+              onFocus={handleEnter}
+              onBlur={handleLeave}
+              className={styles.warningIcon}
+              icon={faTriangleExclamation}
+            />
+            {showTooltip && (
+              <span
+                role="tooltip"
+                aria-hidden={!showTooltip}
+                aria-live="polite"
+                className={styles.tooltip}
+              >
+                The hash is just an example value. Your final piece will be
+                minted with a random hash assigned.
+              </span>
+            )}
+          </div>
+          <div></div>
+        </div>
       </div>
     </PanelGroup>
   )
