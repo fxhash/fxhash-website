@@ -27,6 +27,7 @@ export function NumberController(props: FxParamControllerProps<"number">) {
         max,
         step,
         className: classes.numberInput,
+        value: null,
       }}
       {...props}
       value={stringValue}
