@@ -30,11 +30,11 @@ const ITEMS_PER_PAGE = 40
 const generalSortOptions: IOptions[] = [
   {
     label: "recently minted",
-    value: "id-desc",
+    value: "createdAt-desc",
   },
   {
     label: "oldest minted",
-    value: "id-asc",
+    value: "createdAt-asc",
   },
   {
     label: "recently bought",
