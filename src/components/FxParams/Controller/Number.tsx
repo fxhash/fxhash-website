@@ -3,10 +3,10 @@ import {
   HTMLInputControllerWithTextInput,
 } from "./Controller"
 import classes from "./Controller.module.scss"
-import { useMemo } from "react"
+import { useEffect, useMemo, useState } from "react"
 
 export function NumberController(props: FxParamControllerProps<"number">) {
-  const { options, value } = props
+  const { options, value, onChange } = props
   const min = useMemo(() => {
     if (typeof options?.min === "undefined") return Number.MIN_SAFE_INTEGER
     return options.min
@@ -16,7 +16,19 @@ export function NumberController(props: FxParamControllerProps<"number">) {
     return options.max
   }, [options?.max])
   const step = options?.step || 1
-  const stringValue = `${value}`
+  const [textValue, setTextValue] = useState(value)
+  const handleChangeTextValue = (e: any) => {
+    const val = e.target.value
+    setTextValue(val)
+    if (!isNaN(val) && val.length > 0) {
+      onChange(e)
+    }
+  }
+
+  useEffect(() => {
+    setTextValue(`${value}`)
+  }, [value])
+
   return (
     <HTMLInputControllerWithTextInput
       type="range"
@@ -27,10 +39,11 @@ export function NumberController(props: FxParamControllerProps<"number">) {
         max,
         step,
         className: classes.numberInput,
-        value: null,
+        value: textValue,
+        onChange: handleChangeTextValue,
       }}
       {...props}
-      value={stringValue}
+      value={value}
     />
   )
 }
