@@ -272,10 +272,14 @@ const _ModalUpdatePriceMintTicket = ({
     >
       <form onSubmit={handleSubmit}>
         <p className={style.p}>
-          Lorem ipsum dolor sit amet consectetur. Vulputate tristique malesuada
-          auctor sit duis nunc vel. Viverra nibh felis massa montes tincidunt
-          nisl tempus amet cursus. Eu vitae nulla est platea morbi molestie eu
-          ut.
+          After the grace period, your unexchanged tickets are listed for sale.
+          During this time, you need to pay a daily tax proportional to your
+          ticket&apos;s list price.
+          <br />
+          <br />
+          Adjust the list price to higher or lower your tax payment. If you miss
+          a tax payment, you will lose ownership of your ticket during
+          foreclosure.
         </p>
         <div className={style.title}>with the current settings:</div>
         <div className={style.row_with_unit}>
@@ -363,7 +367,7 @@ const _ModalUpdatePriceMintTicket = ({
               <label htmlFor="price">
                 <div className={style.label_title}>price</div>
                 <div className={style.label_subtitle}>
-                  Anyone paying this price can claim your ticket at any time
+                  Anyone can buy your ticket for this price.
                 </div>
               </label>
               <InputTextUnit
@@ -391,8 +395,8 @@ const _ModalUpdatePriceMintTicket = ({
                   days covered by your tax
                 </div>
                 <div className={style.label_subtitle}>
-                  For how long do you want your token to be secured at this
-                  price? Not including the grace period.
+                  This is the length of time secured by your current tax
+                  settings (not including the grace period).
                 </div>
               </label>
               <InputTextUnit
@@ -417,9 +421,7 @@ const _ModalUpdatePriceMintTicket = ({
         <p className={style.p}>
           Based on these new settings, you&nbsp;will&nbsp;
           <span className={cs(style.claim)}>
-            {absTotalToPayOrClaim.type === "claim"
-              ? "claim back"
-              : "have to pay"}
+            {absTotalToPayOrClaim.type === "claim" ? "get back" : "have to pay"}
           </span>{" "}
           <DisplayTezos
             mutez={absTotalToPayOrClaim.total}

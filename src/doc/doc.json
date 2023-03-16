@@ -12,6 +12,10 @@
           "link": "guide-publish-generative-token"
         },
         {
+          "title": "Snippet API",
+          "link": "snippet-api"
+        },
+        {
           "title": "Collaborations",
           "link": "collaborations"
         },

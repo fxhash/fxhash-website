@@ -29,15 +29,15 @@ const _ModalMintTicketPurchase = ({
       onClose={onClose}
     >
       <p className={style.p}>
-        Lorem ipsum dolor sit amet consectetur. Vulputate tristique malesuada
-        auctor sit duis nunc vel. Viverra nibh felis massa montes tincidunt nisl
-        tempus amet cursus. Eu vitae nulla est platea morbi molestie eu ut.
-        Varius elementum viverra cursus facilisis tincidunt pellentesque
-        ultrices vitae. At at diam ac id tortor dolor lobortis. Ultrices turpis
-        non mauris iaculis interdum metus diam tristique volutpat. Enim sed
-        mauris consectetur venenatis feugiat enim mi. Ac potenti maecenas
-        aliquet consectetur duis. In arcu convallis vel feugiat dolor varius
-        risus.
+        This ticket allows you to explore minting possibilities by playing with
+        different parameter combinations.
+        <br /> <br />
+        When you&apos;re ready, exchange this ticket to mint an artwork with the
+        parameter settings of your choice.
+        <br /> <br />
+        If you don&apos;t exchange this ticket for an artwork within the grace
+        period, you will be required to pay a daily tax to maintain ownership of
+        the ticket.
       </p>
 
       <Spacing size="large" />
@@ -47,8 +47,8 @@ const _ModalMintTicketPurchase = ({
           <label>
             <div className={style.label_title_regular}>Grace period</div>
             <div className={style.label_subtitle}>
-              Your ticket cannot be claimed during this period even if you don’t
-              pay a tax
+              Your ticket can&apos;t be foreclosed on during this period and tax
+              payment is not required
             </div>
           </label>
           <div className={cs(text.bold, text.h4)}>
@@ -60,8 +60,8 @@ const _ModalMintTicketPurchase = ({
           <label>
             <div className={style.label_title_regular}>Current price</div>
             <div className={style.label_subtitle}>
-              Based on the mint price, you can change it based on what you want
-              to pay as a tax
+              Adjust the ticket&apos;s list price to change the tax payment
+              amount
             </div>
           </label>
           <div className={cs(text.bold, text.h4)}>

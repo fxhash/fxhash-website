@@ -31,7 +31,15 @@
   }
 
   p, ul {
-    margin-top: 2em;
+    margin-top: 1.5em;
+    margin-bottom: 0;
+  }
+
+  hr {
+    margin-top: 1.5em;
+    border: 0;
+    height: 2px;
+    background-color: var(--color-gray-vlight);
   }
 
   ul ul {
@@ -44,8 +52,24 @@
     display: block;
   }
 
+  blockquote {
+    background-color: var(--color-gray-vvvlight);
+    margin: 0;
+    padding: 0.8em 1em;
+    margin-top: 1.5em;
+
+    p {
+      margin: 0;
+    }
+  }
+
+  table {
+    margin-top: 1.5em;
+  }
+
   pre, code {
     font-family: inherit;
+    margin-bottom: 0;
   }
 
   pre {
