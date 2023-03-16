@@ -38,6 +38,7 @@ interface Props {
   onClickBack: () => void
   onClickSubmit: () => void
   onClickRefresh?: () => void
+  onLocalDataChange?: (d: FxParamsData) => void
 }
 
 export function PanelRoot(props: Props) {
@@ -62,6 +63,7 @@ export function PanelRoot(props: Props) {
     withAutoUpdate,
     onChangeWithAutoUpdate,
     onClickRefresh,
+    onLocalDataChange,
   } = props
   const name = useMemo(() => getUserName(token.author, 15), [token])
   return (
@@ -85,6 +87,7 @@ export function PanelRoot(props: Props) {
             withAutoUpdate={withAutoUpdate}
             onChangeWithAutoUpdate={onChangeWithAutoUpdate}
             onClickRefresh={onClickRefresh}
+            onLocalDataChange={onLocalDataChange}
           />
           <PanelFeatures features={features} />
         </div>

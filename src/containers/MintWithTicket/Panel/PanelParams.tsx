@@ -40,6 +40,7 @@ interface Props {
   onRedo?: () => void
   withAutoUpdate?: boolean
   onChangeWithAutoUpdate: (state: boolean) => void
+  onLocalDataChange?: (d: FxParamsData) => void
 }
 
 export interface PanelParamsRef {
@@ -61,6 +62,7 @@ export const PanelParams = forwardRef<PanelParamsRef, Props>(
       onRedo,
       withAutoUpdate,
       onChangeWithAutoUpdate,
+      onLocalDataChange,
     },
     ref
   ) => {
@@ -90,6 +92,7 @@ export const PanelParams = forwardRef<PanelParamsRef, Props>(
 
     const handleChangeData = (data: FxParamsData) => {
       setLocalData(data)
+      onLocalDataChange?.(data)
       withAutoUpdate && handleOnChangeDebounced?.(data)
     }
     const handleRandomizeParams = () => {

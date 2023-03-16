@@ -38,6 +38,7 @@ export function MintWithTicketPageRoot({ token, ticketId }: Props) {
   const artworkIframeRef = useRef<ArtworkIframeRef>(null)
   const lastHistoryActionData = useRef<any>()
   const router = useRouter()
+  const [hasLocalChanges, setHasLocalChanges] = useState<boolean>(false)
   const [withAutoUpdate, setWithAutoUpdate] = useState<boolean>(true)
   const [lockedParamIds, setLockedParamIds] = useState<string[]>([])
   const [hash, setHash] = useState(
@@ -75,6 +76,7 @@ export function MintWithTicketPageRoot({ token, ticketId }: Props) {
       newValue: newData,
     })
     setData(newData)
+    setHasLocalChanges(false)
   }
 
   const handleChangeHash = (newHash: string) => {
@@ -96,6 +98,11 @@ export function MintWithTicketPageRoot({ token, ticketId }: Props) {
 
   const handleClickRefresh = () => {
     artworkIframeRef.current?.reloadIframe()
+  }
+
+  const handleLocalDataChange = () => {
+    if (withAutoUpdate) return
+    setHasLocalChanges(true)
   }
 
   // TODO: Call contract v3 mint with ticket
@@ -136,6 +143,7 @@ export function MintWithTicketPageRoot({ token, ticketId }: Props) {
           features={features}
           hash={hash}
           token={token}
+          onLocalDataChange={handleLocalDataChange}
           onChangeData={handleChangeData}
           onChangeHash={handleChangeHash}
           lockedParamIds={lockedParamIds}
@@ -152,6 +160,7 @@ export function MintWithTicketPageRoot({ token, ticketId }: Props) {
           onClickSubmit={handleClickSubmit}
           onClickRefresh={handleClickRefresh}
         />
+        {hasLocalChanges && "hi"}
         {(loading || success) && (
           <div
             className={cs(style.mint_overlay, {
@@ -193,6 +202,17 @@ export function MintWithTicketPageRoot({ token, ticketId }: Props) {
           url={url}
           onLoaded={onIframeLoaded}
         />
+        {hasLocalChanges && (
+          <div className={style.unsyncedContainer}>
+            <div className={style.unsyncedContent}>
+              <i className="fa-solid fa-circle-exclamation" />
+              <p>
+                Params are not synced with the token. <br /> Enable auto-refresh
+                or manually refresh the view.
+              </p>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )
