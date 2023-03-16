@@ -30,6 +30,7 @@ interface Props {
   data?: FxParamsData
   params: FxParamDefinition<FxParamType>[]
   onChangeData: (d: FxParamsData) => void
+  onClickRefresh?: () => void
   onClickLockButton?: (id: string) => void
   onChangeLockedParamIds?: (ids: string[]) => void
   lockedParamIds?: string[]
@@ -50,6 +51,7 @@ export const PanelParams = forwardRef<PanelParamsRef, Props>(
   (
     {
       params,
+      onClickRefresh,
       onChangeData,
       onChangeLockedParamIds,
       lockedParamIds,
@@ -107,6 +109,7 @@ export const PanelParams = forwardRef<PanelParamsRef, Props>(
 
     const handleSubmitData = () => {
       onChangeData(localData)
+      onClickRefresh?.()
     }
 
     const handleClickLockButton = (paramId: string) => {

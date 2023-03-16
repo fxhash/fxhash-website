@@ -94,6 +94,10 @@ export function MintWithTicketPageRoot({ token, ticketId }: Props) {
     router.push("/generative/[...params]", `/generative/slug/${token.slug}`)
   }
 
+  const handleClickRefresh = () => {
+    artworkIframeRef.current?.reloadIframe()
+  }
+
   // TODO: Call contract v3 mint with ticket
   const handleClickSubmit = () => {
     if (inputBytes) {
@@ -146,6 +150,7 @@ export function MintWithTicketPageRoot({ token, ticketId }: Props) {
           onOpenNewTab={handleOpenNewTab}
           onClickBack={handleClickBack}
           onClickSubmit={handleClickSubmit}
+          onClickRefresh={handleClickRefresh}
         />
         {(loading || success) && (
           <div

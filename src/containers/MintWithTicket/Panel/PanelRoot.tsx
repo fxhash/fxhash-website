@@ -37,6 +37,7 @@ interface Props {
   onOpenNewTab: () => void
   onClickBack: () => void
   onClickSubmit: () => void
+  onClickRefresh?: () => void
 }
 
 export function PanelRoot(props: Props) {
@@ -60,6 +61,7 @@ export function PanelRoot(props: Props) {
     onClickBack,
     withAutoUpdate,
     onChangeWithAutoUpdate,
+    onClickRefresh,
   } = props
   const name = useMemo(() => getUserName(token.author, 15), [token])
   return (
@@ -82,6 +84,7 @@ export function PanelRoot(props: Props) {
             onRedo={onRedo}
             withAutoUpdate={withAutoUpdate}
             onChangeWithAutoUpdate={onChangeWithAutoUpdate}
+            onClickRefresh={onClickRefresh}
           />
           <PanelFeatures features={features} />
         </div>
