@@ -9,7 +9,7 @@ import { Qu_genTokenMintTickets } from "../../queries/generative-token"
 import { GenerativeToken } from "../../types/entities/GenerativeToken"
 import { InfiniteScrollTrigger } from "../../components/Utils/InfiniteScrollTrigger"
 
-const ITEMS_PER_PAGE = 20
+const ITEMS_PER_PAGE = 30
 type MintTicketsBySection = {
   auctionTickets: MintTicket[]
   unusedTickets: MintTicket[]
@@ -34,6 +34,14 @@ const _GenerativeMintTickets = ({ tokenId }: GenerativeMintTicketsProps) => {
       skip: 0,
       take: ITEMS_PER_PAGE,
       now: now.toISOString(),
+    },
+    onCompleted: (newData) => {
+      if (
+        !newData?.generativeToken.mintTickets?.length ||
+        newData.generativeToken.mintTickets.length < ITEMS_PER_PAGE
+      ) {
+        setHasNoMintTicketsToFetch(true)
+      }
     },
     fetchPolicy: "cache-and-network",
   })
@@ -98,6 +106,7 @@ const _GenerativeMintTickets = ({ tokenId }: GenerativeMintTicketsProps) => {
           <TableMintTickets
             firstColName="Under auction (holder failed to pay tax)"
             mintTickets={mintTicketsBySection.auctionTickets}
+            loading={loading && mintTicketsBySection.unusedTickets.length === 0}
           />
         </div>
       )}
@@ -107,7 +116,7 @@ const _GenerativeMintTickets = ({ tokenId }: GenerativeMintTicketsProps) => {
           canTrigger={!hasNoMintTicketsToFetch}
         >
           <TableMintTickets
-            firstColName="Unused passes"
+            firstColName="Unused tickets"
             mintTickets={mintTicketsBySection.unusedTickets}
             loading={loading}
           />

@@ -12,6 +12,7 @@ $height: 30px;
 
   &:hover {
     background: var(--fxl-color-background3);
+    color: var(--fxl-color-text-primary-hover);
   }
 
   &:focus-visible {
@@ -87,6 +88,9 @@ $slider-thumb-border-radius: 50%;
   outline: none;
   padding: 0 !important;
   border: none;
+  &:hover {
+    background: var(--fxl-color-light1);
+  }
 }
 
 .baseInput[type="range"]::-webkit-slider-thumb {

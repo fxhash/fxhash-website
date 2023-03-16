@@ -7,9 +7,9 @@
   z-index: 20;
   top: calc(var(--fxl-spacing) * -1);
   display: flex;
-  padding: var(--fxl-spacing-xs) 0;
+  margin: var(--fxl-spacing-xs) 0 var(--fxl-spacing-sm) 0;
   width: 100%;
-  gap: calc(var(--fxl-spacing) * 0.5);
+  gap: calc(var(--fxl-spacing-xs) * 0.5);
   background: var(--fxl-color-background);
   justify-content: flex-end;
 
@@ -23,15 +23,36 @@
   }
 }
 
-.submitButton {
-  width: 100%;
+.submitRow {
+  display: flex;
+  align-items: center;
   margin-top: var(--fxl-spacing);
+  gap: var(--fxl-spacing-sm);
+  .submitButton {
+    flex-grow: 1;
+  }
+  .checkboxWrapper {
+    display: flex;
+    align-items: center;
+    label {
+      font-size: var(--fxl-font-size-xs);
+      text-align: right;
+      margin-right: var(--fxl-spacing-xs);
+      color: var(--fxl-color-light0);
+      user-select: none;
+    }
+    &:hover {
+      label {
+        color: var(--fxl-color-light);
+      }
+    }
+  }
 }
 
 .controlsWrapper {
   display: flex;
   gap: var(--fxl-spacing-xs);
-  color: var(--fxl-color-light1);
+  color: var(--fxl-color-light0);
   .lockButtons {
     display: flex;
     flex-direction: column;
@@ -41,6 +62,6 @@
 
 .lockAllButton {
   &.primary {
-    color: var(--fxl-color-light) !important;
+    color: var(--fxl-color-primary) !important; 
   }
 }

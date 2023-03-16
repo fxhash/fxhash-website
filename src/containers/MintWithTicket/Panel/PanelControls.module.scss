@@ -1,17 +1,10 @@
 .controlPanel {
   display: flex;
   flex-direction: column;
-  padding: var(--fxl-spacing);
+  padding: var(--fxl-spacing-sm);
   gap: var(--fxl-spacing);
   border-top: 1px solid var(--fxl-color-dark2);
   font-size: var(--fxl-font-size-s);
-}
-.checkboxWrapper {
-  display: flex;
-  align-items: center;
-  label {
-    margin-left: var(--fxl-spacing-sm)
-  }
 }
 .buttonsWrapper {
   flex-grow: 1;

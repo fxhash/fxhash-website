@@ -39,3 +39,16 @@ export function getDaysCoveredByHarbergerTax(
 ) {
   return totalTaxPaid / getDailyHarbergerTax(price)
 }
+export const getTaxPaidUntil = (
+  taxationLocked: number,
+  taxationStart: Date,
+  price: number
+) => {
+  const numberOfDaysCovered = getDaysCoveredByHarbergerTax(
+    taxationLocked,
+    price
+  )
+  return new Date(
+    taxationStart.getTime() + numberOfDaysCovered * 24 * 60 * 60 * 1000
+  )
+}

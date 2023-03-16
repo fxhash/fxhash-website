@@ -33,7 +33,7 @@ export function useReceiveTokenInfos(
       if (e.data) {
         if (e.data.id === "fxhash_getHash") {
           if (e.data.data) {
-            setHash(hash)
+            setHash(e.data.data)
           } else {
           }
         }

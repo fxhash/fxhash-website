@@ -65,122 +65,147 @@ const _TableMintTickets = ({
     }
   }, [])
   return (
-    <table className={cs(style.table)}>
-      <thead>
-        <tr>
-          <th className={style["th-gentk"]}>{firstColName}</th>
-          <th className={style["th-date"]}>Tax paid until</th>
-          <th className={style["th-mint-actions"]}>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        {loading || mintTickets.length > 0 ? (
-          mintTickets.map((mintTicket) => {
-            const dateTaxPaidUntil = new Date(mintTicket.taxationPaidUntil)
-            const isUnderAuction = dateTaxPaidUntil > now
-            const price = isUnderAuction
-              ? mintTicket.price
-              : getDAPrice(now, dateTaxPaidUntil, mintTicket.price)
-            return (
-              <tr key={mintTicket.id}>
-                <td
-                  className={cs(style["td-gentk"], style.td_mobile_fullwidth)}
-                >
-                  {displayTokenPreview ? (
-                    <Link href={`/generative/slug/${mintTicket.token.slug}`}>
-                      <a className={style.ticketToken}>
-                        <div className={cs(style.icon)}>
-                          <Image
-                            ipfsUri={mintTicket.token.thumbnailUri!}
-                            image={mintTicket.token.captureMedia}
-                            alt=""
-                          />
-                        </div>
-                        <div className={style.name}>
-                          {mintTicket.token.name}
-                        </div>
-                      </a>
-                    </Link>
-                  ) : (
-                    <UserBadge
-                      hasLink
-                      user={mintTicket.owner}
-                      size="small"
-                      displayAvatar={true}
-                    />
-                  )}
-                </td>
-
-                <td data-label="Tax paid until" className={style["td-date"]}>
-                  {format(dateTaxPaidUntil, "dd/MM/yy H:mm")} (
-                  {formatDistanceToNow(dateTaxPaidUntil, {
-                    addSuffix: true,
-                  })}
-                  )
-                </td>
-                <td data-label="Actions" className={style["td-mint-actions"]}>
-                  <div className={style.actions}>
-                    {user?.id === mintTicket.owner.id && isUnderAuction ? (
-                      <>
-                        <Link
-                          href={`/generative/slug/${mintTicket.token.slug}/ticket/${mintTicket.id}/mint`}
-                        >
-                          <Button
-                            isLink
-                            type="button"
-                            color="secondary"
-                            size="small"
-                          >
-                            mint iteration
-                          </Button>
-                        </Link>
-                        <ButtonUpdatePriceMintTicket mintTicket={mintTicket} />
-                      </>
+    <>
+      {firstColName && (
+        <div className={style.mobile_table_title}>{firstColName}</div>
+      )}
+      <table className={cs(style.table)}>
+        <thead>
+          <tr>
+            <th className={style["th-gentk"]}>{firstColName}</th>
+            <th className={style["th-date"]}>Tax paid until</th>
+            <th className={style["th-mint-actions"]}>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {loading || mintTickets.length > 0 ? (
+            mintTickets.map((mintTicket) => {
+              const dateTaxPaidUntil = new Date(mintTicket.taxationPaidUntil)
+              const isUnderAuction = dateTaxPaidUntil > now
+              const price = isUnderAuction
+                ? mintTicket.price
+                : getDAPrice(now, dateTaxPaidUntil, mintTicket.price)
+              return (
+                <tr key={mintTicket.id}>
+                  <td
+                    className={cs(style["td-gentk"], style.td_mobile_fullwidth)}
+                  >
+                    {displayTokenPreview ? (
+                      <Link href={`/generative/slug/${mintTicket.token.slug}`}>
+                        <a className={style.ticketToken}>
+                          <div className={cs(style.icon)}>
+                            <Image
+                              ipfsUri={mintTicket.token.thumbnailUri!}
+                              image={mintTicket.token.captureMedia}
+                              alt=""
+                            />
+                          </div>
+                          <div className={style.name}>
+                            {mintTicket.token.name}
+                          </div>
+                        </a>
+                      </Link>
                     ) : (
-                      <ButtonClaimMintTicket
-                        mintTicket={mintTicket}
-                        price={price}
-                        now={now}
+                      <UserBadge
+                        hasLink
+                        user={mintTicket.owner}
+                        size="small"
+                        displayAvatar={true}
                       />
                     )}
-                  </div>
-                </td>
-              </tr>
-            )
-          })
-        ) : (
-          <tr>
-            <td
-              className={cs(style.empty, style.td_mobile_fullwidth)}
-              colSpan={5}
-            >
-              No mint tickets found
-            </td>
-          </tr>
-        )}
-        {loading &&
-          [...Array(29)].map((_, idx) => (
-            <tr key={idx}>
-              <td className={style["td-gentk"]}>
-                <div className={style["skeleton-wrapper"]}>
-                  <Skeleton
-                    className={style["skeleton-thumbnail"]}
-                    height="40px"
-                    width="40px"
-                  />
-                  <Skeleton height="25px" width="100%" />
-                </div>
-              </td>
-              <td data-label="Seller" className={style["td-date"]}>
-                <Skeleton height="25px" />
-              </td>
-              <td data-label="Time" className={style["td-mint-actions"]}>
-                <Skeleton height="25px" />
+                  </td>
+
+                  <td
+                    data-label="Tax paid until"
+                    className={cs(style["td-date"], style.td_mobile_fullwidth)}
+                  >
+                    {format(dateTaxPaidUntil, "dd/MM/yy H:mm")} (
+                    {formatDistanceToNow(dateTaxPaidUntil, {
+                      addSuffix: true,
+                    })}
+                    )
+                  </td>
+                  <td
+                    data-label="Actions"
+                    className={cs(
+                      style["td-mint-actions"],
+                      style.td_mobile_fullwidth
+                    )}
+                  >
+                    <div className={style.actions}>
+                      {user?.id === mintTicket.owner.id && isUnderAuction ? (
+                        <>
+                          <Link
+                            href={`/generative/slug/${mintTicket.token.slug}/ticket/${mintTicket.id}/mint`}
+                          >
+                            <Button
+                              isLink
+                              type="button"
+                              color="secondary"
+                              size="small"
+                            >
+                              mint iteration
+                            </Button>
+                          </Link>
+                          <ButtonUpdatePriceMintTicket
+                            mintTicket={mintTicket}
+                          />
+                        </>
+                      ) : (
+                        <ButtonClaimMintTicket
+                          mintTicket={mintTicket}
+                          price={price}
+                          now={now}
+                        />
+                      )}
+                    </div>
+                  </td>
+                </tr>
+              )
+            })
+          ) : (
+            <tr>
+              <td
+                className={cs(style.empty, style.td_mobile_fullwidth)}
+                colSpan={5}
+              >
+                No mint tickets found
               </td>
             </tr>
-          ))}
-      </tbody>
-    </table>
+          )}
+          {loading &&
+            [...Array(29)].map((_, idx) => (
+              <tr key={idx}>
+                <td className={style["td-gentk"]}>
+                  <div className={style["skeleton-wrapper"]}>
+                    <Skeleton
+                      className={style["skeleton-thumbnail"]}
+                      height="40px"
+                      width="40px"
+                    />
+                    <Skeleton height="25px" width="100%" />
+                  </div>
+                </td>
+                <td
+                  data-label="Tax paid until"
+                  className={cs(style["td-date"], style.td_mobile_fullwidth)}
+                >
+                  <Skeleton height="25px" />
+                </td>
+                <td
+                  data-label="Actions"
+                  className={cs(
+                    style["td-mint-actions"],
+                    style.td_mobile_fullwidth
+                  )}
+                >
+                  <Skeleton height="25px" />
+                </td>
+              </tr>
+            ))}
+        </tbody>
+      </table>
+    </>
   )
 }
 

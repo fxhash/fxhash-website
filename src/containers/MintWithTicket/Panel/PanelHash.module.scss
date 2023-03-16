@@ -9,6 +9,38 @@
 
 .hashInput {
   flex-grow: 1;
-  margin-right: var(--fxl-spacing-xs);
+  margin-right: var(--fxl-spacing-xxs);
   font-size: 10.8px !important;
+}
+.refreshWrapper {
+  position: relative;
+}
+
+.warningWrapper {
+  color: var(--color-warning);
+  position: absolute;
+  top: calc(var(--fxl-spacing-xxs) * -1);
+  left: 50%;
+  transform: translate(-50%, -100%);
+  &.wasHovered {
+    color: var(--color-gray-light);
+  }
+  .warningIcon {
+    &:focus-visible {
+      outline-offset: 2px;
+      outline: 1px solid var(--fxl-color-primary);
+    }
+  }
+  .tooltip {
+    transform: translate(-100%,-50%);
+    position: absolute;
+    left: calc(var(--fxl-spacing-sm) * -1);
+    top: 0;
+    width: 200px;
+    color: var(--fxl-color-text-primary);
+    font-size: var(--fxl-font-size-xs);
+    background: var(--fxl-color-background1);
+    border: 1px solid var(--fxl-color-dark2);
+    padding: var(--fxl-spacing-xs);
+  }
 }

@@ -38,7 +38,7 @@ export function MintWithTicketPageRoot({ token, ticketId }: Props) {
   const artworkIframeRef = useRef<ArtworkIframeRef>(null)
   const lastHistoryActionData = useRef<any>()
   const router = useRouter()
-  const [withAutoUpdate, setWithAutoUpdate] = useState<boolean>(false)
+  const [withAutoUpdate, setWithAutoUpdate] = useState<boolean>(true)
   const [lockedParamIds, setLockedParamIds] = useState<string[]>([])
   const [hash, setHash] = useState(
     token.metadata.previewHash || generateFxHash()

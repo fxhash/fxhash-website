@@ -101,39 +101,49 @@ const _ModalUpdatePriceMintTicket = ({
                 : {}),
             }
           })
+          handleResetForm()
         },
       }
     )
-  const { handleChange, handleBlur, handleSubmit, values, errors } = useFormik({
-    initialValues: {
-      price: currentMintTicket.price / 1000000,
-      days: 0,
-    },
-    onSubmit: (submittedValues) => {
-      const tzPrice = submittedValues.price * 1000000
-      const daysSinceCreated = Math.floor(
-        differenceInSeconds(new Date(), new Date(currentMintTicket.createdAt)) /
-          86400
-      )
-      const remainingGracingPeriodInDays =
-        currentMintTicket.settings.gracingPeriod - daysSinceCreated
-      const amount = getUpdatedPriceAmountToPayOrClaim(
-        currentMintTicket,
-        tzPrice,
-        submittedValues.days
-      )
-      call({
-        ticketId: currentMintTicket.id,
-        taxationSettings: {
-          coverage: remainingGracingPeriodInDays + submittedValues.days,
-          price: tzPrice,
-        },
-        amount: amount < 0 ? 0 : amount,
-      })
-    },
-    validationSchema: validation,
-  })
+  const { handleChange, handleBlur, handleSubmit, values, errors, resetForm } =
+    useFormik({
+      initialValues: {
+        price: currentMintTicket.price / 1000000,
+        days: 0,
+      },
+      onSubmit: (submittedValues) => {
+        const daysCoverageWithExtraDay = submittedValues.days + 1
+        const tzPrice = submittedValues.price * 1000000
+        const daysSinceCreated = Math.floor(
+          differenceInSeconds(
+            new Date(),
+            new Date(currentMintTicket.createdAt)
+          ) / 86400
+        )
+        const remainingGracingPeriodInDays = Math.max(
+          0,
+          currentMintTicket.settings.gracingPeriod - daysSinceCreated
+        )
+        const amount = getUpdatedPriceAmountToPayOrClaim(
+          currentMintTicket,
+          tzPrice,
+          daysCoverageWithExtraDay
+        )
+        call({
+          ticketId: currentMintTicket.id,
+          taxationSettings: {
+            coverage: remainingGracingPeriodInDays + daysCoverageWithExtraDay,
+            price: tzPrice,
+          },
+          amount: amount < 0 ? 0 : amount,
+        })
+      },
+      validationSchema: validation,
+    })
 
+  const handleResetForm = useCallback(() => {
+    resetForm()
+  }, [resetForm])
   const formatHours = useCallback((hours: number) => {
     const absHours = Math.abs(hours)
     const days = Math.floor(absHours / 24)
@@ -164,7 +174,7 @@ const _ModalUpdatePriceMintTicket = ({
     const remainingGracingPeriodInHours =
       nowDate < taxStart ? differenceInHours(taxStart, nowDate) : 0
     const consumedTaxDaysInHours =
-      nowDate < taxStart ? 0 : differenceInHours(taxStart, nowDate)
+      nowDate < taxStart ? 0 : differenceInHours(nowDate, taxStart)
     const daysCoveredInHours =
       getDaysCoveredByHarbergerTax(
         parseInt(currentMintTicket.taxationLocked),
@@ -185,35 +195,43 @@ const _ModalUpdatePriceMintTicket = ({
     currentMintTicket.taxationStart,
   ])
 
+  const coverageWithExtraDay = useMemo(
+    () => (values.days || 0) + 1,
+    [values.days]
+  )
   const newCoverageInHours = useMemo(() => {
-    const newDaysCoveredInHours = (values.days || 0) * 24
-    const newTotalCoveredInHours =
-      currentCoverageInHours.remainingGracingPeriod + newDaysCoveredInHours
+    const newDaysCoveredInHours = coverageWithExtraDay * 24
     const lastDayConsumed = getTicketLastDayConsumed(
       currentMintTicket.createdAt
     )
-    const newEndDate = addDays(lastDayConsumed, values.days)
+    const consumedTodayHours = differenceInHours(new Date(), lastDayConsumed)
+    const newTotalCoveredInHours =
+      currentCoverageInHours.remainingGracingPeriod +
+      newDaysCoveredInHours -
+      consumedTodayHours
+
+    const newEndDate = addDays(lastDayConsumed, coverageWithExtraDay)
     return {
       total: newTotalCoveredInHours,
       endDate: newEndDate,
     }
   }, [
+    coverageWithExtraDay,
     currentCoverageInHours.remainingGracingPeriod,
     currentMintTicket.createdAt,
-    values.days,
   ])
 
   const absTotalToPayOrClaim = useMemo(() => {
     const totalToPayOrClaim = getUpdatedPriceAmountToPayOrClaim(
       currentMintTicket,
       values.price * 1000000,
-      values.days
+      coverageWithExtraDay
     )
     return {
       total: Math.abs(totalToPayOrClaim),
       type: totalToPayOrClaim < 0 ? "claim" : "cost",
     }
-  }, [currentMintTicket, values.days, values.price])
+  }, [currentMintTicket, coverageWithExtraDay, values.price])
 
   const formattedGracingPeriod = formatHours(
     currentCoverageInHours.remainingGracingPeriod
@@ -254,15 +272,19 @@ const _ModalUpdatePriceMintTicket = ({
     >
       <form onSubmit={handleSubmit}>
         <p className={style.p}>
-          Lorem ipsum dolor sit amet consectetur. Vulputate tristique malesuada
-          auctor sit duis nunc vel. Viverra nibh felis massa montes tincidunt
-          nisl tempus amet cursus. Eu vitae nulla est platea morbi molestie eu
-          ut.
+          After the grace period, your unexchanged tickets are listed for sale.
+          During this time, you need to pay a daily tax proportional to your
+          ticket&apos;s list price.
+          <br />
+          <br />
+          Adjust the list price to higher or lower your tax payment. If you miss
+          a tax payment, you will lose ownership of your ticket during
+          foreclosure.
         </p>
         <div className={style.title}>with the current settings:</div>
         <div className={style.row_with_unit}>
           <div className={style.row_label}>
-            You will keep ownership of your pass:
+            You will keep ownership of your ticket:
           </div>
           <div className={style.unit}>
             <span>{formattedTotal}</span>
@@ -283,7 +305,7 @@ const _ModalUpdatePriceMintTicket = ({
         <Spacing size="regular" />
         <div className={style.row_with_unit}>
           <div className={style.row_label}>
-            Gracing period{" "}
+            Grace period{" "}
             <span className={style.regular}>
               {formattedGracingPeriod || "0 day"}
             </span>
@@ -293,7 +315,7 @@ const _ModalUpdatePriceMintTicket = ({
             <span>{formattedRemainingTaxCoverage || "0 day"}</span>
           </div>
         </div>
-        <Spacing size="2x-small" />
+        <Spacing size="2x-small" sm="small" />
         <div className={style.container_period}>
           <div className={style.label_bar}>Current</div>
           <div className={style.container_bar}>
@@ -310,6 +332,7 @@ const _ModalUpdatePriceMintTicket = ({
         </div>
         {values.days > 0 && (
           <>
+            <Spacing size="none" sm="x-small" />
             <div className={style.container_period}>
               <div className={style.label_bar}>New</div>
               <div className={style.container_bar}>
@@ -324,7 +347,7 @@ const _ModalUpdatePriceMintTicket = ({
                 </div>
               </div>
             </div>
-            <Spacing size="2x-small" />
+            <Spacing size="2x-small" sm="small" />
             <div className={style.row_with_unit}>
               <div className={style.row_label} />
               <div className={style.unit}>
@@ -344,7 +367,7 @@ const _ModalUpdatePriceMintTicket = ({
               <label htmlFor="price">
                 <div className={style.label_title}>price</div>
                 <div className={style.label_subtitle}>
-                  Anyone paying this price can claim your pass at any time
+                  Anyone can buy your ticket for this price.
                 </div>
               </label>
               <InputTextUnit
@@ -358,6 +381,7 @@ const _ModalUpdatePriceMintTicket = ({
                 sizeX="small"
                 unit="tez"
                 id="price"
+                min={0.1}
               />
             </div>
             {errors.price && (
@@ -371,8 +395,8 @@ const _ModalUpdatePriceMintTicket = ({
                   days covered by your tax
                 </div>
                 <div className={style.label_subtitle}>
-                  For how long do you want your token to be secured at this
-                  price? Not including the gracing period.
+                  This is the length of time secured by your current tax
+                  settings (not including the grace period).
                 </div>
               </label>
               <InputTextUnit
@@ -385,6 +409,7 @@ const _ModalUpdatePriceMintTicket = ({
                 type="number"
                 unit="days"
                 id="days"
+                min={0}
               />
             </div>
             {errors.days && (
@@ -394,16 +419,9 @@ const _ModalUpdatePriceMintTicket = ({
         </div>
         <hr className={style.hr} />
         <p className={style.p}>
-          Based on these new settings, you will{" "}
-          <span
-            className={cs(style.claim, {
-              [colors.success]: absTotalToPayOrClaim.type === "claim",
-              [colors.secondary]: absTotalToPayOrClaim.type === "cost",
-            })}
-          >
-            {absTotalToPayOrClaim.type === "claim"
-              ? "claim back"
-              : "have to pay"}
+          Based on these new settings, you&nbsp;will&nbsp;
+          <span className={cs(style.claim)}>
+            {absTotalToPayOrClaim.type === "claim" ? "get back" : "have to pay"}
           </span>{" "}
           <DisplayTezos
             mutez={absTotalToPayOrClaim.total}

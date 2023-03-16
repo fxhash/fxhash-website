@@ -66,7 +66,7 @@ export function Sandbox() {
 
   const fxparamsBytes = useMemo(() => {
     return serializeParams(data, params)
-  }, [stringifyParamsData(data)])
+  }, [stringifyParamsData(data), params])
 
   return (
     <section
