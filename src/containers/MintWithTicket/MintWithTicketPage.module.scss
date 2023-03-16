@@ -1,5 +1,10 @@
 .root {
-
+  // Ignore darkmode style changes
+  --color-primary: #FF005C;
+  --color-secondary: #7000FF;
+  --color-secondary-light: #b174ff;
+  --color-secondary-vlight: #7e1aff;
+  
   --fxl-color-light: #ffffff;
   --fxl-color-light1: #525252;
   --fxl-color-light2: #363636;

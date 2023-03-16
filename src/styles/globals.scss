@@ -122,6 +122,11 @@ body {
   --color-secondary-light: #7b9811;
   --color-border: #0f0f0f;
   --color-border-input: #7e7e7e;
+  --fxl-color-text-primary: var(--color-black);
+  --fxl-color-background1: var(--color-gray-vvvlight);
+  --fxl-color-background2: var(--color-gray-vvlight);
+  --fxl-color-background3: var(--color-gray-vlight);
+  --fxl-color-light2: var(--color-gray-light);
 }
 
 ::-webkit-scrollbar {
