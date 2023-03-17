@@ -41,9 +41,7 @@ export function MintWithTicketPageRoot({ token, ticketId }: Props) {
   const [hasLocalChanges, setHasLocalChanges] = useState<boolean>(false)
   const [withAutoUpdate, setWithAutoUpdate] = useState<boolean>(true)
   const [lockedParamIds, setLockedParamIds] = useState<string[]>([])
-  const [hash, setHash] = useState(
-    token.metadata.previewHash || generateFxHash()
-  )
+  const [hash, setHash] = useState(generateFxHash())
   const [data, setData] = useState({})
   const { params, features, onIframeLoaded } =
     useReceiveTokenInfos(artworkIframeRef)
@@ -54,8 +52,7 @@ export function MintWithTicketPageRoot({ token, ticketId }: Props) {
 
   const inputBytes = useMemo<string | null>(() => {
     const serialized = serializeParams(data, params || [])
-    if (serialized.length === 0)
-      return token.metadata?.previewInputBytes || null
+    if (serialized.length === 0) return null
     return serialized
   }, [stringifyParamsData(data), params])
 
