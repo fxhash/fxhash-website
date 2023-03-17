@@ -51,6 +51,10 @@
           "link": "guide"
         },
         {
+          "title": "Params & mint tickets",
+          "link": "fxparams-mint-tickets"
+        },
+        {
           "title": "fxhash RPC",
           "link": "rpc"
         },
