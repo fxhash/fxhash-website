@@ -32,17 +32,8 @@ const _ConnectWallet = () => {
   const isFreeLiveMint = true
 
   const handleClickConnect = useCallback(() => {
-    userCtx.connect()
+    userCtx.connect(isFreeLiveMint)
   }, [userCtx, walletType])
-
-  const getAutonomyAddress = async () => {
-    const result = await autonomyIRL.getAddress({
-      chain: autonomyIRL.chain.tez,
-      // params: params,
-    })
-
-    console.log(result)
-  }
 
   return (
     <div className={cs(style.container)}>
@@ -56,7 +47,7 @@ const _ConnectWallet = () => {
           <Button
             color="secondary"
             className={style.button}
-            onClick={getAutonomyAddress}
+            onClick={handleClickConnect}
           >
             sync Autonomy wallet
           </Button>

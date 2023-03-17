@@ -5,7 +5,9 @@ import {
   OpKind,
   TezosToolkit,
   Wallet,
+  WalletProvider,
 } from "@taquito/taquito"
+import autonomyIRL from "autonomy-irl-js"
 import {
   BurnSupplyCallData,
   CancelOfferCall,
@@ -92,6 +94,47 @@ export class WalletManager {
     return this.beaconWallet!
   }
 
+  async connectAutonomyWallet() {
+    const { result: pkh } = await autonomyIRL.getAddress({
+      chain: autonomyIRL.chain.tez,
+      // params: params,
+    })
+
+    const provider: Pick<
+      WalletProvider,
+      "getPKH" | "mapTransferParamsToWalletParams" | "sendOperations"
+    > = {
+      getPKH: () => pkh,
+      mapTransferParamsToWalletParams: (params) => {
+        return params()
+      },
+      sendOperations: (operations) => {
+        return autonomyIRL.sendTransaction({
+          transactions: operations.map((op) => ({
+            from: pkh,
+            to: op.to,
+            nonce: "0",
+            value: op.value,
+          })),
+          sourceAddress: pkh,
+          metadata: {
+            metadata: {
+              name: "app_name",
+              description: "app_description",
+              url: "#",
+              icons: ["url_icon"],
+            },
+          },
+          chain: autonomyIRL.chain.tez,
+        })
+      },
+    }
+
+    this.beaconWallet = provider as BeaconWallet
+    this.tezosToolkit.setWalletProvider(provider as WalletProvider)
+    return provider.getPKH()
+  }
+
   /**
    * If a beacon session can be found in the storage, then we can assume that the user is still connected
    * to the platform and thus register its wallet to the tezos toolkit
@@ -111,7 +154,11 @@ export class WalletManager {
   }
 
   async disconnect() {
-    await this.getBeaconWallet().disconnect()
+    try {
+      await this.getBeaconWallet().disconnect()
+    } catch (_) {
+      // do nothing TODO comment
+    }
     this.tezosToolkit.setWalletProvider(undefined)
     this.beaconWallet = null
     this.contracts = {}
