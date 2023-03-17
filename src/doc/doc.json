@@ -1,0 +1,102 @@
+{
+  "title": "Documentation",
+  "description": "Learn about fxhash, its principles as an artist and as a collector.",
+  "categories": [
+    {
+      "title": "Guides for artists",
+      "icon": "fas fa-laptop-code",
+      "link": "artist",
+      "articles": [
+        {
+          "title": "Publish a Generative Token",
+          "link": "guide-publish-generative-token"
+        },
+        {
+          "title": "fx(lens)",
+          "link": "fxlens"
+        },
+        {
+          "title": "Params",
+          "link": "params"
+        },
+        {
+          "title": "Snippet API",
+          "link": "snippet-api"
+        },
+        {
+          "title": "Project settings",
+          "link": "project-settings"
+        },
+        {
+          "title": "Collaborations",
+          "link": "collaborations"
+        },
+        {
+          "title": "Pricing your project",
+          "link": "pricing-your-project"
+        },
+        {
+          "title": "Artist Code of conduct",
+          "link": "code-of-conduct"
+        }
+      ]
+    },
+    {
+      "title": "Collecting on fxhash",
+      "icon": "fas fa-book",
+      "link": "collect",
+      "articles": [
+        {
+          "title": "Guide to collect",
+          "link": "guide"
+        },
+        {
+          "title": "fxhash RPC",
+          "link": "rpc"
+        },
+        {
+          "title": "Collector Code of conduct",
+          "link": "code-of-conduct"
+        }
+      ]
+    },
+    {
+      "title": "The platform",
+      "icon": "far fa-browser",
+      "link": "fxhash",
+      "articles": [
+        {
+          "title": "Overview",
+          "link": "overview"
+        },
+        {
+          "title": "Fxhash 1.0",
+          "link": "one"
+        },
+        {
+          "title": "Moderation system",
+          "link": "moderation"
+        },
+        {
+          "title": "Getting verified",
+          "link": "verification"
+        },
+        {
+          "title": "Integration guide",
+          "link": "integration-guide"
+        }
+      ]
+    },
+    {
+      "title": "Community",
+      "icon": "fa-solid fa-users",
+      "link": "community",
+      "articles": [
+        {
+          "title": "Articles",
+          "link": "articles"
+        }
+      ]
+    }
+  ]
+}
