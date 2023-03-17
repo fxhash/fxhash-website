@@ -11,10 +11,9 @@ import {
 } from "components/FxParams/types"
 import { GenerativeToken } from "types/entities/GenerativeToken"
 import { IParamsHistoryEntry } from "components/FxParams/ParamsHistory"
-import { MutableRefObject, RefObject, useMemo } from "react"
+import { RefObject, useMemo } from "react"
 import { getUserName } from "utils/user"
 import { PanelControls } from "./PanelControls"
-import { withAutoFormat } from "components/NFTArticle/SlateEditor/Plugins/AutoFormatPlugin"
 import { Spacing } from "components/Layout/Spacing"
 
 interface Props {
@@ -39,6 +38,8 @@ interface Props {
   onClickBack: () => void
   onClickSubmit: () => void
   onClickHide: () => void
+  onClickRefresh?: () => void
+  onLocalDataChange?: (d: FxParamsData) => void
 }
 
 export function PanelRoot(props: Props) {
@@ -64,6 +65,8 @@ export function PanelRoot(props: Props) {
     withAutoUpdate,
     onChangeWithAutoUpdate,
     onClickHide,
+    onClickRefresh,
+    onLocalDataChange,
   } = props
   const name = useMemo(() => getUserName(token.author, 15), [token])
   return (
@@ -94,6 +97,8 @@ export function PanelRoot(props: Props) {
             onRedo={onRedo}
             withAutoUpdate={withAutoUpdate}
             onChangeWithAutoUpdate={onChangeWithAutoUpdate}
+            onClickRefresh={onClickRefresh}
+            onLocalDataChange={onLocalDataChange}
           />
           <PanelFeatures features={features} />
         </div>

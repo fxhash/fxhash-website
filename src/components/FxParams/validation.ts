@@ -11,8 +11,8 @@ const ControllerTypeSchema = z.enum([
 ])
 
 const FxParamOptions_bigintSchema = z.object({
-  min: z.number().optional(),
-  max: z.number().optional(),
+  min: z.number().or(z.bigint()).optional(),
+  max: z.number().or(z.bigint()).optional(),
 })
 
 const FxParamOptions_numberSchema = z.object({

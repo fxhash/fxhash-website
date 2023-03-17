@@ -1,16 +1,14 @@
 ---
-title: 'Collaborations'
-date: '2022-04-16'
-description: 'A full documentation on how to collaborate with other artists and publish together.'
+title: "Collaborations"
+date: "2022-04-16"
+description: "A full documentation on how to collaborate with other artists and publish together."
 ---
 
-fxhash comes with built-in tools so that the work that is the fruit of a collaboration between many artists can be released in the best possible conditions. We provides a collaboration factory contract which can be used to originate collaboration contracts between any number of entities.
-
+> fxhash comes with built-in tools so that the work that is the fruit of a collaboration between many artists can be released in the best possible conditions. We provides a collaboration factory contract which can be used to originate collaboration contracts between any number of entities.
 
 # What's a collaboration contract ?
 
 A collaboration contract allows entities to create, approve and send operations to the blockchain as a group. Creating a collaboration contract doesn't bind the different parties together but sending operations through the collaboration contract is binding. An operation can be sent through a collaboration contract if and only if all the parties have approved the transaction. Only then the transaction can be executed by any member of the collaboration. Not all the transactions are made available through the collaboration contract but only a list of operations provided by fxhash. This ensures that the transactions that are sent through the collaboration contract are safe to be sent.
-
 
 # How to create a collaboration ?
 
@@ -24,7 +22,6 @@ Please note that the shares of collaboration contract itself don't guarantee tha
 
 You can setup different splits if you author different pieces with the same collaboration contract for instance.
 
-
 # Integration on the platform
 
 When fxhash detects that a work was published with a collaboration contract, it assigns all the members of the collaboration as authors. We tried to provide a seamless integration of the collaboration contracts as we feel that they play a major role in the development of our artistic community.
@@ -32,7 +29,6 @@ When fxhash detects that a work was published with a collaboration contract, it 
 ![integration](/images/doc/artist/collaborations/integration.jpg)
 
 If a work is published as a collaboration, it will also appear on all the profiles of the collaborators.
-
 
 # How to send operations as a collaboration group ?
 
@@ -42,10 +38,9 @@ We tried to make the usage of the collaboration as transparent as possible for y
 
 When you go to your [collaborations page](/collaborations), you will see all your collaborations. By clicking on each of them, you will access a page to manage the collaboration. There are 3 tabs on this page:
 
-* **operations awaiting**: operations not sent to the blockchain yet
-* **operations executed**: operations previously approved **and** executed
-* **informations**: extra informations about the collab, such as the shares, the contract balance and a button to withdraw the funds
-
+- **operations awaiting**: operations not sent to the blockchain yet
+- **operations executed**: operations previously approved **and** executed
+- **informations**: extra informations about the collab, such as the shares, the contract balance and a button to withdraw the funds
 
 ## Inspecting an operation
 
@@ -55,8 +50,9 @@ Operations can be inspected before getting approved. By clicking on the operatio
 
 You can also check the exact call parameters if you want to be sure of what you are approving.
 
-You must be very careful when approving  an operation on a collaboration contract, and make sure that you agree with its application. Our UI makes it easy to inspect those operations, and you should review those thoroughly. **By approving an operation, you give your formal agreement for its execution**. It's as if you sent the operation yourself.
+You must be very careful when approving an operation on a collaboration contract, and make sure that you agree with its application. Our UI makes it easy to inspect those operations, and you should review those thoroughly.
 
+::infobox[**By approving an operation, you give your formal agreement for its execution**. It's as if you sent the operation yourself.]
 
 ## Approving and executing
 
@@ -66,18 +62,18 @@ By default, the initiator of the operation will be marked as approving the opera
 
 By clicking the button, it will execute the operation, and voilà !
 
-
 # Projects authored as a collaboration
 
 When a project is created through a collaboration contract, the address of the contract is stored as the author onchain. And since the members of a collaboration own the collaboration contract, they are indirectly co-authors by definition.
 
-On the fxhash website, when you edit a project co-authored, it will automatically create proposals in the collaboration contract (displayed in the *operations awaiting* section of the manager). **Because we don't have a notification system for now, you will need to inform your collaborators that they need to approve the operation**.
+On the fxhash website, when you edit a project co-authored, it will automatically create proposals in the collaboration contract (displayed in the _operations awaiting_ section of the manager).
 
+::infobox[Because we don't yet have a notification system, you will need to inform your collaborators that they need to approve the operation.]{type=warning}
 
 # Extra costs
 
-There are some extra costs that come with using a collaboration contract. First, the contract needs to be originated. Then, each operation needs to be stored *twice*, for the creation of the proposal (where the parameters are stored onchain) and for its execution (same cost as if you were to send the same operation by yourself).
+There are some extra costs that come with using a collaboration contract. First, the contract needs to be originated. Then, each operation needs to be stored _twice_, for the creation of the proposal (where the parameters are stored onchain) and for its execution (same cost as if you were to send the same operation by yourself).
 
 We recommend splitting those costs by having different members creating and executing an operation.
 
-However, creating a collaboration contract + proposing and executing an operation is lower than 1 tezos, which is still acceptable. Moreover, collaboration contracts can be reused.
+::infobox[Creating a collaboration contract + proposing and executing an operation costs **less than 1 tezos**. Collaboration contracts can be reused.]

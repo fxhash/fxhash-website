@@ -3,7 +3,7 @@
   "description": "Learn about fxhash, its principles as an artist and as a collector.",
   "categories": [
     {
-      "title": "Artistic guides",
+      "title": "Guides for artists",
       "icon": "fas fa-laptop-code",
       "link": "artist",
       "articles": [
@@ -12,24 +12,28 @@
           "link": "guide-publish-generative-token"
         },
         {
+          "title": "fx(lens)",
+          "link": "fxlens"
+        },
+        {
+          "title": "Params",
+          "link": "params"
+        },
+        {
+          "title": "Snippet API",
+          "link": "snippet-api"
+        },
+        {
+          "title": "Project settings",
+          "link": "project-settings"
+        },
+        {
           "title": "Collaborations",
           "link": "collaborations"
         },
         {
-          "title": "Capture settings",
-          "link": "capture-settings"
-        },
-        {
-          "title": "Explore variation settings",
-          "link": "explore-variation-settings"
-        },
-        {
           "title": "Pricing your project",
           "link": "pricing-your-project"
-        },
-        {
-          "title": "Reserves",
-          "link": "reserves"
         },
         {
           "title": "Artist Code of conduct",

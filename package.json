@@ -91,7 +91,7 @@
     "use-async-effect": "^2.2.3",
     "use-http": "^1.0.26",
     "yup": "^0.32.11",
-    "zod": "^3.20.6"
+    "zod": "^3.21.4"
   },
   "devDependencies": {
     "@next/bundle-analyzer": "^12.2.6",

@@ -19,6 +19,9 @@ interface Props {
   onChangeHash: (h: string) => void
 }
 
+const validateHash = (hash: string) =>
+  hash.startsWith("oo") && hash.length === 51
+
 export function PanelHash(props: Props) {
   const { hash, onChangeHash } = props
   const { hoverElement, wasHovered, showTooltip, handleEnter, handleLeave } =
@@ -42,6 +45,33 @@ export function PanelHash(props: Props) {
           value={hash}
           onChange={handleChange}
           className={styles.hashInput}
+          onKeyDown={async (e) => {
+            // allow arrow keys
+            const isArrow =
+              e.key === "ArrowLeft" ||
+              e.key === "ArrowRight" ||
+              e.key === "ArrowUp" ||
+              e.key === "ArrowDown"
+            if (isArrow) return
+
+            // allow copy and paste
+            const isCopy = e.key === "c" && e.metaKey
+            const isPaste = e.key === "v" && e.metaKey
+            if (!isPaste && !isCopy) e.preventDefault()
+          }}
+          onPaste={async (e) => {
+            e.preventDefault()
+
+            // set pasted text as hash if valid
+            const pasted = e.clipboardData.getData("text/plain")
+            if (validateHash(pasted)) {
+              onChangeHash(pasted)
+              return
+            }
+
+            // tried to paste invalid hash
+            alert("Only valid seeds are allowed.")
+          }}
         />
         <div className={styles.refreshWrapper}>
           <IconButton onClick={handleRefresh}>

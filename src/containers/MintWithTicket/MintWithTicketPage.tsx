@@ -51,11 +51,10 @@ export function MintWithTicketPageRoot({ token, ticketId }: Props) {
   const artworkIframeRef = useRef<ArtworkIframeRef>(null)
   const lastHistoryActionData = useRef<any>()
   const router = useRouter()
+  const [hasLocalChanges, setHasLocalChanges] = useState<boolean>(false)
   const [withAutoUpdate, setWithAutoUpdate] = useState<boolean>(true)
   const [lockedParamIds, setLockedParamIds] = useState<string[]>([])
-  const [hash, setHash] = useState(
-    token.metadata.previewHash || generateFxHash()
-  )
+  const [hash, setHash] = useState(generateFxHash())
   const [data, setData] = useState({})
   const { params, features, onIframeLoaded } =
     useReceiveTokenInfos(artworkIframeRef)
@@ -66,8 +65,7 @@ export function MintWithTicketPageRoot({ token, ticketId }: Props) {
 
   const inputBytes = useMemo<string | null>(() => {
     const serialized = serializeParams(data, params || [])
-    if (serialized.length === 0)
-      return token.metadata?.previewInputBytes || null
+    if (serialized.length === 0) return null
     return serialized
   }, [stringifyParamsData(data), params])
 
@@ -92,6 +90,7 @@ export function MintWithTicketPageRoot({ token, ticketId }: Props) {
       newValue: newData,
     })
     setData(newData)
+    setHasLocalChanges(false)
   }
 
   const handleChangeHash = (newHash: string) => {
@@ -109,6 +108,15 @@ export function MintWithTicketPageRoot({ token, ticketId }: Props) {
 
   const handleClickBack = () => {
     router.push("/generative/[...params]", `/generative/slug/${token.slug}`)
+  }
+
+  const handleClickRefresh = () => {
+    artworkIframeRef.current?.reloadIframe()
+  }
+
+  const handleLocalDataChange = () => {
+    if (withAutoUpdate) return
+    setHasLocalChanges(true)
   }
 
   // TODO: Call contract v3 mint with ticket
@@ -175,6 +183,7 @@ export function MintWithTicketPageRoot({ token, ticketId }: Props) {
           features={features}
           hash={hash}
           token={token}
+          onLocalDataChange={handleLocalDataChange}
           onChangeData={handleChangeData}
           onChangeHash={handleChangeHash}
           lockedParamIds={lockedParamIds}
@@ -190,6 +199,7 @@ export function MintWithTicketPageRoot({ token, ticketId }: Props) {
           onClickBack={handleClickBack}
           onClickSubmit={handleClickSubmit}
           onClickHide={handleToggleShowPanel(false)}
+          onClickRefresh={handleClickRefresh}
         />
         {(loading || success) && (
           <div
@@ -237,6 +247,17 @@ export function MintWithTicketPageRoot({ token, ticketId }: Props) {
           onLoaded={onIframeLoaded}
         />
         <div className={style.frame_mask} onClick={handleClickArtwork} />
+        {hasLocalChanges && (
+          <div className={style.unsyncedContainer}>
+            <div className={style.unsyncedContent}>
+              <i className="fa-solid fa-circle-exclamation" />
+              <p>
+                Params are not synced with the token. <br /> Enable auto-refresh
+                or manually refresh the view.
+              </p>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )

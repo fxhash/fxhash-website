@@ -1,5 +1,10 @@
 @import "../../styles/Variables";
 .root {
+  // Ignore darkmode style changes
+  --color-primary: #FF005C;
+  --color-secondary: #7000FF;
+  --color-secondary-light: #b174ff;
+  --color-secondary-vlight: #7e1aff;
 
   --fxl-color-light: #ffffff;
   --fxl-color-light1: #525252;
@@ -81,7 +86,6 @@
     height: 100%;
     overflow: hidden;
     pointer-events: none;
-
     .frame_mask {
       position: absolute;
       top: 0;
@@ -90,6 +94,23 @@
       bottom: 0;
       z-index: 1000;
       pointer-events: none;
+    }
+    .unsyncedContainer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      background: rgba(0,0,0,0.5);
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content:center;
+      .unsyncedContent {
+        max-width: 500px;
+        display: flex;
+        align-items: center;
+        gap: var(--fxl-spacing);
+      }
     }
   }
 
