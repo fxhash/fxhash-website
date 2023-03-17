@@ -15,6 +15,8 @@ import rehypeHighlight from "rehype-highlight"
 import { visit } from "unist-util-visit"
 import { retextEnvVariables } from "../utils/retext/retext-env"
 import { remarkToSlate } from "remark-slate-transformer"
+import { githubDirectivePlugin } from "./markdown/GithubDirectives"
+import { infoboxDirectivePlugin } from "./markdown/InfoboxDirectives"
 
 /**
  * The LocalFiles service provide a way to get the contents of the files on the local system
@@ -159,6 +161,8 @@ export async function getArticle(category: string, article: string) {
       .use(remarkParse)
       .use(remarkDirective)
       .use(myRemarkPlugin)
+      .use(githubDirectivePlugin)
+      .use(infoboxDirectivePlugin)
       .use(remarkGfm)
       .use(remarkToc, {
         maxDepth: 1,
