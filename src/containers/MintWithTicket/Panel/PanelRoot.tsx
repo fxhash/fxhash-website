@@ -18,6 +18,7 @@ import { withAutoFormat } from "components/NFTArticle/SlateEditor/Plugins/AutoFo
 import { Spacing } from "components/Layout/Spacing"
 
 interface Props {
+  show: boolean
   data: Record<string, any>
   hash: string
   features: any
@@ -37,10 +38,12 @@ interface Props {
   onOpenNewTab: () => void
   onClickBack: () => void
   onClickSubmit: () => void
+  onClickHide: () => void
 }
 
 export function PanelRoot(props: Props) {
   const {
+    show,
     data,
     params,
     hash,
@@ -60,12 +63,21 @@ export function PanelRoot(props: Props) {
     onClickBack,
     withAutoUpdate,
     onChangeWithAutoUpdate,
+    onClickHide,
   } = props
   const name = useMemo(() => getUserName(token.author, 15), [token])
   return (
     <div className={cs(style.root)}>
-      <div className={cs(style.scrollWrapper)}>
-        <PanelHeader title={token.name} description={`by ${name}`} />
+      <div
+        className={cs(style.scrollWrapper, {
+          [style.show]: show,
+        })}
+      >
+        <PanelHeader
+          title={token.name}
+          description={`by ${name}`}
+          onClickHide={onClickHide}
+        />
         <Spacing size="regular" />
         <div className={cs(style.body)}>
           <PanelHash hash={hash} onChangeHash={onChangeHash} />

@@ -6,7 +6,14 @@ import {
   ArtworkIframeRef,
 } from "components/Artwork/PreviewIframe"
 import { ipfsUrlWithHashAndParams } from "../../utils/ipfs"
-import { useContext, useEffect, useMemo, useRef, useState } from "react"
+import {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react"
 import {
   deserializeParams,
   serializeParams,
@@ -27,12 +34,18 @@ import { ContractFeedback } from "components/Feedback/ContractFeedback"
 import { Loader } from "components/Utils/Loader"
 import Link from "next/link"
 import { Button } from "components/Button"
+import useWindowSize, { breakpoints } from "../../hooks/useWindowsSize"
 
 interface Props {
   token: GenerativeToken
   ticketId: number
 }
 export function MintWithTicketPageRoot({ token, ticketId }: Props) {
+  const { width } = useWindowSize()
+  const isMobile = useMemo(() => {
+    return (width || 0) < breakpoints.sm
+  }, [width])
+  const [showPanel, setShowPanel] = useState(!isMobile)
   const panelParamsRef = useRef<PanelParamsRef>(null)
   const historyContext = useContext(ParamsHistoryContext)
   const artworkIframeRef = useRef<ArtworkIframeRef>(null)
@@ -66,6 +79,10 @@ export function MintWithTicketPageRoot({ token, ticketId }: Props) {
     )
   }, [token.metadata.generativeUri, hash, inputBytes])
 
+  const handleToggleShowPanel = useCallback(
+    (newState) => () => setShowPanel(newState),
+    []
+  )
   const handleChangeData = (newData: Record<string, any>) => {
     historyContext.pushHistory({
       type: "params-update",
@@ -105,6 +122,12 @@ export function MintWithTicketPageRoot({ token, ticketId }: Props) {
     }
   }
 
+  const handleClickArtwork = useCallback(() => {
+    if (isMobile && showPanel) {
+      setShowPanel(false)
+    }
+  }, [isMobile, showPanel])
+
   useEffect(() => {
     historyContext.registerAction("params-update", (value: any) => {
       console.log(value)
@@ -123,10 +146,30 @@ export function MintWithTicketPageRoot({ token, ticketId }: Props) {
     withAutoUpdate,
   ])
 
+  useEffect(() => {
+    setShowPanel(!isMobile)
+  }, [isMobile])
+
   return (
     <div className={cs(style.root)}>
-      <div className={cs(style.panel)}>
+      {!showPanel && (
+        <button
+          title="show panel"
+          className={style.button_show}
+          type="button"
+          onClick={handleToggleShowPanel(true)}
+        >
+          <span>Edit</span>
+          <i aria-hidden className="fa-solid fa-chevrons-right" />
+        </button>
+      )}
+      <div
+        className={cs(style.panel, {
+          [style.show]: showPanel,
+        })}
+      >
         <PanelRoot
+          show={showPanel}
           data={data}
           params={params}
           features={features}
@@ -146,6 +189,7 @@ export function MintWithTicketPageRoot({ token, ticketId }: Props) {
           onOpenNewTab={handleOpenNewTab}
           onClickBack={handleClickBack}
           onClickSubmit={handleClickSubmit}
+          onClickHide={handleToggleShowPanel(false)}
         />
         {(loading || success) && (
           <div
@@ -182,12 +226,17 @@ export function MintWithTicketPageRoot({ token, ticketId }: Props) {
           </div>
         )}
       </div>
-      <div className={cs(style.frame)}>
+      <div
+        className={cs(style.frame, {
+          [style.minimize]: showPanel,
+        })}
+      >
         <ArtworkIframe
           ref={artworkIframeRef}
           url={url}
           onLoaded={onIframeLoaded}
         />
+        <div className={style.frame_mask} onClick={handleClickArtwork} />
       </div>
     </div>
   )

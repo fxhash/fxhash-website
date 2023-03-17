@@ -97,7 +97,7 @@ body {
   --fxl-font-size-regular: var(--font-size-regular);
   --fxl-font-size-m: var(--font-size-big);
   --fxl-font-size-l: var(--font-size-h4);
-  
+
   --fxl-spacing: #{$spacing};
   --fxl-spacing-sm: #{$spacing-small};
   --fxl-spacing-xs: #{$spacing-x-small};
@@ -120,6 +120,7 @@ body {
   --color-gray-dark: #999999;
   --color-secondary: #c8ff00;
   --color-secondary-light: #7b9811;
+  --color-secondary-vlight: #7b9811;
   --color-border: #0f0f0f;
   --color-border-input: #7e7e7e;
 }

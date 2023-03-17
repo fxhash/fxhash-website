@@ -1,3 +1,4 @@
+@import "../../styles/Variables";
 .root {
 
   --fxl-color-light: #ffffff;
@@ -27,12 +28,19 @@
   height: 100vh;
   display: flex;
   flex-direction: row;
+  position: relative;
 
   .panel {
-    width: 400px;
+    width: 0;
     height: 100%;
+    z-index: 6;
     background: var(--fxl-color-panel-background);
     position: relative;
+    transition: all 0.3s ease-out;
+    max-width: 400px;
+    &.show {
+      width: 100%;
+    }
 
     .mint_overlay {
       position: absolute;
@@ -56,7 +64,7 @@
           color: #eeeeee;
         }
       }
-      
+
       &.has_success {
         .kt_feedback {
           * {
@@ -68,9 +76,21 @@
   }
 
   .frame {
+    position: relative;
     flex-grow: 2;
     height: 100%;
     overflow: hidden;
+    pointer-events: none;
+
+    .frame_mask {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 1000;
+      pointer-events: none;
+    }
   }
 
   ::selection {
@@ -96,5 +116,87 @@
 
   ::-webkit-scrollbar-track {
     background: var(--fxl-color-dark2);
+  }
+}
+
+.button_show {
+  position: absolute;
+  top: 10px;
+  left: 0;
+  z-index: 5;
+  background: var(--fxl-color-panel-background);
+  border: solid var(--color-gray-vvvlight);
+  border-width: 2px 2px 2px 0px;
+  font-weight: 400;
+  color: var(--color-black);
+  width: 38px;
+  height: 42px;
+  text-align: center;
+  cursor: pointer;
+  transition: 0.2s all ease-out;
+  & span {
+    display: none;
+  }
+  & i {
+    font-size: 22px;
+  }
+  &:hover {
+    color: var(--color-secondary);
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .root {
+    overflow: hidden;
+    flex-direction: column;
+    .frame {
+      flex-grow: unset;
+      height: 100%;
+      width: 100%;
+      transition: 0.3s ease-out all;
+      &.minimize {
+        height: 25%;
+        .frame_mask {
+          pointer-events: auto;
+        }
+      }
+    }
+    .panel {
+      max-width: 100%;
+      width: 100%;
+      position: absolute;
+      top: 25%;
+      height: 75%;
+      left: 0;
+      right: 0;
+      transform: translateY(100%);
+      &.show {
+        transform: translateY(0);
+      }
+    }
+  }
+  .button_show {
+    top: initial;
+    bottom: 0;
+    border-radius: 25px 25px 0 0;
+    width: max-content;
+    left: 50%;
+    border-width: 2px 2px 0 2px;
+    transform: translateX(-50%);
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    z-index: 5;
+    font-size: var(--font-size-small);
+    & span {
+      display: block;
+    }
+    & i {
+      font-size: 1em;
+      transform: rotate(-90deg);
+    }
   }
 }
