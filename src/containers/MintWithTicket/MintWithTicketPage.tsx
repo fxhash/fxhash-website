@@ -160,7 +160,6 @@ export function MintWithTicketPageRoot({ token, ticketId }: Props) {
           onClickSubmit={handleClickSubmit}
           onClickRefresh={handleClickRefresh}
         />
-        {hasLocalChanges && "hi"}
         {(loading || success) && (
           <div
             className={cs(style.mint_overlay, {
