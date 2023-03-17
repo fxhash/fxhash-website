@@ -1,11 +1,14 @@
 .invalid {
-  color: var(--fxl-color-light);
+  color: var(--fxl-color-text-primary);
   display: flex;
   width: 100%;
   flex-direction: column;
 	margin-bottom: var(--fxl-spacing-xxs);
+  h4 {
+    font-size: var(--fxl-font-size-s);
+  }
   label {
-    color: var(--fxl-color-light1);
+    color: var(--fxl-color-text-primary);
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -15,8 +18,8 @@
       45deg,
       transparent,
       transparent 5px,
-      var(--fxl-color-dark1) 5px,
-      var(--fxl-color-dark1) 10px
+      var(--fxl-color-background3) 5px,
+      var(--fxl-color-background3) 10px
     );
     text-align: center;
     &:hover {
@@ -24,8 +27,8 @@
         45deg,
         transparent,
         transparent 5px,
-        var(--fxl-color-dark2) 5px,
-        var(--fxl-color-dark2) 10px
+        var(--fxl-color-background3) 5px,
+        var(--fxl-color-background3) 10px
       );
     }
     position: relative;
@@ -44,18 +47,21 @@
 }
 
 .errorsWrapper {
-  border: 2px solid var(--fxl-color-dark2);
+  border: 2px solid var(--fxl-color-background0);
   border-top: none;
 	padding: var(--fxl-spacing-sm);
 }
 .attributes {
-  margin-bottom: var(--fxl-spacing-l);
+  margin-bottom: var(--fxl-spacing-sm);
 }
 .issue {
   h3 {
+    font-size: var(--fxl-font-size-s);
     font-weight: 400;
   }
   p{
-    color: var(--fxl-color-light1);
+    font-size: var(--fxl-font-size-s);
+    margin: var(--fxl-spacing-sm) 0;
+    color: var(--fxl-color-text-primary);
   }
 }

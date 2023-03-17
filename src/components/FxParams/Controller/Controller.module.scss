@@ -11,8 +11,8 @@ $slider-thumb-width: 15px;
 $slider-thumb-border-radius: 0px;
 
 .controller {
-	display: flex;
-	align-items: center;
+  display: flex;
+  align-items: center;
   gap: var(--fxl-spacing-xxs);
   color: var(--fxl-color-text-primary);
   &:hover {
@@ -21,15 +21,18 @@ $slider-thumb-border-radius: 0px;
       background: var(--fxl-color-light1);
     }
   }
-	label {
+  label {
     color: currentColor;
-		flex: 1;
-    font-size: 1rem;
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
     word-break: break-all;
+    white-space: nowrap;
+    text-overflow: ellipsis;
     font-size: var(--fxl-font-size-s);
-	}
+  }
   input {
-    color: currentColor;   
+    color: currentColor;
   }
   .inputContainer {
     width: 200px;
@@ -52,7 +55,7 @@ $slider-thumb-border-radius: 0px;
         width: 100%;
         margin-right: 0;
       }
-    }    
+    }
 }
 
 .invert {
@@ -69,7 +72,7 @@ $slider-thumb-border-radius: 0px;
         width: 100%;
         margin-right: 0;
       }
-    }    
+    }
 }
 
 .box {
@@ -86,7 +89,7 @@ $slider-thumb-border-radius: 0px;
         width: $height;
         margin-right: 0;
       }
-    }    
+    }
 }
 
 /* Chrome, Safari, Edge, Opera */
@@ -101,3 +104,8 @@ $slider-thumb-border-radius: 0px;
   -moz-appearance: textfield;
 }
 
+@media (max-width: 450px) {
+  .controller .inputContainer {
+    width: 125px;
+  }
+}
