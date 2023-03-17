@@ -39,9 +39,7 @@ There are 2 types of rendering instances to generate previews of tokens:
 
 For most of the cases, even if your project uses WebGL, CPU instances are better because we can scale a very high amount of instances, and so it doesn't bloat the rendering queue. However, in some cases, your project may need a GPU to render properly. **For now, we only have 4 instances available, and as a result the metadata assignation will be slower for projects using those GPU-enabled instances**.
 
-You should **only use GPU-enabled instances** if:
-
-- Your project doesn't render properly using regular instances
+::infobox[You should **only use GPU-enabled instances** if your project doesn't render properly using regular instances]{type=warning}
 
 If you don't use WebGL and only the regular canvas API, it's also possible that your project doesn't render properly on the CPU instance because the canvas API uses GPU acceleration. If you observe differences between the capture and your live version, then try using GPU-enabled rendering.
 
@@ -64,7 +62,7 @@ You can configure the following settings, for both **during the mint** period an
 
 These settings should give enough control to define a strategy during the lifetime of your token. You can for instance disabled infinite exploration after token is minted, so that the front end only display a finite number of states through the minted collection of the token. You decide.
 
-_Please note that this has no effect on the iterations which will be generated from your project._
+::infobox[Please note that the variation settings have no effect on the iterations which will be generated from your project.]
 
 # Reserves
 
@@ -109,7 +107,7 @@ We would recommend to keep new users in mind. It's great to reward your previous
 
 ### Limitations
 
-**As of today, and due to an issue with some optimization in our contracts, Access Lists are limited to 500 addresses per list**. We are working on solving this issue.
+::infobox[**As of today, and due to an issue with some optimization in our contracts, Access Lists are limited to 500 addresses per list**. We are working on solving this issue.]{type=warning}
 
 ## Use cases
 
@@ -131,22 +129,16 @@ Please keep in mind that reserves are not dynamic. Future collectors won't be in
 
 You can import a CSV file when creating a reserve, which allows you to use different off-chain strategies. The CSV file should respect the following format:
 
-```js
-address
-amount
-tz1dtzgLYUHMhP6sWeFtFsHkHqyPezBBPLsZ
-2
-tz1PoDdN2oyRyF6DA73zTWAWYhNL4UGr3Egj
-4
-tz1MGzgRu6qJ3RaBUErnpFDLarFVPgaApKrA
-1
+```txt
+address;amount
+tz1dtzgLYUHMhP6sWeFtFsHkHqyPezBBPLsZ;2
+tz1PoDdN2oyRyF6DA73zTWAWYhNL4UGr3Egj;4
+tz1MGzgRu6qJ3RaBUErnpFDLarFVPgaApKrA;1
 ```
 
 ### Lock N editions for later
 
 By setting a reserve as an access list to a burn address (or to yourself if you're not planning on consuming it), you can lock acertain number of editions which can then be safely unlocked.
-
-There are probably more use cases, let's see how this feature will be leveraged.
 
 ## Updating a reserve
 
