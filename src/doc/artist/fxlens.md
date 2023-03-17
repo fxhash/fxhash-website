@@ -86,7 +86,9 @@ At the root of your the boilerplate folder, there is a `project` folder. This is
 |       └── index.js    <-- entry point of the code, comes with basic usage example
 ```
 
-The `index.js` is where the core of your code will go. You will find some example code in the file, so that it's easier for you to get started right away. If you want to lear more about the `$fx` API that's made available by the snippet, you can read the [Snippet API documentation.](/doc/artist/snippet-api)
+The `index.js` is where the core of your code will go. You will find some example code in the file, so that it's easier for you to get started right away.
+
+::infobox[If you want to lear more about the `$fx` API that's made available by the snippet, you can read the [Snippet API documentation](/doc/artist/snippet-api).]
 
 ## How to publish a project once done
 

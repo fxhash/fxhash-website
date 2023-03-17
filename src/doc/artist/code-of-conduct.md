@@ -1,11 +1,8 @@
 ---
-title: 'Code of conduct'
-date: '2022-01-13'
-description: 'Some guidelines to follow when uploading content to fxhash'
+title: "Code of conduct"
+date: "2022-01-13"
+description: "Some guidelines to follow when uploading content to fxhash"
 ---
-
-
-This guide was written by the team of moderators. 
 
 # The hard
 
@@ -13,9 +10,9 @@ This guide was written by the team of moderators.
 
 Make sure you include and indicate any licensing material in your code package. A good way to do this is using a [LICENSE.md](http://LICENSE.md) file and refer to it in a comment within your code. This file should contain any relevant licensing information including:
 
--   The license to your code;
--   The license of any included libraries; and
--   The license of any derived code.
+- The license to your code;
+- The license of any included libraries; and
+- The license of any derived code.
 
 ## Copyminting
 
@@ -59,14 +56,14 @@ Generative projects can use textures and images in a number of different ways, t
 
 ## What is acceptable
 
--   Projects where javascript is used to layer multiple static images on top of each other or as a collage (ie. illustrations, pfps, etc.)
--   Projects where javascript is used to manipulate or draw on top of a static image
+- Projects where javascript is used to layer multiple static images on top of each other or as a collage (ie. illustrations, pfps, etc.)
+- Projects where javascript is used to manipulate or draw on top of a static image
 
 ## What is not acceptable
 
--   Projects that are simply a collection generated static image
--   Projects that are layered multiple static images on top of each other but **not described as such** in the project description
--   Projects that involve static images with javascript being used to manipulate the image further but **not described as such** in the project description
+- Projects that are simply a collection generated static image
+- Projects that are layered multiple static images on top of each other but **not described as such** in the project description
+- Projects that involve static images with javascript being used to manipulate the image further but **not described as such** in the project description
 
 ## Project descriptions
 
@@ -80,9 +77,9 @@ In future, a tagging system will be implemented that will allow artists to add l
 
 The scheduling feature is provided as a means to refresh your project's settings and have it appear back at the top of the list. Resheduling can only be used under the following circumstances:
 
--   Something has gone wrong with your launch - a mistake or issue with the drop that caused the launch to be broken; or
--   A significant change to the allow list; and
--   You have not rescheduled this token already.
+- Something has gone wrong with your launch - a mistake or issue with the drop that caused the launch to be broken; or
+- A significant change to the allow list; and
+- You have not rescheduled this token already.
 
 If you're unsure of whether you meet these requirements and want to reschedule your token, please reach out to @fxhash team on Discord.
 
@@ -90,4 +87,4 @@ Abuse of the rescheduling system will result in the moderation of your token, re
 
 ## tl;dr
 
-If you’re struggling with how to describe your artwork, the bare minimum you need to include, if your artwork is made of layered PNGs chosen at random is: This artwork is made by layering PNGs chosen at random.
+::infobox[If you’re struggling with how to describe your artwork, the bare minimum you need to include, if your artwork is made of layered PNGs chosen at random is: This artwork is made by layering PNGs chosen at random.]
