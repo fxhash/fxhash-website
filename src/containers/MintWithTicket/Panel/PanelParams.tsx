@@ -30,6 +30,7 @@ interface Props {
   data?: FxParamsData
   params: FxParamDefinition<FxParamType>[]
   onChangeData: (d: FxParamsData) => void
+  onClickRefresh?: () => void
   onClickLockButton?: (id: string) => void
   onChangeLockedParamIds?: (ids: string[]) => void
   lockedParamIds?: string[]
@@ -39,6 +40,7 @@ interface Props {
   onRedo?: () => void
   withAutoUpdate?: boolean
   onChangeWithAutoUpdate: (state: boolean) => void
+  onLocalDataChange?: (d: FxParamsData) => void
 }
 
 export interface PanelParamsRef {
@@ -50,6 +52,7 @@ export const PanelParams = forwardRef<PanelParamsRef, Props>(
   (
     {
       params,
+      onClickRefresh,
       onChangeData,
       onChangeLockedParamIds,
       lockedParamIds,
@@ -59,6 +62,7 @@ export const PanelParams = forwardRef<PanelParamsRef, Props>(
       onRedo,
       withAutoUpdate,
       onChangeWithAutoUpdate,
+      onLocalDataChange,
     },
     ref
   ) => {
@@ -88,6 +92,7 @@ export const PanelParams = forwardRef<PanelParamsRef, Props>(
 
     const handleChangeData = (data: FxParamsData) => {
       setLocalData(data)
+      onLocalDataChange?.(data)
       withAutoUpdate && handleOnChangeDebounced?.(data)
     }
     const handleRandomizeParams = () => {
@@ -107,6 +112,7 @@ export const PanelParams = forwardRef<PanelParamsRef, Props>(
 
     const handleSubmitData = () => {
       onChangeData(localData)
+      onClickRefresh?.()
     }
 
     const handleClickLockButton = (paramId: string) => {
@@ -185,9 +191,7 @@ export const PanelParams = forwardRef<PanelParamsRef, Props>(
         </div>
         <div className={classes.submitRow}>
           <div className={classes.checkboxWrapper}>
-            <label htmlFor="updateCheckbox">
-              auto-refresh on settings update
-            </label>
+            <label htmlFor="updateCheckbox">auto-refresh params</label>
             <BaseInput
               id="updateCheckbox"
               type="checkbox"
