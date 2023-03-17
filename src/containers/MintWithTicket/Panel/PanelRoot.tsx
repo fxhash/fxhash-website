@@ -11,13 +11,13 @@ import {
 } from "components/FxParams/types"
 import { GenerativeToken } from "types/entities/GenerativeToken"
 import { IParamsHistoryEntry } from "components/FxParams/ParamsHistory"
-import { MutableRefObject, RefObject, useMemo } from "react"
+import { RefObject, useMemo } from "react"
 import { getUserName } from "utils/user"
 import { PanelControls } from "./PanelControls"
-import { withAutoFormat } from "components/NFTArticle/SlateEditor/Plugins/AutoFormatPlugin"
 import { Spacing } from "components/Layout/Spacing"
 
 interface Props {
+  show: boolean
   data: Record<string, any>
   hash: string
   features: any
@@ -37,12 +37,14 @@ interface Props {
   onOpenNewTab: () => void
   onClickBack: () => void
   onClickSubmit: () => void
+  onClickHide: () => void
   onClickRefresh?: () => void
   onLocalDataChange?: (d: FxParamsData) => void
 }
 
 export function PanelRoot(props: Props) {
   const {
+    show,
     data,
     params,
     hash,
@@ -62,14 +64,23 @@ export function PanelRoot(props: Props) {
     onClickBack,
     withAutoUpdate,
     onChangeWithAutoUpdate,
+    onClickHide,
     onClickRefresh,
     onLocalDataChange,
   } = props
   const name = useMemo(() => getUserName(token.author, 15), [token])
   return (
     <div className={cs(style.root)}>
-      <div className={cs(style.scrollWrapper)}>
-        <PanelHeader title={token.name} description={`by ${name}`} />
+      <div
+        className={cs(style.scrollWrapper, {
+          [style.show]: show,
+        })}
+      >
+        <PanelHeader
+          title={token.name}
+          description={`by ${name}`}
+          onClickHide={onClickHide}
+        />
         <Spacing size="regular" />
         <div className={cs(style.body)}>
           <PanelHash hash={hash} onChangeHash={onChangeHash} />

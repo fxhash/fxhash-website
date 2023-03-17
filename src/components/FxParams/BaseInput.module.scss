@@ -18,7 +18,7 @@ $height: 30px;
   &:focus-visible {
     outline: 1px solid var(--fxl-color-primary);
   }
-  
+
   &:disabled {
     opacity: 0.6;
     pointer-events: none;
@@ -29,7 +29,7 @@ $height: 30px;
   cursor: pointer;
   background: var(--fxl-color-background2);
   color: var(--fxl-color-text-primary);
-  
+
   &:hover {
     background: var(--fxl-color-background3);
     color: var(--fxl-color-light);
@@ -42,7 +42,7 @@ $height: 30px;
   &.color-secondary {
     background: var(--fxl-color-dark1);
     color: var(--fxl-color-light);
-    
+
     &:hover {
       background: var(--fxl-color-dark2);
       color: var(--fxl-color-light);
@@ -51,6 +51,7 @@ $height: 30px;
   }
 
   &.color-main {
+    transition: 0.2s all ease-out;
     background: var(--color-secondary);
     &:hover {
       background: var(--color-secondary-vlight);
@@ -65,7 +66,7 @@ $height: 30px;
 }
 
 .iconButton {
-  width: $height !important; 
+  width: $height !important;
   cursor: pointer;
   padding: 0;
   display: flex;
@@ -81,6 +82,7 @@ $slider-thumb-width: 15px;
 $slider-thumb-border-radius: 50%;
 
 .baseInput[type="range"]{
+  touch-action: none;
   -webkit-appearance: none;
   appearance: none;
   height: $slider-track-height !important;

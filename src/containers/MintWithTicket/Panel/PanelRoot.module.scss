@@ -2,11 +2,14 @@
   display: flex;
   flex-direction: column;
   height: 100%;
+  overflow: hidden;
   .scrollWrapper {
     flex-grow: 1;
     overflow-y: scroll;
     overflow-x: hidden;
-    padding: var(--fxl-spacing-sm) var(--fxl-spacing-sm) 0 var(--fxl-spacing-sm);
+      padding: var(--fxl-spacing-sm) var(--fxl-spacing-sm) 0 var(--fxl-spacing-sm);
+    &.show {
+    }
   }
   .body {
     flex-grow: 1;
