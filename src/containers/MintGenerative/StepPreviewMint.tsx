@@ -2,7 +2,7 @@ import style from "./StepCheckFiles.module.scss"
 import styleSteps from "./Steps.module.scss"
 import cs from "classnames"
 import { StepComponent } from "../../types/Steps"
-import { getIpfsSlash } from "../../utils/ipfs"
+import { getIpfsSlash, ipfsUrlWithHash } from "../../utils/ipfs"
 import { Spacing } from "../../components/Layout/Spacing"
 import { Button } from "../../components/Button"
 import { useContext, useEffect, useMemo } from "react"
@@ -22,6 +22,7 @@ import {
   TMintIssuerOperationParams,
 } from "../../services/contract-operations/MintIssuer"
 import { stringToByteString } from "../../utils/convert"
+import { MintIssuerV3Operation } from "services/contract-operations/MintIssuerV3"
 
 export const StepPreviewMint: StepComponent = ({ onNext, state }) => {
   const userCtx = useContext(UserContext)
@@ -56,27 +57,7 @@ export const StepPreviewMint: StepComponent = ({ onNext, state }) => {
     error: contractError,
     success,
     call,
-  } = useContractOperation<TMintIssuerOperationParams>(MintIssuerOperation)
-
-  // this variable ensures that we can safely access its data regardless of
-  // the state of the queries
-  const safeMetaData: MetadataResponse | false | undefined =
-    !metaError && !metaLoading && (metaData as MetadataResponse)
-
-  // when we receive metadata CID, we can initiate the call to contract
-  useEffect(() => {
-    if (safeMetaData) {
-      const metadataCid = safeMetaData.cid
-      // call the contract
-      // it will handle either a call to the issuer or to the collaboration
-      // contract if target is collaboration
-      call({
-        data: state,
-        metadata: metadata,
-        metadataBytes: stringToByteString(getIpfsSlash(metadataCid)),
-      })
-    }
-  }, [safeMetaData])
+  } = useContractOperation(MintIssuerV3Operation)
 
   // when the contract call is a success, we move to next step
   useEffect(() => {
@@ -89,6 +70,39 @@ export const StepPreviewMint: StepComponent = ({ onNext, state }) => {
 
   // derived from state, to take account for both side-effects interactions
   const loading = metaLoading || contractLoading
+
+  const triggerMint = async () => {
+    if (loading) return
+    // todo: better error handling
+    // upload token metadata and get CID
+    const tokenMetadataResponse = await metaPost(metadata)
+    const tokenMetadataCid = (tokenMetadataResponse as MetadataResponse).cid
+    // generate and upload ticket metadata
+    const ticketMetadata = {
+      name: `[TICKET] ${state.informations!.name}`,
+      description: `A ticket which can be exchanged for an iteration of "${
+        state.informations!.name
+      }".`,
+      symbol: "FX_TICKET",
+      decimals: 0,
+      artifactUri: getIpfsSlash(state.cidPreview!),
+      displayUri: getIpfsSlash(state.cidPreview!),
+      thumbnailUri: getIpfsSlash(state.cidThumbnail!),
+      isBooleanAmount: true,
+    }
+    const ticketMetadataResponse = await metaPost(ticketMetadata)
+    const ticketMetadataCid = (ticketMetadataResponse as MetadataResponse).cid
+
+    // call the contract
+    // it will handle either a call to the issuer or to the collaboration
+    // contract if target is collaboration
+    call({
+      data: state,
+      metadata: metadata,
+      metadataBytes: stringToByteString(getIpfsSlash(tokenMetadataCid)),
+      ticketMetadataBytes: stringToByteString(getIpfsSlash(ticketMetadataCid)),
+    })
+  }
 
   return (
     <>
@@ -123,7 +137,7 @@ export const StepPreviewMint: StepComponent = ({ onNext, state }) => {
           iconSide="right"
           size="large"
           state={loading ? "loading" : "default"}
-          onClick={() => metaPost(metadata)}
+          onClick={triggerMint}
           className={style.button}
         >
           publish project

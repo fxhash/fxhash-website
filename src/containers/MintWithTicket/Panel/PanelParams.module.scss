@@ -1,0 +1,67 @@
+.description {
+  margin-bottom: var(--fxl-spacing-xs);
+}
+
+.randomContainer {
+  position: sticky;
+  z-index: 20;
+  top: calc(var(--fxl-spacing) * -1);
+  display: flex;
+  margin: var(--fxl-spacing-xs) 0 var(--fxl-spacing-sm) 0;
+  width: 100%;
+  gap: calc(var(--fxl-spacing-xs) * 0.5);
+  background: var(--fxl-color-background);
+  justify-content: flex-end;
+
+  .randomButton{
+    flex-grow: 1;
+  }
+
+  .undoRedoContainer {
+    display: flex;
+    gap: var(--fxl-spacing-xxs);
+  }
+}
+
+.submitRow {
+  display: flex;
+  align-items: center;
+  margin-top: var(--fxl-spacing);
+  gap: var(--fxl-spacing-sm);
+  .submitButton {
+    flex-grow: 1;
+  }
+  .checkboxWrapper {
+    display: flex;
+    align-items: center;
+    label {
+      font-size: var(--fxl-font-size-xs);
+      text-align: right;
+      margin-right: var(--fxl-spacing-xs);
+      color: var(--fxl-color-light0);
+      user-select: none;
+    }
+    &:hover {
+      label {
+        color: var(--fxl-color-light);
+      }
+    }
+  }
+}
+
+.controlsWrapper {
+  display: flex;
+  gap: var(--fxl-spacing-xs);
+  color: var(--fxl-color-light0);
+  .lockButtons {
+    display: flex;
+    flex-direction: column;
+    gap: var(--fxl-spacing-xxs);
+  }
+}
+
+.lockAllButton {
+  &.primary {
+    color: var(--fxl-color-primary) !important; 
+  }
+}

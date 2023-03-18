@@ -5,6 +5,7 @@ import { Listing } from "./Listing"
 import { Offer } from "./Offer"
 import { NFTArticle } from "./Article"
 import { MediaImage } from "./MediaImage"
+import { MintTicket } from "./MintTicket"
 
 export interface UserItems {
   generativeTokens?: GenerativeToken[]
@@ -75,6 +76,7 @@ export interface User {
   collaborationContracts: Collaboration[]
   moderationReason?: string | null
   articles: NFTArticle[]
+  mintTickets: MintTicket[]
 }
 
 export interface ConnectedUser extends Partial<User> {

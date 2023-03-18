@@ -7,16 +7,23 @@ import {
   ArtworkIframe,
   ArtworkIframeRef,
 } from "../../components/Artwork/PreviewIframe"
-import { useMemo, useState, useRef, useEffect } from "react"
+import { useMemo, useState, useRef } from "react"
 import { generateFxHash } from "../../utils/hash"
 import { HashTest } from "../../components/Testing/HashTest"
 import { Checkbox } from "../../components/Input/Checkbox"
 import { Button } from "../../components/Button"
-import { RawTokenFeatures } from "../../types/Metadata"
 import { RawFeatures } from "../../components/Features/RawFeatures"
 import { ArtworkFrame } from "../../components/Artwork/ArtworkFrame"
-import { ipfsGatewayUrl } from "../../services/Ipfs"
-import { ipfsUrlWithHash } from "../../utils/ipfs"
+import { ipfsUrlWithHashAndParams } from "../../utils/ipfs"
+import { ControlsTest } from "components/Testing/ControlsTest"
+import {
+  consolidateParams,
+  serializeParams,
+  stringifyParamsData,
+  sumBytesParams,
+} from "components/FxParams/utils"
+import { useReceiveTokenInfos } from "hooks/useReceiveTokenInfos"
+import { FxParamsData } from "components/FxParams/types"
 
 export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
   const [hash, setHash] = useState<string>(
@@ -25,59 +32,60 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
   const [check1, setCheck1] = useState<boolean>(false)
   const [check2, setCheck2] = useState<boolean>(false)
   const artworkIframeRef = useRef<ArtworkIframeRef>(null)
-  const [features, setFeatures] = useState<RawTokenFeatures | null>(null)
+  const { onIframeLoaded, features, params, paramsDefinition } =
+    useReceiveTokenInfos(artworkIframeRef)
+
+  console.log({
+    features,
+    params,
+    paramsDefinition,
+  })
+
+  const [data, setData] = useState<FxParamsData>({})
+
+  const inputBytes = useMemo<string | null>(() => {
+    const serialized = serializeParams(data, params || [])
+    if (serialized.length === 0) return null
+    return serialized
+  }, [stringifyParamsData(data), params])
 
   const url = useMemo<string>(() => {
-    return ipfsUrlWithHash(state.cidUrlParams!, hash)
-  }, [hash])
+    return ipfsUrlWithHashAndParams(state.cidUrlParams!, hash, inputBytes)
+  }, [hash, inputBytes])
+  console.log({ url })
+
+  console.log({ data })
 
   const nextStep = () => {
     onNext({
       previewHash: hash,
+      previewInputBytes: inputBytes,
+      params: {
+        definition: paramsDefinition,
+        // TODO: remove any here
+        inputBytesSize: sumBytesParams(paramsDefinition as any),
+      },
     })
   }
 
-  // attach event to window to get messages from
-  useEffect(() => {
-    const listener = (e: any) => {
-      if (e.data && e.data.id === "fxhash_getFeatures") {
-        if (e.data.data) {
-          setFeatures(e.data.data)
-        } else {
-          setFeatures(null)
-        }
-      }
-    }
-    // Listen to message from child window
-    window.addEventListener("message", listener, false)
-
-    // remove listener when component unmounts
-    return () => {
-      window.removeEventListener("message", listener, false)
-    }
-  }, [])
-
-  const iframeLoaded = () => {
-    if (artworkIframeRef.current) {
-      const iframe = artworkIframeRef.current.getHtmlIframe()
-      if (iframe) {
-        iframe.contentWindow?.postMessage("fxhash_getFeatures", "*")
-      }
-    }
+  const handleSubmitParams = (data: any) => {
+    setData(data)
   }
 
   const renderArtwork = () => (
-    <div className={cs(style.artwork)}>
-      <div className={cs(style["preview-cont"])}>
-        <div className={cs(style["preview-wrapper"])}>
-          <ArtworkFrame>
-            <ArtworkIframe
-              ref={artworkIframeRef}
-              url={url}
-              textWaiting="looking for content on IPFS"
-              onLoaded={iframeLoaded}
-            />
-          </ArtworkFrame>
+    <div className={cs(style.artworkWrapper)}>
+      <div className={cs(style.artwork)}>
+        <div className={cs(style["preview-cont"])}>
+          <div className={cs(style["preview-wrapper"])}>
+            <ArtworkFrame>
+              <ArtworkIframe
+                ref={artworkIframeRef}
+                url={url}
+                textWaiting="looking for content on IPFS"
+                onLoaded={onIframeLoaded}
+              />
+            </ArtworkFrame>
+          </div>
         </div>
       </div>
     </div>
@@ -114,7 +122,23 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
               different hashes generate <strong>different</strong> outputs
             </li>
           </ul>
-          <div className={layout.show_sm}>{renderArtwork()}</div>
+          <div className={layout.show_sm}>
+            <div className={cs(style.artworkWrapper)}>
+              <div className={cs(style.artwork)}>
+                <div className={cs(style["preview-cont"])}>
+                  <div className={cs(style["preview-wrapper"])}>
+                    <ArtworkFrame>
+                      <ArtworkIframe
+                        url={url}
+                        textWaiting="looking for content on IPFS"
+                        onLoaded={onIframeLoaded}
+                      />
+                    </ArtworkFrame>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
 
           <Spacing size="3x-large" sm="x-large" />
 
@@ -126,16 +150,39 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
               artworkIframeRef.current?.reloadIframe()
             }}
           />
-
           <Spacing size="2x-large" sm="x-large" />
-
+          {params && (
+            <div>
+              <h5>Params</h5>
+              <Spacing size="small" />
+              <ControlsTest params={params} onSubmit={handleSubmitParams} />
+            </div>
+          )}
+          <Spacing size="2x-large" sm="x-large" />
           <div>
             <h5>Features</h5>
             <Spacing size="small" />
             <RawFeatures rawFeatures={features} />
           </div>
         </div>
-        <div className={layout.hide_sm}>{renderArtwork()}</div>
+        <div className={layout.hide_sm}>
+          <div className={cs(style.artworkWrapper)}>
+            <div className={cs(style.artwork)}>
+              <div className={cs(style["preview-cont"])}>
+                <div className={cs(style["preview-wrapper"])}>
+                  <ArtworkFrame>
+                    <ArtworkIframe
+                      ref={artworkIframeRef}
+                      url={url}
+                      textWaiting="looking for content on IPFS"
+                      onLoaded={onIframeLoaded}
+                    />
+                  </ArtworkFrame>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <Spacing size="6x-large" sm="x-large" />
@@ -143,7 +190,7 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
       <div className={cs(style.checkboxes)}>
         <div>
           <Checkbox value={check1} paddingLeft={false} onChange={setCheck1}>
-            I want to keep this hash for the preview of my project
+            I want to keep these settings for the preview of my project
           </Checkbox>
           <Checkbox value={check2} paddingLeft={false} onChange={setCheck2}>
             My Generative Token works properly

@@ -1,3 +1,4 @@
+import { TzktOperation } from "./../types/Tzkt"
 import type { WalletOperation } from "@taquito/taquito"
 import { useContext, useRef, useState } from "react"
 import { UserContext } from "../containers/UserProvider"
@@ -10,11 +11,16 @@ import {
 } from "../types/Contracts"
 import { useIsMounted } from "../utils/hookts"
 
+interface OptionsContractOperation {
+  onSuccess?: (data: any) => void
+}
+
 /**
  * A
  */
 export function useContractOperation<Params>(
-  OperationClass: TContractOperation<Params>
+  OperationClass: TContractOperation<Params>,
+  options: OptionsContractOperation = {}
 ): TContractOperationHookReturn<Params> {
   const [state, setState] = useState<ContractOperationStatus>(
     ContractOperationStatus.NONE
@@ -24,6 +30,7 @@ export function useContractOperation<Params>(
   const [error, setError] = useState<boolean>(false)
   const [opHash, setOpHash] = useState<string | null>(null)
   const [operation, setOperation] = useState<WalletOperation | null>(null)
+  const [opData, setOpData] = useState<TzktOperation[] | null>(null)
   const [params, setParams] = useState<Params | null>(null)
   const counter = useRef<number>(0)
   const isMounted = useIsMounted()
@@ -37,6 +44,7 @@ export function useContractOperation<Params>(
     setError(false)
     setOpHash(null)
     setOperation(null)
+    setOpData(null)
     setParams(null)
     setState(ContractOperationStatus.NONE)
   }
@@ -48,6 +56,7 @@ export function useContractOperation<Params>(
     setError(false)
     setOpHash(null)
     setOperation(null)
+    setOpData(null)
     setParams(params)
     setState(ContractOperationStatus.NONE)
 
@@ -69,6 +78,12 @@ export function useContractOperation<Params>(
           }
           if (data?.operation) {
             setOperation(data.operation)
+          }
+          if (data?.opData) {
+            setOpData(data.opData)
+          }
+          if (options.onSuccess) {
+            options.onSuccess(data)
           }
         } else if (status === ContractOperationStatus.ERROR) {
           setLoading(false)
@@ -126,6 +141,7 @@ export function useContractOperation<Params>(
     params,
     opHash,
     operation,
+    opData,
     loading,
     success,
     call,

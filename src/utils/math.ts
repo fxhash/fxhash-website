@@ -26,3 +26,29 @@ export function getNumberWithOrdinal(n: number) {
     v = n % 100
   return n + (s[(v - 20) % 10] || s[v] || s[0])
 }
+
+const getDailyHarbergerTax = (price: number) => {
+  return price * 0.0014
+}
+export function getMintTicketHarbergerTax(price: number, days: number) {
+  return getDailyHarbergerTax(price) * days
+}
+export function getDaysCoveredByHarbergerTax(
+  totalTaxPaid: number,
+  price: number
+) {
+  return totalTaxPaid / getDailyHarbergerTax(price)
+}
+export const getTaxPaidUntil = (
+  taxationLocked: number,
+  taxationStart: Date,
+  price: number
+) => {
+  const numberOfDaysCovered = getDaysCoveredByHarbergerTax(
+    taxationLocked,
+    price
+  )
+  return new Date(
+    taxationStart.getTime() + numberOfDaysCovered * 24 * 60 * 60 * 1000
+  )
+}

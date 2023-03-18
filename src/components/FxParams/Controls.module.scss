@@ -1,0 +1,24 @@
+.controls {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  min-width: 0;
+  gap: var(--fxl-spacing-xxs);
+}
+.blade {
+  display: flex;
+  gap: var(--fxl-spacing-xxs);
+  align-items: center;
+  background: var(--fxl-color-background1);
+  padding: 0 0 0 var(--fxl-spacing-xxs);
+  &:hover {
+    background: var(--fxl-color-background2);
+  }
+  & > div {
+    min-width: 0;
+    flex-grow: 1;
+  }
+  .lockButton {
+  }
+}
+

@@ -28,6 +28,7 @@ interface Props {
   gentkId?: number
   listingId?: number
   assetId?: string
+  paymentMethod?: string
   appearance?: Record<string, string | number | undefined>
   onClose?: () => void
   onSuccess?: TSuccess
@@ -89,6 +90,7 @@ const WinterCheckout: FunctionComponent<Props> = (props) => {
       "gentkId",
       "listingId",
       "assetId",
+      "paymentMethod",
     ]
     paramsStr.forEach((param) => {
       const propValue = props[param as keyof PropsWithChildren<Props>]

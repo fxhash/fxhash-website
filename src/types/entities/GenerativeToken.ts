@@ -9,6 +9,7 @@ import { Split } from "./Split"
 import { User } from "./User"
 import { ISettingsContext } from "../../context/Theme"
 import { MediaImage } from "./MediaImage"
+import { MintTicket, MintTicketSettings } from "./MintTicket"
 
 export enum GenTokFlag {
   NONE = "NONE",
@@ -84,8 +85,13 @@ export interface GenerativeTokenMarketStatsHistory {
   to: string
 }
 
+export enum GenerativeTokenVersion {
+  "PRE_V3" = "PRE_V3",
+  V3 = "V3",
+}
 export interface GenerativeToken {
   id: number
+  version: GenerativeTokenVersion
   author: User
   name: string
   flag: GenTokFlag
@@ -124,6 +130,9 @@ export interface GenerativeToken {
   entireCollection?: Objkt[]
   articleMentions?: ArticleGenerativeTokenMention[]
   captureMedia?: MediaImage
+  mintTickets: MintTicket[]
+  mintTicketSettings: MintTicketSettings | null
+  inputBytesSize: number
 }
 
 export interface GenerativeTokenWithCollection extends GenerativeToken {
