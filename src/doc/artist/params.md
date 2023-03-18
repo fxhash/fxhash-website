@@ -66,7 +66,9 @@ Because artists may want to give collectors some time to play with the parameter
 
 ![minting details of fxparams projects](/images/doc/artist/fxparams/tickets.png)
 
-To ensure projects don't end up with staling tickets and unminted iterations, we've put a taxation mechanism in place: collectors will have to pay a fee to the artist(s) to keep the ticket. To ensure the best release conditions for artists' projects, they can configure a grace period: during the grace period, collectors don't have to pay a tax. This mechanism ensures that as an artist, you can properly define the period during which you want your project to be explored freely. TODO: Read more about the taxation mechanism here.
+To ensure projects don't end up with staling tickets and unminted iterations, we've put a taxation mechanism in place: collectors will have to pay a fee to the artist(s) to keep the ticket. To ensure the best release conditions for artists' projects, they can configure a grace period: during the grace period, collectors don't have to pay a tax. This mechanism ensures that as an artist, you can properly define the period during which you want your project to be explored freely.
+
+::infobox[Read more about the [underlying mechanism of mint tickets](/doc/collect/fxparams-mint-tickets#the-mint-ticket-mechanism).]
 
 # fxhash minting interface
 

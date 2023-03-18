@@ -420,7 +420,7 @@ The `$fx.params(definition)` function must be called first, with an array of par
 
 ![params technical overview](/images/doc/artist/fxparams/params-technical-overview.png)
 
-When working with fx(params), the code needs to receive a sequence of bytes as string of hexadecimal values, so that one value can be mapped to every parameter. It would not be convenient at all to input this string manually, as such we recommend using fx(lens) to work on your fx(hash) projects (TODO: link to fxlens). fx(lens) comes with built-in tools and hot-reloading to facilitate iterating on your project and manipulating the various parameters as you define those in your code.
+When working with fx(params), the code needs to receive a sequence of bytes as string of hexadecimal values, so that one value can be mapped to every parameter. It would not be convenient at all to input this string manually, as such we recommend using [fx(lens)](/doc/artist/fxlens) to work on your fx(hash) projects. fx(lens) comes with built-in tools and hot-reloading to facilitate iterating on your project and manipulating the various parameters as you define those in your code.
 
 ## Parameter definition specifications
 
