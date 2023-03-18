@@ -31,6 +31,7 @@ const Home: NextPage<Props> = ({
   articles,
   //  listings,
 }) => {
+  console.log(randomGenerativeToken)
   return (
     <>
       <Head>
@@ -80,7 +81,7 @@ export async function getServerSideProps() {
       ${Frag_GenTokenInfo}
       ${Frag_UserBadge}
       query Query($skip: Int, $take: Int, $filters: GenerativeTokenFilter) {
-        randomGenerativeToken {
+        randomTopGenerativeToken {
           id
           name
           ...Author
@@ -125,7 +126,7 @@ export async function getServerSideProps() {
             }
           }
         }
-        articles(take: 2, sort: { createdAt: "DESC" }) {
+        articles(take: 3, sort: { createdAt: "DESC" }) {
           id
           title
           slug
@@ -148,7 +149,7 @@ export async function getServerSideProps() {
 
   return {
     props: {
-      randomGenerativeToken: data.randomGenerativeToken,
+      randomGenerativeToken: data.randomTopGenerativeToken,
       generativeTokens: data.generativeTokens,
       listings: data.listings,
       articles: data.articles,

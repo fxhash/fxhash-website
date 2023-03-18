@@ -13,9 +13,14 @@ import { UserBadge } from "../../components/User/UserBadge"
 
 const docs = [
   {
-    title: "Minting an NFT on fxhash",
-    subtitle: "Quick start guide on minting a generative token",
+    title: "Publishing a project on fxhash",
+    subtitle: "Quick start guide on creating on fxhash",
     url: "/doc/artist/guide-publish-generative-token",
+  },
+  {
+    title: "Collecting on fxhash",
+    subtitle: "How to get started to collect pieces on fxhash",
+    url: "/doc/collect/guide",
   },
   {
     title: "Integration guide",
@@ -82,7 +87,7 @@ const _HomeHero = ({ randomGenerativeToken, articles }: HomeHeroProps) => {
           </div>
           <div className={style.user_articles}>
             <div>
-              <h6>featured fx(text) articles</h6>
+              <h6>community articles</h6>
               <div>
                 {articles.map((article) => (
                   <div className={style.user_article} key={article.id}>

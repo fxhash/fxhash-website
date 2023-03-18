@@ -26,7 +26,6 @@ const _HomeMarketplace = () => {
       take: 33,
       sort: { secVolumeTz7d: "DESC" },
     },
-    pollInterval: 10000,
   })
   const stats: GenerativeTokenMarketStats[] =
     data?.marketStats?.generativeTokens

@@ -28,7 +28,7 @@
   padding-bottom: 48px;
   padding-top: 30px;
   h1 {
-    font-weight: 500;
+    font-weight: bold;
     max-width: 480px;
   }
   .socials {
@@ -70,6 +70,7 @@
       .subtitle {
         margin-top: 2px;
         color: var(--color-gray);
+        font-size: var(--font-size-small);
       }
     }
   }
@@ -78,7 +79,7 @@
     .user_article {
       margin-bottom: 16px;
       .title {
-        font-weight: 500;
+        font-weight: bold;
         color: var(--color-black);
         font-size: var(--font-size-h4);
         &:hover {
@@ -88,6 +89,7 @@
       .subtitle {
         margin-top: 2px;
         color: var(--color-gray);
+        font-size: var(--font-size-small);
       }
       .written {
         margin-right: 0.5em;

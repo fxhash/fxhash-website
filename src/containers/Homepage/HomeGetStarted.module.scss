@@ -1,14 +1,14 @@
 @import "../../styles/Variables";
 
 .bg {
-  padding-top: 48px;
-  padding-bottom: 48px;
+  padding-top: 100px;
+  padding-bottom: 100px;
   background-color: var(--color-gray-vvvlight);
 }
 .docs {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
+  gap: 32px;
   margin-top: 32px;
   & a {
     display: inline-flex;
@@ -37,7 +37,8 @@
   .docs {
     grid-template-columns: repeat(1, 1fr);
     gap: 36px;
-    margin-top: 16px;
+    margin-top: 50px;
+    
     & .doc_title {
       font-size: var(--font-size-h5);
     }

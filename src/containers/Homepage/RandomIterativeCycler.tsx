@@ -58,65 +58,71 @@ const _RandomIterativeCycler = ({
               [style.is_active]: isActive,
             })}
           >
-            <SquareContainer>
-              <ArtworkFrame
-                tokenLabels={generativeToken.labels}
-                borderWidth={0}
-              >
-                <Image
-                  image={objkt.captureMedia}
-                  ipfsUri={objkt.metadata?.thumbnailUri}
-                  alt={`${objkt.name} preview`}
-                />
-              </ArtworkFrame>
-            </SquareContainer>
-            <div className={style.details}>
-              {isActive && (
-                <ManualProgressAnimated
-                  percent={(counterInSec * 100) / maxTimeSec}
-                  className={style.progress_bar}
-                />
-              )}
-              <div className={style.infos}>
-                <UserBadge
-                  classNameAvatar={style.avatar}
-                  user={generativeToken.author}
-                  displayName={false}
-                />
-                <div>
-                  <Link href={`/gentk/slug/${objkt.slug}`}>
-                    <a className={style.title_url}>
-                      <h4>
-                        {generativeToken.name}{" "}
-                        <span className={style.iteration}>
-                          #{objkt.iteration}/{generativeToken.supply}
-                        </span>
-                      </h4>
-                    </a>
-                  </Link>
-                  <div className={style.creator}>
-                    <EntityBadge
-                      displayAvatar={false}
-                      user={generativeToken.author}
-                      toggeable
-                      centered
-                      size="regular"
-                    />
+            <div
+              className={cs({
+                [style.square]: isActive,
+              })}
+            >
+              <SquareContainer className={cs(style.square_container)}>
+                <ArtworkFrame
+                  tokenLabels={generativeToken.labels}
+                  borderWidth={0}
+                >
+                  <Image
+                    image={objkt.captureMedia}
+                    ipfsUri={objkt.metadata?.thumbnailUri}
+                    alt={`${objkt.name} preview`}
+                  />
+                </ArtworkFrame>
+              </SquareContainer>
+              <div className={style.details}>
+                {isActive && (
+                  <ManualProgressAnimated
+                    percent={(counterInSec * 100) / maxTimeSec}
+                    className={style.progress_bar}
+                  />
+                )}
+                <div className={style.infos}>
+                  <UserBadge
+                    classNameAvatar={style.avatar}
+                    user={generativeToken.author}
+                    displayName={false}
+                  />
+                  <div>
+                    <Link href={`/gentk/slug/${objkt.slug}`}>
+                      <a className={style.title_url}>
+                        <h4>
+                          {generativeToken.name}{" "}
+                          <span className={style.iteration}>
+                            #{objkt.iteration}/{generativeToken.supply}
+                          </span>
+                        </h4>
+                      </a>
+                    </Link>
+                    <div className={style.creator}>
+                      <EntityBadge
+                        displayAvatar={false}
+                        user={generativeToken.author}
+                        toggeable
+                        centered
+                        size="regular"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
-              {objkt.owner && (
-                <div className={style.owner}>
-                  <span className={style.label}>owned by</span>
-                  <UserBadge
-                    displayAvatar={false}
-                    classNameAvatar={style.avatar}
-                    user={objkt.owner}
-                    size="regular"
-                  />
-                </div>
-              )}
             </div>
+            {objkt.owner && (
+              <div className={style.owner}>
+                <span className={style.label}>owned by</span>
+                <UserBadge
+                  displayAvatar={false}
+                  classNameAvatar={style.avatar}
+                  user={objkt.owner}
+                  size="regular"
+                />
+              </div>
+            )}
           </div>
         )
       })}

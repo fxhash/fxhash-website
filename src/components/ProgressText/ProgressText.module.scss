@@ -4,12 +4,22 @@
   &_color {
     left: 0;
     position: absolute;
-    overflow: hidden;
-    color: var(--color-primary);
+    background-color: var(--color-primary);
     will-change: width;
     transition: 0.3s width $timing-cubic;
+    height: 100%;
+    background-clip: text;
+    color: transparent;
   }
   &_back {
     color: inherit;
+  }
+  &_cover {
+    left: 0;
+    position: absolute;
+    background-color: var(--color-white);
+    will-change: width;
+    transition: 0.3s width $timing-cubic;
+    height: 100%;
   }
 }
