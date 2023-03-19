@@ -1,11 +1,11 @@
 @import "../../styles/Variables";
 
 .bg {
-  padding-top: 48px;
-  padding-bottom: 32px;
+  padding-top: 100px;
+  padding-bottom: 100px;
   background-color: var(--color-gray-vvvlight);
   .ranks {
-    margin-top: 32px;
+    margin-top: 80px;
     grid-auto-flow: row;
     grid-template-columns: repeat(3, 1fr);
   }
@@ -81,6 +81,7 @@
 @media (max-width: $breakpoint-sm) {
   .bg .ranks {
     grid-template-columns: repeat(1, 1fr);
+    margin-top: 40px;
   }
   .top {
     gap: 32px 16px;

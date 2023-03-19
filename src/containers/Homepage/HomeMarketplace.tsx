@@ -40,7 +40,7 @@ const _HomeMarketplace = () => {
 
   return (
     <div className={cs(layout["padding-big"], style.bg)}>
-      <TitleHyphen>marketplace</TitleHyphen>
+      <TitleHyphen>trending projects</TitleHyphen>
       <div className={style.top}>
         {display.top.map(({ generativeToken }, idx) => {
           if (!generativeToken) return null

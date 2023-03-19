@@ -17,9 +17,10 @@ const _HomeExplore = ({ generativeTokens }: HomeExploreProps) => {
   const settings = useContext(SettingsContext)
   return (
     <div className={cs(layout["padding-big"], style.container)}>
-      <TitleHyphen>recent works</TitleHyphen>
-      <div className={style.subtitle}>recent works from fxhash's artists</div>
-      <CardsContainer className={cs(style["row-responsive-limiter"])}>
+      <TitleHyphen>recent projects</TitleHyphen>
+      <CardsContainer
+        className={cs(style["row-responsive-limiter"], style.projects)}
+      >
         {generativeTokens.map((token) => (
           <GenerativeTokenCard
             key={token.id}

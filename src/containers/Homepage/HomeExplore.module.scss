@@ -1,14 +1,18 @@
 @import "../../styles/Variables";
 
 .container {
-  padding-top: 96px;
-  padding-bottom: 80px;
+  padding-top: 100px;
+  padding-bottom: 100px;
 }
 
 .subtitle {
   margin-top: 20px;
   margin-bottom: 32px;
   font-size: var(--font-size-regular);
+}
+
+.projects {
+  margin-top: 32px;
 }
 
 .cta {
