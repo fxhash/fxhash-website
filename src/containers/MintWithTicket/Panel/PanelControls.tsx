@@ -12,10 +12,17 @@ interface Props {
   onOpenNewTab?: () => void
   onSubmit: () => void
   submitLabel?: string
+  hideSubmit?: boolean
 }
 
 export function PanelControls(props: Props) {
-  const { onClickBack, onOpenNewTab, onSubmit, submitLabel = "mint" } = props
+  const {
+    onClickBack,
+    onOpenNewTab,
+    onSubmit,
+    submitLabel = "mint",
+    hideSubmit,
+  } = props
 
   return (
     <div className={style.controlPanel}>
@@ -33,14 +40,16 @@ export function PanelControls(props: Props) {
             <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
           </IconButton>
         )}
-        <BaseButton
-          color="main"
-          onClick={onSubmit}
-          className={style.submitButton}
-          title={submitLabel}
-        >
-          {submitLabel}
-        </BaseButton>
+        {!hideSubmit && (
+          <BaseButton
+            color="main"
+            onClick={onSubmit}
+            className={style.submitButton}
+            title={submitLabel}
+          >
+            {submitLabel}
+          </BaseButton>
+        )}
       </div>
     </div>
   )

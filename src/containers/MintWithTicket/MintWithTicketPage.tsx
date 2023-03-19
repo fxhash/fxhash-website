@@ -38,7 +38,7 @@ import useWindowSize, { breakpoints } from "../../hooks/useWindowsSize"
 
 interface Props {
   token: GenerativeToken
-  ticketId: number
+  ticketId?: number
 }
 export function MintWithTicketPageRoot({ token, ticketId }: Props) {
   const { width } = useWindowSize()
@@ -121,7 +121,7 @@ export function MintWithTicketPageRoot({ token, ticketId }: Props) {
 
   // TODO: Call contract v3 mint with ticket
   const handleClickSubmit = () => {
-    if (inputBytes) {
+    if (inputBytes && ticketId != null) {
       call({
         token: token,
         ticketId: ticketId,
@@ -200,6 +200,7 @@ export function MintWithTicketPageRoot({ token, ticketId }: Props) {
           onClickSubmit={handleClickSubmit}
           onClickHide={handleToggleShowPanel(false)}
           onClickRefresh={handleClickRefresh}
+          hideSubmit={ticketId == null}
         />
         {(loading || success) && (
           <div

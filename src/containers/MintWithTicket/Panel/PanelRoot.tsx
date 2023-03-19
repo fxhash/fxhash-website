@@ -40,6 +40,7 @@ interface Props {
   onClickHide: () => void
   onClickRefresh?: () => void
   onLocalDataChange?: (d: FxParamsData) => void
+  hideSubmit?: boolean
 }
 
 export function PanelRoot(props: Props) {
@@ -67,6 +68,7 @@ export function PanelRoot(props: Props) {
     onClickHide,
     onClickRefresh,
     onLocalDataChange,
+    hideSubmit,
   } = props
   const name = useMemo(() => getUserName(token.author, 15), [token])
   return (
@@ -107,6 +109,7 @@ export function PanelRoot(props: Props) {
         onSubmit={onClickSubmit}
         onOpenNewTab={onOpenNewTab}
         onClickBack={onClickBack}
+        hideSubmit={hideSubmit}
       />
     </div>
   )

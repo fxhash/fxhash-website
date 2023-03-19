@@ -14,10 +14,17 @@ import { SettingsContext } from "../../context/Theme"
 import { ipfsGatewayUrl } from "../../services/Ipfs"
 import { Image } from "../Image"
 import { useReceiveTokenInfos } from "hooks/useReceiveTokenInfos"
+import { getGenerativeTokenUrl } from "utils/generative-token"
 interface Props {
   token: Pick<
     GenerativeToken,
-    "metadata" | "labels" | "captureMedia" | "displayUri" | "name" | "balance"
+    | "metadata"
+    | "labels"
+    | "captureMedia"
+    | "displayUri"
+    | "name"
+    | "balance"
+    | "inputBytesSize"
   >
   forceImageDisplay?: boolean
   canStop?: boolean
@@ -79,6 +86,11 @@ export function GenerativeArtwork({
     }
   }, [previewHash, previewInputBytes, artworkArtifactUrl])
 
+  const paramsUrl = useMemo(
+    () => `${getGenerativeTokenUrl(token as GenerativeToken)}/explore-params`,
+    [token]
+  )
+
   return (
     <>
       <SquareContainer>
@@ -105,6 +117,22 @@ export function GenerativeArtwork({
       <Spacing size="8px" />
 
       <div className={cs(layout["x-inline"], style.artwork_buttons)}>
+        {token.inputBytesSize > 0 && (
+          <Link href={paramsUrl} passHref>
+            <Button
+              isLink
+              type="button"
+              size="small"
+              color="transparent"
+              iconComp={
+                <i aria-hidden className="fa-sharp fa-regular fa-slider" />
+              }
+              iconSide="right"
+            >
+              params
+            </Button>
+          </Link>
+        )}
         {!hideVariations && (
           <ButtonVariations
             token={token}
