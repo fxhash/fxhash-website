@@ -19,7 +19,9 @@
 
   &.wrapper_contain {
     height: 100%;
+    width: 100%;
     background-size: contain;
+    position: absolute;
 
     img {
       object-fit: contain;
@@ -37,14 +39,8 @@
   }
 
   &.wrapper_responsive {
-    background-size: cover;
-
     img {
-      position: absolute;
-      top: 0;
-      left: 0;
       width: 100%;
-      height: 100%;
     }
   }
 

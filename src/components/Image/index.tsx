@@ -64,6 +64,8 @@ export interface FxImageProps extends BaseImageProps {
 export function Image(props: FxImageProps) {
   const { image, ipfsUri, alt, mode, position, style } = props
 
+  console.log(props)
+
   // top condition to avoid any computations if there is no img
   if (!image && !ipfsUri) return null
 
@@ -98,12 +100,7 @@ function SimpleImage({
   )
 
   return (
-    <div
-      className={cs(css.wrapper, css[`wrapper_${mode}`])}
-      style={{
-        position: position,
-      }}
-    >
+    <div className={cs(css.wrapper, css[`wrapper_${mode}`])}>
       <img src={gatewayUrl} alt={alt} {...restProps} loading="lazy" />
     </div>
   )
