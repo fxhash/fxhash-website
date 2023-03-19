@@ -136,7 +136,10 @@ export const StepConfigureCapture: StepComponent = ({ onNext, state }) => {
         module.
         <br />
         Read more about the different{" "}
-        <LinkGuide href="/doc/artist/capture-settings" newTab={true}>
+        <LinkGuide
+          href="/doc/artist/project-settings#capture-settings"
+          newTab={true}
+        >
           capture strategies in the guide
         </LinkGuide>
       </p>

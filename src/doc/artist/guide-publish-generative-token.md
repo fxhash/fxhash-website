@@ -80,7 +80,7 @@ Once you have properly tested your project, you can [mint](/mint-generative) it 
 > fxhash is built with modularity in mind. The snippet injected into the code gives access to those various modules, listed below.
 
 - [`fx(params)`](/doc/artist/params): gives artists the option to define a set of parameters collectors will modulate before minting their iteration
-- [`features`](/doc/snippet-api/fxfeaturesfeatures): can be used to expose the features of an iteration
+- [`features`](/doc/artist/snippet-api#fxfeaturesfeatures): can be used to expose the features of an iteration
 
 ::infobox[The [Snippet API documentation page](/doc/artist/snippet-api) goes in-depth into what can be done with the various fxhash modules.]{type=info}
 

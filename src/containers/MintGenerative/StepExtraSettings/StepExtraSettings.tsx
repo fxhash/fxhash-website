@@ -211,7 +211,10 @@ export const StepExtraSettings: StepComponent = ({ state, onNext }) => {
         be disabled on the Generative Token page.
       </p>
 
-      <LinkGuide href="/doc/artist/explore-variation-settings" newTab>
+      <LinkGuide
+        href="/doc/artist/project-settings#explore-variation-settings"
+        newTab
+      >
         read more on the explore variation settings
       </LinkGuide>
 

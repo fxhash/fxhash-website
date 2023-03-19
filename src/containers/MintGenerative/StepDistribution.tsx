@@ -332,7 +332,7 @@ export const StepDistribution: StepComponent = ({ state, onNext }) => {
                 constraints.
                 <br />
                 We recommend{" "}
-                <LinkGuide href="/doc/artist/reserves" newTab>
+                <LinkGuide href="/doc/artist/project-settings#reserves" newTab>
                   reading the article about reserves
                 </LinkGuide>{" "}
                 to use the feature properly.

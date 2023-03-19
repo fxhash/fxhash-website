@@ -94,7 +94,10 @@ export function EditReserves({ token, contractOperation }: Props) {
               constraints.
               <br />
               We recommend{" "}
-              <LinkGuide href="/doc/artist/reserves#updating-a-reserve" newTab>
+              <LinkGuide
+                href="/doc/artist/project-settings#updating-a-reserve"
+                newTab
+              >
                 reading how to update the reserves properly
               </LinkGuide>
             </span>

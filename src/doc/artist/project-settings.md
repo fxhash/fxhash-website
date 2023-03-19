@@ -1,5 +1,5 @@
 ---
-title: "Capture settings"
+title: "Project settings"
 date: "2023-03-20"
 description: "Some in-depth documentation on the various settings artists can configure when minting their project on fxhash."
 ---
