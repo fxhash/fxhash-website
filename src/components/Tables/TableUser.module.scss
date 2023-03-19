@@ -41,7 +41,7 @@
 
   td {
     vertical-align: middle;
-    padding: 4px 6px;
+    padding: 4px 4px;
     height: 50px;
     border-bottom: 1px solid var(--color-gray-vlight);
     &:first-child {
@@ -110,14 +110,32 @@ td.td-right {
   width: 180px;
 }
 
+.th-mint-actions {
+  width: 400px;
+}
+
 .th-time {
   width: 180px;
+}
+
+.th-date {
+  width: 350px;
 }
 
 .td-gentk {
   word-break: break-word;
   .link_wrapper {
     display: flex;
+  }
+}
+
+.ticketToken {
+  color: var(--color-black);
+  display: flex;
+  align-items: center;
+  gap: $spacing;
+  .name {
+    font-weight: bold;
   }
 }
 
@@ -189,6 +207,18 @@ td.td-right {
 }
 
 .mobile {
+  display: none;
+}
+
+.actions {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.mobile_table_title {
   display: none;
 }
 
@@ -276,4 +306,29 @@ td.td-right {
     max-height: 400px;
     overscroll-behavior: auto;
   }
+
+  .mobile_table_title {
+    display: block;
+    position: sticky;
+    z-index: 10;
+    top: 0;
+    background: var(--color-black);
+    color: var(--color-white);
+    padding: 8px 10px;
+    font-size: var(--font-size-small);
+    font-weight: 600;
+    text-align: left;
+  }
+}
+
+.icon {
+  width: 60px;
+  height: 60px;
+  background-position: center;
+  background-size: cover;
+  background-color: black;
+  flex-shrink: 0;
+  border: 3px solid var(--color-border);
+  transition: all 0.2s;
+  position: relative;
 }

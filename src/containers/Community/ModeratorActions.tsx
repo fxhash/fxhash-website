@@ -2,15 +2,18 @@
 import layout from "../../styles/Layout.module.scss"
 import cs from "classnames"
 import { useContext } from "react"
-import { GenerativeToken } from "../../types/entities/GenerativeToken"
+import {
+  GenerativeToken,
+  GenerativeTokenVersion,
+} from "../../types/entities/GenerativeToken"
 import { User } from "../../types/entities/User"
 import { UserContext } from "../UserProvider"
 import { Button } from "../../components/Button"
 import { Spacing } from "../../components/Layout/Spacing"
-import { useContractCall } from "../../utils/hookts"
-import { ModerateCall } from "../../types/ContractCalls"
 import { ContractFeedback } from "../../components/Feedback/ContractFeedback"
 import { isTokenModerator } from "../../utils/user"
+import { useContractOperation } from "hooks/useContractOperation"
+import { ModerateOperation } from "services/contract-operations/Moderate"
 
 interface Props {
   token: GenerativeToken
@@ -25,12 +28,15 @@ export function ModeratorActions({ token }: Props) {
     success,
     call,
     error: contractError,
-  } = useContractCall<ModerateCall>(userCtx.walletManager!.moderateToken)
+  } = useContractOperation(ModerateOperation)
 
   const moderate = (state: 1 | 4) => {
     call({
-      tokenId: token.id,
+      entityId: token.id,
       state: state,
+      contract:
+        token.version === GenerativeTokenVersion.PRE_V3 ? "token" : "token_v3",
+      reason: -1,
     })
   }
 

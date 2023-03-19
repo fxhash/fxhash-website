@@ -55,7 +55,7 @@ export function ProposalDetailsBurnExpanded({
           <Spacing size="small" />
 
           {token ? (
-            <>
+            <div className={cs(style.details_wrapper)}>
               <strong>Token: </strong>
               <LinkIcon
                 iconComp={
@@ -66,12 +66,12 @@ export function ProposalDetailsBurnExpanded({
               >
                 {token.name}
               </LinkIcon>
-              <Spacing size="regular" />
+              <Spacing size="x-small" />
               <strong className={cs(colors.error)}>
                 This operation will burn the token completely. It will be
                 removed from the contracts and from the indexer.
               </strong>
-            </>
+            </div>
           ) : (
             !showOldSettings && (
               <strong className={cs(colors.error)}>

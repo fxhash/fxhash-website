@@ -17,6 +17,17 @@ export function ipfsUrlWithHash(
   return `${transform(cid)}/?fxhash=${hash}`
 }
 
+export function ipfsUrlWithHashAndParams(
+  cid: string,
+  hash: string,
+  params: string | null | undefined,
+  transform: (cid: string) => string = ipfsGatewayUrl
+) {
+  let url = `${transform(cid)}/?fxhash=${hash}`
+  if (params) url += `&fxparams=${params}`
+  return url
+}
+
 /**
  * Is an URI an IPFS uri ?
  */

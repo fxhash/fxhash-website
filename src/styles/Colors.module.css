@@ -37,3 +37,7 @@
 .black {
   color: var(--color-black);
 }
+
+.blue {
+  color: var(--color-donator);
+}

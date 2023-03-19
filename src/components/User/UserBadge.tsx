@@ -72,6 +72,7 @@ const WrapperDiv = ({
 
 export function UserBadge({
   user,
+  topText,
   prependText,
   size = "regular",
   hasLink = true,
@@ -79,6 +80,7 @@ export function UserBadge({
   avatarSide = "left",
   displayAddress = false,
   displayAvatar = true,
+  displayName = true,
   newTab = false,
   className,
   classNameAvatar,
@@ -124,31 +126,34 @@ export function UserBadge({
         />
       )}
 
-      <Container className={cs(style.user_infos)}>
-        <span className={cs(style.user_name)}>
-          {prependText && (
-            <span className={cs(style.prepend)}>{prependText}</span>
-          )}
-          <span
-            className={cs({
-              [style.moderator]: isPlatformOwned(userAlias),
-              [style.donation]: isDonator(userAlias),
-            })}
-          >
-            {getUserName(userAlias, 15)}
+      {displayName && (
+        <Container className={cs(style.user_infos)}>
+          {topText && <span className={cs(style.user_address)}>{topText}</span>}
+          <span className={cs(style.user_name)}>
+            {prependText && (
+              <span className={cs(style.prepend)}>{prependText}</span>
+            )}
+            <span
+              className={cs({
+                [style.moderator]: isPlatformOwned(userAlias),
+                [style.donation]: isDonator(userAlias),
+              })}
+            >
+              {getUserName(userAlias, 15)}
+            </span>
+            {verified && (
+              <i
+                aria-hidden
+                className={cs("fas", "fa-badge-check", style.verified)}
+              />
+            )}
           </span>
-          {verified && (
-            <i
-              aria-hidden
-              className={cs("fas", "fa-badge-check", style.verified)}
-            />
-          )}
-        </span>
 
-        {displayAddress && (
-          <span className={cs(style.user_address)}>{userAlias.id}</span>
-        )}
-      </Container>
+          {displayAddress && (
+            <span className={cs(style.user_address)}>{userAlias.id}</span>
+          )}
+        </Container>
+      )}
     </Wrapper>
   ) : (
     <></>

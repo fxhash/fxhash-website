@@ -13,11 +13,18 @@ import { useContext, useEffect, useMemo, useRef, useState } from "react"
 import { SettingsContext } from "../../context/Theme"
 import { ipfsGatewayUrl } from "../../services/Ipfs"
 import { Image } from "../Image"
-
+import { useReceiveTokenInfos } from "hooks/useReceiveTokenInfos"
+import { getGenerativeTokenUrl } from "utils/generative-token"
 interface Props {
   token: Pick<
     GenerativeToken,
-    "metadata" | "labels" | "captureMedia" | "displayUri" | "name" | "balance"
+    | "metadata"
+    | "labels"
+    | "captureMedia"
+    | "displayUri"
+    | "name"
+    | "balance"
+    | "inputBytesSize"
   >
   forceImageDisplay?: boolean
   canStop?: boolean
@@ -35,11 +42,15 @@ export function GenerativeArtwork({
   artifactUrl: artworkArtifactUrl,
 }: Props) {
   const settings = useContext(SettingsContext)
-  const iframeRef = useRef<ArtworkIframeRef>(null)
+  const artworkIframeRef = useRef<ArtworkIframeRef>(null)
 
+  const { params, onIframeLoaded } = useReceiveTokenInfos(artworkIframeRef)
   // used to preview the token in the iframe with different hashes
   const [previewHash, setPreviewHash] = useState<string | null>(
     token.metadata.previewHash || null
+  )
+  const [previewInputBytes, setPreviewInputBytes] = useState<string | null>(
+    token.metadata.previewInputBytes || null
   )
   // forcing image display as a state
   const [displayImage, setDisplayImage] = useState(
@@ -52,8 +63,8 @@ export function GenerativeArtwork({
   }, [settings.quality])
 
   const reload = () => {
-    if (iframeRef.current) {
-      iframeRef.current.reloadIframe()
+    if (artworkIframeRef.current) {
+      artworkIframeRef.current.reloadIframe()
     }
   }
 
@@ -65,11 +76,20 @@ export function GenerativeArtwork({
       return ipfsGatewayUrl(token.metadata.artifactUri)
     } else {
       // there is a forced hash, add it to the generative URL
-      return `${ipfsGatewayUrl(
+      let url = `${ipfsGatewayUrl(
         token.metadata.generativeUri
       )}/?fxhash=${previewHash}`
+      if (previewInputBytes) {
+        url += `&fxparams=${previewInputBytes}`
+      }
+      return url
     }
-  }, [previewHash])
+  }, [previewHash, previewInputBytes, artworkArtifactUrl])
+
+  const paramsUrl = useMemo(
+    () => `${getGenerativeTokenUrl(token as GenerativeToken)}/explore-params`,
+    [token]
+  )
 
   return (
     <>
@@ -85,9 +105,10 @@ export function GenerativeArtwork({
           ) : (
             <ArtworkIframe
               tokenLabels={token.labels}
-              ref={iframeRef}
+              ref={artworkIframeRef}
               url={artifactUrl}
               hasLoading={false}
+              onLoaded={onIframeLoaded}
             />
           )}
         </ArtworkFrame>
@@ -96,13 +117,31 @@ export function GenerativeArtwork({
       <Spacing size="8px" />
 
       <div className={cs(layout["x-inline"], style.artwork_buttons)}>
+        {token.inputBytesSize > 0 && (
+          <Link href={paramsUrl} passHref>
+            <Button
+              isLink
+              type="button"
+              size="small"
+              color="transparent"
+              iconComp={
+                <i aria-hidden className="fa-sharp fa-regular fa-slider" />
+              }
+              iconSide="right"
+            >
+              params
+            </Button>
+          </Link>
+        )}
         {!hideVariations && (
           <ButtonVariations
             token={token}
             previewHash={previewHash}
-            onChangeHash={(hash) => {
+            params={params}
+            onChangeHash={(hash, inputBytes) => {
               setDisplayImage(false)
               setPreviewHash(hash)
+              if (inputBytes) setPreviewInputBytes(inputBytes)
             }}
           />
         )}

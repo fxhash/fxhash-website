@@ -1,5 +1,9 @@
 import { gql } from "@apollo/client"
-import { Frag_GenAuthor, Frag_GenPricing } from "./fragments/generative-token"
+import {
+  Frag_GenAuthor,
+  Frag_GenPricing,
+  Frag_GenTokenBadge,
+} from "./fragments/generative-token"
 import { Frag_ArticleInfos, Frag_ArticleInfosAction } from "./fragments/article"
 import { Frag_MediaImage } from "./fragments/media"
 import { Frag_UserBadge } from "./fragments/user"
@@ -88,6 +92,7 @@ export const Qu_userEntireCollection = gql`
         rarity
         iteration
         generationHash
+        inputBytes
         issuer {
           name
           flag
@@ -290,6 +295,37 @@ export const Qu_userSales = gql`
           id
           name
           metadata
+          captureMedia {
+            ...MediaImage
+          }
+        }
+      }
+    }
+  }
+`
+
+export const Qu_userMintTickets = gql`
+  ${Frag_MediaImage}
+  query UserMintTickets($id: String!) {
+    user(id: $id) {
+      id
+      mintTickets {
+        id
+        price
+        createdAt
+        taxationLocked
+        taxationPaidUntil
+        taxationStart
+        settings {
+          gracingPeriod
+          metadataUri
+          metadata
+        }
+        token {
+          id
+          slug
+          name
+          thumbnailUri
           captureMedia {
             ...MediaImage
           }

@@ -4,6 +4,7 @@ import {
   Wallet,
   WalletOperation,
 } from "@taquito/taquito"
+import { getGentkLocalID } from "utils/entities/gentk"
 import { FxhashContracts } from "../../types/Contracts"
 import { Objkt } from "../../types/entities/Objkt"
 import { displayMutez } from "../../utils/units"
@@ -27,9 +28,13 @@ export class OfferOperation extends ContractOperation<TOfferOperationParams> {
   }
 
   async call(): Promise<WalletOperation> {
+    // recent V3 tokens have an ID of "FXN-{id}", so we need to extract the ID
+    // part only for these recent tokens
+    const id = getGentkLocalID(this.params.token)
+
     return this.marketplaceContract!.methodsObject.offer({
       gentk: {
-        id: this.params.token.id,
+        id: id,
         version: this.params.token.version,
       },
       price: this.params.price,

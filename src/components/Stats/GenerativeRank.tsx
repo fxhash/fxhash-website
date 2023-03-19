@@ -8,12 +8,18 @@ import Link from "next/link"
 import { getGenerativeTokenMarketplaceUrl } from "../../utils/generative-token"
 import { UserType, Collaboration } from "../../types/entities/User"
 import { Image } from "../Image"
+import { EntityBadge } from "../User/EntityBadge"
 
 interface Props {
   token: GenerativeToken
+  showAuthorBadge?: boolean
 }
 
-export function GenerativeRank({ token, children }: PropsWithChildren<Props>) {
+export function GenerativeRank({
+  token,
+  showAuthorBadge,
+  children,
+}: PropsWithChildren<Props>) {
   const author =
     token.author.type === UserType.COLLAB_CONTRACT_V1
       ? (token.author as Collaboration).collaborators
@@ -32,8 +38,14 @@ export function GenerativeRank({ token, children }: PropsWithChildren<Props>) {
           />
         </div>
         <div className={cs(style.details)}>
-          <strong>{token.name}</strong>
-          <span className={cs(colors.gray)}>{author}</span>
+          <strong className={style.name}>{token.name}</strong>
+          {showAuthorBadge ? (
+            <div className={style.author_badge}>
+              <EntityBadge user={token.author} hasLink size="small" />
+            </div>
+          ) : (
+            <span className={cs(style.author, colors.gray)}>{author}</span>
+          )}
         </div>
         <div className={cs(style.metric)}>{children}</div>
       </a>

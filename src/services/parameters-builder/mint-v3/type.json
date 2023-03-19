@@ -1,0 +1,81 @@
+{
+  "prim": "pair",
+  "args": [
+    {
+      "prim": "pair",
+      "args": [
+        {
+          "prim": "option",
+          "args": [
+            {
+              "prim": "bytes"
+            }
+          ],
+          "annots": [
+            "%create_ticket"
+          ]
+        },
+        {
+          "prim": "pair",
+          "args": [
+            {
+              "prim": "bytes",
+              "annots": [
+                "%input_bytes"
+              ]
+            },
+            {
+              "prim": "nat",
+              "annots": [
+                "%issuer_id"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "prim": "pair",
+      "args": [
+        {
+          "prim": "option",
+          "args": [
+            {
+              "prim": "address"
+            }
+          ],
+          "annots": [
+            "%recipient"
+          ]
+        },
+        {
+          "prim": "pair",
+          "args": [
+            {
+              "prim": "option",
+              "args": [
+                {
+                  "prim": "address"
+                }
+              ],
+              "annots": [
+                "%referrer"
+              ]
+            },
+            {
+              "prim": "option",
+              "args": [
+                {
+                  "prim": "bytes"
+                }
+              ],
+              "annots": [
+                "%reserve_input"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

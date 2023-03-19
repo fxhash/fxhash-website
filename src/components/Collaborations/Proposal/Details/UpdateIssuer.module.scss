@@ -2,8 +2,13 @@
   padding: 15px;
   font-size: var(--font-size-small);
   background-color: var(--color-gray-vlight);
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 10px;
+}
 
-  & > *+* {
-    margin-top: 8px;
-  }
+.details_wrapper {
+  padding: 15px;
+  font-size: var(--font-size-small);
+  background-color: var(--color-gray-vlight);
 }

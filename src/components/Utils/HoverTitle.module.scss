@@ -17,6 +17,7 @@
     word-break: break-word;
     width: max-content;
     max-width: 300px;
+    z-index: 20;
   }
 
   &.hover_enabled:hover {

@@ -1,3 +1,4 @@
+import { TzktOperation } from "./../types/Tzkt"
 import { fetchRetry } from "../utils/network"
 import { sleep } from "../utils/promises"
 
@@ -41,13 +42,13 @@ export async function isOperationApplied(
   hash: string,
   intervalMs: number = 10000,
   maxDurationMs: number = 120000
-) {
+): Promise<TzktOperation[]> {
   // will be set if the max duration promise reaches the end
   let stopped = false
 
   try {
-    await Promise.race([
-      new Promise(async (resolve, reject) => {
+    const opData = await Promise.race([
+      new Promise<void>(async (resolve, reject) => {
         await sleep(maxDurationMs)
         stopped = true
         return reject(
@@ -58,7 +59,7 @@ export async function isOperationApplied(
           )
         )
       }),
-      new Promise<void>(async (resolve, reject) => {
+      new Promise<TzktOperation[]>(async (resolve, reject) => {
         const url = API_OPERATION(hash)
 
         while (!stopped) {
@@ -79,7 +80,7 @@ export async function isOperationApplied(
               }
             }
             // operation was successfully applied
-            return resolve()
+            return resolve(data)
           }
           // if no data or if array is empty, operation not found yet
         }
@@ -87,7 +88,7 @@ export async function isOperationApplied(
     ])
 
     // if it resolved without and didn't throw, then it was applied successfully
-    return true
+    return opData as TzktOperation[]
   } catch (error: any) {
     const message =
       error.message ||

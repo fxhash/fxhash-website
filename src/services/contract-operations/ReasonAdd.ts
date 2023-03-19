@@ -5,11 +5,11 @@ import {
   Wallet,
 } from "@taquito/taquito"
 import { ContractOperation } from "./ContractOperation"
-import { mapModKtKeyToContract } from "./Moderate"
+import { mapModKtKeyToContract, TModContractKey } from "./Moderate"
 
 export type TResonAddParams = {
   reason: string
-  contract: "user" | "token" | "article"
+  contract: TModContractKey
 }
 
 /**

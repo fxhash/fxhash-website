@@ -1,0 +1,9 @@
+
+.lockButton {
+  color: var(--fxl-color-primary) !important; 
+  &.isOpen {
+    color: var(--fxl-color-light1) !important; 
+  }
+}
+
+
