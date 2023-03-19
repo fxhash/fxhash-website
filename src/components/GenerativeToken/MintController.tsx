@@ -23,6 +23,7 @@ import { UserContext } from "../../containers/UserProvider"
 import { MintButton } from "./MintButton"
 import WinterCheckout from "components/CreditCard/WinterCheckout"
 import { useRouter } from "next/router"
+import { useAsyncMemo } from "use-async-memo"
 import { winterCheckoutAppearance } from "../../utils/winter"
 import { TContractOperation } from "../../services/contract-operations/ContractOperation"
 import {
@@ -33,6 +34,8 @@ import { ButtonMintTicketPurchase } from "../MintTicket/ButtonMintTicketPurchase
 import { User } from "../../types/entities/User"
 import { MintTicket } from "../../types/entities/MintTicket"
 import { generateMintTicketFromMintAction } from "../../utils/mint-ticket"
+import { isOperationApplied } from "services/Blockchain"
+import { TzktOperation } from "types/Tzkt"
 
 interface Props {
   token: GenerativeToken
@@ -158,11 +161,28 @@ export function MintController({
 
   const isTicketMinted = token.inputBytesSize > 0
 
+  // outputs ticket transaction or null, taking credit card into account
+  const finalOp = useAsyncMemo(async () => {
+    if (!isTicketMinted) return null
+    // if credit card, return the op of the credit card
+    if (opHashCC) {
+      let op: TzktOperation[] | null = null
+      try {
+        op = await isOperationApplied(opHashCC)
+      } catch (err: any) {}
+      return op
+    }
+    // return the classic op data
+    else {
+      return opData
+    }
+  }, [isTicketMinted, opData, opHashCC])
+
   const mintedTicket = useMemo<MintTicket | null>(() => {
     if (!isTicketMinted) return null
-    if (!opData) return null
-    return generateMintTicketFromMintAction(opData, token, user as User)
-  }, [isTicketMinted, opData, token, user])
+    if (!finalOp) return null
+    return generateMintTicketFromMintAction(finalOp, token, user as User)
+  }, [isTicketMinted, finalOp, token, user])
 
   return (
     <div className={cs(className || style.root)}>
@@ -176,7 +196,8 @@ export function MintController({
 
       {opHashCC ? (
         <span className={cs(style.success)}>
-          You have purchased your unique iteration!
+          You have purchased your {mintedTicket ? "ticket" : "unique iteration"}
+          !
         </span>
       ) : (
         <ContractFeedback
@@ -269,10 +290,27 @@ export function MintController({
         onClose={closeCreditCard}
         onSuccess={onCreditCardSuccess}
         onFinish={() => {
-          router.push(revealUrl)
+          if (!isTicketMinted) {
+            router.push(revealUrl)
+          }
           setShowCC(false)
         }}
         appearance={winterCheckoutAppearance}
+        additionalPurchaseParams={
+          isTicketMinted
+            ? {
+                create_ticket: "00",
+                input_bytes: "",
+                referrer: null,
+                reserve_input: null,
+              }
+            : {
+                create_ticket: null,
+                input_bytes: "",
+                referrer: null,
+                reserve_input: null,
+              }
+        }
       />
     </div>
   )
