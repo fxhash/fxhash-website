@@ -1,0 +1,46 @@
+@import "../../styles/Variables";
+
+.selects {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+
+  .select_timezone {
+    width: auto;
+  }
+
+  .input_days_wrapper {
+    width: auto;
+    margin-top: 0 !important;
+
+    input {
+      width: 100px;
+    }
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .title {
+    font-size: var(--font-size-h4);
+  }
+  .selects {
+    gap: $spacing;
+    .select_timezone {
+      width: 100%;
+    }
+    .select {
+      width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .input_days_wrapper {
+      width: 100%;
+      input {
+        width: 100%;
+      }
+    }
+  }
+}
