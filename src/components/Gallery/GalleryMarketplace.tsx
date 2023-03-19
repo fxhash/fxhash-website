@@ -13,6 +13,7 @@ import { SortAndFilters } from "../SortAndFilters/SortAndFilters"
 import { getTagsFromFiltersObject } from "../../utils/filters"
 import { ExploreTagDef } from "../Exploration/ExploreTags"
 import { MarketplaceFilters } from "../../containers/Marketplace/MarketplaceFilters"
+import { useQueryParamSort } from "hooks/useQueryParamSort"
 
 const ITEMS_PER_PAGE = 40
 
@@ -22,7 +23,6 @@ interface Props {
   initialFilters?: ListingFilters
   onChangeSearch?: (value: string) => void
   onChangeFilters?: (updatedFilters: ListingFilters) => void
-  onChangeSort?: (updatedSort: string) => void
 }
 
 export const GalleryMarketplace = ({
@@ -31,7 +31,6 @@ export const GalleryMarketplace = ({
   initialFilters,
   onChangeSearch,
   onChangeFilters,
-  onChangeSort,
 }: Props) => {
   const [hasNothingToFetch, setHasNothingToFetch] = useState(false)
   const {
@@ -41,7 +40,7 @@ export const GalleryMarketplace = ({
     restoreSort,
     setSearchSortOptions,
     sortOptions,
-  } = useSort(sortOptionsMarketplace, {
+  } = useQueryParamSort(sortOptionsMarketplace, {
     defaultSort: initialSort,
     defaultWithSearchOptions:
       initialFilters && !!initialFilters["searchQuery_eq"],
@@ -130,13 +129,7 @@ export const GalleryMarketplace = ({
     restoreSort()
     onChangeSearch?.("")
   }, [onChangeSearch, restoreSort, setFilters])
-  const handleChangeSort = useCallback(
-    (newSort) => {
-      setSortValue(newSort)
-      onChangeSort?.(newSort)
-    },
-    [onChangeSort, setSortValue]
-  )
+
   const handleSetFilters = useCallback(
     (newFilters) => {
       setFilters(newFilters)
@@ -159,7 +152,7 @@ export const GalleryMarketplace = ({
   const sort = {
     value: sortValue,
     options: sortOptions,
-    onChange: handleChangeSort,
+    onChange: setSortValue,
   }
 
   return (

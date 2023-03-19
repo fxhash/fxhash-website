@@ -21,6 +21,12 @@
   width: calc(min(100%, 500px));
 }
 
+.artworkWrapper {
+  width: 100%;
+  position: sticky;
+  top: 0;
+}
+
 .iframe-container {
   width: 100%;
   padding-top: 100%;

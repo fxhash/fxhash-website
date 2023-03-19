@@ -15,7 +15,10 @@ import { matchRule } from "../utils/regex"
 import { IndexerStatusProvider } from "../context/IndexerStatus"
 import { IndexerStatus, NetworkStatus } from "../types/IndexerStatus"
 import { ModalProvider } from "../context/Modal"
+
 const EXCLUDE_LAYOUT = [
+  "/generative/slug/[slug]/ticket/[ticketId]/mint",
+  "/generative/slug/[slug]/explore-params",
   "/generative/[id]/enjoy",
   "/u/[name]/collection/enjoy",
   "/pkh/[id]/collection/enjoy",

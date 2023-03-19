@@ -4,6 +4,7 @@ import {
   Wallet,
   WalletOperation,
 } from "@taquito/taquito"
+import { getGentkLocalID } from "utils/entities/gentk"
 import { FxhashContracts } from "../../types/Contracts"
 import { Objkt } from "../../types/entities/Objkt"
 import { getGentkFA2Contract } from "../../utils/gentk"
@@ -23,32 +24,26 @@ export type TListingOperationParams = {
  * List a gentk on the Marketplace
  */
 export class ListingOperation extends ContractOperation<TListingOperationParams> {
-  gentkContract: ContractAbstraction<Wallet> | null = null
-  marketplaceContract: ContractAbstraction<Wallet> | null = null
-
-  async prepare() {
-    this.gentkContract = await this.manager.getContract(
-      getGentkFA2Contract(this.params.token)
-    )
-    this.marketplaceContract = await this.manager.getContract(
-      FxhashContracts.MARKETPLACE_V2
-    )
-  }
+  async prepare() {}
 
   async call(): Promise<WalletOperation> {
+    // recent V3 tokens have an ID of "FXN-{id}", so we need to extract the ID
+    // part only for these recent tokens
+    const id = getGentkLocalID(this.params.token)
+
     const updateOperatorsParams = [
       {
         add_operator: {
           owner: this.params.token.owner!.id,
           operator: FxhashContracts.MARKETPLACE_V2,
-          token_id: this.params.token.id,
+          token_id: id,
         },
       },
     ]
 
     const listingParams = {
       gentk: {
-        id: this.params.token.id,
+        id: id,
         version: this.params.token.version,
       },
       price: this.params.price,

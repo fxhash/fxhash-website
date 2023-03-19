@@ -7,13 +7,24 @@ import { generateFxHash } from "../../utils/hash"
 import { uniq } from "lodash"
 import { HoverTitle } from "../Utils/HoverTitle"
 import { SettingsContext } from "../../context/Theme"
+import { FxParamDefinition, FxParamType } from "components/FxParams/types"
+import {
+  getRandomParamValues,
+  serializeParams,
+} from "components/FxParams/utils"
 
 interface Props {
   token: Pick<GenerativeToken, "metadata" | "balance">
   previewHash?: string | null
-  onChangeHash: (hash: string) => void
+  params?: FxParamDefinition<FxParamType>[]
+  onChangeHash: (hash: string, inputBytes?: string) => void
 }
-export function ButtonVariations({ token, previewHash, onChangeHash }: Props) {
+export function ButtonVariations({
+  token,
+  previewHash,
+  onChangeHash,
+  params,
+}: Props) {
   // some shortcuts to get access to useful variables derived from the token data
   const fullyMinted = token.balance === 0
   const exploreSet = token.metadata.settings?.exploration
@@ -49,6 +60,17 @@ export function ButtonVariations({ token, previewHash, onChangeHash }: Props) {
     ])
   }, [])
 
+  // a list of inputBytes to explore, if enabled
+  const inputBytes = useMemo<string[] | null>(() => {
+    if (!activeSettings?.paramsConstraints) {
+      return null
+    }
+    return uniq([
+      token.metadata.previewInputBytes!,
+      ...activeSettings.paramsConstraints,
+    ])
+  }, [])
+
   // the component rendering the icon next to the button
   const icon = useMemo(() => {
     if (activeSettings?.enabled) {
@@ -81,7 +103,14 @@ export function ButtonVariations({ token, previewHash, onChangeHash }: Props) {
     }
     // if no hash constraints, just give a random hash
     if (!hashes) {
-      onChangeHash(generateFxHash())
+      onChangeHash(
+        generateFxHash(),
+        params &&
+          serializeParams(
+            getRandomParamValues(params, { noTransform: true }),
+            params
+          )
+      )
     }
     // if there is a list of hashes, cycle through those
     else {
@@ -90,7 +119,7 @@ export function ButtonVariations({ token, previewHash, onChangeHash }: Props) {
       idx = idx === -1 || idx == null ? 0 : idx
       // compute the new index
       idx = (idx + 1) % hashes.length
-      onChangeHash(hashes[idx])
+      onChangeHash(hashes[idx], inputBytes?.[idx])
     }
   }
 

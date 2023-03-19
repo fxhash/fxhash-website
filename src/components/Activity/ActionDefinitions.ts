@@ -27,6 +27,7 @@ import { ActionListingV3 } from "./Actions/ActionListingV3"
 import { ActionListingAcceptedV3 } from "./Actions/ActionListingAcceptedV3"
 import { ActionListingCancelledV3 } from "./Actions/ActionListingCancelledV3"
 import { getObjktUrl } from "../../utils/objkt"
+import { ActionMintedTicket } from "./Actions/ActionMintedTicket"
 
 const ActionLinks = {
   gentk: (action: ActionType) => `/gentk/${action.objkt?.id}`,
@@ -58,6 +59,13 @@ export const ActionDefinitions: Record<TokenActionType, ActionDefinition> = {
     render: ActionMintedFrom,
     predecescence: 0,
     link: ActionLinks.gentk,
+  },
+  TICKET_MINTED: {
+    icon: "fa-sharp fa-solid fa-ticket",
+    iconColor: "success",
+    render: ActionMintedTicket,
+    predecescence: 0,
+    link: ActionLinks.token,
   },
   GENTK_SIGNED: {
     icon: "fa-solid fa-signature",
@@ -223,4 +231,5 @@ export const ActionDefinitions: Record<TokenActionType, ActionDefinition> = {
   AUCTION_BID: ActionTodoDefinition,
   AUCTION_CANCELLED: ActionTodoDefinition,
   AUCTION_FULFILLED: ActionTodoDefinition,
+  CODEX_UPDATED: ActionTodoDefinition,
 }

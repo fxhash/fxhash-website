@@ -3,7 +3,7 @@ import styleSteps from "./Steps.module.scss"
 import cs from "classnames"
 import { StepComponent } from "../../types/Steps"
 import { ArtworkIframe } from "../../components/Artwork/PreviewIframe"
-import { ipfsUrlWithHash } from "../../utils/ipfs"
+import { ipfsUrlWithHash, ipfsUrlWithHashAndParams } from "../../utils/ipfs"
 import { ArtworkPreview } from "../../components/Artwork/Preview"
 import { Spacing } from "../../components/Layout/Spacing"
 import Link from "next/link"
@@ -26,7 +26,11 @@ export const StepVerification: StepComponent = ({ onNext, state }) => {
             <div className={cs(style["preview-wrapper"])}>
               <ArtworkFrame>
                 <ArtworkIframe
-                  url={ipfsUrlWithHash(state.cidUrlParams!, state.previewHash!)}
+                  url={ipfsUrlWithHashAndParams(
+                    state.cidUrlParams!,
+                    state.previewHash!,
+                    state.previewInputBytes!
+                  )}
                   textWaiting="looking for content on IPFS"
                 />
               </ArtworkFrame>
@@ -34,7 +38,11 @@ export const StepVerification: StepComponent = ({ onNext, state }) => {
           </div>
           <Spacing size="small" />
           <Link
-            href={ipfsUrlWithHash(state.cidUrlParams!, state.previewHash!)}
+            href={ipfsUrlWithHashAndParams(
+              state.cidUrlParams!,
+              state.previewHash!,
+              state.previewInputBytes!
+            )}
             passHref
           >
             <Button

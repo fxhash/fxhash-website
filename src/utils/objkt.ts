@@ -9,8 +9,14 @@ export function getObjktUrl(objkt: Objkt): string {
  * Given an gentk which has an issuer, outputs a display URL for a live
  * version
  */
-export function gentkLiveUrl(gentk: Objkt): string {
-  return ipfsGatewayUrl(
-    `${gentk.issuer.generativeUri}/?fxhash=${gentk.generationHash}`
-  )
+export function gentkLiveUrl({
+  issuer,
+  generationHash,
+  inputBytes,
+}: Objkt): string {
+  let query = `?fxhash=${generationHash}`
+  if (inputBytes) {
+    query += `&fxparams=${inputBytes}`
+  }
+  return ipfsGatewayUrl(`${issuer.generativeUri}/${query}`)
 }

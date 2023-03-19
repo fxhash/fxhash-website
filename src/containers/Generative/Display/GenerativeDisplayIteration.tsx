@@ -53,6 +53,7 @@ const _GenerativeDisplayIteration = ({
       captureMedia: objkt.captureMedia,
       displayUri: objkt.metadata?.displayUri,
       balance: 0,
+      inputBytesSize: objkt.issuer?.inputBytesSize || 0,
     }
   }, [objkt])
   const gentkUrl = useMemo(() => gentkLiveUrl(objkt), [objkt])

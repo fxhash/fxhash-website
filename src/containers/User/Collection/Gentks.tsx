@@ -24,16 +24,17 @@ import { useQuery } from "@apollo/client"
 import { Qu_userObjkts } from "../../../queries/user"
 import { CardSizeSelect } from "../../../components/Input/CardSizeSelect"
 import { GentksActions } from "./GentksActions"
+import { useQueryParamSort } from "hooks/useQueryParamSort"
 const ITEMS_PER_PAGE = 40
 
 const generalSortOptions: IOptions[] = [
   {
     label: "recently minted",
-    value: "id-desc",
+    value: "createdAt-desc",
   },
   {
     label: "oldest minted",
-    value: "id-asc",
+    value: "createdAt-asc",
   },
   {
     label: "recently bought",
@@ -71,23 +72,14 @@ interface Props {
 export function UserCollectionGentks({ user }: Props) {
   const [hasNothingToFetch, setHasNothingToFetch] = useState(false)
 
-  // sort variables
-  const [sortValue, setSortValue] = useState<string>("id-desc")
-  const sort = useMemo<Record<string, any>>(
-    () => sortValueToSortVariable(sortValue),
-    [sortValue]
-  )
-  // sort options - when the search is triggered, options are updated to include relevance
-  const [sortOptions, setSortOptions] = useState<IOptions[]>(generalSortOptions)
-  // keeps track of the search option used before the search was triggered
-  const sortBeforeSearch = useRef<string>(sortValue)
-
-  // effect to update the sortBeforeSearch value whenever a sort changes
-  useEffect(() => {
-    if (sortValue !== "relevance-desc") {
-      sortBeforeSearch.current = sortValue
-    }
-  }, [sortValue])
+  const {
+    sortVariable,
+    sortValue,
+    sortOptions,
+    setSortValue,
+    setSearchSortOptions,
+    restoreSort,
+  } = useQueryParamSort(generalSortOptions)
 
   // filters
   const [filters, setFilters] = useState<IUserCollectionFilters>({})
@@ -104,7 +96,7 @@ export function UserCollectionGentks({ user }: Props) {
         skip: 0,
         take: ITEMS_PER_PAGE,
         filters,
-        sort,
+        sort: sortVariable,
       },
       onCompleted: (newData) => {
         if (
@@ -146,10 +138,10 @@ export function UserCollectionGentks({ user }: Props) {
     refetch?.({
       skip: 0,
       take: ITEMS_PER_PAGE,
-      sort,
+      sort: sortVariable,
       filters,
     })
-  }, [sort, filters])
+  }, [sortVariable, filters])
 
   const addFilter = (filter: string, value: any) => {
     setFilters({
@@ -162,8 +154,7 @@ export function UserCollectionGentks({ user }: Props) {
     addFilter(filter, undefined)
     // if the filter is search string, we reset the sort to what ti was
     if (filter === "searchQuery_eq" && sortValue === "relevance-desc") {
-      setSortValue(sortBeforeSearch.current)
-      setSortOptions(generalSortOptions)
+      restoreSort()
     }
   }
 
@@ -257,15 +248,11 @@ export function UserCollectionGentks({ user }: Props) {
               onMinimize={setIsSearchMinimized}
               onSearch={(value) => {
                 if (value) {
-                  setSortOptions(searchSortOptions)
-                  setSortValue("relevance-desc")
                   addFilter("searchQuery_eq", value)
+                  setSearchSortOptions()
                 } else {
                   removeFilter("searchQuery_eq")
-                  setSortOptions(generalSortOptions)
-                  if (sortValue === "relevance-desc") {
-                    setSortValue(sortBeforeSearch.current)
-                  }
+                  restoreSort()
                 }
               }}
               className={styleSearch.large_search}
@@ -286,14 +273,7 @@ export function UserCollectionGentks({ user }: Props) {
             <div style={{ width: "100%" }}>
               {filterTags.length > 0 && (
                 <>
-                  <ExploreTags
-                    terms={filterTags}
-                    onClearAll={() => {
-                      setFilters({})
-                      setSortOptions(generalSortOptions)
-                      setSortValue(sortBeforeSearch.current)
-                    }}
-                  />
+                  <ExploreTags terms={filterTags} onClearAll={restoreSort} />
                   <Spacing size="regular" />
                 </>
               )}
@@ -310,7 +290,7 @@ export function UserCollectionGentks({ user }: Props) {
                       key={objkt.id}
                       objkt={objkt}
                       showOwner={false}
-                      showRarity={sort.rarity != null}
+                      showRarity={sortVariable.rarity != null}
                     />
                   ))}
                   {loading &&

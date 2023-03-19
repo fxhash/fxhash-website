@@ -1,6 +1,7 @@
 // import style from "./Pricing.module.scss"
 import cs from "classnames"
 import { FormikErrors } from "formik"
+import React, { Fragment, useMemo } from "react"
 import { Field } from "../../components/Form/Field"
 import { Fieldset } from "../../components/Form/Fieldset"
 import { InputRadioBtnIcon } from "../../components/Input/InputRadioBtnIcon"
@@ -34,6 +35,7 @@ interface Props {
   errors?: FormikErrors<GenTokPricingForm<string>>
   lockWarning?: boolean
   collaboration?: Collaboration | null
+  noFieldset?: boolean
 }
 export function InputPricing({
   value,
@@ -41,6 +43,7 @@ export function InputPricing({
   errors,
   lockWarning,
   collaboration,
+  noFieldset = false,
 }: Props) {
   const update = (key: keyof GenTokPricingForm<string>, nvalue: any) => {
     onChange({
@@ -49,14 +52,18 @@ export function InputPricing({
     })
   }
 
+  const WithFieldset = useMemo(
+    () => (noFieldset ? Fragment : Fieldset),
+    [noFieldset]
+  )
+
   return (
-    <Fieldset>
+    <WithFieldset>
       <Field>
         <label>
           Pricing method
           <small>
-            You will not be able to update the pricing method after publication,
-            only its pricing settings
+            You will be able to update the pricing method after publication
           </small>
         </label>
         <InputRadioBtnIcon
@@ -85,6 +92,6 @@ export function InputPricing({
           collaboration={collaboration}
         />
       )}
-    </Fieldset>
+    </WithFieldset>
   )
 }
