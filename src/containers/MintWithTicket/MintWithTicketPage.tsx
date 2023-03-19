@@ -168,7 +168,7 @@ export function MintWithTicketPageRoot({ token, ticketId }: Props) {
           onClick={handleToggleShowPanel(true)}
         >
           <span>Edit</span>
-          <i aria-hidden className="fa-solid fa-chevrons-right" />
+          <i aria-hidden className="fa-sharp fa-solid fa-chevrons-right" />
         </button>
       )}
       <div

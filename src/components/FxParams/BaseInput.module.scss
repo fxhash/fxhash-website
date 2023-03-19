@@ -53,6 +53,8 @@ $height: 30px;
   &.color-main {
     transition: 0.2s all ease-out;
     background: var(--color-secondary);
+    color: white;
+    
     &:hover {
       background: var(--color-secondary-vlight);
       color: var(--fxl-color-light);

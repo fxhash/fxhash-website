@@ -16,15 +16,16 @@
       background: transparent;
       border: 0;
       font-weight: 400;
-      color: var(--fxl-color-light);
+      color: var(--fxl-color-light1);
       width: 30px;
       text-align: center;
       font-size: 22px;
       transform: rotate(-90deg);
       cursor: pointer;
       transition: 0.2s all ease-out;
+
       &:hover {
-        color: var(--color-secondary);
+        color: var(--fxl-color-light);
       }
     }
   }

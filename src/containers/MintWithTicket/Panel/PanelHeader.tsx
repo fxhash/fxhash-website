@@ -23,7 +23,7 @@ export function PanelHeader(props: Props) {
           type="button"
           onClick={onClickHide}
         >
-          <i aria-hidden className="fa-solid fa-chevrons-up" />
+          <i aria-hidden className="fa-sharp fa-regular fa-chevrons-up" />
         </button>
       </div>
       <small>{description}</small>

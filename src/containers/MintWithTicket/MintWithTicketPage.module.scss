@@ -149,7 +149,7 @@
   border: solid var(--color-gray-vvvlight);
   border-width: 2px 2px 2px 0px;
   font-weight: 400;
-  color: var(--color-black);
+  color: var(--fxl-color-light);
   width: 38px;
   height: 42px;
   text-align: center;
@@ -162,7 +162,7 @@
     font-size: 22px;
   }
   &:hover {
-    color: var(--color-secondary);
+    color: var(--fxl-color-light);
   }
 }
 
@@ -199,7 +199,6 @@
   .button_show {
     top: initial;
     bottom: 0;
-    border-radius: 25px 25px 0 0;
     width: max-content;
     left: 50%;
     border-width: 2px 2px 0 2px;
@@ -209,7 +208,7 @@
     flex-direction: row;
     align-items: center;
     gap: 8px;
-    padding: 8px 16px;
+    padding: 10px 16px 8px 16px;
     z-index: 5;
     font-size: var(--font-size-small);
     & span {
@@ -218,6 +217,8 @@
     & i {
       font-size: 1em;
       transform: rotate(-90deg);
+      position: relative;
+      top: -1px;
     }
   }
 }

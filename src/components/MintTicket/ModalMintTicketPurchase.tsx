@@ -11,6 +11,7 @@ import Link from "next/link"
 import { getGenerativeTokenUrl } from "../../utils/generative-token"
 import { GenerativeToken } from "../../types/entities/GenerativeToken"
 import { MintTicket } from "../../types/entities/MintTicket"
+import { LinkGuide } from "components/Link/LinkGuide"
 
 interface ModalMintTicketPurchaseProps {
   mintTicket: MintTicket
@@ -38,6 +39,11 @@ const _ModalMintTicketPurchase = ({
         If you don&apos;t exchange this ticket for an artwork within the grace
         period, you will be required to pay a daily tax to maintain ownership of
         the ticket.
+        <br />
+        <br />
+        <LinkGuide href="/doc/collect/fxparams-mint-tickets">
+          Read more about tickets
+        </LinkGuide>
       </p>
 
       <Spacing size="large" />
