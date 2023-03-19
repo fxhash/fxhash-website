@@ -16,7 +16,7 @@ fx(lens) is a web page which can be executed locally, designed to load and inter
 
 fx(lens) on its own is just a web page which can load a token. To further improve the development experience we created a boilerplate which comes with fx(lens) integrated. With 3 commands, you can bootstrap a fully-featured dev environment specifically dedicated to work on fxhash projects. Our boilerplate comes with CLI utilities to quickly spin some servers locally and open fx(lens) pointing to the project's server. This unlocks a few possibilities, such as having hot-reloading for your project (as soon as you save your project file, the page updates).
 
-::github[fxhash boilerplate]{href=https://github.com/fxhash/params-boilerplate desc="fxhash official boilerplate, fully-featured development environment with many utilities to work and publish a fxhash project."}
+::github[fxhash boilerplate]{href=https://github.com/fxhash/fxhash-boilerplate desc="fxhash official boilerplate, fully-featured development environment with many utilities to work and publish a fxhash project."}
 
 ## Overview
 

@@ -42,7 +42,7 @@ To facilitate the creation of fxhash projects, we have created a fully-featured 
 
 ![screenshot of fxlens](/images/doc/artist/lens/lens-1.png)
 
-::github[fxhash boilerplate]{href=https://github.com/fxhash/params-boilerplate desc="fxhash official boilerplate, fully-featured development environment with many utilities to work and publish a fxhash project."}
+::github[fxhash boilerplate]{href=https://github.com/fxhash/fxhash-boilerplate desc="fxhash official boilerplate, fully-featured development environment with many utilities to work and publish a fxhash project."}
 
 ::infobox[More information on this dev environment on the [fxlens documentation page](/doc/artist/fxlens).]
 
@@ -192,7 +192,7 @@ This is such an important point that it bears mentioning twice.
 
 We encourage you to use our fxhash boilerplate, specifically designed to create projects for fxhash.
 
-::github[fxhash boilerplate]{href=https://github.com/fxhash/params-boilerplate desc="fxhash official boilerplate, fully-featured development environment with many utilities to work and publish a fxhash project."}
+::github[fxhash boilerplate]{href=https://github.com/fxhash/fxhash-boilerplate desc="fxhash official boilerplate, fully-featured development environment with many utilities to work and publish a fxhash project."}
 
 It comes with the following features:
 
@@ -204,13 +204,19 @@ It comes with the following features:
 
 ::infobox[More details on the boilerplate in the [fx(lens) documentation page](/doc/artist/fxlens)]
 
-## Using our simplest boilerplate
+## Using our simple boilerplate
 
-We also provide a [simpler boilerplate](https://github.com/fxhash/fxhash-simple-boilerplate), with a single html and javascript file. The snippet is already injected, but that's it.
+We also provide a [simple boilerplate](https://github.com/fxhash/fxhash-simple-boilerplate), with a single html and javascript file. The snippet is already injected, but that's it. If you want to work with fx(params) you will need to provide the input bytes yourself, or use [fx(lens)](/doc/artist/fxlens).
+
+::github[fxhash simple boilerplate]{href=https://github.com/fxhash/fxhash-simple-boilerplate desc="fxhash official simple boilerplate, with a few files prepared for you to bootstrap a project easily."}
+
+::infobox[We advise to only go for this option if you already have some experience in web development, and with fxhash]
 
 ## Starting from scratch
 
-You can also start from scratch, just remember to inject the snippet in the `<head>` of your index, before importing your scripts.
+You can also start from scratch, just remember to inject the snippet in the `<head>` of your index, before importing your scripts. Similar to the simple boilerplate, you will need fx(lens) to work with fx(params).
+
+::infobox[This option is only suited for experienced programmers]{type=warning}
 
 # Have fun
 

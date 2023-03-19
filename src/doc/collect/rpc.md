@@ -1,11 +1,10 @@
 ---
-title: 'fxhash RPC endpoint'
-date: '2021-10-20'
-description: 'Add the fxhash RPC endpoint to Temple'
+title: "fxhash RPC endpoint"
+date: "2021-10-20"
+description: "Add the fxhash RPC endpoint to Temple"
 ---
 
-
-*This is not required, but can help you send request with more success to the tezos blockchain*
+::infobox[The fxhash RPC is not mandatory to interact with fxhash, but can help you sending request with more success to the tezos blockchain]
 
 To interact with the Tezos blockchain using Temple, a RPC endpoint needs to receive the requests. Sometimes, when there is a lot of traffic on tezos, the public RPC used by Temple can be very slow. That's why we decided to deploy our own RPC endpoint. It's actually used by the front-end to interact with the blockchain as well, so that we can be safe from public nodes being down. This is how you can configure Temple to use our RPC endpoint:
 
@@ -23,10 +22,10 @@ To interact with the Tezos blockchain using Temple, a RPC endpoint needs to rece
 
 ## Add the fxhash RPC
 
-* Scroll down, until you get to **ADD A NETWORK**
-* Give it a name (whatever you prefer)
-* Enter `https://rpc1.fxhash.xyz` as the base URL
-* Add the network
+- Scroll down, until you get to **ADD A NETWORK**
+- Give it a name (whatever you prefer)
+- Enter `https://rpc1.fxhash.xyz` as the base URL
+- Add the network
 
 ![Add a network](/images/articles/guide-collect/temple4.jpg)
 
@@ -36,9 +35,9 @@ The RPC should now appear in the list of available endpoints.
 
 ## Set fxhash RPC as active RPC
 
-* Go back to the home of Temple
-* Click on the dropdown to select the RPC (labelled as Tezos Mainet if you have the default settings)
-* Select `FXHASH RPC` (or the name you entered)
+- Go back to the home of Temple
+- Click on the dropdown to select the RPC (labelled as Tezos Mainet if you have the default settings)
+- Select `FXHASH RPC` (or the name you entered)
 
 ![Set RPC active](/images/articles/guide-collect/temple6.jpg)
 

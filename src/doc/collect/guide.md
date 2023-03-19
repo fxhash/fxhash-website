@@ -1,10 +1,14 @@
 ---
 title: "Collect & Mint Tokens"
-date: "2021-10-20"
+date: "2023-03-20"
 description: "How to collect & mint tokens on fxhash ?"
 ---
 
-This guide will walk you through everything you need to know in order to collect on fxhash. From the basic tools to interact with the _tezos blockchain_ to the principles behind fxhash, it's covered in this article.
+> This guide will walk you through everything you need to know in order to collect on fxhash. From the basic tools to interact with the _tezos blockchain_ to the principles behind fxhash, we got you covered.
+
+# How does fxhash work ?
+
+![Mint overview](/images/articles/guide-collect/guide-mint.jpg)
 
 # Interact with the Tezos blockchain
 
@@ -13,10 +17,6 @@ In order to interact with the Smart Contracts of **fxhash**, you will need to ha
 We recommend [Temple](https://templewallet.com/) (browser extension) or [Kukai](https://wallet.kukai.app/) (website).
 
 Once you have a wallet and a tezos address on it, you can synchronize your wallet with fxhash by clicking on the _sync_ button. You will need to send tezos to your address in order to purchase tokens on the platform. It can be done through various exchange platforms, such as [coinbase](https://www.coinbase.com/en/how-to-buy/tezos), [kraken](https://www.kraken.com/en-gb/learn/buy-tezos-xtz) or [coinhouse](https://www.coinhouse.com/buy-tezos/) for instance.
-
-# How does fxhash work ?
-
-![Mint overview](/images/articles/guide-collect/guide-mint.jpg)
 
 ## Overview
 
@@ -28,19 +28,9 @@ Once you have a wallet and a tezos address on it, you can synchronize your walle
 
 ## Waiting to be signed
 
-While the metadata is being generated, the tokens will appear as _[waiting to be signed]_
+::infobox[While the metadata is being generated, the tokens will appear as **[waiting to be signed]**]
 
 ![Waiting to be signed example](/images/articles/guide-collect/waiting-to-be-signed.jpg)
-
-# Opening hours for new content
-
-**fxhash** follows opening cycles for the new content. While you are free to mint unique iterations at any time, artists can only publish new Generative Tokens during opening hours. This mechanic was implemented during the early days, when the platform couldn't handle as many transaction as there were. It gave servers some time to catch up on **the signing process**.
-
-However the community observed that the mechanic itself was quite interesting, as it could give a schedule so that collectors and artists could gather at the same time and expect new content to be added to the platform.
-
-We are currently experimenting with the opening schedule. Maybe it will stay, maybe it won't. It's part of the fun for now.
-
-You can find the opening schedule under [/community/opening-schedule](/community/opening-schedule)
 
 # Be careful with your tezos
 
