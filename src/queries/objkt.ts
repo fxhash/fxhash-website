@@ -31,6 +31,7 @@ export const Qu_objkt = gql`
         slug
         labels
         generativeUri
+        inputBytesSize
         marketStats {
           floor
         }
