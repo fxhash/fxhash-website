@@ -62,7 +62,7 @@ Grace periods can be as short as one day or longer than multiple lifetimes — i
 
 Once an unexchanged ticket falls outside of the grace period, a new set of requirements should be met by the ticket holder to maintain ownership of the ticket.
 
-1. The ticket holder defines a price for the ticket, thereby listing it on the secondary market
+1. The ticket holder defines a price for the ticket (mint price by default), thereby listing it on the secondary market
 2. A daily tax proportional to the ticket’s list price must be paid to retain ownership
 
 These requirements entail that unexchanged tickets are always for sale and collectable by anyone — and that any salable ticket is subject to the daily tax. **If the ticket tax is not paid**, ownership is forfeited by the owner and the ticket is entered into foreclosure.
