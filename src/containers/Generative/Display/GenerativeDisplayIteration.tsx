@@ -47,6 +47,8 @@ const _GenerativeDisplayIteration = ({
   const creator: User = objkt.issuer.author
   const tokenFromObjtk = useMemo(() => {
     return {
+      id: objkt.issuer.id,
+      slug: objkt.issuer.slug,
       name: objkt.name || "",
       metadata: objkt.issuer?.metadata || {},
       labels: objkt.issuer?.labels,
