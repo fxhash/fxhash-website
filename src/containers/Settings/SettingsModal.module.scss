@@ -1,0 +1,54 @@
+@import "../../styles/Variables.scss";
+
+.root {
+  width: 900px;
+  height: 100%;
+}
+
+.tab {
+  padding-top: 0px !important;
+  padding-bottom: 30px !important;
+  font-size: var(--font-size-small);
+}
+
+.content {
+  flex: 1;
+  padding: 8px 16px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  margin: 8px -16px -16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  font-size: var(--font-size-regular);
+}
+
+.info_bottom {
+  position: absolute;
+  bottom: 3px;
+  right: 6px;
+  color: var(--color-gray-light);
+  font-size: var(--font-size-small);
+}
+
+
+
+@media (max-width: $breakpoint-sm) {
+  .root {
+    height: 100vh;
+    width: 100vw;
+    transform: none;
+    top: 0;
+    left: 0;
+  }
+
+  .tab {
+    padding-bottom: 10px !important;
+    font-size: var(--font-size-regular);
+  }
+
+  .content {
+    padding: 8px 20px 20px;
+    margin: 8px -20px -20px;
+  }
+}
