@@ -141,7 +141,7 @@ const _GenerativeDisplayIteration = ({
               {format(new Date(objkt.createdAt), "MMMM d, yyyy' at 'HH:mm")}
             </span>
             {objkt.issuer.labels && (
-              <Labels className={style.labels} labels={objkt.issuer.labels} />
+              <Labels className={style.labels} token={objkt.issuer} />
             )}
           </div>
 

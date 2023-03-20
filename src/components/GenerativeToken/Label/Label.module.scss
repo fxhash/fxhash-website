@@ -9,4 +9,10 @@
     color: black;
     font-weight: bold;
   }
+  
+  &.group_HIGHLIGHT {
+    background-color: var(--color-success-light);
+    color: var(--color-success-dark);
+    font-weight: bold;
+  }
 }

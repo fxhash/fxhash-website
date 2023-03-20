@@ -40,6 +40,7 @@ export enum GenTokLabel {
 export enum GenTokLabelGroup {
   WARNING = "WARNING",
   DETAILS = "DETAILS",
+  HIGHLIGHT = "HIGHLIGHT",
 }
 
 export interface GenTokLabelDefinition {
@@ -50,6 +51,12 @@ export interface GenTokLabelDefinition {
   icon?: string
   showWarningSetting?: keyof ISettingsContext
   showWarningOn?: "preview" | "run"
+}
+
+export const GenTokLabel_Params: GenTokLabelDefinition = {
+  label: "Params",
+  shortLabel: "Params",
+  group: GenTokLabelGroup.HIGHLIGHT,
 }
 
 export interface GenerativeTokenMarketStats {

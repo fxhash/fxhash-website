@@ -65,6 +65,7 @@ export const Qu_userGenTokens = gql`
         balance
         name
         thumbnailUri
+        inputBytesSize
         captureMedia {
           ...MediaImage
         }
