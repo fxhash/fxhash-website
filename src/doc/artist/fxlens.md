@@ -82,7 +82,7 @@ At the root of your the boilerplate folder, there is a `project` folder. This is
 |   ├── public
 |   |   ├── index.html  <-- entry point of the page, loads css, js and includes fxhash snippet
 |   |   └── style.css   <-- loaded by index.html, your styles can go in there
-|   └── public
+|   └── src
 |       └── index.js    <-- entry point of the code, comes with basic usage example
 ```
 

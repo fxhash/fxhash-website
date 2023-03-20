@@ -15,6 +15,7 @@ import Link from "next/link"
 import { Button } from "components/Button"
 import { EntityBadge } from "components/User/EntityBadge"
 import { useRouter } from "next/router"
+import { getGenerativeTokenUrl } from "utils/generative-token"
 
 interface Props {
   token: GenerativeToken
@@ -75,6 +76,12 @@ const RevealPage: NextPage<Props> = ({ token }) => {
               <span style={{ marginRight: 10 }}>created by </span>
               <EntityBadge size="regular" user={token.author} toggeable />
             </div>
+            <Spacing size="large" />
+            <Link href={getGenerativeTokenUrl(token)} passHref>
+              <Button isLink={true} size="small">
+                open project page
+              </Button>
+            </Link>
           </div>
 
           <Spacing size="3x-large" />
