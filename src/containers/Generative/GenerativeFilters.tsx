@@ -2,13 +2,15 @@ import style from "./GenerativeFilters.module.scss"
 import cs from "classnames"
 import { FiltersGroup } from "../../components/Exploration/FiltersGroup"
 import { InputText } from "../../components/Input/InputText"
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import {
   InputRadioButtons,
   RadioOption,
 } from "../../components/Input/InputRadioButtons"
 import { Button } from "../../components/Button"
 import { GenerativeTokenFilters } from "../../types/entities/GenerativeToken"
+import { InputMultiList } from "components/Input/InputMultiList"
+import { InputRadioMultiButtons } from "components/Input/InputRadioMultiButtons"
 
 const MintProgresOptions: RadioOption[] = [
   {
@@ -41,6 +43,18 @@ const ArtistVerificationOptions: RadioOption[] = [
   {
     value: undefined,
     label: "All",
+  },
+]
+
+interface IBooleanFilterDef {
+  label: string
+  value: keyof GenerativeTokenFilters
+}
+
+const booleanFiltersDef: IBooleanFilterDef[] = [
+  {
+    label: "fx(params)",
+    value: "fxparams_eq",
   },
 ]
 
@@ -79,6 +93,29 @@ export function GenerativeFilters({ filters, setFilters }: Props) {
       supply_gte: min,
       supply_lte: max,
     })
+  }
+
+  // derive booleanFilters (list of strings, each string is property filter)
+  const booleanFilters = useMemo(() => {
+    const out: string[] = []
+    for (const bf of booleanFiltersDef) {
+      if (filters[bf.value] === true) {
+        out.push(bf.value)
+      }
+    }
+    return out
+  }, [filters])
+
+  const updateBooleanFilters = (enabledFilters: string[]) => {
+    const out: GenerativeTokenFilters = {
+      ...filters,
+    }
+    for (const bf of booleanFiltersDef) {
+      ;(out[bf.value] as any) = enabledFilters.includes(bf.value)
+        ? true
+        : undefined
+    }
+    setFilters(out)
   }
 
   return (
@@ -152,6 +189,14 @@ export function GenerativeFilters({ filters, setFilters }: Props) {
             setFilters({ ...filters, authorVerified_eq: value })
           }
           options={ArtistVerificationOptions}
+        />
+      </FiltersGroup>
+
+      <FiltersGroup title="More...">
+        <InputRadioMultiButtons
+          options={booleanFiltersDef}
+          value={booleanFilters}
+          onChange={updateBooleanFilters}
         />
       </FiltersGroup>
     </>

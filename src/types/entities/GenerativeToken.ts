@@ -161,6 +161,7 @@ export interface GenerativeTokenFilters {
   pricingMethod_eq?: GenTokPricing
   locked_eq?: boolean
   mintOpened_eq?: boolean
+  fxparams_eq?: boolean
 }
 
 export interface GenerativeTokenFeatureValue {
