@@ -98,7 +98,12 @@ function SimpleImage({
   )
 
   return (
-    <div className={cs(css.wrapper, css[`wrapper_${mode}`])}>
+    <div
+      className={cs(css.wrapper, css[`wrapper_${mode}`])}
+      style={{
+        position: position,
+      }}
+    >
       <img src={gatewayUrl} alt={alt} {...restProps} loading="lazy" />
     </div>
   )

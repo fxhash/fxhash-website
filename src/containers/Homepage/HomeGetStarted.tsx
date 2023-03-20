@@ -9,7 +9,7 @@ const docs = [
   {
     title: "what is generative art?",
     description:
-      "Learn more about generative art, fxhash and his artist ecosystem",
+      "Learn more about generative art, fxhash and its artist ecosystem",
     url: "/doc/fxhash/overview",
   },
   {

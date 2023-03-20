@@ -8,19 +8,19 @@ interface Props {
   token: GenerativeToken
 }
 
-const ExploreParamsFromSlug = ({ token }: Props) => {
+const ExploreParamsFromId: NextPage<Props> = ({ token }) => {
   return <ExploreParams token={token} />
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { slug } = context?.params || {}
+  const { id } = context?.params || {}
   let token = null
   const apolloClient = createApolloClient()
-  if (slug) {
+  if (id) {
     const { data } = await apolloClient.query({
       query: Qu_genToken,
       fetchPolicy: "no-cache",
-      variables: { slug },
+      variables: { id: parseInt(id as string) },
     })
     if (data) {
       token = data.generativeToken
@@ -35,4 +35,4 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 }
 
-export default ExploreParamsFromSlug
+export default ExploreParamsFromId
