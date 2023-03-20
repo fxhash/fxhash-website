@@ -46,7 +46,11 @@ export class ModerateOperation extends ContractOperation<TModerateParams> {
     }
 
     // now build contextual parameters based on target contract
-    if (contract === "token" || contract === "article") {
+    if (
+      contract === "token" ||
+      contract === "token_v3" ||
+      contract === "article"
+    ) {
       params.token_id = entityId
     } else {
       params.address = entityId

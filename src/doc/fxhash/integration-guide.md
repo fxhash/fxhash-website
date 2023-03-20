@@ -15,12 +15,13 @@ This guide provides informations on how to integrate some of the components of f
 These are the addresses of the contracts actively being used by fxhash:
 
 | ID               | Address                                                     | Description                                                                                                                                         |
-| ---------------- | ----------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+|------------------| ----------------------------------------------------------- |-----------------------------------------------------------------------------------------------------------------------------------------------------|
 | issuer           | `{{process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_ISSUER}}`          | Generative Tokens - stores the projects & main entrypoint to mint NFTs                                                                              |
 | issuer_v3        | `{{process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_ISSUER_V3}}`       | Generative Tokens - stores the projects & main entrypoint to mint NFTs (since fxhash 2.0)                                                           |
 | gentk_v1         | `{{process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_GENTK_V1}}`        | FA2 NFTs, beta tokens                                                                                                                               |
 | gentk_v2         | `{{process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_GENTK_V2}}`        | FA2 NFTs, tokens since fxhash 1.0                                                                                                                   |
 | gentk_v3         | `{{process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_GENTK_V3}}`        | FA2 NFTs, tokens since fxhash 2.0                                                                                                                   |
+| mint_ticket_v3   | `{{process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_MINT_TICKETS_V3}}` | Mint ticket - used with fx(params) mint                                                                                                             |
 | articles         | `{{process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_ARTICLES}}`        | fx(text) FA2 contract                                                                                                                               |
 | marketplace_v1   | `{{process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_MARKETPLACE_V1}}`  | The beta marketplace contract, still indexed but no more listings are made through this contract. Shouldn't be used anymore, soon to be deprecated. |
 | marketplace_v2   | `{{process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_MARKETPLACE_V2}}`  | The marketplace contact since fxhash 1.0                                                                                                            |

@@ -26,10 +26,12 @@ $slider-thumb-border-radius: 0px;
     flex: 1;
     min-width: 0;
     overflow: hidden;
-    word-break: break-all;
-    white-space: nowrap;
-    text-overflow: ellipsis;
     font-size: var(--fxl-font-size-s);
+    &.ellipsis {
+      word-break: break-all;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
   }
   input {
     color: currentColor;

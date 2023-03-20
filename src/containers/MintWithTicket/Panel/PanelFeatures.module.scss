@@ -19,7 +19,8 @@
       color: var(--fxl-color-light0);
     }
     & :last-child {
-      min-width: 200px;
+      max-width: 200px;
+      width: 100%;
     }
   }
 }

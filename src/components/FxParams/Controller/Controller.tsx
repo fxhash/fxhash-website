@@ -3,11 +3,14 @@ import {
   InputHTMLAttributes,
   ReactNode,
   RefObject,
+  useCallback,
+  useState,
 } from "react"
 import { FxParamOptionsMap, FxParamType } from "../types"
 import classes from "./Controller.module.scss"
 import cx from "classnames"
 import { BaseInput } from "../BaseInput"
+import cs from "classnames"
 
 /*
  * Providing a name starting or ending with `search` prevents
@@ -35,6 +38,7 @@ export interface ControllerProps {
 }
 
 export function Controller(props: ControllerProps) {
+  const [labelEllipsis, setLabelEllipsis] = useState(true)
   const {
     id,
     label,
@@ -42,10 +46,21 @@ export function Controller(props: ControllerProps) {
     className,
     inputContainerProps,
   } = props
+  const handleToggleEllipsis = useCallback(
+    () => setLabelEllipsis((old) => !old),
+    []
+  )
   return (
     <div className={cx(classes.controller, classes[layout], className)}>
       {id && (
-        <label title={label} htmlFor={id}>
+        <label
+          className={cs({
+            [classes.ellipsis]: labelEllipsis,
+          })}
+          title={label}
+          htmlFor={id}
+          onClick={handleToggleEllipsis}
+        >
           {label || id}
         </label>
       )}
