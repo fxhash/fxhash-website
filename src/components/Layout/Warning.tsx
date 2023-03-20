@@ -17,7 +17,7 @@ export function Warning({
 }: PropsWithChildren<Props>) {
   return (
     <div className={cs(className, style.container)}>
-      <Link href="/article/fx(text)">
+      <Link href="/doc/collect/fxparams-mint-tickets">
         <a>
           <span className={cs(style.message)}>{children}</span>
         </a>
