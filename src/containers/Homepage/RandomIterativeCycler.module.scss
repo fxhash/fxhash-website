@@ -1,0 +1,78 @@
+@import "../../styles/Variables";
+
+.cycler {
+  position: relative;
+  padding-top: calc(100% + 105px);
+  & > div {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    transition: 1.5s $timing-cubic all;
+    scale: 0.7;
+    opacity: 0;
+    transform-origin: center center;
+    will-change: transform, opacity, scale;
+    pointer-events: none;
+    z-index: 1;
+    .details {
+      opacity: 0;
+    }
+    .infos {
+      background-color: var(--color-gray-vvvlight);
+      padding: 8px 4px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 8px;
+    }
+    .avatar {
+      width: 30px;
+      height: 30px;
+    }
+    .progress_bar {
+      width: 100%;
+    }
+    .title_url {
+      color: var(--color-black);
+    }
+    h4 {
+      font-size: 0.9375rem;
+      line-height: 1.312;
+    }
+    .iteration {
+      font-weight: 400;
+      color: var(--color-gray-light);
+    }
+    .creator {
+      line-height: 1;
+      font-size: 0.75rem;
+    }
+    .owner {
+      font-size: 0.75rem;
+      margin-top: 8px;
+      display: flex;
+      flex-direction: row;
+      gap: 0.5em;
+      .label {
+        color: var(--color-gray);
+      }
+    }
+    &.show {
+      opacity: 0.1;
+    }
+    &.is_active {
+      pointer-events: initial;
+      opacity: 1;
+      scale: 1;
+      z-index: 2;
+      .details {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+.square {
+  border: 3px solid var(--color-border);
+}
