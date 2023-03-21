@@ -5,27 +5,37 @@ import Link from "next/link"
 import { Qu_userAlerts } from "queries/user"
 import { useContext, useEffect } from "react"
 import { MintTicket } from "types/entities/MintTicket"
+import { Offer } from "types/entities/Offer"
 import { ConnectedUser } from "types/entities/User"
 import { getUserProfileLink } from "utils/user"
 
-const setAlertCursor = (userId: string) => {
-  // read alert cursors from local storage
-  const fromStorage = localStorage.getItem("alert-cursor")
+type CursorIdentifier = "alert-cursor" | "offer-cursor"
+
+const setCursor = (userId: string, identifier: CursorIdentifier) => {
+  // read cursors from local storage
+  const fromStorage = localStorage.getItem(identifier)
   // if no cursors, create a new object
   const userCursors = fromStorage ? JSON.parse(fromStorage) : {}
   // set cursor for current user
   userCursors[userId] = new Date().toISOString()
   // save to local storage
-  localStorage.setItem("alert-cursor", JSON.stringify(userCursors))
+  localStorage.setItem(identifier, JSON.stringify(userCursors))
+}
+
+const readCursor = (userId: string, identifier: CursorIdentifier) => {
+  // read alert cursors from local storage
+  const fromStorage = localStorage.getItem(identifier)
+  // if no cursors, return true
+  if (!fromStorage) return null
+  // get cursor for current user
+  return JSON.parse(fromStorage)[userId]
+  // alert if cursor is older than 24 hours
 }
 
 const shouldAlert = (userId: string) => {
-  // read alert cursors from local storage
-  const fromStorage = localStorage.getItem("alert-cursor")
-  // if no cursors, return true
-  if (!fromStorage) return true
-  // get cursor for current user
-  const cursor = JSON.parse(fromStorage)[userId]
+  const cursor = readCursor(userId, "alert-cursor")
+  // if no cursor, return true
+  if (!cursor) return true
   // alert if cursor is older than 24 hours
   return isAfter(new Date(), addDays(new Date(cursor), 1))
 }
@@ -62,14 +72,42 @@ const createMintTicketAlert = (
   }
 }
 
-const createAlerts = (user: ConnectedUser, data: any) => {
-  setAlertCursor(user.id)
+const createOfferAlert = (user: ConnectedUser, offers: Offer[]) => {
+  // use a separate cursor to track when the last offer alert was sent
+  const cursor = readCursor(user.id, "offer-cursor")
+  // find offers created since the last alert
+  const newOffers = offers.filter((offer) =>
+    cursor ? isAfter(new Date(offer.createdAt), new Date(cursor)) : true
+  )
+  // if none, do nothing
+  if (!newOffers.length) return null
 
-  return [
-    createMintTicketAlert(user, data.user.mintTickets),
-    // ... other alerts
-  ].filter((alert) => alert !== null) as IMessageSent[]
+  // set the user's offer cursor to the current time
+  setCursor(user.id, "offer-cursor")
+
+  return {
+    type: "warning",
+    title: "Offer alert",
+    content: (onRemove: () => void) => (
+      <>
+        You have {newOffers.length} active offers.{" "}
+        <Link
+          legacyBehavior
+          href={`${getUserProfileLink(user)}/dashboard/offers-received`}
+        >
+          <a onClick={onRemove}>See my offers</a>
+        </Link>
+      </>
+    ),
+    keepAlive: true,
+  }
 }
+
+const createAlerts = (user: ConnectedUser, data: any) =>
+  [
+    createMintTicketAlert(user, data.user.mintTickets),
+    createOfferAlert(user, data.user.offersReceived),
+  ].filter((alert) => alert !== null) as IMessageSent[]
 
 export const useUserAlerts = (user: ConnectedUser | null) => {
   const messageCenter = useContext(MessageCenterContext)
@@ -82,6 +120,7 @@ export const useUserAlerts = (user: ConnectedUser | null) => {
     const notify = async () => {
       const { data } = await getUserAlertsData({ variables: { id: user.id } })
       messageCenter.addMessages(createAlerts(user, data))
+      setCursor(user.id, "alert-cursor")
     }
 
     notify()

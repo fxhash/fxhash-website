@@ -59,6 +59,10 @@ export const Qu_userAlerts = gql`
         id
         taxationPaidUntil
       }
+      offersReceived(filters: { active: true }) {
+        id
+        createdAt
+      }
     }
   }
 `
