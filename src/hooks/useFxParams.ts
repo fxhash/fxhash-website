@@ -22,11 +22,8 @@ export const useFxParams = (params: FxParamDefinition<any>[]) => {
     (query.fxparams as string) || null
   )
 
-  const updateQueryParams = (
-    action: "push" | "replace",
-    query: { fxhash: string; fxparams: string }
-  ) =>
-    router[action](
+  const updateQueryParams = (query: { fxhash: string; fxparams: string }) =>
+    router.replace(
       {
         query: {
           ...router.query,
@@ -41,14 +38,8 @@ export const useFxParams = (params: FxParamDefinition<any>[]) => {
     // wait until params are loaded
     if (!inputBytes) return
 
-    // replace route with new hash and input bytes if not loaded from query
-    if (!query.fxhash) {
-      updateQueryParams("replace", { fxhash: hash, fxparams: inputBytes })
-      return
-    }
-
     // update query params with new hash and input bytes
-    updateQueryParams("push", { fxhash: hash, fxparams: inputBytes })
+    updateQueryParams({ fxhash: hash, fxparams: inputBytes })
   }, [hash, inputBytes])
 
   // use usememo maybe
