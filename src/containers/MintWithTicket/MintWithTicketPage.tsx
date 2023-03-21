@@ -29,13 +29,14 @@ import {
 import { PanelParamsRef } from "./Panel/PanelParams"
 import { useRouter } from "next/router"
 import { useContractOperation } from "hooks/useContractOperation"
-import { MintWithTicketOperation } from "services/contract-operations/MintWithTicketV3"
 import { ContractFeedback } from "components/Feedback/ContractFeedback"
 import { Loader } from "components/Utils/Loader"
 import Link from "next/link"
 import { Button } from "components/Button"
 import useWindowSize, { breakpoints } from "../../hooks/useWindowsSize"
 import { MintV3AbstractionOperation } from "services/contract-operations/MintV3Abstraction"
+import { useSettingsContext } from "../../context/Theme"
+import { PreMintWarning } from "./PreMintWarning"
 
 export type TOnMintHandler = (ticketId: number | null) => void
 
@@ -45,11 +46,14 @@ interface Props {
   mode?: PanelSubmitMode
 }
 export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
+  const { showTicketPreMintWarning } = useSettingsContext()
   const { width } = useWindowSize()
   const isMobile = useMemo(() => {
     return (width || 0) < breakpoints.sm
   }, [width])
   const [showPanel, setShowPanel] = useState(!isMobile)
+  const [showPreMintWarningView, setShowPreMintWarningView] = useState(false)
+  const [selectedTicketId, setSelectedTicketId] = useState<number | null>(null)
   const panelParamsRef = useRef<PanelParamsRef>(null)
   const historyContext = useContext(ParamsHistoryContext)
   const artworkIframeRef = useRef<ArtworkIframeRef>(null)
@@ -64,7 +68,15 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
     useReceiveTokenInfos(artworkIframeRef)
 
   const { call, success, loading, state, error, opHash } = useContractOperation(
-    MintV3AbstractionOperation
+    MintV3AbstractionOperation,
+    {
+      onSuccess: () => {
+        if (showPreMintWarningView) {
+          setShowPreMintWarningView(false)
+          setSelectedTicketId(null)
+        }
+      },
+    }
   )
 
   const inputBytes = useMemo<string | null>(() => {
@@ -124,28 +136,43 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
   }
 
   // call contract v3 mint with ticket
-  const handleClickSubmit: TOnMintHandler = (_ticketId) => {
-    if (inputBytes) {
-      // if we are minting with a ticket passed as a propo
-      if (mode === "with-ticket") {
-        if (ticketId != null) {
+  const handleMint: TOnMintHandler = useCallback(
+    (_ticketId) => {
+      if (inputBytes) {
+        // if we are minting with a ticket passed as a propo
+        if (mode === "with-ticket") {
+          if (ticketId != null) {
+            call({
+              token: token,
+              ticketId: ticketId,
+              inputBytes: inputBytes,
+            })
+          }
+        }
+        // else we are minting using settings passed to this function
+        else if (mode === "free") {
           call({
             token: token,
-            ticketId: ticketId,
+            ticketId: _ticketId,
             inputBytes: inputBytes,
           })
         }
       }
-      // else we are minting using settings passed to this function
-      else if (mode === "free") {
-        call({
-          token: token,
-          ticketId: _ticketId,
-          inputBytes: inputBytes,
-        })
+    },
+    [call, inputBytes, mode, ticketId, token]
+  )
+
+  const handleClickSubmit: TOnMintHandler = useCallback(
+    (_ticketId) => {
+      if (showTicketPreMintWarning) {
+        setShowPreMintWarningView(true)
+        setSelectedTicketId(_ticketId)
+      } else {
+        handleMint(_ticketId)
       }
-    }
-  }
+    },
+    [handleMint, showTicketPreMintWarning]
+  )
 
   const handleClickArtwork = useCallback(() => {
     if (isMobile && showPanel) {
@@ -153,9 +180,17 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
     }
   }, [isMobile, showPanel])
 
+  const handleClosePreMintView = useCallback(() => {
+    setShowPreMintWarningView(false)
+    setSelectedTicketId(null)
+  }, [])
+
+  const handleValidatePreMint = useCallback(() => {
+    handleMint(selectedTicketId)
+  }, [handleMint, selectedTicketId])
+
   useEffect(() => {
     historyContext.registerAction("params-update", (value: any) => {
-      console.log(value)
       panelParamsRef?.current?.updateData(value)
       setData(value)
     })
@@ -252,6 +287,15 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
                 </Button>
               </Link>
             )}
+          </div>
+        )}
+        {showPreMintWarningView && (
+          <div className={cs(style.mint_overlay, style.pre_mint)}>
+            <PreMintWarning
+              onChangeHash={handleChangeHash}
+              onMint={handleValidatePreMint}
+              onClose={handleClosePreMintView}
+            />
           </div>
         )}
       </div>

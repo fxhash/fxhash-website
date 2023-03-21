@@ -4,6 +4,7 @@ import { PropsWithChildren, InputHTMLAttributes, ChangeEvent } from "react"
 
 // @ts-ignore
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
+  classNameCheckmark?: string
   value: boolean
   isRadio?: boolean
   name?: string
@@ -16,6 +17,7 @@ export function Checkbox({
   name,
   onChange,
   className,
+  classNameCheckmark,
   isRadio,
   paddingLeft = true,
   children,
@@ -33,7 +35,7 @@ export function Checkbox({
         checked={value}
         onChange={(event) => onChange(!value, event)}
       />
-      <span className={cs(style.checkmark)}></span>
+      <span className={cs(style.checkmark, classNameCheckmark)}/>
       {children}
     </label>
   )
