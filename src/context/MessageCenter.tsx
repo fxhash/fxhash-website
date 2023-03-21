@@ -11,7 +11,7 @@ type TMessageType = "success" | "warning" | "error"
 export interface IMessageSent {
   type: TMessageType
   title: string
-  content?: (onRemove: () => void) => ReactElement | string | null
+  content?: ((onRemove: () => void) => ReactElement) | string | null
   keepAlive?: boolean
 }
 
