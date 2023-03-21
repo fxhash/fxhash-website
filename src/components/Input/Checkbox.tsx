@@ -35,7 +35,7 @@ export function Checkbox({
         checked={value}
         onChange={(event) => onChange(!value, event)}
       />
-      <span className={cs(style.checkmark, classNameCheckmark)}/>
+      <span className={cs(style.checkmark, classNameCheckmark)} />
       {children}
     </label>
   )
