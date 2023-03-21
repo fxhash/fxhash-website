@@ -89,8 +89,6 @@ export function GenerativeArtwork({
   }, [previewHash, previewInputBytes, artworkArtifactUrl])
 
   const paramsUrl = useMemo(() => {
-    console.log(exploreParamsQuery)
-
     if (exploreParamsQuery)
       return `${getGenerativeTokenUrl(
         token as GenerativeToken
