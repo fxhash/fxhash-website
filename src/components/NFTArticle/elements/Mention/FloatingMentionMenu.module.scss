@@ -1,0 +1,11 @@
+.floating_menu {
+  top: -9999px;
+  left: -9999px;
+  position: absolute;
+  z-index: 2;
+  background: var(--color-white);
+}
+.search_results {
+  border: 2px solid var(--color-gray-vvlight) !important;
+  left: -2px !important;
+}
