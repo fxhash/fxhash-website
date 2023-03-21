@@ -110,7 +110,7 @@ const _ModalClaimMintTicket = ({
   }, [harbergerTax, price])
   return (
     <Modal
-      title={`Claim mint pass for “${mintTicket.token?.name}”`}
+      title={`Claim mint ticket for “${mintTicket.token?.name}”`}
       onClose={onClose}
     >
       <form onSubmit={handleSubmit}>
@@ -156,7 +156,7 @@ const _ModalClaimMintTicket = ({
                 </div>
                 <div className={style.label_subtitle}>
                   For how long do you want your token to be secured at this
-                  price? Not including the grace period.
+                  price?
                 </div>
               </label>
               <InputTextUnit
