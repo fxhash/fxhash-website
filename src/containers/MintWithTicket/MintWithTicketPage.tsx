@@ -34,6 +34,7 @@ import { Loader } from "components/Utils/Loader"
 import Link from "next/link"
 import { Button } from "components/Button"
 import useWindowSize, { breakpoints } from "../../hooks/useWindowsSize"
+import { useFxParams } from "hooks/useFxParams"
 import { MintV3AbstractionOperation } from "services/contract-operations/MintV3Abstraction"
 import { useSettingsContext } from "../../context/Theme"
 import { PreMintWarning } from "./PreMintWarning"
@@ -62,8 +63,6 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
   const [hasLocalChanges, setHasLocalChanges] = useState<boolean>(false)
   const [withAutoUpdate, setWithAutoUpdate] = useState<boolean>(true)
   const [lockedParamIds, setLockedParamIds] = useState<string[]>([])
-  const [hash, setHash] = useState(generateFxHash())
-  const [data, setData] = useState({})
   const { params, features, onIframeLoaded } =
     useReceiveTokenInfos(artworkIframeRef)
 
@@ -72,6 +71,7 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
     setSelectedTicketId(null)
   }, [])
 
+  const { data, setData, hash, setHash, inputBytes } = useFxParams(params)
   const { call, success, loading, state, error, opHash } = useContractOperation(
     MintV3AbstractionOperation,
     {
@@ -82,12 +82,6 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
       },
     }
   )
-
-  const inputBytes = useMemo<string | null>(() => {
-    const serialized = serializeParams(data, params || [])
-    if (serialized.length === 0) return null
-    return serialized
-  }, [stringifyParamsData(data), params])
 
   const url = useMemo<string>(() => {
     return ipfsUrlWithHashAndParams(

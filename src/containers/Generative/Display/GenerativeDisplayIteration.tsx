@@ -59,6 +59,10 @@ const _GenerativeDisplayIteration = ({
     }
   }, [objkt])
   const gentkUrl = useMemo(() => gentkLiveUrl(objkt), [objkt])
+  const exploreParamsQuery = useMemo(() => {
+    if (!objkt.inputBytes) return null
+    return `fxhash=${objkt.generationHash}&fxparams=${objkt.inputBytes}`
+  }, [objkt])
 
   return (
     <>
@@ -226,6 +230,7 @@ const _GenerativeDisplayIteration = ({
             token={tokenFromObjtk}
             openUrl={gentkUrl}
             artifactUrl={gentkUrl}
+            exploreParamsQuery={exploreParamsQuery}
           />
 
           {objkt.features && objkt.features.length > 0 && (
