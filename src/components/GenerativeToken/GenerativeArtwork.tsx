@@ -32,6 +32,7 @@ interface Props {
   openText?: string
   hideVariations?: boolean
   artifactUrl?: string
+  exploreParamsQuery?: string | null
 }
 export function GenerativeArtwork({
   token,
@@ -40,6 +41,7 @@ export function GenerativeArtwork({
   openText = "open",
   hideVariations,
   artifactUrl: artworkArtifactUrl,
+  exploreParamsQuery,
 }: Props) {
   const settings = useContext(SettingsContext)
   const artworkIframeRef = useRef<ArtworkIframeRef>(null)
@@ -86,10 +88,13 @@ export function GenerativeArtwork({
     }
   }, [previewHash, previewInputBytes, artworkArtifactUrl])
 
-  const paramsUrl = useMemo(
-    () => `${getGenerativeTokenUrl(token as GenerativeToken)}/explore-params`,
-    [token]
-  )
+  const paramsUrl = useMemo(() => {
+    if (exploreParamsQuery)
+      return `${getGenerativeTokenUrl(
+        token as GenerativeToken
+      )}/explore-params?${exploreParamsQuery}`
+    return `${getGenerativeTokenUrl(token as GenerativeToken)}/explore-params`
+  }, [token])
 
   return (
     <>
