@@ -123,7 +123,6 @@ const WinterCheckout: FunctionComponent<Props> = (props) => {
     setProjectUrl(url)
   }, [contractAddress, production, projectId, props, tokenId])
 
-
   return showModal ? (
     <iframe id="winter-checkout" src={projectUrl} className={style.iframe} />
   ) : (

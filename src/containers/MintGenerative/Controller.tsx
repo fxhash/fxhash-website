@@ -134,7 +134,6 @@ export function MintGenerativeController({ anchor }: Props) {
   const history = useHistory()
   const location = useLocation()
 
-
   // derive index of the step from the location
   const stepIndex = useMemo<number>(() => {
     const S = STEPS.find((step) => step.path === location.pathname)

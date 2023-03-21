@@ -40,7 +40,6 @@ export function ProposalDetailsBurnSupplyExpanded({
   // easier
   const token: GenerativeToken = data?.generativeToken
 
-
   return (
     <div>
       {loading ? (
