@@ -15,6 +15,9 @@ import { RefObject, useMemo } from "react"
 import { getUserName } from "utils/user"
 import { PanelControls } from "./PanelControls"
 import { Spacing } from "components/Layout/Spacing"
+import { TOnMintHandler } from "../MintWithTicketPage"
+
+export type PanelSubmitMode = "with-ticket" | "free" | "none"
 
 interface Props {
   show: boolean
@@ -36,11 +39,12 @@ interface Props {
   onChangeWithAutoUpdate: (state: boolean) => void
   onOpenNewTab: () => void
   onClickBack: () => void
-  onClickSubmit: () => void
+  onClickSubmit: TOnMintHandler
   onClickHide: () => void
   onClickRefresh?: () => void
   onLocalDataChange?: (d: FxParamsData) => void
   hideSubmit?: boolean
+  mode?: PanelSubmitMode
 }
 
 export function PanelRoot(props: Props) {
@@ -69,8 +73,10 @@ export function PanelRoot(props: Props) {
     onClickRefresh,
     onLocalDataChange,
     hideSubmit,
+    mode = "none",
   } = props
   const name = useMemo(() => getUserName(token.author, 15), [token])
+
   return (
     <div className={cs(style.root)}>
       <div
@@ -106,6 +112,8 @@ export function PanelRoot(props: Props) {
         </div>
       </div>
       <PanelControls
+        mode={mode}
+        token={token}
         onSubmit={onClickSubmit}
         onOpenNewTab={onOpenNewTab}
         onClickBack={onClickBack}

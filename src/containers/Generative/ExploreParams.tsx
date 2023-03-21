@@ -4,6 +4,7 @@ import { GenerativeToken } from "types/entities/GenerativeToken"
 import { truncateEnd } from "utils/strings"
 import { getImageApiUrl, OG_IMAGE_SIZE } from "components/Image"
 import { MintWithTicketPage } from "containers/MintWithTicket/MintWithTicketPage"
+import { UserGuard } from "components/Guards/UserGuard"
 
 interface Props {
   token: GenerativeToken
@@ -14,6 +15,7 @@ export const ExploreParams = ({ token }: Props) => {
   const displayUrl =
     token.captureMedia?.cid &&
     getImageApiUrl(token.captureMedia.cid, OG_IMAGE_SIZE)
+
   return (
     <>
       <Head>
@@ -51,7 +53,8 @@ export const ExploreParams = ({ token }: Props) => {
           content={displayUrl || "https://www.fxhash.xyz/images/og/og1.jpg"}
         />
       </Head>
-      <MintWithTicketPage token={token} />
+
+      <MintWithTicketPage token={token} mode="free" />
     </>
   )
 }

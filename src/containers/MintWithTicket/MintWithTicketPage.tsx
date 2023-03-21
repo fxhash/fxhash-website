@@ -20,7 +20,7 @@ import {
   stringifyParamsData,
 } from "components/FxParams/utils"
 import { useReceiveTokenInfos } from "hooks/useReceiveTokenInfos"
-import { PanelRoot } from "./Panel/PanelRoot"
+import { PanelRoot, PanelSubmitMode } from "./Panel/PanelRoot"
 import { generateFxHash } from "utils/hash"
 import {
   ParamsHistoryContext,
@@ -35,12 +35,16 @@ import { Loader } from "components/Utils/Loader"
 import Link from "next/link"
 import { Button } from "components/Button"
 import useWindowSize, { breakpoints } from "../../hooks/useWindowsSize"
+import { MintV3AbstractionOperation } from "services/contract-operations/MintV3Abstraction"
+
+export type TOnMintHandler = (ticketId: number | null) => void
 
 interface Props {
   token: GenerativeToken
   ticketId?: number
+  mode?: PanelSubmitMode
 }
-export function MintWithTicketPageRoot({ token, ticketId }: Props) {
+export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
   const { width } = useWindowSize()
   const isMobile = useMemo(() => {
     return (width || 0) < breakpoints.sm
@@ -60,7 +64,7 @@ export function MintWithTicketPageRoot({ token, ticketId }: Props) {
     useReceiveTokenInfos(artworkIframeRef)
 
   const { call, success, loading, state, error, opHash } = useContractOperation(
-    MintWithTicketOperation
+    MintV3AbstractionOperation
   )
 
   const inputBytes = useMemo<string | null>(() => {
@@ -119,14 +123,27 @@ export function MintWithTicketPageRoot({ token, ticketId }: Props) {
     setHasLocalChanges(true)
   }
 
-  // TODO: Call contract v3 mint with ticket
-  const handleClickSubmit = () => {
-    if (inputBytes && ticketId != null) {
-      call({
-        token: token,
-        ticketId: ticketId,
-        inputBytes: inputBytes,
-      })
+  // call contract v3 mint with ticket
+  const handleClickSubmit: TOnMintHandler = (_ticketId) => {
+    if (inputBytes) {
+      // if we are minting with a ticket passed as a propo
+      if (mode === "with-ticket") {
+        if (ticketId != null) {
+          call({
+            token: token,
+            ticketId: ticketId,
+            inputBytes: inputBytes,
+          })
+        }
+      }
+      // else we are minting using settings passed to this function
+      else if (mode === "free") {
+        call({
+          token: token,
+          ticketId: _ticketId,
+          inputBytes: inputBytes,
+        })
+      }
     }
   }
 
@@ -201,6 +218,7 @@ export function MintWithTicketPageRoot({ token, ticketId }: Props) {
           onClickHide={handleToggleShowPanel(false)}
           onClickRefresh={handleClickRefresh}
           hideSubmit={ticketId == null}
+          mode={mode}
         />
         {(loading || success) && (
           <div

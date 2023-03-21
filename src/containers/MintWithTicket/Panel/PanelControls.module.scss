@@ -24,3 +24,14 @@
     }
   }
 }
+
+.submitButtons {
+  display: flex;
+  flex-direction: row;
+  flex-grow: 2;
+  gap: 4px;
+
+  & > * {
+    flex: 1 1 0;
+  }
+}
