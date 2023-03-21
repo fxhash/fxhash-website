@@ -35,11 +35,9 @@ export class UpdatePricingV3Operation extends ContractOperation<TUpdatePricingV3
   }
 
   async call(): Promise<TransactionWalletOperation> {
-    console.log(this.params.data)
     // transform the string values in the form into some numbers so that
     // it can be sent to contract correctly (or packed)
     const numbered = transformPricingFormToNumbers(this.params.data)
-    console.log({ numbered })
 
     // let's pack the pricing (only sub-field "details" gets packed)
     const packedPricing = packPricing(numbered)
@@ -48,7 +46,6 @@ export class UpdatePricingV3Operation extends ContractOperation<TUpdatePricingV3
       issuer_id: this.params.token.id,
       pricing: packedPricing,
     }
-    console.log(params)
 
     // if the author is a collab contract, we have to call the collab contract
     // proposal EP instead

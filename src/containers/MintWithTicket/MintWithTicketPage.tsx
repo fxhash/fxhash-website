@@ -150,7 +150,6 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
 
   useEffect(() => {
     historyContext.registerAction("params-update", (value: any) => {
-      console.log(value)
       panelParamsRef?.current?.updateData(value)
       setData(value)
     })

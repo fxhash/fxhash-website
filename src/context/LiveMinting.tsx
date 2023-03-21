@@ -56,7 +56,7 @@ export function LiveMintingProvider({ children }: Props) {
               },
             })
           } catch (err) {
-            console.log(err)
+            console.error(err)
             throw new Error("Network error: cannot find the event.")
           }
 

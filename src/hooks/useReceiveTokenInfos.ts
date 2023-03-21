@@ -45,7 +45,6 @@ export function useReceiveTokenInfos(
           }
         }
         if (e.data.id === "fxhash_getParams") {
-          console.log("??")
           if (e.data.data) {
             const { definitions, values } = e.data.data
             if (definitions) {
