@@ -54,7 +54,6 @@ export class MintV3AbstractionOperation extends ContractOperation<TMintV3Abstrac
           mutez: true,
         }
 
-    console.log(params, options)
     return this.contract!.methodsObject[ep](params).send(options)
   }
 
