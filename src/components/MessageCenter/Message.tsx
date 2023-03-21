@@ -10,10 +10,12 @@ interface Props {
 export function Message({ message, onRemove }: Props) {
   const [hidden, setHidden] = useState<boolean>(false)
 
+  const { type, title, content, keepAlive } = message
+
   const icon =
-    message.type === "error"
+    type === "error"
       ? "fas fa-times-circle"
-      : message.type === "warning"
+      : type === "warning"
       ? "fas fa-exclamation-circle"
       : "fas fa-check-circle"
 
@@ -21,24 +23,32 @@ export function Message({ message, onRemove }: Props) {
     <div
       className={cs(
         style.root,
-        style[`type_${message.type}`],
+        style[`type_${type}`],
         {
           [style.hidden]: hidden,
         },
         "message"
       )}
-      onTransitionEnd={onRemove}
+      onTransitionEnd={() => {
+        if (keepAlive) return
+        onRemove()
+      }}
     >
       <div className={cs(style.header)}>
         <i className={icon} aria-hidden />
-        <div className={cs(style.title)}>{message.title}</div>
+        <div className={cs(style.title)}>{title}</div>
       </div>
-      {message.content && (
-        <div className={cs(style.content)}>{message.content}</div>
+      {content && (
+        <div className={cs(style.content)}>
+          {typeof content === "function" ? content(onRemove) : content}
+        </div>
       )}
       <div
-        className={cs(style.loader, "loader")}
-        onAnimationEnd={() => setHidden(true)}
+        className={!keepAlive ? cs(style.loader, "loader") : undefined}
+        onAnimationEnd={() => {
+          if (keepAlive) return
+          setHidden(true)
+        }}
       />
       <button className={cs(style.close)} onClick={onRemove}>
         <i className="far fa-times" aria-hidden />
