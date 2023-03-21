@@ -57,6 +57,8 @@ export const GenTokLabel_Params: GenTokLabelDefinition = {
   label: "Params",
   shortLabel: "Params",
   group: GenTokLabelGroup.HIGHLIGHT,
+  description:
+    "This piece is using the fx(params) module, letting collector play with parameters before minting",
 }
 
 export interface GenerativeTokenMarketStats {
