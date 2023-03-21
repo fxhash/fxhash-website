@@ -33,9 +33,7 @@ export function EditToken({ token }: Props) {
       router.replace("/")
     }
   }, [user])
-
-  console.log({ token })
-
+  
   const EditTokenComp = useMemo(
     () =>
       token.version === GenerativeTokenVersion.PRE_V3

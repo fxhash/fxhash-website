@@ -134,7 +134,6 @@ export function MintGenerativeController({ anchor }: Props) {
   const history = useHistory()
   const location = useLocation()
 
-  console.log(state)
 
   // derive index of the step from the location
   const stepIndex = useMemo<number>(() => {
