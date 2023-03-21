@@ -35,6 +35,7 @@ import { Loader } from "components/Utils/Loader"
 import Link from "next/link"
 import { Button } from "components/Button"
 import useWindowSize, { breakpoints } from "../../hooks/useWindowsSize"
+import { useFxParams } from "hooks/useFxParams"
 
 interface Props {
   token: GenerativeToken
@@ -54,20 +55,14 @@ export function MintWithTicketPageRoot({ token, ticketId }: Props) {
   const [hasLocalChanges, setHasLocalChanges] = useState<boolean>(false)
   const [withAutoUpdate, setWithAutoUpdate] = useState<boolean>(true)
   const [lockedParamIds, setLockedParamIds] = useState<string[]>([])
-  const [hash, setHash] = useState(generateFxHash())
-  const [data, setData] = useState({})
   const { params, features, onIframeLoaded } =
     useReceiveTokenInfos(artworkIframeRef)
+
+  const { data, setData, hash, setHash, inputBytes } = useFxParams(params)
 
   const { call, success, loading, state, error, opHash } = useContractOperation(
     MintWithTicketOperation
   )
-
-  const inputBytes = useMemo<string | null>(() => {
-    const serialized = serializeParams(data, params || [])
-    if (serialized.length === 0) return null
-    return serialized
-  }, [stringifyParamsData(data), params])
 
   const url = useMemo<string>(() => {
     return ipfsUrlWithHashAndParams(
