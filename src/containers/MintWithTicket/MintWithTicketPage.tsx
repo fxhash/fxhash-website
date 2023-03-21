@@ -14,14 +14,9 @@ import {
   useRef,
   useState,
 } from "react"
-import {
-  deserializeParams,
-  serializeParams,
-  stringifyParamsData,
-} from "components/FxParams/utils"
+import { deserializeParams } from "components/FxParams/utils"
 import { useReceiveTokenInfos } from "hooks/useReceiveTokenInfos"
 import { PanelRoot, PanelSubmitMode } from "./Panel/PanelRoot"
-import { generateFxHash } from "utils/hash"
 import {
   ParamsHistoryContext,
   ParamsHistoryProvider,
@@ -35,7 +30,7 @@ import Link from "next/link"
 import { Button } from "components/Button"
 import useWindowSize, { breakpoints } from "../../hooks/useWindowsSize"
 import { useFxParams } from "hooks/useFxParams"
-import { MintV3AbstractionOperation } from "services/contract-operations/MintV3Abstraction"
+import { MintV3AbstractionOperation } from "../../services/contract-operations/MintV3Abstraction"
 import { useSettingsContext } from "../../context/Theme"
 import { PreMintWarning } from "./PreMintWarning"
 
@@ -222,6 +217,7 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
         })}
       >
         <PanelRoot
+          disableWarningAnimation={!showTicketPreMintWarning}
           show={showPanel}
           data={data}
           params={params}
