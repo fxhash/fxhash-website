@@ -69,7 +69,7 @@ export function GenerativeDisplayMinimalist({
               Published on{" "}
               {format(new Date(token.createdAt), "MMMM d, yyyy' at 'HH:mm")}
             </span>
-            <Labels labels={token.labels!} />
+            <Labels token={token} />
           </div>
 
           <Spacing size="regular" />

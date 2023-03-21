@@ -55,7 +55,12 @@ const MintWithTicket: NextPage<Props> = ({ token, ticketId }) => {
           content={displayUrl || "https://www.fxhash.xyz/images/og/og1.jpg"}
         />
       </Head>
-      <MintWithTicketPage token={token} ticketId={parseInt(ticketId)} />
+
+      <MintWithTicketPage
+        token={token}
+        ticketId={parseInt(ticketId)}
+        mode="with-ticket"
+      />
     </>
   )
 }
