@@ -67,13 +67,17 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
   const { params, features, onIframeLoaded } =
     useReceiveTokenInfos(artworkIframeRef)
 
+  const handleClosePreMintView = useCallback(() => {
+    setShowPreMintWarningView(false)
+    setSelectedTicketId(null)
+  }, [])
+
   const { call, success, loading, state, error, opHash } = useContractOperation(
     MintV3AbstractionOperation,
     {
       onSuccess: () => {
         if (showPreMintWarningView) {
-          setShowPreMintWarningView(false)
-          setSelectedTicketId(null)
+          handleClosePreMintView()
         }
       },
     }
@@ -179,11 +183,6 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
       setShowPanel(false)
     }
   }, [isMobile, showPanel])
-
-  const handleClosePreMintView = useCallback(() => {
-    setShowPreMintWarningView(false)
-    setSelectedTicketId(null)
-  }, [])
 
   const handleValidatePreMint = useCallback(() => {
     handleMint(selectedTicketId)
