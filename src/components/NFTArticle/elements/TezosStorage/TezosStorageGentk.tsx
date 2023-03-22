@@ -19,7 +19,7 @@ import { ArtworkIframe, ArtworkIframeRef } from "../../../Artwork/PreviewIframe"
 import { gentkLiveUrl, getObjktIdFromContract } from "../../../../utils/objkt"
 
 interface Props {
-  id: number
+  id: string
 }
 export const TezosStorageGentk: TezosStorageRenderer<Props> = ({ id }) => {
   const [running, setRunning] = useState<boolean>(false)
