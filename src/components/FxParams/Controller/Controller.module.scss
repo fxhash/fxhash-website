@@ -1,0 +1,113 @@
+$height: 30px;
+
+$controller-background: var(--fxl-color-dark1);
+$controller-height: 25px;
+
+$slider-color: var(--fxl-color-primary);
+$slider-color-light: var(--fxl-color-primary-light);
+$slider-track-height: 3px;
+$slider-thumb-height: 15px;
+$slider-thumb-width: 15px;
+$slider-thumb-border-radius: 0px;
+
+.controller {
+  display: flex;
+  align-items: center;
+  gap: var(--fxl-spacing-xxs);
+  color: var(--fxl-color-text-primary);
+  &:hover {
+    color: var(--fxl-color-text-primary-hover);
+    input[type="range"]{
+      background: var(--fxl-color-light1);
+    }
+  }
+  label {
+    color: currentColor;
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    font-size: var(--fxl-font-size-s);
+    &.ellipsis {
+      word-break: break-all;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+  }
+  input {
+    color: currentColor;
+  }
+  .inputContainer {
+    width: 200px;
+    display: flex;
+    align-items: center;
+  }
+}
+
+.default {
+    input, select {
+      &:nth-child(1) {
+        margin-right: var(--fxl-spacing-xxs);
+        width: 65%;
+      }
+      &:nth-child(2) {
+        margin-left: var(--fxl-spacing-xxs);
+        width: 35%;
+      }
+      &:only-child {
+        width: 100%;
+        margin-right: 0;
+      }
+    }
+}
+
+.invert {
+    input, select {
+      &:nth-child(1) {
+        margin-right: var(--fxl-spacing-xxs);
+        width: 30%;
+      }
+      &:nth-child(2) {
+        margin-left: var(--fxl-spacing-xxs);
+        width: 70%;
+      }
+      &:only-child {
+        width: 100%;
+        margin-right: 0;
+      }
+    }
+}
+
+.box {
+    input, select {
+      &:nth-child(1) {
+        margin-right: var(--fxl-spacing-xxs);
+        width: $height;
+      }
+      &:nth-child(2) {
+        margin-left: var(--fxl-spacing-xxs);
+        width: calc(100% - $height);
+      }
+      &:only-child {
+        width: $height;
+        margin-right: 0;
+      }
+    }
+}
+
+/* Chrome, Safari, Edge, Opera */
+.numberInput::-webkit-outer-spin-button,
+.numberInput::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+.numberInput[type=number] {
+  -moz-appearance: textfield;
+}
+
+@media (max-width: 450px) {
+  .controller .inputContainer {
+    width: 125px;
+  }
+}
