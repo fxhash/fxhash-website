@@ -112,6 +112,14 @@ body {
   --fxl-spacing-l: #{$spacing-large};
   --fxl-spacing-xl: #{$spacing-x-large};
   --fxl-spacing-xxl: #{$spacing-2x-large};
+  
+  --spacing: #{$spacing};
+  --spacing-sm: #{$spacing-small};
+  --spacing-xs: #{$spacing-x-small};
+  --spacing-xxs: #{$spacing-2x-small};
+  --spacing-l: #{$spacing-large};
+  --spacing-xl: #{$spacing-x-large};
+  --spacing-xxl: #{$spacing-2x-large};
 
 }
 
