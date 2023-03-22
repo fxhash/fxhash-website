@@ -94,10 +94,14 @@ export class WalletManager {
     return this.beaconWallet!
   }
 
+  /**
+   * FOR LIVE MINTING:
+   * construct a fake wallet provider using autonomyIRL to be able to reuse
+   * our beacon wallet implementation
+   */
   async connectAutonomyWallet() {
     const { result: pkh } = await autonomyIRL.getAddress({
       chain: autonomyIRL.chain.tez,
-      // params: params,
     })
 
     const provider: Pick<
@@ -109,7 +113,7 @@ export class WalletManager {
         return params()
       },
       sendOperations: async (operations) => {
-        const { value, errorMessage } = await autonomyIRL.sendTransaction({
+        const { result } = await autonomyIRL.sendTransaction({
           transactions: operations.map((op) => ({
             kind: "transaction",
             destination: op.to,
@@ -131,10 +135,7 @@ export class WalletManager {
           chain: autonomyIRL.chain.tez,
         })
 
-        alert(JSON.stringify(errorMessage))
-        alert(JSON.stringify(value))
-
-        return value
+        return result
       },
     }
 
