@@ -128,7 +128,7 @@ export function PanelControls(props: Props) {
                 className={style.submitButton}
                 title="exchange your ticket for an iteration"
               >
-                exchange{" "}
+                use ticket{" "}
                 <i className="fa-sharp fa-solid fa-ticket" aria-hidden />
               </BaseButton>
             )}
