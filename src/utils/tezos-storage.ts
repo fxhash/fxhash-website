@@ -9,7 +9,7 @@ import { GenerativeToken } from "../types/entities/GenerativeToken"
 import { Objkt } from "../types/entities/Objkt"
 import { ITezosStoragePointer } from "../types/TezosStorage"
 import { getGentkFA2Contract } from "./gentk"
-import { getGentkLocalID } from "./entities/gentk";
+import { getGentkLocalID } from "./entities/gentk"
 
 /**
  * Given a Generative Token, outputs the Tezos Storage Pointer properties
