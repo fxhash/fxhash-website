@@ -9,15 +9,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useContext, useEffect, useMemo } from "react"
 import { UserContext } from "containers/UserProvider"
 import { PanelSubmitMode } from "./PanelRoot"
-import { useLazyQuery, useQuery } from "@apollo/client"
+import { useLazyQuery } from "@apollo/client"
 import { Qu_userMintTickets } from "queries/user"
 import { MintTicket } from "types/entities/MintTicket"
 import { GenerativeToken } from "types/entities/GenerativeToken"
 import { DisplayTezos } from "components/Display/DisplayTezos"
-import { genTokCurrentPrice, getReservesAmount } from "utils/generative-token"
 import { displayMutez } from "utils/units"
 import { TOnMintHandler } from "../MintWithTicketPage"
 import { isBefore } from "date-fns"
+import { useMintingState } from "hooks/useMintingState"
 
 interface Props {
   token: GenerativeToken
@@ -41,6 +41,9 @@ export function PanelControls(props: Props) {
   } = props
 
   const { user } = useContext(UserContext)
+
+  const mintingState = useMintingState(token)
+  const { enabled, locked, price } = mintingState
 
   // get user mint tickets when user is available, and mode is "free"
   const [getUserTickets, { data, loading, error }] = useLazyQuery(
@@ -74,10 +77,6 @@ export function PanelControls(props: Props) {
     return projectTickets.length > 0 ? projectTickets : null
   }, [data])
 
-  // balance after reserve slots
-  const balanceWithoutReserve =
-    token.balance - getReservesAmount(token.reserves)
-
   return (
     <div className={style.controlPanel}>
       <div className={style.buttonsWrapper}>
@@ -105,20 +104,14 @@ export function PanelControls(props: Props) {
           </BaseButton>
         ) : mode === "free" ? (
           <div className={style.submitButtons}>
-            {balanceWithoutReserve > 0 && (
+            {!locked && enabled && (
               <BaseButton
                 color="main"
                 onClick={() => onSubmit(null)}
                 className={style.submitButton}
-                title={`mint with ${displayMutez(
-                  genTokCurrentPrice(token)
-                )} tezos`}
+                title={`mint with ${displayMutez(price)} tezos`}
               >
-                mint{" "}
-                <DisplayTezos
-                  mutez={genTokCurrentPrice(token)}
-                  formatBig={false}
-                />
+                mint <DisplayTezos mutez={price} formatBig={false} />
               </BaseButton>
             )}
             {userTickets && (
