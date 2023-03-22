@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react"
 /**
  * call a callback every delay ms and return the result of the callback
  */
-export const useIntervalValue = (callback: () => void, delay: number) => {
+export const useIntervalValue = <T>(callback: () => T, delay: number) => {
   const [result, setResult] = useState<any>(callback())
 
   useEffect(() => {
@@ -11,7 +11,7 @@ export const useIntervalValue = (callback: () => void, delay: number) => {
       setResult(callback())
     }, delay)
     return () => clearInterval(id)
-  }, [delay])
+  }, [delay, callback])
 
   return result
 }
