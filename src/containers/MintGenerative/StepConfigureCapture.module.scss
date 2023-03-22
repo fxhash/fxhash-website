@@ -1,0 +1,19 @@
+@import "../../styles/Variables";
+.inputs {
+  display: flex;
+  flex-direction: column;
+}
+
+.bottom {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.button {}
+
+@media (max-width: $breakpoint-sm) {
+  .button {
+    width: 100%;
+  }
+}
