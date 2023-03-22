@@ -1,6 +1,6 @@
 import { MessageProps } from "components/MessageCenter/Message"
 import { addDays, formatDistanceStrict, isAfter, isBefore } from "date-fns"
-import { useCallbackInterval } from "hooks/useCallbackInterval"
+import { useIntervalValue } from "hooks/useIntervalValue"
 import Link from "next/link"
 import { MintTicket } from "types/entities/MintTicket"
 import { ConnectedUser } from "types/entities/User"
@@ -26,7 +26,7 @@ const MintTicketAlert = ({
   )
 
   // update the countdown every minute
-  const expiresIn = useCallbackInterval(
+  const expiresIn = useIntervalValue(
     () =>
       formatDistanceStrict(
         new Date(),
