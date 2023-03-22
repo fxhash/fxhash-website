@@ -19,7 +19,7 @@ export function BaseSelect(props: SelectHTMLAttributes<HTMLSelectElement>) {
 
 export interface BaseButtonProps
   extends ButtonHTMLAttributes<HTMLButtonElement> {
-  color?: "primary" | "secondary" | "main" | undefined
+  color?: "primary" | "secondary" | "primary-inverted" | "main" | undefined
 }
 
 export function BaseButton(props: BaseButtonProps) {
