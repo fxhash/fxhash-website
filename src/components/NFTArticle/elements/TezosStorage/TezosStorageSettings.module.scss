@@ -68,6 +68,7 @@
     font-size: var(--font-size-small);
     text-align: left;
     pointer-events: none;
+    color: var(--color-black);
 
     &>*+* {
       margin-top: 3px;
