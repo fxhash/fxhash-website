@@ -24,6 +24,9 @@ export function Footer() {
             <Link href="/doc/fxhash/integration-guide">
               <a>3rd party integration</a>
             </Link>
+            <Link href="/community/reports">
+              <a>Tokens reported</a>
+            </Link>
           </div>
         </div>
         <div>
@@ -43,6 +46,7 @@ export function Footer() {
             <Link href="/press-kit">
               <a>Press kit</a>
             </Link>
+
             <Link href="/status">
               <a className={style.indexer}>
                 <IndexerStatusLabel
