@@ -1,4 +1,3 @@
-import { Fieldset } from "components/Form/Fieldset"
 import { Checkbox } from "components/Input/Checkbox"
 import { Select } from "components/Input/Select"
 import { Spacing } from "components/Layout/Spacing"
@@ -63,9 +62,10 @@ interface VariantFormProps {
   ) => void
   exploreOption: string
   onChangeExploreOption: (option: string) => void
-  activeHash: string
-  onClickVariant: (hash: string, param?: string) => void
+  activeVariant: number
+  onClickVariant: (index: number, hash: string, param?: string) => void
   onAdd: (target: VariantTarget) => void
+  translateInputBytes?: (bytes: string) => string
 }
 
 const ADD_BUTTON_LABELS: Record<string, ReactNode> = {
@@ -99,12 +99,13 @@ export function VariantForm(props: VariantFormProps) {
   const {
     withParams = false,
     target,
-    activeHash,
+    activeVariant,
     settings,
     onChangeExplorationSettings,
     exploreOption,
     onChangeExploreOption,
     onClickVariant,
+    translateInputBytes,
     onAdd,
   } = props
 
@@ -167,7 +168,7 @@ export function VariantForm(props: VariantFormProps) {
                   className={cs(style.hashlist)}
                   hashes={hashConstraints || []}
                   params={paramsConstraints}
-                  activeHash={activeHash}
+                  activeItem={activeVariant}
                   onChange={(hashes, params) => {
                     onChangeExplorationSettings(
                       target,
@@ -182,7 +183,8 @@ export function VariantForm(props: VariantFormProps) {
                       )
                     }
                   }}
-                  onHashClick={onClickVariant}
+                  onClickItem={onClickVariant}
+                  translateInputBytes={translateInputBytes}
                 />
               ) : (
                 EMPTY_LABELS[labelTarget]

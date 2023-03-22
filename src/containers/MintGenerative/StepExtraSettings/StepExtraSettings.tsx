@@ -27,6 +27,7 @@ import { ControlsTest, ControlsTestRef } from "components/Testing/ControlsTest"
 import { ArtworkFrame } from "components/Artwork/ArtworkFrame"
 import { VariantForm } from "./VariantForm"
 import { useReceiveTokenInfos } from "hooks/useReceiveTokenInfos"
+import { truncateEnd } from "utils/strings"
 
 const variantSettingsTabs = ["preMint", "postMint"] as const
 
@@ -74,6 +75,7 @@ export const StepExtraSettings: StepComponent = ({ state, onNext }) => {
   const controlsTestRef = useRef<ControlsTestRef>(null)
   // STATES
   // form state (since not much data its ok to store there)
+  const [selectedVariant, setSelectedVariant] = useState<number>(0)
   const [settings, setSettings] = useState(
     state.settings ? cloneDeep(state.settings) : initialSettings
   )
@@ -125,16 +127,31 @@ export const StepExtraSettings: StepComponent = ({ state, onNext }) => {
   const addCurrentVariant = (target: VariantSettingsTabKey) => {
     const currentHashConstraints =
       settings.exploration?.[target]?.hashConstraints || []
-    if (!currentHashConstraints.includes(hash)) {
-      currentHashConstraints.push(hash)
-      updateExplorationSetting(
-        target,
-        "hashConstraints",
-        currentHashConstraints
+    const currentParamConstraints =
+      settings.exploration?.[target]?.paramsConstraints || []
+    if (!usesParams) {
+      if (!currentHashConstraints.includes(hash)) {
+        currentHashConstraints.push(hash)
+        updateExplorationSetting(
+          target,
+          "hashConstraints",
+          currentHashConstraints
+        )
+      }
+    } else {
+      const combinationExists = currentHashConstraints.some(
+        (existingHash, index) => {
+          const pairedInputBytes = currentParamConstraints[index]
+          return existingHash === hash && pairedInputBytes === inputBytes
+        }
       )
-      if (usesParams && inputBytes) {
-        const currentParamConstraints =
-          settings.exploration?.[target]?.paramsConstraints || []
+      if (!combinationExists && inputBytes) {
+        currentHashConstraints.push(hash)
+        updateExplorationSetting(
+          target,
+          "hashConstraints",
+          currentHashConstraints
+        )
         currentParamConstraints.push(inputBytes)
         updateExplorationSetting(
           target,
@@ -178,7 +195,8 @@ export const StepExtraSettings: StepComponent = ({ state, onNext }) => {
   const preMintSettings = settings.exploration?.preMint
   const postMintSettings = settings.exploration?.postMint
 
-  const setVariant = (hash: string, paramBytes?: string) => {
+  const setVariant = (index: number, hash: string, paramBytes?: string) => {
+    setSelectedVariant(index)
     setHash(hash)
     if (paramBytes) {
       const data = deserializeParams(paramBytes, params, {
@@ -191,6 +209,11 @@ export const StepExtraSettings: StepComponent = ({ state, onNext }) => {
 
   const handleSubmitParams = (data: any) => {
     setData(data)
+  }
+
+  const translateInputBytes = (bytes: string) => {
+    const data = deserializeParams(bytes, params, {})
+    return truncateEnd(Object.values(data).join(", "), 100)
   }
 
   return (
@@ -238,9 +261,10 @@ export const StepExtraSettings: StepComponent = ({ state, onNext }) => {
                 exploreOption={preExploreOptions}
                 onChangeExploreOption={setPreExploreOptions}
                 onChangeExplorationSettings={updateExplorationSetting}
-                activeHash={hash}
+                activeVariant={selectedVariant}
                 onClickVariant={setVariant}
                 onAdd={addCurrentVariant}
+                translateInputBytes={translateInputBytes}
               />
             )}
             {activeTab === "postMint" && (
@@ -251,9 +275,10 @@ export const StepExtraSettings: StepComponent = ({ state, onNext }) => {
                 exploreOption={postExploreOptions}
                 onChangeExploreOption={setPostExploreOptions}
                 onChangeExplorationSettings={updateExplorationSetting}
-                activeHash={hash}
+                activeVariant={selectedVariant}
                 onClickVariant={setVariant}
                 onAdd={addCurrentVariant}
+                translateInputBytes={translateInputBytes}
               />
             )}
           </Form>
