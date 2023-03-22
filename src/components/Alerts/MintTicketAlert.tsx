@@ -1,13 +1,11 @@
 import { MessageProps } from "components/MessageCenter/Message"
-import { formatDistanceStrict, isAfter, isBefore } from "date-fns"
+import { addDays, formatDistanceStrict, isAfter, isBefore } from "date-fns"
+import { useCallbackInterval } from "hooks/useCallbackInterval"
 import Link from "next/link"
-import { useState } from "react"
 import { MintTicket } from "types/entities/MintTicket"
 import { ConnectedUser } from "types/entities/User"
-import { useInterval } from "utils/hookts"
 import { getUserProfileLink } from "utils/user"
 
-// add useInterval
 const MintTicketAlert = ({
   user,
   expiringMintTickets,
@@ -17,6 +15,7 @@ const MintTicketAlert = ({
   expiringMintTickets: MintTicket[]
   onRemove: MessageProps["onRemove"]
 }) => {
+  // find the soonest expiring mint ticket
   const expiringSoonest = expiringMintTickets.reduce((acc, mintTicket) =>
     isBefore(
       new Date(mintTicket.taxationPaidUntil),
@@ -26,9 +25,14 @@ const MintTicketAlert = ({
       : acc
   )
 
-  const expiresIn = formatDistanceStrict(
-    new Date(),
-    new Date(expiringSoonest.taxationPaidUntil)
+  // update the countdown every minute
+  const expiresIn = useCallbackInterval(
+    () =>
+      formatDistanceStrict(
+        new Date(),
+        new Date(expiringSoonest.taxationPaidUntil)
+      ),
+    60 * 1000 // 60 seconds
   )
 
   return (
@@ -51,8 +55,9 @@ export const createMintTicketAlert = (
 ) => {
   // find mint tickets with taxation period expiring in the next 48 hours
   const expiringMintTickets = mintTickets.filter(
-    (mintTicket) => isAfter(new Date(mintTicket.taxationPaidUntil), new Date()) // &&
-    // isBefore(new Date(mintTicket.taxationPaidUntil), addDays(new Date(), 2))
+    (mintTicket) =>
+      isAfter(new Date(mintTicket.taxationPaidUntil), new Date()) &&
+      isBefore(new Date(mintTicket.taxationPaidUntil), addDays(new Date(), 2))
   )
   // if none, do nothing
   if (!expiringMintTickets.length) return null

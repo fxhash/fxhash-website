@@ -29,7 +29,8 @@ const shouldAlert = (userId: string) => {
 }
 
 const createAlerts = (user: ConnectedUser, data: any) => {
-  // setAlertCursor(user.id)
+  // set alert cursor to ensure we don't alert again for 24 hours
+  setAlertCursor(user.id)
 
   return [
     createMintTicketAlert(user, data.user.mintTickets),
