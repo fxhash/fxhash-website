@@ -1,0 +1,58 @@
+@import "../../styles/Variables";
+
+.btns_wrapper {
+  display: flex;
+  gap: 4px;
+}
+
+.root {
+  position: relative;
+}
+
+.caret {
+  margin-right: 0 !important;
+  margin-left: 15px;
+}
+
+.dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: var(--color-white);
+  z-index: 200;
+  border: 3px solid var(--color-secondary);
+  border-top: none;
+
+  button {
+    border: none;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+    padding: 8px 12px;
+
+    &:hover {
+      background-color: var(--color-gray-vlight);
+    }
+  }
+}
+
+.credit_card_btn {
+  padding-left: 20px !important;
+  padding-right: 20px !important;
+
+  i {
+    margin-right: 0;
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .root {
+    width: 100%;
+  }
+  .button {
+    width: 100%;
+  }
+}
