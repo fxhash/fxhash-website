@@ -108,13 +108,16 @@ export class WalletManager {
       mapTransferParamsToWalletParams: (params) => {
         return params()
       },
-      sendOperations: (operations) => {
-        return autonomyIRL.sendTransaction({
+      sendOperations: async (operations) => {
+        const { value, errorMessage } = await autonomyIRL.sendTransaction({
           transactions: operations.map((op) => ({
-            from: pkh,
-            to: op.to,
-            nonce: "0",
-            value: op.value,
+            kind: "transaction",
+            destination: op.to,
+            amount: 0,
+            mutez: true,
+            entrypoint: op.parameter.entrypoint,
+            parameters: op.parameter.value,
+            storageLimit: op.storageLimit.toString(),
           })),
           sourceAddress: pkh,
           metadata: {
@@ -127,6 +130,11 @@ export class WalletManager {
           },
           chain: autonomyIRL.chain.tez,
         })
+
+        alert(JSON.stringify(errorMessage))
+        alert(JSON.stringify(value))
+
+        return value
       },
     }
 
