@@ -37,8 +37,8 @@ const MintTicketAlert = ({
 
   return (
     <>
-      You have {expiringMintTickets.length} mint ticket(s) expiring soon - next
-      expiration in {expiresIn}.{<br />}
+      You have <b>{expiringMintTickets.length}</b> mint ticket(s) expiring soon
+      - next expiration in {expiresIn}.{<br />}
       <Link
         legacyBehavior
         href={`${getUserProfileLink(user)}/collection/tickets`}
