@@ -6,12 +6,14 @@ import { ModalUpdatePriceMintTicket } from "./ModalUpdatePriceMintTicket"
 
 interface ButtonMintTicketPurchaseProps {
   mintTicket: MintTicket
+  showModalOnRender?: boolean
 }
 
 const _ButtonMintTicketPurchase = ({
   mintTicket,
+  showModalOnRender = false,
 }: ButtonMintTicketPurchaseProps) => {
-  const [showModal, setShowModal] = useState(false)
+  const [showModal, setShowModal] = useState(showModalOnRender)
   const [showModalUpdatePrice, setShowModalUpdatePrice] = useState(false)
   const handleToggleModal = useCallback(
     (newState) => () => setShowModal(newState),
