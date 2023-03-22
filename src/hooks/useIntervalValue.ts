@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 
 /**
  * call a callback every delay ms and return the result of the callback
@@ -6,12 +6,20 @@ import { useEffect, useRef, useState } from "react"
 export const useIntervalValue = <T>(callback: () => T, delay: number) => {
   const [result, setResult] = useState<any>(callback())
 
+  /**
+   * save the callback in a ref so we don't need to update the interval when
+   * it changes
+   */
+  const savedCallback = useCallback(callback, [callback])
+
   useEffect(() => {
     const id = setInterval(() => {
-      setResult(callback())
+      // call the callback and update the result
+      setResult(savedCallback())
     }, delay)
+
     return () => clearInterval(id)
-  }, [delay, callback])
+  }, [delay, savedCallback])
 
   return result
 }
