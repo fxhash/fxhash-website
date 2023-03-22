@@ -1,0 +1,77 @@
+.entry {
+  padding: 8px 0;
+  position: relative;
+  z-index: 1000;
+  padding-left: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  &::before {
+    content: "";
+    display: block;
+    position: absolute;
+    left: 0;
+    top: calc(50% - 1px);
+    width: 15px;
+    height: 3px;
+    transition: all 0.2s ease-out;
+  }
+
+  &.state_default {
+    color: var(--color-gray-dark);
+    &::before {
+      background-color: var(--color-gray-light);
+    }
+  }
+  &.state_success {
+    font-weight: bold;
+    color: var(--color-success);
+    padding-left: 12px;
+    
+    &::before {
+      background-color: var(--color-success);
+    }
+  }
+  &.state_loading {
+    font-weight: bold;
+    padding-left: 12px;
+
+    &::before {
+      background-color: var(--color-black);
+    }
+  }
+}
+
+.container {
+  position: relative;
+}
+
+.progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3px;
+  height: 100%;
+  background-color: var(--color-gray-light);
+
+  .progress_valid {
+    z-index: 10;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: var(--color-success);
+    transition: all 0.2s ease-out;
+  }
+  
+  .progress_loading {
+    z-index: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: var(--color-black);
+    transition: all 0.2s ease-out;
+  }
+}

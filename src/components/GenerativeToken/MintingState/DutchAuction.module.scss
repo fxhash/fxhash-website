@@ -1,0 +1,13 @@
+.details {
+  font-size: var(--font-size-small);
+  margin-top: 20px;
+  margin-bottom: 8px;
+  line-height: 1.5em;
+  color: var(--color-gray);
+}
+
+.pricing {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
