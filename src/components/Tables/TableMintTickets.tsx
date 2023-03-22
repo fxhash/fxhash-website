@@ -61,7 +61,7 @@ const _TableMintTickets = ({
       setNow(new Date())
     }, 15000)
     return () => {
-      clearTimeout(interval)
+      clearInterval(interval)
     }
   }, [])
   return (
