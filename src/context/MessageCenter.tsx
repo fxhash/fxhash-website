@@ -1,10 +1,8 @@
 import React, {
   PropsWithChildren,
   useState,
-  useCallback,
-  useRef,
-  useEffect,
   useMemo,
+  ReactElement,
 } from "react"
 import { MessageCenterContainer } from "../components/MessageCenter/MessageCenterContainer"
 
@@ -13,12 +11,14 @@ type TMessageType = "success" | "warning" | "error"
 export interface IMessageSent {
   type: TMessageType
   title: string
-  content?: string | null
+  content?: ((onRemove: () => void) => ReactElement) | string | null
+  keepAlive?: boolean
 }
 
 export interface IMessage extends IMessageSent {
   id: string
   createdAt: number
+  keepAlive: boolean
 }
 
 interface IMessageCenterContext {
@@ -60,6 +60,7 @@ export function MessageCenterProvider({ children }: PropsWithChildren<{}>) {
           ...message,
           id: "" + Math.random(),
           createdAt: performance.now(),
+          keepAlive: message.keepAlive || false,
         }
         setContext({
           ...context,
@@ -77,6 +78,7 @@ export function MessageCenterProvider({ children }: PropsWithChildren<{}>) {
           ...message,
           id: "" + Math.random(),
           createdAt: performance.now(),
+          keepAlive: message.keepAlive || false,
         }))
       setContext({
         ...context,
