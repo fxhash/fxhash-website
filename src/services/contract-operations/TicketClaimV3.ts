@@ -37,7 +37,7 @@ export class TicketClaimV3Operation extends ContractOperation<TTicketClaimV3Oper
       transfer_to: null,
       taxation: this.params.taxationSettings,
     }).send({
-      amount: Math.floor(this.params.amount),
+      amount: this.params.amount,
       mutez: true,
     })
   }

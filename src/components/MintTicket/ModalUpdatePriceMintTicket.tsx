@@ -113,7 +113,7 @@ const _ModalUpdatePriceMintTicket = ({
       },
       onSubmit: (submittedValues) => {
         const daysCoverageWithExtraDay = submittedValues.days + 1
-        const tzPrice = submittedValues.price * 1000000
+        const tzPrice = Math.ceil(submittedValues.price * 1000000)
         const daysSinceCreated = Math.floor(
           differenceInSeconds(
             new Date(),
@@ -135,7 +135,7 @@ const _ModalUpdatePriceMintTicket = ({
             coverage: remainingGracingPeriodInDays + daysCoverageWithExtraDay,
             price: tzPrice,
           },
-          amount: amount < 0 ? 0 : amount,
+          amount: amount < 0 ? 0 : Math.ceil(amount),
         })
       },
       validationSchema: validation,
@@ -382,6 +382,7 @@ const _ModalUpdatePriceMintTicket = ({
                 unit="tez"
                 id="price"
                 min={0.1}
+                step="any"
               />
             </div>
             {errors.price && (
