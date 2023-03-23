@@ -1,3 +1,4 @@
+import { DisplayTezos } from "components/Display/DisplayTezos"
 import { MessageProps } from "components/MessageCenter/Message"
 import { ISettingsContext } from "context/Theme"
 import { isAfter } from "date-fns"
@@ -18,8 +19,17 @@ const OfferAlert = ({
 }) => {
   return (
     <>
-      You have <b>{newOffers.length}</b> new offers.
-      <br />
+      {/* render details of first 2 offers, truncate rest */}
+      {newOffers.slice(0, 2).map((offer) => (
+        <div key={offer.id}>
+          Offer of{" "}
+          <b>
+            <DisplayTezos mutez={offer.price} />
+          </b>{" "}
+          for <b>{offer.objkt.name}</b>
+        </div>
+      ))}
+      {newOffers.length > 2 && <div>...{newOffers.length - 2} more</div>}
       <Link
         legacyBehavior
         href={`${getUserProfileLink(user)}/dashboard/offers-received`}
@@ -64,7 +74,7 @@ export const createOfferAlert = (
 
   return {
     type: "warning",
-    title: "Offer alert",
+    title: "New offers",
     content: (onRemove: () => void) => (
       <OfferAlert user={user} newOffers={relevantOffers} onRemove={onRemove} />
     ),
