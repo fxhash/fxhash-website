@@ -14,6 +14,7 @@ export type ButtonSize =
   | "very-small"
   | "very-large"
   | "large-x"
+  | "full"
   | "custom"
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
