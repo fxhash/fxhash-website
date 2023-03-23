@@ -71,8 +71,8 @@ export function PanelControls(props: Props) {
       .filter((ticket) =>
         isBefore(new Date(), new Date(ticket.taxationPaidUntil))
       )
-      .sort(
-        (a, b) => (a.taxationPaidUntil as any) - (b.taxationPaidUntil as any)
+      .sort((a, b) =>
+        (a.taxationPaidUntil as any) < (b.taxationPaidUntil as any) ? 1 : -1
       )
     return projectTickets.length > 0 ? projectTickets : null
   }, [data])
