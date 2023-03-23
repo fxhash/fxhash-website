@@ -48,6 +48,7 @@
     }
 
     .mint_overlay {
+      overflow: auto;
       position: absolute;
       top: 0;
       left: 0;
@@ -63,6 +64,9 @@
       gap: 8px;
       text-align: center;
       padding: 12px;
+      &.pre_mint {
+        z-index: 999;
+      }
 
       .kt_feedback {
         * {

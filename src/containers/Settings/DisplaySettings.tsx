@@ -99,6 +99,23 @@ export function DisplaySettings({ settings, className }: Props) {
         </div>
       </SettingsGroup>
       <hr />
+      <SettingsGroup title="fx(params)">
+        <div className={cs(styleSettings.toggle_line)}>
+          <span>
+            <span>Pre-mint warning</span>
+            <span className={styleSettings.toggle_line_description}>
+              Display a warning to try out different hashes before minting
+            </span>
+          </span>
+          <Switch
+            onChange={(value) =>
+              settings.update("showTicketPreMintWarning", value)
+            }
+            value={settings.showTicketPreMintWarning}
+          />
+        </div>
+      </SettingsGroup>
+      <hr />
       <SettingsGroup title="Layout">
         <div className={style.settings_layout}>
           <div className={style.layout_controls}>

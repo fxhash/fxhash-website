@@ -16,10 +16,10 @@ import Link from "next/link"
 import { getGentkUrl } from "../../../../utils/gentk"
 import { Button } from "../../../Button"
 import { ArtworkIframe, ArtworkIframeRef } from "../../../Artwork/PreviewIframe"
-import { gentkLiveUrl } from "../../../../utils/objkt"
+import { gentkLiveUrl, getObjktIdFromContract } from "../../../../utils/objkt"
 
 interface Props {
-  id: number
+  id: string
 }
 export const TezosStorageGentk: TezosStorageRenderer<Props> = ({ id }) => {
   const [running, setRunning] = useState<boolean>(false)
@@ -156,7 +156,11 @@ TezosStorageGentk.matches = (pointer) => {
   // get contract address, removing network indentifier if any
   const contract = pointer.contract.split(".")[0]
   if (
-    ![FxhashContracts.GENTK_V1, FxhashContracts.GENTK_V2].includes(contract)
+    [
+      FxhashContracts.GENTK_V1,
+      FxhashContracts.GENTK_V2,
+      FxhashContracts.GENTK_V3,
+    ].indexOf(contract) === -1
   ) {
     return false
   }
@@ -171,7 +175,10 @@ TezosStorageGentk.matches = (pointer) => {
 }
 
 TezosStorageGentk.getPropsFromPointer = (pointer) => {
+  const contract = pointer.contract.split(".")[0]
+  const idNumber = parseInt(pointer.path.split("::")[1])
+
   return {
-    id: parseInt(pointer.path.split("::")[1]),
+    id: getObjktIdFromContract(contract, idNumber),
   }
 }

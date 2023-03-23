@@ -24,9 +24,6 @@ interface Props {
 const RevealPage: NextPage<Props> = ({ token }) => {
   const { query } = useRouter()
   const { fxhash, fxparams } = query
-
-  console.log({ fxhash, fxparams })
-
   return (
     <>
       <Head>

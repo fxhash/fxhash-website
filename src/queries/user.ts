@@ -51,6 +51,18 @@ export const Qu_userLight = gql`
   }
 `
 
+export const Qu_userAlerts = gql`
+  query User($id: String, $name: String) {
+    user(id: $id, name: $name) {
+      id
+      mintTickets {
+        id
+        taxationPaidUntil
+      }
+    }
+  }
+`
+
 export const Qu_userGenTokens = gql`
   ${Frag_GenAuthor}
   ${Frag_GenPricing}
