@@ -181,17 +181,23 @@ export const ParameterProcessors: FxParamProcessors = {
   },
 
   string: {
-    serialize: (input) => {
-      let hex = stringToHex(input.substring(0, 64))
-      hex = hex.padEnd(64 * 4, "0")
+    serialize: (input, def) => {
+      let max = 64
+      if (typeof def.options?.maxLength !== "undefined")
+        max = Number(def.options.maxLength)
+      let hex = stringToHex(input.substring(0, max))
+      hex = hex.padEnd(max * 4, "0")
       return hex
     },
-
     deserialize: (input) => {
       return hexToString(input)
     },
 
-    bytesLength: () => 64 * 2,
+    bytesLength: (options) => {
+      if (typeof options?.maxLength !== "undefined")
+        return Number(options.maxLength) * 2
+      return 64 * 2
+    },
     random: (definition) => {
       let min = 0
       if (typeof definition.options?.minLength !== "undefined")

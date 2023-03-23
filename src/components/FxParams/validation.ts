@@ -23,7 +23,7 @@ const FxParamOptions_numberSchema = z.object({
 
 const FxParamOptions_stringSchema = z.object({
   minLength: z.number().gte(0).optional(),
-  maxLength: z.number().lte(64).optional(),
+  maxLength: z.number().optional(),
 })
 
 const FxParamOptions_selectSchema = z.object({
