@@ -23,7 +23,7 @@ const readCursor = (userId: string, identifier: CursorIdentifier) => {
   // alert if cursor is older than 24 hours
 }
 
-const shouldAlert = (userId: string) => {
+const shouldSendDailyAlert = (userId: string) => {
   const cursor = readCursor(userId, "alert-cursor")
   // if no cursor, return true
   if (!cursor) return true
@@ -31,4 +31,4 @@ const shouldAlert = (userId: string) => {
   return isAfter(new Date(), addDays(new Date(cursor), 1))
 }
 
-export { setCursor, readCursor, shouldAlert }
+export { setCursor, readCursor, shouldSendDailyAlert }

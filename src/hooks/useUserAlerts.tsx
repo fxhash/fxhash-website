@@ -3,12 +3,30 @@ import { createMintTicketAlert } from "components/Alerts/MintTicketAlert"
 import { createOfferAlert } from "components/Alerts/OfferAlert"
 import { IMessageSent, MessageCenterContext } from "context/MessageCenter"
 import { ISettingsContext, SettingsContext } from "context/Theme"
-import { Qu_userAlerts } from "queries/user"
+import { Qu_userDailyAlerts, Qu_userFrequentAlerts } from "queries/user"
 import { useContext, useEffect } from "react"
 import { ConnectedUser } from "types/entities/User"
-import { setCursor, shouldAlert } from "utils/alerts"
+import { setCursor, shouldSendDailyAlert } from "utils/alerts"
 
-const createAlerts = (
+/**
+ * alerts that are potentially sent multiple times per day - the createXAlert
+ * handler should manage the frequency of alerts
+ */
+const createFrequentAlerts = (
+  user: ConnectedUser,
+  settings: ISettingsContext,
+  data: any
+) => {
+  return [
+    createOfferAlert(user, settings, data.user.offersReceived),
+    // ...other frequent alerts
+  ].filter((alert) => alert !== null) as IMessageSent[]
+}
+
+/**
+ * alerts that are only sent once per day
+ */
+const createDailyAlerts = (
   user: ConnectedUser,
   settings: ISettingsContext,
   data: any
@@ -18,22 +36,42 @@ const createAlerts = (
 
   return [
     createMintTicketAlert(user, settings, data.user.mintTickets),
-    createOfferAlert(user, settings, data.user.offersReceived),
+    // ...other daily alerts
   ].filter((alert) => alert !== null) as IMessageSent[]
 }
 
 export const useUserAlerts = (user: ConnectedUser | null) => {
   const settings = useContext(SettingsContext)
   const messageCenter = useContext(MessageCenterContext)
-  const [getUserAlertsData] = useLazyQuery(Qu_userAlerts)
+  const [getUserDailyAlerts] = useLazyQuery(Qu_userDailyAlerts)
+  const [getUserFrequentAlerts] = useLazyQuery(Qu_userFrequentAlerts)
 
   useEffect(() => {
-    // if no user or already alerted in past 24h, do nothing
-    if (!user || !shouldAlert(user.id)) return
+    // if no user, do nothing
+    if (!user) return
 
     const notify = async () => {
-      const { data } = await getUserAlertsData({ variables: { id: user.id } })
-      messageCenter.addMessages(createAlerts(user, settings, data))
+      // always fetch data on user loaded for frequent alerts
+      const { data: frequentAlertsData } = await getUserFrequentAlerts({
+        variables: { id: user.id },
+      })
+
+      // if we should send daily alerts, do so
+      if (shouldSendDailyAlert(user.id)) {
+        // fetch data for daily alerts
+        const { data: dailyAlertsData } = await getUserDailyAlerts({
+          variables: { id: user.id },
+        })
+        // send daily alerts
+        messageCenter.addMessages(
+          createDailyAlerts(user, settings, dailyAlertsData)
+        )
+      }
+
+      // send frequent alerts
+      messageCenter.addMessages(
+        createFrequentAlerts(user, settings, frequentAlertsData)
+      )
     }
 
     notify()
