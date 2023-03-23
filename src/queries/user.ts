@@ -59,9 +59,17 @@ export const Qu_userAlerts = gql`
         id
         taxationPaidUntil
       }
-      offersReceived(filters: { active: true }) {
+      offersReceived(filters: { active_eq: true }) {
         id
         createdAt
+        price
+        objkt {
+          issuer {
+            marketStats {
+              floor
+            }
+          }
+        }
       }
     }
   }
