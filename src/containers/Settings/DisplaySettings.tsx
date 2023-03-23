@@ -142,28 +142,30 @@ export function DisplaySettings({ settings, className }: Props) {
             value={settings.showOfferAlerts}
           />
         </div>
-        <div className={cs(styleSettings.toggle_line)}>
-          <span>
-            <span>Offer alert floor threshold</span>
-            <span className={styleSettings.toggle_line_description}>
-              The floor threshold above which you will receive an alert for a
-              given offer
+        {settings.showOfferAlerts && (
+          <div className={cs(styleSettings.toggle_line)}>
+            <span>
+              <span>Offer alert floor threshold</span>
+              <span className={styleSettings.toggle_line_description}>
+                The floor threshold above which you will receive an alert for a
+                given offer
+              </span>
             </span>
-          </span>
-          <div className={cs(style.labelled_slider)}>
-            <Slider
-              value={settings.offerAlertsFloorThreshold}
-              onChange={(val) =>
-                settings.update("offerAlertsFloorThreshold", val)
-              }
-              className={cs(style.slider)}
-              min={0}
-              max={1}
-              step={0.1}
-            />
-            <p>{settings.offerAlertsFloorThreshold * 100}%</p>
+            <div className={cs(style.labelled_slider)}>
+              <Slider
+                value={settings.offerAlertsFloorThreshold}
+                onChange={(val) =>
+                  settings.update("offerAlertsFloorThreshold", val)
+                }
+                className={cs(style.slider)}
+                min={0}
+                max={1}
+                step={0.1}
+              />
+              <p>{settings.offerAlertsFloorThreshold * 100}%</p>
+            </div>
           </div>
-        </div>
+        )}
       </SettingsGroup>
       <hr />
       <SettingsGroup title="Layout">
