@@ -51,7 +51,7 @@ export const useUserAlerts = (user: ConnectedUser | null) => {
     if (!user) return
 
     const notify = async () => {
-      // always fetch data on user loaded for frequent alerts
+      // always fetch data on user changed for frequent alerts
       const { data: frequentAlertsData } = await getUserFrequentAlerts({
         variables: { id: user.id },
       })
@@ -75,5 +75,6 @@ export const useUserAlerts = (user: ConnectedUser | null) => {
     }
 
     notify()
-  }, [user])
+    // run whenever user changes
+  }, [user?.id])
 }
