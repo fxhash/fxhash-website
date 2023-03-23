@@ -45,6 +45,7 @@ interface Props {
   onLocalDataChange?: (d: FxParamsData) => void
   hideSubmit?: boolean
   mode?: PanelSubmitMode
+  disableWarningAnimation?: boolean
 }
 
 export function PanelRoot(props: Props) {
@@ -74,6 +75,7 @@ export function PanelRoot(props: Props) {
     onLocalDataChange,
     hideSubmit,
     mode = "none",
+    disableWarningAnimation,
   } = props
   const name = useMemo(() => getUserName(token.author, 15), [token])
 
@@ -91,7 +93,11 @@ export function PanelRoot(props: Props) {
         />
         <Spacing size="regular" />
         <div className={cs(style.body)}>
-          <PanelHash hash={hash} onChangeHash={onChangeHash} />
+          <PanelHash
+            hash={hash}
+            onChangeHash={onChangeHash}
+            disableWarningAnimation={disableWarningAnimation}
+          />
           <PanelParams
             ref={panelParamsRef}
             data={data}

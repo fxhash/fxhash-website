@@ -9,6 +9,7 @@ import { GenerativeToken } from "../types/entities/GenerativeToken"
 import { Objkt } from "../types/entities/Objkt"
 import { ITezosStoragePointer } from "../types/TezosStorage"
 import { getGentkFA2Contract } from "./gentk"
+import { getGentkLocalID } from "./entities/gentk"
 
 /**
  * Given a Generative Token, outputs the Tezos Storage Pointer properties
@@ -33,7 +34,7 @@ export function generativeTokenTezosStoragePointer(
 export function gentkTezosStoragePointer(gentk: Objkt): ITezosStoragePointer {
   return {
     contract: getGentkFA2Contract(gentk),
-    path: `token_metadata::${gentk.id}`,
+    path: `token_metadata::${getGentkLocalID(gentk)}`,
     storage_type: undefined,
     data_spec: undefined,
     value_path: undefined,

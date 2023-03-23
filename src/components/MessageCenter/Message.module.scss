@@ -49,10 +49,14 @@
     font-weight: bold;
     padding-right: 15px;
   }
-  
+
   .content {
     padding: 15px;
     border-top: 1px solid rgba(255, 255, 255, 0.3);
+
+    a {
+      color: #7000ff;
+    }
   }
 
   .close {
@@ -69,7 +73,6 @@
     justify-content: center;
     opacity: 0.6;
     cursor: pointer;
-    display: none;
 
     i {
       font-size: 16px;
@@ -78,12 +81,6 @@
 
     &:hover {
       opacity: 1;
-    }
-  }
-
-  &:hover {
-    .close {
-      display: block;
     }
   }
 

@@ -47,8 +47,8 @@ export function Root({
   return (
     <ApolloProvider client={clientSideClient}>
       <SettingsProvider>
-        <UserProvider>
-          <MessageCenterProvider>
+        <MessageCenterProvider>
+          <UserProvider>
             <IndexerStatusProvider
               indexerStatus={indexerStatus}
               networkStatus={networkStatus}
@@ -61,8 +61,8 @@ export function Root({
                 </ModalProvider>
               </CyclesProvider>
             </IndexerStatusProvider>
-          </MessageCenterProvider>
-        </UserProvider>
+          </UserProvider>
+        </MessageCenterProvider>
       </SettingsProvider>
     </ApolloProvider>
   )

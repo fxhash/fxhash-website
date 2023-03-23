@@ -18,6 +18,9 @@ export const Qu_objkt = gql`
         }
       }
       assigned
+      minter {
+        ...UserBadgeInfos
+      }
       owner {
         ...UserBadgeInfos
       }

@@ -17,22 +17,9 @@ export type NavigationLink = NavigationLinkSingle | NavigationLinkSubmenu
 export const navigationLinks: NavigationLink[] = [
   { href: "/explore", label: "explore", key: "explore" },
   {
-    label: "community",
-    key: "community",
-    subMenu: [
-      {
-        href: "/community/opening-schedule",
-        label: "opening schedule",
-        key: "opening-schedule",
-      },
-      { href: "/community/reports", label: "tokens reported", key: "reports" },
-      {
-        href: "https://feedback.fxhash.xyz/",
-        external: true,
-        label: "feedback",
-        key: "feedback",
-      },
-    ],
+    href: "/articles",
+    label: "fx(text)",
+    key: "articles",
   },
   { href: "/marketplace", label: "marketplace", key: "marketplace" },
   { href: "/sandbox", label: "sandbox", key: "sandbox" },

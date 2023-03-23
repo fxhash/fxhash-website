@@ -17,13 +17,14 @@ import { useAriaTooltip } from "hooks/useAriaTooltip"
 interface Props {
   hash: string
   onChangeHash: (h: string) => void
+  disableWarningAnimation?: boolean
 }
 
 const validateHash = (hash: string) =>
   hash.startsWith("oo") && hash.length === 51
 
 export function PanelHash(props: Props) {
-  const { hash, onChangeHash } = props
+  const { hash, onChangeHash, disableWarningAnimation } = props
   const { hoverElement, wasHovered, showTooltip, handleEnter, handleLeave } =
     useAriaTooltip()
   const handleChange = (e: any) => {
@@ -81,7 +82,7 @@ export function PanelHash(props: Props) {
             onMouseEnter={handleEnter}
             onMouseLeave={handleLeave}
             className={cx(styles.warningWrapper, {
-              [styles.wasHovered]: wasHovered,
+              [styles.wasHovered]: wasHovered || disableWarningAnimation,
             })}
           >
             <FontAwesomeIcon
