@@ -3,6 +3,9 @@ import cs from "classnames"
 import { TokenFeature, TokenFeatureValueType } from "../../types/Metadata"
 import { displayPercentage } from "../../utils/units"
 import Link from "next/link"
+import { defaultQueryParamSerialize } from "hooks/useQueryParam"
+import { objktFeatureType } from "types/entities/Objkt"
+import { Button } from "components/Button"
 
 interface Props {
   feature: TokenFeature
@@ -23,34 +26,54 @@ function displayFeatureValue(value: TokenFeatureValueType) {
 }
 
 function getFeatureFilterUrl(projectUrl: string, feature: TokenFeature) {
-  return `${projectUrl}?features=${JSON.stringify({
-    [feature.name]: feature.value,
-  })}`
+  // use defaultQueryParamSerialize as this route uses query params
+  const serializedFeature = defaultQueryParamSerialize([
+    {
+      name: feature.name,
+      values: [feature.value],
+      type: objktFeatureType(feature.value),
+    },
+  ])
+  return `${projectUrl}?features=${serializedFeature}`
 }
 
 export function Feature({ feature, projectUrl }: Props) {
-  return (
-    <article
-      className={cs(style.feature, { [style.has_rarity]: !!feature.rarity })}
-    >
-      <div className={cs(style.details)}>
-        <strong>{feature.name}</strong>
-        {projectUrl ? (
-          <Link
-            className={style.details_value}
-            href={getFeatureFilterUrl(projectUrl, feature)}
-          >
-            {displayFeatureValue(feature.value)}
-          </Link>
-        ) : (
+  if (!projectUrl)
+    return (
+      <article
+        className={cs(style.feature, { [style.has_rarity]: !!feature.rarity })}
+      >
+        <div className={cs(style.details)}>
+          <strong>{feature.name}</strong>
           <span>{displayFeatureValue(feature.value)}</span>
-        )}
-      </div>
-      {feature.rarity && (
-        <div className={cs(style.rarity)}>
-          {displayPercentage(feature.rarity)}%
         </div>
-      )}
-    </article>
+        {feature.rarity && (
+          <div className={cs(style.rarity)}>
+            {displayPercentage(feature.rarity)}%
+          </div>
+        )}
+      </article>
+    )
+
+  return (
+    <Link href={getFeatureFilterUrl(projectUrl, feature)}>
+      <Button className={cs(style.feature_link)} isLink color="transparent">
+        <article
+          className={cs(style.feature, {
+            [style.has_rarity]: !!feature.rarity,
+          })}
+        >
+          <div className={cs(style.details)}>
+            <strong>{feature.name}</strong>
+            <span>{displayFeatureValue(feature.value)}</span>
+          </div>
+          {feature.rarity && (
+            <div className={cs(style.rarity)}>
+              {displayPercentage(feature.rarity)}%
+            </div>
+          )}
+        </article>
+      </Button>
+    </Link>
   )
 }
