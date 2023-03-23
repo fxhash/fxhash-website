@@ -382,6 +382,7 @@ const _ModalUpdatePriceMintTicket = ({
                 unit="tez"
                 id="price"
                 min={0.1}
+                step="any"
               />
             </div>
             {errors.price && (

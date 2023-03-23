@@ -136,6 +136,7 @@ const _ModalClaimMintTicket = ({
                 type="number"
                 value={values.price}
                 min={0.1}
+                step="any"
                 onChange={handleChange}
                 onBlur={handleBlur}
                 classNameContainer={style.input}
