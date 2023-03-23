@@ -116,6 +116,56 @@ export function DisplaySettings({ settings, className }: Props) {
         </div>
       </SettingsGroup>
       <hr />
+      <SettingsGroup title="notifications">
+        <div className={cs(styleSettings.toggle_line)}>
+          <span>
+            <span>Mint tickets expiring</span>
+            <span className={styleSettings.toggle_line_description}>
+              Receive a daily alert when you have mint tickets expiring (going
+              into dutch auction) in the next 48 hours
+            </span>
+          </span>
+          <Switch
+            onChange={(value) => settings.update("showMintTicketAlerts", value)}
+            value={settings.showMintTicketAlerts}
+          />
+        </div>
+        <div className={cs(styleSettings.toggle_line)}>
+          <span>
+            <span>Offers</span>
+            <span className={styleSettings.toggle_line_description}>
+              Receive a daily alert when you have a new offer
+            </span>
+          </span>
+          <Switch
+            onChange={(value) => settings.update("showOfferAlerts", value)}
+            value={settings.showOfferAlerts}
+          />
+        </div>
+        <div className={cs(styleSettings.toggle_line)}>
+          <span>
+            <span>Offer alert floor threshold</span>
+            <span className={styleSettings.toggle_line_description}>
+              The floor threshold above which you will receive an alert for a
+              given offer
+            </span>
+          </span>
+          <div className={cs(style.labelled_slider)}>
+            <Slider
+              value={settings.offerAlertsFloorThreshold}
+              onChange={(val) =>
+                settings.update("offerAlertsFloorThreshold", val)
+              }
+              className={cs(style.slider)}
+              min={0}
+              max={1}
+              step={0.1}
+            />
+            <p>{settings.offerAlertsFloorThreshold * 100}%</p>
+          </div>
+        </div>
+      </SettingsGroup>
+      <hr />
       <SettingsGroup title="Layout">
         <div className={style.settings_layout}>
           <div className={style.layout_controls}>
