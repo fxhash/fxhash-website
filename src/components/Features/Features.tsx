@@ -8,16 +8,15 @@ import { useMemo } from "react"
 
 interface Props {
   features?: TokenFeature[] | null
-  objkt?: Objkt | null
+  projectUrl?: string
   layout?: "cols_2" | "responsive"
 }
 
-export function Features({ features, objkt, layout = "responsive" }: Props) {
-  const projectUrl = useMemo(
-    () => (objkt?.issuer ? getGenerativeTokenUrl(objkt.issuer) : ""),
-    [objkt]
-  )
-
+export function Features({
+  features,
+  projectUrl,
+  layout = "responsive",
+}: Props) {
   return features && features.length > 0 ? (
     <div className={cs(style.features, style[layout])}>
       {features.map((feature, idx) => (

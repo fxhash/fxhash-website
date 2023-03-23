@@ -281,7 +281,10 @@ const _GenerativeDisplayIteration = ({
               <Spacing size="3x-large" />
               <h4>Features</h4>
               <Spacing size="small" />
-              <Features features={objkt.features} objkt={objkt} />
+              <Features
+                features={objkt.features}
+                projectUrl={getGenerativeTokenUrl(objkt.issuer)}
+              />
             </div>
           )}
         </div>
@@ -292,7 +295,10 @@ const _GenerativeDisplayIteration = ({
           <Spacing size="3x-large" />
           <h4>Features</h4>
           <Spacing size="small" />
-          <Features features={objkt.features} objkt={objkt} />
+          <Features
+            features={objkt.features}
+            projectUrl={getGenerativeTokenUrl(objkt.issuer)}
+          />
         </div>
       )}
     </>
