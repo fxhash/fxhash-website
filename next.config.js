@@ -152,6 +152,11 @@ module.exports = withBundleAnalyzer({
         destination: "/pkh/:name",
         permanent: true,
       },
+      {
+        source: "/explore/articles",
+        destination: "/articles",
+        permanent: true,
+      },
 
       process.env.NEXT_PUBLIC_MAINTENANCE_MODE === "1"
         ? {
