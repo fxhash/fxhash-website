@@ -30,11 +30,13 @@ export class TicketUpdatePriceV3Operation extends ContractOperation<TTicketUpdat
   }
 
   async call(): Promise<TransactionWalletOperation> {
+    const amount = Math.ceil(this.params.amount)
+    console.log(amount, this.params)
     return this.contract!.methodsObject.update_price({
       token_id: this.params.ticketId,
       taxation: this.params.taxationSettings,
     }).send({
-      amount: this.params.amount,
+      amount,
       mutez: true,
     })
   }
