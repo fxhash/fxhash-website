@@ -16,6 +16,7 @@
     pointer-events: none;
     z-index: 1;
     .details {
+      transition: 0.5s ease-out opacity;
       opacity: 0;
     }
     .infos {
@@ -49,11 +50,13 @@
       font-size: 0.75rem;
     }
     .owner {
+      transition: 0.5s ease-out opacity;
       font-size: 0.75rem;
       margin-top: 8px;
       display: flex;
       flex-direction: row;
       gap: 0.5em;
+      opacity: 0;
       .label {
         color: var(--color-gray);
       }
@@ -67,6 +70,9 @@
       scale: 1;
       z-index: 2;
       .details {
+        opacity: 1;
+      }
+      .owner {
         opacity: 1;
       }
     }

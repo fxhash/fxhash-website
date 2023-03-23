@@ -54,11 +54,27 @@ $height: 30px;
     transition: 0.2s all ease-out;
     background: var(--color-secondary);
     color: white;
-    
+
     &:hover {
       background: var(--color-secondary-vlight);
       color: var(--fxl-color-light);
       outline: 1px solid var(--color-secondary);
+      outline-offset: 2px;
+    }
+    &:active {
+      background: var(--color-secondary-dark);
+    }
+  }
+
+  &.color-primary-inverted {
+    transition: 0.2s all ease-out;
+    background: var(--color-primary);
+    color: var(--fxl-color-light);
+
+    &:hover {
+      background: var(--color-primary);
+      color: var(--fxl-color-light);
+      outline: 1px solid var(--color-primary);
       outline-offset: 2px;
     }
     &:active {

@@ -83,7 +83,9 @@ TezosStorageProject.matches = (pointer) => {
     return false
   }
   const contract = pointer.contract.split(".")[0]
-  if (contract !== FxhashContracts.ISSUER) {
+  if (
+    [FxhashContracts.ISSUER, FxhashContracts.ISSUER_V3].indexOf(contract) === -1
+  ) {
     return false
   }
   const split = pointer.path.split("::")

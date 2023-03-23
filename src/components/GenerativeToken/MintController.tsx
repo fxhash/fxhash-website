@@ -212,7 +212,10 @@ export function MintController({
       {finalOpHash && (
         <>
           {isTicketMinted && mintedTicket ? (
-            <ButtonMintTicketPurchase mintTicket={mintedTicket} />
+            <ButtonMintTicketPurchase
+              mintTicket={mintedTicket}
+              showModalOnRender
+            />
           ) : (
             <Link href={revealUrl} passHref>
               <Button

@@ -23,6 +23,9 @@ export interface ISettingsProperties {
   borderWidthCards: number
   shadowCards: number
   hoverEffectCard: boolean
+  // mint ticket
+  showTicketPreMintWarning: boolean
+
   // performances
   quality: number
   topBannerMessage: string
@@ -109,6 +112,7 @@ const defaultProperties: ISettingsProperties = {
   displayPricesCard: false,
   displayBurntCard: false,
   hoverEffectCard: true,
+  showTicketPreMintWarning: true,
   quality: 0,
   topBannerMessage: "",
   nsfw: false,

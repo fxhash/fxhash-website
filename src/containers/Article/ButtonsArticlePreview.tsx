@@ -72,7 +72,6 @@ const _ButtonsArticlePreview = ({
     }
     try {
       const { metadataCID } = await uploadMetadata(metadata)
-      console.log({ metadataCID })
       mintArticle({
         data: {
           metadataCid: metadataCID,

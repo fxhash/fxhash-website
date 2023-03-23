@@ -1,10 +1,10 @@
 import { useLazyQuery } from "@apollo/client"
+import { createMintTicketAlert } from "components/Alerts/MintTicketAlert"
 import { IMessageSent, MessageCenterContext } from "context/MessageCenter"
-import { addDays, isAfter, isBefore } from "date-fns"
+import { addDays, isAfter } from "date-fns"
 import Link from "next/link"
 import { Qu_userAlerts } from "queries/user"
 import { useContext, useEffect } from "react"
-import { MintTicket } from "types/entities/MintTicket"
 import { Offer } from "types/entities/Offer"
 import { ConnectedUser } from "types/entities/User"
 import { getUserProfileLink } from "utils/user"
@@ -40,38 +40,6 @@ const shouldAlert = (userId: string) => {
   return isAfter(new Date(), addDays(new Date(cursor), 1))
 }
 
-const createMintTicketAlert = (
-  user: ConnectedUser,
-  mintTickets: MintTicket[]
-) => {
-  // find mint tickets with taxation period expiring in the next 48 hours
-  const expiringMintTickets = mintTickets.filter(
-    (mintTicket) =>
-      isAfter(new Date(mintTicket.taxationPaidUntil), new Date()) &&
-      isBefore(new Date(mintTicket.taxationPaidUntil), addDays(new Date(), 2))
-  )
-  // if none, do nothing
-  if (!expiringMintTickets.length) return null
-
-  return {
-    type: "warning",
-    title: "Mint ticket alert",
-    content: (onRemove: () => void) => (
-      <>
-        You have {expiringMintTickets.length} mint ticket(s) with taxation
-        periods expiring in the next 48 hours.{" "}
-        <Link
-          legacyBehavior
-          href={`${getUserProfileLink(user)}/collection/tickets`}
-        >
-          <a onClick={onRemove}>See my tickets</a>
-        </Link>
-      </>
-    ),
-    keepAlive: true,
-  }
-}
-
 const createOfferAlert = (user: ConnectedUser, offers: Offer[]) => {
   // use a separate cursor to track when the last offer alert was sent
   const cursor = readCursor(user.id, "offer-cursor")
@@ -103,11 +71,15 @@ const createOfferAlert = (user: ConnectedUser, offers: Offer[]) => {
   }
 }
 
-const createAlerts = (user: ConnectedUser, data: any) =>
-  [
+const createAlerts = (user: ConnectedUser, data: any) => {
+  // set alert cursor to ensure we don't alert again for 24 hours
+  setCursor(user.id, "alert-cursor")
+
+  return [
     createMintTicketAlert(user, data.user.mintTickets),
     createOfferAlert(user, data.user.offersReceived),
   ].filter((alert) => alert !== null) as IMessageSent[]
+}
 
 export const useUserAlerts = (user: ConnectedUser | null) => {
   const messageCenter = useContext(MessageCenterContext)

@@ -7,17 +7,19 @@ interface Props {
   hashes: string[]
   params?: string[] | null
   onChange: (hashes: string[], params?: string[]) => void
-  onHashClick?: (hash: string, param?: string) => void
+  onClickItem?: (index: number, hash: string, param?: string) => void
   className?: string
-  activeHash?: string
+  activeItem?: number
+  translateInputBytes?: (bytes: string) => string
 }
 export function HashList({
   hashes,
   params,
   className,
   onChange,
-  onHashClick,
-  activeHash,
+  onClickItem,
+  activeItem,
+  translateInputBytes,
 }: Props) {
   const removeItem = (idx: number) => {
     const cleanedHashes = [...hashes]
@@ -37,12 +39,19 @@ export function HashList({
           key={idx}
           title="Load hash on the right"
           className={cs(style.hash, effects["drop-shadow-small"], {
-            [style.active]: hash === activeHash,
+            [style.active]: idx === activeItem,
           })}
         >
-          <span onClick={() => onHashClick?.(hash, params?.[idx])}>
+          <span onClick={() => onClickItem?.(idx, hash, params?.[idx])}>
             {hash}
-            {params && ` / ${truncateMiddle(params?.[idx] || "", 40)}`}
+            {params && (
+              <>
+                &nbsp;
+                {translateInputBytes
+                  ? translateInputBytes(params?.[idx]).toString()
+                  : truncateMiddle(params?.[idx] || "", 48)}
+              </>
+            )}
           </span>
           <button
             type="button"

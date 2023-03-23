@@ -3,11 +3,11 @@ import cs from "classnames"
 import { IMessage } from "../../context/MessageCenter"
 import { useEffect, useRef, useState } from "react"
 
-interface Props {
+export interface MessageProps {
   message: IMessage
   onRemove: () => void
 }
-export function Message({ message, onRemove }: Props) {
+export function Message({ message, onRemove }: MessageProps) {
   const [hidden, setHidden] = useState<boolean>(false)
 
   const { type, title, content, keepAlive } = message

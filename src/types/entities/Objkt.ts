@@ -12,6 +12,7 @@ export interface Objkt {
   version: 0 | 1
   issuer: GenerativeToken
   owner?: User | null
+  minter?: User | null
   assigned?: boolean
   generationHash?: string
   inputBytes?: string | null

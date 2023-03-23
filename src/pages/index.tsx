@@ -29,9 +29,7 @@ const Home: NextPage<Props> = ({
   randomGenerativeToken,
   generativeTokens,
   articles,
-  //  listings,
 }) => {
-  console.log(randomGenerativeToken)
   return (
     <>
       <Head>
@@ -102,30 +100,6 @@ export async function getServerSideProps() {
         generativeTokens(skip: $skip, take: $take, filters: $filters) {
           ...TokenInfo
         }
-        listings(skip: $skip, take: $take) {
-          id
-          price
-          objkt {
-            id
-            name
-            slug
-            metadata
-            captureMedia {
-              ...MediaImage
-            }
-            issuer {
-              labels
-              ...Author
-            }
-            owner {
-              ...UserBadgeInfos
-            }
-            activeListing {
-              id
-              price
-            }
-          }
-        }
         articles(take: 3, sort: { createdAt: "DESC" }) {
           id
           title
@@ -151,7 +125,6 @@ export async function getServerSideProps() {
     props: {
       randomGenerativeToken: data.randomTopGenerativeToken,
       generativeTokens: data.generativeTokens,
-      listings: data.listings,
       articles: data.articles,
     },
   }

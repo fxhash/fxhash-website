@@ -35,12 +35,6 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
   const { onIframeLoaded, features, params, paramsDefinition } =
     useReceiveTokenInfos(artworkIframeRef)
 
-  console.log({
-    features,
-    params,
-    paramsDefinition,
-  })
-
   const [data, setData] = useState<FxParamsData>({})
 
   const inputBytes = useMemo<string | null>(() => {
@@ -52,9 +46,6 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
   const url = useMemo<string>(() => {
     return ipfsUrlWithHashAndParams(state.cidUrlParams!, hash, inputBytes)
   }, [hash, inputBytes])
-  console.log({ url })
-
-  console.log({ data })
 
   const nextStep = () => {
     onNext({
