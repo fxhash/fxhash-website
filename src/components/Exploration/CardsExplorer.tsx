@@ -31,16 +31,11 @@ interface PropsChildren {
 }
 
 interface Props {
-  filtersVisibleDefault?: boolean
   cardSizeScope?: string
   children: FunctionComponent<PropsChildren>
 }
 
-export function CardsExplorer({
-  filtersVisibleDefault = false,
-  cardSizeScope,
-  children,
-}: Props) {
+export function CardsExplorer({ cardSizeScope, children }: Props) {
   const settings = useContext(SettingsContext)
   const router = useRouter()
   const isMobile = useIsMobile()
@@ -50,9 +45,7 @@ export function CardsExplorer({
   })
 
   // is the filters panel visible ?
-  const [filtersVisible, setFiltersVisible] = useState<boolean>(
-    filtersVisibleDefault
-  )
+  const [filtersVisible, setFiltersVisible] = useState<boolean>(false)
   // is the search loading ?
   const [searchLoading, setSearchLoading] = useState<boolean>(false)
 
@@ -71,12 +64,6 @@ export function CardsExplorer({
       [cardSizeScope!]: value,
     })
   }
-
-  useEffect(() => {
-    if (isMobile && filtersVisibleDefault) {
-      setFiltersVisible(false)
-    }
-  }, [isMobile])
 
   useEffect(() => {
     // cardSize scopes need to match the basePath to prevent race conditions
