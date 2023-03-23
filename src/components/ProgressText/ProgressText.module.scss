@@ -1,0 +1,25 @@
+@import "../../styles/Variables";
+.progress {
+  position: relative;
+  &_color {
+    left: 0;
+    position: absolute;
+    background-color: var(--color-primary);
+    will-change: width;
+    transition: 2.5s width linear;
+    height: 100%;
+    background-clip: text;
+    color: transparent;
+  }
+  &_back {
+    color: inherit;
+  }
+  &_cover {
+    left: 0;
+    position: absolute;
+    background-color: var(--color-white);
+    will-change: width;
+    transition: 2.5s width linear;
+    height: 100%;
+  }
+}

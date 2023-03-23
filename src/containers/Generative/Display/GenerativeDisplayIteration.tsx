@@ -47,16 +47,24 @@ const _GenerativeDisplayIteration = ({
   const creator: User = objkt.issuer.author
   const tokenFromObjtk = useMemo(() => {
     return {
+      id: objkt.issuer.id,
+      slug: objkt.issuer.slug,
       name: objkt.name || "",
       metadata: objkt.issuer?.metadata || {},
       labels: objkt.issuer?.labels,
       captureMedia: objkt.captureMedia,
       displayUri: objkt.metadata?.displayUri,
       balance: 0,
+      inputBytesSize: objkt.issuer?.inputBytesSize || 0,
     }
   }, [objkt])
   const gentkUrl = useMemo(() => gentkLiveUrl(objkt), [objkt])
-
+  const isParamsToken = !!objkt.inputBytes
+  const exploreParamsQuery = useMemo(() => {
+    if (!isParamsToken) return null
+    return `fxhash=${objkt.generationHash}&fxparams=${objkt.inputBytes}`
+  }, [objkt, isParamsToken])
+  const minter = objkt.minter
   return (
     <>
       <div className={cs(style.artwork_header_mobile, layout.break_words)}>
@@ -138,7 +146,7 @@ const _GenerativeDisplayIteration = ({
               {format(new Date(objkt.createdAt), "MMMM d, yyyy' at 'HH:mm")}
             </span>
             {objkt.issuer.labels && (
-              <Labels className={style.labels} labels={objkt.issuer.labels} />
+              <Labels className={style.labels} token={objkt.issuer} />
             )}
           </div>
 
@@ -163,6 +171,48 @@ const _GenerativeDisplayIteration = ({
               style.extra_details
             )}
           >
+            <strong>Creator</strong>
+            <span className={cs(style.mobile_align_right, style.mobile_gray)}>
+              <UserBadge
+                className={style.minterBadge}
+                displayAvatar={false}
+                user={creator}
+              />
+            </span>
+            {minter && (
+              <>
+                {isParamsToken ? (
+                  <strong>
+                    Params
+                    <HoverTitle
+                      message="This user set the params."
+                      className={cs(style.tooltip, style.paramsTooltip)}
+                    >
+                      <Icon icon="infos-circle" />
+                    </HoverTitle>
+                  </strong>
+                ) : (
+                  <strong>Minter</strong>
+                )}
+                <span
+                  className={cs(style.mobile_align_right, style.mobile_gray)}
+                >
+                  <UserBadge
+                    className={style.minterBadge}
+                    displayAvatar={false}
+                    user={minter}
+                  />
+                </span>
+              </>
+            )}
+            <strong>Owner</strong>
+            <span className={cs(style.mobile_align_right, style.mobile_gray)}>
+              <UserBadge
+                className={style.minterBadge}
+                displayAvatar={false}
+                user={owner}
+              />
+            </span>
             <strong>Royalties</strong>
             <span className={cs(style.mobile_align_right, style.mobile_gray)}>
               {displayRoyalties(objkt.royalties)}
@@ -223,6 +273,7 @@ const _GenerativeDisplayIteration = ({
             token={tokenFromObjtk}
             openUrl={gentkUrl}
             artifactUrl={gentkUrl}
+            exploreParamsQuery={exploreParamsQuery}
           />
 
           {objkt.features && objkt.features.length > 0 && (

@@ -1,4 +1,5 @@
 import { useLazyQuery } from "@apollo/client"
+import { useUserAlerts } from "hooks/useUserAlerts"
 import React, { PropsWithChildren, useState, useRef } from "react"
 import { Qu_user } from "../queries/user"
 import type { WalletManager } from "../services/Wallet"
@@ -29,6 +30,8 @@ export function UserProvider({ children }: PropsWithChildren<{}>) {
   const [context, setContext] = useState<UserContextType>(defaultCtx)
   // keep a reference to the context to be used in functions
   const ctxRef = useRef<UserContextType>(context)
+
+  useUserAlerts(context.user)
 
   const [getUser, { data: userData }] = useLazyQuery(Qu_user, {
     fetchPolicy: "no-cache",

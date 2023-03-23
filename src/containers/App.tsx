@@ -176,7 +176,7 @@ export const App = ({ Component, pageProps }: AppPropsWithLayout) => {
         <meta name="theme-color" content="#ffffff"></meta>
       </Head>
 
-      <NextNprogress color="#7000FF" />
+      <NextNprogress color="#7000FF" showOnShallow={false} />
 
       {process.env.NEXT_PUBLIC_MAINTENANCE_MODE === "1" ? (
         <Component {...pageProps} />

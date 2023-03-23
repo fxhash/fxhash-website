@@ -10,7 +10,7 @@ export function getGentkUrl(gentk: Objkt): string {
 }
 
 export const fakeGentk: DeepPartial<Objkt> = {
-  id: 0,
+  id: "0",
   name: "[WAITING TO BE SIGNED]",
   owner: {
     id: "tz1fepn7jZsCYBqCDhpM63hzh9g2Ytqk4Tpv",
@@ -42,7 +42,9 @@ export const fakeGentk: DeepPartial<Objkt> = {
 export function getGentkFA2Contract(gentk: Objkt): string {
   if (gentk.version === 0) {
     return FxhashContracts.GENTK_V1
-  } else {
+  } else if (gentk.version === 1) {
     return FxhashContracts.GENTK_V2
+  } else {
+    return FxhashContracts.GENTK_V3
   }
 }

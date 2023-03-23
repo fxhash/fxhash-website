@@ -6,10 +6,10 @@ import { Qu_moderationReasons } from "../../queries/moderation-reason"
 import { ModerationReason } from "../../types/entities/ModerationReason"
 import { LoaderBlock } from "../../components/Layout/LoaderBlock"
 import { useMemo } from "react"
-import { Spacing } from "../../components/Layout/Spacing"
+import { TModContractKey } from "services/contract-operations/Moderate"
 
 interface Props {
-  moderationContract: "token" | "user" | "article"
+  moderationContract: TModContractKey
 }
 export function ModerationReasons({ moderationContract }: Props) {
   // get reasons currently indexed

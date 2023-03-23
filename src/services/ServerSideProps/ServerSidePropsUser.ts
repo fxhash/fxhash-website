@@ -84,6 +84,7 @@ export const getServerSidePropsUserById = async (
         offersSent: [],
         articles: [],
         listings: [],
+        mintTickets: [],
       }
     }
   }

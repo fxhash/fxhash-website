@@ -1,0 +1,71 @@
+@import "../../../styles/Variables";
+
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.checkbox {
+  label {
+    flex-direction: row-reverse !important;
+    justify-content: flex-end;
+    padding-left: 0;
+
+    span {
+      margin-left: 20px;
+    }
+  }
+}
+
+.form {
+  width: 100%;
+}
+
+.field_disabled {
+  opacity: 0.2;
+  pointer-events: none;
+}
+
+.hashlist_wrapper {
+  padding: 8px;
+  border: 3px solid var(--color-border-input);
+  width: 100%;
+
+  .hashlist {
+    width: 100%;
+  }
+
+  &.no_hash {
+    border-color: var(--color-error);
+    color: var(--color-error);
+    font-weight: bold;
+  }
+}
+
+.field_header {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+  gap: 8px;
+
+  label {
+    font-size: var(--font-size-h5);
+    font-weight: bold;
+  }
+}
+.button {}
+
+.artworkWrapper {
+  position: sticky;
+  top: 0;
+}
+
+@media (max-width: $breakpoint-sm) {
+  .button {
+    width: 100%;
+  }
+}

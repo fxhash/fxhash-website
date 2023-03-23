@@ -5,6 +5,7 @@ import {
   WalletOperation,
   WalletParamsWithKind,
 } from "@taquito/taquito"
+import { getGentkLocalID } from "utils/entities/gentk"
 import { FxhashContracts } from "../../types/Contracts"
 import { Objkt } from "../../types/entities/Objkt"
 import { Offer } from "../../types/entities/Offer"
@@ -27,17 +28,7 @@ export type TOfferAcceptOperationParams = {
  * List a gentk on the Marketplace
  */
 export class OfferAcceptOperation extends ContractOperation<TOfferAcceptOperationParams> {
-  gentkContract: ContractAbstraction<Wallet> | null = null
-  marketplaceContract: ContractAbstraction<Wallet> | null = null
-
-  async prepare() {
-    this.gentkContract = await this.manager.getContract(
-      getGentkFA2Contract(this.params.token)
-    )
-    this.marketplaceContract = await this.manager.getContract(
-      FxhashContracts.MARKETPLACE_V2
-    )
-  }
+  async prepare() {}
 
   async call(): Promise<WalletOperation> {
     const updateOperatorsParams = [
@@ -45,7 +36,7 @@ export class OfferAcceptOperation extends ContractOperation<TOfferAcceptOperatio
         add_operator: {
           owner: this.params.token.owner!.id,
           operator: FxhashContracts.MARKETPLACE_V2,
-          token_id: this.params.token.id,
+          token_id: getGentkLocalID(this.params.token.id),
         },
       },
     ]

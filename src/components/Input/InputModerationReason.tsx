@@ -6,9 +6,10 @@ import { Qu_moderationReasons } from "../../queries/moderation-reason"
 import { ModerationReason } from "../../types/entities/ModerationReason"
 import { useMemo } from "react"
 import { IOptions, Select } from "./Select"
+import { TModContractKey } from "services/contract-operations/Moderate"
 
 interface Props extends InputProps<number> {
-  moderationContract: "token" | "user" | "article"
+  moderationContract: TModContractKey
 }
 export function InputModerationReason({
   value,

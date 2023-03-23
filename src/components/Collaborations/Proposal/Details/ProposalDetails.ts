@@ -11,6 +11,10 @@ import {
   ProposalDetailsMintIssuerHeader,
 } from "./MintIssuer"
 import {
+  ProposalDetailsMintIssuerV3Expanded,
+  ProposalDetailsMintIssuerV3Header,
+} from "./MintIssuerV3"
+import {
   ProposalDetailsUpdateIssuerExpanded,
   ProposalDetailsUpdateIssuerHeader,
 } from "./UpdateIssuer"
@@ -18,6 +22,10 @@ import {
   ProposalDetailsUpdatePriceExpanded,
   ProposalDetailsUpdatePriceHeader,
 } from "./UpdatePrice"
+import {
+  ProposalDetailsUpdatePriceV3Expanded,
+  ProposalDetailsUpdatePriceV3Header,
+} from "./UpdatePriceV3"
 import {
   ProposalDetailsUpdateReserveExpanded,
   ProposalDetailsUpdateReserveHeader,
@@ -36,6 +44,7 @@ export interface IProposalDetails {
 
 // maps proposal call IDs to their rendering components
 export const ProposalDetails: Record<number, IProposalDetails> = {
+  // PRE_V3
   0: {
     header: ProposalDetailsMintIssuerHeader,
     expanded: ProposalDetailsMintIssuerExpanded,
@@ -57,6 +66,31 @@ export const ProposalDetails: Record<number, IProposalDetails> = {
     expanded: ProposalDetailsBurnSupplyExpanded,
   },
   5: {
+    header: ProposalDetailsBurnHeader,
+    expanded: ProposalDetailsBurnExpanded,
+  },
+  // V3
+  6: {
+    header: ProposalDetailsMintIssuerV3Header,
+    expanded: ProposalDetailsMintIssuerV3Expanded,
+  },
+  7: {
+    header: ProposalDetailsUpdateIssuerHeader,
+    expanded: ProposalDetailsUpdateIssuerExpanded,
+  },
+  8: {
+    header: ProposalDetailsUpdatePriceV3Header,
+    expanded: ProposalDetailsUpdatePriceV3Expanded,
+  },
+  9: {
+    header: ProposalDetailsUpdateReserveHeader,
+    expanded: ProposalDetailsUpdateReserveExpanded,
+  },
+  10: {
+    header: ProposalDetailsBurnSupplyHeader,
+    expanded: ProposalDetailsBurnSupplyExpanded,
+  },
+  11: {
     header: ProposalDetailsBurnHeader,
     expanded: ProposalDetailsBurnExpanded,
   },
