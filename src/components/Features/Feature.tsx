@@ -60,7 +60,12 @@ export function Feature({ feature, projectUrl }: Props) {
 
   return (
     <Link href={getFeatureFilterUrl(projectUrl, feature)}>
-      <Button className={cs(style.feature_link)} isLink color="transparent">
+      <Button
+        className={cs(style.feature_link)}
+        isLink
+        color="transparent"
+        size="full"
+      >
         <FeatureDetail feature={feature} />
       </Button>
     </Link>
