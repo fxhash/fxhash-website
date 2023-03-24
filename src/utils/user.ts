@@ -338,6 +338,13 @@ export const UserAliases: Record<string, Partial<User>> = {
     preventLink: true,
   },
 
+  [process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_GENTK_V3!]: {
+    id: "The minter of each iteration will get some royalties",
+    name: "Minter",
+    platformOwned: true,
+    preventLink: true,
+  },
+
   ...UserDonationAliases,
 }
 
