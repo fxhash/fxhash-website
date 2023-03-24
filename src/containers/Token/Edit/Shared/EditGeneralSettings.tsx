@@ -3,10 +3,7 @@ import editStyle from "./EditStyle.module.scss"
 import layout from "styles/Layout.module.scss"
 import cs from "classnames"
 import * as Yup from "yup"
-import {
-  GenerativeToken,
-  GenerativeTokenVersion,
-} from "types/entities/GenerativeToken"
+import { GenerativeToken } from "types/entities/GenerativeToken"
 import { Formik } from "formik"
 import { Form } from "components/Form/Form"
 import { Fieldset } from "components/Form/Fieldset"
@@ -48,11 +45,6 @@ export function EditGeneralSettings({ token, contractOperation }: Props) {
   }
 
   const disabled = token.balance === 0
-
-  const gentkContract =
-    token.version === GenerativeTokenVersion.V3
-      ? FxhashContracts.GENTK_V3
-      : FxhashContracts.GENTK_V2
 
   return (
     <Formik
@@ -177,7 +169,7 @@ export function EditGeneralSettings({ token, contractOperation }: Props) {
                 {({ addAddress }) => (
                   <div className={cs(editStyle.royalties_last_row)}>
                     {!values.splitsSecondary.find(
-                      (split) => split.address === gentkContract
+                      (split) => split.address === FxhashContracts.GENTK_V2
                     ) && (
                       <Button
                         type="button"
@@ -186,7 +178,7 @@ export function EditGeneralSettings({ token, contractOperation }: Props) {
                           <i className="fa-solid fa-plus" aria-hidden />
                         }
                         onClick={() => {
-                          addAddress(gentkContract)
+                          addAddress(FxhashContracts.GENTK_V2)
                         }}
                       >
                         royalties to the minter
