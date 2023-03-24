@@ -261,7 +261,7 @@ export const StepDistribution: StepComponent = ({ state, onNext }) => {
                   {({ addAddress }) => (
                     <div className={cs(style.royalties_last_row)}>
                       {!values.splitsSecondary.find(
-                        (split) => split.address === FxhashContracts.GENTK_V2
+                        (split) => split.address === FxhashContracts.GENTK_V3
                       ) && (
                         <Button
                           type="button"
@@ -270,7 +270,7 @@ export const StepDistribution: StepComponent = ({ state, onNext }) => {
                             <i className="fa-solid fa-plus" aria-hidden />
                           }
                           onClick={() => {
-                            addAddress(FxhashContracts.GENTK_V2)
+                            addAddress(FxhashContracts.GENTK_V3)
                           }}
                         >
                           royalties to the minter
