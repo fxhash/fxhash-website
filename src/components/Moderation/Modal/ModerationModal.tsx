@@ -11,12 +11,15 @@ import { InputModerationReason } from "../../Input/InputModerationReason"
 import { Spacing } from "../../Layout/Spacing"
 import { Button } from "../../Button"
 import { useContractOperation } from "../../../hooks/useContractOperation"
-import { ModerateOperation } from "../../../services/contract-operations/Moderate"
+import {
+  ModerateOperation,
+  TModContractKey,
+} from "../../../services/contract-operations/Moderate"
 import Link from "next/link"
 import { Submit } from "../../Form/Submit"
 
 interface Props extends ModalProps {
-  moderationContract: "token" | "user" | "article"
+  moderationContract: TModContractKey
   infoText: string
   infoState?: string
   flags: IOptions[]

@@ -8,8 +8,8 @@ export function Logo({}: Props) {
       <img src="/images/logo.svg" alt="fx logo" />
       <span>
         {" "}
-        <i className="fa-regular fa-copyright" aria-hidden /> 2022 fxhash
-        foundation
+        <i className="fa-regular fa-copyright" aria-hidden /> 2022-
+        {new Date().getFullYear()} fxhash foundation
       </span>
     </div>
   )

@@ -2,6 +2,7 @@ import { gql } from "@apollo/client"
 import { Frag_ArticleInfos } from "./article"
 import { Frag_MediaImage } from "./media"
 import { Frag_UserBadge } from "./user"
+import { Frag_MintTicketFull } from "./mint-ticket"
 
 export const Frag_GenPricing = gql`
   fragment Pricing on GenerativeToken {
@@ -88,6 +89,7 @@ export const Frag_GenTokenBadge = gql`
     name
     thumbnailUri
     displayUri
+    labels
     captureMedia {
       ...MediaImage
     }
@@ -101,6 +103,8 @@ export const Frag_GenTokenInfo = gql`
   fragment TokenInfo on GenerativeToken {
     ...TokenBadge
     id
+    version
+    inputBytesSize
     slug
     flag
     labels
@@ -112,6 +116,9 @@ export const Frag_GenTokenInfo = gql`
     createdAt
     reserves {
       amount
+    }
+    mintTicketSettings {
+      gracingPeriod
     }
     ...Pricing
   }

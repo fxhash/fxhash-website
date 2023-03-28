@@ -159,12 +159,8 @@ export const InputCaptureSettings: FunctionComponent<Props> = ({
       <h5>Extra settings</h5>
 
       <p>
-        <strong className={cs(colors.warning)}>
-          <i className="fas fa-flask" /> Warning: experimental feature
-        </strong>
-        <br />
         <span>Only use if your project meets </span>
-        <Link href="/doc/artist/guide-publish-generative-token#gpu-enabled-rendering">
+        <Link href="/doc/artist/project-settings#environment">
           <a target="_blank">certain criteria</a>
         </Link>
       </p>

@@ -22,7 +22,7 @@ import { CaptureSettings } from "../../types/Mint"
 import { InputCaptureSettings } from "../../components/Input/CaptureSettngs"
 import { validateCaptureSettings } from "../../utils/validations"
 import { LinkGuide } from "../../components/Link/LinkGuide"
-import { ipfsUrlWithHash } from "../../utils/ipfs"
+import { ipfsUrlWithHashAndParams } from "../../utils/ipfs"
 
 export const StepConfigureCapture: StepComponent = ({ onNext, state }) => {
   const [settings, setSettings] = useState<CaptureSettings>(
@@ -64,9 +64,10 @@ export const StepConfigureCapture: StepComponent = ({ onNext, state }) => {
 
   const captureTest = () => {
     post({
-      cid: ipfsUrlWithHash(
+      cid: ipfsUrlWithHashAndParams(
         state.cidUrlParams!,
         state.previewHash!,
+        state.previewInputBytes!,
         (cid) => cid
       ),
       mode: settings.mode,
@@ -93,6 +94,7 @@ export const StepConfigureCapture: StepComponent = ({ onNext, state }) => {
         canvasSelector: settings.canvasSelector,
         cidParams: state.cidUrlParams,
         previewHash: state.previewHash,
+        previewInputBytes: state.previewInputBytes,
         authHash: state.authHash1,
       })
     }
@@ -134,7 +136,10 @@ export const StepConfigureCapture: StepComponent = ({ onNext, state }) => {
         module.
         <br />
         Read more about the different{" "}
-        <LinkGuide href="/doc/artist/capture-settings" newTab={true}>
+        <LinkGuide
+          href="/doc/artist/project-settings#capture-settings"
+          newTab={true}
+        >
           capture strategies in the guide
         </LinkGuide>
       </p>

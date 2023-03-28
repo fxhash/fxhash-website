@@ -1,0 +1,44 @@
+@import "../../../styles/Variables";
+
+.root {
+  margin-bottom: var(--fxl-spacing);
+  .title {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    h1 {
+      flex: 1;
+      display: block;
+      font-size: var(--font-size-h4);
+      margin-bottom: var(--fxl-spacing-xxs);
+    }
+    .button_hide {
+      background: transparent;
+      border: 0;
+      font-weight: 400;
+      color: var(--fxl-color-light1);
+      width: 30px;
+      text-align: center;
+      font-size: 22px;
+      transform: rotate(-90deg);
+      cursor: pointer;
+      transition: 0.2s all ease-out;
+
+      &:hover {
+        color: var(--fxl-color-light);
+      }
+    }
+  }
+  small {
+    font-size: var(font-size-small);
+    color: var(--fxl-color-text-secondary);
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .root {
+    .title .button_hide {
+      transform: rotate(180deg);
+    }
+  }
+}

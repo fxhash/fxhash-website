@@ -16,10 +16,15 @@ body {
   --color-primary: #FF005C;
   --color-secondary: #7000FF;
   --color-secondary-light: #b174ff;
+  --color-secondary-vlight: #7e1aff;
+  --color-secondary-dark: #5a00cc;
   --color-success: #00eda0;
+  --color-success-light: #00eda042;
+  --color-success-dark: #00281b;
   --color-error: #eb1b1b;
   --color-error-20: rgba(255, 0, 0, 0.2);
   --color-warning: #ffc300;
+  --color-warning-light: #ffc3003b;
   --color-gray-vvvlight: #f1f1f1;
   --color-gray-vvlight: #e7e7e7;
   --color-gray-vlight: #d3d3d3;
@@ -33,6 +38,8 @@ body {
   --color-border: #000000;
   --color-border-input: #000000;
   --color-donator: #3496eb;
+  --color-info: rgba(0, 154, 255, 0.8);
+  --color-info-light: rgba(0, 154, 255, 0.18);
 
   --layout-margin-big-lg: 80px;
   --layout-margin-small-lg: 30px;
@@ -55,8 +62,10 @@ body {
   --font-size-h5: 1.25rem;
   --font-size-h4: 1.5625rem;
   --font-size-h3: 2rem;
-  --font-size-h2: 2.4375rem;
+  --font-size-h2: 2.5rem;
   --font-size-h1: 3rem;
+
+  --font-size-paragraph: 1.3125rem;
 
   --font-family-primary: "Fira Code", monospace;
 
@@ -64,6 +73,54 @@ body {
   --cards-shadow: 19px;
   --cards-gap: 30px;
   --cards-size: 270px;
+
+  --fxl-color-light: #ffffff;
+  --fxl-color-light0: #bbbbbb;
+  --fxl-color-light1: #727272;
+  --fxl-color-light2: #363636;
+  --fxl-color-dark: #000000;
+  --fxl-color-dark0: #111111;
+  --fxl-color-dark1: #181818;
+  --fxl-color-dark2: #1c1c1c;
+  --fxl-color-background1: #f8f8f8;
+  --fxl-color-background2: var(--color-gray-vvvlight);
+  --fxl-color-background3: var(--color-gray-vvlight);
+
+  --fxl-font-family: var(--font-family-primary);
+  --fxl-color-primary: var(--color-primary);
+  --fxl-color-primary-light: var(--color-primary);
+  --fxl-color-secondary: var(--color-secondary);
+  --fxl-color-secondary-light: var(--color-secondary-light);
+  --fxl-color-background: var(--color-white);
+  --fxl-color-background-hover: var(--color-white);
+  --fxl-color-text-primary: var(--color-black);
+  --fxl-color-text-primary-hover: var(--color-dark1);
+  --fxl-color-text-secondary: var(--color-black);
+
+  --fxl-color-panel-background: var(--fxl-color-dark);
+
+  --fxl-font-size-xs: var(--font-size-vsmall);
+  --fxl-font-size-s: var(--font-size-small);
+  --fxl-font-size-regular: var(--font-size-regular);
+  --fxl-font-size-m: var(--font-size-big);
+  --fxl-font-size-l: var(--font-size-h4);
+
+  --fxl-spacing: #{$spacing};
+  --fxl-spacing-sm: #{$spacing-small};
+  --fxl-spacing-xs: #{$spacing-x-small};
+  --fxl-spacing-xxs: #{$spacing-2x-small};
+  --fxl-spacing-l: #{$spacing-large};
+  --fxl-spacing-xl: #{$spacing-x-large};
+  --fxl-spacing-xxl: #{$spacing-2x-large};
+  
+  --spacing: #{$spacing};
+  --spacing-sm: #{$spacing-small};
+  --spacing-xs: #{$spacing-x-small};
+  --spacing-xxs: #{$spacing-2x-small};
+  --spacing-l: #{$spacing-large};
+  --spacing-xl: #{$spacing-x-large};
+  --spacing-xxl: #{$spacing-2x-large};
+
 }
 
 .dark {
@@ -78,8 +135,14 @@ body {
   --color-gray-dark: #999999;
   --color-secondary: #c8ff00;
   --color-secondary-light: #7b9811;
+  --color-secondary-vlight: #7b9811;
   --color-border: #0f0f0f;
   --color-border-input: #7e7e7e;
+  --fxl-color-text-primary: var(--color-black);
+  --fxl-color-background1: var(--color-gray-vvvlight);
+  --fxl-color-background2: var(--color-gray-vvlight);
+  --fxl-color-background3: var(--color-gray-vlight);
+  --fxl-color-light2: var(--color-gray-light);
 }
 
 ::-webkit-scrollbar {

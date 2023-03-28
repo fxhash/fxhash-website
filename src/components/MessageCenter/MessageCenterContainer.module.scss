@@ -2,6 +2,7 @@
 
 .root {
   position: fixed;
+  z-index: 50;
   bottom: 10px;
   right: 10px;
   width: min(400px, 100%);

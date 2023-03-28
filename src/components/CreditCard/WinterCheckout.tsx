@@ -30,6 +30,7 @@ interface Props {
   assetId?: string
   paymentMethod?: string
   appearance?: Record<string, string | number | undefined>
+  additionalPurchaseParams?: Record<string, any>
   onClose?: () => void
   onSuccess?: TSuccess
   onFinish: (data: any) => void
@@ -45,6 +46,7 @@ const WinterCheckout: FunctionComponent<Props> = (props) => {
     contractAddress,
     tokenId,
     onFinish,
+    additionalPurchaseParams,
   } = props
   const [projectUrl, setProjectUrl] = useState("")
 
@@ -99,7 +101,12 @@ const WinterCheckout: FunctionComponent<Props> = (props) => {
       }
     })
 
-    const paramsObj = ["extraMintParams", "priceFunctionParams", "appearance"]
+    const paramsObj = [
+      "extraMintParams",
+      "priceFunctionParams",
+      "appearance",
+      "additionalPurchaseParams",
+    ]
     paramsObj.forEach((param) => {
       const propValue = props[param as keyof PropsWithChildren<Props>]
       if (propValue) {

@@ -67,6 +67,10 @@ export const clientSideClient = new ApolloClient({
             keyArgs: ["sort", "featureFilters", "filters"],
             merge: cacheMergePaginatedField,
           },
+          mintTickets: {
+            keyArgs: ["filters", "sort"],
+            merge: cacheMergePaginatedField,
+          },
         },
       },
       User: {
@@ -118,6 +122,10 @@ export const clientSideClient = new ApolloClient({
             keyArgs: ["sort", "filters"],
             merge: cacheMergePaginatedField,
           },
+          // mintTickets: {
+          //   keyArgs: ["sort", "filters"],
+          //   merge: cacheMergePaginatedField,
+          // },
         },
       },
     },

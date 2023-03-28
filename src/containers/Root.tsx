@@ -15,7 +15,11 @@ import { matchRule } from "../utils/regex"
 import { IndexerStatusProvider } from "../context/IndexerStatus"
 import { IndexerStatus, NetworkStatus } from "../types/IndexerStatus"
 import { ModalProvider } from "../context/Modal"
+
 const EXCLUDE_LAYOUT = [
+  "/generative/slug/[slug]/ticket/[ticketId]/mint",
+  "/generative/[id]/explore-params",
+  "/generative/slug/[slug]/explore-params",
   "/generative/[id]/enjoy",
   "/u/[name]/collection/enjoy",
   "/pkh/[id]/collection/enjoy",
@@ -43,8 +47,8 @@ export function Root({
   return (
     <ApolloProvider client={clientSideClient}>
       <SettingsProvider>
-        <UserProvider>
-          <MessageCenterProvider>
+        <MessageCenterProvider>
+          <UserProvider>
             <IndexerStatusProvider
               indexerStatus={indexerStatus}
               networkStatus={networkStatus}
@@ -57,8 +61,8 @@ export function Root({
                 </ModalProvider>
               </CyclesProvider>
             </IndexerStatusProvider>
-          </MessageCenterProvider>
-        </UserProvider>
+          </UserProvider>
+        </MessageCenterProvider>
       </SettingsProvider>
     </ApolloProvider>
   )

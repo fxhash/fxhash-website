@@ -26,6 +26,14 @@
 
 .mint_progress {
   font-size: var(--font-size-small);
+  margin-top: 8px;
+}
+
+.labels {
+  margin-top: 4px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
 }
 
 @media (max-width: $breakpoint-sm) {

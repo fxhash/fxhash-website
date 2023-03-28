@@ -7,7 +7,10 @@ interface Props {
 }
 export function Label({ definition }: Props) {
   return (
-    <div className={cs(style.root, style[`group_${definition.group}`])}>
+    <div
+      className={cs(style.root, style[`group_${definition.group}`])}
+      title={definition.description || definition.label}
+    >
       {definition.shortLabel}
     </div>
   )

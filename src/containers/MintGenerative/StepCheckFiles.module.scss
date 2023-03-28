@@ -9,6 +9,10 @@
     flex: 1 0 0;
   }
 }
+.artworkWrapper {
+  position: sticky;
+  top: 0;
+}
 
 .artwork {
   width: 100%;
@@ -38,6 +42,10 @@
 }
 
 @media (max-width: $breakpoint-sm) {
+  .artworkWrapper {
+    position: static;
+    top: 0;
+  }
   .container {
     flex-direction: column;
   }

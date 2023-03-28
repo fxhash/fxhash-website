@@ -14,6 +14,9 @@ export function transformGenTokDistribFormToNumbers(
     royalties: Math.floor(parseFloat(input.royalties!) * 10),
     pricing: transformPricingFormToNumbers(input.pricing),
     reserves: input.reserves as any,
+    gracingPeriod: input.gracingPeriod
+      ? parseInt(input.gracingPeriod)
+      : undefined,
   }
 }
 
