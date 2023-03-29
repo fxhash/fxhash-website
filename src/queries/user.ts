@@ -51,13 +51,34 @@ export const Qu_userLight = gql`
   }
 `
 
-export const Qu_userAlerts = gql`
+export const Qu_userDailyAlerts = gql`
   query User($id: String, $name: String) {
     user(id: $id, name: $name) {
       id
       mintTickets {
         id
         taxationPaidUntil
+      }
+    }
+  }
+`
+
+export const Qu_userFrequentAlerts = gql`
+  query User($id: String, $name: String) {
+    user(id: $id, name: $name) {
+      id
+      offersReceived(filters: { active_eq: true }) {
+        id
+        createdAt
+        price
+        objkt {
+          name
+          issuer {
+            marketStats {
+              floor
+            }
+          }
+        }
       }
     }
   }

@@ -1,4 +1,5 @@
 import { MessageProps } from "components/MessageCenter/Message"
+import { ISettingsContext } from "context/Theme"
 import { addDays, formatDistanceStrict, isAfter, isBefore } from "date-fns"
 import { useIntervalValue } from "hooks/useIntervalValue"
 import Link from "next/link"
@@ -51,8 +52,11 @@ const MintTicketAlert = ({
 
 export const createMintTicketAlert = (
   user: ConnectedUser,
+  settings: ISettingsContext,
   mintTickets: MintTicket[]
 ) => {
+  if (!settings.showMintTicketAlerts) return null
+
   // find mint tickets with taxation period expiring in the next 48 hours
   const expiringMintTickets = mintTickets.filter(
     (mintTicket) =>
