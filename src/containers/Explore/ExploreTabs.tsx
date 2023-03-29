@@ -8,7 +8,6 @@ import layout from "../../styles/Layout.module.scss"
 const definition: TabDefinition[] = [
   { name: "gallery", props: { href: "/explore" } },
   { name: "incoming", props: { href: "/explore/incoming" } },
-  { name: "articles", props: { href: "/explore/articles" } },
   { name: "reveal feed", props: { href: "/explore/reveal-feed" } },
 ]
 

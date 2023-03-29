@@ -1,37 +1,22 @@
 import Head from "next/head"
 import { GetServerSideProps, NextPage } from "next"
 import layout from "../../styles/Layout.module.scss"
-import style from "../../styles/GenerativeTokenDetails.module.scss"
 import cs from "classnames"
 import { createApolloClient } from "../../services/ApolloClient"
 import { GenerativeToken } from "../../types/entities/GenerativeToken"
 import { Spacing } from "../../components/Layout/Spacing"
 import { truncateEnd } from "../../utils/strings"
-import { useState } from "react"
 import { Qu_genToken } from "../../queries/generative-token"
-import { GenerativeActions } from "../../containers/Generative/Actions"
 import { GenerativeFlagBanner } from "../../containers/Generative/FlagBanner"
-import { TabDefinition, Tabs } from "../../components/Layout/Tabs"
-import { GenerativeIterations } from "../../containers/Generative/Iterations/GenerativeIterations"
 import { GenerativeDisplay } from "../../containers/Generative/Display/GenerativeDisplay"
 import { getImageApiUrl, OG_IMAGE_SIZE } from "../../components/Image"
-
-const tabs: TabDefinition[] = [
-  {
-    name: "iterations",
-  },
-  {
-    name: "activity",
-  },
-]
+import { GenerativeTokenTabs } from "../../containers/Generative/GenerativeTokenTabs"
 
 interface Props {
   token: GenerativeToken
 }
 
 const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
-  const [tabActive, setTabActive] = useState<number>(0)
-
   // get the display url for og:image
   const displayUrl =
     token.captureMedia?.cid &&
@@ -86,22 +71,7 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
       <Spacing size="6x-large" />
       <Spacing size="6x-large" sm="none" />
 
-      <Tabs
-        className={style.tabs}
-        activeIdx={tabActive}
-        tabDefinitions={tabs}
-        tabsLayout="fixed-size"
-        onClickTab={setTabActive}
-      />
-
-      {tabActive === 0 ? (
-        <GenerativeIterations token={token} />
-      ) : (
-        <main className={cs(layout["padding-big"])}>
-          <Spacing size="x-large" />
-          <GenerativeActions token={token} className={style.activity} />
-        </main>
-      )}
+      <GenerativeTokenTabs token={token} />
 
       <Spacing size="6x-large" />
       <Spacing size="6x-large" />

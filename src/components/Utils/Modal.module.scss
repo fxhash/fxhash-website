@@ -62,22 +62,22 @@
 @media (max-width: $breakpoint-sm) {
   .modal {
     left: 0;
-    top: 32px;
+    top: 16px;
     bottom: 0;
     right: 0;
     transform: none;
     max-width: none;
     display: flex;
     flex-direction: column;
-    max-height: calc(100% - 32px);
+    max-height: calc(100% - 16px);
     overflow: auto;
 
     header {
       background-color: var(--color-white);
       color: var(--color-black);
       span {
-        font-size: var(--font-size-h4);
-        padding: 32px 20px;
+        font-size: var(--font-size-h5);
+        padding: 16px 20px;
       }
     }
 
@@ -88,7 +88,7 @@
   .btn_close {
     width: auto;
     height: auto;
-    padding: 32px 20px;
+    padding: 16px 20px;
     font-size: 33px;
   }
 }

@@ -69,7 +69,7 @@ If you find a bug with the front end, you can create an issue.
 
 * `/articles` *[deprecated]*: markdown files, generated in html at build time, they populate the `about` tab of the website
 * `/components`: reusable components used multiple times in the app
-* `/containers`: bigger *building block* components. They often use multiple components and have some more complexe logic
+* `/containers`: bigger *building block* components. They often use multiple components and have some more complex logic
 * `/context`: react context
 * `/doc`: the articles from the doc - website doc is derived from this folder
 * `/hooks`: react hooks

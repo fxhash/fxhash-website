@@ -1,5 +1,5 @@
 import Head from "next/head"
-import { NextPageWithLayout } from "../../_app"
+import { NextPageWithLayout } from "../../../containers/App"
 import { LiveMintingEvent } from "../../../containers/LiveMinting/LiveMintingEvent"
 import { LiveMintingLayout } from "../../../containers/LiveMinting/LiveMintingLayout"
 

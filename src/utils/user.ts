@@ -139,6 +139,18 @@ export function processTzProfile(data: any): TzProfile | null {
 }
 
 export const UserDonationAliases: Record<string, Partial<User>> = {
+  KT1X1jyohFrZyDYWvCPXw9KvWxk2VDwxyg2g: {
+    id: "KT1X1jyohFrZyDYWvCPXw9KvWxk2VDwxyg2g",
+    name: "#TezQuakeAid",
+    descriptionLight:
+      "A Tezos community fundraiser to support relief efforts following the devastating earthquakes in Turkey and Syria.",
+    description:
+      "A Tezos community fundraiser to support relief efforts following the devastating earthquakes in Turkey and Syria.",
+    avatarUri: "ipfs://Qma8htuC4aZQkPW75Mtj5izwFrJcvna1giCbCg3ztC1e9y",
+    donationAddress: true,
+    flag: UserFlag.VERIFIED,
+  },
+
   tz2JuyvKDbsBvoFfaww7rcUb3qDpvTcZngeD: {
     id: "tz2JuyvKDbsBvoFfaww7rcUb3qDpvTcZngeD",
     name: "Girls Who Code",
@@ -320,6 +332,13 @@ export const UserAliases: Record<string, Partial<User>> = {
   },
 
   [process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_GENTK_V2!]: {
+    id: "The minter of each iteration will get some royalties",
+    name: "Minter",
+    platformOwned: true,
+    preventLink: true,
+  },
+
+  [process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_GENTK_V3!]: {
     id: "The minter of each iteration will get some royalties",
     name: "Minter",
     platformOwned: true,

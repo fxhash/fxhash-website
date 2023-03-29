@@ -11,13 +11,10 @@ interface Props {
   medias: IEditorMediaFile[]
   onMediaUriUpdate: (media: IEditorMediaFile, uri: string) => void
 }
-export function EditorMedias({
-  medias,
-  onMediaUriUpdate,
-}: Props) {
+export function EditorMedias({ medias, onMediaUriUpdate }: Props) {
   const mediasRef = useRef<EditorMediaRef[]>([])
   useEffect(() => {
-    mediasRef.current = mediasRef.current.slice(0, medias.length);
+    mediasRef.current = mediasRef.current.slice(0, medias.length)
   }, [medias])
 
   const hasLocalMedias = useMemo(() => {
@@ -46,9 +43,9 @@ export function EditorMedias({
         {medias.map((media, idx) => (
           <EditorMedia
             key={media.uri}
-            ref={ref => mediasRef.current[idx] = ref!}
+            ref={(ref) => (mediasRef.current[idx] = ref!)}
             media={media}
-            onChangeUri={uri => onMediaUriUpdate(media, uri)}
+            onChangeUri={(uri) => onMediaUriUpdate(media, uri)}
           />
         ))}
       </div>

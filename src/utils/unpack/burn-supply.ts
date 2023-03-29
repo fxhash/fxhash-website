@@ -1,5 +1,8 @@
 import type { BigNumber } from "bignumber.js"
-import { EBuildableParams, unpackBytes } from "../../services/parameters-builder/BuildParameters"
+import {
+  EBuildableParams,
+  unpackBytes,
+} from "../../services/parameters-builder/BuildParameters"
 import { TInputBurnSupply } from "../../services/parameters-builder/burn-supply/input"
 import { transformBurnSupplyBigNumbers } from "../unpack-transformers/burn-supply"
 

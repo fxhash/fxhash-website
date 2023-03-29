@@ -2,7 +2,7 @@ import style from "./Sandbox.module.scss"
 import cs from "classnames"
 import { ArtworkIframeRef } from "../../components/Artwork/PreviewIframe"
 import { Dropzone } from "../../components/Input/Dropzone"
-import { useState, useMemo, useRef } from "react"
+import { useState, useMemo, useRef, useEffect, useCallback } from "react"
 import { Button } from "../../components/Button"
 import { Spacing } from "../../components/Layout/Spacing"
 import { FileList } from "./FileList"
@@ -15,15 +15,22 @@ import { generateFxHash } from "../../utils/hash"
 import { RawTokenFeatures } from "../../types/Metadata"
 import { RawFeatures } from "../../components/Features/RawFeatures"
 import { ArtworkFrame } from "../../components/Artwork/ArtworkFrame"
+import { Controls } from "components/FxParams/Controls"
+import { serializeParams, stringifyParamsData } from "components/FxParams/utils"
+import { ControlsTest, ControlsTestRef } from "components/Testing/ControlsTest"
+import { FxParamDefinition, FxParamType } from "components/FxParams/types"
+import { useReceiveTokenInfos } from "hooks/useReceiveTokenInfos"
 
 export function Sandbox() {
   const artworkIframeRef = useRef<ArtworkIframeRef>(null)
+  const paramControlsRef = useRef<ControlsTestRef>(null)
+  const { onIframeLoaded, params, hash, features, setHash } =
+    useReceiveTokenInfos(artworkIframeRef)
   const [file, setFile] = useState<File | null>(null)
-  const [hash, setHash] = useState<string>(generateFxHash())
   const [filesRecord, setFilesRecord] = useState<SandboxFiles | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [url, setUrl] = useState<string | null>(null)
-  const [features, setFeatures] = useState<RawTokenFeatures | null>(null)
+  const [data, setData] = useState<Record<string, any>>({})
 
   const fileList = useMemo<string[] | null>(
     () => (filesRecord ? Object.keys(filesRecord) : null),
@@ -53,21 +60,13 @@ export function Sandbox() {
     }
   }
 
-  const iframeLoaded = () => {
-    if (artworkIframeRef.current) {
-      const iframe = artworkIframeRef.current.getHtmlIframe()
-      if (iframe) {
-        // @ts-ignore
-        if (iframe.contentWindow?.$fxhashFeatures) {
-          // @ts-ignore
-          // process the raw features
-          setFeatures(iframe.contentWindow?.$fxhashFeatures)
-        } else {
-          setFeatures(null)
-        }
-      }
-    }
+  const handleSubmitParams = (params: Record<string, any>) => {
+    setData(params)
   }
+
+  const fxparamsBytes = useMemo(() => {
+    return serializeParams(data, params)
+  }, [stringifyParamsData(data), params])
 
   return (
     <section
@@ -136,14 +135,25 @@ export function Sandbox() {
                 }}
               />
             </div>
-
+            {params && (
+              <div>
+                <Spacing size="2x-large" />
+                <h5>Params</h5>
+                <Spacing size="small" />
+                <ControlsTest
+                  params={params}
+                  onSubmit={handleSubmitParams}
+                  ref={paramControlsRef}
+                />
+              </div>
+            )}
             <Spacing size="2x-large" />
-
             <div>
               <h5>Features</h5>
               <Spacing size="small" />
               <RawFeatures rawFeatures={features} />
             </div>
+            <Spacing size="2x-large" />
           </div>
         ) : (
           <div className={cs(style["drag-container"])}>
@@ -168,37 +178,39 @@ export function Sandbox() {
           </div>
         )}
       </div>
-
-      <div className={cs(style.artwork)}>
-        <div className={cs(style["iframe-container"])}>
-          <div className={cs(style["iframe-wrapper"])}>
-            <ArtworkFrame>
-              <SandboxPreview
-                hash={hash}
-                ref={artworkIframeRef}
-                record={filesRecord || undefined}
-                textWaiting="Waiting for content to be reachable"
-                onUrlUpdate={setUrl}
-                onLoaded={iframeLoaded}
-              />
-            </ArtworkFrame>
+      <div className={cs(style.artworkWrapper)}>
+        <div className={cs(style.artwork)}>
+          <div className={cs(style["iframe-container"])}>
+            <div className={cs(style["iframe-wrapper"])}>
+              <ArtworkFrame>
+                <SandboxPreview
+                  hash={hash}
+                  fxparams={fxparamsBytes}
+                  ref={artworkIframeRef}
+                  record={filesRecord || undefined}
+                  textWaiting="Waiting for content to be reachable"
+                  onUrlUpdate={setUrl}
+                  onLoaded={onIframeLoaded}
+                />
+              </ArtworkFrame>
+            </div>
           </div>
-        </div>
 
-        {url && (
-          <Button
-            isLink
-            // @ts-ignore
-            href={url}
-            target="_blank"
-            size="small"
-            className={style.button}
-            iconComp={<i aria-hidden className="fas fa-external-link-alt" />}
-            iconSide="right"
-          >
-            open live
-          </Button>
-        )}
+          {url && (
+            <Button
+              isLink
+              // @ts-ignore
+              href={url}
+              target="_blank"
+              size="small"
+              className={style.button}
+              iconComp={<i aria-hidden className="fas fa-external-link-alt" />}
+              iconSide="right"
+            >
+              open live
+            </Button>
+          )}
+        </div>
       </div>
     </section>
   )

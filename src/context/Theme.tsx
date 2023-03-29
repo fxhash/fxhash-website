@@ -9,6 +9,7 @@ import { useClientEffect } from "../utils/hookts"
 import style from "./Theme.module.scss"
 import cs from "classnames"
 import isMobile from "is-mobile"
+import { MarketplaceSortOption } from "containers/Marketplace/GenerativeListings"
 
 export interface ISettingsProperties {
   // display
@@ -16,18 +17,26 @@ export interface ISettingsProperties {
   spaceBetweenCards: number
   displayPricesCard: boolean
   displayBurntCard: boolean
-  cardSize: {[scope: string]: number }
+  cardSize: { [scope: string]: number }
   displayInfosGenerativeCard: boolean
   displayInfosGentkCard: boolean
   borderWidthCards: number
   shadowCards: number
   hoverEffectCard: boolean
+  // mint ticket
+  showTicketPreMintWarning: boolean
+
   // performances
   quality: number
   topBannerMessage: string
   nsfw: boolean
   epilepsy: boolean
   layoutMasonry: boolean
+  preferredMarketplaceSorting: MarketplaceSortOption
+  // notifications
+  showMintTicketAlerts: boolean
+  showOfferAlerts: boolean
+  offerAlertsFloorThreshold: number
 }
 
 const Colors = {
@@ -112,6 +121,13 @@ const defaultProperties: ISettingsProperties = {
   nsfw: false,
   epilepsy: hasReducedMotion && hasReducedMotion.matches,
   layoutMasonry: false,
+  preferredMarketplaceSorting: "listingCreatedAt-desc",
+  // fx(params)
+  showTicketPreMintWarning: true,
+  // notifications
+  showMintTicketAlerts: true,
+  showOfferAlerts: true,
+  offerAlertsFloorThreshold: 0.5,
 }
 
 const defaultCtx: ISettingsContext = {
@@ -123,6 +139,9 @@ const defaultCtx: ISettingsContext = {
 }
 
 export const SettingsContext = React.createContext<ISettingsContext>(defaultCtx)
+
+export const useSettingsContext = () =>
+  React.useContext<ISettingsContext>(SettingsContext)
 
 export function SettingsProvider({ children }: PropsWithChildren<{}>) {
   const [context, setContext] = useState<ISettingsContext>(defaultCtx)

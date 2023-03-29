@@ -4,6 +4,6 @@ export interface MediaImage {
   height?: number
   metadata?: {} | null
   mimeType?: string
-  placeholder?: string 
+  placeholder?: string
   processed: boolean
 }

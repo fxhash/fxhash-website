@@ -28,5 +28,7 @@ export interface ITezosStoragePointer {
 
 // a list of the optional tezos storage pointer keys
 export const OptionalTezosStoragePointerKeys: (keyof ITezosStoragePointer)[] = [
-  "storage_type", "data_spec", "value_path"
+  "storage_type",
+  "data_spec",
+  "value_path",
 ]

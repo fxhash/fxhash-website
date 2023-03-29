@@ -1,4 +1,10 @@
-import { ContractAbstraction, OpKind, Wallet, WalletOperation } from "@taquito/taquito"
+import {
+  ContractAbstraction,
+  OpKind,
+  Wallet,
+  WalletOperation,
+} from "@taquito/taquito"
+import { getGentkLocalIDFromObjkt } from "utils/entities/gentk"
 import { FxhashContracts } from "../../types/Contracts"
 import { Objkt } from "../../types/entities/Objkt"
 import { displayMutez } from "../../utils/units"
@@ -13,7 +19,7 @@ export type TOfferOperationParams = {
  * List a gentk on the Marketplace
  */
 export class OfferOperation extends ContractOperation<TOfferOperationParams> {
-  marketplaceContract: ContractAbstraction<Wallet>|null = null
+  marketplaceContract: ContractAbstraction<Wallet> | null = null
 
   async prepare() {
     this.marketplaceContract = await this.manager.getContract(
@@ -22,19 +28,25 @@ export class OfferOperation extends ContractOperation<TOfferOperationParams> {
   }
 
   async call(): Promise<WalletOperation> {
+    // recent V3 tokens have an ID of "FXN-{id}", so we need to extract the ID
+    // part only for these recent tokens
+    const id = getGentkLocalIDFromObjkt(this.params.token)
+
     return this.marketplaceContract!.methodsObject.offer({
       gentk: {
-        id: this.params.token.id,
+        id: id,
         version: this.params.token.version,
       },
       price: this.params.price,
     }).send({
       mutez: true,
-      amount: this.params.price
+      amount: this.params.price,
     })
   }
 
   success(): string {
-    return `You have made an offer of ${displayMutez(this.params.price)} tez on ${this.params.token.name}`
+    return `You have made an offer of ${displayMutez(
+      this.params.price
+    )} tez on ${this.params.token.name}`
   }
 }

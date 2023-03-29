@@ -1,5 +1,8 @@
 import type { BigNumber } from "bignumber.js"
-import { EBuildableParams, unpackBytes } from "../../services/parameters-builder/BuildParameters"
+import {
+  EBuildableParams,
+  unpackBytes,
+} from "../../services/parameters-builder/BuildParameters"
 import { TInputUpdateIssuer } from "../../services/parameters-builder/update-issuer/input"
 import { transformUpdateIssuerBigNumbers } from "../unpack-transformers/update-issuer"
 

@@ -1,18 +1,24 @@
-import React, { PropsWithChildren, useState, useCallback, useRef, useEffect, useMemo } from "react"
+import React, {
+  PropsWithChildren,
+  useState,
+  useMemo,
+  ReactElement,
+} from "react"
 import { MessageCenterContainer } from "../components/MessageCenter/MessageCenterContainer"
-
 
 type TMessageType = "success" | "warning" | "error"
 
 export interface IMessageSent {
   type: TMessageType
   title: string
-  content?: string|null
+  content?: ((onRemove: () => void) => ReactElement) | string | null
+  keepAlive?: boolean
 }
 
 export interface IMessage extends IMessageSent {
   id: string
   createdAt: number
+  keepAlive: boolean
 }
 
 interface IMessageCenterContext {
@@ -39,11 +45,12 @@ const defaultCtx: IMessageCenterContext = {
   ...defaultProperties,
 }
 
-export const MessageCenterContext = React.createContext<IMessageCenterContext>(defaultCtx)
+export const MessageCenterContext =
+  React.createContext<IMessageCenterContext>(defaultCtx)
 
 export function MessageCenterProvider({ children }: PropsWithChildren<{}>) {
   const [context, setContext] = useState<IMessageCenterContext>(defaultCtx)
-  
+
   // memoize to prevent rerendering JIC
   const memoizedContext = useMemo<IMessageCenterContext>(() => {
     // adds a message to the list of messages to display
@@ -51,40 +58,36 @@ export function MessageCenterProvider({ children }: PropsWithChildren<{}>) {
       if (!(context.ignoreWarnings && message.type === "warning")) {
         const toAdd: IMessage = {
           ...message,
-          id: ""+Math.random(),
+          id: "" + Math.random(),
           createdAt: performance.now(),
+          keepAlive: message.keepAlive || false,
         }
         setContext({
           ...context,
-          messages: [
-            ...context.messages,
-            toAdd,
-          ]
+          messages: [...context.messages, toAdd],
         })
       }
     }
 
     const addMessages = (messages: IMessageSent[]) => {
       const toAdd: IMessage[] = messages
-        .filter(
-          message => context.ignoreWarnings ? message.type !== "warning" : true
+        .filter((message) =>
+          context.ignoreWarnings ? message.type !== "warning" : true
         )
-        .map(message => ({
+        .map((message) => ({
           ...message,
-          id: ""+Math.random(),
+          id: "" + Math.random(),
           createdAt: performance.now(),
+          keepAlive: message.keepAlive || false,
         }))
       setContext({
         ...context,
-        messages: [
-          ...context.messages,
-          ...toAdd,
-        ]
+        messages: [...context.messages, ...toAdd],
       })
     }
 
     const removeMessage = (id: string) => {
-      const messages = context.messages.filter(message => message.id !== id)
+      const messages = context.messages.filter((message) => message.id !== id)
       setContext({
         ...context,
         messages,

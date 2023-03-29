@@ -2,7 +2,7 @@
 
 .form {
   display: flex;
-	flex-direction: column;
+  flex-direction: column;
 }
 
 .field {
@@ -11,11 +11,12 @@
   position: relative;
   width: 100%;
 
-  & + .field, & + .fieldset {
+  &+.field,
+  &+.fieldset {
     margin-top: var(--layout-margin-md);
   }
 
-  & > label {
+  &>label {
     display: flex;
     flex-direction: column;
     gap: 5px;
@@ -37,8 +38,15 @@
   padding: 15px 0;
   position: relative;
 
+  &+.field,
+  &+.fieldset {
+    margin-top: var(--layout-margin-md);
+  }
+
   .field {
-    & + .field, & + .fieldset {
+
+    &+.field,
+    &+.fieldset {
       margin-top: var(--layout-margin-small-lg);
     }
   }
@@ -60,7 +68,7 @@
     }
   }
 
-  & > small {
+  &>small {
     font-size: 1rem;
     color: var(--color-gray);
     margin-top: var(--layout-margin-small-md);
@@ -86,10 +94,13 @@
 
 @media (max-width: $breakpoint-sm) {
   .field {
-    & + .field, & + .fieldset {
+
+    &+.field,
+    &+.fieldset {
       margin-top: 16px;
     }
-    & > label {
+
+    &>label {
       margin-bottom: $spacing;
     }
   }

@@ -4,43 +4,17 @@ import Link from "next/link"
 import { Logo } from "./Logo"
 import { IndexerStatusLabel } from "../../components/Status/IndexerStatusLabel"
 import { useIndexerStatusSeverity } from "../../hooks/useIndexerStatusSeverity"
-
-interface SocialProps {
-  icon: string
-  url: string
-}
-
-function FooterSocial({ icon, url }: SocialProps) {
-  return (
-    <Link href={url}>
-      <a>
-        <i aria-hidden className={`fab fa-${icon}`} />
-      </a>
-    </Link>
-  )
-}
+import layout from "../../styles/Layout.module.scss"
+import { ConnectWithUs } from "../../components/ConnectWithUs/ConnectWithUs"
 
 export function Footer() {
   const severity = useIndexerStatusSeverity()
   return (
-    <footer className={cs(style.footer)}>
+    <footer className={cs(style.footer, layout["padding-big"])}>
       <div className={cs(style.content)}>
         <div className={cs(style.logo_wrapper)}>
           <Logo />
-          <div className={cs(style.socials)}>
-            <FooterSocial
-              icon="twitter"
-              url={process.env.NEXT_PUBLIC_URL_TWITTER!}
-            />
-            <FooterSocial
-              icon="instagram"
-              url={process.env.NEXT_PUBLIC_URL_INSTAGRAM!}
-            />
-            <FooterSocial
-              icon="discord"
-              url={process.env.NEXT_PUBLIC_URL_DISCORD!}
-            />
-          </div>
+          <ConnectWithUs className={style.connect} />
         </div>
         <div>
           <div className={cs(style.links)}>
@@ -50,14 +24,21 @@ export function Footer() {
             <Link href="/doc/fxhash/integration-guide">
               <a>3rd party integration</a>
             </Link>
+            <Link href="/community/reports">
+              <a>Tokens reported</a>
+            </Link>
+          </div>
+        </div>
+        <div>
+          <div className={cs(style.links)}>
             <Link href="/doc/legal/terms.pdf">
               <a target="_blank">Terms and conditions (english soon)</a>
             </Link>
             <Link href="/doc/legal/referencement.pdf">
               <a target="_blank">Referencing (english soon)</a>
             </Link>
-            <Link href="https://feedback.fxhash.xyz">
-              <a target="_blank">Feature request</a>
+            <Link href="/doc/legal/privacy-policy-02-2023.pdf">
+              <a target="_blank">Privacy policy</a>
             </Link>
             <Link href="https://join.com/companies/fxhash">
               <a target="_blank">Career opportunities</a>
@@ -65,8 +46,9 @@ export function Footer() {
             <Link href="/press-kit">
               <a>Press kit</a>
             </Link>
+
             <Link href="/status">
-              <a>
+              <a className={style.indexer}>
                 <IndexerStatusLabel
                   severity={severity}
                   label="Indexer status"
@@ -74,54 +56,19 @@ export function Footer() {
               </a>
             </Link>
           </div>
-        </div>
-      </div>
-      <div className={cs(style.powered)}>
-        <span>
-          powered by{" "}
-          <a href="https://tzkt.io/" target="_blank" rel="noreferrer">
-            tzkt
-          </a>{" "}
-          &amp;{" "}
-          <a href="https://smartpy.io/" target="_blank" rel="noreferrer">
-            SmartPy
-          </a>
-        </span>
-      </div>
-    </footer>
-  )
-  return (
-    <footer className={cs(style.footer)}>
-      <div className={cs(style.content)}>
-        <h1>art is evolving</h1>
-        <div className={cs(style.details)}>
-          <span>and we were born to witness it</span>
-          <div className={cs(style.socials)}>
-            <FooterSocial
-              icon="twitter"
-              url={process.env.NEXT_PUBLIC_URL_TWITTER!}
-            />
-            <FooterSocial
-              icon="instagram"
-              url={process.env.NEXT_PUBLIC_URL_INSTAGRAM!}
-            />
-            <FooterSocial
-              icon="discord"
-              url={process.env.NEXT_PUBLIC_URL_DISCORD!}
-            />
+          <div className={cs(style.powered)}>
+            <span>
+              powered by{" "}
+              <a href="https://tzkt.io/" target="_blank" rel="noreferrer">
+                tzkt
+              </a>{" "}
+              &amp;{" "}
+              <a href="https://smartpy.io/" target="_blank" rel="noreferrer">
+                SmartPy
+              </a>
+            </span>
           </div>
         </div>
-      </div>
-      <div className={cs(style.powered)}>
-        <span>
-          <Link href="/fix-gentk">
-            <a>🚑 FIX Gentk 🚑</a>
-          </Link>
-        </span>
-        <span>
-          powered by <a href="https://tzkt.io/">TzTK API</a> &amp;{" "}
-          <a href="https://smartpy.io/">SmartPy</a>
-        </span>
       </div>
     </footer>
   )

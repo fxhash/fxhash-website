@@ -14,7 +14,7 @@ import { User } from "../../types/entities/User"
 import { Cover } from "../Utils/Cover"
 import { LiveMintingContext } from "../../context/LiveMinting"
 import { IReserveConsumption } from "../../services/contract-operations/Mint"
-import { ButtonIcon } from "components/Button/ButtonIcon"
+import { ButtonPaymentCard } from "../Utils/ButtonPaymentCard"
 
 /**
  * The Mint Button displays a mint button component with specific display rules
@@ -75,13 +75,6 @@ export function MintButton({
   // conditions required to show the regular mint button
   const isMintButton =
     !isMintDropdown && ((userEligible && onlyReserveLeft) || !onlyReserveLeft)
-
-  console.log({
-    hasCreditCardOption,
-    loading,
-    userEligible,
-    onlyReserveLeft,
-  })
 
   return isMintButton || isMintDropdown ? (
     <>
@@ -157,19 +150,11 @@ export function MintButton({
           )}
         </div>
 
-        {hasCreditCardOption && !loading && !(userEligible && onlyReserveLeft) && (
-          <Button
-            type="button"
-            size="regular"
-            disabled={disabled}
-            onClick={openCreditCard}
-            color="secondary"
-            title="Pay with your credit card"
-            className={cs(style.credit_card_btn)}
-          >
-            <i className={cs("fa-sharp fa-solid fa-credit-card")} aria-hidden />
-          </Button>
-        )}
+        {hasCreditCardOption &&
+          !loading &&
+          !(userEligible && onlyReserveLeft) && (
+            <ButtonPaymentCard onClick={openCreditCard} disabled={disabled} />
+          )}
       </div>
 
       {showDropdown && (

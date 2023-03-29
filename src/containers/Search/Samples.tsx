@@ -111,9 +111,10 @@ export const samples: Record<Exclude<SearchTabKey, "summary">, Sample<any>> = {
                   displayDetails={settings.displayInfosGenerativeCard}
                 />
               ))}
-              {loading && CardsLoading({
-                number: ITEMS_PER_PAGE,
-              })}
+              {loading &&
+                CardsLoading({
+                  number: ITEMS_PER_PAGE,
+                })}
             </CardsContainer>
           </div>
         )
@@ -177,9 +178,10 @@ export const samples: Record<Exclude<SearchTabKey, "summary">, Sample<any>> = {
                 listings.map((offer) => (
                   <ObjktCard key={offer.id} objkt={offer.objkt} />
                 ))}
-              {loading && CardsLoading({
-                number: ITEMS_PER_PAGE,
-              })}
+              {loading &&
+                CardsLoading({
+                  number: ITEMS_PER_PAGE,
+                })}
             </CardsContainer>
           </div>
         )

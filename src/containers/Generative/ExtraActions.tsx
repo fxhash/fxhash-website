@@ -1,29 +1,18 @@
 import style from "./ExtraActions.module.scss"
 import cs from "classnames"
-import colors from "../../styles/Colors.module.css"
-import text from "../../styles/Text.module.css"
 import { Dropdown } from "../../components/Navigation/Dropdown"
 import { useContext, useState } from "react"
-import { Modal } from "../../components/Utils/Modal"
-import { Button } from "../../components/Button"
 import { UserContext } from "../UserProvider"
-import { useContractCall } from "../../utils/hookts"
-import { ModerateCall, ReportCall } from "../../types/ContractCalls"
 import {
   GenerativeToken,
+  GenerativeTokenVersion,
   GenTokFlag,
 } from "../../types/entities/GenerativeToken"
-import { ContractFeedback } from "../../components/Feedback/ContractFeedback"
-import { Select } from "../../components/Input/Select"
-import { Form } from "../../components/Form/Form"
-import { Field } from "../../components/Form/Field"
-import { Spacing } from "../../components/Layout/Spacing"
 import { isTokenModerator } from "../../utils/user"
 import { User } from "../../types/entities/User"
-import Link from "next/link"
-import { InputModerationReason } from "../../components/Input/InputModerationReason"
 import { ModerationModal } from "../../components/Moderation/Modal/ModerationModal"
 import { EditLabelsModal } from "./Moderation/EditLabelsModal"
+import { ReportModal } from "components/Moderation/Report/ReportModal"
 
 function OpenButton() {
   return <i aria-hidden className="fas fa-ellipsis-h" />
@@ -40,74 +29,20 @@ export function GenerativeExtraActions({ token }: Props) {
   const [moderateModal, setModerateModal] = useState<boolean>(false)
   const [editLabelsModal, setEditLabelsModal] = useState<boolean>(false)
 
-  const {
-    state: callState,
-    loading: contractLoading,
-    success,
-    call,
-    error: contractError,
-  } = useContractCall<ReportCall>(userCtx.walletManager!.report)
-
-  const report = () => {
-    call({
-      tokenId: token.id,
-    })
-  }
-
   return (
     <>
       {reportModal && (
-        <Modal
-          title="Do you want to report this Generative Token ?"
-          onClose={() => setReportModal(false)}
-        >
-          <em className={cs(colors.gray)}>
-            Thank you for taking the time to make the platform a safer place for
-            the community !
-          </em>
-          <p>
-            If 10 users report this Generative Token over a 1 hour period, then
-            it will be removed from the front-end until a trusted member
-            moderates the Token and assert if whether or not it violates the
-            code of conduct of the platform.
-          </p>
-
-          <div className={cs(style.reports_bottom)}>
-            <ContractFeedback
-              state={callState}
-              loading={contractLoading}
-              success={success}
-              error={contractError}
-              successMessage="Token was reported !"
-            />
-
-            <div className={cs(style.report_btns)}>
-              {!contractLoading && (
-                <Button
-                  color="transparent"
-                  size="small"
-                  onClick={() => setReportModal(false)}
-                >
-                  cancel report
-                </Button>
-              )}
-              <Button
-                color="primary"
-                size="small"
-                onClick={report}
-                state={contractLoading ? "loading" : "default"}
-              >
-                report the token
-              </Button>
-            </div>
-          </div>
-        </Modal>
+        <ReportModal token={token} onClose={() => setReportModal(false)} />
       )}
 
       {moderateModal && (
         <ModerationModal
           entityId={token.id}
-          moderationContract="token"
+          moderationContract={
+            token.version === GenerativeTokenVersion.PRE_V3
+              ? "token"
+              : "token_v3"
+          }
           flags={Object.keys(GenTokFlag).map((flag, idx) => ({
             label: flag,
             value: idx,

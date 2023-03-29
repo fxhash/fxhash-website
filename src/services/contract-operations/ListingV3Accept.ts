@@ -1,4 +1,4 @@
-import { ContractAbstraction, Wallet, WalletOperation } from "@taquito/taquito";
+import { ContractAbstraction, Wallet, WalletOperation } from "@taquito/taquito"
 import { FxhashContracts } from "../../types/Contracts"
 import { NFTArticle } from "../../types/entities/Article"
 import { Listing } from "../../types/entities/Listing"
@@ -30,11 +30,13 @@ export class ListingV3AcceptOperation extends ContractOperation<TListingV3Accept
       referrers: null,
     }).send({
       amount: this.params.listing.price * this.params.amount,
-      mutez: true
+      mutez: true,
     })
   }
 
   success(): string {
-    return `You have bought ${this.params.amount} edition of ${this.params.article.title} for ${displayMutez(this.params.listing.price)} tez`
+    return `You have bought ${this.params.amount} edition of ${
+      this.params.article.title
+    } for ${displayMutez(this.params.listing.price)} tez`
   }
 }

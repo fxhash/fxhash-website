@@ -14,15 +14,15 @@ export interface GenerativeTokenInformations {
 }
 
 export enum CaptureTriggerMode {
-  DELAY             = "DELAY",
-  FN_TRIGGER        = "FN_TRIGGER",
+  DELAY = "DELAY",
+  FN_TRIGGER = "FN_TRIGGER",
 }
 export const CaptureTriggerModeList = Object.values(CaptureTriggerMode)
 
 export enum CaptureMode {
-  CANVAS          = "CANVAS",
-  CUSTOM          = "CUSTOM",
-  VIEWPORT        = "VIEWPORT",
+  CANVAS = "CANVAS",
+  CUSTOM = "CUSTOM",
+  VIEWPORT = "VIEWPORT",
 }
 export const CaptureModeList = Object.values(CaptureMode)
 
@@ -36,15 +36,25 @@ export interface CaptureSettings {
   gpu?: boolean
 }
 
+// object defining the fx(params) when minting a Generative Token
+export interface MintGenerativeParams {
+  // JSON definition of the params
+  definition: any
+  // number of bytes required when minting params
+  inputBytesSize: number
+}
+
 export interface MintGenerativeData<N = string> {
   // if the project is authored as a collaboration
-  collaboration?: Collaboration|null
+  collaboration?: Collaboration | null
   // the ipfs uri pointing to the project with URL params
   cidUrlParams?: string
   // a hash to verify that the first matches
   authHash1?: string
   // the hash selector for the preview
   previewHash?: string
+  // the byte string of param values for the preview
+  previewInputBytes?: string | null
   // the ipfs uri to the preview
   cidPreview?: string
   // the ipfs uri to the thumbnail
@@ -57,6 +67,8 @@ export interface MintGenerativeData<N = string> {
   captureSettings?: CaptureSettings
   // general settings
   settings?: GenTokenSettings
+  // fx(params) settings
+  params?: MintGenerativeParams
   // general informations about the token
   informations?: GenTokenInformationsForm
   // minted successful
@@ -68,11 +80,13 @@ export interface GenTokenSettings {
     preMint?: {
       enabled: boolean
       hashConstraints?: string[] | null
-    },
+      paramsConstraints?: string[] | null
+    }
     postMint?: {
       enabled: boolean
       hashConstraints?: string[] | null
-    },
+      paramsConstraints?: string[] | null
+    }
   }
 }
 
@@ -80,6 +94,7 @@ export interface GenTokPricingForm<N> {
   pricingMethod?: GenTokPricing
   pricingFixed: Partial<IPricingFixed<N>>
   pricingDutchAuction: Partial<IPricingDutchAuction<N>>
+  lockForReserves?: boolean
 }
 
 export interface GenTokDistributionForm<N> {
@@ -90,6 +105,7 @@ export interface GenTokDistributionForm<N> {
   splitsPrimary: ISplit[]
   splitsSecondary: ISplit[]
   reserves: IReserve<N>[]
+  gracingPeriod?: N
 }
 
 export interface GenTokenInformationsForm {

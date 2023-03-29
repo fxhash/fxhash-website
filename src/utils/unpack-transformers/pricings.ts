@@ -1,7 +1,10 @@
 import type { BigNumber } from "bignumber.js"
 import { TInputPricingDutchAuction } from "../../services/parameters-builder/pricing-dutch-auction/input"
 import { TInputPricingFixed } from "../../services/parameters-builder/pricing-fixed/input"
-import { TInputPricing, TInputPricingDetails } from "../../services/parameters-builder/pricing/input"
+import {
+  TInputPricing,
+  TInputPricingDetails,
+} from "../../services/parameters-builder/pricing/input"
 
 export function transformPricingFixedBigNumbers(
   bnInput: TInputPricingFixed<BigNumber>
@@ -16,7 +19,7 @@ export function transformPricingDutchAuctionBigNumbers(
   input: TInputPricingDutchAuction<BigNumber>
 ): any {
   const levels: number[] = []
-  input.levels.forEach(val => levels.push(val.toNumber()))
+  input.levels.forEach((val) => levels.push(val.toNumber()))
   return {
     levels: levels,
     decrement_duration: input.decrement_duration.toNumber(),
@@ -32,13 +35,16 @@ export function transformPricingBigNumber(
     return {
       pricing_id: id,
       details: transformPricingFixedBigNumbers(bnInput.details),
+      lock_for_reserves: bnInput.lock_for_reserves,
     }
-  }
-  else if (id === 1) {
+  } else if (id === 1) {
     return {
       pricing_id: id,
       details: transformPricingDutchAuctionBigNumbers(bnInput.details as any),
+      lock_for_reserves: bnInput.lock_for_reserves,
     }
   }
-  throw new Error(`Must implement transform pricing BigNumber -> number for prcing method ${id}`)
+  throw new Error(
+    `Must implement transform pricing BigNumber -> number for prcing method ${id}`
+  )
 }

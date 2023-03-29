@@ -1,5 +1,5 @@
-import { Objkt } from './Objkt'
-import { User } from './User'
+import { Objkt } from "./Objkt"
+import { User } from "./User"
 
 export interface Offer {
   id: number

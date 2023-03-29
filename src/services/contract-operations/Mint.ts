@@ -1,10 +1,21 @@
-import { ContractAbstraction, OpKind, TransactionWalletOperation, Wallet, WalletOperation, WalletOperationBatch, WalletParamsWithKind } from "@taquito/taquito"
+import {
+  ContractAbstraction,
+  OpKind,
+  TransactionWalletOperation,
+  Wallet,
+  WalletOperation,
+  WalletOperationBatch,
+  WalletParamsWithKind,
+} from "@taquito/taquito"
 import { FxhashContracts } from "../../types/Contracts"
 import { GenerativeToken } from "../../types/entities/GenerativeToken"
 import { EReserveMethod } from "../../types/entities/Reserve"
 import { packMintReserveInput } from "../../utils/pack/reserves"
 import { apiEventsSignPayload } from "../apis/events.service"
-import { buildParameters, EBuildableParams } from "../parameters-builder/BuildParameters"
+import {
+  buildParameters,
+  EBuildableParams,
+} from "../parameters-builder/BuildParameters"
 import { ContractOperation } from "./ContractOperation"
 
 export interface IReserveConsumption {
@@ -22,10 +33,10 @@ export type TMintOperationParams = {
  * Mint an unique iteration of a Generative Token
  */
 export class MintOperation extends ContractOperation<TMintOperationParams> {
-  issuerContract: ContractAbstraction<Wallet>|null = null
-  reserveInput: string|null = null
-  payloadPacked: string|null = null
-  payloadSignature: string|null = null
+  issuerContract: ContractAbstraction<Wallet> | null = null
+  reserveInput: string | null = null
+  payloadPacked: string | null = null
+  payloadSignature: string | null = null
 
   async prepare() {
     this.issuerContract = await this.manager.getContract(FxhashContracts.ISSUER)
@@ -35,9 +46,9 @@ export class MintOperation extends ContractOperation<TMintOperationParams> {
       const consume = this.params.consumeReserve
       switch (consume.method) {
         case EReserveMethod.WHITELIST: {
-          this.reserveInput = packMintReserveInput({ 
-            method: EReserveMethod.WHITELIST, 
-            data: null
+          this.reserveInput = packMintReserveInput({
+            method: EReserveMethod.WHITELIST,
+            data: null,
           })
           break
         }
@@ -48,8 +59,8 @@ export class MintOperation extends ContractOperation<TMintOperationParams> {
             method: EReserveMethod.MINT_PASS,
             data: {
               payload: response.payloadPacked,
-              signature: response.signature
-            }
+              signature: response.signature,
+            },
           })
           this.payloadPacked = response.payloadPacked
           this.payloadSignature = response.signature
@@ -70,10 +81,13 @@ export class MintOperation extends ContractOperation<TMintOperationParams> {
         amount: 0,
         parameter: {
           entrypoint: "consume_pass",
-          value: buildParameters({
-            payload: this.payloadPacked,
-            signature: this.payloadSignature,
-          }, EBuildableParams.MINT_PASS_CONSUME)
+          value: buildParameters(
+            {
+              payload: this.payloadPacked,
+              signature: this.payloadSignature,
+            },
+            EBuildableParams.MINT_PASS_CONSUME
+          ),
         },
         storageLimit: 120,
       })
@@ -86,11 +100,14 @@ export class MintOperation extends ContractOperation<TMintOperationParams> {
       mutez: true,
       parameter: {
         entrypoint: "mint",
-        value: buildParameters({
-          issuer_id: this.params.token.id,
-          referrer: null,
-          reserve_input: this.reserveInput,
-        }, EBuildableParams.MINT)
+        value: buildParameters(
+          {
+            issuer_id: this.params.token.id,
+            referrer: null,
+            reserve_input: this.reserveInput,
+          },
+          EBuildableParams.MINT
+        ),
       },
       storageLimit: 650,
     })
@@ -98,7 +115,7 @@ export class MintOperation extends ContractOperation<TMintOperationParams> {
     return this.manager.tezosToolkit.wallet.batch().with(ops).send()
 
     // more naively it can be called likeso if there's no mint pass
-    // mint passes are for our live events 
+    // mint passes are for our live events
 
     // return this.issuerContract!.methodsObject.mint({
     //   issuer_id: this.params.token.id,

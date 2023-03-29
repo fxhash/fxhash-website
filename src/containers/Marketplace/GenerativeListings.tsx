@@ -13,10 +13,19 @@ import { CardsLoading } from "../../components/Card/CardsLoading"
 import { Qu_genTokListings } from "../../queries/marketplace"
 import { CardsExplorer } from "../../components/Exploration/CardsExplorer"
 import { CardSizeSelect } from "../../components/Input/CardSizeSelect"
+import { useRouter } from "next/router"
+import { useSettingsContext } from "context/Theme"
+import { useQueryParamSort } from "hooks/useQueryParamSort"
 
 const ITEMS_PER_PAGE = 20
 
-const sortOptions: IOptions[] = [
+export type MarketplaceSortOption =
+  | "listingCreatedAt-desc"
+  | "listingPrice-desc"
+  | "listingPrice-asc"
+  | "listingCreatedAt-asc"
+
+export const marketplaceSortOptions: IOptions<MarketplaceSortOption>[] = [
   {
     label: "recently listed",
     value: "listingCreatedAt-desc",
@@ -35,24 +44,16 @@ const sortOptions: IOptions[] = [
   },
 ]
 
-function sortValueToSortVariable(val: string) {
-  if (val === "pertinence") return {}
-  const split = val.split("-")
-  return {
-    [split[0]]: split[1].toUpperCase(),
-  }
-}
-
 interface Props {
   token: GenerativeToken
 }
 
 export const GenerativeListings = ({ token }: Props) => {
-  const [sortValue, setSortValue] = useState<string>("listingCreatedAt-desc")
-  const sort = useMemo<Record<string, any>>(
-    () => sortValueToSortVariable(sortValue),
-    [sortValue]
-  )
+  const settings = useSettingsContext()
+  const { sortValue, sortVariable, sortOptions, setSortValue } =
+    useQueryParamSort(marketplaceSortOptions, {
+      defaultSort: settings.preferredMarketplaceSorting,
+    })
 
   // use to know when to stop loading
   const currentLength = useRef<number>(0)
@@ -65,7 +66,7 @@ export const GenerativeListings = ({ token }: Props) => {
       id: token.id,
       skip: 0,
       take: ITEMS_PER_PAGE,
-      sort: sort,
+      sort: sortVariable,
     },
   })
 
@@ -100,9 +101,9 @@ export const GenerativeListings = ({ token }: Props) => {
       id: token.id,
       skip: 0,
       take: ITEMS_PER_PAGE,
-      sort,
+      sort: sortVariable,
     })
-  }, [sort])
+  }, [sortVariable])
 
   return (
     <CardsExplorer cardSizeScope="marketplace">
@@ -130,9 +131,10 @@ export const GenerativeListings = ({ token }: Props) => {
                   objkts.map((objkt) => (
                     <ObjktCard key={objkt.id} objkt={objkt} />
                   ))}
-                {loading && CardsLoading({
-                  number: ITEMS_PER_PAGE,
-                })}
+                {loading &&
+                  CardsLoading({
+                    number: ITEMS_PER_PAGE,
+                  })}
                 {!loading && objkts?.length === 0 && (
                   <p>No items currently listed</p>
                 )}

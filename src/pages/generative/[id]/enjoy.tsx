@@ -112,6 +112,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
                 metadata
                 iteration
                 generationHash
+                inputBytes
                 owner {
                   ...UserBadgeInfos
                 }

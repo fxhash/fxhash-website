@@ -18,11 +18,11 @@ import { CardNftArticle } from "../../components/Card/CardNFTArticle"
 import { CardNftArticleSkeleton } from "../../components/Card/CardNFTArticleSkeleton"
 import { InfiniteScrollTrigger } from "../../components/Utils/InfiniteScrollTrigger"
 import { sortOptionsArticles } from "../../utils/sort"
-import useSort from "../../hooks/useSort"
 import { SortAndFilters } from "../../components/SortAndFilters/SortAndFilters"
 import useFilters from "../../hooks/useFilters"
 import { ExploreTagDef } from "../../components/Exploration/ExploreTags"
 import { getTagsFromFiltersObject } from "../../utils/filters"
+import { useQueryParamSort } from "hooks/useQueryParamSort"
 
 const ITEMS_PER_PAGE = 20
 
@@ -43,7 +43,7 @@ const _ExploreArticles = ({
     setSortValue,
     setSearchSortOptions,
     restoreSort,
-  } = useSort(sortOptionsArticles, {
+  } = useQueryParamSort(sortOptionsArticles, {
     defaultSort: initialSearchQuery ? "relevance-desc" : "createdAt-desc",
   })
   const { filters, setFilters, addFilter, removeFilter } =

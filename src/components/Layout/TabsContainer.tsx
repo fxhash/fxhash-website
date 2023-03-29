@@ -6,6 +6,7 @@ import { Props as TabsProps, Tabs } from "./Tabs"
 
 interface PropsChildren {
   tabIndex: number
+  tabKey?: string
 }
 
 interface TabContainerProps extends Omit<TabsProps, "activeIdx"> {
@@ -37,6 +38,7 @@ export function TabsContainer({
     },
     [onClickTab]
   )
+  const activeTab = tabDefinitions[index]
   return (
     <>
       <Tabs
@@ -53,6 +55,7 @@ export function TabsContainer({
 
       {children({
         tabIndex: index,
+        tabKey: activeTab?.key,
       })}
     </>
   )

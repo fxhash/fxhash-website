@@ -1,22 +1,22 @@
 import { MichelsonMap } from "@taquito/michelson-encoder"
 
 export interface ProfileUpdateCallData {
-  metadata: string,
+  metadata: string
   name: string
 }
 
 export interface MintGenerativeCallData {
-  amount: number,
-  enabled: boolean,
-  metadata: string,
-  price: number,
-  royalties: number,
+  amount: number
+  enabled: boolean
+  metadata: string
+  price: number
+  royalties: number
 }
 
 export interface UpdateGenerativeCallData {
-  enabled: boolean,
-  price: number,
-  royalties: number,
+  enabled: boolean
+  price: number
+  royalties: number
   issuer_id: number
 }
 
@@ -26,7 +26,7 @@ export interface BurnSupplyCallData {
 }
 
 export interface MintCall {
-  issuer_id: number,
+  issuer_id: number
   price: number
 }
 

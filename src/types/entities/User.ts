@@ -2,9 +2,10 @@ import { Action } from "./Action"
 import { GenerativeToken } from "./GenerativeToken"
 import { Objkt } from "./Objkt"
 import { Listing } from "./Listing"
-import { Offer } from "./Offer";
-import { NFTArticle } from "./Article";
-import { MediaImage } from "./MediaImage";
+import { Offer } from "./Offer"
+import { NFTArticle } from "./Article"
+import { MediaImage } from "./MediaImage"
+import { MintTicket } from "./MintTicket"
 
 export interface UserItems {
   generativeTokens?: GenerativeToken[]
@@ -14,31 +15,31 @@ export interface UserItems {
 }
 
 export enum UserFlag {
-  NONE          = "NONE",
-  REVIEW        = "REVIEW",
-  SUSPICIOUS    = "SUSPICIOUS",
-  MALICIOUS     = "MALICIOUS",
-  VERIFIED      = "VERIFIED",
+  NONE = "NONE",
+  REVIEW = "REVIEW",
+  SUSPICIOUS = "SUSPICIOUS",
+  MALICIOUS = "MALICIOUS",
+  VERIFIED = "VERIFIED",
 }
 
 export enum UserAuthorization {
-  TOKEN_MODERATION          = "TOKEN_MODERATION",
-  ARTICLE_MODERATION        = "ARTICLE_MODERATION",
-  USER_MODERATION           = "USER_MODERATION",
-  GOVERNANCE_MODERATION     = "GOVERNANCE_MODERATION",
+  TOKEN_MODERATION = "TOKEN_MODERATION",
+  ARTICLE_MODERATION = "ARTICLE_MODERATION",
+  USER_MODERATION = "USER_MODERATION",
+  GOVERNANCE_MODERATION = "GOVERNANCE_MODERATION",
 }
 
 export enum UserType {
-  REGULAR               = "REGULAR",
-  COLLAB_CONTRACT_V1    = "COLLAB_CONTRACT_V1"
+  REGULAR = "REGULAR",
+  COLLAB_CONTRACT_V1 = "COLLAB_CONTRACT_V1",
 }
 
 export const UserFlagValues: Record<UserFlag, number> = {
-  NONE          : 0,
-  REVIEW        : 1,
-  SUSPICIOUS    : 2,
-  MALICIOUS     : 3,
-  VERIFIED      : 10,
+  NONE: 0,
+  REVIEW: 1,
+  SUSPICIOUS: 2,
+  MALICIOUS: 3,
+  VERIFIED: 10,
 }
 
 export interface User {
@@ -73,8 +74,9 @@ export interface User {
   preventLink?: boolean
   // as a regular user, it can have collaboration contracts
   collaborationContracts: Collaboration[]
-  moderationReason?: string|null
+  moderationReason?: string | null
   articles: NFTArticle[]
+  mintTickets: MintTicket[]
 }
 
 export interface ConnectedUser extends Partial<User> {
@@ -101,7 +103,7 @@ export interface IUserCollectionFilters {
   createdAt_gt?: string
   assignedAt_gt?: string
   assignedAt_lt?: string
-  mintProgress_eq?: "COMPLETED"|"ONGOING"|"ALMOST"
+  mintProgress_eq?: "COMPLETED" | "ONGOING" | "ALMOST"
   authorVerified_eq?: boolean
   author_in?: string[]
   searchQuery_eq?: string
