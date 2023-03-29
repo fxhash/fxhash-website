@@ -63,15 +63,17 @@ export const useUserAlerts = (user: ConnectedUser | null) => {
           variables: { id: user.id },
         })
         // send daily alerts
-        messageCenter.addMessages(
-          createDailyAlerts(user, settings, dailyAlertsData)
-        )
+        if (dailyAlertsData?.user)
+          messageCenter.addMessages(
+            createDailyAlerts(user, settings, dailyAlertsData)
+          )
       }
 
       // send frequent alerts
-      messageCenter.addMessages(
-        createFrequentAlerts(user, settings, frequentAlertsData)
-      )
+      if (frequentAlertsData?.user)
+        messageCenter.addMessages(
+          createFrequentAlerts(user, settings, frequentAlertsData)
+        )
     }
 
     notify()
