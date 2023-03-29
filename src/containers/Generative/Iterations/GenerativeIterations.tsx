@@ -37,6 +37,7 @@ import { getTagsFromFiltersObject } from "../../../utils/filters"
 import { SettingsContext } from "../../../context/Theme"
 import useSort from "hooks/useSort"
 import { useQueryParamSort } from "hooks/useQueryParamSort"
+import { useQueryParam } from "hooks/useQueryParam"
 
 const ITEMS_PER_PAGE = 20
 
@@ -72,6 +73,7 @@ interface Props {
 }
 export function GenerativeIterations({ token }: Props) {
   const settings = useContext(SettingsContext)
+
   //
   // REFS / STATE
   //
@@ -88,9 +90,9 @@ export function GenerativeIterations({ token }: Props) {
       defaultSort: "iteration-asc",
     })
   // the filters on the features, default no filters
-  const [featureFilters, setFeatureFilters] = useState<IObjktFeatureFilter[]>(
-    []
-  )
+  const [featureFilters, setFeatureFilters] = useQueryParam<
+    IObjktFeatureFilter[]
+  >("features", [])
   const [objtkFilters, setObjtkFilters] = useState<ObjktFilters>({})
 
   const removeObjtkFilter = useCallback((key: keyof ObjktFilters) => {
@@ -102,7 +104,7 @@ export function GenerativeIterations({ token }: Props) {
   }, [])
 
   const clearFeatureFilter = useCallback((name: string) => {
-    setFeatureFilters((oldFeaturesFilters) =>
+    setFeatureFilters((oldFeaturesFilters: IObjktFeatureFilter[]) =>
       oldFeaturesFilters.filter((filter) => filter.name !== name)
     )
   }, [])
@@ -114,7 +116,7 @@ export function GenerativeIterations({ token }: Props) {
 
   // serialize the feature filters to send to the backend
   const serializedFeatureFilters = useMemo<IObjktFeatureFilter[]>(() => {
-    return featureFilters.map((filter) => ({
+    return featureFilters.map((filter: IObjktFeatureFilter) => ({
       name: filter.name,
       type: filter.type,
       values: filter.values.map((value) => "" + value),
