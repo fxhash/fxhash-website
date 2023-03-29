@@ -2,8 +2,10 @@ import { useRouter } from "next/router"
 import { useState } from "react"
 import { useEffectAfterRender } from "./useEffectAfterRender"
 
-export const defaultQueryParamParse = (value: string) => JSON.parse(decodeURIComponent(value))
-export const defaultQueryParamSerialize = <T>(value: T) => encodeURIComponent(JSON.stringify(value))
+export const defaultQueryParamParse = (value: string) =>
+  JSON.parse(decodeURIComponent(value))
+export const defaultQueryParamSerialize = <T>(value: T) =>
+  encodeURIComponent(JSON.stringify(value))
 
 /**
  * hook that creates a stateful value that is synced with a query param -
