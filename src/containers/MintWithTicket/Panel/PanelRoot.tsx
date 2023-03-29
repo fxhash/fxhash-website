@@ -16,6 +16,7 @@ import { getUserName } from "utils/user"
 import { PanelControls } from "./PanelControls"
 import { Spacing } from "components/Layout/Spacing"
 import { TOnMintHandler } from "../MintWithTicketPage"
+import Link from "next/link"
 
 export type PanelSubmitMode = "with-ticket" | "free" | "none"
 
@@ -91,6 +92,13 @@ export function PanelRoot(props: Props) {
           description={`by ${name}`}
           onClickHide={onClickHide}
         />
+        <Spacing size="small" />
+        <Link href="/doc/collect/fxparams-mint-tickets">
+          <a className={style.learn}>
+            <i aria-hidden="true" className="fas fa-book" />
+            How to use fx(params)
+          </a>
+        </Link>
         <Spacing size="regular" />
         <div className={cs(style.body)}>
           <PanelHash
