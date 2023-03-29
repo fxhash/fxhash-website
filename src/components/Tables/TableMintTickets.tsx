@@ -29,12 +29,14 @@ interface TableMintTicketsProps {
   displayTokenPreview?: boolean
   mintTickets: MintTicket[]
   loading?: boolean
+  refreshEveryMs?: number
 }
 const _TableMintTickets = ({
   firstColName = "owner",
   displayTokenPreview,
   mintTickets,
   loading,
+  refreshEveryMs = 15000,
 }: TableMintTicketsProps) => {
   const [now, setNow] = useState(new Date())
   const { user } = useContext(UserContext)
@@ -59,11 +61,11 @@ const _TableMintTickets = ({
   useEffect(() => {
     const interval = setInterval(() => {
       setNow(new Date())
-    }, 15000)
+    }, refreshEveryMs)
     return () => {
       clearInterval(interval)
     }
-  }, [])
+  }, [refreshEveryMs])
   return (
     <>
       {firstColName && (
