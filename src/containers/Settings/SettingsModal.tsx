@@ -6,6 +6,7 @@ import { TabsContainer } from "../../components/Layout/TabsContainer"
 import { TabDefinition } from "../../components/Layout/Tabs"
 import { PropsWithChildren, useContext } from "react"
 import { SettingsContext } from "../../context/Theme"
+import { NotificationSettings } from "./NotificationSettings"
 
 interface PropsTabWrapper {
   className: string
@@ -26,7 +27,7 @@ const SettingTabs: TabDefinition[] = [
     name: "display",
   },
   {
-    name: "network",
+    name: "notifications",
   },
 ]
 
@@ -48,7 +49,7 @@ export function SettingsModal({ onClose }: Props) {
             {tabIndex === 0 ? (
               <DisplaySettings settings={settings} />
             ) : tabIndex === 1 ? (
-              <div>Coming soon</div>
+              <NotificationSettings settings={settings} />
             ) : tabIndex === 2 ? (
               <div>2</div>
             ) : null}
