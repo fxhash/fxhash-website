@@ -420,6 +420,9 @@ export const Qu_userAcceptCollectionOffer = gql`
         captureMedia {
           ...MediaImage
         }
+        owner {
+          id
+        }
       }
     }
   }

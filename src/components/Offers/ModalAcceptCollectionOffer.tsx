@@ -72,7 +72,10 @@ const _ModalAcceptCollectionOffer = ({
           size="small"
           state={loading ? "loading" : "default"}
           disabled={!selectedGentk}
-          onClick={() => onClickAccept(selectedGentk!)}
+          onClick={() => {
+            onClickAccept(selectedGentk!)
+            onClose()
+          }}
         >
           accept offer
         </Button>

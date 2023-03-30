@@ -37,7 +37,7 @@ export class CollectionOfferAcceptOperation extends ContractOperation<TCollectio
 
     const collectionOfferAcceptParams = {
       gentk: {
-        id: this.params.token.id,
+        id: getGentkLocalID(this.params.token.id),
         version: this.params.token.version,
       },
       offer_id: this.params.offer.id,
