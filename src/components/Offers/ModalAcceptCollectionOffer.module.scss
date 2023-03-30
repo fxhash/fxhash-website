@@ -1,0 +1,56 @@
+@import "../../styles/Variables";
+
+.gentks {
+  flex: 1;
+}
+
+.gentk_container {
+  display: flex;
+  flex-direction: row;
+
+  > label {
+    padding-left: 0px;
+  }
+}
+
+.gentk {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  cursor: pointer;
+  color: var(--color-black);
+  margin-bottom: 8px;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.container_name {
+  display: flex;
+  flex-direction: column;
+  margin-left: 8px;
+}
+
+.name {
+  font-weight: bold;
+}
+
+.thumbnail_container {
+  flex-shrink: 0;
+  width: 50px;
+  height: 50px;
+}
+
+.container_buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 16px;
+}
+
+@media (max-width: $breakpoint-sm) {
+  .container_buttons {
+    flex-direction: column;
+  }
+}
