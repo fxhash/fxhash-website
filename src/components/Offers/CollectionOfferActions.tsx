@@ -97,7 +97,6 @@ export function CollectionOfferActions({ offer, children }: Props) {
         cancel
       </Button>
     ) : isCurrentUser ? (
-      // modal on accept!!!!!!!!!!!!!!!
       <Button
         type="button"
         color="secondary"
