@@ -359,6 +359,7 @@ export const Qu_userMintTickets = gql`
           id
           slug
           name
+          flag
           thumbnailUri
           captureMedia {
             ...MediaImage
