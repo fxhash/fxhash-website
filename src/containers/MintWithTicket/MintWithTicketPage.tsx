@@ -39,6 +39,8 @@ import { ButtonIcon } from "components/Button/ButtonIcon"
 import { PanelGroup } from "./Panel/PanelGroup"
 import { ParamConfigurationList } from "./ParamConfigurationList"
 import { PanelSubmitMode } from "./Panel/PanelControls"
+import { format } from "date-fns"
+import { truncateEnd } from "utils/strings"
 
 export type TOnMintHandler = (ticketId: number | null) => void
 
@@ -192,11 +194,15 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
 
   const handleSaveConfiguration = () => {
     if (paramConfigExists) return
+    const now = Date.now()
     historyContext.saveConfiguration(`${token.id}`, {
-      name: "Untitled",
+      name: `${truncateEnd(`${Object.values(data)[0]}`, 20)} - ${format(
+        new Date(now),
+        "MM/dd/yyyy hh:mm"
+      )}`,
       hash,
       inputBytes: inputBytes || "",
-      createdAt: Date.now(),
+      createdAt: now,
     })
   }
 
