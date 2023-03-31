@@ -21,6 +21,7 @@
   }
   .resize_edge {
     display: none;
+    touch-action: none;
     background: var(--fxl-color-dark1);
     width: 4px;
     height: 100%;
@@ -108,7 +109,6 @@
       }
     }
     .resize_edge {
-      touch-action: none;
       cursor: row-resize;
       background: var(--fxl-color-dark);
       height: 16px;

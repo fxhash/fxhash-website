@@ -10,6 +10,7 @@ import style from "./ResizableArea.module.scss"
 import cs from "classnames"
 import useWindowSize, { breakpoints } from "../../hooks/useWindowsSize"
 import { off, on } from "../../utils/events"
+import { floorToDecimalNb } from "../../utils/math";
 
 interface ResizableAreaProps {
   className?: string
@@ -66,7 +67,7 @@ const _ResizableArea = ({
         if (percentYView > 90) {
           setShowPanel(false)
         }
-        setTranslationYPanel(percentYView)
+        setTranslationYPanel(floorToDecimalNb(percentYView, 2))
       } else {
         const moveX = e.x
         setWidthPanel(
@@ -90,12 +91,12 @@ const _ResizableArea = ({
         if (percentYView > 90) {
           setShowPanel(false)
         }
-        setTranslationYPanel(percentYView)
+        setTranslationYPanel(floorToDecimalNb(percentYView, 2))
       } else {
-        // const moveX = e.x
-        // setWidthPanel(
-        //   moveX - refResizeEdge.current.getBoundingClientRect().width / 2
-        // )
+        const moveX = touche.clientX
+        setWidthPanel(
+          moveX - refResizeEdge.current.getBoundingClientRect().width / 2
+        )
       }
     },
     [isMobile]
@@ -161,6 +162,7 @@ const _ResizableArea = ({
   const styleChild = {
     height: isMobile && showPanel ? `${translationYPanel}%` : "100%",
   }
+
   return (
     <div
       ref={refContainer}
