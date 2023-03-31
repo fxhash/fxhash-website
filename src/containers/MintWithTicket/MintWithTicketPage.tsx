@@ -60,7 +60,6 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
   const panelParamsRef = useRef<PanelParamsRef>(null)
   const historyContext = useContext(ParamsHistoryContext)
   const artworkIframeRef = useRef<ArtworkIframeRef>(null)
-  const lastHistoryActionData = useRef<any>()
   const router = useRouter()
   const [hasLocalChanges, setHasLocalChanges] = useState<boolean>(false)
   const [withAutoUpdate, setWithAutoUpdate] = useState<boolean>(true)
@@ -210,7 +209,19 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
   }
 
   const handleLoadConfiguration = (config: ParamConfiguration) => {
-    const data = deserializeParams(config.inputBytes, params, {})
+    const data = deserializeParams(config.inputBytes, params, {
+      withTransform: true,
+    })
+    historyContext.pushHistory({
+      type: "config-update",
+      oldValue: {
+        data: deserializeParams(inputBytes || "", params, {
+          withTransform: true,
+        }),
+        hash,
+      },
+      newValue: { data, hash: config.hash },
+    })
     setData(data)
     panelParamsRef?.current?.updateData(data)
     setHash(config.hash)
@@ -235,14 +246,12 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
     historyContext.registerAction("hash-update", (value: any) => {
       setHash(value)
     })
-  }, [
-    lastHistoryActionData,
-    panelParamsRef,
-    params,
-    setHash,
-    historyContext,
-    withAutoUpdate,
-  ])
+    historyContext.registerAction("config-update", (value: any) => {
+      setHash(value.hash)
+      panelParamsRef?.current?.updateData(value.data)
+      setData(value.data)
+    })
+  }, [panelParamsRef, params, setHash, historyContext, withAutoUpdate])
 
   useEffect(() => {
     setShowPanel(!isMobile)

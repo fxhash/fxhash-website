@@ -13,7 +13,7 @@ import { stringifyParamsData } from "./utils"
 const isEqual = (a: any, b: any) =>
   stringifyParamsData(a) === stringifyParamsData(b)
 
-type ParamsHistoryActionType = "params-update" | "hash-update"
+type ParamsHistoryActionType = "params-update" | "hash-update" | "config-update"
 
 export interface IParamsHistoryEntry {
   type: ParamsHistoryActionType
@@ -81,17 +81,6 @@ export function ParamsHistoryProvider({ children }: Props) {
 
   const pushHistory = (entry: IParamsHistoryEntry) => {
     setHistory((prev) => [entry, ...prev])
-
-    const historyEntry = history[0]
-    const lastStatesPerActionType = Object.keys(actions?.current || {})
-      .filter((actionType) => actionType !== entry.type)
-      .map((actionType) => {
-        return history.find((historyEntry) => historyEntry.type === actionType)
-      })
-    lastStatesPerActionType.forEach((historyEntry) => {
-      if (!historyEntry) return
-      actions?.current?.[historyEntry?.type]?.(historyEntry?.newValue)
-    })
     setOffset(-1)
   }
 
