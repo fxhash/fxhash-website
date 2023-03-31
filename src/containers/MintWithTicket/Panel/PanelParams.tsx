@@ -78,6 +78,7 @@ export const PanelParams = forwardRef<PanelParamsRef, PanelParamsProps>(
     },
     ref
   ) => {
+    const [showSaveConfirmation, setShowSaveConfirmation] = useState(false)
     const [localData, setLocalData] = useState<FxParamsData>({})
     const withParamLocking = !!onChangeLockedParamIds
     const withHistory = !!history && !!onUndo && !!onRedo
@@ -135,6 +136,14 @@ export const PanelParams = forwardRef<PanelParamsRef, PanelParamsProps>(
       }
     }
 
+    const handleClickSaveConfiguration = () => {
+      onSaveConfiguration?.()
+      setShowSaveConfirmation(true)
+      setTimeout(() => {
+        setShowSaveConfirmation(false)
+      }, 2000)
+    }
+
     useImperativeHandle(ref, () => ({
       updateData: setLocalData,
       getLocalData: () => localData,
@@ -149,11 +158,18 @@ export const PanelParams = forwardRef<PanelParamsRef, PanelParamsProps>(
           <div className={classes.randomContainer}>
             {onSaveConfiguration && (
               <IconButton
+                className={classes.saveConfigButton}
                 disabled={disableSaveConfigurationButton}
                 title="save configuration"
-                onClick={onSaveConfiguration}
+                onClick={handleClickSaveConfiguration}
               >
                 <FontAwesomeIcon icon={faFloppyDisk} />
+                {showSaveConfirmation && (
+                  <div className={classes.confirmSave}>
+                    Param configuration saved{" "}
+                    <i className="fa-solid fa-check fa-xs" />
+                  </div>
+                )}
               </IconButton>
             )}
             {onOpenLoadConfigurationModal && (

@@ -12,6 +12,21 @@
   gap: calc(var(--fxl-spacing-xs) * 0.5);
   background: var(--fxl-color-background);
   justify-content: flex-end;
+  .saveConfigButton {
+    position: relative;
+  }
+  .confirmSave {
+    font-size: var(--fxl-font-size-xs);
+    position: absolute;
+    top:0;
+    left: 50%;
+    transform: translate(-50%, calc(-100% - var(--fxl-spacing-xxs)));
+    white-space: nowrap;
+    color: var(--fxl-color-light0);
+    i {
+      color: var(--fxl-color-light);
+    }
+  }
 
   .randomButton{
     flex-grow: 1;
