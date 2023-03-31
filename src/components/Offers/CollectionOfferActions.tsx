@@ -22,8 +22,6 @@ interface Props {
   children: FunctionComponent<PropsChildren>
 }
 
-// TODO!
-
 /**
  * CollectionOfferActions is a control component which is responsible for any logic
  * related to a collection offer's actions. It can trigger the accept & cancel operations
