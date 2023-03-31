@@ -28,24 +28,15 @@
   --fxl-color-text-secondary: var(--fxl-color-light1);
 
   color: var(--fxl-color-light);
-
   width: 100%;
   height: 100vh;
-  display: flex;
-  flex-direction: row;
-  position: relative;
 
   .panel {
-    width: 0;
+    width: 100%;
     height: 100%;
     z-index: 6;
     background: var(--fxl-color-panel-background);
     position: relative;
-    transition: all 0.3s ease-out;
-    max-width: 400px;
-    &.show {
-      width: 100%;
-    }
 
     .mint_overlay {
       overflow: auto;
@@ -86,18 +77,11 @@
 
   .frame {
     position: relative;
-    flex-grow: 2;
     height: 100%;
+    width: 100%;
     overflow: hidden;
-    .frame_mask {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      z-index: 1000;
-      pointer-events: none;
-    }
+    pointer-events: all;
+
     .unsyncedContainer {
       position: absolute;
       top: 0;
@@ -143,85 +127,9 @@
   }
 }
 
-.button_show {
-  position: fixed;
-  top: 10px;
-  left: 0;
-  z-index: 5;
-  background: var(--fxl-color-panel-background);
-  border: solid var(--color-gray-vvvlight);
-  border-width: 2px 2px 2px 0px;
-  font-weight: 400;
-  color: var(--fxl-color-light);
-  width: 38px;
-  height: 42px;
-  text-align: center;
-  cursor: pointer;
-  transition: 0.2s all ease-out;
-  & span {
-    display: none;
-  }
-  & i {
-    font-size: 22px;
-  }
-  &:hover {
-    color: var(--fxl-color-light);
-  }
-}
 
 @media (max-width: $breakpoint-sm) {
   .root {
     overflow: hidden;
-    flex-direction: column;
-    .frame {
-      flex-grow: unset;
-      height: 100%;
-      width: 100%;
-      transition: 0.3s ease-out all;
-      &.minimize {
-        height: 25%;
-        .frame_mask {
-          pointer-events: auto;
-        }
-      }
-    }
-    .panel {
-      max-width: 100%;
-      width: 100%;
-      position: absolute;
-      top: 25%;
-      height: 75%;
-      left: 0;
-      right: 0;
-      transform: translateY(100%);
-      &.show {
-        transform: translateY(0);
-      }
-    }
-  }
-  .button_show {
-    top: initial;
-    bottom: 0;
-    width: max-content;
-    left: 50%;
-    border-width: 2px 2px 0 2px;
-    transform: translateX(-50%);
-    height: auto;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 16px 8px 16px;
-    z-index: 5;
-    font-size: var(--font-size-small);
-    & span {
-      display: block;
-    }
-    & i {
-      font-size: 1em;
-      transform: rotate(-90deg);
-      position: relative;
-      top: -1px;
-    }
   }
 }

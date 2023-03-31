@@ -28,11 +28,11 @@ import { ContractFeedback } from "components/Feedback/ContractFeedback"
 import { Loader } from "components/Utils/Loader"
 import Link from "next/link"
 import { Button } from "components/Button"
-import useWindowSize, { breakpoints } from "../../hooks/useWindowsSize"
 import { useFxParams } from "hooks/useFxParams"
 import { MintV3AbstractionOperation } from "../../services/contract-operations/MintV3Abstraction"
 import { useSettingsContext } from "../../context/Theme"
 import { PreMintWarning } from "./PreMintWarning"
+import { ResizableArea } from "../../components/ResizableArea/ResizableArea"
 
 export type TOnMintHandler = (ticketId: number | null) => void
 
@@ -43,11 +43,7 @@ interface Props {
 }
 export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
   const { showTicketPreMintWarning } = useSettingsContext()
-  const { width } = useWindowSize()
-  const isMobile = useMemo(() => {
-    return (width || 0) < breakpoints.sm
-  }, [width])
-  const [showPanel, setShowPanel] = useState(!isMobile)
+
   const [showPreMintWarningView, setShowPreMintWarningView] = useState(false)
   const [selectedTicketId, setSelectedTicketId] = useState<number | null>(null)
   const panelParamsRef = useRef<PanelParamsRef>(null)
@@ -86,10 +82,6 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
     )
   }, [token.metadata.generativeUri, hash, inputBytes])
 
-  const handleToggleShowPanel = useCallback(
-    (newState) => () => setShowPanel(newState),
-    []
-  )
   const handleChangeData = (newData: Record<string, any>) => {
     historyContext.pushHistory({
       type: "params-update",
@@ -167,12 +159,6 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
     [handleMint, showTicketPreMintWarning]
   )
 
-  const handleClickArtwork = useCallback(() => {
-    if (isMobile && showPanel) {
-      setShowPanel(false)
-    }
-  }, [isMobile, showPanel])
-
   const handleValidatePreMint = useCallback(() => {
     handleMint(selectedTicketId)
   }, [handleMint, selectedTicketId])
@@ -193,124 +179,106 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
     historyContext,
     withAutoUpdate,
   ])
-
-  useEffect(() => {
-    setShowPanel(!isMobile)
-  }, [isMobile])
-
   return (
-    <div className={cs(style.root)}>
-      {!showPanel && (
-        <button
-          title="show panel"
-          className={style.button_show}
-          type="button"
-          onClick={handleToggleShowPanel(true)}
-        >
-          <span>Edit</span>
-          <i aria-hidden className="fa-sharp fa-solid fa-chevrons-right" />
-        </button>
-      )}
-      <div
-        className={cs(style.panel, {
-          [style.show]: showPanel,
-        })}
-      >
-        <PanelRoot
-          disableWarningAnimation={!showTicketPreMintWarning}
-          show={showPanel}
-          data={data}
-          params={params}
-          features={features}
-          hash={hash}
-          token={token}
-          onLocalDataChange={handleLocalDataChange}
-          onChangeData={handleChangeData}
-          onChangeHash={handleChangeHash}
-          lockedParamIds={lockedParamIds}
-          onChangeLockedParamIds={setLockedParamIds}
-          history={historyContext.history}
-          historyOffset={historyContext.offset}
-          onUndo={historyContext.undo}
-          onRedo={historyContext.redo}
-          panelParamsRef={panelParamsRef}
-          withAutoUpdate={withAutoUpdate}
-          onChangeWithAutoUpdate={setWithAutoUpdate}
-          onOpenNewTab={handleOpenNewTab}
-          onClickBack={handleClickBack}
-          onClickSubmit={handleClickSubmit}
-          onClickHide={handleToggleShowPanel(false)}
-          onClickRefresh={handleClickRefresh}
-          hideSubmit={ticketId == null}
-          mode={mode}
-        />
-        {(loading || success) && (
-          <div
-            className={cs(style.mint_overlay, {
-              [style.has_success]: success,
-            })}
-          >
-            <div className={cs(style.kt_feedback)}>
-              <ContractFeedback
-                state={state}
-                success={success}
-                loading={loading}
-                error={error}
-                successMessage="Your iteration is minted!"
-              />
-            </div>
-            {loading && <Loader size="small" color="currentColor" />}
-            {success && (
-              <Link
-                href={`/reveal/${token.id}/?fxhash=${opHash}&fxparams=${inputBytes}`}
-                passHref
+    <div className={style.root}>
+      <ResizableArea
+        resizableComponent={({ show, onToggleVisibility }) => (
+          <div className={cs(style.panel)}>
+            <PanelRoot
+              disableWarningAnimation={!showTicketPreMintWarning}
+              show={show}
+              data={data}
+              params={params}
+              features={features}
+              hash={hash}
+              token={token}
+              onLocalDataChange={handleLocalDataChange}
+              onChangeData={handleChangeData}
+              onChangeHash={handleChangeHash}
+              lockedParamIds={lockedParamIds}
+              onChangeLockedParamIds={setLockedParamIds}
+              history={historyContext.history}
+              historyOffset={historyContext.offset}
+              onUndo={historyContext.undo}
+              onRedo={historyContext.redo}
+              panelParamsRef={panelParamsRef}
+              withAutoUpdate={withAutoUpdate}
+              onChangeWithAutoUpdate={setWithAutoUpdate}
+              onOpenNewTab={handleOpenNewTab}
+              onClickBack={handleClickBack}
+              onClickSubmit={handleClickSubmit}
+              onClickHide={onToggleVisibility(false)}
+              onClickRefresh={handleClickRefresh}
+              hideSubmit={ticketId == null}
+              mode={mode}
+            />
+            {(loading || success) && (
+              <div
+                className={cs(style.mint_overlay, {
+                  [style.has_success]: success,
+                })}
               >
-                <Button
-                  isLink
-                  size="regular"
-                  color="secondary"
-                  iconComp={<i aria-hidden className="fas fa-arrow-right" />}
-                  iconSide="right"
-                >
-                  final reveal
-                </Button>
-              </Link>
+                <div className={cs(style.kt_feedback)}>
+                  <ContractFeedback
+                    state={state}
+                    success={success}
+                    loading={loading}
+                    error={error}
+                    successMessage="Your iteration is minted!"
+                  />
+                </div>
+                {loading && <Loader size="small" color="currentColor" />}
+                {success && (
+                  <Link
+                    href={`/reveal/${token.id}/?fxhash=${opHash}&fxparams=${inputBytes}`}
+                    passHref
+                  >
+                    <Button
+                      isLink
+                      size="regular"
+                      color="secondary"
+                      iconComp={
+                        <i aria-hidden className="fas fa-arrow-right" />
+                      }
+                      iconSide="right"
+                    >
+                      final reveal
+                    </Button>
+                  </Link>
+                )}
+              </div>
+            )}
+            {showPreMintWarningView && (
+              <div className={cs(style.mint_overlay, style.pre_mint)}>
+                <PreMintWarning
+                  onChangeHash={handleChangeHash}
+                  onMint={handleValidatePreMint}
+                  onClose={handleClosePreMintView}
+                />
+              </div>
             )}
           </div>
         )}
-        {showPreMintWarningView && (
-          <div className={cs(style.mint_overlay, style.pre_mint)}>
-            <PreMintWarning
-              onChangeHash={handleChangeHash}
-              onMint={handleValidatePreMint}
-              onClose={handleClosePreMintView}
-            />
-          </div>
-        )}
-      </div>
-      <div
-        className={cs(style.frame, {
-          [style.minimize]: showPanel,
-        })}
       >
-        <ArtworkIframe
-          ref={artworkIframeRef}
-          url={url}
-          onLoaded={onIframeLoaded}
-        />
-        <div className={style.frame_mask} onClick={handleClickArtwork} />
-        {hasLocalChanges && (
-          <div className={style.unsyncedContainer}>
-            <div className={style.unsyncedContent}>
-              <i className="fa-solid fa-circle-exclamation" />
-              <p>
-                Params are not synced with the token. <br /> Enable auto-refresh
-                or manually refresh the view.
-              </p>
+        <div className={cs(style.frame)}>
+          <ArtworkIframe
+            ref={artworkIframeRef}
+            url={url}
+            onLoaded={onIframeLoaded}
+          />
+          {hasLocalChanges && (
+            <div className={style.unsyncedContainer}>
+              <div className={style.unsyncedContent}>
+                <i className="fa-solid fa-circle-exclamation" />
+                <p>
+                  Params are not synced with the token. <br /> Enable
+                  auto-refresh or manually refresh the view.
+                </p>
+              </div>
             </div>
-          </div>
-        )}
-      </div>
+          )}
+        </div>
+      </ResizableArea>
     </div>
   )
 }
