@@ -64,6 +64,7 @@ interface ParamConfigurationListProps {
   items: ParamConfiguration[]
   params: FxParamDefinition<any>[]
   onLoadConfiguration: (c: ParamConfiguration) => void
+  onPreviewConfiguration: (c: ParamConfiguration) => void
   onUpdateConfigName: (idx: number, name: string) => void
   onRemoveConfig: (idx: number) => void
 }
@@ -72,6 +73,7 @@ export function ParamConfigurationList({
   items,
   params,
   onLoadConfiguration,
+  onPreviewConfiguration,
   onUpdateConfigName,
   onRemoveConfig,
 }: ParamConfigurationListProps) {
@@ -94,14 +96,17 @@ export function ParamConfigurationList({
             <div className={style.configWrap}>
               <div
                 className={style.config}
-                onClick={() => onLoadConfiguration(config)}
+                onClick={() => onPreviewConfiguration(config)}
               >
                 {config.hash}&nbsp;{translateInputBytes(config.inputBytes)}
               </div>
-              <FontAwesomeIcon
+              <i
+                onClick={() => onLoadConfiguration(config)}
+                className="fa-solid fa-inbox-in fa-sm"
+              />
+              <i
                 onClick={() => onRemoveConfig(idx)}
-                icon={faTrash}
-                size="sm"
+                className="fa-solid fa-trash fa-sm"
               />
             </div>
           </li>

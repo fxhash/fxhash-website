@@ -46,8 +46,8 @@ export interface PanelParamsProps {
   onChangeWithAutoUpdate: (state: boolean) => void
   onLocalDataChange?: (d: FxParamsData) => void
   onSaveConfiguration?: () => void
-  onLoadConfiguration?: () => void
-  disableLoadConfigurationButton?: boolean
+  onOpenLoadConfigurationModal?: () => void
+  disableOpenLoadConfigurationButton?: boolean
   disableSaveConfigurationButton?: boolean
 }
 
@@ -72,8 +72,8 @@ export const PanelParams = forwardRef<PanelParamsRef, PanelParamsProps>(
       onChangeWithAutoUpdate,
       onLocalDataChange,
       onSaveConfiguration,
-      onLoadConfiguration,
-      disableLoadConfigurationButton,
+      onOpenLoadConfigurationModal,
+      disableOpenLoadConfigurationButton,
       disableSaveConfigurationButton,
     },
     ref
@@ -156,11 +156,11 @@ export const PanelParams = forwardRef<PanelParamsRef, PanelParamsProps>(
                 <FontAwesomeIcon icon={faFloppyDisk} />
               </IconButton>
             )}
-            {onLoadConfiguration && (
+            {onOpenLoadConfigurationModal && (
               <IconButton
-                disabled={disableLoadConfigurationButton}
+                disabled={disableOpenLoadConfigurationButton}
                 title="load configuration"
-                onClick={onLoadConfiguration}
+                onClick={onOpenLoadConfigurationModal}
               >
                 <i className="fa-sharp fa-solid fa-inbox-out" />
               </IconButton>

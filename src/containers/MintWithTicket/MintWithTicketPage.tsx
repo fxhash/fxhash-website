@@ -66,6 +66,7 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
   const [hasLocalChanges, setHasLocalChanges] = useState<boolean>(false)
   const [withAutoUpdate, setWithAutoUpdate] = useState<boolean>(true)
   const [lockedParamIds, setLockedParamIds] = useState<string[]>([])
+  const [tempConfig, setTempConfig] = useState<ParamConfiguration>()
   const { params, features, onIframeLoaded } =
     useReceiveTokenInfos(artworkIframeRef)
 
@@ -208,9 +209,24 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
 
   const handleOpenLoadConfigurationModal = () => {
     setShowLoadConfigModal(true)
+    setTempConfig({
+      name: "Temp Config",
+      hash,
+      inputBytes: inputBytes || "",
+      createdAt: Date.now(),
+    })
   }
 
   const handleCloseLoadConfigurationModal = () => {
+    setShowLoadConfigModal(false)
+    if (!tempConfig) return
+    const data = deserializeParams(tempConfig.inputBytes, params, {
+      withTransform: true,
+    })
+    setData(data)
+    panelParamsRef?.current?.updateData(data)
+    setHash(tempConfig.hash)
+    setHasLocalChanges(false)
     setShowLoadConfigModal(false)
   }
 
@@ -227,6 +243,17 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
         hash,
       },
       newValue: { data, hash: config.hash },
+    })
+    setData(data)
+    panelParamsRef?.current?.updateData(data)
+    setHash(config.hash)
+    setHasLocalChanges(false)
+    setShowLoadConfigModal(false)
+  }
+
+  const handlePreviewConfiguration = (config: ParamConfiguration) => {
+    const data = deserializeParams(config.inputBytes, params, {
+      withTransform: true,
     })
     setData(data)
     panelParamsRef?.current?.updateData(data)
@@ -309,8 +336,8 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
           hideSubmit={ticketId == null}
           mode={mode}
           onSaveConfiguration={handleSaveConfiguration}
-          onLoadConfiguration={handleOpenLoadConfigurationModal}
-          disableLoadConfigurationButton={
+          onOpenLoadConfigurationModal={handleOpenLoadConfigurationModal}
+          disableOpenLoadConfigurationButton={
             !storedConfigurations || storedConfigurations?.length === 0
           }
           disableSaveConfigurationButton={paramConfigExists}
@@ -331,6 +358,7 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
                 items={storedConfigurations}
                 params={params}
                 onLoadConfiguration={handleLoadConfiguration}
+                onPreviewConfiguration={handlePreviewConfiguration}
                 onUpdateConfigName={handleUpdateConfigName}
                 onRemoveConfig={handleRemoveConfig}
               />

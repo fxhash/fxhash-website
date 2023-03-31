@@ -56,8 +56,8 @@ export function PanelRoot(props: PanelRootProps) {
     mode = "none",
     disableWarningAnimation,
     onSaveConfiguration,
-    onLoadConfiguration,
-    disableLoadConfigurationButton,
+    onOpenLoadConfigurationModal,
+    disableOpenLoadConfigurationButton,
     disableSaveConfigurationButton,
   } = props
   const name = useMemo(() => getUserName(token.author, 15), [token])
@@ -97,8 +97,10 @@ export function PanelRoot(props: PanelRootProps) {
             onClickRefresh={onClickRefresh}
             onLocalDataChange={onLocalDataChange}
             onSaveConfiguration={onSaveConfiguration}
-            onLoadConfiguration={onLoadConfiguration}
-            disableLoadConfigurationButton={disableLoadConfigurationButton}
+            onOpenLoadConfigurationModal={onOpenLoadConfigurationModal}
+            disableOpenLoadConfigurationButton={
+              disableOpenLoadConfigurationButton
+            }
             disableSaveConfigurationButton={disableSaveConfigurationButton}
           />
           <PanelFeatures features={features} />
