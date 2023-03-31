@@ -101,7 +101,8 @@ const _ModalClaimMintTicket = ({
   }, [claimedTicket, onClickUpdatePrice])
   const harbergerTax = useMemo(() => {
     if (values.price > 0 && values.days > 0) {
-      return getMintTicketHarbergerTax(values.price, values.days)
+      const daysCoverageWithExtraDay = values.days + 1
+      return getMintTicketHarbergerTax(values.price, daysCoverageWithExtraDay)
     }
     return false
   }, [values.price, values.days])
