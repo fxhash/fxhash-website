@@ -10,7 +10,7 @@ import style from "./ResizableArea.module.scss"
 import cs from "classnames"
 import useWindowSize, { breakpoints } from "../../hooks/useWindowsSize"
 import { off, on } from "../../utils/events"
-import { floorToDecimalNb } from "../../utils/math";
+import { floorToDecimalNb } from "../../utils/math"
 
 interface ResizableAreaProps {
   className?: string
