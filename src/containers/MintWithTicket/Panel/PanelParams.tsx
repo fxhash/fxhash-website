@@ -15,7 +15,11 @@ import {
 } from "components/FxParams/types"
 import { LockButton } from "components/FxParams/LockButton/LockButton"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faRotateLeft, faRotateRight } from "@fortawesome/free-solid-svg-icons"
+import {
+  faFloppyDisk,
+  faRotateLeft,
+  faRotateRight,
+} from "@fortawesome/free-solid-svg-icons"
 import cx from "classnames"
 import { Controls } from "components/FxParams/Controls"
 import { getRandomParamValues } from "components/FxParams/utils"
@@ -26,7 +30,7 @@ import {
   IconButton,
 } from "components/FxParams/BaseInput"
 
-interface Props {
+export interface PanelParamsProps {
   data?: FxParamsData
   params: FxParamDefinition<FxParamType>[]
   onChangeData: (d: FxParamsData) => void
@@ -41,6 +45,10 @@ interface Props {
   withAutoUpdate?: boolean
   onChangeWithAutoUpdate: (state: boolean) => void
   onLocalDataChange?: (d: FxParamsData) => void
+  onSaveConfiguration?: () => void
+  onLoadConfiguration?: () => void
+  disableLoadConfigurationButton?: boolean
+  disableSaveConfigurationButton?: boolean
 }
 
 export interface PanelParamsRef {
@@ -48,7 +56,7 @@ export interface PanelParamsRef {
   getLocalData: () => FxParamsData
 }
 
-export const PanelParams = forwardRef<PanelParamsRef, Props>(
+export const PanelParams = forwardRef<PanelParamsRef, PanelParamsProps>(
   (
     {
       params,
@@ -63,6 +71,10 @@ export const PanelParams = forwardRef<PanelParamsRef, Props>(
       withAutoUpdate,
       onChangeWithAutoUpdate,
       onLocalDataChange,
+      onSaveConfiguration,
+      onLoadConfiguration,
+      disableLoadConfigurationButton,
+      disableSaveConfigurationButton,
     },
     ref
   ) => {
@@ -135,6 +147,24 @@ export const PanelParams = forwardRef<PanelParamsRef, Props>(
         descriptionClassName={classes.description}
         headerComp={
           <div className={classes.randomContainer}>
+            {onSaveConfiguration && (
+              <IconButton
+                disabled={disableSaveConfigurationButton}
+                title="save configuration"
+                onClick={onSaveConfiguration}
+              >
+                <FontAwesomeIcon icon={faFloppyDisk} />
+              </IconButton>
+            )}
+            {onLoadConfiguration && (
+              <IconButton
+                disabled={disableLoadConfigurationButton}
+                title="load configuration"
+                onClick={onLoadConfiguration}
+              >
+                <i className="fa-sharp fa-solid fa-inbox-out" />
+              </IconButton>
+            )}
             <IconButton
               title="Randomize"
               onClick={handleRandomizeParams}

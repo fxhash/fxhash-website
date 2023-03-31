@@ -16,8 +16,10 @@ import {
 } from "react"
 import { deserializeParams } from "components/FxParams/utils"
 import { useReceiveTokenInfos } from "hooks/useReceiveTokenInfos"
-import { PanelRoot, PanelSubmitMode } from "./Panel/PanelRoot"
+import { PanelRoot } from "./Panel/PanelRoot"
 import {
+  concatParamConfiguration,
+  ParamConfiguration,
   ParamsHistoryContext,
   ParamsHistoryProvider,
 } from "components/FxParams/ParamsHistory"
@@ -33,6 +35,10 @@ import { useFxParams } from "hooks/useFxParams"
 import { MintV3AbstractionOperation } from "../../services/contract-operations/MintV3Abstraction"
 import { useSettingsContext } from "../../context/Theme"
 import { PreMintWarning } from "./PreMintWarning"
+import { ButtonIcon } from "components/Button/ButtonIcon"
+import { PanelGroup } from "./Panel/PanelGroup"
+import { ParamConfigurationList } from "./ParamConfigurationList"
+import { PanelSubmitMode } from "./Panel/PanelControls"
 
 export type TOnMintHandler = (ticketId: number | null) => void
 
@@ -47,6 +53,7 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
   const isMobile = useMemo(() => {
     return (width || 0) < breakpoints.sm
   }, [width])
+  const [showLoadConfigModal, setShowLoadConfigModal] = useState(false)
   const [showPanel, setShowPanel] = useState(!isMobile)
   const [showPreMintWarningView, setShowPreMintWarningView] = useState(false)
   const [selectedTicketId, setSelectedTicketId] = useState<number | null>(null)
@@ -76,6 +83,13 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
         }
       },
     }
+  )
+
+  const storedConfigurations =
+    historyContext.storedConfigurations[`${token.id}`]
+
+  const paramConfigExists = storedConfigurations?.some(
+    (c) => concatParamConfiguration(c) === `${hash}-${inputBytes}`
   )
 
   const url = useMemo<string>(() => {
@@ -177,6 +191,42 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
     handleMint(selectedTicketId)
   }, [handleMint, selectedTicketId])
 
+  const handleSaveConfiguration = () => {
+    if (paramConfigExists) return
+    historyContext.saveConfiguration(`${token.id}`, {
+      name: "Untitled",
+      hash,
+      inputBytes: inputBytes || "",
+      createdAt: Date.now(),
+    })
+  }
+
+  const handleOpenLoadConfigurationModal = () => {
+    setShowLoadConfigModal(true)
+  }
+
+  const handleCloseLoadConfigurationModal = () => {
+    setShowLoadConfigModal(false)
+  }
+
+  const handleLoadConfiguration = (config: ParamConfiguration) => {
+    const data = deserializeParams(config.inputBytes, params, {})
+    setData(data)
+    panelParamsRef?.current?.updateData(data)
+    setHash(config.hash)
+    setHasLocalChanges(false)
+  }
+
+  const handleUpdateConfigName = (idx: number, name: string) => {
+    historyContext.updateConfigName(`${token.id}`, idx, name)
+  }
+  const handleRemoveConfig = (idx: number) => {
+    historyContext.removeConfig(`${token.id}`, idx)
+    if (storedConfigurations.length === 1) {
+      setShowLoadConfigModal(false)
+    }
+  }
+
   useEffect(() => {
     historyContext.registerAction("params-update", (value: any) => {
       panelParamsRef?.current?.updateData(value)
@@ -238,15 +288,43 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
           onChangeWithAutoUpdate={setWithAutoUpdate}
           onOpenNewTab={handleOpenNewTab}
           onClickBack={handleClickBack}
-          onClickSubmit={handleClickSubmit}
+          onSubmit={handleClickSubmit}
           onClickHide={handleToggleShowPanel(false)}
           onClickRefresh={handleClickRefresh}
           hideSubmit={ticketId == null}
           mode={mode}
+          onSaveConfiguration={handleSaveConfiguration}
+          onLoadConfiguration={handleOpenLoadConfigurationModal}
+          disableLoadConfigurationButton={
+            !storedConfigurations || storedConfigurations?.length === 0
+          }
+          disableSaveConfigurationButton={paramConfigExists}
         />
+        {showLoadConfigModal && (
+          <div className={cs(style.overlay, style.loadPanel)}>
+            <PanelGroup
+              title="Load Previous Configuration"
+              headerComp={
+                <ButtonIcon
+                  onClick={handleCloseLoadConfigurationModal}
+                  icon="fa-solid fa-xmark"
+                />
+              }
+            />
+            {storedConfigurations && (
+              <ParamConfigurationList
+                items={storedConfigurations}
+                params={params}
+                onLoadConfiguration={handleLoadConfiguration}
+                onUpdateConfigName={handleUpdateConfigName}
+                onRemoveConfig={handleRemoveConfig}
+              />
+            )}
+          </div>
+        )}
         {(loading || success) && (
           <div
-            className={cs(style.mint_overlay, {
+            className={cs(style.layout_centered, style.overlay, {
               [style.has_success]: success,
             })}
           >
@@ -279,7 +357,9 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
           </div>
         )}
         {showPreMintWarningView && (
-          <div className={cs(style.mint_overlay, style.pre_mint)}>
+          <div
+            className={cs(style.layout_centered, style.overlay, style.pre_mint)}
+          >
             <PreMintWarning
               onChangeHash={handleChangeHash}
               onMint={handleValidatePreMint}

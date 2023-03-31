@@ -23,7 +23,20 @@ export interface IParamsHistoryEntry {
 
 type ParamsHistoryAction = (entry: IParamsHistoryEntry) => void
 
+export type ParamConfiguration = {
+  hash: string
+  inputBytes: string
+  name: string
+  createdAt: number
+}
+
+export const concatParamConfiguration = (c: ParamConfiguration) =>
+  `${c.hash}-${c.inputBytes}`
+
+type StoredConfigurations = Record<string, ParamConfiguration[]>
+
 export interface IParamsHistoryContext {
+  storedConfigurations: StoredConfigurations
   registerAction: (t: ParamsHistoryActionType, a: ParamsHistoryAction) => void
   history: IParamsHistoryEntry[]
   pushHistory: (entry: IParamsHistoryEntry) => void
@@ -31,6 +44,9 @@ export interface IParamsHistoryContext {
   setOffset: (o: number) => void
   undo: () => void
   redo: () => void
+  saveConfiguration: (id: string, config: ParamConfiguration) => void
+  updateConfigName: (id: string, idx: number, name: string) => void
+  removeConfig: (id: string, idx: number) => void
 }
 
 const defaultParamsHistoryContext: IParamsHistoryContext = {
@@ -41,6 +57,10 @@ const defaultParamsHistoryContext: IParamsHistoryContext = {
   setOffset: () => {},
   undo: () => {},
   redo: () => {},
+  storedConfigurations: {},
+  saveConfiguration: () => {},
+  updateConfigName: () => {},
+  removeConfig: () => {},
 }
 
 export const ParamsHistoryContext = createContext(defaultParamsHistoryContext)
@@ -53,6 +73,8 @@ type ParamHistoryActions = Record<
 type Props = PropsWithChildren<{}>
 
 export function ParamsHistoryProvider({ children }: Props) {
+  const [storedConfigurations, setStoredConfigurations] =
+    useState<StoredConfigurations>({})
   const [history, setHistory] = useState<IParamsHistoryEntry[]>([])
   const [offset, setOffset] = useState<number>(-1)
   const actions = useRef<Partial<ParamHistoryActions>>()
@@ -105,6 +127,44 @@ export function ParamsHistoryProvider({ children }: Props) {
     }
   }
 
+  const saveConfiguration = (id: string, config: ParamConfiguration) => {
+    const configurations = {
+      ...storedConfigurations,
+      [id]: [config, ...(storedConfigurations[id] || [])],
+    }
+    setStoredConfigurations(configurations)
+    localStorage.setItem("storedConfigurations", JSON.stringify(configurations))
+  }
+
+  const updateConfigName = (id: string, idx: number, name: string) => {
+    const updatedConfigurations = storedConfigurations[id]
+    storedConfigurations[id][idx].name = name
+    const configurations = {
+      ...storedConfigurations,
+      [id]: updatedConfigurations,
+    }
+    setStoredConfigurations(configurations)
+    localStorage.setItem("storedConfigurations", JSON.stringify(configurations))
+  }
+
+  const removeConfig = (id: string, idx: number) => {
+    const updatedConfigurations = storedConfigurations[id].filter(
+      (_, i) => i !== idx
+    )
+    const configurations = {
+      ...storedConfigurations,
+      [id]: updatedConfigurations,
+    }
+    setStoredConfigurations(configurations)
+    localStorage.setItem("storedConfigurations", JSON.stringify(configurations))
+  }
+
+  useEffect(() => {
+    const fromStorage = localStorage.getItem("storedConfigurations")
+    const stored = fromStorage ? JSON.parse(fromStorage) : {}
+    setStoredConfigurations(stored)
+  }, [])
+
   const context: IParamsHistoryContext = {
     registerAction,
     history,
@@ -113,6 +173,10 @@ export function ParamsHistoryProvider({ children }: Props) {
     setOffset,
     undo,
     redo,
+    storedConfigurations,
+    saveConfiguration,
+    updateConfigName,
+    removeConfig,
   }
 
   return (
