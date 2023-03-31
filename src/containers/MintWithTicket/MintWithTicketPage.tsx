@@ -318,7 +318,7 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
         {showLoadConfigModal && (
           <div className={cs(style.overlay, style.loadPanel)}>
             <PanelGroup
-              title="Load Previous Configuration"
+              title="Load saved params"
               headerComp={
                 <ButtonIcon
                   onClick={handleCloseLoadConfigurationModal}
