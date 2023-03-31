@@ -42,8 +42,8 @@ export function PanelControls(props: Props) {
 
   const { user } = useContext(UserContext)
 
-  const mintingState = useMintingState(token)
-  const { enabled, locked, price } = mintingState
+  const { enabled, locked, price, hidden } = useMintingState(token)
+  const showMintButton = !hidden && !locked && enabled
 
   // get user mint tickets when user is available, and mode is "free"
   const [getUserTickets, { data, loading, error }] = useLazyQuery(
@@ -104,7 +104,7 @@ export function PanelControls(props: Props) {
           </BaseButton>
         ) : mode === "free" ? (
           <div className={style.submitButtons}>
-            {!locked && enabled && (
+            {showMintButton && (
               <BaseButton
                 color="main"
                 onClick={() => onSubmit(null)}
