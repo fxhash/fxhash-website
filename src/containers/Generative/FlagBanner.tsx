@@ -4,7 +4,7 @@ import {
 } from "../../types/entities/GenerativeToken"
 import { FlagBanner } from "../../components/Flag/FlagBanner"
 
-function getFlagText(flag: GenTokFlag): string {
+export function getFlagText(flag: GenTokFlag): string {
   switch (flag) {
     case GenTokFlag.AUTO_DETECT_COPY:
       return "The fxhash system has automatically flagged this token as a potential copymint. The moderation team has not yet stated if it respects the Guidelines of the platform. Please wait until a decision is taken."

@@ -14,7 +14,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { generateFxHash } from "utils/hash"
 import cx from "classnames"
 import { useAriaTooltip } from "hooks/useAriaTooltip"
-interface Props {
+
+export interface PanelHashProps {
   hash: string
   onChangeHash: (h: string) => void
   disableWarningAnimation?: boolean
@@ -23,7 +24,7 @@ interface Props {
 const validateHash = (hash: string) =>
   hash.startsWith("oo") && hash.length === 51
 
-export function PanelHash(props: Props) {
+export function PanelHash(props: PanelHashProps) {
   const { hash, onChangeHash, disableWarningAnimation } = props
   const { hoverElement, wasHovered, showTooltip, handleEnter, handleLeave } =
     useAriaTooltip()

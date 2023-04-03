@@ -15,7 +15,11 @@ import {
 } from "components/FxParams/types"
 import { LockButton } from "components/FxParams/LockButton/LockButton"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faRotateLeft, faRotateRight } from "@fortawesome/free-solid-svg-icons"
+import {
+  faFloppyDisk,
+  faRotateLeft,
+  faRotateRight,
+} from "@fortawesome/free-solid-svg-icons"
 import cx from "classnames"
 import { Controls } from "components/FxParams/Controls"
 import { getRandomParamValues } from "components/FxParams/utils"
@@ -26,7 +30,7 @@ import {
   IconButton,
 } from "components/FxParams/BaseInput"
 
-interface Props {
+export interface PanelParamsProps {
   data?: FxParamsData
   params: FxParamDefinition<FxParamType>[]
   onChangeData: (d: FxParamsData) => void
@@ -41,6 +45,10 @@ interface Props {
   withAutoUpdate?: boolean
   onChangeWithAutoUpdate: (state: boolean) => void
   onLocalDataChange?: (d: FxParamsData) => void
+  onSaveConfiguration?: () => void
+  onOpenLoadConfigurationModal?: () => void
+  disableOpenLoadConfigurationButton?: boolean
+  disableSaveConfigurationButton?: boolean
 }
 
 export interface PanelParamsRef {
@@ -48,7 +56,7 @@ export interface PanelParamsRef {
   getLocalData: () => FxParamsData
 }
 
-export const PanelParams = forwardRef<PanelParamsRef, Props>(
+export const PanelParams = forwardRef<PanelParamsRef, PanelParamsProps>(
   (
     {
       params,
@@ -63,9 +71,14 @@ export const PanelParams = forwardRef<PanelParamsRef, Props>(
       withAutoUpdate,
       onChangeWithAutoUpdate,
       onLocalDataChange,
+      onSaveConfiguration,
+      onOpenLoadConfigurationModal,
+      disableOpenLoadConfigurationButton,
+      disableSaveConfigurationButton,
     },
     ref
   ) => {
+    const [showSaveConfirmation, setShowSaveConfirmation] = useState(false)
     const [localData, setLocalData] = useState<FxParamsData>({})
     const withParamLocking = !!onChangeLockedParamIds
     const withHistory = !!history && !!onUndo && !!onRedo
@@ -123,6 +136,14 @@ export const PanelParams = forwardRef<PanelParamsRef, Props>(
       }
     }
 
+    const handleClickSaveConfiguration = () => {
+      onSaveConfiguration?.()
+      setShowSaveConfirmation(true)
+      setTimeout(() => {
+        setShowSaveConfirmation(false)
+      }, 2000)
+    }
+
     useImperativeHandle(ref, () => ({
       updateData: setLocalData,
       getLocalData: () => localData,
@@ -135,6 +156,31 @@ export const PanelParams = forwardRef<PanelParamsRef, Props>(
         descriptionClassName={classes.description}
         headerComp={
           <div className={classes.randomContainer}>
+            {onSaveConfiguration && (
+              <IconButton
+                className={classes.saveConfigButton}
+                disabled={disableSaveConfigurationButton}
+                title="save configuration"
+                onClick={handleClickSaveConfiguration}
+              >
+                <FontAwesomeIcon icon={faFloppyDisk} />
+                {showSaveConfirmation && (
+                  <div className={classes.confirmSave}>
+                    Param configuration saved{" "}
+                    <i className="fa-solid fa-check fa-xs" />
+                  </div>
+                )}
+              </IconButton>
+            )}
+            {onOpenLoadConfigurationModal && (
+              <IconButton
+                disabled={disableOpenLoadConfigurationButton}
+                title="load configuration"
+                onClick={onOpenLoadConfigurationModal}
+              >
+                <i className="fa-sharp fa-solid fa-inbox-out" />
+              </IconButton>
+            )}
             <IconButton
               title="Randomize"
               onClick={handleRandomizeParams}

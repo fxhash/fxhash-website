@@ -38,7 +38,7 @@
     background: var(--fxl-color-panel-background);
     position: relative;
 
-    .mint_overlay {
+    .overlay {
       overflow: auto;
       position: absolute;
       top: 0;
@@ -47,14 +47,17 @@
       bottom: 0;
       z-index: 1000;
       background-color: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(12px);
+      padding: 12px;
+    }
+
+    .layout_centered {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      backdrop-filter: blur(12px);
       gap: 8px;
       text-align: center;
-      padding: 12px;
       &.pre_mint {
         z-index: 999;
       }
@@ -72,6 +75,14 @@
           }
         }
       }
+    }
+  }
+
+  .loadPanel {
+    .load_config_header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
   }
 

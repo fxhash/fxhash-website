@@ -8,11 +8,10 @@ type Props = PropsWithChildren<{}>
 export function LiveMintingRoot({ children }: Props) {
   // we hide the warnings in the message center to make a better flow
   const messageCenter = useContext(MessageCenterContext)
+
   useEffect(() => {
-    if (messageCenter.ready) {
-      messageCenter.setIgnoreWarnings(true)
-    }
-  }, [messageCenter.ready])
+    messageCenter.setIgnoreWarnings(true)
+  }, [])
 
   return (
     <LiveMintingProvider>
