@@ -28,6 +28,7 @@ import { ActionListingAcceptedV3 } from "./Actions/ActionListingAcceptedV3"
 import { ActionListingCancelledV3 } from "./Actions/ActionListingCancelledV3"
 import { getObjktUrl } from "../../utils/objkt"
 import { ActionMintedTicket } from "./Actions/ActionMintedTicket"
+import { ActionClaimedTicket } from "./Actions/ActionClaimedTicket"
 
 const ActionLinks = {
   gentk: (action: ActionType) => `/gentk/${action.objkt?.id}`,
@@ -64,6 +65,13 @@ export const ActionDefinitions: Record<TokenActionType, ActionDefinition> = {
     icon: "fa-sharp fa-solid fa-ticket",
     iconColor: "success",
     render: ActionMintedTicket,
+    predecescence: 0,
+    link: ActionLinks.token,
+  },
+  TICKET_CLAIMED: {
+    icon: "fa-sharp fa-solid fa-ticket",
+    iconColor: "success",
+    render: ActionClaimedTicket,
     predecescence: 0,
     link: ActionLinks.token,
   },
