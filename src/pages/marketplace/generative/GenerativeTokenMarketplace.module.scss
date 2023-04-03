@@ -27,6 +27,10 @@
   }
 }
 
+.button {
+  width: 100%;
+}
+
 .metrics {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
@@ -88,9 +92,6 @@
     .progress_container {
       width: 100%;
     }
-  }
-  .button {
-    width: 100%;
   }
   .metrics {
     margin-top: 0;

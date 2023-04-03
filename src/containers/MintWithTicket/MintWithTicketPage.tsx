@@ -335,7 +335,7 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
             )}
             {(loading || success) && (
               <div
-                className={cs(style.mint_overlay, {
+                className={cs(style.overlay, style.layout_centered, {
                   [style.has_success]: success,
                 })}
               >
@@ -370,7 +370,13 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
               </div>
             )}
             {showPreMintWarningView && (
-              <div className={cs(style.mint_overlay, style.pre_mint)}>
+              <div
+                className={cs(
+                  style.overlay,
+                  style.layout_centered,
+                  style.pre_mint
+                )}
+              >
                 <PreMintWarning
                   onChangeHash={handleChangeHash}
                   onMint={handleValidatePreMint}
