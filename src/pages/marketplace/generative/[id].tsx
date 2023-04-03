@@ -145,6 +145,7 @@ const GenerativeTokenMarketplace: NextPage<Props> = ({ token }) => {
                   open project page
                 </Button>
               </Link>
+              <Spacing size="x-small" sm="regular" />
               <CollectionOfferCreate token={token} />
             </div>
           </div>
