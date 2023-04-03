@@ -3,13 +3,16 @@ import { Button } from "../Button"
 import { Modal } from "../Utils/Modal"
 import style from "./ModalAcceptCollectionOffer.module.scss"
 import { Spacing } from "../Layout/Spacing"
-import { CollectionOffer } from "types/entities/Offer"
+import { CollectionOffer, offerTypeGuard } from "types/entities/Offer"
 import { Objkt } from "types/entities/Objkt"
 import { useQuery } from "@apollo/client"
 import { UserContext } from "containers/UserProvider"
 import { Qu_userAcceptCollectionOffer } from "queries/user"
 import { Image } from "components/Image"
 import { Checkbox } from "components/Input/Checkbox"
+import { DisplayTezos } from "components/Display/DisplayTezos"
+import Link from "next/link"
+import { FloorDifference } from "components/Display/FloorDifference"
 
 interface ModalAcceptCollectionOfferProps {
   offer: CollectionOffer
@@ -33,24 +36,39 @@ const _ModalAcceptCollectionOffer = ({
     fetchPolicy: "no-cache",
   })
 
+  console.log(data)
+  const floor = data?.user?.objkts?.[0]?.issuer?.marketStats?.floor
+
   return (
     <Modal
       title={`Accept collection offer for ${offer.token.name}`}
       onClose={onClose}
     >
-      <p className={style.p}>Select which gentk you would like to sell</p>
+      <p className={style.p}>
+        Select which gentk you would like to sell for&nbsp;
+        <DisplayTezos
+          className={style.price}
+          formatBig={false}
+          mutez={offer.price}
+          tezosSize="regular"
+        />
+        &nbsp; which is&nbsp;
+        <FloorDifference Element="span" price={offer.price} floor={floor} /> of
+        the floor price.
+      </p>
       <Spacing size="regular" />
       <div className={style.gentks}>
         {data?.user.objkts.map((gentk: Objkt) => (
-          <div key={gentk.id} className={style.gentk_container}>
+          <div
+            key={gentk.id}
+            className={style.gentk_container}
+            onClick={() => setSelectedGentk(gentk)}
+          >
             <Checkbox
               value={gentk.id === selectedGentk?.id}
-              onChange={(value) => setSelectedGentk(value ? gentk : null)}
+              onChange={() => {}}
             />
-            <div
-              className={style.gentk}
-              onClick={() => setSelectedGentk(gentk)}
-            >
+            <div className={style.gentk}>
               <div className={style.thumbnail_container}>
                 <Image
                   ipfsUri={gentk.metadata?.thumbnailUri}
@@ -62,6 +80,16 @@ const _ModalAcceptCollectionOffer = ({
                 <span className={style.name}>{gentk.name}</span>
               </span>
             </div>
+            <Link href={`/gentk/${gentk.id}`} passHref>
+              <a
+                target="_blank"
+                rel="noopener norefere"
+                className={style.linkButton}
+                title="Open token in new tab"
+              >
+                <i className="fa-solid fa-arrow-up-right-from-square" />
+              </a>
+            </Link>
           </div>
         ))}
       </div>
