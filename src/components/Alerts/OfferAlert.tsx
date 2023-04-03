@@ -47,7 +47,13 @@ const OfferAlert = ({
   )
 }
 
-const checkOfferIsRelevant = (offer: AnyOffer, floorThreshold: number) => {
+const checkOfferIsRelevant = (
+  user: ConnectedUser,
+  offer: AnyOffer,
+  floorThreshold: number
+) => {
+  // if offer is from the user, ignore
+  if (offer.buyer.id === user.id) return false
   /**
    * if no floor, use 0 - better to have false positives than miss
    * potentially good offers
@@ -74,7 +80,7 @@ export const createOfferAlert = (
   )
   // filter offers below floor threshold
   const relevantOffers = newOffers.filter((offer) =>
-    checkOfferIsRelevant(offer, settings.offerAlertsFloorThreshold)
+    checkOfferIsRelevant(user, offer, settings.offerAlertsFloorThreshold)
   )
   // if none, do nothing
   if (!relevantOffers.length) return null

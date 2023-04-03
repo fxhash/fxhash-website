@@ -1,4 +1,4 @@
-import React, { memo, useRef } from "react"
+import React, { memo, useContext, useRef } from "react"
 import style from "./TableUser.module.scss"
 import cs from "classnames"
 import {
@@ -19,6 +19,7 @@ import useHasScrolledToBottom from "hooks/useHasScrolledToBottom"
 import { OfferActions } from "components/Offers/OfferActions"
 import { CollectionOfferActions } from "components/Offers/CollectionOfferActions"
 import Skeleton from "components/Skeleton"
+import { UserContext } from "containers/UserProvider"
 
 interface RowProps {
   buttons?: React.ReactNode
@@ -113,13 +114,18 @@ const OfferRow = ({ offer }: { offer: Offer }) => (
   </OfferActions>
 )
 
-const CollectionOfferRow = ({ offer }: { offer: CollectionOffer }) => (
-  <CollectionOfferActions key={`${offer.id}-${offer.version}`} offer={offer}>
-    {({ buttons, feedback }) => (
-      <Row buttons={buttons} feedback={feedback} offer={offer} />
-    )}
-  </CollectionOfferActions>
-)
+const CollectionOfferRow = ({ offer }: { offer: CollectionOffer }) => {
+  const { user } = useContext(UserContext)
+  // don't show the received offer if it's from the current user
+  if (user?.id === offer.buyer.id) return null
+  return (
+    <CollectionOfferActions key={`${offer.id}-${offer.version}`} offer={offer}>
+      {({ buttons, feedback }) => (
+        <Row buttons={buttons} feedback={feedback} offer={offer} />
+      )}
+    </CollectionOfferActions>
+  )
+}
 
 interface TableUserOffersReceivedProps {
   offers: AnyOffer[]

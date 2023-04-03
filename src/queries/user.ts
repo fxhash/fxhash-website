@@ -70,6 +70,9 @@ export const Qu_userFrequentAlerts = gql`
           id
           createdAt
           price
+          buyer {
+            id
+          }
           token {
             id
             name
@@ -82,6 +85,9 @@ export const Qu_userFrequentAlerts = gql`
           id
           createdAt
           price
+          buyer {
+            id
+          }
           objkt {
             id
             name
