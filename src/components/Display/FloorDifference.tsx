@@ -7,7 +7,7 @@ interface Props {
   price: number
   floor: number | null
   append?: string
-  Element: ElementType
+  Element?: ElementType
 }
 export function FloorDifference({
   price,
