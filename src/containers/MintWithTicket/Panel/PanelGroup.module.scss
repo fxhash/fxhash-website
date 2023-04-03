@@ -6,6 +6,7 @@
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
+    margin-bottom: var(--fxl-spacing-xs);
   }
 
   .title_wrapper {
@@ -14,7 +15,6 @@
     flex-direction: row;
     align-items: center;
     gap: var(--fxl-spacing-xs);
-    margin-bottom: var(--fxl-spacing-xs);
   }
 
   .title {

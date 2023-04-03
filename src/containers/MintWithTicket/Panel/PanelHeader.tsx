@@ -1,13 +1,13 @@
 import style from "./PanelHeader.module.scss"
 import cs from "classnames"
 
-interface Props {
+export interface PanelHeaderProps {
   title: React.ReactNode
   description: React.ReactNode
   onClickHide: () => void
 }
 
-export function PanelHeader(props: Props) {
+export function PanelHeader(props: PanelHeaderProps) {
   const {
     title = "fx(lens)",
     description = "Local environment for fxhash projects",

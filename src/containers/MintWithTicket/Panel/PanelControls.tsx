@@ -8,7 +8,6 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useContext, useEffect, useMemo } from "react"
 import { UserContext } from "containers/UserProvider"
-import { PanelSubmitMode } from "./PanelRoot"
 import { useLazyQuery } from "@apollo/client"
 import { Qu_userMintTickets } from "queries/user"
 import { MintTicket } from "types/entities/MintTicket"
@@ -19,24 +18,26 @@ import { TOnMintHandler } from "../MintWithTicketPage"
 import { isBefore } from "date-fns"
 import { useMintingState } from "hooks/useMintingState"
 
-interface Props {
+export type PanelSubmitMode = "with-ticket" | "free" | "none"
+
+export interface PanelControlsProps {
   token: GenerativeToken
   onClickBack?: () => void
   onOpenNewTab?: () => void
   onSubmit: TOnMintHandler
   submitLabel?: string
   hideSubmit?: boolean
-  mode: PanelSubmitMode
+  mode?: PanelSubmitMode
 }
 
-export function PanelControls(props: Props) {
+export function PanelControls(props: PanelControlsProps) {
   const {
     token,
     onClickBack,
     onOpenNewTab,
     onSubmit,
     submitLabel = "mint",
-    mode,
+    mode = "none",
     hideSubmit,
   } = props
 

@@ -1,9 +1,9 @@
 import style from "./PanelRoot.module.scss"
 import cs from "classnames"
-import { PanelHeader } from "./PanelHeader"
-import { PanelParams, PanelParamsRef } from "./PanelParams"
-import { PanelFeatures } from "./PanelFeatures"
-import { PanelHash } from "./PanelHash"
+import { PanelHeader, PanelHeaderProps } from "./PanelHeader"
+import { PanelParams, PanelParamsProps, PanelParamsRef } from "./PanelParams"
+import { PanelFeatures, PanelFeaturesProps } from "./PanelFeatures"
+import { PanelHash, PanelHashProps } from "./PanelHash"
 import {
   FxParamDefinition,
   FxParamsData,
@@ -13,43 +13,22 @@ import { GenerativeToken } from "types/entities/GenerativeToken"
 import { IParamsHistoryEntry } from "components/FxParams/ParamsHistory"
 import { RefObject, useMemo } from "react"
 import { getUserName } from "utils/user"
-import { PanelControls } from "./PanelControls"
+import { PanelControls, PanelControlsProps } from "./PanelControls"
 import { Spacing } from "components/Layout/Spacing"
 import { TOnMintHandler } from "../MintWithTicketPage"
 import Link from "next/link"
 
-export type PanelSubmitMode = "with-ticket" | "free" | "none"
-
-interface Props {
-  show: boolean
-  data: Record<string, any>
-  hash: string
-  features: any
-  params: FxParamDefinition<FxParamType>[]
-  token: GenerativeToken
-  onChangeHash: (s: string) => void
-  onChangeData: (data: FxParamsData) => void
-  onChangeLockedParamIds?: (ids: string[]) => void
-  lockedParamIds?: string[]
-  history?: IParamsHistoryEntry[]
-  historyOffset?: number
-  onUndo?: () => void
-  onRedo?: () => void
+interface PanelRootProps
+  extends PanelParamsProps,
+    PanelHashProps,
+    PanelFeaturesProps,
+    PanelControlsProps {
   panelParamsRef?: RefObject<PanelParamsRef>
-  withAutoUpdate: boolean
-  onChangeWithAutoUpdate: (state: boolean) => void
-  onOpenNewTab: () => void
-  onClickBack: () => void
-  onClickSubmit: TOnMintHandler
   onClickHide: () => void
-  onClickRefresh?: () => void
-  onLocalDataChange?: (d: FxParamsData) => void
-  hideSubmit?: boolean
-  mode?: PanelSubmitMode
-  disableWarningAnimation?: boolean
+  show: boolean
 }
 
-export function PanelRoot(props: Props) {
+export function PanelRoot(props: PanelRootProps) {
   const {
     show,
     data,
@@ -66,7 +45,7 @@ export function PanelRoot(props: Props) {
     onUndo,
     onRedo,
     panelParamsRef,
-    onClickSubmit,
+    onSubmit,
     onOpenNewTab,
     onClickBack,
     withAutoUpdate,
@@ -77,6 +56,10 @@ export function PanelRoot(props: Props) {
     hideSubmit,
     mode = "none",
     disableWarningAnimation,
+    onSaveConfiguration,
+    onOpenLoadConfigurationModal,
+    disableOpenLoadConfigurationButton,
+    disableSaveConfigurationButton,
   } = props
   const name = useMemo(() => getUserName(token.author, 15), [token])
 
@@ -121,6 +104,12 @@ export function PanelRoot(props: Props) {
             onChangeWithAutoUpdate={onChangeWithAutoUpdate}
             onClickRefresh={onClickRefresh}
             onLocalDataChange={onLocalDataChange}
+            onSaveConfiguration={onSaveConfiguration}
+            onOpenLoadConfigurationModal={onOpenLoadConfigurationModal}
+            disableOpenLoadConfigurationButton={
+              disableOpenLoadConfigurationButton
+            }
+            disableSaveConfigurationButton={disableSaveConfigurationButton}
           />
           <PanelFeatures features={features} />
         </div>
@@ -128,7 +117,7 @@ export function PanelRoot(props: Props) {
       <PanelControls
         mode={mode}
         token={token}
-        onSubmit={onClickSubmit}
+        onSubmit={onSubmit}
         onOpenNewTab={onOpenNewTab}
         onClickBack={onClickBack}
         hideSubmit={hideSubmit}

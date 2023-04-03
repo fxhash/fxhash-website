@@ -1,11 +1,11 @@
 import style from "./PanelFeatures.module.scss"
 import { PanelGroup } from "./PanelGroup"
 
-interface Props {
+export interface PanelFeaturesProps {
   features: any
 }
 
-export function PanelFeatures(props: Props) {
+export function PanelFeatures(props: PanelFeaturesProps) {
   const { features } = props
   if (!features || features?.length === 0) return null
   return (
