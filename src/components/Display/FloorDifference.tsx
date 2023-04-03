@@ -1,14 +1,20 @@
 import style from "./FloorDifference.module.scss"
 import cs from "classnames"
 import colors from "../../styles/Colors.module.css"
-import { useMemo } from "react"
+import { useMemo, ElementType } from "react"
 
 interface Props {
   price: number
   floor: number | null
   append?: string
+  Element: ElementType
 }
-export function FloorDifference({ price, floor, append }: Props) {
+export function FloorDifference({
+  price,
+  floor,
+  append,
+  Element = "div",
+}: Props) {
   const ratio = useMemo(
     () => (floor != null ? price / floor : null),
     [price, floor]
@@ -19,7 +25,7 @@ export function FloorDifference({ price, floor, append }: Props) {
   )
 
   return (
-    <div>
+    <Element>
       {ratio !== null ? (
         ratio < 1 ? (
           <strong className={cs(colors.error)}>
@@ -33,6 +39,6 @@ export function FloorDifference({ price, floor, append }: Props) {
       ) : (
         "/"
       )}
-    </div>
+    </Element>
   )
 }
