@@ -26,8 +26,6 @@ export const useQueryParam = <T>(
     paramValue ? parse(paramValue) : defaultValue
   )
 
-  console.log(serialize(value))
-
   /**
    * check if a param is defined - if it's an array, check if it has any items
    * otherwise, check if it's truthy

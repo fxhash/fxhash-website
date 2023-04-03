@@ -18,7 +18,7 @@ import { disableIosTextFieldZoom } from "../utils/mobile"
 const ROUTES_TO_RETAIN = [
   "/explore",
   "/explore/incoming",
-  "/explore/articles",
+  "/articles",
   "/marketplace",
   "/marketplace/collections",
 ]
