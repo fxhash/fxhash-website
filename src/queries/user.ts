@@ -424,6 +424,11 @@ export const Qu_userAcceptCollectionOffer = gql`
         owner {
           id
         }
+        issuer {
+          marketStats {
+            floor
+          }
+        }
       }
     }
   }
