@@ -3,7 +3,7 @@ import { MessageProps } from "components/MessageCenter/Message"
 import { ISettingsContext } from "context/Theme"
 import { isAfter } from "date-fns"
 import Link from "next/link"
-import { Offer } from "types/entities/Offer"
+import { AnyOffer, Offer, offerTypeGuard } from "types/entities/Offer"
 import { ConnectedUser } from "types/entities/User"
 import { readCursor, setCursor } from "utils/alerts"
 import { getUserProfileLink } from "utils/user"
@@ -14,7 +14,7 @@ const OfferAlert = ({
   onRemove,
 }: {
   user: ConnectedUser
-  newOffers: Offer[]
+  newOffers: AnyOffer[]
   onRemove: MessageProps["onRemove"]
 }) => {
   return (
@@ -26,7 +26,14 @@ const OfferAlert = ({
           <b>
             <DisplayTezos mutez={offer.price} />
           </b>{" "}
-          for <b>{offer.objkt.name}</b>
+          for{" "}
+          {offerTypeGuard(offer) ? (
+            <b>{offer.objkt.name}</b>
+          ) : (
+            <>
+              collection <b>{offer.token.name}</b>
+            </>
+          )}
         </div>
       ))}
       {newOffers.length > 2 && <div>...{newOffers.length - 2} more</div>}
@@ -40,19 +47,22 @@ const OfferAlert = ({
   )
 }
 
-const checkOfferIsRelevant = (offer: Offer, floorThreshold: number) => {
+const checkOfferIsRelevant = (offer: AnyOffer, floorThreshold: number) => {
   /**
    * if no floor, use 0 - better to have false positives than miss
    * potentially good offers
    */
-  const floor = offer.objkt.issuer.marketStats?.floor || 0
+  const floor =
+    (offerTypeGuard(offer)
+      ? offer.objkt.issuer.marketStats?.floor
+      : offer.token.marketStats?.floor) || 0
   return offer.price >= floorThreshold * floor
 }
 
 export const createOfferAlert = (
   user: ConnectedUser,
   settings: ISettingsContext,
-  offers: Offer[]
+  offers: AnyOffer[]
 ) => {
   if (!settings.showOfferAlerts) return null
 
