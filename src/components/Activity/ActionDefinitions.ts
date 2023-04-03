@@ -71,7 +71,8 @@ export const ActionDefinitions: Record<TokenActionType, ActionDefinition> = {
     predecescence: 0,
     link: ActionLinks.token,
   },
-  TICKET_CLAIMED: {
+  // @ts-expect-error TODO: fix typo in API type
+  TICKED_CLAIMED: {
     icon: "fa-sharp fa-solid fa-ticket",
     iconColor: "success",
     render: ActionClaimedTicket,
