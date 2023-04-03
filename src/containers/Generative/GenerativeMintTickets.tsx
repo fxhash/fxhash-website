@@ -98,6 +98,7 @@ const _GenerativeMintTickets = ({ tokenId }: GenerativeMintTicketsProps) => {
             firstColName="Your tickets"
             mintTickets={userMintTickets}
             loading={loading}
+            refreshEveryMs={60000}
           />
         </div>
       )}
@@ -107,6 +108,7 @@ const _GenerativeMintTickets = ({ tokenId }: GenerativeMintTicketsProps) => {
             firstColName="Under auction (holder failed to pay tax)"
             mintTickets={mintTicketsBySection.auctionTickets}
             loading={loading && mintTicketsBySection.unusedTickets.length === 0}
+            refreshEveryMs={15000}
           />
         </div>
       )}
@@ -119,6 +121,7 @@ const _GenerativeMintTickets = ({ tokenId }: GenerativeMintTicketsProps) => {
             firstColName="Unused tickets"
             mintTickets={mintTicketsBySection.unusedTickets}
             loading={loading}
+            refreshEveryMs={60000}
           />
         </InfiniteScrollTrigger>
       </div>
