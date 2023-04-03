@@ -65,15 +65,30 @@ export const Qu_userFrequentAlerts = gql`
   query User($id: String, $name: String) {
     user(id: $id, name: $name) {
       id
-      offersReceived(filters: { active_eq: true }) {
-        id
-        createdAt
-        price
-        objkt {
-          name
-          issuer {
+      allOffersReceived(filters: { active_eq: true }) {
+        ... on CollectionOffer {
+          id
+          createdAt
+          price
+          token {
+            id
+            name
             marketStats {
               floor
+            }
+          }
+        }
+        ... on Offer {
+          id
+          createdAt
+          price
+          objkt {
+            id
+            name
+            issuer {
+              marketStats {
+                floor
+              }
             }
           }
         }
