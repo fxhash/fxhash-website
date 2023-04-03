@@ -245,7 +245,8 @@
   padding: 0 !important;
   color: transparent !important;
   animation: turn 1.5s ease-in-out 0.5s infinite forwards;
-
+  margin-left: var(--spacing-xxs);
+  margin-right: var(--spacing-xxs);
   & > * {
     opacity: 0;
   }
