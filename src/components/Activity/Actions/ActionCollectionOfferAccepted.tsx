@@ -8,7 +8,6 @@ export const ActionCollectionOfferAccepted: TActionComp = ({
   action,
   verbose,
 }) => {
-  console.log(action)
   return (
     <>
       <UserBadge
