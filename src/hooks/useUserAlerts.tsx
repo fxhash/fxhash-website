@@ -18,7 +18,7 @@ const createFrequentAlerts = (
   data: any
 ) => {
   return [
-    createOfferAlert(user, settings, data.user?.offersReceived || []),
+    createOfferAlert(user, settings, data.user.offersReceived),
     // ...other frequent alerts
   ].filter((alert) => alert !== null) as IMessageSent[]
 }
