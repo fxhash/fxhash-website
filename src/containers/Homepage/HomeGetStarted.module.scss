@@ -1,0 +1,46 @@
+@import "../../styles/Variables";
+
+.bg {
+  padding-top: 100px;
+  padding-bottom: 100px;
+  background-color: var(--color-gray-vvvlight);
+}
+.docs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  margin-top: 32px;
+  & a {
+    display: inline-flex;
+    flex-direction: column;
+    font-size: var(--font-size-regular);
+    & .doc_title span {
+      margin-right: 0.5em;
+    }
+    & .doc_description {
+      margin-top: 16px;
+      text-decoration: none;
+      color: var(--color-black);
+      font-size: var(--font-size-regular);
+      line-height: 1.31;
+      font-weight: 400;
+    }
+    &:hover {
+      text-decoration: none;
+      & .doc_title {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+@media (max-width: $breakpoint-sm) {
+  .docs {
+    grid-template-columns: repeat(1, 1fr);
+    gap: 36px;
+    margin-top: 50px;
+    
+    & .doc_title {
+      font-size: var(--font-size-h5);
+    }
+  }
+}
