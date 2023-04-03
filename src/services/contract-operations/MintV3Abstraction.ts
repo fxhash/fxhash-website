@@ -8,6 +8,7 @@ import {
 import { FxhashContracts } from "../../types/Contracts"
 import { ContractOperation } from "./ContractOperation"
 import { genTokCurrentPrice } from "utils/generative-token"
+import { isTicketOwner, isTicketUsed } from "services/Blockchain"
 
 export type TMintV3AbstractionOperationParams = {
   // if a ticket ID is provided, uses the ticket; otherwise mints on issuer
@@ -30,7 +31,25 @@ export class MintV3AbstractionOperation extends ContractOperation<TMintV3Abstrac
     this.contract = await this.manager.getContract(FxhashContracts.ISSUER_V3)
   }
 
+  async validate(): Promise<boolean> {
+    if (this.useTicket) {
+      const [isUsed, isOwner] = await Promise.all([
+        isTicketUsed(this.params.ticketId!),
+        isTicketOwner(
+          this.params.ticketId!,
+          await this.manager.getBeaconWallet().getPKH()
+        ),
+      ])
+
+      if (isUsed) throw new Error("Ticket is already used.")
+      if (!isOwner) throw new Error("Ticket is not owned by you.")
+    }
+    return true
+  }
+
   async call(): Promise<TransactionWalletOperation> {
+    await this.validate()
+
     const ep = this.useTicket ? "mint_with_ticket" : "mint"
     const params = this.useTicket
       ? {

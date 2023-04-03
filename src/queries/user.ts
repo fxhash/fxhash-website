@@ -1,12 +1,10 @@
 import { gql } from "@apollo/client"
-import {
-  Frag_GenAuthor,
-  Frag_GenPricing,
-  Frag_GenTokenBadge,
-} from "./fragments/generative-token"
+import { Frag_GenAuthor, Frag_GenPricing } from "./fragments/generative-token"
 import { Frag_ArticleInfos, Frag_ArticleInfosAction } from "./fragments/article"
 import { Frag_MediaImage } from "./fragments/media"
 import { Frag_UserBadge } from "./fragments/user"
+import { Frag_UserOffer } from "./fragments/offer"
+import { Frag_UserCollectionOffer } from "./fragments/collection-offer"
 
 export const Qu_user = gql`
   ${Frag_UserBadge}
@@ -51,13 +49,55 @@ export const Qu_userLight = gql`
   }
 `
 
-export const Qu_userAlerts = gql`
+export const Qu_userDailyAlerts = gql`
   query User($id: String, $name: String) {
     user(id: $id, name: $name) {
       id
       mintTickets {
         id
         taxationPaidUntil
+      }
+    }
+  }
+`
+
+export const Qu_userFrequentAlerts = gql`
+  query User($id: String, $name: String) {
+    user(id: $id, name: $name) {
+      id
+      allOffersReceived(filters: { active_eq: true }) {
+        ... on CollectionOffer {
+          id
+          createdAt
+          price
+          buyer {
+            id
+          }
+          token {
+            id
+            name
+            marketStats {
+              floor
+            }
+          }
+        }
+        ... on Offer {
+          id
+          createdAt
+          price
+          buyer {
+            id
+          }
+          objkt {
+            id
+            name
+            issuer {
+              marketStats {
+                floor
+              }
+            }
+          }
+        }
       }
     }
   }
@@ -338,6 +378,7 @@ export const Qu_userMintTickets = gql`
           id
           slug
           name
+          flag
           thumbnailUri
           captureMedia {
             ...MediaImage
@@ -349,39 +390,17 @@ export const Qu_userMintTickets = gql`
 `
 
 export const Qu_userOffersReceived = gql`
-  ${Frag_MediaImage}
+  ${Frag_UserCollectionOffer}
+  ${Frag_UserOffer}
   query UserOffersReceived($id: String!, $filters: OfferFilter) {
     user(id: $id) {
       id
-      offersReceived(filters: $filters) {
-        id
-        price
-        createdAt
-        buyer {
-          id
-          name
+      allOffersReceived(filters: $filters) {
+        ... on CollectionOffer {
+          ...UserCollectionOffer
         }
-        objkt {
-          id
-          version
-          name
-          metadata
-          captureMedia {
-            ...MediaImage
-          }
-          activeListing {
-            id
-            version
-          }
-          owner {
-            id
-          }
-          issuer {
-            id
-            marketStats {
-              floor
-            }
-          }
+        ... on Offer {
+          ...UserOffer
         }
       }
     }
@@ -389,28 +408,46 @@ export const Qu_userOffersReceived = gql`
 `
 
 export const Qu_userOffersSent = gql`
-  ${Frag_MediaImage}
+  ${Frag_UserCollectionOffer}
+  ${Frag_UserOffer}
   query UserOffersSent($id: String!, $filters: OfferFilter) {
     user(id: $id) {
       id
-      offersSent(filters: $filters) {
+      allOffersSent(filters: $filters) {
+        ... on CollectionOffer {
+          ...UserCollectionOffer
+        }
+        ... on Offer {
+          ...UserOffer
+        }
+      }
+    }
+  }
+`
+
+export const Qu_userAcceptCollectionOffer = gql`
+  ${Frag_MediaImage}
+  query UserAcceptCollectionOffer($userId: String!, $issuerId: Int!) {
+    user(id: $userId) {
+      id
+      objkts(
+        filters: { issuer_in: [$issuerId] }
+        sort: { iteration: "ASC" }
+        take: 50
+      ) {
         id
-        price
-        createdAt
-        buyer {
+        version
+        name
+        metadata
+        captureMedia {
+          ...MediaImage
+        }
+        owner {
           id
         }
-        objkt {
-          id
-          version
-          name
-          metadata
-          captureMedia {
-            ...MediaImage
-          }
-          owner {
-            id
-            name
+        issuer {
+          marketStats {
+            floor
           }
         }
       }

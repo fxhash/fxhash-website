@@ -143,6 +143,14 @@ export function GenerativeDisplay({ token, offlineMode = false }: Props) {
             )}
           >
             <GenerativePricing token={token} />
+            {token.mintTicketSettings && (
+              <>
+                <strong>Ticket Grace Period</strong>
+                <span className={style.mobile_align_right}>
+                  {token.mintTicketSettings.gracingPeriod} days
+                </span>
+              </>
+            )}
             <ListSplits name="Primary split" splits={token.splitsPrimary} />
             <strong>Royalties</strong>
             <span className={style.mobile_align_right}>

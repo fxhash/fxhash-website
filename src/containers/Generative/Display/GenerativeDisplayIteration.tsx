@@ -31,6 +31,7 @@ import { Clamp } from "../../../components/Clamp/Clamp"
 import { truncateMiddle } from "../../../utils/strings"
 import { HoverTitle } from "../../../components/Utils/HoverTitle"
 import { Icon } from "../../../components/Icons/Icon"
+import { DisplayTezos } from "../../../components/Display/DisplayTezos"
 
 interface GenerativeDisplayIterationProps {
   objkt: Objkt
@@ -171,6 +172,20 @@ const _GenerativeDisplayIteration = ({
               style.extra_details
             )}
           >
+            {objkt.mintedPrice !== null && (
+              <>
+                <strong>Minted Price</strong>
+                <span
+                  className={cs(style.mobile_align_right, style.mobile_gray)}
+                >
+                  <DisplayTezos
+                    mutez={objkt.mintedPrice || 0}
+                    tezosSize="regular"
+                    formatBig={false}
+                  />
+                </span>
+              </>
+            )}
             <strong>Creator</strong>
             <span className={cs(style.mobile_align_right, style.mobile_gray)}>
               <UserBadge
@@ -281,7 +296,10 @@ const _GenerativeDisplayIteration = ({
               <Spacing size="3x-large" />
               <h4>Features</h4>
               <Spacing size="small" />
-              <Features features={objkt.features} />
+              <Features
+                features={objkt.features}
+                projectUrl={getGenerativeTokenUrl(objkt.issuer)}
+              />
             </div>
           )}
         </div>
@@ -292,7 +310,10 @@ const _GenerativeDisplayIteration = ({
           <Spacing size="3x-large" />
           <h4>Features</h4>
           <Spacing size="small" />
-          <Features features={objkt.features} />
+          <Features
+            features={objkt.features}
+            projectUrl={getGenerativeTokenUrl(objkt.issuer)}
+          />
         </div>
       )}
     </>

@@ -7,6 +7,7 @@ import listingV3Type from "./listing-v3/type.json"
 // import listingCancelType from "./listing-cancel/type.json"
 // import listingAcceptType from "./listing-accept/type.json"
 import offerAcceptType from "./offer-accept/type.json"
+import collectionOfferAcceptType from "./collection-offer-accept/type.json"
 import mintIssuerType from "./mint-issuer/type.json"
 import mintIssuerV3Type from "./mint-issuer-v3/type.json"
 import mintType from "./mint/type.json"
@@ -39,6 +40,7 @@ export enum EBuildableParams {
   // LISTING_CANCEL        = "LISTING_CANCEL",
   // LISTING_ACCEPT        = "LISTING_ACCEPT",
   OFFER_ACCEPT = "OFFER_ACCEPT",
+  COLLECTION_OFFER_ACCEPT = "COLLECTION_OFFER_ACCEPT",
   MINT = "MINT",
   MINT_V3 = "MINT_V3",
   MINT_ISSUER = "MINT_ISSUER",
@@ -68,6 +70,7 @@ const buildableParamTypes: Record<EBuildableParams, MichelsonV1Expression> = {
   // LISTING_CANCEL: listingCancelType,
   // LISTING_ACCEPT: listingAcceptType,
   OFFER_ACCEPT: offerAcceptType,
+  COLLECTION_OFFER_ACCEPT: collectionOfferAcceptType,
   MINT_ISSUER: mintIssuerType,
   MINT_ISSUER_V3: mintIssuerV3Type,
   MINT: mintType,

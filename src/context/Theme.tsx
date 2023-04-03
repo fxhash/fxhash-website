@@ -33,6 +33,10 @@ export interface ISettingsProperties {
   epilepsy: boolean
   layoutMasonry: boolean
   preferredMarketplaceSorting: MarketplaceSortOption
+  // notifications
+  showMintTicketAlerts: boolean
+  showOfferAlerts: boolean
+  offerAlertsFloorThreshold: number
 }
 
 const Colors = {
@@ -112,13 +116,18 @@ const defaultProperties: ISettingsProperties = {
   displayPricesCard: false,
   displayBurntCard: false,
   hoverEffectCard: true,
-  showTicketPreMintWarning: true,
   quality: 0,
   topBannerMessage: "",
   nsfw: false,
   epilepsy: hasReducedMotion && hasReducedMotion.matches,
   layoutMasonry: false,
   preferredMarketplaceSorting: "listingCreatedAt-desc",
+  // fx(params)
+  showTicketPreMintWarning: true,
+  // notifications
+  showMintTicketAlerts: true,
+  showOfferAlerts: true,
+  offerAlertsFloorThreshold: 0.5,
 }
 
 const defaultCtx: ISettingsContext = {

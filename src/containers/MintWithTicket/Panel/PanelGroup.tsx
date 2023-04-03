@@ -3,7 +3,7 @@ import cs from "classnames"
 import { PropsWithChildren, ReactChild } from "react"
 import { useAriaTooltip } from "hooks/useAriaTooltip"
 
-type Props = PropsWithChildren<{
+export type PanelGroupProps = PropsWithChildren<{
   title: string
   description?: string
   descriptionClassName?: string
@@ -15,7 +15,7 @@ export function PanelGroup({
   description,
   descriptionClassName,
   children,
-}: Props) {
+}: PanelGroupProps) {
   const { showTooltip, handleLeave, handleEnter, hoverElement } =
     useAriaTooltip()
   return (

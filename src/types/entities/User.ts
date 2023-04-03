@@ -2,7 +2,7 @@ import { Action } from "./Action"
 import { GenerativeToken } from "./GenerativeToken"
 import { Objkt } from "./Objkt"
 import { Listing } from "./Listing"
-import { Offer } from "./Offer"
+import { AnyOffer, Offer } from "./Offer"
 import { NFTArticle } from "./Article"
 import { MediaImage } from "./MediaImage"
 import { MintTicket } from "./MintTicket"
@@ -60,8 +60,8 @@ export interface User {
   listings: Listing[]
   objkts: Objkt[]
   offers: Listing[]
-  offersReceived: Offer[]
-  offersSent: Offer[]
+  allOffersReceived: AnyOffer[]
+  allOffersSent: Offer[]
   createdAt: Date
   updatedAt: Date
   // can be populated to merge the actions, however not returned by api

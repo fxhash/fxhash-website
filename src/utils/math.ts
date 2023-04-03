@@ -11,6 +11,11 @@ export function getMutezDecimalsNb(x: number): number {
   return split.length > 1 ? split.pop()?.length || 0 : 0
 }
 
+export function floorToDecimalNb(nb: number, decimals: number): number {
+  const coeff = Math.pow(10, decimals)
+  return Math.floor(nb * coeff) / coeff
+}
+
 export function getDecimalsNumber(x: number): number {
   return x.toString().split(".").pop()?.length || 0
 }

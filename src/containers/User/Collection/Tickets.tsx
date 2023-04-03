@@ -31,6 +31,7 @@ const UserCollectionTicketsTable = ({ user }: UserSalesTableProps) => {
         mintTickets={tickets}
         firstColName="Token"
         displayTokenPreview
+        refreshEveryMs={60000}
       />
     </div>
   )
