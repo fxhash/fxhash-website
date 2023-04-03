@@ -5,6 +5,7 @@ import React, {
   useEffect,
   useState,
 } from "react"
+import { faTriangleExclamation } from "@fortawesome/free-solid-svg-icons"
 import style from "./TableUser.module.scss"
 import { UserBadge } from "../User/UserBadge"
 import Skeleton from "../Skeleton"
@@ -23,6 +24,39 @@ import { UserContext } from "../../containers/UserProvider"
 import Link from "next/link"
 import { Button } from "../Button"
 import { Image } from "components/Image"
+import { GenTokFlag } from "types/entities/GenerativeToken"
+import { useAriaTooltip } from "hooks/useAriaTooltip"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { getFlagText } from "containers/Generative/FlagBanner"
+
+const ModeratedFlag = ({ flag }: { flag: GenTokFlag }) => {
+  const { hoverElement, showTooltip, handleEnter, handleLeave } =
+    useAriaTooltip()
+
+  return (
+    <div onMouseEnter={handleEnter} onMouseLeave={handleLeave}>
+      <FontAwesomeIcon
+        className={style.warningIcon}
+        ref={hoverElement}
+        tabIndex={0}
+        onFocus={handleEnter}
+        onBlur={handleLeave}
+        icon={faTriangleExclamation}
+      />
+
+      {showTooltip && (
+        <span
+          className={style.tooltip}
+          role="tooltip"
+          aria-hidden={!showTooltip}
+          aria-live="polite"
+        >
+          {getFlagText(flag)}
+        </span>
+      )}
+    </div>
+  )
+}
 
 interface TableMintTicketsProps {
   firstColName?: string
@@ -31,10 +65,11 @@ interface TableMintTicketsProps {
   loading?: boolean
   refreshEveryMs?: number
 }
+
 const _TableMintTickets = ({
   firstColName = "owner",
   displayTokenPreview,
-  mintTickets,
+  mintTickets: mintTicketsUnfiltered,
   loading,
   refreshEveryMs = 15000,
 }: TableMintTicketsProps) => {
@@ -66,6 +101,30 @@ const _TableMintTickets = ({
       clearInterval(interval)
     }
   }, [refreshEveryMs])
+
+  const isInForeclosure = (mintTicket: MintTicket) => {
+    const dateTaxPaidUntil = new Date(mintTicket.taxationPaidUntil)
+    return dateTaxPaidUntil <= now
+  }
+
+  const isFlagged = (mintTicket: MintTicket) => {
+    const isMalicious = mintTicket.token.flag === GenTokFlag.MALICIOUS
+    const isHidden = mintTicket.token.flag === GenTokFlag.HIDDEN
+    return isMalicious || isHidden
+  }
+
+  /**
+   * if a ticket is associated with a moderated token we hide the
+   * claim action - if the ticket is in foreclosure we simply hide
+   * the entire ticket as there will be no available actions.
+   */
+  const shouldHideTicket = (mintTicket: MintTicket) =>
+    isFlagged(mintTicket) && isInForeclosure(mintTicket)
+
+  const mintTickets = mintTicketsUnfiltered.filter(
+    (mintTicket) => !shouldHideTicket(mintTicket)
+  )
+
   return (
     <>
       {firstColName && (
@@ -81,32 +140,53 @@ const _TableMintTickets = ({
         </thead>
         <tbody>
           {loading || mintTickets.length > 0 ? (
-            mintTickets.map((mintTicket) => {
+            mintTickets.map((mintTicket, i) => {
               const dateTaxPaidUntil = new Date(mintTicket.taxationPaidUntil)
               const isUnderAuction = dateTaxPaidUntil > now
               const price = isUnderAuction
                 ? mintTicket.price
                 : getDAPrice(now, dateTaxPaidUntil, mintTicket.price)
+
+              const showFlag = isFlagged(mintTicket)
+
               return (
-                <tr key={mintTicket.id}>
+                <tr
+                  key={mintTicket.id}
+                  className={cs({ [style["tr-flagged"]]: showFlag })}
+                >
                   <td
                     className={cs(style["td-gentk"], style.td_mobile_fullwidth)}
                   >
                     {displayTokenPreview ? (
-                      <Link href={`/generative/slug/${mintTicket.token.slug}`}>
-                        <a className={style.ticketToken}>
-                          <div className={cs(style.icon)}>
-                            <Image
-                              ipfsUri={mintTicket.token.thumbnailUri!}
-                              image={mintTicket.token.captureMedia}
-                              alt=""
-                            />
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          flexDirection: "row",
+                        }}
+                      >
+                        <Link
+                          href={`/generative/slug/${mintTicket.token.slug}`}
+                        >
+                          <a className={style.ticketToken}>
+                            <div className={cs(style.icon)}>
+                              <Image
+                                ipfsUri={mintTicket.token.thumbnailUri!}
+                                image={mintTicket.token.captureMedia}
+                                alt=""
+                              />
+                            </div>
+                            <div className={cs(style.name)}>
+                              {mintTicket.token.name}
+                            </div>
+                          </a>
+                        </Link>
+                        {showFlag && (
+                          <div className={cs(style.flag)}>
+                            <ModeratedFlag flag={mintTicket.token.flag} />
                           </div>
-                          <div className={style.name}>
-                            {mintTicket.token.name}
-                          </div>
-                        </a>
-                      </Link>
+                        )}
+                      </div>
                     ) : (
                       <UserBadge
                         hasLink
@@ -137,28 +217,32 @@ const _TableMintTickets = ({
                     <div className={style.actions}>
                       {user?.id === mintTicket.owner.id && isUnderAuction ? (
                         <>
-                          <Link
-                            href={`/generative/slug/${mintTicket.token.slug}/ticket/${mintTicket.id}/mint`}
-                          >
-                            <Button
-                              isLink
-                              type="button"
-                              color="secondary"
-                              size="small"
+                          {!showFlag && (
+                            <Link
+                              href={`/generative/slug/${mintTicket.token.slug}/ticket/${mintTicket.id}/mint`}
                             >
-                              mint iteration
-                            </Button>
-                          </Link>
+                              <Button
+                                isLink
+                                type="button"
+                                color="secondary"
+                                size="small"
+                              >
+                                mint iteration
+                              </Button>
+                            </Link>
+                          )}
                           <ButtonUpdatePriceMintTicket
                             mintTicket={mintTicket}
                           />
                         </>
                       ) : (
-                        <ButtonClaimMintTicket
-                          mintTicket={mintTicket}
-                          price={price}
-                          now={now}
-                        />
+                        !showFlag && (
+                          <ButtonClaimMintTicket
+                            mintTicket={mintTicket}
+                            price={price}
+                            now={now}
+                          />
+                        )
                       )}
                     </div>
                   </td>
