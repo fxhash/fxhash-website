@@ -303,6 +303,12 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
               onClickRefresh={handleClickRefresh}
               hideSubmit={ticketId == null}
               mode={mode}
+              onSaveConfiguration={handleSaveConfiguration}
+              onOpenLoadConfigurationModal={handleOpenLoadConfigurationModal}
+              disableOpenLoadConfigurationButton={
+                !storedConfigurations || storedConfigurations?.length === 0
+              }
+              disableSaveConfigurationButton={paramConfigExists}
             />
             {showLoadConfigModal && (
               <div className={cs(style.overlay, style.loadPanel)}>
