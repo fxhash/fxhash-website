@@ -25,7 +25,9 @@ export const ActionCollectionOfferAccepted: TActionComp = ({
     </span>
     <>
       on{" "}
-      <strong>{verbose ? action.token!.name : `#${action.token!.id}`}</strong>
+      <strong>
+        {verbose ? action.token!.name : `#${action.objkt!.iteration}`}
+      </strong>
     </>
     <>accepted by</>
     <UserBadge
