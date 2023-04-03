@@ -51,13 +51,7 @@ interface Props {
 }
 export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
   const { showTicketPreMintWarning } = useSettingsContext()
-
-  const { width } = useWindowSize()
-  const isMobile = useMemo(() => {
-    return (width || 0) < breakpoints.sm
-  }, [width])
   const [showLoadConfigModal, setShowLoadConfigModal] = useState(false)
-  const [showPanel, setShowPanel] = useState(!isMobile)
   const [showPreMintWarningView, setShowPreMintWarningView] = useState(false)
   const [selectedTicketId, setSelectedTicketId] = useState<number | null>(null)
   const panelParamsRef = useRef<PanelParamsRef>(null)
@@ -277,111 +271,21 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
     })
   }, [panelParamsRef, params, setHash, historyContext, withAutoUpdate])
 
-  useEffect(() => {
-    setShowPanel(!isMobile)
-  }, [isMobile])
-
   return (
     <div className={style.root}>
       <ResizableArea
         resizableComponent={({ show, onToggleVisibility }) => (
           <div className={cs(style.panel)}>
-        <PanelRoot
-          disableWarningAnimation={!showTicketPreMintWarning}
-          show={show}
-          data={data}
-          params={params}
-          features={features}
-          hash={hash}
-          token={token}
-          onLocalDataChange={handleLocalDataChange}
-          onChangeData={handleChangeData}
-          onChangeHash={handleChangeHash}
-          lockedParamIds={lockedParamIds}
-          onChangeLockedParamIds={setLockedParamIds}
-          history={historyContext.history}
-          historyOffset={historyContext.offset}
-          onUndo={historyContext.undo}
-          onRedo={historyContext.redo}
-          panelParamsRef={panelParamsRef}
-          withAutoUpdate={withAutoUpdate}
-          onChangeWithAutoUpdate={setWithAutoUpdate}
-          onOpenNewTab={handleOpenNewTab}
-          onClickBack={handleClickBack}
-          onSubmit={handleClickSubmit}
-          onClickHide={handleToggleShowPanel(false)}
-          onClickRefresh={handleClickRefresh}
-          hideSubmit={ticketId == null}
-          mode={mode}
-          onSaveConfiguration={handleSaveConfiguration}
-          onOpenLoadConfigurationModal={handleOpenLoadConfigurationModal}
-          disableOpenLoadConfigurationButton={
-            !storedConfigurations || storedConfigurations?.length === 0
-          }
-          disableSaveConfigurationButton={paramConfigExists}
-        />
-        {showLoadConfigModal && (
-          <div className={cs(style.overlay, style.loadPanel)}>
-            <PanelGroup
-              title="Load saved params"
-              headerComp={
-                <ButtonIcon
-                  onClick={handleCloseLoadConfigurationModal}
-                  icon="fa-solid fa-xmark"
-                />
-              }
-            />
-            {storedConfigurations && (
-              <ParamConfigurationList
-                items={storedConfigurations}
-                params={params}
-                onLoadConfiguration={handleLoadConfiguration}
-                onPreviewConfiguration={handlePreviewConfiguration}
-                onUpdateConfigName={handleUpdateConfigName}
-                onRemoveConfig={handleRemoveConfig}
-              />
-            )}
-          </div>
-        )}
-        {(loading || success) && (
-          <div
-            className={cs(style.layout_centered, style.overlay, {
-              [style.has_success]: success,
-            })}
-          >
-            <div className={cs(style.kt_feedback)}>
-              <ContractFeedback
-                state={state}
-                success={success}
-                loading={loading}
-                error={error}
-                successMessage="Your iteration is minted!"
-              />
-            </div>
-            {loading && <Loader size="small" color="currentColor" />}
-            {success && (
-              <Link
-                href={`/reveal/${token.id}/?fxhash=${opHash}&fxparams=${inputBytes}`}
-                passHref
-              >
-                <Button
-                  isLink
-                  size="regular"
-                  color="secondary"
-                  iconComp={<i aria-hidden className="fas fa-arrow-right" />}
-                  iconSide="right"
-                >
-                  final reveal
-                </Button>
-              </Link>
-            )}
-          </div>
-        )}
-        {showPreMintWarningView && (
-          <div
-            className={cs(style.layout_centered, style.overlay, style.pre_mint)}
-          >
-            <PreMintWarning
+            <PanelRoot
+              disableWarningAnimation={!showTicketPreMintWarning}
+              show={show}
+              data={data}
+              params={params}
+              features={features}
+              hash={hash}
+              token={token}
+              onLocalDataChange={handleLocalDataChange}
+              onChangeData={handleChangeData}
               onChangeHash={handleChangeHash}
               lockedParamIds={lockedParamIds}
               onChangeLockedParamIds={setLockedParamIds}
@@ -394,12 +298,35 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
               onChangeWithAutoUpdate={setWithAutoUpdate}
               onOpenNewTab={handleOpenNewTab}
               onClickBack={handleClickBack}
-              onClickSubmit={handleClickSubmit}
+              onSubmit={handleClickSubmit}
               onClickHide={onToggleVisibility(false)}
               onClickRefresh={handleClickRefresh}
               hideSubmit={ticketId == null}
               mode={mode}
             />
+            {showLoadConfigModal && (
+              <div className={cs(style.overlay, style.loadPanel)}>
+                <PanelGroup
+                  title="Load saved params"
+                  headerComp={
+                    <ButtonIcon
+                      onClick={handleCloseLoadConfigurationModal}
+                      icon="fa-solid fa-xmark"
+                    />
+                  }
+                />
+                {storedConfigurations && (
+                  <ParamConfigurationList
+                    items={storedConfigurations}
+                    params={params}
+                    onLoadConfiguration={handleLoadConfiguration}
+                    onPreviewConfiguration={handlePreviewConfiguration}
+                    onUpdateConfigName={handleUpdateConfigName}
+                    onRemoveConfig={handleRemoveConfig}
+                  />
+                )}
+              </div>
+            )}
             {(loading || success) && (
               <div
                 className={cs(style.mint_overlay, {
