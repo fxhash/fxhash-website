@@ -17,8 +17,7 @@ export const ActionClaimedTicket: TActionComp = ({ action, verbose }) => (
         <>
           <span>
             {" "}
-            of <strong>{action.token!.name}</strong>
-            from
+            of <strong>{action.token!.name}</strong> from
           </span>
           <UserBadge
             className={cs(style.user)}
