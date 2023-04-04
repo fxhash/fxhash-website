@@ -19,8 +19,8 @@ const _UserOffersReceived = ({ user }: UserOffersReceivedProps) => {
     },
   })
   const offers = useMemo(
-    () => data?.user?.offersReceived || [],
-    [data?.user?.offersReceived]
+    () => data?.user?.allOffersReceived || [],
+    [data?.user?.allOffersReceived]
   )
   // todo intinite loader
   return (
