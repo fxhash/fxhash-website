@@ -140,7 +140,7 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
   // call contract v3 mint with ticket
   const handleMint: TOnMintHandler = useCallback(
     (_ticketId) => {
-      if (inputBytes && _ticketId) {
+      if (inputBytes) {
         call({
           token: token,
           ticketId: _ticketId,
