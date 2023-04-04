@@ -7,32 +7,36 @@ import { DisplayTezos } from "../../Display/DisplayTezos"
 export const ActionCollectionOfferAccepted: TActionComp = ({
   action,
   verbose,
-}) => (
-  <>
-    <UserBadge
-      className={cs(style.user)}
-      hasLink={true}
-      user={action.target!}
-      size="small"
-    />
-    <>collection offer of</>
-    <span className={cs(style.price)}>
-      <DisplayTezos
-        formatBig={false}
-        mutez={action.numericValue}
-        tezosSize="regular"
-      />
-    </span>
+}) => {
+  return (
     <>
-      on{" "}
-      <strong>{verbose ? action.token!.name : `#${action.token!.id}`}</strong>
+      <UserBadge
+        className={cs(style.user)}
+        hasLink={true}
+        user={action.target!}
+        size="small"
+      />
+      <>collection offer of</>
+      <span className={cs(style.price)}>
+        <DisplayTezos
+          formatBig={false}
+          mutez={action.numericValue}
+          tezosSize="regular"
+        />
+      </span>
+      <>
+        on{" "}
+        <strong>
+          {verbose ? action.objkt!.name : `#${action.objkt!.iteration}`}
+        </strong>
+      </>
+      <>accepted by</>
+      <UserBadge
+        className={cs(style.user)}
+        hasLink={true}
+        user={action.issuer!}
+        size="small"
+      />
     </>
-    <>accepted by</>
-    <UserBadge
-      className={cs(style.user)}
-      hasLink={true}
-      user={action.issuer!}
-      size="small"
-    />
-  </>
-)
+  )
+}
