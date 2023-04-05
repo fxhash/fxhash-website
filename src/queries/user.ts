@@ -456,6 +456,7 @@ export const Qu_userAcceptCollectionOffer = gql`
         }
         activeListing {
           id
+          version
         }
       }
     }
