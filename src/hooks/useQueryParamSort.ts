@@ -2,15 +2,15 @@ import { IOptions } from "components/Input/Select"
 import { useRouter } from "next/router"
 import { useEffectAfterRender } from "./useEffectAfterRender"
 import useSort, { UseSortParams } from "./useSort"
-import { NextParsedUrlQuery } from "next/dist/server/request-meta"
+import { NextRouter } from "next/router"
 
 const initializeFromQueryParam = <T>(
   options: IOptions<T>[],
-  routerQuery: NextParsedUrlQuery,
+  routerQuery: NextRouter["query"],
   defaultSort?: string
 ) => {
   // get the sort value from the query param
-  const { sort: sortQueryParam } = routerQuery as { sort: T }
+  const { sort: sortQueryParam } = routerQuery as unknown as { sort: T }
   // check if the sort value is valid
   const isValid = options.find((option) => option.value === sortQueryParam)
   // if it's valid, return it, otherwise return the default sort
