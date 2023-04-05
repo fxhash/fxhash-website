@@ -39,17 +39,14 @@ export const useOfferFilters = (storageKey?: OfferFiltersSettingsKeys) => {
   const settings = useContext(SettingsContext)
 
   const { sortValue, sortVariable, sortOptions, setSortValue } =
-    useQueryParamSort(offersSortOptions)
+    useQueryParamSort(offersSortOptions, {
+      defaultSort: storageKey ? settings[storageKey].sort : "createdAt-desc",
+    })
 
-  const [floorThreshold, setFloorThreshold] = useQueryParam("floor", 50)
-
-  // load settings if we have a storage key
-  useEffect(() => {
-    if (!storageKey) return
-    const { floorThreshold, sort } = settings.marketplaceGenerativeOffers
-    setFloorThreshold(floorThreshold)
-    setSortValue(sort)
-  }, [])
+  const [floorThreshold, setFloorThreshold] = useQueryParam(
+    "floor",
+    storageKey ? settings[storageKey].floorThreshold : 50
+  )
 
   return {
     floorThreshold,
