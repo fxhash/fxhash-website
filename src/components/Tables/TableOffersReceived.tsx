@@ -8,6 +8,7 @@ import {
   offerTypeGuard,
 } from "types/entities/Offer"
 import {
+  GenerativeTokenImageAndName,
   ObjktImageAndName,
   TokenImageAndName,
 } from "components/Objkt/ObjktImageAndName"
@@ -39,13 +40,9 @@ const Row = ({ buttons, feedback, offer }: RowProps) => {
       )
 
     return (
-      <TokenImageAndName
-        href={`/generative/${offer.token.id}`}
-        metadata={offer.token.metadata}
-        captureMedia={offer.token.captureMedia}
-        name={`${offer.token.name} (collection)`}
-        label="Token"
-      />
+      <div className={cs(style.link_wrapper)}>
+        <GenerativeTokenImageAndName token={offer.token} />
+      </div>
     )
   }
 

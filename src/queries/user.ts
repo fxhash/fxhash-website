@@ -392,10 +392,14 @@ export const Qu_userMintTickets = gql`
 export const Qu_userOffersReceived = gql`
   ${Frag_UserCollectionOffer}
   ${Frag_UserOffer}
-  query UserOffersReceived($id: String!, $filters: OfferFilter) {
+  query UserOffersReceived(
+    $id: String!
+    $filters: OfferFilter
+    $sort: OffersSortInput
+  ) {
     user(id: $id) {
       id
-      allOffersReceived(filters: $filters) {
+      allOffersReceived(filters: $filters, sort: $sort) {
         ... on CollectionOffer {
           ...UserCollectionOffer
         }
@@ -449,6 +453,9 @@ export const Qu_userAcceptCollectionOffer = gql`
           marketStats {
             floor
           }
+        }
+        activeListing {
+          id
         }
       }
     }
