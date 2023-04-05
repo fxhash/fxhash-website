@@ -139,11 +139,11 @@ const defaultProperties: ISettingsProperties = {
   offerAlertsFloorThreshold: 0.5,
   marketplaceGenerativeOffers: {
     sort: "createdAt-desc",
-    floorThreshold: 0.5,
+    floorThreshold: 50,
   },
   userDashboardReceivedOffers: {
     sort: "createdAt-desc",
-    floorThreshold: 0.5,
+    floorThreshold: 50,
   },
 }
 
