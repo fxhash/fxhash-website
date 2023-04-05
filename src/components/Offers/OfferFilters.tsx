@@ -1,11 +1,18 @@
-import { memo } from "react"
+import { memo, useContext, useEffect } from "react"
 import { IOptions, Select } from "components/Input/Select"
 import { useQueryParam } from "hooks/useQueryParam"
 import { useQueryParamSort } from "hooks/useQueryParamSort"
 import style from "./OfferFilters.module.scss"
 import { Slider } from "components/Input/Slider"
+import { SettingsContext } from "context/Theme"
 
-const offersSortOptions: IOptions[] = [
+export type OfferSortOption =
+  | "createdAt-desc"
+  | "price-desc"
+  | "price-asc"
+  | "createdAt-asc"
+
+const offersSortOptions: IOptions<OfferSortOption>[] = [
   {
     label: "recently created",
     value: "createdAt-desc",
@@ -24,21 +31,42 @@ const offersSortOptions: IOptions[] = [
   },
 ]
 
-export const useOfferFilters = (defaultSort?: string) => {
+type OfferFiltersSettingsKeys =
+  | "marketplaceGenerativeOffers"
+  | "userDashboardReceivedOffers"
+
+export const useOfferFilters = (storageKey?: OfferFiltersSettingsKeys) => {
+  const settings = useContext(SettingsContext)
+
   const { sortValue, sortVariable, sortOptions, setSortValue } =
-    useQueryParamSort(offersSortOptions, {
-      defaultSort,
-    })
+    useQueryParamSort(offersSortOptions)
 
   const [floorThreshold, setFloorThreshold] = useQueryParam("floor", 50)
 
+  // load settings if we have a storage key
+  useEffect(() => {
+    if (!storageKey) return
+    const { floorThreshold, sort } = settings.marketplaceGenerativeOffers
+    setFloorThreshold(floorThreshold)
+    setSortValue(sort)
+  }, [])
+
   return {
     floorThreshold,
-    setFloorThreshold,
+    setFloorThreshold: (val: number) => {
+      // update settings if we have a storage key
+      if (storageKey)
+        settings.update(storageKey, { floorThreshold: val, sort: sortValue })
+      setFloorThreshold(val)
+    },
     sortValue,
     sortVariable,
     sortOptions,
-    setSortValue,
+    setSortValue: (val: string) => {
+      // update settings if we have a storage key
+      if (storageKey) settings.update(storageKey, { floorThreshold, sort: val })
+      setSortValue(val)
+    },
   }
 }
 
