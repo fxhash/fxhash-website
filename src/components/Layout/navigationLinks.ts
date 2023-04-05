@@ -11,6 +11,7 @@ export interface NavigationLinkSubmenu {
   label: string
   key: string
   subMenu: NavigationLinkSingle[]
+  href?: string
 }
 export type NavigationLink = NavigationLinkSingle | NavigationLinkSubmenu
 
@@ -26,7 +27,7 @@ export const navigationLinks: NavigationLink[] = [
   { href: "/doc", label: "doc", key: "doc" },
 ]
 
-export const getProfileLinks = (user: ConnectedUser) => [
+export const getProfileLinks = (user: ConnectedUser): NavigationLink[] => [
   {
     href: "/mint-generative",
     key: "mint-generative",
@@ -37,22 +38,42 @@ export const getProfileLinks = (user: ConnectedUser) => [
     key: "article-new",
     label: "mint article",
   },
-  { href: `${getUserProfileLink(user)}`, key: "creations", label: "creations" },
   {
-    href: `${getUserProfileLink(user)}/articles`,
-    key: "articles",
-    label: "articles",
+    label: "Profile",
+    key: "profile",
+    href: `${getUserProfileLink(user)}`,
+    subMenu: [
+      {
+        href: `${getUserProfileLink(user)}`,
+        key: "creations",
+        label: "creations",
+      },
+      {
+        href: `/collaborations`,
+        key: "collaborations",
+        label: "collaborations",
+      },
+
+      {
+        href: `${getUserProfileLink(user)}/articles`,
+        key: "articles",
+        label: "articles",
+      },
+      {
+        href: `${getUserProfileLink(user)}/collection`,
+        key: "collection",
+        label: "collection",
+      },
+      {
+        href: `${getUserProfileLink(user)}/dashboard/`,
+        key: "sales",
+        label: "sales",
+      },
+      {
+        href: `${getUserProfileLink(user)}/dashboard/offers-received`,
+        key: "offers",
+        label: "offers",
+      },
+    ],
   },
-  {
-    href: `${getUserProfileLink(user)}/collection`,
-    key: "collection",
-    label: "collection",
-  },
-  {
-    href: `${getUserProfileLink(user)}/dashboard`,
-    key: "dashboard",
-    label: "dashboard",
-  },
-  { href: `/collaborations`, key: "collaborations", label: "collaborations" },
-  { href: `/edit-profile`, key: "edit-profile", label: "edit profile" },
 ]
