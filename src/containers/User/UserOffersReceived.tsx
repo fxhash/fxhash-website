@@ -19,7 +19,7 @@ const _UserOffersReceived = ({ user }: UserOffersReceivedProps) => {
     sortVariable,
     sortOptions,
     setSortValue,
-  } = useOfferFilters()
+  } = useOfferFilters("userDashboardReceivedOffers")
 
   const { data, loading, refetch } = useQuery(Qu_userOffersReceived, {
     notifyOnNetworkStatusChange: true,
