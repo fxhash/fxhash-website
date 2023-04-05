@@ -15,7 +15,7 @@ import Link from "next/link"
 import { FloorDifference } from "components/Display/FloorDifference"
 
 interface ModalAcceptCollectionOfferProps {
-  offer: CollectionOffer
+  offer: CollectionOffer | null
   onClose: () => void
   onClickAccept: (selectedGentk: Objkt) => void
 }
@@ -31,13 +31,15 @@ const _ModalAcceptCollectionOffer = ({
   const { data, loading } = useQuery(Qu_userAcceptCollectionOffer, {
     variables: {
       userId: user?.id,
-      issuerId: offer.token.id,
+      issuerId: offer!.token.id,
     },
+    skip: !offer,
     fetchPolicy: "no-cache",
   })
 
-  console.log(data)
   const floor = data?.user?.objkts?.[0]?.issuer?.marketStats?.floor
+
+  if (!offer) return null
 
   return (
     <Modal
