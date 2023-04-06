@@ -8,6 +8,8 @@ import { SettingsContext } from "context/Theme"
 
 export type OfferSortOption =
   | "createdAt-desc"
+  | "floorDifference-desc"
+  | "floorDifference-asc"
   | "price-desc"
   | "price-asc"
   | "createdAt-asc"
@@ -16,6 +18,14 @@ const offersSortOptions: IOptions<OfferSortOption>[] = [
   {
     label: "recently created",
     value: "createdAt-desc",
+  },
+  {
+    label: "floor % (high to low)",
+    value: "floorDifference-desc",
+  },
+  {
+    label: "floor % (low to high)",
+    value: "floorDifference-asc",
   },
   {
     label: "price (high to low)",
