@@ -98,7 +98,7 @@ export function useContractOperation<Params>(
             type: "warning",
             title: "Indexer delay",
             content:
-              "We've added a 2 minutes delay to our indexer to protect against blockchain rollbacks occuring since last protocol update. It will take about 2 minutes for your operation to be visible on the website.",
+              "We've added a 30 second delay to our indexer to protect against blockchain rollbacks occuring since last protocol update. It will take about 30 seconds for your operation to be visible on the website.",
           },
           {
             type: "success",
