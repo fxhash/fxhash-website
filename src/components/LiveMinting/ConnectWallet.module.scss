@@ -1,0 +1,55 @@
+.container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12vh 0;
+
+  &.center {
+    justify-content: space-around;
+    padding: 22vh 0;
+  }
+}
+
+.welcome {
+  padding: 0 15px;
+  text-align: center;
+}
+
+.container_button {
+  max-width: 300px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  label {
+    margin-bottom: 4px !important;
+  }
+}
+
+.button {
+  width: 100%;
+  padding-left: 15px !important;
+  padding-right: 15px !important;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.purchase {
+  margin-top: 6px;
+  font-size: var(--font-size-small);
+  text-align: center;
+  color: var(--color-gray-dark);
+}
+
+.tezos {
+  font-weight: bold;
+  color: var(--color-donator);
+}
+
+.radio {
+  font-size: var(--font-size-small);
+}
