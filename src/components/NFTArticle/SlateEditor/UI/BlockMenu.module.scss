@@ -1,0 +1,14 @@
+.root {
+  position: absolute;
+  visibility: hidden;
+  &.pos-up {
+    bottom: -30px;
+  }
+
+  &.pos-down {
+    top: -3px;
+  }
+}
+.show {
+  visibility: visible;
+}

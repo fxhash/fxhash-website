@@ -1,0 +1,75 @@
+@import "../../styles/Variables";
+
+.gentks {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xxs);
+  overflow: auto;
+}
+
+.gentk_container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  cursor: pointer;
+  padding: var(--spacing-xxs) var(--spacing-xs);
+  gap: var(--spacing);
+  &:hover {
+    background-color: var(--color-gray-vvlight);
+  }
+  > label {
+    padding-left: 0px;
+    margin-bottom: 0;
+    > span {
+      margin-right: 0;
+    }
+  }
+}
+.linkButton {
+  margin-left: auto;
+  color: var(--color-gray-light);
+  &:hover {
+    color: var(--color-secondary);
+  }
+}
+
+.gentk {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  cursor: pointer;
+  color: var(--color-black);
+}
+
+.price {
+  color: var(--color-secondary);
+}
+
+.container_name {
+  display: flex;
+  flex-direction: column;
+  margin-left: var(--spacing);
+}
+
+.name {
+  font-weight: bold;
+}
+
+.thumbnail_container {
+  flex-shrink: 0;
+  width: 50px;
+  height: 50px;
+}
+
+.container_buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 16px;
+}
+
+@media (max-width: $breakpoint-sm) {
+  .container_buttons {
+    flex-direction: column;
+  }
+}
