@@ -24,7 +24,7 @@ import { useReceiveTokenInfos } from "hooks/useReceiveTokenInfos"
 export function Sandbox() {
   const artworkIframeRef = useRef<ArtworkIframeRef>(null)
   const paramControlsRef = useRef<ControlsTestRef>(null)
-  const { onIframeLoaded, params, hash, features, setHash } =
+  const { onIframeLoaded, params, hash, features, setHash, info } =
     useReceiveTokenInfos(artworkIframeRef)
   const [file, setFile] = useState<File | null>(null)
   const [filesRecord, setFilesRecord] = useState<SandboxFiles | null>(null)

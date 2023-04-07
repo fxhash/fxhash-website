@@ -25,8 +25,9 @@ export const snippetFromUrl = `
       var isFxpreview = search.get('preview') === "1"
       // call this method to trigger the preview
       function fxpreview() {
-        window.dispatchEvent(new Event("fxhash-preview"))
-        setTimeout(() => fxpreview(), 500)
+        console.log("FXPREVIEW")
+        // window.dispatchEvent(new Event("fxhash-preview"))
+        // setTimeout(() => fxpreview(), 500)
       }
       //
       // NEW: v2 of the fxhash SDK lol
@@ -141,7 +142,8 @@ export const snippetFromUrl = `
             }
           },
           constrain: (value, definition) => {
-            return value.slice(0, 8).padEnd(8, "f")
+            const hex = value.replace("#", "")
+            return hex.slice(0, 8).padEnd(8, "f")
           },
           random: () =>
             \`\${[...Array(8)]
@@ -159,7 +161,11 @@ export const snippetFromUrl = `
             }
             return rtn
           },
-          bytesLength: () => 64 * 2,
+          bytesLength: (options) => {
+            if (typeof options?.maxLength !== "undefined")
+                return Number(options.maxLength) * 2
+            return 64 * 2
+          },
           constrain: (value, definition) => {
             let min = 0
             if (typeof definition.options?.minLength !== "undefined")
@@ -167,7 +173,6 @@ export const snippetFromUrl = `
             let max = 64
             if (typeof definition.options?.maxLength !== "undefined")
               max = definition.options.maxLength
-            max = Math.min(max, 64)
             let v = value.slice(0, max);
             if (v.length < min) {
               return v.padEnd(min)
@@ -181,7 +186,6 @@ export const snippetFromUrl = `
             let max = 64
             if (typeof definition.options?.maxLength !== "undefined")
               max = definition.options.maxLength
-            max = Math.min(max, 64)
             const length = Math.round(Math.random() * (max - min) + min)
             return [...Array(length)]
               .map((i) => (~~(Math.random() * 36)).toString(36))
@@ -224,8 +228,8 @@ export const snippetFromUrl = `
             continue
           }
           // extract the length from the bytes & shift the initial bytes string
-          const valueBytes = bytes.substring(0, processor.bytesLength() * 2)
-          bytes = bytes.substring(processor.bytesLength() * 2)
+          const valueBytes = bytes.substring(0, processor.bytesLength(def?.options) * 2)
+          bytes = bytes.substring(processor.bytesLength(def?.options) * 2)
           // deserialize the bytes into the params
           const value =  processor.deserialize(valueBytes, def)
           params[def.id] = processor.constrain?.(value, def) || value;
@@ -245,6 +249,7 @@ export const snippetFromUrl = `
       }
 
       window.$fx = {
+        _version: "3.0.1",
         _processors: processors,
         // where params def & features will be stored
         _params: undefined,
@@ -300,27 +305,18 @@ export const snippetFromUrl = `
         
       }
       window.addEventListener("message", (event) => {
-        if (event.data === "fxhash_getHash") {
+        if (event.data === "fxhash_getInfo") {
           parent.postMessage({
-            id: "fxhash_getHash",
-            data: window.$fx.hash
-          }, "*")
-        }
-        
-        if (event.data === "fxhash_getFeatures") {
-          parent.postMessage({
-            id: "fxhash_getFeatures",
-            data: window.$fx.getFeatures()
-          }, "*")
-        }
-
-        if (event.data === "fxhash_getParams") {
-          parent.postMessage({
-            id: "fxhash_getParams",
-            data: {
-              definitions: window.$fx.getDefinitions(),
-              values: window.$fx.getRawParams(),
-            }
+            id: "fxhash_getInfo",
+            data: { 
+              version: window.$fx._version,
+              hash: window.$fx.hash,
+              features: window.$fx.getFeatures(),
+              params: {
+                definitions: window.$fx.getDefinitions(),
+                values: window.$fx.getRawParams(),
+              },
+            },
           }, "*")
         }
       })
