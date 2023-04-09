@@ -28,7 +28,7 @@ import { TabsContainer } from "../../../components/Layout/TabsContainer"
 import { GenerativeListings } from "../../../containers/Marketplace/GenerativeListings"
 import { GenerativeOffers } from "../../../containers/Marketplace/GenerativeOffers"
 import { getImageApiUrl, OG_IMAGE_SIZE } from "../../../components/Image"
-import { CollectionOfferCreate } from "containers/Objkt/CollectionOfferCreate"
+import { ButtonCollectionOfferCreate } from "containers/Objkt/ButtonCollectionOfferCreate"
 
 interface Props {
   token: GenerativeToken
@@ -146,7 +146,10 @@ const GenerativeTokenMarketplace: NextPage<Props> = ({ token }) => {
                 </Button>
               </Link>
               <Spacing size="x-small" sm="regular" />
-              <CollectionOfferCreate token={token} />
+              <ButtonCollectionOfferCreate
+                token={token}
+                floor={token.marketStats?.floor}
+              />
             </div>
           </div>
         </header>
