@@ -1,89 +1,48 @@
-import React, { memo, useCallback, useContext, useMemo, useState } from "react"
-import autonomyIRL from "autonomy-irl-js"
+import React, { memo, useCallback, useContext } from "react"
 import cs from "classnames"
 import style from "./ConnectWallet.module.scss"
 import { Button } from "../Button"
 import { UserContext } from "../../containers/UserProvider"
-import { IconTezos } from "../Icons/IconTezos"
-import Link from "next/link"
-import { Checkbox } from "../Input/Checkbox"
-import { Spacing } from "../Layout/Spacing"
 import { LiveMintingContext } from "../../context/LiveMinting"
-import { useRouter } from "next/router"
-
-type WalletType = "custom" | "naan"
-const options = [
-  {
-    value: "naan",
-    label: "I have installed naan wallet",
-  },
-  {
-    value: "custom",
-    label: "I have my own wallet installed",
-  },
-]
 
 const _ConnectWallet = () => {
-  const [walletType, setWalletType] = useState<WalletType | "">("")
-  const userCtx = useContext(UserContext)
+  const { connect } = useContext(UserContext)
+  const { event } = useContext(LiveMintingContext)
 
-  const liveMinting = useContext(LiveMintingContext)
+  const handleClickConnect = useCallback(
+    (useAutonomy: boolean) => connect(useAutonomy),
+    [connect]
+  )
 
-  const isFreeLiveMint = true
-
-  const handleClickConnect = useCallback(() => {
-    userCtx.connect(isFreeLiveMint)
-  }, [userCtx, walletType])
+  const handleClickConnectAutonomy = () => handleClickConnect(true)
+  const handleClickConnectWallet = () => handleClickConnect(false)
 
   return (
     <div className={cs(style.container)}>
       <div className={cs(style.welcome)}>
-        Welcome to our Live Minting experience at{" "}
-        <strong>{liveMinting.event?.name}</strong>
+        Welcome to our Live Minting experience at <strong>{event?.name}</strong>
       </div>
 
       <div className={style.container_button}>
-        {isFreeLiveMint ? (
-          <Button
-            color="secondary"
-            className={style.button}
-            onClick={handleClickConnect}
-          >
-            sync Autonomy wallet
-          </Button>
-        ) : (
-          <>
-            <Link href={"https://wallet.kukai.app/"} passHref>
-              <Button
-                isLink
-                // @ts-ignore
-                target="_blank"
-                color="secondary"
-                className={style.button}
-              >
-                sync with autonomy wallet
-              </Button>
-            </Link>
-            <div className={style.purchase}>
-              You can purchase{" "}
-              <span className={style.tezos}>
-                <IconTezos />
-                tezos
-              </span>{" "}
-              from the wallet application
-            </div>
-          </>
-        )}
+        <Button
+          color="secondary"
+          className={style.button}
+          onClick={handleClickConnectAutonomy}
+        >
+          connect Autonomy wallet
+        </Button>
+        <div className={style.purchase}>
+          You will be prompted to select a wallet from the Autonomy app
+        </div>
       </div>
 
       <div className={style.container_button}>
         <Button
           type="button"
-          // disabled={!walletType && !isFocus}
           iconComp={<i aria-hidden className="fas fa-wallet" />}
-          onClick={handleClickConnect}
+          onClick={handleClickConnectWallet}
         >
-          connect your wallet
+          connect other wallet
         </Button>
       </div>
     </div>
