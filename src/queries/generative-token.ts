@@ -51,6 +51,20 @@ export const Qu_genTokens = gql`
   }
 `
 
+export const Qu_genTokensAuthors = gql`
+  ${Frag_GenAuthor}
+  query GenerativeTokens($skip: Int, $take: Int, $projectIds: [Int!]) {
+    generativeTokens(
+      skip: $skip
+      take: $take
+      filters: { id_in: $projectIds }
+    ) {
+      id
+      ...Author
+    }
+  }
+`
+
 export const Qu_genTokensIncoming = gql`
   ${Frag_GenTokenInfo}
   query GenerativeTokensIncoming(
