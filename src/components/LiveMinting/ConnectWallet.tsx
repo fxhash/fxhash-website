@@ -36,6 +36,10 @@ const _ConnectWallet = () => {
         </div>
       </div>
 
+      {/* 
+
+      TODO: figure out how to connect other wallet from inside autonomy webview
+      
       <div className={style.container_button}>
         <Button
           type="button"
@@ -44,7 +48,7 @@ const _ConnectWallet = () => {
         >
           connect other wallet
         </Button>
-      </div>
+      </div> */}
     </div>
   )
 }
