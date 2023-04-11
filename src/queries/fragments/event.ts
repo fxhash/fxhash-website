@@ -10,5 +10,6 @@ export const Frag_EventCard = gql`
     location
     imageUrl
     availabilities
+    description
   }
 `

@@ -24,7 +24,7 @@ export const generateCalendarDataForEvent = (
       dateEnd.getMinutes(),
     ],
     title: `${event.name} | fx(hash)`,
-    location: event.location,
+    location: event.location || "",
     status: "TENTATIVE",
     url: `${window.location.origin}/events/${event.id}/onboarding`,
     categories: ["Generative Art", "NFT"],
@@ -36,7 +36,7 @@ export const generateCalendarDataForEvent = (
       },
     ],
   }
-  const descriptionLines = []
+  const descriptionLines = [event.description, ""]
   if (event.artists?.length > 0) {
     const allArtists = event.artists
       .map((artist) => artist.name || artist.id)
