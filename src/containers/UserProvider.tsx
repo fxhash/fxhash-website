@@ -11,7 +11,7 @@ export interface UserContextType {
   user: ConnectedUser | null
   userFetched: boolean
   walletManager: WalletManager | null
-  connect: () => Promise<void>
+  connect: (useAutonomy?: boolean) => Promise<void>
   disconnect: () => void
 }
 
@@ -54,12 +54,14 @@ export function UserProvider({ children }: PropsWithChildren<{}>) {
   }, [userData])
 
   // asks the manager for a connection
-  const connect = () =>
+  const connect = (useAutonomy = false) =>
     new Promise<void>(async (resolve, reject) => {
       const ctx = ctxRef.current
 
       if (ctx.walletManager) {
-        const pkh = await ctx.walletManager.connect()
+        const pkh = useAutonomy
+          ? await ctx.walletManager.connectAutonomyWallet()
+          : await ctx.walletManager.connect()
         if (pkh) {
           // user is connected, we can update context and request gql api for user data
           const nCtx = { ...ctx }
