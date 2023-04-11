@@ -11,6 +11,7 @@ export interface UserContextType {
   user: ConnectedUser | null
   userFetched: boolean
   walletManager: WalletManager | null
+  isLiveMinting: boolean
   connect: (useAutonomy?: boolean) => Promise<void>
   disconnect: () => void
 }
@@ -19,6 +20,7 @@ const defaultCtx: UserContextType = {
   autoConnectChecked: false,
   user: null,
   userFetched: false,
+  isLiveMinting: true,
   walletManager: null,
   connect: () => new Promise((r) => r()),
   disconnect: () => {},
@@ -64,7 +66,7 @@ export function UserProvider({ children }: PropsWithChildren<{}>) {
           : await ctx.walletManager.connect()
         if (pkh) {
           // user is connected, we can update context and request gql api for user data
-          const nCtx = { ...ctx }
+          const nCtx = { ...ctx, isLiveMinting: useAutonomy }
           nCtx.user = {
             id: pkh,
             authorizations: [],
@@ -89,7 +91,7 @@ export function UserProvider({ children }: PropsWithChildren<{}>) {
     const ctx = ctxRef.current
     if (ctx.walletManager) {
       await ctx.walletManager.disconnect()
-      setContext({ ...ctx, user: null })
+      setContext({ ...ctx, user: null, isLiveMinting: false })
     }
   }
 
