@@ -20,7 +20,7 @@ const defaultCtx: UserContextType = {
   autoConnectChecked: false,
   user: null,
   userFetched: false,
-  isLiveMinting: true,
+  isLiveMinting: false,
   walletManager: null,
   connect: () => new Promise((r) => r()),
   disconnect: () => {},
