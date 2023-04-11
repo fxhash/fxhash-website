@@ -27,6 +27,7 @@
     "@types/react-color": "^3.0.6",
     "@types/react-datepicker": "^4.3.4",
     "@vvo/tzdb": "^6.50.0",
+    "autonomy-irl-js": "^1.0.0",
     "bignumber.js": "^9.0.2",
     "chart.js": "^3.6.0",
     "classnames": "^2.3.1",

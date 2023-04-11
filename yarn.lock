@@ -949,6 +949,11 @@ attr-accept@^2.2.1:
   resolved "https://registry.npmjs.org/attr-accept/-/attr-accept-2.2.2.tgz"
   integrity sha512-7prDjvt9HmqiZ0cl5CRjtS84sEyhsHP2coDkaZKRKVfCDo9s7iw7ChVmar78Gu9pC4SoR/28wFu/G5JJhTnqEg==
 
+autonomy-irl-js@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/autonomy-irl-js/-/autonomy-irl-js-1.0.0.tgz#7f4959695f7cbbe2fc0c9bda333b0f94a7663ed7"
+  integrity sha512-MJnd6p3isSfi694iDXB8QEJE6wwnuTP5q4C25y3yjvMvkTi6yb243tmX527XdaspBJqYPKw0zI+hqnpJDhLXQQ==
+
 available-typed-arrays@^1.0.5:
   version "1.0.5"
   resolved "https://registry.npmjs.org/available-typed-arrays/-/available-typed-arrays-1.0.5.tgz"
