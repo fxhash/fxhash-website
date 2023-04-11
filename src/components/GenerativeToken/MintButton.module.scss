@@ -6,6 +6,9 @@
 
   &.reversed {
     flex-direction: row-reverse;
+    > &:last-child {
+      flex-grow: 1;
+    }
   }
 }
 
@@ -53,7 +56,7 @@
 }
 
 @media (max-width: $breakpoint-sm) {
-  .root {
+  .btns_wrapper {
     width: 100%;
   }
   .button {
