@@ -6,7 +6,7 @@
 
   &.reversed {
     flex-direction: row-reverse;
-    > &:last-child {
+    > :last-child {
       flex-grow: 1;
     }
   }
