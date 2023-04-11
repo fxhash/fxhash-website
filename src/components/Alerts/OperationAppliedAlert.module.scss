@@ -1,0 +1,23 @@
+@import "../../styles/Variables.scss";
+
+.divider_container {
+  margin-left: -15px;
+  margin-right: -15px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+
+  .divider {
+    width: 100%;
+    height: 1px;
+    background-color: var(--color-gray-light);
+  }
+}
+
+.info_container {
+  display: flex;
+  align-items: center;
+
+  .info {
+    font-size: 0.75rem;
+  }
+}

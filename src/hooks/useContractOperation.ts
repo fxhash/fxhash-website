@@ -10,6 +10,7 @@ import {
   TContractOperationHookReturn,
 } from "../types/Contracts"
 import { useIsMounted } from "../utils/hookts"
+import { createOperationAppliedAlert } from "components/Alerts/OperationAppliedAlert"
 
 interface OptionsContractOperation {
   onSuccess?: (data: any) => void
@@ -93,19 +94,7 @@ export function useContractOperation<Params>(
 
       // even if not mounted anymore we push the messages to message center
       if (status === ContractOperationStatus.INJECTED) {
-        messageCenter.addMessages([
-          {
-            type: "warning",
-            title: "Indexer delay",
-            content:
-              "We've added a 30 second delay to our indexer to protect against blockchain rollbacks occuring since last protocol update. It will take about 30 seconds for your operation to be visible on the website.",
-          },
-          {
-            type: "success",
-            title: `Operation applied`,
-            content: `${data.message}`,
-          },
-        ])
+        messageCenter.addMessage(createOperationAppliedAlert(data.message))
       } else if (status === ContractOperationStatus.ERROR) {
         messageCenter.addMessage({
           type: "error",
