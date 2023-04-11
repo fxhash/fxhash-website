@@ -49,7 +49,7 @@ export function MintButton({
   children,
 }: PropsWithChildren<Props>) {
   // user ctx
-  const { user } = useContext(UserContext)
+  const { user, isLiveMinting } = useContext(UserContext)
   // live minting ctx
   const liveMintingContext = useContext(LiveMintingContext)
 
@@ -78,14 +78,20 @@ export function MintButton({
 
   return isMintButton || isMintDropdown ? (
     <>
-      <div className={cs(style.btns_wrapper)}>
+      <div
+        className={cs(style.btns_wrapper, {
+          [style.reversed]: isLiveMinting,
+        })}
+      >
         <div className={cs(style.root)}>
           <Button
             type="button"
-            color="secondary"
+            color={isLiveMinting ? "secondary-inverted" : "secondary"}
             size="regular"
             state={loading ? "loading" : "default"}
-            className={style.button}
+            className={cs(style.button, {
+              [style.narrow]: isLiveMinting,
+            })}
             disabled={disabled}
             onClick={() => {
               if (isMintButton) {

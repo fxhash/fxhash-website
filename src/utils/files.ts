@@ -57,3 +57,16 @@ export async function unzipFile(file: File): Promise<Record<string, Blob>> {
 export function isUrlLocal(url: string): boolean {
   return url.startsWith("blob:")
 }
+
+export const downloadTextAsGeneratedFile = (filename: string, text: string) => {
+  const element = document.createElement("a")
+  element.setAttribute(
+    "href",
+    `data:text/calendar;charset=utf-8,${encodeURIComponent(text)}`
+  )
+  element.setAttribute("download", filename)
+  element.style.display = "none"
+  document.body.appendChild(element)
+  element.click()
+  document.body.removeChild(element)
+}
