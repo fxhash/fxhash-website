@@ -1,6 +1,6 @@
 import cs from "classnames"
 import colors from "../../styles/Colors.module.css"
-import { ElementType, useMemo } from "react"
+import { useMemo } from "react"
 
 interface Props {
   price: number
