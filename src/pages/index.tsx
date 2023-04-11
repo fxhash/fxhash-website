@@ -21,9 +21,7 @@ import { Frag_UserBadge } from "../queries/fragments/user"
 import { Homepage } from "../containers/Homepage/Homepage"
 import { NFTArticle } from "../types/entities/Article"
 import { Frag_EventCard } from "../queries/fragments/event"
-import {
-  LiveMintingEvent,
-} from "../types/entities/LiveMinting"
+import { LiveMintingEvent } from "../types/entities/LiveMinting"
 
 interface Props {
   randomGenerativeToken: GenerativeToken | null

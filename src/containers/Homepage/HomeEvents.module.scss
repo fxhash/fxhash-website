@@ -1,3 +1,5 @@
+@import "../../styles/Variables";
+
 .container {
   padding-top: 40px;
   padding-bottom: 112px;
@@ -5,6 +7,13 @@
 
 .container_events {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(293px, 1fr));
   gap: 24px;
 }
+
+@media (max-width: $breakpoint-sm) {
+  .container_events {
+    gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+};

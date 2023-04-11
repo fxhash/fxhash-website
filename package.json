@@ -41,6 +41,7 @@
     "graphql": "^15.6.1",
     "gray-matter": "^4.0.3",
     "hastscript": "^7.0.2",
+    "ics": "^3.1.0",
     "is-hotkey": "^0.2.0",
     "is-mobile": "^3.0.0",
     "jose": "^4.11.1",

@@ -11,6 +11,8 @@ import { Countdown } from "../Utils/Countdown"
 import { EntityBadge } from "../User/EntityBadge"
 import { iconArtist } from "../Icons/custom"
 import cs from "classnames"
+import { downloadTextAsGeneratedFile } from "../../utils/files"
+import { generateCalendarDataForEvent } from "../../utils/ical"
 
 const availabilityLabels: Record<EventAvailability, string> = {
   ONLINE: "online",
@@ -19,8 +21,8 @@ const availabilityLabels: Record<EventAvailability, string> = {
 interface CardEventProps {
   event: LiveMintingEventWithArtists
 }
-const _CardEvent = ({
-  event: {
+const _CardEvent = ({ event }: CardEventProps) => {
+  const {
     name,
     startsAt,
     endsAt,
@@ -29,11 +31,23 @@ const _CardEvent = ({
     imageUrl,
     location,
     availabilities,
-  },
-}: CardEventProps) => {
+  } = event
   const [now, setNow] = useState(new Date())
-  const handleEndTimer = useCallback(() => setNow(new Date()), [])
   const dateStartAt = useMemo(() => new Date(startsAt), [startsAt])
+  const handleEndTimer = useCallback(() => setNow(new Date()), [])
+  const handleClickCalendar = useCallback(async () => {
+    const icsCreateEvent = (await import("ics")).createEvent
+    icsCreateEvent(generateCalendarDataForEvent(event), (error, value) => {
+      if (error) {
+        console.error(error)
+        return
+      }
+      downloadTextAsGeneratedFile(
+        `${format(dateStartAt, "yyyy-M-d")}-${id}.ics`,
+        value
+      )
+    })
+  }, [dateStartAt, event, id])
   const eventTimeStatus = useMemo<"upcoming" | "ongoing" | "past">(() => {
     const isLive = now > dateStartAt
     if (!isLive) return "upcoming"
@@ -61,7 +75,8 @@ const _CardEvent = ({
           <div className={style.card_text}>Scheduled</div>
           <Spacing size="2x-small" />
           <div className={style.card_date}>
-            {format(dateStartAt, "do MMMM yyyy 'at' H:mm")}
+            {format(dateStartAt, "do MMMM yyyy")} at&nbsp;
+            {format(dateStartAt, "H:mm")}
           </div>
           <Spacing size="x-small" />
           <div className={style.timer}>
@@ -94,16 +109,25 @@ const _CardEvent = ({
         )}
       </div>
       <div className={style.card_verso}>
-        <div className={style.card_infos}>
-          <div className={style.card_title}>Exhibiting</div>
-          {availabilities.length > 0 && (
-            <>
-              <Spacing size="2x-small" />
-              <div className={style.card_text}>
-                Available {availabilitiesStr}
-              </div>
-            </>
-          )}
+        <div className={style.card_header}>
+          <div className={style.card_infos}>
+            <div className={style.card_title}>Exhibiting</div>
+            {availabilities.length > 0 && (
+              <>
+                <Spacing size="2x-small" />
+                <div className={style.card_text}>
+                  Available {availabilitiesStr}
+                </div>
+              </>
+            )}
+          </div>
+          <button
+            className={style.cta_calendar}
+            onClick={handleClickCalendar}
+            title="Save to your calendar"
+          >
+            <i className="fa-regular fa-calendar-circle-plus" />
+          </button>
         </div>
         <div className={style.card_artists}>
           {artists.map((artist) => (

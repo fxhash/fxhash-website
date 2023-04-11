@@ -75,8 +75,33 @@
   font-weight: 600;
   padding: 12px 20px;
 }
-.card_infos {
+.card_header {
   padding: 12px 20px 8px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  .card_infos {
+    flex: 1;
+  }
+  .cta_calendar {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    width: 40px;
+    height: 40px;
+    font-size: 26px;
+    color: currentColor;
+    border: none;
+    background: none;
+    box-shadow: none;
+    cursor: pointer;
+    padding: 0;
+    transition: 0.2s color ease-out;
+    &:hover {
+      color: var(--color-secondary);
+    }
+  }
 }
 .artists {
   display: flex;
@@ -118,5 +143,18 @@
       border-radius: 50%;
       background-color: var(--color-success);
     }
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .card, .card_artists, .card_infos, .cta_view_event {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  .card_title {
+    font-size: 22px;
+  }
+  .card_date {
+    font-size: 17px;
   }
 }
