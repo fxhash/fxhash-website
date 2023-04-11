@@ -1,4 +1,4 @@
-import { User } from "./User";
+import { User } from "./User"
 
 export enum EventStatus {
   PUBLISHED = "PUBLISHED",
