@@ -147,9 +147,6 @@ export function createApolloClient(
 
 export function createApolloClientEvent() {
   return createApolloClient(
-    `${process.env.NEXT_PUBLIC_API_EVENTS_ROOT!}/graphql`,
-    {
-      "x-api-key": process.env.API_KEY_EVENTS,
-    }
+    `${process.env.NEXT_PUBLIC_API_EVENTS_ROOT!}/graphql`
   )
 }

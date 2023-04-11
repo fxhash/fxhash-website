@@ -10,6 +10,7 @@ import { useQuery } from "@apollo/client"
 import { Qu_genTokensAuthors } from "../../queries/generative-token"
 import { User } from "../../types/entities/User"
 import { GenerativeToken } from "../../types/entities/GenerativeToken"
+import { clamp } from "date-fns"
 
 type EventByProjectIds = {
   projectIdsEvent: Record<number, string>
@@ -74,6 +75,7 @@ const _HomeEvents = ({ events }: HomeEventsProps) => {
       }
     })
   }, [authorByProject, events])
+  const offset = Math.max(0, 4 - eventsWithArtist.length)
   return (
     <div className={cs(layout["padding-big"], style.container)}>
       <TitleHyphen>upcoming events</TitleHyphen>
@@ -81,6 +83,9 @@ const _HomeEvents = ({ events }: HomeEventsProps) => {
       <div className={style.container_events}>
         {eventsWithArtist.map((event) => (
           <CardEvent key={event.id} event={event} />
+        ))}
+        {[...Array(offset)].map((_, i) => (
+          <div key={i} />
         ))}
       </div>
     </div>

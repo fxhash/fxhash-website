@@ -88,7 +88,7 @@ export async function getServerSideProps() {
       ${Frag_EventCard}
       query Events($endAfter: DateTime) {
         events(
-          take: 12
+          take: 4
           where: { endsAt: { gte: $endAfter }, status: { equals: PUBLISHED } }
           orderBy: { startsAt: asc }
         ) {
