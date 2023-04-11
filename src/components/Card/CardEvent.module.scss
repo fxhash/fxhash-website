@@ -1,0 +1,122 @@
+@import "../../styles/Variables";
+
+.card {
+  border: 3px solid var(--color-border);
+  width: 100%;
+  aspect-ratio: 293 / 286;
+  border-radius: 4px;
+  padding: 12px 20px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  color: white;
+  background-size: cover;
+  background-position: center center;
+  .card_body {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0 16px;
+  }
+  .card_verso {
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    background: var(--color-white);
+    color: var(--color-black);
+    transform: translateY(101%);
+    will-change: transform;
+    transition: transform 0.2s $timing-cubic;
+  }
+  &:hover {
+    .card_verso {
+      transform: translateY(0);
+    }
+  }
+}
+.card_title {
+  font-size: 24px;
+  font-weight: 700;
+}
+.card_date {
+  font-size: 19px;
+  font-weight: 600;
+  line-height: 1.26;
+}
+.card_text {
+  opacity: 0.8;
+  font-size: var(--font-size-small);
+}
+.card_artists {
+  flex: 1;
+  background-color: var(--color-gray-vvvlight);
+  padding: 8px 20px;
+  overflow: auto;
+
+  & > div > a {
+    display: block;
+  }
+  & > div + div {
+    margin-top: 8px;
+  }
+}
+.cta_view_event {
+  font-size: 19px;
+  line-height: 1.3;
+  color: var(--color-black);
+  font-weight: 600;
+  padding: 12px 20px;
+}
+.card_infos {
+  padding: 12px 20px 8px;
+}
+.artists {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  & > span {
+    font-weight: 600;
+    font-size: 20px;
+  }
+  & > i {
+    display: flex;
+    font-size: 32px;
+  }
+}
+.timer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-size: var(--font-size-small);
+  .label {
+    opacity: 0.8;
+  }
+}
+.dot {
+  height: 10px;
+  width: 10px;
+  background-color: var(--color-error);
+  border-radius: 50%;
+  margin-right: 8px;
+  position: relative;
+  &.dot_active {
+    background-color: var(--color-success);
+    &::before {
+      content: "";
+      animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      border-radius: 50%;
+      background-color: var(--color-success);
+    }
+  }
+}

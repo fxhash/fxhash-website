@@ -1,3 +1,16 @@
+import { User } from "./User";
+
+export enum EventStatus {
+  PUBLISHED = "PUBLISHED",
+  DRAFT = "DRAFT",
+  HIDDEN = "HIDDEN",
+}
+
+export enum EventAvailability {
+  ONLINE = "ONLINE",
+  IRL = "IRL",
+}
+
 export interface LiveMintingEvent {
   id: string
   name: string
@@ -8,7 +21,13 @@ export interface LiveMintingEvent {
   endsAt: string
   projectIds: number[]
   onboarding?: EventOnboarding
+  location?: string
+  imageUrl?: string
+  availabilities: EventAvailability[]
+  status: EventStatus
 }
+
+export type LiveMintingEventWithArtists = LiveMintingEvent & { artists: User[] }
 
 export interface LiveMintingPassGroup {
   address: string
