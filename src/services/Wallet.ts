@@ -10,7 +10,6 @@ import autonomyIRL from "autonomy-irl-js"
 import {
   ContractOperationCallback,
   ContractOperationStatus,
-  FxhashContracts,
 } from "../types/Contracts"
 import { isOperationApplied } from "./Blockchain"
 import { TContractOperation } from "./contract-operations/ContractOperation"
