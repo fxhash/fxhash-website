@@ -126,10 +126,11 @@ export class WalletManager {
           sourceAddress: pkh,
           metadata: {
             metadata: {
-              name: "app_name",
-              description: "app_description",
-              url: "#",
-              icons: ["url_icon"],
+              name: "fxhash",
+              description:
+                "The tezos platform for artists and collectors to live out their passion for generative art.",
+              url: "https://fxhash.xyz",
+              // icons: ["url_icon"],
             },
           },
           chain: autonomyIRL.chain.tez,
