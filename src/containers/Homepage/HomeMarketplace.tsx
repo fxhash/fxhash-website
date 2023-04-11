@@ -9,7 +9,6 @@ import { GenerativeTokenMarketStats } from "../../types/entities/GenerativeToken
 import { CardSimple } from "../../components/Card/CardSimple"
 import { Ranks } from "../../components/Stats/Ranks"
 import { GenerativeRank } from "../../components/Stats/GenerativeRank"
-import Skeleton from "../../components/Skeleton"
 import { CardSimpleSkeleton } from "../../components/Card/CardSimpleSkeleton"
 
 type Display = {

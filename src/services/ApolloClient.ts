@@ -132,11 +132,21 @@ export const clientSideClient = new ApolloClient({
   }),
 })
 
-export function createApolloClient() {
+export function createApolloClient(
+  uri = process.env.NEXT_PUBLIC_API_ROOT,
+  headers?: Record<string, any>
+) {
   return new ApolloClient({
-    uri: process.env.NEXT_PUBLIC_API_ROOT,
+    uri,
     cache: new InMemoryCache(),
     ssrMode: true,
     ssrForceFetchDelay: 1000,
+    headers,
   })
+}
+
+export function createApolloClientEvent() {
+  return createApolloClient(
+    `${process.env.NEXT_PUBLIC_API_EVENTS_ROOT!}/graphql`
+  )
 }
