@@ -141,7 +141,8 @@ export const snippetFromUrl = `
             }
           },
           constrain: (value, definition) => {
-            return value.slice(0, 8).padEnd(8, "f")
+            const hex = value.replace("#", "")
+            return hex.slice(0, 8).padEnd(8, "f")
           },
           random: () =>
             \`\${[...Array(8)]

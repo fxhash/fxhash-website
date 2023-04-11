@@ -18,6 +18,7 @@ export interface Objkt {
   inputBytes?: string | null
   duplicate?: boolean
   iteration?: number
+  mintedPrice?: number
   tags: string[]
   name?: string
   slug?: string

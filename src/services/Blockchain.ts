@@ -96,3 +96,23 @@ export async function isOperationApplied(
     throw new Error(message)
   }
 }
+
+export const isTicketUsed = async (ticketId: number) => {
+  const url = `${process.env.NEXT_PUBLIC_TZKT_API}operations/transactions\
+?target=${process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_MINT_TICKETS_V3}\
+&entrypoint.in=consume&parameter.token_id=${ticketId}&status=applied&limit=1`
+
+  const result = await fetchRetry(url)
+  const data = await result.json()
+  return data.length > 0
+}
+
+export const isTicketOwner = async (ticketId: number, address: string) => {
+  const url = `${process.env.NEXT_PUBLIC_TZKT_API}contracts\
+/${process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_MINT_TICKETS_V3}\
+/bigmaps/ledger/keys?key=${ticketId}&select=value`
+
+  const result = await fetchRetry(url)
+  const [owner] = await result.json()
+  return owner === address
+}

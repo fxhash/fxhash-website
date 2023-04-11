@@ -131,7 +131,7 @@
   display: grid;
   grid-template-columns: max-content 1fr;
   align-items: baseline;
-  gap: 12px 5px;
+  gap: 12px;
   /* prevents children elements from streching */
   justify-items: start;
   // & > *:nth-child(2n):not(a) {

@@ -1,9 +1,4 @@
-import React, {
-  PropsWithChildren,
-  useState,
-  useMemo,
-  ReactElement,
-} from "react"
+import React, { PropsWithChildren, useState, ReactElement } from "react"
 import { MessageCenterContainer } from "../components/MessageCenter/MessageCenterContainer"
 
 type TMessageType = "success" | "warning" | "error"
@@ -22,7 +17,6 @@ export interface IMessage extends IMessageSent {
 }
 
 interface IMessageCenterContext {
-  ready: boolean
   messages: IMessage[]
   removeMessage: (id: string) => void
   addMessage: (message: IMessageSent) => void
@@ -32,7 +26,6 @@ interface IMessageCenterContext {
 }
 
 const defaultProperties: IMessageCenterContext = {
-  ready: false,
   messages: [],
   removeMessage: () => {},
   addMessage: () => {},
@@ -49,74 +42,56 @@ export const MessageCenterContext =
   React.createContext<IMessageCenterContext>(defaultCtx)
 
 export function MessageCenterProvider({ children }: PropsWithChildren<{}>) {
-  const [context, setContext] = useState<IMessageCenterContext>(defaultCtx)
+  const [messages, setMessages] = useState<IMessageCenterContext["messages"]>(
+    defaultCtx.messages
+  )
+  const [ignoreWarnings, setIgnoreWarnings] = useState<
+    IMessageCenterContext["ignoreWarnings"]
+  >(defaultCtx.ignoreWarnings)
 
-  // memoize to prevent rerendering JIC
-  const memoizedContext = useMemo<IMessageCenterContext>(() => {
-    // adds a message to the list of messages to display
-    const addMessage = (message: IMessageSent) => {
-      if (!(context.ignoreWarnings && message.type === "warning")) {
-        const toAdd: IMessage = {
-          ...message,
-          id: "" + Math.random(),
-          createdAt: performance.now(),
-          keepAlive: message.keepAlive || false,
-        }
-        setContext({
-          ...context,
-          messages: [...context.messages, toAdd],
-        })
+  // adds a message to the list of messages to display
+  const addMessage = (message: IMessageSent) => {
+    if (!(ignoreWarnings && message.type === "warning")) {
+      const toAdd: IMessage = {
+        ...message,
+        id: "" + Math.random(),
+        createdAt: performance.now(),
+        keepAlive: message.keepAlive || false,
       }
+      setMessages((existing) => [...existing, toAdd])
     }
+  }
 
-    const addMessages = (messages: IMessageSent[]) => {
-      const toAdd: IMessage[] = messages
-        .filter((message) =>
-          context.ignoreWarnings ? message.type !== "warning" : true
-        )
-        .map((message) => ({
-          ...message,
-          id: "" + Math.random(),
-          createdAt: performance.now(),
-          keepAlive: message.keepAlive || false,
-        }))
-      setContext({
-        ...context,
-        messages: [...context.messages, ...toAdd],
-      })
-    }
+  const addMessages = (messagesToAdd: IMessageSent[]) => {
+    const toAdd: IMessage[] = messagesToAdd
+      .filter((message) => (ignoreWarnings ? message.type !== "warning" : true))
+      .map((message) => ({
+        ...message,
+        id: "" + Math.random(),
+        createdAt: performance.now(),
+        keepAlive: message.keepAlive || false,
+      }))
+    setMessages((existing) => [...existing, ...toAdd])
+  }
 
-    const removeMessage = (id: string) => {
-      const messages = context.messages.filter((message) => message.id !== id)
-      setContext({
-        ...context,
-        messages,
-      })
-    }
+  const removeMessage = (id: string) =>
+    setMessages((existing) => existing.filter((message) => message.id !== id))
 
-    const setIgnoreWarnings = (state: boolean) => {
-      setContext({
-        ...context,
-        ignoreWarnings: state,
-      })
-    }
-
-    return {
-      ...context,
-      ready: true, // once methods are defined it's ready to be consumed
-      removeMessage,
-      addMessage,
-      addMessages,
-      setIgnoreWarnings,
-    }
-  }, [context])
+  const context = {
+    messages,
+    ignoreWarnings,
+    addMessage,
+    addMessages,
+    removeMessage,
+    setIgnoreWarnings,
+  }
 
   return (
-    <MessageCenterContext.Provider value={memoizedContext}>
+    <MessageCenterContext.Provider value={context}>
       {children}
       <MessageCenterContainer
-        messages={memoizedContext.messages}
-        removeMessage={memoizedContext.removeMessage}
+        messages={messages}
+        removeMessage={removeMessage}
       />
     </MessageCenterContext.Provider>
   )

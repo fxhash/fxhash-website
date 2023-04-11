@@ -650,7 +650,7 @@ $fx.params([
     id: "a_color",
     name: "A color",
     type: "color",
-    default: "#abababff",
+    default: "abababff",
   },
 ])
 ```

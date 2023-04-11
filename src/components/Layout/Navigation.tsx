@@ -15,7 +15,7 @@ import { SearchInputControlled } from "../Input/SearchInputControlled"
 import { getProfileLinks, navigationLinks } from "./navigationLinks"
 import { MobileMenu } from "./MobileMenu"
 import ClientOnly from "../Utils/ClientOnly"
-import useWindowSize, { breakpoints } from "../../hooks/useWindowsSize"
+import useIsMobile from "../../hooks/useIsMobile"
 
 interface NavigationProps {
   onChangeSearchVisibility: (isVisible: boolean) => void
@@ -27,7 +27,6 @@ export function Navigation({ onChangeSearchVisibility }: NavigationProps) {
   const [opened, setOpened] = useState(false)
   const [isSearchMinimized, setIsSearchMinimized] = useState(true)
   const [settingsModal, setSettingsModal] = useState<boolean>(false)
-  const { width } = useWindowSize()
 
   const handleMinimize = useCallback(
     (isMinimized) => {
@@ -77,10 +76,8 @@ export function Navigation({ onChangeSearchVisibility }: NavigationProps) {
     [userCtx.user]
   )
 
-  const isMobile = useMemo(
-    () => width !== undefined && width <= breakpoints.md,
-    [width]
-  )
+  const isMobile = useIsMobile()
+
   return (
     <>
       <nav className={cs(style.nav, text.h6, { [style.opened]: opened })}>
