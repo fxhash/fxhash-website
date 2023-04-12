@@ -11,14 +11,14 @@ export const generateCalendarDataForEvent = (
     productId: "fxhash",
     start: [
       dateStart.getFullYear(),
-      dateStart.getMonth(),
+      dateStart.getMonth() + 1,
       dateStart.getDate(),
       dateStart.getHours(),
       dateStart.getMinutes(),
     ],
     end: [
       dateEnd.getFullYear(),
-      dateEnd.getMonth(),
+      dateEnd.getMonth() + 1,
       dateEnd.getDate(),
       dateEnd.getHours(),
       dateEnd.getMinutes(),
