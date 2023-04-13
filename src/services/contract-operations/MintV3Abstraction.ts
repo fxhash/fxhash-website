@@ -1,5 +1,4 @@
 import { GenerativeToken } from "./../../types/entities/GenerativeToken"
-import { MintTicket } from "./../../types/entities/MintTicket"
 import {
   ContractAbstraction,
   TransactionWalletOperation,
@@ -10,9 +9,29 @@ import { ContractOperation } from "./ContractOperation"
 import { genTokCurrentPrice } from "utils/generative-token"
 import { isTicketOwner, isTicketUsed } from "services/Blockchain"
 
+const isValidTicket = async (
+  pkh: string,
+  ticketId: number
+): Promise<[isUsed: boolean, isOwned: boolean]> => {
+  return Promise.all([isTicketUsed(ticketId), isTicketOwner(ticketId, pkh)])
+}
+
+const getFirstTicketAvailable = async (
+  pkh: string,
+  ticketIds: number[]
+): Promise<number | null> => {
+  for (const ticketId of ticketIds) {
+    const [isUsed, isOwner] = await isValidTicket(pkh, ticketId)
+    if (!isUsed && isOwner) {
+      return ticketId
+    }
+  }
+  return null
+}
+
 export type TMintV3AbstractionOperationParams = {
-  // if a ticket ID is provided, uses the ticket; otherwise mints on issuer
-  ticketId: number | null
+  // if a ticket ID or array of ticketID is provided, uses the first ticket available; otherwise mints on issuer
+  ticketId: number | number[] | null
   token: GenerativeToken
   inputBytes: string
 }
@@ -25,6 +44,7 @@ export type TMintV3AbstractionOperationParams = {
 export class MintV3AbstractionOperation extends ContractOperation<TMintV3AbstractionOperationParams> {
   contract: ContractAbstraction<Wallet> | null = null
   useTicket: boolean | null = null
+  ticketId: number | null = null
 
   async prepare() {
     this.useTicket = this.params.ticketId !== null
@@ -33,16 +53,28 @@ export class MintV3AbstractionOperation extends ContractOperation<TMintV3Abstrac
 
   async validate(): Promise<boolean> {
     if (this.useTicket) {
-      const [isUsed, isOwner] = await Promise.all([
-        isTicketUsed(this.params.ticketId!),
-        isTicketOwner(
-          this.params.ticketId!,
-          await this.manager.getBeaconWallet().getPKH()
-        ),
-      ])
+      const pkh = await this.manager.getBeaconWallet().getPKH()
+      if (this.params.ticketId instanceof Array) {
+        const availableTicketId = await getFirstTicketAvailable(
+          pkh,
+          this.params.ticketId
+        )
+        if (availableTicketId) {
+          this.ticketId = availableTicketId
+          return true
+        }
+        throw new Error("No tickets remaining.")
+      } else {
+        const [isUsed, isOwner] = await isValidTicket(
+          pkh,
+          this.params.ticketId!
+        )
 
-      if (isUsed) throw new Error("Ticket is already used.")
-      if (!isOwner) throw new Error("Ticket is not owned by you.")
+        if (isUsed) throw new Error("Ticket is already used.")
+        if (!isOwner) throw new Error("Ticket is not owned by you.")
+
+        this.ticketId = this.params.ticketId
+      }
     }
     return true
   }
@@ -54,7 +86,7 @@ export class MintV3AbstractionOperation extends ContractOperation<TMintV3Abstrac
     const params = this.useTicket
       ? {
           issuer_id: this.params.token.id,
-          ticket_id: this.params.ticketId,
+          ticket_id: this.ticketId,
           input_bytes: this.params.inputBytes,
           recipient: null,
         }
