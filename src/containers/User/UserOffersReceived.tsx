@@ -69,7 +69,10 @@ const _UserOffersReceived = ({ user }: UserOffersReceivedProps) => {
         floorThreshold={floorThreshold}
         setFloorThreshold={setFloorThreshold}
         sortValue={sortValue}
-        sortOptions={sortOptions}
+        sortOptions={sortOptions.filter(
+          // floor difference sorting not currently working here
+          ({ value }) => !value.includes("floorDifference")
+        )}
         setSortValue={setSortValue}
       />
       <Spacing size="large" />
