@@ -64,7 +64,14 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
       params: {
         definition: paramsDefinition,
         // TODO: remove any here
-        inputBytesSize: sumBytesParams(paramsDefinition as any),
+        inputBytesSize: sumBytesParams(
+          // TODO: find a better solution, this is not very clean
+          // virtually inject a version into each parameter
+          (paramsDefinition as any)?.map((def: any) => ({
+            ...def,
+            version: "3.0.1",
+          }))
+        ),
       },
     })
   }

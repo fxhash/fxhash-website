@@ -28,8 +28,6 @@ export const StepPreviewMint: StepComponent = ({ onNext, state }) => {
   const userCtx = useContext(UserContext)
   const user = userCtx.user!
 
-  console.log({ state })
-
   // we build a metadata object from the state (can be uploaded)
   const metadata = useMemo(() => generativeMetadataFromMintForm(state), [state])
 

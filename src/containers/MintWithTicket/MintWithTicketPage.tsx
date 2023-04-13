@@ -33,6 +33,8 @@ import { useFxParams } from "hooks/useFxParams"
 import { MintV3AbstractionOperation } from "../../services/contract-operations/MintV3Abstraction"
 import { useSettingsContext } from "../../context/Theme"
 import { PreMintWarning } from "./PreMintWarning"
+import { UserContext } from "containers/UserProvider"
+import { generateTzAddress } from "utils/hash"
 
 export type TOnMintHandler = (ticketId: number | null) => void
 
@@ -61,6 +63,13 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
   const { params, features, onIframeLoaded } =
     useReceiveTokenInfos(artworkIframeRef)
 
+  // get the user to get their tezos address, or a random tz address
+  const { user } = useContext(UserContext)
+  const randomAddress = useMemo(() => generateTzAddress(), [])
+  const minterAddress = useMemo(() => {
+    return user?.id || randomAddress
+  }, [user, randomAddress])
+
   const handleClosePreMintView = useCallback(() => {
     setShowPreMintWarningView(false)
     setSelectedTicketId(null)
@@ -82,9 +91,10 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
     return ipfsUrlWithHashAndParams(
       token.metadata.generativeUri,
       hash,
+      minterAddress,
       inputBytes
     )
-  }, [token.metadata.generativeUri, hash, inputBytes])
+  }, [token.metadata.generativeUri, hash, minterAddress, inputBytes])
 
   const handleToggleShowPanel = useCallback(
     (newState) => () => setShowPanel(newState),
@@ -128,10 +138,14 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
     setHasLocalChanges(true)
   }
 
+  console.log(token)
+
   // call contract v3 mint with ticket
   const handleMint: TOnMintHandler = useCallback(
     (_ticketId) => {
       if (inputBytes) {
+        console.log(inputBytes)
+        console.log(inputBytes.length / 2)
         // if we are minting with a ticket passed as a propo
         if (mode === "with-ticket") {
           if (ticketId != null) {
