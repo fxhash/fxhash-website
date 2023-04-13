@@ -1,0 +1,95 @@
+@import "../../styles/Variables";
+.input {
+  border: 3px solid var(--color-border-input);
+  background-color: var(--color-white);
+  padding: 15px;
+  font-family: inherit;
+  outline: none;
+  font-size: inherit;
+  color: inherit;
+
+  &:focus {
+    border-color: var(--color-secondary);
+  }
+}
+
+.text {
+  height: 50px;
+}
+
+.textunit {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+
+  span {
+    font-weight: bold;
+    font-size: var(--font-size-h5);
+    width: 80px;
+  }
+
+  input {
+    flex-grow: 2;
+    min-width: 0;
+  }
+
+  &.size-regular {
+    width: calc(min(100%, 400px));
+  }
+
+  &.size-small {
+    width: calc(min(100%, 230px));
+  }
+
+  &.size-fill {
+    width: 100%;
+  }
+}
+
+.inside {
+  position: relative;
+  span {
+    position: absolute;
+    top: 50%;
+    left: 8px;
+    width: 24px;
+    overflow: hidden;
+    transform: translateY(-50%);
+    line-height: 1;
+    pointer-events: none;
+  }
+  input {
+    padding-left: 40px;
+  }
+  &:focus-within {
+    span {
+      color: var(--color-secondary);
+    }
+  }
+}
+
+.error {
+  border-color: var(--color-error);
+}
+
+.texarea {
+  resize: vertical;
+  min-height: 150px;
+}
+
+@media (max-width: $breakpoint-sm) {
+  .textunit {
+
+    span {
+      width: auto;
+    }
+    &.size-regular {
+      width: auto;
+    }
+  }
+  .inside {
+    span {
+      width: 24px;
+    }
+  }
+}

@@ -1,0 +1,12 @@
+.container {
+  display: flex;
+  gap: 16px;
+  flex-direction: column;
+  .buttons {
+    display: flex;
+    gap: 8px;
+    & > button {
+      flex-grow: 1;
+    }
+  }
+}
