@@ -40,8 +40,8 @@ export const API_BLOCKCHAIN_CONTRACT_OPERATIONS = (
  */
 export async function isOperationApplied(
   hash: string,
-  intervalMs: number = 10000,
-  maxDurationMs: number = 120000
+  intervalMs: number = 5000,
+  maxDurationMs: number = 60000
 ): Promise<TzktOperation[]> {
   // will be set if the max duration promise reaches the end
   let stopped = false
