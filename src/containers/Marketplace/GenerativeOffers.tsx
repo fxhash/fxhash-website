@@ -22,7 +22,7 @@ export function GenerativeOffers({ token }: Props) {
     sortVariable,
     sortOptions,
     setSortValue,
-  } = useOfferFilters()
+  } = useOfferFilters("marketplaceGenerativeOffers")
 
   const { data, loading, refetch } = useQuery(Qu_genTokOffers, {
     variables: {
