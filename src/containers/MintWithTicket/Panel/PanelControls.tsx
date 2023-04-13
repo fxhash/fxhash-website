@@ -6,9 +6,9 @@ import {
   faArrowUpRightFromSquare,
 } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { useContext, useEffect, useMemo } from "react"
+import { useCallback, useContext, useMemo } from "react"
 import { UserContext } from "containers/UserProvider"
-import { useLazyQuery } from "@apollo/client"
+import { useQuery } from "@apollo/client"
 import { Qu_userMintTickets } from "queries/user"
 import { MintTicket } from "types/entities/MintTicket"
 import { GenerativeToken } from "types/entities/GenerativeToken"
@@ -25,21 +25,11 @@ export interface PanelControlsProps {
   onClickBack?: () => void
   onOpenNewTab?: () => void
   onSubmit: TOnMintHandler
-  submitLabel?: string
-  hideSubmit?: boolean
   mode?: PanelSubmitMode
 }
 
 export function PanelControls(props: PanelControlsProps) {
-  const {
-    token,
-    onClickBack,
-    onOpenNewTab,
-    onSubmit,
-    submitLabel = "mint",
-    mode = "none",
-    hideSubmit,
-  } = props
+  const { token, onClickBack, onOpenNewTab, onSubmit, mode = "none" } = props
 
   const { user } = useContext(UserContext)
 
@@ -47,21 +37,13 @@ export function PanelControls(props: PanelControlsProps) {
   const showMintButton = !hidden && !locked && enabled
 
   // get user mint tickets when user is available, and mode is "free"
-  const [getUserTickets, { data, loading, error }] = useLazyQuery(
-    Qu_userMintTickets,
-    {
-      fetchPolicy: "network-only",
-    }
-  )
-  useEffect(() => {
-    if (mode === "free" && user && !loading && !data && !error) {
-      getUserTickets({
-        variables: {
-          id: user.id,
-        },
-      })
-    }
-  }, [user, loading, data, error])
+  const { data } = useQuery(Qu_userMintTickets, {
+    fetchPolicy: "network-only",
+    variables: {
+      id: user?.id,
+    },
+    skip: !(mode === "free" && user),
+  })
 
   // extract user tickets for this project
   const userTickets = useMemo(() => {
@@ -76,7 +58,16 @@ export function PanelControls(props: PanelControlsProps) {
         (a.taxationPaidUntil as any) < (b.taxationPaidUntil as any) ? 1 : -1
       )
     return projectTickets.length > 0 ? projectTickets : null
-  }, [data])
+  }, [data, token.id])
+
+  const handleClickMint = useCallback(() => {
+    onSubmit(null)
+  }, [onSubmit])
+  const handleClickUseTicket = useCallback(() => {
+    if (userTickets) {
+      onSubmit(userTickets.map((ticket) => ticket.id))
+    }
+  }, [onSubmit, userTickets])
 
   return (
     <div className={style.controlPanel}>
@@ -97,18 +88,18 @@ export function PanelControls(props: PanelControlsProps) {
         {mode === "with-ticket" ? (
           <BaseButton
             color="main"
-            onClick={() => onSubmit(null)}
+            onClick={handleClickMint}
             className={style.submitButton}
-            title={submitLabel}
+            title={"use ticket"}
           >
-            {submitLabel}
+            use ticket <i className="fa-sharp fa-solid fa-ticket" aria-hidden />
           </BaseButton>
         ) : mode === "free" ? (
           <div className={style.submitButtons}>
             {showMintButton && (
               <BaseButton
                 color="main"
-                onClick={() => onSubmit(null)}
+                onClick={handleClickMint}
                 className={style.submitButton}
                 title={`mint with ${displayMutez(price)} tezos`}
               >
@@ -118,7 +109,7 @@ export function PanelControls(props: PanelControlsProps) {
             {userTickets && (
               <BaseButton
                 color="main"
-                onClick={() => onSubmit(userTickets[0].id)}
+                onClick={handleClickUseTicket}
                 className={style.submitButton}
                 title="exchange your ticket for an iteration"
               >
