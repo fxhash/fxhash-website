@@ -69,7 +69,7 @@ const _ModalClaimMintTicket = ({
     )
   const { handleSubmit, handleChange, handleBlur, values, errors } = useFormik({
     initialValues: {
-      price: mintTicket.price / 1000000,
+      price: (price / 1000000) * 2,
       days: 7,
     },
     onSubmit: (submittedValues) => {

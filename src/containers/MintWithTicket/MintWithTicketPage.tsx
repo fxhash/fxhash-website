@@ -42,7 +42,7 @@ import { PanelSubmitMode } from "./Panel/PanelControls"
 import { format } from "date-fns"
 import { truncateEnd } from "utils/strings"
 
-export type TOnMintHandler = (ticketId: number | null) => void
+export type TOnMintHandler = (ticketId: number | number[] | null) => void
 
 interface Props {
   token: GenerativeToken
@@ -53,7 +53,9 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
   const { showTicketPreMintWarning } = useSettingsContext()
   const [showLoadConfigModal, setShowLoadConfigModal] = useState(false)
   const [showPreMintWarningView, setShowPreMintWarningView] = useState(false)
-  const [selectedTicketId, setSelectedTicketId] = useState<number | null>(null)
+  const [selectedTicketId, setSelectedTicketId] = useState<
+    number | number[] | null
+  >(null)
   const panelParamsRef = useRef<PanelParamsRef>(null)
   const historyContext = useContext(ParamsHistoryContext)
   const artworkIframeRef = useRef<ArtworkIframeRef>(null)
@@ -139,39 +141,28 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
   const handleMint: TOnMintHandler = useCallback(
     (_ticketId) => {
       if (inputBytes) {
-        // if we are minting with a ticket passed as a propo
-        if (mode === "with-ticket") {
-          if (ticketId != null) {
-            call({
-              token: token,
-              ticketId: ticketId,
-              inputBytes: inputBytes,
-            })
-          }
-        }
-        // else we are minting using settings passed to this function
-        else if (mode === "free") {
-          call({
-            token: token,
-            ticketId: _ticketId,
-            inputBytes: inputBytes,
-          })
-        }
+        call({
+          token: token,
+          ticketId: _ticketId,
+          inputBytes: inputBytes,
+        })
       }
     },
-    [call, inputBytes, mode, ticketId, token]
+    [call, inputBytes, token]
   )
 
   const handleClickSubmit: TOnMintHandler = useCallback(
     (_ticketId) => {
+      const ticketIdToMint =
+        mode === "with-ticket" && ticketId ? ticketId : _ticketId
       if (showTicketPreMintWarning) {
         setShowPreMintWarningView(true)
-        setSelectedTicketId(_ticketId)
+        setSelectedTicketId(ticketIdToMint)
       } else {
-        handleMint(_ticketId)
+        handleMint(ticketIdToMint)
       }
     },
-    [handleMint, showTicketPreMintWarning]
+    [handleMint, mode, showTicketPreMintWarning, ticketId]
   )
 
   const handleValidatePreMint = useCallback(() => {
@@ -301,7 +292,6 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
               onSubmit={handleClickSubmit}
               onClickHide={onToggleVisibility(false)}
               onClickRefresh={handleClickRefresh}
-              hideSubmit={ticketId == null}
               mode={mode}
               onSaveConfiguration={handleSaveConfiguration}
               onOpenLoadConfigurationModal={handleOpenLoadConfigurationModal}

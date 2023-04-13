@@ -97,7 +97,7 @@ export class WalletManager {
           transactions: operations.map((op) => ({
             kind: "transaction",
             destination: op.to,
-            amount: 0,
+            amount: op.amount.toString(),
             mutez: true,
             entrypoint: op.parameter.entrypoint,
             parameters: op.parameter.value,

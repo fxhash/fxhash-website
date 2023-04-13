@@ -9,13 +9,14 @@ import { DateDistance } from "../Utils/Date/DateDistance"
 import { OfferProps } from "./Offer"
 import Link from "next/link"
 import { Image } from "../Image"
+import { offerTypeGuard } from "types/entities/Offer"
 
 const _OfferMobile = ({
-  objkt,
   offer,
-  showObjkt,
+  showToken,
   floor,
   user,
+  canAccept = false,
   onClickCancel,
   onClickAccept,
   cancelState,
@@ -29,21 +30,32 @@ const _OfferMobile = ({
   }, [offer, onClickAccept])
   return (
     <div className={cs(style.offer_mobile)}>
-      {showObjkt && offer.objkt && (
-        <Link href={`/gentk/${offer.objkt.id}`}>
-          <a className={style.objkt_image}>
-            <Image
-              ipfsUri={offer.objkt.metadata?.thumbnailUri}
-              image={offer.objkt.captureMedia}
-              alt={`thumbnail of ${offer.objkt.name}`}
-            />
-          </a>
-        </Link>
-      )}
+      {showToken &&
+        (offerTypeGuard(offer) ? (
+          <Link href={`/gentk/${offer.objkt.id}`}>
+            <a className={style.objkt_image}>
+              <Image
+                ipfsUri={offer.objkt.metadata?.thumbnailUri}
+                image={offer.objkt.captureMedia}
+                alt={`thumbnail of ${offer.objkt.name}`}
+              />
+            </a>
+          </Link>
+        ) : (
+          <Link href={`/generative/${offer.token.id}`}>
+            <a className={style.objkt_image}>
+              <Image
+                ipfsUri={offer.token.metadata?.thumbnailUri}
+                image={offer.token.captureMedia}
+                alt={`thumbnail of ${offer.token.name}`}
+              />
+            </a>
+          </Link>
+        ))}
       <div className={style.infos}>
-        {offer.objkt && (
-          <div className={style.infos_iteration}>#{offer.objkt.iteration}</div>
-        )}
+        <div className={style.infos_iteration}>
+          {offerTypeGuard(offer) ? `#${offer.objkt.iteration}` : "Collection"}
+        </div>
         <div className={cs(style.user_badge_wrapper)}>
           <UserBadge user={offer.buyer} size="small" />
         </div>
@@ -70,7 +82,7 @@ const _OfferMobile = ({
               cancel
             </Button>
           </div>
-        ) : (objkt?.owner?.id || offer.objkt?.owner?.id) === user?.id ? (
+        ) : canAccept ? (
           <div className={cs(style.call_btn)}>
             <Button
               type="button"
