@@ -107,7 +107,7 @@ export function CollectionOfferActions({ offer, children }: Props) {
             : "default"
         }
       >
-        accept
+        select & accept
       </Button>
     ) : null
 
