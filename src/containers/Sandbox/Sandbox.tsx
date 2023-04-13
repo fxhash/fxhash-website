@@ -20,12 +20,21 @@ import { serializeParams, stringifyParamsData } from "components/FxParams/utils"
 import { ControlsTest, ControlsTestRef } from "components/Testing/ControlsTest"
 import { FxParamDefinition, FxParamType } from "components/FxParams/types"
 import { useReceiveTokenInfos } from "hooks/useReceiveTokenInfos"
+import { MinterTest } from "components/Testing/MinterTest"
 
 export function Sandbox() {
   const artworkIframeRef = useRef<ArtworkIframeRef>(null)
   const paramControlsRef = useRef<ControlsTestRef>(null)
-  const { onIframeLoaded, params, hash, features, setHash, info } =
-    useReceiveTokenInfos(artworkIframeRef)
+  const {
+    onIframeLoaded,
+    params,
+    hash,
+    setHash,
+    minter,
+    setMinter,
+    features,
+    info,
+  } = useReceiveTokenInfos(artworkIframeRef)
   const [file, setFile] = useState<File | null>(null)
   const [filesRecord, setFilesRecord] = useState<SandboxFiles | null>(null)
   const [error, setError] = useState<string | null>(null)
@@ -134,6 +143,17 @@ export function Sandbox() {
                   artworkIframeRef.current?.reloadIframe()
                 }}
               />
+
+              <Spacing size="large" />
+
+              <MinterTest
+                autoGenerate={false}
+                value={minter}
+                onMinterUpdate={(minter) => setMinter(minter)}
+                onRetry={() => {
+                  artworkIframeRef.current?.reloadIframe()
+                }}
+              />
             </div>
             {params && (
               <div>
@@ -185,6 +205,7 @@ export function Sandbox() {
               <ArtworkFrame>
                 <SandboxPreview
                   hash={hash}
+                  minter={minter}
                   fxparams={fxparamsBytes}
                   ref={artworkIframeRef}
                   record={filesRecord || undefined}
