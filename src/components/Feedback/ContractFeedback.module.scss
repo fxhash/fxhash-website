@@ -1,0 +1,17 @@
+.container {
+  font-size: var(--font-size-small);
+}
+
+.loading {
+  color: var(--color-gray);
+}
+
+.success {
+  color: var(--color-success);
+  font-weight: bold;
+}
+
+.error {
+  color: var(--color-error);
+  font-weight: bold;
+}

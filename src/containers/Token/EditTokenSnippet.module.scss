@@ -1,0 +1,21 @@
+@import "../../styles/Variables";
+
+.container {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.enabled {
+  color: var(--color-success);
+}
+
+.disabled {
+  color: var(--color-error);
+}
+
+@media (max-width: $breakpoint-sm) {
+  .button {
+    width: 100%;
+  }
+}
