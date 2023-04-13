@@ -6,7 +6,7 @@ import { Objkt } from "../../types/entities/Objkt"
 import { CollectionOffer } from "../../types/entities/Offer"
 import { Button } from "../Button"
 import { ContractFeedback } from "../Feedback/ContractFeedback"
-import { CollectionOfferCancelOoperation } from "services/contract-operations/CollectionOfferCancel"
+import { CollectionOfferCancelOperation } from "services/contract-operations/CollectionOfferCancel"
 import { CollectionOfferAcceptOperation } from "services/contract-operations/CollectionOfferAccept"
 import { useRouter } from "next/router"
 import { useModal } from "hooks/useModal"
@@ -51,7 +51,7 @@ export function CollectionOfferActions({ offer, children }: Props) {
     success: cancelSuccess,
     call: cancelCall,
     params: cancelParams,
-  } = useContractOperation(CollectionOfferCancelOoperation)
+  } = useContractOperation(CollectionOfferCancelOperation)
 
   const cancelOffer = (offer: CollectionOffer) => {
     cancelCall({
