@@ -25,6 +25,9 @@
 
       &:not(:first-child) {
         margin-left: -28px;
+        &.toggleButton {
+          margin-left: 0px;
+        }
       }
 
       .user_name {
@@ -165,6 +168,9 @@
       .avatar_wrapper {
         &:not(:first-child) {
           margin-left: -20px;
+          &.toggleButton {
+            margin-left: 0px;
+          }
         }
       }
 
@@ -195,6 +201,9 @@
       .avatar_wrapper {
         &:not(:first-child) {
           margin-left: -10px;
+          &.toggleButton {
+            margin-left: 0px;
+          }
         }
       }
 
