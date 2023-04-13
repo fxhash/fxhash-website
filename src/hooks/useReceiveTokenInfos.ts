@@ -114,18 +114,16 @@ export function useReceiveTokenInfos(
           features,
           hash,
         } = e.data.data
-        const definitionsWithDefaults = definitions.map(
-          (d: FxParamDefinition<FxParamType>) => ({
-            ...d,
-            default: values?.[d.id],
-          })
-        )
         setInfo({
           version,
           features,
           hash,
           paramsDefinition: definitions,
-          params: definitionsWithDefaults,
+          params:
+            definitions?.map((d: FxParamDefinition<FxParamType>) => ({
+              ...d,
+              default: values?.[d.id],
+            })) || null,
         })
       }
       // handle deprecated events from old snippet
