@@ -1,13 +1,12 @@
-import style from "./FloorDifference.module.scss"
 import cs from "classnames"
 import colors from "../../styles/Colors.module.css"
-import { useMemo, ElementType } from "react"
+import { useMemo } from "react"
 
 interface Props {
   price: number
   floor: number | null
   append?: string
-  Element?: ElementType
+  Element?: keyof JSX.IntrinsicElements
 }
 export function FloorDifference({
   price,
