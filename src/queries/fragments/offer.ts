@@ -16,6 +16,8 @@ export const Frag_UserOffer = gql`
       version
       name
       metadata
+      lastSoldPrice
+      mintedPrice
       captureMedia {
         ...MediaImage
       }

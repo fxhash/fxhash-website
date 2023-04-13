@@ -21,6 +21,11 @@ export const Frag_UserCollectionOffer = gql`
       captureMedia {
         ...MediaImage
       }
+      heldGentks(userId: $id) {
+        id
+        lastSoldPrice
+        mintedPrice
+      }
     }
   }
 `

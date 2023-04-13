@@ -450,6 +450,8 @@ export const Qu_userAcceptCollectionOffer = gql`
             floor
           }
         }
+        lastSoldPrice
+        mintedPrice
       }
     }
   }

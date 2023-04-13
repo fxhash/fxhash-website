@@ -3,7 +3,7 @@ import { Button } from "../Button"
 import { Modal } from "../Utils/Modal"
 import style from "./ModalAcceptCollectionOffer.module.scss"
 import { Spacing } from "../Layout/Spacing"
-import { CollectionOffer, offerTypeGuard } from "types/entities/Offer"
+import { CollectionOffer } from "types/entities/Offer"
 import { Objkt } from "types/entities/Objkt"
 import { useQuery } from "@apollo/client"
 import { UserContext } from "containers/UserProvider"
@@ -36,7 +36,6 @@ const _ModalAcceptCollectionOffer = ({
     fetchPolicy: "no-cache",
   })
 
-  console.log(data)
   const floor = data?.user?.objkts?.[0]?.issuer?.marketStats?.floor
 
   return (
@@ -78,6 +77,16 @@ const _ModalAcceptCollectionOffer = ({
               </div>
               <span className={style.container_name}>
                 <span className={style.name}>{gentk.name}</span>
+                <span style={{ fontSize: 12 }}>
+                  You paid{" "}
+                  <DisplayTezos
+                    className={style.price}
+                    formatBig={false}
+                    mutez={gentk.lastSoldPrice || gentk.mintedPrice!}
+                    tezosSize="regular"
+                  />{" "}
+                  for this gentk
+                </span>
               </span>
             </div>
             <Link href={`/gentk/${gentk.id}`} passHref>

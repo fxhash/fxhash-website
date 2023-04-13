@@ -19,6 +19,7 @@ export interface Objkt {
   duplicate?: boolean
   iteration?: number
   mintedPrice?: number
+  lastSoldPrice?: number | null
   tags: string[]
   name?: string
   slug?: string

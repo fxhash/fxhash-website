@@ -49,6 +49,16 @@ const Row = ({ buttons, feedback, offer }: RowProps) => {
     )
   }
 
+  const getMinLastSoldPrice = () => {
+    if (offerTypeGuard(offer))
+      return offer.objkt.lastSoldPrice || offer.objkt.mintedPrice!
+    return offer.token.heldGentks!.reduce((acc, item) => {
+      const price = item.lastSoldPrice || item.mintedPrice!
+      if (acc === null) return price
+      return Math.min(acc, price)
+    }, null as number | null) as number
+  }
+
   return (
     <>
       {feedback && (
@@ -67,6 +77,14 @@ const Row = ({ buttons, feedback, offer }: RowProps) => {
             className={style.price}
             formatBig={false}
             mutez={offer.price}
+            tezosSize="regular"
+          />
+        </td>
+        <td className={style["td-price"]} data-label="Price paid">
+          <DisplayTezos
+            className={style.price}
+            formatBig={false}
+            mutez={getMinLastSoldPrice()}
             tezosSize="regular"
           />
         </td>
@@ -151,6 +169,7 @@ const _TableUserOffersReceived = ({
             <tr>
               <th className={style["th-gentk"]}>Token</th>
               <th className={style["th-price"]}>Price</th>
+              <th className={style["th-price_paid"]}>Price paid</th>
               <th className={style["th-floor"]}>Floor Difference</th>
               <th className={style["th-user"]}>From</th>
               <th className={style["th-time"]}>Time</th>
@@ -190,6 +209,9 @@ const _TableUserOffersReceived = ({
                     </div>
                   </td>
                   <td className={style["td-user"]} data-label="Price">
+                    <Skeleton height="25px" />
+                  </td>
+                  <td className={style["td-user"]} data-label="Price paid">
                     <Skeleton height="25px" />
                   </td>
                   <td
