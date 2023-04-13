@@ -1,0 +1,149 @@
+@import "../../styles/Variables.scss";
+
+.base {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $spacing;
+
+  h6 {
+    margin-bottom: $spacing-2x-small;
+  }
+}
+
+.base_left,
+.base_center,
+.base_right {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.base_left {
+  align-items: flex-start;
+}
+
+.base_center {
+  align-items: center;
+}
+
+.base_right {
+  align-items: flex-end;
+}
+
+.editions {
+  margin: 0;
+  font-size: var(--font-size-h4);
+  line-height: 1;
+  font-weight: bold;
+}
+
+.presentation_details {
+  overflow-wrap: break-word;
+  word-break: break-word;
+
+  .presentation_title {
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+}
+
+.multilines {
+  display: flex;
+  flex-direction: column;
+  gap: var(--layout-margin-small-sm);
+  align-items: flex-start;
+  width: 100%;
+}
+
+.details {
+  margin-top: $spacing-4x-large;
+  .locked {
+    font-weight: bold;
+    i {
+      margin-right: 4px;
+    }
+  }
+}
+
+.details_list {
+  margin-top: $spacing;
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  align-items: baseline;
+  gap: 12px 5px;
+  /* prevents children elements from streching */
+  justify-items: start;
+  // & > *:nth-child(2n):not(a) {
+  //   opacity: 0.6;
+  // }
+
+  hr {
+    display: none;
+  }
+}
+.collect {
+  grid-column: span 3;
+}
+.metadata {
+  font-size: var(--font-size-small);
+  color: var(--color-gray);
+  font-weight: normal;
+}
+
+@media (max-width: $breakpoint-sm) {
+  .base {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    h6 {
+      margin-bottom: $spacing-x-small;
+    }
+  }
+  .base_left {
+    grid-column: span 2;
+  }
+  .base_left,
+  .base_center {
+    align-items: flex-start;
+  }
+  .base_right {
+    h6 {
+      text-align: right;
+    }
+  }
+  .details {
+    margin-top: $spacing-x-large;
+  }
+  .collect {
+    grid-column: span 2;
+    width: 100%;
+  }
+  .details_list {
+    grid-template-columns: repeat(2, 1fr);
+    hr {
+      width: 100%;
+      border: none;
+      height: 3px;
+      background-color: var(--color-gray-vvlight);
+      margin: 0;
+      grid-column: span 2;
+      display: initial;
+    }
+  }
+  .mobile_align_right {
+    width: 100%;
+    text-align: right;
+  }
+  .mobile_grid_two {
+    grid-column: span 2;
+  }
+  .mobile_gray {
+    color: var(--color-gray);
+  }
+  .metadata {
+    font-size: var(--font-size-regular);
+  }
+}
+
+.disabled {
+  pointer-events: none;
+}
