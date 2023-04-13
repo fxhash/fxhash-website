@@ -1,21 +1,13 @@
 import style from "./PanelRoot.module.scss"
 import cs from "classnames"
-import { PanelHeader, PanelHeaderProps } from "./PanelHeader"
+import { PanelHeader } from "./PanelHeader"
 import { PanelParams, PanelParamsProps, PanelParamsRef } from "./PanelParams"
 import { PanelFeatures, PanelFeaturesProps } from "./PanelFeatures"
 import { PanelHash, PanelHashProps } from "./PanelHash"
-import {
-  FxParamDefinition,
-  FxParamsData,
-  FxParamType,
-} from "components/FxParams/types"
-import { GenerativeToken } from "types/entities/GenerativeToken"
-import { IParamsHistoryEntry } from "components/FxParams/ParamsHistory"
 import { RefObject, useMemo } from "react"
 import { getUserName } from "utils/user"
 import { PanelControls, PanelControlsProps } from "./PanelControls"
 import { Spacing } from "components/Layout/Spacing"
-import { TOnMintHandler } from "../MintWithTicketPage"
 import Link from "next/link"
 
 interface PanelRootProps
@@ -53,7 +45,6 @@ export function PanelRoot(props: PanelRootProps) {
     onClickHide,
     onClickRefresh,
     onLocalDataChange,
-    hideSubmit,
     mode = "none",
     disableWarningAnimation,
     onSaveConfiguration,
@@ -120,7 +111,6 @@ export function PanelRoot(props: PanelRootProps) {
         onSubmit={onSubmit}
         onOpenNewTab={onOpenNewTab}
         onClickBack={onClickBack}
-        hideSubmit={hideSubmit}
       />
     </div>
   )

@@ -13,7 +13,7 @@ export type TCollectionOfferCancelOperationParams = {
 /**
  * Withdraw a collection offer from the Marketplace
  */
-export class CollectionOfferCancelOoperation extends ContractOperation<TCollectionOfferCancelOperationParams> {
+export class CollectionOfferCancelOperation extends ContractOperation<TCollectionOfferCancelOperationParams> {
   contract: ContractAbstraction<Wallet> | null = null
 
   async prepare() {

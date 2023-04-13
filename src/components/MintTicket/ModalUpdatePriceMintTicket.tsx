@@ -54,7 +54,10 @@ const getUpdatedPriceAmountToPayOrClaim = (
   const taxStart = new Date(mintTicket.taxationStart)
   const lastDayConsumed = getTicketLastDayConsumed(mintTicket.createdAt)
   const consumedTaxDays =
-    lastDayConsumed < taxStart ? 0 : differenceInDays(taxStart, lastDayConsumed)
+    lastDayConsumed < taxStart
+      ? 0
+      : Math.abs(differenceInDays(lastDayConsumed, taxStart))
+
   const taxAlreadyPaid = getMintTicketHarbergerTax(
     mintTicket.price,
     consumedTaxDays

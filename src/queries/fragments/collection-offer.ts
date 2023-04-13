@@ -1,5 +1,6 @@
 import { gql } from "@apollo/client"
 import { Frag_MediaImage } from "./media"
+import { Frag_UserBadge } from "./user"
 
 export const Frag_UserCollectionOffer = gql`
   ${Frag_MediaImage}
@@ -17,6 +18,29 @@ export const Frag_UserCollectionOffer = gql`
       marketStats {
         floor
       }
+      metadata
+      captureMedia {
+        ...MediaImage
+      }
+    }
+  }
+`
+
+export const Frag_GenTokCollectionOffer = gql`
+  ${Frag_MediaImage}
+  ${Frag_UserBadge}
+  fragment GenTokCollectionOffer on CollectionOffer {
+    id
+    price
+    version
+    createdAt
+    cancelledAt
+    completedAt
+    buyer {
+      ...UserBadgeInfos
+    }
+    token {
+      id
       metadata
       captureMedia {
         ...MediaImage
