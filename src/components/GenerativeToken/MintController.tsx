@@ -157,7 +157,7 @@ export function MintController({
 
   const revealUrl = generateRevealUrl
     ? generateRevealUrl({ tokenId: token.id, hash: finalOpHash })
-    : `/reveal/${token.id}/?fxhash=${finalOpHash}`
+    : `/reveal/${token.id}/?fxhash=${finalOpHash}&fxminter=${user?.id}`
 
   const isTicketMinted = token.inputBytesSize > 0
 
