@@ -8,7 +8,7 @@ import {
   ArtworkIframeRef,
 } from "../../components/Artwork/PreviewIframe"
 import { useMemo, useState, useRef } from "react"
-import { generateFxHash } from "../../utils/hash"
+import { generateFxHash, generateTzAddress } from "../../utils/hash"
 import { HashTest } from "../../components/Testing/HashTest"
 import { Checkbox } from "../../components/Input/Checkbox"
 import { Button } from "../../components/Button"
@@ -24,10 +24,14 @@ import {
 } from "components/FxParams/utils"
 import { useReceiveTokenInfos } from "hooks/useReceiveTokenInfos"
 import { FxParamsData } from "components/FxParams/types"
+import { MinterTest } from "components/Testing/MinterTest"
 
 export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
   const [hash, setHash] = useState<string>(
     state.previewHash ?? generateFxHash()
+  )
+  const [minter, setMinter] = useState<string>(
+    state?.previewMinter ?? generateTzAddress()
   )
   const [check1, setCheck1] = useState<boolean>(false)
   const [check2, setCheck2] = useState<boolean>(false)
@@ -44,12 +48,18 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
   }, [stringifyParamsData(data), params])
 
   const url = useMemo<string>(() => {
-    return ipfsUrlWithHashAndParams(state.cidUrlParams!, hash, inputBytes)
-  }, [hash, inputBytes])
+    return ipfsUrlWithHashAndParams(
+      state.cidUrlParams!,
+      hash,
+      minter,
+      inputBytes
+    )
+  }, [hash, minter, inputBytes])
 
   const nextStep = () => {
     onNext({
       previewHash: hash,
+      previewMinter: minter,
       previewInputBytes: inputBytes,
       params: {
         definition: paramsDefinition,
@@ -141,7 +151,18 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
               artworkIframeRef.current?.reloadIframe()
             }}
           />
+          <Spacing size="large" sm="x-large" />
+
+          <MinterTest
+            autoGenerate={false}
+            value={minter}
+            onMinterUpdate={setMinter}
+            onRetry={() => {
+              artworkIframeRef.current?.reloadIframe()
+            }}
+          />
           <Spacing size="2x-large" sm="x-large" />
+
           {params && (
             <div>
               <h5>Params</h5>

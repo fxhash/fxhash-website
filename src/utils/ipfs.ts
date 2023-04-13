@@ -20,10 +20,11 @@ export function ipfsUrlWithHash(
 export function ipfsUrlWithHashAndParams(
   cid: string,
   hash: string,
+  minter: string,
   params: string | null | undefined,
   transform: (cid: string) => string = ipfsGatewayUrl
 ) {
-  let url = `${transform(cid)}/?fxhash=${hash}`
+  let url = `${transform(cid)}/?fxhash=${hash}&fxminter=${minter}`
   if (params) url += `&fxparams=${params}`
   return url
 }

@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback, useMemo } from "react"
-import { generateFxHash } from "utils/hash"
+import { generateFxHash, generateTzAddress } from "utils/hash"
 import { RawTokenFeatures } from "types/Metadata"
 import { ArtworkIframeRef } from "components/Artwork/PreviewIframe"
 import { FxParamDefinition, FxParamType } from "components/FxParams/types"
@@ -7,6 +7,7 @@ import { FxParamDefinition, FxParamType } from "components/FxParams/types"
 export interface TokenInfo {
   version: string | null
   hash: string
+  minter: string
   features: RawTokenFeatures | null
   params: any | null
   paramsDefinition: any | null
@@ -16,6 +17,10 @@ interface IFrameTokenInfos {
   onIframeLoaded: () => void
   hash: string
   setHash: (h: string) => void
+  // minter address
+  minter: string
+  setMinter: (minter: string) => void
+  // the features
   features: RawTokenFeatures | null
   setFeatures: (f: RawTokenFeatures | null) => void
   // params enhanced with values as executed in the token
@@ -71,11 +76,12 @@ function handleOldSnippetEvents(
 
 export function useReceiveTokenInfos(
   ref: React.RefObject<ArtworkIframeRef | null>,
-  options?: { initialHash?: string }
+  options?: { initialHash?: string; initialMinter?: string }
 ): IFrameTokenInfos {
   const [info, setInfo] = useState<TokenInfo>({
     version: null,
     hash: options?.initialHash || generateFxHash(),
+    minter: options?.initialMinter || generateTzAddress(),
     features: null,
     params: null,
     paramsDefinition: null,
@@ -91,6 +97,12 @@ export function useReceiveTokenInfos(
     setInfo((i) => ({
       ...i,
       hash,
+    }))
+
+  const setMinter = (minter: string) =>
+    setInfo((i) => ({
+      ...i,
+      minter,
     }))
 
   const setParams = (params: any | null) =>
@@ -111,6 +123,7 @@ export function useReceiveTokenInfos(
         const {
           version,
           params: { definitions, values },
+          minter,
           features,
           hash,
         } = e.data.data
@@ -119,6 +132,7 @@ export function useReceiveTokenInfos(
           features,
           hash,
           paramsDefinition: definitions,
+          minter: minter,
           params:
             definitions?.map((d: FxParamDefinition<FxParamType>) => ({
               ...d,
@@ -168,8 +182,10 @@ export function useReceiveTokenInfos(
     features: info.features,
     params: paramsWithVersion,
     hash: info.hash,
+    minter: info.minter,
     paramsDefinition: info.paramsDefinition,
     setHash,
+    setMinter,
     setParams,
     setFeatures,
     setParamsDefinition,
