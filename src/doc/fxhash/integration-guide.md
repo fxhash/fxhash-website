@@ -15,7 +15,7 @@ This guide provides informations on how to integrate some of the components of f
 These are the addresses of the contracts actively being used by fxhash:
 
 | ID               | Address                                                     | Description                                                                                                                                         |
-|------------------| ----------------------------------------------------------- |-----------------------------------------------------------------------------------------------------------------------------------------------------|
+| ---------------- | ----------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
 | issuer           | `{{process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_ISSUER}}`          | Generative Tokens - stores the projects & main entrypoint to mint NFTs                                                                              |
 | issuer_v3        | `{{process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_ISSUER_V3}}`       | Generative Tokens - stores the projects & main entrypoint to mint NFTs (since fxhash 2.0)                                                           |
 | gentk_v1         | `{{process.env.NEXT_PUBLIC_TZ_CT_ADDRESS_GENTK_V1}}`        | FA2 NFTs, beta tokens                                                                                                                               |
@@ -232,12 +232,12 @@ The new marketplace contract will now replace the marketplace_v1 contract. The n
 - `listing_accept`: accept a listing
 - `listing_cancel`: cancel a listing
 
-The marketplace_v2 contract supports both the gentk_v1 and gentk_v2 contracts. When an entry point needs a reference to a gentk, it will ask for:
+The marketplace_v2 contract supports gentk_v1, gentk_v2 and gentk_v3 contracts. When an entry point needs a reference to a gentk, it will ask for:
 
 ```js
 {
   id: 0, // the id of the token
-  version: 0 // the version, 0: gentk_v1, 1: gentk_v2
+  version: 0 // the version, 0: gentk_v1, 1: gentk_v2, 2: gentk_v3
 }
 ```
 

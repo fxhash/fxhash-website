@@ -23,7 +23,7 @@
   transition: 0.2s all ease-in;
   position: fixed;
   z-index: 60;
-  padding: 24px 20px 32px;
+  padding: 20px;
   left: 0;
   bottom: -100%;
   width: 100%;
@@ -41,17 +41,32 @@
 }
 
 .nav_button {
-  padding-bottom: 24px;
-  font-weight: bold;
+  padding-bottom: 16px;
+  font-weight: 500;
   font-size: 20px;
   color: var(--color-gray);
   transition: color 0.3s ease-out;
   text-align: left;
+  &.button_title {
+    color: var(--color-black);
+    font-weight: bold;
+  }
   &:last-child {
     padding-bottom: 0;
   }
 }
 
+.divider {
+  background: var(--color-gray-light);
+  margin-bottom: 16px;
+  width: 100%;
+  height: 1px;
+}
+
+.button_unsync {
+  flex-shrink: 0;
+  height: 36px;
+}
 
 .avatar_btn {
   border: 0;

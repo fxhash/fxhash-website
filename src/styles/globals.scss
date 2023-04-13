@@ -13,27 +13,28 @@ body {
 :root {
   --main-padding-sm: 20px;
 
-  --color-primary: #FF005C;
-  --color-secondary: #7000FF;
+  --color-primary: #ff005c;
+  --color-secondary: #7000ff;
   --color-secondary-light: #b174ff;
   --color-secondary-vlight: #7e1aff;
   --color-secondary-dark: #5a00cc;
-  --color-success: #00eda0;
+  --color-success: #2cb927;
   --color-success-light: #00eda042;
   --color-success-dark: #00281b;
   --color-error: #eb1b1b;
+  --color-error-40: rgba(255, 0, 0, 0.4);
   --color-error-20: rgba(255, 0, 0, 0.2);
   --color-warning: #ffc300;
   --color-warning-light: #ffc3003b;
   --color-gray-vvvlight: #f1f1f1;
   --color-gray-vvlight: #e7e7e7;
   --color-gray-vlight: #d3d3d3;
-  --color-gray-light: #C4C4C4;
+  --color-gray-light: #c4c4c4;
   --color-gray: #727272;
   --color-gray-dark: #484848;
   --color-gray-vdark: #363636;
   --color-black: #000000;
-  --color-white: #FFFFFF;
+  --color-white: #ffffff;
   --rgb-white: 255, 255, 255;
   --color-border: #000000;
   --color-border-input: #000000;
@@ -112,7 +113,7 @@ body {
   --fxl-spacing-l: #{$spacing-large};
   --fxl-spacing-xl: #{$spacing-x-large};
   --fxl-spacing-xxl: #{$spacing-2x-large};
-  
+
   --spacing: #{$spacing};
   --spacing-sm: #{$spacing-small};
   --spacing-xs: #{$spacing-x-small};
@@ -120,7 +121,6 @@ body {
   --spacing-l: #{$spacing-large};
   --spacing-xl: #{$spacing-x-large};
   --spacing-xxl: #{$spacing-2x-large};
-
 }
 
 .dark {

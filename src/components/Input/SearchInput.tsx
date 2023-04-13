@@ -10,7 +10,7 @@ import {
   useState,
 } from "react"
 import useClickOutside from "../../hooks/useClickOutside"
-import useWindowSize, { breakpoints } from "../../hooks/useWindowsSize"
+import useIsMobile from "../../hooks/useIsMobile"
 import { focusAndOpenKeyboard } from "../../utils/events"
 
 export interface SearchInputProps {
@@ -43,7 +43,7 @@ export function SearchInput({
 }: SearchInputProps) {
   const refInput = useRef<HTMLInputElement>(null)
   const refForm = useRef<HTMLFormElement>(null)
-  const { width } = useWindowSize()
+  const isMobile = useIsMobile()
   const [isMinimizedControlled, setIsMinimizedControlled] = useState(
     !!minimizeBehavior
   )
@@ -52,10 +52,6 @@ export function SearchInput({
     [isMinimizedControlled, minimize]
   )
 
-  const isMobile = useMemo(
-    () => width !== undefined && width <= breakpoints.sm,
-    [width]
-  )
   const handleMinimize = useCallback(
     (newState) => {
       setIsMinimizedControlled(newState)

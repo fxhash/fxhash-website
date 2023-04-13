@@ -10,6 +10,8 @@ import {
 import { Frag_UserBadge } from "./fragments/user"
 import { Frag_MediaImage } from "./fragments/media"
 import { Frag_MintTicketFull } from "./fragments/mint-ticket"
+import { Frag_GenTokOffer } from "./fragments/offer"
+import { Frag_GenTokCollectionOffer } from "./fragments/collection-offer"
 
 export const Qu_genToken = gql`
   ${Frag_GenTokenInfo}
@@ -47,6 +49,20 @@ export const Qu_genTokens = gql`
     generativeTokens(skip: $skip, take: $take, sort: $sort, filters: $filters) {
       id
       ...TokenInfo
+    }
+  }
+`
+
+export const Qu_genTokensAuthors = gql`
+  ${Frag_GenAuthor}
+  query GenerativeTokens($skip: Int, $take: Int, $projectIds: [Int!]) {
+    generativeTokens(
+      skip: $skip
+      take: $take
+      filters: { id_in: $projectIds }
+    ) {
+      id
+      ...Author
     }
   }
 `
@@ -280,31 +296,19 @@ export const Qu_genTokOwners = gql`
 `
 
 export const Qu_genTokOffers = gql`
-  ${Frag_MediaImage}
-  ${Frag_UserBadge}
-  query GetGenTokOffers($id: Float) {
+  ${Frag_GenTokOffer}
+  ${Frag_GenTokCollectionOffer}
+  query GetGenTokOffers($id: Float, $userId: String, $sort: OffersSortInput) {
     generativeToken(id: $id) {
       id
-      offers(filters: { active_eq: true }) {
-        id
-        price
-        version
-        createdAt
-        cancelledAt
-        acceptedAt
-        buyer {
-          ...UserBadgeInfos
+      name
+      isHolder(userId: $userId)
+      allOffers(filters: { active_eq: true }, sort: $sort) {
+        ... on CollectionOffer {
+          ...GenTokCollectionOffer
         }
-        objkt {
-          id
-          iteration
-          metadata
-          captureMedia {
-            ...MediaImage
-          }
-          owner {
-            ...UserBadgeInfos
-          }
+        ... on Offer {
+          ...GenTokOffer
         }
       }
     }

@@ -10,6 +10,7 @@ import style from "./Theme.module.scss"
 import cs from "classnames"
 import isMobile from "is-mobile"
 import { MarketplaceSortOption } from "containers/Marketplace/GenerativeListings"
+import { OfferSortOption } from "components/Offers/OfferFilters"
 
 export interface ISettingsProperties {
   // display
@@ -33,6 +34,18 @@ export interface ISettingsProperties {
   epilepsy: boolean
   layoutMasonry: boolean
   preferredMarketplaceSorting: MarketplaceSortOption
+  // notifications
+  showMintTicketAlerts: boolean
+  showOfferAlerts: boolean
+  offerAlertsFloorThreshold: number
+  marketplaceGenerativeOffers: {
+    sort: OfferSortOption
+    floorThreshold: number
+  }
+  userDashboardReceivedOffers: {
+    sort: OfferSortOption
+    floorThreshold: number
+  }
 }
 
 const Colors = {
@@ -112,13 +125,26 @@ const defaultProperties: ISettingsProperties = {
   displayPricesCard: false,
   displayBurntCard: false,
   hoverEffectCard: true,
-  showTicketPreMintWarning: true,
   quality: 0,
   topBannerMessage: "",
   nsfw: false,
   epilepsy: hasReducedMotion && hasReducedMotion.matches,
   layoutMasonry: false,
   preferredMarketplaceSorting: "listingCreatedAt-desc",
+  // fx(params)
+  showTicketPreMintWarning: true,
+  // notifications
+  showMintTicketAlerts: true,
+  showOfferAlerts: true,
+  offerAlertsFloorThreshold: 0.5,
+  marketplaceGenerativeOffers: {
+    sort: "createdAt-desc",
+    floorThreshold: 50,
+  },
+  userDashboardReceivedOffers: {
+    sort: "createdAt-desc",
+    floorThreshold: 50,
+  },
 }
 
 const defaultCtx: ISettingsContext = {

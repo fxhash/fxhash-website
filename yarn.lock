@@ -649,6 +649,11 @@
   resolved "https://registry.npmjs.org/@types/node/-/node-17.0.29.tgz"
   integrity sha512-tx5jMmMFwx7wBwq/V7OohKDVb/JwJU5qCVkeLMh1//xycAJ/ESuw9aJ9SEtlCZDYi2pBfe4JkisSoAtbOsBNAA==
 
+"@types/nprogress@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@types/nprogress/-/nprogress-0.2.0.tgz#86c593682d4199212a0509cc3c4d562bbbd6e45f"
+  integrity sha512-1cYJrqq9GezNFPsWTZpFut/d4CjpZqA0vhqDUPFWYKF1oIyBz5qnoYMzR+0C/T96t3ebLAC1SSnwrVOm5/j74A==
+
 "@types/papaparse@^5.3.2":
   version "5.3.2"
   resolved "https://registry.npmjs.org/@types/papaparse/-/papaparse-5.3.2.tgz"
@@ -948,6 +953,11 @@ attr-accept@^2.2.1:
   version "2.2.2"
   resolved "https://registry.npmjs.org/attr-accept/-/attr-accept-2.2.2.tgz"
   integrity sha512-7prDjvt9HmqiZ0cl5CRjtS84sEyhsHP2coDkaZKRKVfCDo9s7iw7ChVmar78Gu9pC4SoR/28wFu/G5JJhTnqEg==
+
+autonomy-irl-js@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/autonomy-irl-js/-/autonomy-irl-js-1.0.0.tgz#7f4959695f7cbbe2fc0c9bda333b0f94a7663ed7"
+  integrity sha512-MJnd6p3isSfi694iDXB8QEJE6wwnuTP5q4C25y3yjvMvkTi6yb243tmX527XdaspBJqYPKw0zI+hqnpJDhLXQQ==
 
 available-typed-arrays@^1.0.5:
   version "1.0.5"
@@ -2246,6 +2256,14 @@ html-whitespace-sensitive-tag-names@^2.0.0:
   resolved "https://registry.npmjs.org/html-whitespace-sensitive-tag-names/-/html-whitespace-sensitive-tag-names-2.0.0.tgz"
   integrity sha512-SQdIvTTtnHAx72xGUIUudvVOCjeWvV1U7rvSFnNGxTGRw3ZC7RES4Gw6dm1nMYD60TXvm6zjk/bWqgNc5pjQaw==
 
+ics@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/ics/-/ics-3.1.0.tgz#ea3e369d69a53c5cd70a33e2b790cfc483b9b7b7"
+  integrity sha512-O48TZKyLYagLlXoZwDmjetXc6SoT54wFkTu2MEYe7zse8kL+C/dgSynYCjRG1OTAv3iHtGtG0PWKG81LbcrKFA==
+  dependencies:
+    nanoid "^3.1.23"
+    yup "^0.32.9"
+
 ieee754@^1.2.1:
   version "1.2.1"
   resolved "https://registry.npmjs.org/ieee754/-/ieee754-1.2.1.tgz"
@@ -3219,6 +3237,11 @@ nanoclone@^0.2.1:
   resolved "https://registry.npmjs.org/nanoclone/-/nanoclone-0.2.1.tgz"
   integrity sha512-wynEP02LmIbLpcYw8uBKpcfF6dmg2vcpKqxeH5UcoKEYdExslsdUA4ugFauuaeYdTB76ez6gJW8XAZ6CgkXYxA==
 
+nanoid@^3.1.23:
+  version "3.3.6"
+  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.3.6.tgz#443380c856d6e9f9824267d960b4236ad583ea4c"
+  integrity sha512-BGcqMMJuToF7i1rt+2PWSNVnWIkGCU78jBG3RxO/bZlnZPK2Cmi2QaffxGO/2RvWi9sL+FAiRiXMgsyxQ1DIDA==
+
 nanoid@^3.3.4:
   version "3.3.4"
   resolved "https://registry.npmjs.org/nanoid/-/nanoid-3.3.4.tgz"
@@ -3260,13 +3283,14 @@ next@12.2.6:
     "@next/swc-win32-ia32-msvc" "12.2.6"
     "@next/swc-win32-x64-msvc" "12.2.6"
 
-nextjs-progressbar@^0.0.13:
-  version "0.0.13"
-  resolved "https://registry.npmjs.org/nextjs-progressbar/-/nextjs-progressbar-0.0.13.tgz"
-  integrity sha512-vuE9/j1yaFyHhMVwdlPZbGbcwnvoZZMH8fXUG+HCa+w5uojRNOMO43EL+o9YZ53QwQHsjWdfUapz+J8D/u3jFw==
+nextjs-progressbar@^0.0.16:
+  version "0.0.16"
+  resolved "https://registry.yarnpkg.com/nextjs-progressbar/-/nextjs-progressbar-0.0.16.tgz#d2c1e54ffc2c6d52b64282c0d764a44241fbc36e"
+  integrity sha512-GV0fD38EMD3vSDCmkq+tObmoup6QA91a6a9MxGuhJZuRk/9TNsrHGnIQQQ/sggkMkXuT4fBgF6jRjFwScDT3zA==
   dependencies:
+    "@types/nprogress" "^0.2.0"
     nprogress "^0.2.0"
-    prop-types "^15.7.2"
+    prop-types "^15.8.1"
 
 node-fetch@2.6.1:
   version "2.6.1"
@@ -4752,7 +4776,7 @@ yallist@^4.0.0:
   resolved "https://registry.npmjs.org/yallist/-/yallist-4.0.0.tgz"
   integrity sha512-3wdGidZyq5PB084XLES5TpOSRA3wjXAlIWMhum2kRcv/41Sn2emQ0dycQW4uZXLejwKvg6EsvbdlVL+FYEct7A==
 
-yup@^0.32.11:
+yup@^0.32.11, yup@^0.32.9:
   version "0.32.11"
   resolved "https://registry.npmjs.org/yup/-/yup-0.32.11.tgz"
   integrity sha512-Z2Fe1bn+eLstG8DRR6FTavGD+MeAwyfmouhHsIUgaADz8jvFKbO/fXc2trJKZg+5EBjh4gGm3iU/t3onKlXHIg==

@@ -69,13 +69,13 @@ const _ModalClaimMintTicket = ({
     )
   const { handleSubmit, handleChange, handleBlur, values, errors } = useFormik({
     initialValues: {
-      price: mintTicket.price / 1000000,
+      price: (price / 1000000) * 2,
       days: 7,
     },
     onSubmit: (submittedValues) => {
       // add extra day to cover for end of period
       const daysCoverageWithExtraDay = submittedValues.days + 1
-      const tzPrice = submittedValues.price * 1000000
+      const tzPrice = Math.ceil(submittedValues.price * 1000000)
       const amount =
         getMintTicketHarbergerTax(
           submittedValues.price,
@@ -89,7 +89,7 @@ const _ModalClaimMintTicket = ({
           coverage: daysCoverageWithExtraDay,
           price: tzPrice,
         },
-        amount,
+        amount: Math.ceil(amount),
       })
     },
     validationSchema: validation,
@@ -101,7 +101,8 @@ const _ModalClaimMintTicket = ({
   }, [claimedTicket, onClickUpdatePrice])
   const harbergerTax = useMemo(() => {
     if (values.price > 0 && values.days > 0) {
-      return getMintTicketHarbergerTax(values.price, values.days)
+      const daysCoverageWithExtraDay = values.days + 1
+      return getMintTicketHarbergerTax(values.price, daysCoverageWithExtraDay)
     }
     return false
   }, [values.price, values.days])
@@ -136,6 +137,7 @@ const _ModalClaimMintTicket = ({
                 type="number"
                 value={values.price}
                 min={0.1}
+                step="any"
                 onChange={handleChange}
                 onBlur={handleBlur}
                 classNameContainer={style.input}

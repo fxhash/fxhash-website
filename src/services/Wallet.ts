@@ -1,36 +1,18 @@
 import { BeaconWallet } from "@taquito/beacon-wallet"
 import {
   ContractAbstraction,
-  MichelsonMap,
-  OpKind,
   TezosToolkit,
   Wallet,
+  WalletProvider,
 } from "@taquito/taquito"
+// @ts-expect-error no types for autonomy
+import autonomyIRL from "autonomy-irl-js"
 import {
-  BurnSupplyCallData,
-  CancelOfferCall,
-  CollectCall,
-  MintCall,
-  MintGenerativeCallData,
-  ModerateCall,
-  ModerateUserStateCall,
-  PlaceOfferCall,
-  ProfileUpdateCallData,
-  ReportCall,
-  UpdateGenerativeCallData,
-} from "../types/ContractCalls"
-import {
-  ContractInteractionMethod,
   ContractOperationCallback,
   ContractOperationStatus,
-  FxhashContracts,
 } from "../types/Contracts"
-import { stringToByteString } from "../utils/convert"
 import { isOperationApplied } from "./Blockchain"
-import {
-  ContractOperation,
-  TContractOperation,
-} from "./contract-operations/ContractOperation"
+import { TContractOperation } from "./contract-operations/ContractOperation"
 
 // the different operations which can be performed by the wallet
 export enum EWalletOperations {
@@ -93,6 +75,57 @@ export class WalletManager {
   }
 
   /**
+   * FOR LIVE MINTING:
+   * construct a fake wallet provider using autonomyIRL to be able to reuse
+   * our beacon wallet implementation
+   */
+  async connectAutonomyWallet() {
+    const { result: pkh } = await autonomyIRL.getAddress({
+      chain: autonomyIRL.chain.tez,
+    })
+
+    const provider: Pick<
+      WalletProvider,
+      "getPKH" | "mapTransferParamsToWalletParams" | "sendOperations"
+    > = {
+      getPKH: () => pkh,
+      mapTransferParamsToWalletParams: (params) => {
+        return params()
+      },
+      sendOperations: async (operations) => {
+        const { result } = await autonomyIRL.sendTransaction({
+          transactions: operations.map((op) => ({
+            kind: "transaction",
+            destination: op.to,
+            amount: op.amount.toString(),
+            mutez: true,
+            entrypoint: op.parameter.entrypoint,
+            parameters: op.parameter.value,
+            storageLimit: op.storageLimit.toString(),
+          })),
+          sourceAddress: pkh,
+          metadata: {
+            metadata: {
+              name: "fxhash",
+              description:
+                "The tezos platform for artists and collectors to live out their passion for generative art.",
+              url: "https://fxhash.xyz",
+              // icons: ["url_icon"],
+            },
+          },
+          chain: autonomyIRL.chain.tez,
+        })
+
+        return result
+      },
+    }
+
+    this.beaconWallet = provider as BeaconWallet
+    this.tezosToolkit.setWalletProvider(provider as WalletProvider)
+    return provider.getPKH()
+  }
+
+  /**
    * If a beacon session can be found in the storage, then we can assume that the user is still connected
    * to the platform and thus register its wallet to the tezos toolkit
    */
@@ -111,7 +144,14 @@ export class WalletManager {
   }
 
   async disconnect() {
-    await this.getBeaconWallet().disconnect()
+    try {
+      await this.getBeaconWallet().disconnect()
+    } catch (_) {
+      /**
+       * If an autonomy wallet is connected, then the disconnect method will throw an error
+       * because it's a fake wallet provider. We can ignore this error
+       */
+    }
     this.tezosToolkit.setWalletProvider(undefined)
     this.beaconWallet = null
     this.contracts = {}

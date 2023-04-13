@@ -102,7 +102,7 @@ export function MintController({
   className,
   children,
 }: PropsWithChildren<Props>) {
-  const { user } = useContext(UserContext)
+  const { user, isLiveMinting } = useContext(UserContext)
   const router = useRouter()
 
   // the mint context, handles display logic
@@ -270,7 +270,11 @@ export function MintController({
               openCreditCard={openCreditCard}
             >
               <span className={style.mint}>
-                mint {isTicketMinted ? "ticket" : "iteration"}&nbsp;&nbsp;
+                {!isLiveMinting && (
+                  <>
+                    mint {isTicketMinted ? "ticket" : "iteration"}&nbsp;&nbsp;
+                  </>
+                )}
                 <DisplayTezos
                   mutez={price}
                   tezosSize="regular"
