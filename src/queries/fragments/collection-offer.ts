@@ -7,6 +7,7 @@ export const Frag_UserCollectionOffer = gql`
     id
     price
     createdAt
+    amount
     buyer {
       id
       name
