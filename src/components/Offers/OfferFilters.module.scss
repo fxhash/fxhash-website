@@ -1,0 +1,23 @@
+.offer_filters {
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+  align-items: center;
+  & > * {
+    margin-left: 20px;
+  }
+}
+
+.floor_slider {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 250px;
+
+  .label {
+    display: flex;
+    font-size: var(--font-size-small);
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+}
