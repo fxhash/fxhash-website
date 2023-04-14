@@ -34,14 +34,17 @@ const _PreMintWarning = ({
   return (
     <div className={style.container}>
       <p>
-        What you see is <strong>not necessarily</strong> what you get.
+        <strong>Attention:</strong> Confirm the preview before minting
         <br />
         <br />
-        Minted outputs can differ significantly from the displayed preview.
+        When minting generative art with fx(params), your piece could either be
+        a perfect match or display slight variations from the preview.
         <br />
         <br />
-        Try out with different hashes at least 3 times to visualize how your
-        mint will look like.
+        To better anticipate the outcome, experiment with different hashes at
+        least 3 times before finalizing your mint. If the preview stays the same
+        as you refresh the hash, this is what your minted iteration will look
+        like.
       </p>
       <Spacing size="x-large" sm="regular" />
       <div className={style.container_generate}>
