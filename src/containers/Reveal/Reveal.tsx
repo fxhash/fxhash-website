@@ -15,6 +15,7 @@ import { RevealIframe } from "../../components/Reveal/RevealIframe"
 interface Props {
   generativeUri: string
   hash: string
+  minter: string
   params?: string
   previeweUri?: string
   features?: TokenFeature[] | null
@@ -27,7 +28,13 @@ interface Props {
  *  - display a loader while <iframe> is loading
  *  - once iframe is loaded, reveal it with a flipping effect
  */
-export function Reveal({ hash, params, generativeUri, features }: Props) {
+export function Reveal({
+  hash,
+  minter,
+  params,
+  generativeUri,
+  features,
+}: Props) {
   const iframeRef = useRef<HTMLIFrameElement>(null)
   const viewUrl = useMemo<string>(() => {
     let url
@@ -38,12 +45,13 @@ export function Reveal({ hash, params, generativeUri, features }: Props) {
     } else {
       url = `${ipfsGatewayUrl(generativeUri)}/?fxhash=${hash}`
     }
+    url += `&fxminter=${minter}`
     // append params if defined
     if (params && params.length > 0) {
       url += `&fxparams=${params}`
     }
     return url
-  }, [generativeUri, hash, params])
+  }, [generativeUri, hash, minter, params])
 
   const reloadIframe = () => {
     if (iframeRef.current) {
