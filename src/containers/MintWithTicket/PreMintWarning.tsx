@@ -42,9 +42,11 @@ const _PreMintWarning = ({
         <br />
         <br />
         To better anticipate the outcome, experiment with different hashes at
-        least 3 times before finalizing your mint. If the preview stays the same
-        as you refresh the hash, this is what your minted iteration will look
-        like.
+        least 3 times before finalizing your mint.
+        <br />
+        <br />
+        If the preview stays the same as you refresh the hash, this is what your
+        minted iteration will look like.
       </p>
       <Spacing size="x-large" sm="regular" />
       <div className={style.container_generate}>
