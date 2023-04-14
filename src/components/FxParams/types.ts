@@ -50,6 +50,7 @@ export interface FxParamDefinition<Type extends FxParamType> {
   type: Type
   default: FxParamTypeMap[Type]
   options: FxParamOptionsMap[Type]
+  version?: string
 }
 
 export type hexString = `#${string}`
@@ -63,7 +64,7 @@ export interface FxParamProcessor<Type extends FxParamType> {
     input: string,
     definition: FxParamDefinition<Type>
   ) => FxParamTypeMap[Type]
-  bytesLength: (options: FxParamOptionsMap[Type]) => number
+  bytesLength: (definition: FxParamDefinition<Type>) => number
   transform?: (input: string) => any
   random: (definition: FxParamDefinition<Type>) => FxParamTypeMap[Type]
 }

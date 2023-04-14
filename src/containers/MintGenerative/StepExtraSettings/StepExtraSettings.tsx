@@ -101,7 +101,12 @@ export const StepExtraSettings: StepComponent = ({ state, onNext }) => {
   // DERIVED FROM STATE
   // the url to display in the iframe
   const iframeUrl = useMemo<string>(() => {
-    return ipfsUrlWithHashAndParams(state.cidUrlParams!, hash, inputBytes)
+    return ipfsUrlWithHashAndParams(
+      state.cidUrlParams!,
+      hash,
+      state.previewMinter!,
+      inputBytes
+    )
   }, [hash, inputBytes])
 
   // FUNCTIONS
