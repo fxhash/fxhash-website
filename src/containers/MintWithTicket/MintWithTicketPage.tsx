@@ -353,7 +353,7 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
                 {loading && <Loader size="small" color="currentColor" />}
                 {success && (
                   <Link
-                    href={`/reveal/${token.id}/?fxhash=${opHash}&fxparams=${inputBytes}`}
+                    href={`/reveal/${token.id}/?fxhash=${opHash}&fxparams=${inputBytes}&fxminter=${user?.id}`}
                     passHref
                   >
                     <Button
