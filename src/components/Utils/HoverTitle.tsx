@@ -21,7 +21,7 @@ export function HoverTitle({
       const { left, width: anchorWidth } =
         anchorRef.current.getBoundingClientRect()
       const { width, x } = hoverMessageRef.current.getBoundingClientRect()
-      const margin = 8;
+      const margin = 8
       if (window.outerWidth > left + width / 2) {
         setOffetX(0)
       } else {
