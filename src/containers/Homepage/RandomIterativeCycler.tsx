@@ -23,9 +23,10 @@ const _RandomIterativeCycler = ({
   const [cursor, setCursor] = useState(0)
   const [counterInSec, setCounterInSec] = useState(0)
   useEffect(() => {
-    setInterval(() => {
+    const interval = setInterval(() => {
       setCounterInSec((sec) => sec + 1)
     }, 1000)
+    return () => clearInterval(interval)
   }, [])
   useEffect(() => {
     if (counterInSec > maxTimeSec) {
