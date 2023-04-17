@@ -142,8 +142,8 @@ const _TableMintTickets = ({
           {loading || mintTickets.length > 0 ? (
             mintTickets.map((mintTicket, i) => {
               const dateTaxPaidUntil = new Date(mintTicket.taxationPaidUntil)
-              const isUnderAuction = dateTaxPaidUntil > now
-              const price = isUnderAuction
+              const isNotUnderAuction = dateTaxPaidUntil > now
+              const price = isNotUnderAuction
                 ? mintTicket.price
                 : getDAPrice(now, dateTaxPaidUntil, mintTicket.price)
 
@@ -215,7 +215,7 @@ const _TableMintTickets = ({
                     )}
                   >
                     <div className={style.actions}>
-                      {user?.id === mintTicket.owner.id && isUnderAuction ? (
+                      {user?.id === mintTicket.owner.id && isNotUnderAuction ? (
                         <>
                           {!showFlag && (
                             <Link

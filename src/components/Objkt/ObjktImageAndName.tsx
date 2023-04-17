@@ -4,6 +4,7 @@ import { Objkt } from "../../types/entities/Objkt"
 import Link from "next/link"
 import { Image } from "../Image"
 import { MediaImage } from "types/entities/MediaImage"
+import { GenerativeToken } from "types/entities/GenerativeToken"
 
 interface TokenImageAndNameProps {
   href: string
@@ -62,5 +63,26 @@ const _ObjtkImageAndName = ({
   )
 }
 
+interface GenerativeTokenImageAndNameProps {
+  token: GenerativeToken
+  label?: string
+  shortName?: boolean
+  size?: number
+}
+
+const _GenerativeTokenImageAndName = ({
+  token,
+  shortName,
+}: GenerativeTokenImageAndNameProps) => (
+  <TokenImageAndName
+    href={`/generative/${token.id}`}
+    metadata={token.metadata}
+    captureMedia={token.captureMedia}
+    name={shortName ? `Collection` : `${token.name} (collection)`}
+    label="Token"
+  />
+)
+
 export const TokenImageAndName = memo(_TokenImageAndName)
 export const ObjktImageAndName = memo(_ObjtkImageAndName)
+export const GenerativeTokenImageAndName = memo(_GenerativeTokenImageAndName)

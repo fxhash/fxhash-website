@@ -8,6 +8,7 @@ import {
   offerTypeGuard,
 } from "types/entities/Offer"
 import {
+  GenerativeTokenImageAndName,
   ObjktImageAndName,
   TokenImageAndName,
 } from "components/Objkt/ObjktImageAndName"
@@ -39,13 +40,9 @@ const Row = ({ buttons, feedback, offer }: RowProps) => {
       )
 
     return (
-      <TokenImageAndName
-        href={`/generative/${offer.token.id}`}
-        metadata={offer.token.metadata}
-        captureMedia={offer.token.captureMedia}
-        name={`${offer.token.name} (collection)`}
-        label="Token"
-      />
+      <div className={cs(style.link_wrapper)}>
+        <GenerativeTokenImageAndName token={offer.token} />
+      </div>
     )
   }
 
@@ -114,18 +111,13 @@ const OfferRow = ({ offer }: { offer: Offer }) => (
   </OfferActions>
 )
 
-const CollectionOfferRow = ({ offer }: { offer: CollectionOffer }) => {
-  const { user } = useContext(UserContext)
-  // don't show the received offer if it's from the current user
-  if (user?.id === offer.buyer.id) return null
-  return (
-    <CollectionOfferActions key={`${offer.id}-${offer.version}`} offer={offer}>
-      {({ buttons, feedback }) => (
-        <Row buttons={buttons} feedback={feedback} offer={offer} />
-      )}
-    </CollectionOfferActions>
-  )
-}
+const CollectionOfferRow = ({ offer }: { offer: CollectionOffer }) => (
+  <CollectionOfferActions key={`${offer.id}-${offer.version}`} offer={offer}>
+    {({ buttons, feedback }) => (
+      <Row buttons={buttons} feedback={feedback} offer={offer} />
+    )}
+  </CollectionOfferActions>
+)
 
 interface TableUserOffersReceivedProps {
   offers: AnyOffer[]

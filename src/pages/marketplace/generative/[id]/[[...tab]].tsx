@@ -1,37 +1,38 @@
 import Link from "next/link"
 import Head from "next/head"
 import { GetServerSideProps, NextPage } from "next"
-import layout from "../../../styles/Layout.module.scss"
-import style from "./GenerativeTokenMarketplace.module.scss"
-import colors from "../../../styles/Colors.module.css"
-import styleActivity from "../../../styles/Activity.module.scss"
+import layout from "../../../../styles/Layout.module.scss"
+import style from "../GenerativeTokenMarketplace.module.scss"
+import colors from "../../../../styles/Colors.module.css"
+import styleActivity from "../../../../styles/Activity.module.scss"
 import cs from "classnames"
-import { createApolloClient } from "../../../services/ApolloClient"
-import { GenerativeToken } from "../../../types/entities/GenerativeToken"
-import { Spacing } from "../../../components/Layout/Spacing"
-import { MintProgress } from "../../../components/Artwork/MintProgress"
-import { Button } from "../../../components/Button"
-import { ClientOnlyEmpty } from "../../../components/Utils/ClientOnly"
-import { truncateEnd } from "../../../utils/strings"
-import { useState } from "react"
-import { Qu_genTokenMarketplace } from "../../../queries/generative-token"
-import { GenerativeActions } from "../../../containers/Generative/Actions"
-import { GenerativeFlagBanner } from "../../../containers/Generative/FlagBanner"
-import { ArtworkPreview } from "../../../components/Artwork/Preview"
-import { getGenerativeTokenUrl } from "../../../utils/generative-token"
-import { TabDefinition, Tabs } from "../../../components/Layout/Tabs"
-import { DisplayTezos } from "../../../components/Display/DisplayTezos"
-import { GenerativeStatsMarketplace } from "../../../containers/Marketplace/GenerativeStatsMarketplace"
-import { TokenActionType } from "../../../types/entities/Action"
-import { EntityBadge } from "../../../components/User/EntityBadge"
-import { TabsContainer } from "../../../components/Layout/TabsContainer"
-import { GenerativeListings } from "../../../containers/Marketplace/GenerativeListings"
-import { GenerativeOffers } from "../../../containers/Marketplace/GenerativeOffers"
-import { getImageApiUrl, OG_IMAGE_SIZE } from "../../../components/Image"
+import { createApolloClient } from "../../../../services/ApolloClient"
+import { GenerativeToken } from "../../../../types/entities/GenerativeToken"
+import { Spacing } from "../../../../components/Layout/Spacing"
+import { MintProgress } from "../../../../components/Artwork/MintProgress"
+import { Button } from "../../../../components/Button"
+import { ClientOnlyEmpty } from "../../../../components/Utils/ClientOnly"
+import { truncateEnd } from "../../../../utils/strings"
+import { Qu_genTokenMarketplace } from "../../../../queries/generative-token"
+import { GenerativeActions } from "../../../../containers/Generative/Actions"
+import { GenerativeFlagBanner } from "../../../../containers/Generative/FlagBanner"
+import { ArtworkPreview } from "../../../../components/Artwork/Preview"
+import { getGenerativeTokenUrl } from "../../../../utils/generative-token"
+import { TabDefinition } from "../../../../components/Layout/Tabs"
+import { DisplayTezos } from "../../../../components/Display/DisplayTezos"
+import { GenerativeStatsMarketplace } from "../../../../containers/Marketplace/GenerativeStatsMarketplace"
+import { TokenActionType } from "../../../../types/entities/Action"
+import { EntityBadge } from "../../../../components/User/EntityBadge"
+import { TabsContainer } from "../../../../components/Layout/TabsContainer"
+import { GenerativeListings } from "../../../../containers/Marketplace/GenerativeListings"
+import { GenerativeOffers } from "../../../../containers/Marketplace/GenerativeOffers"
+import { getImageApiUrl, OG_IMAGE_SIZE } from "../../../../components/Image"
 import { ButtonCollectionOfferCreate } from "containers/Objkt/ButtonCollectionOfferCreate"
+import { useRouter } from "next/router"
 
 interface Props {
   token: GenerativeToken
+  tab: typeof tabs[number]["name"]
 }
 
 const tabs: TabDefinition[] = [
@@ -49,6 +50,14 @@ const tabs: TabDefinition[] = [
   },
 ]
 
+const marketplaceComponents = {
+  listed: GenerativeListings,
+  ["offers"]: GenerativeOffers,
+  ["stats"]: GenerativeStatsMarketplace,
+  activity: GenerativeActions,
+}
+export const marketplaceComponentsKeys = Object.keys(marketplaceComponents)
+
 const actionTypeFilters: TokenActionType[] = [
   TokenActionType.LISTING_V1_ACCEPTED,
   TokenActionType.LISTING_V2_ACCEPTED,
@@ -61,8 +70,8 @@ const actionFilters = {
   type_in: actionTypeFilters,
 }
 
-const GenerativeTokenMarketplace: NextPage<Props> = ({ token }) => {
-  const [tabActive, setTabActive] = useState<number>(0)
+const GenerativeTokenMarketplace: NextPage<Props> = ({ token, tab }) => {
+  const router = useRouter()
 
   // get the display url for og:image
   const displayUrl =
@@ -262,6 +271,16 @@ const GenerativeTokenMarketplace: NextPage<Props> = ({ token }) => {
         className={style.tabs}
         tabDefinitions={tabs}
         tabsLayout="fixed-size"
+        initialIdx={tabs.findIndex(({ name }) => name === tab)}
+        onClickTab={(tabIndex) => {
+          const { id } = router.query
+          // push the new route to avoid query param conflicts
+          router.push(
+            `/marketplace/generative/${id}/${tabs[tabIndex].name}`,
+            undefined,
+            { shallow: true }
+          )
+        }}
       >
         {({ tabIndex }) => (
           <section className={cs(layout["padding-big"])}>
@@ -305,6 +324,17 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   let idStr = context.params?.id
   let token: GenerativeToken | null = null
 
+  const tab = context.params?.tab?.[0] || "listed"
+  const isExistingTab = marketplaceComponentsKeys.indexOf(tab) > -1
+  if (!isExistingTab) {
+    return {
+      redirect: {
+        destination: `/marketplace/generative/id/listed`,
+        permanent: false,
+      },
+    }
+  }
+
   if (idStr) {
     const id = parseInt(idStr as string)
     if (id === 0 || id) {
@@ -323,6 +353,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: {
       token: token,
+      tab,
     },
     notFound: !token,
   }

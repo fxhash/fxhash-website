@@ -35,6 +35,9 @@ export class CollectionOfferAcceptOperation extends ContractOperation<TCollectio
       },
     ]
 
+    // the list of operationd
+    const operations: WalletParamsWithKind[] = []
+
     const collectionOfferAcceptParams = {
       gentk: {
         id: getGentkLocalID(this.params.token.id),
@@ -42,9 +45,6 @@ export class CollectionOfferAcceptOperation extends ContractOperation<TCollectio
       },
       offer_id: this.params.offer.id,
     }
-
-    // the list of operationd
-    const operations: WalletParamsWithKind[] = []
 
     // if there's an active listing, it must first be cancelled
     if (this.params.token.activeListing) {

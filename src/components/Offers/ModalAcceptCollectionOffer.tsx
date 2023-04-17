@@ -2,8 +2,9 @@ import React, { memo, useContext, useState } from "react"
 import { Button } from "../Button"
 import { Modal } from "../Utils/Modal"
 import style from "./ModalAcceptCollectionOffer.module.scss"
+import colors from "../../styles/Colors.module.css"
 import { Spacing } from "../Layout/Spacing"
-import { CollectionOffer, offerTypeGuard } from "types/entities/Offer"
+import { CollectionOffer } from "types/entities/Offer"
 import { Objkt } from "types/entities/Objkt"
 import { useQuery } from "@apollo/client"
 import { UserContext } from "containers/UserProvider"
@@ -13,9 +14,11 @@ import { Checkbox } from "components/Input/Checkbox"
 import { DisplayTezos } from "components/Display/DisplayTezos"
 import Link from "next/link"
 import { FloorDifference } from "components/Display/FloorDifference"
+import { UserBadge } from "../User/UserBadge"
+import { plural } from "../../utils/strings"
 
 interface ModalAcceptCollectionOfferProps {
-  offer: CollectionOffer
+  offer: CollectionOffer | null
   onClose: () => void
   onClickAccept: (selectedGentk: Objkt) => void
 }
@@ -31,30 +34,47 @@ const _ModalAcceptCollectionOffer = ({
   const { data, loading } = useQuery(Qu_userAcceptCollectionOffer, {
     variables: {
       userId: user?.id,
-      issuerId: offer.token.id,
+      issuerId: offer!.token.id,
     },
+    skip: !offer,
     fetchPolicy: "no-cache",
   })
 
-  console.log(data)
   const floor = data?.user?.objkts?.[0]?.issuer?.marketStats?.floor
+
+  if (!offer) return null
 
   return (
     <Modal
-      title={`Accept collection offer for ${offer.token.name}`}
+      title={`Accept collection offer for “${offer.token.name}“`}
       onClose={onClose}
     >
       <p className={style.p}>
-        Select which gentk you would like to sell for&nbsp;
+        <UserBadge user={offer.buyer} displayAvatar={false} /> want to acquire{" "}
+        <span className={colors.secondary}>{offer.amount}</span> editions
+        for&nbsp;
         <DisplayTezos
           className={style.price}
           formatBig={false}
           mutez={offer.price}
           tezosSize="regular"
         />
-        &nbsp; which is&nbsp;
-        <FloorDifference Element="span" price={offer.price} floor={floor} /> of
-        the floor price.
+        {offer.amount > 1 ? "/each" : ""}
+        {floor && (
+          <>
+            &nbsp; which is&nbsp;
+            <FloorDifference
+              Element="span"
+              price={offer.price}
+              floor={floor}
+            />{" "}
+            of the floor price
+          </>
+        )}
+        .
+      </p>
+      <p>
+        Please Select which gentk{plural(offer.amount)} you would like to sell:
       </p>
       <Spacing size="regular" />
       <div className={style.gentks}>
