@@ -88,7 +88,7 @@ const _RandomIterativeCycler = ({
                     user={generativeToken.author}
                     displayName={false}
                   />
-                  <div>
+                  <div className={style.infos_text}>
                     <Link href={`/gentk/slug/${objkt.slug}`}>
                       <a className={style.title_url}>
                         <h4>
@@ -103,9 +103,8 @@ const _RandomIterativeCycler = ({
                       <EntityBadge
                         displayAvatar={false}
                         user={generativeToken.author}
-                        toggeable
-                        centered
                         size="regular"
+                        toggeable={true}
                       />
                     </div>
                   </div>
