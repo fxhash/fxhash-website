@@ -274,6 +274,13 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
     })
   }, [panelParamsRef, params, setHash, historyContext, withAutoUpdate])
 
+  useEffect(() => {
+    document.documentElement.classList.add(style.black)
+    return () => {
+      document.documentElement.classList.remove(style.black)
+    }
+  }, [])
+
   return (
     <div className={style.root}>
       <ResizableArea
