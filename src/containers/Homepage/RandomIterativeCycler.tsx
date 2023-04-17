@@ -8,10 +8,6 @@ import { UserBadge } from "../../components/User/UserBadge"
 import style from "./RandomIterativeCycler.module.scss"
 import cs from "classnames"
 import Link from "next/link"
-import {
-  ProgressAnimated,
-  ProgressAnimatedRef,
-} from "../../components/Utils/ProgressAnimated"
 import { ManualProgressAnimated } from "../../components/Utils/ManualProgressAnimated"
 
 interface RandomIterativeCyclerProps {
@@ -63,18 +59,22 @@ const _RandomIterativeCycler = ({
                 [style.square]: isActive,
               })}
             >
-              <SquareContainer className={cs(style.square_container)}>
-                <ArtworkFrame
-                  tokenLabels={generativeToken.labels}
-                  borderWidth={0}
-                >
-                  <Image
-                    image={objkt.captureMedia}
-                    ipfsUri={objkt.metadata?.thumbnailUri}
-                    alt={`${objkt.name} preview`}
-                  />
-                </ArtworkFrame>
-              </SquareContainer>
+              <Link href={`/gentk/slug/${objkt.slug}`}>
+                <a>
+                  <SquareContainer className={cs(style.square_container)}>
+                    <ArtworkFrame
+                      tokenLabels={generativeToken.labels}
+                      borderWidth={0}
+                    >
+                      <Image
+                        image={objkt.captureMedia}
+                        ipfsUri={objkt.metadata?.thumbnailUri}
+                        alt={`${objkt.name} preview`}
+                      />
+                    </ArtworkFrame>
+                  </SquareContainer>
+                </a>
+              </Link>
               <div className={style.details}>
                 {isActive && (
                   <ManualProgressAnimated
