@@ -27,7 +27,7 @@ import {
   CaptureTriggerMode,
   MintGenerativeData,
 } from "../types/Mint"
-import { getIpfsSlash } from "./ipfs"
+import { getIpfsSlash, ipfsUrlWithHashAndParams } from "./ipfs"
 import { clamp } from "./math"
 import { tagsFromString } from "./strings"
 import {
@@ -192,32 +192,31 @@ export function generativeMetadataFromMintForm(
     // we don't need to add anything
   }
 
-  let artifactUri = `${getIpfsSlash(data.cidUrlParams!)}?fxhash=${
-    data.previewHash
-  }`
-
-  if (data.previewInputBytes) {
-    artifactUri += `&fxparams=${data.previewInputBytes}`
-  }
-
   return {
     name: data.informations!.name,
     description: data.informations!.description,
     childrenDescription:
       data.informations!.childrenDescription || data.informations!.description,
     tags: tagsFromString(data.informations!.tags),
-    artifactUri,
+    artifactUri: ipfsUrlWithHashAndParams(
+      data.cidUrlParams!,
+      data.previewHash!,
+      data.previewMinter!,
+      data.previewInputBytes,
+      (cid) => `ipfs://${cid}`
+    ),
     displayUri: getIpfsSlash(data.cidPreview!),
     thumbnailUri: getIpfsSlash(data.cidThumbnail!),
     generativeUri: getIpfsSlash(data.cidUrlParams!),
     authenticityHash: data.authHash2!,
     previewHash: data.previewHash!,
+    previewMinter: data.previewMinter,
     previewInputBytes: data.previewInputBytes!,
     capture,
     settings: data.settings ?? null,
     symbol: "FXGEN",
     decimals: 0,
-    version: "0.3",
+    version: "3.0.1",
     params: data.params!,
   }
 }

@@ -53,7 +53,12 @@ const STEPS: Step[] = [
     path: "/capture-settings",
     component: StepConfigureCapture,
     title: "Configure capture",
-    requiredProps: ["previewHash", "previewInputBytes", "params"],
+    requiredProps: [
+      "previewHash",
+      "previewMinter",
+      "previewInputBytes",
+      "params",
+    ],
   },
   {
     path: "/verifications",

@@ -181,17 +181,31 @@ export const ParameterProcessors: FxParamProcessors = {
   },
 
   string: {
-    serialize: (input) => {
-      let hex = stringToHex(input.substring(0, 64))
-      hex = hex.padEnd(64 * 4, "0")
+    serialize: (input, def) => {
+      if (!def.version) {
+        let hex = stringToHex(input.substring(0, 64))
+        hex = hex.padEnd(64 * 4, "0")
+        return hex
+      }
+      let max = 64
+      if (typeof def.options?.maxLength !== "undefined")
+        max = Number(def.options.maxLength)
+      let hex = stringToHex(input.substring(0, max))
+      hex = hex.padEnd(max * 4, "0")
       return hex
     },
-
     deserialize: (input) => {
       return hexToString(input)
     },
 
-    bytesLength: () => 64 * 2,
+    bytesLength: (def) => {
+      if (!def.version) {
+        return 64 * 2
+      }
+      if (typeof def.options?.maxLength !== "undefined")
+        return Number(def.options.maxLength) * 2
+      return 64 * 2
+    },
     random: (definition) => {
       let min = 0
       if (typeof definition.options?.minLength !== "undefined")
@@ -276,7 +290,7 @@ export function deserializeParams(
       def.type as FxParamType
     ] as FxParamProcessor<FxParamType>
     // extract the length from the bytes & shift the initial bytes string
-    const bytesLen = processor.bytesLength(def.options)
+    const bytesLen = processor.bytesLength(def)
     const valueBytes = bytes.substring(0, bytesLen * 2)
     bytes = bytes.substring(bytesLen * 2)
     // deserialize the bytes into the params
@@ -342,7 +356,7 @@ export function sumBytesParams(
           ParameterProcessors[
             def.type as FxParamType
           ] as FxParamProcessor<FxParamType>
-        ).bytesLength(def?.options),
+        ).bytesLength(def),
       0
     ) || 0
   )

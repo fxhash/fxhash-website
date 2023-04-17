@@ -29,6 +29,7 @@ export const StepVerification: StepComponent = ({ onNext, state }) => {
                   url={ipfsUrlWithHashAndParams(
                     state.cidUrlParams!,
                     state.previewHash!,
+                    state.previewMinter!,
                     state.previewInputBytes!
                   )}
                   textWaiting="looking for content on IPFS"
@@ -41,6 +42,7 @@ export const StepVerification: StepComponent = ({ onNext, state }) => {
             href={ipfsUrlWithHashAndParams(
               state.cidUrlParams!,
               state.previewHash!,
+              state.previewMinter!,
               state.previewInputBytes!
             )}
             passHref
