@@ -274,10 +274,12 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
     })
   }, [panelParamsRef, params, setHash, historyContext, withAutoUpdate])
 
+  // on this view we want the html element bg to be black
+  // especially for mobile header being black
   useEffect(() => {
-    document.documentElement.classList.add(style.black)
+    document.documentElement.classList.add(style.blackHtmlBackground)
     return () => {
-      document.documentElement.classList.remove(style.black)
+      document.documentElement.classList.remove(style.blackHtmlBackground)
     }
   }, [])
 
