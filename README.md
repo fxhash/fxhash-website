@@ -63,7 +63,7 @@ If you find a bug with the front end, you can create an issue.
 * [typescript](https://www.typescriptlang.org/)
 * [css modules](https://github.com/css-modules/css-modules) (with sass)
 * [taquito](https://tezostaquito.io/) to interact with the blockchain
-* [ApolloClient](https://www.apollographql.com/docs/react/) to run graohQL queries (both durring SSR and on the client-side), and handle the store (client-side)
+* [ApolloClient](https://www.apollographql.com/docs/react/) to run graphQL queries (both durring SSR and on the client-side), and handle the store (client-side)
 
 ### Project structure
 
