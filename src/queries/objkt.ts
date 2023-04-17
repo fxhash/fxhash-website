@@ -92,6 +92,9 @@ export const Qu_objkt = gql`
           id
           iteration
         }
+        ticket {
+          id
+        }
       }
     }
   }
