@@ -17,7 +17,6 @@ import { Offer } from "./Offer"
 import { OfferMobile } from "./OfferMobile"
 import { CollectionOfferCancelOperation } from "services/contract-operations/CollectionOfferCancel"
 import { GenerativeToken } from "types/entities/GenerativeToken"
-import { CollectionOfferAcceptOperation } from "services/contract-operations/CollectionOfferAccept"
 import { useModal } from "hooks/useModal"
 import { ModalAcceptCollectionOffer } from "components/Offers/ModalAcceptCollectionOffer"
 
@@ -67,9 +66,6 @@ export function ListOffers({
   )
 
   const offerAcceptBag = useContractOperation(OfferAcceptOperation)
-  const collectionOfferAcceptBag = useContractOperation(
-    CollectionOfferAcceptOperation
-  )
 
   const [selectedOffer, setSelectedOffer] = useState<CollectionOffer | null>(
     null
@@ -78,14 +74,6 @@ export function ListOffers({
     ModalAcceptCollectionOffer,
     {
       offer: selectedOffer,
-      onClickAccept: (objkt: Objkt) => {
-        if (!selectedOffer) throw new Error("No offer selected")
-        return collectionOfferAcceptBag.call({
-          offer: selectedOffer,
-          token: objkt,
-          price: selectedOffer.price,
-        })
-      },
     }
   )
 
@@ -145,21 +133,14 @@ export function ListOffers({
   const getAcceptState = useCallback(
     (offer: AnyOffer) => {
       if (
-        (offerAcceptBag.loading &&
-          offerAcceptBag.params?.offer.id === offer.id) ||
-        (collectionOfferAcceptBag.loading &&
-          collectionOfferAcceptBag.params?.offer.id === offer.id)
+        offerAcceptBag.loading &&
+        offerAcceptBag.params?.offer.id === offer.id
       )
         return "loading"
 
       return "default"
     },
-    [
-      offerAcceptBag.loading,
-      offerAcceptBag.params?.offer.id,
-      collectionOfferAcceptBag.loading,
-      collectionOfferAcceptBag.params?.offer.id,
-    ]
+    [offerAcceptBag.loading, offerAcceptBag.params?.offer.id]
   )
 
   return (
@@ -180,11 +161,6 @@ export function ListOffers({
             offer={offer}
             contractBag={collectionOfferCancelBag}
             successMessage="Your collection offer has been cancelled"
-          />
-          <ListOfferFeedback
-            offer={offer}
-            contractBag={collectionOfferAcceptBag}
-            successMessage="You have accepted the collection offer"
           />
           <Offer
             user={user}

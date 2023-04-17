@@ -65,7 +65,9 @@ const _OfferMobile = ({
             formatBig={false}
             className={cs(style.price)}
           />
-          <FloorDifference price={offer.price} floor={floor} append="floor" />
+          <div>
+            <FloorDifference price={offer.price} floor={floor} append="floor" />
+          </div>
         </div>
         <div className={cs(style.date)}>
           <DateDistance timestamptz={offer.createdAt} />
@@ -91,7 +93,7 @@ const _OfferMobile = ({
               onClick={handleClickAccept}
               state={acceptState}
             >
-              accept
+              {!offerTypeGuard(offer) ? "select & " : ""}accept
             </Button>
           </div>
         ) : null}

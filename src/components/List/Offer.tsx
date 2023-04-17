@@ -68,7 +68,9 @@ const _Offer = ({
         formatBig={false}
         className={cs(style.price)}
       />
-      <FloorDifference price={offer.price} floor={floor} append="floor" />
+      <div className={style.floor}>
+        <FloorDifference price={offer.price} floor={floor} append="floor" />
+      </div>
       <div className={cs(style.call_btn)}>
         {offer.buyer.id === user?.id ? (
           <Button
@@ -88,7 +90,7 @@ const _Offer = ({
             onClick={handleClickAccept}
             state={acceptState}
           >
-            accept
+            {!offerTypeGuard(offer) ? "select & " : ""}accept
           </Button>
         ) : null}
       </div>

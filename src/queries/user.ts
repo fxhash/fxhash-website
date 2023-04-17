@@ -442,6 +442,7 @@ export const Qu_userAcceptCollectionOffer = gql`
         id
         version
         name
+        iteration
         metadata
         captureMedia {
           ...MediaImage
