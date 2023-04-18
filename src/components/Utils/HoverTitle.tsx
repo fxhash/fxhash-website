@@ -21,13 +21,16 @@ export function HoverTitle({
       const { left, width: anchorWidth } =
         anchorRef.current.getBoundingClientRect()
       const { width, x } = hoverMessageRef.current.getBoundingClientRect()
-      const margin = 8
-      if (window.outerWidth > left + width / 2) {
-        setOffetX(0)
-      } else {
+      const centeredTooltipPosition = left + anchorWidth / 2
+      const padding = 8
+      if (centeredTooltipPosition + width / 2 > window.outerWidth) {
         setOffetX(
-          margin + width / 2 - (window.outerWidth - (left + anchorWidth / 2))
+          padding + width / 2 - (window.outerWidth - centeredTooltipPosition)
         )
+      } else if (centeredTooltipPosition - width / 2 < 0) {
+        setOffetX(-(padding + width / 2 - centeredTooltipPosition))
+      } else {
+        setOffetX(0)
       }
     }
     calcScreenOverflow()
