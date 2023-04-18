@@ -190,8 +190,7 @@ export function UserCollectionGentks({ user }: Props) {
             //@ts-ignore
             value = `generators: (${filters[key].length})`
             break
-          case "listing_eq":
-            //@ts-ignore
+          case "activeListing_exist":
             value = `listing: ${filters[key] ? "listed" : "not listed"}`
             break
         }

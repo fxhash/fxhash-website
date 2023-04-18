@@ -222,8 +222,10 @@ export function UserCollectionFilters({ user, filters, setFilters }: Props) {
 
       <FiltersGroup title="Listing">
         <InputRadioButtons
-          value={filters.listing_eq}
-          onChange={(value) => setFilters({ ...filters, listing_eq: value })}
+          value={filters.activeListing_exist}
+          onChange={(value) =>
+            setFilters({ ...filters, activeListing_exist: value })
+          }
           options={ListingOptions}
         />
       </FiltersGroup>

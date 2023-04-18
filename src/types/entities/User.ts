@@ -107,7 +107,7 @@ export interface IUserCollectionFilters {
   authorVerified_eq?: boolean
   author_in?: string[]
   searchQuery_eq?: string
-  listing_eq?: "LISTED" | "NOT LISTED"
+  activeListing_exist?: "LISTED" | "NOT LISTED"
 }
 
 export interface UserFilters {
