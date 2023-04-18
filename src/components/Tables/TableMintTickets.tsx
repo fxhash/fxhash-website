@@ -69,7 +69,7 @@ interface TableMintTicketsProps {
 const _TableMintTickets = ({
   firstColName = "owner",
   displayTokenPreview,
-  mintTickets: mintTicketsUnfiltered,
+  mintTickets: mintTicketsUnfiltered = [],
   loading,
   refreshEveryMs = 15000,
 }: TableMintTicketsProps) => {
