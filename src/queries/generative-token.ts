@@ -205,17 +205,18 @@ export const Qu_genTokenMintTickets = gql`
     $skip: Int
     $take: Int
     $now: String
+    $sort: MintTicketSortInput
+    $filters: MintTicketFilter
   ) {
     generativeToken(id: $id, slug: $slug) {
       id
       mintTicketSettings {
         gracingPeriod
       }
-      mintTickets(
-        sort: { taxationPaidUntil: "ASC" }
-        skip: $skip
-        take: $take
-      ) {
+      underAuctionMintTickets {
+        ...MintTicketFull
+      }
+      mintTickets(sort: $sort, skip: $skip, take: $take, filters: $filters) {
         ...MintTicketFull
       }
     }
@@ -310,6 +311,23 @@ export const Qu_genTokOffers = gql`
         ... on Offer {
           ...GenTokOffer
         }
+      }
+    }
+  }
+`
+
+export const Qu_genMintTickets = gql`
+  ${Frag_MintTicketFull}
+  query GetGenMintTickets(
+    $id: Float
+    $skip: Int
+    $take: Int
+    $sort: MintTicketSortInput
+  ) {
+    generativeToken(id: $id) {
+      id
+      mintTickets(skip: $skip, take: $take, sort: $sort) {
+        ...MintTicketFull
       }
     }
   }

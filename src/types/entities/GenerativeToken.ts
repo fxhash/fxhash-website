@@ -139,6 +139,7 @@ export interface GenerativeToken {
   entireCollection?: Objkt[]
   articleMentions?: ArticleGenerativeTokenMention[]
   captureMedia?: MediaImage
+  underAuctionMintTickets: MintTicket[]
   mintTickets: MintTicket[]
   mintTicketSettings: MintTicketSettings | null
   inputBytesSize: number
