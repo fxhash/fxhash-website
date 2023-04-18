@@ -154,6 +154,7 @@ export function generativeFromMintParams(
     objkts: [],
     actions: [],
     createdAt: new Date().toISOString(),
+    underAuctionMintTickets: [],
     mintTickets: [],
     mintTicketSettings: null,
     inputBytesSize: 0,
