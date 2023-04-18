@@ -29,6 +29,8 @@ import { GenerativeOffers } from "../../../../containers/Marketplace/GenerativeO
 import { getImageApiUrl, OG_IMAGE_SIZE } from "../../../../components/Image"
 import { CollectionOfferCreate } from "containers/Objkt/CollectionOfferCreate"
 import { useRouter } from "next/router"
+import { GenerativeMintTickets } from "containers/Generative/GenerativeMintTickets"
+import { useMemo } from "react"
 
 interface Props {
   token: GenerativeToken
@@ -53,6 +55,7 @@ const tabs: TabDefinition[] = [
 const marketplaceComponents = {
   listed: GenerativeListings,
   ["offers"]: GenerativeOffers,
+  ["tickets"]: GenerativeMintTickets,
   ["stats"]: GenerativeStatsMarketplace,
   activity: GenerativeActions,
 }
@@ -77,6 +80,33 @@ const GenerativeTokenMarketplace: NextPage<Props> = ({ token, tab }) => {
   const displayUrl =
     token.captureMedia?.cid &&
     getImageApiUrl(token.captureMedia.cid, OG_IMAGE_SIZE)
+
+  const usesParams = !!token.inputBytesSize
+
+  const { tabs, tabIndexes } = useMemo(() => {
+    const tabs = [
+      {
+        name: "listed",
+      },
+      ...(usesParams ? [{ name: "tickets" }] : []),
+      {
+        name: "offers",
+      },
+      {
+        name: "stats",
+      },
+      {
+        name: "activity",
+      },
+    ]
+
+    const tabIndexes = tabs.reduce((acc, tab, index) => {
+      acc[tab.name] = index
+      return acc
+    }, {} as Record<string, number>)
+
+    return { tabs, tabIndexes }
+  }, [usesParams])
 
   return (
     <>
@@ -282,15 +312,23 @@ const GenerativeTokenMarketplace: NextPage<Props> = ({ token, tab }) => {
         {({ tabIndex }) => (
           <section className={cs(layout["padding-big"])}>
             <Spacing size="3x-large" sm="x-large" />
-            {tabIndex === 0 ? (
+            {tabIndexes.listed === tabIndex ? (
               <ClientOnlyEmpty>
                 <GenerativeListings token={token} />
               </ClientOnlyEmpty>
-            ) : tabIndex === 1 ? (
+            ) : tabIndexes.tickets === tabIndex ? (
+              <ClientOnlyEmpty>
+                <GenerativeMintTickets
+                  tokenId={token.id}
+                  showCurrentUserTickets={false}
+                  showGracePeriodTickets={false}
+                />
+              </ClientOnlyEmpty>
+            ) : tabIndexes.offers === tabIndex ? (
               <ClientOnlyEmpty>
                 <GenerativeOffers token={token} />
               </ClientOnlyEmpty>
-            ) : tabIndex === 2 ? (
+            ) : tabIndexes.stats === tabIndex ? (
               <ClientOnlyEmpty>
                 <GenerativeStatsMarketplace token={token} />
               </ClientOnlyEmpty>
