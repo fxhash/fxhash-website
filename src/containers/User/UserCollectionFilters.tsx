@@ -56,6 +56,21 @@ const ArtistVerificationOptions: RadioOption[] = [
   },
 ]
 
+const ListingOptions: RadioOption[] = [
+  {
+    value: true,
+    label: "Listed",
+  },
+  {
+    value: false,
+    label: "Not listed",
+  },
+  {
+    value: undefined,
+    label: "All",
+  },
+]
+
 interface Props {
   user: User
   filters: IUserCollectionFilters
@@ -202,6 +217,14 @@ export function UserCollectionFilters({ user, filters, setFilters }: Props) {
             setFilters({ ...filters, authorVerified_eq: value })
           }
           options={ArtistVerificationOptions}
+        />
+      </FiltersGroup>
+
+      <FiltersGroup title="Listing">
+        <InputRadioButtons
+          value={filters.listing_eq}
+          onChange={(value) => setFilters({ ...filters, listing_eq: value })}
+          options={ListingOptions}
         />
       </FiltersGroup>
     </>
