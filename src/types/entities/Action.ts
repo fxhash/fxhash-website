@@ -53,7 +53,7 @@ export interface Action {
   target?: User
   token?: GenerativeToken
   objkt?: Objkt
-  ticket?: MintTicket
+  ticketId?: number
   article?: NFTArticleInfos
   metadata: HistoryMetadata
   createdAt: string

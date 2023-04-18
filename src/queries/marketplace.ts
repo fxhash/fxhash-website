@@ -71,17 +71,13 @@ export const Qu_genTokActions = gql`
         target {
           ...UserBadgeInfos
         }
-        ticket {
-          id
-        }
+        ticketId
         objkt {
           id
           name
           iteration
         }
-        ticket {
-          id
-        }
+        ticketId
         token {
           id
           name

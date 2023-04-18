@@ -316,9 +316,7 @@ export const Qu_userActions = gql`
           name
           iteration
         }
-        ticket {
-          id
-        }
+        ticketId
         article {
           id
           ...ArticleInfosAction

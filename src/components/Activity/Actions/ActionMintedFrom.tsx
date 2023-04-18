@@ -19,7 +19,7 @@ export const ActionMintedFrom: TActionComp = ({ action, verbose }) => (
       ) : (
         <strong>#{action.objkt!.iteration}</strong>
       )}
-      {action.ticket ? (
+      {action.ticketId ? (
         <span> with ticket</span>
       ) : (
         <>
