@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useEffect, useMemo, useState } from "react"
+import React, { memo, useCallback, useEffect, useState } from "react"
 import { GenerativeToken } from "../../types/entities/GenerativeToken"
 import { SquareContainer } from "../../components/Layout/SquareContainer"
 import { ArtworkFrame } from "../../components/Artwork/ArtworkFrame"
@@ -84,14 +84,16 @@ const _RandomIterativeCycler = ({
   useEffect(() => {
     if (counterInSec > maxTimeSec) {
       setCursor((oldCursor) => {
-        const newCursor =
-          oldCursor === generativeToken.objkts.length - 1 ? 0 : oldCursor + 1
-        onChangeCursor(newCursor)
-        return newCursor
+        return oldCursor === generativeToken.objkts.length - 1
+          ? 0
+          : oldCursor + 1
       })
       setCounterInSec(0)
     }
-  }, [counterInSec, generativeToken.objkts.length, onChangeCursor])
+  }, [counterInSec, generativeToken.objkts.length])
+  useEffect(() => {
+    onChangeCursor(cursor)
+  }, [cursor, onChangeCursor])
   return (
     <div className={style.cycler}>
       {generativeToken.objkts?.map((objkt, idx) => {
