@@ -13,10 +13,7 @@ import { useQueryParamSort } from "hooks/useQueryParamSort"
 import { sortOptionsMintTickets } from "utils/sort"
 
 const ITEMS_PER_PAGE = 30
-type MintTicketsBySection = {
-  auctionTickets: MintTicket[]
-  unusedTickets: MintTicket[]
-}
+
 type GenerativeTokenWithUserMintTickets = GenerativeToken & {
   loggedUserMintTickets: MintTicket[]
 }
@@ -66,7 +63,10 @@ const _GenerativeMintTickets = ({
       }
     },
     fetchPolicy: "cache-and-network",
+    nextFetchPolicy: "cache-only",
   })
+
+  console.log(data)
 
   const underAuctionMintTickets = useMemo(
     () => data?.generativeToken?.underAuctionMintTickets || [],
@@ -140,6 +140,7 @@ const _GenerativeMintTickets = ({
             mintTickets={mintTickets}
             loading={loading}
             refreshEveryMs={60000}
+            updateCacheOnForeclosure
           />
         </InfiniteScrollTrigger>
       </div>
