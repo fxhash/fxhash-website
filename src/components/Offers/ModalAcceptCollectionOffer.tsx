@@ -80,12 +80,12 @@ const _ModalAcceptCollectionOffer = ({
               </div>
               <span className={style.container_name}>
                 <span className={style.name}>{gentk.name}</span>
-                <span style={{ fontSize: 12 }}>
+                <span style={{ fontSize: 14 }}>
                   You paid{" "}
                   <DisplayTezos
                     className={style.price}
                     formatBig={false}
-                    mutez={gentk.lastSoldPrice || gentk.mintedPrice!}
+                    mutez={gentk.lastSoldPrice!}
                     tezosSize="regular"
                   />{" "}
                   for this gentk

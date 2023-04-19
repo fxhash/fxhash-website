@@ -1,4 +1,4 @@
-import React, { memo, useContext, useRef } from "react"
+import React, { memo, useRef } from "react"
 import style from "./TableUser.module.scss"
 import cs from "classnames"
 import {
@@ -10,7 +10,6 @@ import {
 import {
   GenerativeTokenImageAndName,
   ObjktImageAndName,
-  TokenImageAndName,
 } from "components/Objkt/ObjktImageAndName"
 import { DisplayTezos } from "components/Display/DisplayTezos"
 import { FloorDifference } from "components/Display/FloorDifference"
@@ -20,12 +19,43 @@ import useHasScrolledToBottom from "hooks/useHasScrolledToBottom"
 import { OfferActions } from "components/Offers/OfferActions"
 import { CollectionOfferActions } from "components/Offers/CollectionOfferActions"
 import Skeleton from "components/Skeleton"
-import { UserContext } from "containers/UserProvider"
+import { useAriaTooltip } from "hooks/useAriaTooltip"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faInfoCircle } from "@fortawesome/free-solid-svg-icons"
 
 interface RowProps {
   buttons?: React.ReactNode
   feedback?: React.ReactNode
   offer: AnyOffer
+}
+
+const PricePaidInfo = () => {
+  const { hoverElement, showTooltip, handleEnter, handleLeave } =
+    useAriaTooltip()
+
+  return (
+    <div onMouseEnter={handleEnter} onMouseLeave={handleLeave}>
+      <FontAwesomeIcon
+        className={style.warningIcon}
+        ref={hoverElement}
+        tabIndex={0}
+        onFocus={handleEnter}
+        onBlur={handleLeave}
+        icon={faInfoCircle}
+      />
+
+      {showTooltip && (
+        <span
+          className={style.tooltip}
+          role="tooltip"
+          aria-hidden={!showTooltip}
+          aria-live="polite"
+        >
+          hello
+        </span>
+      )}
+    </div>
+  )
 }
 
 const Row = ({ buttons, feedback, offer }: RowProps) => {
@@ -46,15 +76,14 @@ const Row = ({ buttons, feedback, offer }: RowProps) => {
     )
   }
 
-  const getMinLastSoldPrice = () => {
-    if (offerTypeGuard(offer))
-      return offer.objkt.lastSoldPrice || offer.objkt.mintedPrice!
-    return offer.token.heldGentks!.reduce((acc, item) => {
-      const price = item.lastSoldPrice || item.mintedPrice!
-      if (acc === null) return price
-      return Math.min(acc, price)
-    }, null as number | null) as number
-  }
+  const pricePaid = offerTypeGuard(offer)
+    ? offer.objkt.lastSoldPrice!
+    : offer.token.minLastSoldPrice!
+
+  // if not whole number, round to 2 decimal places:
+  const pricePaidPercentageDifference = ((offer.price / pricePaid) * 100)
+    .toFixed(2)
+    .replace(/[.,]00$/, "")
 
   return (
     <>
@@ -78,12 +107,18 @@ const Row = ({ buttons, feedback, offer }: RowProps) => {
           />
         </td>
         <td className={style["td-price"]} data-label="Price paid">
+          {!offerTypeGuard(offer) && (
+            <span className={style.price_paid} style={{ fontSize: 14 }}>
+              ≥{" "}
+            </span>
+          )}
           <DisplayTezos
-            className={style.price}
+            className={style.price_paid}
             formatBig={false}
-            mutez={getMinLastSoldPrice()}
+            mutez={pricePaid}
             tezosSize="regular"
           />
+          <span>(+{pricePaidPercentageDifference}%)</span>
         </td>
         <td className={style["td-price"]} data-label="Floor Difference">
           <FloorDifference

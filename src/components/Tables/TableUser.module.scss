@@ -171,6 +171,10 @@ td.td-right {
   word-break: break-all;
 }
 
+.price_paid {
+  color: var(--color-secondary);
+}
+
 .date {
   font-size: var(--font-size-vsmall);
   color: var(--color-gray);
