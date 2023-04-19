@@ -10,7 +10,6 @@ import { useQuery } from "@apollo/client"
 import { Qu_genTokensAuthors } from "../../queries/generative-token"
 import { User } from "../../types/entities/User"
 import { GenerativeToken } from "../../types/entities/GenerativeToken"
-import { clamp } from "date-fns"
 
 type EventByProjectIds = {
   projectIdsEvent: Record<number, string>
