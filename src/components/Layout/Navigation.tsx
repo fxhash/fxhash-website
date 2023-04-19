@@ -205,7 +205,7 @@ export function Navigation({ onChangeSearchVisibility }: NavigationProps) {
                     </div>
                   </div>
                 ) : (
-                  <div className={style.profile_single}>
+                  <div key={profileLink.key} className={style.profile_single}>
                     {renderUserNavLink(profileLink)}
                   </div>
                 )
