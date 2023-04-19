@@ -66,8 +66,6 @@ const _GenerativeMintTickets = ({
     nextFetchPolicy: "cache-only",
   })
 
-  console.log(data)
-
   const underAuctionMintTickets = useMemo(
     () => data?.generativeToken?.underAuctionMintTickets || [],
     [data?.generativeToken]

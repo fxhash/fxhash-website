@@ -43,8 +43,6 @@ const moveMintTicketToUnderAuction = (
   cache: ApolloCache<any>,
   mintTicket: MintTicket
 ) => {
-  console.log("MOVING MINT TICKET")
-
   cache.modify({
     id: cache.identify({
       __typename: "GenerativeToken",
@@ -57,11 +55,6 @@ const moveMintTicketToUnderAuction = (
           __typename: "MintTicket",
           id: mintTicket.id,
         })
-
-        console.log("IN UNDER AUCTION")
-        console.log({ existing })
-        console.log({ mintTicketRef })
-
         return [mintTicketRef, ...existing]
       },
       // remove it from the list of unused mint tickets
@@ -73,8 +66,6 @@ const moveMintTicketToUnderAuction = (
       },
     },
   })
-
-  console.log(cache.extract())
 }
 
 interface MintTicketRowProps {
