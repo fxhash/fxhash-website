@@ -1,0 +1,19 @@
+@import "../../styles/Variables";
+
+.container {
+  max-width: 1200px;
+  width: 100%;
+  margin: auto;
+}
+
+.article {
+  margin-bottom: $spacing-x-large;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    margin-bottom: 20px;
+  }
+}
