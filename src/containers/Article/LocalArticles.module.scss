@@ -1,0 +1,10 @@
+@import "../../styles/Variables";
+.container_button {
+  margin-bottom: $spacing-large;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+.button_create {
+  display: inline-flex;
+}
