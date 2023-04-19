@@ -8,7 +8,7 @@ import layout from "../../styles/Layout.module.scss"
 import { Spacing } from "../../components/Layout/Spacing"
 import { useQuery } from "@apollo/client"
 import { Qu_genTokensAuthors } from "../../queries/generative-token"
-import { User } from "../../types/entities/User"
+import { Collaboration, User, UserType } from "../../types/entities/User"
 import { GenerativeToken } from "../../types/entities/GenerativeToken"
 import { clamp } from "date-fns"
 
@@ -61,11 +61,23 @@ const _HomeEvents = ({ events }: HomeEventsProps) => {
   const eventsWithArtist = useMemo(() => {
     return events.map((event) => {
       const distinctArtistsIds = [] as string[]
+      const addArtist = (list: User[], artist: User) => {
+        if (artist && distinctArtistsIds.indexOf(artist.id) === -1) {
+          list.push(artist)
+          distinctArtistsIds.push(artist.id)
+        }
+      }
       const artists = event.projectIds.reduce((acc, projectId) => {
         const artist = authorByProject[projectId]
-        if (artist && distinctArtistsIds.indexOf(artist.id) === -1) {
-          acc.push(artist)
-          distinctArtistsIds.push(artist.id)
+        if (!artist) return acc
+        if (artist.type === UserType.COLLAB_CONTRACT_V1) {
+          if ((artist as Collaboration).collaborators) {
+            ;(artist as Collaboration).collaborators.forEach((collabArtist) => {
+              addArtist(acc, collabArtist)
+            })
+          }
+        } else {
+          addArtist(acc, artist)
         }
         return acc
       }, [] as User[])
