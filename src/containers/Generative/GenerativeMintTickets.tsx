@@ -63,7 +63,6 @@ const _GenerativeMintTickets = ({
       }
     },
     fetchPolicy: "cache-and-network",
-    nextFetchPolicy: "cache-only",
   })
 
   const underAuctionMintTickets = useMemo(
