@@ -74,19 +74,7 @@ const _RandomIterativeCycler = ({
       },
       []
     )
-  const objkts = useMemo(() => {
-    // duplicate objkts when only two to have a pretty infinite loop
-    if (generativeToken.objkts.length !== 2) {
-      return generativeToken.objkts
-    }
-    const [objkt1, objkt2] = generativeToken.objkts
-    return [
-      objkt1,
-      objkt2,
-      { ...objkt1, id: `${objkt1.id}-dup` },
-      { ...objkt2, id: `${objkt2.id}-dup` },
-    ]
-  }, [generativeToken.objkts])
+
   useEffect(() => {
     const interval = setInterval(() => {
       setCounterInSec((sec) => sec + 1)
@@ -96,24 +84,24 @@ const _RandomIterativeCycler = ({
   useEffect(() => {
     if (counterInSec > maxTimeSec) {
       setCursor((oldCursor) => {
-        const newCursor = oldCursor === objkts.length - 1 ? 0 : oldCursor + 1
+        const newCursor = oldCursor === generativeToken.objkts.length - 1 ? 0 : oldCursor + 1
         onChangeCursor(newCursor)
         return newCursor
       })
       setCounterInSec(0)
     }
-  }, [counterInSec, objkts.length, onChangeCursor])
+  }, [counterInSec, generativeToken.objkts.length, onChangeCursor])
   return (
     <div className={style.cycler}>
-      {objkts?.map((objkt, idx) => {
+      {generativeToken.objkts?.map((objkt, idx) => {
         const itemData = calculateItemPositionAndOpacity({
           idx,
           cursor,
-          totalItems: objkts.length,
+          totalItems: generativeToken.objkts.length,
         })
         return (
           <div
-            key={objkt.slug}
+            key={objkt.id}
             style={itemData.divStyle}
             className={cs({
               [style.show]: itemData.show,
