@@ -1,6 +1,6 @@
 import { MintTicket, MintTicketSettings } from "../../types/entities/MintTicket"
 import { getUpdatedPriceAmountToPayOrClaim } from "./updatePrice"
-import { addDays } from "date-fns";
+import { addDays } from "date-fns"
 
 describe("ticket_updatePrice", () => {
   const ticket = {
