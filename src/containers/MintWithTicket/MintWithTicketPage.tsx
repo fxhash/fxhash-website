@@ -147,8 +147,6 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
     setHasLocalChanges(true)
   }
 
-  console.log(token)
-
   // call contract v3 mint with ticket
   const handleMint: TOnMintHandler = useCallback(
     (_ticketId) => {

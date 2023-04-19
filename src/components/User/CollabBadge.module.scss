@@ -261,6 +261,17 @@
     flex-direction: column;
     align-items: center;
   }
+
+  &.hide_avatars {
+    &.size_regular, &.size_small {
+      &.opened .avatars .avatar_wrapper:not(:first-child) {
+        margin-left: 0;
+      }
+      .avatars .avatar_wrapper {
+        margin-left: 0;
+      }
+    }
+  }
 }
 
 :global(.dark) :local(.root) {

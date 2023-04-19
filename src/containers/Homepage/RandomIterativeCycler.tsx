@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useRef, useState } from "react"
+import React, { memo, useCallback, useEffect, useState } from "react"
 import { GenerativeToken } from "../../types/entities/GenerativeToken"
 import { SquareContainer } from "../../components/Layout/SquareContainer"
 import { ArtworkFrame } from "../../components/Artwork/ArtworkFrame"
@@ -8,11 +8,18 @@ import { UserBadge } from "../../components/User/UserBadge"
 import style from "./RandomIterativeCycler.module.scss"
 import cs from "classnames"
 import Link from "next/link"
-import {
-  ProgressAnimated,
-  ProgressAnimatedRef,
-} from "../../components/Utils/ProgressAnimated"
 import { ManualProgressAnimated } from "../../components/Utils/ManualProgressAnimated"
+
+type CalculateItemPositionAndOpacityPayload = {
+  isActive: boolean
+  show: boolean
+  divStyle: object
+}
+type CalculateItemPositionAndOpacity = (data: {
+  idx: number
+  cursor: number
+  totalItems: number
+}) => CalculateItemPositionAndOpacityPayload
 
 interface RandomIterativeCyclerProps {
   generativeToken: GenerativeToken
@@ -26,57 +33,107 @@ const _RandomIterativeCycler = ({
 }: RandomIterativeCyclerProps) => {
   const [cursor, setCursor] = useState(0)
   const [counterInSec, setCounterInSec] = useState(0)
+  const calculateItemPositionAndOpacity =
+    useCallback<CalculateItemPositionAndOpacity>(
+      ({ idx, cursor, totalItems }) => {
+        if (totalItems === 1)
+          return { isActive: true, show: true, divStyle: {} }
+        const isCursorAfterLoopStart = cursor + 1 >= totalItems
+        const isCursorBeforeLoopEnd = cursor - 1 < 0
+        const isBeforeActive = isCursorBeforeLoopEnd
+          ? idx === totalItems - 1
+          : idx === cursor - 1
+        const isActive = idx === cursor
+        const isAfterActive = isCursorAfterLoopStart
+          ? idx === 0
+          : idx === cursor + 1
+
+        const data = {
+          isActive: isActive,
+          show: isBeforeActive || isAfterActive,
+        } as CalculateItemPositionAndOpacityPayload
+        if (isBeforeActive) {
+          data.divStyle = {
+            transform: `translateX(calc(${-1} * (75%)))`,
+          }
+          return data
+        }
+        if (isAfterActive && isCursorAfterLoopStart) {
+          data.divStyle = {
+            transform: `translateX(calc(${1} * (75%)))`,
+          }
+          return data
+        }
+        data.divStyle =
+          isActive || isBeforeActive || isAfterActive
+            ? {
+                transform: `translateX(calc(${idx - cursor} * (75%)))`,
+              }
+            : {}
+        return data
+      },
+      []
+    )
+
   useEffect(() => {
-    setInterval(() => {
+    const interval = setInterval(() => {
       setCounterInSec((sec) => sec + 1)
     }, 1000)
+    return () => clearInterval(interval)
   }, [])
   useEffect(() => {
     if (counterInSec > maxTimeSec) {
       setCursor((oldCursor) => {
-        const newCursor =
-          oldCursor === generativeToken.objkts.length - 1 ? 0 : oldCursor + 1
-        onChangeCursor(newCursor)
-        return newCursor
+        return oldCursor === generativeToken.objkts.length - 1
+          ? 0
+          : oldCursor + 1
       })
       setCounterInSec(0)
     }
-  }, [counterInSec, generativeToken.objkts.length, onChangeCursor])
+  }, [counterInSec, generativeToken.objkts.length])
+  useEffect(() => {
+    onChangeCursor(cursor)
+  }, [cursor, onChangeCursor])
   return (
     <div className={style.cycler}>
       {generativeToken.objkts?.map((objkt, idx) => {
-        const divStyle = {
-          transform: `translateX(calc(${idx - cursor} * (75%)))`,
-        }
-        const isActive = idx === cursor
+        const itemData = calculateItemPositionAndOpacity({
+          idx,
+          cursor,
+          totalItems: generativeToken.objkts.length,
+        })
         return (
           <div
-            key={objkt.slug}
-            style={divStyle}
+            key={objkt.id}
+            style={itemData.divStyle}
             className={cs({
-              [style.show]: idx === cursor - 1 || idx === cursor + 1,
-              [style.is_active]: isActive,
+              [style.show]: itemData.show,
+              [style.is_active]: itemData.isActive,
             })}
           >
             <div
               className={cs({
-                [style.square]: isActive,
+                [style.square]: itemData.isActive,
               })}
             >
-              <SquareContainer className={cs(style.square_container)}>
-                <ArtworkFrame
-                  tokenLabels={generativeToken.labels}
-                  borderWidth={0}
-                >
-                  <Image
-                    image={objkt.captureMedia}
-                    ipfsUri={objkt.metadata?.thumbnailUri}
-                    alt={`${objkt.name} preview`}
-                  />
-                </ArtworkFrame>
-              </SquareContainer>
+              <Link href={`/generative/slug/${generativeToken.slug}`}>
+                <a>
+                  <SquareContainer className={cs(style.square_container)}>
+                    <ArtworkFrame
+                      tokenLabels={generativeToken.labels}
+                      borderWidth={0}
+                    >
+                      <Image
+                        image={objkt.captureMedia}
+                        ipfsUri={objkt.metadata?.thumbnailUri}
+                        alt={`${objkt.name} preview`}
+                      />
+                    </ArtworkFrame>
+                  </SquareContainer>
+                </a>
+              </Link>
               <div className={style.details}>
-                {isActive && (
+                {itemData.isActive && (
                   <ManualProgressAnimated
                     percent={(counterInSec * 100) / maxTimeSec}
                     className={style.progress_bar}
@@ -88,7 +145,7 @@ const _RandomIterativeCycler = ({
                     user={generativeToken.author}
                     displayName={false}
                   />
-                  <div>
+                  <div className={style.infos_text}>
                     <Link href={`/gentk/slug/${objkt.slug}`}>
                       <a className={style.title_url}>
                         <h4>
@@ -103,9 +160,8 @@ const _RandomIterativeCycler = ({
                       <EntityBadge
                         displayAvatar={false}
                         user={generativeToken.author}
-                        toggeable
-                        centered
                         size="regular"
+                        toggeable={true}
                       />
                     </div>
                   </div>
