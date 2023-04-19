@@ -34,11 +34,6 @@ export async function processZipSandbox(file: File): Promise<SandboxFiles> {
     throw SandboxFileError.NO_SNIPPET
   }
 
-  // replace the snippet with the URL one, turn the index.html to a string and then to a file
-  snippet.innerHTML = snippetFromUrl
-  const newIndexContents = doc.documentElement.outerHTML
-  files["index.html"] = new Blob([newIndexContents], { type: "text/html" })
-
   // go through the files to create object URLS
   const record: SandboxFiles = {}
   for (const name in files) {

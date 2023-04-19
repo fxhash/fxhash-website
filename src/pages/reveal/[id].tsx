@@ -23,7 +23,8 @@ interface Props {
 
 const RevealPage: NextPage<Props> = ({ token }) => {
   const { query } = useRouter()
-  const { fxhash, fxparams } = query
+  const { fxhash, fxparams, fxminter } = query
+
   return (
     <>
       <Head>
@@ -57,6 +58,7 @@ const RevealPage: NextPage<Props> = ({ token }) => {
           <Reveal
             hash={fxhash as string}
             params={fxparams as string}
+            minter={fxminter as string}
             generativeUri={token.metadata.generativeUri}
           />
 

@@ -39,7 +39,7 @@ export const getProfileLinks = (user: ConnectedUser): NavigationLink[] => [
     label: "mint article",
   },
   {
-    label: "Profile",
+    label: "profile",
     key: "profile",
     href: `${getUserProfileLink(user)}`,
     subMenu: [

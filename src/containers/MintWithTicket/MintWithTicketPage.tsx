@@ -34,6 +34,8 @@ import { useFxParams } from "hooks/useFxParams"
 import { MintV3AbstractionOperation } from "../../services/contract-operations/MintV3Abstraction"
 import { useSettingsContext } from "../../context/Theme"
 import { PreMintWarning } from "./PreMintWarning"
+import { UserContext } from "containers/UserProvider"
+import { generateTzAddress } from "utils/hash"
 import { ResizableArea } from "../../components/ResizableArea/ResizableArea"
 import { ButtonIcon } from "components/Button/ButtonIcon"
 import { PanelGroup } from "./Panel/PanelGroup"
@@ -67,6 +69,13 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
   const { params, features, onIframeLoaded } =
     useReceiveTokenInfos(artworkIframeRef)
 
+  // get the user to get their tezos address, or a random tz address
+  const { user } = useContext(UserContext)
+  const randomAddress = useMemo(() => generateTzAddress(), [])
+  const minterAddress = useMemo(() => {
+    return user?.id || randomAddress
+  }, [user, randomAddress])
+
   const handleClosePreMintView = useCallback(() => {
     setShowPreMintWarningView(false)
     setSelectedTicketId(null)
@@ -95,9 +104,10 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
     return ipfsUrlWithHashAndParams(
       token.metadata.generativeUri,
       hash,
+      minterAddress,
       inputBytes
     )
-  }, [token.metadata.generativeUri, hash, inputBytes])
+  }, [token.metadata.generativeUri, hash, minterAddress, inputBytes])
 
   const handleChangeData = (newData: Record<string, any>) => {
     historyContext.pushHistory({
@@ -136,6 +146,8 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
     if (withAutoUpdate) return
     setHasLocalChanges(true)
   }
+
+  console.log(token)
 
   // call contract v3 mint with ticket
   const handleMint: TOnMintHandler = useCallback(
@@ -341,7 +353,7 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
                 {loading && <Loader size="small" color="currentColor" />}
                 {success && (
                   <Link
-                    href={`/reveal/${token.id}/?fxhash=${opHash}&fxparams=${inputBytes}`}
+                    href={`/reveal/${token.id}/?fxhash=${opHash}&fxparams=${inputBytes}&fxminter=${user?.id}`}
                     passHref
                   >
                     <Button

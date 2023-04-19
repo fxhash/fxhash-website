@@ -74,7 +74,11 @@ const LiveMintingRevealPage: NextPageWithLayout<Props> = ({ hash, token }) => {
             </div>
           </div>
           <Spacing size="3x-large" />
-          <Reveal hash={hash} generativeUri={token.metadata.generativeUri} />
+          <Reveal
+            hash={hash}
+            generativeUri={token.metadata.generativeUri}
+            minter={user!.id}
+          />
 
           <Submit layout="center">
             <Link

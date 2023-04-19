@@ -43,6 +43,7 @@ export function GenerativeArtwork({
   artifactUrl: artworkArtifactUrl,
   exploreParamsQuery,
 }: Props) {
+  console.log(token)
   const settings = useContext(SettingsContext)
   const artworkIframeRef = useRef<ArtworkIframeRef>(null)
 
@@ -50,6 +51,9 @@ export function GenerativeArtwork({
   // used to preview the token in the iframe with different hashes
   const [previewHash, setPreviewHash] = useState<string | null>(
     token.metadata.previewHash || null
+  )
+  const [previewMinter, setPreviewMinter] = useState<string | null>(
+    token.metadata.previewMinter || null
   )
   const [previewInputBytes, setPreviewInputBytes] = useState<string | null>(
     token.metadata.previewInputBytes || null
@@ -81,6 +85,9 @@ export function GenerativeArtwork({
       let url = `${ipfsGatewayUrl(
         token.metadata.generativeUri
       )}/?fxhash=${previewHash}`
+      if (previewMinter) {
+        url += `&fxminter=${previewMinter}`
+      }
       if (previewInputBytes) {
         url += `&fxparams=${previewInputBytes}`
       }
