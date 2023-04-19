@@ -137,7 +137,6 @@ const _TableUserOffersSent = ({
     offsetBottom: 100,
   })
 
-  console.log("hellooo")
 
   return (
     <>

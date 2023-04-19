@@ -59,7 +59,7 @@ const _RandomIterativeCycler = ({
                 [style.square]: isActive,
               })}
             >
-              <Link href={`/gentk/slug/${objkt.slug}`}>
+              <Link href={`/generative/slug/${generativeToken.slug}`}>
                 <a>
                   <SquareContainer className={cs(style.square_container)}>
                     <ArtworkFrame

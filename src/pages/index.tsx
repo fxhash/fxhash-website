@@ -113,6 +113,7 @@ export async function getServerSideProps() {
         randomTopGenerativeToken {
           id
           name
+          slug
           ...Author
           supply
           objkts(take: 10) {
