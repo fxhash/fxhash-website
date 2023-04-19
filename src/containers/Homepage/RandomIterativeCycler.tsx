@@ -84,7 +84,8 @@ const _RandomIterativeCycler = ({
   useEffect(() => {
     if (counterInSec > maxTimeSec) {
       setCursor((oldCursor) => {
-        const newCursor = oldCursor === generativeToken.objkts.length - 1 ? 0 : oldCursor + 1
+        const newCursor =
+          oldCursor === generativeToken.objkts.length - 1 ? 0 : oldCursor + 1
         onChangeCursor(newCursor)
         return newCursor
       })
