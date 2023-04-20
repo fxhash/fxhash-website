@@ -272,6 +272,15 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
     })
   }, [panelParamsRef, params, setHash, historyContext, withAutoUpdate])
 
+  // on this view we want the html element bg to be black
+  // especially for mobile header being black
+  useEffect(() => {
+    document.documentElement.classList.add(style.blackHtmlBackground)
+    return () => {
+      document.documentElement.classList.remove(style.blackHtmlBackground)
+    }
+  }, [])
+
   return (
     <div className={style.root}>
       <ResizableArea
