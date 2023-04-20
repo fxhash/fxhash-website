@@ -23,15 +23,16 @@ type CalculateItemPositionAndOpacity = (data: {
 
 interface RandomIterativeCyclerProps {
   generativeToken: GenerativeToken
-  onChangeCursor: (cursorPos: number) => void
+  cursor: number
+  onChangeCursor: () => void
 }
 
 const maxTimeSec = 5
 const _RandomIterativeCycler = ({
   generativeToken,
+  cursor,
   onChangeCursor,
 }: RandomIterativeCyclerProps) => {
-  const [cursor, setCursor] = useState(0)
   const [counterInSec, setCounterInSec] = useState(0)
   const calculateItemPositionAndOpacity =
     useCallback<CalculateItemPositionAndOpacity>(
@@ -83,17 +84,10 @@ const _RandomIterativeCycler = ({
   }, [])
   useEffect(() => {
     if (counterInSec > maxTimeSec) {
-      setCursor((oldCursor) => {
-        return oldCursor === generativeToken.objkts.length - 1
-          ? 0
-          : oldCursor + 1
-      })
+      onChangeCursor()
       setCounterInSec(0)
     }
-  }, [counterInSec, generativeToken.objkts.length])
-  useEffect(() => {
-    onChangeCursor(cursor)
-  }, [cursor, onChangeCursor])
+  }, [counterInSec, onChangeCursor])
   return (
     <div className={style.cycler}>
       {generativeToken.objkts?.map((objkt, idx) => {
