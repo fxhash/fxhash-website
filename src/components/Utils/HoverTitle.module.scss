@@ -8,9 +8,8 @@
     text-align: center;
     font-size: var(--font-size-small);
     padding: 4px 8px;
-    left: 50%;
     bottom: 50%;
-    transform: translateX(-50%);
+    left: 50%;
     pointer-events: none;
     opacity: 0;
     transition: all 0.15s ease-out;
