@@ -8,9 +8,11 @@ import style from "./Homepage.module.scss"
 import { NFTArticle } from "../../types/entities/Article"
 import { LiveMintingEvent } from "../../types/entities/LiveMinting"
 import { HomeEvents } from "./HomeEvents"
+import { HomeIncoming } from "./HomeIncoming"
 
 interface HomepageProps {
   generativeTokens: GenerativeToken[]
+  incomingTokens: GenerativeToken[]
   randomGenerativeToken: GenerativeToken | null
   articles: NFTArticle[]
   events: LiveMintingEvent[]
@@ -18,6 +20,7 @@ interface HomepageProps {
 
 const _Homepage = ({
   generativeTokens,
+  incomingTokens,
   randomGenerativeToken,
   articles,
   events,
@@ -29,6 +32,9 @@ const _Homepage = ({
         randomGenerativeToken={randomGenerativeToken}
       />
       {events.length > 0 && <HomeEvents events={events} />}
+      {incomingTokens.length > 0 && (
+        <HomeIncoming generativeTokens={incomingTokens} />
+      )}
       <HomeMarketplace />
       <HomeExplore generativeTokens={generativeTokens} />
       <HomeGetStarted />
