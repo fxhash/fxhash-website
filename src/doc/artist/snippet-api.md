@@ -436,9 +436,9 @@ console.log($fx.getParam("another_param"))
 The snippet API exposes a set of utility functions which lets artists define a list of parameters and get the active value of these parameters.
 
 - [`$fx.params()`](#fxparamsdefinition): define the parameters
-- [`$fx.getParam()`](#fxgetparamid): get the value of a parameter
-- [`$fx.getParams()`](#fxgetparams): get all the parameters
-- [`$fx.getRawParam()`](#fxgetrawparamid): get the raw value of a parameter
+- [`$fx.getParam()`](#fxgetparamid): get the value of a single parameter
+- [`$fx.getParams()`](#fxgetparams): get all the parameter values
+- [`$fx.getRawParam()`](#fxgetrawparamid): get the raw value of a single parameter
 
 The `$fx.params(definition)` function must be called first, with an array of parameter definitions. Under the hood, calling this function will serve a few purposes:
 
