@@ -31,6 +31,8 @@ $fx.preview()
 | ----------------------------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | [`hash`](#fxhash)                   | string                       | The string hash injected into the iteration.                                                                                                                                                     |
 | [`rand()`](#fxrand)                 | ()&nbsp;=>&nbsp;number       | A pseudo random number generator, using the unique hash as a seed. Outputs a number between 0 (inclusive) and 1 (exclusive). `[0; 1[`                                                            |
+| [`minter`](#fxminter)               | string                       | The string of the wallet address of the minter injected into the iteration.                                                                                                                             |
+| [`randminter()`](#fxrandminter)     | ()&nbsp;=>&nbsp;number       | A pseudo random number generator, using the minter address as a seed. Outputs a number between 0 (inclusive) and 1 (exclusive). ` [0; 1[`                                                        |
 | [`preview()`](#fxpreview)           | ()&nbsp;=>&nbsp;void         | A function which can be called to programmatically trigger the image capture of the iteration.                                                                                                   |
 | [`isPreview`](#fxispreview)         | boolean                      | A boolean which will be set to true if your code is being ran in fxhash capture module. Can be useful if you want to define specific properties for the capture only.                            |
 | [`features()`](#fxfeaturesfeatures) | (object)&nbsp;=>&nbsp;void   | This function can be called with an object as parameter to define the features of the iteration.                                                                                                 |
@@ -66,7 +68,32 @@ The fxhash snippet provides an implementation of SFC32 ([Standard Fast Counter 3
 
 `$fx.rand()` is a pointer to the `fxrand()` function. You can use any of these in your code, although we recommend using the `$fx` syntax for consistency accross your code.
 
-::infobox[It is not mandatory to use the `$fx.rand()` function as your source of randomness, you can implement the PRNG of your choice instead, as long as it uses the hash an a seed.]
+::infobox[It is not mandatory to use the `$fx.rand()` function as your source of randomness, you can implement the PRNG of your choice instead, as long as it uses the hash as the seed.]
+
+## $fx.minter
+
+The string wallet address of the minter injected into the iteration. Directly grabbed from the `fxminter` URL parameter when the iteration is loaded.
+
+```js
+console.log($fx.minter) // output example: tz18jgjtEDRtkvNoV9LToradSmVNYFS9aXEe
+```
+
+## $fx.randminter()
+
+> The `$fx.randminter()` function is a Pseudorandom Number Generator which outputs a number between 0 and 1 (`[0; 1[`). It uses the minter address injected into the code as a seed, and will always output the same sequence of numbers.
+
+```js
+const rand01 = $fx.randminter() // number [0; 1[
+const r2 = fxrandminter() // same effect as above
+```
+
+`$fx.randminter()` can pretty much be used instead of `Math.random()`
+
+The fxhash snippet provides an implementation of SFC32 ([Standard Fast Counter 32](https://github.com/bryc/code/blob/master/jshash/PRNGs.md#sfc32)) as the PRNG.
+
+`$fx.randminter()` is a pointer to the `fxrandminter()` function. You can use any of these in your code, although we recommend using the `$fx` syntax for consistency accross your code.
+
+::infobox[It is not mandatory to use the `$fx.randminter()` function as your source of randomness, you can implement the PRNG of your choice instead, as long as it uses the minter address as the seed.]
 
 ## $fx.preview()
 
