@@ -766,9 +766,15 @@ Corresponding controller:
 
 ```html
 <script id="fxhash-snippet">
-  //---- do not edit the following code
+  //---- do not edit the following code (you can indent as you wish)
   let search = new URLSearchParams(window.location.search)
   let alphabet = "123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ"
+  let b58dec = (str) =>
+    [...str].reduce(
+      (p, c) => (p * alphabet.length + alphabet.indexOf(c)) | 0,
+      0
+    )
+  // make fxrand from hash
   var fxhash =
     search.get("fxhash") ||
     "oo" +
@@ -776,11 +782,6 @@ Corresponding controller:
         .fill(0)
         .map((_) => alphabet[(Math.random() * alphabet.length) | 0])
         .join("")
-  let b58dec = (str) =>
-    [...str].reduce(
-      (p, c) => (p * alphabet.length + alphabet.indexOf(c)) | 0,
-      0
-    )
   let fxhashTrunc = fxhash.slice(2)
   let regex = new RegExp(".{" + ((fxhash.length / 4) | 0) + "}", "g")
   let hashes = fxhashTrunc.match(regex).map((h) => b58dec(h))
@@ -800,6 +801,19 @@ Corresponding controller:
     }
   }
   var fxrand = sfc32(...hashes)
+  // make fxrandminter from minter address
+  var fxminter =
+    search.get("fxminter") ||
+    "tz1" +
+      Array(33)
+        .fill(0)
+        .map((_) => alphabet[(Math.random() * alphabet.length) | 0])
+        .join("")
+  let fxminterTrunc = fxminter.slice(3)
+  regex = new RegExp(".{" + ((fxminterTrunc.length / 4) | 0) + "}", "g")
+  hashes = fxminterTrunc.match(regex).map((h) => b58dec(h))
+  var fxrandminter = sfc32(...hashes)
+
   // true if preview mode active, false otherwise
   // you can append preview=1 to the URL to simulate preview active
   var isFxpreview = search.get("preview") === "1"
@@ -808,9 +822,6 @@ Corresponding controller:
     window.dispatchEvent(new Event("fxhash-preview"))
     setTimeout(() => fxpreview(), 500)
   }
-  //
-  // NEW: v2 of the fxhash SDK lol
-  //
   // get the byte params from the URL
   let fxparams = search.get("fxparams")
   fxparams = fxparams ? fxparams.replace("0x", "") : fxparams
@@ -921,7 +932,8 @@ Corresponding controller:
         }
       },
       constrain: (value, definition) => {
-        return value.slice(0, 8).padEnd(8, "f")
+        const hex = value.replace("#", "")
+        return hex.slice(0, 8).padEnd(8, "f")
       },
       random: () =>
         `${[...Array(8)]
@@ -939,7 +951,11 @@ Corresponding controller:
         }
         return rtn
       },
-      bytesLength: () => 64 * 2,
+      bytesLength: (options) => {
+        if (typeof options?.maxLength !== "undefined")
+          return Number(options.maxLength) * 2
+        return 64 * 2
+      },
       constrain: (value, definition) => {
         let min = 0
         if (typeof definition.options?.minLength !== "undefined")
@@ -947,7 +963,6 @@ Corresponding controller:
         let max = 64
         if (typeof definition.options?.maxLength !== "undefined")
           max = definition.options.maxLength
-        max = Math.min(max, 64)
         let v = value.slice(0, max)
         if (v.length < min) {
           return v.padEnd(min)
@@ -961,7 +976,6 @@ Corresponding controller:
         let max = 64
         if (typeof definition.options?.maxLength !== "undefined")
           max = definition.options.maxLength
-        max = Math.min(max, 64)
         const length = Math.round(Math.random() * (max - min) + min)
         return [...Array(length)]
           .map((i) => (~~(Math.random() * 36)).toString(36))
@@ -1006,8 +1020,11 @@ Corresponding controller:
         continue
       }
       // extract the length from the bytes & shift the initial bytes string
-      const valueBytes = bytes.substring(0, processor.bytesLength() * 2)
-      bytes = bytes.substring(processor.bytesLength() * 2)
+      const valueBytes = bytes.substring(
+        0,
+        processor.bytesLength(def?.options) * 2
+      )
+      bytes = bytes.substring(processor.bytesLength(def?.options) * 2)
       // deserialize the bytes into the params
       const value = processor.deserialize(valueBytes, def)
       params[def.id] = processor.constrain?.(value, def) || value
@@ -1029,6 +1046,7 @@ Corresponding controller:
   }
 
   window.$fx = {
+    _version: "3.0.0",
     _processors: processors,
     // where params def & features will be stored
     _params: undefined,
@@ -1038,6 +1056,10 @@ Corresponding controller:
 
     hash: fxhash,
     rand: fxrand,
+
+    minter: fxminter,
+    randminter: fxrandminter,
+
     preview: fxpreview,
     isPreview: isFxpreview,
     params: function (definition) {
@@ -1083,33 +1105,19 @@ Corresponding controller:
     },
   }
   window.addEventListener("message", (event) => {
-    if (event.data === "fxhash_getHash") {
+    if (event.data === "fxhash_getInfo") {
       parent.postMessage(
         {
-          id: "fxhash_getHash",
-          data: window.$fx.hash,
-        },
-        "*"
-      )
-    }
-
-    if (event.data === "fxhash_getFeatures") {
-      parent.postMessage(
-        {
-          id: "fxhash_getFeatures",
-          data: window.$fx.getFeatures(),
-        },
-        "*"
-      )
-    }
-
-    if (event.data === "fxhash_getParams") {
-      parent.postMessage(
-        {
-          id: "fxhash_getParams",
+          id: "fxhash_getInfo",
           data: {
-            definitions: window.$fx.getDefinitions(),
-            values: window.$fx.getRawParams(),
+            version: window.$fx._version,
+            hash: window.$fx.hash,
+            features: window.$fx.getFeatures(),
+            params: {
+              definitions: window.$fx.getDefinitions(),
+              values: window.$fx.getRawParams(),
+            },
+            minter: window.$fx.minter,
           },
         },
         "*"
