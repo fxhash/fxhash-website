@@ -1,21 +1,92 @@
-import React, { memo, useCallback, useContext } from "react"
+import React, { memo, useContext, useEffect, useState } from "react"
 import cs from "classnames"
+// @ts-expect-error no types for autonomy
+import autonomyIRL from "autonomy-irl-js"
 import style from "./ConnectWallet.module.scss"
 import { Button } from "../Button"
 import { UserContext } from "../../containers/UserProvider"
 import { LiveMintingContext } from "../../context/LiveMinting"
+import Link from "next/link"
+import { IconTezos } from "components/Icons/IconTezos"
+
+const ConnectWalletAutonomy = () => {
+  const { connect } = useContext(UserContext)
+
+  return (
+    <div className={style.container_button}>
+      <Button
+        color="secondary"
+        className={style.button}
+        onClick={() => connect(true)}
+      >
+        connect Autonomy wallet
+      </Button>
+      <div className={style.purchase}>
+        You will be prompted to select a wallet from the Autonomy app
+      </div>
+    </div>
+  )
+}
+
+const ConnectWalletDefault = () => {
+  const { connect } = useContext(UserContext)
+
+  return (
+    <>
+      <div className={style.container_button}>
+        <Link href={"https://wallet.kukai.app/"} passHref>
+          <Button
+            isLink
+            // @ts-ignore
+            target="_blank"
+            color="secondary"
+            className={style.button}
+          >
+            create wallet with kukai
+          </Button>
+        </Link>
+        <div className={style.purchase}>
+          You can purchase{" "}
+          <span className={style.tezos}>
+            <IconTezos />
+            tezos
+          </span>{" "}
+          from the wallet application
+        </div>
+      </div>
+
+      <div className={style.container_button}>
+        <Button
+          type="button"
+          iconComp={<i aria-hidden className="fas fa-wallet" />}
+          onClick={() => connect(false)}
+        >
+          connect your wallet
+        </Button>
+      </div>
+    </>
+  )
+}
 
 const _ConnectWallet = () => {
-  const { connect } = useContext(UserContext)
   const { event } = useContext(LiveMintingContext)
+  const [useAutonomy, setUseAutonomy] = useState(false)
 
-  const handleClickConnect = useCallback(
-    (useAutonomy: boolean) => connect(useAutonomy),
-    [connect]
-  )
+  // check if visiting from Autonomy app
+  useEffect(() => {
+    const checkAutonomy = async () => {
+      try {
+        await autonomyIRL.getAddress({
+          chain: autonomyIRL.chain.tez,
+        })
+        setUseAutonomy(true)
+      } catch (e) {
+        // do nothing
+      }
+    }
 
-  const handleClickConnectAutonomy = () => handleClickConnect(true)
-  const handleClickConnectWallet = () => handleClickConnect(false)
+    checkAutonomy()
+  }, [])
 
   return (
     <div className={cs(style.container)}>
@@ -23,32 +94,7 @@ const _ConnectWallet = () => {
         Welcome to our Live Minting experience at <strong>{event?.name}</strong>
       </div>
 
-      <div className={style.container_button}>
-        <Button
-          color="secondary"
-          className={style.button}
-          onClick={handleClickConnectAutonomy}
-        >
-          connect Autonomy wallet
-        </Button>
-        <div className={style.purchase}>
-          You will be prompted to select a wallet from the Autonomy app
-        </div>
-      </div>
-
-      {/* 
-
-      TODO: figure out how to connect other wallet from inside autonomy webview
-      
-      <div className={style.container_button}>
-        <Button
-          type="button"
-          iconComp={<i aria-hidden className="fas fa-wallet" />}
-          onClick={handleClickConnectWallet}
-        >
-          connect other wallet
-        </Button>
-      </div> */}
+      {useAutonomy ? <ConnectWalletAutonomy /> : <ConnectWalletDefault />}
     </div>
   )
 }
