@@ -33,7 +33,7 @@ const _TokenImageAndName = ({
         />
       </div>
       <span className={style.container_name}>
-        <span className={style.label}>{label}</span>
+        <span className={style.label}>{label.toLocaleUpperCase()}</span>
         <span className={style.name}>{name}</span>
       </span>
     </a>
@@ -50,6 +50,7 @@ interface ObjktImageAndNameProps {
 const _ObjtkImageAndName = ({
   objkt,
   shortName,
+  label = "Gentk",
   size = 40,
 }: ObjktImageAndNameProps) => {
   return (
@@ -57,7 +58,7 @@ const _ObjtkImageAndName = ({
       href={`/gentk/${objkt.id}`}
       metadata={objkt.metadata}
       captureMedia={objkt.captureMedia}
-      label="Gentk"
+      label={label}
       name={shortName ? `#${objkt.iteration}` : objkt.name}
     />
   )
@@ -78,8 +79,8 @@ const _GenerativeTokenImageAndName = ({
     href={`/generative/${token.id}`}
     metadata={token.metadata}
     captureMedia={token.captureMedia}
-    name={shortName ? `Collection` : `${token.name} (collection)`}
-    label="Token"
+    name={shortName ? `Collection` : `${token.name}`}
+    label="Collection"
   />
 )
 
