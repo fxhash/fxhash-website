@@ -6,14 +6,8 @@ interface Props {
   price: number
   floor: number | null
   append?: string
-  Element?: keyof JSX.IntrinsicElements
 }
-export function FloorDifference({
-  price,
-  floor,
-  append,
-  Element = "div",
-}: Props) {
+export function FloorDifference({ price, floor, append }: Props) {
   const ratio = useMemo(
     () => (floor != null ? price / floor : null),
     [price, floor]
@@ -24,7 +18,7 @@ export function FloorDifference({
   )
 
   return (
-    <Element>
+    <span>
       {ratio !== null ? (
         ratio < 1 ? (
           <strong className={cs(colors.error)}>
@@ -38,6 +32,6 @@ export function FloorDifference({
       ) : (
         "/"
       )}
-    </Element>
+    </span>
   )
 }

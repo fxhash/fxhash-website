@@ -26,6 +26,7 @@ import { LiveMintingEvent } from "../types/entities/LiveMinting"
 interface Props {
   randomGenerativeToken: GenerativeToken | null
   generativeTokens: GenerativeToken[]
+  incomingTokens: GenerativeToken[]
   articles: NFTArticle[]
   listings: Listing[]
   events: LiveMintingEvent[]
@@ -34,6 +35,7 @@ interface Props {
 const Home: NextPage<Props> = ({
   randomGenerativeToken,
   generativeTokens,
+  incomingTokens,
   articles,
   events,
 }) => {
@@ -68,6 +70,7 @@ const Home: NextPage<Props> = ({
         articles={articles}
         randomGenerativeToken={randomGenerativeToken}
         generativeTokens={generativeTokens}
+        incomingTokens={incomingTokens}
       />
     </>
   )
@@ -113,6 +116,7 @@ export async function getServerSideProps() {
         randomTopGenerativeToken {
           id
           name
+          slug
           ...Author
           supply
           objkts(take: 10) {
@@ -130,6 +134,16 @@ export async function getServerSideProps() {
         }
         generativeTokens(skip: $skip, take: $take, filters: $filters) {
           ...TokenInfo
+        }
+        incomingTokens: generativeTokens(
+          take: 4
+          filters: { mintOpened_eq: false, flag_in: [CLEAN, NONE] }
+          sort: { mintOpensAt: "ASC" }
+        ) {
+          id
+          ...TokenInfo
+          lockEnd
+          mintOpensAt
         }
         articles(take: 3, sort: { createdAt: "DESC" }) {
           id
@@ -156,6 +170,7 @@ export async function getServerSideProps() {
     props: {
       randomGenerativeToken: data.randomTopGenerativeToken,
       generativeTokens: data.generativeTokens,
+      incomingTokens: data.incomingTokens,
       articles: data.articles,
       events: dataEvent.events || [],
     },

@@ -65,6 +65,9 @@
     transform: scaleY(1);
   }
 }
+.button_collection_offer {
+  width: 100%;
+}
 
 @media (max-width: $breakpoint-sm) {
   .inputs {

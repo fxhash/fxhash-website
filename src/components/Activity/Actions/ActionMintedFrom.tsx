@@ -19,14 +19,20 @@ export const ActionMintedFrom: TActionComp = ({ action, verbose }) => (
       ) : (
         <strong>#{action.objkt!.iteration}</strong>
       )}
-      <span>for </span>
-      <span className={cs(style.price)}>
-        <DisplayTezos
-          formatBig={false}
-          mutez={action.numericValue}
-          tezosSize="regular"
-        />
-      </span>
+      {action.ticketId ? (
+        <span> with ticket</span>
+      ) : (
+        <>
+          <span>for </span>
+          <span className={cs(style.price)}>
+            <DisplayTezos
+              formatBig={false}
+              mutez={action.numericValue}
+              tezosSize="regular"
+            />
+          </span>
+        </>
+      )}
     </>
   </>
 )

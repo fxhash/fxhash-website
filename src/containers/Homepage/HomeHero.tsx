@@ -34,11 +34,27 @@ interface HomeHeroProps {
   articles: NFTArticle[]
 }
 const _HomeHero = ({ randomGenerativeToken, articles }: HomeHeroProps) => {
+  const randomGenerativeTokenWithDups = useMemo(() => {
+    // duplicate objkts when only two to have a pretty infinite loop
+    if (randomGenerativeToken?.objkts.length !== 2) {
+      return randomGenerativeToken
+    }
+    const [objkt1, objkt2] = randomGenerativeToken.objkts
+    return {
+      ...randomGenerativeToken,
+      objkts: [
+        objkt1,
+        objkt2,
+        { ...objkt1, id: `${objkt1.id}-dup` },
+        { ...objkt2, id: `${objkt2.id}-dup` },
+      ],
+    }
+  }, [randomGenerativeToken])
   const [cursor, setCursor] = useState(0)
   const percent = useMemo(() => {
-    const nbObjkts = randomGenerativeToken?.objkts.length || 0
+    const nbObjkts = randomGenerativeTokenWithDups?.objkts.length || 0
     return Math.floor(((cursor + 1) * 100) / nbObjkts)
-  }, [cursor, randomGenerativeToken?.objkts.length])
+  }, [cursor, randomGenerativeTokenWithDups?.objkts.length])
   return (
     <>
       <div className={style.container}>
@@ -59,9 +75,9 @@ const _HomeHero = ({ randomGenerativeToken, articles }: HomeHeroProps) => {
         </div>
         <div className={style.right}>
           <div>
-            {randomGenerativeToken && (
+            {randomGenerativeTokenWithDups && (
               <RandomIterativeCycler
-                generativeToken={randomGenerativeToken}
+                generativeToken={randomGenerativeTokenWithDups}
                 onChangeCursor={setCursor}
               />
             )}

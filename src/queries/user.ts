@@ -316,6 +316,7 @@ export const Qu_userActions = gql`
           name
           iteration
         }
+        ticketId
         article {
           id
           ...ArticleInfosAction
@@ -442,6 +443,7 @@ export const Qu_userAcceptCollectionOffer = gql`
         id
         version
         name
+        iteration
         metadata
         captureMedia {
           ...MediaImage

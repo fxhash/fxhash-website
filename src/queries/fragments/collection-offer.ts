@@ -8,6 +8,7 @@ export const Frag_UserCollectionOffer = gql`
     id
     price
     createdAt
+    amount
     buyer {
       id
       name
@@ -37,11 +38,13 @@ export const Frag_GenTokCollectionOffer = gql`
     createdAt
     cancelledAt
     completedAt
+    amount
     buyer {
       ...UserBadgeInfos
     }
     token {
       id
+      name
       metadata
       captureMedia {
         ...MediaImage
