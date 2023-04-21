@@ -59,8 +59,10 @@ const PricePaidInfo = () => {
 }
 
 const Row = ({ buttons, feedback, offer }: RowProps) => {
+  const isIndividualOffer = offerTypeGuard(offer)
+
   const renderPreview = () => {
-    if (offerTypeGuard(offer))
+    if (isIndividualOffer)
       return (
         offer.objkt && (
           <div className={cs(style.link_wrapper)}>
@@ -76,14 +78,9 @@ const Row = ({ buttons, feedback, offer }: RowProps) => {
     )
   }
 
-  const pricePaid = offerTypeGuard(offer)
+  const pricePaid = isIndividualOffer
     ? offer.objkt.lastSoldPrice!
     : offer.token.minLastSoldPrice!
-
-  // if not whole number, round to 2 decimal places:
-  const pricePaidPercentageDifference = ((offer.price / pricePaid) * 100)
-    .toFixed(2)
-    .replace(/[.,]00$/, "")
 
   return (
     <>
@@ -118,7 +115,6 @@ const Row = ({ buttons, feedback, offer }: RowProps) => {
             mutez={pricePaid}
             tezosSize="regular"
           />
-          <span>(+{pricePaidPercentageDifference}%)</span>
         </td>
         <td className={style["td-price"]} data-label="Floor Difference">
           <FloorDifference
@@ -140,7 +136,7 @@ const Row = ({ buttons, feedback, offer }: RowProps) => {
         </td>
         <td className={style["td-time"]} data-label="Time">
           <div className={style.date}>
-            <DateDistance timestamptz={offer.createdAt} />
+            <DateDistance timestamptz={offer.createdAt} shorten />
           </div>
         </td>
         <td
@@ -197,7 +193,7 @@ const _TableUserOffersReceived = ({
               <th className={style["th-gentk"]}>Token</th>
               <th className={style["th-price"]}>Price</th>
               <th className={style["th-price_paid"]}>Price paid</th>
-              <th className={style["th-floor"]}>Floor Difference</th>
+              <th className={style["th-floor"]}>Floor diff</th>
               <th className={style["th-user"]}>From</th>
               <th className={style["th-time"]}>Time</th>
               <th className={style["th-action"]}>Action</th>
