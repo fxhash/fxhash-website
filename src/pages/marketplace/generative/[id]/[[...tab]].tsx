@@ -18,7 +18,7 @@ import { GenerativeActions } from "../../../../containers/Generative/Actions"
 import { GenerativeFlagBanner } from "../../../../containers/Generative/FlagBanner"
 import { ArtworkPreview } from "../../../../components/Artwork/Preview"
 import { getGenerativeTokenUrl } from "../../../../utils/generative-token"
-import { TabDefinition, Tabs } from "../../../../components/Layout/Tabs"
+import { TabDefinition } from "../../../../components/Layout/Tabs"
 import { DisplayTezos } from "../../../../components/Display/DisplayTezos"
 import { GenerativeStatsMarketplace } from "../../../../containers/Marketplace/GenerativeStatsMarketplace"
 import { TokenActionType } from "../../../../types/entities/Action"
@@ -27,7 +27,7 @@ import { TabsContainer } from "../../../../components/Layout/TabsContainer"
 import { GenerativeListings } from "../../../../containers/Marketplace/GenerativeListings"
 import { GenerativeOffers } from "../../../../containers/Marketplace/GenerativeOffers"
 import { getImageApiUrl, OG_IMAGE_SIZE } from "../../../../components/Image"
-import { CollectionOfferCreate } from "containers/Objkt/CollectionOfferCreate"
+import { ButtonCollectionOfferCreate } from "containers/Objkt/ButtonCollectionOfferCreate"
 import { useRouter } from "next/router"
 
 interface Props {
@@ -155,7 +155,10 @@ const GenerativeTokenMarketplace: NextPage<Props> = ({ token, tab }) => {
                 </Button>
               </Link>
               <Spacing size="x-small" sm="regular" />
-              <CollectionOfferCreate token={token} />
+              <ButtonCollectionOfferCreate
+                token={token}
+                floor={token.marketStats?.floor}
+              />
             </div>
           </div>
         </header>

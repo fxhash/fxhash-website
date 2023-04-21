@@ -29,7 +29,7 @@ export class CollectionOfferOperation extends ContractOperation<TCollectionOffer
       price: this.params.price,
     }).send({
       mutez: true,
-      amount: this.params.price,
+      amount: this.params.price * this.params.amount,
     })
   }
 

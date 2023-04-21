@@ -34,6 +34,9 @@
 
 .radio .checkmark {
   border-radius: 50%;
+  &::after {
+    border-radius: 50%;
+  }
 }
 
 /* On mouse-over, add a grey background color */

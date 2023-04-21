@@ -49,8 +49,8 @@ const Row = ({ buttons, feedback, offer }: RowProps) => {
   return (
     <>
       {feedback && (
-        <tr className={cs(style.contract_feedback)}>
-          <td colSpan={6}>
+        <tr className={style.contract_feedback}>
+          <td colSpan={6} className={style.td_mobile_fullwidth}>
             <div className={cs(style.feedback_wrapper)}>{feedback}</div>
           </td>
         </tr>
@@ -68,14 +68,16 @@ const Row = ({ buttons, feedback, offer }: RowProps) => {
           />
         </td>
         <td className={style["td-price"]} data-label="Floor Difference">
-          <FloorDifference
-            price={offer.price}
-            floor={
-              (offerTypeGuard(offer)
-                ? offer.objkt.issuer.marketStats?.floor
-                : offer.token.marketStats?.floor) || null
-            }
-          />
+          <div>
+            <FloorDifference
+              price={offer.price}
+              floor={
+                (offerTypeGuard(offer)
+                  ? offer.objkt.issuer.marketStats?.floor
+                  : offer.token.marketStats?.floor) || null
+              }
+            />
+          </div>
         </td>
         <td className={style["td-user"]} data-label="From">
           <UserBadge

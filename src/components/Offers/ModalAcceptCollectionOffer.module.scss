@@ -1,11 +1,16 @@
 @import "../../styles/Variables";
 
+.p {
+  margin: 0;
+  max-width: 500px;
+}
 .gentks {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-xxs);
   overflow: auto;
 }
+
 
 .gentk_container {
   display: flex;
@@ -68,8 +73,23 @@
   gap: 16px;
 }
 
+.contract_feedback {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  text-align: center;
+  margin-top: 16px;
+}
+
+.total {
+  max-width: 500px;
+}
+
 @media (max-width: $breakpoint-sm) {
   .container_buttons {
     flex-direction: column;
+  }
+  .contract_feedback {
+    margin-top: 8px;
   }
 }
