@@ -136,11 +136,9 @@ const _CardEvent = ({ event }: CardEventProps) => {
             </div>
           ))}
         </div>
-        {eventTimeStatus !== "upcoming" && (
-          <Link href={`/events/${id}/onboarding`}>
-            <a className={style.cta_view_event}>View event</a>
-          </Link>
-        )}
+        <Link href={`/events/${id}/onboarding`}>
+          <a className={style.cta_view_event}>View event</a>
+        </Link>
       </div>
     </div>
   )
