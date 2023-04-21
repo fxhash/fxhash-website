@@ -67,6 +67,7 @@ const actionTypeFilters: TokenActionType[] = [
   TokenActionType.COLLECTION_OFFER_ACCEPTED,
   TokenActionType.OFFER_ACCEPTED,
   TokenActionType.AUCTION_FULFILLED,
+  TokenActionType.TICKED_CLAIMED,
 ]
 
 const actionFilters = {
