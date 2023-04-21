@@ -323,6 +323,7 @@ const GenerativeTokenMarketplace: NextPage<Props> = ({ token, tab }) => {
               <ClientOnlyEmpty>
                 <GenerativeMintTickets
                   tokenId={token.id}
+                  defaultTicketsLabel="For sale"
                   showCurrentUserTickets={false}
                   showGracePeriodTickets={false}
                 />
