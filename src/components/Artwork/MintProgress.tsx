@@ -86,7 +86,7 @@ export function MintProgress({
           }}
         />
       </div>
-      {showReserve && reserveSize > 0 && (
+      {showReserve && reserveSize > 0 && !complete && (
         <div className={cs(style.reserve_text)}>
           <span>{reserveSize} reserved</span>
           {eligibleFor > 0 && (

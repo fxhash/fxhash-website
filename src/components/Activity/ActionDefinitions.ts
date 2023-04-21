@@ -32,6 +32,7 @@ import { ActionClaimedTicket } from "./Actions/ActionClaimedTicket"
 import { ActionCollectionOffer } from "./Actions/ActionCollectionOffer"
 import { ActionCollectionOfferCancelled } from "./Actions/ActionCollectionOfferCancelled"
 import { ActionCollectionOfferAccepted } from "./Actions/ActionCollectionOfferAccepted"
+import { ActionUpdatedTicketPrice } from "./Actions/ActionUpdatedTicketPrice"
 
 const ActionLinks = {
   gentk: (action: ActionType) => `/gentk/${action.objkt?.id}`,
@@ -76,6 +77,13 @@ export const ActionDefinitions: Record<TokenActionType, ActionDefinition> = {
     icon: "fa-sharp fa-solid fa-ticket",
     iconColor: "success",
     render: ActionClaimedTicket,
+    predecescence: 0,
+    link: ActionLinks.token,
+  },
+  TICKET_PRICE_UPDATED: {
+    icon: "fa-solid fa-ticket",
+    iconColor: "success",
+    render: ActionUpdatedTicketPrice,
     predecescence: 0,
     link: ActionLinks.token,
   },

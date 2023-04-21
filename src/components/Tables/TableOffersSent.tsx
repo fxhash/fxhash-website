@@ -137,8 +137,6 @@ const _TableUserOffersSent = ({
     offsetBottom: 100,
   })
 
-  console.log("hellooo")
-
   return (
     <>
       <div ref={refWrapper} className={cs(style.wrapper)}>

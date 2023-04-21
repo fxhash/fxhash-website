@@ -147,8 +147,6 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
     setHasLocalChanges(true)
   }
 
-  console.log(token)
-
   // call contract v3 mint with ticket
   const handleMint: TOnMintHandler = useCallback(
     (_ticketId) => {
@@ -274,6 +272,15 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
     })
   }, [panelParamsRef, params, setHash, historyContext, withAutoUpdate])
 
+  // on this view we want the html element bg to be black
+  // especially for mobile header being black
+  useEffect(() => {
+    document.documentElement.classList.add(style.blackHtmlBackground)
+    return () => {
+      document.documentElement.classList.remove(style.blackHtmlBackground)
+    }
+  }, [])
+
   return (
     <div className={style.root}>
       <ResizableArea
@@ -353,7 +360,7 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
                 {loading && <Loader size="small" color="currentColor" />}
                 {success && (
                   <Link
-                    href={`/reveal/${token.id}/?fxhash=${opHash}&fxparams=${inputBytes}`}
+                    href={`/reveal/${token.id}/?fxhash=${opHash}&fxparams=${inputBytes}&fxminter=${user?.id}`}
                     passHref
                   >
                     <Button
