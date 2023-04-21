@@ -17,56 +17,21 @@ import { YupPrice } from "../../utils/yup/price"
 import { Error } from "../Error/Error"
 import {
   addDays,
-  differenceInDays,
   differenceInHours,
   differenceInSeconds,
   format,
-  set,
-  subDays,
 } from "date-fns"
 import { YupDaysCoverage } from "../../utils/yup/ticket"
 import cs from "classnames"
-import {
-  getDaysCoveredByHarbergerTax,
-  getMintTicketHarbergerTax,
-} from "../../utils/math"
+import { getDaysCoveredByHarbergerTax } from "../../utils/math"
 import { ContractFeedback } from "../Feedback/ContractFeedback"
 import colors from "../../styles/Colors.module.css"
 import { plural } from "../../utils/strings"
 import { getDiffByPath } from "../../utils/indexing"
-
-const getTicketLastDayConsumed = (createdAt: Date) => {
-  const dateCreatedAt = new Date(createdAt)
-  const now = new Date()
-  const lastDayConsumed = set(now, {
-    hours: dateCreatedAt.getHours(),
-    minutes: dateCreatedAt.getMinutes(),
-  })
-  if (lastDayConsumed < now) return lastDayConsumed
-  return subDays(lastDayConsumed, 1)
-}
-
-const getUpdatedPriceAmountToPayOrClaim = (
-  mintTicket: MintTicket,
-  newTzPrice: number,
-  newCoverage: number
-) => {
-  const taxStart = new Date(mintTicket.taxationStart)
-  const lastDayConsumed = getTicketLastDayConsumed(mintTicket.createdAt)
-  const consumedTaxDays =
-    lastDayConsumed < taxStart
-      ? 0
-      : Math.abs(differenceInDays(lastDayConsumed, taxStart))
-
-  const taxAlreadyPaid = getMintTicketHarbergerTax(
-    mintTicket.price,
-    consumedTaxDays
-  )
-  const amount = getMintTicketHarbergerTax(newTzPrice, newCoverage)
-  const totalToPayOrClaim =
-    amount - (parseInt(mintTicket.taxationLocked) - taxAlreadyPaid)
-  return totalToPayOrClaim
-}
+import {
+  getTicketLastDayConsumed,
+  getUpdatedPriceAmountToPayOrClaim,
+} from "./updatePrice"
 
 const validation = Yup.object({
   price: YupPrice,
@@ -117,11 +82,10 @@ const _ModalUpdatePriceMintTicket = ({
       onSubmit: (submittedValues) => {
         const daysCoverageWithExtraDay = submittedValues.days + 1
         const tzPrice = Math.ceil(submittedValues.price * 1000000)
-        const daysSinceCreated = Math.floor(
-          differenceInSeconds(
-            new Date(),
-            new Date(currentMintTicket.createdAt)
-          ) / 86400
+        const daysSinceCreated = Math.trunc(
+          (new Date().getTime() -
+            new Date(currentMintTicket.createdAt).getTime()) /
+            86400000
         )
         const remainingGracingPeriodInDays = Math.max(
           0,

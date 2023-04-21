@@ -43,7 +43,6 @@ export function GenerativeArtwork({
   artifactUrl: artworkArtifactUrl,
   exploreParamsQuery,
 }: Props) {
-  console.log(token)
   const settings = useContext(SettingsContext)
   const artworkIframeRef = useRef<ArtworkIframeRef>(null)
 

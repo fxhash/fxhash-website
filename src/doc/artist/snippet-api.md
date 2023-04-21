@@ -31,6 +31,8 @@ $fx.preview()
 | ----------------------------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | [`hash`](#fxhash)                   | string                       | The string hash injected into the iteration.                                                                                                                                                     |
 | [`rand()`](#fxrand)                 | ()&nbsp;=>&nbsp;number       | A pseudo random number generator, using the unique hash as a seed. Outputs a number between 0 (inclusive) and 1 (exclusive). `[0; 1[`                                                            |
+| [`minter`](#fxminter)               | string                       | The string of the wallet address of the minter injected into the iteration.                                                                                                                             |
+| [`randminter()`](#fxrandminter)     | ()&nbsp;=>&nbsp;number       | A pseudo random number generator, using the minter address as a seed. Outputs a number between 0 (inclusive) and 1 (exclusive). ` [0; 1[`                                                        |
 | [`preview()`](#fxpreview)           | ()&nbsp;=>&nbsp;void         | A function which can be called to programmatically trigger the image capture of the iteration.                                                                                                   |
 | [`isPreview`](#fxispreview)         | boolean                      | A boolean which will be set to true if your code is being ran in fxhash capture module. Can be useful if you want to define specific properties for the capture only.                            |
 | [`features()`](#fxfeaturesfeatures) | (object)&nbsp;=>&nbsp;void   | This function can be called with an object as parameter to define the features of the iteration.                                                                                                 |
@@ -66,7 +68,32 @@ The fxhash snippet provides an implementation of SFC32 ([Standard Fast Counter 3
 
 `$fx.rand()` is a pointer to the `fxrand()` function. You can use any of these in your code, although we recommend using the `$fx` syntax for consistency accross your code.
 
-::infobox[It is not mandatory to use the `$fx.rand()` function as your source of randomness, you can implement the PRNG of your choice instead, as long as it uses the hash an a seed.]
+::infobox[It is not mandatory to use the `$fx.rand()` function as your source of randomness, you can implement the PRNG of your choice instead, as long as it uses the hash as the seed.]
+
+## $fx.minter
+
+The string wallet address of the minter injected into the iteration. Directly grabbed from the `fxminter` URL parameter when the iteration is loaded.
+
+```js
+console.log($fx.minter) // output example: tz18jgjtEDRtkvNoV9LToradSmVNYFS9aXEe
+```
+
+## $fx.randminter()
+
+> The `$fx.randminter()` function is a Pseudorandom Number Generator which outputs a number between 0 and 1 (`[0; 1[`). It uses the minter address injected into the code as a seed, and will always output the same sequence of numbers.
+
+```js
+const rand01 = $fx.randminter() // number [0; 1[
+const r2 = fxrandminter() // same effect as above
+```
+
+`$fx.randminter()` can pretty much be used instead of `Math.random()`
+
+The fxhash snippet provides an implementation of SFC32 ([Standard Fast Counter 32](https://github.com/bryc/code/blob/master/jshash/PRNGs.md#sfc32)) as the PRNG.
+
+`$fx.randminter()` is a pointer to the `fxrandminter()` function. You can use any of these in your code, although we recommend using the `$fx` syntax for consistency accross your code.
+
+::infobox[It is not mandatory to use the `$fx.randminter()` function as your source of randomness, you can implement the PRNG of your choice instead, as long as it uses the minter address as the seed.]
 
 ## $fx.preview()
 
@@ -409,9 +436,9 @@ console.log($fx.getParam("another_param"))
 The snippet API exposes a set of utility functions which lets artists define a list of parameters and get the active value of these parameters.
 
 - [`$fx.params()`](#fxparamsdefinition): define the parameters
-- [`$fx.getParam()`](#fxgetparamid): get the value of a parameter
-- [`$fx.getParams()`](#fxgetparams): get all the parameters
-- [`$fx.getRawParam()`](#fxgetrawparamid): get the raw value of a parameter
+- [`$fx.getParam()`](#fxgetparamid): get the value of a single parameter
+- [`$fx.getParams()`](#fxgetparams): get all the parameter values
+- [`$fx.getRawParam()`](#fxgetrawparamid): get the raw value of a single parameter
 
 The `$fx.params(definition)` function must be called first, with an array of parameter definitions. Under the hood, calling this function will serve a few purposes:
 
@@ -739,9 +766,15 @@ Corresponding controller:
 
 ```html
 <script id="fxhash-snippet">
-  //---- do not edit the following code
+  //---- do not edit the following code (you can indent as you wish)
   let search = new URLSearchParams(window.location.search)
   let alphabet = "123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ"
+  let b58dec = (str) =>
+    [...str].reduce(
+      (p, c) => (p * alphabet.length + alphabet.indexOf(c)) | 0,
+      0
+    )
+  // make fxrand from hash
   var fxhash =
     search.get("fxhash") ||
     "oo" +
@@ -749,11 +782,6 @@ Corresponding controller:
         .fill(0)
         .map((_) => alphabet[(Math.random() * alphabet.length) | 0])
         .join("")
-  let b58dec = (str) =>
-    [...str].reduce(
-      (p, c) => (p * alphabet.length + alphabet.indexOf(c)) | 0,
-      0
-    )
   let fxhashTrunc = fxhash.slice(2)
   let regex = new RegExp(".{" + ((fxhash.length / 4) | 0) + "}", "g")
   let hashes = fxhashTrunc.match(regex).map((h) => b58dec(h))
@@ -773,6 +801,19 @@ Corresponding controller:
     }
   }
   var fxrand = sfc32(...hashes)
+  // make fxrandminter from minter address
+  var fxminter =
+    search.get("fxminter") ||
+    "tz1" +
+      Array(33)
+        .fill(0)
+        .map((_) => alphabet[(Math.random() * alphabet.length) | 0])
+        .join("")
+  let fxminterTrunc = fxminter.slice(3)
+  regex = new RegExp(".{" + ((fxminterTrunc.length / 4) | 0) + "}", "g")
+  hashes = fxminterTrunc.match(regex).map((h) => b58dec(h))
+  var fxrandminter = sfc32(...hashes)
+
   // true if preview mode active, false otherwise
   // you can append preview=1 to the URL to simulate preview active
   var isFxpreview = search.get("preview") === "1"
@@ -781,9 +822,6 @@ Corresponding controller:
     window.dispatchEvent(new Event("fxhash-preview"))
     setTimeout(() => fxpreview(), 500)
   }
-  //
-  // NEW: v2 of the fxhash SDK lol
-  //
   // get the byte params from the URL
   let fxparams = search.get("fxparams")
   fxparams = fxparams ? fxparams.replace("0x", "") : fxparams
@@ -894,7 +932,8 @@ Corresponding controller:
         }
       },
       constrain: (value, definition) => {
-        return value.slice(0, 8).padEnd(8, "f")
+        const hex = value.replace("#", "")
+        return hex.slice(0, 8).padEnd(8, "f")
       },
       random: () =>
         `${[...Array(8)]
@@ -912,7 +951,11 @@ Corresponding controller:
         }
         return rtn
       },
-      bytesLength: () => 64 * 2,
+      bytesLength: (options) => {
+        if (typeof options?.maxLength !== "undefined")
+          return Number(options.maxLength) * 2
+        return 64 * 2
+      },
       constrain: (value, definition) => {
         let min = 0
         if (typeof definition.options?.minLength !== "undefined")
@@ -920,7 +963,6 @@ Corresponding controller:
         let max = 64
         if (typeof definition.options?.maxLength !== "undefined")
           max = definition.options.maxLength
-        max = Math.min(max, 64)
         let v = value.slice(0, max)
         if (v.length < min) {
           return v.padEnd(min)
@@ -934,7 +976,6 @@ Corresponding controller:
         let max = 64
         if (typeof definition.options?.maxLength !== "undefined")
           max = definition.options.maxLength
-        max = Math.min(max, 64)
         const length = Math.round(Math.random() * (max - min) + min)
         return [...Array(length)]
           .map((i) => (~~(Math.random() * 36)).toString(36))
@@ -979,8 +1020,11 @@ Corresponding controller:
         continue
       }
       // extract the length from the bytes & shift the initial bytes string
-      const valueBytes = bytes.substring(0, processor.bytesLength() * 2)
-      bytes = bytes.substring(processor.bytesLength() * 2)
+      const valueBytes = bytes.substring(
+        0,
+        processor.bytesLength(def?.options) * 2
+      )
+      bytes = bytes.substring(processor.bytesLength(def?.options) * 2)
       // deserialize the bytes into the params
       const value = processor.deserialize(valueBytes, def)
       params[def.id] = processor.constrain?.(value, def) || value
@@ -1002,6 +1046,7 @@ Corresponding controller:
   }
 
   window.$fx = {
+    _version: "3.0.0",
     _processors: processors,
     // where params def & features will be stored
     _params: undefined,
@@ -1011,6 +1056,10 @@ Corresponding controller:
 
     hash: fxhash,
     rand: fxrand,
+
+    minter: fxminter,
+    randminter: fxrandminter,
+
     preview: fxpreview,
     isPreview: isFxpreview,
     params: function (definition) {
@@ -1056,33 +1105,19 @@ Corresponding controller:
     },
   }
   window.addEventListener("message", (event) => {
-    if (event.data === "fxhash_getHash") {
+    if (event.data === "fxhash_getInfo") {
       parent.postMessage(
         {
-          id: "fxhash_getHash",
-          data: window.$fx.hash,
-        },
-        "*"
-      )
-    }
-
-    if (event.data === "fxhash_getFeatures") {
-      parent.postMessage(
-        {
-          id: "fxhash_getFeatures",
-          data: window.$fx.getFeatures(),
-        },
-        "*"
-      )
-    }
-
-    if (event.data === "fxhash_getParams") {
-      parent.postMessage(
-        {
-          id: "fxhash_getParams",
+          id: "fxhash_getInfo",
           data: {
-            definitions: window.$fx.getDefinitions(),
-            values: window.$fx.getRawParams(),
+            version: window.$fx._version,
+            hash: window.$fx.hash,
+            features: window.$fx.getFeatures(),
+            params: {
+              definitions: window.$fx.getDefinitions(),
+              values: window.$fx.getRawParams(),
+            },
+            minter: window.$fx.minter,
           },
         },
         "*"

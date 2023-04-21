@@ -55,6 +55,7 @@ export function CollabBadge(props: Props) {
     size,
     toggeable = false,
     centered = false,
+    displayAvatar = true,
     avatarSide,
     className,
     classNameAvatar,
@@ -78,9 +79,12 @@ export function CollabBadge(props: Props) {
   const isSliced = slicedCollaborators.length < collaborators.length
 
   const marginLeftToggleButton = useMemo(() => {
+    if (!displayAvatar) {
+      return 0
+    }
     if (!sliceCountRef.current?.offsetWidth || !opened) return undefined
     return sliceCountRef?.current?.offsetWidth * -1
-  }, [sliceCountRef, opened])
+  }, [displayAvatar, opened])
 
   return (
     <div
@@ -93,6 +97,7 @@ export function CollabBadge(props: Props) {
           [style.toggeable]: toggeable,
           [style.hide]: !isInitialized,
           [style.centered]: centered,
+          [style.hide_avatars]: !displayAvatar,
         },
         className
       )}
@@ -105,16 +110,18 @@ export function CollabBadge(props: Props) {
       >
         {slicedCollaborators.map((user) => (
           <div key={user.id} className={cs(style.avatar_wrapper)}>
-            <Avatar
-              image={user.avatarMedia}
-              uri={user.avatarUri}
-              className={cs(
-                badgeStyle.avatar,
-                badgeStyle[`avatar-${size}`],
-                style.avatar,
-                classNameAvatar
-              )}
-            />
+            {displayAvatar && (
+              <Avatar
+                image={user.avatarMedia}
+                uri={user.avatarUri}
+                className={cs(
+                  badgeStyle.avatar,
+                  badgeStyle[`avatar-${size}`],
+                  style.avatar,
+                  classNameAvatar
+                )}
+              />
+            )}
             <span className={cs(style.user_name)}>
               <span className={cs(style.user_name_content)}>
                 {getUserName(user, 10)}

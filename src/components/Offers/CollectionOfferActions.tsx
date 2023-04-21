@@ -37,7 +37,6 @@ export function CollectionOfferActions({ offer, children }: Props) {
     ModalAcceptCollectionOffer,
     {
       offer,
-      onClickAccept: (objkt: Objkt) => acceptOffer(objkt),
     }
   )
 
@@ -57,23 +56,6 @@ export function CollectionOfferActions({ offer, children }: Props) {
     cancelCall({
       offer: offer,
       token: offer.token,
-    })
-  }
-
-  const {
-    state: acceptState,
-    loading: acceptLoading,
-    error: acceptError,
-    success: acceptSuccess,
-    call: acceptCall,
-    params: acceptParams,
-  } = useContractOperation(CollectionOfferAcceptOperation)
-
-  const acceptOffer = (objkt: Objkt) => {
-    acceptCall({
-      offer: offer,
-      token: objkt,
-      price: offer.price,
     })
   }
 
@@ -101,13 +83,9 @@ export function CollectionOfferActions({ offer, children }: Props) {
         size="very-small"
         className={style.button}
         onClick={openModal}
-        state={
-          acceptLoading && acceptParams?.offer.id === offer.id
-            ? "loading"
-            : "default"
-        }
+        state={"default"}
       >
-        accept
+        select & accept
       </Button>
     ) : null
 
@@ -120,15 +98,6 @@ export function CollectionOfferActions({ offer, children }: Props) {
         success={cancelSuccess}
         error={cancelError}
         successMessage="Your collection offer has been cancelled"
-        noSpacing
-      />
-    ) : acceptParams?.offer.id === offer.id ? (
-      <ContractFeedback
-        state={acceptState}
-        loading={acceptLoading}
-        success={acceptSuccess}
-        error={acceptError}
-        successMessage="You have accepted the offer"
         noSpacing
       />
     ) : null

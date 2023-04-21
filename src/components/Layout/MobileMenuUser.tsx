@@ -1,4 +1,4 @@
-import React, { memo, useCallback } from "react"
+import React, { Fragment, memo, useCallback } from "react"
 import style from "./MobileMenuUser.module.scss"
 import { NavigationLink, NavigationLinkSingle } from "./navigationLinks"
 import ReactDOM from "react-dom"
@@ -63,13 +63,13 @@ const _MobileMenuUser = ({
         <div className={style.links}>
           {links.map((profileLink) => {
             return "subMenu" in profileLink ? (
-              <>
+              <Fragment key={profileLink.key}>
                 <div className={style.divider} />
                 {renderProfileLink(profileLink, true)}
                 {profileLink.subMenu.map((link) =>
                   renderProfileLink(link, false)
                 )}
-              </>
+              </Fragment>
             ) : (
               renderProfileLink(profileLink, false)
             )

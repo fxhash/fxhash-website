@@ -67,6 +67,10 @@ export const clientSideClient = new ApolloClient({
             keyArgs: ["sort", "featureFilters", "filters"],
             merge: cacheMergePaginatedField,
           },
+          underAuctionMintTickets: {
+            keyArgs: [],
+            merge: (_, incoming) => incoming,
+          },
           mintTickets: {
             keyArgs: ["filters", "sort"],
             merge: cacheMergePaginatedField,
@@ -106,6 +110,15 @@ export const clientSideClient = new ApolloClient({
       },
       Query: {
         fields: {
+          generativeToken: {
+            read(_, { args, toReference }) {
+              if (!args) return
+              return toReference({
+                __typename: "GenerativeToken",
+                id: args.id,
+              })
+            },
+          },
           generativeTokens: {
             keyArgs: ["sort", "filters"],
             merge: cacheMergePaginatedField,

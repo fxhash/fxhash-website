@@ -14,7 +14,7 @@ import { ContractOperation } from "./ContractOperation"
 
 export type TCollectionOfferAcceptOperationParams = {
   offer: CollectionOffer
-  token: Objkt
+  tokens: Objkt[]
   price: number
 }
 
@@ -25,80 +25,83 @@ export class CollectionOfferAcceptOperation extends ContractOperation<TCollectio
   async prepare() {}
 
   async call(): Promise<WalletOperation> {
-    const updateOperatorsParams = [
-      {
-        add_operator: {
-          owner: this.params.token.owner!.id,
-          operator: FxhashContracts.MARKETPLACE_V2,
-          token_id: getGentkLocalID(this.params.token.id),
+    const operations = this.params.tokens.reduce((ops, token) => {
+      const updateOperatorsParams = [
+        {
+          add_operator: {
+            owner: token.owner!.id,
+            operator: FxhashContracts.MARKETPLACE_V2,
+            token_id: getGentkLocalID(token.id),
+          },
         },
-      },
-    ]
+      ]
+      const collectionOfferAcceptParams = {
+        gentk: {
+          id: getGentkLocalID(token.id),
+          version: token.version,
+        },
+        offer_id: this.params.offer.id,
+      }
 
-    const collectionOfferAcceptParams = {
-      gentk: {
-        id: getGentkLocalID(this.params.token.id),
-        version: this.params.token.version,
-      },
-      offer_id: this.params.offer.id,
-    }
+      // if there's an active listing, it must first be cancelled
+      if (token.activeListing) {
+        ops.push({
+          kind: OpKind.TRANSACTION,
+          to: getListingFA2Contract(token.activeListing),
+          amount: 0,
+          parameter: {
+            entrypoint: getListingCancelEp(token.activeListing),
+            value: buildParameters(
+              token.activeListing.id,
+              EBuildableParams.LISTING_CANCEL
+            ),
+          },
+          storageLimit: 150,
+        })
+      }
 
-    // the list of operationd
-    const operations: WalletParamsWithKind[] = []
-
-    // if there's an active listing, it must first be cancelled
-    if (this.params.token.activeListing) {
-      operations.push({
+      // add the marketplace v2 as an operator
+      ops.push({
         kind: OpKind.TRANSACTION,
-        to: getListingFA2Contract(this.params.token.activeListing),
+        to: getGentkFA2Contract(token),
         amount: 0,
         parameter: {
-          entrypoint: getListingCancelEp(this.params.token.activeListing),
+          entrypoint: "update_operators",
           value: buildParameters(
-            this.params.token.activeListing.id,
-            EBuildableParams.LISTING_CANCEL
+            updateOperatorsParams,
+            EBuildableParams.UPDATE_OPERATORS
           ),
         },
-        storageLimit: 150,
+        storageLimit: 300,
       })
-    }
 
-    // add the marketplace v2 as an operator
-    operations.push({
-      kind: OpKind.TRANSACTION,
-      to: getGentkFA2Contract(this.params.token),
-      amount: 0,
-      parameter: {
-        entrypoint: "update_operators",
-        value: buildParameters(
-          updateOperatorsParams,
-          EBuildableParams.UPDATE_OPERATORS
-        ),
-      },
-      storageLimit: 300,
-    })
+      // accept the offer
+      ops.push({
+        kind: OpKind.TRANSACTION,
+        to: FxhashContracts.MARKETPLACE_V2,
+        amount: 0,
+        parameter: {
+          entrypoint: "collection_offer_accept",
+          value: buildParameters(
+            collectionOfferAcceptParams,
+            EBuildableParams.COLLECTION_OFFER_ACCEPT
+          ),
+        },
+        storageLimit: 450,
+      })
 
-    // accept the offer
-    operations.push({
-      kind: OpKind.TRANSACTION,
-      to: FxhashContracts.MARKETPLACE_V2,
-      amount: 0,
-      parameter: {
-        entrypoint: "collection_offer_accept",
-        value: buildParameters(
-          collectionOfferAcceptParams,
-          EBuildableParams.COLLECTION_OFFER_ACCEPT
-        ),
-      },
-      storageLimit: 450,
-    })
+      return ops
+    }, [] as WalletParamsWithKind[])
 
     return this.manager.tezosToolkit.wallet.batch().with(operations).send()
   }
 
   success(): string {
-    return `You have accepted the offer on ${
-      this.params.token.name
-    } for ${displayMutez(this.params.price)} tez`
+    const [token] = this.params.tokens
+    const totalTokens = this.params.tokens.length
+    const price = this.params.price * totalTokens
+    return `You have accepted the offer on ${token.name} for ${displayMutez(
+      price
+    )} tez`
   }
 }

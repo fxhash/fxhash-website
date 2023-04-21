@@ -8,22 +8,34 @@ import { useQuery } from "@apollo/client"
 import { Qu_genTokenMintTickets } from "../../queries/generative-token"
 import { GenerativeToken } from "../../types/entities/GenerativeToken"
 import { InfiniteScrollTrigger } from "../../components/Utils/InfiniteScrollTrigger"
+import { Select } from "components/Input/Select"
+import { useQueryParamSort } from "hooks/useQueryParamSort"
+import { sortOptionsMintTickets } from "utils/sort"
 
 const ITEMS_PER_PAGE = 30
-type MintTicketsBySection = {
-  auctionTickets: MintTicket[]
-  unusedTickets: MintTicket[]
-}
+
 type GenerativeTokenWithUserMintTickets = GenerativeToken & {
   loggedUserMintTickets: MintTicket[]
 }
 interface GenerativeMintTicketsProps {
   tokenId: number
+  defaultTicketsLabel?: string
+  showCurrentUserTickets?: boolean
+  showGracePeriodTickets?: boolean
 }
-const _GenerativeMintTickets = ({ tokenId }: GenerativeMintTicketsProps) => {
+const _GenerativeMintTickets = ({
+  tokenId,
+  defaultTicketsLabel = "Unused tickets",
+  showCurrentUserTickets = true,
+  showGracePeriodTickets = true,
+}: GenerativeMintTicketsProps) => {
   const [hasNoMintTicketsToFetch, setHasNoMintTicketsToFetch] = useState(false)
   const { user } = useContext(UserContext)
   const now = useMemo(() => new Date(), [])
+
+  const { sortValue, setSortValue, sortVariable, sortOptions } =
+    useQueryParamSort(sortOptionsMintTickets)
+
   const { data, loading, fetchMore } = useQuery<{
     generativeToken: GenerativeTokenWithUserMintTickets
     userMintTickets: MintTicket[]
@@ -34,6 +46,15 @@ const _GenerativeMintTickets = ({ tokenId }: GenerativeMintTicketsProps) => {
       skip: 0,
       take: ITEMS_PER_PAGE,
       now: now.toISOString(),
+      sort: sortVariable,
+      filters: !showGracePeriodTickets
+        ? {
+            underAuction_eq: false,
+            inGracePeriod_eq: false,
+          }
+        : {
+            underAuction_eq: false,
+          },
     },
     onCompleted: (newData) => {
       if (
@@ -45,6 +66,11 @@ const _GenerativeMintTickets = ({ tokenId }: GenerativeMintTicketsProps) => {
     },
     fetchPolicy: "cache-and-network",
   })
+
+  const underAuctionMintTickets = useMemo(
+    () => data?.generativeToken?.underAuctionMintTickets || [],
+    [data?.generativeToken]
+  )
 
   const mintTickets = useMemo(
     () => data?.generativeToken?.mintTickets || [],
@@ -61,6 +87,7 @@ const _GenerativeMintTickets = ({ tokenId }: GenerativeMintTicketsProps) => {
       variables: {
         skip: mintTickets?.length,
         take: ITEMS_PER_PAGE,
+        sort: sortVariable,
       },
     })
     if (
@@ -71,28 +98,9 @@ const _GenerativeMintTickets = ({ tokenId }: GenerativeMintTicketsProps) => {
     }
   }, [loading, hasNoMintTicketsToFetch, fetchMore, mintTickets?.length])
 
-  const mintTicketsBySection = useMemo<MintTicketsBySection>(() => {
-    const now = new Date()
-    return mintTickets.reduce(
-      (acc, ticket) => {
-        if (isBefore(now, new Date(ticket.taxationPaidUntil))) {
-          if (ticket.owner.id !== user?.id) {
-            acc.unusedTickets.push(ticket)
-          }
-        } else {
-          acc.auctionTickets.push(ticket)
-        }
-        return acc
-      },
-      {
-        auctionTickets: [],
-        unusedTickets: [],
-      } as MintTicketsBySection
-    )
-  }, [mintTickets, user?.id])
   return (
     <div className={style.container}>
-      {userMintTickets.length > 0 && (
+      {showCurrentUserTickets && userMintTickets.length > 0 && (
         <div>
           <TableMintTickets
             firstColName="Your tickets"
@@ -106,22 +114,32 @@ const _GenerativeMintTickets = ({ tokenId }: GenerativeMintTicketsProps) => {
         <div>
           <TableMintTickets
             firstColName="Under auction (holder failed to pay tax)"
-            mintTickets={mintTicketsBySection.auctionTickets}
-            loading={loading && mintTicketsBySection.unusedTickets.length === 0}
+            mintTickets={underAuctionMintTickets}
+            loading={loading && underAuctionMintTickets.length === 0}
             refreshEveryMs={15000}
           />
         </div>
       )}
+      <div className={style.top_bar}>
+        <Select
+          className={style.select}
+          classNameRoot={style.select_root}
+          value={sortValue}
+          options={sortOptions}
+          onChange={setSortValue}
+        />
+      </div>
       <div>
         <InfiniteScrollTrigger
           onTrigger={handleFetchMoreTickets}
           canTrigger={!hasNoMintTicketsToFetch}
         >
           <TableMintTickets
-            firstColName="Unused tickets"
-            mintTickets={mintTicketsBySection.unusedTickets}
+            firstColName={defaultTicketsLabel}
+            mintTickets={mintTickets}
             loading={loading}
             refreshEveryMs={60000}
+            updateCacheOnForeclosure
           />
         </InfiniteScrollTrigger>
       </div>
