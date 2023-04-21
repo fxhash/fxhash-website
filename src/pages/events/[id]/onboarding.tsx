@@ -32,6 +32,24 @@ const EventsOnboardingPage: NextPage<Props> = ({ event, tokens }) => {
       <Head>
         <title>fxhash — {event.name} onboarding</title>
         <meta name="description" content={event.description} />
+        <meta
+          key="og:title"
+          property="og:title"
+          content={`fxhash — ${event.name} onboarding`}
+        />
+        <meta
+          key="og:description"
+          property="og:description"
+          content={event.description}
+        />
+        <meta key="og:type" property="og:type" content="website" />
+        <meta name="twitter:site" content="@fx_hash_" />
+        <meta name="twitter:card" content="summary" />
+        <meta
+          name="twitter:title"
+          content={`fxhash — ${event.name} onboarding`}
+        />
+        <meta name="twitter:description" content={event.description} />
       </Head>
 
       <main className={cs(layout["padding-small"])}>
