@@ -139,7 +139,7 @@ export function UserBadge({
                 [style.donation]: isDonator(userAlias),
               })}
             >
-              {getUserName(userAlias, 15)}
+              {getUserName(userAlias, 8)}
             </span>
             {verified && (
               <i
