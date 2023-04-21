@@ -253,6 +253,7 @@ const GenerativeTokenMarketplace: NextPage<Props> = ({ token, tab }) => {
                 <DisplayTezos
                   mutez={token.marketStats.lowestSold}
                   formatBig={false}
+                  maxDecimals={2}
                 />
               ) : (
                 "/"
@@ -266,6 +267,7 @@ const GenerativeTokenMarketplace: NextPage<Props> = ({ token, tab }) => {
                 <DisplayTezos
                   mutez={token.marketStats.highestSold}
                   formatBig={false}
+                  maxDecimals={2}
                 />
               ) : (
                 "/"
@@ -323,6 +325,7 @@ const GenerativeTokenMarketplace: NextPage<Props> = ({ token, tab }) => {
               <ClientOnlyEmpty>
                 <GenerativeMintTickets
                   tokenId={token.id}
+                  defaultTicketsLabel="For sale"
                   showCurrentUserTickets={false}
                   showGracePeriodTickets={false}
                 />

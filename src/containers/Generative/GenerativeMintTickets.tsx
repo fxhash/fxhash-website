@@ -19,11 +19,13 @@ type GenerativeTokenWithUserMintTickets = GenerativeToken & {
 }
 interface GenerativeMintTicketsProps {
   tokenId: number
+  defaultTicketsLabel?: string
   showCurrentUserTickets?: boolean
   showGracePeriodTickets?: boolean
 }
 const _GenerativeMintTickets = ({
   tokenId,
+  defaultTicketsLabel = "Unused tickets",
   showCurrentUserTickets = true,
   showGracePeriodTickets = true,
 }: GenerativeMintTicketsProps) => {
@@ -133,7 +135,7 @@ const _GenerativeMintTickets = ({
           canTrigger={!hasNoMintTicketsToFetch}
         >
           <TableMintTickets
-            firstColName="Unused tickets"
+            firstColName={defaultTicketsLabel}
             mintTickets={mintTickets}
             loading={loading}
             refreshEveryMs={60000}
