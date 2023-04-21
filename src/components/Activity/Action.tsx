@@ -23,7 +23,7 @@ export const ActionReference = ({
       target="_blank"
       rel="noreferrer"
     >
-      <DateDistance timestamptz={action.createdAt} />
+      <DateDistance timestamptz={action.createdAt} shorten />
       <i aria-hidden className="fas fa-external-link-square" />
     </a>
   )
