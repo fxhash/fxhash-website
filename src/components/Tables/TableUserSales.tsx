@@ -54,7 +54,7 @@ const _TableUserSales = ({
                     >
                       {sale.objkt && (
                         <div className={cs(style.link_wrapper)}>
-                          <ObjktImageAndName objkt={sale.objkt} />
+                          <ObjktImageAndName objkt={sale.objkt} label="" />
                         </div>
                       )}
                     </td>
