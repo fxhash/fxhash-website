@@ -41,8 +41,8 @@ const Row = ({ buttons, feedback, offer }: RowProps) => {
         href={`/generative/${offer.token.id}`}
         metadata={offer.token.metadata}
         captureMedia={offer.token.captureMedia}
-        name={`${offer.token.name} (collection)`}
-        label="Token"
+        name={`${offer.token.name}`}
+        label="Collection"
       />
     )
   }
@@ -89,7 +89,7 @@ const Row = ({ buttons, feedback, offer }: RowProps) => {
         </td>
         <td className={style["td-time"]} data-label="Time">
           <div className={style.date}>
-            <DateDistance timestamptz={offer.createdAt} />
+            <DateDistance timestamptz={offer.createdAt} shorten />
           </div>
         </td>
         <td
