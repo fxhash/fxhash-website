@@ -98,7 +98,7 @@ const _ModalAcceptCollectionOffer = ({
       onClose={onClose}
     >
       <p className={style.p}>
-        <UserBadge user={offer.buyer} displayAvatar={false} /> want to acquire{" "}
+        <UserBadge user={offer.buyer} displayAvatar={false} /> wants to acquire{" "}
         <span className={colors.secondary}>{offer.amount}</span> edition
         {plural(offer.amount)} for&nbsp;
         <DisplayTezos
@@ -120,7 +120,7 @@ const _ModalAcceptCollectionOffer = ({
       </p>
       <Spacing size="regular" sm="small" />
       <p className={style.p}>
-        Please Select which gentk{plural(offer.amount)} you would like to sell:
+        Please select which gentk{plural(offer.amount)} you would like to sell:
       </p>
       <Spacing size="regular" sm="small" />
       <div className={style.gentks}>
