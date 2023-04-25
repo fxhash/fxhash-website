@@ -120,12 +120,17 @@ export class MintV3AbstractionOperation extends ContractOperation<TMintV3Abstrac
       }
       if (this.claimTicket) {
         const ops: WalletParamsWithKind[] = []
-        const ticketPrice = getMintTicketDAPrice(
-          new Date(),
-          new Date(this.ticket!.taxationPaidUntil),
-          this.ticket!.price
+        const ticketPrice = Math.ceil(
+          getMintTicketDAPrice(
+            new Date(),
+            new Date(this.ticket!.taxationPaidUntil),
+            this.ticket!.price
+          )
         )
-        const amount = ticketPrice + getMintTicketHarbergerTax(ticketPrice, 1)
+        console.log(ticketPrice)
+        const amount = Math.ceil(
+          ticketPrice + getMintTicketHarbergerTax(ticketPrice, 1)
+        )
         const val = buildParameters(
           {
             token_id: this.ticket!.id,

@@ -18,6 +18,7 @@ import { TOnMintHandler } from "../MintWithTicketPage"
 import { isBefore } from "date-fns"
 import { useMintingState } from "hooks/useMintingState"
 import { ButtonClaimAndMint } from "./ButtonClaimAndMint"
+import { Qu_mintTickets } from "../../../queries/mint-ticket"
 
 export type PanelSubmitMode = "with-ticket" | "free" | "none"
 
@@ -38,28 +39,27 @@ export function PanelControls(props: PanelControlsProps) {
   const showMintButton = !hidden && !locked && enabled
 
   // get user mint tickets when user is available, and mode is "free"
-  const { data } = useQuery(Qu_userMintTickets, {
+  const { data } = useQuery(Qu_mintTickets, {
     fetchPolicy: "network-only",
     variables: {
-      id: user?.id,
+      take: 20,
+      skip: 0,
+      sort: {
+        taxationPaidUntil: "ASC",
+      },
+      filters: {
+        token_eq: token.id,
+        owner_eq: user?.id,
+        underAuction_eq: false,
+      },
     },
     skip: !(mode === "free" && user),
   })
 
   // extract user tickets for this project
   const userTickets = useMemo(() => {
-    if (!data) return null
-    if (!data.user?.mintTickets) return null
-    const projectTickets = (data.user.mintTickets as MintTicket[])
-      .filter((ticket) => ticket.token.id === token.id)
-      .filter((ticket) =>
-        isBefore(new Date(), new Date(ticket.taxationPaidUntil))
-      )
-      .sort((a, b) =>
-        (a.taxationPaidUntil as any) < (b.taxationPaidUntil as any) ? 1 : -1
-      )
-    return projectTickets.length > 0 ? projectTickets : null
-  }, [data, token.id])
+    return data?.mintTickets.length > 0 ? data.mintTickets : null
+  }, [data])
 
   const handleClickMint = useCallback(() => {
     onSubmit(null)

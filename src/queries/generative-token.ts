@@ -260,6 +260,7 @@ export const Qu_genTokenClaimableMintTickets = gql`
         }
       ) {
         id
+        taxationPaidUntil
         price
       }
     }

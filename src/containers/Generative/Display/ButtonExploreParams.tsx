@@ -5,7 +5,7 @@ import { getGenerativeTokenUrl } from "../../../utils/generative-token"
 import { Button } from "../../../components/Button"
 import { UserContext } from "../../UserProvider"
 import { useQuery } from "@apollo/client"
-import { Qu_MintTickets } from "../../../queries/mint-ticket"
+import { Qu_mintTickets } from "../../../queries/mint-ticket"
 import style from "./GenerativeDisplay.module.scss"
 
 interface ButtonExploreParamsProps {
@@ -14,12 +14,14 @@ interface ButtonExploreParamsProps {
 
 const _ButtonExploreParams = ({ token }: ButtonExploreParamsProps) => {
   const { user } = useContext(UserContext)
-  const { data } = useQuery(Qu_MintTickets, {
+  const { data } = useQuery(Qu_mintTickets, {
     variables: {
       take: 1,
+      skip: 0,
       filters: {
         token_eq: token.id,
         owner_eq: user?.id,
+        underAuction_eq: false,
       },
     },
     skip: !user,

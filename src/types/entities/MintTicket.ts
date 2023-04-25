@@ -8,6 +8,7 @@ export interface MintTicket {
   owner: User
   createdAt: Date
   price: number
+  daPrice?: number
   taxationLocked: string
   taxationStart: Date
   taxationPaidUntil: Date

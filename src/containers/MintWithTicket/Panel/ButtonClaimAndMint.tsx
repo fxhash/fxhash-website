@@ -19,7 +19,7 @@ interface ClaimAndMintProps {
   onClick: (ticket: MintTicket) => void
 }
 
-const _ClaimAndMint = ({ token, onClick }: ClaimAndMintProps) => {
+const _ButtonClaimAndMint = ({ token, onClick }: ClaimAndMintProps) => {
   const { user } = useContext(UserContext)
   const now = useNow(15000)
   const { data } = useQuery<{
@@ -33,20 +33,20 @@ const _ClaimAndMint = ({ token, onClick }: ClaimAndMintProps) => {
   const cheapestTicket = useMemo<MintTicket | null>(() => {
     if (!data?.generativeToken) return null
     const [cheapestDaTicket] = data.generativeToken.daMintTickets
-      .map((ticket, idx) => {
+      .map((ticket) => {
         return {
           ...ticket,
-          price: getMintTicketDAPrice(
+          daPrice: getMintTicketDAPrice(
             now,
             new Date(ticket.taxationPaidUntil),
             ticket.price
           ),
         }
       })
-      .sort((a, b) => (a.price > b.price ? 1 : -1))
+      .sort((a, b) => (a.daPrice > b.daPrice ? 1 : -1))
     const [cheapestClaimableTicket] = data.generativeToken.mintTickets
     if (cheapestDaTicket && cheapestClaimableTicket) {
-      return cheapestDaTicket.price < cheapestClaimableTicket.price
+      return cheapestDaTicket.daPrice < cheapestClaimableTicket.price
         ? cheapestDaTicket
         : cheapestClaimableTicket
     }
@@ -57,19 +57,19 @@ const _ClaimAndMint = ({ token, onClick }: ClaimAndMintProps) => {
       onClick(cheapestTicket)
     }
   }, [cheapestTicket, onClick])
-  return (
-    cheapestTicket && (
-      <BaseButton
-        color="main"
-        onClick={handleClickClaimAndMint}
-        className={style.submitButton}
-        title={`claim & mint with ${displayMutez(cheapestTicket.price)} tezos`}
-      >
-        claim & mint{" "}
-        <DisplayTezos mutez={cheapestTicket.price} formatBig={false} />
-      </BaseButton>
-    )
-  )
+  const cheapestTicketPrice =
+    cheapestTicket && (cheapestTicket.daPrice || cheapestTicket.price)
+  return cheapestTicketPrice ? (
+    <BaseButton
+      color="main"
+      onClick={handleClickClaimAndMint}
+      className={style.submitButton}
+      title={`claim & mint with ${displayMutez(cheapestTicketPrice)} tezos`}
+    >
+      claim & mint{" "}
+      <DisplayTezos mutez={cheapestTicketPrice} formatBig={false} />
+    </BaseButton>
+  ) : null
 }
 
-export const ButtonClaimAndMint = memo(_ClaimAndMint)
+export const ButtonClaimAndMint = memo(_ButtonClaimAndMint)
