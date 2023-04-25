@@ -6,7 +6,7 @@ import { Button } from "../../../components/Button"
 import { UserContext } from "../../UserProvider"
 import { useQuery } from "@apollo/client"
 import { Qu_MintTickets } from "../../../queries/mint-ticket"
-import style from "./GenerativeDisplay.module.scss";
+import style from "./GenerativeDisplay.module.scss"
 
 interface ButtonExploreParamsProps {
   token: GenerativeToken

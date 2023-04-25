@@ -18,7 +18,7 @@ import {
 import { MintTicket } from "../../types/entities/MintTicket"
 import { getMintTicketHarbergerTax } from "../../utils/math"
 import { getMintTicketDAPrice } from "../../utils/mint-ticket"
-import { coverage } from "browserslist";
+import { coverage } from "browserslist"
 
 const isValidTicket = async (
   pkh: string,

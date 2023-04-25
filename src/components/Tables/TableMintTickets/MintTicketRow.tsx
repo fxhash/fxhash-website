@@ -1,11 +1,7 @@
 import { memo, useContext, useEffect, useRef } from "react"
 import Link from "next/link"
 import cs from "classnames"
-import {
-  format,
-  formatDistanceToNow,
-  isBefore,
-} from "date-fns"
+import { format, formatDistanceToNow, isBefore } from "date-fns"
 import { Image } from "components/Image"
 import { UserContext } from "containers/UserProvider"
 import { MintTicket } from "types/entities/MintTicket"
@@ -17,7 +13,7 @@ import { ButtonUpdatePriceMintTicket } from "components/MintTicket/ButtonUpdateP
 import { ButtonClaimMintTicket } from "components/MintTicket/ButtonClaimMintTicket"
 import { ApolloCache, useApolloClient } from "@apollo/client"
 import { GenerativeToken } from "types/entities/GenerativeToken"
-import { getMintTicketDAPrice } from "../../../utils/mint-ticket";
+import { getMintTicketDAPrice } from "../../../utils/mint-ticket"
 
 const moveMintTicketToUnderAuction = (
   cache: ApolloCache<any>,

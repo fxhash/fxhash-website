@@ -5,7 +5,7 @@ import { MintTicket } from "types/entities/MintTicket"
 import Skeleton from "../../Skeleton"
 import style from "../TableUser.module.scss"
 import { MintTicketRow } from "./MintTicketRow"
-import useNow from "../../../hooks/useNow";
+import useNow from "../../../hooks/useNow"
 
 interface TableMintTicketsProps {
   firstColName?: string
