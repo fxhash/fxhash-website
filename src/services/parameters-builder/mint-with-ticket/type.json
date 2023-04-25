@@ -1,0 +1,40 @@
+{
+  "prim": "pair",
+  "args": [
+    {
+      "prim": "nat",
+      "annots": ["%issuer_id"]
+    },
+    {
+      "prim": "pair",
+      "args": [
+        {
+          "prim": "nat",
+          "annots": [
+            "%ticket_id"
+          ]
+        },
+        {
+          "prim": "pair",
+          "args": [
+            {
+              "prim": "bytes",
+              "annots": ["%input_bytes"]
+            },
+            {
+              "prim": "option",
+              "args": [{
+                "prim": "address"
+              }],
+              "annots": [
+                "%recipient"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+
+

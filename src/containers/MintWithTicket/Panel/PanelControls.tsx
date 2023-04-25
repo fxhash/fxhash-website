@@ -17,6 +17,7 @@ import { displayMutez } from "utils/units"
 import { TOnMintHandler } from "../MintWithTicketPage"
 import { isBefore } from "date-fns"
 import { useMintingState } from "hooks/useMintingState"
+import { ButtonClaimAndMint } from "./ButtonClaimAndMint"
 
 export type PanelSubmitMode = "with-ticket" | "free" | "none"
 
@@ -65,9 +66,15 @@ export function PanelControls(props: PanelControlsProps) {
   }, [onSubmit])
   const handleClickUseTicket = useCallback(() => {
     if (userTickets) {
-      onSubmit(userTickets.map((ticket) => ticket.id))
+      onSubmit(userTickets)
     }
   }, [onSubmit, userTickets])
+  const handleClickClaimMint = useCallback(
+    (ticket) => {
+      onSubmit(ticket, true)
+    },
+    [onSubmit]
+  )
 
   return (
     <div className={style.controlPanel}>
@@ -96,7 +103,7 @@ export function PanelControls(props: PanelControlsProps) {
           </BaseButton>
         ) : mode === "free" ? (
           <div className={style.submitButtons}>
-            {showMintButton && (
+            {showMintButton ? (
               <BaseButton
                 color="main"
                 onClick={handleClickMint}
@@ -105,6 +112,11 @@ export function PanelControls(props: PanelControlsProps) {
               >
                 mint <DisplayTezos mutez={price} formatBig={false} />
               </BaseButton>
+            ) : (
+              <ButtonClaimAndMint
+                token={token}
+                onClick={handleClickClaimMint}
+              />
             )}
             {userTickets && (
               <BaseButton

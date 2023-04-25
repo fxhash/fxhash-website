@@ -231,6 +231,41 @@ export const Qu_genTokenMintTickets = gql`
   }
 `
 
+export const Qu_genTokenClaimableMintTickets = gql`
+  query Query($id: Float, $slug: String, $ownerId: String) {
+    generativeToken(id: $id, slug: $slug) {
+      id
+      daMintTickets: mintTickets(
+        sort: { price: "ASC" }
+        skip: 0
+        take: 3
+        filters: {
+          inGracePeriod_eq: false
+          underAuction_eq: true
+          owner_ne: $ownerId
+        }
+      ) {
+        id
+        taxationPaidUntil
+        price
+      }
+      mintTickets(
+        sort: { price: "ASC" }
+        skip: 0
+        take: 3
+        filters: {
+          inGracePeriod_eq: false
+          underAuction_eq: false
+          owner_ne: $ownerId
+        }
+      ) {
+        id
+        price
+      }
+    }
+  }
+`
+
 export const Qu_genTokenAllIterations = gql`
   ${Frag_MediaImage}
   query GenerativeTokenIterations($id: Float!) {

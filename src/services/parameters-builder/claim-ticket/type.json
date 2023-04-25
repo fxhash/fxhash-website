@@ -1,0 +1,45 @@
+{
+  "prim": "pair",
+  "args": [
+    {
+      "prim": "pair",
+      "args": [
+        {
+          "prim": "nat",
+          "annots": ["%coverage"]
+        },
+        {
+          "prim": "mutez",
+          "annots": [
+            "%price"
+          ]
+        }
+      ],
+      "annots": [
+        "%taxation"
+      ]
+    },
+    {
+      "prim": "pair",
+      "args": [
+        {
+          "prim": "nat",
+          "annots": [
+            "%token_id"
+          ]
+        },
+        {
+          "prim": "option",
+          "args": [{
+            "prim": "address"
+          }],
+          "annots": [
+            "%transfer_to"
+          ]
+        }
+      ]
+    }
+  ]
+}
+
+

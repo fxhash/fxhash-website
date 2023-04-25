@@ -1,10 +1,8 @@
-import { MintTicket } from "./../../types/entities/MintTicket"
 import {
   ContractAbstraction,
   TransactionWalletOperation,
   Wallet,
 } from "@taquito/taquito"
-import { NFTArticle } from "../../types/entities/Article"
 import { FxhashContracts } from "../../types/Contracts"
 import { ContractOperation } from "./ContractOperation"
 
