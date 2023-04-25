@@ -1,0 +1,13 @@
+{
+  "plugins": [
+    "prettier"
+  ],
+  "extends": [
+    "prettier",
+    "next/core-web-vitals"
+  ],
+  "rules": {
+    "prettier/prettier": "error",
+    "react/no-unescaped-entities": "warn"
+  }
+}
