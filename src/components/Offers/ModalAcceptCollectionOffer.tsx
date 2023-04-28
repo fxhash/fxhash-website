@@ -94,7 +94,7 @@ const _ModalAcceptCollectionOffer = ({
 
   return (
     <Modal
-      title={`Accept collection offer for “${offer.token.name}“`}
+      title={`Accept collection offer for “${offer.token.name}”`}
       onClose={onClose}
     >
       <p className={style.p}>
