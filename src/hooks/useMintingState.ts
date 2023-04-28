@@ -284,7 +284,11 @@ export function useMintingState(
       if (!activeTimer.current || activeTimer.current !== T) {
         activeTimer.current = T
         // we compute when we need to trigger the timer
-        const triggerIn = T - Date.now()
+        // timeout has a max of 32-bit signed integer
+        // This causes an integer overflow when using delays
+        // larger than 2,147,483,647 ms (about 24.8 days),
+        // resulting in the timeout being executed immediately
+        const triggerIn = Math.min(T - Date.now() + 10, 0x7fffffff)
         // only trigger anything if it's in the future
         if (triggerIn >= 0) {
           // request a state update when timer will trigger
@@ -297,7 +301,7 @@ export function useMintingState(
                 forceDisabled
               )
             )
-          }, triggerIn + 10)
+          }, triggerIn)
           // return the timer clear
           return () => {
             activeTimer.current = undefined
