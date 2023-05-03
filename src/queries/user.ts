@@ -198,6 +198,9 @@ export const Qu_userObjkts = gql`
           generativeUri
           labels
           ...Author
+          marketStats {
+            floor
+          }
         }
         name
         createdAt

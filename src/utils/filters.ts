@@ -12,6 +12,9 @@ export interface ITagsFilters {
   fullyMinted_eq: (isFullyMinted: boolean) => string
   searchQuery_eq: (value: string) => string
   activeListing_exist: (value: boolean) => string
+  assigned_eq: (isAssigned: boolean) => string
+  author_in: (authors: any[]) => string
+  issuer_in: (issuers: any[]) => string
 }
 
 export const tagsFilters: ITagsFilters = {
@@ -28,6 +31,10 @@ export const tagsFilters: ITagsFilters = {
   searchQuery_eq: (value) => `search: ${value}`,
   activeListing_exist: (value) =>
     `listings: ${value ? "for sale" : "not for sale"}`,
+  assigned_eq: (isAssigned) =>
+    `metadata assigned: ${isAssigned ? "yes" : "no"}`,
+  author_in: (authors) => `artists: (${authors.length})`,
+  issuer_in: (issuers) => `generators: (${issuers.length})`,
 }
 
 interface TagOption<TFilters> {

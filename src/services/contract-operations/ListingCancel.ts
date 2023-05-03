@@ -3,17 +3,16 @@ import {
   OpKind,
   Wallet,
   WalletOperation,
+  WalletParamsWithKind,
 } from "@taquito/taquito"
-import { FxhashContracts } from "../../types/Contracts"
 import { Listing } from "../../types/entities/Listing"
 import { Objkt } from "../../types/entities/Objkt"
 import { getListingCancelEp, getListingFA2Contract } from "../../utils/listing"
+import { ContractOperation } from "./ContractOperation"
 import {
   buildParameters,
   EBuildableParams,
 } from "../parameters-builder/BuildParameters"
-import { TInputListingCancel } from "../parameters-builder/listing-cancel/input"
-import { ContractOperation } from "./ContractOperation"
 
 export type TListingCancelOperationParams = {
   listing: Listing
@@ -26,6 +25,19 @@ export type TListingCancelOperationParams = {
 export class ListingCancelOperation extends ContractOperation<TListingCancelOperationParams> {
   contract: ContractAbstraction<Wallet> | null = null
   ep: string = ""
+
+  static generateOp(listing: Listing): WalletParamsWithKind {
+    return {
+      kind: OpKind.TRANSACTION,
+      to: getListingFA2Contract(listing),
+      amount: 0,
+      parameter: {
+        entrypoint: getListingCancelEp(listing),
+        value: buildParameters(listing!.id, EBuildableParams.LISTING_CANCEL),
+      },
+      storageLimit: 150,
+    }
+  }
 
   async prepare() {
     this.contract = await this.manager.getContract(

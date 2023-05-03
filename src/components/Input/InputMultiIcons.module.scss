@@ -1,0 +1,25 @@
+@import "../../styles/Variables.scss";
+
+.container {
+  display: flex;
+  flex-direction: row;
+  button {
+    height: 50px;
+    margin: 0;
+    padding: 0 4px;
+    border: none;
+    background: transparent;
+    color: var(--color-border-input);
+    cursor: pointer;
+
+    &.active {
+      pointer-events: none;
+
+      color: var(--color-secondary);
+    }
+
+    &:hover {
+      color: var(--color-secondary);
+    }
+  }
+}

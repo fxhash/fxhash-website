@@ -33,6 +33,9 @@ type SortValue =
   | "createdAt-asc"
   | "createdAt-desc"
   | "relevance-desc"
+  | "collectedAt-desc"
+  | "rarity-asc"
+  | "rarity-desc"
 
 export const sortOptions: Record<SortValue, IOptions> = {
   "mintOpensAt-desc": {
@@ -78,6 +81,18 @@ export const sortOptions: Record<SortValue, IOptions> = {
   "createdAt-asc": {
     label: "oldest",
     value: "createdAt-asc",
+  },
+  "collectedAt-desc": {
+    label: "recently bought",
+    value: "collectedAt-desc",
+  },
+  "rarity-asc": {
+    label: "rarity (rarest first)",
+    value: "rarity-asc",
+  },
+  "rarity-desc": {
+    label: "rarity (rarest last)",
+    value: "rarity-desc",
   },
 }
 
@@ -134,4 +149,12 @@ export const sortOptionsMintTickets: IOptions[] = [
   },
   sortOptions["price-asc"],
   sortOptions["price-desc"],
+]
+
+export const sortOptionsUserGentk: IOptions[] = [
+  sortOptionWithCustomLabel(sortOptions["createdAt-desc"], "recently minted"),
+  sortOptionWithCustomLabel(sortOptions["createdAt-asc"], "oldest minted"),
+  sortOptions["collectedAt-desc"],
+  sortOptions["rarity-asc"],
+  sortOptions["rarity-desc"],
 ]

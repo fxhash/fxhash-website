@@ -28,6 +28,9 @@
     background: var(--color-black);
     color: var(--color-white);
   }
+  &.non_sticky thead {
+    position: static;
+  }
 
   th {
     padding: 12px 4px;
@@ -37,6 +40,10 @@
     &:first-child {
       padding-left: 8px;
     }
+  }
+
+  &.no_th_padding th:first-child {
+    padding-left: 4px;
   }
 
   td {
@@ -80,6 +87,10 @@ td.td-center {
 th.th-right,
 td.td-right {
   text-align: right;
+}
+
+.th-select {
+  width: 50px;
 }
 
 .th-gentk {
@@ -224,6 +235,11 @@ td.td-right {
   display: none;
 }
 
+td .checkbox, th .checkbox {
+  margin-bottom: 0;
+  justify-content: center;
+}
+
 @media (max-width: $breakpoint-sm) {
   .table {
     padding-top: $spacing;
@@ -361,3 +377,4 @@ td.td-right {
 .flag {
   margin-left: 8px;
 }
+

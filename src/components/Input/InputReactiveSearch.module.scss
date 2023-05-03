@@ -1,7 +1,8 @@
 .root {
   display: flex;
   flex-direction: column;
-  width: 400px;
+  max-width: 400px;
+  width: 100%;
   position: relative;
   z-index: 2;
 }

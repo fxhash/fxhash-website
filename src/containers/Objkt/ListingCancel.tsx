@@ -13,9 +13,10 @@ import style from "./MarketplaceActions.module.scss"
 interface Props {
   listing: Listing
   objkt: Objkt
+  onSuccess?: () => void
 }
 
-export function ListingCancel({ listing, objkt }: Props) {
+export function ListingCancel({ listing, objkt, onSuccess }: Props) {
   const {
     state,
     loading: contractLoading,
@@ -23,7 +24,10 @@ export function ListingCancel({ listing, objkt }: Props) {
     success,
     call,
   } = useContractOperation<TListingCancelOperationParams>(
-    ListingCancelOperation
+    ListingCancelOperation,
+    {
+      onSuccess,
+    }
   )
 
   const callContract = () => {
