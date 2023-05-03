@@ -1,8 +1,4 @@
-import {
-  OpKind,
-  WalletOperation,
-  WalletParamsWithKind,
-} from "@taquito/taquito"
+import { OpKind, WalletOperation, WalletParamsWithKind } from "@taquito/taquito"
 import { getGentkLocalIDFromObjkt } from "utils/entities/gentk"
 import { FxhashContracts } from "../../types/Contracts"
 import { Objkt } from "../../types/entities/Objkt"

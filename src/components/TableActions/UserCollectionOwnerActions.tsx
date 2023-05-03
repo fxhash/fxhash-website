@@ -7,7 +7,7 @@ import { ModalAddListing } from "./ModalAddListing"
 import { ModalCancelListing } from "./ModalCancelListing"
 import { ModalTransferGentk } from "./ModalTransferGentk"
 import { ModalBurnGentk } from "./ModalBurnGentk"
-import { ModalUpdateListing } from "./ModalUpdateListing";
+import { ModalUpdateListing } from "./ModalUpdateListing"
 
 interface DropdownAction {
   value: string
