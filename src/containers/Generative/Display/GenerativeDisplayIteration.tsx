@@ -68,6 +68,7 @@ const _GenerativeDisplayIteration = ({
     return `fxhash=${objkt.generationHash}&fxparams=${objkt.inputBytes}`
   }, [objkt, isParamsToken])
   const minter = objkt.minter
+
   return (
     <>
       <div className={cs(style.artwork_header_mobile, layout.break_words)}>
@@ -108,11 +109,12 @@ const _GenerativeDisplayIteration = ({
 
           <Spacing size="x-large" sm="none" />
 
-          <div className={cs(style.buttons_marketplace)}>
+          <div className={cs(style.buttons, style.actions)}>
             {objkt.activeListing && (
               <ListingAccept listing={objkt.activeListing} objkt={objkt} />
             )}
-            <ClientOnlyEmpty>
+            {/* @ts-ignore */}
+            <ClientOnlyEmpty style={{ width: "100%" }}>
               <UserGuard forceRedirect={false}>
                 <MarketplaceActions objkt={objkt} />
               </UserGuard>

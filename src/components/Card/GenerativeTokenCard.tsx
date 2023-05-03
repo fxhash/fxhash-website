@@ -41,6 +41,7 @@ export function GenerativeTokenCard({
   lockedUntil,
 }: Props) {
   const url = getGenerativeTokenUrl(token)
+
   return (
     <Link href={url} passHref>
       <AnchorForward className={cs(className, style.anchor)}>

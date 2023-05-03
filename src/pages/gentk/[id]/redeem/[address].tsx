@@ -69,15 +69,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   let redeemableDetails = null
 
   try {
-    const idStr = context.params?.id
+    const id = context.params?.id
     const address = context.params?.address
 
-    if (!idStr || !address) {
+    if (!id || !address) {
       throw new Error("Invalid parameters")
     }
 
-    const id = parseInt(idStr as string)
-    if (!(id === 0 || id)) {
+    if (!id) {
       throw new Error("Invalid identifier")
     }
 
@@ -86,7 +85,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       query: Qu_objkt,
       fetchPolicy: "no-cache",
       variables: {
-        id: id,
+        id,
       },
     })
     if (!data) {

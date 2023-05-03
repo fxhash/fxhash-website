@@ -1,4 +1,4 @@
-@import '../../../styles/Variables.scss';
+@import "../../../styles/Variables.scss";
 
 .artwork_header {
 }
@@ -13,13 +13,6 @@
   flex-direction: column;
   align-items: center;
   width: 100%;
-}
-
-.buttons_marketplace {
-  display: flex;
-  flex-direction: row;
-  gap: var(--layout-margin-small-sm);
-  align-items: flex-start;
 }
 
 .paramsTooltip {
@@ -71,7 +64,6 @@
 }
 
 .mobile_align_right {
-
 }
 
 .button_marketplace {
@@ -121,7 +113,7 @@
       font-size: var(--font-size-h5);
     }
   }
-  .buttons_marketplace {
+  .buttons {
     gap: 12px;
     & > button {
       width: 100%;

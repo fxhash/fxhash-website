@@ -31,6 +31,7 @@ export function ObjktCard({
 }: Props) {
   const url = getObjktUrl(objkt)
   const settings = useContext(SettingsContext)
+
   return (
     <Link href={url} passHref>
       <AnchorForward style={{ height: "100%" }}>

@@ -104,44 +104,41 @@ const ObjktRedeem: NextPage<Props> = ({ objkt, redeemableDetails }) => {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const idStr = context.params?.id
+  const id = context.params?.id
   let objkt = null
   let redeemableDetails = null
 
-  if (idStr) {
-    const id = parseInt(idStr as string)
-    if (id === 0 || id) {
-      const { data } = await createApolloClient().query({
-        query: Qu_objkt,
-        fetchPolicy: "no-cache",
-        variables: {
-          id: id,
-        },
-      })
-      if (data) {
-        objkt = data.objkt
+  if (id) {
+    const { data } = await createApolloClient().query({
+      query: Qu_objkt,
+      fetchPolicy: "no-cache",
+      variables: {
+        id,
+      },
+    })
+    if (data) {
+      objkt = data.objkt
 
-        if (objkt.availableRedeemables?.length > 0) {
-          // now we query the events API to get details about the redeemables
-          const { data: data2 } = await createEventsClient().query({
-            query: Qu_redeemableDetails,
-            fetchPolicy: "no-cache",
-            variables: {
-              where: {
-                address: {
-                  in: objkt.availableRedeemables.map((red: any) => red.address),
-                },
+      if (objkt.availableRedeemables?.length > 0) {
+        // now we query the events API to get details about the redeemables
+        const { data: data2 } = await createEventsClient().query({
+          query: Qu_redeemableDetails,
+          fetchPolicy: "no-cache",
+          variables: {
+            where: {
+              address: {
+                in: objkt.availableRedeemables.map((red: any) => red.address),
               },
             },
-          })
-          if (data2) {
-            redeemableDetails = data2.consumables
-            // process the markdown strings and replace strings from the object
-            // clone deep so that we can mutate the object
-            redeemableDetails = cloneDeep(redeemableDetails)
-            for (const details of redeemableDetails) {
-              details.description = await mdToHtml(details.description)
-            }
+          },
+        })
+        if (data2) {
+          redeemableDetails = data2.consumables
+          // process the markdown strings and replace strings from the object
+          // clone deep so that we can mutate the object
+          redeemableDetails = cloneDeep(redeemableDetails)
+          for (const details of redeemableDetails) {
+            details.description = await mdToHtml(details.description)
           }
         }
       }
