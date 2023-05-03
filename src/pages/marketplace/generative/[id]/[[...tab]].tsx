@@ -196,7 +196,7 @@ const GenerativeTokenMarketplace: NextPage<Props> = ({ token, tab }) => {
               />
             </div>
           </div>
-        </header>
+        </InlineTokenCard>
 
         <Spacing size="3x-large" />
 
