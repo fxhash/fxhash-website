@@ -18,6 +18,7 @@ import { RedeemTokenOperation } from "services/contract-operations/RedeemToken"
 import { ContractFeedback } from "components/Feedback/ContractFeedback"
 import { Error as ErrorFeedback } from "components/Error/Error"
 import { Tabs } from "../../components/Layout/Tabs"
+import { getGentkLocalID } from "utils/entities/gentk"
 
 const tabs = [
   {
@@ -99,7 +100,7 @@ export function RedeemModal({
               await wallet.beaconWallet!.client.getActiveAccount()
             )?.publicKey,
             redeemableAddress: redeemable.address,
-            tokenId: gentk.id,
+            tokenId: getGentkLocalID(gentk.id),
           }),
         }
       )
