@@ -12,7 +12,7 @@ import {
   TBurnGentkOperationParams,
 } from "../../services/contract-operations/BurnGentk"
 import { TextWarning } from "../Text/TextWarning"
-import { Checkbox } from "../Input/Checkbox";
+import { Checkbox } from "../Input/Checkbox"
 
 interface ModalBurnGentkProps {
   objkt: Objkt

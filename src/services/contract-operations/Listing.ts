@@ -1,8 +1,7 @@
 import {
-  ContractAbstraction,
   OpKind,
-  Wallet,
   WalletOperation,
+  WalletParamsWithKind,
 } from "@taquito/taquito"
 import { getGentkLocalIDFromObjkt } from "utils/entities/gentk"
 import { FxhashContracts } from "../../types/Contracts"
@@ -24,17 +23,14 @@ export type TListingOperationParams = {
  * List a gentk on the Marketplace
  */
 export class ListingOperation extends ContractOperation<TListingOperationParams> {
-  async prepare() {}
-
-  async call(): Promise<WalletOperation> {
+  static generateOps(objkt: Objkt, price: number): WalletParamsWithKind[] {
     // recent V3 tokens have an ID of "FXN-{id}", so we need to extract the ID
     // part only for these recent tokens
-    const id = getGentkLocalIDFromObjkt(this.params.token)
-
+    const id = getGentkLocalIDFromObjkt(objkt)
     const updateOperatorsParams = [
       {
         add_operator: {
-          owner: this.params.token.owner!.id,
+          owner: objkt.owner!.id,
           operator: FxhashContracts.MARKETPLACE_V2,
           token_id: id,
         },
@@ -44,38 +40,43 @@ export class ListingOperation extends ContractOperation<TListingOperationParams>
     const listingParams = {
       gentk: {
         id: id,
-        version: this.params.token.version,
+        version: objkt.version,
       },
-      price: this.params.price,
+      price,
     }
 
+    return [
+      {
+        kind: OpKind.TRANSACTION,
+        to: getGentkFA2Contract(objkt),
+        amount: 0,
+        parameter: {
+          entrypoint: "update_operators",
+          value: buildParameters(
+            updateOperatorsParams,
+            EBuildableParams.UPDATE_OPERATORS
+          ),
+        },
+        storageLimit: 300,
+      },
+      {
+        kind: OpKind.TRANSACTION,
+        to: FxhashContracts.MARKETPLACE_V2,
+        amount: 0,
+        parameter: {
+          entrypoint: "listing",
+          value: buildParameters(listingParams, EBuildableParams.LISTING),
+        },
+        storageLimit: 450,
+      },
+    ]
+  }
+  async prepare() {}
+
+  async call(): Promise<WalletOperation> {
     return this.manager.tezosToolkit.wallet
       .batch()
-      .with([
-        {
-          kind: OpKind.TRANSACTION,
-          to: getGentkFA2Contract(this.params.token),
-          amount: 0,
-          parameter: {
-            entrypoint: "update_operators",
-            value: buildParameters(
-              updateOperatorsParams,
-              EBuildableParams.UPDATE_OPERATORS
-            ),
-          },
-          storageLimit: 300,
-        },
-        {
-          kind: OpKind.TRANSACTION,
-          to: FxhashContracts.MARKETPLACE_V2,
-          amount: 0,
-          parameter: {
-            entrypoint: "listing",
-            value: buildParameters(listingParams, EBuildableParams.LISTING),
-          },
-          storageLimit: 450,
-        },
-      ])
+      .with(ListingOperation.generateOps(this.params.token, this.params.price))
       .send()
   }
 

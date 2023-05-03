@@ -4,9 +4,10 @@ import { Objkt } from "../../types/entities/Objkt"
 import style from "./UserCollectionOwnerActions.module.scss"
 import cs from "classnames"
 import { ModalAddListing } from "./ModalAddListing"
-import { ModalCancelListing } from "./ModalCancelListing";
-import { ModalTransferGentk } from "./ModalTransferGentk";
-import { ModalBurnGentk } from "./ModalBurnGentk";
+import { ModalCancelListing } from "./ModalCancelListing"
+import { ModalTransferGentk } from "./ModalTransferGentk"
+import { ModalBurnGentk } from "./ModalBurnGentk"
+import { ModalUpdateListing } from "./ModalUpdateListing";
 
 interface DropdownAction {
   value: string
@@ -114,6 +115,9 @@ const _UserCollectionOwnerActions = ({
       )}
       {selectedAction === "addListing" && (
         <ModalAddListing objkt={objkt} onClose={handleCloseModal} />
+      )}
+      {selectedAction === "editListing" && (
+        <ModalUpdateListing objkt={objkt} onClose={handleCloseModal} />
       )}
       {selectedAction === "cancelListing" && (
         <ModalCancelListing objkt={objkt} onClose={handleCloseModal} />

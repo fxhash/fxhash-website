@@ -15,7 +15,7 @@ import {
   TransferGentkOperation,
   TTransferGentkOperationParams,
 } from "../../services/contract-operations/TransferGentk"
-import { UserContext } from "../../containers/UserProvider";
+import { UserContext } from "../../containers/UserProvider"
 
 interface ModalTransferGentkProps {
   objkt: Objkt

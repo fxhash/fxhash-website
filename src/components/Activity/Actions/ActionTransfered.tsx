@@ -13,7 +13,9 @@ export const ActionTransfered: TActionComp = ({ action, verbose }) => (
     />
     <>
       transfered{" "}
-      <strong>#{verbose ? action.objkt!.name : action.objkt!.iteration}</strong>{" "}
+      <strong>
+        {verbose ? action.objkt!.name : `#${action.objkt!.iteration}`}
+      </strong>{" "}
       to
     </>
     <UserBadge

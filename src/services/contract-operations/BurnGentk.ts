@@ -2,7 +2,7 @@ import { WalletOperation, WalletParamsWithKind } from "@taquito/taquito"
 import { Objkt } from "../../types/entities/Objkt"
 import { ContractOperation } from "./ContractOperation"
 import { ListingCancelOperation } from "./ListingCancel"
-import { TransferGentkOperation } from "./TransferGentk";
+import { TransferGentkOperation } from "./TransferGentk"
 
 export type TBurnGentkOperationParams = {
   objkt: Objkt // with active listing
