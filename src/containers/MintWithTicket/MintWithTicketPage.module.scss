@@ -1,0 +1,149 @@
+@import "../../styles/Variables";
+.blackHtmlBackground {
+  background: #000000;
+}
+.root {
+  // Ignore darkmode style changes
+  --color-primary: #ff005c;
+  --color-secondary: #7000ff;
+  --color-secondary-light: #b174ff;
+  --color-secondary-vlight: #7e1aff;
+
+  --fxl-color-light: #ffffff;
+  --fxl-color-light1: #525252;
+  --fxl-color-light2: #363636;
+  --fxl-color-dark: #000000;
+  --fxl-color-dark1: #181818;
+  --fxl-color-dark2: #1c1c1c;
+  --fxl-color-background1: var(--fxl-color-dark0);
+  --fxl-color-background2: var(--fxl-color-dark1);
+  --fxl-color-background3: var(--fxl-color-dark2);
+
+  --fxl-font-family: var(--font-family-primary);
+  --fxl-color-primary: var(--color-primary);
+  --fxl-color-primary-light: var(--color-primary);
+  --fxl-color-secondary: var(--color-secondary);
+  --fxl-color-secondary-light: var(--color-secondary-light);
+  --fxl-color-background: var(--fxl-color-dark);
+  --fxl-color-background-hover: var(--color-white);
+  --fxl-color-text-primary: var(--fxl-color-light0);
+  --fxl-color-text-primary-hover: var(--fxl-color-light);
+  --fxl-color-text-secondary: var(--fxl-color-light1);
+
+  color: var(--fxl-color-light);
+  width: 100%;
+  height: 100vh;
+
+  .panel {
+    width: 100%;
+    height: 100%;
+    z-index: 6;
+    background: var(--fxl-color-panel-background);
+    position: relative;
+
+    .overlay {
+      overflow: auto;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 1000;
+      background-color: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(12px);
+      padding: 12px;
+    }
+
+    .layout_centered {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-align: center;
+      &.pre_mint {
+        z-index: 999;
+      }
+
+      .kt_feedback {
+        * {
+          color: #eeeeee;
+        }
+      }
+
+      &.has_success {
+        .kt_feedback {
+          * {
+            color: var(--color-success);
+          }
+        }
+      }
+    }
+  }
+
+  .loadPanel {
+    .load_config_header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+
+  .frame {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    pointer-events: all;
+
+    .unsyncedContainer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      background: rgba(0, 0, 0, 0.5);
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      .unsyncedContent {
+        max-width: 500px;
+        display: flex;
+        align-items: center;
+        gap: var(--fxl-spacing);
+      }
+    }
+  }
+
+  ::selection {
+    color: var(--fxl-color-background);
+    background: var(--fxl-color-primary);
+  }
+  ::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--fxl-color-light2);
+
+    &:hover {
+      background: var(--fxl-color-light1);
+    }
+
+    &:active {
+      background: var(--fxl-color-primary);
+    }
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--fxl-color-dark2);
+  }
+}
+
+
+@media (max-width: $breakpoint-sm) {
+  .root {
+    overflow: hidden;
+  }
+}

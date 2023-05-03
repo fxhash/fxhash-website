@@ -28,6 +28,12 @@ import { ActionListingAcceptedV3 } from "./Actions/ActionListingAcceptedV3"
 import { ActionListingCancelledV3 } from "./Actions/ActionListingCancelledV3"
 import { getObjktUrl } from "../../utils/objkt"
 import { ActionRedeemed } from "./Actions/ActionRedeemed"
+import { ActionMintedTicket } from "./Actions/ActionMintedTicket"
+import { ActionClaimedTicket } from "./Actions/ActionClaimedTicket"
+import { ActionCollectionOffer } from "./Actions/ActionCollectionOffer"
+import { ActionCollectionOfferCancelled } from "./Actions/ActionCollectionOfferCancelled"
+import { ActionCollectionOfferAccepted } from "./Actions/ActionCollectionOfferAccepted"
+import { ActionUpdatedTicketPrice } from "./Actions/ActionUpdatedTicketPrice"
 
 const ActionLinks = {
   gentk: (action: ActionType) => `/gentk/${action.objkt?.id}`,
@@ -59,6 +65,27 @@ export const ActionDefinitions: Record<TokenActionType, ActionDefinition> = {
     render: ActionMintedFrom,
     predecescence: 0,
     link: ActionLinks.gentk,
+  },
+  TICKET_MINTED: {
+    icon: "fa-sharp fa-solid fa-ticket",
+    iconColor: "success",
+    render: ActionMintedTicket,
+    predecescence: 0,
+    link: ActionLinks.token,
+  },
+  TICKED_CLAIMED: {
+    icon: "fa-sharp fa-solid fa-ticket",
+    iconColor: "success",
+    render: ActionClaimedTicket,
+    predecescence: 0,
+    link: ActionLinks.token,
+  },
+  TICKET_PRICE_UPDATED: {
+    icon: "fa-solid fa-ticket",
+    iconColor: "success",
+    render: ActionUpdatedTicketPrice,
+    predecescence: 0,
+    link: ActionLinks.token,
   },
   GENTK_SIGNED: {
     icon: "fa-solid fa-signature",
@@ -193,6 +220,27 @@ export const ActionDefinitions: Record<TokenActionType, ActionDefinition> = {
     predecescence: 0,
     link: ActionLinks.gentk,
   },
+  COLLECTION_OFFER: {
+    icon: "fa-regular fa-arrow-turn-up",
+    iconColor: "success",
+    render: ActionCollectionOffer,
+    predecescence: 0,
+    link: ActionLinks.token,
+  },
+  COLLECTION_OFFER_ACCEPTED: {
+    icon: "fa-regular fa-arrow-right-arrow-left",
+    iconColor: "success",
+    render: ActionCollectionOfferAccepted,
+    predecescence: 0,
+    link: ActionLinks.gentk,
+  },
+  COLLECTION_OFFER_CANCELLED: {
+    icon: "fa-solid fa-xmark",
+    iconColor: "error",
+    render: ActionCollectionOfferCancelled,
+    predecescence: 0,
+    link: ActionLinks.gentk,
+  },
   ARTICLE_MINTED: {
     icon: "fa-sharp fa-solid fa-memo",
     iconColor: "success",
@@ -224,11 +272,9 @@ export const ActionDefinitions: Record<TokenActionType, ActionDefinition> = {
 
   // TODO
   NONE: ActionTodoDefinition,
-  COLLECTION_OFFER: ActionTodoDefinition,
-  COLLECTION_OFFER_CANCELLED: ActionTodoDefinition,
-  COLLECTION_OFFER_ACCEPTED: ActionTodoDefinition,
   AUCTION: ActionTodoDefinition,
   AUCTION_BID: ActionTodoDefinition,
   AUCTION_CANCELLED: ActionTodoDefinition,
   AUCTION_FULFILLED: ActionTodoDefinition,
+  CODEX_UPDATED: ActionTodoDefinition,
 }

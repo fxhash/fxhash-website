@@ -9,9 +9,10 @@ import { Submit } from "../../Form/Submit"
 import { useContractOperation } from "../../../hooks/useContractOperation"
 import { ResonAddOperation } from "../../../services/contract-operations/ReasonAdd"
 import { ContractFeedback } from "../../Feedback/ContractFeedback"
+import { TModContractKey } from "services/contract-operations/Moderate"
 
 interface Props {
-  moderationContract: "token" | "user" | "article"
+  moderationContract: TModContractKey
 }
 export function CreateModerationReason({ moderationContract }: Props) {
   const [reason, setReason] = useState<string>("")

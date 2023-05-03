@@ -22,6 +22,10 @@
   align-items: flex-start;
 }
 
+.paramsTooltip {
+  font-weight: normal;
+  margin-left: var(--spacing-xs);
+}
 .buttons {
   display: flex;
   flex-direction: column;
@@ -29,12 +33,17 @@
   align-items: flex-start;
   width: 100%;
 }
+.actions {
+  gap: 4px;
+  max-width: 400px;
+}
 
 .features_wrapper {
   width: 100%;
 }
 
 .extra_details {
+  // overflow: hidden;
   display: grid;
   grid-template-columns: max-content 1fr;
   align-items: baseline;
@@ -47,6 +56,11 @@
 }
 
 .project_infos {
+  display: flex;
+  flex-direction: column;
+  gap: var(--layout-margin-small-sm);
+  align-items: flex-start;
+  width: 100%;
   h4 {
     font-size: var(--font-size-regular);
   }
@@ -58,6 +72,10 @@
 
 .mobile_align_right {
 
+}
+
+.button_marketplace {
+  flex: 1;
 }
 
 @media (max-width: $breakpoint-md) {

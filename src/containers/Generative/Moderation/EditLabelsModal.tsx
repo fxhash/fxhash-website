@@ -6,12 +6,16 @@ import {
   MultiListItem,
 } from "../../../components/Input/InputMultiList"
 import { genTokLabelDefinitions } from "../../../utils/generative-token"
-import { GenerativeToken } from "../../../types/entities/GenerativeToken"
+import {
+  GenerativeToken,
+  GenerativeTokenVersion,
+} from "../../../types/entities/GenerativeToken"
 import { useState } from "react"
 import { UpdateTokenModOperation } from "../../../services/contract-operations/UpdateTokenMod"
 import { useContractOperation } from "../../../hooks/useContractOperation"
 import { Button } from "../../../components/Button"
 import { ContractFeedback } from "../../../components/Feedback/ContractFeedback"
+import { UpdateTokenModV3Operation } from "services/contract-operations/UpdateTokenModV3"
 
 const labelsList: MultiListItem[] = Object.keys(genTokLabelDefinitions).map(
   (id) => ({
@@ -31,7 +35,9 @@ export function EditLabelsModal({ onClose, token }: Props) {
   const [labels, setLabels] = useState(token.labels)
 
   const { state, loading, success, call, error } = useContractOperation(
-    UpdateTokenModOperation
+    token.version === GenerativeTokenVersion.PRE_V3
+      ? UpdateTokenModOperation
+      : UpdateTokenModV3Operation
   )
 
   return (

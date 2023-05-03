@@ -12,10 +12,22 @@ import { useState, useEffect } from "react"
 import { useRouter } from "next/router"
 import { SettingsModal } from "../../containers/Settings/SettingsModal"
 import { SearchInputControlled } from "../Input/SearchInputControlled"
-import { getProfileLinks, navigationLinks } from "./navigationLinks"
+import {
+  getProfileLinks,
+  navigationLinks,
+  NavigationLinkSingle,
+} from "./navigationLinks"
 import { MobileMenu } from "./MobileMenu"
 import ClientOnly from "../Utils/ClientOnly"
-import useWindowSize, { breakpoints } from "../../hooks/useWindowsSize"
+import useIsMobile from "../../hooks/useIsMobile"
+
+const renderUserNavLink = (profileLink: NavigationLinkSingle) => {
+  return (
+    <Link key={profileLink.key} href={profileLink.href}>
+      <a className={style.profile_button}>{profileLink.label}</a>
+    </Link>
+  )
+}
 
 interface NavigationProps {
   onChangeSearchVisibility: (isVisible: boolean) => void
@@ -27,7 +39,6 @@ export function Navigation({ onChangeSearchVisibility }: NavigationProps) {
   const [opened, setOpened] = useState(false)
   const [isSearchMinimized, setIsSearchMinimized] = useState(true)
   const [settingsModal, setSettingsModal] = useState<boolean>(false)
-  const { width } = useWindowSize()
 
   const handleMinimize = useCallback(
     (isMinimized) => {
@@ -77,10 +88,8 @@ export function Navigation({ onChangeSearchVisibility }: NavigationProps) {
     [userCtx.user]
   )
 
-  const isMobile = useMemo(
-    () => width !== undefined && width <= breakpoints.md,
-    [width]
-  )
+  const isMobile = useIsMobile()
+
   return (
     <>
       <nav className={cs(style.nav, text.h6, { [style.opened]: opened })}>
@@ -170,6 +179,7 @@ export function Navigation({ onChangeSearchVisibility }: NavigationProps) {
           )}
           {userCtx.user && profileLinks ? (
             <Dropdown
+              className={style.user_dropdown}
               ariaLabel="Open user actions"
               itemComp={
                 <div className={cs(style.avatar_btn)}>
@@ -182,18 +192,29 @@ export function Navigation({ onChangeSearchVisibility }: NavigationProps) {
                 </div>
               }
             >
-              {profileLinks.map((profileLink) => (
-                <Link key={profileLink.key} href={profileLink.href}>
-                  <a className={style.nav_button}>{profileLink.label}</a>
-                </Link>
-              ))}
+              {profileLinks.map((profileLink) => {
+                return "subMenu" in profileLink ? (
+                  <div key={profileLink.key} className={style.profile_submenu}>
+                    <Link href={profileLink.href!}>
+                      <a className={style.profile_submenu_title}>
+                        {profileLink.label}
+                      </a>
+                    </Link>
+                    <div className={style.profile_submenu_links}>
+                      {profileLink.subMenu.map(renderUserNavLink)}
+                    </div>
+                  </div>
+                ) : (
+                  <div key={profileLink.key} className={style.profile_single}>
+                    {renderUserNavLink(profileLink)}
+                  </div>
+                )
+              })}
               <Button
                 size="small"
                 color="primary"
                 onClick={handleClickDisconnect}
-                style={{
-                  marginTop: "5px",
-                }}
+                className={style.button_unsync}
               >
                 unsync
               </Button>

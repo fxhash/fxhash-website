@@ -1,34 +1,39 @@
 import React, { memo, useCallback } from "react"
 import cs from "classnames"
 import style from "./ListOffers.module.scss"
-import { ObjktImageAndName } from "../Objkt/ObjktImageAndName"
+import {
+  GenerativeTokenImageAndName,
+  ObjktImageAndName,
+  TokenImageAndName,
+} from "../Objkt/ObjktImageAndName"
 import { UserBadge } from "../User/UserBadge"
 import { DisplayTezos } from "../Display/DisplayTezos"
 import { FloorDifference } from "../Display/FloorDifference"
 import { Button, ButtonState } from "../Button"
 import { DateDistance } from "../Utils/Date/DateDistance"
-import { Offer as IOffer } from "../../types/entities/Offer"
+import { offerTypeGuard, AnyOffer } from "../../types/entities/Offer"
 import { ConnectedUser } from "../../types/entities/User"
 import { Objkt } from "../../types/entities/Objkt"
+import { GenerativeToken } from "types/entities/GenerativeToken"
 
 export interface OfferProps {
-  objkt?: Objkt
-  offer: IOffer
+  offer: AnyOffer
   floor: number | null
-  showObjkt?: boolean
+  showToken?: boolean
   user: ConnectedUser | null
-  onClickAccept: (offer: IOffer) => void
-  onClickCancel: (offer: IOffer) => void
+  onClickAccept: (offer: AnyOffer) => void
+  onClickCancel: (offer: AnyOffer) => void
   cancelState: ButtonState
   acceptState: ButtonState
+  canAccept: Boolean
 }
 
 const _Offer = ({
-  objkt,
   offer,
-  showObjkt,
+  showToken,
   floor,
   user,
+  canAccept = false,
   onClickCancel,
   onClickAccept,
   cancelState,
@@ -43,12 +48,16 @@ const _Offer = ({
   return (
     <div
       className={cs(style.offer, {
-        [style.small_padding]: !!showObjkt,
+        [style.small_padding]: !!showToken,
       })}
     >
-      {showObjkt && (
+      {showToken && (
         <div className={cs(style.objkt)}>
-          <ObjktImageAndName objkt={offer.objkt} size={50} shortName />
+          {offerTypeGuard(offer) ? (
+            <ObjktImageAndName objkt={offer.objkt} size={50} shortName />
+          ) : (
+            <GenerativeTokenImageAndName token={offer.token} shortName />
+          )}
         </div>
       )}
       <div className={cs(style.user_badge_wrapper)}>
@@ -59,7 +68,9 @@ const _Offer = ({
         formatBig={false}
         className={cs(style.price)}
       />
-      <FloorDifference price={offer.price} floor={floor} append="floor" />
+      <div className={style.floor}>
+        <FloorDifference price={offer.price} floor={floor} append="floor" />
+      </div>
       <div className={cs(style.call_btn)}>
         {offer.buyer.id === user?.id ? (
           <Button
@@ -71,7 +82,7 @@ const _Offer = ({
           >
             cancel
           </Button>
-        ) : (objkt?.owner?.id || offer.objkt?.owner?.id) === user?.id ? (
+        ) : canAccept ? (
           <Button
             type="button"
             color="secondary"
@@ -79,7 +90,7 @@ const _Offer = ({
             onClick={handleClickAccept}
             state={acceptState}
           >
-            accept
+            {!offerTypeGuard(offer) ? "select & " : ""}accept
           </Button>
         ) : null}
       </div>

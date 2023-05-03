@@ -10,14 +10,17 @@ import { Redemption } from "./Redemption"
 import { Redeemable } from "./Redeemable"
 
 export interface Objkt {
-  id: number
+  id: string
   version: 0 | 1
   issuer: GenerativeToken
   owner?: User | null
+  minter?: User | null
   assigned?: boolean
   generationHash?: string
+  inputBytes?: string | null
   duplicate?: boolean
   iteration?: number
+  mintedPrice?: number
   tags: string[]
   name?: string
   slug?: string

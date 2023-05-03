@@ -13,8 +13,10 @@ import { Spacing } from "../../components/Layout/Spacing"
 import { RevealIframe } from "../../components/Reveal/RevealIframe"
 
 interface Props {
-  hash: string
   generativeUri: string
+  hash: string
+  minter: string
+  params?: string
   previeweUri?: string
   features?: TokenFeature[] | null
 }
@@ -26,17 +28,30 @@ interface Props {
  *  - display a loader while <iframe> is loading
  *  - once iframe is loaded, reveal it with a flipping effect
  */
-export function Reveal({ hash, generativeUri, previeweUri, features }: Props) {
+export function Reveal({
+  hash,
+  minter,
+  params,
+  generativeUri,
+  features,
+}: Props) {
   const iframeRef = useRef<HTMLIFrameElement>(null)
   const viewUrl = useMemo<string>(() => {
+    let url
     // the old system doesn't include fxhash in the generative Uri,
     // so we have to add it if needed
     if (generativeUri.includes("fxhash")) {
-      return ipfsGatewayUrl(generativeUri)
+      url = ipfsGatewayUrl(generativeUri)
     } else {
-      return `${ipfsGatewayUrl(generativeUri)}/?fxhash=${hash}`
+      url = `${ipfsGatewayUrl(generativeUri)}/?fxhash=${hash}`
     }
-  }, [generativeUri])
+    url += `&fxminter=${minter}`
+    // append params if defined
+    if (params && params.length > 0) {
+      url += `&fxparams=${params}`
+    }
+    return url
+  }, [generativeUri, hash, minter, params])
 
   const reloadIframe = () => {
     if (iframeRef.current) {

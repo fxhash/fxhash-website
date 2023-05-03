@@ -1,0 +1,10 @@
+.container {
+  & > div + div {
+    margin-top: 16px;
+  }
+
+  .top_bar {
+    display: flex;
+    justify-content: flex-end;
+  }
+}

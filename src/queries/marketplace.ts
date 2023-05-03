@@ -77,11 +77,13 @@ export const Qu_genTokActions = gql`
         redeemable {
           address
         }
+        ticketId
         objkt {
           id
           name
           iteration
         }
+        ticketId
         token {
           id
           name

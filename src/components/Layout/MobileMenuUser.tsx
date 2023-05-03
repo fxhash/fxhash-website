@@ -1,4 +1,4 @@
-import React, { memo } from "react"
+import React, { Fragment, memo, useCallback } from "react"
 import style from "./MobileMenuUser.module.scss"
 import { NavigationLink, NavigationLinkSingle } from "./navigationLinks"
 import ReactDOM from "react-dom"
@@ -11,7 +11,7 @@ import { Button } from "../Button"
 
 interface MobileMenuUserProps {
   open: boolean
-  links: NavigationLinkSingle[]
+  links: NavigationLink[]
   onClose: () => void
   user: ConnectedUser
   onClickDisconnect: () => void
@@ -24,6 +24,24 @@ const _MobileMenuUser = ({
   links,
   onClickDisconnect,
 }: MobileMenuUserProps) => {
+  const renderProfileLink = useCallback(
+    (profileLink, isTitle) => {
+      return (
+        <Link key={profileLink.key} href={profileLink.href}>
+          <a
+            className={cs(style.nav_button, {
+              [style.button_title]: isTitle,
+            })}
+            onClick={onClose}
+          >
+            {profileLink.label}
+          </a>
+        </Link>
+      )
+    },
+    [onClose]
+  )
+
   return ReactDOM.createPortal(
     <div
       className={cs(style.container, { [style["container--open"]]: open })}
@@ -43,15 +61,22 @@ const _MobileMenuUser = ({
           <i aria-hidden className="fas fa-caret-down" />
         </button>
         <div className={style.links}>
-          {links.map((profileLink) => (
-            <Link key={profileLink.key} href={profileLink.href}>
-              <a className={style.nav_button} onClick={onClose}>
-                {profileLink.label}
-              </a>
-            </Link>
-          ))}
+          {links.map((profileLink) => {
+            return "subMenu" in profileLink ? (
+              <Fragment key={profileLink.key}>
+                <div className={style.divider} />
+                {renderProfileLink(profileLink, true)}
+                {profileLink.subMenu.map((link) =>
+                  renderProfileLink(link, false)
+                )}
+              </Fragment>
+            ) : (
+              renderProfileLink(profileLink, false)
+            )
+          })}
         </div>
         <Button
+          className={style.button_unsync}
           type="button"
           size="small"
           color="primary"

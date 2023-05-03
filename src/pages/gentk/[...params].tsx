@@ -65,9 +65,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     token = null
 
   if (idStr) {
-    const id = parseInt(idStr as string)
-    if (id === 0 || id) {
-      variables.id = id
+    const id = idStr as string
+    if (id.length) {
+      // handle V3 gentk IDs (e.g. FX0-1234) as well as legacy IDs (e.g. 1234)
+      variables.id = id.startsWith("FX") ? id : parseInt(id)
     }
   } else if (slug) {
     variables.slug = slug

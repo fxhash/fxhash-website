@@ -1,5 +1,3 @@
-import style from "./CardsExplorer.module.scss"
-import cs from "classnames"
 import {
   FunctionComponent,
   useState,
@@ -10,6 +8,7 @@ import {
 import { SettingsContext } from "../../context/Theme"
 import { useInView } from "react-intersection-observer"
 import { useRouter } from "next/router"
+import useIsMobile from "../../hooks/useIsMobile"
 
 const DEFAULT_SIZE = 270
 
@@ -32,27 +31,21 @@ interface PropsChildren {
 }
 
 interface Props {
-  filtersVisibleDefault?: boolean
   cardSizeScope?: string
   children: FunctionComponent<PropsChildren>
 }
 
-export function CardsExplorer({
-  filtersVisibleDefault = false,
-  cardSizeScope,
-  children,
-}: Props) {
+export function CardsExplorer({ cardSizeScope, children }: Props) {
   const settings = useContext(SettingsContext)
   const router = useRouter()
+  const isMobile = useIsMobile()
 
   const { ref: refCardsContainer, inView: inViewCardsContainer } = useInView({
     rootMargin: "-300px 0px -100px",
   })
 
   // is the filters panel visible ?
-  const [filtersVisible, setFiltersVisible] = useState<boolean>(
-    filtersVisibleDefault
-  )
+  const [filtersVisible, setFiltersVisible] = useState<boolean>(false)
   // is the search loading ?
   const [searchLoading, setSearchLoading] = useState<boolean>(false)
 

@@ -11,6 +11,7 @@ import { TInputMintIssuer } from "../services/parameters-builder/mint-issuer/inp
 import { TInputPricingDetails } from "../services/parameters-builder/pricing/input"
 import {
   GenerativeToken,
+  GenerativeTokenVersion,
   GenTokFlag,
   GenTokLabel,
   GenTokLabelDefinition,
@@ -26,7 +27,7 @@ import {
   CaptureTriggerMode,
   MintGenerativeData,
 } from "../types/Mint"
-import { getIpfsSlash } from "./ipfs"
+import { getIpfsSlash, ipfsUrlWithHashAndParams } from "./ipfs"
 import { clamp } from "./math"
 import { tagsFromString } from "./strings"
 import {
@@ -96,6 +97,7 @@ export function generativeFromMintParams(
 ): GenerativeToken {
   return {
     id: 0,
+    version: GenerativeTokenVersion.V3,
     author: author,
     name: metadata.name,
     flag: GenTokFlag.NONE,
@@ -153,6 +155,10 @@ export function generativeFromMintParams(
     actions: [],
     createdAt: new Date().toISOString(),
     redeemables: [],
+    underAuctionMintTickets: [],
+    mintTickets: [],
+    mintTicketSettings: null,
+    inputBytesSize: 0,
   }
 }
 
@@ -194,19 +200,26 @@ export function generativeMetadataFromMintForm(
     childrenDescription:
       data.informations!.childrenDescription || data.informations!.description,
     tags: tagsFromString(data.informations!.tags),
-    artifactUri: `${getIpfsSlash(data.cidUrlParams!)}?fxhash=${
-      data.previewHash
-    }`,
+    artifactUri: ipfsUrlWithHashAndParams(
+      data.cidUrlParams!,
+      data.previewHash!,
+      data.previewMinter!,
+      data.previewInputBytes,
+      (cid) => `ipfs://${cid}`
+    ),
     displayUri: getIpfsSlash(data.cidPreview!),
     thumbnailUri: getIpfsSlash(data.cidThumbnail!),
     generativeUri: getIpfsSlash(data.cidUrlParams!),
     authenticityHash: data.authHash2!,
     previewHash: data.previewHash!,
+    previewMinter: data.previewMinter,
+    previewInputBytes: data.previewInputBytes!,
     capture,
     settings: data.settings ?? null,
     symbol: "FXGEN",
     decimals: 0,
-    version: "0.2",
+    version: "3.0.1",
+    params: data.params!,
   }
 }
 
@@ -236,6 +249,7 @@ export function generativeFromMintForm(
 
   return {
     id: 0,
+    version: GenerativeTokenVersion.V3,
     author: data.collaboration ?? user,
     name: data.informations!.name,
     flag: GenTokFlag.NONE,
@@ -294,6 +308,10 @@ export function generativeFromMintForm(
     actions: [],
     createdAt: new Date().toISOString(),
     redeemables: [],
+    underAuctionMintTickets: [],
+    mintTickets: [],
+    mintTicketSettings: null,
+    inputBytesSize: 0,
   }
 }
 

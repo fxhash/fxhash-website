@@ -7,7 +7,7 @@ import {
 import { FxhashContracts } from "../../types/Contracts"
 import { ContractOperation } from "./ContractOperation"
 
-type TModContractKey = "user" | "token" | "article"
+export type TModContractKey = "user" | "token" | "token_v3" | "article"
 
 export type TModerateParams = {
   contract: TModContractKey
@@ -19,6 +19,7 @@ export type TModerateParams = {
 export const mapModKtKeyToContract: Record<TModContractKey, string> = {
   user: FxhashContracts.USER_MODERATION,
   token: FxhashContracts.MODERATION,
+  token_v3: FxhashContracts.MODERATION_V3,
   article: FxhashContracts.ARTICLE_MODERATION,
 }
 
@@ -45,7 +46,11 @@ export class ModerateOperation extends ContractOperation<TModerateParams> {
     }
 
     // now build contextual parameters based on target contract
-    if (contract === "token" || contract === "article") {
+    if (
+      contract === "token" ||
+      contract === "token_v3" ||
+      contract === "article"
+    ) {
       params.token_id = entityId
     } else {
       params.address = entityId

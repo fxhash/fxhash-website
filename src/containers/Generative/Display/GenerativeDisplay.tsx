@@ -45,6 +45,7 @@ interface Props {
 export function GenerativeDisplay({ token, offlineMode = false }: Props) {
   const [showDescription, setShowDescription] = useState(false)
   const handleShowDescription = useCallback(() => setShowDescription(true), [])
+
   return (
     <>
       <div className={cs(style.artwork_header_mobile, layout.break_words)}>
@@ -135,9 +136,7 @@ export function GenerativeDisplay({ token, offlineMode = false }: Props) {
               Published on{" "}
               {format(new Date(token.createdAt), "MMMM d, yyyy' at 'HH:mm")}
             </span>
-            {token.labels && (
-              <Labels className={style.labels} labels={token.labels!} />
-            )}
+            {token.labels && <Labels className={style.labels} token={token} />}
           </div>
 
           <Spacing size="large" sm="regular" />
@@ -166,6 +165,14 @@ export function GenerativeDisplay({ token, offlineMode = false }: Props) {
               isRedeemable={token.redeemables && token.redeemables.length > 0}
               urlRedeemable={`/generative/${token.id}/redeem`}
             />
+            {token.mintTicketSettings && (
+              <>
+                <strong>Ticket Grace Period</strong>
+                <span className={style.mobile_align_right}>
+                  {token.mintTicketSettings.gracingPeriod} days
+                </span>
+              </>
+            )}
             <ListSplits name="Primary split" splits={token.splitsPrimary} />
             <strong>Royalties</strong>
             <span className={style.mobile_align_right}>

@@ -1,56 +1,44 @@
 import type { NextPage } from "next"
 import Head from "next/head"
-import Link from "next/link"
-import styles from "../styles/Home.module.scss"
-import layout from "../styles/Layout.module.scss"
-import cs from "classnames"
-import Colors from "../styles/Colors.module.css"
-import { createApolloClient } from "../services/ApolloClient"
+import {
+  createApolloClient,
+  createApolloClientEvent,
+} from "../services/ApolloClient"
 import { gql } from "@apollo/client"
 import {
   GenerativeToken,
   GenerativeTokenFilters,
   GenTokFlag,
 } from "../types/entities/GenerativeToken"
-import { ArtworkPreview } from "../components/Artwork/Preview"
-import { Button } from "../components/Button"
-import { Spacing } from "../components/Layout/Spacing"
-import { MintProgress } from "../components/Artwork/MintProgress"
-import { UserBadge } from "../components/User/UserBadge"
-import { SectionHeader } from "../components/Layout/SectionHeader"
-import { CardsContainer } from "../components/Card/CardsContainer"
-import { GenerativeTokenCard } from "../components/Card/GenerativeTokenCard"
 import { Listing } from "../types/entities/Listing"
-import { ObjktCard } from "../components/Card/ObjktCard"
-import nl2br from "react-nl2br"
-import { TitleHyphen } from "../components/Layout/TitleHyphen"
-import { getGenerativeTokenUrl } from "../utils/generative-token"
-import React, { useCallback, useContext, useState } from "react"
-import { SettingsContext } from "../context/Theme"
-import { PresentationHeader } from "../containers/Home/PresentationHeader"
+import React from "react"
 import {
   Frag_GenAuthor,
   Frag_GenTokenInfo,
 } from "../queries/fragments/generative-token"
 import { Frag_MediaImage } from "../queries/fragments/media"
 import { Frag_UserBadge } from "../queries/fragments/user"
-import { Clamp } from "../components/Clamp/Clamp"
+import { Homepage } from "../containers/Homepage/Homepage"
+import { NFTArticle } from "../types/entities/Article"
+import { Frag_EventCard } from "../queries/fragments/event"
+import { LiveMintingEvent } from "../types/entities/LiveMinting"
 
 interface Props {
   randomGenerativeToken: GenerativeToken | null
   generativeTokens: GenerativeToken[]
+  incomingTokens: GenerativeToken[]
+  articles: NFTArticle[]
   listings: Listing[]
+  events: LiveMintingEvent[]
 }
 
 const Home: NextPage<Props> = ({
   randomGenerativeToken,
   generativeTokens,
-  listings,
+  incomingTokens,
+  articles,
+  events,
 }) => {
-  const settings = useContext(SettingsContext)
-  const [showDescription, setShowDescription] = useState(false)
-  const handleShowDescription = useCallback(() => setShowDescription(true), [])
-
   return (
     <>
       <Head>
@@ -77,150 +65,13 @@ const Home: NextPage<Props> = ({
           content="https://www.fxhash.xyz/images/og/og1.jpg"
         />
       </Head>
-
-      <Spacing size="3x-large" sm="x-large" />
-
-      <section className={cs(layout["padding-big"])}>
-        <PresentationHeader />
-      </section>
-
-      <Spacing size="6x-large" sm="3x-large" />
-
-      {randomGenerativeToken && (
-        <>
-          <section
-            className={cs(
-              styles["random-artwork"],
-              layout["padding-big"],
-              layout.break_words
-            )}
-          >
-            <div className={cs(styles["artwork-infos"])}>
-              <span className={cs(styles["section-subtitle"], Colors.gray)}>
-                — a random artwork
-              </span>
-              <Spacing size="4x-large" sm="regular" />
-              <div>
-                <h3>{randomGenerativeToken.name}</h3>
-                <Spacing size="x-small" sm="regular" />
-                <UserBadge user={randomGenerativeToken.author} size="big" />
-                <Spacing size="x-small" sm="regular" />
-
-                <div className={cs(styles["artwork-details"])}>
-                  <div className={cs(styles.mint_progress)}>
-                    <MintProgress token={randomGenerativeToken} />
-                  </div>
-
-                  <Spacing size="2x-large" sm="regular" />
-
-                  <Link
-                    href={getGenerativeTokenUrl(randomGenerativeToken)}
-                    passHref
-                  >
-                    <Button
-                      className={styles.button}
-                      isLink={true}
-                      size="regular"
-                    >
-                      open project
-                    </Button>
-                  </Link>
-
-                  <Spacing size="large" sm="regular" />
-
-                  <Clamp
-                    className={cs(styles.description, {
-                      [styles.description_opened]: showDescription,
-                    })}
-                    onClickCTA={handleShowDescription}
-                    labelCTA="read more"
-                  >
-                    {nl2br(randomGenerativeToken.metadata.description)}
-                  </Clamp>
-                </div>
-              </div>
-            </div>
-
-            <div className={cs(styles["artwork-container"])}>
-              <ArtworkPreview
-                image={randomGenerativeToken.captureMedia}
-                ipfsUri={randomGenerativeToken.metadata?.displayUri}
-                loading={true}
-              />
-            </div>
-          </section>
-
-          <Spacing size="6x-large" sm="3x-large" />
-          <Spacing size="6x-large" sm="none" />
-        </>
-      )}
-
-      <section>
-        <SectionHeader className={cs(styles.section_header)}>
-          <TitleHyphen>recent works</TitleHyphen>
-          <Link href="/explore" passHref>
-            <Button
-              isLink={true}
-              iconComp={<i aria-hidden className="fas fa-arrow-right" />}
-              iconSide="right"
-              color="transparent"
-            >
-              explore
-            </Button>
-          </Link>
-        </SectionHeader>
-
-        <Spacing size="3x-large" sm="regular" />
-
-        <main className={cs(layout["padding-big"])}>
-          <CardsContainer className={cs(styles["row-responsive-limiter"])}>
-            {generativeTokens.map((token) => (
-              <GenerativeTokenCard
-                key={token.id}
-                token={token}
-                displayPrice={settings.displayPricesCard}
-                displayDetails={settings.displayInfosGenerativeCard}
-              />
-            ))}
-          </CardsContainer>
-        </main>
-      </section>
-
-      <Spacing size="6x-large" />
-      <Spacing size="6x-large" sm="none" />
-
-      <section>
-        <SectionHeader className={cs(styles.section_header)}>
-          <div>
-            <div className={styles.late_party}>late to the party ?</div>
-            <TitleHyphen>marketplace</TitleHyphen>
-          </div>
-          <Link href="/marketplace" passHref>
-            <Button
-              isLink={true}
-              iconComp={<i aria-hidden className="fas fa-arrow-right" />}
-              iconSide="right"
-              color="transparent"
-            >
-              marketplace
-            </Button>
-          </Link>
-        </SectionHeader>
-
-        <Spacing size="3x-large" sm="regular" />
-
-        <main className={cs(layout["padding-big"])}>
-          <CardsContainer className={cs(styles["row-responsive-limiter"])}>
-            {listings.map((listing) => (
-              <ObjktCard key={listing.objkt.id} objkt={listing.objkt} />
-            ))}
-          </CardsContainer>
-        </main>
-      </section>
-
-      <Spacing size="6x-large" />
-      <Spacing size="6x-large" sm="none" />
-      <Spacing size="6x-large" sm="none" />
+      <Homepage
+        events={events}
+        articles={articles}
+        randomGenerativeToken={randomGenerativeToken}
+        generativeTokens={generativeTokens}
+        incomingTokens={incomingTokens}
+      />
     </>
   )
 }
@@ -231,44 +82,75 @@ export async function getServerSideProps() {
     take: number
     filters: GenerativeTokenFilters
   }
+  const now = new Date()
+  const eventApolloClient = createApolloClientEvent()
+  const { data: dataEvent } = await eventApolloClient.query<{
+    events: LiveMintingEvent[]
+  }>({
+    query: gql`
+      ${Frag_EventCard}
+      query Events($endAfter: DateTime) {
+        events(
+          take: 4
+          where: { endsAt: { gte: $endAfter }, status: { equals: PUBLISHED } }
+          orderBy: { startsAt: asc }
+        ) {
+          id
+          ...EventCard
+        }
+      }
+    `,
+    variables: {
+      endAfter: now.toISOString(),
+    },
+  })
+
   const apolloClient = createApolloClient()
-  const { data, error } = await apolloClient.query<any, IQueryVariables>({
+  const { data } = await apolloClient.query<any, IQueryVariables>({
     query: gql`
       ${Frag_GenAuthor}
       ${Frag_MediaImage}
       ${Frag_GenTokenInfo}
       ${Frag_UserBadge}
       query Query($skip: Int, $take: Int, $filters: GenerativeTokenFilter) {
-        randomGenerativeToken {
-          ...TokenInfo
-          metadata
-          metadataUri
-        }
-        generativeTokens(skip: $skip, take: $take, filters: $filters) {
-          ...TokenInfo
-        }
-        listings(skip: $skip, take: $take) {
+        randomTopGenerativeToken {
           id
-          price
-          objkt {
+          name
+          slug
+          ...Author
+          supply
+          objkts(take: 10) {
             id
-            name
+            iteration
             slug
             metadata
             captureMedia {
               ...MediaImage
             }
-            issuer {
-              labels
-              ...Author
-            }
             owner {
               ...UserBadgeInfos
             }
-            activeListing {
-              id
-              price
-            }
+          }
+        }
+        generativeTokens(skip: $skip, take: $take, filters: $filters) {
+          ...TokenInfo
+        }
+        incomingTokens: generativeTokens(
+          take: 4
+          filters: { mintOpened_eq: false, flag_in: [CLEAN, NONE] }
+          sort: { mintOpensAt: "ASC" }
+        ) {
+          id
+          ...TokenInfo
+          lockEnd
+          mintOpensAt
+        }
+        articles(take: 3, sort: { createdAt: "DESC" }) {
+          id
+          title
+          slug
+          author {
+            ...UserBadgeInfos
           }
         }
       }
@@ -276,7 +158,7 @@ export async function getServerSideProps() {
     fetchPolicy: "no-cache",
     variables: {
       skip: 0,
-      take: 5,
+      take: 10,
       filters: {
         mintOpened_eq: true,
         flag_in: [GenTokFlag.CLEAN, GenTokFlag.NONE],
@@ -286,9 +168,11 @@ export async function getServerSideProps() {
 
   return {
     props: {
-      randomGenerativeToken: data.randomGenerativeToken,
+      randomGenerativeToken: data.randomTopGenerativeToken,
       generativeTokens: data.generativeTokens,
-      listings: data.listings,
+      incomingTokens: data.incomingTokens,
+      articles: data.articles,
+      events: dataEvent.events || [],
     },
   }
 }

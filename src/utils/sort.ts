@@ -122,3 +122,16 @@ export const sortOptionsUsers: IOptions[] = [
   ),
   sortOptionWithCustomLabel(sortOptions["createdAt-asc"], "oldest registered"),
 ]
+
+export const sortOptionsMintTickets: IOptions[] = [
+  {
+    label: "tax paid until (soonest)",
+    value: "taxationPaidUntil-asc",
+  },
+  {
+    label: "tax paid until (latest)",
+    value: "taxationPaidUntil-desc",
+  },
+  sortOptions["price-asc"],
+  sortOptions["price-desc"],
+]

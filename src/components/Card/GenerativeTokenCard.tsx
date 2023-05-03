@@ -4,6 +4,8 @@ import cs from "classnames"
 import {
   GenerativeToken,
   GenTokLabel,
+  GenTokLabelGroup,
+  GenTokLabel_Params,
 } from "../../types/entities/GenerativeToken"
 import colors from "../../styles/Colors.module.css"
 import text from "../../styles/Text.module.css"
@@ -19,6 +21,7 @@ import { EntityBadge } from "../User/EntityBadge"
 import { MintingState } from "../GenerativeToken/MintingState/MintingState"
 import { DisplayTezos } from "../Display/DisplayTezos"
 import { Icon } from "components/Icons/Icon"
+import { Label } from "components/GenerativeToken/Label/Label"
 
 interface Props {
   token: GenerativeToken
@@ -75,6 +78,12 @@ export function GenerativeTokenCard({
               <Spacing size="2x-small" sm="x-small" />
               {token.balance > 0 && positionMintingState === "inside" && (
                 <MintingState token={token} />
+              )}
+
+              {token.inputBytesSize > 0 && (
+                <div className={cs(style.labels)}>
+                  <Label definition={GenTokLabel_Params} />
+                </div>
               )}
             </div>
 

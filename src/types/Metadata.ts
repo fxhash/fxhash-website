@@ -81,7 +81,14 @@ export interface GenerativeTokenMetadata {
   // ADDED STARTING FROM v0.2
   // a fake transaction hash used for the preview
   previewHash?: string
+  previewMinter?: string
+  previewInputBytes?: string
   version?: string
+  // ADDED STARTING FROM v0.3
+  params: {
+    definition: any
+    inputBytesSize: number
+  }
 }
 
 export interface ObjktMetadata extends GenerativeTokenMetadata {

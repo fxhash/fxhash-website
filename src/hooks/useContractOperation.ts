@@ -1,3 +1,4 @@
+import { TzktOperation } from "./../types/Tzkt"
 import type { WalletOperation } from "@taquito/taquito"
 import { useContext, useRef, useState } from "react"
 import { UserContext } from "../containers/UserProvider"
@@ -9,12 +10,18 @@ import {
   TContractOperationHookReturn,
 } from "../types/Contracts"
 import { useIsMounted } from "../utils/hookts"
+import { createOperationAppliedAlert } from "components/Alerts/OperationAppliedAlert"
+
+interface OptionsContractOperation {
+  onSuccess?: (data: any) => void
+}
 
 /**
  * A
  */
 export function useContractOperation<Params>(
-  OperationClass: TContractOperation<Params>
+  OperationClass: TContractOperation<Params>,
+  options: OptionsContractOperation = {}
 ): TContractOperationHookReturn<Params> {
   const [state, setState] = useState<ContractOperationStatus>(
     ContractOperationStatus.NONE
@@ -24,6 +31,7 @@ export function useContractOperation<Params>(
   const [error, setError] = useState<boolean>(false)
   const [opHash, setOpHash] = useState<string | null>(null)
   const [operation, setOperation] = useState<WalletOperation | null>(null)
+  const [opData, setOpData] = useState<TzktOperation[] | null>(null)
   const [params, setParams] = useState<Params | null>(null)
   const counter = useRef<number>(0)
   const isMounted = useIsMounted()
@@ -37,6 +45,7 @@ export function useContractOperation<Params>(
     setError(false)
     setOpHash(null)
     setOperation(null)
+    setOpData(null)
     setParams(null)
     setState(ContractOperationStatus.NONE)
   }
@@ -48,6 +57,7 @@ export function useContractOperation<Params>(
     setError(false)
     setOpHash(null)
     setOperation(null)
+    setOpData(null)
     setParams(params)
     setState(ContractOperationStatus.NONE)
 
@@ -70,6 +80,12 @@ export function useContractOperation<Params>(
           if (data?.operation) {
             setOperation(data.operation)
           }
+          if (data?.opData) {
+            setOpData(data.opData)
+          }
+          if (options.onSuccess) {
+            options.onSuccess(data)
+          }
         } else if (status === ContractOperationStatus.ERROR) {
           setLoading(false)
           setError(true)
@@ -78,19 +94,7 @@ export function useContractOperation<Params>(
 
       // even if not mounted anymore we push the messages to message center
       if (status === ContractOperationStatus.INJECTED) {
-        messageCenter.addMessages([
-          {
-            type: "warning",
-            title: "Indexer delay",
-            content:
-              "We've added a 2 minutes delay to our indexer to protect against blockchain rollbacks occuring since last protocol update. It will take about 2 minutes for your operation to be visible on the website.",
-          },
-          {
-            type: "success",
-            title: `Operation applied`,
-            content: `${data.message}`,
-          },
-        ])
+        messageCenter.addMessage(createOperationAppliedAlert(data.message))
       } else if (status === ContractOperationStatus.ERROR) {
         messageCenter.addMessage({
           type: "error",
@@ -126,6 +130,7 @@ export function useContractOperation<Params>(
     params,
     opHash,
     operation,
+    opData,
     loading,
     success,
     call,

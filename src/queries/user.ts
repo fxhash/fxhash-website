@@ -3,6 +3,8 @@ import { Frag_GenAuthor, Frag_GenPricing } from "./fragments/generative-token"
 import { Frag_ArticleInfos, Frag_ArticleInfosAction } from "./fragments/article"
 import { Frag_MediaImage } from "./fragments/media"
 import { Frag_UserBadge } from "./fragments/user"
+import { Frag_UserOffer } from "./fragments/offer"
+import { Frag_UserCollectionOffer } from "./fragments/collection-offer"
 
 export const Qu_user = gql`
   ${Frag_UserBadge}
@@ -47,6 +49,60 @@ export const Qu_userLight = gql`
   }
 `
 
+export const Qu_userDailyAlerts = gql`
+  query User($id: String, $name: String) {
+    user(id: $id, name: $name) {
+      id
+      mintTickets {
+        id
+        taxationPaidUntil
+      }
+    }
+  }
+`
+
+export const Qu_userFrequentAlerts = gql`
+  query User($id: String, $name: String) {
+    user(id: $id, name: $name) {
+      id
+      allOffersReceived(filters: { active_eq: true }) {
+        ... on CollectionOffer {
+          id
+          createdAt
+          price
+          buyer {
+            id
+          }
+          token {
+            id
+            name
+            marketStats {
+              floor
+            }
+          }
+        }
+        ... on Offer {
+          id
+          createdAt
+          price
+          buyer {
+            id
+          }
+          objkt {
+            id
+            name
+            issuer {
+              marketStats {
+                floor
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`
+
 export const Qu_userGenTokens = gql`
   ${Frag_GenAuthor}
   ${Frag_GenPricing}
@@ -61,6 +117,7 @@ export const Qu_userGenTokens = gql`
         balance
         name
         thumbnailUri
+        inputBytesSize
         captureMedia {
           ...MediaImage
         }
@@ -91,6 +148,7 @@ export const Qu_userEntireCollection = gql`
         rarity
         iteration
         generationHash
+        inputBytes
         issuer {
           name
           flag
@@ -270,6 +328,7 @@ export const Qu_userActions = gql`
           name
           iteration
         }
+        ticketId
         article {
           id
           ...ArticleInfosAction
@@ -311,39 +370,31 @@ export const Qu_userSales = gql`
   }
 `
 
-export const Qu_userOffersReceived = gql`
+export const Qu_userMintTickets = gql`
   ${Frag_MediaImage}
-  query UserOffersReceived($id: String!, $filters: OfferFilter) {
+  query UserMintTickets($id: String!) {
     user(id: $id) {
       id
-      offersReceived(filters: $filters) {
+      mintTickets {
         id
         price
         createdAt
-        buyer {
-          id
-          name
-        }
-        objkt {
-          id
-          version
-          name
+        taxationLocked
+        taxationPaidUntil
+        taxationStart
+        settings {
+          gracingPeriod
+          metadataUri
           metadata
+        }
+        token {
+          id
+          slug
+          name
+          flag
+          thumbnailUri
           captureMedia {
             ...MediaImage
-          }
-          activeListing {
-            id
-            version
-          }
-          owner {
-            id
-          }
-          issuer {
-            id
-            marketStats {
-              floor
-            }
           }
         }
       }
@@ -351,30 +402,75 @@ export const Qu_userOffersReceived = gql`
   }
 `
 
+export const Qu_userOffersReceived = gql`
+  ${Frag_UserCollectionOffer}
+  ${Frag_UserOffer}
+  query UserOffersReceived(
+    $id: String!
+    $filters: OfferFilter
+    $sort: OffersSortInput
+  ) {
+    user(id: $id) {
+      id
+      allOffersReceived(filters: $filters, sort: $sort) {
+        ... on CollectionOffer {
+          ...UserCollectionOffer
+        }
+        ... on Offer {
+          ...UserOffer
+        }
+      }
+    }
+  }
+`
+
 export const Qu_userOffersSent = gql`
-  ${Frag_MediaImage}
+  ${Frag_UserCollectionOffer}
+  ${Frag_UserOffer}
   query UserOffersSent($id: String!, $filters: OfferFilter) {
     user(id: $id) {
       id
-      offersSent(filters: $filters) {
+      allOffersSent(filters: $filters) {
+        ... on CollectionOffer {
+          ...UserCollectionOffer
+        }
+        ... on Offer {
+          ...UserOffer
+        }
+      }
+    }
+  }
+`
+
+export const Qu_userAcceptCollectionOffer = gql`
+  ${Frag_MediaImage}
+  query UserAcceptCollectionOffer($userId: String!, $issuerId: Int!) {
+    user(id: $userId) {
+      id
+      objkts(
+        filters: { issuer_in: [$issuerId] }
+        sort: { iteration: "ASC" }
+        take: 50
+      ) {
         id
-        price
-        createdAt
-        buyer {
+        version
+        name
+        iteration
+        metadata
+        captureMedia {
+          ...MediaImage
+        }
+        owner {
           id
         }
-        objkt {
+        issuer {
+          marketStats {
+            floor
+          }
+        }
+        activeListing {
           id
           version
-          name
-          metadata
-          captureMedia {
-            ...MediaImage
-          }
-          owner {
-            id
-            name
-          }
         }
       }
     }

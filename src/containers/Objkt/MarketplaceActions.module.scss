@@ -1,15 +1,23 @@
 @import "../../styles/Variables";
 
+.listing_container {
+  width: 100%;
+}
 .inputs {
   display: flex;
   align-items: center;
-  gap: 15px;
+  width: 100%;
+  gap: var(--spacing-xxs);
+  .input {
+    width: 100%;
+  }
 }
 
 .lock_container {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 1px;
+  width: 100%;
 }
 
 .infos {
@@ -17,8 +25,49 @@
   font-size: var(--font-size-small);
   margin-bottom: 12px;
 }
-.button_purchase {}
+.button_purchase {
+  flex: 1;
+}
 .button_purchase_content {}
+.button_listing {
+  flex-shrink: 0;
+}
+.button {
+  width: 100%;
+}
+.buttons_pay {
+  width: 100%;
+  margin-top: 2px;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  transform: scaleY(0);
+  transition: 0.2s all ease-out;
+  height: 0;
+  transform-origin: top;
+  button {
+    border: 1px solid var(--color-gray-vvlight);
+    border-radius: 0;
+    box-shadow: none;
+    background-color: var(--color-gray-vvlight);
+    color: var(--color-secondary);
+    font-size: var(--font-size-big);
+    font-weight: 500;
+    padding: 12px 8px;
+    cursor: pointer;
+    transition: 0.3s all ease-out;
+    &:hover {
+      background-color: var(--color-gray-vvvlight);
+    }
+  }
+  &.open {
+    height: auto;
+    transform: scaleY(1);
+  }
+}
+.button_collection_offer {
+  width: 100%;
+}
 
 @media (max-width: $breakpoint-sm) {
   .inputs {
@@ -32,5 +81,8 @@
   }
   .button_purchase_content {
     display: block;
+  }
+  .button_listing {
+    width: 100%;
   }
 }

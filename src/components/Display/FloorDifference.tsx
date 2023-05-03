@@ -1,4 +1,3 @@
-import style from "./FloorDifference.module.scss"
 import cs from "classnames"
 import colors from "../../styles/Colors.module.css"
 import { useMemo } from "react"
@@ -19,7 +18,7 @@ export function FloorDifference({ price, floor, append }: Props) {
   )
 
   return (
-    <div>
+    <span>
       {ratio !== null ? (
         ratio < 1 ? (
           <strong className={cs(colors.error)}>
@@ -33,6 +32,6 @@ export function FloorDifference({ price, floor, append }: Props) {
       ) : (
         "/"
       )}
-    </div>
+    </span>
   )
 }

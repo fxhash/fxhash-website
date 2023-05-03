@@ -35,11 +35,13 @@ export function transformPricingBigNumber(
     return {
       pricing_id: id,
       details: transformPricingFixedBigNumbers(bnInput.details),
+      lock_for_reserves: bnInput.lock_for_reserves,
     }
   } else if (id === 1) {
     return {
       pricing_id: id,
       details: transformPricingDutchAuctionBigNumbers(bnInput.details as any),
+      lock_for_reserves: bnInput.lock_for_reserves,
     }
   }
   throw new Error(

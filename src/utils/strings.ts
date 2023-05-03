@@ -53,9 +53,6 @@ export function stringBytesSize(str: string): number {
   return new Blob([str]).size
 }
 
-/**
- * Prepends a "s" to the given string if the quantity is > 1
- */
-export function plural(str: string, quantity: number): string {
-  return `${str}${quantity > 1 ? "s" : ""}`
+export function plural(nb: number): string {
+  return nb === 1 ? "" : "s"
 }

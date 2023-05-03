@@ -40,7 +40,7 @@ const ExploreRevealFeed: NextPage = () => {
       <section>
         <Spacing size="x-large" sm="2x-large" />
 
-        <ExploreTabs active={3} />
+        <ExploreTabs active={2} />
 
         <Spacing size="x-large" sm="none" />
 

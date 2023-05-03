@@ -11,6 +11,11 @@ export function getMutezDecimalsNb(x: number): number {
   return split.length > 1 ? split.pop()?.length || 0 : 0
 }
 
+export function floorToDecimalNb(nb: number, decimals: number): number {
+  const coeff = Math.pow(10, decimals)
+  return Math.floor(nb * coeff) / coeff
+}
+
 export function getDecimalsNumber(x: number): number {
   return x.toString().split(".").pop()?.length || 0
 }
@@ -25,4 +30,30 @@ export function getNumberWithOrdinal(n: number) {
   const s = ["th", "st", "nd", "rd"],
     v = n % 100
   return n + (s[(v - 20) % 10] || s[v] || s[0])
+}
+
+const getDailyHarbergerTax = (price: number) => {
+  return price * 0.0014
+}
+export function getMintTicketHarbergerTax(price: number, days: number) {
+  return getDailyHarbergerTax(price) * days
+}
+export function getDaysCoveredByHarbergerTax(
+  totalTaxPaid: number,
+  price: number
+) {
+  return totalTaxPaid / getDailyHarbergerTax(price)
+}
+export const getTaxPaidUntil = (
+  taxationLocked: number,
+  taxationStart: Date,
+  price: number
+) => {
+  const numberOfDaysCovered = getDaysCoveredByHarbergerTax(
+    taxationLocked,
+    price
+  )
+  return new Date(
+    taxationStart.getTime() + numberOfDaysCovered * 24 * 60 * 60 * 1000
+  )
 }

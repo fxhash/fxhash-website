@@ -34,7 +34,10 @@ export function MintProgress({
     const burnt = originalSupply - supply
     const burntProgress = settings.displayBurntCard ? burnt / originalSupply : 0
     const reserveSize = token.reserves
-      ? token.reserves.reduce((a, b) => a + b.amount, 0)
+      ? Math.min(
+          token.reserves.reduce((a, b) => a + b.amount, 0),
+          visibleSupply - minted
+        )
       : 0
     const reserveProgress = Math.min(1, reserveSize / visibleSupply)
     return [progress, burntProgress, reserveSize, reserveProgress]
@@ -83,7 +86,7 @@ export function MintProgress({
           }}
         />
       </div>
-      {showReserve && reserveSize > 0 && (
+      {showReserve && reserveSize > 0 && !complete && (
         <div className={cs(style.reserve_text)}>
           <span>{reserveSize} reserved</span>
           {eligibleFor > 0 && (

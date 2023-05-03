@@ -80,10 +80,11 @@ export const getServerSidePropsUserById = async (
         updatedAt: now as any,
         collaborationContracts: [],
         sales: [],
-        offersReceived: [],
-        offersSent: [],
+        allOffersReceived: [],
+        allOffersSent: [],
         articles: [],
         listings: [],
+        mintTickets: [],
       }
     }
   }

@@ -38,6 +38,10 @@
     font-size: var(--font-size-regular);
   }
 
+  .floor {
+    flex-grow: 0.6;
+  }
+
   .date {
     font-size: var(--font-size-vsmall);
     color: var(--color-gray);
@@ -47,7 +51,7 @@
 
   .call_btn {
     flex-grow: 0;
-    flex-basis: 80px;
+    flex-basis: 144px;
   }
 
   .objkt {

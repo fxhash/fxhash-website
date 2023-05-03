@@ -4,7 +4,6 @@ import React, {
   useContext,
   useEffect,
   useMemo,
-  useRef,
   useState,
 } from "react"
 import style from "./MobileMenu.module.scss"
@@ -25,7 +24,7 @@ import { ModalContext } from "../../context/Modal"
 interface MobileMenuProps {
   open: boolean
   navigationLinks: NavigationLink[]
-  profileLinks: NavigationLinkSingle[] | null
+  profileLinks: NavigationLink[] | null
   onClickSettings: () => void
   onClickConnect: () => void
   onClickDisconnect: () => void

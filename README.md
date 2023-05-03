@@ -63,13 +63,13 @@ If you find a bug with the front end, you can create an issue.
 * [typescript](https://www.typescriptlang.org/)
 * [css modules](https://github.com/css-modules/css-modules) (with sass)
 * [taquito](https://tezostaquito.io/) to interact with the blockchain
-* [ApolloClient](https://www.apollographql.com/docs/react/) to run graohQL queries (both durring SSR and on the client-side), and handle the store (client-side)
+* [ApolloClient](https://www.apollographql.com/docs/react/) to run graphQL queries (both durring SSR and on the client-side), and handle the store (client-side)
 
 ### Project structure
 
 * `/articles` *[deprecated]*: markdown files, generated in html at build time, they populate the `about` tab of the website
 * `/components`: reusable components used multiple times in the app
-* `/containers`: bigger *building block* components. They often use multiple components and have some more complexe logic
+* `/containers`: bigger *building block* components. They often use multiple components and have some more complex logic
 * `/context`: react context
 * `/doc`: the articles from the doc - website doc is derived from this folder
 * `/hooks`: react hooks

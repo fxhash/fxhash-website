@@ -67,6 +67,14 @@ export const clientSideClient = new ApolloClient({
             keyArgs: ["sort", "featureFilters", "filters"],
             merge: cacheMergePaginatedField,
           },
+          underAuctionMintTickets: {
+            keyArgs: [],
+            merge: (_, incoming) => incoming,
+          },
+          mintTickets: {
+            keyArgs: ["filters", "sort"],
+            merge: cacheMergePaginatedField,
+          },
         },
       },
       User: {
@@ -102,6 +110,15 @@ export const clientSideClient = new ApolloClient({
       },
       Query: {
         fields: {
+          generativeToken: {
+            read(_, { args, toReference }) {
+              if (!args) return
+              return toReference({
+                __typename: "GenerativeToken",
+                id: args.id,
+              })
+            },
+          },
           generativeTokens: {
             keyArgs: ["sort", "filters"],
             merge: cacheMergePaginatedField,
@@ -118,17 +135,31 @@ export const clientSideClient = new ApolloClient({
             keyArgs: ["sort", "filters"],
             merge: cacheMergePaginatedField,
           },
+          // mintTickets: {
+          //   keyArgs: ["sort", "filters"],
+          //   merge: cacheMergePaginatedField,
+          // },
         },
       },
     },
   }),
 })
 
-export function createApolloClient() {
+export function createApolloClient(
+  uri = process.env.NEXT_PUBLIC_API_ROOT,
+  headers?: Record<string, any>
+) {
   return new ApolloClient({
-    uri: process.env.NEXT_PUBLIC_API_ROOT,
+    uri,
     cache: new InMemoryCache(),
     ssrMode: true,
     ssrForceFetchDelay: 1000,
+    headers,
   })
+}
+
+export function createApolloClientEvent() {
+  return createApolloClient(
+    `${process.env.NEXT_PUBLIC_API_EVENTS_ROOT!}/graphql`
+  )
 }

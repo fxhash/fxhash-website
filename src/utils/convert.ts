@@ -78,3 +78,7 @@ export function hexStringToString(str: string): string {
       )
     : ""
 }
+
+export function numberToHex(nb: number): string {
+  return Number(nb).toString(16).padStart(2, "0")
+}

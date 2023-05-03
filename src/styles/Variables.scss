@@ -28,3 +28,14 @@ $breakpoint-vlg: 1600px;
 $breakpoint-lg: 1200px;
 $breakpoint-md: 960px;
 $breakpoint-sm: 768px;
+
+// timing
+$timing-cubic: cubic-bezier(0.77, 0, 0.175, 1);
+
+// keyframes
+@keyframes ping {
+  75%, 100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}

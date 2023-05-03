@@ -33,6 +33,7 @@ import { truncateMiddle } from "../../../utils/strings"
 import { HoverTitle } from "../../../components/Utils/HoverTitle"
 import { Icon } from "../../../components/Icons/Icon"
 import { GenerativeRedeemable } from "../../../components/GenerativeToken/GenerativeRedeemable"
+import { DisplayTezos } from "../../../components/Display/DisplayTezos"
 
 interface GenerativeDisplayIterationProps {
   objkt: Objkt
@@ -49,16 +50,24 @@ const _GenerativeDisplayIteration = ({
   const creator: User = objkt.issuer.author
   const tokenFromObjtk = useMemo(() => {
     return {
+      id: objkt.issuer.id,
+      slug: objkt.issuer.slug,
       name: objkt.name || "",
       metadata: objkt.issuer?.metadata || {},
       labels: objkt.issuer?.labels,
       captureMedia: objkt.captureMedia,
       displayUri: objkt.metadata?.displayUri,
       balance: 0,
+      inputBytesSize: objkt.issuer?.inputBytesSize || 0,
     }
   }, [objkt])
   const gentkUrl = useMemo(() => gentkLiveUrl(objkt), [objkt])
-
+  const isParamsToken = !!objkt.inputBytes
+  const exploreParamsQuery = useMemo(() => {
+    if (!isParamsToken) return null
+    return `fxhash=${objkt.generationHash}&fxparams=${objkt.inputBytes}`
+  }, [objkt, isParamsToken])
+  const minter = objkt.minter
   return (
     <>
       <div className={cs(style.artwork_header_mobile, layout.break_words)}>
@@ -108,35 +117,29 @@ const _GenerativeDisplayIteration = ({
                 <MarketplaceActions objkt={objkt} />
               </UserGuard>
             </ClientOnlyEmpty>
+            <div className={cs(layout.buttons_inline, layout.flex_wrap)}>
+              <Link href={getGenerativeTokenUrl(objkt.issuer)} passHref>
+                <Button isLink={true} className={style.button} size="regular">
+                  open project
+                </Button>
+              </Link>
+              <Link
+                href={getGenerativeTokenMarketplaceUrl(objkt.issuer)}
+                passHref
+              >
+                <Button
+                  isLink={true}
+                  className={cs(style.button, style.button_marketplace)}
+                  size="regular"
+                >
+                  open marketplace
+                </Button>
+              </Link>
+            </div>
           </div>
-
-          <Spacing size="regular" />
-
-          <div
-            className={cs(
-              layout.buttons_inline,
-              layout.flex_wrap,
-              style.actions
-            )}
-          >
-            <Link href={getGenerativeTokenUrl(objkt.issuer)} passHref>
-              <Button isLink={true} className={style.button} size="regular">
-                open project
-              </Button>
-            </Link>
-            <Link
-              href={getGenerativeTokenMarketplaceUrl(objkt.issuer)}
-              passHref
-            >
-              <Button isLink={true} className={style.button} size="regular">
-                open marketplace
-              </Button>
-            </Link>
-          </div>
-
           <Spacing size="4x-large" sm="x-large" />
 
-          <div className={cs(style.buttons, style.project_infos)}>
+          <div className={cs(style.project_infos)}>
             <h4>
               Project #{objkt.issuer.id} — iteration #{objkt.iteration}
             </h4>
@@ -145,7 +148,7 @@ const _GenerativeDisplayIteration = ({
               {format(new Date(objkt.createdAt), "MMMM d, yyyy' at 'HH:mm")}
             </span>
             {objkt.issuer.labels && (
-              <Labels className={style.labels} labels={objkt.issuer.labels} />
+              <Labels className={style.labels} token={objkt.issuer} />
             )}
           </div>
 
@@ -174,6 +177,62 @@ const _GenerativeDisplayIteration = ({
               isRedeemable={objkt.availableRedeemables?.length > 0}
               urlRedeemable={`/gentk/${objkt.id}/redeem`}
             />
+            {objkt.mintedPrice !== null && (
+              <>
+                <strong>Minted Price</strong>
+                <span
+                  className={cs(style.mobile_align_right, style.mobile_gray)}
+                >
+                  <DisplayTezos
+                    mutez={objkt.mintedPrice || 0}
+                    tezosSize="regular"
+                    formatBig={false}
+                  />
+                </span>
+              </>
+            )}
+            <strong>Creator</strong>
+            <span className={cs(style.mobile_align_right, style.mobile_gray)}>
+              <UserBadge
+                className={style.minterBadge}
+                displayAvatar={false}
+                user={creator}
+              />
+            </span>
+            {minter && (
+              <>
+                {isParamsToken ? (
+                  <strong>
+                    Params
+                    <HoverTitle
+                      message="This user set the params."
+                      className={cs(style.tooltip, style.paramsTooltip)}
+                    >
+                      <Icon icon="infos-circle" />
+                    </HoverTitle>
+                  </strong>
+                ) : (
+                  <strong>Minter</strong>
+                )}
+                <span
+                  className={cs(style.mobile_align_right, style.mobile_gray)}
+                >
+                  <UserBadge
+                    className={style.minterBadge}
+                    displayAvatar={false}
+                    user={minter}
+                  />
+                </span>
+              </>
+            )}
+            <strong>Owner</strong>
+            <span className={cs(style.mobile_align_right, style.mobile_gray)}>
+              <UserBadge
+                className={style.minterBadge}
+                displayAvatar={false}
+                user={owner}
+              />
+            </span>
             <strong>Royalties</strong>
             <span className={cs(style.mobile_align_right, style.mobile_gray)}>
               {displayRoyalties(objkt.royalties)}
@@ -234,6 +293,7 @@ const _GenerativeDisplayIteration = ({
             token={tokenFromObjtk}
             openUrl={gentkUrl}
             artifactUrl={gentkUrl}
+            exploreParamsQuery={exploreParamsQuery}
           />
 
           {objkt.features && objkt.features.length > 0 && (
@@ -241,7 +301,10 @@ const _GenerativeDisplayIteration = ({
               <Spacing size="3x-large" />
               <h4>Features</h4>
               <Spacing size="small" />
-              <Features features={objkt.features} />
+              <Features
+                features={objkt.features}
+                projectUrl={getGenerativeTokenUrl(objkt.issuer)}
+              />
             </div>
           )}
         </div>
@@ -252,7 +315,10 @@ const _GenerativeDisplayIteration = ({
           <Spacing size="3x-large" />
           <h4>Features</h4>
           <Spacing size="small" />
-          <Features features={objkt.features} />
+          <Features
+            features={objkt.features}
+            projectUrl={getGenerativeTokenUrl(objkt.issuer)}
+          />
         </div>
       )}
     </>

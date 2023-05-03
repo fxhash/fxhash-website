@@ -2,9 +2,10 @@ import { Action } from "./Action"
 import { GenerativeToken } from "./GenerativeToken"
 import { Objkt } from "./Objkt"
 import { Listing } from "./Listing"
-import { Offer } from "./Offer"
+import { AnyOffer, Offer } from "./Offer"
 import { NFTArticle } from "./Article"
 import { MediaImage } from "./MediaImage"
+import { MintTicket } from "./MintTicket"
 
 export interface UserItems {
   generativeTokens?: GenerativeToken[]
@@ -59,8 +60,8 @@ export interface User {
   listings: Listing[]
   objkts: Objkt[]
   offers: Listing[]
-  offersReceived: Offer[]
-  offersSent: Offer[]
+  allOffersReceived: AnyOffer[]
+  allOffersSent: Offer[]
   createdAt: Date
   updatedAt: Date
   // can be populated to merge the actions, however not returned by api
@@ -75,6 +76,7 @@ export interface User {
   collaborationContracts: Collaboration[]
   moderationReason?: string | null
   articles: NFTArticle[]
+  mintTickets: MintTicket[]
 }
 
 export interface ConnectedUser extends Partial<User> {
@@ -105,6 +107,7 @@ export interface IUserCollectionFilters {
   authorVerified_eq?: boolean
   author_in?: string[]
   searchQuery_eq?: string
+  activeListing_exist?: "LISTED" | "NOT LISTED"
 }
 
 export interface UserFilters {

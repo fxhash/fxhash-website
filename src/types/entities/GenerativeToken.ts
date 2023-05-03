@@ -10,6 +10,7 @@ import { User } from "./User"
 import { ISettingsContext } from "../../context/Theme"
 import { MediaImage } from "./MediaImage"
 import { Redeemable } from "./Redeemable"
+import { MintTicket, MintTicketSettings } from "./MintTicket"
 
 export enum GenTokFlag {
   NONE = "NONE",
@@ -40,6 +41,7 @@ export enum GenTokLabel {
 export enum GenTokLabelGroup {
   WARNING = "WARNING",
   DETAILS = "DETAILS",
+  HIGHLIGHT = "HIGHLIGHT",
 }
 
 export interface GenTokLabelDefinition {
@@ -50,6 +52,14 @@ export interface GenTokLabelDefinition {
   icon?: string
   showWarningSetting?: keyof ISettingsContext
   showWarningOn?: "preview" | "run"
+}
+
+export const GenTokLabel_Params: GenTokLabelDefinition = {
+  label: "Params",
+  shortLabel: "Params",
+  group: GenTokLabelGroup.HIGHLIGHT,
+  description:
+    "This piece is using the fx(params) module, letting collector play with parameters before minting",
 }
 
 export interface GenerativeTokenMarketStats {
@@ -85,8 +95,13 @@ export interface GenerativeTokenMarketStatsHistory {
   to: string
 }
 
+export enum GenerativeTokenVersion {
+  "PRE_V3" = "PRE_V3",
+  V3 = "V3",
+}
 export interface GenerativeToken {
   id: number
+  version: GenerativeTokenVersion
   author: User
   name: string
   flag: GenTokFlag
@@ -126,6 +141,10 @@ export interface GenerativeToken {
   articleMentions?: ArticleGenerativeTokenMention[]
   captureMedia?: MediaImage
   redeemables: Redeemable[]
+  underAuctionMintTickets: MintTicket[]
+  mintTickets: MintTicket[]
+  mintTicketSettings: MintTicketSettings | null
+  inputBytesSize: number
 }
 
 export interface GenerativeTokenWithCollection extends GenerativeToken {
@@ -147,6 +166,7 @@ export interface GenerativeTokenFilters {
   pricingMethod_eq?: GenTokPricing
   locked_eq?: boolean
   mintOpened_eq?: boolean
+  fxparams_eq?: boolean
 }
 
 export interface GenerativeTokenFeatureValue {

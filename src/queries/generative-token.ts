@@ -10,6 +10,9 @@ import {
 } from "./fragments/generative-token"
 import { Frag_UserBadge } from "./fragments/user"
 import { Frag_MediaImage } from "./fragments/media"
+import { Frag_MintTicketFull } from "./fragments/mint-ticket"
+import { Frag_GenTokOffer } from "./fragments/offer"
+import { Frag_GenTokCollectionOffer } from "./fragments/collection-offer"
 
 export const Qu_genToken = gql`
   ${Frag_GenTokenInfo}
@@ -28,6 +31,7 @@ export const Qu_genToken = gql`
       lockEnd
       metadata
       metadataUri
+      version
       ...SplitsPrimary
       ...SplitsSecondary
       ...Reserves
@@ -48,6 +52,20 @@ export const Qu_genTokens = gql`
     generativeTokens(skip: $skip, take: $take, sort: $sort, filters: $filters) {
       id
       ...TokenInfo
+    }
+  }
+`
+
+export const Qu_genTokensAuthors = gql`
+  ${Frag_GenAuthor}
+  query GenerativeTokens($skip: Int, $take: Int, $projectIds: [Int!]) {
+    generativeTokens(
+      skip: $skip
+      take: $take
+      filters: { id_in: $projectIds }
+    ) {
+      id
+      ...Author
     }
   }
 `
@@ -184,6 +202,41 @@ export const Qu_genTokenIterations = gql`
   }
 `
 
+export const Qu_genTokenMintTickets = gql`
+  ${Frag_MintTicketFull}
+  query Query(
+    $id: Float
+    $slug: String
+    $ownerId: String
+    $skip: Int
+    $take: Int
+    $now: String
+    $sort: MintTicketSortInput
+    $filters: MintTicketFilter
+  ) {
+    generativeToken(id: $id, slug: $slug) {
+      id
+      mintTicketSettings {
+        gracingPeriod
+      }
+      underAuctionMintTickets {
+        ...MintTicketFull
+      }
+      mintTickets(sort: $sort, skip: $skip, take: $take, filters: $filters) {
+        ...MintTicketFull
+      }
+    }
+    userMintTickets: mintTickets(
+      sort: { taxationPaidUntil: "ASC" }
+      filters: { owner_eq: $ownerId, token_eq: $id, taxationPaidUntil_gt: $now }
+      take: 50
+      skip: 0
+    ) {
+      ...MintTicketFull
+    }
+  }
+`
+
 export const Qu_genTokenAllIterations = gql`
   ${Frag_MediaImage}
   query GenerativeTokenIterations($id: Float!) {
@@ -250,32 +303,37 @@ export const Qu_genTokOwners = gql`
 `
 
 export const Qu_genTokOffers = gql`
-  ${Frag_MediaImage}
-  ${Frag_UserBadge}
-  query GetGenTokOffers($id: Float) {
+  ${Frag_GenTokOffer}
+  ${Frag_GenTokCollectionOffer}
+  query GetGenTokOffers($id: Float, $userId: String, $sort: OffersSortInput) {
     generativeToken(id: $id) {
       id
-      offers(filters: { active_eq: true }) {
-        id
-        price
-        version
-        createdAt
-        cancelledAt
-        acceptedAt
-        buyer {
-          ...UserBadgeInfos
+      name
+      isHolder(userId: $userId)
+      allOffers(filters: { active_eq: true }, sort: $sort) {
+        ... on CollectionOffer {
+          ...GenTokCollectionOffer
         }
-        objkt {
-          id
-          iteration
-          metadata
-          captureMedia {
-            ...MediaImage
-          }
-          owner {
-            ...UserBadgeInfos
-          }
+        ... on Offer {
+          ...GenTokOffer
         }
+      }
+    }
+  }
+`
+
+export const Qu_genMintTickets = gql`
+  ${Frag_MintTicketFull}
+  query GetGenMintTickets(
+    $id: Float
+    $skip: Int
+    $take: Int
+    $sort: MintTicketSortInput
+  ) {
+    generativeToken(id: $id) {
+      id
+      mintTickets(skip: $skip, take: $take, sort: $sort) {
+        ...MintTicketFull
       }
     }
   }

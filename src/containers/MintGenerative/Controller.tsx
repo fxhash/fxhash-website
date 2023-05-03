@@ -1,14 +1,6 @@
 import { useState, useEffect, useMemo, RefObject } from "react"
 import { MintGenerativeData } from "../../types/Mint"
-import {
-  Switch,
-  Route,
-  Link,
-  LinkProps,
-  useRouteMatch,
-  useHistory,
-  useLocation,
-} from "react-router-dom"
+import { Switch, Route, useHistory, useLocation } from "react-router-dom"
 import { StepHome } from "./StepHome"
 import { MintGenerativeTabs } from "./Tabs"
 import { StepUploadIpfs } from "./StepUploadIpfs"
@@ -18,7 +10,7 @@ import { StepConfigureCapture } from "./StepConfigureCapture"
 import { StepVerification } from "./StepVerification"
 import { StepInformations } from "./StepInformations"
 import { StepSuccess } from "./StepSuccess"
-import { StepExtraSettings } from "./StepExtraSettings"
+import { StepExtraSettings } from "./StepExtraSettings/StepExtraSettings"
 import { StepAuthoring } from "./StepAuthoring"
 import { StepDistribution } from "./StepDistribution"
 import { StepPreviewMint } from "./StepPreviewMint"
@@ -61,7 +53,12 @@ const STEPS: Step[] = [
     path: "/capture-settings",
     component: StepConfigureCapture,
     title: "Configure capture",
-    requiredProps: ["previewHash"],
+    requiredProps: [
+      "previewHash",
+      "previewMinter",
+      "previewInputBytes",
+      "params",
+    ],
   },
   {
     path: "/verifications",
