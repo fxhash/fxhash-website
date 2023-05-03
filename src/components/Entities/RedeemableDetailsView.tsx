@@ -62,7 +62,7 @@ export function RedeemableDetailsView({
         <p className={cs(text.info)}>
           Every iteration of this project can be redeemed{" "}
           <strong>
-            {details.maxConsumptions} {plural("time", details.maxConsumptions)}
+            {details.maxConsumptions} time{plural(details.maxConsumptions)}
           </strong>
           <br />
           Base redemption cost is{" "}
