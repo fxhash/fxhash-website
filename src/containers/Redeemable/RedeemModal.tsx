@@ -100,7 +100,7 @@ export function RedeemModal({
               await wallet.beaconWallet!.client.getActiveAccount()
             )?.publicKey,
             redeemableAddress: redeemable.address,
-            tokenId: getGentkLocalID(gentk.id),
+            tokenId: parseInt(getGentkLocalID(gentk.id)),
           }),
         }
       )
