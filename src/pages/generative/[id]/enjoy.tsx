@@ -116,6 +116,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
                 owner {
                   ...UserBadgeInfos
                 }
+                minter {
+                  id
+                }
               }
             }
           }
