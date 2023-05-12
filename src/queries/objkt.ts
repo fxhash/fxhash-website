@@ -110,6 +110,9 @@ export const Qu_objktsFeed = gql`
       owner {
         ...UserBadgeInfos
       }
+      minter {
+        id
+      }
       name
       slug
       issuer {
