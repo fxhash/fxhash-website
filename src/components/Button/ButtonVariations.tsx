@@ -2,11 +2,10 @@ import style from "./ButtonVariations.module.scss"
 import cs from "classnames"
 import { GenerativeToken } from "../../types/entities/GenerativeToken"
 import { Button } from "."
-import { useContext, useMemo } from "react"
+import { useMemo } from "react"
 import { generateFxHash } from "../../utils/hash"
 import { uniq } from "lodash"
 import { HoverTitle } from "../Utils/HoverTitle"
-import { SettingsContext } from "../../context/Theme"
 import { FxParamDefinition, FxParamType } from "components/FxParams/types"
 import {
   getRandomParamValues,

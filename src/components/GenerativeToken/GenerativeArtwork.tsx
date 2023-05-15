@@ -15,6 +15,7 @@ import { ipfsGatewayUrl } from "../../services/Ipfs"
 import { Image } from "../Image"
 import { useReceiveTokenInfos } from "hooks/useReceiveTokenInfos"
 import { getGenerativeTokenUrl } from "utils/generative-token"
+import { ButtonExploreParams } from "components/Button/ButtonExploreParams"
 interface Props {
   token: Pick<
     GenerativeToken,
@@ -94,14 +95,6 @@ export function GenerativeArtwork({
     }
   }, [previewHash, previewInputBytes, artworkArtifactUrl])
 
-  const paramsUrl = useMemo(() => {
-    if (exploreParamsQuery)
-      return `${getGenerativeTokenUrl(
-        token as GenerativeToken
-      )}/explore-params?${exploreParamsQuery}`
-    return `${getGenerativeTokenUrl(token as GenerativeToken)}/explore-params`
-  }, [token])
-
   return (
     <>
       <SquareContainer>
@@ -129,20 +122,10 @@ export function GenerativeArtwork({
 
       <div className={cs(layout["x-inline"], style.artwork_buttons)}>
         {token.inputBytesSize > 0 && (
-          <Link href={paramsUrl} passHref>
-            <Button
-              isLink
-              type="button"
-              size="small"
-              color="transparent"
-              iconComp={
-                <i aria-hidden className="fa-sharp fa-regular fa-slider" />
-              }
-              iconSide="right"
-            >
-              params
-            </Button>
-          </Link>
+          <ButtonExploreParams
+            token={token as GenerativeToken}
+            exploreParamsQuery={exploreParamsQuery}
+          />
         )}
         {!hideVariations && (
           <ButtonVariations
