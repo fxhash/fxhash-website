@@ -251,7 +251,7 @@ export const StepExtraSettings: StepComponent = ({ state, onNext }) => {
           </>
         ) : (
           "button"
-        )}
+        )}{" "}
         will be inactive on the Generative Token page.
       </p>
 
