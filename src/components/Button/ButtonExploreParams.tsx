@@ -27,7 +27,6 @@ export const ButtonExploreParams = ({
     return `${getGenerativeTokenUrl(token)}/explore-params`
   }, [token, exploreParamsQuery])
 
-  // the hover message is only here if disabled, and depends some conditions
   const hoverMessage = useMemo<string | null>(
     () =>
       disabled
