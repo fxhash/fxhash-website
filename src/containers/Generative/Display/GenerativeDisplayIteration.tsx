@@ -58,6 +58,7 @@ const _GenerativeDisplayIteration = ({
       balance: objkt.issuer?.balance || 0,
       inputBytesSize: objkt.issuer?.inputBytesSize || 0,
       supply: objkt.issuer?.supply || 0,
+      iterationsCount: objkt.issuer?.iterationsCount || 0,
     }
   }, [objkt])
   const gentkUrl = useMemo(() => gentkLiveUrl(objkt), [objkt])
