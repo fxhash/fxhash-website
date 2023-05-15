@@ -14,7 +14,10 @@ import {
 import { getActiveExploreSet, isTokenFullyMinted } from "utils/generative-token"
 
 interface Props {
-  token: Pick<GenerativeToken, "metadata" | "balance">
+  token: Pick<
+    GenerativeToken,
+    "balance" | "metadata" | "inputBytesSize" | "iterationsCount" | "supply"
+  >
   previewHash?: string | null
   params?: FxParamDefinition<FxParamType>[]
   onChangeHash: (hash: string, inputBytes?: string) => void
