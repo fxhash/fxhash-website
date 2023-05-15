@@ -11,6 +11,7 @@ import {
   getRandomParamValues,
   serializeParams,
 } from "components/FxParams/utils"
+import { getActiveExploreSet, isTokenFullyMinted } from "utils/generative-token"
 
 interface Props {
   token: Pick<GenerativeToken, "metadata" | "balance">
@@ -24,14 +25,8 @@ export function ButtonVariations({
   onChangeHash,
   params,
 }: Props) {
-  // some shortcuts to get access to useful variables derived from the token data
-  const fullyMinted = token.balance === 0
-  const exploreSet = token.metadata.settings?.exploration
-
-  // settings activated based on fully minted state
-  const activeSettings = fullyMinted
-    ? exploreSet?.postMint
-    : exploreSet?.preMint
+  const fullyMinted = isTokenFullyMinted(token)
+  const activeSettings = getActiveExploreSet(token)
 
   // the hover message is only here if disabled, and depends some conditions
   const hoverMessage = useMemo<string | null>(() => {

@@ -2,7 +2,11 @@ import Link from "next/link"
 import { Button } from "../Button"
 import { useMemo } from "react"
 import { GenerativeToken } from "types/entities/GenerativeToken"
-import { getGenerativeTokenUrl } from "utils/generative-token"
+import {
+  getGenerativeTokenUrl,
+  isExplorationDisabled,
+} from "utils/generative-token"
+import { HoverTitle } from "components/Utils/HoverTitle"
 
 interface ButtonExploreParamsProps {
   token: GenerativeToken
@@ -13,14 +17,7 @@ export const ButtonExploreParams = ({
   token,
   exploreParamsQuery,
 }: ButtonExploreParamsProps) => {
-  // some shortcuts to get access to useful variables derived from the token data
-  const fullyMinted = token.balance === 0
-  const exploreSet = token.metadata.settings?.exploration
-
-  // settings activated based on fully minted state
-  const activeSettings = fullyMinted
-    ? exploreSet?.postMint
-    : exploreSet?.preMint
+  const disabled = isExplorationDisabled(token)
 
   const paramsUrl = useMemo(() => {
     if (exploreParamsQuery)
@@ -30,18 +27,30 @@ export const ButtonExploreParams = ({
     return `${getGenerativeTokenUrl(token)}/explore-params`
   }, [token, exploreParamsQuery])
 
+  // the hover message is only here if disabled, and depends some conditions
+  const hoverMessage = useMemo<string | null>(
+    () =>
+      disabled
+        ? "Artist disabled the exploration of params after minting phase"
+        : null,
+    []
+  )
+
   return (
-    <Link href={paramsUrl} passHref>
-      <Button
-        isLink
-        type="button"
-        size="small"
-        color="transparent"
-        iconComp={<i aria-hidden className="fa-sharp fa-regular fa-slider" />}
-        iconSide="right"
-      >
-        params
-      </Button>
-    </Link>
+    <HoverTitle message={hoverMessage}>
+      <Link href={paramsUrl} passHref>
+        <Button
+          disabled={disabled}
+          isLink
+          type="button"
+          size="small"
+          color="transparent"
+          iconComp={<i aria-hidden className="fa-sharp fa-regular fa-slider" />}
+          iconSide="right"
+        >
+          params
+        </Button>
+      </Link>
+    </HoverTitle>
   )
 }
