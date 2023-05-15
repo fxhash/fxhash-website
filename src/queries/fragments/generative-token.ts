@@ -111,6 +111,7 @@ export const Frag_GenTokenInfo = gql`
     supply
     originalSupply
     balance
+    iterationsCount
     enabled
     royalties
     createdAt
