@@ -228,15 +228,31 @@ export const StepExtraSettings: StepComponent = ({ state, onNext }) => {
       <p>
         These settings will help you define how much freedom users will have in
         exploring the variety of your Generative Token. When they land on the
-        page of your Generative Token, a <strong>variations</strong> button can
-        give them the ability to see more variations than the one you provided
-        for the preview. These settings are independent from the random outputs
-        collectors will generate when minting.
+        page of your Generative Token, the <strong>variations</strong> button
+        can give them the ability to see more variations than the one you
+        provided for the preview. These settings are independent from the random
+        outputs collectors will generate when minting.
       </p>
 
+      {usesParams && (
+        <p>
+          For projects using fx(params), the <strong>explore params</strong>{" "}
+          button allows users to navigate the parameter space of your Generative
+          Token.
+        </p>
+      )}
+
       <p>
-        If exploration is <strong>disabled</strong>, the variations buttons will
-        be disabled on the Generative Token page.
+        If exploration is <strong>disabled</strong>, the{" "}
+        <strong>variations</strong>{" "}
+        {usesParams ? (
+          <>
+            and <strong>explore params</strong> buttons
+          </>
+        ) : (
+          "button"
+        )}
+        will be inactive on the Generative Token page.
       </p>
 
       <LinkGuide
