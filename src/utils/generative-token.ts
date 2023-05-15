@@ -632,3 +632,25 @@ export function getReserveConsumptionMethod(
 
   return consumption
 }
+
+export const isTokenFullyMinted = (token: Pick<GenerativeToken, "balance">) =>
+  token.balance === 0
+
+export const getExploreSet = (token: Pick<GenerativeToken, "metadata">) =>
+  token.metadata.settings?.exploration
+
+export const getActiveExploreSet = (
+  token: Pick<GenerativeToken, "balance" | "metadata">
+) => {
+  const fullyMinted = isTokenFullyMinted(token)
+  const exploreSet = getExploreSet(token)
+
+  return fullyMinted ? exploreSet?.postMint : exploreSet?.preMint
+}
+
+export const isExplorationDisabled = (
+  token: Pick<GenerativeToken, "balance" | "metadata">
+) => {
+  const exploreSet = getActiveExploreSet(token)
+  return exploreSet?.enabled === false
+}
