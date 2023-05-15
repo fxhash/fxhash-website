@@ -59,7 +59,7 @@ For projects using fx(params), the `explore params` button allows users to navig
 
 You can configure the following settings, for both **during the mint** period and **after fully minted**:
 
-- **enabled**: Determines if the `variations` and `explore params` buttons are active. If disabled, these buttons will be unclickable and visibly deactivated.
+- **enabled**: Determines if the `variations` and `explore params` buttons are active. If disabled, these buttons will be unclickable and visibly deactivated. Note that pre-mint exploration cannot be disabled for fx(params) projects.
 - **number of variations:**
   - **infinite**: viewers can explore any amount of variations and so randomly
   - **limited set of hashes**: define a list of hashes the viewers will cycle through when clicking on the button
