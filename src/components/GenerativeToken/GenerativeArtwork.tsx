@@ -26,6 +26,8 @@ interface Props {
     | "name"
     | "balance"
     | "inputBytesSize"
+    | "iterationsCount"
+    | "supply"
   >
   forceImageDisplay?: boolean
   canStop?: boolean
