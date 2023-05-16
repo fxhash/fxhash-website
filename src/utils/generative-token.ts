@@ -632,3 +632,43 @@ export function getReserveConsumptionMethod(
 
   return consumption
 }
+
+export const isTokenFullyMinted = (
+  token: Pick<
+    GenerativeToken,
+    "balance" | "inputBytesSize" | "iterationsCount" | "supply"
+  >
+) => {
+  const usesParams = token.inputBytesSize > 0
+  /**
+   * if the project uses params, it is fully minted when all tickets have been
+   * used (iterations count is equal to supply)
+   */
+  if (usesParams) return token.iterationsCount === token.supply
+  return token.balance === 0
+}
+
+export const getExploreSet = (token: Pick<GenerativeToken, "metadata">) =>
+  token.metadata.settings?.exploration
+
+export const getActiveExploreSet = (
+  token: Pick<
+    GenerativeToken,
+    "balance" | "metadata" | "inputBytesSize" | "iterationsCount" | "supply"
+  >
+) => {
+  const fullyMinted = isTokenFullyMinted(token)
+  const exploreSet = getExploreSet(token)
+
+  return fullyMinted ? exploreSet?.postMint : exploreSet?.preMint
+}
+
+export const isExplorationDisabled = (
+  token: Pick<
+    GenerativeToken,
+    "balance" | "metadata" | "inputBytesSize" | "iterationsCount" | "supply"
+  >
+) => {
+  const exploreSet = getActiveExploreSet(token)
+  return exploreSet?.enabled === false
+}
