@@ -37,6 +37,7 @@ import {
 import { transformReserveInputToGeneric } from "./transformers/reserves"
 import { isUserOrCollaborator } from "./user"
 import { ISettingsContext } from "../context/Theme"
+import { FxhashContracts } from "types/Contracts"
 
 export function getGenerativeTokenUrl(generative: GenerativeToken): string {
   return generative.slug
@@ -158,6 +159,7 @@ export function generativeFromMintParams(
     mintTickets: [],
     mintTicketSettings: null,
     inputBytesSize: 0,
+    gentkContractAddress: FxhashContracts.GENTK_V3,
   }
 }
 
@@ -310,6 +312,7 @@ export function generativeFromMintForm(
     mintTickets: [],
     mintTicketSettings: null,
     inputBytesSize: 0,
+    gentkContractAddress: FxhashContracts.GENTK_V3,
   }
 }
 
