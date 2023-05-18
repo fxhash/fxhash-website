@@ -39,11 +39,8 @@ export function PanelControls(props: PanelControlsProps) {
   const {
     showDropdown,
     setShowDropdown,
-    // TODO: SEE IF WE NEED TO INCORPORATE THESE HERE
-    userEligible,
-    onlyReserveLeft,
-    isMintButton,
     isMintDropdown,
+    onMintShouldUseReserve,
     reserveConsumptionMethod,
   } = useMintReserveInfo(token)
 
@@ -79,7 +76,7 @@ export function PanelControls(props: PanelControlsProps) {
       setShowDropdown(true)
       return
     }
-    onSubmit(null)
+    onSubmit(null, onMintShouldUseReserve ? reserveConsumptionMethod : null)
   }, [onSubmit])
 
   const handleClickUseTicket = useCallback(() => {

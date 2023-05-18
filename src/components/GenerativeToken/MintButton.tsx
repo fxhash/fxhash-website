@@ -46,10 +46,9 @@ export function MintButton({
   const {
     showDropdown,
     setShowDropdown,
-    userEligible,
-    onlyReserveLeft,
     isMintButton,
     isMintDropdown,
+    onMintShouldUseReserve,
     reserveConsumptionMethod,
   } = useMintReserveInfo(token, forceReserveConsumption)
 
@@ -72,17 +71,7 @@ export function MintButton({
             disabled={disabled}
             onClick={() => {
               if (isMintButton) {
-                // TODO: SEE IF BELOW CAN BE CLEANED UP
-                onMint(
-                  // to trigger reserve, user must be eligible
-                  (userEligible &&
-                    // there must only be reserve or reserve forced
-                    (onlyReserveLeft || forceReserveConsumption) &&
-                    // returns the consumption method
-                    reserveConsumptionMethod) ||
-                    // fallback to null
-                    null
-                )
+                onMint(onMintShouldUseReserve ? reserveConsumptionMethod : null)
               } else {
                 setShowDropdown(!showDropdown)
               }
@@ -109,11 +98,9 @@ export function MintButton({
           )}
         </div>
 
-        {hasCreditCardOption &&
-          !loading &&
-          !(userEligible && onlyReserveLeft) && (
-            <ButtonPaymentCard onClick={openCreditCard} disabled={disabled} />
-          )}
+        {hasCreditCardOption && !loading && !onMintShouldUseReserve && (
+          <ButtonPaymentCard onClick={openCreditCard} disabled={disabled} />
+        )}
       </div>
 
       {showDropdown && (

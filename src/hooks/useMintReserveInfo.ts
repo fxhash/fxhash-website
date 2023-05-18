@@ -39,6 +39,13 @@ export const useMintReserveInfo = (
   const isMintButton =
     !isMintDropdown && ((userEligible && onlyReserveLeft) || !onlyReserveLeft)
 
+  // should we use the reserve without showing the dropdown
+  const onMintShouldUseReserve =
+    // to trigger reserve, user must be eligible
+    userEligible &&
+    // there must only be reserve or reserve forced
+    (onlyReserveLeft || forceReserveConsumption)
+
   const reserveConsumptionMethod = user
     ? getReserveConsumptionMethod(token, user as User, liveMintingContext)
     : null
@@ -46,10 +53,9 @@ export const useMintReserveInfo = (
   return {
     showDropdown,
     setShowDropdown,
-    onlyReserveLeft,
-    userEligible,
     isMintDropdown,
     isMintButton,
+    onMintShouldUseReserve,
     reserveConsumptionMethod,
   }
 }
