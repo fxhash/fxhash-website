@@ -1,7 +1,7 @@
 import style from "./MintButton.module.scss"
 import cs from "classnames"
 import { GenerativeToken } from "../../types/entities/GenerativeToken"
-import { PropsWithChildren, useContext } from "react"
+import { PropsWithChildren, useContext, useState } from "react"
 import { Button } from "../../components/Button"
 import { UserContext } from "../../containers/UserProvider"
 import { Cover } from "../Utils/Cover"
@@ -43,9 +43,8 @@ export function MintButton({
   children,
 }: PropsWithChildren<Props>) {
   const { isLiveMinting } = useContext(UserContext)
+  const [showDropdown, setShowDropdown] = useState(false)
   const {
-    showDropdown,
-    setShowDropdown,
     isMintButton,
     isMintDropdown,
     onMintShouldUseReserve,

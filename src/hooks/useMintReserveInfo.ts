@@ -16,8 +16,6 @@ export const useMintReserveInfo = (
   const { user } = useContext(UserContext)
   const liveMintingContext = useContext(LiveMintingContext)
 
-  const [showDropdown, setShowDropdown] = useState(false)
-
   // the number of editions left in the reserve
   const reserveLeft = useMemo(() => reserveSize(token), [token])
 
@@ -51,8 +49,6 @@ export const useMintReserveInfo = (
     : null
 
   return {
-    showDropdown,
-    setShowDropdown,
     isMintDropdown,
     isMintButton,
     onMintShouldUseReserve,

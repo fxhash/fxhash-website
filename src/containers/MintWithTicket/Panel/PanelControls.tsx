@@ -1,4 +1,4 @@
-import { useCallback, useContext, useMemo } from "react"
+import { useCallback, useContext, useMemo, useState } from "react"
 import cs from "classnames"
 import { isBefore } from "date-fns"
 import {
@@ -36,13 +36,9 @@ export function PanelControls(props: PanelControlsProps) {
 
   const { user } = useContext(UserContext)
 
-  const {
-    showDropdown,
-    setShowDropdown,
-    isMintDropdown,
-    onMintShouldUseReserve,
-    reserveConsumptionMethod,
-  } = useMintReserveInfo(token)
+  const [showDropdown, setShowDropdown] = useState(false)
+  const { isMintDropdown, onMintShouldUseReserve, reserveConsumptionMethod } =
+    useMintReserveInfo(token)
 
   const { enabled, locked, price, hidden } = useMintingState(token)
   const showMintButton = !hidden && !locked && enabled
