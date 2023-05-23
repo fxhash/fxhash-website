@@ -36,6 +36,8 @@ import { MintTicket } from "../../types/entities/MintTicket"
 import { generateMintTicketFromMintAction } from "../../utils/mint-ticket"
 import { isOperationApplied } from "services/Blockchain"
 import { TzktOperation } from "types/Tzkt"
+import { LiveMintingContext } from "context/LiveMinting"
+import useFetch, { CachePolicies } from "use-http"
 
 interface Props {
   token: GenerativeToken
@@ -102,7 +104,9 @@ export function MintController({
   className,
   children,
 }: PropsWithChildren<Props>) {
-  const { user, isLiveMinting } = useContext(UserContext)
+  const { user } = useContext(UserContext)
+  const { event, mintPass, authToken, paidLiveMinting } =
+    useContext(LiveMintingContext)
   const router = useRouter()
 
   // the mint context, handles display logic
@@ -114,6 +118,15 @@ export function MintController({
   const [loadingCC, setLoadingCC] = useState<boolean>(false)
   const [opHashCC, setOpHashCC] = useState<string | null>(null)
 
+  // free live minting
+  const [opHashFree, setOpHashFree] = useState<string | null>(null)
+  const { post: postFree, loading: loadingFree } = useFetch(
+    process.env.NEXT_PUBLIC_API_EVENTS_ROOT,
+    {
+      cachePolicy: CachePolicies.NO_CACHE,
+    }
+  )
+
   const mintOperation = mintOpsByVersion[token.version]
   // hook to interact with the contract
   const { state, loading, success, call, error, opHash, opData, clear } =
@@ -121,9 +134,29 @@ export function MintController({
       mintOperation.operation
     )
 
-  // can be used to call the mint entry point of the smart contract
-  const mint = (reserveConsumption: IReserveConsumption | null) => {
-    setOpHashCC(null) // reset CC op hash in case of new direct BC transaction
+  /**
+   * can be used to call the mint entry point of the smart contract, or to
+   * request the backend to mint the token on behalf of the user
+   */
+  //
+  const mint = async (reserveConsumption: IReserveConsumption | null) => {
+    if (!user) throw new Error("No wallet connected")
+
+    if (event?.freeLiveMinting) {
+      const opHash = await postFree("/request-mint", {
+        projectId: token.id,
+        eventId: event.id,
+        token: mintPass?.token || authToken,
+        recipient: user.id,
+        createTicket: token.inputBytesSize > 0,
+      })
+      setOpHashFree(opHash)
+      return
+    }
+
+    // reset other op hashes in case of new direct BC transaction
+    setOpHashFree(null)
+    setOpHashCC(null)
     call(
       mintOperation.getParams({
         token: token,
@@ -152,8 +185,8 @@ export function MintController({
   }
 
   // derive the op hash of interest from the CC or BC transaction hash
-  const finalOpHash = opHashCC || opHash
-  const finalLoading = loading || loadingCC
+  const finalOpHash = opHashCC || opHash || opHashFree
+  const finalLoading = loading || loadingCC || loadingFree
 
   const revealUrl = generateRevealUrl
     ? generateRevealUrl({ tokenId: token.id, hash: finalOpHash })
@@ -270,7 +303,7 @@ export function MintController({
               openCreditCard={openCreditCard}
             >
               <span className={style.mint}>
-                {!isLiveMinting && (
+                {!paidLiveMinting && (
                   <>
                     mint {isTicketMinted ? "ticket" : "iteration"}&nbsp;&nbsp;
                   </>
