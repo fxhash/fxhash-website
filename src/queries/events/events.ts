@@ -11,6 +11,7 @@ export const Qu_event = gql`
       startsAt
       endsAt
       projectIds
+      freeLiveMinting
     }
   }
 `
