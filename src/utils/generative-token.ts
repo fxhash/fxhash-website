@@ -571,6 +571,7 @@ export function reserveEligibleAmount(
   const reserves = eligibleReserves
     ? token.reserves.filter((res) => eligibleReserves.includes(res.method))
     : token.reserves
+  console.log({ reserves })
   if (reserves && user && user.id) {
     for (const reserve of reserves) {
       if (reserve.amount > 0 && reserve.method) {

@@ -15,6 +15,7 @@ import { Cover } from "../Utils/Cover"
 import { LiveMintingContext } from "../../context/LiveMinting"
 import { IReserveConsumption } from "../../services/contract-operations/Mint"
 import { ButtonPaymentCard } from "../Utils/ButtonPaymentCard"
+import { EReserveMethod } from "types/entities/Reserve"
 
 /**
  * The Mint Button displays a mint button component with specific display rules
@@ -60,6 +61,13 @@ export function MintButton({
 
   // only the reserve is available for minting
   const onlyReserveLeft = reserveLeft === token.balance
+
+  // same but for access list reserve
+  const reserveALLeft = useMemo(
+    () => reserveSize(token, [EReserveMethod.WHITELIST]),
+    [token]
+  )
+  const onlyReserveALLeft = reserveLeft === token.balance
 
   // compute how many editions in reserve the user is eligible for
   const eligibleFor = useMemo(
@@ -158,7 +166,7 @@ export function MintButton({
 
         {hasCreditCardOption &&
           !loading &&
-          !(userEligible && onlyReserveLeft) && (
+          !(userEligible && reserveALLeft) && (
             <ButtonPaymentCard onClick={openCreditCard} disabled={disabled} />
           )}
       </div>
