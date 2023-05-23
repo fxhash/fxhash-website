@@ -8,6 +8,14 @@ import style from "./WinterCheckout.module.scss"
 
 type TSuccess = (transactionHash: string, amountUSD: number) => void
 
+export interface IWinterMintPass {
+  address: string
+  parameters: {
+    payload: string
+    signature: string
+  }
+}
+
 interface Props {
   projectId?: number
   showModal?: boolean
@@ -31,6 +39,7 @@ interface Props {
   paymentMethod?: string
   appearance?: Record<string, string | number | undefined>
   additionalPurchaseParams?: Record<string, any>
+  mintPassParameters?: IWinterMintPass | null
   onClose?: () => void
   onSuccess?: TSuccess
   onFinish: (data: any) => void
@@ -47,6 +56,7 @@ const WinterCheckout: FunctionComponent<Props> = (props) => {
     tokenId,
     onFinish,
     additionalPurchaseParams,
+    mintPassParameters,
   } = props
   const [projectUrl, setProjectUrl] = useState("")
 
@@ -79,7 +89,7 @@ const WinterCheckout: FunctionComponent<Props> = (props) => {
       )
     }
 
-    const paramsStr = [
+    const paramsStr: (keyof Props)[] = [
       "contractVersion",
       "walletAddress",
       "email",
@@ -95,20 +105,21 @@ const WinterCheckout: FunctionComponent<Props> = (props) => {
       "paymentMethod",
     ]
     paramsStr.forEach((param) => {
-      const propValue = props[param as keyof PropsWithChildren<Props>]
+      const propValue = props[param]
       if (propValue) {
         queryParams.push(`${param}=${propValue}`)
       }
     })
 
-    const paramsObj = [
+    const paramsObj: (keyof Props)[] = [
       "extraMintParams",
       "priceFunctionParams",
       "appearance",
       "additionalPurchaseParams",
+      "mintPassParameters",
     ]
     paramsObj.forEach((param) => {
-      const propValue = props[param as keyof PropsWithChildren<Props>]
+      const propValue = props[param]
       if (propValue) {
         queryParams.push(
           `${param}=${encodeURIComponent(JSON.stringify(propValue))}`
@@ -121,7 +132,15 @@ const WinterCheckout: FunctionComponent<Props> = (props) => {
       ? "https://checkout.usewinter.com/?" + queryString
       : "https://sandbox-winter-checkout.onrender.com/?" + queryString
     setProjectUrl(url)
-  }, [contractAddress, production, projectId, props, tokenId])
+  }, [
+    contractAddress,
+    production,
+    projectId,
+    props,
+    tokenId,
+    additionalPurchaseParams,
+    mintPassParameters,
+  ])
 
   return showModal ? (
     <iframe id="winter-checkout" src={projectUrl} className={style.iframe} />
