@@ -1,7 +1,5 @@
 import { useRouter } from "next/router"
 import React, { PropsWithChildren, useState } from "react"
-import { ErrorPage } from "../components/Error/ErrorPage"
-import { LoaderBlock } from "../components/Layout/LoaderBlock"
 import { Qu_event, Qu_eventMintPass } from "../queries/events/events"
 import { eventsClient } from "../services/EventsClient"
 import {
@@ -19,6 +17,8 @@ export interface ILiveMintingContext {
   loading: boolean
   event: LiveMintingEvent | null
   mintPass: LiveMintingPass | null
+  authToken: string | null
+  paidLiveMinting: boolean | null
   error: string | null
 }
 
@@ -26,6 +26,8 @@ const defaultCtx: ILiveMintingContext = {
   loading: true,
   event: null,
   mintPass: null,
+  authToken: null,
+  paidLiveMinting: null,
   error: null,
 }
 
@@ -37,7 +39,10 @@ export function LiveMintingProvider({ children }: Props) {
 
   // get the id and the token from the router
   const router = useRouter()
-  const { id, token } = router.query
+  const { id, token, mode } = router.query
+
+  // is the token generated from a free live minting QR?
+  const isAuthToken = mode === "auth"
 
   // make queries to the events backend
   useClientAsyncEffect(
@@ -66,35 +71,56 @@ export function LiveMintingProvider({ children }: Props) {
             throw new Error("The event loaded from the URL doesn't exist.")
           }
 
-          // check if the token exists and is valid for this event
-          try {
-            response = await eventsClient.query({
-              query: Qu_eventMintPass,
-              variables: {
-                where: {
-                  token: token,
+          // if it's not an auth token, we need to check the mint pass
+          if (!isAuthToken) {
+            // check if the token exists and is valid for this event
+            try {
+              response = await eventsClient.query({
+                query: Qu_eventMintPass,
+                variables: {
+                  where: {
+                    token: token,
+                  },
                 },
-              },
-            })
-          } catch (err) {
-            throw new Error("Network error: cannot find the mint pass.")
-          }
+              })
+            } catch (err) {
+              throw new Error("Network error: cannot find the mint pass.")
+            }
 
-          // if there is no mintPass in the response, it's invalid
-          const mintPass = response?.data?.mintPass
-          if (!mintPass || mintPass.group.event.id !== event.id) {
-            throw new Error("This mint pass is invalid.")
-          }
+            // if there is no mintPass in the response, it's invalid
+            const mintPass = response?.data?.mintPass
+            if (!mintPass || mintPass.group.event.id !== event.id) {
+              throw new Error("This mint pass is invalid.")
+            }
 
-          // we can update the context with the event/pass details
-          if (isMounted()) {
-            setContext({
-              ...context,
-              loading: false,
-              error: null,
-              event: event,
-              mintPass: mintPass,
-            })
+            // we can update the context with the event/pass details
+            if (isMounted()) {
+              setContext({
+                ...context,
+                loading: false,
+                error: null,
+                event: event,
+                mintPass: mintPass,
+                paidLiveMinting: !event.freeLiveMinting,
+              })
+            }
+          } else {
+            // check that a token was provided
+            if (!token) {
+              throw new Error("No token provided for free live minting.")
+            }
+
+            // we can update the context with the event/free mint auth token details
+            if (isMounted()) {
+              setContext({
+                ...context,
+                loading: false,
+                error: null,
+                event: event,
+                mintPass: null,
+                authToken: token as string,
+              })
+            }
           }
         } catch (err: any) {
           if (isMounted()) {
