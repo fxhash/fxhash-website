@@ -12,6 +12,7 @@ const naiveMimes: Record<string, string> = {
   js: "text/javascript",
   css: "text/css",
   csv: "text/csv",
+  vtt: "text/vtt",
 }
 
 /**
