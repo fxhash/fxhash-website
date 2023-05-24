@@ -75,7 +75,12 @@ export function MintButton({
     userEligible && !onlyReserveLeft && !forceReserveConsumption
   // conditions required to show the regular mint button
   const isMintButton =
-    !isMintDropdown && ((userEligible && onlyReserveLeft) || !onlyReserveLeft)
+    !isMintDropdown &&
+    ((userEligible && onlyReserveLeft) ||
+      !onlyReserveLeft ||
+      // TODO: tidy me
+      liveMintingContext.mintPass ||
+      liveMintingContext.authToken)
 
   return isMintButton || isMintDropdown ? (
     <>
