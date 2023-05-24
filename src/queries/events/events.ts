@@ -70,3 +70,16 @@ export const Qu_eventMintPassGroup = gql`
     }
   }
 `
+
+export const Qu_eventsFreeLiveMintingWallets = gql`
+  query EventFreeLiveMintingWallets($where: EventWhereInput!) {
+    events(where: $where) {
+      id
+      name
+      description
+      freeLiveMintingWallets {
+        publicKey
+      }
+    }
+  }
+`
