@@ -70,6 +70,9 @@ export function MintButton({
   )
   const userEligible = eligibleFor > 0
 
+  const override =
+    !!liveMintingContext.mintPass || !!liveMintingContext.authToken
+
   // should we show the button with dropdown
   const isMintDropdown =
     userEligible && !onlyReserveLeft && !forceReserveConsumption
@@ -79,8 +82,7 @@ export function MintButton({
     ((userEligible && onlyReserveLeft) ||
       !onlyReserveLeft ||
       // TODO: tidy me
-      liveMintingContext.mintPass ||
-      liveMintingContext.authToken)
+      override)
 
   return isMintButton || isMintDropdown ? (
     <>

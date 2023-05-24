@@ -561,6 +561,14 @@ export function reserveEligibleAmount(
   liveMintingContext?: ILiveMintingContext
 ): number {
   let eligibleFor = 0
+
+  // override if live minting TODO cleanup
+  if (
+    liveMintingContext?.event?.projectIds.includes(token.id) &&
+    liveMintingContext.authToken
+  )
+    return 1
+
   if (token.reserves && user && user.id) {
     for (const reserve of token.reserves) {
       if (reserve.amount > 0 && reserve.method) {
