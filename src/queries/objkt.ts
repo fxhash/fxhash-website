@@ -2,10 +2,12 @@ import { gql } from "@apollo/client"
 import { Frag_GenAuthor } from "./fragments/generative-token"
 import { Frag_MediaImage } from "./fragments/media"
 import { Frag_UserBadge } from "./fragments/user"
+import { Frag_GenTokOffer } from "./fragments/offer"
 export const Qu_objkt = gql`
   ${Frag_GenAuthor}
   ${Frag_MediaImage}
   ${Frag_UserBadge}
+  ${Frag_GenTokOffer}
   query Gentk($id: ObjktId, $slug: String) {
     objkt(id: $id, slug: $slug) {
       id
@@ -66,16 +68,7 @@ export const Qu_objkt = gql`
         }
       }
       offers(filters: { active_eq: true }) {
-        id
-        price
-        version
-        createdAt
-        cancelledAt
-        acceptedAt
-        buyer {
-          id
-          name
-        }
+        ...GenTokOffer
       }
       actions {
         id
