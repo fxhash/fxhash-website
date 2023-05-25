@@ -56,6 +56,10 @@ const booleanFiltersDef: IBooleanFilterDef[] = [
     label: "fx(params)",
     value: "fxparams_eq",
   },
+  {
+    label: "redeemable",
+    value: "redeemable_eq",
+  },
 ]
 
 interface Props {

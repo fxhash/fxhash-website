@@ -167,6 +167,7 @@ export interface GenerativeTokenFilters {
   locked_eq?: boolean
   mintOpened_eq?: boolean
   fxparams_eq?: boolean
+  redeemable_eq?: boolean
 }
 
 export interface GenerativeTokenFeatureValue {
