@@ -317,15 +317,18 @@ export function MintController({
             >
               <span className={style.mint}>
                 {!paidLiveMinting && (
+                  <>mint {isTicketMinted ? "ticket" : "iteration"}</>
+                )}
+                {!event?.freeLiveMinting && (
                   <>
-                    mint {isTicketMinted ? "ticket" : "iteration"}&nbsp;&nbsp;
+                    &nbsp;&nbsp;
+                    <DisplayTezos
+                      mutez={price}
+                      tezosSize="regular"
+                      formatBig={false}
+                    />
                   </>
                 )}
-                <DisplayTezos
-                  mutez={price}
-                  tezosSize="regular"
-                  formatBig={false}
-                />
               </span>
             </MintButton>
           )}
