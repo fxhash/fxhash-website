@@ -121,6 +121,7 @@ export function MintController({
 
   // free live minting
   const [opHashFree, setOpHashFree] = useState<string | null>(null)
+  const [errorFree, setErrorFree] = useState<string | null>(null)
   const { post: postFree, loading: loadingFree } = useFetch(
     process.env.NEXT_PUBLIC_API_EVENTS_ROOT,
     {
@@ -146,11 +147,15 @@ export function MintController({
     if (checkIsEligibleForFreeLiveMint(token, liveMintingContext)) {
       const opHash = await postFree("/request-mint", {
         projectId: token.id,
-        eventId: event!.id,
+        eventId: "autonomy-test",
         token: mintPass?.token || authToken,
         recipient: user.id,
         createTicket: token.inputBytesSize > 0,
       })
+      if (opHash.error) {
+        setErrorFree(opHash.error)
+        return
+      }
       setOpHashFree(opHash)
       return
     }
@@ -241,6 +246,13 @@ export function MintController({
           loading={loading}
           className={cs(style.contract_feedback)}
         />
+      )}
+
+      {errorFree && (
+        <span className={cs(style.error)}>
+          An error occurred requesting your mint - please try again or rescan
+          the QR code if the error persists.
+        </span>
       )}
 
       {finalOpHash && (
