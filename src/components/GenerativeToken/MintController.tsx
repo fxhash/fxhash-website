@@ -38,6 +38,7 @@ import { isOperationApplied } from "services/Blockchain"
 import { TzktOperation } from "types/Tzkt"
 import { LiveMintingContext } from "context/LiveMinting"
 import useFetch, { CachePolicies } from "use-http"
+import { checkIsEligibleForFreeLiveMint } from "utils/generative-token"
 
 interface Props {
   token: GenerativeToken
@@ -105,8 +106,8 @@ export function MintController({
   children,
 }: PropsWithChildren<Props>) {
   const { user } = useContext(UserContext)
-  const { event, mintPass, authToken, paidLiveMinting } =
-    useContext(LiveMintingContext)
+  const liveMintingContext = useContext(LiveMintingContext)
+  const { event, mintPass, authToken, paidLiveMinting } = liveMintingContext
   const router = useRouter()
 
   // the mint context, handles display logic
@@ -142,10 +143,10 @@ export function MintController({
   const mint = async (reserveConsumption: IReserveConsumption | null) => {
     if (!user) throw new Error("No wallet connected")
 
-    if (event?.freeLiveMinting) {
+    if (checkIsEligibleForFreeLiveMint(token, liveMintingContext)) {
       const opHash = await postFree("/request-mint", {
         projectId: token.id,
-        eventId: event.id,
+        eventId: event!.id,
         token: mintPass?.token || authToken,
         recipient: user.id,
         createTicket: token.inputBytesSize > 0,

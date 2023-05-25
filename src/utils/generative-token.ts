@@ -553,6 +553,25 @@ const mapReserveToEligiblity: Record<EReserveMethod, TReserveEligibility> = {
 }
 
 /**
+ * Given a token and the live minting context, checks whether there is a free
+ * live minting event in the context, whether the project is part of the event
+ * and whether the user has an auth token to mint.
+ */
+export const checkIsEligibleForFreeLiveMint = (
+  token: GenerativeToken,
+  liveMintingContext?: ILiveMintingContext
+) => {
+  if (!liveMintingContext || !liveMintingContext.event?.freeLiveMinting)
+    return false
+
+  const isProjectIncludedInEvent =
+    liveMintingContext.event.projectIds?.includes(token.id)
+  const isEligibleToMint = !!liveMintingContext.authToken
+
+  return isProjectIncludedInEvent && isEligibleToMint
+}
+
+/**
  * Is a user elligible to mint from the reserve of a token ?
  */
 export function reserveEligibleAmount(
@@ -562,12 +581,7 @@ export function reserveEligibleAmount(
 ): number {
   let eligibleFor = 0
 
-  // override if live minting TODO cleanup
-  if (
-    liveMintingContext?.event?.projectIds.includes(token.id) &&
-    liveMintingContext.authToken
-  )
-    return 1
+  if (checkIsEligibleForFreeLiveMint(token, liveMintingContext)) return 1
 
   if (token.reserves && user && user.id) {
     for (const reserve of token.reserves) {
