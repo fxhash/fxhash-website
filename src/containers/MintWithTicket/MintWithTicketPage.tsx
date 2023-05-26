@@ -43,21 +43,26 @@ import { ParamConfigurationList } from "./ParamConfigurationList"
 import { PanelSubmitMode } from "./Panel/PanelControls"
 import { format } from "date-fns"
 import { truncateEnd } from "utils/strings"
+import { MintTicket } from "../../types/entities/MintTicket"
 
-export type TOnMintHandler = (ticketId: number | number[] | null) => void
+export type TOnMintHandler = (
+  ticket: MintTicket | MintTicket[] | null,
+  claimTicket?: boolean
+) => void
 
 interface Props {
   token: GenerativeToken
-  ticketId?: number
+  ticket?: MintTicket
   mode?: PanelSubmitMode
 }
-export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
+export function MintWithTicketPageRoot({ token, ticket, mode }: Props) {
   const { showTicketPreMintWarning } = useSettingsContext()
   const [showLoadConfigModal, setShowLoadConfigModal] = useState(false)
   const [showPreMintWarningView, setShowPreMintWarningView] = useState(false)
-  const [selectedTicketId, setSelectedTicketId] = useState<
-    number | number[] | null
-  >(null)
+  const [selectedTicket, setSelectedTicket] = useState<{
+    ticket: MintTicket | MintTicket[]
+    claimTicket?: boolean
+  } | null>(null)
   const panelParamsRef = useRef<PanelParamsRef>(null)
   const historyContext = useContext(ParamsHistoryContext)
   const artworkIframeRef = useRef<ArtworkIframeRef>(null)
@@ -78,7 +83,7 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
 
   const handleClosePreMintView = useCallback(() => {
     setShowPreMintWarningView(false)
-    setSelectedTicketId(null)
+    setSelectedTicket(null)
   }, [])
 
   const { data, setData, hash, setHash, inputBytes } = useFxParams(params)
@@ -149,11 +154,12 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
 
   // call contract v3 mint with ticket
   const handleMint: TOnMintHandler = useCallback(
-    (_ticketId) => {
+    (_ticket, claimTicket) => {
       if (inputBytes) {
         call({
           token: token,
-          ticketId: _ticketId,
+          ticket: _ticket,
+          claimTicket,
           inputBytes: inputBytes,
         })
       }
@@ -162,22 +168,21 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
   )
 
   const handleClickSubmit: TOnMintHandler = useCallback(
-    (_ticketId) => {
-      const ticketIdToMint =
-        mode === "with-ticket" && ticketId ? ticketId : _ticketId
+    (_ticket, claimTicket) => {
+      const ticketToMint = mode === "with-ticket" && ticket ? ticket : _ticket
       if (showTicketPreMintWarning) {
         setShowPreMintWarningView(true)
-        setSelectedTicketId(ticketIdToMint)
+        setSelectedTicket(ticketToMint && { ticket: ticketToMint, claimTicket })
       } else {
-        handleMint(ticketIdToMint)
+        handleMint(ticketToMint, claimTicket)
       }
     },
-    [handleMint, mode, showTicketPreMintWarning, ticketId]
+    [handleMint, mode, showTicketPreMintWarning, ticket]
   )
 
   const handleValidatePreMint = useCallback(() => {
-    handleMint(selectedTicketId)
-  }, [handleMint, selectedTicketId])
+    handleMint(selectedTicket?.ticket || null, selectedTicket?.claimTicket)
+  }, [handleMint, selectedTicket])
 
   const handleSaveConfiguration = () => {
     if (paramConfigExists) return

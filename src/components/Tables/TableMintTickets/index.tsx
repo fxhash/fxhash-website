@@ -1,10 +1,11 @@
-import React, { memo, useEffect, useState } from "react"
+import React, { memo } from "react"
 import cs from "classnames"
 import { GenTokFlag } from "types/entities/GenerativeToken"
 import { MintTicket } from "types/entities/MintTicket"
 import Skeleton from "../../Skeleton"
 import style from "../TableUser.module.scss"
 import { MintTicketRow } from "./MintTicketRow"
+import useNow from "../../../hooks/useNow"
 
 interface TableMintTicketsProps {
   firstColName?: string
@@ -23,16 +24,7 @@ const _TableMintTickets = ({
   refreshEveryMs = 15000,
   updateCacheOnForeclosure = false,
 }: TableMintTicketsProps) => {
-  const [now, setNow] = useState(new Date())
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setNow(new Date())
-    }, refreshEveryMs)
-    return () => {
-      clearInterval(interval)
-    }
-  }, [refreshEveryMs])
+  const now = useNow(refreshEveryMs)
 
   const isInForeclosure = (mintTicket: MintTicket) => {
     const dateTaxPaidUntil = new Date(mintTicket.taxationPaidUntil)

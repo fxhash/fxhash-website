@@ -2,18 +2,19 @@ import Head from "next/head"
 import { GetServerSideProps, NextPage } from "next"
 import { createApolloClient } from "services/ApolloClient"
 import { GenerativeToken } from "types/entities/GenerativeToken"
-import { Spacing } from "components/Layout/Spacing"
 import { truncateEnd } from "utils/strings"
-import { Qu_genToken } from "queries/generative-token"
 import { getImageApiUrl, OG_IMAGE_SIZE } from "components/Image"
 import { MintWithTicketPage } from "containers/MintWithTicket/MintWithTicketPage"
+import { MintTicket } from "../../../../../../types/entities/MintTicket"
+import { gql } from "@apollo/client"
+import { Frag_GenTokenInfo } from "../../../../../../queries/fragments/generative-token"
 
 interface Props {
   token: GenerativeToken
-  ticketId: string
+  ticket: MintTicket
 }
 
-const MintWithTicket: NextPage<Props> = ({ token, ticketId }) => {
+const MintWithTicket: NextPage<Props> = ({ token, ticket }) => {
   // get the display url for og:image
   const displayUrl =
     token.captureMedia?.cid &&
@@ -56,36 +57,50 @@ const MintWithTicket: NextPage<Props> = ({ token, ticketId }) => {
         />
       </Head>
 
-      <MintWithTicketPage
-        token={token}
-        ticketId={parseInt(ticketId)}
-        mode="with-ticket"
-      />
+      <MintWithTicketPage token={token} ticket={ticket} mode="with-ticket" />
     </>
   )
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { ticketId, slug } = context?.params || {}
-  let token = null
   const apolloClient = createApolloClient()
-  if (slug) {
+  if (slug && ticketId && !Array.isArray(ticketId)) {
     const { data } = await apolloClient.query({
-      query: Qu_genToken,
+      query: gql`
+        ${Frag_GenTokenInfo}
+        query GenerativeTokenParam($slug: String, $ticketId: Float!) {
+          generativeToken(slug: $slug) {
+            ...TokenInfo
+            tags
+            moderationReason
+            mintOpensAt
+            lockEnd
+            metadata
+            metadataUri
+            version
+          }
+          mintTicket(id: $ticketId) {
+            id
+            price
+            taxationPaidUntil
+          }
+        }
+      `,
       fetchPolicy: "no-cache",
-      variables: { slug },
+      variables: { slug, ticketId: parseInt(ticketId) },
     })
-    if (data) {
-      token = data.generativeToken
+    if (data.generativeToken && data.mintTicket) {
+      return {
+        props: {
+          token: data.generativeToken,
+          ticket: data.mintTicket,
+        },
+      }
     }
   }
-
   return {
-    props: {
-      token: token,
-      ticketId,
-    },
-    notFound: !token || !ticketId,
+    notFound: true,
   }
 }
 

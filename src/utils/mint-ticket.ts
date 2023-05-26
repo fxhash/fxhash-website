@@ -5,6 +5,7 @@ import { User } from "../types/entities/User"
 import { getTaxPaidUntil } from "./math"
 import { GenerativeToken } from "../types/entities/GenerativeToken"
 import { TzktOperation } from "../types/Tzkt"
+import { addDays, differenceInSeconds, subSeconds } from "date-fns"
 
 export const generateMintTicketFromMintAction = (
   opData: TzktOperation[],
@@ -40,4 +41,24 @@ export const generateMintTicketFromMintAction = (
     ),
     settings: token.mintTicketSettings!,
   }
+}
+
+export const getMintTicketDAPrice = (
+  dateNow: Date,
+  dateEnd: Date,
+  price: number
+) => {
+  const dateNowOffset = subSeconds(dateNow, 60)
+  const dateEndDayLater = addDays(dateEnd, 1)
+  // end of auction
+  if (dateEndDayLater < dateNowOffset) {
+    return 100000
+  }
+  // start of auction
+  if (dateNowOffset < dateEnd) {
+    return price
+  }
+  const elapsedTimeInSeconds = differenceInSeconds(dateNowOffset, dateEnd)
+  const daProgressMultiplier = (elapsedTimeInSeconds * 100) / 86400 / 100
+  return 100000 + (price - 100000) * (1 - daProgressMultiplier)
 }

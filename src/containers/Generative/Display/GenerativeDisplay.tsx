@@ -28,6 +28,7 @@ import { ListReserves } from "../../../components/List/ListReserves"
 import { GenTokArticleMentions } from "./GenTokArticleMentions"
 import { Clamp } from "../../../components/Clamp/Clamp"
 import { useCallback, useState } from "react"
+import { ButtonExploreParams } from "./ButtonExploreParams"
 
 /**
  * This is the Core component resposible for the display logic of a Generative
@@ -89,16 +90,21 @@ export function GenerativeDisplay({ token, offlineMode = false }: Props) {
           <Spacing size="x-large" sm="regular" />
 
           <MintController token={token} forceDisabled={offlineMode}>
-            <Link href={getGenerativeTokenMarketplaceUrl(token)} passHref>
-              <Button
-                isLink={true}
-                size="regular"
-                disabled={offlineMode}
-                className={style.button}
-              >
-                open marketplace
-              </Button>
-            </Link>
+            <>
+              {token.inputBytesSize > 0 && (
+                <ButtonExploreParams token={token} />
+              )}
+              <Link href={getGenerativeTokenMarketplaceUrl(token)} passHref>
+                <Button
+                  isLink={true}
+                  size="regular"
+                  disabled={offlineMode}
+                  className={style.button}
+                >
+                  open marketplace
+                </Button>
+              </Link>
+            </>
           </MintController>
 
           <Spacing size="4x-large" sm="x-large" />

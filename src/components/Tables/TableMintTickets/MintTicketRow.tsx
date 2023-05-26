@@ -1,14 +1,7 @@
 import { memo, useContext, useEffect, useRef } from "react"
 import Link from "next/link"
 import cs from "classnames"
-import {
-  addDays,
-  differenceInSeconds,
-  format,
-  formatDistanceToNow,
-  isBefore,
-  subSeconds,
-} from "date-fns"
+import { format, formatDistanceToNow, isBefore } from "date-fns"
 import { Image } from "components/Image"
 import { UserContext } from "containers/UserProvider"
 import { MintTicket } from "types/entities/MintTicket"
@@ -19,25 +12,8 @@ import { Button } from "components/Button"
 import { ButtonUpdatePriceMintTicket } from "components/MintTicket/ButtonUpdatePriceMintTicket"
 import { ButtonClaimMintTicket } from "components/MintTicket/ButtonClaimMintTicket"
 import { ApolloCache, useApolloClient } from "@apollo/client"
-import { Qu_genTokenMintTickets } from "queries/generative-token"
 import { GenerativeToken } from "types/entities/GenerativeToken"
-import { Frag_MintTicketFull } from "queries/fragments/mint-ticket"
-
-const getDAPrice = (dateNow: Date, dateEnd: Date, price: number) => {
-  const dateNowOffset = subSeconds(dateNow, 60)
-  const dateEndDayLater = addDays(dateEnd, 1)
-  // end of auction
-  if (dateEndDayLater < dateNowOffset) {
-    return 100000
-  }
-  // start of auction
-  if (dateNowOffset < dateEnd) {
-    return price
-  }
-  const elapsedTimeInSeconds = differenceInSeconds(dateNowOffset, dateEnd)
-  const daProgressMultiplier = (elapsedTimeInSeconds * 100) / 86400 / 100
-  return 100000 + (price - 100000) * (1 - daProgressMultiplier)
-}
+import { getMintTicketDAPrice } from "../../../utils/mint-ticket"
 
 const moveMintTicketToUnderAuction = (
   cache: ApolloCache<any>,
@@ -92,7 +68,7 @@ const _MintTicketRow = ({
 
   const price = !isUnderAuction
     ? mintTicket.price
-    : getDAPrice(now, dateTaxPaidUntil, mintTicket.price)
+    : getMintTicketDAPrice(now, dateTaxPaidUntil, mintTicket.price)
 
   useEffect(() => {
     if (!updateCacheOnForeclosure) return

@@ -1,10 +1,8 @@
 import {
   ContractAbstraction,
   OpKind,
-  TransactionWalletOperation,
   Wallet,
   WalletOperation,
-  WalletOperationBatch,
   WalletParamsWithKind,
 } from "@taquito/taquito"
 import { FxhashContracts } from "../../types/Contracts"
