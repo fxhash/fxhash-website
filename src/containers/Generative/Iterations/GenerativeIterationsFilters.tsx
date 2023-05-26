@@ -27,11 +27,14 @@ interface IBooleanFilterDef {
   value: keyof ObjktFilters
 }
 
-const booleanFiltersDef: IBooleanFilterDef[] = [
+const iterationsFilters: IBooleanFilterDef[] = [
   {
     label: "For sale",
     value: "activeListing_exist",
   },
+]
+
+const redeemableIterationsFilters: IBooleanFilterDef[] = [
   {
     label: "Redeemable",
     value: "redeemable_eq",
@@ -123,6 +126,12 @@ export function GenerativeIterationsFilters({
     if (hasRedeemedFilter) return { ...newFilters, redeemable_eq: undefined }
     return newFilters
   }
+
+  const booleanFiltersDef = useMemo(() => {
+    if (token.redeemables.length > 0)
+      return [...iterationsFilters, ...redeemableIterationsFilters]
+    return iterationsFilters
+  }, [token])
 
   const { booleanFilters, updateBooleanFilters } = useBooleanFilters({
     booleanFiltersDef,
