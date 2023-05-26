@@ -2,15 +2,15 @@ import style from "./GenerativeFilters.module.scss"
 import cs from "classnames"
 import { FiltersGroup } from "../../components/Exploration/FiltersGroup"
 import { InputText } from "../../components/Input/InputText"
-import { useMemo, useState } from "react"
+import { useState } from "react"
 import {
   InputRadioButtons,
   RadioOption,
 } from "../../components/Input/InputRadioButtons"
 import { Button } from "../../components/Button"
 import { GenerativeTokenFilters } from "../../types/entities/GenerativeToken"
-import { InputMultiList } from "components/Input/InputMultiList"
 import { InputRadioMultiButtons } from "components/Input/InputRadioMultiButtons"
+import { useBooleanFilters } from "hooks/useBooleanFilters"
 
 const MintProgresOptions: RadioOption[] = [
   {
@@ -99,28 +99,11 @@ export function GenerativeFilters({ filters, setFilters }: Props) {
     })
   }
 
-  // derive booleanFilters (list of strings, each string is property filter)
-  const booleanFilters = useMemo(() => {
-    const out: string[] = []
-    for (const bf of booleanFiltersDef) {
-      if (filters[bf.value] === true) {
-        out.push(bf.value)
-      }
-    }
-    return out
-  }, [filters])
-
-  const updateBooleanFilters = (enabledFilters: string[]) => {
-    const out: GenerativeTokenFilters = {
-      ...filters,
-    }
-    for (const bf of booleanFiltersDef) {
-      ;(out[bf.value] as any) = enabledFilters.includes(bf.value)
-        ? true
-        : undefined
-    }
-    setFilters(out)
-  }
+  const { booleanFilters, updateBooleanFilters } = useBooleanFilters({
+    booleanFiltersDef,
+    filters,
+    setFilters,
+  })
 
   return (
     <>
