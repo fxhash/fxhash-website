@@ -12,6 +12,8 @@ export interface ITagsFilters {
   fullyMinted_eq: (isFullyMinted: boolean) => string
   searchQuery_eq: (value: string) => string
   activeListing_exist: (value: boolean) => string
+  redeemable_eq: (value: boolean) => string
+  redeemed_eq: (value: boolean) => string
 }
 
 export const tagsFilters: ITagsFilters = {
@@ -28,6 +30,8 @@ export const tagsFilters: ITagsFilters = {
   searchQuery_eq: (value) => `search: ${value}`,
   activeListing_exist: (value) =>
     `listings: ${value ? "for sale" : "not for sale"}`,
+  redeemable_eq: (value) => `redeemable: ${value ? "yes" : "no"}`,
+  redeemed_eq: (value) => `redeemed: ${value ? "yes" : "no"}`,
 }
 
 interface TagOption<TFilters> {

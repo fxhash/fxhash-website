@@ -35,7 +35,6 @@ import { LargeGentkCard } from "../../../components/Card/LargeGentkCard"
 import { CardSizeSelect } from "../../../components/Input/CardSizeSelect"
 import { getTagsFromFiltersObject } from "../../../utils/filters"
 import { SettingsContext } from "../../../context/Theme"
-import useSort from "hooks/useSort"
 import { useQueryParamSort } from "hooks/useQueryParamSort"
 import { useQueryParam } from "hooks/useQueryParam"
 
@@ -93,10 +92,10 @@ export function GenerativeIterations({ token }: Props) {
   const [featureFilters, setFeatureFilters] = useQueryParam<
     IObjktFeatureFilter[]
   >("features", [])
-  const [objtkFilters, setObjtkFilters] = useState<ObjktFilters>({})
+  const [objktFilters, setObjktFilters] = useState<ObjktFilters>({})
 
-  const removeObjtkFilter = useCallback((key: keyof ObjktFilters) => {
-    setObjtkFilters((oldFilters) => {
+  const removeObjktFilter = useCallback((key: keyof ObjktFilters) => {
+    setObjktFilters((oldFilters) => {
       const newFilters = { ...oldFilters }
       delete newFilters[key]
       return newFilters
@@ -111,7 +110,7 @@ export function GenerativeIterations({ token }: Props) {
 
   const handleClearAllTags = useCallback(() => {
     setFeatureFilters([])
-    setObjtkFilters({})
+    setObjktFilters({})
   }, [])
 
   // serialize the feature filters to send to the backend
@@ -136,7 +135,7 @@ export function GenerativeIterations({ token }: Props) {
         take: ITEMS_PER_PAGE,
         sort: sortVariable,
         featureFilters: serializedFeatureFilters,
-        filters: objtkFilters,
+        filters: objktFilters,
       },
       fetchPolicy: "cache-and-network",
       nextFetchPolicy: "cache-and-network",
@@ -159,15 +158,15 @@ export function GenerativeIterations({ token }: Props) {
     const objtkFiltersTags = getTagsFromFiltersObject<
       ObjktFilters,
       ExploreTagDef
-    >(objtkFilters, ({ key, label }) => ({
+    >(objktFilters, ({ key, label }) => ({
       value: label,
-      onClear: () => removeObjtkFilter(key),
+      onClear: () => removeObjktFilter(key),
     }))
     return featuresFiltersTags.concat(objtkFiltersTags)
   }, [
     clearFeatureFilter,
-    objtkFilters,
-    removeObjtkFilter,
+    objktFilters,
+    removeObjktFilter,
     serializedFeatureFilters,
   ])
 
@@ -264,8 +263,8 @@ export function GenerativeIterations({ token }: Props) {
                 token={token}
                 featureFilters={featureFilters}
                 setFeatureFilters={setFeatureFilters}
-                objtkFilters={objtkFilters}
-                setObjtkFilters={setObjtkFilters}
+                objktFilters={objktFilters}
+                setObjktFilters={setObjktFilters}
               />
             </FiltersPanel>
             <div style={{ width: "100%" }}>

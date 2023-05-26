@@ -1,7 +1,8 @@
-import style from "./GenerativeIterationsFilters.module.scss"
+import { Dispatch, SetStateAction, useMemo } from "react"
 import cs from "classnames"
-import { FiltersGroup } from "../../../components/Exploration/FiltersGroup"
-import { Dispatch, SetStateAction, useCallback, useMemo } from "react"
+import { useQuery } from "@apollo/client"
+import { useBooleanFilters } from "hooks/useBooleanFilters"
+import { InputRadioMultiButtons } from "components/Input/InputRadioMultiButtons"
 import {
   GenerativeToken,
   GenerativeTokenFeature,
@@ -18,20 +19,26 @@ import {
 import { Qu_genTokenFeatures } from "../../../queries/generative-token"
 import { FiltersSubGroup } from "../../../components/Exploration/FiltersSubGroup"
 import { LoaderBlock } from "../../../components/Layout/LoaderBlock"
-import { useQuery } from "@apollo/client"
-import {
-  InputRadioButtons,
-  RadioOption,
-} from "../../../components/Input/InputRadioButtons"
+import { FiltersGroup } from "../../../components/Exploration/FiltersGroup"
+import style from "./GenerativeIterationsFilters.module.scss"
 
-const ActiveListingsOptions: RadioOption[] = [
+interface IBooleanFilterDef {
+  label: string
+  value: keyof ObjktFilters
+}
+
+const booleanFiltersDef: IBooleanFilterDef[] = [
   {
-    value: undefined,
-    label: "All",
+    label: "For sale",
+    value: "activeListing_exist",
   },
   {
-    value: true,
-    label: "For sale",
+    label: "Redeemable",
+    value: "redeemable_eq",
+  },
+  {
+    label: "Redeemed",
+    value: "redeemed_eq",
   },
 ]
 
@@ -44,16 +51,16 @@ interface Props {
   token: GenerativeToken
   featureFilters: IObjktFeatureFilter[]
   setFeatureFilters: Dispatch<SetStateAction<IObjktFeatureFilter[]>>
-  objtkFilters: ObjktFilters
-  setObjtkFilters: Dispatch<SetStateAction<ObjktFilters>>
+  objktFilters: ObjktFilters
+  setObjktFilters: Dispatch<SetStateAction<ObjktFilters>>
 }
 
 export function GenerativeIterationsFilters({
   token,
   featureFilters,
   setFeatureFilters,
-  objtkFilters,
-  setObjtkFilters,
+  objktFilters,
+  setObjktFilters,
 }: Props) {
   const { data, loading } = useQuery(Qu_genTokenFeatures, {
     notifyOnNetworkStatusChange: true,
@@ -62,16 +69,6 @@ export function GenerativeIterationsFilters({
     },
     fetchPolicy: "no-cache",
   })
-
-  const handleChangeFilters = useCallback(
-    (field) => (option: boolean | undefined) => {
-      setObjtkFilters((oldFilters) => ({
-        ...oldFilters,
-        [field]: option,
-      }))
-    },
-    [setObjtkFilters]
-  )
 
   const features: GenerativeTokenFeature[] | null =
     data?.generativeToken?.features || null
@@ -113,6 +110,32 @@ export function GenerativeIterationsFilters({
     (featureFilter) => featureFilter.name
   )
 
+  const enforceMutuallyExclusiveFilters = (
+    currentFilters: ObjktFilters,
+    newFilters: ObjktFilters
+  ) => {
+    const hasRedeemableFilter =
+      newFilters.redeemable_eq && currentFilters.redeemed_eq
+    const hasRedeemedFilter =
+      newFilters.redeemed_eq && currentFilters.redeemable_eq
+
+    if (hasRedeemableFilter) return { ...newFilters, redeemed_eq: undefined }
+    if (hasRedeemedFilter) return { ...newFilters, redeemable_eq: undefined }
+    return newFilters
+  }
+
+  const { booleanFilters, updateBooleanFilters } = useBooleanFilters({
+    booleanFiltersDef,
+    filters: objktFilters,
+    setFilters: (newFilters) => {
+      const enforcedFilters = enforceMutuallyExclusiveFilters(
+        objktFilters,
+        newFilters
+      )
+      setObjktFilters(enforcedFilters)
+    },
+  })
+
   return (
     <>
       <FiltersGroup title="Features">
@@ -151,10 +174,10 @@ export function GenerativeIterationsFilters({
         )}
       </FiltersGroup>
       <FiltersGroup title="Listings">
-        <InputRadioButtons
-          value={objtkFilters.activeListing_exist}
-          onChange={handleChangeFilters("activeListing_exist")}
-          options={ActiveListingsOptions}
+        <InputRadioMultiButtons
+          options={booleanFiltersDef}
+          value={booleanFilters}
+          onChange={updateBooleanFilters}
         />
       </FiltersGroup>
     </>

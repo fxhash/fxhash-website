@@ -43,6 +43,8 @@ export interface Objkt {
 
 export interface ObjktFilters {
   activeListing_exist?: boolean
+  redeemable_eq?: boolean
+  redeemed_eq?: boolean
 }
 
 export enum EObjktFeatureType {
