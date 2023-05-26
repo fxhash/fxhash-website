@@ -37,6 +37,8 @@ import { getTagsFromFiltersObject } from "../../../utils/filters"
 import { SettingsContext } from "../../../context/Theme"
 import { useQueryParamSort } from "hooks/useQueryParamSort"
 import { useQueryParam } from "hooks/useQueryParam"
+import { useInfiniteScroll } from "hooks/useInfiniteScroll"
+import { GentkList } from "components/GenerativeToken/GentkList"
 
 const ITEMS_PER_PAGE = 20
 
@@ -72,16 +74,6 @@ interface Props {
 }
 export function GenerativeIterations({ token }: Props) {
   const settings = useContext(SettingsContext)
-
-  //
-  // REFS / STATE
-  //
-  // reference to the element at the top
-  const topMarkerRef = useRef<HTMLDivElement>(null)
-
-  // use to know when to stop loading
-  const currentLength = useRef<number>(0)
-  const ended = useRef<boolean>(false)
 
   // the sort value
   const { sortValue, sortVariable, sortOptions, setSortValue } =
@@ -170,31 +162,26 @@ export function GenerativeIterations({ token }: Props) {
     serializedFeatureFilters,
   ])
 
-  //
-  // UTILITIES
-  //
-  const infiniteScrollFetch = () => {
-    !ended.current &&
+  const { topMarkerRef, scrollToTop, onEndReached } = useInfiniteScroll({
+    loading,
+    itemLength: tokens?.length || 0,
+    offsetTop: 30,
+    onFetchMore: () => {
       fetchMore?.({
         variables: {
           skip: tokens?.length || 0,
           take: ITEMS_PER_PAGE,
         },
       })
-  }
+    },
+  })
 
   //
   // SIDE EFFECTS
   //
   useEffect(() => {
-    // first we scroll to the top
-    const top = (topMarkerRef.current?.offsetTop || 0) + 30
-    if (window.scrollY > top) {
-      window.scrollTo(0, top)
-    }
+    scrollToTop()
 
-    currentLength.current = 0
-    ended.current = false
     refetch?.({
       skip: 0,
       take: ITEMS_PER_PAGE,
@@ -202,17 +189,6 @@ export function GenerativeIterations({ token }: Props) {
       featureFilters: serializedFeatureFilters,
     })
   }, [sortVariable, serializedFeatureFilters])
-
-  // prevents reloading on scroll if we have reached the end
-  useEffect(() => {
-    if (!loading) {
-      if (currentLength.current === tokens?.length) {
-        ended.current = true
-      } else {
-        currentLength.current = tokens?.length || 0
-      }
-    }
-  }, [loading])
 
   const CContainer = settings.layoutMasonry
     ? MasonryCardsContainer
@@ -278,27 +254,16 @@ export function GenerativeIterations({ token }: Props) {
                 </>
               )}
 
-              {!loading && tokens?.length === 0 && <span>No results</span>}
-
-              <InfiniteScrollTrigger
-                onTrigger={infiniteScrollFetch}
+              <GentkList
+                tokens={tokens}
+                loading={loading}
+                sortVariable={sortVariable}
+                cardSize={cardSize}
+                itemsPerPage={ITEMS_PER_PAGE}
                 canTrigger={!!data && !loading}
-              >
-                <CContainer ref={refCardsContainer} cardSize={cardSize}>
-                  {tokens?.map((gentk) => (
-                    <LargeGentkCard
-                      key={gentk.id}
-                      objkt={gentk}
-                      showRarity={sortVariable.rarity != null}
-                    />
-                  ))}
-                  {loading &&
-                    CardsLoading({
-                      number: ITEMS_PER_PAGE,
-                      type: "large",
-                    })}
-                </CContainer>
-              </InfiniteScrollTrigger>
+                onEndReached={onEndReached}
+                refCardsContainer={refCardsContainer}
+              />
             </div>
           </section>
         </>
