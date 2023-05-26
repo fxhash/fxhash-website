@@ -59,6 +59,7 @@ export const Qu_objkt = gql`
       createdAt
       availableRedeemables {
         address
+        redeemedPercentage
       }
       activeListing {
         id

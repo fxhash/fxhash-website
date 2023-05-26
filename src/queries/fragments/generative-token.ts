@@ -133,6 +133,7 @@ export const Frag_GenTokenRedeemables = gql`
       address
       baseAmount
       maxConsumptionsPerToken
+      redeemedPercentage
     }
   }
 `

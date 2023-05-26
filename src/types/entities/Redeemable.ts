@@ -12,6 +12,7 @@ export interface Redeemable {
   splits: Split[]
   redemptions: Redemption[]
   createdAt: string
+  redeemedPercentage: number
 }
 
 export interface RedeemableOptionValue {

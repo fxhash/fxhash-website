@@ -30,6 +30,7 @@ import { Clamp } from "../../../components/Clamp/Clamp"
 import { useCallback, useState } from "react"
 import { Icon } from "components/Icons/Icon"
 import { GenerativeRedeemable } from "../../../components/GenerativeToken/GenerativeRedeemable"
+import { RedeemableDetails } from "types/entities/Redeemable"
 
 /**
  * This is the Core component resposible for the display logic of a Generative
@@ -40,9 +41,14 @@ import { GenerativeRedeemable } from "../../../components/GenerativeToken/Genera
 
 interface Props {
   token: GenerativeToken
+  redeemableDetails?: RedeemableDetails[] | null
   offlineMode?: boolean
 }
-export function GenerativeDisplay({ token, offlineMode = false }: Props) {
+export function GenerativeDisplay({
+  token,
+  redeemableDetails,
+  offlineMode = false,
+}: Props) {
   const [showDescription, setShowDescription] = useState(false)
   const handleShowDescription = useCallback(() => setShowDescription(true), [])
 
@@ -161,10 +167,14 @@ export function GenerativeDisplay({ token, offlineMode = false }: Props) {
             )}
           >
             <GenerativePricing token={token} />
-            <GenerativeRedeemable
-              isRedeemable={token.redeemables && token.redeemables.length > 0}
-              urlRedeemable={`/generative/${token.id}/redeem`}
-            />
+            {redeemableDetails && (
+              <GenerativeRedeemable
+                urlRedeemable={`/generative/${token.id}/redeem`}
+                // take the first redeemable?
+                details={redeemableDetails[0]}
+                redeemedPercentage={token.redeemables![0].redeemedPercentage}
+              />
+            )}
             {token.mintTicketSettings && (
               <>
                 <strong>Ticket Grace Period</strong>

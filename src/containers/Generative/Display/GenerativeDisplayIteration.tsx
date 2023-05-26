@@ -34,13 +34,16 @@ import { HoverTitle } from "../../../components/Utils/HoverTitle"
 import { Icon } from "../../../components/Icons/Icon"
 import { GenerativeRedeemable } from "../../../components/GenerativeToken/GenerativeRedeemable"
 import { DisplayTezos } from "../../../components/Display/DisplayTezos"
+import { RedeemableDetails } from "types/entities/Redeemable"
 
 interface GenerativeDisplayIterationProps {
   objkt: Objkt
+  redeemableDetails: RedeemableDetails[] | null
 }
 
 const _GenerativeDisplayIteration = ({
   objkt,
+  redeemableDetails,
 }: GenerativeDisplayIterationProps) => {
   const [showDescription, setShowDescription] = useState(false)
   const handleShowDescription = useCallback(() => setShowDescription(true), [])
@@ -175,10 +178,16 @@ const _GenerativeDisplayIteration = ({
               style.extra_details
             )}
           >
-            <GenerativeRedeemable
-              isRedeemable={objkt.availableRedeemables?.length > 0}
-              urlRedeemable={`/gentk/${objkt.id}/redeem`}
-            />
+            {redeemableDetails && (
+              <GenerativeRedeemable
+                urlRedeemable={`/gentk/${objkt.id}/redeem`}
+                // take the first redeemable?
+                details={redeemableDetails[0]}
+                redeemedPercentage={
+                  objkt.availableRedeemables![0].redeemedPercentage
+                }
+              />
+            )}
             {objkt.mintedPrice !== null && (
               <>
                 <strong>Minted Price</strong>

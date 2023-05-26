@@ -13,12 +13,16 @@ import { GenerativeDisplayIteration } from "../../containers/Generative/Display/
 import { getImageApiUrl, OG_IMAGE_SIZE } from "../../components/Image"
 import { MetaHead } from "components/Utils/MetaHead"
 import { getUserName } from "utils/user"
+import { createEventsClient } from "services/EventsClient"
+import { Qu_redeemableDetails } from "queries/events/redeemable"
+import { RedeemableDetails } from "types/entities/Redeemable"
 
 interface Props {
   objkt: Objkt
+  redeemableDetails: RedeemableDetails[]
 }
 
-const ObjktDetails: NextPage<Props> = ({ objkt }) => {
+const ObjktDetails: NextPage<Props> = ({ objkt, redeemableDetails }) => {
   // get the display url for og:image
   const displayUrl =
     objkt.captureMedia?.cid &&
@@ -37,7 +41,10 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
       <Spacing size="3x-large" sm="x-large" />
 
       <section className={cs(layout["padding-big"])}>
-        <GenerativeDisplayIteration objkt={objkt} />
+        <GenerativeDisplayIteration
+          objkt={objkt}
+          redeemableDetails={redeemableDetails}
+        />
       </section>
 
       <Spacing size="6x-large" />
@@ -62,7 +69,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
   }
   let variables: Record<string, any> = {},
-    token = null
+    token = null,
+    redeemableDetails = null
 
   if (idStr) {
     const id = idStr as string
@@ -87,9 +95,26 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
   }
 
+  if (token && token.availableRedeemables?.length) {
+    // query the events API to get details about the redeemables
+    const { data } = await createEventsClient().query({
+      query: Qu_redeemableDetails,
+      fetchPolicy: "no-cache",
+      variables: {
+        where: {
+          address: {
+            in: token.availableRedeemables.map((red: any) => red.address),
+          },
+        },
+      },
+    })
+    redeemableDetails = data.consumables
+  }
+
   return {
     props: {
       objkt: token,
+      redeemableDetails,
     },
     notFound: !token,
   }
