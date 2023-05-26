@@ -2,7 +2,7 @@ import { useMemo } from "react"
 
 interface IBooleanFilterDef<T> {
   label: string
-  value: Extract<keyof T, string>
+  value: keyof T
 }
 
 interface UseBooleanFiltersProps<T> {
@@ -11,7 +11,7 @@ interface UseBooleanFiltersProps<T> {
   setFilters: (filters: T) => void
 }
 
-export const useBooleanFilters = <T>({
+export const useBooleanFilters = <T extends Record<string, any>>({
   booleanFiltersDef,
   filters,
   setFilters,
@@ -21,7 +21,7 @@ export const useBooleanFilters = <T>({
     const out: string[] = []
     for (const bf of booleanFiltersDef) {
       if (filters[bf.value] === true) {
-        out.push(bf.value)
+        out.push(bf.value as string)
       }
     }
 
@@ -33,7 +33,7 @@ export const useBooleanFilters = <T>({
       ...filters,
     }
     for (const bf of booleanFiltersDef) {
-      ;(out[bf.value] as any) = enabledFilters.includes(bf.value)
+      ;(out[bf.value] as any) = enabledFilters.includes(bf.value as string)
         ? true
         : undefined
     }
