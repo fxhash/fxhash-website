@@ -1,11 +1,46 @@
 import style from "./GenerativeRedeemable.module.scss"
-import { GenerativeToken } from "../../types/entities/GenerativeToken"
 import Link from "next/link"
 import { Icon } from "../Icons/Icon"
 import { ToggableInfo } from "components/Layout/ToggableInfo"
 import { DisplayTezos } from "components/Display/DisplayTezos"
 import { DateFormatted } from "components/Utils/Date/DateFormat"
 import { RedeemableDetails } from "types/entities/Redeemable"
+
+interface RedeemablePriceProps {
+  baseAmount: number
+  options: RedeemableDetails["options"]
+}
+
+const RedeemablePrice = ({ baseAmount, options }: RedeemablePriceProps) => {
+  if (!options.length)
+    return (
+      <span>
+        Price: <DisplayTezos mutez={baseAmount} />
+      </span>
+    )
+
+  const calculatePriceRange = (options: RedeemableDetails["options"]) => {
+    const minMaxValues = options.map((option) => {
+      const amounts = option.values.map((value) => value.amount)
+      return { min: Math.min(...amounts), max: Math.max(...amounts) }
+    })
+
+    const sumMin = minMaxValues.reduce((acc, option) => acc + option.min, 0)
+    const sumMax = minMaxValues.reduce((acc, option) => acc + option.max, 0)
+
+    return { min: sumMin, max: sumMax }
+  }
+
+  const { min, max } = calculatePriceRange(options)
+
+  return (
+    <span>
+      Price: <DisplayTezos mutez={baseAmount + min} />
+      {" -> "}
+      <DisplayTezos mutez={baseAmount + max} />
+    </span>
+  )
+}
 
 interface Props {
   urlRedeemable: string
@@ -35,7 +70,7 @@ export function GenerativeRedeemable({
       </>
     )
 
-  const { name, amount, expiresAt } = details
+  const { name, amount, expiresAt, options } = details
 
   return (
     <ToggableInfo
@@ -64,9 +99,7 @@ export function GenerativeRedeemable({
         {redeemedPercentage !== null && (
           <span>Redeemed: {redeemedPercentage.toFixed(1)}%</span>
         )}
-        <span>
-          Price: <DisplayTezos mutez={amount} />
-        </span>
+        <RedeemablePrice baseAmount={amount} options={options} />
         {expiresAt && (
           <span>
             Expires: <DateFormatted date={expiresAt} />
