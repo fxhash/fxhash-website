@@ -214,30 +214,30 @@ export function MintController({
         />
       )}
 
-      {randomSeed && (
-        <>
-          {isTicketMinted && mintedTicket ? (
-            <ButtonMintTicketPurchase
-              mintTicket={mintedTicket}
-              showModalOnRender
-            />
-          ) : (
-            <Link href={revealUrl} passHref>
-              <Button
-                className={style.button}
-                isLink
-                color="secondary"
-                iconComp={<i aria-hidden className="fas fa-arrow-right" />}
-                iconSide="right"
-                size="regular"
-              >
-                reveal
-              </Button>
-            </Link>
-          )}
-          <Spacing size="regular" />
-        </>
-      )}
+      <>
+        {isTicketMinted && mintedTicket && (
+          <ButtonMintTicketPurchase
+            mintTicket={mintedTicket}
+            showModalOnRender
+          />
+        )}
+
+        {!isTicketMinted && randomSeed && (
+          <Link href={revealUrl} passHref>
+            <Button
+              className={style.button}
+              isLink
+              color="secondary"
+              iconComp={<i aria-hidden className="fas fa-arrow-right" />}
+              iconSide="right"
+              size="regular"
+            >
+              reveal
+            </Button>
+          </Link>
+        )}
+        <Spacing size="regular" />
+      </>
 
       {!token.enabled && token.balance > 0 && (
         <>
