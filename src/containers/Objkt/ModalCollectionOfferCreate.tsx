@@ -126,6 +126,7 @@ const _ModalCollectionOfferCreate = ({
             onChange={handleChange}
             onBlur={handleBlur}
             min={0}
+            lang="en"
             step="any"
           />
           {floor && (

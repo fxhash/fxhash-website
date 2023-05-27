@@ -36,6 +36,7 @@ import { MintTicket } from "../../types/entities/MintTicket"
 import { generateMintTicketFromMintAction } from "../../utils/mint-ticket"
 import { isOperationApplied } from "services/Blockchain"
 import { TzktOperation } from "types/Tzkt"
+import { useFetchRandomSeed } from "hooks/useFetchRandomSeed"
 
 interface Props {
   token: GenerativeToken
@@ -153,11 +154,15 @@ export function MintController({
 
   // derive the op hash of interest from the CC or BC transaction hash
   const finalOpHash = opHashCC || opHash
-  const finalLoading = loading || loadingCC
+
+  const { randomSeed, loading: randomSeedLoading } =
+    useFetchRandomSeed(finalOpHash)
+
+  const finalLoading = loading || loadingCC || randomSeedLoading
 
   const revealUrl = generateRevealUrl
-    ? generateRevealUrl({ tokenId: token.id, hash: finalOpHash })
-    : `/reveal/${token.id}/?fxhash=${finalOpHash}&fxminter=${user?.id}`
+    ? generateRevealUrl({ tokenId: token.id, hash: randomSeed })
+    : `/reveal/${token.id}/?fxhash=${randomSeed}&fxminter=${user?.id}`
 
   const isTicketMinted = token.inputBytesSize > 0
 
@@ -209,30 +214,30 @@ export function MintController({
         />
       )}
 
-      {finalOpHash && (
-        <>
-          {isTicketMinted && mintedTicket ? (
-            <ButtonMintTicketPurchase
-              mintTicket={mintedTicket}
-              showModalOnRender
-            />
-          ) : (
-            <Link href={revealUrl} passHref>
-              <Button
-                className={style.button}
-                isLink
-                color="secondary"
-                iconComp={<i aria-hidden className="fas fa-arrow-right" />}
-                iconSide="right"
-                size="regular"
-              >
-                reveal
-              </Button>
-            </Link>
-          )}
-          <Spacing size="regular" />
-        </>
-      )}
+      <>
+        {isTicketMinted && mintedTicket && (
+          <ButtonMintTicketPurchase
+            mintTicket={mintedTicket}
+            showModalOnRender
+          />
+        )}
+
+        {!isTicketMinted && randomSeed && (
+          <Link href={revealUrl} passHref>
+            <Button
+              className={style.button}
+              isLink
+              color="secondary"
+              iconComp={<i aria-hidden className="fas fa-arrow-right" />}
+              iconSide="right"
+              size="regular"
+            >
+              reveal
+            </Button>
+          </Link>
+        )}
+        <Spacing size="regular" />
+      </>
 
       {!token.enabled && token.balance > 0 && (
         <>

@@ -55,8 +55,10 @@ const _GenerativeDisplayIteration = ({
       labels: objkt.issuer?.labels,
       captureMedia: objkt.captureMedia,
       displayUri: objkt.metadata?.displayUri,
-      balance: 0,
+      balance: objkt.issuer?.balance || 0,
       inputBytesSize: objkt.issuer?.inputBytesSize || 0,
+      supply: objkt.issuer?.supply || 0,
+      iterationsCount: objkt.issuer?.iterationsCount || 0,
     }
   }, [objkt])
   const gentkUrl = useMemo(() => gentkLiveUrl(objkt), [objkt])
@@ -250,19 +252,12 @@ const _GenerativeDisplayIteration = ({
               </>
             )}
             <strong>Operation hash</strong>
-            <a
-              target="_blank"
-              rel="noreferrer"
-              referrerPolicy="no-referrer"
-              href={`https://tzkt.io/${objkt.generationHash}`}
-              className={cs(text.very_small, style.mobile_align_right)}
-            >
+            <span className={cs(text.very_small, style.mobile_align_right)}>
               <span className={layout.hide_sm}>{objkt.generationHash}</span>
               <span className={layout.show_sm}>
                 {truncateMiddle(objkt.generationHash || "", 12)}
-              </span>{" "}
-              <i className="fas fa-external-link-square" aria-hidden />
-            </a>
+              </span>
+            </span>
             <hr />
             <strong>Metadata</strong>
             {objkt.assigned ? (

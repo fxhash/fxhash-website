@@ -120,6 +120,8 @@ export interface GenerativeToken {
   originalSupply: number
   supply: number
   balance: number
+  // defined for V3 only
+  iterationsCount?: number
   enabled: boolean
   royalties: number
   splitsPrimary: Split[]

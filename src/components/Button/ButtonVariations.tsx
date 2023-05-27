@@ -2,19 +2,22 @@ import style from "./ButtonVariations.module.scss"
 import cs from "classnames"
 import { GenerativeToken } from "../../types/entities/GenerativeToken"
 import { Button } from "."
-import { useContext, useMemo } from "react"
+import { useMemo } from "react"
 import { generateFxHash } from "../../utils/hash"
 import { uniq } from "lodash"
 import { HoverTitle } from "../Utils/HoverTitle"
-import { SettingsContext } from "../../context/Theme"
 import { FxParamDefinition, FxParamType } from "components/FxParams/types"
 import {
   getRandomParamValues,
   serializeParams,
 } from "components/FxParams/utils"
+import { getActiveExploreSet, isTokenFullyMinted } from "utils/generative-token"
 
 interface Props {
-  token: Pick<GenerativeToken, "metadata" | "balance">
+  token: Pick<
+    GenerativeToken,
+    "balance" | "metadata" | "inputBytesSize" | "iterationsCount" | "supply"
+  >
   previewHash?: string | null
   params?: FxParamDefinition<FxParamType>[]
   onChangeHash: (hash: string, inputBytes?: string) => void
@@ -25,14 +28,8 @@ export function ButtonVariations({
   onChangeHash,
   params,
 }: Props) {
-  // some shortcuts to get access to useful variables derived from the token data
-  const fullyMinted = token.balance === 0
-  const exploreSet = token.metadata.settings?.exploration
-
-  // settings activated based on fully minted state
-  const activeSettings = fullyMinted
-    ? exploreSet?.postMint
-    : exploreSet?.preMint
+  const fullyMinted = isTokenFullyMinted(token)
+  const activeSettings = getActiveExploreSet(token)
 
   // the hover message is only here if disabled, and depends some conditions
   const hoverMessage = useMemo<string | null>(() => {

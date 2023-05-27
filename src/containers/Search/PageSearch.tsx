@@ -109,12 +109,12 @@ const _PageSearch = ({ query: queryUrl, tab }: PageSearchProps) => {
         <meta
           key="description"
           name="description"
-          content="Search fxhash by users, gentk, articles and marketplace listings"
+          content="Search fxhash by users, gentks, articles and marketplace listings"
         />
         <meta
           key="og:description"
           property="og:description"
-          content="Search fxhash by users, gentk, articles and marketplace listings"
+          content="Search fxhash by users, gentks, articles and marketplace listings"
         />
         <meta key="og:type" property="og:type" content="website" />
         <meta
