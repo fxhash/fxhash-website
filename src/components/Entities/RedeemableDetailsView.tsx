@@ -32,6 +32,36 @@ export function RedeemableDetailsView({
 }: Props) {
   return (
     <div className={cs(style.root)}>
+      <div className={style.left}>
+        <div className={cs(style.medias_desktop)}>
+          <CarouselRedeemable medias={details.medias} />
+        </div>
+        {details.options?.length > 0 && (
+          <div className={style.options}>
+            <span>The following options are available:</span>
+            <Spacing size="regular" />
+            <div className={style.options_grid}>
+              {details.options.map((option, idx) => (
+                <div
+                  className={style.options_list}
+                  key={`${option.label}${idx}`}
+                >
+                  <strong>{option.label}</strong>
+                  <ul>
+                    {option.values.map((value, idx) => (
+                      <li key={idx}>
+                        {value.label}{" "}
+                        <span className={cs(style.option_dash)}>—</span>{" "}
+                        <DisplayTezos mutez={value.amount} formatBig={false} />
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
       <div>
         <h3>{title}</h3>
         <Spacing size="x-large" />
@@ -89,15 +119,17 @@ export function RedeemableDetailsView({
         {urlRedeem && !error && (
           <>
             <Spacing size="x-large" />
-            <Link href={urlRedeem}>
-              <Button
-                isLink
-                iconComp={<Icon icon="sparkles" />}
-                color="secondary"
-              >
-                redeem your token
-              </Button>
-            </Link>
+            <div className={cs(style.redeem_btn_wrapper)}>
+              <Link href={urlRedeem}>
+                <Button
+                  isLink
+                  iconComp={<Icon icon="sparkles" />}
+                  color="secondary"
+                >
+                  redeem your token
+                </Button>
+              </Link>
+            </div>
           </>
         )}
         {error && (
@@ -105,36 +137,6 @@ export function RedeemableDetailsView({
             <Spacing size="x-large" />
             <Error>{error}</Error>
           </>
-        )}
-      </div>
-      <div className={style.right}>
-        <div className={cs(style.medias_desktop)}>
-          <CarouselRedeemable medias={details.medias} />
-        </div>
-        {details.options?.length > 0 && (
-          <div className={style.options}>
-            <span>The following options are available:</span>
-            <Spacing size="regular" />
-            <div className={style.options_grid}>
-              {details.options.map((option, idx) => (
-                <div
-                  className={style.options_list}
-                  key={`${option.label}${idx}`}
-                >
-                  <strong>{option.label}</strong>
-                  <ul>
-                    {option.values.map((value, idx) => (
-                      <li key={idx}>
-                        {value.label}{" "}
-                        <span className={cs(style.option_dash)}>—</span>{" "}
-                        <DisplayTezos mutez={value.amount} formatBig={false} />
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-          </div>
         )}
       </div>
     </div>
