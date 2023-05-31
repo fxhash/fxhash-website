@@ -67,7 +67,7 @@ export function ObjktCard({
 
           <Spacing size="small" sm="x-small" />
 
-          {objkt.issuer.redeemables.length > 0 && (
+          {objkt.issuer?.redeemables?.length > 0 && (
             <>
               <RedeemableIndicator
                 objkt={objkt}
