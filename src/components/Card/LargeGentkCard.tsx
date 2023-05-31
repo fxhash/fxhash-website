@@ -16,6 +16,21 @@ import { LargeCard } from "./LargeCard"
 import { HoverTitle } from "components/Utils/HoverTitle"
 import { Icon } from "components/Icons/Icon"
 
+const RedeemableDetail = ({ objkt }: { objkt: Objkt }) => {
+  if (objkt.availableRedeemables.length > 0)
+    return (
+      <HoverTitle message="Redeemable">
+        <Icon icon="sparkles" className={cs(colors["gray-light"])} />
+      </HoverTitle>
+    )
+
+  return (
+    <HoverTitle message="This token has been redeemed">
+      <Icon icon="sparkle" className={cs(colors["gray-light"])} /> Redeemed
+    </HoverTitle>
+  )
+}
+
 interface Props {
   objkt: Objkt
   showOwner?: boolean
@@ -29,6 +44,7 @@ export function LargeGentkCard({
 }: Props) {
   const url = getObjktUrl(objkt)
   const settings = useContext(SettingsContext)
+  const isProjectRedeemable = objkt.issuer.redeemables.length > 0
   return (
     <Link href={url} passHref>
       <AnchorForward className={style.root} style={{ height: "100%" }}>
@@ -42,14 +58,7 @@ export function LargeGentkCard({
             <div className={cs(style.topper)}>
               <div className={cs(style.left_topper)}>
                 <span>#{objkt.iteration}</span>
-                {objkt.availableRedeemables?.length > 0 && (
-                  <HoverTitle message="Redeemable">
-                    <Icon
-                      icon="sparkles"
-                      className={cs(colors["gray-light"])}
-                    />
-                  </HoverTitle>
-                )}
+                {isProjectRedeemable && <RedeemableDetail objkt={objkt} />}
               </div>
               {objkt.duplicate && (
                 <div className={cs(style.dup_flag)}>[WARNING: DUPLICATE]</div>

@@ -163,38 +163,21 @@ const GenerativeTokenMarketplace: NextPage<Props> = ({ token, tab }) => {
           title={token.name}
           author={token.author}
         >
-          <div className={cs(style.progress_container)}>
-            <MintProgress token={token} />
-          </div>
-          <div className={cs(style.presentation_details)}>
-            <small className={cs(colors.gray, style.token_id)}>
-              #{token.id}
-            </small>
-            <h3>{token.name}</h3>
-            <Spacing size="3x-small" sm="x-small" />
-            <EntityBadge
-              classNameAvatar={style.avatar}
-              user={token.author}
-              size="regular"
-              toggeable
-            />
-            <Spacing size="small" />
-            <div className={cs(style.artwork_details)}>
-              <div className={cs(style.progress_container)}>
-                <MintProgress token={token} />
-              </div>
-              <Spacing size="small" sm="regular" />
-              <Link href={getGenerativeTokenUrl(token)} passHref>
-                <Button isLink={true} className={style.button} size="small">
-                  open project page
-                </Button>
-              </Link>
-              <Spacing size="x-small" sm="regular" />
-              <ButtonCollectionOfferCreate
-                token={token}
-                floor={token.marketStats?.floor}
-              />
+          <div className={cs(style.artwork_details)}>
+            <div className={cs(style.progress_container)}>
+              <MintProgress token={token} />
             </div>
+            <Spacing size="small" sm="regular" />
+            <Link href={getGenerativeTokenUrl(token)} passHref>
+              <Button isLink={true} className={style.button} size="small">
+                open project page
+              </Button>
+            </Link>
+            <Spacing size="x-small" sm="regular" />
+            <ButtonCollectionOfferCreate
+              token={token}
+              floor={token.marketStats?.floor}
+            />
           </div>
         </InlineTokenCard>
 

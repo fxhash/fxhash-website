@@ -179,6 +179,9 @@ export const Qu_genTokenIterations = gql`
           id
           flag
           labels
+          redeemables {
+            address
+          }
         }
         owner {
           ...UserBadgeInfos
