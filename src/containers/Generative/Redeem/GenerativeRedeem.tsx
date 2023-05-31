@@ -1,4 +1,4 @@
-import React, { memo } from "react"
+import React, { memo, useContext } from "react"
 import cs from "classnames"
 import layout from "../../../styles/Layout.module.scss"
 import Link from "next/link"
@@ -11,15 +11,12 @@ import { RedeemableDetails } from "../../../types/entities/Redeemable"
 import { GenerativeToken } from "../../../types/entities/GenerativeToken"
 import style from "./GenerativeRedeem.module.scss"
 import { CardsExplorer } from "components/Exploration/CardsExplorer"
-import { InfiniteScrollTrigger } from "components/Utils/InfiniteScrollTrigger"
-import { CardsContainer } from "components/Card/CardsContainer"
-import { LargeGentkCard } from "components/Card/LargeGentkCard"
-import { CardsLoading } from "components/Card/CardsLoading"
 import { useInfiniteScroll } from "hooks/useInfiniteScroll"
 import { useQuery } from "@apollo/client"
 import { Qu_genTokenIterations } from "queries/generative-token"
 import { Objkt } from "types/entities/Objkt"
 import { GentkList } from "components/GenerativeToken/GentkList"
+import { UserContext } from "containers/UserProvider"
 
 const ITEMS_PER_PAGE = 20
 interface GenerativeRedeemProps {
@@ -31,6 +28,8 @@ const _GenerativeRedeem = ({
   token,
   redeemableDetails,
 }: GenerativeRedeemProps) => {
+  const { user } = useContext(UserContext)
+
   const { data, loading, fetchMore } = useQuery(Qu_genTokenIterations, {
     notifyOnNetworkStatusChange: true,
     variables: {
@@ -39,6 +38,7 @@ const _GenerativeRedeem = ({
       take: ITEMS_PER_PAGE,
       filters: {
         redeemable_eq: true,
+        owner_in: user ? [user.id] : undefined,
       },
     },
     fetchPolicy: "cache-and-network",
@@ -104,6 +104,7 @@ const _GenerativeRedeem = ({
                 canTrigger={!!data && !loading}
                 onEndReached={onEndReached}
                 refCardsContainer={refCardsContainer}
+                emptyMessage="You don't have any iterations of this project that can be redeemed."
               />
             </div>
           </>
