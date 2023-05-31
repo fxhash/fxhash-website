@@ -43,6 +43,11 @@ export const Qu_genTokListings = gql`
         owner {
           ...UserBadgeInfos
         }
+        issuer {
+          redeemables {
+            address
+          }
+        }
         availableRedeemables {
           address
         }

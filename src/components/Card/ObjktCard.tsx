@@ -16,7 +16,7 @@ import { useContext } from "react"
 import { SettingsContext } from "../../context/Theme"
 import { DisplayTezos } from "../Display/DisplayTezos"
 import { EntityBadge } from "../User/EntityBadge"
-import { Icon } from "components/Icons/Icon"
+import { RedeemableIndicator } from "./RedeemableIndicator"
 
 interface Props {
   objkt: Objkt
@@ -67,11 +67,13 @@ export function ObjktCard({
 
           <Spacing size="small" sm="x-small" />
 
-          {objkt.availableRedeemables?.length > 0 && (
+          {objkt.issuer.redeemables.length > 0 && (
             <>
-              <span className={cs(text.small, colors.gray)}>
-                <Icon icon="sparkles" /> Redeemable
-              </span>
+              <RedeemableIndicator
+                objkt={objkt}
+                showLabel
+                enableHover={false}
+              />
               <Spacing size="small" sm="x-small" />
             </>
           )}
@@ -87,12 +89,12 @@ export function ObjktCard({
                 )}
               </div>
             </div>
-            {objkt.issuer && (
+            {objkt.issuer?.author && (
               <div className={cs(style.badge)}>
                 <span className={cs(colors["gray-dark"])}>created by</span>
                 <EntityBadge
                   className={styleObjkt.entity}
-                  user={objkt.issuer.author!}
+                  user={objkt.issuer.author}
                   size="regular"
                   hasLink={false}
                   avatarSide="right"

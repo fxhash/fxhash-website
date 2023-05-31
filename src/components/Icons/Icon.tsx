@@ -1,7 +1,7 @@
 // import style from "./Icon.module.scss"
 import cs from "classnames"
 
-type TIcon =
+export type TIcon =
   | "infos-circle"
   | "sparkles"
   | "sparkle"

@@ -13,23 +13,7 @@ import { useContext } from "react"
 import { SettingsContext } from "../../context/Theme"
 import { DisplayTezos } from "../Display/DisplayTezos"
 import { LargeCard } from "./LargeCard"
-import { HoverTitle } from "components/Utils/HoverTitle"
-import { Icon } from "components/Icons/Icon"
-
-const RedeemableDetail = ({ objkt }: { objkt: Objkt }) => {
-  if (objkt.availableRedeemables.length > 0)
-    return (
-      <HoverTitle message="Redeemable">
-        <Icon icon="sparkles" className={cs(colors["gray-light"])} />
-      </HoverTitle>
-    )
-
-  return (
-    <HoverTitle message="This token has been redeemed">
-      <Icon icon="sparkle" className={cs(colors["gray-light"])} /> Redeemed
-    </HoverTitle>
-  )
-}
+import { RedeemableIndicator } from "./RedeemableIndicator"
 
 interface Props {
   objkt: Objkt
@@ -58,7 +42,13 @@ export function LargeGentkCard({
             <div className={cs(style.topper)}>
               <div className={cs(style.left_topper)}>
                 <span>#{objkt.iteration}</span>
-                {isProjectRedeemable && <RedeemableDetail objkt={objkt} />}
+                {isProjectRedeemable && (
+                  <RedeemableIndicator
+                    objkt={objkt}
+                    // show label if redeemed
+                    showLabel={!objkt.availableRedeemables.length}
+                  />
+                )}
               </div>
               {objkt.duplicate && (
                 <div className={cs(style.dup_flag)}>[WARNING: DUPLICATE]</div>
