@@ -8,7 +8,7 @@ import { Inputs as RedeemInputs } from "./RedeemForm"
 import { Spacing } from "components/Layout/Spacing"
 import { Button } from "components/Button"
 import { Submit } from "components/Form/Submit"
-import { useContext, useMemo, useState } from "react"
+import { useContext, useEffect, useMemo, useState } from "react"
 import { UserContext } from "containers/UserProvider"
 import { fetchRetry } from "utils/network"
 import { redeemTotalCost } from "utils/entities/redeem"
@@ -19,6 +19,7 @@ import { ContractFeedback } from "components/Feedback/ContractFeedback"
 import { Error as ErrorFeedback } from "components/Error/Error"
 import { Tabs } from "../../components/Layout/Tabs"
 import { getGentkLocalID } from "utils/entities/gentk"
+import { useRouter } from "next/router"
 
 const tabs = [
   {
@@ -55,6 +56,7 @@ export function RedeemModal({
   redeemable,
   inputs,
 }: Props) {
+  const router = useRouter()
   const [activeTabIdx, setActiveTabIdx] = useState(0)
   const { walletManager: wallet, user } = useContext(UserContext)
   const [redemptionPayload, setRedemptionPayload] =
@@ -130,6 +132,13 @@ export function RedeemModal({
       })
     }
   }
+
+  useEffect(() => {
+    if (success)
+      router.push(
+        `/gentk/${gentk.id}/redeem/${redeemable.address}/success?message=${redeemable.successInfos}`
+      )
+  }, [success])
 
   return (
     <Modal title={title} onClose={onClose}>
