@@ -201,6 +201,9 @@ export const Qu_userObjkts = gql`
           generativeUri
           labels
           ...Author
+          redeemables {
+            address
+          }
         }
         name
         createdAt
