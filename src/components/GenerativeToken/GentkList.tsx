@@ -14,6 +14,7 @@ interface GentkListProps {
   tokens: Objkt[] | null
   onEndReached: () => void
   canTrigger: boolean
+  emptyMessage?: string
   refCardsContainer: (node?: Element | null | undefined) => void
   sortVariable?: Record<string, string> | null
 }
@@ -26,6 +27,7 @@ export const GentkList = ({
   itemsPerPage,
   refCardsContainer,
   sortVariable = null,
+  emptyMessage = "No results",
   onEndReached,
 }: GentkListProps) => {
   const { layoutMasonry } = useContext(SettingsContext)
@@ -34,7 +36,7 @@ export const GentkList = ({
 
   return (
     <>
-      {!loading && tokens?.length === 0 && <span>No results</span>}
+      {!loading && tokens?.length === 0 && <span>{emptyMessage}</span>}
 
       <InfiniteScrollTrigger onTrigger={onEndReached} canTrigger={canTrigger}>
         <CContainer ref={refCardsContainer} cardSize={cardSize}>
