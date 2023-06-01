@@ -31,6 +31,11 @@
   border: 3px solid var(--color-secondary);
   border-top: none;
 
+  &.top {
+    top: auto;
+    bottom: 100%;
+  }
+
   button {
     border: none;
     background: transparent;
