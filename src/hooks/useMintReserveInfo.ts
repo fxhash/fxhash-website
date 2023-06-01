@@ -51,7 +51,7 @@ export const useMintReserveInfo = (
   return {
     isMintDropdown,
     isMintButton,
-    userEligible,
+    onlyReserveLeft,
     onMintShouldUseReserve,
     reserveConsumptionMethod,
   }
