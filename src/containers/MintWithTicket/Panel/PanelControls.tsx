@@ -21,7 +21,7 @@ import { BaseButton, IconButton } from "components/FxParams/BaseInput"
 import { TOnMintHandler } from "../MintWithTicketPage"
 import style from "./PanelControls.module.scss"
 
-export type PanelSubmitMode = "with-ticket" | "free" | "none"
+export type PanelSubmitMode = "with-ticket" | "free" | "live-minting" | "none"
 
 export interface PanelControlsProps {
   token: GenerativeToken
