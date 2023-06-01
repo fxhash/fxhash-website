@@ -1,4 +1,4 @@
-import { useCallback, useContext, useMemo, useState } from "react"
+import { useCallback, useContext, useMemo, useRef, useState } from "react"
 import cs from "classnames"
 import { isBefore } from "date-fns"
 import {
@@ -20,11 +20,17 @@ import { Cover } from "components/Utils/Cover"
 import { BaseButton, IconButton } from "components/FxParams/BaseInput"
 import { TOnMintHandler } from "../MintWithTicketPage"
 import style from "./PanelControls.module.scss"
+import { ButtonPaymentCard } from "components/Utils/ButtonPaymentCard"
+import {
+  CreditCardCheckout,
+  CreditCardCheckoutHandle,
+} from "components/CreditCard/CreditCardCheckout"
 
 export type PanelSubmitMode = "with-ticket" | "free" | "live-minting" | "none"
 
 export interface PanelControlsProps {
   token: GenerativeToken
+  inputBytes: string | null
   onClickBack?: () => void
   onOpenNewTab?: () => void
   onSubmit: TOnMintHandler
@@ -32,13 +38,22 @@ export interface PanelControlsProps {
 }
 
 export function PanelControls(props: PanelControlsProps) {
-  const { token, onClickBack, onOpenNewTab, onSubmit, mode = "none" } = props
+  const {
+    token,
+    inputBytes,
+    onClickBack,
+    onOpenNewTab,
+    onSubmit,
+    mode = "none",
+  } = props
 
   const { user } = useContext(UserContext)
 
   const [showDropdown, setShowDropdown] = useState(false)
   const { isMintDropdown, onMintShouldUseReserve, reserveConsumptionMethod } =
     useMintReserveInfo(token)
+
+  const checkoutRef = useRef<CreditCardCheckoutHandle | null>(null)
 
   const { enabled, locked, price, hidden } = useMintingState(token)
   const showMintButton = !hidden && !locked && enabled
@@ -97,7 +112,8 @@ export function PanelControls(props: PanelControlsProps) {
             <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
           </IconButton>
         )}
-        {mode === "with-ticket" ? (
+
+        {mode === "with-ticket" && (
           <BaseButton
             color="main"
             onClick={handleClickMint}
@@ -106,7 +122,9 @@ export function PanelControls(props: PanelControlsProps) {
           >
             use ticket <i className="fa-sharp fa-solid fa-ticket" aria-hidden />
           </BaseButton>
-        ) : mode === "free" ? (
+        )}
+
+        {mode === "free" && (
           <div className={style.submitButtons}>
             <div style={{ position: "relative", display: "flex" }}>
               {showMintButton && (
@@ -150,7 +168,33 @@ export function PanelControls(props: PanelControlsProps) {
               </BaseButton>
             )}
           </div>
-        ) : null}
+        )}
+
+        {mode === "live-minting" && (
+          <>
+            <ButtonPaymentCard
+              className={style.creditCardButton}
+              label="Buy iteration"
+              disabled={false}
+              onClick={() => checkoutRef.current?.open()}
+            />
+
+            <CreditCardCheckout
+              ref={checkoutRef}
+              tokenId={token.id}
+              userId={user?.id!}
+              onSuccess={(hash: string) => {
+                // setOpHashCC(hash)
+              }}
+              mintParams={{
+                create_ticket: "00",
+                input_bytes: inputBytes || "",
+                referrer: null,
+              }}
+              consumeReserve={reserveConsumptionMethod}
+            />
+          </>
+        )}
 
         {showDropdown && (
           <Cover
