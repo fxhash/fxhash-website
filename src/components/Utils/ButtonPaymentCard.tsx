@@ -10,6 +10,7 @@ interface ButtonPaymentCardProps {
   onClick?: () => void
   hasDropdown?: string
   disabled: boolean
+  label?: string | null
 }
 
 const _ButtonPaymentCard = ({
@@ -17,6 +18,7 @@ const _ButtonPaymentCard = ({
   onClick,
   disabled,
   hasDropdown,
+  label = null,
 }: ButtonPaymentCardProps) => {
   const { isLiveMinting } = useContext(UserContext)
   return (
@@ -30,7 +32,7 @@ const _ButtonPaymentCard = ({
       className={cs(style.credit_card_btn, className)}
       classNameChildren={style.credit_card_btn_children}
     >
-      {isLiveMinting && <div className={style.copy}>buy iteration</div>}
+      {label && <div className={style.copy}>{label}</div>}
       <i className={style.icon_winter} aria-hidden>
         {iconCardWinter}
       </i>
