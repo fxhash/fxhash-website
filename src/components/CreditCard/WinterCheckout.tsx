@@ -22,7 +22,9 @@ interface Props {
   title?: string
   brandImage?: string
   mintQuantity?: number
-  extraMintParams?: object
+  extraMintParams?: {
+    mintPass: IWinterMintPass
+  }
   priceFunctionParams?: object
   production?: boolean
   fillSource?: string
