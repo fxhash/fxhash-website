@@ -8,6 +8,8 @@ import { FxhashContracts } from "../../types/Contracts"
 import { ContractOperation } from "./ContractOperation"
 import { genTokCurrentPrice } from "utils/generative-token"
 import { isTicketOwner, isTicketUsed } from "services/Blockchain"
+import { prepareReserveConsumption } from "utils/pack/reserves"
+import { IReserveConsumption } from "./Mint"
 
 const isValidTicket = async (
   pkh: string,
@@ -34,6 +36,7 @@ export type TMintV3AbstractionOperationParams = {
   ticketId: number | number[] | null
   token: GenerativeToken
   inputBytes: string
+  consumeReserve?: IReserveConsumption | null
 }
 
 /**
@@ -45,10 +48,22 @@ export class MintV3AbstractionOperation extends ContractOperation<TMintV3Abstrac
   contract: ContractAbstraction<Wallet> | null = null
   useTicket: boolean | null = null
   ticketId: number | null = null
+  reserveInput: string | null = null
+  payloadPacked: string | null = null
+  payloadSignature: string | null = null
 
   async prepare() {
     this.useTicket = this.params.ticketId !== null
     this.contract = await this.manager.getContract(FxhashContracts.ISSUER_V3)
+
+    // if there is a consume method, pack the data
+    if (this.params.consumeReserve) {
+      const { reserveInput, payloadPacked, payloadSignature } =
+        await prepareReserveConsumption(this.params.consumeReserve)
+      this.reserveInput = reserveInput
+      this.payloadPacked = payloadPacked
+      this.payloadSignature = payloadSignature
+    }
   }
 
   async validate(): Promise<boolean> {
@@ -93,7 +108,7 @@ export class MintV3AbstractionOperation extends ContractOperation<TMintV3Abstrac
       : {
           issuer_id: this.params.token.id,
           referrer: null,
-          reserve_input: null,
+          reserve_input: this.reserveInput,
           create_ticket: null,
           recipient: null,
           input_bytes: this.params.inputBytes,
