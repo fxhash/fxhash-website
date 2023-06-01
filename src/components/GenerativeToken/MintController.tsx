@@ -38,16 +38,9 @@ import { MintTicket } from "../../types/entities/MintTicket"
 import { generateMintTicketFromMintAction } from "../../utils/mint-ticket"
 import { isOperationApplied } from "services/Blockchain"
 import { TzktOperation } from "types/Tzkt"
-import {
-  getReserveConsumptionMethod,
-  reserveEligibleAmount,
-  reserveSize,
-} from "utils/generative-token"
-import { EReserveMethod } from "types/entities/Reserve"
-import { LiveMintingContext } from "context/LiveMinting"
-import { apiEventsSignPayload } from "services/apis/events.service"
-import { packMintReserveInput } from "utils/pack/reserves"
+import { prepareReserveConsumption } from "utils/pack/reserves"
 import { useFetchRandomSeed } from "hooks/useFetchRandomSeed"
+import { useMintReserveInfo } from "hooks/useMintReserveInfo"
 
 interface Props {
   token: GenerativeToken
@@ -120,7 +113,8 @@ export function MintController({
   // the mint context, handles display logic
   const mintingState = useMintingState(token, forceDisabled)
   const { hidden, enabled, locked, price } = mintingState
-  const liveMintingContext = useContext(LiveMintingContext)
+  const { onMintShouldUseReserve, reserveConsumptionMethod } =
+    useMintReserveInfo(token, forceReserveConsumption)
 
   // the credit card minting state
   const [showCC, setShowCC] = useState<boolean>(false)
@@ -149,26 +143,9 @@ export function MintController({
   }
 
   // the mint pass settings for winter
-  const winterPassSettings = useMemo(() => {
-    const reserveLeft = reserveSize(token, [EReserveMethod.MINT_PASS])
-    const onlyReserveLeft = reserveLeft === token.balance
-    const eligibleFor = user
-      ? reserveEligibleAmount(user as User, token, liveMintingContext, [
-          EReserveMethod.MINT_PASS,
-        ])
-      : 0
-    const userEligible = eligibleFor > 0
-    // finally define if there are mint pass settings
-    return (
-      (userEligible && // to trigger reserve, user must be eligible
-        // there must only be reserve or reserve forced
-        (onlyReserveLeft || forceReserveConsumption) &&
-        // returns the consumption method
-        getReserveConsumptionMethod(token, user as User, liveMintingContext)) ||
-      // fallback to null
-      null
-    )
-  }, [token, liveMintingContext, user, forceReserveConsumption])
+  const winterPassSettings = onMintShouldUseReserve
+    ? reserveConsumptionMethod
+    : null
 
   // called to open the credit card window
   const openCreditCard = async () => {
@@ -180,23 +157,19 @@ export function MintController({
 
     if (winterPassSettings) {
       try {
-        const response = await apiEventsSignPayload(winterPassSettings.data)
-        setReserveInputCC(
-          packMintReserveInput({
-            method: EReserveMethod.MINT_PASS,
-            data: {
-              payload: response.payloadPacked,
-              signature: response.signature,
+        const { reserveInput, payloadPacked, payloadSignature } =
+          await prepareReserveConsumption(winterPassSettings.data)
+        setReserveInputCC(reserveInput)
+
+        const isMintPass = payloadPacked && payloadSignature
+        if (isMintPass)
+          setMintPassCC({
+            address: winterPassSettings.data.reserveData,
+            parameters: {
+              payload: payloadPacked,
+              signature: payloadSignature,
             },
           })
-        )
-        setMintPassCC({
-          address: winterPassSettings.data.reserveData,
-          parameters: {
-            payload: response.payloadPacked,
-            signature: response.signature,
-          },
-        })
       } catch (err) {
         console.log(err)
         return
