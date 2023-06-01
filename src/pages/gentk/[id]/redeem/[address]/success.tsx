@@ -14,14 +14,19 @@ import { useRouter } from "next/router"
 import { getGenerativeTokenUrl } from "utils/generative-token"
 import { Qu_objkt } from "queries/objkt"
 import { Objkt } from "types/entities/Objkt"
+import { ArtworkPreview } from "components/Artwork/Preview"
+import { createEventsClient } from "services/EventsClient"
+import { Qu_redeemableDetails } from "queries/events/redeemable"
+import { RedeemableDetails } from "types/entities/Redeemable"
 
 interface Props {
   gentk: Objkt
+  redeemableDetails: RedeemableDetails
 }
 
-const RevealPage: NextPage<Props> = ({ gentk }) => {
+const RevealPage: NextPage<Props> = ({ gentk, redeemableDetails }) => {
   const { query } = useRouter()
-  const { message } = query
+  const { available = "0" } = query
 
   return (
     <>
@@ -60,6 +65,13 @@ const RevealPage: NextPage<Props> = ({ gentk }) => {
             <Spacing size="8px" />
             <h2>{gentk.name}</h2>
             <Spacing size="8px" />
+            <div style={{ width: 400 }}>
+              <ArtworkPreview
+                image={gentk.captureMedia}
+                ipfsUri={gentk.metadata?.thumbnailUri}
+              />
+            </div>
+            <Spacing size="large" />
             <div className={cs(layout.x_centered)}>
               <span style={{ marginRight: 10 }}>created by </span>
               <EntityBadge
@@ -69,7 +81,9 @@ const RevealPage: NextPage<Props> = ({ gentk }) => {
               />
             </div>
             <Spacing size="large" />
-            <span className={cs(text.success)}>{message}</span>
+            <span className={cs(text.success)}>
+              {redeemableDetails.successInfos}
+            </span>
             <Spacing size="large" />
             <Link href={getGenerativeTokenUrl(gentk.issuer)} passHref>
               <Button isLink={true} size="small">
@@ -78,30 +92,22 @@ const RevealPage: NextPage<Props> = ({ gentk }) => {
             </Link>
           </div>
 
-          <Spacing size="3x-large" />
+          <Spacing size="large" />
 
           <Article className={cs(layout.small_centered)}>
             <p>
-              Your purchase will now be processed <strong>blah blah</strong>. No
-              more actions are required on your end, this happens automatically
-              in the backend! blah blah blah, blah!
+              Now that your token has been redeemed, there’s nothing left to do
+              on your end. The token hasn’t changed and is still in your wallet
+              {available === "0"
+                ? ", but it can’t be redeemed again."
+                : `- it can be redeemed ${available} more times.`}
+            </p>
+            <p>
+              Please note that it is the artist&apos;s responsibility to fulfil
+              your order - they will be in touch with you regarding status
+              updates and delivery.
             </p>
           </Article>
-
-          <Spacing size="6x-large" />
-
-          {/* <div className={cs(layout.y_centered)}>
-            <Link href={`/reveal/progress/${hash}`} passHref>
-              <Button
-                isLink
-                color="secondary"
-                iconComp={<i aria-hidden className="fas fa-arrow-right"/>}
-                iconSide="right"
-              >
-                signing progress
-              </Button>
-            </Link>
-          </div> */}
         </main>
       </section>
 
@@ -113,9 +119,10 @@ const RevealPage: NextPage<Props> = ({ gentk }) => {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { id } = context.query
+  const { id, address } = context.query
 
   let token = null
+  let redeemableDetails = null
 
   if (id != null) {
     const apolloClient = createApolloClient()
@@ -129,11 +136,29 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     if (data) {
       token = data.objkt
     }
+
+    // query the events API to get details about the redeemables
+    const { data: data2 } = await createEventsClient().query({
+      query: Qu_redeemableDetails,
+      fetchPolicy: "no-cache",
+      variables: {
+        where: {
+          address: {
+            equals: address,
+          },
+        },
+      },
+    })
+    if (!data2 || !data2.consumables || data2.consumables.length < 1) {
+      throw new Error("Could not find the redeemable in our database")
+    }
+    redeemableDetails = data2.consumables[0]
   }
 
   return {
     props: {
       gentk: token,
+      redeemableDetails,
     },
     notFound: !token,
   }

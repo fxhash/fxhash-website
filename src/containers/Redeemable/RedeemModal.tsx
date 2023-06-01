@@ -136,7 +136,9 @@ export function RedeemModal({
   useEffect(() => {
     if (success)
       router.push(
-        `/gentk/${gentk.id}/redeem/${redeemable.address}/success?message=${redeemable.successInfos}`
+        `/gentk/${gentk.id}/redeem/${redeemable.address}/success?available=${
+          gentk.availableRedeemables.length - 1
+        }`
       )
   }, [success])
 
