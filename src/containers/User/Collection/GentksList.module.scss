@@ -1,0 +1,15 @@
+.batch_actions {
+  position: sticky;
+  bottom: -3px;
+  left: 0;
+  right: 0;
+  background-color: var(--color-white);
+  padding: 16px;
+  z-index: 2;
+  border: 3px solid var(--color-border-input);
+  display: flex;
+  flex-direction: row;
+}
+.selected {
+  flex: 1;
+}

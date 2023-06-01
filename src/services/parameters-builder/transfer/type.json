@@ -1,0 +1,52 @@
+{
+  "prim": "list",
+  "args": [
+    {
+      "prim": "pair",
+      "args": [
+        {
+          "prim": "address",
+          "annots": [
+            "%from_"
+          ]
+        },
+        {
+          "prim": "list",
+          "args": [
+            {
+              "prim": "pair",
+              "args": [
+                {
+                  "prim": "address",
+                  "annots": [
+                    "%to_"
+                  ]
+                },
+                {
+                  "prim": "pair",
+                  "args": [
+                    {
+                      "prim": "nat",
+                      "annots": [
+                        "%token_id"
+                      ]
+                    },
+                    {
+                      "prim": "nat",
+                      "annots": [
+                        "%amount"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "annots": [
+            "%txs"
+          ]
+        }
+      ]
+    }
+  ]
+}

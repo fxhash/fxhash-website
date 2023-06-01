@@ -1,0 +1,15 @@
+.root {
+  background: var(--color-gray-vvvlight);
+  border: 1px solid var(--color-gray-light);
+  padding: 8px 12px;
+  font-size: var(--font-size-small);
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  align-items: center;
+
+  .icon {
+    font-size: 32px;
+    color: var(--color-gray);
+  }
+}

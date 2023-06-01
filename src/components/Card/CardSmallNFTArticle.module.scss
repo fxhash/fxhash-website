@@ -1,0 +1,43 @@
+@import "../../styles/Variables";
+.container {
+  border: var(--cards-border-width) solid var(--color-border);
+  box-shadow: 0px 2px var(--cards-shadow) -7px rgba(0, 0, 0, 0.67);
+}
+.img-wrapper {
+  position: relative;
+  display: block;
+  height: 250px;
+}
+.infos {
+  border-top: var(--cards-border-width) solid var(--color-border);
+  padding: $spacing-x-small;
+}
+.title {
+  color: var(--color-black);
+  h5 {
+    margin: $spacing-x-small 0 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    font-size: var(--font-size-h6);
+  }
+}
+.description {
+  margin: $spacing 0 0;
+  font-size: var(--font-size-small);
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+@media (max-width: $breakpoint-lg) {
+  .img-wrapper {
+    height: 200px;
+  }
+}
+@media (max-width: $breakpoint-sm) {
+  .img-wrapper {
+    height: 150px;
+  }
+}
