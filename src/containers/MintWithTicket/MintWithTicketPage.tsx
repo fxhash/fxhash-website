@@ -44,6 +44,7 @@ import { PanelSubmitMode } from "./Panel/PanelControls"
 import { format } from "date-fns"
 import { truncateEnd } from "utils/strings"
 import { IReserveConsumption } from "services/contract-operations/MintV3"
+import { useFetchRandomSeed } from "hooks/useFetchRandomSeed"
 
 export type TOnMintHandler = (
   ticketId: number | number[] | null,
@@ -99,6 +100,12 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
       },
     }
   )
+
+  const {
+    randomSeed,
+    success: randomSeedSuccess,
+    loading: randomSeedLoading,
+  } = useFetchRandomSeed(opHash)
 
   const storedConfigurations =
     historyContext.storedConfigurations[`${token.id}`]
@@ -366,10 +373,12 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
                     successMessage="Your iteration is minted!"
                   />
                 </div>
-                {loading && <Loader size="small" color="currentColor" />}
-                {success && (
+                {loading && randomSeedLoading && (
+                  <Loader size="small" color="currentColor" />
+                )}
+                {success && randomSeedSuccess && (
                   <Link
-                    href={`/reveal/${token.id}/?fxhash=${opHash}&fxparams=${inputBytes}&fxminter=${user?.id}`}
+                    href={`/reveal/${token.id}/?fxhash=${randomSeed}&fxparams=${inputBytes}&fxminter=${user?.id}`}
                     passHref
                   >
                     <Button
