@@ -1,9 +1,4 @@
-import React, {
-  FunctionComponent,
-  PropsWithChildren,
-  useEffect,
-  useState,
-} from "react"
+import React, { FunctionComponent, useEffect, useState } from "react"
 import style from "./WinterCheckout.module.scss"
 
 type TSuccess = (transactionHash: string, amountUSD: number) => void
@@ -39,7 +34,6 @@ interface Props {
   paymentMethod?: string
   appearance?: Record<string, string | number | undefined>
   additionalPurchaseParams?: Record<string, any>
-  mintPassParameters?: IWinterMintPass | null
   onClose?: () => void
   onSuccess?: TSuccess
   onFinish: (data: any) => void
@@ -56,7 +50,6 @@ const WinterCheckout: FunctionComponent<Props> = (props) => {
     tokenId,
     onFinish,
     additionalPurchaseParams,
-    mintPassParameters,
   } = props
   const [projectUrl, setProjectUrl] = useState("")
 
@@ -116,7 +109,6 @@ const WinterCheckout: FunctionComponent<Props> = (props) => {
       "priceFunctionParams",
       "appearance",
       "additionalPurchaseParams",
-      "mintPassParameters",
     ]
     paramsObj.forEach((param) => {
       const propValue = props[param]
@@ -139,7 +131,6 @@ const WinterCheckout: FunctionComponent<Props> = (props) => {
     props,
     tokenId,
     additionalPurchaseParams,
-    mintPassParameters,
   ])
 
   return showModal ? (

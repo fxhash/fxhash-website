@@ -386,7 +386,13 @@ export function MintController({
                 reserve_input: reserveInputCC,
               }
         }
-        mintPassParameters={mintPassCC}
+        extraMintParams={
+          mintPassCC
+            ? {
+                mintPass: mintPassCC,
+              }
+            : undefined
+        }
       />
     </div>
   )
