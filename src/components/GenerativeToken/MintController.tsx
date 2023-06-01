@@ -378,12 +378,14 @@ export function MintController({
                 input_bytes: "",
                 referrer: null,
                 reserve_input: reserveInputCC,
+                recipient: user?.id,
               }
             : {
                 create_ticket: null,
                 input_bytes: "",
                 referrer: null,
                 reserve_input: reserveInputCC,
+                recipient: user?.id,
               }
         }
         extraMintParams={
