@@ -1,8 +1,9 @@
-import React, { memo, useCallback, useState } from "react"
+import React, { memo, useCallback, useMemo, useState } from "react"
 import { Objkt } from "../../../types/entities/Objkt"
 import { TableUserCollection } from "../../../components/Tables/TableUserCollection"
 import style from "./GentksList.module.scss"
-import { set as _set } from "lodash"
+import { GentksListBatchActions } from "./GentksListBatchActions"
+import { setNestedProp } from "../../../utils/strings"
 
 interface GentksListProps {
   objkts: Objkt[]
@@ -36,7 +37,11 @@ const _GentksList = ({
       const newObjks = { ...oldObjkts }
       const foundObjkt = newObjks[objktId]
       if (foundObjkt) {
-        newObjks[objktId] = _set({ ...foundObjkt }, rowKey, value)
+        newObjks[objktId] = setNestedProp(
+          { ...foundObjkt },
+          rowKey.split("."),
+          value
+        )
       }
       return newObjks
     })
@@ -52,7 +57,11 @@ const _GentksList = ({
           }, {} as Record<string, Objkt>)
     })
   }, [objkts])
-  const totalSelected = Object.keys(selectedObjkts).length
+  const selectedObjktsArray = useMemo(
+    () => Object.values(selectedObjkts),
+    [selectedObjkts]
+  )
+  const totalSelected = selectedObjktsArray.length
   return (
     <div>
       <TableUserCollection
@@ -70,7 +79,9 @@ const _GentksList = ({
             {totalSelected}/{objkts.length}
             {hasMoreObjkts ? "+" : ""} selected
           </div>
-          <div>{"<dropdown action>"}</div>
+          <div>
+            <GentksListBatchActions objkts={selectedObjktsArray} />
+          </div>
         </div>
       )}
     </div>

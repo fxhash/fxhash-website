@@ -8,6 +8,7 @@ import { Spacing } from "../Layout/Spacing"
 import { ListingUpsert } from "../../containers/Objkt/ListingUpsert"
 import { DisplayTezos } from "../Display/DisplayTezos"
 import cs from "classnames"
+import { calculatePercentageDifference } from "../../utils/math";
 
 interface ModalUpdateListingProps {
   objkt: Objkt
@@ -22,7 +23,7 @@ const _ModalUpdateListing = ({ objkt, onClose }: ModalUpdateListingProps) => {
 
   const currentPrice = objkt.activeListing?.price || 0
   const percent = newPrice
-    ? ((newPrice - currentPrice) / (currentPrice || 1)) * 100
+    ? calculatePercentageDifference(currentPrice, newPrice)
     : null
   return (
     <Modal

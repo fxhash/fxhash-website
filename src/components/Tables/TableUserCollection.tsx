@@ -71,9 +71,11 @@ const _TableUserCollection = ({
         <tbody>
           {loading || objkts.length > 0 ? (
             objkts.map((objkt) => {
-              const isSelected = !!selectedObjkts[objkt.id]
-              const priceValue =
-                (selectedObjkts[objkt.id]?.activeListing?.price || 0) / 1000000
+              const selectedObjkt = selectedObjkts[objkt.id]
+              const isSelected = !!selectedObjkt
+              const priceValue = selectedObjkt?.activeListing?.price
+                ? selectedObjkt.activeListing.price / 1000000
+                : undefined
               return (
                 <tr key={objkt.id}>
                   {isOwner && (
@@ -101,14 +103,13 @@ const _TableUserCollection = ({
                       <InputTextUnit
                         name="price"
                         type="number"
-                        value={priceValue}
+                        defaultValue={priceValue}
                         min={0}
                         step="any"
                         onChange={handleChangeRowPrice(
                           objkt.id,
                           "activeListing.price"
                         )}
-                        classNameContainer={style.input}
                         sizeX="small"
                         unit={<IconTezos size="regular" />}
                         positionUnit="inside-left"

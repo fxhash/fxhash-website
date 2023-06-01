@@ -17,6 +17,7 @@ interface Props {
   closeOnClick?: boolean
   mobileMenuAbsolute?: boolean
   renderComp?: any
+  direction?: "top" | "bottom"
 }
 
 export function Dropdown({
@@ -28,6 +29,7 @@ export function Dropdown({
   children,
   mobileMenuAbsolute,
   renderComp,
+  direction = "bottom",
 }: PropsWithChildren<Props>) {
   const [opened, setOpened] = useState<boolean>(false)
 
@@ -90,7 +92,7 @@ export function Dropdown({
       >
         {itemComp}
       </button>
-      <DropdownMenu opened={opened} className={className}>
+      <DropdownMenu direction={direction} opened={opened} className={className}>
         {children}
       </DropdownMenu>
     </div>

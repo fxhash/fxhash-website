@@ -56,3 +56,16 @@ export function stringBytesSize(str: string): number {
 export function plural(nb: number): string {
   return nb === 1 ? "" : "s"
 }
+
+export function setNestedProp(
+  obj = {},
+  [first, ...rest]: string[],
+  value: any
+): any {
+  return {
+    ...obj,
+    [first]: rest.length
+      ? setNestedProp(obj[first as keyof object], rest, value)
+      : value,
+  }
+}

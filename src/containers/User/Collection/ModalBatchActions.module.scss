@@ -1,0 +1,54 @@
+@import "../../../styles/Variables";
+
+.gentks {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xxs);
+  overflow: auto;
+}
+
+.gentk_container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  cursor: pointer;
+  padding: var(--spacing-xxs) var(--spacing-xs);
+  gap: var(--spacing);
+}
+
+.container_name {
+  display: flex;
+  flex-direction: column;
+  margin-left: var(--spacing);
+}
+
+.name {
+  font-weight: bold;
+}
+
+.gentk {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  cursor: pointer;
+  color: var(--color-black);
+}
+
+.price {
+  color: var(--color-secondary);
+}
+
+.thumbnail_container {
+  flex-shrink: 0;
+  width: 50px;
+  height: 50px;
+}
+
+.container_input {
+  width: 150px;
+}
+
+
+@media (max-width: $breakpoint-sm) {
+
+}

@@ -13,6 +13,7 @@ interface DropdownAction {
   value: string
   label: any
   type?: "warning"
+  modal: React.ElementType
 }
 const actionsList: Record<string, DropdownAction> = {
   transfer: {
@@ -23,6 +24,7 @@ const actionsList: Record<string, DropdownAction> = {
       </>
     ),
     value: "transfer",
+    modal: ModalTransferGentk,
   },
   editListing: {
     label: (
@@ -32,6 +34,7 @@ const actionsList: Record<string, DropdownAction> = {
       </>
     ),
     value: "editListing",
+    modal: ModalUpdateListing,
   },
   cancelListing: {
     label: (
@@ -41,6 +44,7 @@ const actionsList: Record<string, DropdownAction> = {
       </>
     ),
     value: "cancelListing",
+    modal: ModalCancelListing,
   },
   addListing: {
     label: (
@@ -50,6 +54,7 @@ const actionsList: Record<string, DropdownAction> = {
       </>
     ),
     value: "addListing",
+    modal: ModalAddListing,
   },
   burn: {
     label: (
@@ -60,6 +65,7 @@ const actionsList: Record<string, DropdownAction> = {
     ),
     value: "burn",
     type: "warning",
+    modal: ModalBurnGentk,
   },
 }
 
@@ -89,6 +95,8 @@ const _UserCollectionOwnerActions = ({
     list.push(actionsList.burn)
     return list
   }, [objkt.activeListing])
+  const ModalSelectedAction =
+    selectedAction && actionsList[selectedAction].modal
   return (
     <>
       <Dropdown
@@ -110,20 +118,8 @@ const _UserCollectionOwnerActions = ({
           </div>
         ))}
       </Dropdown>
-      {selectedAction === "transfer" && (
-        <ModalTransferGentk objkt={objkt} onClose={handleCloseModal} />
-      )}
-      {selectedAction === "addListing" && (
-        <ModalAddListing objkt={objkt} onClose={handleCloseModal} />
-      )}
-      {selectedAction === "editListing" && (
-        <ModalUpdateListing objkt={objkt} onClose={handleCloseModal} />
-      )}
-      {selectedAction === "cancelListing" && (
-        <ModalCancelListing objkt={objkt} onClose={handleCloseModal} />
-      )}
-      {selectedAction === "burn" && (
-        <ModalBurnGentk objkt={objkt} onClose={handleCloseModal} />
+      {ModalSelectedAction && (
+        <ModalSelectedAction objkt={objkt} onClose={handleCloseModal} />
       )}
     </>
   )
