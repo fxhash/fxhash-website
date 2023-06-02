@@ -158,7 +158,7 @@ export function MintController({
     if (winterPassSettings) {
       try {
         const { reserveInput, payloadPacked, payloadSignature } =
-          await prepareReserveConsumption(winterPassSettings.data)
+          await prepareReserveConsumption(winterPassSettings)
         setReserveInputCC(reserveInput)
 
         const isMintPass = payloadPacked && payloadSignature
