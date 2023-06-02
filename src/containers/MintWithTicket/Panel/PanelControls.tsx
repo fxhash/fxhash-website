@@ -1,4 +1,5 @@
 import { useCallback, useContext, useMemo, useRef, useState } from "react"
+import ReactDOM from "react-dom"
 import cs from "classnames"
 import { isBefore } from "date-fns"
 import {
@@ -54,6 +55,7 @@ export function PanelControls(props: PanelControlsProps) {
     useMintReserveInfo(token)
 
   const checkoutRef = useRef<CreditCardCheckoutHandle | null>(null)
+  const [checkoutLoading, setCheckoutLoading] = useState(false)
 
   const { enabled, locked, price, hidden } = useMintingState(token)
   const showMintButton = !hidden && !locked && enabled
@@ -174,25 +176,39 @@ export function PanelControls(props: PanelControlsProps) {
           <>
             <ButtonPaymentCard
               className={style.creditCardButton}
-              label="Buy iteration"
+              label={checkoutLoading ? "loading..." : "pay with card"}
               disabled={false}
-              onClick={() => checkoutRef.current?.open()}
+              onClick={() => {
+                setCheckoutLoading(true)
+                checkoutRef.current?.open()
+              }}
             />
 
-            <CreditCardCheckout
-              ref={checkoutRef}
-              tokenId={token.id}
-              userId={user?.id!}
-              onSuccess={(hash: string) => {
-                // setOpHashCC(hash)
-              }}
-              mintParams={{
-                create_ticket: "00",
-                input_bytes: inputBytes || "",
-                referrer: null,
-              }}
-              consumeReserve={reserveConsumptionMethod}
-            />
+            {ReactDOM.createPortal(
+              <CreditCardCheckout
+                ref={checkoutRef}
+                tokenId={token.id}
+                userId={user?.id!}
+                onClose={() => {
+                  setCheckoutLoading(false)
+                }}
+                onFinish={() => {
+                  setCheckoutLoading(false)
+                  // redirect
+                }}
+                onSuccess={(hash: string) => {
+                  // setOpHashCC(hash)
+                  // or redirect here?
+                }}
+                mintParams={{
+                  create_ticket: "00",
+                  input_bytes: inputBytes || "",
+                  referrer: null,
+                }}
+                consumeReserve={reserveConsumptionMethod}
+              />,
+              document.body
+            )}
           </>
         )}
 
