@@ -344,30 +344,14 @@ export function MintController({
           setShowCC(false)
         }}
         appearance={winterCheckoutAppearance}
-        additionalPurchaseParams={
-          isTicketMinted
-            ? {
-                create_ticket: "00",
-                input_bytes: "",
-                referrer: null,
-                reserve_input: reserveInputCC,
-                recipient: user?.id,
-              }
-            : {
-                create_ticket: null,
-                input_bytes: "",
-                referrer: null,
-                reserve_input: reserveInputCC,
-                recipient: user?.id,
-              }
-        }
-        extraMintParams={
-          mintPassCC
-            ? {
-                mintPass: mintPassCC,
-              }
-            : undefined
-        }
+        additionalPurchaseParams={{
+          mintPass: mintPassCC,
+          create_ticket: isTicketMinted ? "" : null,
+          input_bytes: "",
+          referrer: null,
+          reserve_input: reserveInputCC,
+          recipient: user?.id,
+        }}
       />
     </div>
   )
