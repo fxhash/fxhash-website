@@ -22,6 +22,7 @@ import { Submit } from "../../../../../components/Form/Submit"
 import { UserContext } from "../../../../../containers/UserProvider"
 import { getUserProfileLink } from "../../../../../utils/user"
 import { User } from "../../../../../types/entities/User"
+import { useRouter } from "next/router"
 
 interface Props {
   hash: string
@@ -29,8 +30,11 @@ interface Props {
 }
 
 const LiveMintingRevealPage: NextPageWithLayout<Props> = ({ hash, token }) => {
+  const router = useRouter()
   const eventCtx = useContext(LiveMintingContext)
   const { user } = useContext(UserContext)
+
+  const { fxparams } = router.query
 
   return (
     <>
@@ -78,6 +82,7 @@ const LiveMintingRevealPage: NextPageWithLayout<Props> = ({ hash, token }) => {
             hash={hash}
             generativeUri={token.metadata.generativeUri}
             minter={user!.id}
+            params={fxparams as string}
           />
 
           <Submit layout="center">
