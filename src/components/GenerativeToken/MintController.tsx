@@ -262,7 +262,7 @@ export function MintController({
             passHref
           >
             <Button
-              className={style.button}
+              className={cs(style.button, style.button_mint_directly)}
               isLink
               color="secondary"
               iconComp={<i aria-hidden className="fas fa-arrow-right" />}
