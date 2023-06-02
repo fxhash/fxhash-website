@@ -26,6 +26,8 @@ import {
   CreditCardCheckout,
   CreditCardCheckoutHandle,
 } from "components/CreditCard/CreditCardCheckout"
+import { useRouter } from "next/router"
+import { useFetchRandomSeed } from "hooks/useFetchRandomSeed"
 
 export type PanelSubmitMode = "with-ticket" | "free" | "live-minting" | "none"
 
@@ -48,6 +50,7 @@ export function PanelControls(props: PanelControlsProps) {
     mode = "none",
   } = props
 
+  const router = useRouter()
   const { user } = useContext(UserContext)
 
   const [showDropdown, setShowDropdown] = useState(false)
@@ -56,6 +59,8 @@ export function PanelControls(props: PanelControlsProps) {
 
   const checkoutRef = useRef<CreditCardCheckoutHandle | null>(null)
   const [checkoutLoading, setCheckoutLoading] = useState(false)
+  const [checkoutOpHash, setCheckoutOpHash] = useState<string | null>(null)
+  const { randomSeed: checkoutSeed } = useFetchRandomSeed(checkoutOpHash)
 
   const { enabled, locked, price, hidden } = useMintingState(token)
   const showMintButton = !hidden && !locked && enabled
@@ -191,14 +196,25 @@ export function PanelControls(props: PanelControlsProps) {
                 userId={user?.id!}
                 onClose={() => {
                   setCheckoutLoading(false)
+                  setCheckoutOpHash(null)
+                }}
+                onSuccess={(hash: string) => {
+                  setCheckoutOpHash(hash)
                 }}
                 onFinish={() => {
                   setCheckoutLoading(false)
-                  // redirect
-                }}
-                onSuccess={(hash: string) => {
-                  // setOpHashCC(hash)
-                  // or redirect here?
+
+                  if (mode === "live-minting") {
+                    const { id: eventId, token: mintPassToken } = router.query
+                    router.push(
+                      `/live-minting/${eventId}/reveal/${token.id}/${checkoutSeed}?token=${mintPassToken}&fxparams=${inputBytes}`
+                    )
+                    return
+                  }
+
+                  router.push(
+                    `/reveal/${token.id}?fxhash=${checkoutSeed}&fxparams=${inputBytes}&fxminter=${user?.id}`
+                  )
                 }}
                 mintParams={{
                   create_ticket: "00",
