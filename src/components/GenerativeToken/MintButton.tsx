@@ -8,9 +8,8 @@ import { Cover } from "../Utils/Cover"
 import { IReserveConsumption } from "../../services/contract-operations/Mint"
 import { ButtonPaymentCard } from "../Utils/ButtonPaymentCard"
 import { useMintReserveInfo } from "hooks/useMintReserveInfo"
-import { getReserveConsumptionMethod } from "utils/generative-token"
 import { LiveMintingContext } from "context/LiveMinting"
-import { User } from "types/entities/User"
+import { ReserveDropdown } from "./ReserveDropdown"
 
 /**
  * The Mint Button displays a mint button component with specific display rules
@@ -44,7 +43,6 @@ export function MintButton({
   openCreditCard,
   children,
 }: PropsWithChildren<Props>) {
-  const { user } = useContext(UserContext)
   const liveMintingContext = useContext(LiveMintingContext)
   const { paidLiveMinting } = liveMintingContext
 
@@ -94,32 +92,11 @@ export function MintButton({
           </Button>
 
           {showDropdown && (
-            <div className={cs(style.dropdown)}>
-              <button
-                type="button"
-                onClick={() => {
-                  setShowDropdown(false)
-                  onMint(
-                    getReserveConsumptionMethod(
-                      token,
-                      user as User,
-                      liveMintingContext
-                    )
-                  )
-                }}
-              >
-                using your reserve
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setShowDropdown(false)
-                  onMint(null)
-                }}
-              >
-                without reserve
-              </button>
-            </div>
+            <ReserveDropdown
+              hideDropdown={() => setShowDropdown(false)}
+              onMint={onMint}
+              reserveConsumptionMethod={reserveConsumptionMethod}
+            />
           )}
         </div>
 

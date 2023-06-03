@@ -39,6 +39,7 @@ import { TzktOperation } from "types/Tzkt"
 import { LiveMintingContext } from "context/LiveMinting"
 import useFetch, { CachePolicies } from "use-http"
 import { checkIsEligibleForFreeLiveMint } from "utils/generative-token"
+import { useFetchRandomSeed } from "hooks/useFetchRandomSeed"
 
 interface Props {
   token: GenerativeToken
@@ -192,11 +193,15 @@ export function MintController({
 
   // derive the op hash of interest from the CC or BC transaction hash
   const finalOpHash = opHashCC || opHash || opHashFree
-  const finalLoading = loading || loadingCC || loadingFree
+
+  const { randomSeed, loading: randomSeedLoading } =
+    useFetchRandomSeed(finalOpHash)
+
+  const finalLoading = loading || loadingCC || loadingFree || randomSeedLoading
 
   const revealUrl = generateRevealUrl
-    ? generateRevealUrl({ tokenId: token.id, hash: finalOpHash })
-    : `/reveal/${token.id}/?fxhash=${finalOpHash}&fxminter=${user?.id}`
+    ? generateRevealUrl({ tokenId: token.id, hash: randomSeed })
+    : `/reveal/${token.id}/?fxhash=${randomSeed}&fxminter=${user?.id}`
 
   const isTicketMinted = token.inputBytesSize > 0
 
@@ -257,12 +262,14 @@ export function MintController({
 
       {finalOpHash && (
         <>
-          {isTicketMinted && mintedTicket ? (
+          {isTicketMinted && mintedTicket && (
             <ButtonMintTicketPurchase
               mintTicket={mintedTicket}
               showModalOnRender
             />
-          ) : (
+          )}
+
+          {!isTicketMinted && randomSeed && (
             <Link href={revealUrl} passHref>
               <Button
                 className={style.button}

@@ -47,24 +47,11 @@ export class MintV3Operation extends ContractOperation<TMintV3OperationParams> {
 
     // if there is a consume method, pack the data
     if (this.params.consumeReserve) {
-      const consume = this.params.consumeReserve
-      switch (consume.method) {
-        case EReserveMethod.WHITELIST: {
-          this.reserveInput = packMintReserveInput({
-            method: EReserveMethod.WHITELIST,
-            data: null,
-          })
-          break
-        }
-        case EReserveMethod.MINT_PASS: {
-          const { reserveInput, payloadPacked, payloadSignature } =
-            await prepareReserveConsumption(this.params.consumeReserve)
-          this.reserveInput = reserveInput
-          this.payloadPacked = payloadPacked
-          this.payloadSignature = payloadSignature
-          break
-        }
-      }
+      const { reserveInput, payloadPacked, payloadSignature } =
+        await prepareReserveConsumption(this.params.consumeReserve)
+      this.reserveInput = reserveInput
+      this.payloadPacked = payloadPacked
+      this.payloadSignature = payloadSignature
     }
   }
 

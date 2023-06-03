@@ -43,8 +43,13 @@ import { ParamConfigurationList } from "./ParamConfigurationList"
 import { PanelSubmitMode } from "./Panel/PanelControls"
 import { format } from "date-fns"
 import { truncateEnd } from "utils/strings"
+import { IReserveConsumption } from "services/contract-operations/MintV3"
+import { useFetchRandomSeed } from "hooks/useFetchRandomSeed"
 
-export type TOnMintHandler = (ticketId: number | number[] | null) => void
+export type TOnMintHandler = (
+  ticketId: number | number[] | null,
+  reserveConsumption?: IReserveConsumption | null
+) => void
 
 interface Props {
   token: GenerativeToken
@@ -58,6 +63,8 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
   const [selectedTicketId, setSelectedTicketId] = useState<
     number | number[] | null
   >(null)
+  const [selectedReserveConsumption, setSelectedReserveConsumption] =
+    useState<IReserveConsumption | null>(null)
   const panelParamsRef = useRef<PanelParamsRef>(null)
   const historyContext = useContext(ParamsHistoryContext)
   const artworkIframeRef = useRef<ArtworkIframeRef>(null)
@@ -79,6 +86,7 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
   const handleClosePreMintView = useCallback(() => {
     setShowPreMintWarningView(false)
     setSelectedTicketId(null)
+    setSelectedReserveConsumption(null)
   }, [])
 
   const { data, setData, hash, setHash, inputBytes } = useFxParams(params)
@@ -92,6 +100,12 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
       },
     }
   )
+
+  const {
+    randomSeed,
+    success: randomSeedSuccess,
+    loading: randomSeedLoading,
+  } = useFetchRandomSeed(opHash)
 
   const storedConfigurations =
     historyContext.storedConfigurations[`${token.id}`]
@@ -149,12 +163,13 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
 
   // call contract v3 mint with ticket
   const handleMint: TOnMintHandler = useCallback(
-    (_ticketId) => {
+    (_ticketId, reserveConsumption) => {
       if (inputBytes) {
         call({
           token: token,
           ticketId: _ticketId,
           inputBytes: inputBytes,
+          consumeReserve: reserveConsumption,
         })
       }
     },
@@ -162,22 +177,23 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
   )
 
   const handleClickSubmit: TOnMintHandler = useCallback(
-    (_ticketId) => {
+    (_ticketId, reserveConsumption = null) => {
       const ticketIdToMint =
         mode === "with-ticket" && ticketId ? ticketId : _ticketId
       if (showTicketPreMintWarning) {
         setShowPreMintWarningView(true)
         setSelectedTicketId(ticketIdToMint)
+        setSelectedReserveConsumption(reserveConsumption)
       } else {
-        handleMint(ticketIdToMint)
+        handleMint(ticketIdToMint, reserveConsumption)
       }
     },
     [handleMint, mode, showTicketPreMintWarning, ticketId]
   )
 
   const handleValidatePreMint = useCallback(() => {
-    handleMint(selectedTicketId)
-  }, [handleMint, selectedTicketId])
+    handleMint(selectedTicketId, selectedReserveConsumption)
+  }, [handleMint, selectedTicketId, selectedReserveConsumption])
 
   const handleSaveConfiguration = () => {
     if (paramConfigExists) return
@@ -357,10 +373,12 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
                     successMessage="Your iteration is minted!"
                   />
                 </div>
-                {loading && <Loader size="small" color="currentColor" />}
-                {success && (
+                {loading && randomSeedLoading && (
+                  <Loader size="small" color="currentColor" />
+                )}
+                {success && randomSeedSuccess && (
                   <Link
-                    href={`/reveal/${token.id}/?fxhash=${opHash}&fxparams=${inputBytes}&fxminter=${user?.id}`}
+                    href={`/reveal/${token.id}/?fxhash=${randomSeed}&fxparams=${inputBytes}&fxminter=${user?.id}`}
                     passHref
                   >
                     <Button
