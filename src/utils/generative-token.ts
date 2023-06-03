@@ -593,7 +593,7 @@ export function reserveEligibleAmount(
     ? token.reserves.filter((res) => eligibleReserves.includes(res.method))
     : token.reserves
   if (reserves && user && user.id) {
-    for (const reserve of token.reserves) {
+    for (const reserve of reserves) {
       if (reserve.amount > 0 && reserve.method) {
         eligibleFor += Math.min(
           mapReserveToEligiblity[reserve.method](
