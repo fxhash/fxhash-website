@@ -521,9 +521,15 @@ export const mapReserveIdtoEnum: Record<number, EReserveMethod> =
 /**
  * How many editions are left in the reserve ?
  */
-export function reserveSize(token: GenerativeToken): number {
+export function reserveSize(
+  token: GenerativeToken,
+  eligibleReserves?: EReserveMethod[]
+): number {
   let size = 0
-  for (const reserve of token.reserves) {
+  const reserves = eligibleReserves
+    ? token.reserves.filter((res) => eligibleReserves.includes(res.method))
+    : token.reserves
+  for (const reserve of reserves) {
     size += reserve.amount
   }
   return Math.min(token.balance, size)
@@ -576,13 +582,17 @@ export const checkIsEligibleForMintWithAutoToken = (
 export function reserveEligibleAmount(
   user: User,
   token: GenerativeToken,
-  liveMintingContext?: ILiveMintingContext
+  liveMintingContext?: ILiveMintingContext,
+  eligibleReserves?: EReserveMethod[]
 ): number {
   let eligibleFor = 0
 
   if (checkIsEligibleForMintWithAutoToken(token, liveMintingContext)) return 1
 
-  if (token.reserves && user && user.id) {
+  const reserves = eligibleReserves
+    ? token.reserves.filter((res) => eligibleReserves.includes(res.method))
+    : token.reserves
+  if (reserves && user && user.id) {
     for (const reserve of token.reserves) {
       if (reserve.amount > 0 && reserve.method) {
         eligibleFor += Math.min(
@@ -615,19 +625,24 @@ export function getReservesAmount(reserves: IReserve[]): number {
 export function getReserveConsumptionMethod(
   token: GenerativeToken,
   user: User,
-  liveMintingContext: ILiveMintingContext
+  liveMintingContext: ILiveMintingContext,
+  eligibleReserves?: EReserveMethod[]
 ): IReserveConsumption | null {
   let consumption: IReserveConsumption | null = null
 
+  const reserves = eligibleReserves
+    ? token.reserves?.filter((res) => eligibleReserves.includes(res.method))
+    : token.reserves
+
   // only if a token has a reserve we check
-  if (token.reserves) {
+  if (reserves) {
     // we sort the reserve, MINT_PASS is last
-    const sorted = token.reserves.sort((a, b) =>
+    const sorted = reserves.sort((a, b) =>
       a.method === EReserveMethod.MINT_PASS ? -1 : 1
     )
 
     // we parse the reserve and check for a match
-    for (const reserve of token.reserves) {
+    for (const reserve of reserves) {
       if (reserve.amount > 0) {
         if (
           mapReserveToEligiblity[reserve.method](

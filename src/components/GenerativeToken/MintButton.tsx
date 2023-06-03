@@ -50,6 +50,7 @@ export function MintButton({
   const {
     isMintButton,
     isMintDropdown,
+    onlyReserveLeft,
     onMintShouldUseReserve,
     reserveConsumptionMethod,
   } = useMintReserveInfo(token, forceReserveConsumption)
@@ -100,9 +101,11 @@ export function MintButton({
           )}
         </div>
 
-        {hasCreditCardOption && !loading && !onMintShouldUseReserve && (
-          <ButtonPaymentCard onClick={openCreditCard} disabled={disabled} />
-        )}
+        {hasCreditCardOption &&
+          !loading &&
+          (!onlyReserveLeft || onMintShouldUseReserve) && (
+            <ButtonPaymentCard onClick={openCreditCard} disabled={disabled} />
+          )}
       </div>
 
       {showDropdown && (

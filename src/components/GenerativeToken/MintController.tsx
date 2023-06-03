@@ -21,7 +21,9 @@ import { MintingState } from "./MintingState/MintingState"
 import { useMintingState } from "../../hooks/useMintingState"
 import { UserContext } from "../../containers/UserProvider"
 import { MintButton } from "./MintButton"
-import WinterCheckout from "components/CreditCard/WinterCheckout"
+import WinterCheckout, {
+  IWinterMintPass,
+} from "components/CreditCard/WinterCheckout"
 import { useRouter } from "next/router"
 import { useAsyncMemo } from "use-async-memo"
 import { winterCheckoutAppearance } from "../../utils/winter"
@@ -39,7 +41,9 @@ import { TzktOperation } from "types/Tzkt"
 import { LiveMintingContext } from "context/LiveMinting"
 import useFetch, { CachePolicies } from "use-http"
 import { useFetchRandomSeed } from "hooks/useFetchRandomSeed"
+import { useMintReserveInfo } from "hooks/useMintReserveInfo"
 import { checkIsEligibleForMintWithAutoToken } from "utils/generative-token"
+import { prepareReserveConsumption } from "utils/pack/reserves"
 
 interface Props {
   token: GenerativeToken
@@ -114,11 +118,15 @@ export function MintController({
   // the mint context, handles display logic
   const mintingState = useMintingState(token, forceDisabled)
   const { hidden, enabled, locked, price } = mintingState
+  const { onMintShouldUseReserve, reserveConsumptionMethod } =
+    useMintReserveInfo(token, forceReserveConsumption)
 
   // the credit card minting state
   const [showCC, setShowCC] = useState<boolean>(false)
   const [loadingCC, setLoadingCC] = useState<boolean>(false)
   const [opHashCC, setOpHashCC] = useState<string | null>(null)
+  const [reserveInputCC, setReserveInputCC] = useState<any>(null)
+  const [mintPassCC, setMintPassCC] = useState<IWinterMintPass | null>(null)
 
   // free live minting
   const [opHashFree, setOpHashFree] = useState<string | null>(null)
@@ -176,11 +184,39 @@ export function MintController({
     )
   }
 
+  // the mint pass settings for winter
+  const winterPassSettings = onMintShouldUseReserve
+    ? reserveConsumptionMethod
+    : null
+
   // called to open the credit card window
-  const openCreditCard = () => {
+  const openCreditCard = async () => {
     clear()
     setLoadingCC(true)
     setOpHashCC(null)
+    setReserveInputCC(null)
+    setMintPassCC(null)
+
+    if (winterPassSettings) {
+      try {
+        const { reserveInput, payloadPacked, payloadSignature } =
+          await prepareReserveConsumption(winterPassSettings)
+        setReserveInputCC(reserveInput)
+
+        const isMintPass = payloadPacked && payloadSignature
+        if (isMintPass)
+          setMintPassCC({
+            address: winterPassSettings.data.reserveData,
+            parameters: {
+              payload: payloadPacked,
+              signature: payloadSignature,
+            },
+          })
+      } catch (err) {
+        console.log(err)
+        return
+      }
+    }
     setShowCC(true)
   }
   const closeCreditCard = () => {
@@ -369,21 +405,14 @@ export function MintController({
           setShowCC(false)
         }}
         appearance={winterCheckoutAppearance}
-        additionalPurchaseParams={
-          isTicketMinted
-            ? {
-                create_ticket: "00",
-                input_bytes: "",
-                referrer: null,
-                reserve_input: null,
-              }
-            : {
-                create_ticket: null,
-                input_bytes: "",
-                referrer: null,
-                reserve_input: null,
-              }
-        }
+        additionalPurchaseParams={{
+          mintPass: mintPassCC,
+          create_ticket: isTicketMinted ? "" : null,
+          input_bytes: "",
+          referrer: null,
+          reserve_input: reserveInputCC,
+          recipient: user?.id,
+        }}
       />
     </div>
   )
