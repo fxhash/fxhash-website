@@ -39,7 +39,7 @@ export function LiveMintingProvider({ children }: Props) {
 
   // get the id and the token from the router
   const router = useRouter()
-  const { id, token, mode } = router.query
+  const { id, token, address, mode } = router.query
 
   // is the token generated from a free live minting QR?
   const isAuthToken = mode === "auth"
@@ -117,7 +117,12 @@ export function LiveMintingProvider({ children }: Props) {
                 loading: false,
                 error: null,
                 event: event,
-                mintPass: null,
+                // create a fake mint pass with the address to reuse reserve logic
+                mintPass: {
+                  group: {
+                    address,
+                  },
+                } as any,
                 authToken: token as string,
               })
             }

@@ -532,9 +532,25 @@ export function reserveSize(token: GenerativeToken): number {
 type TReserveEligibility = (
   reserve: IReserve,
   user: User,
-  liveMintContext?: ILiveMintingContext,
-  token?: GenerativeToken
+  liveMintContext?: ILiveMintingContext
 ) => number
+
+/**
+ * Maps a reserve method with its function to compute how many can be consumed
+ * from the reserve
+ */
+const mapReserveToEligiblity: Record<EReserveMethod, TReserveEligibility> = {
+  WHITELIST: (reserve, user) => {
+    return reserve.data[user.id] || 0
+  },
+  MINT_PASS: (reserve, _, passCtx) => {
+    return reserve.data
+      ? passCtx?.mintPass?.group?.address === reserve.data
+        ? 1
+        : 0
+      : 0
+  },
+}
 
 /**
  * Given a token and the live minting context, checks whether the project is
@@ -552,26 +568,6 @@ export const checkIsEligibleForMintWithAutoToken = (
   const isEligibleToMint = !!liveMintingContext.authToken
 
   return isProjectIncludedInEvent && isEligibleToMint
-}
-
-/**
- * Maps a reserve method with its function to compute how many can be consumed
- * from the reserve
- */
-const mapReserveToEligiblity: Record<EReserveMethod, TReserveEligibility> = {
-  WHITELIST: (reserve, user) => {
-    return reserve.data[user.id] || 0
-  },
-  MINT_PASS: (reserve, _, passCtx, token) => {
-    // if the user is eligible to mint with an auto token, we return 1
-    if (checkIsEligibleForMintWithAutoToken(token!, passCtx)) return 1
-
-    return reserve.data
-      ? passCtx?.mintPass?.group?.address === reserve.data
-        ? 1
-        : 0
-      : 0
-  },
 }
 
 /**
@@ -637,8 +633,7 @@ export function getReserveConsumptionMethod(
           mapReserveToEligiblity[reserve.method](
             reserve,
             user,
-            liveMintingContext,
-            token
+            liveMintingContext
           ) > 0
         ) {
           consumption = {
