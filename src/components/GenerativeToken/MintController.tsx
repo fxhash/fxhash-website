@@ -256,6 +256,13 @@ export function MintController({
         />
       )}
 
+      {opHashFree && (
+        <span className={cs(style.success)}>
+          You have collected your {mintedTicket ? "ticket" : "unique iteration"}
+          !
+        </span>
+      )}
+
       {errorFree && (
         <span className={cs(style.error)}>
           An error occurred requesting your mint - please try again or rescan
