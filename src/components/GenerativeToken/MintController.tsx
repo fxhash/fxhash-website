@@ -38,8 +38,8 @@ import { isOperationApplied } from "services/Blockchain"
 import { TzktOperation } from "types/Tzkt"
 import { LiveMintingContext } from "context/LiveMinting"
 import useFetch, { CachePolicies } from "use-http"
-import { checkIsEligibleForFreeLiveMint } from "utils/generative-token"
 import { useFetchRandomSeed } from "hooks/useFetchRandomSeed"
+import { checkIsEligibleForMintWithAutoToken } from "utils/generative-token"
 
 interface Props {
   token: GenerativeToken
@@ -145,7 +145,10 @@ export function MintController({
   const mint = async (reserveConsumption: IReserveConsumption | null) => {
     if (!user) throw new Error("No wallet connected")
 
-    if (checkIsEligibleForFreeLiveMint(token, liveMintingContext)) {
+    if (
+      liveMintingContext.event?.freeLiveMinting &&
+      checkIsEligibleForMintWithAutoToken(token, liveMintingContext)
+    ) {
       const opHash = await postFree("/request-mint", {
         projectId: token.id,
         eventId: "autonomy-test",

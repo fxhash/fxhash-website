@@ -532,8 +532,27 @@ export function reserveSize(token: GenerativeToken): number {
 type TReserveEligibility = (
   reserve: IReserve,
   user: User,
-  liveMintContext?: ILiveMintingContext
+  liveMintContext?: ILiveMintingContext,
+  token?: GenerativeToken
 ) => number
+
+/**
+ * Given a token and the live minting context, checks whether the project is
+ * part of the event and whether the user has an auth token to mint. We won't
+ * know until the user tries to mint whether the token is valid.
+ */
+export const checkIsEligibleForMintWithAutoToken = (
+  token: GenerativeToken,
+  liveMintingContext?: ILiveMintingContext
+) => {
+  if (!liveMintingContext || !liveMintingContext.event) return false
+
+  const isProjectIncludedInEvent =
+    liveMintingContext.event.projectIds?.includes(token.id)
+  const isEligibleToMint = !!liveMintingContext.authToken
+
+  return isProjectIncludedInEvent && isEligibleToMint
+}
 
 /**
  * Maps a reserve method with its function to compute how many can be consumed
@@ -543,32 +562,16 @@ const mapReserveToEligiblity: Record<EReserveMethod, TReserveEligibility> = {
   WHITELIST: (reserve, user) => {
     return reserve.data[user.id] || 0
   },
-  MINT_PASS: (reserve, user, passCtx) => {
+  MINT_PASS: (reserve, _, passCtx, token) => {
+    // if the user is eligible to mint with an auto token, we return 1
+    if (checkIsEligibleForMintWithAutoToken(token!, passCtx)) return 1
+
     return reserve.data
       ? passCtx?.mintPass?.group?.address === reserve.data
         ? 1
         : 0
       : 0
   },
-}
-
-/**
- * Given a token and the live minting context, checks whether there is a free
- * live minting event in the context, whether the project is part of the event
- * and whether the user has an auth token to mint.
- */
-export const checkIsEligibleForFreeLiveMint = (
-  token: GenerativeToken,
-  liveMintingContext?: ILiveMintingContext
-) => {
-  if (!liveMintingContext || !liveMintingContext.event?.freeLiveMinting)
-    return false
-
-  const isProjectIncludedInEvent =
-    liveMintingContext.event.projectIds?.includes(token.id)
-  const isEligibleToMint = !!liveMintingContext.authToken
-
-  return isProjectIncludedInEvent && isEligibleToMint
 }
 
 /**
@@ -581,7 +584,7 @@ export function reserveEligibleAmount(
 ): number {
   let eligibleFor = 0
 
-  if (checkIsEligibleForFreeLiveMint(token, liveMintingContext)) return 1
+  if (checkIsEligibleForMintWithAutoToken(token, liveMintingContext)) return 1
 
   if (token.reserves && user && user.id) {
     for (const reserve of token.reserves) {
@@ -634,14 +637,17 @@ export function getReserveConsumptionMethod(
           mapReserveToEligiblity[reserve.method](
             reserve,
             user,
-            liveMintingContext
+            liveMintingContext,
+            token
           ) > 0
         ) {
           consumption = {
             method: reserve.method,
             data: {
               event: liveMintingContext.event?.id,
-              token: liveMintingContext.mintPass?.token,
+              token:
+                liveMintingContext.authToken ||
+                liveMintingContext.mintPass?.token,
               address: user.id,
               project: token.id,
               reserveData: reserve.data,
