@@ -4,6 +4,7 @@
  */
 
 interface IMintPassPayload {
+  event: string
   token: string
   project: number
   address: string
