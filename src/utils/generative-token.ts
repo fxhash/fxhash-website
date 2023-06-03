@@ -640,6 +640,7 @@ export function getReserveConsumptionMethod(
           consumption = {
             method: reserve.method,
             data: {
+              event: liveMintingContext.event?.id,
               token: liveMintingContext.mintPass?.token,
               address: user.id,
               project: token.id,
