@@ -119,6 +119,7 @@ export function LiveMintingProvider({ children }: Props) {
                 event: event,
                 // create a fake mint pass with the address to reuse reserve logic
                 mintPass: {
+                  token,
                   group: {
                     address,
                   },
