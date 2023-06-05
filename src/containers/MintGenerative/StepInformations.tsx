@@ -23,6 +23,7 @@ const initialForm: GenTokenInformationsForm = {
   name: "",
   description: "",
   childrenDescription: "",
+  mintingInstructions: "",
   tags: "",
   labels: [],
 }
@@ -49,6 +50,7 @@ const validation = Yup.object().shape({
 })
 
 export const StepInformations: StepComponent = ({ state, onNext }) => {
+  const usesParams = !!state.previewInputBytes
   const initialState = useMemo(() => state.informations || initialForm, [])
 
   const next = (values: GenTokenInformationsForm) => {
@@ -106,6 +108,25 @@ export const StepInformations: StepComponent = ({ state, onNext }) => {
                 error={!!errors.description}
               />
             </Field>
+
+            {usesParams && (
+              <Field>
+                <label htmlFor="mintingInstructions">
+                  Minting instructions
+                  <small>
+                    Detailed minting instructions for complex params or custom
+                    minting interface use cases
+                  </small>
+                </label>
+                <InputTextarea
+                  name="mintingInstructions"
+                  value={values.mintingInstructions}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  error={!!errors.mintingInstructions}
+                />
+              </Field>
+            )}
 
             <Field error={errors.childrenDescription}>
               <label htmlFor="childrenDescription">

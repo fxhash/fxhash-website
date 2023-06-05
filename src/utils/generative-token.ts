@@ -198,6 +198,7 @@ export function generativeMetadataFromMintForm(
     description: data.informations!.description,
     childrenDescription:
       data.informations!.childrenDescription || data.informations!.description,
+    mintingInstructions: data.informations!.mintingInstructions,
     tags: tagsFromString(data.informations!.tags),
     artifactUri: ipfsUrlWithHashAndParams(
       data.cidUrlParams!,
