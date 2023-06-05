@@ -1,6 +1,5 @@
 import style from "./InputReserveWhitelist.module.scss"
 import cs from "classnames"
-import { InputProps } from "../../../types/Inputs"
 import { TInputReserveProps } from "./InputReserve"
 import { InputSplits } from "../InputSplits"
 import { transformSplitsAccessList } from "../../../utils/transformers/splits"
@@ -9,38 +8,42 @@ import { useCallback, useState } from "react"
 import { ProjectHolders } from "../ProjectHolders/ProjectHolders"
 import { ISplit } from "../../../types/entities/Split"
 import { ModalImportCsvReserve } from "../../ModalImportCsv/ModalImportCsvReserve"
+import { ModalImportEventMinterWallets } from "../../ModalImportEventMinterWallets/ModalImportEventMinterWallets"
 
 export function InputReserveWhitelist({
+  maxSize,
   value,
   onChange,
   children,
 }: TInputReserveProps<any>) {
-  // the select holders modal
+  const [showImportFromEventModal, setShowImportFromEventModal] =
+    useState(false)
   const [showAddHoldersModal, setShowAddHoldersModal] = useState(false)
   const [showImportCsvModal, setShowImportCsvModal] = useState(false)
+
+  const handleToggleImportFromEventModal = useCallback(
+    (newState) => () => setShowImportFromEventModal(newState),
+    []
+  )
 
   const handleToggleAddHoldersModal = useCallback(
     (newState) => () => setShowAddHoldersModal(newState),
     []
   )
+
   const handleToggleImportCsvModal = useCallback(
     (newState) => () => setShowImportCsvModal(newState),
     []
   )
-  const handleImportHolders = useCallback(
-    (addSplits) => (splits: ISplit[]) => {
+
+  const handleImport = useCallback(
+    (addSplits, hideModal) => (splits: ISplit[]) => {
       addSplits(splits)
-      setShowAddHoldersModal(false)
+      hideModal()
     },
     []
   )
-  const handleImportCsv = useCallback(
-    (addSplits) => (splits: ISplit[]) => {
-      addSplits(splits)
-      setShowImportCsvModal(false)
-    },
-    []
-  )
+
   return (
     <div>
       {children}
@@ -58,6 +61,14 @@ export function InputReserveWhitelist({
               type="button"
               size="very-small"
               iconComp={<i className="fa-solid fa-plus" aria-hidden />}
+              onClick={handleToggleImportFromEventModal(true)}
+            >
+              import from event
+            </Button>
+            <Button
+              type="button"
+              size="very-small"
+              iconComp={<i className="fa-solid fa-plus" aria-hidden />}
               onClick={handleToggleImportCsvModal(true)}
             >
               import from .csv
@@ -70,16 +81,32 @@ export function InputReserveWhitelist({
             >
               add current holders of a project
             </Button>
+            {showImportFromEventModal && (
+              <ModalImportEventMinterWallets
+                numEditions={maxSize}
+                onClose={handleToggleImportFromEventModal(false)}
+                onImport={handleImport(
+                  addSplits,
+                  handleToggleImportFromEventModal(false)
+                )}
+              />
+            )}
             {showAddHoldersModal && (
               <ProjectHolders
                 onClose={handleToggleAddHoldersModal(false)}
-                onImport={handleImportHolders(addSplits)}
+                onImport={handleImport(
+                  addSplits,
+                  handleToggleAddHoldersModal(false)
+                )}
               />
             )}
             {showImportCsvModal && (
               <ModalImportCsvReserve
                 onClose={handleToggleImportCsvModal(false)}
-                onImport={handleImportCsv(addSplits)}
+                onImport={handleImport(
+                  addSplits,
+                  handleToggleImportCsvModal(false)
+                )}
               />
             )}
           </div>

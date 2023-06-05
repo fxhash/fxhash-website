@@ -8,6 +8,7 @@ import { Cover } from "../Utils/Cover"
 import { IReserveConsumption } from "../../services/contract-operations/Mint"
 import { ButtonPaymentCard } from "../Utils/ButtonPaymentCard"
 import { useMintReserveInfo } from "hooks/useMintReserveInfo"
+import { LiveMintingContext } from "context/LiveMinting"
 import { ReserveDropdown } from "./ReserveDropdown"
 
 /**
@@ -42,11 +43,14 @@ export function MintButton({
   openCreditCard,
   children,
 }: PropsWithChildren<Props>) {
-  const { isLiveMinting } = useContext(UserContext)
+  const liveMintingContext = useContext(LiveMintingContext)
+  const { paidLiveMinting } = liveMintingContext
+
   const [showDropdown, setShowDropdown] = useState(false)
   const {
     isMintButton,
     isMintDropdown,
+    onlyReserveLeft,
     onMintShouldUseReserve,
     reserveConsumptionMethod,
   } = useMintReserveInfo(token, forceReserveConsumption)
@@ -55,17 +59,17 @@ export function MintButton({
     <>
       <div
         className={cs(style.btns_wrapper, {
-          [style.reversed]: isLiveMinting,
+          [style.reversed]: paidLiveMinting,
         })}
       >
         <div className={cs(style.root)}>
           <Button
             type="button"
-            color={isLiveMinting ? "secondary-inverted" : "secondary"}
+            color={paidLiveMinting ? "secondary-inverted" : "secondary"}
             size="regular"
             state={loading ? "loading" : "default"}
             className={cs(style.button, {
-              [style.narrow]: isLiveMinting,
+              [style.narrow]: paidLiveMinting,
             })}
             disabled={disabled}
             onClick={() => {
@@ -97,9 +101,11 @@ export function MintButton({
           )}
         </div>
 
-        {hasCreditCardOption && !loading && !onMintShouldUseReserve && (
-          <ButtonPaymentCard onClick={openCreditCard} disabled={disabled} />
-        )}
+        {hasCreditCardOption &&
+          !loading &&
+          (!onlyReserveLeft || onMintShouldUseReserve) && (
+            <ButtonPaymentCard onClick={openCreditCard} disabled={disabled} />
+          )}
       </div>
 
       {showDropdown && (
