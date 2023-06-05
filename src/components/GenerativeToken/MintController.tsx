@@ -38,9 +38,12 @@ import { MintTicket } from "../../types/entities/MintTicket"
 import { generateMintTicketFromMintAction } from "../../utils/mint-ticket"
 import { isOperationApplied } from "services/Blockchain"
 import { TzktOperation } from "types/Tzkt"
-import { prepareReserveConsumption } from "utils/pack/reserves"
+import { LiveMintingContext } from "context/LiveMinting"
+import useFetch, { CachePolicies } from "use-http"
 import { useFetchRandomSeed } from "hooks/useFetchRandomSeed"
 import { useMintReserveInfo } from "hooks/useMintReserveInfo"
+import { checkIsEligibleForMintWithAutoToken } from "utils/generative-token"
+import { prepareReserveConsumption } from "utils/pack/reserves"
 
 interface Props {
   token: GenerativeToken
@@ -107,7 +110,9 @@ export function MintController({
   className,
   children,
 }: PropsWithChildren<Props>) {
-  const { user, isLiveMinting } = useContext(UserContext)
+  const { user } = useContext(UserContext)
+  const liveMintingContext = useContext(LiveMintingContext)
+  const { event, mintPass, authToken, paidLiveMinting } = liveMintingContext
   const router = useRouter()
 
   // the mint context, handles display logic
@@ -123,6 +128,16 @@ export function MintController({
   const [reserveInputCC, setReserveInputCC] = useState<any>(null)
   const [mintPassCC, setMintPassCC] = useState<IWinterMintPass | null>(null)
 
+  // free live minting
+  const [opHashFree, setOpHashFree] = useState<string | null>(null)
+  const [errorFree, setErrorFree] = useState<string | null>(null)
+  const { post: postFree, loading: loadingFree } = useFetch(
+    process.env.NEXT_PUBLIC_API_EVENTS_ROOT,
+    {
+      cachePolicy: CachePolicies.NO_CACHE,
+    }
+  )
+
   const mintOperation = mintOpsByVersion[token.version]
   // hook to interact with the contract
   const { state, loading, success, call, error, opHash, opData, clear } =
@@ -130,9 +145,36 @@ export function MintController({
       mintOperation.operation
     )
 
-  // can be used to call the mint entry point of the smart contract
-  const mint = (reserveConsumption: IReserveConsumption | null) => {
-    setOpHashCC(null) // reset CC op hash in case of new direct BC transaction
+  /**
+   * can be used to call the mint entry point of the smart contract, or to
+   * request the backend to mint the token on behalf of the user
+   */
+  //
+  const mint = async (reserveConsumption: IReserveConsumption | null) => {
+    if (!user) throw new Error("No wallet connected")
+
+    if (
+      liveMintingContext.event?.freeLiveMinting &&
+      checkIsEligibleForMintWithAutoToken(token, liveMintingContext)
+    ) {
+      const opHash = await postFree("/request-mint", {
+        projectId: token.id,
+        eventId: "autonomy-test",
+        token: mintPass?.token || authToken,
+        recipient: user.id,
+        createTicket: token.inputBytesSize > 0,
+      })
+      if (opHash.error) {
+        setErrorFree(opHash.error)
+        return
+      }
+      setOpHashFree(opHash)
+      return
+    }
+
+    // reset other op hashes in case of new direct BC transaction
+    setOpHashFree(null)
+    setOpHashCC(null)
     call(
       mintOperation.getParams({
         token: token,
@@ -189,12 +231,12 @@ export function MintController({
   }
 
   // derive the op hash of interest from the CC or BC transaction hash
-  const finalOpHash = opHashCC || opHash
+  const finalOpHash = opHashCC || opHash || opHashFree
 
   const { randomSeed, loading: randomSeedLoading } =
     useFetchRandomSeed(finalOpHash)
 
-  const finalLoading = loading || loadingCC || randomSeedLoading
+  const finalLoading = loading || loadingCC || loadingFree || randomSeedLoading
 
   const revealUrl = generateRevealUrl
     ? generateRevealUrl({ tokenId: token.id, hash: randomSeed })
@@ -250,30 +292,46 @@ export function MintController({
         />
       )}
 
-      <>
-        {isTicketMinted && mintedTicket && (
-          <ButtonMintTicketPurchase
-            mintTicket={mintedTicket}
-            showModalOnRender
-          />
-        )}
+      {opHashFree && (
+        <span className={cs(style.success)}>
+          You have collected your {mintedTicket ? "ticket" : "unique iteration"}
+          !
+        </span>
+      )}
 
-        {!isTicketMinted && randomSeed && (
-          <Link href={revealUrl} passHref>
-            <Button
-              className={style.button}
-              isLink
-              color="secondary"
-              iconComp={<i aria-hidden className="fas fa-arrow-right" />}
-              iconSide="right"
-              size="regular"
-            >
-              reveal
-            </Button>
-          </Link>
-        )}
-        <Spacing size="regular" />
-      </>
+      {errorFree && (
+        <span className={cs(style.error)}>
+          An error occurred requesting your mint - please try again or rescan
+          the QR code if the error persists.
+        </span>
+      )}
+
+      {finalOpHash && (
+        <>
+          {isTicketMinted && mintedTicket && (
+            <ButtonMintTicketPurchase
+              mintTicket={mintedTicket}
+              showModalOnRender
+            />
+          )}
+
+          {!isTicketMinted && randomSeed && (
+            <Link href={revealUrl} passHref>
+              <Button
+                className={style.button}
+                isLink
+                color="secondary"
+                iconComp={<i aria-hidden className="fas fa-arrow-right" />}
+                iconSide="right"
+                size="regular"
+              >
+                reveal
+              </Button>
+            </Link>
+          )}
+          <Spacing size="regular" />
+        </>
+      )}
 
       {!token.enabled && token.balance > 0 && (
         <>
@@ -311,16 +369,19 @@ export function MintController({
               openCreditCard={openCreditCard}
             >
               <span className={style.mint}>
-                {!isLiveMinting && (
+                {!paidLiveMinting && (
+                  <>mint {isTicketMinted ? "ticket" : "iteration"}</>
+                )}
+                {!event?.freeLiveMinting && (
                   <>
-                    mint {isTicketMinted ? "ticket" : "iteration"}&nbsp;&nbsp;
+                    &nbsp;&nbsp;
+                    <DisplayTezos
+                      mutez={price}
+                      tezosSize="regular"
+                      formatBig={false}
+                    />
                   </>
                 )}
-                <DisplayTezos
-                  mutez={price}
-                  tezosSize="regular"
-                  formatBig={false}
-                />
               </span>
             </MintButton>
           )}

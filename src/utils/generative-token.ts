@@ -549,13 +549,31 @@ const mapReserveToEligiblity: Record<EReserveMethod, TReserveEligibility> = {
   WHITELIST: (reserve, user) => {
     return reserve.data[user.id] || 0
   },
-  MINT_PASS: (reserve, user, passCtx) => {
+  MINT_PASS: (reserve, _, passCtx) => {
     return reserve.data
       ? passCtx?.mintPass?.group?.address === reserve.data
         ? 1
         : 0
       : 0
   },
+}
+
+/**
+ * Given a token and the live minting context, checks whether the project is
+ * part of the event and whether the user has an auth token to mint. We won't
+ * know until the user tries to mint whether the token is valid.
+ */
+export const checkIsEligibleForMintWithAutoToken = (
+  token: GenerativeToken,
+  liveMintingContext?: ILiveMintingContext
+) => {
+  if (!liveMintingContext || !liveMintingContext.event) return false
+
+  const isProjectIncludedInEvent =
+    liveMintingContext.event.projectIds?.includes(token.id)
+  const isEligibleToMint = !!liveMintingContext.authToken
+
+  return isProjectIncludedInEvent && isEligibleToMint
 }
 
 /**
@@ -568,10 +586,12 @@ export function reserveEligibleAmount(
   eligibleReserves?: EReserveMethod[]
 ): number {
   let eligibleFor = 0
+
+  if (checkIsEligibleForMintWithAutoToken(token, liveMintingContext)) return 1
+
   const reserves = eligibleReserves
     ? token.reserves.filter((res) => eligibleReserves.includes(res.method))
     : token.reserves
-  console.log({ reserves })
   if (reserves && user && user.id) {
     for (const reserve of reserves) {
       if (reserve.amount > 0 && reserve.method) {
