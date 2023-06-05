@@ -459,6 +459,7 @@ export const Qu_userAcceptCollectionOffer = gql`
             floor
           }
         }
+        lastSoldPrice
         activeListing {
           id
           version

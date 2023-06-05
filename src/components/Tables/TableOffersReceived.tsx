@@ -1,4 +1,4 @@
-import React, { memo, useContext, useRef } from "react"
+import React, { memo, useRef } from "react"
 import style from "./TableUser.module.scss"
 import cs from "classnames"
 import {
@@ -10,7 +10,6 @@ import {
 import {
   GenerativeTokenImageAndName,
   ObjktImageAndName,
-  TokenImageAndName,
 } from "components/Objkt/ObjktImageAndName"
 import { DisplayTezos } from "components/Display/DisplayTezos"
 import { FloorDifference } from "components/Display/FloorDifference"
@@ -20,7 +19,9 @@ import useHasScrolledToBottom from "hooks/useHasScrolledToBottom"
 import { OfferActions } from "components/Offers/OfferActions"
 import { CollectionOfferActions } from "components/Offers/CollectionOfferActions"
 import Skeleton from "components/Skeleton"
-import { UserContext } from "containers/UserProvider"
+import { useAriaTooltip } from "hooks/useAriaTooltip"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faInfoCircle } from "@fortawesome/free-solid-svg-icons"
 
 interface RowProps {
   buttons?: React.ReactNode
@@ -28,9 +29,40 @@ interface RowProps {
   offer: AnyOffer
 }
 
+const PricePaidInfo = () => {
+  const { hoverElement, showTooltip, handleEnter, handleLeave } =
+    useAriaTooltip()
+
+  return (
+    <div onMouseEnter={handleEnter} onMouseLeave={handleLeave}>
+      <FontAwesomeIcon
+        className={style.warningIcon}
+        ref={hoverElement}
+        tabIndex={0}
+        onFocus={handleEnter}
+        onBlur={handleLeave}
+        icon={faInfoCircle}
+      />
+
+      {showTooltip && (
+        <span
+          className={style.tooltip}
+          role="tooltip"
+          aria-hidden={!showTooltip}
+          aria-live="polite"
+        >
+          hello
+        </span>
+      )}
+    </div>
+  )
+}
+
 const Row = ({ buttons, feedback, offer }: RowProps) => {
+  const isIndividualOffer = offerTypeGuard(offer)
+
   const renderPreview = () => {
-    if (offerTypeGuard(offer))
+    if (isIndividualOffer)
       return (
         offer.objkt && (
           <div className={cs(style.link_wrapper)}>
@@ -45,6 +77,10 @@ const Row = ({ buttons, feedback, offer }: RowProps) => {
       </div>
     )
   }
+
+  const pricePaid = isIndividualOffer
+    ? offer.objkt.lastSoldPrice!
+    : offer.token.minLastSoldPrice!
 
   return (
     <>
@@ -64,6 +100,19 @@ const Row = ({ buttons, feedback, offer }: RowProps) => {
             className={style.price}
             formatBig={false}
             mutez={offer.price}
+            tezosSize="regular"
+          />
+        </td>
+        <td className={style["td-price"]} data-label="Price paid">
+          {!offerTypeGuard(offer) && (
+            <span className={style.price_paid} style={{ fontSize: 14 }}>
+              ≥{" "}
+            </span>
+          )}
+          <DisplayTezos
+            className={style.price_paid}
+            formatBig={false}
+            mutez={pricePaid}
             tezosSize="regular"
           />
         </td>
@@ -89,7 +138,7 @@ const Row = ({ buttons, feedback, offer }: RowProps) => {
         </td>
         <td className={style["td-time"]} data-label="Time">
           <div className={style.date}>
-            <DateDistance timestamptz={offer.createdAt} />
+            <DateDistance timestamptz={offer.createdAt} shorten />
           </div>
         </td>
         <td
@@ -145,7 +194,8 @@ const _TableUserOffersReceived = ({
             <tr>
               <th className={style["th-gentk"]}>Token</th>
               <th className={style["th-price"]}>Price</th>
-              <th className={style["th-floor"]}>Floor Difference</th>
+              <th className={style["th-price_paid"]}>Price paid</th>
+              <th className={style["th-floor"]}>Floor diff</th>
               <th className={style["th-user"]}>From</th>
               <th className={style["th-time"]}>Time</th>
               <th className={style["th-action"]}>Action</th>
@@ -184,6 +234,9 @@ const _TableUserOffersReceived = ({
                     </div>
                   </td>
                   <td className={style["td-user"]} data-label="Price">
+                    <Skeleton height="25px" />
+                  </td>
+                  <td className={style["td-user"]} data-label="Price paid">
                     <Skeleton height="25px" />
                   </td>
                   <td

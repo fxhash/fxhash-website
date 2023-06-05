@@ -17,7 +17,7 @@
   overflow-x: auto;
   min-width: 940px;
   width: 100%;
-  table-layout: fixed;
+  table-layout: auto;
   border-collapse: separate;
   font-size: var(--font-size-small);
   border-spacing: 0;
@@ -83,23 +83,21 @@ td.td-right {
 }
 
 .th-gentk {
-  width: 100%;
 }
 
 .th-user {
-  width: 180px;
 }
 
 .th-price {
-  width: 120px;
+}
+
+.th-price_paid {
 }
 
 .th-floor {
-  width: 160px;
 }
 
 .th-action {
-  width: 180px;
 }
 
 .th-editions {
@@ -115,7 +113,6 @@ td.td-right {
 }
 
 .th-time {
-  width: 180px;
 }
 
 .th-date {
@@ -165,6 +162,10 @@ td.td-right {
   color: var(--color-secondary);
   font-weight: bold;
   word-break: break-all;
+}
+
+.price_paid {
+  color: var(--color-secondary);
 }
 
 .date {

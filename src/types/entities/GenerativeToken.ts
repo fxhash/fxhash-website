@@ -145,6 +145,8 @@ export interface GenerativeToken {
   mintTickets: MintTicket[]
   mintTicketSettings: MintTicketSettings | null
   inputBytesSize: number
+  heldGentks?: Objkt[]
+  minLastSoldPrice?: number
 }
 
 export interface GenerativeTokenWithCollection extends GenerativeToken {

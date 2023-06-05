@@ -23,6 +23,7 @@ export const Frag_UserCollectionOffer = gql`
       captureMedia {
         ...MediaImage
       }
+      minLastSoldPrice(userId: $id)
     }
   }
 `
