@@ -379,6 +379,11 @@ export const genTokLabelDefinitions: Record<
     shortLabel: "Prerendered components",
     group: GenTokLabelGroup.DETAILS,
   },
+  106: {
+    label: "Custom minting interface",
+    shortLabel: "Custom UI",
+    group: GenTokLabelGroup.DETAILS,
+  },
 }
 
 export const getGenTokLabelDefinition = (
