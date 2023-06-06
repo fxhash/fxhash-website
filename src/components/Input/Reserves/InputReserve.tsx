@@ -14,6 +14,7 @@ import { FormikErrors } from "formik"
 // the type of a reserve input update component
 export interface TInputReserveProps<T>
   extends PropsWithChildren<InputProps<T>> {
+  maxSize: number
   errors?: FormikErrors<T>
 }
 export type TInputReserve<T = any> = FunctionComponent<TInputReserveProps<T>>
@@ -56,6 +57,7 @@ export function InputReserve({
       </header>
       <main>
         <definition.inputComponent
+          maxSize={maxSize}
           value={value.data}
           onChange={(val) => update("data", val)}
           errors={

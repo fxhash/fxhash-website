@@ -1,20 +1,15 @@
 import style from "./MintButton.module.scss"
-import effects from "../../styles/Effects.module.scss"
 import cs from "classnames"
 import { GenerativeToken } from "../../types/entities/GenerativeToken"
-import { PropsWithChildren, useContext, useMemo, useState } from "react"
+import { PropsWithChildren, useContext, useState } from "react"
 import { Button } from "../../components/Button"
 import { UserContext } from "../../containers/UserProvider"
-import {
-  getReserveConsumptionMethod,
-  reserveEligibleAmount,
-  reserveSize,
-} from "../../utils/generative-token"
-import { User } from "../../types/entities/User"
 import { Cover } from "../Utils/Cover"
-import { LiveMintingContext } from "../../context/LiveMinting"
 import { IReserveConsumption } from "../../services/contract-operations/Mint"
 import { ButtonPaymentCard } from "../Utils/ButtonPaymentCard"
+import { useMintReserveInfo } from "hooks/useMintReserveInfo"
+import { LiveMintingContext } from "context/LiveMinting"
+import { ReserveDropdown } from "./ReserveDropdown"
 
 /**
  * The Mint Button displays a mint button component with specific display rules
@@ -48,67 +43,38 @@ export function MintButton({
   openCreditCard,
   children,
 }: PropsWithChildren<Props>) {
-  // user ctx
-  const { user, isLiveMinting } = useContext(UserContext)
-  // live minting ctx
   const liveMintingContext = useContext(LiveMintingContext)
+  const { paidLiveMinting } = liveMintingContext
 
   const [showDropdown, setShowDropdown] = useState(false)
-
-  // the number of editions left in the reserve
-  const reserveLeft = useMemo(() => reserveSize(token), [token])
-
-  // only the reserve is available for minting
-  const onlyReserveLeft = reserveLeft === token.balance
-
-  // compute how many editions in reserve the user is eligible for
-  const eligibleFor = useMemo(
-    () =>
-      user ? reserveEligibleAmount(user as User, token, liveMintingContext) : 0,
-    [user, token]
-  )
-  const userEligible = eligibleFor > 0
-
-  // should we show the button with dropdown
-  const isMintDropdown =
-    userEligible && !onlyReserveLeft && !forceReserveConsumption
-  // conditions required to show the regular mint button
-  const isMintButton =
-    !isMintDropdown && ((userEligible && onlyReserveLeft) || !onlyReserveLeft)
+  const {
+    isMintButton,
+    isMintDropdown,
+    onlyReserveLeft,
+    onMintShouldUseReserve,
+    reserveConsumptionMethod,
+  } = useMintReserveInfo(token, forceReserveConsumption)
 
   return isMintButton || isMintDropdown ? (
     <>
       <div
         className={cs(style.btns_wrapper, {
-          [style.reversed]: isLiveMinting,
+          [style.reversed]: paidLiveMinting,
         })}
       >
         <div className={cs(style.root)}>
           <Button
             type="button"
-            color={isLiveMinting ? "secondary-inverted" : "secondary"}
+            color={paidLiveMinting ? "secondary-inverted" : "secondary"}
             size="regular"
             state={loading ? "loading" : "default"}
             className={cs(style.button, {
-              [style.narrow]: isLiveMinting,
+              [style.narrow]: paidLiveMinting,
             })}
             disabled={disabled}
             onClick={() => {
               if (isMintButton) {
-                onMint(
-                  // to trigger reserve, user must be eligible
-                  (userEligible &&
-                    // there must only be reserve or reserve forced
-                    (onlyReserveLeft || forceReserveConsumption) &&
-                    // returns the consumption method
-                    getReserveConsumptionMethod(
-                      token,
-                      user as User,
-                      liveMintingContext
-                    )) ||
-                    // fallback to null
-                    null
-                )
+                onMint(onMintShouldUseReserve ? reserveConsumptionMethod : null)
               } else {
                 setShowDropdown(!showDropdown)
               }
@@ -127,38 +93,17 @@ export function MintButton({
           </Button>
 
           {showDropdown && (
-            <div className={cs(style.dropdown)}>
-              <button
-                type="button"
-                onClick={() => {
-                  setShowDropdown(false)
-                  onMint(
-                    getReserveConsumptionMethod(
-                      token,
-                      user as User,
-                      liveMintingContext
-                    )
-                  )
-                }}
-              >
-                using your reserve
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setShowDropdown(false)
-                  onMint(null)
-                }}
-              >
-                without reserve
-              </button>
-            </div>
+            <ReserveDropdown
+              hideDropdown={() => setShowDropdown(false)}
+              onMint={onMint}
+              reserveConsumptionMethod={reserveConsumptionMethod}
+            />
           )}
         </div>
 
         {hasCreditCardOption &&
           !loading &&
-          !(userEligible && onlyReserveLeft) && (
+          (!onlyReserveLeft || onMintShouldUseReserve) && (
             <ButtonPaymentCard onClick={openCreditCard} disabled={disabled} />
           )}
       </div>

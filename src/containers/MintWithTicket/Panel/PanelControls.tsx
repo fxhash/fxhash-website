@@ -1,22 +1,25 @@
-import style from "./PanelControls.module.scss"
-import { BaseButton, IconButton } from "components/FxParams/BaseInput"
-
+import { useCallback, useContext, useMemo, useState } from "react"
+import cs from "classnames"
+import { isBefore } from "date-fns"
 import {
   faArrowLeft,
   faArrowUpRightFromSquare,
 } from "@fortawesome/free-solid-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { useCallback, useContext, useMemo } from "react"
-import { UserContext } from "containers/UserProvider"
 import { useQuery } from "@apollo/client"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { UserContext } from "containers/UserProvider"
 import { Qu_userMintTickets } from "queries/user"
 import { MintTicket } from "types/entities/MintTicket"
 import { GenerativeToken } from "types/entities/GenerativeToken"
 import { DisplayTezos } from "components/Display/DisplayTezos"
 import { displayMutez } from "utils/units"
-import { TOnMintHandler } from "../MintWithTicketPage"
-import { isBefore } from "date-fns"
 import { useMintingState } from "hooks/useMintingState"
+import { useMintReserveInfo } from "hooks/useMintReserveInfo"
+import { ReserveDropdown } from "components/GenerativeToken/ReserveDropdown"
+import { Cover } from "components/Utils/Cover"
+import { BaseButton, IconButton } from "components/FxParams/BaseInput"
+import { TOnMintHandler } from "../MintWithTicketPage"
+import style from "./PanelControls.module.scss"
 
 export type PanelSubmitMode = "with-ticket" | "free" | "none"
 
@@ -32,6 +35,10 @@ export function PanelControls(props: PanelControlsProps) {
   const { token, onClickBack, onOpenNewTab, onSubmit, mode = "none" } = props
 
   const { user } = useContext(UserContext)
+
+  const [showDropdown, setShowDropdown] = useState(false)
+  const { isMintDropdown, onMintShouldUseReserve, reserveConsumptionMethod } =
+    useMintReserveInfo(token)
 
   const { enabled, locked, price, hidden } = useMintingState(token)
   const showMintButton = !hidden && !locked && enabled
@@ -61,8 +68,13 @@ export function PanelControls(props: PanelControlsProps) {
   }, [data, token.id])
 
   const handleClickMint = useCallback(() => {
-    onSubmit(null)
+    if (isMintDropdown) {
+      setShowDropdown(true)
+      return
+    }
+    onSubmit(null, onMintShouldUseReserve ? reserveConsumptionMethod : null)
   }, [onSubmit])
+
   const handleClickUseTicket = useCallback(() => {
     if (userTickets) {
       onSubmit(userTickets.map((ticket) => ticket.id))
@@ -96,16 +108,36 @@ export function PanelControls(props: PanelControlsProps) {
           </BaseButton>
         ) : mode === "free" ? (
           <div className={style.submitButtons}>
-            {showMintButton && (
-              <BaseButton
-                color="main"
-                onClick={handleClickMint}
-                className={style.submitButton}
-                title={`mint with ${displayMutez(price)} tezos`}
-              >
-                mint <DisplayTezos mutez={price} formatBig={false} />
-              </BaseButton>
-            )}
+            <div style={{ position: "relative", display: "flex" }}>
+              {showMintButton && (
+                <BaseButton
+                  color="main"
+                  onClick={handleClickMint}
+                  className={style.submitButton}
+                  title={`mint with ${displayMutez(price)} tezos`}
+                >
+                  mint <DisplayTezos mutez={price} formatBig={false} />
+                  {isMintDropdown && (
+                    <i
+                      aria-hidden
+                      className={cs(`fas fa-caret-down`, style.caret)}
+                      style={{
+                        transform: showDropdown ? "rotate(180deg)" : "none",
+                      }}
+                    />
+                  )}
+                </BaseButton>
+              )}
+              {showDropdown && (
+                <ReserveDropdown
+                  className={style.reserveDropdown}
+                  hideDropdown={() => setShowDropdown(false)}
+                  onMint={(reserve) => onSubmit(null, reserve)}
+                  reserveConsumptionMethod={reserveConsumptionMethod}
+                  placement="top"
+                />
+              )}
+            </div>
             {userTickets && (
               <BaseButton
                 color="main"
@@ -119,6 +151,14 @@ export function PanelControls(props: PanelControlsProps) {
             )}
           </div>
         ) : null}
+
+        {showDropdown && (
+          <Cover
+            index={100}
+            onClick={() => setShowDropdown(false)}
+            opacity={0}
+          />
+        )}
       </div>
     </div>
   )
