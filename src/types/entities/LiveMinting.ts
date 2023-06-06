@@ -25,6 +25,7 @@ export interface LiveMintingEvent {
   imageUrl?: string
   availabilities: EventAvailability[]
   status: EventStatus
+  freeLiveMinting: boolean
 }
 
 export type LiveMintingEventWithArtists = LiveMintingEvent & { artists: User[] }
