@@ -125,6 +125,7 @@ export function LiveMintingProvider({ children }: Props) {
                   },
                 } as any,
                 authToken: token as string,
+                paidLiveMinting: !event.freeLiveMinting,
               })
             }
           }
