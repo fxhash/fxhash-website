@@ -4,7 +4,7 @@ import { GenerativeToken } from "../../types/entities/GenerativeToken"
 import { Button } from "."
 import { useMemo } from "react"
 import { generateFxHash } from "../../utils/hash"
-import { uniq } from "lodash"
+import { uniq, uniqBy } from "lodash"
 import { HoverTitle } from "../Utils/HoverTitle"
 import { FxParamDefinition, FxParamType } from "components/FxParams/types"
 import {
@@ -13,20 +13,23 @@ import {
 } from "components/FxParams/utils"
 import { getActiveExploreSet, isTokenFullyMinted } from "utils/generative-token"
 
+export type Variant = [string | null, string | null]
+
 interface Props {
   token: Pick<
     GenerativeToken,
     "balance" | "metadata" | "inputBytesSize" | "iterationsCount" | "supply"
   >
-  previewHash?: string | null
   params?: FxParamDefinition<FxParamType>[]
-  onChangeHash: (hash: string, inputBytes?: string) => void
+  onChangeVariant: (variant: Variant) => void
+  variant: Variant
 }
+
 export function ButtonVariations({
   token,
-  previewHash,
-  onChangeHash,
+  onChangeVariant,
   params,
+  variant,
 }: Props) {
   const fullyMinted = isTokenFullyMinted(token)
   const activeSettings = getActiveExploreSet(token)
@@ -44,79 +47,83 @@ export function ButtonVariations({
       }
     }
     return null
-  }, [])
+  }, [
+    token.metadata.settings?.exploration,
+    activeSettings?.enabled,
+    fullyMinted,
+  ])
 
-  // a list of hashes to explore, if enabled
-  const hashes = useMemo<string[] | null>(() => {
-    if (!activeSettings?.hashConstraints) {
-      return null
-    }
-    return uniq([
-      token.metadata.previewHash!,
-      ...activeSettings.hashConstraints,
-    ])
-  }, [])
-
-  // a list of inputBytes to explore, if enabled
-  const inputBytes = useMemo<string[] | null>(() => {
-    if (!activeSettings?.paramsConstraints) {
-      return null
-    }
-    return uniq([
-      token.metadata.previewInputBytes!,
-      ...activeSettings.paramsConstraints,
-    ])
-  }, [])
+  const variants = useMemo<Variant[] | null>(() => {
+    if (!activeSettings?.hashConstraints) return null
+    let suppliedVariants = activeSettings.hashConstraints.map(
+      (hash, idx) =>
+        [hash, activeSettings.paramsConstraints?.[idx] || null] as Variant
+    )
+    return uniqBy(
+      [
+        [
+          token.metadata.previewHash || null,
+          token.metadata.previewInputBytes || null,
+        ] as Variant,
+        ...suppliedVariants,
+      ],
+      (v) => `${v[0]}-${v[1]}`
+    )
+  }, [activeSettings, token])
 
   // the component rendering the icon next to the button
   const icon = useMemo(() => {
     if (activeSettings?.enabled) {
       // if there is an infinite number of variations
-      if (!activeSettings?.hashConstraints) {
+      if (!variants) {
         return <i aria-hidden className="fas fa-infinity" />
       }
       // otherwise there is a finite amount of variations, we need to display the active
       else {
         // find index of the active hash
-        let idx = hashes?.indexOf(previewHash!)
+        let idx = variants?.findIndex(
+          (v) => v[0] === variant[0] && v[1] === variant[1]
+        )
         idx = idx === -1 || idx == null ? 0 : idx
         return (
           <div className={cs(style.progress)}>
-            {idx + 1}/{hashes!.length}
+            {idx + 1}/{variants.length}
           </div>
         )
       }
     } else {
       return <i aria-hidden className="fas fa-infinity" />
     }
-  }, [previewHash])
+  }, [activeSettings, variants, variant])
 
   // update the preview hash, either by looping through available hashes, or by
   // generating a random hash
-  const updatePreviewHash = () => {
+  const handleClickVariantButton = () => {
     // small front security for those removing the disabled property on the buttons
     if (!activeSettings?.enabled) {
       return
     }
     // if no hash constraints, just give a random hash
-    if (!hashes) {
-      onChangeHash(
+    if (!variants) {
+      onChangeVariant([
         generateFxHash(),
         params &&
           serializeParams(
             getRandomParamValues(params, { noTransform: true }),
             params
-          )
-      )
+          ),
+      ] as Variant)
     }
     // if there is a list of hashes, cycle through those
     else {
       // find index of the active hash
-      let idx = hashes?.indexOf(previewHash!)
+      let idx = variants?.findIndex(
+        (v) => v[0] === variant[0] && v[1] === variant[1]
+      )
       idx = idx === -1 || idx == null ? 0 : idx
       // compute the new index
-      idx = (idx + 1) % hashes.length
-      onChangeHash(hashes[idx], inputBytes?.[idx])
+      idx = (idx + 1) % variants.length
+      onChangeVariant(variants[idx])
     }
   }
 
@@ -129,7 +136,7 @@ export function ButtonVariations({
         disabled={!activeSettings?.enabled}
         iconComp={icon}
         iconSide="right"
-        onClick={updatePreviewHash}
+        onClick={handleClickVariantButton}
       >
         variations
       </Button>
