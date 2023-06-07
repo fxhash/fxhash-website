@@ -27,21 +27,23 @@ $fx.preview()
 
 # API Overview
 
-| Property                            | Type                         | Description                                                                                                                                                                                      |
-| ----------------------------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| [`hash`](#fxhash)                   | string                       | The string hash injected into the iteration.                                                                                                                                                     |
-| [`rand()`](#fxrand)                 | ()&nbsp;=>&nbsp;number       | A pseudo random number generator, using the unique hash as a seed. Outputs a number between 0 (inclusive) and 1 (exclusive). `[0; 1[`                                                            |
-| [`minter`](#fxminter)               | string                       | The string of the wallet address of the minter injected into the iteration.                                                                                                                             |
-| [`randminter()`](#fxrandminter)     | ()&nbsp;=>&nbsp;number       | A pseudo random number generator, using the minter address as a seed. Outputs a number between 0 (inclusive) and 1 (exclusive). ` [0; 1[`                                                        |
-| [`preview()`](#fxpreview)           | ()&nbsp;=>&nbsp;void         | A function which can be called to programmatically trigger the image capture of the iteration.                                                                                                   |
-| [`isPreview`](#fxispreview)         | boolean                      | A boolean which will be set to true if your code is being ran in fxhash capture module. Can be useful if you want to define specific properties for the capture only.                            |
-| [`features()`](#fxfeaturesfeatures) | (object)&nbsp;=>&nbsp;void   | This function can be called with an object as parameter to define the features of the iteration.                                                                                                 |
-| [`getFeature()`](#fxgetfeaturename) | (string)&nbsp;=>&nbsp;any    | Given a feature name, output its value (as defined through the `features()` function)                                                                                                            |
-| [`getFeatures()`](#fxgetfeatures)   | ()&nbsp;=>&nbsp;object       | Return the features object (whole object defined through the `features()` function)                                                                                                              |
-| [`params()`](#fxparamsdefinition)   | (array)&nbsp;=>&nbsp;void    | This function can be called with an array of parameter definitions as an input. This is how you can define the parameters collectors will modulate before minting their iteration of your piece. |
-| [`getParam()`](#fxgetparamid)       | (string)&nbsp;=>&nbsp;any    | Given a param ID, returns its current value based on the param values passed to the iteration.                                                                                                   |
-| [`getParams()`](#fxgetparams)       | ()&nbsp;=>&nbsp;object       | Return an map of param key value pairs, based on the provided params definition and the current values of all the parameters.                                                                    |
-| [`getRawParam()`](#fxgetrawparamid) | (string)&nbsp;=>&nbsp;string | Returns the bytes string of a parameter as passed to the iteration.                                                                                                                              |
+| Property          | Type   | Description                                  |
+| ----------------- | ------ | -------------------------------------------- |
+| [`hash`](#fxhash) | string | The string hash injected into the iteration. |
+
+| [`iteration`](#fxhash) | string | The iteration number in the collection. |
+| [`rand()`](#fxrand) | ()&nbsp;=>&nbsp;number | A pseudo random number generator, using the unique hash as a seed. Outputs a number between 0 (inclusive) and 1 (exclusive). `[0; 1[` |
+| [`minter`](#fxminter) | string | The string of the wallet address of the minter injected into the iteration. |
+| [`randminter()`](#fxrandminter) | ()&nbsp;=>&nbsp;number | A pseudo random number generator, using the minter address as a seed. Outputs a number between 0 (inclusive) and 1 (exclusive). ` [0; 1[` |
+| [`preview()`](#fxpreview) | ()&nbsp;=>&nbsp;void | A function which can be called to programmatically trigger the image capture of the iteration. |
+| [`isPreview`](#fxispreview) | boolean | A boolean which will be set to true if your code is being ran in fxhash capture module. Can be useful if you want to define specific properties for the capture only. |
+| [`features()`](#fxfeaturesfeatures) | (object)&nbsp;=>&nbsp;void | This function can be called with an object as parameter to define the features of the iteration. |
+| [`getFeature()`](#fxgetfeaturename) | (string)&nbsp;=>&nbsp;any | Given a feature name, output its value (as defined through the `features()` function) |
+| [`getFeatures()`](#fxgetfeatures) | ()&nbsp;=>&nbsp;object | Return the features object (whole object defined through the `features()` function) |
+| [`params()`](#fxparamsdefinition) | (array)&nbsp;=>&nbsp;void | This function can be called with an array of parameter definitions as an input. This is how you can define the parameters collectors will modulate before minting their iteration of your piece. |
+| [`getParam()`](#fxgetparamid) | (string)&nbsp;=>&nbsp;any | Given a param ID, returns its current value based on the param values passed to the iteration. |
+| [`getParams()`](#fxgetparams) | ()&nbsp;=>&nbsp;object | Return an map of param key value pairs, based on the provided params definition and the current values of all the parameters. |
+| [`getRawParam()`](#fxgetrawparamid) | (string)&nbsp;=>&nbsp;string | Returns the bytes string of a parameter as passed to the iteration. |
 
 # Top-level API reference
 
@@ -51,6 +53,14 @@ The string hash injected into the iteration. Will be unique for every iteration 
 
 ```js
 console.log($fx.hash) // output example: ooj2HmX8dgniNPuPRcapyXBn9vYpsNwgD1uwx98SLceF6iCZJZK
+```
+
+## $fx.iteration
+
+The iteration number in the collection. Directly grabbed from the `iteration` URL parameter when the iteration is loaded.
+
+```js
+console.log($fx.iteration) // output example: 42
 ```
 
 ## $fx.rand()
