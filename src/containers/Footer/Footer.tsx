@@ -16,7 +16,8 @@ export function Footer() {
           <Logo />
           <ConnectWithUs className={style.connect} />
           <div className={style.partner}>
-            partner with us <a href="mailto:partnerships@fxhash.xyz">partnerships@fxhash.xyz</a>
+            partner with us{" "}
+            <a href="mailto:partnerships@fxhash.xyz">partnerships@fxhash.xyz</a>
           </div>
         </div>
         <div>
