@@ -101,7 +101,7 @@ export function LiveMintingProvider({ children }: Props) {
                 error: null,
                 event: event,
                 mintPass: mintPass,
-                paidLiveMinting: !event.freeLiveMinting,
+                paidLiveMinting: false,
               })
             }
           } else {
@@ -125,7 +125,7 @@ export function LiveMintingProvider({ children }: Props) {
                   },
                 } as any,
                 authToken: token as string,
-                paidLiveMinting: !event.freeLiveMinting,
+                paidLiveMinting: false,
               })
             }
           }

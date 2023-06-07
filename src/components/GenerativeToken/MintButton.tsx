@@ -101,11 +101,9 @@ export function MintButton({
           )}
         </div>
 
-        {hasCreditCardOption &&
-          !loading &&
-          (!onlyReserveLeft || onMintShouldUseReserve) && (
-            <ButtonPaymentCard onClick={openCreditCard} disabled={disabled} />
-          )}
+        {hasCreditCardOption && !loading && !onlyReserveLeft && (
+          <ButtonPaymentCard onClick={openCreditCard} disabled={disabled} />
+        )}
       </div>
 
       {showDropdown && (
