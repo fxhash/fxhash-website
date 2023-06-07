@@ -77,6 +77,7 @@ const LiveMintingRevealPage: NextPageWithLayout<Props> = ({ hash, token }) => {
           <Reveal
             hash={hash}
             generativeUri={token.metadata.generativeUri}
+            iteration={iteration}
             minter={user!.id}
           />
 
