@@ -21,6 +21,7 @@ import { ControlsTest, ControlsTestRef } from "components/Testing/ControlsTest"
 import { FxParamDefinition, FxParamType } from "components/FxParams/types"
 import { useReceiveTokenInfos } from "hooks/useReceiveTokenInfos"
 import { MinterTest } from "components/Testing/MinterTest"
+import { IterationTest } from "components/Testing/IterationTest"
 
 export function Sandbox() {
   const artworkIframeRef = useRef<ArtworkIframeRef>(null)
@@ -30,6 +31,8 @@ export function Sandbox() {
     params,
     hash,
     setHash,
+    iteration,
+    setIteration,
     minter,
     setMinter,
     features,
@@ -146,6 +149,17 @@ export function Sandbox() {
 
               <Spacing size="large" />
 
+              <IterationTest
+                autoGenerate={false}
+                value={iteration}
+                onIterationUpdate={setIteration}
+                onRetry={() => {
+                  artworkIframeRef.current?.reloadIframe()
+                }}
+              />
+
+              <Spacing size="large" />
+
               <MinterTest
                 autoGenerate={false}
                 value={minter}
@@ -205,6 +219,7 @@ export function Sandbox() {
               <ArtworkFrame>
                 <SandboxPreview
                   hash={hash}
+                  iteration={iteration}
                   minter={minter}
                   fxparams={fxparamsBytes}
                   ref={artworkIframeRef}

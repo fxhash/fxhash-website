@@ -81,6 +81,7 @@ export interface GenerativeTokenMetadata {
   // ADDED STARTING FROM v0.2
   // a fake transaction hash used for the preview
   previewHash?: string
+  previewIteration?: number
   previewMinter?: string
   previewInputBytes?: string
   version?: string

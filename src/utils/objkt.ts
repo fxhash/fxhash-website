@@ -13,10 +13,12 @@ export function getObjktUrl(objkt: Objkt): string {
 export function gentkLiveUrl({
   issuer,
   generationHash,
+  iteration,
   inputBytes,
   minter,
 }: Objkt): string {
   let query = `?fxhash=${generationHash}`
+  query += `$fxiteration=${iteration}`
   query += `&fxminter=${minter!.id}`
   if (inputBytes) {
     query += `&fxparams=${inputBytes}`

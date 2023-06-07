@@ -240,7 +240,7 @@ export function MintController({
 
   const revealUrl = generateRevealUrl
     ? generateRevealUrl({ tokenId: token.id, hash: randomSeed })
-    : `/reveal/${token.id}/?fxhash=${randomSeed}&fxminter=${user?.id}`
+    : `/reveal/${token.id}/?fxhash=${randomSeed}$fxiteration=${iteration}&fxminter=${user?.id}`
 
   const isTicketMinted = token.inputBytesSize > 0
 

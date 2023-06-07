@@ -7,6 +7,7 @@ import { FxParamDefinition, FxParamType } from "components/FxParams/types"
 export interface TokenInfo {
   version: string | null
   hash: string
+  iteration: number
   minter: string
   features: RawTokenFeatures | null
   params: any | null
@@ -17,6 +18,9 @@ interface IFrameTokenInfos {
   onIframeLoaded: () => void
   hash: string
   setHash: (h: string) => void
+  // iteration number
+  iteration: number
+  setIteration: (i: number) => void
   // minter address
   minter: string
   setMinter: (minter: string) => void
@@ -76,11 +80,16 @@ function handleOldSnippetEvents(
 
 export function useReceiveTokenInfos(
   ref: React.RefObject<ArtworkIframeRef | null>,
-  options?: { initialHash?: string; initialMinter?: string }
+  options?: {
+    initialHash?: string
+    initialIteration?: number
+    initialMinter?: string
+  }
 ): IFrameTokenInfos {
   const [info, setInfo] = useState<TokenInfo>({
     version: null,
     hash: options?.initialHash || generateFxHash(),
+    iteration: options?.initialIteration || 0,
     minter: options?.initialMinter || generateTzAddress(),
     features: null,
     params: null,
@@ -97,6 +106,12 @@ export function useReceiveTokenInfos(
     setInfo((i) => ({
       ...i,
       hash,
+    }))
+
+  const setIteration = (iteration: number) =>
+    setInfo((i) => ({
+      ...i,
+      iteration,
     }))
 
   const setMinter = (minter: string) =>
@@ -123,6 +138,7 @@ export function useReceiveTokenInfos(
         const {
           version,
           params: { definitions, values },
+          iteration,
           minter,
           features,
           hash,
@@ -131,6 +147,7 @@ export function useReceiveTokenInfos(
           version,
           features,
           hash,
+          iteration,
           paramsDefinition: definitions,
           minter: minter,
           params:
@@ -182,9 +199,11 @@ export function useReceiveTokenInfos(
     features: info.features,
     params: paramsWithVersion,
     hash: info.hash,
+    iteration: info.iteration,
     minter: info.minter,
     paramsDefinition: info.paramsDefinition,
     setHash,
+    setIteration,
     setMinter,
     setParams,
     setFeatures,

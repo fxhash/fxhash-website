@@ -25,6 +25,7 @@ import {
 import { useReceiveTokenInfos } from "hooks/useReceiveTokenInfos"
 import { FxParamsData } from "components/FxParams/types"
 import { MinterTest } from "components/Testing/MinterTest"
+import { IterationTest } from "components/Testing/IterationTest"
 
 export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
   const [hash, setHash] = useState<string>(
@@ -32,6 +33,9 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
   )
   const [minter, setMinter] = useState<string>(
     state?.previewMinter ?? generateTzAddress()
+  )
+  const [iteration, setIteration] = useState<number>(
+    state.previewIteration ?? 0
   )
   const [check1, setCheck1] = useState<boolean>(false)
   const [check2, setCheck2] = useState<boolean>(false)
@@ -51,6 +55,7 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
     return ipfsUrlWithHashAndParams(
       state.cidUrlParams!,
       hash,
+      iteration,
       minter,
       inputBytes
     )
@@ -154,6 +159,16 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
             autoGenerate={false}
             value={hash}
             onHashUpdate={setHash}
+            onRetry={() => {
+              artworkIframeRef.current?.reloadIframe()
+            }}
+          />
+          <Spacing size="large" sm="x-large" />
+
+          <IterationTest
+            autoGenerate={false}
+            value={iteration}
+            onIterationUpdate={setIteration}
             onRetry={() => {
               artworkIframeRef.current?.reloadIframe()
             }}

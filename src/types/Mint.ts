@@ -53,6 +53,8 @@ export interface MintGenerativeData<N = string> {
   authHash1?: string
   // the hash selector for the preview
   previewHash?: string
+  // the iteration selection for the preview
+  previewIteration?: number
   // the minter selection for the preview
   previewMinter?: string
   // the byte string of param values for the preview

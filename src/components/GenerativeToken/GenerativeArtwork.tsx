@@ -63,6 +63,10 @@ export function GenerativeArtwork({
 
   const [previewHash, previewInputBytes] = variant
 
+  const [previewIteration, setPreviewIteration] = useState<number>(
+    token.metadata.previewIteration || 0
+  )
+
   const [previewMinter, setPreviewMinter] = useState<string | null>(
     token.metadata.previewMinter || null
   )
@@ -94,6 +98,9 @@ export function GenerativeArtwork({
       let url = `${ipfsGatewayUrl(
         token.metadata.generativeUri
       )}/?fxhash=${previewHash}`
+      if (previewIteration) {
+        url += `&fxiteration=${previewIteration}`
+      }
       if (previewMinter) {
         url += `&fxminter=${previewMinter}`
       }
@@ -104,6 +111,7 @@ export function GenerativeArtwork({
     }
   }, [
     previewHash,
+    previewIteration,
     previewInputBytes,
     artworkArtifactUrl,
     token.metadata.artifactUri,

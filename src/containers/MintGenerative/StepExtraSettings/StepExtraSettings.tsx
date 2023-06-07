@@ -28,6 +28,7 @@ import { ArtworkFrame } from "components/Artwork/ArtworkFrame"
 import { VariantForm } from "./VariantForm"
 import { useReceiveTokenInfos } from "hooks/useReceiveTokenInfos"
 import { truncateEnd } from "utils/strings"
+import { IterationTest } from "components/Testing/IterationTest"
 
 const variantSettingsTabs = ["preMint", "postMint"] as const
 
@@ -85,6 +86,9 @@ export const StepExtraSettings: StepComponent = ({ state, onNext }) => {
   const [hash, setHash] = useState<string>(
     state.previewHash || generateFxHash()
   )
+  const [iteration, setIteration] = useState<number>(
+    state.previewIteration || 0
+  )
   // current hash
   const [data, setData] = useState<Record<string, any> | null>(null)
   // the explore options
@@ -104,6 +108,7 @@ export const StepExtraSettings: StepComponent = ({ state, onNext }) => {
     return ipfsUrlWithHashAndParams(
       state.cidUrlParams!,
       hash,
+      iteration,
       state.previewMinter!,
       inputBytes
     )
@@ -310,6 +315,15 @@ export const StepExtraSettings: StepComponent = ({ state, onNext }) => {
             autoGenerate={false}
             value={hash}
             onHashUpdate={setHash}
+            onRetry={() => {
+              iframeRef.current?.reloadIframe()
+            }}
+          />
+          <Spacing size="x-large" />
+          <IterationTest
+            autoGenerate={false}
+            value={iteration}
+            onIterationUpdate={setIteration}
             onRetry={() => {
               iframeRef.current?.reloadIframe()
             }}

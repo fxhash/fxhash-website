@@ -55,6 +55,7 @@ const STEPS: Step[] = [
     title: "Configure capture",
     requiredProps: [
       "previewHash",
+      "previewIteration",
       "previewMinter",
       "previewInputBytes",
       "params",

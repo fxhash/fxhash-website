@@ -14,6 +14,7 @@ interface Props {
   record?: SandboxFiles
   textWaiting?: string
   hash?: string
+  iteration?: number
   minter?: string
   fxparams?: string
   onLoaded?: () => void
@@ -27,7 +28,16 @@ export interface ArtworkIframeRef {
 
 export const SandboxPreview = forwardRef<ArtworkIframeRef, Props>(
   (
-    { record, hash, minter, onUrlUpdate, onLoaded, textWaiting, fxparams },
+    {
+      record,
+      hash,
+      iteration,
+      minter,
+      onUrlUpdate,
+      onLoaded,
+      textWaiting,
+      fxparams,
+    },
     ref
   ) => {
     const iframeRef = useRef<HTMLIFrameElement>(null)
@@ -81,7 +91,7 @@ export const SandboxPreview = forwardRef<ArtworkIframeRef, Props>(
     // the URL of the iframe gets updated whenever ID / hash changes
     useEffect(() => {
       if (iframeRef.current && id !== "0") {
-        let previewUrl = `${location.origin}/sandbox/preview.html?id=${id}&fxhash=${hash}&fxminter=${minter}`
+        let previewUrl = `${location.origin}/sandbox/preview.html?id=${id}&fxhash=${hash}&fxiteration=${iteration}&fxminter=${minter}`
         if (fxparams) {
           previewUrl += `&fxparams=${fxparams}`
         }
@@ -89,7 +99,7 @@ export const SandboxPreview = forwardRef<ArtworkIframeRef, Props>(
         iframeRef.current.src = previewUrl
         onUrlUpdate && onUrlUpdate(previewUrl)
       }
-    }, [id, hash, minter, fxparams])
+    }, [id, hash, iteration, minter, fxparams])
 
     const reloadIframe = () => {
       if (iframeRef.current) {

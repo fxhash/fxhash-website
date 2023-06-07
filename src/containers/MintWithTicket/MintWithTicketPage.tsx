@@ -378,7 +378,7 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
                 )}
                 {success && randomSeedSuccess && (
                   <Link
-                    href={`/reveal/${token.id}/?fxhash=${randomSeed}&fxparams=${inputBytes}&fxminter=${user?.id}`}
+                    href={`/reveal/${token.id}/?fxhash=${randomSeed}&fxiteration=${iteration}&fxparams=${inputBytes}&fxminter=${user?.id}`}
                     passHref
                   >
                     <Button
