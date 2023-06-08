@@ -59,11 +59,12 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
       minter,
       inputBytes
     )
-  }, [hash, minter, inputBytes])
+  }, [hash, iteration, minter, inputBytes])
 
   const nextStep = () => {
     onNext({
       previewHash: hash,
+      previewIteration: iteration,
       previewMinter: minter,
       previewInputBytes: inputBytes,
       params: {
