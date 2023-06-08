@@ -112,7 +112,7 @@ export const StepExtraSettings: StepComponent = ({ state, onNext }) => {
       state.previewMinter!,
       inputBytes
     )
-  }, [hash, inputBytes])
+  }, [hash, iteration, inputBytes])
 
   // FUNCTIONS
   // some setters to update the settings easily
