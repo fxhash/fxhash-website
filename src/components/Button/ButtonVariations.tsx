@@ -13,7 +13,7 @@ import {
 } from "components/FxParams/utils"
 import { getActiveExploreSet, isTokenFullyMinted } from "utils/generative-token"
 
-export type Variant = [string | null, string | null]
+export type Variant = [string | null, string | null, number | null]
 
 interface Props {
   token: Pick<
@@ -24,6 +24,9 @@ interface Props {
   onChangeVariant: (variant: Variant) => void
   variant: Variant
 }
+
+const getRandomIteration = (maxIterations: number) =>
+  Math.floor(Math.random() * maxIterations) + 1
 
 export function ButtonVariations({
   token,
@@ -57,13 +60,18 @@ export function ButtonVariations({
     if (!activeSettings?.hashConstraints) return null
     let suppliedVariants = activeSettings.hashConstraints.map(
       (hash, idx) =>
-        [hash, activeSettings.paramsConstraints?.[idx] || null] as Variant
+        [
+          hash,
+          activeSettings.paramsConstraints?.[idx] || null,
+          getRandomIteration(token.supply),
+        ] as Variant
     )
     return uniqBy(
       [
         [
           token.metadata.previewHash || null,
           token.metadata.previewInputBytes || null,
+          token.metadata.previewIteration || null,
         ] as Variant,
         ...suppliedVariants,
       ],
@@ -112,6 +120,7 @@ export function ButtonVariations({
             getRandomParamValues(params, { noTransform: true }),
             params
           ),
+        getRandomIteration(token.supply),
       ] as Variant)
     }
     // if there is a list of hashes, cycle through those

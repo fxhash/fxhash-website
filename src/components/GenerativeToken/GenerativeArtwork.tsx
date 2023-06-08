@@ -55,17 +55,14 @@ export function GenerativeArtwork({
     () => [
       token.metadata.previewHash || null,
       token.metadata.previewInputBytes || null,
+      token.metadata.previewIteration || null,
     ],
     [token]
   )
 
   const [variant, setVariant] = useState<Variant>(previewVariant)
 
-  const [previewHash, previewInputBytes] = variant
-
-  const [previewIteration, setPreviewIteration] = useState<number>(
-    token.metadata.previewIteration || 0
-  )
+  const [previewHash, previewInputBytes, previewIteration] = variant
 
   const [previewMinter, setPreviewMinter] = useState<string | null>(
     token.metadata.previewMinter || null
