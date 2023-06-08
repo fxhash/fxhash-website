@@ -18,7 +18,7 @@ export function gentkLiveUrl({
   minter,
 }: Objkt): string {
   let query = `?fxhash=${generationHash}`
-  query += `$fxiteration=${iteration}`
+  query += `&fxiteration=${iteration}`
   query += `&fxminter=${minter!.id}`
   if (inputBytes) {
     query += `&fxparams=${inputBytes}`

@@ -27,7 +27,7 @@ export function ipfsUrlWithHashAndParams(
 ) {
   let url = `${transform(
     cid
-  )}/?fxhash=${hash}$fxiteration=${iteration}&fxminter=${minter}`
+  )}/?fxhash=${hash}&fxiteration=${iteration}&fxminter=${minter}`
   if (params) url += `&fxparams=${params}`
   return url
 }
