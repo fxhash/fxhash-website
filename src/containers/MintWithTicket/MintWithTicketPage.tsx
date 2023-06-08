@@ -45,7 +45,7 @@ import { format } from "date-fns"
 import { truncateEnd } from "utils/strings"
 import { IReserveConsumption } from "services/contract-operations/MintV3"
 import { useFetchRandomSeed } from "hooks/useFetchRandomSeed"
-import { useOnChainData } from "hooks/useOnChainData"
+import { getIteration, useOnChainData } from "hooks/useOnChainData"
 
 export type TOnMintHandler = (
   ticketId: number | number[] | null,
@@ -108,11 +108,7 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
     loading: randomSeedLoading,
   } = useFetchRandomSeed(opHash)
 
-  const { data: iteration } = useOnChainData(opHash, (ops) => {
-    const gentkMintOp = ops.find((op) => !!op.parameter.value.iteration)
-    if (!gentkMintOp) throw new Error("No mint op found")
-    return gentkMintOp.parameter.value.iteration
-  })
+  const { data: iteration } = useOnChainData(opHash, getIteration)
 
   const storedConfigurations =
     historyContext.storedConfigurations[`${token.id}`]
