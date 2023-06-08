@@ -247,8 +247,16 @@ export function MintController({
   const finalLoading = loading || loadingCC || loadingFree || randomSeedLoading
 
   const revealUrl = generateRevealUrl
-    ? generateRevealUrl({ tokenId: token.id, hash: randomSeed, iteration })
-    : `/reveal/${token.id}/?fxhash=${randomSeed}$fxiteration=${iteration}&fxminter=${user?.id}`
+    ? generateRevealUrl({
+        tokenId: token.id,
+        hash: randomSeed,
+        iteration,
+      })
+    : `/reveal/${token.id}/?${new URLSearchParams({
+        fxhash: randomSeed,
+        fxiteration: iteration,
+        fxminter: user!.id,
+      }).toString()}`
 
   const isTicketMinted = token.inputBytesSize > 0
 

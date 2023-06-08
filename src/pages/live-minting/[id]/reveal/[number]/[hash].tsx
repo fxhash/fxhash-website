@@ -8,10 +8,8 @@ import cs from "classnames"
 import { createApolloClient } from "../../../../../services/ApolloClient"
 import { GenerativeToken } from "../../../../../types/entities/GenerativeToken"
 import { Qu_genToken } from "../../../../../queries/generative-token"
-import { Article } from "../../../../../components/Article/Article"
 import { EntityBadge } from "../../../../../components/User/EntityBadge"
 import { Reveal } from "../../../../../containers/Reveal/Reveal"
-import { LayoutMinimalist } from "../../../../../components/Layout/LayoutMinimalist"
 import { NextPageWithLayout } from "../../../../../containers/App"
 import { LiveMintingLayout } from "../../../../../containers/LiveMinting/LiveMintingLayout"
 import Link from "next/link"
@@ -26,9 +24,14 @@ import { User } from "../../../../../types/entities/User"
 interface Props {
   hash: string
   token: GenerativeToken
+  iteration: number
 }
 
-const LiveMintingRevealPage: NextPageWithLayout<Props> = ({ hash, token }) => {
+const LiveMintingRevealPage: NextPageWithLayout<Props> = ({
+  hash,
+  token,
+  iteration,
+}) => {
   const eventCtx = useContext(LiveMintingContext)
   const { user } = useContext(UserContext)
 
@@ -151,7 +154,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: {
       hash,
-      token: token,
+      token,
+      iteration: context.params?.iteration,
     },
     notFound: !token || !hash,
   }

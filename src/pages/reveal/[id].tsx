@@ -23,7 +23,7 @@ interface Props {
 
 const RevealPage: NextPage<Props> = ({ token }) => {
   const { query } = useRouter()
-  const { fxhash, fxparams, fxminter } = query
+  const { fxhash, fxparams, fxiteration, fxminter } = query
 
   return (
     <>
@@ -59,6 +59,7 @@ const RevealPage: NextPage<Props> = ({ token }) => {
             hash={fxhash as string}
             params={fxparams as string}
             minter={fxminter as string}
+            iteration={Number(fxiteration)}
             generativeUri={token.metadata.generativeUri}
           />
 
