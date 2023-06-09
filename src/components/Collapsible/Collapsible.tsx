@@ -13,7 +13,7 @@ export const Collapsible: React.FC<CollapsibleProps> = ({
   header,
   children,
 }) => {
-  const [collapsed, setCollapsed] = useState(true)
+  const [collapsed, setCollapsed] = useState(false)
   const toggle = () => setCollapsed(!collapsed)
 
   if (disabled)
