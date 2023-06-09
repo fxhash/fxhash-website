@@ -2,13 +2,13 @@ import nl2br from "react-nl2br"
 import style from "./PanelMintingInstructions.module.scss"
 import { PanelGroup } from "./PanelGroup"
 
-export interface PanelMintingInstructinosProps {
+export interface PanelMintingInstructionsProps {
   instructions: string
 }
 
 export function PanelMintingInstructions({
   instructions,
-}: PanelMintingInstructinosProps) {
+}: PanelMintingInstructionsProps) {
   return (
     <PanelGroup
       title="Minting instructions"
