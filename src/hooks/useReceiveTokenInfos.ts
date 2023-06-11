@@ -32,6 +32,7 @@ interface IFrameTokenInfos {
   paramsDefinition: any
   info: TokenInfo
   runtime: IRuntimeContext
+  dispatch: (id: string, data: any) => void
 }
 
 function handleOldSnippetEvents(
@@ -149,6 +150,11 @@ export function useReceiveTokenInfos(
     }
   }, [ref])
 
+  const dispatch = (id: string, data: any) => {
+    if (!ref.current) return
+    ref.current.getHtmlIframe()?.contentWindow?.postMessage({ id, data }, "*")
+  }
+
   return {
     onIframeLoaded,
     features: definition.features,
@@ -163,5 +169,6 @@ export function useReceiveTokenInfos(
     setParamsDefinition,
     info,
     runtime,
+    dispatch,
   }
 }

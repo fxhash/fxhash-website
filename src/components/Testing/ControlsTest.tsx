@@ -14,6 +14,7 @@ interface ControlsTestProps {
   params: FxParamsData | null
   definition: FxParamDefinitions | null
   onSubmit: (data: FxParamsData) => void
+  onSoftSubmit: (data: FxParamsData) => void
 }
 
 export interface ControlsTestRef {
@@ -22,7 +23,7 @@ export interface ControlsTestRef {
 
 export const ControlsTest = forwardRef<ControlsTestRef, ControlsTestProps>(
   (props, ref) => {
-    const { params, definition, onSubmit } = props
+    const { params, definition, onSubmit, onSoftSubmit } = props
     const [data, setData] = useState<FxParamsData | null>(null)
 
     // whenever definition changes, enforce the reset of the params data object
@@ -30,28 +31,37 @@ export const ControlsTest = forwardRef<ControlsTestRef, ControlsTestProps>(
       setData(definition ? buildParamsObject(definition, params) : {})
     }, [jsonStringifyBigint(definition), jsonStringifyBigint(params)])
 
+    // update the params in the state, eventually soft submit if sync mode is
+    // enabled for any
+    const update = (nd: FxParamsData) => {
+      setData(nd)
+      // ids diff
+      const diffs = Object.keys(nd).filter((id) => data?.[id] !== nd[id])
+      const syncs = diffs
+        .map((id) => definition?.find((d) => d.id === id)!)
+        .filter((def) => def.update === "sync")
+      onSoftSubmit(Object.fromEntries(syncs.map((def) => [def.id, nd[def.id]])))
+    }
+
     const handleSubmitParams = () => {
       data && onSubmit(data)
     }
+
     const handleRandomizeParams = () => {
       if (definition) {
         const randomValues = getRandomParamValues(definition)
-        setData({ ...data, ...randomValues })
+        update({ ...data, ...randomValues })
       }
     }
 
     useImperativeHandle(ref, () => ({
-      setData,
+      setData: update,
     }))
 
     return (
       <div className={classes.container}>
         {definition && data && (
-          <Controls
-            definition={definition}
-            onChangeData={setData}
-            data={data}
-          />
+          <Controls definition={definition} onChangeData={update} data={data} />
         )}
         <div className={classes.buttons}>
           <Button

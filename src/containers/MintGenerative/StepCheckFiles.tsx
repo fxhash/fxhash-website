@@ -18,12 +18,13 @@ import { ControlsTest } from "components/Testing/ControlsTest"
 import { serializeParams, sumBytesParams } from "components/FxParams/utils"
 import { useReceiveTokenInfos } from "hooks/useReceiveTokenInfos"
 import { MinterTest } from "components/Testing/MinterTest"
+import { FxParamsData } from "components/FxParams/types"
 
 export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
   const [check1, setCheck1] = useState<boolean>(false)
   const [check2, setCheck2] = useState<boolean>(false)
   const artworkIframeRef = useRef<ArtworkIframeRef>(null)
-  const { onIframeLoaded, features, runtime } =
+  const { onIframeLoaded, features, runtime, dispatch } =
     useReceiveTokenInfos(artworkIframeRef)
 
   const inputBytes = useMemo<string | null>(() => {
@@ -58,6 +59,10 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
 
   const handleSubmitParams = (data: any) => {
     runtime.state.update({ params: data })
+  }
+
+  const softDispatchParams = (params: FxParamsData) => {
+    dispatch("fxhash_params:update", { params })
   }
 
   return (
@@ -123,6 +128,7 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
                 definition={runtime.definition.params}
                 params={runtime.state.params}
                 onSubmit={handleSubmitParams}
+                onSoftSubmit={softDispatchParams}
               />
             </div>
           )}
