@@ -1,28 +1,43 @@
-import { useState, useImperativeHandle, forwardRef } from "react"
+import { useState, useImperativeHandle, forwardRef, useEffect } from "react"
 import { Button } from "components/Button"
 import { Controls } from "components/FxParams/Controls"
-import { getRandomParamValues } from "components/FxParams/utils"
+import {
+  buildParamsObject,
+  consolidateParams,
+  getRandomParamValues,
+  jsonStringifyBigint,
+} from "components/FxParams/utils"
 import classes from "./ControlsTest.module.scss"
+import { FxParamDefinitions, FxParamsData } from "components/FxParams/types"
 
 interface ControlsTestProps {
-  params: any
-  onSubmit: (data: Record<string, any>) => void
+  params: FxParamsData | null
+  definition: FxParamDefinitions | null
+  onSubmit: (data: FxParamsData) => void
 }
 
 export interface ControlsTestRef {
-  setData: (data: Record<string, any>) => void
+  setData: (data: FxParamsData) => void
 }
 
 export const ControlsTest = forwardRef<ControlsTestRef, ControlsTestProps>(
   (props, ref) => {
-    const { params, onSubmit } = props
-    const [data, setData] = useState<Record<string, any>>({})
+    const { params, definition, onSubmit } = props
+    const [data, setData] = useState<FxParamsData | null>(null)
+
+    // whenever definition changes, enforce the reset of the params data object
+    useEffect(() => {
+      setData(definition ? buildParamsObject(definition, params) : {})
+    }, [jsonStringifyBigint(definition), jsonStringifyBigint(params)])
+
     const handleSubmitParams = () => {
-      onSubmit(data)
+      data && onSubmit(data)
     }
     const handleRandomizeParams = () => {
-      const randomValues = getRandomParamValues(params)
-      setData({ ...data, ...randomValues })
+      if (definition) {
+        const randomValues = getRandomParamValues(definition)
+        setData({ ...data, ...randomValues })
+      }
     }
 
     useImperativeHandle(ref, () => ({
@@ -31,7 +46,13 @@ export const ControlsTest = forwardRef<ControlsTestRef, ControlsTestProps>(
 
     return (
       <div className={classes.container}>
-        <Controls params={params} onChangeData={setData} data={data} />
+        {definition && data && (
+          <Controls
+            definition={definition}
+            onChangeData={setData}
+            data={data}
+          />
+        )}
         <div className={classes.buttons}>
           <Button
             size="small"

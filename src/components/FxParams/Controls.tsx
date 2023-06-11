@@ -7,34 +7,45 @@ import { ParameterController } from "./Controller/Param"
 import { LockButton } from "./LockButton/LockButton"
 import classes from "./Controls.module.scss"
 import { validateParameterDefinition } from "./validation"
+import {
+  FxParamDefinition,
+  FxParamDefinitions,
+  FxParamType,
+  FxParamTypeMap,
+  FxParamsData,
+} from "./types"
 
-interface ControllerBladeProps {
-  parameter: any
+interface ControllerBladeProps<Type extends FxParamType> {
+  definition: FxParamDefinition<Type>
+  value: FxParamTypeMap[Type]
   onClickLockButton?: (id: string) => void
   lockedParamIds?: string[]
-  onChangeParam: (id: string, value: any) => void
+  onChange: (value: FxParamTypeMap[Type]) => void
 }
 
-function ControllerBlade(props: ControllerBladeProps) {
-  const { parameter, onClickLockButton, lockedParamIds, onChangeParam } = props
+function ControllerBlade<Type extends FxParamType>(
+  props: ControllerBladeProps<Type>
+) {
+  const { value, definition, onChange, onClickLockButton, lockedParamIds } =
+    props
   const parsed = useMemo(
-    () => validateParameterDefinition(parameter),
-    [parameter]
+    () => validateParameterDefinition(definition),
+    [definition]
   )
   const isValid = useMemo(() => parsed && parsed.success, [parsed])
   return (
     <div className={classes.blade}>
       <ParameterController
-        parameter={parameter}
-        value={parameter.value}
-        onChange={onChangeParam}
+        definition={definition}
+        value={value}
+        onChange={onChange}
       />
       {onClickLockButton && isValid && (
         <LockButton
           className={classes.lockButton}
-          title={`toggle lock ${parameter.id} param`}
-          isLocked={lockedParamIds?.includes(parameter.id)}
-          onClick={(e) => onClickLockButton(parameter.id)}
+          title={`toggle lock ${definition.id} param`}
+          isLocked={lockedParamIds?.includes(definition.id)}
+          onClick={(e) => onClickLockButton(definition.id)}
         />
       )}
     </div>
@@ -42,34 +53,21 @@ function ControllerBlade(props: ControllerBladeProps) {
 }
 
 interface ControlsProps {
-  params: any
+  definition: FxParamDefinitions
   onClickLockButton?: (id: string) => void
   lockedParamIds?: string[]
-  onChangeData: (newData: Record<string, any>) => void
-  data: Record<string, any>
+  onChangeData: (newData: FxParamsData) => void
+  data: FxParamsData
 }
 
 export const Controls = ({
-  params,
+  definition,
   data,
   onClickLockButton,
   lockedParamIds,
   onChangeData,
 }: ControlsProps) => {
-  const consolidatedParams = consolidateParams(params, data)
-
   const p: React.RefObject<HTMLDivElement> = createRef()
-
-  useEffect(() => {
-    const ps: any = {}
-    if (consolidatedParams?.length > 0) {
-      consolidatedParams.forEach((p: any) => {
-        ps[p.id] = p.value
-      })
-      if (stringifyParamsData(data) !== stringifyParamsData(ps))
-        onChangeData(ps)
-    }
-  }, [params])
 
   const handleChangeParam = (id: string, value: any) => {
     const newData = { ...data, [id]: value }
@@ -78,12 +76,13 @@ export const Controls = ({
 
   return (
     <div className={classes.controls} ref={p}>
-      {consolidatedParams?.map((p: any) => {
+      {definition?.map((def) => {
         return (
           <ControllerBlade
-            key={p.id}
-            parameter={p}
-            onChangeParam={handleChangeParam}
+            key={def.id}
+            definition={def}
+            value={data[def.id]}
+            onChange={(value) => handleChangeParam(def.id, value)}
             lockedParamIds={lockedParamIds}
             onClickLockButton={onClickLockButton}
           />
