@@ -80,24 +80,6 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
     setData(data)
   }
 
-  const renderArtwork = () => (
-    <div className={cs(style.artworkWrapper)}>
-      <div className={cs(style.artwork)}>
-        <div className={cs(style["preview-cont"])}>
-          <div className={cs(style["preview-wrapper"])}>
-            <ArtworkFrame>
-              <ArtworkIframe
-                ref={artworkIframeRef}
-                url={url}
-                textWaiting="looking for content on IPFS"
-                onLoaded={onIframeLoaded}
-              />
-            </ArtworkFrame>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
   return (
     <>
       <p>
