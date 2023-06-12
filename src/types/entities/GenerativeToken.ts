@@ -145,6 +145,7 @@ export interface GenerativeToken {
   mintTickets: MintTicket[]
   mintTicketSettings: MintTicketSettings | null
   inputBytesSize: number
+  gentkContractAddress: string
 }
 
 export interface GenerativeTokenWithCollection extends GenerativeToken {
