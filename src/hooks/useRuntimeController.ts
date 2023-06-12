@@ -330,7 +330,7 @@ export const useRuntimeController: TUseRuntimeController = (
         ),
       },
     }),
-    [controls]
+    [controls, runtime]
   )
 
   return {
