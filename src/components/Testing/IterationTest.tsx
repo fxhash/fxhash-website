@@ -1,4 +1,4 @@
-import style from "./HashTest.module.scss"
+import style from "./IterationTest.module.scss"
 import cs from "classnames"
 import { InputText } from "../Input/InputText"
 import { Button } from "../Button"
@@ -12,10 +12,6 @@ interface Props {
   autoGenerate?: boolean
 }
 
-const generateFxIteration = () => Math.floor(Math.random() * 256)
-const isIterationValid = (iteration: number) =>
-  iteration >= 0 && iteration <= 255
-
 export function IterationTest({
   onIterationUpdate,
   onRetry,
@@ -24,6 +20,11 @@ export function IterationTest({
 }: Props) {
   const [error, setError] = useState<string>()
   const iterationInputRef = useRef<HTMLInputElement>(null)
+  const [maxIteration, setMaxIteration] = useState<number>(100)
+
+  const generateFxIteration = () => Math.floor(Math.random() * maxIteration)
+  const isIterationValid = (iteration: number) =>
+    iteration >= 0 && iteration <= maxIteration
 
   // when it mounts, generates a iteration and send it upwards
   useEffect(() => {
@@ -48,16 +49,11 @@ export function IterationTest({
 
   return (
     <div className={cs(style.container)}>
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
-        <Field error={error}>
-          <small>Current iteration</small>
+      <Field error={error}>
+        <small>Current iteration</small>
+        <div className={cs(style.iterationInputContainer)}>
           <InputText
+            className={cs(style.iterationInput)}
             ref={iterationInputRef}
             value={value || 0}
             onChange={(evt) =>
@@ -70,8 +66,16 @@ export function IterationTest({
               iterationInputRef.current && iterationInputRef.current.select()
             }
           />
-        </Field>
-      </div>
+          max:
+          <InputText
+            className={cs(style.maxIterationInput)}
+            type="number"
+            value={maxIteration}
+            onChange={(evt) => setMaxIteration(parseInt(evt.target.value))}
+          />
+        </div>
+      </Field>
+
       <div className={cs(style.buttons)}>
         <Button
           size="small"
