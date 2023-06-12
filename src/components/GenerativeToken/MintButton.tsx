@@ -44,7 +44,8 @@ export function MintButton({
   children,
 }: PropsWithChildren<Props>) {
   const liveMintingContext = useContext(LiveMintingContext)
-  const { paidLiveMinting } = liveMintingContext
+  const { paidLiveMinting, mintPass } = liveMintingContext
+  const freeLiveMinting = !!mintPass && !paidLiveMinting
 
   const [showDropdown, setShowDropdown] = useState(false)
   const {
@@ -102,6 +103,7 @@ export function MintButton({
         </div>
 
         {hasCreditCardOption &&
+          !freeLiveMinting &&
           !loading &&
           (!onlyReserveLeft || onMintShouldUseReserve) && (
             <ButtonPaymentCard onClick={openCreditCard} disabled={disabled} />

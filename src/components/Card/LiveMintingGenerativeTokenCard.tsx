@@ -27,7 +27,11 @@ interface Props {
   lockedUntil?: string
 }
 
-export function LiveMintingGenerativeTokenCard({ token, className }: Props) {
+export function LiveMintingGenerativeTokenCard({
+  token,
+  displayPrice = true,
+  className,
+}: Props) {
   return (
     <>
       <div className={style.container}>
@@ -40,14 +44,16 @@ export function LiveMintingGenerativeTokenCard({ token, className }: Props) {
             hasLink={false}
             className={cs(style.user_badge)}
           />
-          <div>
-            <DisplayTezos
-              className={style.price}
-              mutez={genTokCurrentPrice(token)}
-              formatBig={false}
-              tezosSize="regular"
-            />
-          </div>
+          {displayPrice && (
+            <div>
+              <DisplayTezos
+                className={style.price}
+                mutez={genTokCurrentPrice(token)}
+                formatBig={false}
+                tezosSize="regular"
+              />
+            </div>
+          )}
         </div>
         <Spacing size="2x-small" />
         {token.balance > 0 && <MintingState token={token} />}
