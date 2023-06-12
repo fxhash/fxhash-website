@@ -33,7 +33,7 @@ import {
 export interface PanelParamsProps {
   data?: FxParamsData
   params?: FxParamDefinition<FxParamType>[] | null
-  onChangeData: (d: FxParamsData) => void
+  onChangeData: (d: FxParamsData, forceRefresh?: boolean) => void
   onClickRefresh?: () => void
   onClickLockButton?: (id: string) => void
   onChangeLockedParamIds?: (ids: string[]) => void
@@ -113,7 +113,7 @@ export const PanelParams = forwardRef<PanelParamsRef, PanelParamsProps>(
       } else {
         randomValues = getRandomParamValues(params)
       }
-      onChangeData(randomValues)
+      onChangeData(randomValues, true)
     }
 
     const handleSubmitData = () => {

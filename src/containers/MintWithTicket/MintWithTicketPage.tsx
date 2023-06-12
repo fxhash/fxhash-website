@@ -126,7 +126,10 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
       `${runtime.state.hash}-${runtime.details.params.inputBytes}`
   )
 
-  const handleChangeData = (newData: FxParamsData) => {
+  const handleChangeData = (
+    newData: FxParamsData,
+    forceRefresh: boolean = false
+  ) => {
     if (!runtime.definition.params) return
     historyContext.pushHistory({
       type: "params-update",
@@ -139,7 +142,7 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
       ),
       newValue: newData,
     })
-    controls.updateParams(newData)
+    controls.updateParams(newData, forceRefresh)
     setHasLocalChanges(false)
   }
 
@@ -352,7 +355,7 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
               onClickBack={handleClickBack}
               onSubmit={handleClickSubmit}
               onClickHide={onToggleVisibility(false)}
-              onClickRefresh={handleClickRefresh}
+              onClickRefresh={controls.hardSync}
               mode={mode}
               onSaveConfiguration={handleSaveConfiguration}
               onOpenLoadConfigurationModal={handleOpenLoadConfigurationModal}

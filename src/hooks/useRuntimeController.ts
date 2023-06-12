@@ -57,6 +57,7 @@ interface IControls {
   updateParams: (params: Partial<FxParamsData>, forceRefresh?: boolean) => void
   dispatchEvent: (id: string, data: any) => void
   hardSync: () => void
+  refresh: () => void
 }
 
 function handleOldSnippetEvents(e: any, runtime: IRuntimeContext) {
@@ -274,13 +275,23 @@ export const useRuntimeController: TUseRuntimeController = (
     )
   }, [project.cid, runtime.details.stateHash.hard])
 
+  // stores the last url set for the iframe
+  const lastUrl = useRef("")
+
   // every time the URL changes, refresh the iframe
   useEffect(() => {
     const iframe = ref.current?.getHtmlIframe()
-    if (iframe) {
+    if (iframe && lastUrl.current !== url) {
       iframe.contentWindow?.location.replace(url)
+      lastUrl.current = url
     }
   }, [url])
+
+  const refresh = useCallback(() => {
+    ref.current
+      ?.getHtmlIframe()
+      ?.contentWindow?.location.replace(lastUrl.current)
+  }, [])
 
   const hardSync = () => {
     runtime.update({
@@ -288,6 +299,7 @@ export const useRuntimeController: TUseRuntimeController = (
         params: controls.params.values,
       },
     })
+    refresh()
   }
 
   return {
@@ -308,6 +320,7 @@ export const useRuntimeController: TUseRuntimeController = (
       updateParams,
       dispatchEvent,
       hardSync,
+      refresh,
     },
     details: {
       activeUrl: url,
