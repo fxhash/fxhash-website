@@ -42,6 +42,7 @@ $fx.preview()
 | [`getParam()`](#fxgetparamid)       | (string)&nbsp;=>&nbsp;any    | Given a param ID, returns its current value based on the param values passed to the iteration.                                                                                                   |
 | [`getParams()`](#fxgetparams)       | ()&nbsp;=>&nbsp;object       | Return an map of param key value pairs, based on the provided params definition and the current values of all the parameters.                                                                    |
 | [`getRawParam()`](#fxgetrawparamid) | (string)&nbsp;=>&nbsp;string | Returns the bytes string of a parameter as passed to the iteration.                                                                                                                              |
+| [`on()`](#fxoneventid-handler-ondone) | (string, function, function)&nbsp;=>&nbsp;function | Adds an event listener to an event                                                                                                                             |
 
 # Top-level API reference
 
@@ -425,6 +426,54 @@ console.log($fx.getRawParam("a_param_id"))
 console.log($fx.getParam("another_param"))
 ```
 
+## $fx.on(eventId, handler, onDone)
+
+> Allows you to subscribe to specific events in the pipeline. Those event subscriptions can be used to trigger effects and override default behaviours
+
+The `eventId` must match an existing `eventId` that you can subscribe to. The `handler` is the function that is called when the event is triggered. Additionally you can return `true` from the `handler` to indicate that the handler has handled the event and no default behaviour should be applied. The `onDone` function is called as the last thing of any event, e.g. after the default behaviour of the event was applied.
+
+Existing `eventId`'s are:
+- `params:update` is triggered whenever values of params are updated
+
+```ts
+
+// define your parameters
+$fx.params([
+  {
+    id: "number_id",
+    type: "number",
+    update: "sync",
+  },
+])
+
+function main() {
+  // render artwork
+}
+
+$fx.on(
+  "params:update", // subscribe to the params update event
+  (newValues) => {
+    // opt-out param update when number_id is 5
+    if  (newValues.number_id === 5) return true;
+    // opt-in any other param value update
+    return false;
+  },
+  () => main(), // render artwork when event was handled
+)
+```
+
+Following is the typescript definition of the `$fx.on` function:
+
+```ts
+type FxOnFunction = (
+  eventId: string
+  handler: (...args) => boolean | Promise<boolean>
+  onDone: () => void
+) => () => void
+```
+
+The function returned by the `$fx.on` function can be called to remove the registerd event listener.
+
 # fx(params)
 
 > fx(params) is the name of the module which gives artists the option to define a set of parameters collectors will modulate before minting their iteration. This section goes into technical details about fx(params).
@@ -489,6 +538,7 @@ type ParameterDefinitionType = {
   name?: string // optional, if not defined name == id
   type: "number" | "string" | "boolean" | "color" | "select" | "bigint" // required
   default?: string | number | bigint | boolean // optional
+  update?: "page-reload" | "sync" // optional
   options?: TYPE_SPECIFIC_OPTIONS // (optional) different options per type (see below)
 }
 ```
@@ -531,6 +581,13 @@ A default value for the parameter. If defined, when the minting interface with t
 
 ---
 
+`update`
+
+_Optional_
+
+Specifies the update mode of the parameter. The default update mode is `"page-reload"`. With update mode `"page-reload"`, a full page reload on the artwork is performed whenever the value of the parameter changes. When the update mode is set to `"sync"` the values of the parameter are updated during the runtime of the artwork. With update mode `"sync"`, no page reload is performed when the the values of the parameter changed.
+
+---
 `options`
 
 _Optional_
