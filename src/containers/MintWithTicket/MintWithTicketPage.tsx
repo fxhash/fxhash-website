@@ -71,7 +71,6 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
   const historyContext = useContext(ParamsHistoryContext)
   const artworkIframeRef = useRef<ArtworkIframeRef>(null)
   const router = useRouter()
-  const [hasLocalChanges, setHasLocalChanges] = useState<boolean>(false)
   const [withAutoUpdate, setWithAutoUpdate] = useState<boolean>(true)
   const [lockedParamIds, setLockedParamIds] = useState<string[]>([])
   const [tempConfig, setTempConfig] = useState<ParamConfiguration>()
@@ -148,7 +147,6 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
       newValue: newData,
     })
     controls.updateParams(newData, forceRefresh)
-    setHasLocalChanges(false)
   }
 
   const handleChangeHash = (hash: string) => {
@@ -170,7 +168,6 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
 
   const handleLocalDataChange = () => {
     if (withAutoUpdate) return
-    setHasLocalChanges(true)
   }
 
   // call contract v3 mint with ticket
@@ -243,7 +240,6 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
     )
     controls.updateParams(data)
     runtime.state.update({ hash: tempConfig.hash })
-    setHasLocalChanges(false)
     setShowLoadConfigModal(false)
   }
 
@@ -272,7 +268,6 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
     })
     controls.updateParams(data)
     runtime.state.update({ hash: config.hash })
-    setHasLocalChanges(false)
     setShowLoadConfigModal(false)
   }
 
@@ -287,7 +282,6 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
     )
     controls.updateParams(data)
     runtime.state.update({ hash: config.hash })
-    setHasLocalChanges(false)
   }
 
   const handleUpdateConfigName = (idx: number, name: string) => {
