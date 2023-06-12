@@ -227,7 +227,10 @@ export const useRuntimeController: TUseRuntimeController = (
   // state update debounce - uses a ref to ensure debounce is proper
   const stateUpdateRef = useRef(runtime.state.update)
   stateUpdateRef.current = runtime.state.update
-  const updtParamsDeb = useCallback(debounce(stateUpdateRef.current, 200), [])
+  const updtParamsDeb = useCallback(
+    debounce((params) => stateUpdateRef.current?.(params), 200),
+    []
+  )
 
   // generic update, used to manipulated the control state, eventually soft
   // refresh the "sync" parameters
@@ -237,6 +240,7 @@ export const useRuntimeController: TUseRuntimeController = (
     update: Partial<FxParamsData>,
     forceRefresh: boolean = false
   ) => {
+    console.log({ update })
     if (!forceRefresh) {
       // find the params which have changed and are "synced"
       const changed = Object.keys(update)
