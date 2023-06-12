@@ -40,6 +40,7 @@ interface IRuntimeControllerOutput {
   // some extra details about the runtime, etc...
   details: {
     activeUrl: string
+    controlsUrl: string
     runtimeSynced: boolean
   }
 }
@@ -345,6 +346,14 @@ export const useRuntimeController: TUseRuntimeController = (
     },
     details: {
       activeUrl: url,
+      controlsUrl: useMemo(() => {
+        return ipfsUrlWithHashAndParams(
+          project.cid,
+          runtime.state.hash,
+          runtime.state.minter,
+          controlDetails.params.inputBytes || project.inputBytes
+        )
+      }, [project.cid, runtime.details.stateHash.soft, controls.params]),
       runtimeSynced:
         runtime.details.stateHash.soft === controlDetails.stateHash.soft,
     },

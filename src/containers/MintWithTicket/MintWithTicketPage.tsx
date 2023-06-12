@@ -159,7 +159,7 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
   }
 
   const handleOpenNewTab = () => {
-    window.open(details.activeUrl)
+    window.open(details.controlsUrl)
   }
 
   const handleClickBack = () => {
