@@ -1,5 +1,5 @@
-import { merge, cloneDeep } from "lodash"
-import { useEffect, useState, useCallback, useMemo } from "react"
+import { merge, cloneDeep, debounce } from "lodash"
+import { useEffect, useState, useCallback, useMemo, useRef } from "react"
 import { generateFxHash, generateTzAddress } from "utils/hash"
 import { RawTokenFeatures } from "types/Metadata"
 import { ArtworkIframeRef } from "components/Artwork/PreviewIframe"
@@ -16,6 +16,7 @@ import {
   serializeParamsOrNull,
 } from "components/FxParams/utils"
 import { ipfsUrlWithHashAndParams } from "utils/ipfs"
+import { DeepPartial } from "types/DeepPartial"
 
 /**
  * The Runtime Controller provides a low-level API to interact with an iframe
@@ -31,6 +32,10 @@ interface IRuntimeControllerOutput {
   // the controls layer, can be used to perform manipulations on the runtime,
   // also exposes control-state UI
   controls: IControls
+  // some extra details about the runtime, etc...
+  details: {
+    activeUrl: string
+  }
 }
 
 interface IControlState {
@@ -103,12 +108,28 @@ interface IProjectState {
   inputBytes?: string
 }
 
+interface IRuntimeOptions {
+  autoRefresh: boolean
+}
+
+const defaultRuntimeOptions: IRuntimeOptions = {
+  autoRefresh: false,
+}
+
 type TUseRuntimeController = (
   ref: React.RefObject<ArtworkIframeRef | null>,
-  project: IProjectState
+  project: IProjectState,
+  options?: DeepPartial<IRuntimeOptions>
 ) => IRuntimeControllerOutput
 
-export const useRuntimeController: TUseRuntimeController = (ref, project) => {
+export const useRuntimeController: TUseRuntimeController = (
+  ref,
+  project,
+  opts
+) => {
+  // options
+  const options = { ...defaultRuntimeOptions, ...opts }
+
   // the runtime state -> controls the state connected to the iframe
   const runtime = useRuntime({
     state: {
@@ -191,6 +212,11 @@ export const useRuntimeController: TUseRuntimeController = (ref, project) => {
     dispatchEvent("fxhash_params:update", { params })
   }
 
+  // state update debounce - uses a ref to ensure debounce is proper
+  const stateUpdateRef = useRef(runtime.state.update)
+  stateUpdateRef.current = runtime.state.update
+  const deb = useCallback(debounce(stateUpdateRef.current, 200), [])
+
   // generic update, used to manipulated the control state, eventually soft
   // refresh the "sync" parameters
   // forceRefresh will circumvent any sync param rule and force a refresh of the
@@ -201,15 +227,29 @@ export const useRuntimeController: TUseRuntimeController = (ref, project) => {
   ) => {
     if (!forceRefresh) {
       // find the params which have changed and are "synced"
-      const syncs = Object.keys(update)
+      const changed = Object.keys(update)
         .filter((id) => controls.params.values[id] !== update[id])
         .map((id) => controls.params.definition?.find((d) => d.id === id)!)
-        .filter((def) => def.update === "sync")
+      // params that are "synced"
+      const synced = changed.filter((def) => def.update === "sync")
       // if at least a change, soft refresh
-      if (Object.keys(syncs).length > 0) {
+      if (Object.keys(synced).length > 0) {
         softUpdateParams(
-          Object.fromEntries(syncs.map((def) => [def.id, update[def.id]]))
+          Object.fromEntries(synced.map((def) => [def.id, update[def.id]]))
         )
+      }
+      // if auto-refresh is defined, we update hard params if any
+      if (options.autoRefresh) {
+        const hard = changed.filter(
+          (def) => !def.update || def.update === "page-reload"
+        )
+        if (Object.keys(hard).length > 0) {
+          deb({
+            params: Object.fromEntries(
+              hard.map((def) => [def.id, update[def.id]])
+            ),
+          })
+        }
       }
     } else {
       runtime.state.update({ params: update })
@@ -268,6 +308,9 @@ export const useRuntimeController: TUseRuntimeController = (ref, project) => {
       updateParams,
       dispatchEvent,
       hardSync,
+    },
+    details: {
+      activeUrl: url,
     },
   }
 }

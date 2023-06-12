@@ -32,7 +32,7 @@ import {
 
 export interface PanelParamsProps {
   data?: FxParamsData
-  params: FxParamDefinition<FxParamType>[]
+  params?: FxParamDefinition<FxParamType>[] | null
   onChangeData: (d: FxParamsData) => void
   onClickRefresh?: () => void
   onClickLockButton?: (id: string) => void
@@ -59,6 +59,7 @@ export interface PanelParamsRef {
 export const PanelParams = forwardRef<PanelParamsRef, PanelParamsProps>(
   (
     {
+      data,
       params,
       onClickRefresh,
       onChangeData,
@@ -79,7 +80,6 @@ export const PanelParams = forwardRef<PanelParamsRef, PanelParamsProps>(
     ref
   ) => {
     const [showSaveConfirmation, setShowSaveConfirmation] = useState(false)
-    const [localData, setLocalData] = useState<FxParamsData>({})
     const withParamLocking = !!onChangeLockedParamIds
     const withHistory = !!history && !!onUndo && !!onRedo
 
@@ -92,6 +92,7 @@ export const PanelParams = forwardRef<PanelParamsRef, PanelParamsProps>(
       if (lockedParamIds && lockedParamIds?.length > 0) {
         onChangeLockedParamIds?.([])
       } else {
+        if (!params) return
         const allParamIds = params.map(
           (d: FxParamDefinition<FxParamType>) => d.id
         )
@@ -99,16 +100,8 @@ export const PanelParams = forwardRef<PanelParamsRef, PanelParamsProps>(
       }
     }
 
-    const handleOnChangeDebounced = useCallback(debounce(onChangeData, 200), [
-      onChangeData,
-    ])
-
-    const handleChangeData = (data: FxParamsData) => {
-      setLocalData(data)
-      onLocalDataChange?.(data)
-      withAutoUpdate && handleOnChangeDebounced?.(data)
-    }
     const handleRandomizeParams = () => {
+      if (!params) return
       let randomValues
       if (withParamLocking) {
         randomValues = getRandomParamValues(
@@ -120,11 +113,10 @@ export const PanelParams = forwardRef<PanelParamsRef, PanelParamsProps>(
       } else {
         randomValues = getRandomParamValues(params)
       }
-      handleChangeData({ ...localData, ...randomValues })
+      onChangeData(randomValues)
     }
 
     const handleSubmitData = () => {
-      onChangeData(localData)
       onClickRefresh?.()
     }
 
@@ -143,11 +135,6 @@ export const PanelParams = forwardRef<PanelParamsRef, PanelParamsProps>(
         setShowSaveConfirmation(false)
       }, 2000)
     }
-
-    useImperativeHandle(ref, () => ({
-      updateData: setLocalData,
-      getLocalData: () => localData,
-    }))
 
     return (
       <PanelGroup
@@ -225,15 +212,17 @@ export const PanelParams = forwardRef<PanelParamsRef, PanelParamsProps>(
         }
       >
         <div className={classes.controlsWrapper}>
-          <Controls
-            params={params}
-            data={localData}
-            onChangeData={handleChangeData}
-            lockedParamIds={lockedParamIds}
-            onClickLockButton={
-              withParamLocking ? handleClickLockButton : undefined
-            }
-          />
+          {params && data && (
+            <Controls
+              definition={params}
+              data={data}
+              onChangeData={onChangeData}
+              lockedParamIds={lockedParamIds}
+              onClickLockButton={
+                withParamLocking ? handleClickLockButton : undefined
+              }
+            />
+          )}
         </div>
         <div className={classes.submitRow}>
           <div className={classes.checkboxWrapper}>

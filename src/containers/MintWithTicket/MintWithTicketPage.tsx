@@ -35,7 +35,7 @@ import { MintV3AbstractionOperation } from "../../services/contract-operations/M
 import { useSettingsContext } from "../../context/Theme"
 import { PreMintWarning } from "./PreMintWarning"
 import { UserContext } from "containers/UserProvider"
-import { generateTzAddress } from "utils/hash"
+import { generateFxHash, generateTzAddress } from "utils/hash"
 import { ResizableArea } from "../../components/ResizableArea/ResizableArea"
 import { ButtonIcon } from "components/Button/ButtonIcon"
 import { PanelGroup } from "./Panel/PanelGroup"
@@ -45,6 +45,8 @@ import { format } from "date-fns"
 import { truncateEnd } from "utils/strings"
 import { IReserveConsumption } from "services/contract-operations/MintV3"
 import { useFetchRandomSeed } from "hooks/useFetchRandomSeed"
+import { useRuntimeController } from "hooks/useRuntimeController"
+import { FxParamsData } from "components/FxParams/types"
 
 export type TOnMintHandler = (
   ticketId: number | number[] | null,
@@ -73,15 +75,24 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
   const [withAutoUpdate, setWithAutoUpdate] = useState<boolean>(true)
   const [lockedParamIds, setLockedParamIds] = useState<string[]>([])
   const [tempConfig, setTempConfig] = useState<ParamConfiguration>()
-  const { params, features, onIframeLoaded } =
-    useReceiveTokenInfos(artworkIframeRef)
 
   // get the user to get their tezos address, or a random tz address
   const { user } = useContext(UserContext)
-  const randomAddress = useMemo(() => generateTzAddress(), [])
   const minterAddress = useMemo(() => {
-    return user?.id || randomAddress
-  }, [user, randomAddress])
+    return user?.id || generateTzAddress()
+  }, [user])
+
+  const { runtime, controls, details } = useRuntimeController(
+    artworkIframeRef,
+    {
+      cid: token.metadata.generativeUri,
+      hash: generateFxHash(),
+      minter: minterAddress,
+    },
+    {
+      autoRefresh: withAutoUpdate,
+    }
+  )
 
   const handleClosePreMintView = useCallback(() => {
     setShowPreMintWarningView(false)
@@ -89,7 +100,6 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
     setSelectedReserveConsumption(null)
   }, [])
 
-  const { data, setData, hash, setHash, inputBytes } = useFxParams(params)
   const { call, success, loading, state, error, opHash } = useContractOperation(
     MintV3AbstractionOperation,
     {
@@ -111,41 +121,39 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
     historyContext.storedConfigurations[`${token.id}`]
 
   const paramConfigExists = storedConfigurations?.some(
-    (c) => concatParamConfiguration(c) === `${hash}-${inputBytes}`
+    (c) =>
+      concatParamConfiguration(c) ===
+      `${runtime.state.hash}-${runtime.details.params.inputBytes}`
   )
 
-  const url = useMemo<string>(() => {
-    return ipfsUrlWithHashAndParams(
-      token.metadata.generativeUri,
-      hash,
-      minterAddress,
-      inputBytes
-    )
-  }, [token.metadata.generativeUri, hash, minterAddress, inputBytes])
-
-  const handleChangeData = (newData: Record<string, any>) => {
+  const handleChangeData = (newData: FxParamsData) => {
+    if (!runtime.definition.params) return
     historyContext.pushHistory({
       type: "params-update",
-      oldValue: deserializeParams(inputBytes || "", params, {
-        withTransform: true,
-      }),
+      oldValue: deserializeParams(
+        runtime.details.params.inputBytes || "",
+        runtime.definition.params,
+        {
+          withTransform: true,
+        }
+      ),
       newValue: newData,
     })
-    setData(newData)
+    controls.updateParams(newData)
     setHasLocalChanges(false)
   }
 
-  const handleChangeHash = (newHash: string) => {
+  const handleChangeHash = (hash: string) => {
     historyContext.pushHistory({
       type: "hash-update",
-      oldValue: hash,
-      newValue: newHash,
+      oldValue: runtime.state.hash,
+      newValue: hash,
     })
-    setHash(newHash)
+    runtime.state.update({ hash })
   }
 
   const handleOpenNewTab = () => {
-    window.open(url)
+    window.open(details.activeUrl)
   }
 
   const handleClickBack = () => {
@@ -164,16 +172,16 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
   // call contract v3 mint with ticket
   const handleMint: TOnMintHandler = useCallback(
     (_ticketId, reserveConsumption) => {
-      if (inputBytes) {
+      if (runtime.details.params.inputBytes) {
         call({
           token: token,
           ticketId: _ticketId,
-          inputBytes: inputBytes,
+          inputBytes: runtime.details.params.inputBytes,
           consumeReserve: reserveConsumption,
         })
       }
     },
-    [call, inputBytes, token]
+    [call, runtime.details.params.inputBytes, token]
   )
 
   const handleClickSubmit: TOnMintHandler = useCallback(
@@ -199,12 +207,12 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
     if (paramConfigExists) return
     const now = Date.now()
     historyContext.saveConfiguration(`${token.id}`, {
-      name: `${truncateEnd(`${Object.values(data)[0]}`, 20)} - ${format(
-        new Date(now),
-        "MM/dd/yyyy hh:mm"
-      )}`,
-      hash,
-      inputBytes: inputBytes || "",
+      name: `${truncateEnd(
+        `${Object.values(runtime.state.params)[0]}`,
+        20
+      )} - ${format(new Date(now), "MM/dd/yyyy hh:mm")}`,
+      hash: runtime.state.hash,
+      inputBytes: runtime.details.params.inputBytes || "",
       createdAt: now,
     })
   }
@@ -213,53 +221,68 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
     setShowLoadConfigModal(true)
     setTempConfig({
       name: "Temp Config",
-      hash,
-      inputBytes: inputBytes || "",
+      hash: runtime.state.hash,
+      inputBytes: runtime.details.params.inputBytes || "",
       createdAt: Date.now(),
     })
   }
 
   const handleCloseLoadConfigurationModal = () => {
     setShowLoadConfigModal(false)
-    if (!tempConfig) return
-    const data = deserializeParams(tempConfig.inputBytes, params, {
-      withTransform: true,
-    })
-    setData(data)
-    panelParamsRef?.current?.updateData(data)
-    setHash(tempConfig.hash)
+    if (!runtime.definition.params || !tempConfig) return
+    const data = deserializeParams(
+      tempConfig.inputBytes,
+      runtime.definition.params,
+      {
+        withTransform: true,
+      }
+    )
+    controls.updateParams(data)
+    runtime.state.update({ hash: tempConfig.hash })
     setHasLocalChanges(false)
     setShowLoadConfigModal(false)
   }
 
   const handleLoadConfiguration = (config: ParamConfiguration) => {
-    const data = deserializeParams(config.inputBytes, params, {
-      withTransform: true,
-    })
+    if (!runtime.definition.params) return
+    const data = deserializeParams(
+      config.inputBytes,
+      runtime.definition.params,
+      {
+        withTransform: true,
+      }
+    )
     historyContext.pushHistory({
       type: "config-update",
       oldValue: {
-        data: deserializeParams(inputBytes || "", params, {
-          withTransform: true,
-        }),
-        hash,
+        data: deserializeParams(
+          runtime.details.params.inputBytes || "",
+          runtime.definition.params,
+          {
+            withTransform: true,
+          }
+        ),
+        hash: runtime.state.hash,
       },
       newValue: { data, hash: config.hash },
     })
-    setData(data)
-    panelParamsRef?.current?.updateData(data)
-    setHash(config.hash)
+    controls.updateParams(data)
+    runtime.state.update({ hash: config.hash })
     setHasLocalChanges(false)
     setShowLoadConfigModal(false)
   }
 
   const handlePreviewConfiguration = (config: ParamConfiguration) => {
-    const data = deserializeParams(config.inputBytes, params, {
-      withTransform: true,
-    })
-    setData(data)
-    panelParamsRef?.current?.updateData(data)
-    setHash(config.hash)
+    if (!runtime.definition.params) return
+    const data = deserializeParams(
+      runtime.details.params.inputBytes || "",
+      runtime.definition.params,
+      {
+        withTransform: true,
+      }
+    )
+    controls.updateParams(data)
+    runtime.state.update({ hash: config.hash })
     setHasLocalChanges(false)
   }
 
@@ -275,18 +298,21 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
 
   useEffect(() => {
     historyContext.registerAction("params-update", (value: any) => {
-      panelParamsRef?.current?.updateData(value)
-      setData(value)
+      controls.updateParams(value)
     })
-    historyContext.registerAction("hash-update", (value: any) => {
-      setHash(value)
+    historyContext.registerAction("hash-update", (hash: any) => {
+      runtime.state.update({ hash })
     })
     historyContext.registerAction("config-update", (value: any) => {
-      setHash(value.hash)
-      panelParamsRef?.current?.updateData(value.data)
-      setData(value.data)
+      runtime.state.update({ hash: value.hash })
+      controls.updateParams(value)
     })
-  }, [panelParamsRef, params, setHash, historyContext, withAutoUpdate])
+  }, [
+    panelParamsRef,
+    runtime.definition.params,
+    historyContext,
+    withAutoUpdate,
+  ])
 
   // on this view we want the html element bg to be black
   // especially for mobile header being black
@@ -305,10 +331,10 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
             <PanelRoot
               disableWarningAnimation={!showTicketPreMintWarning}
               show={show}
-              data={data}
-              params={params}
-              features={features}
-              hash={hash}
+              data={controls.state.params.values}
+              params={controls.state.params.definition}
+              features={runtime.definition.features}
+              hash={runtime.state.hash}
               token={token}
               onLocalDataChange={handleLocalDataChange}
               onChangeData={handleChangeData}
@@ -346,10 +372,10 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
                     />
                   }
                 />
-                {storedConfigurations && (
+                {storedConfigurations && controls.state.params.definition && (
                   <ParamConfigurationList
                     items={storedConfigurations}
-                    params={params}
+                    params={controls.state.params.definition}
                     onLoadConfiguration={handleLoadConfiguration}
                     onPreviewConfiguration={handlePreviewConfiguration}
                     onUpdateConfigName={handleUpdateConfigName}
@@ -378,7 +404,7 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
                 )}
                 {success && randomSeedSuccess && (
                   <Link
-                    href={`/reveal/${token.id}/?fxhash=${randomSeed}&fxparams=${inputBytes}&fxminter=${user?.id}`}
+                    href={`/reveal/${token.id}/?fxhash=${randomSeed}&fxparams=${runtime.details.params.inputBytes}&fxminter=${user?.id}`}
                     passHref
                   >
                     <Button
@@ -415,11 +441,7 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
         )}
       >
         <div className={cs(style.frame)}>
-          <ArtworkIframe
-            ref={artworkIframeRef}
-            url={url}
-            onLoaded={onIframeLoaded}
-          />
+          <ArtworkIframe ref={artworkIframeRef} />
           {hasLocalChanges && (
             <div className={style.unsyncedContainer}>
               <div className={style.unsyncedContent}>
