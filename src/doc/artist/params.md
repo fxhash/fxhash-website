@@ -38,6 +38,23 @@ $fx.params([
 $fx.getParam("number_id")
 ```
 
+# fx(params) update modes
+
+For each individual parameter that you specify, you can also set a specific update mode for. The default update mode is `"page-reload"` and describes the known behaviour of updating the artwork by performing a full page-load on the artwork. By setting the update mode to `"sync"` the parameter will be updated through the controllers without performaing a full page-load on the artwork.
+
+```js
+{
+  id: "number_id",
+  name: "A number/float64",
+  type: "number",
+  update: "sync", // <-- new update property
+},
+```
+
+All updates on prameters with `update: "sync"` are received in the background in real-time. If your artwork is already running in some kind of draw loop (e.g. via `requestAnimationFrame`), you will receive those changes during the runtime of your loop.
+
+For more even more advanced usecases, e.g. if you want to only re-render you artwork when the values of your parameters are changing, you can use the new event listeners described in the section [`$fx.on`](/doc/artist/snippet-api#fxoneventid-handler-ondone) on the snippet api page. 
+
 # Dev environment for fx(params)
 
 For projects to work with fx(params), two components are needed:
