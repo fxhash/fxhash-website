@@ -240,19 +240,19 @@ export const useRuntimeController: TUseRuntimeController = (
     update: Partial<FxParamsData>,
     forceRefresh: boolean = false
   ) => {
+    // find the params which have changed and are "synced"
+    const changed = Object.keys(update)
+      .filter((id) => controls.params.values[id] !== update[id])
+      .map((id) => controls.params.definition?.find((d) => d.id === id)!)
+    // params that are "synced"
+    const synced = changed.filter((def) => def.update === "sync")
+    // if at least a change, soft refresh
+    if (Object.keys(synced).length > 0) {
+      softUpdateParams(
+        Object.fromEntries(synced.map((def) => [def.id, update[def.id]]))
+      )
+    }
     if (!forceRefresh) {
-      // find the params which have changed and are "synced"
-      const changed = Object.keys(update)
-        .filter((id) => controls.params.values[id] !== update[id])
-        .map((id) => controls.params.definition?.find((d) => d.id === id)!)
-      // params that are "synced"
-      const synced = changed.filter((def) => def.update === "sync")
-      // if at least a change, soft refresh
-      if (Object.keys(synced).length > 0) {
-        softUpdateParams(
-          Object.fromEntries(synced.map((def) => [def.id, update[def.id]]))
-        )
-      }
       // if auto-refresh is defined, we update params on the runtime (will only)
       // reload the hard params
       if (options.autoRefresh) {
