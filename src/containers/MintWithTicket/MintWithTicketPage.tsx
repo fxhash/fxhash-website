@@ -94,6 +94,11 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
     }
   )
 
+  const updateAutoUpdate = (auto: boolean) => {
+    auto && controls.hardSync()
+    setWithAutoUpdate(auto)
+  }
+
   const handleClosePreMintView = useCallback(() => {
     setShowPreMintWarningView(false)
     setSelectedTicketId(null)
@@ -161,10 +166,6 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
 
   const handleClickBack = () => {
     router.push("/generative/[...params]", `/generative/slug/${token.slug}`)
-  }
-
-  const handleClickRefresh = () => {
-    artworkIframeRef.current?.reloadIframe()
   }
 
   const handleLocalDataChange = () => {
@@ -350,7 +351,7 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
               onRedo={historyContext.redo}
               panelParamsRef={panelParamsRef}
               withAutoUpdate={withAutoUpdate}
-              onChangeWithAutoUpdate={setWithAutoUpdate}
+              onChangeWithAutoUpdate={updateAutoUpdate}
               onOpenNewTab={handleOpenNewTab}
               onClickBack={handleClickBack}
               onSubmit={handleClickSubmit}
@@ -445,7 +446,7 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
       >
         <div className={cs(style.frame)}>
           <ArtworkIframe ref={artworkIframeRef} />
-          {hasLocalChanges && (
+          {!details.runtimeSynced && !withAutoUpdate && (
             <div className={style.unsyncedContainer}>
               <div className={style.unsyncedContent}>
                 <i className="fa-solid fa-circle-exclamation" />

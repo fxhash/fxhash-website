@@ -9,7 +9,12 @@ import {
   FxParamType,
   FxParamsData,
 } from "components/FxParams/types"
-import { IRuntimeContext, useRuntime } from "./useRuntime"
+import {
+  IRuntimeContext,
+  hashRuntimeHardState,
+  hashRuntimeState,
+  useRuntime,
+} from "./useRuntime"
 import {
   buildParamsObject,
   serializeParams,
@@ -35,6 +40,7 @@ interface IRuntimeControllerOutput {
   // some extra details about the runtime, etc...
   details: {
     activeUrl: string
+    runtimeSynced: boolean
   }
 }
 
@@ -48,6 +54,10 @@ interface IControlState {
 interface IControlDetails {
   params: {
     inputBytes: string | null
+  }
+  stateHash: {
+    hard: string
+    soft: string
   }
 }
 
@@ -216,7 +226,7 @@ export const useRuntimeController: TUseRuntimeController = (
   // state update debounce - uses a ref to ensure debounce is proper
   const stateUpdateRef = useRef(runtime.state.update)
   stateUpdateRef.current = runtime.state.update
-  const deb = useCallback(debounce(stateUpdateRef.current, 200), [])
+  const updtParamsDeb = useCallback(debounce(stateUpdateRef.current, 200), [])
 
   // generic update, used to manipulated the control state, eventually soft
   // refresh the "sync" parameters
@@ -239,18 +249,12 @@ export const useRuntimeController: TUseRuntimeController = (
           Object.fromEntries(synced.map((def) => [def.id, update[def.id]]))
         )
       }
-      // if auto-refresh is defined, we update hard params if any
+      // if auto-refresh is defined, we update params on the runtime (will only)
+      // reload the hard params
       if (options.autoRefresh) {
-        const hard = changed.filter(
-          (def) => !def.update || def.update === "page-reload"
-        )
-        if (Object.keys(hard).length > 0) {
-          deb({
-            params: Object.fromEntries(
-              hard.map((def) => [def.id, update[def.id]])
-            ),
-          })
-        }
+        updtParamsDeb({
+          params: update,
+        })
       }
     } else {
       runtime.state.update({ params: update })
@@ -302,21 +306,38 @@ export const useRuntimeController: TUseRuntimeController = (
     refresh()
   }
 
+  const controlDetails = useMemo<IControlDetails>(
+    () => ({
+      params: {
+        inputBytes: serializeParamsOrNull(
+          controls.params.values,
+          controls.params.definition || []
+        ),
+      },
+      stateHash: {
+        soft: hashRuntimeState({
+          hash: runtime.state.hash,
+          minter: runtime.state.minter,
+          params: controls.params.values,
+        }),
+        hard: hashRuntimeHardState(
+          {
+            hash: runtime.state.hash,
+            minter: runtime.state.minter,
+            params: controls.params.values,
+          },
+          controls.params.definition
+        ),
+      },
+    }),
+    [controls]
+  )
+
   return {
     runtime,
     controls: {
       state: controls,
-      details: useMemo(
-        () => ({
-          params: {
-            inputBytes: serializeParamsOrNull(
-              controls.params.values,
-              controls.params.definition || []
-            ),
-          },
-        }),
-        [controls]
-      ),
+      details: controlDetails,
       updateParams,
       dispatchEvent,
       hardSync,
@@ -324,6 +345,8 @@ export const useRuntimeController: TUseRuntimeController = (
     },
     details: {
       activeUrl: url,
+      runtimeSynced:
+        runtime.details.stateHash.soft === controlDetails.stateHash.soft,
     },
   }
 }

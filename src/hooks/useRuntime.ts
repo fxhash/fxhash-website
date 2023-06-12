@@ -42,7 +42,7 @@ export interface RuntimeWholeState {
 /**
  * Hashes a runtime state using sha1
  */
-function hashRuntimeState(state: RuntimeState) {
+export function hashRuntimeState(state: RuntimeState) {
   return sha1(jsonStringifyBigint(state))
 }
 
@@ -52,7 +52,7 @@ function hashRuntimeState(state: RuntimeState) {
  * - minter address
  * - params in update mode "page-reload"
  */
-function hashRuntimeHardState(
+export function hashRuntimeHardState(
   state: RuntimeState,
   definition: FxParamDefinition<FxParamType>[] | null
 ) {
