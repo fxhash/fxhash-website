@@ -48,7 +48,7 @@ const Qu_genTokens = gql`
 interface LiveMintingEventProps {}
 
 const _LiveMintingEvent = ({}: LiveMintingEventProps) => {
-  const eventCtx = useContext(LiveMintingContext)
+  const { event, mintPass, paidLiveMinting } = useContext(LiveMintingContext)
 
   const { data, loading } = useQuery(Qu_genTokens, {
     notifyOnNetworkStatusChange: true,
@@ -56,7 +56,7 @@ const _LiveMintingEvent = ({}: LiveMintingEventProps) => {
       skip: 0,
       take: 10,
       filters: {
-        id_in: eventCtx.event!.projectIds,
+        id_in: event!.projectIds,
       },
     },
     fetchPolicy: "network-only",
@@ -68,22 +68,26 @@ const _LiveMintingEvent = ({}: LiveMintingEventProps) => {
     <div className={style.container}>
       <p>
         These projects were created especially for this event.
-        <br />
-        Make sure you have enough tezos in your wallet before minting.
+        {paidLiveMinting && (
+          <>
+            <br />
+            Make sure you have enough tezos in your wallet before minting.
+          </>
+        )}
       </p>
       <div className={style.container_token}>
         {generativeTokens?.length > 0 &&
           generativeTokens.map((token) => (
             <Link
               key={token.id}
-              href={`/live-minting/${eventCtx.event!.id}/generative/${
-                token.id
-              }/?token=${eventCtx.mintPass?.token}`}
+              href={`/live-minting/${event!.id}/generative/${token.id}/?token=${
+                mintPass?.token
+              }`}
             >
               <a className={cs(text.reset, style.token)}>
                 <LiveMintingGenerativeTokenCard
                   token={token}
-                  displayPrice
+                  displayPrice={!!paidLiveMinting}
                   displayDetails
                 />
               </a>
