@@ -20,7 +20,6 @@
   pointer-events: none;
   z-index: 100000;
   visibility: hidden;
-
   & > a {
     padding-top: 5px !important;
     padding-bottom: 5px !important;
@@ -50,6 +49,10 @@
   transform: translateY(0px);
   pointer-events: all;
   visibility: visible;
+}
+
+.menu-top {
+  bottom: 100%
 }
 
 .mobile_static_menu {

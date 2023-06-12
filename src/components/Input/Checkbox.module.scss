@@ -30,6 +30,9 @@
   overflow: hidden;
   position: relative;
   margin-right: 15px;
+  &.no_children {
+    margin-right: 0;
+  }
 }
 
 .radio .checkmark {

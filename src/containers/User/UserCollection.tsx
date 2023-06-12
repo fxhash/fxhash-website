@@ -22,14 +22,14 @@ const TabWrapper = ({ children, onClick, ...props }: TabWrapperProps) => (
 
 interface Props {
   user: User
-  activeTab: "gentk" | "articles" | "tickets"
+  activeTab: "gentk" | "articles" | "tickets" | "manage"
 }
 export function UserCollection({ user, activeTab }: Props) {
   // TABS href are computed using the user profile URL
   const TABS = [
     {
       key: "gentk",
-      name: "gentk",
+      name: "gentks",
       props: {
         scroll: false,
         href: `${getUserProfileLink(user)}/collection/`,
@@ -65,7 +65,6 @@ export function UserCollection({ user, activeTab }: Props) {
         tabsClassName={cs(layout["padding-big"])}
         tabWrapperComponent={TabWrapper}
       />
-
       {activeTab === "gentk" && <UserCollectionGentks user={user} />}
 
       {activeTab === "articles" && <UserCollectionArticles user={user} />}

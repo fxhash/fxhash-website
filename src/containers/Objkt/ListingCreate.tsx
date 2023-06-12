@@ -16,10 +16,16 @@ import { IconTezos } from "../../components/Icons/IconTezos"
 
 interface Props {
   objkt: Objkt
+  defaultOpen?: boolean
+  onSuccess?: () => void
 }
 
-export function ListingCreate({ objkt }: Props) {
-  const [opened, setOpened] = useState<boolean>(false)
+export function ListingCreate({
+  objkt,
+  onSuccess,
+  defaultOpen = false,
+}: Props) {
+  const [opened, setOpened] = useState<boolean>(defaultOpen)
   const [price, setPrice] = useState<string>("")
 
   const {
@@ -28,7 +34,9 @@ export function ListingCreate({ objkt }: Props) {
     error: contractError,
     success,
     call,
-  } = useContractOperation<TListingOperationParams>(ListingOperation)
+  } = useContractOperation<TListingOperationParams>(ListingOperation, {
+    onSuccess,
+  })
 
   const callContract = () => {
     const mutez = Math.floor(parseFloat(price) * 1000000)
@@ -42,7 +50,10 @@ export function ListingCreate({ objkt }: Props) {
     }
   }
 
-  const floor = useMemo(() => objkt.issuer?.marketStats?.floor || 0, [])
+  const floor = useMemo(
+    () => objkt.issuer?.marketStats?.floor || 0,
+    [objkt.issuer?.marketStats?.floor]
+  )
   const showWarningListingTooLow = useMemo(() => {
     const mutez = parseFloat(price) * 1000000
     const isFloorOver100tz = floor > 100 * 1000000
@@ -63,8 +74,8 @@ export function ListingCreate({ objkt }: Props) {
         <>
           {showWarningListingTooLow && (
             <TextWarning>
-              Your listing is priced way under <br />
-              the floor (<DisplayTezos mutez={floor} />)
+              Your listing is priced way under the&nbsp;floor&nbsp;(
+              <DisplayTezos mutez={floor} />)
             </TextWarning>
           )}
           <div className={cs(style.inputs)}>

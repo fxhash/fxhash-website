@@ -57,3 +57,7 @@ export const getTaxPaidUntil = (
     taxationStart.getTime() + numberOfDaysCovered * 24 * 60 * 60 * 1000
   )
 }
+
+export function calculatePercentageDifference(nb1: number, nb2: number) {
+  return ((nb2 - nb1) / (nb1 || 1)) * 100
+}

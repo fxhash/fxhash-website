@@ -6,12 +6,14 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useRef,
 } from "react"
 import effects from "../../styles/Effects.module.scss"
 import ReactDOM from "react-dom"
 import { ModalContext } from "../../context/Modal"
 import { nanoid } from "nanoid"
+import useWindowSize, { breakpoints } from "../../hooks/useWindowsSize"
 
 type ModalElements = {
   firstFocusableElement: HTMLElement | null
@@ -22,6 +24,7 @@ export interface Props {
   onClose: () => void
   index?: number
   className?: string
+  width?: string
 }
 export function Modal({
   title,
@@ -29,7 +32,9 @@ export function Modal({
   onClose,
   className,
   children,
+  width,
 }: PropsWithChildren<Props>) {
+  const { width: winWidth } = useWindowSize()
   const refModalId = useRef(`modal-${nanoid(11)}`)
   const refModal = useRef<HTMLDivElement>(null)
   const refModalElements = useRef<ModalElements>({
@@ -41,35 +46,38 @@ export function Modal({
     closeModalId(refModalId.current)
     onClose()
   }, [closeModalId, onClose])
-  const handleKeyboardNavigation = useCallback((e: KeyboardEvent) => {
-    if (e.key === "Escape") {
-      onClose()
-      return
-    }
-    const { firstFocusableElement, lastFocusableElement } =
-      refModalElements.current
-    let isTabPressed = e.key === "Tab" || e.keyCode === 9
-    if (!isTabPressed) {
-      return
-    }
-    if (e.shiftKey) {
-      if (
-        document.activeElement === firstFocusableElement &&
-        lastFocusableElement
-      ) {
-        lastFocusableElement.focus()
-        e.preventDefault()
+  const handleKeyboardNavigation = useCallback(
+    (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        onClose()
+        return
       }
-    } else {
-      if (
-        document.activeElement === lastFocusableElement &&
-        firstFocusableElement
-      ) {
-        firstFocusableElement.focus()
-        e.preventDefault()
+      const { firstFocusableElement, lastFocusableElement } =
+        refModalElements.current
+      let isTabPressed = e.key === "Tab" || e.keyCode === 9
+      if (!isTabPressed) {
+        return
       }
-    }
-  }, [])
+      if (e.shiftKey) {
+        if (
+          document.activeElement === firstFocusableElement &&
+          lastFocusableElement
+        ) {
+          lastFocusableElement.focus()
+          e.preventDefault()
+        }
+      } else {
+        if (
+          document.activeElement === lastFocusableElement &&
+          firstFocusableElement
+        ) {
+          firstFocusableElement.focus()
+          e.preventDefault()
+        }
+      }
+    },
+    [onClose]
+  )
   useEffect(() => {
     const modalId = refModalId.current
     openModalId(modalId)
@@ -96,13 +104,19 @@ export function Modal({
       document.removeEventListener("keydown", handleKeyboardNavigation)
     }
   }, [handleKeyboardNavigation])
+  const calculatedWidth = useMemo(() => {
+    if (winWidth && winWidth < breakpoints.sm) {
+      return undefined
+    }
+    return width
+  }, [width, winWidth])
   return ReactDOM.createPortal(
     <>
       <Cover onClick={handleClose} index={index} />
       <div
         ref={refModal}
         className={cs(style.modal, effects["drop-shadow-big"], className)}
-        style={{ zIndex: index + 1 }}
+        style={{ zIndex: index + 1, width: calculatedWidth }}
         role="dialog"
         aria-modal="true"
         aria-label={title}

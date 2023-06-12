@@ -1,0 +1,44 @@
+@import "../../styles/Variables";
+.container {
+}
+.container_create {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.container_search {
+  min-height: 250px;
+  margin: auto;
+  .container_search_row {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+  }
+}
+.tz_address {
+  font-size: var(--font-size-small);
+  color: var(--color-gray);
+  background-color: var(--color-gray-vvlight);
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+.tezos {
+  color: var(--color-secondary);
+  font-weight: bold;
+}
+.btn_transfer {}
+.btn_full {
+  width: 100%;
+}
+
+@media (max-width: $breakpoint-sm) {
+  .container_search {
+    .container_search_row {
+      flex-direction: column;
+    }
+  }
+  .btn_transfer {
+    margin-top: $spacing-small;
+    width: 100%;
+  }
+}

@@ -25,6 +25,7 @@ import reserveMintPassType from "./reserve-mint-pass/type.json"
 import reserveMintInputType from "./reserve-mint-input/type.json"
 import reserveMintPassInputType from "./reserve-mint-pass-input/type.json"
 import mintPassConsumeType from "./mint-pass-consume/type.json"
+import transferType from "./transfer/type.json"
 import { Schema } from "@taquito/michelson-encoder"
 import { packData, packDataBytes, unpackDataBytes } from "@taquito/michel-codec"
 
@@ -58,6 +59,7 @@ export enum EBuildableParams {
   RESERVE_MINT_PASS_INPUT = "RESERVE_MINT_PASS_INPUT",
   RESERVE_MINT_INPUT = "RESERVE_MINT_INPUT",
   MINT_PASS_CONSUME = "MINT_PASS_CONSUME",
+  TRANSFER = "TRANSFER",
 }
 
 // maps a builadable param type with the actual type in json
@@ -88,6 +90,7 @@ const buildableParamTypes: Record<EBuildableParams, MichelsonV1Expression> = {
   RESERVE_MINT_INPUT: reserveMintInputType,
   RESERVE_MINT_PASS_INPUT: reserveMintPassInputType,
   MINT_PASS_CONSUME: mintPassConsumeType,
+  TRANSFER: transferType,
 }
 
 /**

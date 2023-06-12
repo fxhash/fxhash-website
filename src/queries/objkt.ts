@@ -145,3 +145,20 @@ export const Qu_objktsFeed = gql`
     }
   }
 `
+
+export const qu_Objkts = gql`
+  query Query($filters: ObjktFilter, $skip: Int, $take: Int) {
+    objkts(filters: $filters, skip: $skip, take: $take) {
+      id
+      version
+      owner {
+        id
+      }
+      activeListing {
+        id
+        version
+        price
+      }
+    }
+  }
+`

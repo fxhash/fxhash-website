@@ -1,16 +1,22 @@
-@import "../../../styles/Variables";
 
 .dropdown {
   padding: 0;
 }
+.dropdown_label {
+  width: 100%;
+}
 .open_btn {
-  border: 3px solid var(--color-black);
-  padding-left: 0;
-  padding-right: 0;
-  height: 50px;
-  width: 50px;
+  padding-left: 4px;
+  padding-right: 4px;
+  font-size: 18px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
   color: var(--color-black);
-
+  i {
+    font-size: 16px;
+  }
   &:hover {
     border-color: var(--color-secondary);
     color: var(--color-secondary);
@@ -18,14 +24,20 @@
 }
 .opt {
   text-align: left;
-  padding: 13px 7px;
-  font-size: 13px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: var(--font-size-small);
   color: var(--color-black);
   font-weight: 400;
   display: flex;
   flex-direction: row;
   align-items: center;
+  &.opt_warning {
+    font-weight: bold;
+    color: var(--color-error);
+  }
   i {
+    font-size: 16px;
     margin-right: 10px;
     display: flex;
     flex-direction: row;
@@ -36,11 +48,5 @@
     color: var(--color-white);
     background-color: var(--color-black);
     text-decoration: none;
-  }
-}
-
-@media (max-width: $breakpoint-sm) {
-  .dropdown {
-    right: -100px;
   }
 }

@@ -6,9 +6,7 @@ import {
 } from "@taquito/taquito"
 import { FxhashContracts } from "../../types/Contracts"
 import { NFTArticle } from "../../types/entities/Article"
-import { Objkt } from "../../types/entities/Objkt"
 import { User } from "../../types/entities/User"
-import { getGentkFA2Contract } from "../../utils/gentk"
 import { displayMutez } from "../../utils/units"
 import {
   buildParameters,
