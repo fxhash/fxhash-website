@@ -240,7 +240,6 @@ export const useRuntimeController: TUseRuntimeController = (
     update: Partial<FxParamsData>,
     forceRefresh: boolean = false
   ) => {
-    console.log({ update })
     if (!forceRefresh) {
       // find the params which have changed and are "synced"
       const changed = Object.keys(update)
@@ -359,7 +358,7 @@ export const useRuntimeController: TUseRuntimeController = (
         )
       }, [project.cid, runtime.details.stateHash.soft, controls.params]),
       runtimeSynced:
-        runtime.details.stateHash.soft === controlDetails.stateHash.soft,
+        runtime.details.stateHash.hard === controlDetails.stateHash.hard,
     },
   }
 }
