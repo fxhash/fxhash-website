@@ -295,21 +295,6 @@ export const useRuntimeController: TUseRuntimeController = (
     }
   }, [url])
 
-  const refresh = useCallback(() => {
-    ref.current
-      ?.getHtmlIframe()
-      ?.contentWindow?.location.replace(lastUrl.current)
-  }, [])
-
-  const hardSync = () => {
-    runtime.update({
-      state: {
-        params: controls.params.values,
-      },
-    })
-    refresh()
-  }
-
   const controlDetails = useMemo<IControlDetails>(
     () => ({
       params: {
@@ -337,6 +322,28 @@ export const useRuntimeController: TUseRuntimeController = (
     [controls, runtime]
   )
 
+  const controlsUrl = useMemo(() => {
+    return ipfsUrlWithHashAndParams(
+      project.cid,
+      runtime.state.hash,
+      runtime.state.minter,
+      controlDetails.params.inputBytes || project.inputBytes
+    )
+  }, [project.cid, runtime.details.stateHash.soft, controls.params])
+
+  const refresh = useCallback(() => {
+    ref.current?.getHtmlIframe()?.contentWindow?.location.replace(controlsUrl)
+  }, [controlsUrl])
+
+  const hardSync = () => {
+    runtime.update({
+      state: {
+        params: controls.params.values,
+      },
+    })
+    refresh()
+  }
+
   return {
     runtime,
     controls: {
@@ -349,14 +356,7 @@ export const useRuntimeController: TUseRuntimeController = (
     },
     details: {
       activeUrl: url,
-      controlsUrl: useMemo(() => {
-        return ipfsUrlWithHashAndParams(
-          project.cid,
-          runtime.state.hash,
-          runtime.state.minter,
-          controlDetails.params.inputBytes || project.inputBytes
-        )
-      }, [project.cid, runtime.details.stateHash.soft, controls.params]),
+      controlsUrl,
       runtimeSynced:
         runtime.details.stateHash.hard === controlDetails.stateHash.hard,
     },
