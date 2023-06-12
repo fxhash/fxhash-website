@@ -248,7 +248,7 @@ export const ParameterProcessors: FxParamProcessors = {
 // params are injected into the piece using the binary representation of the
 // numbers, to keep precision
 export function serializeParams(
-  params: any,
+  params: FxParamsData,
   definition: FxParamDefinition<any>[]
 ) {
   // a single hex string will be used for all the params
@@ -275,6 +275,16 @@ export function serializeParams(
   }
 
   return bytes
+}
+
+// call seralizeParams(), returns nullif no params
+export function serializeParamsOrNull(
+  params: FxParamsData,
+  definition: FxParamDefinition<any>[]
+) {
+  const serialized = serializeParams(params, definition || [])
+  if (serialized.length === 0) return null
+  return serialized
 }
 
 // takes an array of bytes, in hexadecimal format, and a parametric space

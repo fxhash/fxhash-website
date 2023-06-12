@@ -2,7 +2,11 @@ import { useEffect, useState, useCallback, useMemo } from "react"
 import { generateFxHash, generateTzAddress } from "utils/hash"
 import { RawTokenFeatures } from "types/Metadata"
 import { ArtworkIframeRef } from "components/Artwork/PreviewIframe"
-import { FxParamDefinition, FxParamType } from "components/FxParams/types"
+import {
+  FxParamDefinition,
+  FxParamType,
+  FxParamsData,
+} from "components/FxParams/types"
 import { IRuntimeContext, useRuntime } from "./useRuntime"
 
 export interface TokenInfo {
@@ -32,7 +36,8 @@ interface IFrameTokenInfos {
   paramsDefinition: any
   info: TokenInfo
   runtime: IRuntimeContext
-  dispatch: (id: string, data: any) => void
+  dispatchEvent: (id: string, data: any) => void
+  softUpdateParams: (params: FxParamsData) => void
 }
 
 function handleOldSnippetEvents(
@@ -84,6 +89,7 @@ export function useReceiveTokenInfos(
   const runtime = useRuntime()
   const { state, definition, details } = runtime
 
+  // TODO: remove this state!!
   const [info, setInfo] = useState<TokenInfo>({
     version: null,
     hash: options?.initialHash || generateFxHash(),
@@ -100,6 +106,7 @@ export function useReceiveTokenInfos(
 
   const setMinter = (minter: string) => state.update({ minter })
 
+  // TODO : FIX
   const setParams = (params: any | null) =>
     setInfo((i) => ({
       ...i,
@@ -119,8 +126,10 @@ export function useReceiveTokenInfos(
           features,
           hash,
         } = e.data.data
-        definition.update({ params: definitions, features, version })
-        state.update({ hash, minter, params: values })
+        runtime.update({
+          state: { hash, minter, params: values },
+          definition: { params: definitions, features, version },
+        })
       }
       // handle deprecated events from old snippet
       handleOldSnippetEvents(e, {
@@ -150,9 +159,14 @@ export function useReceiveTokenInfos(
     }
   }, [ref])
 
-  const dispatch = (id: string, data: any) => {
+  const dispatchEvent = (id: string, data: any) => {
     if (!ref.current) return
     ref.current.getHtmlIframe()?.contentWindow?.postMessage({ id, data }, "*")
+  }
+
+  const softUpdateParams = (params: FxParamsData) => {
+    state.update({ params })
+    dispatchEvent("fxhash_params:update", { params })
   }
 
   return {
@@ -169,6 +183,7 @@ export function useReceiveTokenInfos(
     setParamsDefinition,
     info,
     runtime,
-    dispatch,
+    dispatchEvent,
+    softUpdateParams,
   }
 }

@@ -7,62 +7,35 @@ import {
   ArtworkIframe,
   ArtworkIframeRef,
 } from "../../components/Artwork/PreviewIframe"
-import { useMemo, useState, useRef } from "react"
+import { useState, useRef } from "react"
 import { HashTest } from "../../components/Testing/HashTest"
 import { Checkbox } from "../../components/Input/Checkbox"
 import { Button } from "../../components/Button"
 import { RawFeatures } from "../../components/Features/RawFeatures"
 import { ArtworkFrame } from "../../components/Artwork/ArtworkFrame"
-import { ipfsUrlWithHashAndParams } from "../../utils/ipfs"
 import { ControlsTest } from "components/Testing/ControlsTest"
-import { serializeParams, sumBytesParams } from "components/FxParams/utils"
-import { useReceiveTokenInfos } from "hooks/useReceiveTokenInfos"
 import { MinterTest } from "components/Testing/MinterTest"
-import { FxParamsData } from "components/FxParams/types"
+import { useRuntimeController } from "hooks/useRuntimeController"
 
 export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
   const [check1, setCheck1] = useState<boolean>(false)
   const [check2, setCheck2] = useState<boolean>(false)
   const artworkIframeRef = useRef<ArtworkIframeRef>(null)
-  const { onIframeLoaded, features, runtime, dispatch } =
-    useReceiveTokenInfos(artworkIframeRef)
 
-  const inputBytes = useMemo<string | null>(() => {
-    const serialized = serializeParams(
-      runtime.state.params,
-      runtime.definition.params || []
-    )
-    if (serialized.length === 0) return null
-    return serialized
-  }, [runtime.details.stateHash.soft, runtime.definition.params])
-
-  const url = useMemo<string>(() => {
-    return ipfsUrlWithHashAndParams(
-      state.cidUrlParams!,
-      runtime.state.hash,
-      runtime.state.minter,
-      inputBytes
-    )
-  }, [state.cidUrlParams, runtime.state, inputBytes])
+  const { runtime, controls } = useRuntimeController(artworkIframeRef, {
+    cid: state.cidUrlParams!,
+  })
 
   const nextStep = () => {
     onNext({
       previewHash: runtime.state.hash,
       previewMinter: runtime.state.minter,
-      previewInputBytes: inputBytes,
+      previewInputBytes: runtime.details.params.inputBytes,
       params: {
         definition: runtime.definition.params,
-        inputBytesSize: sumBytesParams(runtime.definition.params || []),
+        inputBytesSize: runtime.details.params.bytesSize,
       },
     })
-  }
-
-  const handleSubmitParams = (data: any) => {
-    runtime.state.update({ params: data })
-  }
-
-  const softDispatchParams = (params: FxParamsData) => {
-    dispatch("fxhash_params:update", { params })
   }
 
   return (
@@ -120,15 +93,15 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
           />
           <Spacing size="2x-large" sm="x-large" />
 
-          {runtime.definition.params && (
+          {controls.state.params.definition && (
             <div>
               <h5>Params</h5>
               <Spacing size="small" />
               <ControlsTest
-                definition={runtime.definition.params}
-                params={runtime.state.params}
-                onSubmit={handleSubmitParams}
-                onSoftSubmit={softDispatchParams}
+                definition={controls.state.params.definition}
+                params={controls.state.params.values}
+                updateParams={controls.updateParams}
+                onSubmit={controls.hardSync}
               />
             </div>
           )}
@@ -136,7 +109,7 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
           <div>
             <h5>Features</h5>
             <Spacing size="small" />
-            <RawFeatures rawFeatures={features} />
+            <RawFeatures rawFeatures={runtime.definition.features} />
           </div>
         </div>
         <div className={layout.hide_sm}>
@@ -147,9 +120,8 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
                   <ArtworkFrame>
                     <ArtworkIframe
                       ref={artworkIframeRef}
-                      url={url}
+                      url={""}
                       textWaiting="looking for content on IPFS"
-                      onLoaded={onIframeLoaded}
                     />
                   </ArtworkFrame>
                 </div>

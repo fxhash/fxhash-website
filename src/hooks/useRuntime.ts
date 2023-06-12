@@ -5,9 +5,14 @@ import {
 } from "components/FxParams/types"
 import { useMemo, useState } from "react"
 import sha1 from "sha1"
-import { jsonStringifyBigint, sumBytesParams } from "components/FxParams/utils"
+import {
+  jsonStringifyBigint,
+  serializeParamsOrNull,
+  sumBytesParams,
+} from "components/FxParams/utils"
 import { TUpdateStateFn, TUpdateableState } from "types/utils/state"
 import { RawTokenFeatures } from "types/Metadata"
+import { merge, cloneDeep } from "lodash"
 
 /**
  * The Runtime Context is responsible for managing the state of a project ran
@@ -27,6 +32,11 @@ export interface RuntimeDefinition {
   params: FxParamDefinition<FxParamType>[] | null
   version: string | null
   features: RawTokenFeatures | null
+}
+
+export interface RuntimeWholeState {
+  state: RuntimeState
+  definition: RuntimeDefinition
 }
 
 /**
@@ -65,12 +75,20 @@ export interface IRuntimeContext {
   state: TUpdateableState<RuntimeState>
   // definitions, used to manipulate the state
   definition: TUpdateableState<RuntimeDefinition>
+  // whoe-state update function, should be used to prevent side-effects
+  update: TUpdateStateFn<RuntimeWholeState>
   // extra details derived from the state & definition
   details: {
-    paramsByteSize: number
+    params: {
+      inputBytes: string | null
+      bytesSize: number
+    }
     stateHash: {
       soft: string
       hard: string
+    }
+    definitionHash: {
+      params: string
     }
   }
 }
@@ -79,30 +97,32 @@ type Parameters = {
   state?: Partial<RuntimeState>
 }
 export function useRuntime(initial?: Parameters): IRuntimeContext {
-  const [state, setState] = useState<RuntimeState>({
-    hash: "",
-    minter: "",
-    params: {},
-    ...initial?.state,
-  })
-  const [definition, setDefinition] = useState<RuntimeDefinition>({
-    params: null,
-    version: null,
-    features: null,
+  const [whole, setWhole] = useState<RuntimeWholeState>({
+    state: {
+      hash: "",
+      minter: "",
+      params: {},
+      ...initial?.state,
+    },
+    definition: {
+      params: null,
+      version: null,
+      features: null,
+    },
   })
 
-  const update: TUpdateStateFn<RuntimeState> = (data) => {
-    setState({
-      ...state,
-      ...data,
-    })
+  const { state, definition } = whole
+
+  const updateState: TUpdateStateFn<RuntimeState> = (state) => {
+    setWhole(merge(cloneDeep(whole), { state }))
   }
 
-  const updateDefinition: TUpdateStateFn<RuntimeDefinition> = (data) => {
-    setDefinition({
-      ...definition,
-      ...data,
-    })
+  const updateDefinition: TUpdateStateFn<RuntimeDefinition> = (definition) => {
+    setWhole(merge(cloneDeep(whole), { definition }))
+  }
+
+  const update: TUpdateStateFn<RuntimeWholeState> = (data) => {
+    setWhole(merge(cloneDeep(whole), data))
   }
 
   // enhance each param definition with the version (useful for serialization)
@@ -121,21 +141,31 @@ export function useRuntime(initial?: Parameters): IRuntimeContext {
   return {
     state: {
       ...state,
-      update,
+      update: updateState,
     },
     definition: {
       ...definitionEnhanced,
       update: updateDefinition,
     },
+    update: update,
     details: useMemo(
       () => ({
-        paramsByteSize: sumBytesParams(definition.params || []),
+        params: {
+          inputBytes: serializeParamsOrNull(
+            state.params,
+            definitionEnhanced.params || []
+          ),
+          bytesSize: sumBytesParams(definitionEnhanced.params || []),
+        },
         stateHash: {
           soft: hashRuntimeState(state),
-          hard: hashRuntimeHardState(state, definition.params),
+          hard: hashRuntimeHardState(state, definitionEnhanced.params),
+        },
+        definitionHash: {
+          params: sha1(jsonStringifyBigint(definitionEnhanced.params)),
         },
       }),
-      [state, definition.params]
+      [state, definitionEnhanced.params]
     ),
   }
 }
