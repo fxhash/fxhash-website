@@ -23,11 +23,18 @@ const defaultRuntimeContext: IRuntimeContext = {
     features: null,
     update: () => {},
   },
+  update: () => {},
   details: {
-    paramsByteSize: 0,
+    definitionHash: {
+      params: "",
+    },
     stateHash: {
       soft: "",
       hard: "",
+    },
+    params: {
+      inputBytes: null,
+      bytesSize: 0,
     },
   },
 }

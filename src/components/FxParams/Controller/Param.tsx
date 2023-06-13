@@ -1,5 +1,10 @@
-import { useMemo, ReactElement } from "react"
-import { FxParamDefinition, FxParamType, FxParamTypeMap } from "../types"
+import { useMemo, ReactElement, createElement } from "react"
+import {
+  FxParamDefinition,
+  FxParamOptionsMap,
+  FxParamType,
+  FxParamTypeMap,
+} from "../types"
 import { FxParamInputChangeHandler, FxParamControllerProps } from "./Controller"
 import { BooleanController } from "./Boolean"
 import { ColorController } from "./Color"
@@ -82,7 +87,7 @@ export function ParameterController<Type extends FxParamType>(
 
   const handleChangeParam = (e: any) => {
     const value = handler(e)
-    onChange(value)
+    onChange(value as FxParamTypeMap[Type])
   }
 
   if (parsedDefinition && !parsedDefinition.success)
@@ -93,13 +98,25 @@ export function ParameterController<Type extends FxParamType>(
       />
     )
 
-  return (
-    <Controller
-      id={definition.id}
-      label={definition.name}
-      value={value as any}
-      onChange={handleChangeParam}
-      options={definition.options}
-    />
+  const options = definition.options as
+    | FxParamOptionsMap["number"]
+    | FxParamOptionsMap["string"]
+    | FxParamOptionsMap["bigint"]
+    | FxParamOptionsMap["select"]
+    | undefined
+
+  return createElement(
+    Controller as React.FC<
+      FxParamControllerProps<any> & {
+        options: typeof options
+      }
+    >,
+    {
+      id: definition.id,
+      label: definition.name,
+      value: value as any,
+      onChange: handleChangeParam,
+      options,
+    }
   )
 }
