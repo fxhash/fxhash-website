@@ -48,11 +48,13 @@ const initialSettings: Partial<GenTokenSettings> = {
     preMint: {
       enabled: true,
       hashConstraints: null,
+      iterationConstraints: null,
       paramsConstraints: null,
     },
     postMint: {
       enabled: true,
       hashConstraints: null,
+      iterationConstraints: null,
       paramsConstraints: null,
     },
   },
@@ -118,9 +120,14 @@ export const StepExtraSettings: StepComponent = ({ state, onNext }) => {
   // some setters to update the settings easily
   const updateExplorationSetting = (
     target: VariantSettingsTabKey,
-    setting: "enabled" | "hashConstraints" | "paramsConstraints",
+    setting:
+      | "enabled"
+      | "hashConstraints"
+      | "iterationConstraints"
+      | "paramsConstraints",
     value: any
   ) => {
+    console.log(setting, value)
     setSettings((currentSettings) => ({
       ...currentSettings,
       exploration: {
@@ -137,22 +144,43 @@ export const StepExtraSettings: StepComponent = ({ state, onNext }) => {
   const addCurrentVariant = (target: VariantSettingsTabKey) => {
     const currentHashConstraints =
       settings.exploration?.[target]?.hashConstraints || []
+    const currentIterationConstraints =
+      settings.exploration?.[target]?.iterationConstraints || []
     const currentParamConstraints =
       settings.exploration?.[target]?.paramsConstraints || []
+
     if (!usesParams) {
-      if (!currentHashConstraints.includes(hash)) {
+      const combinationExists = currentHashConstraints.some(
+        (existingHash, index) => {
+          const pairedIteration = currentIterationConstraints[index]
+          return existingHash === hash && pairedIteration === iteration
+        }
+      )
+
+      if (!combinationExists) {
         currentHashConstraints.push(hash)
         updateExplorationSetting(
           target,
           "hashConstraints",
           currentHashConstraints
         )
+        currentIterationConstraints.push(iteration)
+        updateExplorationSetting(
+          target,
+          "iterationConstraints",
+          currentIterationConstraints
+        )
       }
     } else {
       const combinationExists = currentHashConstraints.some(
         (existingHash, index) => {
           const pairedInputBytes = currentParamConstraints[index]
-          return existingHash === hash && pairedInputBytes === inputBytes
+          const pairedIteration = currentIterationConstraints[index]
+          return (
+            existingHash === hash &&
+            pairedInputBytes === inputBytes &&
+            pairedIteration === iteration
+          )
         }
       )
       if (!combinationExists && inputBytes) {
@@ -161,6 +189,12 @@ export const StepExtraSettings: StepComponent = ({ state, onNext }) => {
           target,
           "hashConstraints",
           currentHashConstraints
+        )
+        currentIterationConstraints.push(iteration)
+        updateExplorationSetting(
+          target,
+          "iterationConstraints",
+          currentIterationConstraints
         )
         currentParamConstraints.push(inputBytes)
         updateExplorationSetting(
@@ -181,11 +215,13 @@ export const StepExtraSettings: StepComponent = ({ state, onNext }) => {
     if (preExploreOptions === "infinite") {
       const preMint = cloned.exploration?.preMint
       if (preMint?.hashConstraints) preMint.hashConstraints = null
+      if (preMint?.iterationConstraints) preMint.iterationConstraints = null
       if (preMint?.paramsConstraints) preMint.paramsConstraints = null
     }
     if (postExploreOptions === "infinite") {
       const postMint = cloned.exploration?.postMint
       if (postMint?.hashConstraints) postMint.hashConstraints = null
+      if (postMint?.iterationConstraints) postMint.iterationConstraints = null
       if (postMint?.paramsConstraints) postMint.paramsConstraints = null
     }
     // we can send the update of the settings to the next component in the tree
@@ -205,9 +241,15 @@ export const StepExtraSettings: StepComponent = ({ state, onNext }) => {
   const preMintSettings = settings.exploration?.preMint
   const postMintSettings = settings.exploration?.postMint
 
-  const setVariant = (index: number, hash: string, paramBytes?: string) => {
+  const setVariant = (
+    index: number,
+    hash: string,
+    iteration: number,
+    paramBytes?: string
+  ) => {
     setSelectedVariant(index)
     setHash(hash)
+    setIteration(iteration)
     if (paramBytes) {
       const data = deserializeParams(paramBytes, params, {
         withTransform: true,
@@ -320,6 +362,13 @@ export const StepExtraSettings: StepComponent = ({ state, onNext }) => {
             }}
           />
           <Spacing size="x-large" />
+          <p className={style.info_text}>
+            <strong>
+              N.B. if your project utilizes fxiteration, the iteration number
+              below will be injected into the variant along with the hash
+              {usesParams ? " and params" : ""}; it will be otherwise ignored.
+            </strong>
+          </p>
           <IterationTest
             autoGenerate={false}
             value={iteration}

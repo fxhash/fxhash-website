@@ -42,6 +42,10 @@
   }
 }
 
+.info_text {
+  font-size: var(--font-size-small);
+}
+
 .field_header {
   display: flex;
   align-items: center;
@@ -57,7 +61,8 @@
     font-weight: bold;
   }
 }
-.button {}
+.button {
+}
 
 .artworkWrapper {
   position: sticky;

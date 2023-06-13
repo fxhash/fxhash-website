@@ -63,7 +63,7 @@ export function ButtonVariations({
         [
           hash,
           activeSettings.paramsConstraints?.[idx] || null,
-          getRandomIteration(token.supply),
+          activeSettings.iterationConstraints?.[idx] || null,
         ] as Variant
     )
     return uniqBy(

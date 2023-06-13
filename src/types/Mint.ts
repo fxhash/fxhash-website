@@ -84,11 +84,13 @@ export interface GenTokenSettings {
     preMint?: {
       enabled: boolean
       hashConstraints?: string[] | null
+      iterationConstraints?: number[] | null
       paramsConstraints?: string[] | null
     }
     postMint?: {
       enabled: boolean
       hashConstraints?: string[] | null
+      iterationConstraints?: number[] | null
       paramsConstraints?: string[] | null
     }
   }
