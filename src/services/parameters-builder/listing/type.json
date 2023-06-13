@@ -1,0 +1,31 @@
+{
+  "prim": "pair",
+  "args": [
+    {
+      "prim": "pair",
+      "args": [
+        {
+          "prim": "nat",
+          "annots": [
+            "%id"
+          ]
+        },
+        {
+          "prim": "nat",
+          "annots": [
+            "%version"
+          ]
+        }
+      ],
+      "annots": [
+        "%gentk"
+      ]
+    },
+    {
+      "prim": "mutez",
+      "annots": [
+        "%price"
+      ]
+    }
+  ]
+}
