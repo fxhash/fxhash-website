@@ -68,7 +68,7 @@ export function ColorController(props: FxParamControllerProps<"color">) {
         type="text"
         id={`text-${id}`}
         onChange={handleInputChange}
-        value={value}
+        value={colorHex}
         autoComplete="off"
         maxLength={9}
         minLength={2}
