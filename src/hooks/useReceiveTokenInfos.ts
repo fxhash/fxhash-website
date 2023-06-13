@@ -96,6 +96,8 @@ export function useReceiveTokenInfos(
     paramsDefinition: null,
   })
 
+  console.log(info)
+
   const setFeatures = (features: RawTokenFeatures | null) =>
     setInfo((i) => ({
       ...i,
@@ -147,7 +149,7 @@ export function useReceiveTokenInfos(
           version,
           features,
           hash,
-          iteration,
+          iteration: parseInt(iteration),
           paramsDefinition: definitions,
           minter: minter,
           params:

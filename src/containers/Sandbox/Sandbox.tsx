@@ -153,9 +153,6 @@ export function Sandbox() {
                 autoGenerate={false}
                 value={iteration}
                 onIterationUpdate={setIteration}
-                onRetry={() => {
-                  artworkIframeRef.current?.reloadIframe()
-                }}
               />
 
               <Spacing size="large" />
