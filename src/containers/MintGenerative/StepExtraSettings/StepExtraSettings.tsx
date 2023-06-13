@@ -127,7 +127,6 @@ export const StepExtraSettings: StepComponent = ({ state, onNext }) => {
       | "paramsConstraints",
     value: any
   ) => {
-    console.log(setting, value)
     setSettings((currentSettings) => ({
       ...currentSettings,
       exploration: {
@@ -362,13 +361,15 @@ export const StepExtraSettings: StepComponent = ({ state, onNext }) => {
             }}
           />
           <Spacing size="x-large" />
-          <p className={style.info_text}>
-            <strong>
+          {{ preMint: preExploreOptions, postMint: postExploreOptions }[
+            activeTab
+          ] !== "infinite" && (
+            <p className={style.info_text}>
               N.B. if your project utilizes fxiteration, the iteration number
               below will be injected into the variant along with the hash
               {usesParams ? " and params" : ""}; it will be otherwise ignored.
-            </strong>
-          </p>
+            </p>
+          )}
           <IterationTest
             autoGenerate={false}
             value={iteration}
