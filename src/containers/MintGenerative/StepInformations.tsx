@@ -46,6 +46,7 @@ const validation = Yup.object().shape({
   description: Yup.string()
     .max(4096, "Max 4096 characters")
     .required("Required"),
+  mintingInstructions: Yup.string().max(4096, "Max 4096 characters"),
   childrenDescription: Yup.string().max(4096, "Max 4096 characters"),
 })
 
