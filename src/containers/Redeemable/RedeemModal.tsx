@@ -204,7 +204,7 @@ export function RedeemModal({
             loading={loading}
             success={success}
             error={error}
-            successMessage={redeemable.successInfos}
+            successMessage="Your token has been redeemed!"
           />
 
           <Submit className={cs(style.submit)}>

@@ -1,5 +1,7 @@
+import ReactMarkdown from "react-markdown"
 import { GetServerSideProps, NextPage } from "next"
 import Head from "next/head"
+import articleStyle from "components/Article/ArticleContent.module.scss"
 import { Spacing } from "components/Layout/Spacing"
 import layout from "styles/Layout.module.scss"
 import text from "styles/Text.module.css"
@@ -81,9 +83,22 @@ const RevealPage: NextPage<Props> = ({ gentk, redeemableDetails }) => {
               />
             </div>
             <Spacing size="large" />
-            <span className={cs(text.success)}>
+
+            <ReactMarkdown
+              className={cs(articleStyle.article, layout.y_centered)}
+              components={{
+                a: ({ href, children }) => (
+                  <Link href={href!} passHref>
+                    <Button isLink={true} size="small" color="secondary">
+                      {children}
+                    </Button>
+                  </Link>
+                ),
+              }}
+            >
               {redeemableDetails.successInfos}
-            </span>
+            </ReactMarkdown>
+
             <Spacing size="large" />
             <Link href={getGenerativeTokenUrl(gentk.issuer)} passHref>
               <Button isLink={true} size="small">
@@ -152,13 +167,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     if (!data2 || !data2.consumables || data2.consumables.length < 1) {
       throw new Error("Could not find the redeemable in our database")
     }
-    redeemableDetails = data2.consumables[0]
+    redeemableDetails = data2.consumables
   }
 
   return {
     props: {
       gentk: token,
-      redeemableDetails,
+      redeemableDetails: redeemableDetails[0],
     },
     notFound: !token,
   }
