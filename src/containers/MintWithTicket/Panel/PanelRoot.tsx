@@ -67,14 +67,14 @@ export function PanelRoot(props: PanelRootProps) {
           description={`by ${name}`}
           onClickHide={onClickHide}
         />
-        <Spacing size="small" />
+        <Spacing size="x-small" />
         <Link href="/doc/collect/fxparams-mint-tickets">
           <a className={style.learn}>
             <i aria-hidden="true" className="fas fa-book" />
             How to use fx(params)
           </a>
         </Link>
-        <Spacing size="regular" />
+        <Spacing size="large" />
         <div className={cs(style.body)}>
           <PanelHash
             hash={hash}

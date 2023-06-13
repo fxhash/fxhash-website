@@ -44,14 +44,20 @@ export interface FxParamTypeMap {
   select: string
 }
 
+export type FxParamUpdateMode = "page-reload" | "sync"
+
 export interface FxParamDefinition<Type extends FxParamType> {
   id: string
   name?: string
   type: Type
+  update?: FxParamUpdateMode
   default: FxParamTypeMap[Type]
+  value: FxParamTypeMap[Type]
   options: FxParamOptionsMap[Type]
   version?: string
 }
+
+export type FxParamDefinitions = FxParamDefinition<FxParamType>[]
 
 export type hexString = `#${string}`
 
