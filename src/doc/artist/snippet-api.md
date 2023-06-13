@@ -585,7 +585,7 @@ A default value for the parameter. If defined, when the minting interface with t
 
 _Optional_
 
-Specifies the update mode of the parameter. The default update mode is `"page-reload"`. With update mode `"page-reload"`, a full page reload on the artwork is performed whenever the value of the parameter changes. When the update mode is set to `"sync"` the values of the parameter are updated during the runtime of the artwork. With update mode `"sync"`, no page reload is performed when the the values of the parameter changed.
+Specifies the update mode of the parameter. The default update mode is `"page-reload"`. With update mode `"page-reload"`, a full page reload on the artwork is performed whenever the value of the parameter changes. When the update mode is set to `"sync"` the parameter values are updated during the runtime of the artwork - no page reload is performed when the parameter values change.
 
 ---
 `options`
