@@ -1,5 +1,12 @@
 import { merge, cloneDeep, debounce } from "lodash"
-import { useEffect, useState, useCallback, useMemo, useRef } from "react"
+import {
+  useEffect,
+  useState,
+  useCallback,
+  useMemo,
+  useRef,
+  RefObject,
+} from "react"
 import { generateFxHash, generateTzAddress } from "utils/hash"
 import { RawTokenFeatures } from "types/Metadata"
 import { ArtworkIframeRef } from "components/Artwork/PreviewIframe"
@@ -158,6 +165,9 @@ export const useRuntimeController: TUseRuntimeController = (
     },
   })
 
+  // the iframe handler
+  const handler = useMemo(() => iframeHandler(ref), [ref])
+
   // add a listener for receiving infos from the iframe
   useEffect(() => {
     const listener = (e: any) => {
@@ -275,25 +285,13 @@ export const useRuntimeController: TUseRuntimeController = (
 
   // derive active URL that should be loaded in the iframe
   const url = useMemo(() => {
-    return ipfsUrlWithHashAndParams(
-      project.cid,
-      runtime.state.hash,
-      runtime.state.minter,
-      runtime.details.params.inputBytes || project.inputBytes
-    )
+    return handler.getUrl({
+      cid: project.cid,
+      hash: runtime.state.hash,
+      minter: runtime.state.minter,
+      inputBytes: runtime.details.params.inputBytes || project.inputBytes,
+    })
   }, [project.cid, runtime.details.stateHash.hard])
-
-  // stores the last url set for the iframe
-  const lastUrl = useRef("")
-
-  // every time the URL changes, refresh the iframe
-  useEffect(() => {
-    const iframe = ref.current?.getHtmlIframe()
-    if (iframe && lastUrl.current !== url) {
-      iframe.contentWindow?.location.replace(url)
-      lastUrl.current = url
-    }
-  }, [url])
 
   const controlDetails = useMemo<IControlDetails>(
     () => ({
@@ -323,13 +321,16 @@ export const useRuntimeController: TUseRuntimeController = (
   )
 
   const controlsUrl = useMemo(() => {
-    return ipfsUrlWithHashAndParams(
-      project.cid,
-      runtime.state.hash,
-      runtime.state.minter,
-      controlDetails.params.inputBytes || project.inputBytes
-    )
+    return handler.getUrl({
+      cid: project.cid,
+      hash: runtime.state.hash,
+      minter: runtime.state.minter,
+      inputBytes: controlDetails.params.inputBytes || project.inputBytes,
+    })
   }, [project.cid, runtime.details.stateHash.soft, controls.params])
+
+  // every time the URL changes, refresh the iframe
+  handler.sync(url, controlsUrl)
 
   const refresh = useCallback(() => {
     ref.current?.getHtmlIframe()?.contentWindow?.location.replace(controlsUrl)
@@ -359,6 +360,36 @@ export const useRuntimeController: TUseRuntimeController = (
       controlsUrl,
       runtimeSynced:
         runtime.details.stateHash.hard === controlDetails.stateHash.hard,
+    },
+  }
+}
+
+type TRuntimeContextConnector = (ref: RefObject<ArtworkIframeRef | null>) => {
+  getUrl: (state: IProjectState) => string
+  sync: (runtimeUrl: string, controlsUrl: string) => void
+}
+
+const iframeHandler: TRuntimeContextConnector = (iframeRef) => {
+  let lastUrl = ""
+
+  return {
+    getUrl(state: IProjectState) {
+      return ipfsUrlWithHashAndParams(
+        state.cid,
+        state.hash || "",
+        state.minter || "",
+        state.inputBytes
+      )
+    },
+    sync(runtimeUrl: string, controlsUrl: string) {
+      // every time the runtime URL changes, refresh the iframe
+      useEffect(() => {
+        const iframe = iframeRef.current?.getHtmlIframe()
+        if (iframe && lastUrl !== runtimeUrl) {
+          iframe.contentWindow?.location.replace(runtimeUrl)
+          lastUrl = runtimeUrl
+        }
+      }, [runtimeUrl])
     },
   }
 }
