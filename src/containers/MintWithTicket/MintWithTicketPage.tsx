@@ -272,9 +272,9 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
   }
 
   const handlePreviewConfiguration = (config: ParamConfiguration) => {
-    if (!runtime.definition.params) return
+    if (!runtime.definition.params || !config.inputBytes) return
     const data = deserializeParams(
-      runtime.details.params.inputBytes || "",
+      config.inputBytes || "",
       runtime.definition.params,
       {
         withTransform: true,
@@ -303,13 +303,15 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
     })
     historyContext.registerAction("config-update", (value: any) => {
       runtime.state.update({ hash: value.hash })
-      controls.updateParams(value)
+      controls.updateParams(value.data)
     })
   }, [
     panelParamsRef,
     runtime.definition.params,
     historyContext,
     withAutoUpdate,
+    controls,
+    runtime.state,
   ])
 
   // on this view we want the html element bg to be black
