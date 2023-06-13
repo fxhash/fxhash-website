@@ -373,9 +373,6 @@ export const StepExtraSettings: StepComponent = ({ state, onNext }) => {
             autoGenerate={false}
             value={iteration}
             onIterationUpdate={setIteration}
-            onRetry={() => {
-              iframeRef.current?.reloadIframe()
-            }}
           />
           {usesParams && (
             <>
