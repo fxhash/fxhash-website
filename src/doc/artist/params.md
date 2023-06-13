@@ -40,7 +40,7 @@ $fx.getParam("number_id")
 
 # fx(params) update modes
 
-For each individual parameter that you specify, you can also set a specific update mode for. The default update mode is `"page-reload"` and describes the known behaviour of updating the artwork by performing a full page-load on the artwork. By setting the update mode to `"sync"` the parameter will be updated through the controllers without performaing a full page-load on the artwork.
+For each individual parameter that you specify, you can also set a specific update mode for. The default update mode is `"page-reload"` and describes the known behaviour of updating the artwork by performing a full page-load on the artwork. By setting the update mode to `"sync"` the parameter will be updated through the controllers without performing a full page-load on the artwork.
 
 ```js
 {
