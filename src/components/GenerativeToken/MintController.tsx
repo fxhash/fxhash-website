@@ -159,7 +159,7 @@ export function MintController({
     ) {
       const opHash = await postFree("/request-mint", {
         projectId: token.id,
-        eventId: "autonomy-test",
+        eventId: event?.id,
         token: mintPass?.token || authToken,
         recipient: user.id,
         createTicket: token.inputBytesSize > 0,
