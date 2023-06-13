@@ -89,7 +89,7 @@ export function useReceiveTokenInfos(
   const [info, setInfo] = useState<TokenInfo>({
     version: null,
     hash: options?.initialHash || generateFxHash(),
-    iteration: options?.initialIteration || 0,
+    iteration: options?.initialIteration || 1,
     minter: options?.initialMinter || generateTzAddress(),
     features: null,
     params: null,

@@ -89,7 +89,7 @@ export const StepExtraSettings: StepComponent = ({ state, onNext }) => {
     state.previewHash || generateFxHash()
   )
   const [iteration, setIteration] = useState<number>(
-    state.previewIteration || 0
+    state.previewIteration || 1
   )
   // current hash
   const [data, setData] = useState<Record<string, any> | null>(null)
