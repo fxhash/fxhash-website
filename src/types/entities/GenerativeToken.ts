@@ -35,6 +35,7 @@ export enum GenTokLabel {
   PFP = 103,
   AUDIO = 104,
   INCLUDE_PRERENDERED_COMPONENTS = 105,
+  CUSTOM_MINTING_INTERFACE = 106,
 }
 
 export enum GenTokLabelGroup {
