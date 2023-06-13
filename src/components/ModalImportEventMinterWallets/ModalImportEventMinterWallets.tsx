@@ -38,7 +38,7 @@ export function ModalImportEventMinterWallets({
         query: Qu_eventsLiveMintingWallets,
         variables: {
           where: {
-            liveMinting: {
+            freeLiveMinting: {
               equals: true,
             },
           },
