@@ -7,35 +7,35 @@ import { Field } from "../Form/Field"
 
 interface Props {
   onIterationUpdate: (iteration: number) => void
-  onRetry: () => void
   value: number | null
   autoGenerate?: boolean
 }
 
 export function IterationTest({
   onIterationUpdate,
-  onRetry,
   value,
   autoGenerate = true,
 }: Props) {
   const [error, setError] = useState<string>()
   const iterationInputRef = useRef<HTMLInputElement>(null)
-  const [maxIteration, setMaxIteration] = useState<number>(100)
 
-  const generateFxIteration = () => Math.floor(Math.random() * maxIteration)
-  const isIterationValid = (iteration: number) =>
-    iteration >= 0 && iteration <= maxIteration
+  const isIterationValid = (iteration: number) => iteration >= 1
 
   // when it mounts, generates a iteration and send it upwards
   useEffect(() => {
     if (autoGenerate) {
-      onIterationUpdate(generateFxIteration())
+      onIterationUpdate(1)
     }
   }, [autoGenerate, onIterationUpdate])
 
-  const newIteration = () => {
+  const increment = () => {
     setError(undefined)
-    onIterationUpdate(generateFxIteration())
+    onIterationUpdate((value || 1) + 1)
+  }
+
+  const decrement = () => {
+    setError(undefined)
+    onIterationUpdate(Math.max((value || 1) - 1, 1))
   }
 
   const manualIterationUpdate = (iteration: number) => {
@@ -51,10 +51,19 @@ export function IterationTest({
     <div className={cs(style.container)}>
       <Field error={error}>
         <small>Current iteration</small>
-        <div className={cs(style.iterationInputContainer)}>
+        <div className={style.iterationInputContainer}>
+          <Button
+            size="small"
+            color="primary"
+            onClick={increment}
+            type="button"
+          >
+            +
+          </Button>
           <InputText
             className={cs(style.iterationInput)}
             ref={iterationInputRef}
+            type="number"
             value={value || 0}
             onChange={(evt) =>
               manualIterationUpdate(parseInt(evt.target.value))
@@ -66,29 +75,16 @@ export function IterationTest({
               iterationInputRef.current && iterationInputRef.current.select()
             }
           />
-          max:
-          <InputText
-            className={cs(style.maxIterationInput)}
-            type="number"
-            value={maxIteration}
-            onChange={(evt) => setMaxIteration(parseInt(evt.target.value))}
-          />
+          <Button
+            size="small"
+            color="primary"
+            onClick={decrement}
+            type="button"
+          >
+            -
+          </Button>
         </div>
       </Field>
-
-      <div className={cs(style.buttons)}>
-        <Button
-          size="small"
-          color="primary"
-          onClick={newIteration}
-          type="button"
-        >
-          new iteration
-        </Button>
-        <Button size="small" onClick={onRetry} type="button">
-          retry with same iteration
-        </Button>
-      </div>
     </div>
   )
 }

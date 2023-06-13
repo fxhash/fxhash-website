@@ -35,7 +35,7 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
     state?.previewMinter ?? generateTzAddress()
   )
   const [iteration, setIteration] = useState<number>(
-    state.previewIteration ?? 0
+    state.previewIteration ?? 1
   )
   const [check1, setCheck1] = useState<boolean>(false)
   const [check2, setCheck2] = useState<boolean>(false)
@@ -170,9 +170,6 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
             autoGenerate={false}
             value={iteration}
             onIterationUpdate={setIteration}
-            onRetry={() => {
-              artworkIframeRef.current?.reloadIframe()
-            }}
           />
           <Spacing size="large" sm="x-large" />
 
