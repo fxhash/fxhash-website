@@ -219,11 +219,6 @@ export const useRuntimeController: TUseRuntimeController = (
     ref.current.getHtmlIframe()?.contentWindow?.postMessage({ id, data }, "*")
   }
 
-  const softUpdateParams = (params: FxParamsData) => {
-    runtime.state.update({ params })
-    dispatchEvent("fxhash_params:update", { params })
-  }
-
   // state update debounce - uses a ref to ensure debounce is proper
   const stateUpdateRef = useRef(runtime.state.update)
   stateUpdateRef.current = runtime.state.update
@@ -231,6 +226,11 @@ export const useRuntimeController: TUseRuntimeController = (
     debounce((params) => stateUpdateRef.current?.(params), 200),
     []
   )
+
+  const softUpdateParams = (params: FxParamsData) => {
+    updtParamsDeb({ params })
+    dispatchEvent("fxhash_params:update", { params })
+  }
 
   // generic update, used to manipulated the control state, eventually soft
   // refresh the "sync" parameters
