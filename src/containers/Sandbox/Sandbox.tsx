@@ -49,7 +49,7 @@ export function Sandbox() {
             state.inputBytes
           )
         },
-        sync(runtimeUrl: string, controlsUrl: string) {
+        useSync(runtimeUrl: string, controlsUrl: string) {
           // every time the runtime URL changes, refresh the iframe
           useEffect(() => {
             if (sandboxId === "0") return

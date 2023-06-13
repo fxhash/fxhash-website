@@ -131,7 +131,7 @@ export type TRuntimeContextConnector = (
   ref: RefObject<ArtworkIframeRef | null>
 ) => {
   getUrl: (state: IProjectState) => string
-  sync: (runtimeUrl: string, controlsUrl: string) => void
+  useSync: (runtimeUrl: string, controlsUrl: string) => void
 }
 
 const iframeHandler: TRuntimeContextConnector = (iframeRef) => {
@@ -146,7 +146,7 @@ const iframeHandler: TRuntimeContextConnector = (iframeRef) => {
         state.inputBytes
       )
     },
-    sync(runtimeUrl: string, controlsUrl: string) {
+    useSync(runtimeUrl: string, controlsUrl: string) {
       // every time the runtime URL changes, refresh the iframe
       useEffect(() => {
         const iframe = iframeRef.current?.getHtmlIframe()
@@ -368,7 +368,7 @@ export const useRuntimeController: TUseRuntimeController = (
   }, [project.cid, runtime.details.stateHash.soft, controls.params])
 
   // every time the URL changes, refresh the iframe
-  connector.sync(url, controlsUrl)
+  connector.useSync(url, controlsUrl)
 
   const refresh = useCallback(() => {
     ref.current?.getHtmlIframe()?.contentWindow?.location.replace(controlsUrl)
