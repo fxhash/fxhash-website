@@ -127,18 +127,52 @@ interface IProjectState {
   inputBytes?: string
 }
 
+export type TRuntimeContextConnector = (
+  ref: RefObject<ArtworkIframeRef | null>
+) => {
+  getUrl: (state: IProjectState) => string
+  sync: (runtimeUrl: string, controlsUrl: string) => void
+}
+
+const iframeHandler: TRuntimeContextConnector = (iframeRef) => {
+  let lastUrl = ""
+
+  return {
+    getUrl(state: IProjectState) {
+      return ipfsUrlWithHashAndParams(
+        state.cid,
+        state.hash || "",
+        state.minter || "",
+        state.inputBytes
+      )
+    },
+    sync(runtimeUrl: string, controlsUrl: string) {
+      // every time the runtime URL changes, refresh the iframe
+      useEffect(() => {
+        const iframe = iframeRef.current?.getHtmlIframe()
+        if (iframe && lastUrl !== runtimeUrl) {
+          iframe.contentWindow?.location.replace(runtimeUrl)
+          lastUrl = runtimeUrl
+        }
+      }, [runtimeUrl])
+    },
+  }
+}
+
 interface IRuntimeOptions {
   autoRefresh: boolean
+  contextConnector: TRuntimeContextConnector
 }
 
 const defaultRuntimeOptions: IRuntimeOptions = {
   autoRefresh: false,
+  contextConnector: iframeHandler,
 }
 
 type TUseRuntimeController = (
   ref: React.RefObject<ArtworkIframeRef | null>,
   project: IProjectState,
-  options?: DeepPartial<IRuntimeOptions>
+  options?: Partial<IRuntimeOptions>
 ) => IRuntimeControllerOutput
 
 export const useRuntimeController: TUseRuntimeController = (
@@ -165,8 +199,12 @@ export const useRuntimeController: TUseRuntimeController = (
     },
   })
 
-  // the iframe handler
-  const handler = useMemo(() => iframeHandler(ref), [ref])
+  // a connector is usedd to interact with the iframe - can be usefull for edge
+  // cases such as with the sandbox
+  const connector = useMemo(
+    () => options.contextConnector(ref),
+    [options.contextConnector, ref]
+  )
 
   // add a listener for receiving infos from the iframe
   useEffect(() => {
@@ -285,7 +323,7 @@ export const useRuntimeController: TUseRuntimeController = (
 
   // derive active URL that should be loaded in the iframe
   const url = useMemo(() => {
-    return handler.getUrl({
+    return connector.getUrl({
       cid: project.cid,
       hash: runtime.state.hash,
       minter: runtime.state.minter,
@@ -321,7 +359,7 @@ export const useRuntimeController: TUseRuntimeController = (
   )
 
   const controlsUrl = useMemo(() => {
-    return handler.getUrl({
+    return connector.getUrl({
       cid: project.cid,
       hash: runtime.state.hash,
       minter: runtime.state.minter,
@@ -330,7 +368,7 @@ export const useRuntimeController: TUseRuntimeController = (
   }, [project.cid, runtime.details.stateHash.soft, controls.params])
 
   // every time the URL changes, refresh the iframe
-  handler.sync(url, controlsUrl)
+  connector.sync(url, controlsUrl)
 
   const refresh = useCallback(() => {
     ref.current?.getHtmlIframe()?.contentWindow?.location.replace(controlsUrl)
@@ -360,36 +398,6 @@ export const useRuntimeController: TUseRuntimeController = (
       controlsUrl,
       runtimeSynced:
         runtime.details.stateHash.hard === controlDetails.stateHash.hard,
-    },
-  }
-}
-
-type TRuntimeContextConnector = (ref: RefObject<ArtworkIframeRef | null>) => {
-  getUrl: (state: IProjectState) => string
-  sync: (runtimeUrl: string, controlsUrl: string) => void
-}
-
-const iframeHandler: TRuntimeContextConnector = (iframeRef) => {
-  let lastUrl = ""
-
-  return {
-    getUrl(state: IProjectState) {
-      return ipfsUrlWithHashAndParams(
-        state.cid,
-        state.hash || "",
-        state.minter || "",
-        state.inputBytes
-      )
-    },
-    sync(runtimeUrl: string, controlsUrl: string) {
-      // every time the runtime URL changes, refresh the iframe
-      useEffect(() => {
-        const iframe = iframeRef.current?.getHtmlIframe()
-        if (iframe && lastUrl !== runtimeUrl) {
-          iframe.contentWindow?.location.replace(runtimeUrl)
-          lastUrl = runtimeUrl
-        }
-      }, [runtimeUrl])
     },
   }
 }
