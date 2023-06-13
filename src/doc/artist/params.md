@@ -53,7 +53,7 @@ For each individual parameter that you specify, you can also set a specific upda
 
 All updates on prameters with `update: "sync"` are received in the background in real-time. If your artwork is already running in some kind of draw loop (e.g. via `requestAnimationFrame`), you will receive those changes during the runtime of your loop.
 
-For more even more advanced usecases, e.g. if you want to only re-render you artwork when the values of your parameters are changing, you can use the new event listeners described in the section [`$fx.on`](/doc/artist/snippet-api#fxoneventid-handler-ondone) on the snippet api page. 
+For even more advanced use cases, e.g. if you want to only re-render your artwork when the values of your parameters are changing, you can use the new event listeners described in the section [`$fx.on`](/doc/artist/snippet-api#fxoneventid-handler-ondone) on the snippet api page. 
 
 # Dev environment for fx(params)
 
