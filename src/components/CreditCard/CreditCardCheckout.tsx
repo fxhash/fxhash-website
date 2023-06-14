@@ -13,6 +13,7 @@ interface MintParams {
   create_ticket: string | null
   input_bytes: string
   referrer: string | null
+  recipient?: string
 }
 
 export interface CreditCardCheckoutHandle {
@@ -110,19 +111,10 @@ export const CreditCardCheckout = forwardRef<
         }}
         appearance={winterCheckoutAppearance}
         additionalPurchaseParams={{
+          mintPass: mintPassCC,
+          reserve_input: reserveInputCC,
           ...mintParams,
-          ...(reserveInputCC && {
-            reserve_input: reserveInputCC,
-            recipient: userId,
-          }),
         }}
-        extraMintParams={
-          mintPassCC
-            ? {
-                mintPass: mintPassCC,
-              }
-            : undefined
-        }
       />
     )
   }

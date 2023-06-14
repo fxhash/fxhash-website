@@ -110,7 +110,7 @@ export function MintButton({
               onClick={openCreditCard}
               disabled={disabled}
               label={
-                isLiveMinting
+                paidLiveMinting
                   ? `Buy ${token.inputBytesSize ? "ticket" : "iteration"}`
                   : null
               }
