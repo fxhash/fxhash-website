@@ -19,6 +19,7 @@ interface PanelRootProps
   panelParamsRef?: RefObject<PanelParamsRef>
   onClickHide: () => void
   show: boolean
+  inputBytes: string | null
 }
 
 export function PanelRoot(props: PanelRootProps) {
@@ -26,6 +27,7 @@ export function PanelRoot(props: PanelRootProps) {
     show,
     data,
     params,
+    inputBytes,
     hash,
     token,
     features,
@@ -114,6 +116,7 @@ export function PanelRoot(props: PanelRootProps) {
       <PanelControls
         mode={mode}
         token={token}
+        inputBytes={inputBytes}
         onSubmit={onSubmit}
         onOpenNewTab={onOpenNewTab}
         onClickBack={onClickBack}

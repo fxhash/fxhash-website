@@ -164,6 +164,13 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
   }
 
   const handleClickBack = () => {
+    if (mode === "live-minting") {
+      const { id: eventId, token: mintPassToken } = router.query
+      router.push(
+        `/live-minting/${eventId}/generative/${token.id}?token=${mintPassToken}`
+      )
+      return
+    }
     router.push("/generative/[...params]", `/generative/slug/${token.slug}`)
   }
 
@@ -334,6 +341,7 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
               show={show}
               data={controls.state.params.values}
               params={controls.state.params.definition}
+              inputBytes={runtime.details.params.inputBytes}
               features={runtime.definition.features}
               hash={runtime.state.hash}
               token={token}

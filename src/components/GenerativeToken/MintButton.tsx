@@ -106,7 +106,15 @@ export function MintButton({
           !freeLiveMinting &&
           !loading &&
           (!onlyReserveLeft || onMintShouldUseReserve) && (
-            <ButtonPaymentCard onClick={openCreditCard} disabled={disabled} />
+            <ButtonPaymentCard
+              onClick={openCreditCard}
+              disabled={disabled}
+              label={
+                paidLiveMinting
+                  ? `Buy ${token.inputBytesSize ? "ticket" : "iteration"}`
+                  : null
+              }
+            />
           )}
       </div>
 
