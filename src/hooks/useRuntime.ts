@@ -114,15 +114,15 @@ export function useRuntime(initial?: Parameters): IRuntimeContext {
   const { state, definition } = whole
 
   const updateState: TUpdateStateFn<RuntimeState> = (state) => {
-    setWhole(merge(cloneDeep(whole), { state }))
+    setWhole((existingState) => merge(cloneDeep(existingState), { state }))
   }
 
   const updateDefinition: TUpdateStateFn<RuntimeDefinition> = (definition) => {
-    setWhole(merge(cloneDeep(whole), { definition }))
+    setWhole((existingState) => merge(cloneDeep(existingState), { definition }))
   }
 
   const update: TUpdateStateFn<RuntimeWholeState> = (data) => {
-    setWhole(merge(cloneDeep(whole), data))
+    setWhole((existingState) => merge(cloneDeep(existingState), data))
   }
 
   // enhance each param definition with the version (useful for serialization)

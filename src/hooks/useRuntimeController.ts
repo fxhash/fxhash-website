@@ -29,6 +29,7 @@ import {
 } from "components/FxParams/utils"
 import { ipfsUrlWithHashAndParams } from "utils/ipfs"
 import { DeepPartial } from "types/DeepPartial"
+import { useRouter } from "next/router"
 
 /**
  * The Runtime Controller provides a low-level API to interact with an iframe
@@ -180,6 +181,9 @@ export const useRuntimeController: TUseRuntimeController = (
   project,
   opts
 ) => {
+  const router = useRouter()
+  const { query } = router
+
   // options
   const options = { ...defaultRuntimeOptions, ...opts }
 
@@ -261,6 +265,26 @@ export const useRuntimeController: TUseRuntimeController = (
       },
     })
   }, [runtime.details.definitionHash.params])
+
+  const updateQueryParams = (query: { fxhash: string; fxparams: string }) =>
+    router.replace(
+      {
+        query: {
+          ...router.query,
+          ...query,
+        },
+      },
+      undefined,
+      { shallow: true }
+    )
+
+  // whenever the runtime state changes, update the query params
+  useEffect(() => {
+    updateQueryParams({
+      fxhash: runtime.state.hash,
+      fxparams: runtime.details.params.inputBytes || "",
+    })
+  }, [runtime.state.hash, runtime.details.params.inputBytes])
 
   const dispatchEvent = (id: string, data: any) => {
     if (!ref.current) return

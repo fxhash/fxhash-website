@@ -9,6 +9,7 @@ import { getUserName } from "utils/user"
 import { PanelControls, PanelControlsProps } from "./PanelControls"
 import { Spacing } from "components/Layout/Spacing"
 import Link from "next/link"
+import { PanelMintingInstructions } from "./PanelMintingInstructions"
 
 interface PanelRootProps
   extends PanelParamsProps,
@@ -80,6 +81,11 @@ export function PanelRoot(props: PanelRootProps) {
             onChangeHash={onChangeHash}
             disableWarningAnimation={disableWarningAnimation}
           />
+          {token.metadata.mintingInstructions && (
+            <PanelMintingInstructions
+              instructions={token.metadata.mintingInstructions}
+            />
+          )}
           <PanelParams
             ref={panelParamsRef}
             data={data}
