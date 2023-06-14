@@ -1,0 +1,6 @@
+@import "../../styles/Variables";
+@media (max-width: $breakpoint-sm) {
+  .tabs {
+    margin: 0 20px;
+  }
+}
