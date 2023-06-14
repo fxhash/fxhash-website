@@ -1,37 +1,54 @@
-import { useState, useImperativeHandle, forwardRef } from "react"
+import { useState, useImperativeHandle, forwardRef, useEffect } from "react"
 import { Button } from "components/Button"
 import { Controls } from "components/FxParams/Controls"
-import { getRandomParamValues } from "components/FxParams/utils"
+import {
+  buildParamsObject,
+  consolidateParams,
+  getRandomParamValues,
+  jsonStringifyBigint,
+} from "components/FxParams/utils"
 import classes from "./ControlsTest.module.scss"
+import { FxParamDefinitions, FxParamsData } from "components/FxParams/types"
 
 interface ControlsTestProps {
-  params: any
-  onSubmit: (data: Record<string, any>) => void
+  definition: FxParamDefinitions | null
+  params: FxParamsData | null
+  updateParams: (params: Partial<FxParamsData>) => void
+  onSubmit: (data: FxParamsData) => void
 }
 
 export interface ControlsTestRef {
-  setData: (data: Record<string, any>) => void
+  setData: (data: FxParamsData) => void
 }
 
 export const ControlsTest = forwardRef<ControlsTestRef, ControlsTestProps>(
   (props, ref) => {
-    const { params, onSubmit } = props
-    const [data, setData] = useState<Record<string, any>>({})
+    const { params, definition, updateParams, onSubmit } = props
+
     const handleSubmitParams = () => {
-      onSubmit(data)
+      params && onSubmit(params)
     }
+
     const handleRandomizeParams = () => {
-      const randomValues = getRandomParamValues(params)
-      setData({ ...data, ...randomValues })
+      if (definition) {
+        const randomValues = getRandomParamValues(definition)
+        updateParams(randomValues)
+      }
     }
 
     useImperativeHandle(ref, () => ({
-      setData,
+      setData: updateParams,
     }))
 
     return (
       <div className={classes.container}>
-        <Controls params={params} onChangeData={setData} data={data} />
+        {definition && params && (
+          <Controls
+            definition={definition}
+            onChangeData={updateParams}
+            data={params}
+          />
+        )}
         <div className={classes.buttons}>
           <Button
             size="small"

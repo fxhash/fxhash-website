@@ -9,6 +9,7 @@ import { getUserName } from "utils/user"
 import { PanelControls, PanelControlsProps } from "./PanelControls"
 import { Spacing } from "components/Layout/Spacing"
 import Link from "next/link"
+import { PanelMintingInstructions } from "./PanelMintingInstructions"
 
 interface PanelRootProps
   extends PanelParamsProps,
@@ -68,20 +69,25 @@ export function PanelRoot(props: PanelRootProps) {
           description={`by ${name}`}
           onClickHide={onClickHide}
         />
-        <Spacing size="small" />
+        <Spacing size="x-small" />
         <Link href="/doc/collect/fxparams-mint-tickets">
           <a className={style.learn}>
             <i aria-hidden="true" className="fas fa-book" />
             How to use fx(params)
           </a>
         </Link>
-        <Spacing size="regular" />
+        <Spacing size="large" />
         <div className={cs(style.body)}>
           <PanelHash
             hash={hash}
             onChangeHash={onChangeHash}
             disableWarningAnimation={disableWarningAnimation}
           />
+          {token.metadata.mintingInstructions && (
+            <PanelMintingInstructions
+              instructions={token.metadata.mintingInstructions}
+            />
+          )}
           <PanelParams
             ref={panelParamsRef}
             data={data}

@@ -6,7 +6,7 @@ import { SquareContainer } from "../Layout/SquareContainer"
 import { ArtworkFrame } from "../Artwork/ArtworkFrame"
 import { ArtworkIframe, ArtworkIframeRef } from "../Artwork/PreviewIframe"
 import { Spacing } from "../Layout/Spacing"
-import { ButtonVariations } from "../Button/ButtonVariations"
+import { ButtonVariations, Variant } from "../Button/ButtonVariations"
 import { Button } from "../Button"
 import Link from "next/link"
 import { useContext, useEffect, useMemo, useRef, useState } from "react"
@@ -50,16 +50,23 @@ export function GenerativeArtwork({
   const artworkIframeRef = useRef<ArtworkIframeRef>(null)
 
   const { params, onIframeLoaded } = useReceiveTokenInfos(artworkIframeRef)
-  // used to preview the token in the iframe with different hashes
-  const [previewHash, setPreviewHash] = useState<string | null>(
-    token.metadata.previewHash || null
+
+  const previewVariant = useMemo<Variant>(
+    () => [
+      token.metadata.previewHash || null,
+      token.metadata.previewInputBytes || null,
+    ],
+    [token]
   )
+
+  const [variant, setVariant] = useState<Variant>(previewVariant)
+
+  const [previewHash, previewInputBytes] = variant
+
   const [previewMinter, setPreviewMinter] = useState<string | null>(
     token.metadata.previewMinter || null
   )
-  const [previewInputBytes, setPreviewInputBytes] = useState<string | null>(
-    token.metadata.previewInputBytes || null
-  )
+
   // forcing image display as a state
   const [displayImage, setDisplayImage] = useState(
     settings.quality === 0 || forceImageDisplay
@@ -68,7 +75,7 @@ export function GenerativeArtwork({
   // update the state of display image if we record a change in settings
   useEffect(() => {
     setDisplayImage(settings.quality === 0 || forceImageDisplay)
-  }, [settings.quality])
+  }, [settings.quality, forceImageDisplay])
 
   const reload = () => {
     if (artworkIframeRef.current) {
@@ -95,7 +102,14 @@ export function GenerativeArtwork({
       }
       return url
     }
-  }, [previewHash, previewInputBytes, artworkArtifactUrl])
+  }, [
+    previewHash,
+    previewInputBytes,
+    artworkArtifactUrl,
+    token.metadata.artifactUri,
+    token.metadata.generativeUri,
+    previewMinter,
+  ])
 
   return (
     <>
@@ -132,12 +146,11 @@ export function GenerativeArtwork({
         {!hideVariations && (
           <ButtonVariations
             token={token}
-            previewHash={previewHash}
+            variant={variant}
             params={params}
-            onChangeHash={(hash, inputBytes) => {
+            onChangeVariant={(v) => {
               setDisplayImage(false)
-              setPreviewHash(hash)
-              if (inputBytes) setPreviewInputBytes(inputBytes)
+              setVariant(v)
             }}
           />
         )}
@@ -149,7 +162,7 @@ export function GenerativeArtwork({
             iconComp={<i aria-hidden className="fas fa-play" />}
             iconSide="right"
             onClick={() => {
-              setPreviewHash(token.metadata.previewHash || null)
+              setVariant(previewVariant)
               setDisplayImage(false)
             }}
           >
@@ -163,7 +176,10 @@ export function GenerativeArtwork({
               color="transparent"
               iconComp={<i aria-hidden className="fas fa-stop" />}
               iconSide="right"
-              onClick={() => setDisplayImage(true)}
+              onClick={() => {
+                setVariant(previewVariant)
+                setDisplayImage(true)
+              }}
             >
               stop
             </Button>

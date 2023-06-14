@@ -161,8 +161,10 @@ export function Sandbox() {
                 <h5>Params</h5>
                 <Spacing size="small" />
                 <ControlsTest
-                  params={params}
+                  params={data}
+                  definition={params}
                   onSubmit={handleSubmitParams}
+                  updateParams={setData}
                   ref={paramControlsRef}
                 />
               </div>

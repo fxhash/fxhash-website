@@ -37,6 +37,7 @@ import {
 import { transformReserveInputToGeneric } from "./transformers/reserves"
 import { isUserOrCollaborator } from "./user"
 import { ISettingsContext } from "../context/Theme"
+import { FxhashContracts } from "types/Contracts"
 
 export function getGenerativeTokenUrl(generative: GenerativeToken): string {
   return generative.slug
@@ -158,6 +159,7 @@ export function generativeFromMintParams(
     mintTickets: [],
     mintTicketSettings: null,
     inputBytesSize: 0,
+    gentkContractAddress: FxhashContracts.GENTK_V3,
   }
 }
 
@@ -198,6 +200,7 @@ export function generativeMetadataFromMintForm(
     description: data.informations!.description,
     childrenDescription:
       data.informations!.childrenDescription || data.informations!.description,
+    mintingInstructions: data.informations!.mintingInstructions,
     tags: tagsFromString(data.informations!.tags),
     artifactUri: ipfsUrlWithHashAndParams(
       data.cidUrlParams!,
@@ -310,6 +313,7 @@ export function generativeFromMintForm(
     mintTickets: [],
     mintTicketSettings: null,
     inputBytesSize: 0,
+    gentkContractAddress: FxhashContracts.GENTK_V3,
   }
 }
 
@@ -376,6 +380,11 @@ export const genTokLabelDefinitions: Record<
   105: {
     label: "Includes prerendered components",
     shortLabel: "Prerendered components",
+    group: GenTokLabelGroup.DETAILS,
+  },
+  106: {
+    label: "Custom minting interface",
+    shortLabel: "Custom UI",
     group: GenTokLabelGroup.DETAILS,
   },
 }
@@ -549,13 +558,31 @@ const mapReserveToEligiblity: Record<EReserveMethod, TReserveEligibility> = {
   WHITELIST: (reserve, user) => {
     return reserve.data[user.id] || 0
   },
-  MINT_PASS: (reserve, user, passCtx) => {
+  MINT_PASS: (reserve, _, passCtx) => {
     return reserve.data
       ? passCtx?.mintPass?.group?.address === reserve.data
         ? 1
         : 0
       : 0
   },
+}
+
+/**
+ * Given a token and the live minting context, checks whether the project is
+ * part of the event and whether the user has an auth token to mint. We won't
+ * know until the user tries to mint whether the token is valid.
+ */
+export const checkIsEligibleForMintWithAutoToken = (
+  token: GenerativeToken,
+  liveMintingContext?: ILiveMintingContext
+) => {
+  if (!liveMintingContext || !liveMintingContext.event) return false
+
+  const isProjectIncludedInEvent =
+    liveMintingContext.event.projectIds?.includes(token.id)
+  const isEligibleToMint = !!liveMintingContext.authToken
+
+  return isProjectIncludedInEvent && isEligibleToMint
 }
 
 /**
@@ -568,10 +595,12 @@ export function reserveEligibleAmount(
   eligibleReserves?: EReserveMethod[]
 ): number {
   let eligibleFor = 0
+
+  if (checkIsEligibleForMintWithAutoToken(token, liveMintingContext)) return 1
+
   const reserves = eligibleReserves
     ? token.reserves.filter((res) => eligibleReserves.includes(res.method))
     : token.reserves
-  console.log({ reserves })
   if (reserves && user && user.id) {
     for (const reserve of reserves) {
       if (reserve.amount > 0 && reserve.method) {
@@ -634,6 +663,7 @@ export function getReserveConsumptionMethod(
           consumption = {
             method: reserve.method,
             data: {
+              event: liveMintingContext.event?.id,
               token: liveMintingContext.mintPass?.token,
               address: user.id,
               project: token.id,

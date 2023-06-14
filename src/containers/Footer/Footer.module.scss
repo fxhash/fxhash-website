@@ -31,11 +31,23 @@
   }
 }
 .connect {
-  padding-left: 24px;
   margin-top: 14px;
   color: var(--color-gray);
   a {
     color: var(--color-gray);
+  }
+}
+.partner {
+  color: var(--color-gray);
+  margin-top: 4px;
+  a {
+    transition: all 0.2s ease-out;
+    color: var(--color-gray);
+    text-decoration: none;
+    &:hover {
+      color: var(--color-secondary);
+    }
+
   }
 }
 

@@ -1,13 +1,4 @@
-import {
-  useState,
-  useEffect,
-  useRef,
-  LegacyRef,
-  MutableRefObject,
-  RefObject,
-  ChangeEvent,
-  useMemo,
-} from "react"
+import { useState, useEffect, useRef, ChangeEvent, useMemo } from "react"
 import { hexToRgba, rgbaToHex } from "../utils"
 import {
   FxParamControllerProps,
@@ -45,6 +36,12 @@ export function ColorController(props: FxParamControllerProps<"color">) {
   }
   const color = useMemo(() => hexToRgba(value), [value])
 
+  // value to which "#" is added just in case missing, ensuring compatibility
+  const colorHex = useMemo(
+    () => (value.includes("#") ? value : `#${value}`),
+    [value]
+  )
+
   return (
     <Controller
       id={id}
@@ -60,10 +57,10 @@ export function ColorController(props: FxParamControllerProps<"color">) {
         <div
           className={cx(classes.square, classes.leftTop)}
           style={{
-            background: `linear-gradient(-45deg, ${value} 0%, ${value} 50%, ${value.slice(
+            background: `linear-gradient(-45deg, ${colorHex} 0%, ${colorHex} 50%, ${colorHex.slice(
               0,
               7
-            )} 50%, ${value.slice(0, 7)} 100%)`,
+            )} 50%, ${colorHex.slice(0, 7)} 100%)`,
           }}
         />
       </BaseButton>
@@ -71,7 +68,7 @@ export function ColorController(props: FxParamControllerProps<"color">) {
         type="text"
         id={`text-${id}`}
         onChange={handleInputChange}
-        value={value}
+        value={colorHex}
         autoComplete="off"
         maxLength={9}
         minLength={2}

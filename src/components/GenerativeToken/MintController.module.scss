@@ -25,6 +25,13 @@
   align-self: flex-start;
 }
 
+.error {
+  font-weight: bold;
+  color: var(--color-error);
+  font-size: var(--font-size-small);
+  margin-bottom: 12px;
+}
+
 .infos {
   color: var(--color-gray);
   font-size: var(--font-size-small);

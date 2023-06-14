@@ -85,25 +85,27 @@ const LiveMintingRevealPage: NextPageWithLayout<Props> = ({ hash, token }) => {
             params={fxparams as string}
           />
 
-          <Submit layout="center">
-            <Link
-              href={`/live-minting/${eventCtx.event!.id}?token=${
-                eventCtx.mintPass?.token
-              }`}
-              passHref
-            >
-              <Button
-                isLink
-                color="secondary"
-                iconComp={<i aria-hidden className="fas fa-arrow-left" />}
-                iconSide="left"
-                size="regular"
-                style={{ justifySelf: "center" }}
+          {eventCtx.mintPass && (
+            <Submit layout="center">
+              <Link
+                href={`/live-minting/${eventCtx.event!.id}?token=${
+                  eventCtx.mintPass?.token
+                }`}
+                passHref
               >
-                mint other project
-              </Button>
-            </Link>
-          </Submit>
+                <Button
+                  isLink
+                  color="secondary"
+                  iconComp={<i aria-hidden className="fas fa-arrow-left" />}
+                  iconSide="left"
+                  size="regular"
+                  style={{ justifySelf: "center" }}
+                >
+                  mint other project
+                </Button>
+              </Link>
+            </Submit>
+          )}
 
           <Submit layout="center">
             <Link

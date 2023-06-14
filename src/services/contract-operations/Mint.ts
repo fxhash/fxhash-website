@@ -10,8 +10,10 @@ import {
 import { FxhashContracts } from "../../types/Contracts"
 import { GenerativeToken } from "../../types/entities/GenerativeToken"
 import { EReserveMethod } from "../../types/entities/Reserve"
-import { packMintReserveInput } from "../../utils/pack/reserves"
-import { apiEventsSignPayload } from "../apis/events.service"
+import {
+  packMintReserveInput,
+  prepareReserveConsumption,
+} from "../../utils/pack/reserves"
 import {
   buildParameters,
   EBuildableParams,
@@ -54,16 +56,11 @@ export class MintOperation extends ContractOperation<TMintOperationParams> {
         }
         case EReserveMethod.MINT_PASS: {
           // first we need to ask the backend to sign the payload
-          const response = await apiEventsSignPayload(consume.data)
-          this.reserveInput = packMintReserveInput({
-            method: EReserveMethod.MINT_PASS,
-            data: {
-              payload: response.payloadPacked,
-              signature: response.signature,
-            },
-          })
-          this.payloadPacked = response.payloadPacked
-          this.payloadSignature = response.signature
+          const { reserveInput, payloadPacked, payloadSignature } =
+            await prepareReserveConsumption(this.params.consumeReserve)
+          this.reserveInput = reserveInput
+          this.payloadPacked = payloadPacked
+          this.payloadSignature = payloadSignature
           break
         }
       }

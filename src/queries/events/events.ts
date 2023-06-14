@@ -11,6 +11,7 @@ export const Qu_event = gql`
       startsAt
       endsAt
       projectIds
+      freeLiveMinting
     }
   }
 `
@@ -65,6 +66,19 @@ export const Qu_eventMintPassGroup = gql`
       event {
         id
         name
+      }
+    }
+  }
+`
+
+export const Qu_eventsLiveMintingWallets = gql`
+  query EventLiveMintingWallets($where: EventWhereInput!) {
+    events(where: $where) {
+      id
+      name
+      description
+      liveMintingWallets {
+        publicKey
       }
     }
   }

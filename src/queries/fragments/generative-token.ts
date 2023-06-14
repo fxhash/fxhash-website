@@ -104,6 +104,7 @@ export const Frag_GenTokenInfo = gql`
     ...TokenBadge
     id
     version
+    gentkContractAddress
     inputBytesSize
     slug
     flag

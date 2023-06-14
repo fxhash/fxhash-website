@@ -2,7 +2,12 @@ import { useEffect, useState, useCallback, useMemo } from "react"
 import { generateFxHash, generateTzAddress } from "utils/hash"
 import { RawTokenFeatures } from "types/Metadata"
 import { ArtworkIframeRef } from "components/Artwork/PreviewIframe"
-import { FxParamDefinition, FxParamType } from "components/FxParams/types"
+import {
+  FxParamDefinition,
+  FxParamType,
+  FxParamsData,
+} from "components/FxParams/types"
+import { IRuntimeContext, useRuntime } from "./useRuntime"
 
 export interface TokenInfo {
   version: string | null
@@ -30,6 +35,9 @@ interface IFrameTokenInfos {
   setParamsDefinition: (p: any) => void
   paramsDefinition: any
   info: TokenInfo
+  runtime: IRuntimeContext
+  dispatchEvent: (id: string, data: any) => void
+  softUpdateParams: (params: FxParamsData) => void
 }
 
 function handleOldSnippetEvents(
@@ -78,6 +86,10 @@ export function useReceiveTokenInfos(
   ref: React.RefObject<ArtworkIframeRef | null>,
   options?: { initialHash?: string; initialMinter?: string }
 ): IFrameTokenInfos {
+  const runtime = useRuntime()
+  const { state, definition, details } = runtime
+
+  // TODO: remove this state!!
   const [info, setInfo] = useState<TokenInfo>({
     version: null,
     hash: options?.initialHash || generateFxHash(),
@@ -88,34 +100,21 @@ export function useReceiveTokenInfos(
   })
 
   const setFeatures = (features: RawTokenFeatures | null) =>
-    setInfo((i) => ({
-      ...i,
-      features,
-    }))
+    definition.update({ features })
 
-  const setHash = (hash: string) =>
-    setInfo((i) => ({
-      ...i,
-      hash,
-    }))
+  const setHash = (hash: string) => state.update({ hash })
 
-  const setMinter = (minter: string) =>
-    setInfo((i) => ({
-      ...i,
-      minter,
-    }))
+  const setMinter = (minter: string) => state.update({ minter })
 
+  // TODO : FIX
   const setParams = (params: any | null) =>
     setInfo((i) => ({
       ...i,
       params,
     }))
 
-  const setParamsDefinition = (paramsDefinition: any | null) =>
-    setInfo((i) => ({
-      ...i,
-      paramsDefinition,
-    }))
+  const setParamsDefinition = (definition: any | null) =>
+    definition.update({ params: definition })
 
   useEffect(() => {
     const listener = (e: any) => {
@@ -127,17 +126,9 @@ export function useReceiveTokenInfos(
           features,
           hash,
         } = e.data.data
-        setInfo({
-          version,
-          features,
-          hash,
-          paramsDefinition: definitions,
-          minter: minter,
-          params:
-            definitions?.map((d: FxParamDefinition<FxParamType>) => ({
-              ...d,
-              default: values?.[d.id],
-            })) || null,
+        runtime.update({
+          state: { hash, minter, params: values },
+          definition: { params: definitions, features, version },
         })
       }
       // handle deprecated events from old snippet
@@ -168,27 +159,31 @@ export function useReceiveTokenInfos(
     }
   }, [ref])
 
-  const paramsWithVersion = useMemo(
-    () =>
-      info.params?.map((p: FxParamDefinition<FxParamType>) => ({
-        ...p,
-        version: info.version,
-      })),
-    [info.params, info.version]
-  )
+  const dispatchEvent = (id: string, data: any) => {
+    if (!ref.current) return
+    ref.current.getHtmlIframe()?.contentWindow?.postMessage({ id, data }, "*")
+  }
+
+  const softUpdateParams = (params: FxParamsData) => {
+    state.update({ params })
+    dispatchEvent("fxhash_params:update", { params })
+  }
 
   return {
     onIframeLoaded,
-    features: info.features,
-    params: paramsWithVersion,
-    hash: info.hash,
-    minter: info.minter,
-    paramsDefinition: info.paramsDefinition,
+    features: definition.features,
+    params: definition.params,
+    hash: state.hash,
+    minter: state.minter,
+    paramsDefinition: definition.params,
     setHash,
     setMinter,
     setParams,
     setFeatures,
     setParamsDefinition,
     info,
+    runtime,
+    dispatchEvent,
+    softUpdateParams,
   }
 }

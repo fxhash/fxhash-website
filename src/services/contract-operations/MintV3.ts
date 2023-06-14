@@ -10,8 +10,8 @@ import {
 import { FxhashContracts } from "../../types/Contracts"
 import { GenerativeToken } from "../../types/entities/GenerativeToken"
 import { EReserveMethod } from "../../types/entities/Reserve"
+import { packMintReserveInput } from "../../utils/pack/reserves"
 import { prepareReserveConsumption } from "../../utils/pack/reserves"
-import { apiEventsSignPayload } from "../apis/events.service"
 import {
   buildParameters,
   EBuildableParams,

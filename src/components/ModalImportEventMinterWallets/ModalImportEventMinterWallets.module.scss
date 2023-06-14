@@ -1,0 +1,32 @@
+@import "../../styles/Variables";
+
+.multi_wrapper {
+  max-height: 250px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border: 3px solid var(--color-border-input);
+}
+
+.event {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  height: 30px;
+  align-items: center;
+  font-size: var(--font-size-small);
+}
+
+.modal {
+  width: 800px;
+}
+
+.container_import {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-top: $spacing;
+}
+
+.empty {
+  margin-top: 16px;
+}
