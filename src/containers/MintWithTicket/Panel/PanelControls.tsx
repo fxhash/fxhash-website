@@ -189,42 +189,53 @@ export function PanelControls(props: PanelControlsProps) {
               }}
             />
 
-            {ReactDOM.createPortal(
-              <CreditCardCheckout
-                ref={checkoutRef}
-                tokenId={token.id}
-                userId={user?.id!}
-                onClose={() => {
-                  setCheckoutLoading(false)
-                  setCheckoutOpHash(null)
-                }}
-                onSuccess={(hash: string) => {
-                  setCheckoutOpHash(hash)
-                }}
-                onFinish={() => {
-                  setCheckoutLoading(false)
+            {typeof window !== "undefined" &&
+              ReactDOM.createPortal(
+                <CreditCardCheckout
+                  ref={checkoutRef}
+                  tokenId={token.id}
+                  userId={user?.id!}
+                  onClose={() => {
+                    setCheckoutLoading(false)
+                    setCheckoutOpHash(null)
+                  }}
+                  onSuccess={(hash: string) => {
+                    setCheckoutOpHash(hash)
+                  }}
+                  onFinish={() => {
+                    setCheckoutLoading(false)
 
-                  if (mode === "live-minting") {
-                    const { id: eventId, token: mintPassToken } = router.query
+                    if (mode === "live-minting") {
+                      const {
+                        id: eventId,
+                        token: mintPassToken,
+                        mode,
+                      } = router.query
+                      router.push(
+                        `/live-minting/${eventId}/reveal/${
+                          token.id
+                        }/${checkoutSeed}?${new URLSearchParams({
+                          token: mintPassToken as string,
+                          fxparams: inputBytes!,
+                          ...(mode && { mode: mode as string }),
+                        })}`
+                      )
+                      return
+                    }
+
                     router.push(
-                      `/live-minting/${eventId}/reveal/${token.id}/${checkoutSeed}?token=${mintPassToken}&fxparams=${inputBytes}`
+                      `/reveal/${token.id}?fxhash=${checkoutSeed}&fxparams=${inputBytes}&fxminter=${user?.id}`
                     )
-                    return
-                  }
-
-                  router.push(
-                    `/reveal/${token.id}?fxhash=${checkoutSeed}&fxparams=${inputBytes}&fxminter=${user?.id}`
-                  )
-                }}
-                mintParams={{
-                  create_ticket: "00",
-                  input_bytes: inputBytes || "",
-                  referrer: null,
-                }}
-                consumeReserve={reserveConsumptionMethod}
-              />,
-              document.body
-            )}
+                  }}
+                  mintParams={{
+                    create_ticket: null,
+                    input_bytes: inputBytes || "",
+                    referrer: null,
+                  }}
+                  consumeReserve={reserveConsumptionMethod}
+                />,
+                document.body
+              )}
           </>
         )}
 
