@@ -4,14 +4,18 @@ import { GenerativeToken } from "types/entities/GenerativeToken"
 import { Qu_genToken } from "queries/generative-token"
 import { ExploreParams } from "containers/Generative/ExploreParams"
 import { isExplorationDisabled } from "utils/generative-token"
+import { NextPageWithLayout } from "containers/App"
+import { LiveMintingLayout } from "containers/LiveMinting/LiveMintingLayout"
 
 interface Props {
   token: GenerativeToken
 }
 
-const LiveMintingExploreParams: NextPage<Props> = ({ token }) => {
+const LiveMintingExploreParams: NextPageWithLayout<Props> = ({ token }) => {
   return <ExploreParams token={token} mode="live-minting" />
 }
+
+LiveMintingExploreParams.getLayout = LiveMintingLayout
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { tokenId } = context?.params || {}
