@@ -236,7 +236,7 @@ export const useRuntimeController: TUseRuntimeController = (
       fxhash: runtime.state.hash,
       fxparams: runtime.details.params.inputBytes || "",
     })
-  }, [runtime.state.hash, runtime.state.params])
+  }, [runtime.state.hash, runtime.details.params.inputBytes])
 
   const dispatchEvent = (id: string, data: any) => {
     if (!ref.current) return
