@@ -11,11 +11,10 @@ import useAsyncEffect from "use-async-effect"
 import { SandboxFiles } from "../../types/Sandbox"
 
 interface Props {
+  id: string
+  setId: (id: string) => void
   record?: SandboxFiles
   textWaiting?: string
-  hash?: string
-  minter?: string
-  fxparams?: string
   onLoaded?: () => void
   onUrlUpdate?: (url: string) => void
 }
@@ -26,13 +25,9 @@ export interface ArtworkIframeRef {
 }
 
 export const SandboxPreview = forwardRef<ArtworkIframeRef, Props>(
-  (
-    { record, hash, minter, onUrlUpdate, onLoaded, textWaiting, fxparams },
-    ref
-  ) => {
+  ({ id, setId, record, onUrlUpdate, onLoaded, textWaiting }, ref) => {
     const iframeRef = useRef<HTMLIFrameElement>(null)
     const workerReg = useRef<ServiceWorkerRegistration | null>(null)
-    const [id, setId] = useState<string>("0")
 
     // register service workers
     useEffect(() => {
@@ -77,19 +72,6 @@ export const SandboxPreview = forwardRef<ArtworkIframeRef, Props>(
         setId(id)
       }
     }, [record])
-
-    // the URL of the iframe gets updated whenever ID / hash changes
-    useEffect(() => {
-      if (iframeRef.current && id !== "0") {
-        let previewUrl = `${location.origin}/sandbox/preview.html?id=${id}&fxhash=${hash}&fxminter=${minter}`
-        if (fxparams) {
-          previewUrl += `&fxparams=${fxparams}`
-        }
-        // load the sandbox preview into the iframe, then service workers do the job
-        iframeRef.current.src = previewUrl
-        onUrlUpdate && onUrlUpdate(previewUrl)
-      }
-    }, [id, hash, minter, fxparams])
 
     const reloadIframe = () => {
       if (iframeRef.current) {
