@@ -85,8 +85,9 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
     artworkIframeRef,
     {
       cid: token.metadata.generativeUri,
-      hash: generateFxHash(),
+      hash: (router.query.fxhash as string) || generateFxHash(),
       minter: minterAddress,
+      inputBytes: router.query.fxparams as string | undefined,
     },
     {
       autoRefresh: withAutoUpdate,
