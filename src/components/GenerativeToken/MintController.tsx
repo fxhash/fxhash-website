@@ -113,6 +113,7 @@ export function MintController({
   const liveMintingContext = useContext(LiveMintingContext)
   const { event, mintPass, authToken, paidLiveMinting } = liveMintingContext
   const router = useRouter()
+  const { query } = router
 
   // the mint context, handles display logic
   const mintingState = useMintingState(token, forceDisabled)
@@ -316,7 +317,11 @@ export function MintController({
           <Link
             href={`/live-minting/${event!.id}/generative/${
               token.id
-            }/explore-params?token=${mintPass?.token}`}
+            }/explore-params?${new URLSearchParams({
+              token: mintPass.token,
+              ...(query.mode && { mode: query.mode as string }),
+              ...(query.address && { address: query.address as string }),
+            })}`}
             passHref
           >
             <Button
