@@ -31,10 +31,9 @@ interface Props {
 
 const LiveMintingRevealPage: NextPageWithLayout<Props> = ({ hash, token }) => {
   const router = useRouter()
-  const eventCtx = useContext(LiveMintingContext)
+  const { query } = router
+  const { event, mintPass } = useContext(LiveMintingContext)
   const { user } = useContext(UserContext)
-
-  const { fxparams } = router.query
 
   return (
     <>
@@ -82,15 +81,21 @@ const LiveMintingRevealPage: NextPageWithLayout<Props> = ({ hash, token }) => {
             hash={hash}
             generativeUri={token.metadata.generativeUri}
             minter={user!.id}
-            params={fxparams as string}
+            params={query.fxparams as string}
           />
 
-          {eventCtx.mintPass && (
+          {mintPass && (
             <Submit layout="center">
               <Link
-                href={`/live-minting/${eventCtx.event!.id}?token=${
-                  eventCtx.mintPass?.token
-                }`}
+                href={`/live-minting/${event!.id}?${new URLSearchParams({
+                  token: mintPass.token,
+                  ...(query.mode && {
+                    mode: query.mode as string,
+                  }),
+                  ...(query.address && {
+                    address: query.address as string,
+                  }),
+                }).toString()}`}
                 passHref
               >
                 <Button
