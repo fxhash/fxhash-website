@@ -376,7 +376,7 @@ export function MintController({
       <CreditCardCheckout
         ref={checkoutRef}
         tokenId={token.id}
-        userId={user!.id}
+        userId={user?.id!}
         onClose={() => {
           setLoadingCC(false)
         }}
