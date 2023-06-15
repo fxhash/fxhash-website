@@ -1,4 +1,5 @@
 import React, { memo, useContext } from "react"
+import { useRouter } from "next/router"
 import style from "./LiveMintingEvent.module.scss"
 import cs from "classnames"
 import text from "../../styles/Text.module.css"
@@ -48,7 +49,9 @@ const Qu_genTokens = gql`
 interface LiveMintingEventProps {}
 
 const _LiveMintingEvent = ({}: LiveMintingEventProps) => {
+  const router = useRouter()
   const eventCtx = useContext(LiveMintingContext)
+  const { id, ...liveMintingQuery } = router.query
 
   const { data, loading } = useQuery(Qu_genTokens, {
     notifyOnNetworkStatusChange: true,
@@ -78,7 +81,7 @@ const _LiveMintingEvent = ({}: LiveMintingEventProps) => {
               key={token.id}
               href={`/live-minting/${eventCtx.event!.id}/generative/${
                 token.id
-              }/?token=${eventCtx.mintPass?.token}`}
+              }/?${new URLSearchParams(liveMintingQuery as any).toString()}`}
             >
               <a className={cs(text.reset, style.token)}>
                 <LiveMintingGenerativeTokenCard
