@@ -136,8 +136,6 @@ export function GenerativeDisplay({ token, offlineMode = false }: Props) {
               <>
                 <Spacing size="large" sm="regular" />
                 <strong>Minting Instructions</strong>
-                <br />
-                <br />
                 {nl2br(token.metadata?.mintingInstructions)}
               </>
             )}

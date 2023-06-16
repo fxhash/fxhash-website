@@ -10,7 +10,6 @@ import { ButtonPaymentCard } from "../Utils/ButtonPaymentCard"
 import { useMintReserveInfo } from "hooks/useMintReserveInfo"
 import { LiveMintingContext } from "context/LiveMinting"
 import { ReserveDropdown } from "./ReserveDropdown"
-import { EReserveMethod } from "types/entities/Reserve"
 
 /**
  * The Mint Button displays a mint button component with specific display rules
@@ -106,9 +105,7 @@ export function MintButton({
         {hasCreditCardOption &&
           !freeLiveMinting &&
           !loading &&
-          (!onlyReserveLeft || onMintShouldUseReserve) &&
-          // access list reserves not currently supported by winter integration
-          reserveConsumptionMethod?.method === EReserveMethod.MINT_PASS && (
+          (!onlyReserveLeft || onMintShouldUseReserve) && (
             <ButtonPaymentCard
               onClick={openCreditCard}
               disabled={disabled}
