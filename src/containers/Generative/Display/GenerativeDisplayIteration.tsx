@@ -110,7 +110,11 @@ const _GenerativeDisplayIteration = ({
 
           <div className={cs(style.buttons, style.actions)}>
             {objkt.activeListing && (
-              <ListingAccept listing={objkt.activeListing} objkt={objkt} />
+              <ListingAccept
+                listing={objkt.activeListing}
+                objkt={objkt}
+                showCreditCardOption={objkt.activeListing.version !== 0}
+              />
             )}
             {/* @ts-ignore */}
             <ClientOnlyEmpty style={{ width: "100%" }}>
