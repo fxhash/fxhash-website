@@ -6,6 +6,7 @@ import {
   FxParamTypeMap,
   FxParamType,
   FxParamsData,
+  FxParamDefinitions,
 } from "./types"
 
 export function rgbaToHex(r: number, g: number, b: number, a: number): string {
@@ -247,7 +248,7 @@ export const ParameterProcessors: FxParamProcessors = {
 // params are injected into the piece using the binary representation of the
 // numbers, to keep precision
 export function serializeParams(
-  params: any,
+  params: FxParamsData,
   definition: FxParamDefinition<any>[]
 ) {
   // a single hex string will be used for all the params
@@ -274,6 +275,16 @@ export function serializeParams(
   }
 
   return bytes
+}
+
+// call seralizeParams(), returns nullif no params
+export function serializeParamsOrNull(
+  params: FxParamsData,
+  definition: FxParamDefinition<any>[]
+) {
+  const serialized = serializeParams(params, definition || [])
+  if (serialized.length === 0) return null
+  return serialized
 }
 
 // takes an array of bytes, in hexadecimal format, and a parametric space
@@ -305,10 +316,13 @@ export function deserializeParams(
 
 // Consolidates parameters from both a params object provided by the token
 // and the dat object of params, which is stored by the controls component.
-export function consolidateParams(params: any, data: any) {
-  if (!params) return []
+export function consolidateParams(
+  definition: FxParamDefinitions,
+  data: FxParamsData
+) {
+  if (!definition) return []
 
-  const rtn = [...params]
+  const rtn = [...definition]
 
   for (const p in rtn) {
     const definition = rtn[p]
@@ -327,6 +341,41 @@ export function consolidateParams(params: any, data: any) {
   }
 
   return rtn
+}
+
+/**
+ * Given a definition and some params data, builds a clean params object where
+ * the values are first found in the data object, then in the definition if a
+ * default value exists, otherwise in randomizes the value using the param
+ * associated processor.
+ *
+ * @param definition an array of parameter definition
+ * @param data the params data used to reconstruct the final values
+ */
+export function buildParamsObject(
+  definition: FxParamDefinitions,
+  data: FxParamsData | null
+) {
+  if (!definition) return {}
+
+  const out: FxParamsData = {}
+  for (const def of definition) {
+    // find if the data object has the propery
+    if (data?.hasOwnProperty(def.id)) {
+      out[def.id] = data[def.id]
+      continue
+    }
+    // find if the definition object has a default value
+    if (def.hasOwnProperty("default")) {
+      out[def.id] = def.default
+      continue
+    }
+    // otherwise use the param processor randomizer
+    const processor = ParameterProcessors[def.type] as FxParamProcessor<any>
+    const rand = processor.random(def)
+    out[def.id] = processor.transform?.(rand) || rand
+  }
+  return out
 }
 
 export function getRandomParamValues(
@@ -363,6 +412,10 @@ export function sumBytesParams(
 }
 
 export function stringifyParamsData(data: FxParamsData) {
+  return jsonStringifyBigint(data)
+}
+
+export function jsonStringifyBigint(data: any): string {
   return JSON.stringify(data, (key, value) => {
     if (typeof value === "bigint") return value.toString()
     return value

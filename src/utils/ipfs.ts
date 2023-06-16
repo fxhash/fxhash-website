@@ -29,6 +29,17 @@ export function ipfsUrlWithHashAndParams(
   return url
 }
 
+export function urlAddTokenParams(
+  base: string,
+  hash: string,
+  minter: string,
+  params: string | null | undefined
+) {
+  let url = `${base}&fxhash=${hash}&fxminter=${minter}`
+  if (params) url += `&fxparams=${params}`
+  return url
+}
+
 /**
  * Is an URI an IPFS uri ?
  */

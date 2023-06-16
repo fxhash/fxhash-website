@@ -1,3 +1,4 @@
+import useFetch, { CachePolicies } from "use-http"
 import style from "./MintController.module.scss"
 import layout from "../../styles/Layout.module.scss"
 import Link from "next/link"
@@ -8,7 +9,7 @@ import {
 } from "../../types/entities/GenerativeToken"
 import { Spacing } from "../Layout/Spacing"
 import { Button } from "../../components/Button"
-import { PropsWithChildren, useContext, useMemo, useState } from "react"
+import { PropsWithChildren, useContext, useMemo, useRef, useState } from "react"
 import { ContractFeedback } from "../Feedback/ContractFeedback"
 import { DisplayTezos } from "../Display/DisplayTezos"
 import { useContractOperation } from "../../hooks/useContractOperation"
@@ -21,12 +22,8 @@ import { MintingState } from "./MintingState/MintingState"
 import { useMintingState } from "../../hooks/useMintingState"
 import { UserContext } from "../../containers/UserProvider"
 import { MintButton } from "./MintButton"
-import WinterCheckout, {
-  IWinterMintPass,
-} from "components/CreditCard/WinterCheckout"
 import { useRouter } from "next/router"
 import { useAsyncMemo } from "use-async-memo"
-import { winterCheckoutAppearance } from "../../utils/winter"
 import { TContractOperation } from "../../services/contract-operations/ContractOperation"
 import {
   MintV3Operation,
@@ -38,12 +35,14 @@ import { MintTicket } from "../../types/entities/MintTicket"
 import { generateMintTicketFromMintAction } from "../../utils/mint-ticket"
 import { isOperationApplied } from "services/Blockchain"
 import { TzktOperation } from "types/Tzkt"
-import { LiveMintingContext } from "context/LiveMinting"
-import useFetch, { CachePolicies } from "use-http"
 import { useFetchRandomSeed } from "hooks/useFetchRandomSeed"
 import { useMintReserveInfo } from "hooks/useMintReserveInfo"
+import { LiveMintingContext } from "context/LiveMinting"
+import {
+  CreditCardCheckout,
+  CreditCardCheckoutHandle,
+} from "components/CreditCard/CreditCardCheckout"
 import { checkIsEligibleForMintWithAutoToken } from "utils/generative-token"
-import { prepareReserveConsumption } from "utils/pack/reserves"
 
 interface Props {
   token: GenerativeToken
@@ -114,19 +113,20 @@ export function MintController({
   const liveMintingContext = useContext(LiveMintingContext)
   const { event, mintPass, authToken, paidLiveMinting } = liveMintingContext
   const router = useRouter()
+  const { query } = router
 
   // the mint context, handles display logic
   const mintingState = useMintingState(token, forceDisabled)
   const { hidden, enabled, locked, price } = mintingState
-  const { onMintShouldUseReserve, reserveConsumptionMethod } =
-    useMintReserveInfo(token, forceReserveConsumption)
+  const { reserveConsumptionMethod } = useMintReserveInfo(
+    token,
+    forceReserveConsumption
+  )
 
   // the credit card minting state
-  const [showCC, setShowCC] = useState<boolean>(false)
+  const checkoutRef = useRef<CreditCardCheckoutHandle | null>(null)
   const [loadingCC, setLoadingCC] = useState<boolean>(false)
   const [opHashCC, setOpHashCC] = useState<string | null>(null)
-  const [reserveInputCC, setReserveInputCC] = useState<any>(null)
-  const [mintPassCC, setMintPassCC] = useState<IWinterMintPass | null>(null)
 
   // free live minting
   const [opHashFree, setOpHashFree] = useState<string | null>(null)
@@ -184,50 +184,12 @@ export function MintController({
     )
   }
 
-  // the mint pass settings for winter
-  const winterPassSettings = onMintShouldUseReserve
-    ? reserveConsumptionMethod
-    : null
-
   // called to open the credit card window
   const openCreditCard = async () => {
     clear()
     setLoadingCC(true)
     setOpHashCC(null)
-    setReserveInputCC(null)
-    setMintPassCC(null)
-
-    if (winterPassSettings) {
-      try {
-        const { reserveInput, payloadPacked, payloadSignature } =
-          await prepareReserveConsumption(winterPassSettings)
-        setReserveInputCC(reserveInput)
-
-        const isMintPass = payloadPacked && payloadSignature
-        if (isMintPass)
-          setMintPassCC({
-            address: winterPassSettings.data.reserveData,
-            parameters: {
-              payload: payloadPacked,
-              signature: payloadSignature,
-            },
-          })
-      } catch (err) {
-        console.log(err)
-        return
-      }
-    }
-    setShowCC(true)
-  }
-  const closeCreditCard = () => {
-    setLoadingCC(false)
-    setShowCC(false)
-  }
-
-  // when the credit card payment is successful
-  const onCreditCardSuccess = (hash: string, usd: number) => {
-    setLoadingCC(false)
-    setOpHashCC(hash)
+    checkoutRef.current?.open()
   }
 
   // derive the op hash of interest from the CC or BC transaction hash
@@ -350,6 +312,32 @@ export function MintController({
         </>
       )}
 
+      {isTicketMinted && mintPass && (
+        <>
+          <Link
+            href={`/live-minting/${event!.id}/generative/${
+              token.id
+            }/explore-params?${new URLSearchParams({
+              token: mintPass.token,
+              ...(query.mode && { mode: query.mode as string }),
+              ...(query.address && { address: query.address as string }),
+            })}`}
+            passHref
+          >
+            <Button
+              className={cs(style.button, style.button_mint_directly)}
+              isLink
+              color="secondary"
+              iconComp={<i aria-hidden className="fas fa-arrow-right" />}
+              iconSide="right"
+              size="regular"
+            >
+              mint directly
+            </Button>
+          </Link>
+        </>
+      )}
+
       {!(opHash && hideMintButtonAfterReveal) && (
         <div
           className={cs(
@@ -390,29 +378,27 @@ export function MintController({
         </div>
       )}
 
-      <WinterCheckout
-        showModal={showCC}
-        production={process.env.NEXT_PUBLIC_TZ_NET === "mainnet"}
-        projectId={8044}
-        gentkId={token.id}
-        walletAddress={user?.id}
-        onClose={closeCreditCard}
-        onSuccess={onCreditCardSuccess}
-        onFinish={() => {
-          if (!isTicketMinted) {
-            router.push(revealUrl)
-          }
-          setShowCC(false)
+      <CreditCardCheckout
+        ref={checkoutRef}
+        tokenId={token.id}
+        userId={user?.id!}
+        onClose={() => {
+          setLoadingCC(false)
         }}
-        appearance={winterCheckoutAppearance}
-        additionalPurchaseParams={{
-          mintPass: mintPassCC,
-          create_ticket: isTicketMinted ? "" : null,
+        onSuccess={(hash: string) => {
+          setLoadingCC(false)
+          setOpHashCC(hash)
+        }}
+        onFinish={() => {
+          if (!isTicketMinted) router.push(revealUrl)
+        }}
+        mintParams={{
+          create_ticket: isTicketMinted ? "00" : null,
           input_bytes: "",
           referrer: null,
-          reserve_input: reserveInputCC,
           recipient: user?.id,
         }}
+        consumeReserve={reserveConsumptionMethod}
       />
     </div>
   )
