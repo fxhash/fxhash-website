@@ -6,7 +6,7 @@ import {
   useCallback,
   useState,
 } from "react"
-import { FxParamOptionsMap, FxParamType } from "../types"
+import { FxParamOptionsMap, FxParamType, FxParamTypeMap } from "../types"
 import classes from "./Controller.module.scss"
 import cx from "classnames"
 import { BaseInput } from "../BaseInput"
@@ -24,7 +24,9 @@ export function BaseParamsInput(props: InputHTMLAttributes<HTMLInputElement>) {
   )
 }
 
-export type FxParamInputChangeHandler = (e: any) => void
+export type FxParamInputChangeHandler<Type extends FxParamType = any> = (
+  e: any
+) => FxParamTypeMap[Type]
 
 export interface ControllerProps {
   label?: string
@@ -74,7 +76,7 @@ export function Controller(props: ControllerProps) {
 export interface HTMLInputControllerProps {
   id: string
   value: string
-  onChange: FxParamInputChangeHandler
+  onChange: (value: any) => void
   type: HTMLInputTypeAttribute
   inputProps?: InputHTMLAttributes<HTMLInputElement | HTMLSelectElement>
   className?: string
@@ -88,7 +90,7 @@ export type FxParamControllerProps<Type extends FxParamType> = Omit<
 > & {
   value: any
   options?: FxParamOptionsMap[Type]
-  onChange: FxParamInputChangeHandler
+  onChange: (value: any) => void
 }
 
 export function HTMLInputController(props: HTMLInputControllerProps) {

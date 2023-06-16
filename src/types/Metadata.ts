@@ -63,6 +63,7 @@ export interface GenerativeTokenMetadata {
   name: string
   description: string
   childrenDescription: string
+  mintingInstructions: string
   tags: string[]
   // link to the fixed hash project
   artifactUri: string

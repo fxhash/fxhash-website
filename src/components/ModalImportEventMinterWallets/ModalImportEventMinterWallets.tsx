@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react"
 import cs from "classnames"
 import { createEventsClient } from "services/EventsClient"
-import { Qu_eventsFreeLiveMintingWallets } from "queries/events/events"
+import { Qu_eventsLiveMintingWallets } from "queries/events/events"
 import { ISplit } from "../../types/entities/Split"
 import { InputMultiList, MultiListItem } from "../Input/InputMultiList"
 import { LoaderBlock } from "../Layout/LoaderBlock"
@@ -18,7 +18,7 @@ interface Props {
 
 interface EventData {
   id: string
-  freeLiveMintingWallets: { publicKey: string }[]
+  liveMintingWallets: { publicKey: string }[]
 }
 
 const eventsClient = createEventsClient()
@@ -32,10 +32,10 @@ export function ModalImportEventMinterWallets({
   const [data, setData] = useState<EventData[] | null>(null)
   const [loading, setLoading] = useState(true)
 
-  const fetchFreeLiveMintingEvents = async () => {
+  const fetchLiveMintingEvents = async () => {
     try {
       const response = await eventsClient.query({
-        query: Qu_eventsFreeLiveMintingWallets,
+        query: Qu_eventsLiveMintingWallets,
         variables: {
           where: {
             freeLiveMinting: {
@@ -53,7 +53,7 @@ export function ModalImportEventMinterWallets({
   }
 
   useEffect(() => {
-    fetchFreeLiveMintingEvents()
+    fetchLiveMintingEvents()
   }, [])
 
   const options = useMemo<MultiListItem[] | null>(() => {
@@ -69,7 +69,7 @@ export function ModalImportEventMinterWallets({
       selected.includes(option.value)
     )
     const wallets = selectedOptions?.flatMap(
-      (option) => option.props.freeLiveMintingWallets
+      (option) => option.props.liveMintingWallets
     )
     const splits =
       wallets?.map((wallet) => ({

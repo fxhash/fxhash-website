@@ -4,13 +4,14 @@ import { GenerativeToken } from "types/entities/GenerativeToken"
 import { truncateEnd } from "utils/strings"
 import { getImageApiUrl, OG_IMAGE_SIZE } from "components/Image"
 import { MintWithTicketPage } from "containers/MintWithTicket/MintWithTicketPage"
-import { UserGuard } from "components/Guards/UserGuard"
+import { PanelSubmitMode } from "containers/MintWithTicket/Panel/PanelControls"
 
 interface Props {
   token: GenerativeToken
+  mode?: PanelSubmitMode
 }
 
-export const ExploreParams = ({ token }: Props) => {
+export const ExploreParams = ({ token, mode = "free" }: Props) => {
   // get the display url for og:image
   const displayUrl =
     token.captureMedia?.cid &&
@@ -54,7 +55,7 @@ export const ExploreParams = ({ token }: Props) => {
         />
       </Head>
 
-      <MintWithTicketPage token={token} mode="free" />
+      <MintWithTicketPage token={token} mode={mode} />
     </>
   )
 }
