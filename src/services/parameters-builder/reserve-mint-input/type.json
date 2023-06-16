@@ -1,0 +1,22 @@
+{
+  "prim": "pair",
+  "args": [
+    {
+      "prim": "option",
+      "args": [
+        {
+          "prim": "bytes"
+        }
+      ],
+      "annots": [
+        "%input"
+      ]
+    },
+    {
+      "prim": "nat",
+      "annots": [
+        "%method_id"
+      ]
+    }
+  ]
+}
