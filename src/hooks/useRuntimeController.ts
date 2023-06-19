@@ -196,6 +196,8 @@ export const useRuntimeController: TUseRuntimeController = (
   })
 
   useEffect(() => {
+    if (!project.minter) return
+
     if (runtime.state.minter !== project.minter)
       runtime.state.update({
         minter: project.minter || generateTzAddress(),
