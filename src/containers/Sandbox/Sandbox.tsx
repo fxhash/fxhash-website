@@ -2,7 +2,7 @@ import style from "./Sandbox.module.scss"
 import cs from "classnames"
 import { ArtworkIframeRef } from "../../components/Artwork/PreviewIframe"
 import { Dropzone } from "../../components/Input/Dropzone"
-import { useState, useMemo, useRef, useEffect, useCallback } from "react"
+import { useState, useMemo, useRef, useEffect } from "react"
 import { Button } from "../../components/Button"
 import { Spacing } from "../../components/Layout/Spacing"
 import { FileList } from "./FileList"
@@ -12,37 +12,70 @@ import { processZipSandbox } from "../../utils/sandbox"
 import { SandboxPreview } from "../../components/Artwork/SandboxPreview"
 import { SandboxFiles } from "../../types/Sandbox"
 import { generateFxHash } from "../../utils/hash"
-import { RawTokenFeatures } from "../../types/Metadata"
 import { RawFeatures } from "../../components/Features/RawFeatures"
 import { ArtworkFrame } from "../../components/Artwork/ArtworkFrame"
-import { Controls } from "components/FxParams/Controls"
-import { serializeParams, stringifyParamsData } from "components/FxParams/utils"
-import { ControlsTest, ControlsTestRef } from "components/Testing/ControlsTest"
-import { FxParamDefinition, FxParamType } from "components/FxParams/types"
-import { useReceiveTokenInfos } from "hooks/useReceiveTokenInfos"
+import { ControlsTest } from "components/Testing/ControlsTest"
 import { MinterTest } from "components/Testing/MinterTest"
+import {
+  TRuntimeContextConnector,
+  useRuntimeController,
+} from "hooks/useRuntimeController"
+import { urlAddTokenParams } from "utils/ipfs"
 import { IterationTest } from "components/Testing/IterationTest"
 
 export function Sandbox() {
   const artworkIframeRef = useRef<ArtworkIframeRef>(null)
-  const paramControlsRef = useRef<ControlsTestRef>(null)
-  const {
-    onIframeLoaded,
-    params,
-    hash,
-    setHash,
-    iteration,
-    setIteration,
-    minter,
-    setMinter,
-    features,
-    info,
-  } = useReceiveTokenInfos(artworkIframeRef)
+
   const [file, setFile] = useState<File | null>(null)
   const [filesRecord, setFilesRecord] = useState<SandboxFiles | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [url, setUrl] = useState<string | null>(null)
-  const [data, setData] = useState<Record<string, any>>({})
+
+  // stores the sandbox state
+  const [sandboxId, setSandboxId] = useState("0")
+  const lastUrl = useRef("")
+  const lastId = useRef(sandboxId)
+
+  // the sandbox connector is used to give a particular control of the sandbow
+  // iframe to the runtime controller. Because the sandbox is an edge case we
+  // need such a module to fine-tune how the sandbox iframe behaves
+  const sandboxConnector = useMemo<TRuntimeContextConnector>(
+    () => (iframeRef) => {
+      return {
+        getUrl(state) {
+          return urlAddTokenParams(
+            `${location.origin}/sandbox/preview.html?id=${sandboxId}`,
+            sandboxId === "0" ? generateFxHash() : state.hash || "",
+            state.minter || "",
+            state.inputBytes
+          )
+        },
+        useSync(runtimeUrl: string, controlsUrl: string) {
+          // every time the runtime URL changes, refresh the iframe
+          useEffect(() => {
+            if (sandboxId === "0") return
+            const iframe = iframeRef.current?.getHtmlIframe()
+            if (iframe && lastUrl.current !== runtimeUrl) {
+              iframe.contentWindow?.location.replace(runtimeUrl)
+              lastUrl.current = runtimeUrl
+              lastId.current = sandboxId
+            }
+          }, [runtimeUrl, sandboxId])
+        },
+      }
+    },
+    [sandboxId]
+  )
+
+  const { runtime, controls } = useRuntimeController(
+    artworkIframeRef,
+    {
+      cid: "", // in this case the url is constructed with the connector above
+    },
+    {
+      contextConnector: sandboxConnector,
+    }
+  )
 
   const fileList = useMemo<string[] | null>(
     () => (filesRecord ? Object.keys(filesRecord) : null),
@@ -62,6 +95,15 @@ export function Sandbox() {
   const uploadFile = async () => {
     if (file) {
       processFile(file)
+      /**
+       * !HACK
+       * For some reason I couldn't find a way to have the iframe location
+       * replaced with th econnector above... tried everything I could think of.
+       * With this "hack", it forces a refresh of the iframe
+       */
+      setTimeout(() => {
+        runtime.state.update({ hash: generateFxHash() })
+      }, 100)
     }
   }
 
@@ -71,14 +113,6 @@ export function Sandbox() {
       processFile(file)
     }
   }
-
-  const handleSubmitParams = (params: Record<string, any>) => {
-    setData(params)
-  }
-
-  const fxparamsBytes = useMemo(() => {
-    return serializeParams(data, params)
-  }, [stringifyParamsData(data), params])
 
   return (
     <section
@@ -140,41 +174,40 @@ export function Sandbox() {
 
               <HashTest
                 autoGenerate={false}
-                value={hash}
-                onHashUpdate={(hash) => setHash(hash)}
-                onRetry={() => {
-                  artworkIframeRef.current?.reloadIframe()
-                }}
+                value={runtime.state.hash}
+                onHashUpdate={(hash) => runtime.state.update({ hash })}
+                onRetry={controls.refresh}
               />
 
               <Spacing size="large" />
 
               <IterationTest
                 autoGenerate={false}
-                value={iteration}
-                onIterationUpdate={setIteration}
+                value={runtime.state.iteration}
+                onIterationUpdate={(iteration) =>
+                  runtime.state.update({ iteration })
+                }
               />
 
               <Spacing size="large" />
 
               <MinterTest
                 autoGenerate={false}
-                value={minter}
-                onMinterUpdate={(minter) => setMinter(minter)}
-                onRetry={() => {
-                  artworkIframeRef.current?.reloadIframe()
-                }}
+                value={runtime.state.minter}
+                onMinterUpdate={(minter) => runtime.state.update({ minter })}
+                onRetry={controls.refresh}
               />
             </div>
-            {params && (
+            {controls.state.params.definition && (
               <div>
                 <Spacing size="2x-large" />
                 <h5>Params</h5>
                 <Spacing size="small" />
                 <ControlsTest
-                  params={params}
-                  onSubmit={handleSubmitParams}
-                  ref={paramControlsRef}
+                  params={controls.state.params.values}
+                  definition={controls.state.params.definition}
+                  onSubmit={controls.hardSync}
+                  updateParams={controls.updateParams}
                 />
               </div>
             )}
@@ -182,7 +215,7 @@ export function Sandbox() {
             <div>
               <h5>Features</h5>
               <Spacing size="small" />
-              <RawFeatures rawFeatures={features} />
+              <RawFeatures rawFeatures={runtime.definition.features} />
             </div>
             <Spacing size="2x-large" />
           </div>
@@ -215,15 +248,12 @@ export function Sandbox() {
             <div className={cs(style["iframe-wrapper"])}>
               <ArtworkFrame>
                 <SandboxPreview
-                  hash={hash}
-                  iteration={iteration}
-                  minter={minter}
-                  fxparams={fxparamsBytes}
+                  id={sandboxId}
+                  setId={setSandboxId}
                   ref={artworkIframeRef}
                   record={filesRecord || undefined}
                   textWaiting="Waiting for content to be reachable"
                   onUrlUpdate={setUrl}
-                  onLoaded={onIframeLoaded}
                 />
               </ArtworkFrame>
             </div>

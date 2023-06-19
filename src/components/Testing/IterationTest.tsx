@@ -55,10 +55,10 @@ export function IterationTest({
           <Button
             size="small"
             color="primary"
-            onClick={increment}
+            onClick={decrement}
             type="button"
           >
-            +
+            -
           </Button>
           <InputText
             className={cs(style.iterationInput)}
@@ -78,10 +78,10 @@ export function IterationTest({
           <Button
             size="small"
             color="primary"
-            onClick={decrement}
+            onClick={increment}
             type="button"
           >
-            -
+            +
           </Button>
         </div>
       </Field>

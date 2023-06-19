@@ -1,4 +1,5 @@
-import { useCallback, useContext, useMemo, useState } from "react"
+import { useCallback, useContext, useMemo, useRef, useState } from "react"
+import ReactDOM from "react-dom"
 import cs from "classnames"
 import { isBefore } from "date-fns"
 import {
@@ -20,11 +21,19 @@ import { Cover } from "components/Utils/Cover"
 import { BaseButton, IconButton } from "components/FxParams/BaseInput"
 import { TOnMintHandler } from "../MintWithTicketPage"
 import style from "./PanelControls.module.scss"
+import { ButtonPaymentCard } from "components/Utils/ButtonPaymentCard"
+import {
+  CreditCardCheckout,
+  CreditCardCheckoutHandle,
+} from "components/CreditCard/CreditCardCheckout"
+import { useRouter } from "next/router"
+import { useFetchRandomSeed } from "hooks/useFetchRandomSeed"
 
-export type PanelSubmitMode = "with-ticket" | "free" | "none"
+export type PanelSubmitMode = "with-ticket" | "free" | "live-minting" | "none"
 
 export interface PanelControlsProps {
   token: GenerativeToken
+  inputBytes: string | null
   onClickBack?: () => void
   onOpenNewTab?: () => void
   onSubmit: TOnMintHandler
@@ -32,13 +41,26 @@ export interface PanelControlsProps {
 }
 
 export function PanelControls(props: PanelControlsProps) {
-  const { token, onClickBack, onOpenNewTab, onSubmit, mode = "none" } = props
+  const {
+    token,
+    inputBytes,
+    onClickBack,
+    onOpenNewTab,
+    onSubmit,
+    mode = "none",
+  } = props
 
+  const router = useRouter()
   const { user } = useContext(UserContext)
 
   const [showDropdown, setShowDropdown] = useState(false)
   const { isMintDropdown, onMintShouldUseReserve, reserveConsumptionMethod } =
     useMintReserveInfo(token)
+
+  const checkoutRef = useRef<CreditCardCheckoutHandle | null>(null)
+  const [checkoutLoading, setCheckoutLoading] = useState(false)
+  const [checkoutOpHash, setCheckoutOpHash] = useState<string | null>(null)
+  const { randomSeed: checkoutSeed } = useFetchRandomSeed(checkoutOpHash)
 
   const { enabled, locked, price, hidden } = useMintingState(token)
   const showMintButton = !hidden && !locked && enabled
@@ -97,7 +119,8 @@ export function PanelControls(props: PanelControlsProps) {
             <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
           </IconButton>
         )}
-        {mode === "with-ticket" ? (
+
+        {mode === "with-ticket" && (
           <BaseButton
             color="main"
             onClick={handleClickMint}
@@ -106,7 +129,9 @@ export function PanelControls(props: PanelControlsProps) {
           >
             use ticket <i className="fa-sharp fa-solid fa-ticket" aria-hidden />
           </BaseButton>
-        ) : mode === "free" ? (
+        )}
+
+        {mode === "free" && (
           <div className={style.submitButtons}>
             <div style={{ position: "relative", display: "flex" }}>
               {showMintButton && (
@@ -150,7 +175,69 @@ export function PanelControls(props: PanelControlsProps) {
               </BaseButton>
             )}
           </div>
-        ) : null}
+        )}
+
+        {mode === "live-minting" && (
+          <>
+            <ButtonPaymentCard
+              className={style.creditCardButton}
+              label={checkoutLoading ? "loading..." : "pay with card"}
+              disabled={false}
+              onClick={() => {
+                setCheckoutLoading(true)
+                checkoutRef.current?.open()
+              }}
+            />
+
+            {typeof window !== "undefined" &&
+              ReactDOM.createPortal(
+                <CreditCardCheckout
+                  ref={checkoutRef}
+                  tokenId={token.id}
+                  userId={user?.id!}
+                  onClose={() => {
+                    setCheckoutLoading(false)
+                    setCheckoutOpHash(null)
+                  }}
+                  onSuccess={(hash: string) => {
+                    setCheckoutOpHash(hash)
+                  }}
+                  onFinish={() => {
+                    setCheckoutLoading(false)
+
+                    if (mode === "live-minting") {
+                      const {
+                        id: eventId,
+                        token: mintPassToken,
+                        mode,
+                      } = router.query
+                      router.push(
+                        `/live-minting/${eventId}/reveal/${
+                          token.id
+                        }/${checkoutSeed}?${new URLSearchParams({
+                          token: mintPassToken as string,
+                          fxparams: inputBytes!,
+                          ...(mode && { mode: mode as string }),
+                        })}`
+                      )
+                      return
+                    }
+
+                    router.push(
+                      `/reveal/${token.id}?fxhash=${checkoutSeed}&fxparams=${inputBytes}&fxminter=${user?.id}`
+                    )
+                  }}
+                  mintParams={{
+                    create_ticket: null,
+                    input_bytes: inputBytes || "",
+                    referrer: null,
+                  }}
+                  consumeReserve={reserveConsumptionMethod}
+                />,
+                document.body
+              )}
+          </>
+        )}
 
         {showDropdown && (
           <Cover

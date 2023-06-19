@@ -2,7 +2,7 @@ import style from "./StepExtraSettings.module.scss"
 import layout from "../../../styles/Layout.module.scss"
 import cs from "classnames"
 import { StepComponent } from "../../../types/Steps"
-import { useMemo, useRef, useState, useCallback, ElementType } from "react"
+import { useRef, useState, useCallback } from "react"
 import { cloneDeep } from "@apollo/client/utilities"
 import { GenTokenSettings } from "../../../types/Mint"
 import { Form } from "../../../components/Form/Form"
@@ -14,31 +14,24 @@ import {
   ArtworkIframeRef,
 } from "../../../components/Artwork/PreviewIframe"
 import { SquareContainer } from "../../../components/Layout/SquareContainer"
-import { generateFxHash } from "../../../utils/hash"
-import { ipfsUrlWithHashAndParams } from "../../../utils/ipfs"
 import { LinkGuide } from "../../../components/Link/LinkGuide"
 import {
   checkIsTabKeyActive,
   Tabs,
   TabDefinition,
 } from "components/Layout/Tabs"
-import { deserializeParams, serializeParams } from "components/FxParams/utils"
-import { ControlsTest, ControlsTestRef } from "components/Testing/ControlsTest"
-import { ArtworkFrame } from "components/Artwork/ArtworkFrame"
-import { VariantForm } from "./VariantForm"
-import { useReceiveTokenInfos } from "hooks/useReceiveTokenInfos"
-import { truncateEnd } from "utils/strings"
+import { deserializeParams } from "components/FxParams/utils"
+import { ControlsTest } from "components/Testing/ControlsTest"
 import { IterationTest } from "components/Testing/IterationTest"
+import { ArtworkFrame } from "components/Artwork/ArtworkFrame"
+import { useRuntimeController } from "hooks/useRuntimeController"
+import { truncateEnd } from "utils/strings"
+import { VariantForm } from "./VariantForm"
 
 const variantSettingsTabs = ["preMint", "postMint"] as const
 
 export type VariantSettingsTabKey = typeof variantSettingsTabs[number]
 
-interface TabComponentProps {}
-
-interface PressKitTabData {
-  component: ElementType<TabComponentProps>
-}
 const tabsDefinitions: TabDefinition[] = [
   { key: "preMint", name: "Pre-mint" },
   { key: "postMint", name: "Post-mint" },
@@ -73,9 +66,10 @@ const ExploreOptions = [
 
 export const StepExtraSettings: StepComponent = ({ state, onNext }) => {
   const usesParams = !!state.previewInputBytes
+
   // REFERENCES
   const iframeRef = useRef<ArtworkIframeRef>(null)
-  const controlsTestRef = useRef<ControlsTestRef>(null)
+
   // STATES
   // form state (since not much data its ok to store there)
   const [selectedVariant, setSelectedVariant] = useState<number>(0)
@@ -83,38 +77,16 @@ export const StepExtraSettings: StepComponent = ({ state, onNext }) => {
     state.settings ? cloneDeep(state.settings) : initialSettings
   )
 
-  const { params, onIframeLoaded } = useReceiveTokenInfos(iframeRef)
+  const { runtime, controls } = useRuntimeController(iframeRef, {
+    cid: state.cidUrlParams!,
+    hash: state.previewHash,
+    iteration: state.previewIteration || 1,
+  })
 
-  const [hash, setHash] = useState<string>(
-    state.previewHash || generateFxHash()
-  )
-  const [iteration, setIteration] = useState<number>(
-    state.previewIteration || 1
-  )
-  // current hash
-  const [data, setData] = useState<Record<string, any> | null>(null)
   // the explore options
   const [preExploreOptions, setPreExploreOptions] = useState<string>("infinite")
   const [postExploreOptions, setPostExploreOptions] =
     useState<string>("infinite")
-
-  const inputBytes =
-    useMemo<string | null>(() => {
-      if (!data) return null
-      return serializeParams(data, params)
-    }, [data, params]) || state.previewInputBytes
-
-  // DERIVED FROM STATE
-  // the url to display in the iframe
-  const iframeUrl = useMemo<string>(() => {
-    return ipfsUrlWithHashAndParams(
-      state.cidUrlParams!,
-      hash,
-      iteration,
-      state.previewMinter!,
-      inputBytes
-    )
-  }, [hash, iteration, inputBytes])
 
   // FUNCTIONS
   // some setters to update the settings easily
@@ -139,7 +111,7 @@ export const StepExtraSettings: StepComponent = ({ state, onNext }) => {
     }))
   }
 
-  // add the current hash to the list of hashes of a mint category
+  // add current variant (token state) to the list of variants
   const addCurrentVariant = (target: VariantSettingsTabKey) => {
     const currentHashConstraints =
       settings.exploration?.[target]?.hashConstraints || []
@@ -152,18 +124,21 @@ export const StepExtraSettings: StepComponent = ({ state, onNext }) => {
       const combinationExists = currentHashConstraints.some(
         (existingHash, index) => {
           const pairedIteration = currentIterationConstraints[index]
-          return existingHash === hash && pairedIteration === iteration
+          return (
+            existingHash === runtime.state.hash &&
+            pairedIteration === runtime.state.iteration
+          )
         }
       )
 
       if (!combinationExists) {
-        currentHashConstraints.push(hash)
+        currentHashConstraints.push(runtime.state.hash)
         updateExplorationSetting(
           target,
           "hashConstraints",
           currentHashConstraints
         )
-        currentIterationConstraints.push(iteration)
+        currentIterationConstraints.push(runtime.state.iteration)
         updateExplorationSetting(
           target,
           "iterationConstraints",
@@ -176,26 +151,26 @@ export const StepExtraSettings: StepComponent = ({ state, onNext }) => {
           const pairedInputBytes = currentParamConstraints[index]
           const pairedIteration = currentIterationConstraints[index]
           return (
-            existingHash === hash &&
-            pairedInputBytes === inputBytes &&
-            pairedIteration === iteration
+            existingHash === runtime.state.hash &&
+            pairedInputBytes === runtime.details.params.inputBytes &&
+            pairedIteration === runtime.state.iteration
           )
         }
       )
-      if (!combinationExists && inputBytes) {
-        currentHashConstraints.push(hash)
+      if (!combinationExists && runtime.details.params.inputBytes) {
+        currentHashConstraints.push(runtime.state.hash)
         updateExplorationSetting(
           target,
           "hashConstraints",
           currentHashConstraints
         )
-        currentIterationConstraints.push(iteration)
+        currentIterationConstraints.push(runtime.state.iteration)
         updateExplorationSetting(
           target,
           "iterationConstraints",
           currentIterationConstraints
         )
-        currentParamConstraints.push(inputBytes)
+        currentParamConstraints.push(runtime.details.params.inputBytes)
         updateExplorationSetting(
           target,
           "paramsConstraints",
@@ -247,23 +222,19 @@ export const StepExtraSettings: StepComponent = ({ state, onNext }) => {
     paramBytes?: string
   ) => {
     setSelectedVariant(index)
-    setHash(hash)
-    setIteration(iteration)
-    if (paramBytes) {
-      const data = deserializeParams(paramBytes, params, {
+    runtime.state.update({ hash, iteration })
+    if (runtime.definition.params && paramBytes) {
+      const data = deserializeParams(paramBytes, runtime.definition.params, {
         withTransform: true,
       })
-      setData(data)
-      controlsTestRef?.current?.setData(data)
+      // update the control & force refresh the runtime
+      controls.updateParams(data, true)
     }
   }
 
-  const handleSubmitParams = (data: any) => {
-    setData(data)
-  }
-
   const translateInputBytes = (bytes: string) => {
-    const data = deserializeParams(bytes, params, {})
+    if (!runtime.definition.params) return ""
+    const data = deserializeParams(bytes, runtime.definition.params, {})
     return truncateEnd(Object.values(data).join(", "), 100)
   }
 
@@ -354,8 +325,8 @@ export const StepExtraSettings: StepComponent = ({ state, onNext }) => {
           <Spacing size="regular" />
           <HashTest
             autoGenerate={false}
-            value={hash}
-            onHashUpdate={setHash}
+            value={runtime.state.hash}
+            onHashUpdate={(hash) => runtime.state.update({ hash })}
             onRetry={() => {
               iframeRef.current?.reloadIframe()
             }}
@@ -372,16 +343,21 @@ export const StepExtraSettings: StepComponent = ({ state, onNext }) => {
           )}
           <IterationTest
             autoGenerate={false}
-            value={iteration}
-            onIterationUpdate={setIteration}
+            value={runtime.state.iteration}
+            onIterationUpdate={(iteration) =>
+              runtime.state.update({
+                iteration,
+              })
+            }
           />
-          {usesParams && (
+          {usesParams && runtime.definition.params && (
             <>
               <Spacing size="x-large" />
               <ControlsTest
-                ref={controlsTestRef}
-                params={params}
-                onSubmit={handleSubmitParams}
+                definition={controls.state.params.definition}
+                params={controls.state.params.values}
+                updateParams={controls.updateParams}
+                onSubmit={controls.hardSync}
               />
             </>
           )}
@@ -394,9 +370,7 @@ export const StepExtraSettings: StepComponent = ({ state, onNext }) => {
               <SquareContainer>
                 <ArtworkIframe
                   ref={iframeRef}
-                  url={iframeUrl}
                   textWaiting="looking for content on IPFS"
-                  onLoaded={onIframeLoaded}
                 />
               </SquareContainer>
             </ArtworkFrame>

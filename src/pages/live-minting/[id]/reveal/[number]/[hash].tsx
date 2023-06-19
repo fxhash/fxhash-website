@@ -20,6 +20,7 @@ import { Submit } from "../../../../../components/Form/Submit"
 import { UserContext } from "../../../../../containers/UserProvider"
 import { getUserProfileLink } from "../../../../../utils/user"
 import { User } from "../../../../../types/entities/User"
+import { useRouter } from "next/router"
 
 interface Props {
   hash: string
@@ -32,7 +33,9 @@ const LiveMintingRevealPage: NextPageWithLayout<Props> = ({
   token,
   iteration,
 }) => {
-  const eventCtx = useContext(LiveMintingContext)
+  const router = useRouter()
+  const { query } = router
+  const { event, mintPass } = useContext(LiveMintingContext)
   const { user } = useContext(UserContext)
 
   return (
@@ -82,14 +85,21 @@ const LiveMintingRevealPage: NextPageWithLayout<Props> = ({
             generativeUri={token.metadata.generativeUri}
             iteration={iteration}
             minter={user!.id}
+            params={query.fxparams as string}
           />
 
-          {eventCtx.mintPass && (
+          {mintPass && (
             <Submit layout="center">
               <Link
-                href={`/live-minting/${eventCtx.event!.id}?token=${
-                  eventCtx.mintPass?.token
-                }`}
+                href={`/live-minting/${event!.id}?${new URLSearchParams({
+                  token: mintPass.token,
+                  ...(query.mode && {
+                    mode: query.mode as string,
+                  }),
+                  ...(query.address && {
+                    address: query.address as string,
+                  }),
+                }).toString()}`}
                 passHref
               >
                 <Button

@@ -1,0 +1,17 @@
+.container {
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+}
+
+.show_more {
+  font-size: var(--font-size-small);
+  color: var(--color-secondary);
+  font-weight: bold;
+  text-decoration: none;
+
+  &:hover {
+    cursor: pointer;
+    text-decoration: underline;
+  }
+}

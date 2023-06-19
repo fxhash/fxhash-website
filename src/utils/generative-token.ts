@@ -37,6 +37,7 @@ import {
 import { transformReserveInputToGeneric } from "./transformers/reserves"
 import { isUserOrCollaborator } from "./user"
 import { ISettingsContext } from "../context/Theme"
+import { FxhashContracts } from "types/Contracts"
 
 export function getGenerativeTokenUrl(generative: GenerativeToken): string {
   return generative.slug
@@ -158,6 +159,7 @@ export function generativeFromMintParams(
     mintTickets: [],
     mintTicketSettings: null,
     inputBytesSize: 0,
+    gentkContractAddress: FxhashContracts.GENTK_V3,
   }
 }
 
@@ -198,6 +200,7 @@ export function generativeMetadataFromMintForm(
     description: data.informations!.description,
     childrenDescription:
       data.informations!.childrenDescription || data.informations!.description,
+    mintingInstructions: data.informations!.mintingInstructions,
     tags: tagsFromString(data.informations!.tags),
     artifactUri: ipfsUrlWithHashAndParams(
       data.cidUrlParams!,
@@ -312,6 +315,7 @@ export function generativeFromMintForm(
     mintTickets: [],
     mintTicketSettings: null,
     inputBytesSize: 0,
+    gentkContractAddress: FxhashContracts.GENTK_V3,
   }
 }
 
@@ -378,6 +382,11 @@ export const genTokLabelDefinitions: Record<
   105: {
     label: "Includes prerendered components",
     shortLabel: "Prerendered components",
+    group: GenTokLabelGroup.DETAILS,
+  },
+  106: {
+    label: "Custom minting interface",
+    shortLabel: "Custom UI",
     group: GenTokLabelGroup.DETAILS,
   },
 }

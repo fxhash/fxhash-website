@@ -1,5 +1,10 @@
-import { useMemo, ReactElement } from "react"
-import { FxParamDefinition, FxParamType } from "../types"
+import { useMemo, ReactElement, createElement } from "react"
+import {
+  FxParamDefinition,
+  FxParamOptionsMap,
+  FxParamType,
+  FxParamTypeMap,
+} from "../types"
 import { FxParamInputChangeHandler, FxParamControllerProps } from "./Controller"
 import { BooleanController } from "./Boolean"
 import { ColorController } from "./Color"
@@ -17,7 +22,7 @@ import { ControllerInvalid } from "./Invalid"
 interface FxParamControllerDefiniton<Type extends FxParamType> {
   type: Type
   controller: (props: FxParamControllerProps<Type>) => ReactElement
-  handler: FxParamInputChangeHandler
+  handler: FxParamInputChangeHandler<Type>
 }
 
 export type FxParamControllerDefinitions = {
@@ -48,7 +53,7 @@ export const controllerDefinitions: FxParamControllerDefinitions = {
   color: {
     type: "color",
     controller: ColorController,
-    handler: (v) => v,
+    handler: (v) => v.replace("#", ""),
   },
   select: {
     type: "select",
@@ -57,48 +62,61 @@ export const controllerDefinitions: FxParamControllerDefinitions = {
   },
 }
 
-export interface ParameterControllerProps {
-  parameter: FxParamDefinition<FxParamType>
-  value: any
-  onChange: (id: string, value: any) => void
+export interface ParameterControllerProps<Type extends FxParamType> {
+  definition: FxParamDefinition<Type>
+  value: FxParamTypeMap[Type]
+  onChange: (value: FxParamTypeMap[Type]) => void
   parsed?:
     | SafeParseError<ControllerDefinitionSchemaType>
     | SafeParseSuccess<ControllerDefinitionSchemaType>
 }
 
-export function ParameterController(props: ParameterControllerProps) {
-  const { parameter, onChange, parsed } = props
+export function ParameterController<Type extends FxParamType>(
+  props: ParameterControllerProps<Type>
+) {
+  const { definition, value, onChange, parsed } = props
 
   const parsedDefinition = useMemo(
-    () => parsed || validateParameterDefinition(parameter),
-    [parameter, parsed]
+    () => parsed || validateParameterDefinition(definition),
+    [definition, parsed]
   )
   const { controller: Controller, handler } = useMemo(
-    () => controllerDefinitions[parameter.type],
-    [parameter.type]
+    () => controllerDefinitions[definition.type],
+    [definition.type]
   )
 
   const handleChangeParam = (e: any) => {
     const value = handler(e)
-    onChange(parameter.id, value)
+    onChange(value as FxParamTypeMap[Type])
   }
 
   if (parsedDefinition && !parsedDefinition.success)
     return (
       <ControllerInvalid
-        definition={parameter}
+        definition={definition}
         error={parsedDefinition.error}
       />
     )
 
-  return (
-    <Controller
-      id={parameter.id}
-      label={parameter.name}
-      value={props.value}
-      onChange={handleChangeParam}
-      // TODO: This should be properly casted
-      options={parameter.options as any}
-    />
+  const options = definition.options as
+    | FxParamOptionsMap["number"]
+    | FxParamOptionsMap["string"]
+    | FxParamOptionsMap["bigint"]
+    | FxParamOptionsMap["select"]
+    | undefined
+
+  return createElement(
+    Controller as React.FC<
+      FxParamControllerProps<any> & {
+        options: typeof options
+      }
+    >,
+    {
+      id: definition.id,
+      label: definition.name,
+      value: value as any,
+      onChange: handleChangeParam,
+      options,
+    }
   )
 }
