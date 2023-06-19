@@ -43,6 +43,7 @@ import {
   CreditCardCheckoutHandle,
 } from "components/CreditCard/CreditCardCheckout"
 import { checkIsEligibleForMintWithAutoToken } from "utils/generative-token"
+import { EReserveMethod } from "types/entities/Reserve"
 
 interface Props {
   token: GenerativeToken
@@ -398,7 +399,12 @@ export function MintController({
           referrer: null,
           recipient: user?.id,
         }}
-        consumeReserve={reserveConsumptionMethod}
+        consumeReserve={
+          // access list reserves not currently supported by winter integration
+          reserveConsumptionMethod?.method === EReserveMethod.MINT_PASS
+            ? reserveConsumptionMethod
+            : null
+        }
       />
     </div>
   )

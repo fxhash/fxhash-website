@@ -53,7 +53,7 @@ export const controllerDefinitions: FxParamControllerDefinitions = {
   color: {
     type: "color",
     controller: ColorController,
-    handler: (v) => v,
+    handler: (v) => v.replace("#", ""),
   },
   select: {
     type: "select",
