@@ -195,16 +195,11 @@ export const useRuntimeController: TUseRuntimeController = (
   })
 
   useEffect(() => {
-    if (runtime.state.hash !== project.hash)
-      runtime.state.update({
-        hash: project.hash || generateFxHash(),
-      })
-
     if (runtime.state.minter !== project.minter)
       runtime.state.update({
         minter: project.minter || generateTzAddress(),
       })
-  }, [project.hash, project.minter])
+  }, [project.minter, runtime.state.minter])
 
   // the control state -> used to control the iframe
   const [controls, setControls] = useState<IControlState>({
