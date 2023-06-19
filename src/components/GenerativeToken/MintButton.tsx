@@ -106,9 +106,7 @@ export function MintButton({
         {hasCreditCardOption &&
           !freeLiveMinting &&
           !loading &&
-          (!onlyReserveLeft || onMintShouldUseReserve) &&
-          // access list reserves not currently supported by winter integration
-          reserveConsumptionMethod?.method === EReserveMethod.MINT_PASS && (
+          (!onlyReserveLeft || onMintShouldUseReserve) && (
             <ButtonPaymentCard
               onClick={openCreditCard}
               disabled={disabled}
