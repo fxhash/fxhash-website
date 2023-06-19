@@ -182,7 +182,6 @@ export const useRuntimeController: TUseRuntimeController = (
   opts
 ) => {
   const router = useRouter()
-  const { query } = router
 
   // options
   const options = { ...defaultRuntimeOptions, ...opts }
@@ -194,6 +193,13 @@ export const useRuntimeController: TUseRuntimeController = (
       minter: project.minter || generateTzAddress(),
     },
   })
+
+  useEffect(() => {
+    if (runtime.state.minter !== project.minter)
+      runtime.state.update({
+        minter: project.minter || generateTzAddress(),
+      })
+  }, [project.minter, runtime.state.minter])
 
   // the control state -> used to control the iframe
   const [controls, setControls] = useState<IControlState>({
