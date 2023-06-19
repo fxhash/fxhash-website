@@ -1,9 +1,13 @@
-import { forwardRef, useImperativeHandle, useState } from "react"
+import {
+  ComponentProps,
+  forwardRef,
+  useImperativeHandle,
+  useState,
+} from "react"
 import { winterCheckoutAppearance } from "utils/winter"
 import WinterCheckout, { IWinterMintPass } from "./WinterCheckout"
 import { IReserveConsumption } from "services/contract-operations/Mint"
 import { prepareReserveConsumption } from "utils/pack/reserves"
-import { EReserveMethod } from "types/entities/Reserve"
 
 interface MintParams {
   create_ticket: string | null
@@ -61,10 +65,6 @@ export const CreditCardCheckout = forwardRef<
      */
     const prepare = async () => {
       if (!consumeReserve) return
-      if (consumeReserve.method !== EReserveMethod.MINT_PASS)
-        throw new Error(
-          "only mint pass reserve consumption is supported for credit card checkout"
-        )
 
       try {
         const { reserveInput, payloadPacked, payloadSignature } =
