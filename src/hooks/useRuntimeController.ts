@@ -30,6 +30,7 @@ import {
 import { ipfsUrlWithHashAndParams } from "utils/ipfs"
 import { DeepPartial } from "types/DeepPartial"
 import { useRouter } from "next/router"
+import { useMessageListener } from "./useMessageListener"
 
 /**
  * The Runtime Controller provides a low-level API to interact with an iframe
@@ -362,6 +363,10 @@ export const useRuntimeController: TUseRuntimeController = (
       inputBytes: runtime.details.params.inputBytes || project.inputBytes,
     })
   }, [project.cid, runtime.details.stateHash.hard])
+  useMessageListener("fxhash_emit:params:update", (e: any) => {
+    const { params } = e.data.data
+    updateParams(params)
+  })
 
   const controlDetails = useMemo<IControlDetails>(
     () => ({
