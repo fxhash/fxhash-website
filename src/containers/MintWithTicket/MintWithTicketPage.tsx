@@ -47,6 +47,7 @@ import { IReserveConsumption } from "services/contract-operations/MintV3"
 import { useFetchRandomSeed } from "hooks/useFetchRandomSeed"
 import { useRuntimeController } from "hooks/useRuntimeController"
 import { FxParamsData } from "components/FxParams/types"
+import { useEffectAfterRender } from "hooks/useEffectAfterRender"
 
 export type TOnMintHandler = (
   ticketId: number | number[] | null,
@@ -77,16 +78,19 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
 
   // get the user to get their tezos address, or a random tz address
   const { user } = useContext(UserContext)
-  const minterAddress = useMemo(() => {
-    return user?.id || generateTzAddress()
-  }, [user])
+
+  const [useMinterFromUrl, setUseMinterFromUrl] = useState<boolean>(
+    !!router.query.fxminter
+  )
 
   const { runtime, controls, details } = useRuntimeController(
     artworkIframeRef,
     {
       cid: token.metadata.generativeUri,
       hash: (router.query.fxhash as string) || generateFxHash(),
-      minter: minterAddress,
+      minter: useMinterFromUrl
+        ? (router.query.fxminter as string)
+        : user?.id || generateTzAddress(),
       inputBytes: router.query.fxparams as string | undefined,
     },
     {
@@ -135,6 +139,11 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
     newData: FxParamsData,
     forceRefresh: boolean = false
   ) => {
+    /**
+     * If we are using the minter from the url to preview the artwork, we need to
+     * reset the minter to the user's address whenever a change is made to params.
+     */
+    if (useMinterFromUrl) setUseMinterFromUrl(false)
     if (!runtime.definition.params) return
     historyContext.pushHistory({
       type: "params-update",

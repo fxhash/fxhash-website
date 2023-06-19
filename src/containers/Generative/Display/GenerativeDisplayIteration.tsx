@@ -63,11 +63,15 @@ const _GenerativeDisplayIteration = ({
   }, [objkt])
   const gentkUrl = useMemo(() => gentkLiveUrl(objkt), [objkt])
   const isParamsToken = !!objkt.inputBytes
+  const minter = objkt.minter
   const exploreParamsQuery = useMemo(() => {
     if (!isParamsToken) return null
-    return `fxhash=${objkt.generationHash}&fxparams=${objkt.inputBytes}`
+    return new URLSearchParams({
+      fxhash: objkt.generationHash!,
+      fxparams: objkt.inputBytes!,
+      fxminter: minter!.id,
+    }).toString()
   }, [objkt, isParamsToken])
-  const minter = objkt.minter
   return (
     <>
       <div className={cs(style.artwork_header_mobile, layout.break_words)}>

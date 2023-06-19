@@ -30,6 +30,7 @@ import {
 import { ipfsUrlWithHashAndParams } from "utils/ipfs"
 import { DeepPartial } from "types/DeepPartial"
 import { useRouter } from "next/router"
+import { useEffectAfterRender } from "./useEffectAfterRender"
 
 /**
  * The Runtime Controller provides a low-level API to interact with an iframe
@@ -285,7 +286,7 @@ export const useRuntimeController: TUseRuntimeController = (
     )
 
   // whenever the runtime state changes, update the query params
-  useEffect(() => {
+  useEffectAfterRender(() => {
     updateQueryParams({
       fxhash: runtime.state.hash,
       fxparams: runtime.details.params.inputBytes || "",
