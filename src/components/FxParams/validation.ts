@@ -73,10 +73,7 @@ const BooleanControllerSchema = BaseControllerDefinitionSchema.extend({
 const ColorControllerSchema = BaseControllerDefinitionSchema.extend({
   type: z.literal(ControllerTypeSchema.enum.color),
   options: z.undefined(),
-  default: z
-    .string()
-    .regex(/^(?!#.*$).*/, "cannot start with #")
-    .optional(),
+  default: z.string().optional(),
 })
 
 const ControllerDefinitionSchema = z.union([
