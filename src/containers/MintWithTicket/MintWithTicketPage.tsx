@@ -416,7 +416,7 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
                   <Link
                     href={`/reveal/${token.id}/?${new URLSearchParams({
                       fxhash: randomSeed,
-                      fxiteration: runtime.state.iteration,
+                      fxiteration: String(runtime.state.iteration),
                       fxparams: runtime.details.params.inputBytes!,
                       fxminter: user!.id,
                     }).toString()}`}
