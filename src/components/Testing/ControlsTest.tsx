@@ -40,8 +40,21 @@ export const ControlsTest = forwardRef<ControlsTestRef, ControlsTestProps>(
       setData: updateParams,
     }))
 
+    const allParamsCodeDriven = definition?.every(
+      (d) => d.update === "code-driven"
+    )
+
     return (
       <div className={classes.container}>
+        {allParamsCodeDriven && (
+          <p className={classes.codeDrivenNote}>
+            <i className="fa-solid fa-triangle-exclamation" aria-hidden />
+            <span>
+              All params of this artwork are defined as "code-driven". This will
+              enable a dedicated minting experience for collectors.
+            </span>
+          </p>
+        )}
         {definition && params && (
           <Controls
             definition={definition}
@@ -49,19 +62,21 @@ export const ControlsTest = forwardRef<ControlsTestRef, ControlsTestProps>(
             data={params}
           />
         )}
-        <div className={classes.buttons}>
-          <Button
-            size="small"
-            color="primary"
-            type="button"
-            onClick={handleRandomizeParams}
-          >
-            randomize params
-          </Button>
-          <Button size="small" type="button" onClick={handleSubmitParams}>
-            submit params
-          </Button>
-        </div>
+        {!allParamsCodeDriven && (
+          <div className={classes.buttons}>
+            <Button
+              size="small"
+              color="primary"
+              type="button"
+              onClick={handleRandomizeParams}
+            >
+              randomize params
+            </Button>
+            <Button size="small" type="button" onClick={handleSubmitParams}>
+              submit params
+            </Button>
+          </div>
+        )}
       </div>
     )
   }

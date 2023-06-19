@@ -44,7 +44,7 @@ export interface FxParamTypeMap {
   select: string
 }
 
-export type FxParamUpdateMode = "page-reload" | "sync"
+export type FxParamUpdateMode = "page-reload" | "sync" | "code-driven"
 
 export interface FxParamDefinition<Type extends FxParamType> {
   id: string

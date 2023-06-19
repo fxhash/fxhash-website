@@ -136,6 +136,8 @@ export const PanelParams = forwardRef<PanelParamsRef, PanelParamsProps>(
       }, 2000)
     }
 
+    const allCodeDriven = params?.every((p) => p.update === "code-driven")
+
     return (
       <PanelGroup
         title="Params"
@@ -171,7 +173,7 @@ export const PanelParams = forwardRef<PanelParamsRef, PanelParamsProps>(
             <IconButton
               title="Randomize"
               onClick={handleRandomizeParams}
-              disabled={allLocked}
+              disabled={allLocked || allCodeDriven}
             >
               <i className="fa-sharp fa-solid fa-shuffle" aria-hidden />
             </IconButton>
@@ -201,6 +203,7 @@ export const PanelParams = forwardRef<PanelParamsRef, PanelParamsProps>(
                 <LockButton
                   title="toggle lock all params"
                   isLocked={allLocked}
+                  disabled={allCodeDriven}
                   onClick={handleToggleLockAllParams}
                   className={cx(classes.lockAllButton, {
                     [classes.primary]: allLocked,

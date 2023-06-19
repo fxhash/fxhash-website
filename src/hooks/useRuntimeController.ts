@@ -403,12 +403,15 @@ export const useRuntimeController: TUseRuntimeController = (
   )
 
   const controlsUrl = useMemo(() => {
-    return connector.getUrl({
-      cid: project.cid,
-      hash: runtime.state.hash,
-      minter: runtime.state.minter,
-      inputBytes: controlDetails.params.inputBytes || project.inputBytes,
-    })
+    return connector.getUrl(
+      {
+        cid: project.cid,
+        hash: runtime.state.hash,
+        minter: runtime.state.minter,
+        inputBytes: controlDetails.params.inputBytes || project.inputBytes,
+      },
+      options?.urlParams
+    )
   }, [project.cid, runtime.details.stateHash.soft, controls.params])
 
   // every time the URL changes, refresh the iframe
