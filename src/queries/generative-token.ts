@@ -6,6 +6,7 @@ import {
   Frag_GenSplitsPrimary,
   Frag_GenSplitsSecondary,
   Frag_GenTokenInfo,
+  Frag_GenTokenRedeemables,
 } from "./fragments/generative-token"
 import { Frag_UserBadge } from "./fragments/user"
 import { Frag_MediaImage } from "./fragments/media"
@@ -19,6 +20,7 @@ export const Qu_genToken = gql`
   ${Frag_GenSplitsSecondary}
   ${Frag_GenReserves}
   ${Frag_GenArticleMentions}
+  ${Frag_GenTokenRedeemables}
 
   query Query($id: Float, $slug: String) {
     generativeToken(id: $id, slug: $slug) {
@@ -34,6 +36,7 @@ export const Qu_genToken = gql`
       ...SplitsSecondary
       ...Reserves
       ...ArticleMentions
+      ...Redeemables
     }
   }
 `
@@ -176,6 +179,9 @@ export const Qu_genTokenIterations = gql`
           id
           flag
           labels
+          redeemables {
+            address
+          }
         }
         owner {
           ...UserBadgeInfos
@@ -187,6 +193,9 @@ export const Qu_genTokenIterations = gql`
           id
           version
           price
+        }
+        availableRedeemables {
+          address
         }
         captureMedia {
           ...MediaImage

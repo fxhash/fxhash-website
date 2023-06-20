@@ -27,6 +27,7 @@ import { ActionListingV3 } from "./Actions/ActionListingV3"
 import { ActionListingAcceptedV3 } from "./Actions/ActionListingAcceptedV3"
 import { ActionListingCancelledV3 } from "./Actions/ActionListingCancelledV3"
 import { getObjktUrl } from "../../utils/objkt"
+import { ActionRedeemed } from "./Actions/ActionRedeemed"
 import { ActionMintedTicket } from "./Actions/ActionMintedTicket"
 import { ActionClaimedTicket } from "./Actions/ActionClaimedTicket"
 import { ActionCollectionOffer } from "./Actions/ActionCollectionOffer"
@@ -92,6 +93,13 @@ export const ActionDefinitions: Record<TokenActionType, ActionDefinition> = {
     render: ActionSigned,
     predecescence: 0,
     link: null,
+  },
+  GENTK_REDEEMED: {
+    icon: "fa-solid fa-ticket",
+    iconColor: "success",
+    render: ActionRedeemed,
+    predecescence: 0,
+    link: ActionLinks.gentk,
   },
   COMPLETED: {
     icon: "fas fa-check-circle",

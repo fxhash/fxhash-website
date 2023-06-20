@@ -1,4 +1,14 @@
 import { BeaconWallet } from "@taquito/beacon-wallet"
+import { char2Bytes } from "@taquito/utils"
+import {
+  BurnSupplyCallData,
+  MintGenerativeCallData,
+  ModerateCall,
+  ModerateUserStateCall,
+  ProfileUpdateCallData,
+  ReportCall,
+  UpdateGenerativeCallData,
+} from "../types/ContractCalls"
 import {
   ContractAbstraction,
   TezosToolkit,
@@ -12,6 +22,7 @@ import {
   ContractOperationStatus,
 } from "../types/Contracts"
 import { isOperationApplied } from "./Blockchain"
+import { RequestSignPayloadInput, SigningType } from "@airgap/beacon-sdk"
 import { TContractOperation } from "./contract-operations/ContractOperation"
 
 // the different operations which can be performed by the wallet
@@ -246,6 +257,41 @@ export class WalletManager {
           )
         }
       }
+    }
+  }
+
+  /**
+   * Sign a bytes payload with the wallet currently synced
+   */
+  async signPayload(bytes: string) {
+    const payload: RequestSignPayloadInput = {
+      signingType: SigningType.MICHELINE,
+      payload: bytes,
+      sourceAddress: await this.tezosToolkit.wallet.pkh(),
+    }
+    return await this.beaconWallet?.client.requestSignPayload(payload)
+  }
+
+  /**
+   * Crafts a string to enhance the payload with application, time and generic
+   * sign payload message.
+   */
+  private stringPayloadCraft(string: string) {
+    return `Tezos Signed Message: fxhash ${new Date().toISOString()} ${string}`
+  }
+
+  /**
+   * Sign a string payload with the wallet currently synced
+   */
+  async signString(string: string) {
+    const payload = this.stringPayloadCraft(string)
+    const bytes = char2Bytes(payload)
+    const payloadBytes = `050100${char2Bytes("" + bytes.length)}${bytes}`
+
+    return {
+      payload,
+      payloadBytes,
+      signature: await this.signPayload(payloadBytes),
     }
   }
 

@@ -201,6 +201,12 @@
 
 @media (max-width: $breakpoint-sm) {
   .article {
+    line-height: 160%;
+
+    p {
+      line-height: 160%;
+    }
+  
     a, li, p {
       word-break: break-word;
       overflow-wrap: break-word;

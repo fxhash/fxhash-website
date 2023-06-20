@@ -11,12 +11,19 @@ import { GenerativeFlagBanner } from "../../containers/Generative/FlagBanner"
 import { GenerativeDisplay } from "../../containers/Generative/Display/GenerativeDisplay"
 import { getImageApiUrl, OG_IMAGE_SIZE } from "../../components/Image"
 import { GenerativeTokenTabs } from "../../containers/Generative/GenerativeTokenTabs"
+import { createEventsClient } from "services/EventsClient"
+import { Qu_redeemableDetails } from "queries/events/redeemable"
+import { RedeemableDetails } from "types/entities/Redeemable"
 
 interface Props {
   token: GenerativeToken
+  redeemableDetails: RedeemableDetails[] | null
 }
 
-const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
+const GenerativeTokenDetails: NextPage<Props> = ({
+  token,
+  redeemableDetails,
+}) => {
   // get the display url for og:image
   const displayUrl =
     token.captureMedia?.cid &&
@@ -65,7 +72,10 @@ const GenerativeTokenDetails: NextPage<Props> = ({ token }) => {
       <Spacing size="3x-large" sm="x-large" />
 
       <section className={cs(layout["padding-big"])}>
-        <GenerativeDisplay token={token} />
+        <GenerativeDisplay
+          token={token}
+          redeemableDetails={redeemableDetails}
+        />
       </section>
 
       <Spacing size="6x-large" />
@@ -89,7 +99,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       idStr = context.params.params[0]
     }
   }
-  let token = null
+  let token,
+    redeemableDetails = null
   const apolloClient = createApolloClient()
   if (idStr) {
     const id = parseInt(idStr as string)
@@ -114,9 +125,26 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
   }
 
+  if (token && token.redeemables?.length) {
+    // query the events API to get details about the redeemables
+    const { data } = await createEventsClient().query({
+      query: Qu_redeemableDetails,
+      fetchPolicy: "no-cache",
+      variables: {
+        where: {
+          address: {
+            in: token.redeemables.map((red: any) => red.address),
+          },
+        },
+      },
+    })
+    redeemableDetails = data.consumables
+  }
+
   return {
     props: {
-      token: token,
+      token,
+      redeemableDetails,
     },
     notFound: !token,
   }

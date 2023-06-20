@@ -11,12 +11,18 @@ import { GenerativeFlagBanner } from "../../containers/Generative/FlagBanner"
 import { ObjktTabs } from "../../containers/Objkt/ObjktTabs"
 import { GenerativeDisplayIteration } from "../../containers/Generative/Display/GenerativeDisplayIteration"
 import { getImageApiUrl, OG_IMAGE_SIZE } from "../../components/Image"
+import { MetaHead } from "components/Utils/MetaHead"
+import { getUserName } from "utils/user"
+import { createEventsClient } from "services/EventsClient"
+import { Qu_redeemableDetails } from "queries/events/redeemable"
+import { RedeemableDetails } from "types/entities/Redeemable"
 
 interface Props {
   objkt: Objkt
+  redeemableDetails: RedeemableDetails[]
 }
 
-const ObjktDetails: NextPage<Props> = ({ objkt }) => {
+const ObjktDetails: NextPage<Props> = ({ objkt, redeemableDetails }) => {
   // get the display url for og:image
   const displayUrl =
     objkt.captureMedia?.cid &&
@@ -24,48 +30,21 @@ const ObjktDetails: NextPage<Props> = ({ objkt }) => {
 
   return (
     <>
-      <Head>
-        <title>fxhash — {objkt.name}</title>
-        <meta
-          key="og:title"
-          property="og:title"
-          content={`${objkt.name} — fxhash`}
-        />
-        <meta
-          key="description"
-          name="description"
-          content={truncateEnd(objkt.metadata?.description || "", 200, "")}
-        />
-        <meta
-          key="og:description"
-          property="og:description"
-          content={truncateEnd(objkt.metadata?.description || "", 200, "")}
-        />
-        <meta key="og:type" property="og:type" content="website" />
-        <meta
-          key="og:image"
-          property="og:image"
-          content={displayUrl || "https://www.fxhash.xyz/images/og/og1.jpg"}
-        />
-        <meta name="twitter:site" content="@fx_hash_" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={`${objkt.name} — fxhash`} />
-        <meta
-          name="twitter:description"
-          content={truncateEnd(objkt.metadata?.description || "", 200, "")}
-        />
-        <meta
-          name="twitter:image"
-          content={displayUrl || "https://www.fxhash.xyz/images/og/og1.jpg"}
-        />
-      </Head>
+      <MetaHead
+        title={`${objkt.name} — ${getUserName(objkt.issuer.author)}`}
+        description={truncateEnd(objkt.metadata?.description || "", 200, "")}
+        image={displayUrl}
+      />
 
       <GenerativeFlagBanner token={objkt.issuer} />
 
       <Spacing size="3x-large" sm="x-large" />
 
       <section className={cs(layout["padding-big"])}>
-        <GenerativeDisplayIteration objkt={objkt} />
+        <GenerativeDisplayIteration
+          objkt={objkt}
+          redeemableDetails={redeemableDetails}
+        />
       </section>
 
       <Spacing size="6x-large" />
@@ -90,7 +69,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
   }
   let variables: Record<string, any> = {},
-    token = null
+    token = null,
+    redeemableDetails = null
 
   if (idStr) {
     const id = idStr as string
@@ -115,9 +95,26 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
   }
 
+  if (token && token.availableRedeemables?.length) {
+    // query the events API to get details about the redeemables
+    const { data } = await createEventsClient().query({
+      query: Qu_redeemableDetails,
+      fetchPolicy: "no-cache",
+      variables: {
+        where: {
+          address: {
+            in: token.availableRedeemables.map((red: any) => red.address),
+          },
+        },
+      },
+    })
+    redeemableDetails = data.consumables
+  }
+
   return {
     props: {
       objkt: token,
+      redeemableDetails,
     },
     notFound: !token,
   }

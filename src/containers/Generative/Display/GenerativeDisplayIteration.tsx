@@ -1,6 +1,7 @@
 import React, { memo, useCallback, useMemo, useState } from "react"
 import cs from "classnames"
 import style from "./GenerativeDisplayIteration.module.scss"
+import colors from "styles/Colors.module.css"
 import layout from "../../../styles/Layout.module.scss"
 import { Spacing } from "../../../components/Layout/Spacing"
 import { EntityBadge } from "../../../components/User/EntityBadge"
@@ -31,14 +32,19 @@ import { Clamp } from "../../../components/Clamp/Clamp"
 import { truncateMiddle } from "../../../utils/strings"
 import { HoverTitle } from "../../../components/Utils/HoverTitle"
 import { Icon } from "../../../components/Icons/Icon"
+import { GenerativeRedeemable } from "../../../components/GenerativeToken/GenerativeRedeemable"
 import { DisplayTezos } from "../../../components/Display/DisplayTezos"
+import { RedeemableDetails } from "types/entities/Redeemable"
+import { RedeemableIndicator } from "components/Card/RedeemableIndicator"
 
 interface GenerativeDisplayIterationProps {
   objkt: Objkt
+  redeemableDetails: RedeemableDetails[] | null
 }
 
 const _GenerativeDisplayIteration = ({
   objkt,
+  redeemableDetails,
 }: GenerativeDisplayIterationProps) => {
   const [showDescription, setShowDescription] = useState(false)
   const handleShowDescription = useCallback(() => setShowDescription(true), [])
@@ -68,10 +74,12 @@ const _GenerativeDisplayIteration = ({
     return `fxhash=${objkt.generationHash}&fxparams=${objkt.inputBytes}`
   }, [objkt, isParamsToken])
   const minter = objkt.minter
+
   return (
     <>
       <div className={cs(style.artwork_header_mobile, layout.break_words)}>
         <h3>{objkt.name}</h3>
+        <RedeemableIndicator objkt={objkt} showLabel enableHover={false} />
         <Spacing size="regular" />
         <EntityBadge
           classNameAvatar={style.avatar}
@@ -104,6 +112,7 @@ const _GenerativeDisplayIteration = ({
             <UserBadge prependText="owned by" user={owner} size="big" />
             <Spacing size="x-large" />
             <h3>{objkt.name}</h3>
+            <RedeemableIndicator objkt={objkt} showLabel enableHover={false} />
           </div>
 
           <Spacing size="x-large" sm="none" />
@@ -174,6 +183,16 @@ const _GenerativeDisplayIteration = ({
               style.extra_details
             )}
           >
+            {redeemableDetails && (
+              <GenerativeRedeemable
+                urlRedeemable={`/gentk/${objkt.id}/redeem`}
+                // take the first redeemable?
+                details={redeemableDetails[0]}
+                redeemedPercentage={
+                  objkt.availableRedeemables![0].redeemedPercentage
+                }
+              />
+            )}
             {objkt.mintedPrice !== null && (
               <>
                 <strong>Minted Price</strong>

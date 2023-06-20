@@ -1,4 +1,7 @@
 // import style from "./PlaceOffer.module.scss"
+import { Button } from "components/Button"
+import { Icon } from "components/Icons/Icon"
+import Link from "next/link"
 import { useContext, useMemo } from "react"
 import { Objkt } from "../../types/entities/Objkt"
 import { Offer } from "../../types/entities/Offer"
@@ -46,6 +49,20 @@ export function MarketplaceActions({ objkt }: Props) {
         ) : (
           <OfferCreate objkt={objkt} />
         ))}
+
+      {objkt.availableRedeemables?.length > 0 &&
+        owner.id === user.id &&
+        !objkt.activeListing && (
+          <Link href={`/gentk/${objkt.id}/redeem`}>
+            <Button
+              isLink
+              color="secondary"
+              iconComp={<Icon icon="sparkles" />}
+            >
+              redeem
+            </Button>
+          </Link>
+        )}
     </>
   )
 }

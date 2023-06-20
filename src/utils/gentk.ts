@@ -1,9 +1,7 @@
+import { Redeemable } from "types/entities/Redeemable"
 import { FxhashContracts } from "../types/Contracts"
 import { DeepPartial } from "../types/DeepPartial"
-import { GenerativeToken } from "../types/entities/GenerativeToken"
 import { Objkt } from "../types/entities/Objkt"
-import { User } from "../types/entities/User"
-import { ObjktMetadata } from "../types/Metadata"
 
 export function getGentkUrl(gentk: Objkt): string {
   return gentk.slug ? `/gentk/slug/${gentk.slug}` : `/gentk/${gentk.id}`
@@ -47,4 +45,19 @@ export function getGentkFA2Contract(gentk: Objkt): string {
   } else {
     return FxhashContracts.GENTK_V3
   }
+}
+
+/**
+ * Given a gentk, outputs a list of Redeemables for which the Gentk can be
+ * redeemed, based on the Generative Token redeemables state and the Gentk
+ * Redemptions
+ */
+export function gentkRedeemables(gentk: Objkt): Redeemable[] {
+  // filter redeemables to see which are still available based on redemptions
+  return gentk.issuer.redeemables.filter((redeemable) => {
+    const redemptions = gentk.redemptions.filter(
+      (r) => r.redeemable.address === redeemable.address
+    )
+    return redemptions.length < redeemable.maxConsumptionsPerToken
+  })
 }

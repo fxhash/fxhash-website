@@ -1,0 +1,36 @@
+@import "../../styles/Variables";
+
+.content, .titles {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  & > div {
+    flex: 1;
+  }
+  gap: $spacing-x-large;
+}
+.titles {
+  align-items: flex-end;
+}
+.content_left {
+  position: sticky;
+  top: 32px;
+}
+
+@media (max-width: $breakpoint-sm) {
+  .content {
+    flex-direction: column;
+  }
+  .content_left {
+    position: static;
+    width: 200px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .titles_infos {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+}

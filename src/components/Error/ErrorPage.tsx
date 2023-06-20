@@ -17,7 +17,7 @@ export function ErrorPage({ title, children }: PropsWithChildren<Props>) {
       )}
     >
       <h1>{title}</h1>
-      <div>{children}</div>
+      {children}
     </div>
   )
 }

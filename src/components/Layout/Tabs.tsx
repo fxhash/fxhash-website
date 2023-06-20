@@ -57,17 +57,19 @@ export function Tab({
 }: TabProps) {
   const Wrapper = wrapperComponent || DefaultTabWrapper
 
+  console.log(onClick)
   return (
     <Wrapper
       className={cs(style.tab, style[`tab-${layout}`], {
         [style.active]: active,
         ["tab-active"]: active,
+        [style.disable_click]: !onClick,
       })}
       onClick={onClick}
       {...definition.props}
       role="button"
       tabIndex={0}
-      onKeyDown={onKeydownAccessibleButton(onClick)}
+      onKeyDown={onClick ? onKeydownAccessibleButton(onClick) : undefined}
     >
       {definition.name}
     </Wrapper>
@@ -144,6 +146,7 @@ export function Tabs({
           const isActive = checkIsTabActive
             ? checkIsTabActive(def, activeIdx, idx)
             : idx === activeIdx
+          const onClick = onClickTab ? () => onClickTab?.(idx, def) : undefined
           return (
             <Tab
               key={idx}
@@ -151,7 +154,7 @@ export function Tabs({
               definition={def}
               layout={tabsLayout}
               wrapperComponent={tabWrapperComponent}
-              onClick={() => onClickTab?.(idx, def)}
+              onClick={onClick}
             />
           )
         })}

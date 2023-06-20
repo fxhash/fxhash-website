@@ -43,6 +43,14 @@ export const Qu_genTokListings = gql`
         owner {
           ...UserBadgeInfos
         }
+        issuer {
+          redeemables {
+            address
+          }
+        }
+        availableRedeemables {
+          address
+        }
       }
     }
   }
@@ -70,6 +78,9 @@ export const Qu_genTokActions = gql`
         }
         target {
           ...UserBadgeInfos
+        }
+        redeemable {
+          address
         }
         ticketId
         objkt {

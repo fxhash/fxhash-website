@@ -1,11 +1,11 @@
 import type { NextPage } from "next"
-import { Spacing } from "../components/Layout/Spacing"
-import { SectionHeader } from "../components/Layout/SectionHeader"
-import ClientOnly from "../components/Utils/ClientOnly"
-import { ExploreGenerativeTokens } from "../containers/ExploreGenerativeTokens"
+import { Spacing } from "components/Layout/Spacing"
+import { SectionHeader } from "components/Layout/SectionHeader"
+import ClientOnly from "components/Utils/ClientOnly"
+import { ExploreGenerativeTokens } from "containers/ExploreGenerativeTokens"
 import Head from "next/head"
-import { ExploreTabs } from "../containers/Explore/ExploreTabs"
-import { TitleHyphen } from "../components/Layout/TitleHyphen"
+import { ExploreTabs } from "containers/Explore/ExploreTabs"
+import { TitleHyphen } from "../../components/Layout/TitleHyphen"
 
 const Explore: NextPage = () => {
   return (

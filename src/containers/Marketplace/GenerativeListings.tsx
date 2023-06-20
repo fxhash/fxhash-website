@@ -74,7 +74,10 @@ export const GenerativeListings = ({ token }: Props) => {
 
   useEffect(() => {
     if (!loading && objkts) {
-      if (currentLength.current === objkts.length) {
+      if (
+        currentLength.current === objkts.length ||
+        objkts.length < ITEMS_PER_PAGE
+      ) {
         ended.current = true
       } else {
         currentLength.current = objkts.length
