@@ -1,7 +1,5 @@
 import React, { memo, useContext, useEffect, useState } from "react"
 import cs from "classnames"
-// @ts-expect-error no types for autonomy
-import autonomyIRL from "autonomy-irl-js"
 import style from "./ConnectWallet.module.scss"
 import { Button } from "../Button"
 import { UserContext } from "../../containers/UserProvider"
@@ -70,15 +68,15 @@ const ConnectWalletDefault = () => {
 
 const _ConnectWallet = () => {
   const { event } = useContext(LiveMintingContext)
+  const { connect } = useContext(UserContext)
   const [useAutonomy, setUseAutonomy] = useState(false)
 
   // check if visiting from Autonomy app
   useEffect(() => {
     const checkAutonomy = async () => {
       try {
-        await autonomyIRL.getAddress({
-          chain: autonomyIRL.chain.tez,
-        })
+        // attempt to connect to Autonomy wallet
+        await connect(true)
         setUseAutonomy(true)
       } catch (e) {
         // do nothing

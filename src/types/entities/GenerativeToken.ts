@@ -36,6 +36,7 @@ export enum GenTokLabel {
   PFP = 103,
   AUDIO = 104,
   INCLUDE_PRERENDERED_COMPONENTS = 105,
+  CUSTOM_MINTING_INTERFACE = 106,
 }
 
 export enum GenTokLabelGroup {
@@ -121,6 +122,8 @@ export interface GenerativeToken {
   originalSupply: number
   supply: number
   balance: number
+  // defined for V3 only
+  iterationsCount?: number
   enabled: boolean
   royalties: number
   splitsPrimary: Split[]
@@ -145,6 +148,7 @@ export interface GenerativeToken {
   mintTickets: MintTicket[]
   mintTicketSettings: MintTicketSettings | null
   inputBytesSize: number
+  gentkContractAddress: string
 }
 
 export interface GenerativeTokenWithCollection extends GenerativeToken {

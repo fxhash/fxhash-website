@@ -9,6 +9,7 @@ import { getUserName } from "utils/user"
 import { PanelControls, PanelControlsProps } from "./PanelControls"
 import { Spacing } from "components/Layout/Spacing"
 import Link from "next/link"
+import { PanelMintingInstructions } from "./PanelMintingInstructions"
 
 interface PanelRootProps
   extends PanelParamsProps,
@@ -18,6 +19,7 @@ interface PanelRootProps
   panelParamsRef?: RefObject<PanelParamsRef>
   onClickHide: () => void
   show: boolean
+  inputBytes: string | null
 }
 
 export function PanelRoot(props: PanelRootProps) {
@@ -25,6 +27,7 @@ export function PanelRoot(props: PanelRootProps) {
     show,
     data,
     params,
+    inputBytes,
     hash,
     token,
     features,
@@ -66,20 +69,25 @@ export function PanelRoot(props: PanelRootProps) {
           description={`by ${name}`}
           onClickHide={onClickHide}
         />
-        <Spacing size="small" />
+        <Spacing size="x-small" />
         <Link href="/doc/collect/fxparams-mint-tickets">
           <a className={style.learn}>
             <i aria-hidden="true" className="fas fa-book" />
             How to use fx(params)
           </a>
         </Link>
-        <Spacing size="regular" />
+        <Spacing size="large" />
         <div className={cs(style.body)}>
           <PanelHash
             hash={hash}
             onChangeHash={onChangeHash}
             disableWarningAnimation={disableWarningAnimation}
           />
+          {token.metadata.mintingInstructions && (
+            <PanelMintingInstructions
+              instructions={token.metadata.mintingInstructions}
+            />
+          )}
           <PanelParams
             ref={panelParamsRef}
             data={data}
@@ -108,6 +116,7 @@ export function PanelRoot(props: PanelRootProps) {
       <PanelControls
         mode={mode}
         token={token}
+        inputBytes={inputBytes}
         onSubmit={onSubmit}
         onOpenNewTab={onOpenNewTab}
         onClickBack={onClickBack}

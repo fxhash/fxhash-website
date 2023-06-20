@@ -6,6 +6,7 @@ import {
   useImperativeHandle,
   useMemo,
   useContext,
+  useCallback,
 } from "react"
 import style from "./Artwork.module.scss"
 import cs from "classnames"
@@ -42,13 +43,13 @@ export const ArtworkIframe = forwardRef<ArtworkIframeRef, Props>(
       setError(false)
     }, [])
 
-    const reloadIframe = () => {
+    const reloadIframe = useCallback(() => {
       if (url && iframeRef?.current?.contentWindow) {
         setLoading(true)
         setError(false)
         iframeRef.current.contentWindow.location.replace(url)
       }
-    }
+    }, [url])
 
     useEffect(() => {
       // when the url changes, we set reload to true
@@ -65,14 +66,18 @@ export const ArtworkIframe = forwardRef<ArtworkIframeRef, Props>(
       setLoading(false)
     }
 
-    const getHtmlIframe = (): HTMLIFrameElement | null => {
+    const getHtmlIframe = useCallback((): HTMLIFrameElement | null => {
       return iframeRef.current
-    }
+    }, [])
 
-    useImperativeHandle(ref, () => ({
-      reloadIframe,
-      getHtmlIframe,
-    }))
+    useImperativeHandle(
+      ref,
+      () => ({
+        reloadIframe,
+        getHtmlIframe,
+      }),
+      [reloadIframe, getHtmlIframe]
+    )
 
     const warning = useMemo(() => {
       if (!tokenLabels || tokenLabels.length === 0) return false

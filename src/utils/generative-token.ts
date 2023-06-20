@@ -37,6 +37,7 @@ import {
 import { transformReserveInputToGeneric } from "./transformers/reserves"
 import { isUserOrCollaborator } from "./user"
 import { ISettingsContext } from "../context/Theme"
+import { FxhashContracts } from "types/Contracts"
 
 export function getGenerativeTokenUrl(generative: GenerativeToken): string {
   return generative.slug
@@ -159,6 +160,7 @@ export function generativeFromMintParams(
     mintTickets: [],
     mintTicketSettings: null,
     inputBytesSize: 0,
+    gentkContractAddress: FxhashContracts.GENTK_V3,
   }
 }
 
@@ -199,6 +201,7 @@ export function generativeMetadataFromMintForm(
     description: data.informations!.description,
     childrenDescription:
       data.informations!.childrenDescription || data.informations!.description,
+    mintingInstructions: data.informations!.mintingInstructions,
     tags: tagsFromString(data.informations!.tags),
     artifactUri: ipfsUrlWithHashAndParams(
       data.cidUrlParams!,
@@ -312,6 +315,7 @@ export function generativeFromMintForm(
     mintTickets: [],
     mintTicketSettings: null,
     inputBytesSize: 0,
+    gentkContractAddress: FxhashContracts.GENTK_V3,
   }
 }
 
@@ -378,6 +382,11 @@ export const genTokLabelDefinitions: Record<
   105: {
     label: "Includes prerendered components",
     shortLabel: "Prerendered components",
+    group: GenTokLabelGroup.DETAILS,
+  },
+  106: {
+    label: "Custom minting interface",
+    shortLabel: "Custom UI",
     group: GenTokLabelGroup.DETAILS,
   },
 }
@@ -523,9 +532,15 @@ export const mapReserveIdtoEnum: Record<number, EReserveMethod> =
 /**
  * How many editions are left in the reserve ?
  */
-export function reserveSize(token: GenerativeToken): number {
+export function reserveSize(
+  token: GenerativeToken,
+  eligibleReserves?: EReserveMethod[]
+): number {
   let size = 0
-  for (const reserve of token.reserves) {
+  const reserves = eligibleReserves
+    ? token.reserves.filter((res) => eligibleReserves.includes(res.method))
+    : token.reserves
+  for (const reserve of reserves) {
     size += reserve.amount
   }
   return Math.min(token.balance, size)
@@ -545,7 +560,7 @@ const mapReserveToEligiblity: Record<EReserveMethod, TReserveEligibility> = {
   WHITELIST: (reserve, user) => {
     return reserve.data[user.id] || 0
   },
-  MINT_PASS: (reserve, user, passCtx) => {
+  MINT_PASS: (reserve, _, passCtx) => {
     return reserve.data
       ? passCtx?.mintPass?.group?.address === reserve.data
         ? 1
@@ -555,16 +570,41 @@ const mapReserveToEligiblity: Record<EReserveMethod, TReserveEligibility> = {
 }
 
 /**
+ * Given a token and the live minting context, checks whether the project is
+ * part of the event and whether the user has an auth token to mint. We won't
+ * know until the user tries to mint whether the token is valid.
+ */
+export const checkIsEligibleForMintWithAutoToken = (
+  token: GenerativeToken,
+  liveMintingContext?: ILiveMintingContext
+) => {
+  if (!liveMintingContext || !liveMintingContext.event) return false
+
+  const isProjectIncludedInEvent =
+    liveMintingContext.event.projectIds?.includes(token.id)
+  const isEligibleToMint = !!liveMintingContext.authToken
+
+  return isProjectIncludedInEvent && isEligibleToMint
+}
+
+/**
  * Is a user elligible to mint from the reserve of a token ?
  */
 export function reserveEligibleAmount(
   user: User,
   token: GenerativeToken,
-  liveMintingContext?: ILiveMintingContext
+  liveMintingContext?: ILiveMintingContext,
+  eligibleReserves?: EReserveMethod[]
 ): number {
   let eligibleFor = 0
-  if (token.reserves && user && user.id) {
-    for (const reserve of token.reserves) {
+
+  if (checkIsEligibleForMintWithAutoToken(token, liveMintingContext)) return 1
+
+  const reserves = eligibleReserves
+    ? token.reserves.filter((res) => eligibleReserves.includes(res.method))
+    : token.reserves
+  if (reserves && user && user.id) {
+    for (const reserve of reserves) {
       if (reserve.amount > 0 && reserve.method) {
         eligibleFor += Math.min(
           mapReserveToEligiblity[reserve.method](
@@ -596,19 +636,24 @@ export function getReservesAmount(reserves: IReserve[]): number {
 export function getReserveConsumptionMethod(
   token: GenerativeToken,
   user: User,
-  liveMintingContext: ILiveMintingContext
+  liveMintingContext: ILiveMintingContext,
+  eligibleReserves?: EReserveMethod[]
 ): IReserveConsumption | null {
   let consumption: IReserveConsumption | null = null
 
+  const reserves = eligibleReserves
+    ? token.reserves?.filter((res) => eligibleReserves.includes(res.method))
+    : token.reserves
+
   // only if a token has a reserve we check
-  if (token.reserves) {
+  if (reserves) {
     // we sort the reserve, MINT_PASS is last
-    const sorted = token.reserves.sort((a, b) =>
+    const sorted = reserves.sort((a, b) =>
       a.method === EReserveMethod.MINT_PASS ? -1 : 1
     )
 
     // we parse the reserve and check for a match
-    for (const reserve of token.reserves) {
+    for (const reserve of reserves) {
       if (reserve.amount > 0) {
         if (
           mapReserveToEligiblity[reserve.method](
@@ -620,6 +665,7 @@ export function getReserveConsumptionMethod(
           consumption = {
             method: reserve.method,
             data: {
+              event: liveMintingContext.event?.id,
               token: liveMintingContext.mintPass?.token,
               address: user.id,
               project: token.id,
@@ -633,4 +679,44 @@ export function getReserveConsumptionMethod(
   }
 
   return consumption
+}
+
+export const isTokenFullyMinted = (
+  token: Pick<
+    GenerativeToken,
+    "balance" | "inputBytesSize" | "iterationsCount" | "supply"
+  >
+) => {
+  const usesParams = token.inputBytesSize > 0
+  /**
+   * if the project uses params, it is fully minted when all tickets have been
+   * used (iterations count is equal to supply)
+   */
+  if (usesParams) return token.iterationsCount === token.supply
+  return token.balance === 0
+}
+
+export const getExploreSet = (token: Pick<GenerativeToken, "metadata">) =>
+  token.metadata.settings?.exploration
+
+export const getActiveExploreSet = (
+  token: Pick<
+    GenerativeToken,
+    "balance" | "metadata" | "inputBytesSize" | "iterationsCount" | "supply"
+  >
+) => {
+  const fullyMinted = isTokenFullyMinted(token)
+  const exploreSet = getExploreSet(token)
+
+  return fullyMinted ? exploreSet?.postMint : exploreSet?.preMint
+}
+
+export const isExplorationDisabled = (
+  token: Pick<
+    GenerativeToken,
+    "balance" | "metadata" | "inputBytesSize" | "iterationsCount" | "supply"
+  >
+) => {
+  const exploreSet = getActiveExploreSet(token)
+  return exploreSet?.enabled === false
 }

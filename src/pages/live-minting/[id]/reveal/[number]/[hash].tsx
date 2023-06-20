@@ -22,6 +22,7 @@ import { Submit } from "../../../../../components/Form/Submit"
 import { UserContext } from "../../../../../containers/UserProvider"
 import { getUserProfileLink } from "../../../../../utils/user"
 import { User } from "../../../../../types/entities/User"
+import { useRouter } from "next/router"
 
 interface Props {
   hash: string
@@ -29,7 +30,9 @@ interface Props {
 }
 
 const LiveMintingRevealPage: NextPageWithLayout<Props> = ({ hash, token }) => {
-  const eventCtx = useContext(LiveMintingContext)
+  const router = useRouter()
+  const { query } = router
+  const { event, mintPass } = useContext(LiveMintingContext)
   const { user } = useContext(UserContext)
 
   return (
@@ -78,27 +81,36 @@ const LiveMintingRevealPage: NextPageWithLayout<Props> = ({ hash, token }) => {
             hash={hash}
             generativeUri={token.metadata.generativeUri}
             minter={user!.id}
+            params={query.fxparams as string}
           />
 
-          <Submit layout="center">
-            <Link
-              href={`/live-minting/${eventCtx.event!.id}?token=${
-                eventCtx.mintPass?.token
-              }`}
-              passHref
-            >
-              <Button
-                isLink
-                color="secondary"
-                iconComp={<i aria-hidden className="fas fa-arrow-left" />}
-                iconSide="left"
-                size="regular"
-                style={{ justifySelf: "center" }}
+          {mintPass && (
+            <Submit layout="center">
+              <Link
+                href={`/live-minting/${event!.id}?${new URLSearchParams({
+                  token: mintPass.token,
+                  ...(query.mode && {
+                    mode: query.mode as string,
+                  }),
+                  ...(query.address && {
+                    address: query.address as string,
+                  }),
+                }).toString()}`}
+                passHref
               >
-                mint other project
-              </Button>
-            </Link>
-          </Submit>
+                <Button
+                  isLink
+                  color="secondary"
+                  iconComp={<i aria-hidden className="fas fa-arrow-left" />}
+                  iconSide="left"
+                  size="regular"
+                  style={{ justifySelf: "center" }}
+                >
+                  mint other project
+                </Button>
+              </Link>
+            </Submit>
+          )}
 
           <Submit layout="center">
             <Link

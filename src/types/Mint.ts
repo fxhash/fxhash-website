@@ -113,6 +113,7 @@ export interface GenTokDistributionForm<N> {
 export interface GenTokenInformationsForm {
   name: string
   description: string
+  mintingInstructions: string
   childrenDescription: string
   tags: string
   labels: GenTokLabel[]

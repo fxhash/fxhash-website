@@ -6,6 +6,7 @@
   border-top: 1px solid var(--fxl-color-dark2);
   font-size: var(--fxl-font-size-s);
 }
+
 .buttonsWrapper {
   flex-grow: 1;
   display: flex;
@@ -20,7 +21,8 @@
   &:checked ~ label {
     &::before {
       background: var(--fxl-color-light1);
-      box-shadow: 3px 3px 0px var(--fxl-color-dark2) inset, -3px -3px 0px var(--fxl-color-dark2) inset;
+      box-shadow: 3px 3px 0px var(--fxl-color-dark2) inset,
+        -3px -3px 0px var(--fxl-color-dark2) inset;
     }
   }
 }
@@ -34,4 +36,18 @@
   & > * {
     flex: 1 1 0;
   }
+}
+
+.creditCardButton {
+  height: auto !important;
+  width: 100%;
+}
+
+.reserveDropdown {
+  color: var(--fxl-color-text-primary);
+}
+
+.caret {
+  margin-right: 0 !important;
+  margin-left: 15px;
 }

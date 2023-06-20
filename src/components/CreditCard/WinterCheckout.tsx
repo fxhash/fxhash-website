@@ -1,12 +1,15 @@
-import React, {
-  FunctionComponent,
-  PropsWithChildren,
-  useEffect,
-  useState,
-} from "react"
+import React, { FunctionComponent, useEffect, useState } from "react"
 import style from "./WinterCheckout.module.scss"
 
 type TSuccess = (transactionHash: string, amountUSD: number) => void
+
+export interface IWinterMintPass {
+  address: string
+  parameters: {
+    payload: string
+    signature: string
+  }
+}
 
 interface Props {
   projectId?: number
@@ -19,7 +22,9 @@ interface Props {
   title?: string
   brandImage?: string
   mintQuantity?: number
-  extraMintParams?: object
+  extraMintParams?: {
+    mintPass: IWinterMintPass
+  }
   priceFunctionParams?: object
   production?: boolean
   fillSource?: string
@@ -79,7 +84,7 @@ const WinterCheckout: FunctionComponent<Props> = (props) => {
       )
     }
 
-    const paramsStr = [
+    const paramsStr: (keyof Props)[] = [
       "contractVersion",
       "walletAddress",
       "email",
@@ -95,20 +100,20 @@ const WinterCheckout: FunctionComponent<Props> = (props) => {
       "paymentMethod",
     ]
     paramsStr.forEach((param) => {
-      const propValue = props[param as keyof PropsWithChildren<Props>]
+      const propValue = props[param]
       if (propValue) {
         queryParams.push(`${param}=${propValue}`)
       }
     })
 
-    const paramsObj = [
+    const paramsObj: (keyof Props)[] = [
       "extraMintParams",
       "priceFunctionParams",
       "appearance",
       "additionalPurchaseParams",
     ]
     paramsObj.forEach((param) => {
-      const propValue = props[param as keyof PropsWithChildren<Props>]
+      const propValue = props[param]
       if (propValue) {
         queryParams.push(
           `${param}=${encodeURIComponent(JSON.stringify(propValue))}`
@@ -121,7 +126,14 @@ const WinterCheckout: FunctionComponent<Props> = (props) => {
       ? "https://checkout.usewinter.com/?" + queryString
       : "https://sandbox-winter-checkout.onrender.com/?" + queryString
     setProjectUrl(url)
-  }, [contractAddress, production, projectId, props, tokenId])
+  }, [
+    contractAddress,
+    production,
+    projectId,
+    props,
+    tokenId,
+    additionalPurchaseParams,
+  ])
 
   return showModal ? (
     <iframe id="winter-checkout" src={projectUrl} className={style.iframe} />

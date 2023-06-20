@@ -104,6 +104,7 @@ export const Frag_GenTokenInfo = gql`
     ...TokenBadge
     id
     version
+    gentkContractAddress
     inputBytesSize
     slug
     flag
@@ -111,6 +112,7 @@ export const Frag_GenTokenInfo = gql`
     supply
     originalSupply
     balance
+    iterationsCount
     enabled
     royalties
     createdAt

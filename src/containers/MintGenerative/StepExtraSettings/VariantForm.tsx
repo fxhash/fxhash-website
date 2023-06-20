@@ -114,20 +114,34 @@ export function VariantForm(props: VariantFormProps) {
 
   return (
     <>
-      <p className={cs(text.info)}>
-        <em>{TARGET_DESCRIPTIONS[target]}</em>
-      </p>
-      <Field className={cs(style.checkbox)}>
-        <Checkbox
-          name={`${target}-enabled`}
-          value={settings?.enabled || false}
-          onChange={(_, event) =>
-            onChangeExplorationSettings(target, "enabled", !settings?.enabled)
-          }
-        >
-          exploration enabled
-        </Checkbox>
-      </Field>
+      {withParams && target === "preMint" ? (
+        <p className={cs(text.info)}>
+          <em>
+            Pre-mint exploration cannot be disabled when using fx(params).
+          </em>
+        </p>
+      ) : (
+        <>
+          <p className={cs(text.info)}>
+            <em>{TARGET_DESCRIPTIONS[target]}</em>
+          </p>
+          <Field className={cs(style.checkbox)}>
+            <Checkbox
+              name={`${target}-enabled`}
+              value={settings?.enabled || false}
+              onChange={(_, event) =>
+                onChangeExplorationSettings(
+                  target,
+                  "enabled",
+                  !settings?.enabled
+                )
+              }
+            >
+              exploration enabled
+            </Checkbox>
+          </Field>
+        </>
+      )}
 
       <div
         className={cs({

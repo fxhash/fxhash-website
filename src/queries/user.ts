@@ -156,6 +156,9 @@ export const Qu_userEntireCollection = gql`
           labels
           ...Author
         }
+        minter {
+          id
+        }
         name
         createdAt
         activeListing {

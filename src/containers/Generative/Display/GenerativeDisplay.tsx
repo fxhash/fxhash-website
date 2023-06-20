@@ -155,6 +155,14 @@ export function GenerativeDisplay({
             labelCTA="read more"
           >
             {nl2br(token.metadata?.description)}
+
+            {token.metadata?.mintingInstructions && (
+              <>
+                <Spacing size="large" sm="regular" />
+                <strong>Minting Instructions</strong>
+                {nl2br(token.metadata?.mintingInstructions)}
+              </>
+            )}
           </Clamp>
 
           <Spacing size="2x-large" sm="3x-large" />

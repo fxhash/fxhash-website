@@ -4,12 +4,14 @@ import cs from "classnames"
 import style from "./ButtonPaymentCard.module.scss"
 import { iconCardWinter } from "../Icons/custom"
 import { UserContext } from "containers/UserProvider"
+import { LiveMintingContext } from "context/LiveMinting"
 
 interface ButtonPaymentCardProps {
   className?: string
   onClick?: () => void
   hasDropdown?: string
   disabled: boolean
+  label?: string | null
 }
 
 const _ButtonPaymentCard = ({
@@ -17,20 +19,21 @@ const _ButtonPaymentCard = ({
   onClick,
   disabled,
   hasDropdown,
+  label = null,
 }: ButtonPaymentCardProps) => {
-  const { isLiveMinting } = useContext(UserContext)
+  const { paidLiveMinting } = useContext(LiveMintingContext)
   return (
     <Button
       type="button"
       size="custom"
       onClick={onClick}
       disabled={disabled}
-      color={isLiveMinting ? "secondary" : "secondary-inverted"}
+      color={paidLiveMinting ? "secondary" : "secondary-inverted"}
       title="Pay with your payment card"
       className={cs(style.credit_card_btn, className)}
       classNameChildren={style.credit_card_btn_children}
     >
-      {isLiveMinting && <div className={style.copy}>buy iteration</div>}
+      {label && <div className={style.copy}>{label}</div>}
       <i className={style.icon_winter} aria-hidden>
         {iconCardWinter}
       </i>
