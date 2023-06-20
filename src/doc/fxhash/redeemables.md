@@ -12,11 +12,11 @@ Redeemables were introduced to facilitate and secure the necessary steps artists
 
 Redeemables provide a set of modules allowing the platform to request arbitrary data. This data is then signed and is associated with a redeem event when it occurs on-chain. It enables us to map on-chain redemptions with the data signed and collected off-chain, facilitating various physical events, primarily the shipping of a product associated with an NFT.
 
-Redemptions are non-destructive. When you redeem your NFT, it continues to exist after the redemption and you keep its ownership.
+Redeeming your token does not destroy it, nor does it remove the token from your wallet or ownership. After redeeming your token, it remains collectable, salable, and transferable in its own right.
 
 # Is the feature open ?
 
-Redeemables are rather complex, and for now, can only be created from our internal admin dashboard. Before releasing the feature to the public, we want to carefully test it and ensure we cover the basic use cases. We are open to receiving requests if you want to experiment with redeemables.
+Redeemables are rather complex and, for now, can only be created via our internal admin dashboard. Before releasing the feature to the public, we want to test it carefully and ensure we cover the basic use cases. We are open to receiving requests if you want to experiment with redeemables.
 
 # How can I request access to have my project enabled through redeemables ?
 
