@@ -114,7 +114,9 @@ export function RedeemableDetailsView({
           {info}
           <br />
           <br />
-          <LinkGuide href="/docs">Learn more about Redeemable tokens</LinkGuide>
+          <LinkGuide href="/doc/fxhash/redeemables">
+            Learn more about Redeemable tokens
+          </LinkGuide>
         </Infobox>
         {urlRedeem && !error && (
           <>
