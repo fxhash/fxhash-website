@@ -63,6 +63,13 @@ export const GenTokLabel_Params: GenTokLabelDefinition = {
     "This piece is using the fx(params) module, letting collector play with parameters before minting",
 }
 
+export const GenTokLabel_Redeemable: GenTokLabelDefinition = {
+  label: "Redeemable",
+  shortLabel: "Redeemable",
+  group: GenTokLabelGroup.HIGHLIGHT,
+  description: "This project can be redeemed.",
+}
+
 export interface GenerativeTokenMarketStats {
   floor: number | null
   median: number | null

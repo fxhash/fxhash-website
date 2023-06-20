@@ -35,6 +35,7 @@ import { Icon } from "../../../components/Icons/Icon"
 import { GenerativeRedeemable } from "../../../components/GenerativeToken/GenerativeRedeemable"
 import { DisplayTezos } from "../../../components/Display/DisplayTezos"
 import { RedeemableDetails } from "types/entities/Redeemable"
+import { RedeemableIndicator } from "components/Card/RedeemableIndicator"
 
 interface GenerativeDisplayIterationProps {
   objkt: Objkt
@@ -78,6 +79,7 @@ const _GenerativeDisplayIteration = ({
     <>
       <div className={cs(style.artwork_header_mobile, layout.break_words)}>
         <h3>{objkt.name}</h3>
+        <RedeemableIndicator objkt={objkt} showLabel enableHover={false} />
         <Spacing size="regular" />
         <EntityBadge
           classNameAvatar={style.avatar}
@@ -110,6 +112,7 @@ const _GenerativeDisplayIteration = ({
             <UserBadge prependText="owned by" user={owner} size="big" />
             <Spacing size="x-large" />
             <h3>{objkt.name}</h3>
+            <RedeemableIndicator objkt={objkt} showLabel enableHover={false} />
           </div>
 
           <Spacing size="x-large" sm="none" />

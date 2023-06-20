@@ -6,6 +6,7 @@ import { Label } from "./Label"
 import {
   GenerativeToken,
   GenTokLabel_Params,
+  GenTokLabel_Redeemable,
 } from "types/entities/GenerativeToken"
 
 interface Props {
@@ -19,6 +20,10 @@ export function Labels({ className, token }: Props) {
     // add "Params" label if params-enabled
     if (token.inputBytesSize > 0) {
       out.unshift(GenTokLabel_Params)
+    }
+    // add "Redeemable" label
+    if (token.redeemables?.length > 0) {
+      out.unshift(GenTokLabel_Redeemable)
     }
     return out
   }, [token])

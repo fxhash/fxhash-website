@@ -6,6 +6,8 @@ import {
   GenTokLabel,
   GenTokLabelGroup,
   GenTokLabel_Params,
+  GenTokLabel_Redeemable,
+  GenTokLabelDefinition,
 } from "../../types/entities/GenerativeToken"
 import colors from "../../styles/Colors.module.css"
 import text from "../../styles/Text.module.css"
@@ -22,6 +24,7 @@ import { MintingState } from "../GenerativeToken/MintingState/MintingState"
 import { DisplayTezos } from "../Display/DisplayTezos"
 import { Icon } from "components/Icons/Icon"
 import { Label } from "components/GenerativeToken/Label/Label"
+import { useMemo } from "react"
 
 interface Props {
   token: GenerativeToken
@@ -41,6 +44,13 @@ export function GenerativeTokenCard({
   lockedUntil,
 }: Props) {
   const url = getGenerativeTokenUrl(token)
+
+  const labels = useMemo<GenTokLabelDefinition[]>(() => {
+    const out: GenTokLabelDefinition[] = []
+    if (token.redeemables?.length > 0) out.push(GenTokLabel_Redeemable)
+    if (token.inputBytesSize > 0) out.push(GenTokLabel_Params)
+    return out
+  }, [token])
 
   return (
     <Link href={url} passHref>
@@ -81,22 +91,14 @@ export function GenerativeTokenCard({
                 <MintingState token={token} />
               )}
 
-              {token.inputBytesSize > 0 && (
+              {labels.length > 0 && (
                 <div className={cs(style.labels)}>
-                  <Label definition={GenTokLabel_Params} />
+                  {labels.map((def, idx) => (
+                    <Label key={idx} definition={def} />
+                  ))}
                 </div>
               )}
             </div>
-
-            {token.redeemables?.length > 0 && (
-              <>
-                <Spacing size="8px" />
-                <span className={cs(text.small, text.bold, colors.success)}>
-                  <Icon icon="sparkles" /> Redeemable
-                </span>
-                <Spacing size="8px" />
-              </>
-            )}
 
             <div className={style.mint_progress}>
               <MintProgress token={token}>
