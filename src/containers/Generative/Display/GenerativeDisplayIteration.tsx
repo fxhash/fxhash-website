@@ -74,7 +74,7 @@ const _GenerativeDisplayIteration = ({
     return `fxhash=${objkt.generationHash}&fxparams=${objkt.inputBytes}`
   }, [objkt, isParamsToken])
   const minter = objkt.minter
-  const isProjectRedeemable = objkt.issuer.redeemables.length > 0
+  const isProjectRedeemable = objkt.issuer.redeemables?.length > 0
 
   return (
     <>
