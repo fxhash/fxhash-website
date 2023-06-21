@@ -74,6 +74,7 @@ const _GenerativeDisplayIteration = ({
     return `fxhash=${objkt.generationHash}&fxparams=${objkt.inputBytes}`
   }, [objkt, isParamsToken])
   const minter = objkt.minter
+  const isProjectRedeemable = objkt.issuer.redeemables.length > 0
 
   return (
     <>
@@ -112,7 +113,13 @@ const _GenerativeDisplayIteration = ({
             <UserBadge prependText="owned by" user={owner} size="big" />
             <Spacing size="x-large" />
             <h3>{objkt.name}</h3>
-            <RedeemableIndicator objkt={objkt} showLabel enableHover={false} />
+            {isProjectRedeemable && (
+              <RedeemableIndicator
+                objkt={objkt}
+                showLabel
+                enableHover={false}
+              />
+            )}
           </div>
 
           <Spacing size="x-large" sm="none" />
