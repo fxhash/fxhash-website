@@ -47,6 +47,9 @@ export const Qu_objkt = gql`
         marketStats {
           floor
         }
+        redeemables {
+          address
+        }
         ...Author
       }
       metadata
