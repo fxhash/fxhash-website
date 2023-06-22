@@ -361,6 +361,7 @@ export const useRuntimeController: TUseRuntimeController = (
       cid: project.cid,
       hash: runtime.state.hash,
       minter: runtime.state.minter,
+      iteration: runtime.state.iteration,
       inputBytes: runtime.details.params.inputBytes || project.inputBytes,
     })
   }, [project.cid, runtime.details.stateHash.hard])
@@ -398,6 +399,7 @@ export const useRuntimeController: TUseRuntimeController = (
     return connector.getUrl({
       cid: project.cid,
       hash: runtime.state.hash,
+      iteration: runtime.state.iteration,
       minter: runtime.state.minter,
       inputBytes: controlDetails.params.inputBytes || project.inputBytes,
     })
