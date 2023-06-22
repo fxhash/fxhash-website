@@ -75,7 +75,7 @@ export function ButtonVariations({
         ] as Variant,
         ...suppliedVariants,
       ],
-      (v) => `${v[0]}-${v[1]}`
+      (v) => `${v[0]}-${v[1]}-${v[2]}`
     )
   }, [activeSettings, token])
 
@@ -90,7 +90,8 @@ export function ButtonVariations({
       else {
         // find index of the active hash
         let idx = variants?.findIndex(
-          (v) => v[0] === variant[0] && v[1] === variant[1]
+          (v) =>
+            v[0] === variant[0] && v[1] === variant[1] && v[2] === variant[2]
         )
         idx = idx === -1 || idx == null ? 0 : idx
         return (
@@ -127,7 +128,7 @@ export function ButtonVariations({
     else {
       // find index of the active hash
       let idx = variants?.findIndex(
-        (v) => v[0] === variant[0] && v[1] === variant[1]
+        (v) => v[0] === variant[0] && v[1] === variant[1] && v[2] === variant[2]
       )
       idx = idx === -1 || idx == null ? 0 : idx
       // compute the new index
