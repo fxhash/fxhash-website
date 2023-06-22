@@ -1,0 +1,42 @@
+@import "../../styles/Variables";
+
+.container {
+  text-align: left;
+}
+.container_mint {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--fxl-spacing-sm);
+  .mint {
+    flex: 1;
+  }
+}
+.container_generate {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--fxl-spacing-sm);
+  .generate {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.checkbox {
+  font-size: var(--font-size-small);
+}
+.checkmark {
+  height: 24px;
+  width: 24px;
+}
+
+@media (max-width: $breakpoint-sm) {
+  .container {
+    font-size: 14px;
+  }
+}
