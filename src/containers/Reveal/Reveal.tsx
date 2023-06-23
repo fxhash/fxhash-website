@@ -15,6 +15,7 @@ import { RevealIframe } from "../../components/Reveal/RevealIframe"
 interface Props {
   generativeUri: string
   hash: string
+  iteration: number
   minter: string
   params?: string
   previeweUri?: string
@@ -30,6 +31,7 @@ interface Props {
  */
 export function Reveal({
   hash,
+  iteration,
   minter,
   params,
   generativeUri,
@@ -45,13 +47,14 @@ export function Reveal({
     } else {
       url = `${ipfsGatewayUrl(generativeUri)}/?fxhash=${hash}`
     }
+    url += `&fxiteration=${iteration}`
     url += `&fxminter=${minter}`
     // append params if defined
     if (params && params.length > 0) {
       url += `&fxparams=${params}`
     }
     return url
-  }, [generativeUri, hash, minter, params])
+  }, [generativeUri, hash, iteration, minter, params])
 
   const reloadIframe = () => {
     if (iframeRef.current) {

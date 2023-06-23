@@ -3,7 +3,6 @@ import layout from "styles/Layout.module.scss"
 import cs from "classnames"
 import { cloneDeep } from "@apollo/client/utilities"
 import { GetServerSideProps, NextPage } from "next"
-import { ArticleContent } from "../../../components/Article/ArticleContent"
 import { Qu_eventDetails } from "../../../queries/events/events"
 import { createEventsClient } from "../../../services/EventsClient"
 import { mdToHtml } from "../../../services/Markdown"
@@ -14,12 +13,11 @@ import { Qu_genTokens } from "../../../queries/generative-token"
 import { GenerativeToken } from "../../../types/entities/GenerativeToken"
 import { createApolloClient } from "../../../services/ApolloClient"
 import { CardsExplorer } from "../../../components/Exploration/CardsExplorer"
-import { InfiniteScrollTrigger } from "../../../components/Utils/InfiniteScrollTrigger"
 import { CardsContainer } from "../../../components/Card/CardsContainer"
 import { GenerativeTokenCard } from "../../../components/Card/GenerativeTokenCard"
-import { CardsLoading } from "../../../components/Card/CardsLoading"
 import { useContext } from "react"
 import { SettingsContext } from "../../../context/Theme"
+import { ArticleEvent } from "components/Article/ArticleEvent"
 
 type Props = {
   event: LiveMintingEvent
@@ -27,6 +25,7 @@ type Props = {
 }
 const EventsOnboardingPage: NextPage<Props> = ({ event, tokens }) => {
   const settings = useContext(SettingsContext)
+
   return (
     <>
       <Head>
@@ -50,16 +49,17 @@ const EventsOnboardingPage: NextPage<Props> = ({ event, tokens }) => {
           content={`fxhash — ${event.name} onboarding`}
         />
         <meta name="twitter:description" content={event.description} />
+        <link rel="stylesheet" href="/highlight/dracula.css" />
       </Head>
 
       <main className={cs(layout["padding-small"])}>
         <Spacing size="3x-large" />
-        <ArticleContent
+        <ArticleEvent
           content={event.onboarding!.description}
           className={cs(style.body)}
         />
         {event.onboarding!.components.map((comp, idx) => (
-          <ArticleContent
+          <ArticleEvent
             key={idx}
             content={comp.component.content}
             className={cs(style.body)}
@@ -140,6 +140,21 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   for (const component of event.onboarding.components) {
     component.component.content = await mdToHtml(component.component.content)
   }
+
+  // quick trick to have video links as video tags
+  // regex to find the video url in markdown
+
+  event.onboarding.description = event.onboarding.description?.replace(
+    /https:\/\/[^\s^\n]*\.mp4/g,
+    (match: string) => {
+      return `
+      <video controls>
+        <source src="${match}" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>  
+    `
+    }
+  )
 
   return {
     props: {

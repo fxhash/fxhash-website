@@ -12,6 +12,7 @@ import { IRuntimeContext, useRuntime } from "./useRuntime"
 export interface TokenInfo {
   version: string | null
   hash: string
+  iteration: number
   minter: string
   features: RawTokenFeatures | null
   params: any | null
@@ -22,6 +23,9 @@ interface IFrameTokenInfos {
   onIframeLoaded: () => void
   hash: string
   setHash: (h: string) => void
+  // iteration number
+  iteration: number
+  setIteration: (i: number) => void
   // minter address
   minter: string
   setMinter: (minter: string) => void
@@ -84,7 +88,11 @@ function handleOldSnippetEvents(
 
 export function useReceiveTokenInfos(
   ref: React.RefObject<ArtworkIframeRef | null>,
-  options?: { initialHash?: string; initialMinter?: string }
+  options?: {
+    initialHash?: string
+    initialIteration?: number
+    initialMinter?: string
+  }
 ): IFrameTokenInfos {
   const runtime = useRuntime()
   const { state, definition, details } = runtime
@@ -93,16 +101,21 @@ export function useReceiveTokenInfos(
   const [info, setInfo] = useState<TokenInfo>({
     version: null,
     hash: options?.initialHash || generateFxHash(),
+    iteration: options?.initialIteration || 1,
     minter: options?.initialMinter || generateTzAddress(),
     features: null,
     params: null,
     paramsDefinition: null,
   })
 
+  console.log(info)
+
   const setFeatures = (features: RawTokenFeatures | null) =>
     definition.update({ features })
 
   const setHash = (hash: string) => state.update({ hash })
+
+  const setIteration = (iteration: number) => state.update({ iteration })
 
   const setMinter = (minter: string) => state.update({ minter })
 
@@ -122,12 +135,18 @@ export function useReceiveTokenInfos(
         const {
           version,
           params: { definitions, values },
+          iteration,
           minter,
           features,
           hash,
         } = e.data.data
         runtime.update({
-          state: { hash, minter, params: values },
+          state: {
+            hash,
+            minter,
+            iteration: parseInt(iteration),
+            params: values,
+          },
           definition: { params: definitions, features, version },
         })
       }
@@ -174,9 +193,11 @@ export function useReceiveTokenInfos(
     features: definition.features,
     params: definition.params,
     hash: state.hash,
+    iteration: state.iteration,
     minter: state.minter,
     paramsDefinition: definition.params,
     setHash,
+    setIteration,
     setMinter,
     setParams,
     setFeatures,

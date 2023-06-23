@@ -12,8 +12,9 @@ import {
   serializeParams,
 } from "components/FxParams/utils"
 import { getActiveExploreSet, isTokenFullyMinted } from "utils/generative-token"
+import { getRandomIteration } from "utils/iteration"
 
-export type Variant = [string | null, string | null]
+export type Variant = [string | null, string | null, number | null]
 
 interface Props {
   token: Pick<
@@ -57,17 +58,22 @@ export function ButtonVariations({
     if (!activeSettings?.hashConstraints) return null
     let suppliedVariants = activeSettings.hashConstraints.map(
       (hash, idx) =>
-        [hash, activeSettings.paramsConstraints?.[idx] || null] as Variant
+        [
+          hash,
+          activeSettings.paramsConstraints?.[idx] || null,
+          activeSettings.iterationConstraints?.[idx] || null,
+        ] as Variant
     )
     return uniqBy(
       [
         [
           token.metadata.previewHash || null,
           token.metadata.previewInputBytes || null,
+          token.metadata.previewIteration || null,
         ] as Variant,
         ...suppliedVariants,
       ],
-      (v) => `${v[0]}-${v[1]}`
+      (v) => `${v[0]}-${v[1]}-${v[2]}`
     )
   }, [activeSettings, token])
 
@@ -82,7 +88,8 @@ export function ButtonVariations({
       else {
         // find index of the active hash
         let idx = variants?.findIndex(
-          (v) => v[0] === variant[0] && v[1] === variant[1]
+          (v) =>
+            v[0] === variant[0] && v[1] === variant[1] && v[2] === variant[2]
         )
         idx = idx === -1 || idx == null ? 0 : idx
         return (
@@ -112,13 +119,14 @@ export function ButtonVariations({
             getRandomParamValues(params, { noTransform: true }),
             params
           ),
+        getRandomIteration(token.supply),
       ] as Variant)
     }
     // if there is a list of hashes, cycle through those
     else {
       // find index of the active hash
       let idx = variants?.findIndex(
-        (v) => v[0] === variant[0] && v[1] === variant[1]
+        (v) => v[0] === variant[0] && v[1] === variant[1] && v[2] === variant[2]
       )
       idx = idx === -1 || idx == null ? 0 : idx
       // compute the new index

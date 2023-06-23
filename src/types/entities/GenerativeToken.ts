@@ -37,6 +37,7 @@ export enum GenTokLabel {
   AUDIO = 104,
   INCLUDE_PRERENDERED_COMPONENTS = 105,
   CUSTOM_MINTING_INTERFACE = 106,
+  FXHACKATHON2023 = 302023,
 }
 
 export enum GenTokLabelGroup {

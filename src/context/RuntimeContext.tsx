@@ -13,6 +13,7 @@ import { IRuntimeContext, useRuntime } from "hooks/useRuntime"
 const defaultRuntimeContext: IRuntimeContext = {
   state: {
     hash: "",
+    iteration: 1,
     minter: "",
     params: {},
     update: () => {},

@@ -69,12 +69,13 @@ export interface ParameterControllerProps<Type extends FxParamType> {
   parsed?:
     | SafeParseError<ControllerDefinitionSchemaType>
     | SafeParseSuccess<ControllerDefinitionSchemaType>
+  forceEnabled?: boolean
 }
 
 export function ParameterController<Type extends FxParamType>(
   props: ParameterControllerProps<Type>
 ) {
-  const { definition, value, onChange, parsed } = props
+  const { definition, value, onChange, parsed, forceEnabled } = props
 
   const parsedDefinition = useMemo(
     () => parsed || validateParameterDefinition(definition),
@@ -105,6 +106,8 @@ export function ParameterController<Type extends FxParamType>(
     | FxParamOptionsMap["select"]
     | undefined
 
+  const isCodeDriven = definition.update === "code-driven" && !forceEnabled
+
   return createElement(
     Controller as React.FC<
       FxParamControllerProps<any> & {
@@ -117,6 +120,7 @@ export function ParameterController<Type extends FxParamType>(
       value: value as any,
       onChange: handleChangeParam,
       options,
+      isCodeDriven,
     }
   )
 }
