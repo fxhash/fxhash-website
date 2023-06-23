@@ -1,0 +1,20 @@
+{
+  "prim": "pair",
+  "args": [
+    {
+      "prim": "option",
+      "args": [{
+        "prim": "timestamp"
+      }],
+      "annots": [
+        "%opens_at"
+      ]
+    },
+    {
+      "prim": "mutez",
+      "annots": [
+        "%price"
+      ]
+    }
+  ]
+}
