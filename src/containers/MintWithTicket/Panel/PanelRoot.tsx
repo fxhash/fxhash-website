@@ -20,6 +20,7 @@ interface PanelRootProps
   onClickHide: () => void
   show: boolean
   inputBytes: string | null
+  randomizeIteration: () => void
 }
 
 export function PanelRoot(props: PanelRootProps) {
@@ -33,6 +34,7 @@ export function PanelRoot(props: PanelRootProps) {
     features,
     onChangeHash,
     onChangeData,
+    randomizeIteration,
     lockedParamIds,
     onChangeLockedParamIds,
     history,
@@ -80,7 +82,10 @@ export function PanelRoot(props: PanelRootProps) {
         <div className={cs(style.body)}>
           <PanelHash
             hash={hash}
-            onChangeHash={onChangeHash}
+            onChangeHash={(hash) => {
+              onChangeHash(hash)
+              randomizeIteration()
+            }}
             disableWarningAnimation={disableWarningAnimation}
           />
           {token.metadata.mintingInstructions && (

@@ -346,6 +346,12 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
               inputBytes={runtime.details.params.inputBytes}
               features={runtime.definition.features}
               hash={runtime.state.hash}
+              randomizeIteration={() =>
+                runtime.state.update({
+                  iteration:
+                    token.supply - Math.floor(Math.random() * token.balance),
+                })
+              }
               token={token}
               onLocalDataChange={handleLocalDataChange}
               onChangeData={handleChangeData}
