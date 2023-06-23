@@ -46,6 +46,8 @@ import { useFetchRandomSeed } from "hooks/useFetchRandomSeed"
 import { getIteration, useOnChainData } from "hooks/useOnChainData"
 import { useRuntimeController } from "hooks/useRuntimeController"
 import { FxParamsData } from "components/FxParams/types"
+import { FxContext } from "./Panel/PanelContext"
+import { getRandomIteration } from "utils/iteration"
 
 export type TOnMintHandler = (
   ticketId: number | number[] | null,
@@ -73,6 +75,7 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
   const [withAutoUpdate, setWithAutoUpdate] = useState<boolean>(true)
   const [lockedParamIds, setLockedParamIds] = useState<string[]>([])
   const [tempConfig, setTempConfig] = useState<ParamConfiguration>()
+  const [fxcontext, setFxcontext] = useState<FxContext>(FxContext.MINTING)
 
   // get the user to get their tezos address, or a random tz address
   const { user } = useContext(UserContext)
@@ -86,13 +89,19 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
       cid: token.metadata.generativeUri,
       hash: (router.query.fxhash as string) || generateFxHash(),
       minter: minterAddress,
+      context: fxcontext,
+      iteration: getRandomIteration(token.supply, token.balance),
       inputBytes: router.query.fxparams as string | undefined,
     },
     {
       autoRefresh: withAutoUpdate,
-      urlParams: new URLSearchParams("fxcontext=minting"),
     }
   )
+
+  const updateContext = useCallback((context: FxContext) => {
+    setFxcontext(context)
+    runtime.state.update({ context })
+  }, [])
 
   const updateAutoUpdate = (auto: boolean) => {
     auto && controls.hardSync()
@@ -100,6 +109,7 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
   }
 
   const handleClosePreMintView = useCallback(() => {
+    updateContext(FxContext.MINTING)
     setShowPreMintWarningView(false)
     setSelectedTicketId(null)
     setSelectedReserveConsumption(null)
@@ -112,6 +122,9 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
         if (showPreMintWarningView) {
           handleClosePreMintView()
         }
+      },
+      onError: () => {
+        updateContext(FxContext.MINTING)
       },
     }
   )
@@ -197,6 +210,7 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
 
   const handleClickSubmit: TOnMintHandler = useCallback(
     (_ticketId, reserveConsumption = null) => {
+      updateContext(FxContext.STANDALONE)
       const ticketIdToMint =
         mode === "with-ticket" && ticketId ? ticketId : _ticketId
       if (showTicketPreMintWarning) {
@@ -346,10 +360,17 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
               inputBytes={runtime.details.params.inputBytes}
               features={runtime.definition.features}
               hash={runtime.state.hash}
+              randomizeIteration={() =>
+                runtime.state.update({
+                  iteration: getRandomIteration(token.supply, token.balance),
+                })
+              }
               token={token}
               onLocalDataChange={handleLocalDataChange}
               onChangeData={handleChangeData}
               onChangeHash={handleChangeHash}
+              fxcontext={fxcontext}
+              setFxcontext={updateContext}
               lockedParamIds={lockedParamIds}
               onChangeLockedParamIds={setLockedParamIds}
               history={historyContext.history}
@@ -417,7 +438,7 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
                   <Link
                     href={`/reveal/${token.id}/?${new URLSearchParams({
                       fxhash: randomSeed,
-                      fxiteration: String(runtime.state.iteration),
+                      fxiteration: iteration,
                       fxparams: runtime.details.params.inputBytes!,
                       fxminter: user!.id,
                     }).toString()}`}

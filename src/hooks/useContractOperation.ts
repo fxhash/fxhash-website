@@ -14,6 +14,7 @@ import { createOperationAppliedAlert } from "components/Alerts/OperationAppliedA
 
 interface OptionsContractOperation {
   onSuccess?: (data: any) => void
+  onError?: (error: any) => void
 }
 
 /**
@@ -87,6 +88,7 @@ export function useContractOperation<Params>(
             options.onSuccess(data)
           }
         } else if (status === ContractOperationStatus.ERROR) {
+          options.onError?.(data)
           setLoading(false)
           setError(true)
         }

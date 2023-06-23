@@ -148,6 +148,8 @@ export function MintController({
       mintOperation.operation
     )
 
+  const isTicketMinted = token.inputBytesSize > 0
+
   /**
    * can be used to call the mint entry point of the smart contract, or to
    * request the backend to mint the token on behalf of the user
@@ -201,7 +203,10 @@ export function MintController({
   const { randomSeed, loading: randomSeedLoading } =
     useFetchRandomSeed(finalOpHash)
 
-  const { data: iteration } = useOnChainData(finalOpHash, getIteration)
+  const { data: iteration } = useOnChainData(
+    !isTicketMinted ? finalOpHash : null,
+    getIteration
+  )
 
   const finalLoading = loading || loadingCC || loadingFree || randomSeedLoading
 
@@ -216,8 +221,6 @@ export function MintController({
         fxiteration: iteration,
         fxminter: user?.id!,
       }).toString()}`
-
-  const isTicketMinted = token.inputBytesSize > 0
 
   // outputs ticket transaction or null, taking credit card into account
   const finalOp = useAsyncMemo(async () => {

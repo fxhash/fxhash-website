@@ -200,6 +200,7 @@ export const useRuntimeController: TUseRuntimeController = (
     state: {
       hash: project.hash || generateFxHash(),
       minter: project.minter || generateTzAddress(),
+      iteration: project.iteration || 1,
       context: project.context,
     },
   })
@@ -375,7 +376,7 @@ export const useRuntimeController: TUseRuntimeController = (
       },
       options?.urlParams
     )
-  }, [project.cid, runtime.details.stateHash.hard])
+  }, [project.cid, runtime.details.stateHash.hard, options.urlParams])
 
   useMessageListener("fxhash_emit:params:update", (e: any) => {
     const { params } = e.data.data
