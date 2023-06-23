@@ -12,6 +12,7 @@ import {
   serializeParams,
 } from "components/FxParams/utils"
 import { getActiveExploreSet, isTokenFullyMinted } from "utils/generative-token"
+import { getRandomIteration } from "utils/iteration"
 
 export type Variant = [string | null, string | null, number | null]
 
@@ -24,9 +25,6 @@ interface Props {
   onChangeVariant: (variant: Variant) => void
   variant: Variant
 }
-
-const getRandomIteration = (maxIterations: number) =>
-  Math.floor(Math.random() * maxIterations) + 1
 
 export function ButtonVariations({
   token,

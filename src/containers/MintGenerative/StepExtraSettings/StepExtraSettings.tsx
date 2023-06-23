@@ -358,6 +358,7 @@ export const StepExtraSettings: StepComponent = ({ state, onNext }) => {
                 params={controls.state.params.values}
                 updateParams={controls.updateParams}
                 onSubmit={controls.hardSync}
+                forceEnabled
               />
             </>
           )}
