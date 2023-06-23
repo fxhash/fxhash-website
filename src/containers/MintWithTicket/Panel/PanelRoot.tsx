@@ -10,7 +10,7 @@ import { PanelControls, PanelControlsProps } from "./PanelControls"
 import { Spacing } from "components/Layout/Spacing"
 import Link from "next/link"
 import { PanelMintingInstructions } from "./PanelMintingInstructions"
-import { PanelContext } from "./PanelContext"
+import { FxContext, PanelContext } from "./PanelContext"
 
 interface PanelRootProps
   extends PanelParamsProps,
@@ -22,8 +22,8 @@ interface PanelRootProps
   show: boolean
   inputBytes: string | null
   randomizeIteration: () => void
-  fxcontext: "minting" | "standalone"
-  setFxcontext: (fxcontext: "minting" | "standalone") => void
+  fxcontext: FxContext
+  setFxcontext: (fxcontext: FxContext) => void
 }
 
 export function PanelRoot(props: PanelRootProps) {

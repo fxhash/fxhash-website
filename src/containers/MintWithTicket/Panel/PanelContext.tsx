@@ -2,9 +2,14 @@ import styles from "./PanelContext.module.scss"
 import { PanelGroup } from "./PanelGroup"
 import { Switch } from "components/Input/Switch"
 
+export enum FxContext {
+  MINTING = "minting",
+  STANDALONE = "standalone",
+}
+
 export interface PanelContextProps {
-  context: "minting" | "standalone"
-  onChangeContext: (c: "minting" | "standalone") => void
+  context: FxContext
+  onChangeContext: (c: FxContext) => void
 }
 
 export function PanelContext({ context, onChangeContext }: PanelContextProps) {
@@ -18,9 +23,9 @@ export function PanelContext({ context, onChangeContext }: PanelContextProps) {
         <Switch
           className={styles.switch}
           onChange={(value) =>
-            onChangeContext(value ? "standalone" : "minting")
+            onChangeContext(value ? FxContext.STANDALONE : FxContext.MINTING)
           }
-          value={context === "standalone"}
+          value={context === FxContext.STANDALONE}
         />
         Standalone
       </div>
