@@ -52,12 +52,7 @@ export function IterationTest({
       <Field error={error}>
         <small>Current iteration</small>
         <div className={style.iterationInputContainer}>
-          <Button
-            size="small"
-            color="primary"
-            onClick={decrement}
-            type="button"
-          >
+          <Button size="small" color="black" onClick={decrement} type="button">
             -
           </Button>
           <InputText
@@ -75,12 +70,7 @@ export function IterationTest({
               iterationInputRef.current && iterationInputRef.current.select()
             }
           />
-          <Button
-            size="small"
-            color="primary"
-            onClick={increment}
-            type="button"
-          >
+          <Button size="small" color="black" onClick={increment} type="button">
             +
           </Button>
         </div>
