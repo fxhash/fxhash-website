@@ -104,6 +104,7 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
   }
 
   const handleClosePreMintView = useCallback(() => {
+    setFxcontext(FxContext.MINTING)
     setShowPreMintWarningView(false)
     setSelectedTicketId(null)
     setSelectedReserveConsumption(null)
