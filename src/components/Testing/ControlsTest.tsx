@@ -15,6 +15,7 @@ interface ControlsTestProps {
   params: FxParamsData | null
   updateParams: (params: Partial<FxParamsData>) => void
   onSubmit: (data: FxParamsData) => void
+  forceEnabled?: boolean
 }
 
 export interface ControlsTestRef {
@@ -23,7 +24,7 @@ export interface ControlsTestRef {
 
 export const ControlsTest = forwardRef<ControlsTestRef, ControlsTestProps>(
   (props, ref) => {
-    const { params, definition, updateParams, onSubmit } = props
+    const { params, definition, updateParams, onSubmit, forceEnabled } = props
 
     const handleSubmitParams = () => {
       params && onSubmit(params)
@@ -46,21 +47,23 @@ export const ControlsTest = forwardRef<ControlsTestRef, ControlsTestProps>(
 
     return (
       <div className={classes.container}>
-        {allParamsCodeDriven && (
-          <p className={classes.codeDrivenNote}>
-            <i className="fa-solid fa-triangle-exclamation" aria-hidden />
-            <span>
-              All params of this artwork are defined as "code-driven". This will
-              enable a dedicated minting experience for collectors.
-            </span>
-          </p>
-        )}
         {definition && params && (
           <Controls
             definition={definition}
             onChangeData={updateParams}
             data={params}
+            forceEnabled={forceEnabled}
           />
+        )}
+        {allParamsCodeDriven && (
+          <p className={classes.codeDrivenNote}>
+            <i className="fa-solid fa-triangle-exclamation" aria-hidden />
+            <span>
+              All params of this artwork are defined as "code-driven". This will
+              enable a dedicated minting experience for collectors. In this view
+              "code-driven" controllers are just enabled for debugging purposes.
+            </span>
+          </p>
         )}
         {!allParamsCodeDriven && (
           <div className={classes.buttons}>

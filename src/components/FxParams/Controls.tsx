@@ -21,13 +21,20 @@ interface ControllerBladeProps<Type extends FxParamType> {
   onClickLockButton?: (id: string) => void
   lockedParamIds?: string[]
   onChange: (value: FxParamTypeMap[Type]) => void
+  forceEnabled?: boolean
 }
 
 function ControllerBlade<Type extends FxParamType>(
   props: ControllerBladeProps<Type>
 ) {
-  const { value, definition, onChange, onClickLockButton, lockedParamIds } =
-    props
+  const {
+    value,
+    definition,
+    onChange,
+    onClickLockButton,
+    lockedParamIds,
+    forceEnabled,
+  } = props
   const parsed = useMemo(
     () => validateParameterDefinition(definition),
     [definition]
@@ -39,6 +46,7 @@ function ControllerBlade<Type extends FxParamType>(
         definition={definition}
         value={value}
         onChange={onChange}
+        forceEnabled={forceEnabled}
       />
       {onClickLockButton && isValid && (
         <LockButton
@@ -58,6 +66,7 @@ interface ControlsProps {
   lockedParamIds?: string[]
   onChangeData: (newData: FxParamsData) => void
   data: FxParamsData
+  forceEnabled?: boolean
 }
 
 export const Controls = ({
@@ -66,6 +75,7 @@ export const Controls = ({
   onClickLockButton,
   lockedParamIds,
   onChangeData,
+  forceEnabled,
 }: ControlsProps) => {
   const p: React.RefObject<HTMLDivElement> = createRef()
 
@@ -85,6 +95,7 @@ export const Controls = ({
             onChange={(value) => handleChangeParam(def.id, value)}
             lockedParamIds={lockedParamIds}
             onClickLockButton={onClickLockButton}
+            forceEnabled={forceEnabled}
           />
         )
       })}

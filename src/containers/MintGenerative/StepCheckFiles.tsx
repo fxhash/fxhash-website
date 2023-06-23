@@ -113,6 +113,7 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
                 params={controls.state.params.values}
                 updateParams={controls.updateParams}
                 onSubmit={controls.hardSync}
+                forceEnabled
               />
             </div>
           )}
