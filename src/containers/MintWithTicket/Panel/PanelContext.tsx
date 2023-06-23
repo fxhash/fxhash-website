@@ -9,7 +9,10 @@ export interface PanelContextProps {
 
 export function PanelContext({ context, onChangeContext }: PanelContextProps) {
   return (
-    <PanelGroup title="Context" description={`Toggle the execution context of the artwork between "minting" and "standalone"`}>
+    <PanelGroup
+      title="Context"
+      description={`Toggle the execution context of the artwork between "minting" and "standalone"`}
+    >
       <div>
         Minting
         <Switch
