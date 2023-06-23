@@ -18,6 +18,7 @@ import {
 } from "components/FxParams/types"
 import {
   IRuntimeContext,
+  TExecutionContext,
   hashRuntimeHardState,
   hashRuntimeState,
   useRuntime,
@@ -128,6 +129,7 @@ interface IProjectState {
   iteration?: number
   minter?: string
   inputBytes?: string
+  context?: TExecutionContext
 }
 
 export type TRuntimeContextConnector = (
@@ -144,13 +146,13 @@ const iframeHandler: TRuntimeContextConnector = (iframeRef) => {
     getUrl(state: IProjectState, urlParams?: URLSearchParams) {
       const searchParams = urlParams?.toString()
       return (
-        ipfsUrlWithHashAndParams(
-          state.cid,
-          state.hash || "",
-          state.iteration || 1,
-          state.minter || "",
-          state.inputBytes
-        ) + `&${searchParams}`
+        ipfsUrlWithHashAndParams(state.cid, {
+          fxhash: state.hash || "",
+          fxiteration: state.iteration || 1,
+          fxminter: state.minter || "",
+          fxparams: state.inputBytes,
+          fxcontext: state.context,
+        }) + `&${searchParams}`
       )
     },
     useSync(runtimeUrl: string, controlsUrl: string) {
@@ -198,6 +200,8 @@ export const useRuntimeController: TUseRuntimeController = (
     state: {
       hash: project.hash || generateFxHash(),
       minter: project.minter || generateTzAddress(),
+      iteration: project.iteration || 1,
+      context: project.context,
     },
   })
 
@@ -368,14 +372,16 @@ export const useRuntimeController: TUseRuntimeController = (
         minter: runtime.state.minter,
         iteration: runtime.state.iteration,
         inputBytes: runtime.details.params.inputBytes || project.inputBytes,
+        context: runtime.state.context,
       },
       options?.urlParams
     )
-  }, [project.cid, runtime.details.stateHash.hard])
+  }, [project.cid, runtime.details.stateHash.hard, options.urlParams])
 
   useMessageListener("fxhash_emit:params:update", (e: any) => {
     const { params } = e.data.data
     updateParams(params)
+    updtParamsDeb({ params })
   })
 
   const controlDetails = useMemo<IControlDetails>(
@@ -392,6 +398,7 @@ export const useRuntimeController: TUseRuntimeController = (
           iteration: runtime.state.iteration,
           minter: runtime.state.minter,
           params: controls.params.values,
+          context: runtime.state.context,
         }),
         hard: hashRuntimeHardState(
           {
@@ -399,6 +406,7 @@ export const useRuntimeController: TUseRuntimeController = (
             iteration: runtime.state.iteration,
             minter: runtime.state.minter,
             params: controls.params.values,
+            context: runtime.state.context,
           },
           controls.params.definition
         ),
@@ -415,6 +423,7 @@ export const useRuntimeController: TUseRuntimeController = (
         iteration: runtime.state.iteration,
         minter: runtime.state.minter,
         inputBytes: controlDetails.params.inputBytes || project.inputBytes,
+        context: runtime.state.context,
       },
       options?.urlParams
     )

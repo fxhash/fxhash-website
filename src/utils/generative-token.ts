@@ -205,10 +205,12 @@ export function generativeMetadataFromMintForm(
     tags: tagsFromString(data.informations!.tags),
     artifactUri: ipfsUrlWithHashAndParams(
       data.cidUrlParams!,
-      data.previewHash!,
-      data.previewIteration!,
-      data.previewMinter!,
-      data.previewInputBytes,
+      {
+        fxhash: data.previewHash!,
+        fxiteration: data.previewIteration!,
+        fxminter: data.previewMinter!,
+        fxparams: data.previewInputBytes,
+      },
       (cid) => `ipfs://${cid}`
     ),
     displayUri: getIpfsSlash(data.cidPreview!),

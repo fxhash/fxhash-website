@@ -26,13 +26,12 @@ export const StepVerification: StepComponent = ({ onNext, state }) => {
             <div className={cs(style["preview-wrapper"])}>
               <ArtworkFrame>
                 <ArtworkIframe
-                  url={ipfsUrlWithHashAndParams(
-                    state.cidUrlParams!,
-                    state.previewHash!,
-                    state.previewIteration!,
-                    state.previewMinter!,
-                    state.previewInputBytes!
-                  )}
+                  url={ipfsUrlWithHashAndParams(state.cidUrlParams!, {
+                    fxhash: state.previewHash!,
+                    fxiteration: state.previewIteration!,
+                    fxminter: state.previewMinter!,
+                    fxparams: state.previewInputBytes!,
+                  })}
                   textWaiting="looking for content on IPFS"
                 />
               </ArtworkFrame>
@@ -40,13 +39,12 @@ export const StepVerification: StepComponent = ({ onNext, state }) => {
           </div>
           <Spacing size="small" />
           <Link
-            href={ipfsUrlWithHashAndParams(
-              state.cidUrlParams!,
-              state.previewHash!,
-              state.previewIteration!,
-              state.previewMinter!,
-              state.previewInputBytes!
-            )}
+            href={ipfsUrlWithHashAndParams(state.cidUrlParams!, {
+              fxhash: state.previewHash!,
+              fxiteration: state.previewIteration!,
+              fxminter: state.previewMinter!,
+              fxparams: state.previewInputBytes!,
+            })}
             passHref
           >
             <Button

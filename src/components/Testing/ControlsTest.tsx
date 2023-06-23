@@ -15,6 +15,7 @@ interface ControlsTestProps {
   params: FxParamsData | null
   updateParams: (params: Partial<FxParamsData>) => void
   onSubmit: (data: FxParamsData) => void
+  forceEnabled?: boolean
 }
 
 export interface ControlsTestRef {
@@ -23,7 +24,7 @@ export interface ControlsTestRef {
 
 export const ControlsTest = forwardRef<ControlsTestRef, ControlsTestProps>(
   (props, ref) => {
-    const { params, definition, updateParams, onSubmit } = props
+    const { params, definition, updateParams, onSubmit, forceEnabled } = props
 
     const handleSubmitParams = () => {
       params && onSubmit(params)
@@ -51,7 +52,8 @@ export const ControlsTest = forwardRef<ControlsTestRef, ControlsTestProps>(
             <i className="fa-solid fa-triangle-exclamation" aria-hidden />
             <span>
               All params of this artwork are defined as "code-driven". This will
-              enable a dedicated minting experience for collectors.
+              enable a dedicated minting experience for collectors. In this view
+              "code-driven" controllers are just enabled for debugging purposes.
             </span>
           </p>
         )}
@@ -60,23 +62,22 @@ export const ControlsTest = forwardRef<ControlsTestRef, ControlsTestProps>(
             definition={definition}
             onChangeData={updateParams}
             data={params}
+            forceEnabled={forceEnabled}
           />
         )}
-        {!allParamsCodeDriven && (
-          <div className={classes.buttons}>
-            <Button
-              size="small"
-              color="primary"
-              type="button"
-              onClick={handleRandomizeParams}
-            >
-              randomize params
-            </Button>
-            <Button size="small" type="button" onClick={handleSubmitParams}>
-              submit params
-            </Button>
-          </div>
-        )}
+        <div className={classes.buttons}>
+          <Button
+            size="small"
+            color="primary"
+            type="button"
+            onClick={handleRandomizeParams}
+          >
+            randomize params
+          </Button>
+          <Button size="small" type="button" onClick={handleSubmitParams}>
+            submit params
+          </Button>
+        </div>
       </div>
     )
   }

@@ -22,11 +22,14 @@ import { merge, cloneDeep } from "lodash"
  * See comments on IRuntimeContext for more details.
  */
 
+export type TExecutionContext = "minting" | "standalone" | "capture"
+
 export interface RuntimeState {
   hash: string
   minter: string
   iteration: number
   params: FxParamsData
+  context?: TExecutionContext
 }
 
 export interface RuntimeDefinition {
