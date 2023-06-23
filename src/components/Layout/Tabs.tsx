@@ -56,8 +56,6 @@ export function Tab({
   onClick,
 }: TabProps) {
   const Wrapper = wrapperComponent || DefaultTabWrapper
-
-  console.log(onClick)
   return (
     <Wrapper
       className={cs(style.tab, style[`tab-${layout}`], {
