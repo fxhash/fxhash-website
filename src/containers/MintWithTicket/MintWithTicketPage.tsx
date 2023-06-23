@@ -46,6 +46,7 @@ import { useFetchRandomSeed } from "hooks/useFetchRandomSeed"
 import { getIteration, useOnChainData } from "hooks/useOnChainData"
 import { useRuntimeController } from "hooks/useRuntimeController"
 import { FxParamsData } from "components/FxParams/types"
+import { getRandomIteration } from "utils/iteration"
 
 export type TOnMintHandler = (
   ticketId: number | number[] | null,
@@ -89,6 +90,7 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
       cid: token.metadata.generativeUri,
       hash: (router.query.fxhash as string) || generateFxHash(),
       minter: minterAddress,
+      iteration: getRandomIteration(token.supply, token.balance),
       inputBytes: router.query.fxparams as string | undefined,
     },
     {
@@ -96,6 +98,8 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
       urlParams: new URLSearchParams(`fxcontext=${fxcontext}`),
     }
   )
+
+  console.log(runtime.state)
 
   const updateAutoUpdate = (auto: boolean) => {
     auto && controls.hardSync()
@@ -351,8 +355,7 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
               hash={runtime.state.hash}
               randomizeIteration={() =>
                 runtime.state.update({
-                  iteration:
-                    token.supply - Math.floor(Math.random() * token.balance),
+                  iteration: getRandomIteration(token.supply, token.balance),
                 })
               }
               token={token}

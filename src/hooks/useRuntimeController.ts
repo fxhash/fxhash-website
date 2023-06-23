@@ -198,6 +198,7 @@ export const useRuntimeController: TUseRuntimeController = (
     state: {
       hash: project.hash || generateFxHash(),
       minter: project.minter || generateTzAddress(),
+      iteration: project.iteration || 1,
     },
   })
 
