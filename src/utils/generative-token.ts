@@ -393,6 +393,11 @@ export const genTokLabelDefinitions: Record<
     shortLabel: "Custom UI",
     group: GenTokLabelGroup.DETAILS,
   },
+  302023: {
+    label: "FXHACKATHON2023",
+    shortLabel: "FXHACKATHON2023",
+    group: GenTokLabelGroup.DETAILS,
+  },
 }
 
 export const getGenTokLabelDefinition = (
