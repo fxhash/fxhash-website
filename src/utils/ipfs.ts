@@ -23,7 +23,7 @@ export function ipfsUrlWithHashAndParams(
     fxhash?: string
     fxiteration?: number | string
     fxminter?: string
-    fxparams?: string
+    fxparams?: string | null
     fxcontext?: string
   },
   transform: (cid: string) => string = ipfsGatewayUrl
