@@ -21,6 +21,7 @@ import {
   useRuntimeController,
 } from "hooks/useRuntimeController"
 import { urlAddTokenParams } from "utils/ipfs"
+import { IterationTest } from "components/Testing/IterationTest"
 
 export function Sandbox() {
   const artworkIframeRef = useRef<ArtworkIframeRef>(null)
@@ -176,6 +177,16 @@ export function Sandbox() {
                 value={runtime.state.hash}
                 onHashUpdate={(hash) => runtime.state.update({ hash })}
                 onRetry={controls.refresh}
+              />
+
+              <Spacing size="large" />
+
+              <IterationTest
+                autoGenerate={false}
+                value={runtime.state.iteration}
+                onIterationUpdate={(iteration) =>
+                  runtime.state.update({ iteration })
+                }
               />
 
               <Spacing size="large" />

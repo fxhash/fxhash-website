@@ -5,15 +5,22 @@ import { truncateMiddle } from "utils/strings"
 
 interface Props {
   hashes: string[]
+  iterations: number[]
   params?: string[] | null
-  onChange: (hashes: string[], params?: string[]) => void
-  onClickItem?: (index: number, hash: string, param?: string) => void
+  onChange: (hashes: string[], iterations?: number[], params?: string[]) => void
+  onClickItem?: (
+    index: number,
+    hash: string,
+    iteration: number,
+    param?: string
+  ) => void
   className?: string
   activeItem?: number
   translateInputBytes?: (bytes: string) => string
 }
 export function HashList({
   hashes,
+  iterations,
   params,
   className,
   onChange,
@@ -24,12 +31,16 @@ export function HashList({
   const removeItem = (idx: number) => {
     const cleanedHashes = [...hashes]
     cleanedHashes.splice(idx, 1)
+
+    const cleanedIterations = [...iterations]
+    cleanedIterations.splice(idx, 1)
+
     let cleanedParams
     if (params) {
       cleanedParams = [...params]
       cleanedParams.splice(idx, 1)
     }
-    onChange(cleanedHashes, cleanedParams)
+    onChange(cleanedHashes, cleanedIterations, cleanedParams)
   }
 
   return (
@@ -42,7 +53,11 @@ export function HashList({
             [style.active]: idx === activeItem,
           })}
         >
-          <span onClick={() => onClickItem?.(idx, hash, params?.[idx])}>
+          <span
+            onClick={() =>
+              onClickItem?.(idx, hash, iterations?.[idx], params?.[idx])
+            }
+          >
             {hash}
             {params && (
               <>

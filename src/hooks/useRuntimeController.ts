@@ -124,6 +124,7 @@ function handleOldSnippetEvents(e: any, runtime: IRuntimeContext) {
 interface IProjectState {
   cid: string
   hash?: string
+  iteration?: number
   minter?: string
   inputBytes?: string
 }
@@ -143,6 +144,7 @@ const iframeHandler: TRuntimeContextConnector = (iframeRef) => {
       return ipfsUrlWithHashAndParams(
         state.cid,
         state.hash || "",
+        state.iteration || 1,
         state.minter || "",
         state.inputBytes
       )
@@ -359,6 +361,7 @@ export const useRuntimeController: TUseRuntimeController = (
       cid: project.cid,
       hash: runtime.state.hash,
       minter: runtime.state.minter,
+      iteration: runtime.state.iteration,
       inputBytes: runtime.details.params.inputBytes || project.inputBytes,
     })
   }, [project.cid, runtime.details.stateHash.hard])
@@ -374,12 +377,14 @@ export const useRuntimeController: TUseRuntimeController = (
       stateHash: {
         soft: hashRuntimeState({
           hash: runtime.state.hash,
+          iteration: runtime.state.iteration,
           minter: runtime.state.minter,
           params: controls.params.values,
         }),
         hard: hashRuntimeHardState(
           {
             hash: runtime.state.hash,
+            iteration: runtime.state.iteration,
             minter: runtime.state.minter,
             params: controls.params.values,
           },
@@ -394,6 +399,7 @@ export const useRuntimeController: TUseRuntimeController = (
     return connector.getUrl({
       cid: project.cid,
       hash: runtime.state.hash,
+      iteration: runtime.state.iteration,
       minter: runtime.state.minter,
       inputBytes: controlDetails.params.inputBytes || project.inputBytes,
     })

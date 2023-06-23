@@ -53,17 +53,27 @@ interface VariantFormProps {
   settings?: {
     enabled: boolean
     hashConstraints?: string[] | null
+    iterationConstraints?: number[] | null
     paramsConstraints?: string[] | null
   }
   onChangeExplorationSettings: (
     target: VariantTarget,
-    setting: "enabled" | "hashConstraints" | "paramsConstraints",
+    setting:
+      | "enabled"
+      | "hashConstraints"
+      | "iterationConstraints"
+      | "paramsConstraints",
     value: any
   ) => void
   exploreOption: string
   onChangeExploreOption: (option: string) => void
   activeVariant: number
-  onClickVariant: (index: number, hash: string, param?: string) => void
+  onClickVariant: (
+    index: number,
+    hash: string,
+    iteration: number,
+    param?: string
+  ) => void
   onAdd: (target: VariantTarget) => void
   translateInputBytes?: (bytes: string) => string
 }
@@ -110,7 +120,8 @@ export function VariantForm(props: VariantFormProps) {
   } = props
 
   const labelTarget = withParams ? "params" : "hash"
-  const { hashConstraints, paramsConstraints } = settings || {}
+  const { hashConstraints, iterationConstraints, paramsConstraints } =
+    settings || {}
 
   return (
     <>
@@ -181,13 +192,19 @@ export function VariantForm(props: VariantFormProps) {
                 <HashList
                   className={cs(style.hashlist)}
                   hashes={hashConstraints || []}
+                  iterations={iterationConstraints || []}
                   params={paramsConstraints}
                   activeItem={activeVariant}
-                  onChange={(hashes, params) => {
+                  onChange={(hashes, iterations, params) => {
                     onChangeExplorationSettings(
                       target,
                       "hashConstraints",
                       hashes
+                    )
+                    onChangeExplorationSettings(
+                      target,
+                      "iterationConstraints",
+                      iterations
                     )
                     if (params) {
                       onChangeExplorationSettings(

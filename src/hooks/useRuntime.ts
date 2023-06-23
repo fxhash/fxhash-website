@@ -25,6 +25,7 @@ import { merge, cloneDeep } from "lodash"
 export interface RuntimeState {
   hash: string
   minter: string
+  iteration: number
   params: FxParamsData
 }
 
@@ -101,6 +102,7 @@ export function useRuntime(initial?: Parameters): IRuntimeContext {
     state: {
       hash: "",
       minter: "",
+      iteration: 1,
       params: {},
       ...initial?.state,
     },
