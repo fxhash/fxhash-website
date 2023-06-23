@@ -49,6 +49,7 @@ const EventsOnboardingPage: NextPage<Props> = ({ event, tokens }) => {
           content={`fxhash — ${event.name} onboarding`}
         />
         <meta name="twitter:description" content={event.description} />
+        <link rel="stylesheet" href="/highlight/dracula.css" />
       </Head>
 
       <main className={cs(layout["padding-small"])}>
