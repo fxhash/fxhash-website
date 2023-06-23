@@ -73,6 +73,9 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
   const [withAutoUpdate, setWithAutoUpdate] = useState<boolean>(true)
   const [lockedParamIds, setLockedParamIds] = useState<string[]>([])
   const [tempConfig, setTempConfig] = useState<ParamConfiguration>()
+  const [fxcontext, setFxcontext] = useState<"minting" | "standalone">(
+    "minting"
+  )
 
   // get the user to get their tezos address, or a random tz address
   const { user } = useContext(UserContext)
@@ -90,7 +93,7 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
     },
     {
       autoRefresh: withAutoUpdate,
-      urlParams: new URLSearchParams("fxcontext=minting"),
+      urlParams: new URLSearchParams(`fxcontext=${fxcontext}`),
     }
   )
 
@@ -356,6 +359,8 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
               onLocalDataChange={handleLocalDataChange}
               onChangeData={handleChangeData}
               onChangeHash={handleChangeHash}
+              fxcontext={fxcontext}
+              setFxcontext={setFxcontext}
               lockedParamIds={lockedParamIds}
               onChangeLockedParamIds={setLockedParamIds}
               history={historyContext.history}

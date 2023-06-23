@@ -10,6 +10,7 @@ import { PanelControls, PanelControlsProps } from "./PanelControls"
 import { Spacing } from "components/Layout/Spacing"
 import Link from "next/link"
 import { PanelMintingInstructions } from "./PanelMintingInstructions"
+import { PanelContext } from "./PanelContext"
 
 interface PanelRootProps
   extends PanelParamsProps,
@@ -21,6 +22,8 @@ interface PanelRootProps
   show: boolean
   inputBytes: string | null
   randomizeIteration: () => void
+  fxcontext: "minting" | "standalone"
+  setFxcontext: (fxcontext: "minting" | "standalone") => void
 }
 
 export function PanelRoot(props: PanelRootProps) {
@@ -34,6 +37,8 @@ export function PanelRoot(props: PanelRootProps) {
     features,
     onChangeHash,
     onChangeData,
+    fxcontext,
+    setFxcontext,
     randomizeIteration,
     lockedParamIds,
     onChangeLockedParamIds,
@@ -88,6 +93,7 @@ export function PanelRoot(props: PanelRootProps) {
             }}
             disableWarningAnimation={disableWarningAnimation}
           />
+          <PanelContext context={fxcontext} onChangeContext={setFxcontext} />
           {token.metadata.mintingInstructions && (
             <PanelMintingInstructions
               instructions={token.metadata.mintingInstructions}
