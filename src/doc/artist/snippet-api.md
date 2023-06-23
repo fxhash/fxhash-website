@@ -27,23 +27,27 @@ $fx.preview()
 
 # API Overview
 
-| Property                              | Type                                               | Description                                                                                                                                                                                      |
-| ------------------------------------- | -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| [`hash`](#fxhash)                     | string                                             | The string hash injected into the iteration.                                                                                                                                                     |
-| [`iteration`](#fxhash)                | string                                             | The iteration number in the collection.                                                                                                                                                          |
-| [`rand()`](#fxrand)                   | ()&nbsp;=>&nbsp;number                             | A pseudo random number generator, using the unique hash as a seed. Outputs a number between 0 (inclusive) and 1 (exclusive). `[0; 1[`                                                            |
-| [`minter`](#fxminter)                 | string                                             | The string of the wallet address of the minter injected into the iteration.                                                                                                                      |
-| [`randminter()`](#fxrandminter)       | ()&nbsp;=>&nbsp;number                             | A pseudo random number generator, using the minter address as a seed. Outputs a number between 0 (inclusive) and 1 (exclusive). ` [0; 1[`                                                        |
-| [`preview()`](#fxpreview)             | ()&nbsp;=>&nbsp;void                               | A function which can be called to programmatically trigger the image capture of the iteration.                                                                                                   |
-| [`isPreview`](#fxispreview)           | boolean                                            | A boolean which will be set to true if your code is being ran in fxhash capture module. Can be useful if you want to define specific properties for the capture only.                            |
-| [`features()`](#fxfeaturesfeatures)   | (object)&nbsp;=>&nbsp;void                         | This function can be called with an object as parameter to define the features of the iteration.                                                                                                 |
-| [`getFeature()`](#fxgetfeaturename)   | (string)&nbsp;=>&nbsp;any                          | Given a feature name, output its value (as defined through the `features()` function)                                                                                                            |
-| [`getFeatures()`](#fxgetfeatures)     | ()&nbsp;=>&nbsp;object                             | Return the features object (whole object defined through the `features()` function)                                                                                                              |
-| [`params()`](#fxparamsdefinition)     | (array)&nbsp;=>&nbsp;void                          | This function can be called with an array of parameter definitions as an input. This is how you can define the parameters collectors will modulate before minting their iteration of your piece. |
-| [`getParam()`](#fxgetparamid)         | (string)&nbsp;=>&nbsp;any                          | Given a param ID, returns its current value based on the param values passed to the iteration.                                                                                                   |
-| [`getParams()`](#fxgetparams)         | ()&nbsp;=>&nbsp;object                             | Return an map of param key value pairs, based on the provided params definition and the current values of all the parameters.                                                                    |
-| [`getRawParam()`](#fxgetrawparamid)   | (string)&nbsp;=>&nbsp;string                       | Returns the bytes string of a parameter as passed to the iteration.                                                                                                                              |
-| [`on()`](#fxoneventid-handler-ondone) | (string, function, function)&nbsp;=>&nbsp;function | Adds an event listener to an event. returns a function to remove the event listener.                                                                                                             |
+| Property                                   | Type                                               | Description                                                                                                                                                                                      |
+| ------------------------------------------ | -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [`hash`](#fxhash)                          | string                                             | The string hash injected into the iteration.                                                                                                                                                     |
+| [`rand()`](#fxrand)                        | ()&nbsp;=>&nbsp;number                             | A pseudo random number generator, using the unique hash as a seed. Outputs a number between 0 (inclusive) and 1 (exclusive). `[0; 1[`                                                            |
+| [`rand.reset()`](#fxrandreset)             | ()&nbsp;=>&nbsp;void                               | Reset the `$fx.rand()` pseudo random number generator to its initial state.                                                                                                                      |
+| [`minter`](#fxminter)                      | string                                             | The string of the wallet address of the minter injected into the iteration.                                                                                                                      |
+| [`randminter()`](#fxrandminter)            | ()&nbsp;=>&nbsp;number                             | A pseudo random number generator, using the minter address as a seed. Outputs a number between 0 (inclusive) and 1 (exclusive). ` [0; 1[`                                                        |
+| [`randminter.reset()`](#fxrandminterreset) | ()&nbsp;=>&nbsp;void                               | Reset the `$fx.randminter()` pseudo random number generator to its initial state.                                                                                                                |
+| [`context`](#fxcontext)                    | string                                             | The execution context of the code (standalone, capture, minting)                                                                                                                                 |
+| [`iteration`](#fxhash)                     | string                                             | The iteration number in the collection.                                                                                                                                                          |
+| [`preview()`](#fxpreview)                  | ()&nbsp;=>&nbsp;void                               | A function which can be called to programmatically trigger the image capture of the iteration.                                                                                                   |
+| [`isPreview`](#fxispreview)                | boolean                                            | A boolean which will be set to true if your code is being ran in fxhash capture module. Can be useful if you want to define specific properties for the capture only.                            |
+| [`features()`](#fxfeaturesfeatures)        | (object)&nbsp;=>&nbsp;void                         | This function can be called with an object as parameter to define the features of the iteration.                                                                                                 |
+| [`getFeature()`](#fxgetfeaturename)        | (string)&nbsp;=>&nbsp;any                          | Given a feature name, output its value (as defined through the `features()` function)                                                                                                            |
+| [`getFeatures()`](#fxgetfeatures)          | ()&nbsp;=>&nbsp;object                             | Return the features object (whole object defined through the `features()` function)                                                                                                              |
+| [`params()`](#fxparamsdefinition)          | (array)&nbsp;=>&nbsp;void                          | This function can be called with an array of parameter definitions as an input. This is how you can define the parameters collectors will modulate before minting their iteration of your piece. |
+| [`getParam()`](#fxgetparamid)              | (string)&nbsp;=>&nbsp;any                          | Given a param ID, returns its current value based on the param values passed to the iteration.                                                                                                   |
+| [`getParams()`](#fxgetparams)              | ()&nbsp;=>&nbsp;object                             | Return an map of param key value pairs, based on the provided params definition and the current values of all the parameters.                                                                    |
+| [`getRawParam()`](#fxgetrawparamid)        | (string)&nbsp;=>&nbsp;string                       | Returns the bytes string of a parameter as passed to the iteration.                                                                                                                              |
+| [`on()`](#fxoneventid-handler-ondone)      | (string, function, function)&nbsp;=>&nbsp;function | Adds an event listener to an event. returns a function to remove the event listener.                                                                                                             |
+| [`emit()`](#fxemiteventid-data)            | (string, any)&nbsp;=>&nbsp;void                    | Emit an event to the parent context. Can be used to update parameters from the code for instance.                                                                                                |
 
 # Top-level API reference
 
@@ -53,14 +57,6 @@ The string hash injected into the iteration. Will be unique for every iteration 
 
 ```js
 console.log($fx.hash) // output example: ooj2HmX8dgniNPuPRcapyXBn9vYpsNwgD1uwx98SLceF6iCZJZK
-```
-
-## $fx.iteration
-
-The iteration number in the collection. Directly grabbed from the `iteration` URL parameter when the iteration is loaded.
-
-```js
-console.log($fx.iteration) // output example: 42
 ```
 
 ## $fx.rand()
@@ -79,6 +75,24 @@ The fxhash snippet provides an implementation of SFC32 ([Standard Fast Counter 3
 `$fx.rand()` is a pointer to the `fxrand()` function. You can use any of these in your code, although we recommend using the `$fx` syntax for consistency accross your code.
 
 ::infobox[It is not mandatory to use the `$fx.rand()` function as your source of randomness, you can implement the PRNG of your choice instead, as long as it uses the hash as the seed.]
+
+## $fx.rand.reset()
+
+You can reset `$fx.rand()` to its initial state by calling `$fx.rand.reset()`.
+
+```js
+$fx.rand() // 0.25
+$fx.rand() // 0.88
+$fx.rand() // 0.124
+
+// reset fxrand
+$fx.rand.reset()
+
+// calling fxrand again will yield the same outputs as the first calls
+$fx.rand() // 0.25
+$fx.rand() // 0.88
+$fx.rand() // 0.124
+```
 
 ## $fx.minter
 
@@ -104,6 +118,50 @@ The fxhash snippet provides an implementation of SFC32 ([Standard Fast Counter 3
 `$fx.randminter()` is a pointer to the `fxrandminter()` function. You can use any of these in your code, although we recommend using the `$fx` syntax for consistency accross your code.
 
 ::infobox[It is not mandatory to use the `$fx.randminter()` function as your source of randomness, you can implement the PRNG of your choice instead, as long as it uses the minter address as the seed.]
+
+## $fx.randminter.reset()
+
+You can reset `$fx.randminter()` to its initial state by calling `$fx.randminter.reset()`.
+
+```js
+$fx.randminter() // 0.25
+$fx.randminter() // 0.88
+$fx.randminter() // 0.124
+
+// reset fxrandminter
+$fx.randminter.reset()
+
+// calling fxrandminter again will yield the same outputs as the first calls
+$fx.randminter() // 0.25
+$fx.randminter() // 0.88
+$fx.randminter() // 0.124
+```
+
+## $fx.context
+
+The context in which the code is executed. Directly grabbed from the `fxcontext` URL parameter. fxhash will ensure that a `fxcontext` flag is passed depending on where the code is executed. For instance, on the minting UI for collectors, `fxcontext` is set to `minting`.
+
+There are 3 possible value for this flag:
+
+- `standalone`: (_default_) when the final output should be displayed, on the main project page for instance
+- `capture`: when the code is executed in the capture environment, to get an image preview of an iteration
+- `minting`: when the code is executed during the minting flow of the collector
+
+```js
+if ($fx.context === "minting") {
+  // run code for the minting UI
+} else {
+  // otherwise display the final output
+}
+```
+
+## $fx.iteration
+
+The iteration number in the collection. Directly grabbed from the `fxiteration` URL parameter when the iteration is loaded.
+
+```js
+console.log($fx.iteration) // output example: 42
+```
 
 ## $fx.preview()
 
@@ -491,6 +549,99 @@ const removeListener = $fx.on("params:update", (newValues) => {
 removeListener() // <-- Will remove the event listener
 ```
 
+## $fx.emit(eventId, data)
+
+> Allow you to emit fxhash-related events, which may have an effect on the parent running the <iframe> in which the code is executed.
+
+The `eventId` must match an existing `eventId` that you can emit. The `data` passed as second parameter will differ for every event.
+
+Following is the typescript definition of the `$fx.emit` function:
+
+```ts
+type FxEmitFunction = (
+  eventId: string
+  data: any
+) => void
+```
+
+Supported events are:
+
+- `params:update` can be used to update `code-driven` parameters
+
+The `data` to pass should be an object where the keys are the parameter ids and the associated values, the new value to set. This is still subject to the constraints of the parameter, so for instance if a number between 0 and 10 is expected and you pass 12, it will clamp to 10. You are not required to pass all the parameters in the data; only those which need to be updated.
+
+```ts
+// define your parameters
+$fx.params([
+  {
+    id: "mouse_x",
+    type: "number",
+    // a code-driven parameter
+    update: "code-driven",
+  },
+  {
+    id: "number_2",
+    type: "number",
+    // a code-driven parameter
+    update: "code-driven",
+  },
+  {
+    id: "number_3",
+    type: "number",
+    // a normal parameter, cannot update with params:update
+    update: "page-reload",
+  },
+])
+
+// example: when the mouse moves, we update the first parameter
+window.addEventListener("mousemove", (evt) => {
+  const X = evt.clientX / window.innerWidth // normalized X position of mouse
+  // we request the update of a parameter
+  $fx.emit("params:update", {
+    mouse_x: X,
+  })
+})
+```
+
+::infobox[Note: there are 2 ways to apply changes to the UI when you emit a parameter from the code]
+
+```ts
+// FIRST WAY
+// Emit the update, and update the view only when receiving the params:update
+// back. This ensures a proper flow of data, and a proper sync of the minting
+// UI and your project
+window.addEventListener("mousemove", (evt) => {
+  const X = evt.clientX / window.innerWidth
+  $fx.emit("params:update", {
+    mouse_x: X,
+  })
+})
+$fx.on(
+  "params:update",
+  // do nothing to check the params received
+  () => {},
+  // once the update is fully registered, update the view
+  () => {
+    draw()
+    // in this case draw() can rely on $fx.getParam("mouse_x") to be synced with
+    // the up-to-date value
+  }
+)
+
+// SECOND WAY
+// Custom draw logic where the params effects are applied right after emitting
+// the update
+window.addEventListener("mousemove", (evt) => {
+  const X = evt.clientX / window.innerWidth
+  $fx.emit("params:update", {
+    mouse_x: X,
+  })
+  // here trigger a draw, but you need to handle the change in value manually,
+  // as $fx.getParam("mouse_x) will point to the old value
+  draw(X)
+})
+```
+
 # fx(params)
 
 > fx(params) is the name of the module which gives artists the option to define a set of parameters collectors will modulate before minting their iteration. This section goes into technical details about fx(params).
@@ -555,7 +706,7 @@ type ParameterDefinitionType = {
   name?: string // optional, if not defined name == id
   type: "number" | "string" | "boolean" | "color" | "select" | "bigint" // required
   default?: string | number | bigint | boolean // optional
-  update?: "page-reload" | "sync" // optional
+  update?: "page-reload" | "sync" | "code-driven" // optional
   options?: TYPE_SPECIFIC_OPTIONS // (optional) different options per type (see below)
 }
 ```
@@ -602,7 +753,13 @@ A default value for the parameter. If defined, when the minting interface with t
 
 _Optional_
 
-Specifies the update mode of the parameter. The default update mode is `"page-reload"`. With update mode `"page-reload"`, a full page reload on the artwork is performed whenever the value of the parameter changes. When the update mode is set to `"sync"` the parameter values are updated during the runtime of the artwork - no page reload is performed when the parameter values change.
+Specifies the update mode of the parameter. There are 3 update modes available:
+
+- `page-reload`: (_default_) the parameter can only be updated from the fxhash UI, the whole project will be refreshed when any page-reload parameter is updated
+- `sync`: the parameter can only be updated from the fxhash UI, [a `params:update` event](#fxoneventid-handler-ondone) will be sent to the project when the parameter is update. The page is not refreshed, so you need to handle the update of the view yourself
+- `code-driven`: the parameter can only be updated from your code, by [emitting a `params.update` event](#fxemiteventid-data).
+
+::infobox[General overview of params update in the [fx(params) section](/doc/artist/params#fxparams-update-modes).]
 
 ---
 

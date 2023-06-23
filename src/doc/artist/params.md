@@ -53,7 +53,82 @@ For each individual parameter that you specify, you can also set a specific upda
 
 All updates on prameters with `update: "sync"` are received in the background in real-time. If your artwork is already running in some kind of draw loop (e.g. via `requestAnimationFrame`), you will receive those changes during the runtime of your loop.
 
-For even more advanced use cases, e.g. if you want to only re-render your artwork when the values of your parameters are changing, you can use the new event listeners described in the section [`$fx.on`](/doc/artist/snippet-api#fxoneventid-handler-ondone) on the snippet api page. 
+For even more advanced use cases, e.g. if you want to only re-render your artwork when the values of your parameters are changing, you can use the new event listeners described in the section [`$fx.on`](/doc/artist/snippet-api#fxoneventid-handler-ondone) on the snippet api page.
+
+## Code-driven parameters
+
+In the previous section, we introduced the update modes. One of these modes is `code-driven`, and is by far the one giving the most control. `page-reload` and `sync` both rely on an external UI to change the parameters at runtime, ie when collectors are minting their iteration. `code-driven` breaks this principle, and give artists the ability to change the value of a parameter with their code, so enabling completely customized minting experiences.
+
+`code-driven` parameters have to be used with other snippet components to provide a custom minting experience; the following code snippet highlights the different components of a `code-driven` params approach:
+
+```js
+// defining parameters as code-driven
+$fx.params([
+  {
+    id: "size",
+    name: "Size",
+    type: "number",
+    // uneditable from ui, will be controlled by the code!!
+    update: "code-driven",
+  },
+  {
+    id: "x_pos",
+    name: "X position",
+    type: "number",
+    update: "code-driven",
+  },
+])
+
+// this is where one would draw the piece
+function draw() {
+  // resetting the fx.rand function is important to ensure every time it's
+  // called, the same values will be generated
+  $fx.rand.reset()
+
+  // DRAW HERE
+}
+
+// this would render the interactive UI when minting
+function drawUI() {
+  // draw UI here
+}
+
+// depending on the execution context, 2 different codes are executed
+
+// the code is executed in a "minting" context
+if ($fx.context === "minting") {
+  // we draw the piece, and the UI on top
+  draw()
+  drawUI()
+
+  // updating the parameter from the code - this would be called when some input
+  // is registered, such as moving the mouse for example
+  window.addEventListener("click", () => {
+    $fx.emit("params:update", {
+      size: Math.random(), // anything here, it will update the parameter value
+    })
+  })
+
+  // when the params are updated, then re-draw
+  $fx.on(
+    "params:update",
+    // we do nothing when the event is received
+    () => {},
+    // once the params are updated and available, we trigger a re-draw
+    () => {
+      draw()
+      drawUI()
+    }
+  )
+}
+// the piece is ran by itself, for the final output or for the capture
+else {
+  // we just draw
+  draw()
+}
+```
+
+_This is an example of an implementation. You are free to follow the patterns of your choice._
 
 # Dev environment for fx(params)
 
