@@ -8,17 +8,30 @@
   @media (max-width: $breakpoint-sm) {
     font-size: 18px;
   }
-
+  
   // temp: hack until we provide header image for events
   h2:has(img):first-child {
     margin-top: 0;
-    width: calc(100vw - 20px);
+    width: 1000px;
     position: relative;
-    margin-left: calc(-50vw + 50% + 10px);
+    margin-left: calc(-500px + 50%);
+
+    @media (max-width: 1000px) {
+      width: 100vw;
+      margin-left: calc(-50vw + 50%);
+    }
 
     img {
       width: 100%;
     }
+  }
+
+  video {
+    width: 100%;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: "Fira Code", monospace;
   }
 
   h1 {

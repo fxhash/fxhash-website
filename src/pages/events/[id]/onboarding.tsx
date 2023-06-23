@@ -143,6 +143,20 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     component.component.content = await mdToHtml(component.component.content)
   }
 
+  // quick trick to have video links as video tags
+  // regex to find the video url in markdown
+
+  event.onboarding.description = (
+    event.onboarding.description as string
+  ).replaceAll(/https:\/\/[^\s^\n]*\.mp4/g, (match) => {
+    return `
+      <video controls>
+        <source src="${match}" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>  
+    `
+  })
+
   return {
     props: {
       event: event,
