@@ -380,6 +380,7 @@ export const useRuntimeController: TUseRuntimeController = (
   useMessageListener("fxhash_emit:params:update", (e: any) => {
     const { params } = e.data.data
     updateParams(params)
+    updtParamsDeb({params})
   })
 
   const controlDetails = useMemo<IControlDetails>(
