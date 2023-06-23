@@ -20,6 +20,7 @@ import { GenerativeTokenCard } from "../../../components/Card/GenerativeTokenCar
 import { CardsLoading } from "../../../components/Card/CardsLoading"
 import { useContext } from "react"
 import { SettingsContext } from "../../../context/Theme"
+import { ArticleEvent } from "components/Article/ArticleEvent"
 
 type Props = {
   event: LiveMintingEvent
@@ -27,6 +28,7 @@ type Props = {
 }
 const EventsOnboardingPage: NextPage<Props> = ({ event, tokens }) => {
   const settings = useContext(SettingsContext)
+  console.log(event)
   return (
     <>
       <Head>
@@ -54,12 +56,12 @@ const EventsOnboardingPage: NextPage<Props> = ({ event, tokens }) => {
 
       <main className={cs(layout["padding-small"])}>
         <Spacing size="3x-large" />
-        <ArticleContent
+        <ArticleEvent
           content={event.onboarding!.description}
           className={cs(style.body)}
         />
         {event.onboarding!.components.map((comp, idx) => (
-          <ArticleContent
+          <ArticleEvent
             key={idx}
             content={comp.component.content}
             className={cs(style.body)}
