@@ -22,10 +22,11 @@ import {
 } from "components/Layout/Tabs"
 import { deserializeParams } from "components/FxParams/utils"
 import { ControlsTest } from "components/Testing/ControlsTest"
+import { IterationTest } from "components/Testing/IterationTest"
 import { ArtworkFrame } from "components/Artwork/ArtworkFrame"
-import { VariantForm } from "./VariantForm"
-import { truncateEnd } from "utils/strings"
 import { useRuntimeController } from "hooks/useRuntimeController"
+import { truncateEnd } from "utils/strings"
+import { VariantForm } from "./VariantForm"
 
 const variantSettingsTabs = ["preMint", "postMint"] as const
 
@@ -40,11 +41,13 @@ const initialSettings: Partial<GenTokenSettings> = {
     preMint: {
       enabled: true,
       hashConstraints: null,
+      iterationConstraints: null,
       paramsConstraints: null,
     },
     postMint: {
       enabled: true,
       hashConstraints: null,
+      iterationConstraints: null,
       paramsConstraints: null,
     },
   },
@@ -77,6 +80,7 @@ export const StepExtraSettings: StepComponent = ({ state, onNext }) => {
   const { runtime, controls } = useRuntimeController(iframeRef, {
     cid: state.cidUrlParams!,
     hash: state.previewHash,
+    iteration: state.previewIteration || 1,
   })
 
   // the explore options
@@ -88,7 +92,11 @@ export const StepExtraSettings: StepComponent = ({ state, onNext }) => {
   // some setters to update the settings easily
   const updateExplorationSetting = (
     target: VariantSettingsTabKey,
-    setting: "enabled" | "hashConstraints" | "paramsConstraints",
+    setting:
+      | "enabled"
+      | "hashConstraints"
+      | "iterationConstraints"
+      | "paramsConstraints",
     value: any
   ) => {
     setSettings((currentSettings) => ({
@@ -107,24 +115,45 @@ export const StepExtraSettings: StepComponent = ({ state, onNext }) => {
   const addCurrentVariant = (target: VariantSettingsTabKey) => {
     const currentHashConstraints =
       settings.exploration?.[target]?.hashConstraints || []
+    const currentIterationConstraints =
+      settings.exploration?.[target]?.iterationConstraints || []
     const currentParamConstraints =
       settings.exploration?.[target]?.paramsConstraints || []
+
     if (!usesParams) {
-      if (!currentHashConstraints.includes(runtime.state.hash)) {
+      const combinationExists = currentHashConstraints.some(
+        (existingHash, index) => {
+          const pairedIteration = currentIterationConstraints[index]
+          return (
+            existingHash === runtime.state.hash &&
+            pairedIteration === runtime.state.iteration
+          )
+        }
+      )
+
+      if (!combinationExists) {
         currentHashConstraints.push(runtime.state.hash)
         updateExplorationSetting(
           target,
           "hashConstraints",
           currentHashConstraints
         )
+        currentIterationConstraints.push(runtime.state.iteration)
+        updateExplorationSetting(
+          target,
+          "iterationConstraints",
+          currentIterationConstraints
+        )
       }
     } else {
       const combinationExists = currentHashConstraints.some(
         (existingHash, index) => {
           const pairedInputBytes = currentParamConstraints[index]
+          const pairedIteration = currentIterationConstraints[index]
           return (
             existingHash === runtime.state.hash &&
-            pairedInputBytes === runtime.details.params.inputBytes
+            pairedInputBytes === runtime.details.params.inputBytes &&
+            pairedIteration === runtime.state.iteration
           )
         }
       )
@@ -134,6 +163,12 @@ export const StepExtraSettings: StepComponent = ({ state, onNext }) => {
           target,
           "hashConstraints",
           currentHashConstraints
+        )
+        currentIterationConstraints.push(runtime.state.iteration)
+        updateExplorationSetting(
+          target,
+          "iterationConstraints",
+          currentIterationConstraints
         )
         currentParamConstraints.push(runtime.details.params.inputBytes)
         updateExplorationSetting(
@@ -154,11 +189,13 @@ export const StepExtraSettings: StepComponent = ({ state, onNext }) => {
     if (preExploreOptions === "infinite") {
       const preMint = cloned.exploration?.preMint
       if (preMint?.hashConstraints) preMint.hashConstraints = null
+      if (preMint?.iterationConstraints) preMint.iterationConstraints = null
       if (preMint?.paramsConstraints) preMint.paramsConstraints = null
     }
     if (postExploreOptions === "infinite") {
       const postMint = cloned.exploration?.postMint
       if (postMint?.hashConstraints) postMint.hashConstraints = null
+      if (postMint?.iterationConstraints) postMint.iterationConstraints = null
       if (postMint?.paramsConstraints) postMint.paramsConstraints = null
     }
     // we can send the update of the settings to the next component in the tree
@@ -178,9 +215,14 @@ export const StepExtraSettings: StepComponent = ({ state, onNext }) => {
   const preMintSettings = settings.exploration?.preMint
   const postMintSettings = settings.exploration?.postMint
 
-  const setVariant = (index: number, hash: string, paramBytes?: string) => {
+  const setVariant = (
+    index: number,
+    hash: string,
+    iteration: number,
+    paramBytes?: string
+  ) => {
     setSelectedVariant(index)
-    runtime.state.update({ hash })
+    runtime.state.update({ hash, iteration })
     if (runtime.definition.params && paramBytes) {
       const data = deserializeParams(paramBytes, runtime.definition.params, {
         withTransform: true,
@@ -289,6 +331,25 @@ export const StepExtraSettings: StepComponent = ({ state, onNext }) => {
               iframeRef.current?.reloadIframe()
             }}
           />
+          <Spacing size="x-large" />
+          {{ preMint: preExploreOptions, postMint: postExploreOptions }[
+            activeTab
+          ] !== "infinite" && (
+            <p className={style.info_text}>
+              N.B. if your project utilizes fxiteration, the iteration number
+              below will be injected into the variant along with the hash
+              {usesParams ? " and params" : ""}; it will be otherwise ignored.
+            </p>
+          )}
+          <IterationTest
+            autoGenerate={false}
+            value={runtime.state.iteration}
+            onIterationUpdate={(iteration) =>
+              runtime.state.update({
+                iteration,
+              })
+            }
+          />
           {usesParams && runtime.definition.params && (
             <>
               <Spacing size="x-large" />
@@ -297,6 +358,7 @@ export const StepExtraSettings: StepComponent = ({ state, onNext }) => {
                 params={controls.state.params.values}
                 updateParams={controls.updateParams}
                 onSubmit={controls.hardSync}
+                forceEnabled
               />
             </>
           )}

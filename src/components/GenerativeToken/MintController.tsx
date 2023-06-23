@@ -43,6 +43,7 @@ import {
   CreditCardCheckoutHandle,
 } from "components/CreditCard/CreditCardCheckout"
 import { checkIsEligibleForMintWithAutoToken } from "utils/generative-token"
+import { getIteration, useOnChainData } from "hooks/useOnChainData"
 import { EReserveMethod } from "types/entities/Reserve"
 
 interface Props {
@@ -52,6 +53,7 @@ interface Props {
   generateRevealUrl?: (params: {
     tokenId: number
     hash: string | null
+    iteration: number
   }) => string
   hideMintButtonAfterReveal?: boolean
   className?: string
@@ -146,6 +148,8 @@ export function MintController({
       mintOperation.operation
     )
 
+  const isTicketMinted = token.inputBytesSize > 0
+
   /**
    * can be used to call the mint entry point of the smart contract, or to
    * request the backend to mint the token on behalf of the user
@@ -199,13 +203,24 @@ export function MintController({
   const { randomSeed, loading: randomSeedLoading } =
     useFetchRandomSeed(finalOpHash)
 
+  const { data: iteration } = useOnChainData(
+    !isTicketMinted ? finalOpHash : null,
+    getIteration
+  )
+
   const finalLoading = loading || loadingCC || loadingFree || randomSeedLoading
 
   const revealUrl = generateRevealUrl
-    ? generateRevealUrl({ tokenId: token.id, hash: randomSeed })
-    : `/reveal/${token.id}/?fxhash=${randomSeed}&fxminter=${user?.id}`
-
-  const isTicketMinted = token.inputBytesSize > 0
+    ? generateRevealUrl({
+        tokenId: token.id,
+        hash: randomSeed,
+        iteration,
+      })
+    : `/reveal/${token.id}/?${new URLSearchParams({
+        fxhash: randomSeed,
+        fxiteration: iteration,
+        fxminter: user?.id!,
+      }).toString()}`
 
   // outputs ticket transaction or null, taking credit card into account
   const finalOp = useAsyncMemo(async () => {

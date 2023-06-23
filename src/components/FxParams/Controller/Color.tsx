@@ -12,7 +12,7 @@ import { BaseButton } from "../BaseInput"
 
 export function ColorController(props: FxParamControllerProps<"color">) {
   const ref = useRef<HTMLDivElement>(null)
-  const { label, id, onChange, value, layout = "box" } = props
+  const { label, id, onChange, value, layout = "box", isCodeDriven } = props
   const [showPicker, setShowPicker] = useState(false)
   const handleToggleShowPicker = () => {
     setShowPicker((show) => !show)
@@ -49,10 +49,12 @@ export function ColorController(props: FxParamControllerProps<"color">) {
       layout={layout}
       className={classes.pickerWrapper}
       inputContainerProps={{ ref }}
+      isCodeDriven={isCodeDriven}
     >
       <BaseButton
         className={cx(classes.squaredButton, { [classes.active]: showPicker })}
         onClick={handleToggleShowPicker}
+        disabled={isCodeDriven}
       >
         <div
           className={cx(classes.square, classes.leftTop)}
@@ -72,6 +74,7 @@ export function ColorController(props: FxParamControllerProps<"color">) {
         autoComplete="off"
         maxLength={9}
         minLength={2}
+        disabled={isCodeDriven}
       />
       {showPicker && (
         <div className={classes.pickerAbsoluteWrapper}>

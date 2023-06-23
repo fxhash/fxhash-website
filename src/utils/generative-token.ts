@@ -205,9 +205,12 @@ export function generativeMetadataFromMintForm(
     tags: tagsFromString(data.informations!.tags),
     artifactUri: ipfsUrlWithHashAndParams(
       data.cidUrlParams!,
-      data.previewHash!,
-      data.previewMinter!,
-      data.previewInputBytes,
+      {
+        fxhash: data.previewHash!,
+        fxiteration: data.previewIteration!,
+        fxminter: data.previewMinter!,
+        fxparams: data.previewInputBytes,
+      },
       (cid) => `ipfs://${cid}`
     ),
     displayUri: getIpfsSlash(data.cidPreview!),
@@ -215,6 +218,7 @@ export function generativeMetadataFromMintForm(
     generativeUri: getIpfsSlash(data.cidUrlParams!),
     authenticityHash: data.authHash2!,
     previewHash: data.previewHash!,
+    previewIteration: data.previewIteration,
     previewMinter: data.previewMinter,
     previewInputBytes: data.previewInputBytes!,
     capture,
@@ -387,6 +391,11 @@ export const genTokLabelDefinitions: Record<
   106: {
     label: "Custom minting interface",
     shortLabel: "Custom UI",
+    group: GenTokLabelGroup.DETAILS,
+  },
+  302023: {
+    label: "FXHACKATHON2023",
+    shortLabel: "FXHACKATHON2023",
     group: GenTokLabelGroup.DETAILS,
   },
 }

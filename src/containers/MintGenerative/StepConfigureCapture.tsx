@@ -66,9 +66,12 @@ export const StepConfigureCapture: StepComponent = ({ onNext, state }) => {
     post({
       cid: ipfsUrlWithHashAndParams(
         state.cidUrlParams!,
-        state.previewHash!,
-        state.previewMinter!,
-        state.previewInputBytes!,
+        {
+          fxhash: state.previewHash!,
+          fxiteration: state.previewIteration!,
+          fxminter: state.previewMinter!,
+          fxparams: state.previewInputBytes!,
+        },
         (cid) => cid
       ),
       mode: settings.mode,
@@ -95,6 +98,7 @@ export const StepConfigureCapture: StepComponent = ({ onNext, state }) => {
         canvasSelector: settings.canvasSelector,
         cidParams: state.cidUrlParams,
         previewHash: state.previewHash,
+        previewIteration: state.previewIteration,
         previewMinter: state.previewMinter,
         previewInputBytes: state.previewInputBytes,
         authHash: state.authHash1,
