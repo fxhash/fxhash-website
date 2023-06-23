@@ -90,6 +90,7 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
     },
     {
       autoRefresh: withAutoUpdate,
+      urlParams: new URLSearchParams("fxcontext=minting"),
     }
   )
 

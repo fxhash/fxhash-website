@@ -105,6 +105,8 @@ export function ParameterController<Type extends FxParamType>(
     | FxParamOptionsMap["select"]
     | undefined
 
+  const isCodeDriven = definition.update === "code-driven"
+
   return createElement(
     Controller as React.FC<
       FxParamControllerProps<any> & {
@@ -117,6 +119,7 @@ export function ParameterController<Type extends FxParamType>(
       value: value as any,
       onChange: handleChangeParam,
       options,
+      isCodeDriven,
     }
   )
 }
