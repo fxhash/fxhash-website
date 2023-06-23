@@ -46,8 +46,8 @@ import { useFetchRandomSeed } from "hooks/useFetchRandomSeed"
 import { getIteration, useOnChainData } from "hooks/useOnChainData"
 import { useRuntimeController } from "hooks/useRuntimeController"
 import { FxParamsData } from "components/FxParams/types"
-import { getRandomIteration } from "utils/iteration"
 import { FxContext } from "./Panel/PanelContext"
+import { getRandomIteration } from "utils/iteration"
 
 export type TOnMintHandler = (
   ticketId: number | number[] | null,
@@ -89,14 +89,19 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
       cid: token.metadata.generativeUri,
       hash: (router.query.fxhash as string) || generateFxHash(),
       minter: minterAddress,
+      context: fxcontext,
       iteration: getRandomIteration(token.supply, token.balance),
       inputBytes: router.query.fxparams as string | undefined,
     },
     {
       autoRefresh: withAutoUpdate,
-      urlParams: new URLSearchParams(`fxcontext=${fxcontext}`),
     }
   )
+
+  const updateContext = useCallback((context: FxContext) => {
+    setFxcontext(context)
+    runtime.state.update({ context })
+  }, [])
 
   const updateAutoUpdate = (auto: boolean) => {
     auto && controls.hardSync()
@@ -104,7 +109,7 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
   }
 
   const handleClosePreMintView = useCallback(() => {
-    setFxcontext(FxContext.MINTING)
+    updateContext(FxContext.MINTING)
     setShowPreMintWarningView(false)
     setSelectedTicketId(null)
     setSelectedReserveConsumption(null)
@@ -119,7 +124,7 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
         }
       },
       onError: () => {
-        setFxcontext(FxContext.MINTING)
+        updateContext(FxContext.MINTING)
       },
     }
   )
@@ -205,7 +210,7 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
 
   const handleClickSubmit: TOnMintHandler = useCallback(
     (_ticketId, reserveConsumption = null) => {
-      setFxcontext(FxContext.STANDALONE)
+      updateContext(FxContext.STANDALONE)
       const ticketIdToMint =
         mode === "with-ticket" && ticketId ? ticketId : _ticketId
       if (showTicketPreMintWarning) {
@@ -365,7 +370,7 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
               onChangeData={handleChangeData}
               onChangeHash={handleChangeHash}
               fxcontext={fxcontext}
-              setFxcontext={setFxcontext}
+              setFxcontext={updateContext}
               lockedParamIds={lockedParamIds}
               onChangeLockedParamIds={setLockedParamIds}
               history={historyContext.history}
