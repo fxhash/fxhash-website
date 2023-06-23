@@ -23,7 +23,7 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
   const [check2, setCheck2] = useState<boolean>(false)
   const artworkIframeRef = useRef<ArtworkIframeRef>(null)
 
-  const { runtime, controls } = useRuntimeController(artworkIframeRef, {
+  const { runtime, controls, details } = useRuntimeController(artworkIframeRef, {
     cid: state.cidUrlParams!,
   })
 
@@ -132,7 +132,7 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
                   <ArtworkFrame>
                     <ArtworkIframe
                       ref={artworkIframeRef}
-                      url={""}
+                      url={details.activeUrl}
                       textWaiting="looking for content on IPFS"
                     />
                   </ArtworkFrame>
