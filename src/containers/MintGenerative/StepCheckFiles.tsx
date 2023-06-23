@@ -17,15 +17,20 @@ import { ControlsTest } from "components/Testing/ControlsTest"
 import { MinterTest } from "components/Testing/MinterTest"
 import { useRuntimeController } from "hooks/useRuntimeController"
 import { IterationTest } from "components/Testing/IterationTest"
+import { ContextTest } from "components/Testing/ContextTest"
 
 export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
   const [check1, setCheck1] = useState<boolean>(false)
   const [check2, setCheck2] = useState<boolean>(false)
   const artworkIframeRef = useRef<ArtworkIframeRef>(null)
 
-  const { runtime, controls, details } = useRuntimeController(artworkIframeRef, {
-    cid: state.cidUrlParams!,
-  })
+  const { runtime, controls, details } = useRuntimeController(
+    artworkIframeRef,
+    {
+      cid: state.cidUrlParams!,
+      context: "standalone",
+    }
+  )
 
   const nextStep = () => {
     onNext({
@@ -102,8 +107,14 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
               artworkIframeRef.current?.reloadIframe()
             }}
           />
+          <Spacing size="x-large" sm="x-large" />
+          <ContextTest
+            value={runtime.state.context}
+            onChange={(context) => {
+              runtime.state.update({ context })
+            }}
+          />
           <Spacing size="2x-large" sm="x-large" />
-
           {controls.state.params.definition && (
             <div>
               <h5>Params</h5>
