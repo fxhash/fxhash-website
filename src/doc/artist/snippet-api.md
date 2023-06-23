@@ -1006,17 +1006,6 @@ Corresponding controller:
       (p, c) => (p * alphabet.length + alphabet.indexOf(c)) | 0,
       0
     )
-  // make fxrand from hash
-  var fxhash =
-    search.get("fxhash") ||
-    "oo" +
-      Array(49)
-        .fill(0)
-        .map((_) => alphabet[(Math.random() * alphabet.length) | 0])
-        .join("")
-  let fxhashTrunc = fxhash.slice(2)
-  let regex = new RegExp(".{" + ((fxhash.length / 4) | 0) + "}", "g")
-  let hashes = fxhashTrunc.match(regex).map((h) => b58dec(h))
   let sfc32 = (a, b, c, d) => {
     return () => {
       a |= 0
@@ -1032,35 +1021,76 @@ Corresponding controller:
       return (t >>> 0) / 4294967296
     }
   }
-  var fxrand = sfc32(...hashes)
+  let rndHash = (n) =>
+    Array(n)
+      .fill(0)
+      .map((_) => alphabet[(Math.random() * alphabet.length) | 0])
+      .join("")
+  let matcher = (str, start) =>
+    str
+      .slice(start)
+      .match(new RegExp(".{" + ((str.length - start) >> 2) + "}", "g"))
+      .map(b58dec)
+  // make fxrand from hash
+  var fxhash = search.get("fxhash") || "oo" + rndHash(49)
+  var fxrand = sfc32(...matcher(fxhash, 2))
   // make fxrandminter from minter address
-  var fxminter =
-    search.get("fxminter") ||
-    "tz1" +
-      Array(33)
-        .fill(0)
-        .map((_) => alphabet[(Math.random() * alphabet.length) | 0])
-        .join("")
-  let fxminterTrunc = fxminter.slice(3)
-  regex = new RegExp(".{" + ((fxminterTrunc.length / 4) | 0) + "}", "g")
-  hashes = fxminterTrunc.match(regex).map((h) => b58dec(h))
-  var fxrandminter = sfc32(...hashes)
-
+  var fxminter = search.get("fxminter") || "tz1" + rndHash(33)
+  var fxrandminter = sfc32(...matcher(fxminter, 3))
   // true if preview mode active, false otherwise
   // you can append preview=1 to the URL to simulate preview active
   var isFxpreview = search.get("preview") === "1"
   // call this method to trigger the preview
   function fxpreview() {
-    window.dispatchEvent(new Event("fxhash-preview"))
-    setTimeout(() => fxpreview(), 500)
+    console.log("FXPREVIEW")
+    // window.dispatchEvent(new Event("fxhash-preview"))
+    // setTimeout(() => fxpreview(), 500)
   }
   // get the byte params from the URL
-  let fxparams = search.get("fxparams")
-  fxparams = fxparams ? fxparams.replace("0x", "") : fxparams
+  const searchParams = search.get("fxparams")
+  let initialInputBytes = searchParams?.replace("0x", "")
+  const throttle = (func, delay) => {
+    let isThrottled = false
+
+    return function (...args) {
+      if (!isThrottled) {
+        func.apply(this, args)
+        isThrottled = true
+
+        setTimeout(() => {
+          isThrottled = false
+        }, delay)
+      }
+    }
+  }
+
+  const stringToHex = (s) => {
+    let rtn = ""
+    for (let i = 0; i < s.length; i++) {
+      rtn += s.charCodeAt(i).toString(16).padStart(4, "0")
+    }
+    return rtn
+  }
+
+  const completeHexColor = (hexCode) => {
+    let hex = hexCode.replace("#", "")
+    if (hex.length === 6) {
+      hex = `${hex}ff`
+    }
+    if (hex.length === 3) {
+      hex = `${hex[0]}${hex[0]}${hex[1]}${hex[1]}${hex[2]}${hex[2]}ff`
+    }
+    return hex
+  }
 
   // the parameter processor, used to parse fxparams
   const processors = {
     number: {
+      serialize: (input) => {
+        const view = new DataView(new ArrayBuffer(8))
+        view.setFloat64(0, input)
+        return view.getBigUint64(0).toString(16).padStart(16, "0")
+      },
       deserialize: (input) => {
         const view = new DataView(new ArrayBuffer(8))
         for (let i = 0; i < 8; i++) {
@@ -1079,6 +1109,10 @@ Corresponding controller:
         max = Math.min(max, Number.MAX_SAFE_INTEGER)
         min = Math.max(min, Number.MIN_SAFE_INTEGER)
         const v = Math.min(Math.max(value, min), max)
+        if (definition?.options?.step) {
+          const t = 1.0 / definition?.options?.step
+          return Math.round(v * t) / t
+        }
         return v
       },
       random: (definition) => {
@@ -1099,6 +1133,11 @@ Corresponding controller:
       },
     },
     bigint: {
+      serialize: (input) => {
+        const view = new DataView(new ArrayBuffer(8))
+        view.setBigInt64(0, BigInt(input))
+        return view.getBigUint64(0).toString(16).padStart(16, "0")
+      },
       deserialize: (input) => {
         const view = new DataView(new ArrayBuffer(8))
         for (let i = 0; i < 8; i++) {
@@ -1133,6 +1172,11 @@ Corresponding controller:
       },
     },
     boolean: {
+      serialize: (input) =>
+        (typeof input === "boolean" && input) ||
+        (typeof input === "string" && input === "true")
+          ? "01"
+          : "00",
       // if value is "00" -> 0 -> false, otherwise we consider it's 1
       deserialize: (input) => {
         return input === "00" ? false : true
@@ -1141,6 +1185,9 @@ Corresponding controller:
       random: () => Math.random() < 0.5,
     },
     color: {
+      serialize: (input) => {
+        return completeHexColor(input)
+      },
       deserialize: (input) => input,
       bytesLength: () => 4,
       transform: (input) => {
@@ -1173,6 +1220,14 @@ Corresponding controller:
           .join("")}`,
     },
     string: {
+      serialize: (input, def) => {
+        let max = 64
+        if (typeof def.options?.maxLength !== "undefined")
+          max = Number(def.options.maxLength)
+        let hex = stringToHex(input.substring(0, max))
+        hex = hex.padEnd(max * 4, "0")
+        return hex
+      },
       deserialize: (input) => {
         const hx = input.match(/.{1,4}/g) || []
         let rtn = ""
@@ -1215,6 +1270,12 @@ Corresponding controller:
       },
     },
     select: {
+      serialize: (input, def) => {
+        // find the index of the input in the array of options
+        return Math.min(255, def.options?.options?.indexOf(input) || 0)
+          .toString(16)
+          .padStart(2, "0")
+      },
       deserialize: (input, definition) => {
         return (
           definition.options.options[parseInt(input, 16)] || definition.default
@@ -1234,6 +1295,35 @@ Corresponding controller:
         return definition?.options?.options[index]
       },
     },
+  }
+
+  // Utility function to get parameter value, default value, or a random value
+  const getParamValue = (param, def, processor) => {
+    if (typeof param !== "undefined") return param
+    if (typeof def.default !== "undefined") return def.default
+    return processor.random(def)
+  }
+
+  // params are injected into the piece using the binary representation of the
+  // numbers, to keep precision
+  const serializeParams = (params, definition) => {
+    // Initialization of the hex string for parameters
+    let hexString = ""
+    // If definition is not provided, return an empty hex string
+    if (!definition) return hexString
+    // Iterating over the definitions
+    for (const def of definition) {
+      const { id, type } = def
+      // Get the processor for the given type
+      const processor = processors[type]
+      // Get the param value, fall back to default or a random value
+      const paramValue = getParamValue(params[id], def, processor)
+      // Serialize the param value
+      const serializedParam = processor.serialize(paramValue, def)
+      // Concatenate serialized params
+      hexString += serializedParam
+    }
+    return hexString
   }
 
   // takes the parameters as bytes and outputs an object with the
@@ -1264,42 +1354,110 @@ Corresponding controller:
     return params
   }
 
-  const transformParamValues = (values, definitions) => {
+  const processParam = (paramId, value, definitions, transformer) => {
+    const definition = definitions.find((d) => d.id === paramId)
+    const processor = processors[definition.type]
+    return processor[transformer]?.(value, definition) || value
+  }
+
+  const processParams = (values, definitions, transformer) => {
     const paramValues = {}
-    for (const def of definitions) {
-      const processor = processors[def.type]
-      const value = values[def.id]
+    for (const definition of definitions) {
+      const processor = processors[definition.type]
+      const value = values[definition.id]
       // deserialize the bytes into the params
-      paramValues[def.id] = processor.transform
-        ? processor.transform(value)
-        : value
+      paramValues[definition.id] =
+        processor[transformer]?.(value, definition) || value
     }
     return paramValues
   }
 
   window.$fx = {
-    _version: "3.0.0",
+    _version: "3.2.0",
     _processors: processors,
     // where params def & features will be stored
     _params: undefined,
     _features: undefined,
     // where the parameter values are stored
     _paramValues: {},
-
+    _listeners: {},
+    _receiveUpdateParams: async function (newRawValues, onDefault) {
+      const handlers = await this.propagateEvent("params:update", newRawValues)
+      handlers.forEach(([optInDefault, onDone]) => {
+        if (!(typeof optInDefault == "boolean" && !optInDefault)) {
+          this._updateParams(newRawValues)
+          onDefault?.()
+        }
+        onDone?.(optInDefault, newRawValues)
+      })
+      if (handlers.length === 0) {
+        this._updateParams(newRawValues)
+        onDefault?.()
+      }
+    },
+    _updateParams: function (newRawValues) {
+      const constrained = processParams(
+        { ...this._rawValues, ...newRawValues },
+        this._params,
+        "constrain"
+      )
+      Object.keys(constrained).forEach((paramId) => {
+        this._rawValues[paramId] = constrained[paramId]
+      })
+      this._paramValues = processParams(
+        this._rawValues,
+        this._params,
+        "transform"
+      )
+      this._updateInputBytes()
+    },
+    _updateInputBytes: function () {
+      const bytes = serializeParams(this._rawValues, this._params)
+      this.inputBytes = bytes
+    },
+    _emitParams: function (newRawValues) {
+      const constrainedValues = Object.keys(newRawValues).reduce(
+        (acc, paramId) => {
+          acc[paramId] = processParam(
+            paramId,
+            newRawValues[paramId],
+            this._params,
+            "constrain"
+          )
+          return acc
+        },
+        {}
+      )
+      this._receiveUpdateParams(constrainedValues, () => {
+        parent.postMessage(
+          {
+            id: "fxhash_emit:params:update",
+            data: {
+              params: constrainedValues,
+            },
+          },
+          "*"
+        )
+      })
+    },
     hash: fxhash,
     rand: fxrand,
-
     minter: fxminter,
     randminter: fxrandminter,
+    iteration: Number(search.get("fxiteration")) || 1,
+    context: search.get("fxcontext") || "standalone",
 
     preview: fxpreview,
     isPreview: isFxpreview,
     params: function (definition) {
-      // todo: maybe do some validation on the dev side ?
-      // or maybe not ?
       this._params = definition
-      this._rawValues = deserializeParams(fxparams, definition)
-      this._paramValues = transformParamValues(this._rawValues, definition)
+      this._rawValues = deserializeParams(initialInputBytes, definition)
+      this._paramValues = processParams(
+        this._rawValues,
+        definition,
+        "transform"
+      )
+      this._updateInputBytes()
     },
     features: function (features) {
       this._features = features
@@ -1322,12 +1480,17 @@ Corresponding controller:
     getRawParams: function () {
       return this._rawValues
     },
+    getRandomParam: function (id) {
+      const definition = this._params.find((d) => d.id === id)
+      const processor = processors[definition.type]
+      return processor.random(definition)
+    },
     getDefinitions: function () {
       return this._params
     },
     stringifyParams: function (params) {
       return JSON.stringify(
-        params,
+        params || this._rawValues,
         (key, value) => {
           if (typeof value === "bigint") return value.toString()
           return value
@@ -1335,7 +1498,54 @@ Corresponding controller:
         2
       )
     },
+    on: function (name, callback, onDone) {
+      if (!this._listeners[name]) {
+        this._listeners[name] = []
+      }
+      this._listeners[name].push([callback, onDone])
+      return () => {
+        const index = this._listeners[name].findIndex(([c]) => c === callback)
+        if (index > -1) {
+          this._listeners[name].splice(index, 1)
+        }
+      }
+    },
+    propagateEvent: async function (name, data) {
+      const results = []
+      if (this._listeners?.[name]) {
+        for (const [callback, onDone] of this._listeners[name]) {
+          const result = callback(data)
+          results.push([
+            result instanceof Promise ? await result : result,
+            onDone,
+          ])
+        }
+      }
+      return results
+    },
+    emit: function (id, data) {
+      switch (id) {
+        case "params:update":
+          this._emitParams(data)
+          break
+        default:
+          console.log("$fx.emit called with unknown id:", id)
+          break
+      }
+    },
   }
+  const resetFxRand = () => {
+    fxrand = sfc32(...matcher(fxhash, 2))
+    $fx.rand = fxrand
+    fxrand.reset = resetFxRand
+  }
+  fxrand.reset = resetFxRand
+  const resetFxRandMinter = () => {
+    fxrandminter = sfc32(...matcher(fxminter, 3))
+    $fx.randminter = fxrandminter
+    fxrandminter.reset = resetFxRandMinter
+  }
+  fxrandminter.reset = resetFxRandMinter
   window.addEventListener("message", (event) => {
     if (event.data === "fxhash_getInfo") {
       parent.postMessage(
@@ -1344,6 +1554,7 @@ Corresponding controller:
           data: {
             version: window.$fx._version,
             hash: window.$fx.hash,
+            iteration: window.$fx.iteration,
             features: window.$fx.getFeatures(),
             params: {
               definitions: window.$fx.getDefinitions(),
@@ -1354,6 +1565,10 @@ Corresponding controller:
         },
         "*"
       )
+    }
+    if (event.data?.id === "fxhash_params:update") {
+      const { params } = event.data.data
+      if (params) window.$fx._receiveUpdateParams(params)
     }
   })
   // END NEW
