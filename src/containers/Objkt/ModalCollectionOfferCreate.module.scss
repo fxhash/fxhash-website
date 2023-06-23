@@ -1,0 +1,74 @@
+@import "../../styles/Variables";
+
+.container_field, .container_field_price {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 16px;
+}
+
+.container_field_price {
+  gap: 0;
+  & > span {
+    margin-right: 16px;
+  }
+}
+
+input.input_amount {
+  flex-grow: 0;
+  width: 100px;
+}
+
+.container_price {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.container_floor {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-left: -3px;
+}
+
+.button_floor {
+  height: 50px;
+  &:hover {
+    z-index: 2;
+  }
+  & + & {
+    margin-left: -3px;
+  }
+}
+
+.container_buttons {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  justify-content: center;
+}
+
+@media (max-width: $breakpoint-sm) {
+  .container_field, .container_field_price {
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .container_field_price {
+    gap: 16px 0;
+  }
+  .button_listing_children {
+    display: inline;
+  }
+  .container_buttons {
+    text-align: center;
+  }
+  .error {
+    margin-top: 4px;
+    text-align: center;
+  }
+}

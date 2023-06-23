@@ -1,0 +1,93 @@
+.regular {
+  font-size: 1rem;
+}
+
+.h6 {
+  font-size: var(--font-size-h6);
+}
+
+.h5 {
+  font-size: var(--font-size-h5);
+}
+
+.h4 {
+  font-size: var(--font-size-h4);
+}
+
+.h3 {
+  font-size: var(--font-size-h3);
+}
+
+.h2 {
+  font-size: var(--font-size-h2);
+}
+
+.h1 {
+  font-size: var(--font-size-h1);
+}
+
+.small {
+  font-size: var(--font-size-small);
+}
+
+.very_small {
+  font-size: 0.8rem;
+}
+
+.small_title {
+  text-transform: uppercase;
+  color: var(--color-gray);
+  font-weight: 300;
+  font-size: var(--font-size-small);
+}
+
+.info {
+  font-size: var(--font-size-small);
+  color: var(--color-gray);
+}
+
+.info_link {
+  font-size: var(--font-size-small);
+  color: var(--color-gray);
+  font-weight: normal;
+}
+
+.info_link:hover {
+  color: var(--color-secondary);
+}
+
+.error {
+  font-weight: bold;
+  color: var(--color-error);
+}
+
+.success {
+  font-weight: bold;
+  color: var(--color-success);
+}
+
+.warning {
+  font-weight: bold;
+  color: var(--color-warning);
+}
+
+.bold {
+  font-weight: bold !important;
+}
+
+.reset {
+  text-decoration: inherit;
+  font-weight: inherit;
+}
+
+.reset:hover {
+  text-decoration: inherit;
+}
+
+.primary {
+  color: var(--color-primary);
+}
+
+.secondary {
+  color: var(--color-secondary);
+}
