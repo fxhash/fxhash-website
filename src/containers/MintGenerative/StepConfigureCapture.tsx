@@ -66,10 +66,12 @@ export const StepConfigureCapture: StepComponent = ({ onNext, state }) => {
     post({
       cid: ipfsUrlWithHashAndParams(
         state.cidUrlParams!,
-        state.previewHash!,
-        state.previewIteration!,
-        state.previewMinter!,
-        state.previewInputBytes!,
+        {
+          fxhash: state.previewHash!,
+          fxiteration: state.previewIteration!,
+          fxminter: state.previewMinter!,
+          fxparams: state.previewInputBytes!,
+        },
         (cid) => cid
       ),
       mode: settings.mode,

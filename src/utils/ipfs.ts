@@ -19,16 +19,20 @@ export function ipfsUrlWithHash(
 
 export function ipfsUrlWithHashAndParams(
   cid: string,
-  hash: string,
-  iteration: number,
-  minter: string,
-  params: string | null | undefined,
+  urlParams: {
+    fxhash?: string
+    fxiteration?: number | string
+    fxminter?: string
+    fxparams?: string | null
+    fxcontext?: string
+  },
   transform: (cid: string) => string = ipfsGatewayUrl
 ) {
-  let url = `${transform(
-    cid
-  )}/?fxhash=${hash}&fxiteration=${iteration}&fxminter=${minter}`
-  if (params) url += `&fxparams=${params}`
+  let url = `${transform(cid)}/?fxhash=${urlParams.fxhash}&fxiteration=${
+    urlParams.fxiteration
+  }&fxminter=${urlParams.fxminter}`
+  if (urlParams.fxcontext) url += `&fxcontext=${urlParams.fxcontext}`
+  if (urlParams.fxparams) url += `&fxparams=${urlParams.fxparams}`
   return url
 }
 

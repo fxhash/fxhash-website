@@ -1,0 +1,243 @@
+@import "../../styles/Variables.scss";
+
+.article {
+  line-height: 180%;
+  font-family: "Source Serif Pro", serif;
+  font-size: 21px;
+
+  @media (max-width: $breakpoint-sm) {
+    font-size: 18px;
+  }
+
+  // temp: hack until we provide header image for events
+  h2:has(img):first-child {
+    margin-top: 0;
+    width: calc(100vw - 20px);
+    position: relative;
+    margin-left: calc(-50vw + 50% + 10px);
+
+    img {
+      width: 100%;
+    }
+  }
+
+  h1 {
+    font-size: var(--font-size-h3-em);
+    margin-top: 2.2em;
+    // margin-left: -40px;
+    line-height: 110%;
+
+    // &::before {
+    //   content: "— ";
+    // }
+
+    @media (max-width: $breakpoint-sm) {
+      margin-left: 0;
+
+      &::before {
+        content: "";
+      }
+    }
+  }
+  h2 {
+    font-size: var(--font-size-h4-em);
+    margin-top: 2em;
+  }
+  h3 {
+    font-size: var(--font-size-h5-em);
+    margin-top: 2em;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    line-height: 140%;
+  }
+
+  p, ul {
+    margin-top: 1.5em;
+    margin-bottom: 0;
+  }
+
+  hr {
+    margin-top: 1.5em;
+    border: 0;
+    height: 2px;
+    background-color: var(--color-gray-vlight);
+  }
+
+  :global {
+    .github_wrapper {
+      background-color: var(--color-gray-vvvlight);
+      display: flex;
+      margin-top: 1.5em;
+      border: 2px solid var(--color-border);
+      flex-direction: row;
+      align-items: center;
+      padding: 10px 14px;
+      color: var(--color-black);
+      gap: 10px;
+
+      &:hover {
+        text-decoration: none;
+        background-color: var(--color-gray-vvlight);
+
+        .gh_title {
+          text-decoration: underline;
+        }
+      }
+
+      i {
+        font-size: 32px;
+      }
+
+      .gh_right {
+        display: flex;
+        flex-direction: column;
+        line-height: 130%;
+        gap: 4px;
+      }
+
+      .gh_desc {
+        font-size: var(--font-size-small-em);
+        font-weight: normal;
+      }
+    }
+
+    .infobox {
+      background-color: var(--color-info-light);
+      padding: 0.8em;
+      margin-top: 1.5em;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 0.8em;
+
+      &::before {
+        content: "\f05a";
+        font-weight: 900;
+        font-family: "Font Awesome 6 Sharp";
+        font-size: 28px;
+        color: var(--color-info);
+      }
+
+      &.infobox_warning {
+        background-color: var(--color-warning-light);
+
+        &::before {
+          content: "\f071";
+          color: var(--color-warning);
+        }
+      }
+    }
+  }
+
+  ul ul {
+    margin-top: 0;
+  }
+
+  img {
+    max-width: 100%;
+    margin: auto;
+    display: block;
+  }
+
+  blockquote {
+    background-color: var(--color-gray-vvvlight);
+    margin: 0;
+    padding: 0.8em 1em;
+    margin-top: 1.5em;
+
+    p {
+      margin: 0;
+    }
+  }
+
+  table {
+    margin-top: 1.5em;
+  }
+
+  pre, code {
+    font-family: inherit;
+    margin-bottom: 0;
+  }
+
+  pre {
+    max-width: 100%;
+    overflow-x: auto;
+    margin-top: 1.5em;
+  }
+
+  pre code {
+    box-shadow: 0px 2px 14px -4px rgba(0, 0, 0, 0.67);
+    padding: 15px;
+    font-size: 0.8em;
+    line-height: 150%;
+  }
+
+  p, ul, table {
+    code {
+      background: #e3e3e3;
+      padding: 2px 5px;
+      border-radius: 4px;
+    }
+  }
+
+  table {
+    border: 1px solid var(--color-gray-light);
+    border-collapse: collapse;
+    max-width: 100%;
+    display: block;
+    overflow-x: auto;
+
+    thead {
+      background-color: var(--color-gray-vvlight);
+    }
+
+    td, th {
+      border: 1px solid var(--color-gray-light);
+      padding: 5px 10px;
+      text-align: left;
+    }
+
+    td {
+      font-size: var(--font-size-small-em);
+
+      code {
+        font-size: 0.8em;
+      }
+    }
+  }
+}
+
+:global .dark :local .article {
+  p, ul, table {
+    code {
+      background: #111111;
+      border: 1px solid var(--color-gray-vlight);
+    }
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .article {
+    line-height: 160%;
+
+    p {
+      line-height: 160%;
+    }
+  
+    a, li, p {
+      word-break: break-word;
+      overflow-wrap: break-word;
+    }
+
+    h1 {
+      margin-top: 1em;
+    }
+    h2 {
+      margin-top: 1.28em;
+    }
+    p, ul {
+      margin-top: 1em;
+    }
+  }
+}
