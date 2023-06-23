@@ -1,0 +1,118 @@
+@import "../../styles/Variables";
+
+.root {
+  position: relative;
+}
+
+.select {
+  height: 50px;
+  font-family: inherit;
+  background: transparent;
+  border: 3px solid var(--color-border-input);
+  font-size: inherit;
+  padding: 0 35px 0 15px;
+  cursor: pointer;
+  position: relative;
+  line-height: 0;
+  text-align: left;
+  color: inherit;
+  width: 100%;
+
+  &:focus,
+  &.opened {
+    border-color: var(--color-secondary);
+    outline: none;
+  }
+
+  &::after {
+    content: "";
+    display: block;
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid var(--color-border-input);
+    transform: translateY(-1px);
+  }
+
+  &.opened {
+    &::after {
+      transform: rotate(180deg) translateY(3px);
+    }
+  }
+  .value {
+    line-height: 1;
+  }
+}
+
+.options {
+  border: 3px solid var(--color-black);
+  border-top: none;
+  position: absolute;
+  left: 0;
+  z-index: 100;
+  background: var(--color-white);
+  width: 100%;
+  color: inherit;
+
+  .options_wrapper {
+    max-height: 250px;
+    overflow: auto;
+    overscroll-behavior: contain;
+  }
+
+  .option {
+    border: none;
+    background: transparent;
+    padding: 8px 15px;
+    cursor: pointer;
+    text-align: left;
+    width: 100%;
+    color: inherit;
+
+    &:hover,
+    &:focus {
+      background-color: var(--color-gray-vvlight);
+    }
+
+    &:focus {
+      outline: none;
+    }
+
+    &:disabled {
+      pointer-events: none;
+      opacity: 0.5;
+      font-style: italic;
+    }
+  }
+}
+
+.placeholder {
+  font-style: italic;
+  color: var(--color-gray);
+}
+
+.opening_bottom {
+  .options {
+    top: 100%;
+    margin-top: -3px;
+    border-top-color: var(--color-border-input);
+  }
+}
+
+.opening_top {
+  .options {
+    bottom: 100%;
+    margin-bottom: -3px;
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .select,
+  .option {
+    font-size: var(--font-size-small);
+  }
+}

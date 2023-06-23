@@ -28,6 +28,9 @@ import { ListReserves } from "../../../components/List/ListReserves"
 import { GenTokArticleMentions } from "./GenTokArticleMentions"
 import { Clamp } from "../../../components/Clamp/Clamp"
 import { useCallback, useState } from "react"
+import { Icon } from "components/Icons/Icon"
+import { GenerativeRedeemable } from "../../../components/GenerativeToken/GenerativeRedeemable"
+import { RedeemableDetails } from "types/entities/Redeemable"
 
 /**
  * This is the Core component resposible for the display logic of a Generative
@@ -38,9 +41,14 @@ import { useCallback, useState } from "react"
 
 interface Props {
   token: GenerativeToken
+  redeemableDetails?: RedeemableDetails[] | null
   offlineMode?: boolean
 }
-export function GenerativeDisplay({ token, offlineMode = false }: Props) {
+export function GenerativeDisplay({
+  token,
+  redeemableDetails,
+  offlineMode = false,
+}: Props) {
   const [showDescription, setShowDescription] = useState(false)
   const handleShowDescription = useCallback(() => setShowDescription(true), [])
 
@@ -55,6 +63,14 @@ export function GenerativeDisplay({ token, offlineMode = false }: Props) {
         />
         <Spacing size="2x-small" sm="regular" />
         <h3>{token.name}</h3>
+        {token.redeemables && token.redeemables.length > 0 && (
+          <div className={cs(style.redeemable)}>
+            <Icon icon="sparkles" /> <span>This project can be redeemed</span>{" "}
+            <Link href={`/generative/${token.id}/redeem`}>
+              <a className={cs(text.regular)}>see more</a>
+            </Link>
+          </div>
+        )}
         <Spacing size="x-large" />
       </div>
 
@@ -71,6 +87,14 @@ export function GenerativeDisplay({ token, offlineMode = false }: Props) {
             <Spacing size="x-large" />
             <h3>{token.name}</h3>
           </div>
+          {token.redeemables && token.redeemables.length > 0 && (
+            <div className={cs(style.redeemable, style["redeemable--hide-md"])}>
+              <Icon icon="sparkles" /> <span>This project can be redeemed</span>{" "}
+              <Link href={`/generative/${token.id}/redeem`}>
+                <a className={cs(text.regular)}>see more</a>
+              </Link>
+            </div>
+          )}
 
           <Spacing size="x-large" sm="none" />
 
@@ -151,6 +175,14 @@ export function GenerativeDisplay({ token, offlineMode = false }: Props) {
             )}
           >
             <GenerativePricing token={token} />
+            {redeemableDetails && (
+              <GenerativeRedeemable
+                urlRedeemable={`/generative/${token.id}/redeem`}
+                // take the first redeemable?
+                details={redeemableDetails[0]}
+                redeemedPercentage={token.redeemables![0].redeemedPercentage}
+              />
+            )}
             {token.mintTicketSettings && (
               <>
                 <strong>Ticket Grace Period</strong>

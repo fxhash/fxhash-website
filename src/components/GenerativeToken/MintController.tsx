@@ -43,6 +43,7 @@ import {
   CreditCardCheckoutHandle,
 } from "components/CreditCard/CreditCardCheckout"
 import { checkIsEligibleForMintWithAutoToken } from "utils/generative-token"
+import { getIteration, useOnChainData } from "hooks/useOnChainData"
 import { EReserveMethod } from "types/entities/Reserve"
 
 interface Props {
@@ -52,6 +53,7 @@ interface Props {
   generateRevealUrl?: (params: {
     tokenId: number
     hash: string | null
+    iteration: number
   }) => string
   hideMintButtonAfterReveal?: boolean
   className?: string
@@ -199,11 +201,21 @@ export function MintController({
   const { randomSeed, loading: randomSeedLoading } =
     useFetchRandomSeed(finalOpHash)
 
+  const { data: iteration } = useOnChainData(finalOpHash, getIteration)
+
   const finalLoading = loading || loadingCC || loadingFree || randomSeedLoading
 
   const revealUrl = generateRevealUrl
-    ? generateRevealUrl({ tokenId: token.id, hash: randomSeed })
-    : `/reveal/${token.id}/?fxhash=${randomSeed}&fxminter=${user?.id}`
+    ? generateRevealUrl({
+        tokenId: token.id,
+        hash: randomSeed,
+        iteration,
+      })
+    : `/reveal/${token.id}/?${new URLSearchParams({
+        fxhash: randomSeed,
+        fxiteration: iteration,
+        fxminter: user?.id!,
+      }).toString()}`
 
   const isTicketMinted = token.inputBytesSize > 0
 

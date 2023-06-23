@@ -2,6 +2,22 @@
 # yarn lockfile v1
 
 
+"@airgap/beacon-blockchain-substrate@^3.3.4":
+  version "3.3.4"
+  resolved "https://registry.yarnpkg.com/@airgap/beacon-blockchain-substrate/-/beacon-blockchain-substrate-3.3.4.tgz#ae4391ca7cee676eca4a61a9b342e9162888e45e"
+  integrity sha512-MyenUYbJdb/ufR7k3+TdL0Uur1PvXHxGbh+u4riN3vTeULC0d+LSZx7qsWM45fpDYtfyOhB0akQHp9s+1MU/rQ==
+  dependencies:
+    "@airgap/beacon-types" "^3.3.4"
+    "@airgap/beacon-ui" "^3.3.4"
+
+"@airgap/beacon-blockchain-tezos@^3.3.4":
+  version "3.3.4"
+  resolved "https://registry.yarnpkg.com/@airgap/beacon-blockchain-tezos/-/beacon-blockchain-tezos-3.3.4.tgz#8980514deac3063e62c882b5630df08db7c690ad"
+  integrity sha512-sUK2d5pMYjulMPs0Cw/+XuDf5BiBnhkRbA8vDjdNicB9l0rws74iLcjCTBfX6AeO66FPxF4C2sx5nHqSxLwgjw==
+  dependencies:
+    "@airgap/beacon-types" "^3.3.4"
+    "@airgap/beacon-ui" "^3.3.4"
+
 "@airgap/beacon-core@^3.3.4":
   version "3.3.4"
   resolved "https://registry.npmjs.org/@airgap/beacon-core/-/beacon-core-3.3.4.tgz"
@@ -15,9 +31,9 @@
     "@stablelib/x25519-session" "^1.0.4"
     bs58check "2.1.2"
 
-"@airgap/beacon-dapp@^3.1.3":
+"@airgap/beacon-dapp@^3.1.3", "@airgap/beacon-dapp@^3.3.4":
   version "3.3.4"
-  resolved "https://registry.npmjs.org/@airgap/beacon-dapp/-/beacon-dapp-3.3.4.tgz"
+  resolved "https://registry.yarnpkg.com/@airgap/beacon-dapp/-/beacon-dapp-3.3.4.tgz#ec7da607d57b64117a023c11e8b8e2bddbfe41ef"
   integrity sha512-fMjRFN2r3S3uZpUuc9KEIhgFoesNdNN/NRIAEInyLC9AB41Z+C9UKd/mISQwd5hJips5CWpTXnuYHnfEk4+Erw==
   dependencies:
     "@airgap/beacon-core" "^3.3.4"
@@ -25,6 +41,22 @@
     "@airgap/beacon-transport-postmessage" "^3.3.4"
     "@airgap/beacon-ui" "^3.3.4"
     qrcode-generator "1.4.4"
+
+"@airgap/beacon-sdk@^3.3.0":
+  version "3.3.4"
+  resolved "https://registry.yarnpkg.com/@airgap/beacon-sdk/-/beacon-sdk-3.3.4.tgz#90b1461f4c4d4b1175e62fea55dcba5794512cbe"
+  integrity sha512-9feyD9vOHqPU6L5JBn6yGWFzvcxStTSmvMIjHRX1tAz8gwAzQxormc6jlXqNK8vNgU1CbLY38kbcMcp/gQTlvw==
+  dependencies:
+    "@airgap/beacon-blockchain-substrate" "^3.3.4"
+    "@airgap/beacon-blockchain-tezos" "^3.3.4"
+    "@airgap/beacon-core" "^3.3.4"
+    "@airgap/beacon-dapp" "^3.3.4"
+    "@airgap/beacon-transport-matrix" "^3.3.4"
+    "@airgap/beacon-transport-postmessage" "^3.3.4"
+    "@airgap/beacon-types" "^3.3.4"
+    "@airgap/beacon-ui" "^3.3.4"
+    "@airgap/beacon-utils" "^3.3.4"
+    "@airgap/beacon-wallet" "^3.3.4"
 
 "@airgap/beacon-transport-matrix@^3.3.4":
   version "3.3.4"
@@ -70,6 +102,15 @@
     "@stablelib/random" "^1.0.2"
     "@stablelib/utf8" "^1.0.1"
     bs58check "2.1.2"
+
+"@airgap/beacon-wallet@^3.3.4":
+  version "3.3.4"
+  resolved "https://registry.yarnpkg.com/@airgap/beacon-wallet/-/beacon-wallet-3.3.4.tgz#49e3038e12da1f37bb71143018bfd0c87c6895d6"
+  integrity sha512-nRzt+1qtJlro2/ryUNE0e8oWWuedng10qKpPZo6CX3eS97AhTVaQ8MpgXzzgMxIqrCXyfWmvzsvPb3GcxwjJ4g==
+  dependencies:
+    "@airgap/beacon-core" "^3.3.4"
+    "@airgap/beacon-transport-matrix" "^3.3.4"
+    "@airgap/beacon-transport-postmessage" "^3.3.4"
 
 "@ampproject/remapping@^2.2.0":
   version "2.2.1"
@@ -1308,6 +1349,11 @@
   version "15.7.4"
   resolved "https://registry.npmjs.org/@types/prop-types/-/prop-types-15.7.4.tgz"
   integrity sha512-rZ5drC/jWjrArrS8BR6SIr4cWpW09RNTYt9AMZo3Jwwif+iacXAqgVjm0B0Bv/S1jhDXKHqRVNCbACkJ89RAnQ==
+
+"@types/prop-types@^15.0.0":
+  version "15.7.5"
+  resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.7.5.tgz#5f19d2b85a98e9558036f6a3cacc8819420f05cf"
+  integrity sha512-JCB8C6SnDoQf0cNycqd/35A7MjcnK+ZTqE7judS6o7utxUCg6imJg3QK2qzHKszlTjcj2cn+NwMB2i96ubpj7w==
 
 "@types/react-color@^3.0.6":
   version "3.0.6"
@@ -5148,7 +5194,7 @@ prompts@^2.0.1:
     kleur "^3.0.3"
     sisteransi "^1.0.5"
 
-prop-types@^15.6.2, prop-types@^15.7.2, prop-types@^15.8.1:
+prop-types@^15.0.0, prop-types@^15.6.2, prop-types@^15.7.2, prop-types@^15.8.1:
   version "15.8.1"
   resolved "https://registry.npmjs.org/prop-types/-/prop-types-15.8.1.tgz"
   integrity sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==
@@ -5281,6 +5327,27 @@ react-lifecycles-compat@^3.0.4:
   version "3.0.4"
   resolved "https://registry.npmjs.org/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz"
   integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
+
+react-markdown@^8.0.7:
+  version "8.0.7"
+  resolved "https://registry.yarnpkg.com/react-markdown/-/react-markdown-8.0.7.tgz#c8dbd1b9ba5f1c5e7e5f2a44de465a3caafdf89b"
+  integrity sha512-bvWbzG4MtOU62XqBx3Xx+zB2raaFFsq4mYiAzfjXJMEz2sixgeAfraA3tvzULF02ZdOMUOKTBFFaZJDDrq+BJQ==
+  dependencies:
+    "@types/hast" "^2.0.0"
+    "@types/prop-types" "^15.0.0"
+    "@types/unist" "^2.0.0"
+    comma-separated-tokens "^2.0.0"
+    hast-util-whitespace "^2.0.0"
+    prop-types "^15.0.0"
+    property-information "^6.0.0"
+    react-is "^18.0.0"
+    remark-parse "^10.0.0"
+    remark-rehype "^10.0.0"
+    space-separated-tokens "^2.0.0"
+    style-to-object "^0.4.0"
+    unified "^10.0.0"
+    unist-util-visit "^4.0.0"
+    vfile "^5.0.0"
 
 react-nl2br@^1.0.2:
   version "1.0.2"
@@ -6027,6 +6094,13 @@ style-to-object@^0.3.0:
   version "0.3.0"
   resolved "https://registry.npmjs.org/style-to-object/-/style-to-object-0.3.0.tgz"
   integrity sha512-CzFnRRXhzWIdItT3OmF8SQfWyahHhjq3HwcMNCNLn+N7klOOqPjMeG/4JSu77D7ypZdGvSzvkrbyeTMizz2VrA==
+  dependencies:
+    inline-style-parser "0.1.1"
+
+style-to-object@^0.4.0:
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/style-to-object/-/style-to-object-0.4.1.tgz#53cf856f7cf7f172d72939d9679556469ba5de37"
+  integrity sha512-HFpbb5gr2ypci7Qw+IOhnP2zOU7e77b+rzM+wTzXzfi1PrtBCX0E7Pk4wL4iTLnhzZ+JgEGAhX81ebTg/aYjQw==
   dependencies:
     inline-style-parser "0.1.1"
 

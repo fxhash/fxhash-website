@@ -12,6 +12,12 @@
   font-size: var(--font-size-small);
   font-weight: normal;
   color: var(--color-gray);
+
+  .left_topper {
+    display: flex;
+    flex-direction: row;
+    gap: 0.3em;
+  }
 }
 
 .bottom {

@@ -128,6 +128,9 @@ export const Qu_userGenTokens = gql`
         reserves {
           amount
         }
+        redeemables {
+          address
+        }
       }
     }
   }
@@ -201,6 +204,9 @@ export const Qu_userObjkts = gql`
           generativeUri
           labels
           ...Author
+          redeemables {
+            address
+          }
         }
         name
         createdAt
@@ -208,6 +214,9 @@ export const Qu_userObjkts = gql`
           id
           version
           price
+        }
+        availableRedeemables {
+          address
         }
       }
     }
@@ -286,6 +295,9 @@ export const Qu_userListings = gql`
             labels
             ...Author
           }
+          availableRedeemables {
+            address
+          }
         }
       }
     }
@@ -309,6 +321,9 @@ export const Qu_userActions = gql`
         }
         target {
           ...UserBadgeInfos
+        }
+        redeemable {
+          address
         }
         token {
           id

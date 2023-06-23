@@ -20,6 +20,7 @@ const ActionsPredecescence: Record<TokenActionType, number> = {
   TICKED_CLAIMED: 1,
   TICKET_PRICE_UPDATED: 1,
   GENTK_SIGNED: 1,
+  GENTK_REDEEMED: 2,
   COMPLETED: 20,
   TRANSFERED: 1,
   LISTING_V1: 4,

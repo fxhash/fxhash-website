@@ -5,7 +5,6 @@ import {
   ArtworkIframe,
   ArtworkIframeRef,
 } from "components/Artwork/PreviewIframe"
-import { ipfsUrlWithHashAndParams } from "../../utils/ipfs"
 import {
   useCallback,
   useContext,
@@ -15,7 +14,6 @@ import {
   useState,
 } from "react"
 import { deserializeParams } from "components/FxParams/utils"
-import { useReceiveTokenInfos } from "hooks/useReceiveTokenInfos"
 import { PanelRoot } from "./Panel/PanelRoot"
 import {
   concatParamConfiguration,
@@ -45,6 +43,7 @@ import { format } from "date-fns"
 import { truncateEnd } from "utils/strings"
 import { IReserveConsumption } from "services/contract-operations/MintV3"
 import { useFetchRandomSeed } from "hooks/useFetchRandomSeed"
+import { getIteration, useOnChainData } from "hooks/useOnChainData"
 import { useRuntimeController } from "hooks/useRuntimeController"
 import { FxParamsData } from "components/FxParams/types"
 
@@ -122,6 +121,8 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
     success: randomSeedSuccess,
     loading: randomSeedLoading,
   } = useFetchRandomSeed(opHash)
+
+  const { data: iteration } = useOnChainData(opHash, getIteration)
 
   const storedConfigurations =
     historyContext.storedConfigurations[`${token.id}`]
@@ -414,7 +415,12 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
                 )}
                 {success && randomSeedSuccess && (
                   <Link
-                    href={`/reveal/${token.id}/?fxhash=${randomSeed}&fxparams=${runtime.details.params.inputBytes}&fxminter=${user?.id}`}
+                    href={`/reveal/${token.id}/?${new URLSearchParams({
+                      fxhash: randomSeed,
+                      fxiteration: String(runtime.state.iteration),
+                      fxparams: runtime.details.params.inputBytes!,
+                      fxminter: user!.id,
+                    }).toString()}`}
                     passHref
                   >
                     <Button

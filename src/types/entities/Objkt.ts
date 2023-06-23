@@ -6,6 +6,8 @@ import { Offer } from "./Offer"
 import { Split } from "./Split"
 import { User } from "./User"
 import { MediaImage } from "./MediaImage"
+import { Redemption } from "./Redemption"
+import { Redeemable } from "./Redeemable"
 
 export interface Objkt {
   id: string
@@ -35,10 +37,14 @@ export interface Objkt {
   updatedAt: string
   assignedAt: string | null
   captureMedia?: MediaImage
+  redemptions: Redemption[]
+  availableRedeemables: Redeemable[]
 }
 
 export interface ObjktFilters {
   activeListing_exist?: boolean
+  redeemable_eq?: boolean
+  redeemed_eq?: boolean
 }
 
 export enum EObjktFeatureType {

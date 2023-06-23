@@ -1,0 +1,17 @@
+@import "../../../styles/Variables";
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+
+  .price {
+    color: var(--color-secondary);
+    font-weight: bold;
+  }
+}
+@media (max-width: $breakpoint-sm) {
+  .field {
+    margin-top: $spacing-x-large;
+  }
+}

@@ -1,0 +1,19 @@
+@import "../../styles/Variables";
+
+.details {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 14px;
+}
+
+@media (max-width: $breakpoint-sm) {
+  .mobile_align_right {
+    width: 100%;
+    text-align: right;
+    color: var(--color-gray);
+  }
+  .mobile_grid_two {
+    grid-column: span 2;
+  }
+}

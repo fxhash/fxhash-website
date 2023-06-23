@@ -3,6 +3,7 @@ import { GenerativeToken } from "./GenerativeToken"
 import { Objkt } from "./Objkt"
 import { User } from "./User"
 import { NFTArticleInfos } from "./Article"
+import { Redeemable } from "./Redeemable"
 import { MintTicket } from "./MintTicket"
 
 export enum TokenActionType {
@@ -16,6 +17,7 @@ export enum TokenActionType {
   TICKED_CLAIMED = "TICKED_CLAIMED",
   TICKET_PRICE_UPDATED = "TICKET_PRICE_UPDATED",
   GENTK_SIGNED = "GENTK_SIGNED",
+  GENTK_REDEEMED = "GENTK_REDEEMED",
   COMPLETED = "COMPLETED",
   TRANSFERED = "TRANSFERED",
   LISTING_V1 = "LISTING_V1",
@@ -53,6 +55,7 @@ export interface Action {
   target?: User
   token?: GenerativeToken
   objkt?: Objkt
+  redeemable?: Redeemable
   ticketId?: number
   article?: NFTArticleInfos
   metadata: HistoryMetadata

@@ -26,8 +26,13 @@ const GenerativeTokenDetails: NextPageWithLayout<Props> = ({
   const liveMinting = useContext(LiveMintingContext)
 
   const handleGenerationRevealUrl = useCallback(
-    ({ tokenId, hash }) =>
-      `/live-minting/${eventId}/reveal/${tokenId}/${hash}/?token=${liveMinting.mintPass?.token}`,
+    ({ tokenId, hash, iteration }) =>
+      `/live-minting/${eventId}/reveal/${tokenId}/${hash}?${new URLSearchParams(
+        {
+          token: liveMinting.mintPass?.token!,
+          iteration,
+        }
+      ).toString()}`,
     [eventId]
   )
 

@@ -1,5 +1,8 @@
 import { gql } from "@apollo/client"
-import { Frag_GenAuthor } from "./fragments/generative-token"
+import {
+  Frag_GenAuthor,
+  Frag_GenTokenRedeemables,
+} from "./fragments/generative-token"
 import { Frag_MediaImage } from "./fragments/media"
 import { Frag_UserBadge } from "./fragments/user"
 import { Frag_GenTokOffer } from "./fragments/offer"
@@ -44,6 +47,9 @@ export const Qu_objkt = gql`
         marketStats {
           floor
         }
+        redeemables {
+          address
+        }
         ...Author
       }
       metadata
@@ -59,6 +65,10 @@ export const Qu_objkt = gql`
       generationHash
       inputBytes
       createdAt
+      availableRedeemables {
+        address
+        redeemedPercentage
+      }
       activeListing {
         id
         version
@@ -87,6 +97,9 @@ export const Qu_objkt = gql`
           name
           id
           iteration
+        }
+        redeemable {
+          address
         }
         ticketId
       }
@@ -134,6 +147,9 @@ export const Qu_objktsFeed = gql`
         id
         version
         price
+      }
+      availableRedeemables {
+        address
       }
     }
   }

@@ -1,5 +1,6 @@
 // import style from "./GenerativeTokenCard.module.scss"
 import Link from "next/link"
+import text from "styles/Text.module.css"
 import colors from "../../styles/Colors.module.css"
 import cs from "classnames"
 import { AnchorForward } from "../Utils/AnchorForward"
@@ -15,6 +16,7 @@ import { useContext } from "react"
 import { SettingsContext } from "../../context/Theme"
 import { DisplayTezos } from "../Display/DisplayTezos"
 import { EntityBadge } from "../User/EntityBadge"
+import { RedeemableIndicator } from "./RedeemableIndicator"
 
 interface Props {
   objkt: Objkt
@@ -29,6 +31,7 @@ export function ObjktCard({
 }: Props) {
   const url = getObjktUrl(objkt)
   const settings = useContext(SettingsContext)
+
   return (
     <Link href={url} passHref>
       <AnchorForward style={{ height: "100%" }}>
@@ -64,6 +67,17 @@ export function ObjktCard({
 
           <Spacing size="small" sm="x-small" />
 
+          {objkt.issuer?.redeemables?.length > 0 && (
+            <>
+              <RedeemableIndicator
+                objkt={objkt}
+                showLabel
+                enableHover={false}
+              />
+              <Spacing size="small" sm="x-small" />
+            </>
+          )}
+
           <div className={cs(style.bottom)}>
             <div className={cs(style.bottom_left)}>
               <div className={cs(style.price)}>
@@ -75,12 +89,12 @@ export function ObjktCard({
                 )}
               </div>
             </div>
-            {objkt.issuer && (
+            {objkt.issuer?.author && (
               <div className={cs(style.badge)}>
                 <span className={cs(colors["gray-dark"])}>created by</span>
                 <EntityBadge
                   className={styleObjkt.entity}
-                  user={objkt.issuer.author!}
+                  user={objkt.issuer.author}
                   size="regular"
                   hasLink={false}
                   avatarSide="right"

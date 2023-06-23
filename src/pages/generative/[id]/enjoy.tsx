@@ -93,8 +93,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   if (idStr) {
     const id = parseInt(idStr as string)
     if (id === 0 || id) {
-      const apolloClient = createApolloClient()
-      const { data, error } = await apolloClient.query({
+      const { data, error } = await createApolloClient().query({
         query: gql`
           ${Frag_UserBadge}
           query Query($id: Float!) {

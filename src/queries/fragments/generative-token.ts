@@ -123,5 +123,19 @@ export const Frag_GenTokenInfo = gql`
       gracingPeriod
     }
     ...Pricing
+    redeemables {
+      address
+    }
+  }
+`
+
+export const Frag_GenTokenRedeemables = gql`
+  fragment Redeemables on GenerativeToken {
+    redeemables {
+      address
+      baseAmount
+      maxConsumptionsPerToken
+      redeemedPercentage
+    }
   }
 `

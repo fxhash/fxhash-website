@@ -51,6 +51,9 @@
     color: var(--color-black);
     border-bottom-color: var(--color-black);
   }
+  &.disable_click {
+    cursor: auto;
+  }
 
   &:hover {
     color: var(--color-black);
@@ -105,6 +108,8 @@
   display: flex;
   justify-content: center;
 }
+
+
 @media (max-width: $breakpoint-lg) {
   .container.layout-fixed-size nav {
     justify-content: center;

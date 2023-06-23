@@ -16,6 +16,7 @@ import { ArtworkFrame } from "../../components/Artwork/ArtworkFrame"
 import { ControlsTest } from "components/Testing/ControlsTest"
 import { MinterTest } from "components/Testing/MinterTest"
 import { useRuntimeController } from "hooks/useRuntimeController"
+import { IterationTest } from "components/Testing/IterationTest"
 
 export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
   const [check1, setCheck1] = useState<boolean>(false)
@@ -29,6 +30,7 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
   const nextStep = () => {
     onNext({
       previewHash: runtime.state.hash,
+      previewIteration: runtime.state.iteration,
       previewMinter: runtime.state.minter,
       previewInputBytes: runtime.details.params.inputBytes,
       params: {
@@ -80,6 +82,15 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
             onRetry={() => {
               artworkIframeRef.current?.reloadIframe()
             }}
+          />
+          <Spacing size="large" sm="x-large" />
+
+          <IterationTest
+            autoGenerate={false}
+            value={runtime.state.iteration}
+            onIterationUpdate={(iteration) =>
+              runtime.state.update({ iteration })
+            }
           />
           <Spacing size="large" sm="x-large" />
 

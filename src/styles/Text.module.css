@@ -83,3 +83,11 @@
 .reset:hover {
   text-decoration: inherit;
 }
+
+.primary {
+  color: var(--color-primary);
+}
+
+.secondary {
+  color: var(--color-secondary);
+}

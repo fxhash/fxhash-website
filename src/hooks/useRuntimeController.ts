@@ -125,6 +125,7 @@ function handleOldSnippetEvents(e: any, runtime: IRuntimeContext) {
 interface IProjectState {
   cid: string
   hash?: string
+  iteration?: number
   minter?: string
   inputBytes?: string
 }
@@ -142,14 +143,13 @@ const iframeHandler: TRuntimeContextConnector = (iframeRef) => {
   return {
     getUrl(state: IProjectState, urlParams?: URLSearchParams) {
       const searchParams = urlParams?.toString()
-      return (
-        ipfsUrlWithHashAndParams(
-          state.cid,
-          state.hash || "",
-          state.minter || "",
-          state.inputBytes
-        ) + `&${searchParams}`
-      )
+      return ipfsUrlWithHashAndParams(
+        state.cid,
+        state.hash || "",
+        state.iteration || 1,
+        state.minter || "",
+        state.inputBytes
+      ) + `&${searchParams}`
     },
     useSync(runtimeUrl: string, controlsUrl: string) {
       // every time the runtime URL changes, refresh the iframe
@@ -359,15 +359,13 @@ export const useRuntimeController: TUseRuntimeController = (
 
   // derive active URL that should be loaded in the iframe
   const url = useMemo(() => {
-    return connector.getUrl(
-      {
-        cid: project.cid,
-        hash: runtime.state.hash,
-        minter: runtime.state.minter,
-        inputBytes: runtime.details.params.inputBytes || project.inputBytes,
-      },
-      options?.urlParams
-    )
+    return connector.getUrl({
+      cid: project.cid,
+      hash: runtime.state.hash,
+      minter: runtime.state.minter,
+      iteration: runtime.state.iteration,
+      inputBytes: runtime.details.params.inputBytes || project.inputBytes,
+    }, options?.urlParams)
   }, [project.cid, runtime.details.stateHash.hard])
 
   useMessageListener("fxhash_emit:params:update", (e: any) => {
@@ -386,12 +384,14 @@ export const useRuntimeController: TUseRuntimeController = (
       stateHash: {
         soft: hashRuntimeState({
           hash: runtime.state.hash,
+          iteration: runtime.state.iteration,
           minter: runtime.state.minter,
           params: controls.params.values,
         }),
         hard: hashRuntimeHardState(
           {
             hash: runtime.state.hash,
+            iteration: runtime.state.iteration,
             minter: runtime.state.minter,
             params: controls.params.values,
           },
@@ -403,15 +403,13 @@ export const useRuntimeController: TUseRuntimeController = (
   )
 
   const controlsUrl = useMemo(() => {
-    return connector.getUrl(
-      {
-        cid: project.cid,
-        hash: runtime.state.hash,
-        minter: runtime.state.minter,
-        inputBytes: controlDetails.params.inputBytes || project.inputBytes,
-      },
-      options?.urlParams
-    )
+    return connector.getUrl({
+      cid: project.cid,
+      hash: runtime.state.hash,
+      iteration: runtime.state.iteration,
+      minter: runtime.state.minter,
+      inputBytes: controlDetails.params.inputBytes || project.inputBytes,
+    }, options?.urlParams)
   }, [project.cid, runtime.details.stateHash.soft, controls.params])
 
   // every time the URL changes, refresh the iframe
