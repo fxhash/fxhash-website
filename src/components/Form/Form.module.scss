@@ -1,0 +1,107 @@
+@import "../../styles/Variables";
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 100%;
+
+  &+.field,
+  &+.fieldset {
+    margin-top: var(--layout-margin-md);
+  }
+
+  &>label {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-bottom: 10px;
+    font-weight: bold;
+    font-size: var(--font-size-big);
+
+    small {
+      font-weight: normal;
+      font-size: 0.7em;
+      color: var(--color-gray);
+    }
+  }
+}
+
+.fieldset {
+  width: 100%;
+  border: none;
+  padding: 15px 0;
+  position: relative;
+
+  &+.field,
+  &+.fieldset {
+    margin-top: var(--layout-margin-md);
+  }
+
+  .field {
+
+    &+.field,
+    &+.fieldset {
+      margin-top: var(--layout-margin-small-lg);
+    }
+  }
+
+  &::before {
+    content: "";
+    display: block;
+    height: 100%;
+    width: 3px;
+    background-color: var(--color-black);
+    position: absolute;
+    left: -20px;
+    top: 0;
+  }
+
+  &.field_error {
+    &::before {
+      background-color: var(--color-error);
+    }
+  }
+
+  &>small {
+    font-size: 1rem;
+    color: var(--color-gray);
+    margin-top: var(--layout-margin-small-md);
+    display: block;
+  }
+}
+
+.error {
+  position: absolute;
+  color: var(--color-error);
+  font-weight: bold;
+}
+
+.error-top-right {
+  top: 3px;
+  right: 0;
+}
+
+.error-bottom-left {
+  bottom: -25px;
+  left: 0;
+}
+
+@media (max-width: $breakpoint-sm) {
+  .field {
+
+    &+.field,
+    &+.fieldset {
+      margin-top: 16px;
+    }
+
+    &>label {
+      margin-bottom: $spacing;
+    }
+  }
+}

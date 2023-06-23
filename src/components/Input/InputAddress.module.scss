@@ -1,0 +1,37 @@
+@import "../../styles/Variables.scss";
+
+.root {
+  & > * + * {
+    margin-top: var(--layout-margin-small-sm);
+  }
+}
+
+.col2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 12px;
+
+  & > * {
+    margin-top: 0 !important;
+  }
+}
+
+.input {
+  width: 100%;
+}
+
+@media (max-width: $breakpoint-sm) {
+  .root {
+    & > * + * {
+      margin-top: 16px;
+    }
+  }
+
+  .col2 {
+    grid-template-columns: 1fr;
+
+    & > *+* {
+      margin-top: 16px;
+    }
+  }
+}
