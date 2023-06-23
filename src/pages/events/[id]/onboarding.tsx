@@ -143,7 +143,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   // quick trick to have video links as video tags
   // regex to find the video url in markdown
 
-  event.onboarding.description = event.onboarding.description?.replaceAll(
+  event.onboarding.description = event.onboarding.description?.replace(
     /https:\/\/[^\s^\n]*\.mp4/g,
     (match: string) => {
       return `
