@@ -47,14 +47,6 @@ export const ControlsTest = forwardRef<ControlsTestRef, ControlsTestProps>(
 
     return (
       <div className={classes.container}>
-        {definition && params && (
-          <Controls
-            definition={definition}
-            onChangeData={updateParams}
-            data={params}
-            forceEnabled={forceEnabled}
-          />
-        )}
         {allParamsCodeDriven && (
           <p className={classes.codeDrivenNote}>
             <i className="fa-solid fa-triangle-exclamation" aria-hidden />
@@ -65,21 +57,27 @@ export const ControlsTest = forwardRef<ControlsTestRef, ControlsTestProps>(
             </span>
           </p>
         )}
-        {!allParamsCodeDriven && (
-          <div className={classes.buttons}>
-            <Button
-              size="small"
-              color="primary"
-              type="button"
-              onClick={handleRandomizeParams}
-            >
-              randomize params
-            </Button>
-            <Button size="small" type="button" onClick={handleSubmitParams}>
-              submit params
-            </Button>
-          </div>
+        {definition && params && (
+          <Controls
+            definition={definition}
+            onChangeData={updateParams}
+            data={params}
+            forceEnabled={forceEnabled}
+          />
         )}
+        <div className={classes.buttons}>
+          <Button
+            size="small"
+            color="primary"
+            type="button"
+            onClick={handleRandomizeParams}
+          >
+            randomize params
+          </Button>
+          <Button size="small" type="button" onClick={handleSubmitParams}>
+            submit params
+          </Button>
+        </div>
       </div>
     )
   }
