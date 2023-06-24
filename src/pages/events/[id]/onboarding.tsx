@@ -26,8 +26,6 @@ type Props = {
 const EventsOnboardingPage: NextPage<Props> = ({ event, tokens }) => {
   const settings = useContext(SettingsContext)
 
-  console.log(event)
-
   return (
     <>
       <Head>

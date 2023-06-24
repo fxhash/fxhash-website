@@ -33,6 +33,10 @@ export interface LiveMintingEvent {
 
 export type LiveMintingEventWithArtists = LiveMintingEvent & { artists: User[] }
 
+export interface DashboardFeatured {
+  event: LiveMintingEvent | null
+}
+
 export interface LiveMintingPassGroup {
   address: string
   label: string

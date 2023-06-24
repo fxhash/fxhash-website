@@ -21,7 +21,10 @@ import { Frag_UserBadge } from "../queries/fragments/user"
 import { Homepage } from "../containers/Homepage/Homepage"
 import { NFTArticle } from "../types/entities/Article"
 import { Frag_EventCard } from "../queries/fragments/event"
-import { LiveMintingEvent } from "../types/entities/LiveMinting"
+import {
+  DashboardFeatured,
+  LiveMintingEvent,
+} from "../types/entities/LiveMinting"
 
 interface Props {
   randomGenerativeToken: GenerativeToken | null
@@ -30,6 +33,7 @@ interface Props {
   articles: NFTArticle[]
   listings: Listing[]
   events: LiveMintingEvent[]
+  featuredEvent: LiveMintingEvent | null
 }
 
 const Home: NextPage<Props> = ({
@@ -38,6 +42,7 @@ const Home: NextPage<Props> = ({
   incomingTokens,
   articles,
   events,
+  featuredEvent,
 }) => {
   return (
     <>
@@ -65,8 +70,10 @@ const Home: NextPage<Props> = ({
           content="https://www.fxhash.xyz/images/og/og1.jpg"
         />
       </Head>
+
       <Homepage
         events={events}
+        featuredEvent={featuredEvent}
         articles={articles}
         randomGenerativeToken={randomGenerativeToken}
         generativeTokens={generativeTokens}
@@ -86,6 +93,7 @@ export async function getServerSideProps() {
   const eventApolloClient = createApolloClientEvent()
   const { data: dataEvent } = await eventApolloClient.query<{
     events: LiveMintingEvent[]
+    featured: DashboardFeatured
   }>({
     query: gql`
       ${Frag_EventCard}
@@ -97,6 +105,19 @@ export async function getServerSideProps() {
         ) {
           id
           ...EventCard
+        }
+        featured(where: { id: 1 }) {
+          id
+          event {
+            id
+            name
+            headerMedia {
+              ...MediaDetails
+            }
+            thumbnailMedia {
+              ...MediaDetails
+            }
+          }
         }
       }
     `,
@@ -173,6 +194,7 @@ export async function getServerSideProps() {
       incomingTokens: data.incomingTokens,
       articles: data.articles,
       events: dataEvent.events || [],
+      featuredEvent: dataEvent.featured?.event,
     },
   }
 }
