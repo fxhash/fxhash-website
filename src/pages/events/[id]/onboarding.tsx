@@ -26,6 +26,8 @@ type Props = {
 const EventsOnboardingPage: NextPage<Props> = ({ event, tokens }) => {
   const settings = useContext(SettingsContext)
 
+  console.log(event)
+
   return (
     <>
       <Head>
@@ -54,6 +56,15 @@ const EventsOnboardingPage: NextPage<Props> = ({ event, tokens }) => {
 
       <main className={cs(layout["padding-small"])}>
         <Spacing size="3x-large" />
+
+        <div className={cs(style.header)}>
+          {event.headerMedia && (
+            <img src={event.headerMedia.url} alt={`${event.name} header`} />
+          )}
+        </div>
+
+        <h1 className={cs(style.h1)}>{event.name}</h1>
+
         <ArticleEvent
           content={event.onboarding!.description}
           className={cs(style.body)}

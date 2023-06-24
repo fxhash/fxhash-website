@@ -1,6 +1,9 @@
 import { gql } from "@apollo/client"
+import { Frag_EventMedia } from "./media"
 
 export const Frag_EventCard = gql`
+  ${Frag_EventMedia}
+
   fragment EventCard on Event {
     id
     name
@@ -11,5 +14,11 @@ export const Frag_EventCard = gql`
     imageUrl
     availabilities
     description
+    thumbnailMedia {
+      ...MediaDetails
+    }
+    headerMedia {
+      ...MediaDetails
+    }
   }
 `

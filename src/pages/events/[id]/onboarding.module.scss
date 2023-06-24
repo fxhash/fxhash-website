@@ -10,3 +10,22 @@
   max-width: 800px;
   margin: auto;
 }
+
+.header {
+  display: block;
+  width: 1000px;
+  margin: 0 auto;
+  max-width: 100%;
+  
+  img {
+    width: 100%;
+  }
+}
+
+.h1 {
+  font-family: "Source Serif Pro", serif;
+  font-size: 2.35rem;
+  width: 800px;
+  margin: 0 auto;
+  margin-top: 2.2em;
+}

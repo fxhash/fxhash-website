@@ -31,6 +31,7 @@ const _CardEvent = ({ event }: CardEventProps) => {
     imageUrl,
     location,
     availabilities,
+    thumbnailMedia,
   } = event
   const [now, setNow] = useState(new Date())
   const dateStartAt = useMemo(() => new Date(startsAt), [startsAt])
@@ -48,6 +49,7 @@ const _CardEvent = ({ event }: CardEventProps) => {
       )
     })
   }, [dateStartAt, event, id])
+
   const eventTimeStatus = useMemo<"upcoming" | "ongoing" | "past">(() => {
     const isLive = now > dateStartAt
     if (!isLive) return "upcoming"
@@ -55,14 +57,18 @@ const _CardEvent = ({ event }: CardEventProps) => {
     if (isPast) return "past"
     return "ongoing"
   }, [dateStartAt, endsAt, now])
+
   const styleBackground = {
-    backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.54), rgba(0, 0, 0, 0.54)), url(${imageUrl})`,
+    backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.54), rgba(0, 0, 0, 0.54)), url(${
+      thumbnailMedia?.url || imageUrl
+    })`,
   }
   const availabilitiesStr = useMemo(() => {
     return availabilities
       .map((availability) => availabilityLabels[availability])
       .join(" and ")
   }, [availabilities])
+
   return (
     <div className={style.card} style={styleBackground}>
       <div>

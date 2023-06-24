@@ -1,3 +1,4 @@
+import { EventMedia } from "./EventMedia"
 import { User } from "./User"
 
 export enum EventStatus {
@@ -26,6 +27,8 @@ export interface LiveMintingEvent {
   availabilities: EventAvailability[]
   status: EventStatus
   freeLiveMinting: boolean
+  thumbnailMedia?: EventMedia | null
+  headerMedia?: EventMedia | null
 }
 
 export type LiveMintingEventWithArtists = LiveMintingEvent & { artists: User[] }

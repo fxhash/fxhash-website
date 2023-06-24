@@ -1,4 +1,5 @@
 import { gql } from "@apollo/client"
+import { Frag_EventMedia } from "queries/fragments/media"
 
 export const Frag_RedeemableBaseDetails = gql`
   fragment RedeemableBaseDetails on Consumable {
@@ -19,6 +20,7 @@ export const Qu_redeemableBase = gql`
 
 export const Qu_redeemableDetails = gql`
   ${Frag_RedeemableBaseDetails}
+  ${Frag_EventMedia}
 
   query Consumables($where: ConsumableWhereInput) {
     consumables(where: $where) {
@@ -37,9 +39,7 @@ export const Qu_redeemableDetails = gql`
       medias {
         index
         media {
-          s3key
-          name
-          url
+          ...MediaDetails
         }
       }
     }

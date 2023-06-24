@@ -1,6 +1,9 @@
 import { gql } from "@apollo/client"
+import { Frag_EventMedia } from "queries/fragments/media"
 
 export const Qu_event = gql`
+  ${Frag_EventMedia}
+
   query Event($where: EventWhereUniqueInput!) {
     event(where: $where) {
       id
@@ -12,11 +15,19 @@ export const Qu_event = gql`
       endsAt
       projectIds
       freeLiveMinting
+      thumbnailMedia {
+        ...MediaDetails
+      }
+      headerMedia {
+        ...MediaDetails
+      }
     }
   }
 `
 
 export const Qu_eventDetails = gql`
+  ${Frag_EventMedia}
+
   query EventDetails($where: EventWhereUniqueInput!) {
     event(where: $where) {
       id
@@ -27,6 +38,12 @@ export const Qu_eventDetails = gql`
       startsAt
       endsAt
       projectIds
+      thumbnailMedia {
+        ...MediaDetails
+      }
+      headerMedia {
+        ...MediaDetails
+      }
       onboarding {
         id
         enabled
