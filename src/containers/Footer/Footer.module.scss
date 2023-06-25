@@ -1,0 +1,92 @@
+@import '../../styles/Variables.scss';
+
+.footer {
+  background-color: black;
+  color: var(--color-white);
+  font-size: var(--font-size-small);
+  padding-top: 100px;
+  padding-bottom: 12px;
+
+  a {
+    color: #a5a5a5;
+    font-weight: normal;
+
+    &:hover {
+      color: var(--color-secondary);
+    }
+  }
+}
+
+.content {
+  max-width: 1440px;
+  margin: auto;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 10px;
+  & > * {
+    flex: 1;
+  }
+}
+.connect {
+  margin-top: 14px;
+  color: var(--color-gray);
+  a {
+    color: var(--color-gray);
+  }
+}
+.partner {
+  color: var(--color-gray);
+  margin-top: 4px;
+  a {
+    transition: all 0.2s ease-out;
+    color: var(--color-gray);
+    text-decoration: none;
+    &:hover {
+      color: var(--color-secondary);
+    }
+
+  }
+}
+
+.links {
+  display: flex;
+  flex-direction: column;
+
+  a {
+    padding: 4px 0;
+  }
+}
+
+.logo_wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.powered {
+  margin-top: 116px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  & a {
+    color: var(--color-secondary);
+  }
+}
+.indexer {
+  margin-top: 24px;
+}
+
+@media (max-width: $breakpoint-md) {
+  .footer {
+    padding-top: 48px;
+  }
+  .content {
+    flex-direction: column;
+    gap: 16px;
+  }
+  .connect {
+    padding-left: 0;
+  }
+}
