@@ -80,7 +80,9 @@ const _GenerativeDisplayIteration = ({
     <>
       <div className={cs(style.artwork_header_mobile, layout.break_words)}>
         <h3>{objkt.name}</h3>
-        <RedeemableIndicator objkt={objkt} showLabel enableHover={false} />
+        {isProjectRedeemable && (
+          <RedeemableIndicator objkt={objkt} showLabel enableHover={false} />
+        )}
         <Spacing size="regular" />
         <EntityBadge
           classNameAvatar={style.avatar}
