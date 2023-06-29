@@ -145,7 +145,7 @@ export async function getServerSideProps() {
           lockEnd
           mintOpensAt
         }
-        articles(take: 3, sort: { createdAt: "DESC" }) {
+        articles(take: 3, sort: { createdAt: "DESC" }, filters: { flag_eq: NONE }}) {
           id
           title
           slug
