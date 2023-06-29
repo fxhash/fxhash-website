@@ -89,13 +89,13 @@ export function PanelControls(props: PanelControlsProps) {
     return projectTickets.length > 0 ? projectTickets : null
   }, [data, token.id])
 
-  const handleClickMint = useCallback(() => {
-    if (isMintDropdown) {
+  const handleClickMint = (useTicket: boolean) => () => {
+    if (!useTicket && isMintDropdown) {
       setShowDropdown(true)
       return
     }
     onSubmit(null, onMintShouldUseReserve ? reserveConsumptionMethod : null)
-  }, [onSubmit])
+  }
 
   const handleClickUseTicket = useCallback(() => {
     if (userTickets) {
@@ -123,7 +123,7 @@ export function PanelControls(props: PanelControlsProps) {
         {mode === "with-ticket" && (
           <BaseButton
             color="main"
-            onClick={handleClickMint}
+            onClick={handleClickMint(true)}
             className={style.submitButton}
             title={"use ticket"}
           >
@@ -137,7 +137,7 @@ export function PanelControls(props: PanelControlsProps) {
               {showMintButton && (
                 <BaseButton
                   color="main"
-                  onClick={handleClickMint}
+                  onClick={handleClickMint(false)}
                   className={style.submitButton}
                   title={`mint with ${displayMutez(price)} tezos`}
                 >
