@@ -35,8 +35,6 @@ export const RedeemableIndicator = ({
   const message = isRedeemable ? "Redeemable" : "This token has been redeemed"
   const color = isRedeemable ? "gray" : "gray-light"
 
-  console.log({ isRedeemable })
-
   const content = (
     <Content showLabel={showLabel} icon={icon} label={label} color={color} />
   )
