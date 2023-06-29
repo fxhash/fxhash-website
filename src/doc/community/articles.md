@@ -1,11 +1,10 @@
 ---
-title: 'Articles'
-date: '2022-08-01'
-description: 'A presentation of what articles are, and why they could become a very powerful feature for the whole tezos ecosystem.'
+title: "Articles"
+date: "2022-08-01"
+description: "A presentation of what articles are, and why they could become a very powerful feature for the whole tezos ecosystem."
 ---
 
 We have recently released articles on fxhash. While articles may seem like a trivial feature at first sight, we believe they will become a major component for content creation and organization, not only for fxhash but also for the whole tezos ecosystem. This document will walk you through what articles are, how they are implemented and the key role they will play in our ecosystem.
-
 
 # Articles as mutable semi-fungible tokens
 
@@ -17,8 +16,7 @@ Articles are similar to Hic et Nunc multi-editions "NFTs". When a writer mints a
 
 ## Mutable metadata
 
-While *traditionnal* NFTs are designed to be immutable, we believe this paradigm shouldn't apply to articles. At the pace at which our world changes, and because articles are going to be a core building block for educational content among other sensitive applications, it doesn't make sense to lock these at a given point in time. As such, it will be possible for writers to update their articles even after it was minted.
-
+While _traditional_ NFTs are designed to be immutable, we believe this paradigm shouldn't apply to articles. At the pace at which our world changes, and because articles are going to be a core building block for educational content among other sensitive applications, it doesn't make sense to lock these at a given point in time. As such, it will be possible for writers to update their articles even after it was minted.
 
 # Dynamic content & Tezos interoperability
 
@@ -43,7 +41,7 @@ Phasellus ut augue in quam facilisis congue consequat ut nibh. In pellentesque e
 
 ::tezos-storage-pointer[Some comment on this token]{contract="KT1NkZho1yRkDdQnN4Mz93sDYyY2pPrEHTNs" path="token_metadata:880"}
 
-*Phasellus ut augue in quam facilisis congue consequat ut nibh. In pellentesque erat eget ex pretium, eu tristique nibh pretium. Nullam tristique...*
+_Phasellus ut augue in quam facilisis congue consequat ut nibh. In pellentesque erat eget ex pretium, eu tristique nibh pretium. Nullam tristique..._
 ```
 
 By using this design, we let the implementation of a viewer to the discretion of application developers. Because these are declarative pointers to some blockchain content, the data can be fetched on-the-fly from the blockchain. This is **dynamic content**. Moreover, pointers are not limited to fxhash, which means that this framework can be used to describe any content on tezos.
@@ -51,19 +49,18 @@ By using this design, we let the implementation of a viewer to the discretion of
 [This is the document describing our markdown specification.](https://github.com/fxhash/specifications/blob/main/articles/fx-markdown.md)
 
 Our specification also supports:
-* embedding youtube, spotify and twitter
-* images pointing to IPFS
-* video content (not implemented yet)
-* audio content (not implemented yet)
 
+- embedding youtube, spotify and twitter
+- images pointing to IPFS
+- video content (not implemented yet)
+- audio content (not implemented yet)
 
 # Facilitating the creation of articles
 
 We've put a lot of work into the implementation of an intuitive [WYSIWYG](https://en.wikipedia.org/wiki/WYSIWYG) editor. We really wanted to provide a seamless experience to writers, so we built a custom solution on top of [slatejs](https://www.slatejs.org/), a modular library to design text editor. Because we have so many custom blocks, it was a bit tricky to propose a great user experience. We hope our solution will fit your needs, and we will keep iterating on it based on your valuable feedback.
 
-
 # Articles as building blocks of a new ecosystem
 
-NFTs have become a major tool for artists. However, there are many other actors in this space, and we believe that they deserve tools which follow the same principles. Articles are the first building block towards the implementation of such a system. We briefly describe this system in our documentation: [Curated Spaces](/doc/community/curation).
+NFTs have become a major tool for artists. However, there are many other actors in this space, and we believe that they deserve tools which follow the same principles. Articles are the first building block towards the implementation of such a system.
 
 The Articles feature will first be shipped on fxhash, but we will work towards the implementation of an external platform which will target the whole Tezos ecosystem.
