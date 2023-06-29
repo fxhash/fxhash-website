@@ -29,7 +29,6 @@ export function Sandbox() {
   const [file, setFile] = useState<File | null>(null)
   const [filesRecord, setFilesRecord] = useState<SandboxFiles | null>(null)
   const [error, setError] = useState<string | null>(null)
-  const [url, setUrl] = useState<string | null>(null)
 
   // stores the sandbox state
   const [sandboxId, setSandboxId] = useState("0")
@@ -67,7 +66,7 @@ export function Sandbox() {
     [sandboxId]
   )
 
-  const { runtime, controls } = useRuntimeController(
+  const { runtime, controls, details } = useRuntimeController(
     artworkIframeRef,
     {
       cid: "", // in this case the url is constructed with the connector above
@@ -253,17 +252,16 @@ export function Sandbox() {
                   ref={artworkIframeRef}
                   record={filesRecord || undefined}
                   textWaiting="Waiting for content to be reachable"
-                  onUrlUpdate={setUrl}
                 />
               </ArtworkFrame>
             </div>
           </div>
 
-          {url && (
+          {details.activeUrl && (
             <Button
               isLink
               // @ts-ignore
-              href={url}
+              href={details.activeUrl}
               target="_blank"
               size="small"
               className={style.button}
