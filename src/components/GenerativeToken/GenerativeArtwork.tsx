@@ -49,8 +49,10 @@ export function GenerativeArtwork({
   const settings = useContext(SettingsContext)
   const artworkIframeRef = useRef<ArtworkIframeRef>(null)
 
-  const { params, onIframeLoaded } = useReceiveTokenInfos(artworkIframeRef)
-  const paramsDefinition = params || token.metadata.params.definition
+  const { paramsDefinition: paramsDefinitionFromIframe, onIframeLoaded } =
+    useReceiveTokenInfos(artworkIframeRef)
+  const paramsDefinition =
+    paramsDefinitionFromIframe || token.metadata.params.definition
 
   const previewVariant = useMemo<Variant>(
     () => [

@@ -1,5 +1,4 @@
-import { useEffect, useState, useCallback, useMemo } from "react"
-import { generateFxHash, generateTzAddress } from "utils/hash"
+import { useEffect, useCallback } from "react"
 import { RawTokenFeatures } from "types/Metadata"
 import { ArtworkIframeRef } from "components/Artwork/PreviewIframe"
 import {
@@ -8,16 +7,6 @@ import {
   FxParamsData,
 } from "components/FxParams/types"
 import { IRuntimeContext, useRuntime } from "./useRuntime"
-
-export interface TokenInfo {
-  version: string | null
-  hash: string
-  iteration: number
-  minter: string
-  features: RawTokenFeatures | null
-  params: any | null
-  paramsDefinition: any | null
-}
 
 interface IFrameTokenInfos {
   onIframeLoaded: () => void
@@ -38,7 +27,6 @@ interface IFrameTokenInfos {
   // raw param definition directly from the script
   setParamsDefinition: (p: any) => void
   paramsDefinition: any
-  info: TokenInfo
   runtime: IRuntimeContext
   dispatchEvent: (id: string, data: any) => void
   softUpdateParams: (params: FxParamsData) => void
@@ -76,8 +64,8 @@ function handleOldSnippetEvents(
               default: values?.[d.id],
             })
           )
-          handlers.setParamsDefinition(definitions)
-          handlers.setParams(definitionsWithDefaults)
+          handlers.setParamsDefinition(definitionsWithDefaults)
+          handlers.setParams(values)
         }
       } else {
         handlers.setParams(null)
@@ -88,27 +76,9 @@ function handleOldSnippetEvents(
 
 export function useReceiveTokenInfos(
   ref: React.RefObject<ArtworkIframeRef | null>,
-  options?: {
-    initialHash?: string
-    initialIteration?: number
-    initialMinter?: string
-  }
 ): IFrameTokenInfos {
   const runtime = useRuntime()
-  const { state, definition, details } = runtime
-
-  // TODO: remove this state!!
-  const [info, setInfo] = useState<TokenInfo>({
-    version: null,
-    hash: options?.initialHash || generateFxHash(),
-    iteration: options?.initialIteration || 1,
-    minter: options?.initialMinter || generateTzAddress(),
-    features: null,
-    params: null,
-    paramsDefinition: null,
-  })
-
-  console.log(info)
+  const { state, definition } = runtime
 
   const setFeatures = (features: RawTokenFeatures | null) =>
     definition.update({ features })
@@ -119,15 +89,10 @@ export function useReceiveTokenInfos(
 
   const setMinter = (minter: string) => state.update({ minter })
 
-  // TODO : FIX
-  const setParams = (params: any | null) =>
-    setInfo((i) => ({
-      ...i,
-      params,
-    }))
+  const setParams = (params: any | null) => state.update({ params })
 
-  const setParamsDefinition = (definition: any | null) =>
-    definition.update({ params: definition })
+  const setParamsDefinition = (params: any | null) =>
+    definition.update({ params })
 
   useEffect(() => {
     const listener = (e: any) => {
@@ -191,7 +156,7 @@ export function useReceiveTokenInfos(
   return {
     onIframeLoaded,
     features: definition.features,
-    params: definition.params,
+    params: state.params,
     hash: state.hash,
     iteration: state.iteration,
     minter: state.minter,
@@ -202,7 +167,6 @@ export function useReceiveTokenInfos(
     setParams,
     setFeatures,
     setParamsDefinition,
-    info,
     runtime,
     dispatchEvent,
     softUpdateParams,
