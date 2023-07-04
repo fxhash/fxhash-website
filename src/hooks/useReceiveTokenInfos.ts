@@ -75,7 +75,7 @@ function handleOldSnippetEvents(
 }
 
 export function useReceiveTokenInfos(
-  ref: React.RefObject<ArtworkIframeRef | null>,
+  ref: React.RefObject<ArtworkIframeRef | null>
 ): IFrameTokenInfos {
   const runtime = useRuntime()
   const { state, definition } = runtime
