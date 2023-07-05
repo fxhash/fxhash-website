@@ -137,7 +137,7 @@ export function useRuntime(initial?: Parameters): IRuntimeContext {
       params:
         definition.params?.map((p: FxParamDefinition<FxParamType>) => ({
           ...p,
-          version: definition.version || "0",
+          ...(definition.version && { version: definition.version }),
         })) || null,
     }),
     [definition]

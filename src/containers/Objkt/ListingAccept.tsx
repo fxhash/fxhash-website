@@ -23,9 +23,13 @@ import { getUserProfileLink } from "../../utils/user"
 interface Props {
   listing: Listing
   objkt: Objkt
+  showCreditCardOption?: boolean
 }
-
-export function ListingAccept({ listing, objkt }: Props) {
+export function ListingAccept({
+  listing,
+  objkt,
+  showCreditCardOption = true,
+}: Props) {
   const [showWinterCheckout, setShowWinterCheckout] = useState(false)
   const [showWinterPaymentOptions, setShowWinterPaymentOptions] =
     useState(false)
@@ -128,15 +132,17 @@ export function ListingAccept({ listing, objkt }: Props) {
                 formatBig={false}
               />
             </Button>
-            {!contractLoading && !showWinterCheckout && (
-              <ButtonPaymentCard
-                onClick={handleToggleWinterPaymentOptions(
-                  !showWinterPaymentOptions
-                )}
-                disabled={locked}
-                hasDropdown={showWinterPaymentOptions ? "up" : "down"}
-              />
-            )}
+            {showCreditCardOption &&
+              !contractLoading &&
+              !showWinterCheckout && (
+                <ButtonPaymentCard
+                  onClick={handleToggleWinterPaymentOptions(
+                    !showWinterPaymentOptions
+                  )}
+                  disabled={locked}
+                  hasDropdown={showWinterPaymentOptions ? "up" : "down"}
+                />
+              )}
             {locked && (
               <Unlock locked={true} onClick={() => setLocked(false)} />
             )}

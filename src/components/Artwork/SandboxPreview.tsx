@@ -16,7 +16,6 @@ interface Props {
   record?: SandboxFiles
   textWaiting?: string
   onLoaded?: () => void
-  onUrlUpdate?: (url: string) => void
 }
 
 export interface ArtworkIframeRef {
@@ -25,7 +24,7 @@ export interface ArtworkIframeRef {
 }
 
 export const SandboxPreview = forwardRef<ArtworkIframeRef, Props>(
-  ({ id, setId, record, onUrlUpdate, onLoaded, textWaiting }, ref) => {
+  ({ id, setId, record, onLoaded, textWaiting }, ref) => {
     const iframeRef = useRef<HTMLIFrameElement>(null)
     const workerReg = useRef<ServiceWorkerRegistration | null>(null)
 
