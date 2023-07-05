@@ -136,6 +136,8 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
     error: randomSeedError,
   } = useFetchRandomSeed(opHash)
 
+  const revealLoading = loading || randomSeedLoading
+
   const { data: iteration } = useOnChainData(opHash, getIteration)
 
   const storedConfigurations =
@@ -432,10 +434,8 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
                     successMessage="Your iteration is minted!"
                   />
                 </div>
-                {loading && randomSeedLoading && (
-                  <Loader size="small" color="currentColor" />
-                )}
-                {!randomSeedLoading && (!randomSeed || randomSeedError) && (
+                {revealLoading && <Loader size="small" color="currentColor" />}
+                {!revealLoading && (!randomSeed || randomSeedError) && (
                   <span className={style.error}>
                     An error occurred revealing your token - please visit{" "}
                     <Link href={`/pkh/${user!.id}/collection`}>
