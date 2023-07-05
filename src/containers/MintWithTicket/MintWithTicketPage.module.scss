@@ -71,6 +71,13 @@
         }
       }
 
+      .error {
+        font-weight: bold;
+        color: var(--color-error);
+        font-size: var(--font-size-small);
+        margin-bottom: 12px;
+      }
+
       &.has_success {
         .kt_feedback {
           * {
@@ -140,7 +147,6 @@
     background: var(--fxl-color-dark2);
   }
 }
-
 
 @media (max-width: $breakpoint-sm) {
   .root {

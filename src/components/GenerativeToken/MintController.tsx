@@ -200,8 +200,11 @@ export function MintController({
   // derive the op hash of interest from the CC or BC transaction hash
   const finalOpHash = opHashCC || opHash || opHashFree
 
-  const { randomSeed, loading: randomSeedLoading } =
-    useFetchRandomSeed(finalOpHash)
+  const {
+    randomSeed,
+    loading: randomSeedLoading,
+    error: randomSeedError,
+  } = useFetchRandomSeed(finalOpHash, isTicketMinted)
 
   const { data: iteration } = useOnChainData(
     !isTicketMinted ? finalOpHash : null,
@@ -307,6 +310,18 @@ export function MintController({
               </Button>
             </Link>
           )}
+
+          {!isTicketMinted &&
+            !randomSeedLoading &&
+            (!randomSeed || randomSeedError) && (
+              <span className={style.error}>
+                An error occurred revealing your token - please visit{" "}
+                <Link href={`/pkh/${user!.id}/collection`}>
+                  <a className={style.cta_view_event}>your collection</a>
+                </Link>{" "}
+                to see the reveal.
+              </span>
+            )}
           <Spacing size="regular" />
         </>
       )}
