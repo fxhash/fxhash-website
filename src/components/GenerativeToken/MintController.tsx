@@ -204,7 +204,7 @@ export function MintController({
     randomSeed,
     loading: randomSeedLoading,
     error: randomSeedError,
-  } = useFetchRandomSeed(finalOpHash)
+  } = useFetchRandomSeed(finalOpHash, isTicketMinted)
 
   const { data: iteration } = useOnChainData(
     !isTicketMinted ? finalOpHash : null,
@@ -319,7 +319,7 @@ export function MintController({
                 <Link href={`/pkh/${user!.id}/collection`}>
                   <a className={style.cta_view_event}>your collection</a>
                 </Link>{" "}
-                to reveal it.
+                to see the reveal.
               </span>
             )}
           <Spacing size="regular" />
