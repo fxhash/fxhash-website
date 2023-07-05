@@ -107,7 +107,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       variables: {
         where: {
           address: {
-            equals: address,
+            // fetch all the redeemables that are available for this token
+            // so we can filter out the ones that are not active
+            in: objkt.availableRedeemables.map((red: any) => red.address),
+          },
+          // only get active redeemables
+          active: {
+            equals: true,
           },
         },
       },
@@ -116,7 +122,21 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       throw new Error("Could not find the redeemable in our database")
     }
 
-    redeemableDetails = data2.consumables[0]
+    /**
+     * TEMP UNTIL WE HAVE AN API FIX
+     * filter out any redeemables that have been made inactive
+     */
+    const activeRedeemables = data2.consumables as RedeemableDetails[]
+    const activeRedeemableAddresses = activeRedeemables.map((r) => r.address)
+    objkt = cloneDeep(objkt)
+    objkt.availableRedeemables = objkt.availableRedeemables.filter((r) =>
+      activeRedeemableAddresses.includes(r.address)
+    )
+
+    // find the redeemable details for the address in the URL
+    redeemableDetails = activeRedeemables.find(
+      (r: RedeemableDetails) => r.address === address
+    )!
     // process the markdown strings and replace strings from the object
     // clone deep so that we can mutate the object
     redeemableDetails = cloneDeep(redeemableDetails)

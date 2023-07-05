@@ -129,6 +129,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
               address: {
                 in: objkt.availableRedeemables.map((red: any) => red.address),
               },
+              // only get active redeemables
+              active: {
+                equals: true,
+              },
             },
           },
         })

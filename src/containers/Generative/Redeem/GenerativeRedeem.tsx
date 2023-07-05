@@ -45,7 +45,17 @@ const _GenerativeRedeem = ({
     nextFetchPolicy: "cache-and-network",
   })
 
-  const tokens: Objkt[] | null = data?.generativeToken?.objkts
+  /**
+   * TEMP UNTIL WE HAVE AN API FIX
+   * filter out any redeemables that have been made inactive
+   */
+  const activeRedeemableAddresses = redeemableDetails.map((r) => r.address)
+  const tokens: Objkt[] | null = data?.generativeToken?.objkts.filter(
+    (o: Objkt) =>
+      o.availableRedeemables.some((r) =>
+        activeRedeemableAddresses.includes(r.address)
+      )
+  )
 
   const { topMarkerRef, onEndReached } = useInfiniteScroll({
     loading,
