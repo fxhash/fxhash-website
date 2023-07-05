@@ -133,6 +133,7 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
     randomSeed,
     success: randomSeedSuccess,
     loading: randomSeedLoading,
+    error: randomSeedError,
   } = useFetchRandomSeed(opHash)
 
   const { data: iteration } = useOnChainData(opHash, getIteration)
@@ -433,6 +434,15 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
                 </div>
                 {loading && randomSeedLoading && (
                   <Loader size="small" color="currentColor" />
+                )}
+                {randomSeedError && (
+                  <span className={style.error}>
+                    An error occurred revealing your token - please visit{" "}
+                    <Link href={`/u/${user!.id}/collection`}>
+                      <a className={style.cta_view_event}>your collection</a>
+                    </Link>{" "}
+                    to reveal it.
+                  </span>
                 )}
                 {success && randomSeedSuccess && (
                   <Link
