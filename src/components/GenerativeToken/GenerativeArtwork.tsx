@@ -14,8 +14,8 @@ import { SettingsContext } from "../../context/Theme"
 import { ipfsGatewayUrl } from "../../services/Ipfs"
 import { Image } from "../Image"
 import { useReceiveTokenInfos } from "hooks/useReceiveTokenInfos"
-import { getGenerativeTokenUrl } from "utils/generative-token"
 import { ButtonExploreParams } from "components/Button/ButtonExploreParams"
+
 interface Props {
   token: Pick<
     GenerativeToken,
@@ -49,7 +49,10 @@ export function GenerativeArtwork({
   const settings = useContext(SettingsContext)
   const artworkIframeRef = useRef<ArtworkIframeRef>(null)
 
-  const { params, onIframeLoaded } = useReceiveTokenInfos(artworkIframeRef)
+  const { paramsDefinition: paramsDefinitionFromIframe, onIframeLoaded } =
+    useReceiveTokenInfos(artworkIframeRef)
+  const paramsDefinition =
+    paramsDefinitionFromIframe || token.metadata.params?.definition
 
   const previewVariant = useMemo<Variant>(
     () => [
@@ -152,7 +155,7 @@ export function GenerativeArtwork({
           <ButtonVariations
             token={token}
             variant={variant}
-            params={params}
+            params={paramsDefinition}
             onChangeVariant={(v) => {
               setDisplayImage(false)
               setVariant(v)

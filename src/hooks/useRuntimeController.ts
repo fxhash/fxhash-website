@@ -152,7 +152,7 @@ const iframeHandler: TRuntimeContextConnector = (iframeRef) => {
           fxminter: state.minter || "",
           fxparams: state.inputBytes,
           fxcontext: state.context,
-        }) + `&${searchParams}`
+        }) + (searchParams ? `?${searchParams}` : "")
       )
     },
     useSync(runtimeUrl: string, controlsUrl: string) {
