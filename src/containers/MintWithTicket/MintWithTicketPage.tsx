@@ -441,7 +441,7 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
                     <Link href={`/pkh/${user!.id}/collection`}>
                       <a className={style.cta_view_event}>your collection</a>
                     </Link>{" "}
-                    to reveal it.
+                    to see the reveal.
                   </span>
                 )}
                 {success && randomSeedSuccess && (
