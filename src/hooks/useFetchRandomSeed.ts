@@ -4,7 +4,10 @@ import { useEffect, useState } from "react"
 
 const MAX_RETRIES = 5
 
-export function useFetchRandomSeed(opHash: string | null) {
+export function useFetchRandomSeed(
+  opHash: string | null,
+  forceSkip: boolean = false
+) {
   const [retries, setRetries] = useState(0)
   const [error, setError] = useState<Error | null>(null)
 
@@ -13,7 +16,7 @@ export function useFetchRandomSeed(opHash: string | null) {
       hash: opHash,
     },
     fetchPolicy: "no-cache",
-    skip: !opHash,
+    skip: !opHash || forceSkip,
     onError: () => {
       if (retries < MAX_RETRIES) {
         setRetries(retries + 1)
