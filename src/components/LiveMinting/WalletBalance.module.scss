@@ -1,0 +1,24 @@
+.root {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wrapper {
+  margin-top: 0px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-small);
+  color: var(--color-gray);
+  border-radius: 4px;
+  padding: 10px 20px;
+  box-shadow: 0 3px 14px -8px rgba(0, 0, 0, 0.3);
+
+  .balance {
+    color: var(--color-secondary);
+    font-weight: bold;
+    font-size: var(--font-size-h5);
+    margin-left: 8px;
+  }
+}

@@ -1,0 +1,16 @@
+.root {
+  .title {
+    z-index: 10;
+    position: relative;
+    display: inline-block;
+    font-weight: bold;
+    font-size: var(--font-size-h5);
+  }
+
+  .content {
+    margin-top: 16px;
+    & > *+* {
+      margin-top: 16px;
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "prim": "pair",
+  "args": [
+    {
+      "prim": "bytes",
+      "annots": [
+        "%payload"
+      ]
+    },
+    {
+      "prim": "signature",
+      "annots": [
+        "%signature"
+      ]
+    }
+  ]
+}
