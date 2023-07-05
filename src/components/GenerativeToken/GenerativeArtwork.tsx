@@ -52,7 +52,7 @@ export function GenerativeArtwork({
   const { paramsDefinition: paramsDefinitionFromIframe, onIframeLoaded } =
     useReceiveTokenInfos(artworkIframeRef)
   const paramsDefinition =
-    paramsDefinitionFromIframe || token.metadata.params.definition
+    paramsDefinitionFromIframe || token.metadata.params?.definition
 
   const previewVariant = useMemo<Variant>(
     () => [
