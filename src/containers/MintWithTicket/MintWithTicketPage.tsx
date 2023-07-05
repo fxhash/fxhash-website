@@ -435,7 +435,7 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
                 {loading && randomSeedLoading && (
                   <Loader size="small" color="currentColor" />
                 )}
-                {randomSeedError && (
+                {!randomSeedLoading && (!randomSeed || randomSeedError) && (
                   <span className={style.error}>
                     An error occurred revealing your token - please visit{" "}
                     <Link href={`/u/${user!.id}/collection`}>

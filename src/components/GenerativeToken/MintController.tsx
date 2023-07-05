@@ -287,16 +287,6 @@ export function MintController({
         </span>
       )}
 
-      {randomSeedError && (
-        <span className={style.error}>
-          An error occurred revealing your token - please visit{" "}
-          <Link href={`/u/${user!.id}/collection`}>
-            <a className={style.cta_view_event}>your collection</a>
-          </Link>{" "}
-          to reveal it.
-        </span>
-      )}
-
       {finalOpHash && (
         <>
           {isTicketMinted && mintedTicket && (
@@ -319,6 +309,16 @@ export function MintController({
                 reveal
               </Button>
             </Link>
+          )}
+
+          {!randomSeedLoading && (!randomSeed || randomSeedError) && (
+            <span className={style.error}>
+              An error occurred revealing your token - please visit{" "}
+              <Link href={`/u/${user!.id}/collection`}>
+                <a className={style.cta_view_event}>your collection</a>
+              </Link>{" "}
+              to reveal it.
+            </span>
           )}
           <Spacing size="regular" />
         </>
