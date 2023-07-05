@@ -24,7 +24,7 @@ export function useFetchRandomSeed(opHash: string | null) {
   })
 
   useEffect(() => {
-    if (data === null && retries < 3) refetch()
+    if (data === null && retries < MAX_RETRIES) refetch()
   }, [data, retries])
 
   return {
