@@ -14,6 +14,7 @@ import { GenerativeTokenTabs } from "../../containers/Generative/GenerativeToken
 import { createEventsClient } from "services/EventsClient"
 import { Qu_redeemableDetails } from "queries/events/redeemable"
 import { RedeemableDetails } from "types/entities/Redeemable"
+import { cloneDeep } from "@apollo/client/utilities"
 
 interface Props {
   token: GenerativeToken
@@ -100,7 +101,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
   }
   let token,
-    redeemableDetails = null
+    redeemableDetails: RedeemableDetails[] | null = null
   const apolloClient = createApolloClient()
   if (idStr) {
     const id = parseInt(idStr as string)
@@ -135,10 +136,23 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
           address: {
             in: token.redeemables.map((red: any) => red.address),
           },
+          // only get active redeemables
+          active: {
+            equals: true,
+          },
         },
       },
     })
     redeemableDetails = data.consumables
+    /**
+     * TEMP UNTIL WE HAVE AN API FIX
+     * filter out any redeemables that have been made inactive
+     */
+    const activeRedeemableAddresses = redeemableDetails?.map((r) => r.address)
+    token = cloneDeep(token)
+    token.redeemables = token.redeemables.filter((r: RedeemableDetails) =>
+      activeRedeemableAddresses?.includes(r.address)
+    )
   }
 
   return {

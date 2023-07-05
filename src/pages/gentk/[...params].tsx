@@ -16,6 +16,7 @@ import { getUserName } from "utils/user"
 import { createEventsClient } from "services/EventsClient"
 import { Qu_redeemableDetails } from "queries/events/redeemable"
 import { RedeemableDetails } from "types/entities/Redeemable"
+import { cloneDeep } from "@apollo/client/utilities"
 
 interface Props {
   objkt: Objkt
@@ -70,7 +71,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
   let variables: Record<string, any> = {},
     token = null,
-    redeemableDetails = null
+    redeemableDetails: any[] | null = null
 
   if (idStr) {
     const id = idStr as string
@@ -105,10 +106,23 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
           address: {
             in: token.availableRedeemables.map((red: any) => red.address),
           },
+          // only get active redeemables
+          active: {
+            equals: true,
+          },
         },
       },
     })
     redeemableDetails = data.consumables
+    /**
+     * TEMP UNTIL WE HAVE AN API FIX
+     * filter out any redeemables that have been made inactive
+     */
+    token = cloneDeep(token)
+    token.availableRedeemables = token.availableRedeemables.filter(
+      (r: RedeemableDetails) =>
+        redeemableDetails?.some((rd) => rd.address === r.address)
+    )
   }
 
   return {
