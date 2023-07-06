@@ -9,7 +9,6 @@
   background: var(--color-gray-vvvvlight);
   color: var(--color-black);
   text-decoration: none !important;
-  height: 350px;
   .cardHeader {
     aspect-ratio: 293 / 286;
     height: 150px;
@@ -29,6 +28,7 @@
   font-size: 16px;
   font-weight: 700;
   line-height: 20px;
+  margin-bottom: var(--spacing-xl);
 }
 .date, .location {
   font-size: 14px;
