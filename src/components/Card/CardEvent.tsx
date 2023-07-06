@@ -62,7 +62,7 @@ const _CardEvent = ({ event }: CardEventProps) => {
               )}
             </div>
             <Spacing size="x-small" />
-            <div className={style.location}>{location || "online"}</div>
+            <div className={style.location}>{location || "Online"}</div>
           </div>
         </div>
       </a>
