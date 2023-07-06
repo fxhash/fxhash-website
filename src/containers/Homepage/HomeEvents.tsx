@@ -89,7 +89,7 @@ const _HomeEvents = ({ events }: HomeEventsProps) => {
   const offset = Math.max(0, 4 - eventsWithArtist.length)
   return (
     <div className={cs(layout["padding-big"], style.container)}>
-      <TitleHyphen>upcoming events</TitleHyphen>
+      <TitleHyphen>events</TitleHyphen>
       <Spacing size="2x-large" />
       <div className={style.container_events}>
         {eventsWithArtist.map((event) => (
