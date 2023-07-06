@@ -34,20 +34,7 @@ const _CardEvent = ({ event }: CardEventProps) => {
   } = event
   const [now, setNow] = useState(new Date())
   const dateStartAt = useMemo(() => new Date(startsAt), [startsAt])
-  const handleEndTimer = useCallback(() => setNow(new Date()), [])
-  const handleClickCalendar = useCallback(async () => {
-    const icsCreateEvent = (await import("ics")).createEvent
-    icsCreateEvent(generateCalendarDataForEvent(event), (error, value) => {
-      if (error) {
-        console.error(error)
-        return
-      }
-      downloadTextAsGeneratedFile(
-        `${format(dateStartAt, "yyyy-M-d")}-${id}.ics`,
-        value
-      )
-    })
-  }, [dateStartAt, event, id])
+  const dateEndsAt = useMemo(() => new Date(endsAt), [endsAt])
   const eventTimeStatus = useMemo<"upcoming" | "ongoing" | "past">(() => {
     const isLive = now > dateStartAt
     if (!isLive) return "upcoming"
@@ -58,89 +45,28 @@ const _CardEvent = ({ event }: CardEventProps) => {
   const styleBackground = {
     backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.54), rgba(0, 0, 0, 0.54)), url(${imageUrl})`,
   }
-  const availabilitiesStr = useMemo(() => {
-    return availabilities
-      .map((availability) => availabilityLabels[availability])
-      .join(" and ")
-  }, [availabilities])
   return (
-    <div className={style.card} style={styleBackground}>
-      <div>
-        <h4 className={style.card_title}>{name}</h4>
-        <Spacing size="2x-small" />
-        <div className={style.card_text}>{location}</div>
-      </div>
-      <div className={style.card_body}>
-        <div>
-          <div className={style.card_text}>Scheduled</div>
-          <Spacing size="2x-small" />
-          <div className={style.card_date}>
-            {format(dateStartAt, "do MMMM yyyy")} at&nbsp;
-            {format(dateStartAt, "H:mm")}
-          </div>
-          <Spacing size="x-small" />
-          <div className={style.timer}>
-            <span
-              className={cs(style.dot, {
-                [style.dot_active]: eventTimeStatus === "ongoing",
-              })}
-            />
-            {eventTimeStatus === "upcoming" && (
-              <span className={style.label}>
-                <span>Starts in </span>
-                <Countdown until={dateStartAt} onEnd={handleEndTimer} />
-              </span>
-            )}
-            {eventTimeStatus === "ongoing" && (
-              <span className={style.label}>Ongoing</span>
-            )}
-            {eventTimeStatus === "past" && (
-              <span className={style.label}>Finished</span>
-            )}
-          </div>
-        </div>
-        {artists.length > 0 && (
-          <div className={style.artists}>
-            <span>{artists.length}</span>
-            <i aria-hidden="true" aria-label="artists">
-              {iconArtist}
-            </i>
-          </div>
-        )}
-      </div>
-      <div className={style.card_verso}>
-        <div className={style.card_header}>
-          <div className={style.card_infos}>
-            <div className={style.card_title}>Exhibiting</div>
-            {availabilities.length > 0 && (
-              <>
-                <Spacing size="2x-small" />
-                <div className={style.card_text}>
-                  Available {availabilitiesStr}
-                </div>
-              </>
-            )}
-          </div>
-          <button
-            className={style.cta_calendar}
-            onClick={handleClickCalendar}
-            title="Save to your calendar"
-          >
-            <i className="fa-regular fa-calendar-circle-plus" />
-          </button>
-        </div>
-        <div className={style.card_artists}>
-          {artists.map((artist) => (
-            <div key={artist.id}>
-              <EntityBadge user={artist} size="small" hasLink />
+    <Link href={`/events/${id}/onboarding`}>
+      <a className={style.card}>
+        <div className={style.cardHeader} style={styleBackground} />
+        <div className={style.cardBody}>
+          <h4 className={style.title}>{name}</h4>
+          <div>
+            <div className={style.date}>
+              {format(dateStartAt, "do MMMM yyyy")}
+              {eventTimeStatus === "upcoming" && (
+                <> @ {format(dateStartAt, "Haaa")}</>
+              )}
+              {startsAt !== endsAt && eventTimeStatus !== "upcoming" && (
+                <> — {format(dateEndsAt, "do MMM yyyy")}</>
+              )}
             </div>
-          ))}
+            <Spacing size="x-small" />
+            <div className={style.location}>{location || "online"}</div>
+          </div>
         </div>
-        <Link href={`/events/${id}/onboarding`}>
-          <a className={style.cta_view_event}>View event</a>
-        </Link>
-      </div>
-    </div>
+      </a>
+    </Link>
   )
 }
 
