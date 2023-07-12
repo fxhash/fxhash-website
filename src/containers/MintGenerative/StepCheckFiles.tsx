@@ -105,7 +105,10 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
           </ul>
 
           <Spacing size="3x-large" sm="x-large" />
-          <div className={layout.show_sm}>{artwork}</div>
+          <div className={layout.show_sm}>
+            {artwork}
+            <Spacing size="3x-large" sm="x-large" />
+          </div>
 
           <HashTest
             autoGenerate={false}
