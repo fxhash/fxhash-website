@@ -2,8 +2,8 @@
 // import cs from "classnames"
 
 import { ApolloProvider } from "@apollo/client"
-import { useRouter } from "next/router"
-import { Fragment, PropsWithChildren } from "react"
+import { NextRouter, useRouter } from "next/router"
+import { Fragment, PropsWithChildren, useCallback } from "react"
 import { Layout } from "../components/Layout/Layout"
 import { clientSideClient } from "../services/ApolloClient"
 import { UserProvider } from "./UserProvider"
@@ -15,6 +15,9 @@ import { matchRule } from "../utils/regex"
 import { IndexerStatusProvider } from "../context/IndexerStatus"
 import { IndexerStatus, NetworkStatus } from "../types/IndexerStatus"
 import { ModalProvider } from "../context/Modal"
+import { usePlausible } from "hooks/usePlausible"
+import { useMatomo } from "hooks/useMatomo"
+import { useTrackPageView } from "hooks/useTrackPageView"
 
 const EXCLUDE_LAYOUT = [
   "/generative/slug/[slug]/ticket/[ticketId]/mint",
@@ -43,6 +46,20 @@ export function Root({
   )
     ? Fragment
     : Layout
+
+  // initialise tracking services
+  const plausible = usePlausible()
+  const matomo = useMatomo()
+
+  const handleTrackPageView = useCallback(
+    (router: NextRouter) => {
+      plausible.handleTrackPageView(router)
+      matomo.handleTrackPageView(router)
+    },
+    [matomo, plausible]
+  )
+
+  useTrackPageView(handleTrackPageView)
 
   return (
     <ApolloProvider client={clientSideClient}>

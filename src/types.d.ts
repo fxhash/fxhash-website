@@ -1,0 +1,2 @@
+
+declare module "matomo-tracker"
