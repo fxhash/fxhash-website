@@ -7,7 +7,7 @@ import {
   ArtworkIframe,
   ArtworkIframeRef,
 } from "../../components/Artwork/PreviewIframe"
-import { useState, useRef } from "react"
+import { useState, useRef, useMemo } from "react"
 import { HashTest } from "../../components/Testing/HashTest"
 import { Checkbox } from "../../components/Input/Checkbox"
 import { Button } from "../../components/Button"
@@ -45,6 +45,32 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
     })
   }
 
+  const artwork = useMemo(
+    () => (
+      <div className={cs(style.artwork)}>
+        <div className={cs(style["preview-cont"])}>
+          <div className={cs(style["preview-wrapper"])}>
+            <ArtworkFrame>
+              <ArtworkIframe
+                ref={artworkIframeRef}
+                url={details.activeUrl}
+                textWaiting="looking for content on IPFS"
+              />
+            </ArtworkFrame>
+          </div>
+        </div>
+        <Spacing size="regular" />
+        <ContextTest
+          asButtons
+          value={runtime.state.context}
+          onChange={(context) => {
+            runtime.state.update({ context })
+          }}
+        />
+      </div>
+    ),
+    [details.activeUrl, runtime.state]
+  )
   return (
     <>
       <p>
@@ -79,6 +105,10 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
           </ul>
 
           <Spacing size="3x-large" sm="x-large" />
+          <div className={layout.show_sm}>
+            {artwork}
+            <Spacing size="3x-large" sm="x-large" />
+          </div>
 
           <HashTest
             autoGenerate={false}
@@ -107,13 +137,6 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
               artworkIframeRef.current?.reloadIframe()
             }}
           />
-          <Spacing size="x-large" sm="x-large" />
-          <ContextTest
-            value={runtime.state.context}
-            onChange={(context) => {
-              runtime.state.update({ context })
-            }}
-          />
           <Spacing size="2x-large" sm="x-large" />
           {controls.state.params.definition && (
             <div>
@@ -136,21 +159,7 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
           </div>
         </div>
         <div className={layout.hide_sm}>
-          <div className={cs(style.artworkWrapper)}>
-            <div className={cs(style.artwork)}>
-              <div className={cs(style["preview-cont"])}>
-                <div className={cs(style["preview-wrapper"])}>
-                  <ArtworkFrame>
-                    <ArtworkIframe
-                      ref={artworkIframeRef}
-                      url={details.activeUrl}
-                      textWaiting="looking for content on IPFS"
-                    />
-                  </ArtworkFrame>
-                </div>
-              </div>
-            </div>
-          </div>
+          <div className={cs(style.artworkWrapper)}>{artwork}</div>
         </div>
       </div>
 

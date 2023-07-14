@@ -2,6 +2,15 @@
   small {
     font-weight: bold;
   }
+  .buttons {
+    margin-top: var(--spacing);
+    display: flex;
+    justify-content: space-between;
+    gap: var(--spacing);
+  }
+  .button {
+    flex-grow: 1;
+  }
   .select {
     width: 100%;
   }
