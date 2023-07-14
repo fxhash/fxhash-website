@@ -28,6 +28,8 @@ import {
 } from "components/CreditCard/CreditCardCheckout"
 import { useRouter } from "next/router"
 import { useFetchRandomSeed } from "hooks/useFetchRandomSeed"
+import { useWalletBalance } from "hooks/useWalletBalance"
+import { genTokCurrentPrice } from "utils/generative-token"
 
 export type PanelSubmitMode = "with-ticket" | "free" | "live-minting" | "none"
 
@@ -51,7 +53,9 @@ export function PanelControls(props: PanelControlsProps) {
   } = props
 
   const router = useRouter()
-  const { user } = useContext(UserContext)
+  const userCtx = useContext(UserContext)
+  const { balance, loading } = useWalletBalance(userCtx)
+  const { user } = userCtx
 
   const [showDropdown, setShowDropdown] = useState(false)
   const { isMintDropdown, onMintShouldUseReserve, reserveConsumptionMethod } =
@@ -89,13 +93,15 @@ export function PanelControls(props: PanelControlsProps) {
     return projectTickets.length > 0 ? projectTickets : null
   }, [data, token.id])
 
-  const handleClickMint = (useTicket: boolean) => () => {
-    if (!useTicket && isMintDropdown) {
-      setShowDropdown(true)
-      return
+  const handleClickMint =
+    (useTicket: boolean, bypassDropdown = false) =>
+    () => {
+      if (!useTicket && isMintDropdown && !bypassDropdown) {
+        setShowDropdown(true)
+        return
+      }
+      onSubmit(null, onMintShouldUseReserve ? reserveConsumptionMethod : null)
     }
-    onSubmit(null, onMintShouldUseReserve ? reserveConsumptionMethod : null)
-  }
 
   const handleClickUseTicket = useCallback(() => {
     if (userTickets) {
@@ -188,6 +194,17 @@ export function PanelControls(props: PanelControlsProps) {
                 checkoutRef.current?.open()
               }}
             />
+
+            {balance && balance > genTokCurrentPrice(token) && (
+              <BaseButton
+                color="main"
+                onClick={handleClickMint(false, true)}
+                className={style.smallTezButton}
+                title={`mint with ${displayMutez(price)} tezos`}
+              >
+                <DisplayTezos mutez={price} formatBig={false} />
+              </BaseButton>
+            )}
 
             {typeof window !== "undefined" &&
               ReactDOM.createPortal(
