@@ -18,7 +18,7 @@ const _HomeIncoming = ({ generativeTokens }: HomeIncomingProps) => {
   return (
     <div className={cs(layout["padding-big"], style.container)}>
       <div className={style.container_title}>
-        <TitleHyphen>incoming</TitleHyphen>
+        <TitleHyphen>incoming projects</TitleHyphen>
         <Link href={"/explore/incoming"}>
           <a className={style.explore_more}>
             see all <i aria-hidden="true" className="fas fa-arrow-right" />
