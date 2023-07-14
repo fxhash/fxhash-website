@@ -15,7 +15,7 @@ export function useMatomo(): TrackingService {
     return _matomo
   }, [])
 
-  const handleTrackPageView = useCallback(() => {
+  const trackPageView = useCallback(() => {
     const url = window.location.href
     if (DEBUG) {
       console.log("MATOMO DEBUG: tracking page view", url)
@@ -25,6 +25,6 @@ export function useMatomo(): TrackingService {
   }, [matomo])
 
   return {
-    handleTrackPageView,
+    trackPageView,
   }
 }

@@ -3,7 +3,7 @@ import Plausible from "plausible-tracker"
 import { useCallback, useMemo } from "react"
 
 export interface TrackingService {
-  handleTrackPageView: (router: NextRouter) => void
+  trackPageView: (router: NextRouter) => void
 }
 
 let _plausible: any
@@ -21,7 +21,7 @@ export function usePlausible(): TrackingService {
     return _plausible
   }, [])
 
-  const handleTrackPageView = useCallback(() => {
+  const trackPageView = useCallback(() => {
     const url = window.location.href
     if (DEBUG) {
       console.log("PLAUSIBLE DEBUG: tracking page view", url)
@@ -31,6 +31,6 @@ export function usePlausible(): TrackingService {
   }, [plausible])
 
   return {
-    handleTrackPageView,
+    trackPageView,
   }
 }

@@ -53,8 +53,8 @@ export function Root({
 
   const handleTrackPageView = useCallback(
     (router: NextRouter) => {
-      plausible.handleTrackPageView(router)
-      matomo.handleTrackPageView(router)
+      plausible.trackPageView(router)
+      matomo.trackPageView(router)
     },
     [matomo, plausible]
   )
