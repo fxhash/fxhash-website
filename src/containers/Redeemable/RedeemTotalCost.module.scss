@@ -1,0 +1,33 @@
+.root {
+  display: grid;
+  grid-template-columns: auto min-content;
+  gap: 5px 10px;
+
+  .property {
+    position: relative;
+
+    &::before {
+      position: absolute;
+      content: "";
+      display: block;
+      border-bottom: 1px dotted var(--color-black);
+      width: 100%;
+      bottom: 5px;
+    }
+    
+    .name {
+      position: relative;
+      background-color: var(--color-white);
+      padding-right: 5px;
+    }
+  }
+
+  .price {
+    text-align: right;
+  }
+
+  .total {
+    font-weight: bold;
+    font-size: var(--font-size-regular);
+  }
+}
