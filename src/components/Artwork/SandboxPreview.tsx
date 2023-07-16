@@ -91,9 +91,10 @@ export const SandboxPreview = forwardRef<ArtworkIframeRef, Props>(
       <div className={cs(style["iframe-container"])}>
         <iframe
           ref={iframeRef}
-          sandbox="allow-scripts allow-same-origin"
+          sandbox="allow-scripts allow-same-origin allow-modals"
           className={cs(style.iframe)}
           onLoad={onLoaded}
+          allow="accelerometer *; camera *; gyroscope *; microphone *; xr-spatial-tracking *;"
         />
         {/* {loading &&(
         <LoaderBlock height="100%">{textWaiting}</LoaderBlock>

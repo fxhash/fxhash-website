@@ -18,6 +18,8 @@ import { MinterTest } from "components/Testing/MinterTest"
 import { useRuntimeController } from "hooks/useRuntimeController"
 import { IterationTest } from "components/Testing/IterationTest"
 import { ContextTest } from "components/Testing/ContextTest"
+import useIsMobile from "hooks/useIsMobile"
+import { breakpoints } from "hooks/useWindowsSize"
 
 export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
   const [check1, setCheck1] = useState<boolean>(false)
@@ -71,6 +73,8 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
     ),
     [details.activeUrl, runtime.state]
   )
+
+  const isMobile = useIsMobile(breakpoints.md)
   return (
     <>
       <p>
@@ -105,10 +109,12 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
           </ul>
 
           <Spacing size="3x-large" sm="x-large" />
-          <div className={layout.show_sm}>
-            {artwork}
-            <Spacing size="3x-large" sm="x-large" />
-          </div>
+          {isMobile && (
+            <div>
+              {artwork}
+              <Spacing size="3x-large" sm="x-large" />
+            </div>
+          )}
 
           <HashTest
             autoGenerate={false}
@@ -158,9 +164,11 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
             <RawFeatures rawFeatures={runtime.definition.features} />
           </div>
         </div>
-        <div className={layout.hide_sm}>
-          <div className={cs(style.artworkWrapper)}>{artwork}</div>
-        </div>
+        {!isMobile && (
+          <div>
+            <div className={cs(style.artworkWrapper)}>{artwork}</div>
+          </div>
+        )}
       </div>
 
       <Spacing size="6x-large" sm="x-large" />
