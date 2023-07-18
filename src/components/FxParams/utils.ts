@@ -8,6 +8,7 @@ import {
   FxParamsData,
   FxParamDefinitions,
 } from "./types"
+import semver from "semver"
 
 export function rgbaToHex(r: number, g: number, b: number, a: number): string {
   const outParts = [
@@ -420,4 +421,8 @@ export function jsonStringifyBigint(data: any): string {
     if (typeof value === "bigint") return value.toString()
     return value
   })
+}
+
+export function fxParamsAsQueryParams(snippetVersion: string): boolean {
+  return !semver.valid(snippetVersion) || semver.lte(snippetVersion, "3.2.0")
 }

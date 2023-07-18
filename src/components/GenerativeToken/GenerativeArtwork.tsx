@@ -15,6 +15,8 @@ import { ipfsGatewayUrl } from "../../services/Ipfs"
 import { Image } from "../Image"
 import { useReceiveTokenInfos } from "hooks/useReceiveTokenInfos"
 import { ButtonExploreParams } from "components/Button/ButtonExploreParams"
+import { fxParamsAsQueryParams } from "components/FxParams/utils"
+import { generateRandomStringSequence } from "utils/getRandomStringSequence"
 
 interface Props {
   token: Pick<
@@ -105,7 +107,12 @@ export function GenerativeArtwork({
         url += `&fxminter=${previewMinter}`
       }
       if (previewInputBytes) {
-        url += `&fxparams=${previewInputBytes}`
+        if (fxParamsAsQueryParams(token.metadata.snippetVersion || "3.2.0")) {
+          url += `&fxparams=${previewInputBytes}`
+        } else {
+          url += `&fxparamsUpdate=${generateRandomStringSequence(3)}`
+          url += `#${previewInputBytes}`
+        }
       }
       return url
     }
@@ -116,6 +123,7 @@ export function GenerativeArtwork({
     artworkArtifactUrl,
     token.metadata.artifactUri,
     token.metadata.generativeUri,
+    token.metadata.snippetVersion,
     previewMinter,
   ])
 

@@ -81,6 +81,7 @@ export const StepExtraSettings: StepComponent = ({ state, onNext }) => {
     cid: state.cidUrlParams!,
     hash: state.previewHash,
     iteration: state.previewIteration || 1,
+    snippetVersion: state.snippetVersion!,
   })
 
   // the explore options

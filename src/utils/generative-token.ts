@@ -38,6 +38,7 @@ import { transformReserveInputToGeneric } from "./transformers/reserves"
 import { isUserOrCollaborator } from "./user"
 import { ISettingsContext } from "../context/Theme"
 import { FxhashContracts } from "types/Contracts"
+import { fxParamsAsQueryParams } from "components/FxParams/utils"
 
 export function getGenerativeTokenUrl(generative: GenerativeToken): string {
   return generative.slug
@@ -210,6 +211,7 @@ export function generativeMetadataFromMintForm(
         fxiteration: data.previewIteration!,
         fxminter: data.previewMinter!,
         fxparams: data.previewInputBytes,
+        fxParamsAsQueryParams: fxParamsAsQueryParams(data.snippetVersion!),
       },
       (cid) => `ipfs://${cid}`
     ),
@@ -227,6 +229,7 @@ export function generativeMetadataFromMintForm(
     decimals: 0,
     version: "3.0.1",
     params: data.params!,
+    snippetVersion: data.snippetVersion!,
   }
 }
 

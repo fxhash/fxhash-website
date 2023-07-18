@@ -1,4 +1,5 @@
 import { ipfsGatewayUrl } from "../services/Ipfs"
+import { generateRandomStringSequence } from "./getRandomStringSequence"
 
 export function getIpfsSlash(cid: string): string {
   return `ipfs://${cid}`
@@ -24,6 +25,7 @@ export function ipfsUrlWithHashAndParams(
     fxiteration?: number | string
     fxminter?: string
     fxparams?: string | null
+    fxParamsAsQueryParams?: boolean
     fxcontext?: string
   },
   transform: (cid: string) => string = ipfsGatewayUrl
@@ -32,18 +34,14 @@ export function ipfsUrlWithHashAndParams(
     urlParams.fxiteration
   }&fxminter=${urlParams.fxminter}`
   if (urlParams.fxcontext) url += `&fxcontext=${urlParams.fxcontext}`
-  if (urlParams.fxparams) url += `&fxparams=${urlParams.fxparams}`
-  return url
-}
-
-export function urlAddTokenParams(
-  base: string,
-  hash: string,
-  minter: string,
-  params: string | null | undefined
-) {
-  let url = `${base}&fxhash=${hash}&fxminter=${minter}`
-  if (params) url += `&fxparams=${params}`
+  if (urlParams.fxparams) {
+    if (urlParams.fxParamsAsQueryParams) {
+      url += `&fxparams=${urlParams.fxparams}`
+    } else {
+      url += `&fxparamsUpdate=${generateRandomStringSequence(3)}`
+      url += `#${urlParams.fxparams}`
+    }
+  }
   return url
 }
 

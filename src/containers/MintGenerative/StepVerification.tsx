@@ -10,6 +10,7 @@ import Link from "next/link"
 import { Button } from "../../components/Button"
 import { ArtworkFrame } from "../../components/Artwork/ArtworkFrame"
 import { ipfsGatewayUrl } from "../../services/Ipfs"
+import { fxParamsAsQueryParams } from "components/FxParams/utils"
 
 export const StepVerification: StepComponent = ({ onNext, state }) => {
   return (
@@ -44,6 +45,9 @@ export const StepVerification: StepComponent = ({ onNext, state }) => {
               fxiteration: state.previewIteration!,
               fxminter: state.previewMinter!,
               fxparams: state.previewInputBytes!,
+              fxParamsAsQueryParams: fxParamsAsQueryParams(
+                state.snippetVersion!
+              ),
             })}
             passHref
           >

@@ -20,8 +20,9 @@ import {
   TRuntimeContextConnector,
   useRuntimeController,
 } from "hooks/useRuntimeController"
-import { urlAddTokenParams } from "utils/ipfs"
 import { IterationTest } from "components/Testing/IterationTest"
+import { fxParamsAsQueryParams } from "components/FxParams/utils"
+import { generateRandomStringSequence } from "utils/getRandomStringSequence"
 
 export function Sandbox() {
   const artworkIframeRef = useRef<ArtworkIframeRef>(null)
@@ -42,12 +43,20 @@ export function Sandbox() {
     () => (iframeRef) => {
       return {
         getUrl(state) {
-          return urlAddTokenParams(
-            `${location.origin}/sandbox/preview.html?id=${sandboxId}`,
-            sandboxId === "0" ? generateFxHash() : state.hash || "",
-            state.minter || "",
-            state.inputBytes
-          )
+          const base = `${location.origin}/sandbox/preview.html?id=${sandboxId}`
+          const hash = sandboxId === "0" ? generateFxHash() : state.hash || ""
+          const minter = state.minter || ""
+          const params = state.inputBytes
+          let url = `${base}&fxhash=${hash}&fxminter=${minter}`
+          if (params) {
+            if (fxParamsAsQueryParams(state.snippetVersion)) {
+              url += `&fxparams=${params}`
+            } else {
+              url += `&fxparamsUpdate=${generateRandomStringSequence(3)}`
+              url += `#${params}`
+            }
+          }
+          return url
         },
         useSync(runtimeUrl: string, controlsUrl: string) {
           // every time the runtime URL changes, refresh the iframe
@@ -70,6 +79,7 @@ export function Sandbox() {
     artworkIframeRef,
     {
       cid: "", // in this case the url is constructed with the connector above
+      snippetVersion: "",
     },
     {
       contextConnector: sandboxConnector,

@@ -61,6 +61,7 @@ const RevealPage: NextPage<Props> = ({ token }) => {
             minter={fxminter as string}
             iteration={Number(fxiteration)}
             generativeUri={token.metadata.generativeUri}
+            snippetVersion={token.metadata.snippetVersion!}
           />
 
           <Spacing size="3x-large" />
