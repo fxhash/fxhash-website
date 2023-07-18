@@ -1,0 +1,74 @@
+@import "../../styles/Variables";
+
+.btns_wrapper {
+  display: flex;
+  gap: 4px;
+
+  &.reversed {
+    flex-direction: row-reverse;
+    > :last-child {
+      flex-grow: 1;
+    }
+  }
+}
+
+.root {
+  position: relative;
+}
+
+.caret {
+  margin-right: 0 !important;
+  margin-left: 15px;
+}
+
+.dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: var(--color-white);
+  z-index: 200;
+  border: 3px solid var(--color-secondary);
+  border-top: none;
+
+  &.top {
+    top: auto;
+    bottom: 100%;
+  }
+
+  button {
+    border: none;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+    padding: 8px 12px;
+
+    &:hover {
+      background-color: var(--color-gray-vlight);
+    }
+  }
+}
+
+.credit_card_btn {
+  padding-left: 20px !important;
+  padding-right: 20px !important;
+
+  i {
+    margin-right: 0;
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .btns_wrapper {
+    width: 100%;
+  }
+  .button {
+    width: 100%;
+
+    &.narrow {
+      width: auto;
+    }
+  }
+}

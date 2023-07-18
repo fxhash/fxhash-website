@@ -1,0 +1,47 @@
+@import "../../styles/Variables";
+
+.page {
+
+  & > *+* {
+    margin-top: 16px;
+  }
+  hr {
+    height: 1px;
+    border-style: none;
+    background-color: var(--color-gray-light);
+    margin: 16px 0 0 0;
+  }
+}
+
+.toggle_line {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  & > *:first-child {
+    flex: 1;
+  }
+
+  & > span {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  &_description {
+    font-size: var(--font-size-small);
+    color: var(--color-gray);
+  }
+}
+
+.disabled {
+  opacity: 0.1;
+  pointer-events: none;
+}
+
+@media (max-width: $breakpoint-sm) {
+  .toggle_line {
+    & > span {
+      flex: 1
+    }
+  }
+}
