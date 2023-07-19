@@ -1286,7 +1286,7 @@ Corresponding controller:
         }
         return uint8
       },
-      bytesLength: (opt) => opt.len,
+      bytesLength: (opt) => opt.length,
       constain: (value, def) => {
         return value
       },

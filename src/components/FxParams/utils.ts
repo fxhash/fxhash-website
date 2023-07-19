@@ -452,5 +452,5 @@ export function jsonStringifyBigint(data: any): string {
 
 export function fxParamsAsQueryParams(snippetVersion: string): boolean {
   if (snippetVersion === "") return false
-  return semver.valid(snippetVersion) && semver.lte(snippetVersion, "3.2.0")
+  return !!(semver.valid(snippetVersion) && semver.lte(snippetVersion, "3.2.0"))
 }

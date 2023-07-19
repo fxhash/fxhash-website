@@ -160,6 +160,7 @@ const iframeHandler: TRuntimeContextConnector = (iframeRef) => {
     useSync(runtimeUrl: string, controlsUrl: string) {
       // every time the runtime URL changes, refresh the iframe
       useEffect(() => {
+        console.log(runtimeUrl)
         const iframe = iframeRef.current?.getHtmlIframe()
         if (iframe && lastUrl !== runtimeUrl) {
           iframe.contentWindow?.location.replace(runtimeUrl)
