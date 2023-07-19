@@ -23,8 +23,11 @@ export function gentkLiveUrl({
   let query = `?fxhash=${generationHash}`
   query += `&fxiteration=${iteration}`
   query += `&fxminter=${minter!.id}`
+  // get the version from the issuer metadata, or gentk metadata, or fallback
+  const snippetVersion =
+    issuer?.metadata?.snippetVersion || metadata?.snippetVersion || "3.2.0"
   if (inputBytes) {
-    if (fxParamsAsQueryParams(metadata?.snippetVersion || "3.2.0")) {
+    if (fxParamsAsQueryParams(snippetVersion)) {
       query += `&fxparams=${inputBytes}`
     } else {
       query += `&fxparamsUpdate=${sha1(inputBytes)}`
