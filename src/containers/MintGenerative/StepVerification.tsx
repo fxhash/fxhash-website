@@ -32,6 +32,9 @@ export const StepVerification: StepComponent = ({ onNext, state }) => {
                     fxiteration: state.previewIteration!,
                     fxminter: state.previewMinter!,
                     fxparams: state.previewInputBytes!,
+                    fxParamsAsQueryParams: fxParamsAsQueryParams(
+                      state.snippetVersion!
+                    ),
                   })}
                   textWaiting="looking for content on IPFS"
                 />
