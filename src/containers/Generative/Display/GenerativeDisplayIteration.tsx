@@ -71,7 +71,7 @@ const _GenerativeDisplayIteration = ({
   const isParamsToken = !!objkt.inputBytes
   const exploreParamsQuery = useMemo(() => {
     if (!isParamsToken) return null
-    return `fxhash=${objkt.generationHash}&fxparams=${objkt.inputBytes}`
+    return `fxhash=${objkt.generationHash}#0x${objkt.inputBytes}`
   }, [objkt, isParamsToken])
   const minter = objkt.minter
   const isProjectRedeemable = objkt.issuer.redeemables?.length > 0

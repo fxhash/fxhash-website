@@ -91,7 +91,9 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
       minter: minterAddress,
       context: fxcontext,
       iteration: getRandomIteration(token.supply, token.balance),
-      inputBytes: router.query.fxparams as string | undefined,
+      inputBytes: global?.window?.location?.hash?.replace("#0x", "") as
+        | string
+        | undefined,
       snippetVersion: token.metadata.snippetVersion,
     },
     {

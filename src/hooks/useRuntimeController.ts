@@ -160,7 +160,6 @@ const iframeHandler: TRuntimeContextConnector = (iframeRef) => {
     useSync(runtimeUrl: string, controlsUrl: string) {
       // every time the runtime URL changes, refresh the iframe
       useEffect(() => {
-        console.log(runtimeUrl)
         const iframe = iframeRef.current?.getHtmlIframe()
         if (iframe && lastUrl !== runtimeUrl) {
           iframe.contentWindow?.location.replace(runtimeUrl)
@@ -290,13 +289,20 @@ export const useRuntimeController: TUseRuntimeController = (
     })
   }, [runtime.details.definitionHash.params])
 
-  const updateQueryParams = (query: { fxhash: string; fxparams: string }) =>
+  const updateQueryParams = ({
+    fxhash,
+    fxparams,
+  }: {
+    fxhash: string
+    fxparams: string
+  }) =>
     router.replace(
       {
         query: {
           ...router.query,
-          ...query,
+          fxhash,
         },
+        hash: `0x${fxparams}`,
       },
       undefined,
       { shallow: true }
@@ -306,7 +312,7 @@ export const useRuntimeController: TUseRuntimeController = (
   useEffect(() => {
     updateQueryParams({
       fxhash: runtime.state.hash,
-      fxparams: runtime.details.params.inputBytes || "",
+      fxparams: runtime.details.params.inputBytes || project.inputBytes || "",
     })
   }, [runtime.state.hash, runtime.details.params.inputBytes])
 
