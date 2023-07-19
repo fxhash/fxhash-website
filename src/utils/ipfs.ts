@@ -1,5 +1,6 @@
 import { ipfsGatewayUrl } from "../services/Ipfs"
 import { generateRandomStringSequence } from "./getRandomStringSequence"
+import sha1 from "sha1"
 
 export function getIpfsSlash(cid: string): string {
   return `ipfs://${cid}`
@@ -38,8 +39,8 @@ export function ipfsUrlWithHashAndParams(
     if (urlParams.fxParamsAsQueryParams) {
       url += `&fxparams=${urlParams.fxparams}`
     } else {
-      url += `&fxparamsUpdate=${generateRandomStringSequence(3)}`
-      url += `#${urlParams.fxparams}`
+      url += `&fxparamsUpdate=${sha1(urlParams.fxparams)}`
+      url += `#0x${urlParams.fxparams}`
     }
   }
   return url

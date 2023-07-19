@@ -22,7 +22,7 @@ import {
 } from "hooks/useRuntimeController"
 import { IterationTest } from "components/Testing/IterationTest"
 import { fxParamsAsQueryParams } from "components/FxParams/utils"
-import { generateRandomStringSequence } from "utils/getRandomStringSequence"
+import sha1 from "sha1"
 
 export function Sandbox() {
   const artworkIframeRef = useRef<ArtworkIframeRef>(null)
@@ -52,8 +52,8 @@ export function Sandbox() {
             if (fxParamsAsQueryParams(state.snippetVersion)) {
               url += `&fxparams=${params}`
             } else {
-              url += `&fxparamsUpdate=${generateRandomStringSequence(3)}`
-              url += `#${params}`
+              url += `&fxparamsUpdate=${sha1(params)}`
+              url += `#0x${params}`
             }
           }
           return url

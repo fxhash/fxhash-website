@@ -2,7 +2,7 @@ import { ipfsGatewayUrl } from "../services/Ipfs"
 import { Objkt } from "../types/entities/Objkt"
 import { FxhashContracts } from "../types/Contracts"
 import { fxParamsAsQueryParams } from "components/FxParams/utils"
-import { generateRandomStringSequence } from "./getRandomStringSequence"
+import sha1 from "sha1"
 
 export function getObjktUrl(objkt: Objkt): string {
   return objkt.slug ? `/gentk/slug/${objkt.slug}` : `/gentk/${objkt.id}`
@@ -27,8 +27,8 @@ export function gentkLiveUrl({
     if (fxParamsAsQueryParams(metadata?.snippetVersion || "3.2.0")) {
       query += `&fxparams=${inputBytes}`
     } else {
-      query += `&fxparamsUpdate=${generateRandomStringSequence(3)}`
-      query += `#${inputBytes}`
+      query += `&fxparamsUpdate=${sha1(inputBytes)}`
+      query += `#0x${inputBytes}`
     }
   }
   return ipfsGatewayUrl(`${issuer.generativeUri}/${query}`)

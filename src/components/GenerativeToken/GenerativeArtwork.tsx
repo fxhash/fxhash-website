@@ -16,7 +16,7 @@ import { Image } from "../Image"
 import { useReceiveTokenInfos } from "hooks/useReceiveTokenInfos"
 import { ButtonExploreParams } from "components/Button/ButtonExploreParams"
 import { fxParamsAsQueryParams } from "components/FxParams/utils"
-import { generateRandomStringSequence } from "utils/getRandomStringSequence"
+import sha1 from "sha1"
 
 interface Props {
   token: Pick<
@@ -110,8 +110,8 @@ export function GenerativeArtwork({
         if (fxParamsAsQueryParams(token.metadata.snippetVersion || "3.2.0")) {
           url += `&fxparams=${previewInputBytes}`
         } else {
-          url += `&fxparamsUpdate=${generateRandomStringSequence(3)}`
-          url += `#${previewInputBytes}`
+          url += `&fxparamsUpdate=${sha1(previewInputBytes)}`
+          url += `#0x${previewInputBytes}`
         }
       }
       return url

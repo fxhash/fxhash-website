@@ -12,7 +12,7 @@ import { TitleHyphen } from "../../components/Layout/TitleHyphen"
 import { Spacing } from "../../components/Layout/Spacing"
 import { RevealIframe } from "../../components/Reveal/RevealIframe"
 import { fxParamsAsQueryParams } from "components/FxParams/utils"
-import { generateRandomStringSequence } from "utils/getRandomStringSequence"
+import sha1 from "sha1"
 
 interface Props {
   generativeUri: string
@@ -58,8 +58,8 @@ export function Reveal({
       if (fxParamsAsQueryParams(snippetVersion || "")) {
         url += `&fxparams=${params}`
       } else {
-        url += `&fxparamsUpdate=${generateRandomStringSequence(3)}`
-        url += `#${params}`
+        url += `&fxparamsUpdate=${sha1(params)}`
+        url += `#0x${params}`
       }
     }
     return url
