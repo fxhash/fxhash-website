@@ -104,6 +104,7 @@ export const StepConfigureCapture: StepComponent = ({ onNext, state }) => {
         previewMinter: state.previewMinter,
         previewInputBytes: state.previewInputBytes,
         authHash: state.authHash1,
+        snippetVersion: state.snippetVersion,
       })
     }
   }
