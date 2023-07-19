@@ -1047,8 +1047,8 @@ Corresponding controller:
     // setTimeout(() => fxpreview(), 500)
   }
   // get the byte params from the URL
-  const searchParams = search.get("fxparams")
-  let initialInputBytes = searchParams?.replace("0x", "")
+  const searchParams = window.location.hash
+  let initialInputBytes = searchParams?.replace("#0x", "")
   const throttle = (func, delay) => {
     let isThrottled = false
 
@@ -1269,6 +1269,36 @@ Corresponding controller:
           .join("")
       },
     },
+    bytes: {
+      serialize: (input, def) => {
+        const out = Array.from(input)
+          .map((i) => i.toString(16).padStart(2, "0"))
+          .join("")
+        return out
+      },
+      deserialize: (input, def) => {
+        const len = input.length / 2
+        const uint8 = new Uint8Array(len)
+        let idx
+        for (let i = 0; i < len; i += 2) {
+          idx = i * 2
+          uint8[i] = parseInt(`${input[idx]}${input[idx + 1]}`, 16)
+        }
+        return uint8
+      },
+      bytesLength: (opt) => opt.len,
+      constain: (value, def) => {
+        return value
+      },
+      random: (def) => {
+        const len = def.options?.length || 0
+        const uint8 = new Uint8Array(len)
+        for (let i = 0; i < len; i++) {
+          uint8[i] = (Math.random() * 255) | 0
+        }
+        return uint8
+      },
+    },
     select: {
       serialize: (input, def) => {
         // find the index of the input in the array of options
@@ -1373,7 +1403,7 @@ Corresponding controller:
   }
 
   window.$fx = {
-    _version: "3.2.0",
+    _version: "3.3.0",
     _processors: processors,
     // where params def & features will be stored
     _params: undefined,
