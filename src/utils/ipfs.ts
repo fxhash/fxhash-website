@@ -28,6 +28,7 @@ export function ipfsUrlWithHashAndParams(
     fxparams?: string | null
     fxParamsAsQueryParams?: boolean
     fxcontext?: string
+    noFxParamsUpdateQuery?: boolean
   },
   transform: (cid: string) => string = ipfsGatewayUrl
 ) {
@@ -39,7 +40,9 @@ export function ipfsUrlWithHashAndParams(
     if (urlParams.fxParamsAsQueryParams) {
       url += `&fxparams=${urlParams.fxparams}`
     } else {
-      url += `&fxparamsUpdate=${sha1(urlParams.fxparams)}`
+      if (!urlParams.noFxParamsUpdateQuery) {
+        url += `&fxparamsUpdate=${sha1(urlParams.fxparams)}`
+      }
       url += `#0x${urlParams.fxparams}`
     }
   }

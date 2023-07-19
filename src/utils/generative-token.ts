@@ -212,6 +212,7 @@ export function generativeMetadataFromMintForm(
         fxminter: data.previewMinter!,
         fxparams: data.previewInputBytes,
         fxParamsAsQueryParams: fxParamsAsQueryParams(data.snippetVersion!),
+        noFxParamsUpdateQuery: true,
       },
       (cid) => `ipfs://${cid}`
     ),
