@@ -10,12 +10,12 @@ import { Reveal } from "containers/Reveal/Reveal"
 import { GenerativeToken } from "types/entities/GenerativeToken"
 import { Qu_genToken } from "queries/generative-token"
 import { Article } from "components/Article/Article"
-import { UserBadge } from "components/User/UserBadge"
 import Link from "next/link"
 import { Button } from "components/Button"
 import { EntityBadge } from "components/User/EntityBadge"
 import { useRouter } from "next/router"
 import { getGenerativeTokenUrl } from "utils/generative-token"
+import { useInputBytesFromLocationHash } from "hooks/useInputBytesFromLocationHash"
 
 interface Props {
   token: GenerativeToken
@@ -23,7 +23,9 @@ interface Props {
 
 const RevealPage: NextPage<Props> = ({ token }) => {
   const { query } = useRouter()
-  const { fxhash, fxparams, fxiteration, fxminter } = query
+  const { fxhash, fxiteration, fxminter } = query
+
+  const inputBytes = useInputBytesFromLocationHash()
 
   return (
     <>
@@ -57,7 +59,7 @@ const RevealPage: NextPage<Props> = ({ token }) => {
         <main className={cs(layout["padding-big"])}>
           <Reveal
             hash={fxhash as string}
-            params={fxparams as string}
+            params={inputBytes}
             minter={fxminter as string}
             iteration={Number(fxiteration)}
             generativeUri={token.metadata.generativeUri}
