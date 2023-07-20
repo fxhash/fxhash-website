@@ -1,0 +1,45 @@
+@import "../../styles/Variables";
+
+.card {
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-gray-vvvvlight);
+  color: var(--color-black);
+  text-decoration: none !important;
+  .cardHeader {
+    aspect-ratio: 293 / 286;
+    height: 150px;
+    width: 100%;
+    background-size: cover;
+    background-position: center center;
+  }
+  .cardBody {
+    padding: var(--spacing);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-grow: 1;
+  }
+}
+.title {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 20px;
+  margin-bottom: var(--spacing-xl);
+}
+.date, .location {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 18px;
+}
+.location {
+  color: var(--color-gray);
+}
+
+@media (max-width: $breakpoint-sm) {
+  .card {
+  }
+}
