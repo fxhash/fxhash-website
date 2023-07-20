@@ -8,6 +8,7 @@ import {
   FxParamsData,
   FxParamDefinitions,
 } from "./types"
+import semver from "semver"
 
 export function rgbaToHex(r: number, g: number, b: number, a: number): string {
   const outParts = [
@@ -221,6 +222,33 @@ export const ParameterProcessors: FxParamProcessors = {
     },
   },
 
+  bytes: {
+    serialize: (input, def) => {
+      return Array.from(input)
+        .map((i) => i.toString(16).padStart(2, "0"))
+        .join("")
+    },
+    deserialize: (input, def) => {
+      const len = input.length / 2
+      const uint8 = new Uint8Array(len)
+      let idx
+      for (let i = 0; i < len; i++) {
+        idx = i * 2
+        uint8[i] = parseInt(`${input[idx]}${input[idx + 1]}`, 16)
+      }
+      return uint8
+    },
+    bytesLength: (def) => def.options.length,
+    random: (def) => {
+      const len = def.options?.length || 0
+      const uint8 = new Uint8Array(len)
+      for (let i = 0; i < len; i++) {
+        uint8[i] = (Math.random() * 255) | 0
+      }
+      return uint8
+    },
+  },
+
   select: {
     serialize: (input, def) => {
       // find the index of the input in the array of options
@@ -420,4 +448,9 @@ export function jsonStringifyBigint(data: any): string {
     if (typeof value === "bigint") return value.toString()
     return value
   })
+}
+
+export function fxParamsAsQueryParams(snippetVersion: string): boolean {
+  if (snippetVersion === "") return false
+  return !!(semver.valid(snippetVersion) && semver.lte(snippetVersion, "3.2.0"))
 }

@@ -23,6 +23,7 @@ import { InputCaptureSettings } from "../../components/Input/CaptureSettngs"
 import { validateCaptureSettings } from "../../utils/validations"
 import { LinkGuide } from "../../components/Link/LinkGuide"
 import { ipfsUrlWithHashAndParams } from "../../utils/ipfs"
+import { fxParamsAsQueryParams } from "components/FxParams/utils"
 
 export const StepConfigureCapture: StepComponent = ({ onNext, state }) => {
   const [settings, setSettings] = useState<CaptureSettings>(
@@ -71,6 +72,7 @@ export const StepConfigureCapture: StepComponent = ({ onNext, state }) => {
           fxiteration: state.previewIteration!,
           fxminter: state.previewMinter!,
           fxparams: state.previewInputBytes!,
+          fxParamsAsQueryParams: fxParamsAsQueryParams(state.snippetVersion!),
         },
         (cid) => cid
       ),
@@ -102,6 +104,7 @@ export const StepConfigureCapture: StepComponent = ({ onNext, state }) => {
         previewMinter: state.previewMinter,
         previewInputBytes: state.previewInputBytes,
         authHash: state.authHash1,
+        snippetVersion: state.snippetVersion,
       })
     }
   }

@@ -920,6 +920,34 @@ Corresponding controller:
 
 ---
 
+`bytes`
+
+Arbitrary data which can only be manipulated with code, not from the UI; the update mode must be **code-driven**. Allows to store bytes in an optimised way, the bytes are serialized to hexadecimal and deserialized to [Uint8Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array).
+
+| Property | Type   | Default | Description                                                                                    |
+| -------- | ------ | ------- | ---------------------------------------------------------------------------------------------- |
+| length   | number | 0       | **(Required)** The maximum number of bytes which can be stored by this bytes parameter buffer. |
+
+Example:
+
+```js
+$fx.params([
+  {
+    id: "some_bytes",
+    name: "Some bytes",
+    type: "bytes",
+    update: "code-driven", // required!!
+    options: {
+      length: 4,
+    },
+    // the default value must be an Uint8Array
+    default: new Uint8Array([0, 255, 48, 57]),
+  },
+])
+```
+
+---
+
 `select`
 
 A select is defined by a list of strings, where each string defines an option which can be selected. A select can take up to 256 entries. A select is stored as a single byte onchain, which is the hexadecimal representation of a number between 0 and 255, corresponding to the index of the selected option in the array of options. When deserialized, the string of the option is extracted.
@@ -1047,8 +1075,8 @@ Corresponding controller:
     // setTimeout(() => fxpreview(), 500)
   }
   // get the byte params from the URL
-  const searchParams = search.get("fxparams")
-  let initialInputBytes = searchParams?.replace("0x", "")
+  const searchParams = window.location.hash
+  let initialInputBytes = searchParams?.replace("#0x", "")
   const throttle = (func, delay) => {
     let isThrottled = false
 
@@ -1269,6 +1297,36 @@ Corresponding controller:
           .join("")
       },
     },
+    bytes: {
+      serialize: (input, def) => {
+        const out = Array.from(input)
+          .map((i) => i.toString(16).padStart(2, "0"))
+          .join("")
+        return out
+      },
+      deserialize: (input, def) => {
+        const len = input.length / 2
+        const uint8 = new Uint8Array(len)
+        let idx
+        for (let i = 0; i < len; i++) {
+          idx = i * 2
+          uint8[i] = parseInt(`${input[idx]}${input[idx + 1]}`, 16)
+        }
+        return uint8
+      },
+      bytesLength: (opt) => opt.length,
+      constain: (value, def) => {
+        return value
+      },
+      random: (def) => {
+        const len = def.options?.length || 0
+        const uint8 = new Uint8Array(len)
+        for (let i = 0; i < len; i++) {
+          uint8[i] = (Math.random() * 255) | 0
+        }
+        return uint8
+      },
+    },
     select: {
       serialize: (input, def) => {
         // find the index of the input in the array of options
@@ -1373,7 +1431,7 @@ Corresponding controller:
   }
 
   window.$fx = {
-    _version: "3.2.0",
+    _version: "3.3.0",
     _processors: processors,
     // where params def & features will be stored
     _params: undefined,

@@ -28,7 +28,6 @@ import { ContractFeedback } from "components/Feedback/ContractFeedback"
 import { Loader } from "components/Utils/Loader"
 import Link from "next/link"
 import { Button } from "components/Button"
-import { useFxParams } from "hooks/useFxParams"
 import { MintV3AbstractionOperation } from "../../services/contract-operations/MintV3Abstraction"
 import { useSettingsContext } from "../../context/Theme"
 import { PreMintWarning } from "./PreMintWarning"
@@ -48,6 +47,7 @@ import { useRuntimeController } from "hooks/useRuntimeController"
 import { FxParamsData } from "components/FxParams/types"
 import { FxContext } from "./Panel/PanelContext"
 import { getRandomIteration } from "utils/iteration"
+import { useInputBytesFromLocationHash } from "hooks/useInputBytesFromLocationHash"
 
 export type TOnMintHandler = (
   ticketId: number | number[] | null,
@@ -83,6 +83,8 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
     return user?.id || generateTzAddress()
   }, [user])
 
+  const inputBytes = useInputBytesFromLocationHash()
+
   const { runtime, controls, details } = useRuntimeController(
     artworkIframeRef,
     {
@@ -91,7 +93,8 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
       minter: minterAddress,
       context: fxcontext,
       iteration: getRandomIteration(token.supply, token.balance),
-      inputBytes: router.query.fxparams as string | undefined,
+      inputBytes,
+      snippetVersion: token.metadata.snippetVersion,
     },
     {
       autoRefresh: withAutoUpdate,
@@ -449,9 +452,8 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
                     href={`/reveal/${token.id}/?${new URLSearchParams({
                       fxhash: randomSeed,
                       fxiteration: iteration,
-                      fxparams: runtime.details.params.inputBytes!,
                       fxminter: user!.id,
-                    }).toString()}`}
+                    }).toString()}#0x${runtime.details.params.inputBytes}`}
                     passHref
                   >
                     <Button

@@ -91,6 +91,7 @@ export interface GenerativeTokenMetadata {
     definition: any
     inputBytesSize: number
   }
+  snippetVersion: string
 }
 
 export interface ObjktMetadata extends GenerativeTokenMetadata {
