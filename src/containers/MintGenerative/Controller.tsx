@@ -59,6 +59,7 @@ const STEPS: Step[] = [
       "previewMinter",
       "previewInputBytes",
       "params",
+      "snippetVersion",
     ],
   },
   {

@@ -241,7 +241,7 @@ export function PanelControls(props: PanelControlsProps) {
                     }
 
                     router.push(
-                      `/reveal/${token.id}?fxhash=${checkoutSeed}&fxparams=${inputBytes}&fxminter=${user?.id}`
+                      `/reveal/${token.id}?fxhash=${checkoutSeed}&fxminter=${user?.id}#0x${inputBytes}`
                     )
                   }}
                   mintParams={{

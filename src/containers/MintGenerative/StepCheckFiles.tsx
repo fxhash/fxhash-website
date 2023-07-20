@@ -31,6 +31,7 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
     {
       cid: state.cidUrlParams!,
       context: "standalone",
+      snippetVersion: "",
     }
   )
 
@@ -44,6 +45,7 @@ export const StepCheckFiles: StepComponent = ({ onNext, state }) => {
         definition: runtime.definition.params,
         inputBytesSize: runtime.details.params.bytesSize,
       },
+      snippetVersion: runtime.definition.version,
     })
   }
 

@@ -11,6 +11,8 @@ import { SectionHeader } from "../../components/Layout/SectionHeader"
 import { TitleHyphen } from "../../components/Layout/TitleHyphen"
 import { Spacing } from "../../components/Layout/Spacing"
 import { RevealIframe } from "../../components/Reveal/RevealIframe"
+import { fxParamsAsQueryParams } from "components/FxParams/utils"
+import sha1 from "sha1"
 
 interface Props {
   generativeUri: string
@@ -20,6 +22,7 @@ interface Props {
   params?: string
   previeweUri?: string
   features?: TokenFeature[] | null
+  snippetVersion: string
 }
 
 /**
@@ -36,6 +39,7 @@ export function Reveal({
   params,
   generativeUri,
   features,
+  snippetVersion,
 }: Props) {
   const iframeRef = useRef<HTMLIFrameElement>(null)
   const viewUrl = useMemo<string>(() => {
@@ -51,10 +55,15 @@ export function Reveal({
     url += `&fxminter=${minter}`
     // append params if defined
     if (params && params.length > 0) {
-      url += `&fxparams=${params}`
+      if (fxParamsAsQueryParams(snippetVersion || "")) {
+        url += `&fxparams=${params}`
+      } else {
+        url += `&fxparamsUpdate=${sha1(params)}`
+        url += `#0x${params}`
+      }
     }
     return url
-  }, [generativeUri, hash, iteration, minter, params])
+  }, [generativeUri, hash, iteration, minter, params, snippetVersion])
 
   const reloadIframe = () => {
     if (iframeRef.current) {

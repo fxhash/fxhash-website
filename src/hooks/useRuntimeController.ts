@@ -27,12 +27,12 @@ import {
   buildParamsObject,
   serializeParams,
   serializeParamsOrNull,
+  fxParamsAsQueryParams,
 } from "components/FxParams/utils"
 import { ipfsUrlWithHashAndParams } from "utils/ipfs"
 import { DeepPartial } from "types/DeepPartial"
 import { useRouter } from "next/router"
 import { useMessageListener } from "./useMessageListener"
-
 /**
  * The Runtime Controller provides a low-level API to interact with an iframe
  * and control its runtime with granularity.
@@ -130,6 +130,7 @@ interface IProjectState {
   minter?: string
   inputBytes?: string
   context?: TExecutionContext
+  snippetVersion: string
 }
 
 export type TRuntimeContextConnector = (
@@ -152,6 +153,7 @@ const iframeHandler: TRuntimeContextConnector = (iframeRef) => {
           fxminter: state.minter || "",
           fxparams: state.inputBytes,
           fxcontext: state.context,
+          fxParamsAsQueryParams: fxParamsAsQueryParams(state.snippetVersion),
         }) + (searchParams ? `?${searchParams}` : "")
       )
     },
@@ -202,6 +204,9 @@ export const useRuntimeController: TUseRuntimeController = (
       minter: project.minter || generateTzAddress(),
       iteration: project.iteration || 1,
       context: project.context,
+    },
+    definition: {
+      version: project.snippetVersion,
     },
   })
 
@@ -284,13 +289,20 @@ export const useRuntimeController: TUseRuntimeController = (
     })
   }, [runtime.details.definitionHash.params])
 
-  const updateQueryParams = (query: { fxhash: string; fxparams: string }) =>
+  const updateQueryParams = ({
+    fxhash,
+    fxparams,
+  }: {
+    fxhash: string
+    fxparams: string
+  }) =>
     router.replace(
       {
         query: {
           ...router.query,
-          ...query,
+          fxhash,
         },
+        hash: `0x${fxparams}`,
       },
       undefined,
       { shallow: true }
@@ -300,7 +312,7 @@ export const useRuntimeController: TUseRuntimeController = (
   useEffect(() => {
     updateQueryParams({
       fxhash: runtime.state.hash,
-      fxparams: runtime.details.params.inputBytes || "",
+      fxparams: runtime.details.params.inputBytes || project.inputBytes || "",
     })
   }, [runtime.state.hash, runtime.details.params.inputBytes])
 
@@ -373,6 +385,7 @@ export const useRuntimeController: TUseRuntimeController = (
         iteration: runtime.state.iteration,
         inputBytes: runtime.details.params.inputBytes || project.inputBytes,
         context: runtime.state.context,
+        snippetVersion: runtime.definition.version || "",
       },
       options?.urlParams
     )
@@ -424,6 +437,7 @@ export const useRuntimeController: TUseRuntimeController = (
         minter: runtime.state.minter,
         inputBytes: controlDetails.params.inputBytes || project.inputBytes,
         context: runtime.state.context,
+        snippetVersion: runtime.definition.version || "",
       },
       options?.urlParams
     )
