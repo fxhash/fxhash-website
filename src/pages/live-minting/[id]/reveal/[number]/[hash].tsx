@@ -86,6 +86,7 @@ const LiveMintingRevealPage: NextPageWithLayout<Props> = ({
             iteration={iteration}
             minter={user!.id}
             params={query.fxparams as string}
+            snippetVersion={token.metadata.snippetVersion}
           />
 
           {mintPass && (

@@ -77,6 +77,8 @@ export interface MintGenerativeData<N = string> {
   informations?: GenTokenInformationsForm
   // minted successful
   minted?: boolean
+  // version of the snippet the token is minted with
+  snippetVersion?: string | null
 }
 
 export interface GenTokenSettings {

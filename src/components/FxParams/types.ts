@@ -4,44 +4,45 @@ export type FxParamType =
   | "boolean"
   | "color"
   | "string"
+  | "bytes"
   | "select"
 
-interface FxParamOption_bigint {
-  min?: number | bigint
-  max?: number | bigint
+export type FxParamOptionsMap = {
+  [Type in FxParamType]: {
+    number: {
+      min?: number
+      max?: number
+      step?: number
+    }
+    bigint: {
+      min?: number | bigint
+      max?: number | bigint
+    }
+    boolean: undefined
+    color: undefined
+    string: {
+      minLength?: number
+      maxLength?: number
+    }
+    bytes: {
+      length: number
+    }
+    select: {
+      options: string[]
+    }
+  }[Type]
 }
 
-interface FxParamOption_number {
-  min?: number
-  max?: number
-  step?: number
-}
-
-interface FxParamOption_string {
-  minLength?: number
-  maxLength?: number
-}
-
-interface FxParamOption_select {
-  options: string[]
-}
-
-export interface FxParamOptionsMap {
-  number: FxParamOption_number
-  bigint: FxParamOption_bigint
-  boolean: undefined
-  color: undefined
-  string: FxParamOption_string
-  select: FxParamOption_select
-}
-
-export interface FxParamTypeMap {
-  number: number
-  bigint: bigint
-  boolean: boolean
-  color: string
-  string: string
-  select: string
+export type FxParamTypeMap = {
+  [Type in FxParamType]: {
+    number: number
+    bigint: bigint
+    boolean: boolean
+    color: string
+    string: string
+    bytes: Uint8Array
+    select: string
+  }[Type]
 }
 
 export type FxParamUpdateMode = "page-reload" | "sync" | "code-driven"

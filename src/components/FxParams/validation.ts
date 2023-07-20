@@ -6,6 +6,7 @@ const ControllerTypeSchema = z.enum([
   "bigint",
   "color",
   "string",
+  "bytes",
   "boolean",
   "select",
 ])
@@ -26,6 +27,10 @@ const FxParamOptions_stringSchema = z.object({
   maxLength: z.number().optional(),
 })
 
+const FxParamOptions_bytesSchema = z.object({
+  length: z.number().gt(0),
+})
+
 const FxParamOptions_selectSchema = z.object({
   options: z.string().array().nonempty(),
 })
@@ -40,6 +45,16 @@ const StringControllerSchema = BaseControllerDefinitionSchema.extend({
   type: z.literal(ControllerTypeSchema.enum.string),
   options: FxParamOptions_stringSchema.optional(),
   default: z.string().optional(),
+})
+
+const BytesControllerSchema = BaseControllerDefinitionSchema.extend({
+  type: z.literal(ControllerTypeSchema.enum.bytes),
+  options: FxParamOptions_bytesSchema,
+  default: z.any().optional(),
+  update: z.literal("code-driven", {
+    invalid_type_error: "Bytes parameters must be code-driven",
+    required_error: "Bytes parameters must be code-driven",
+  }),
 })
 
 const NumberControllerSchema = BaseControllerDefinitionSchema.extend({
@@ -81,6 +96,7 @@ const ControllerDefinitionSchema = z.union([
   NumberControllerSchema,
   BigIntControllerSchema,
   SelectControllerSchema,
+  BytesControllerSchema,
   BooleanControllerSchema,
   ColorControllerSchema,
 ])
@@ -94,6 +110,7 @@ const controllerSchema = {
   bigint: BigIntControllerSchema,
   color: ColorControllerSchema,
   string: StringControllerSchema,
+  bytes: BytesControllerSchema,
   boolean: BooleanControllerSchema,
   select: SelectControllerSchema,
 }

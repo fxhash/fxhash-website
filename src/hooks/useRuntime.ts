@@ -99,6 +99,7 @@ export interface IRuntimeContext {
 
 type Parameters = {
   state?: Partial<RuntimeState>
+  definition?: Partial<RuntimeDefinition>
 }
 export function useRuntime(initial?: Parameters): IRuntimeContext {
   const [whole, setWhole] = useState<RuntimeWholeState>({
@@ -113,6 +114,7 @@ export function useRuntime(initial?: Parameters): IRuntimeContext {
       params: null,
       version: null,
       features: null,
+      ...initial?.definition,
     },
   })
 
