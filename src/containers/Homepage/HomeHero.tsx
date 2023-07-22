@@ -32,6 +32,17 @@ const _HomeHero = ({ randomGenerativeToken }: HomeHeroProps) => {
     const nbObjkts = randomGenerativeTokenWithDups?.objkts.length || 0
     return Math.floor(((cursor + 1) * 100) / nbObjkts)
   }, [cursor, randomGenerativeTokenWithDups?.objkts.length])
+
+  const changeCursorHandler = () => {
+    const randomGenerativeTokenWithDupsIterations =
+      randomGenerativeTokenWithDups?.objkts
+    if (!randomGenerativeTokenWithDupsIterations) return
+    setCursor((oldCursor) =>
+      oldCursor === randomGenerativeTokenWithDupsIterations.length - 1
+        ? 0
+        : oldCursor + 1
+    )
+  }
   return (
     <>
       <div className={style.container}>
@@ -55,7 +66,8 @@ const _HomeHero = ({ randomGenerativeToken }: HomeHeroProps) => {
             {randomGenerativeTokenWithDups && (
               <RandomIterativeCycler
                 generativeToken={randomGenerativeTokenWithDups}
-                onChangeCursor={setCursor}
+                cursor={cursor}
+                onChangeCursor={changeCursorHandler}
               />
             )}
           </div>
