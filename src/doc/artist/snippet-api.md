@@ -165,7 +165,7 @@ console.log($fx.iteration) // output example: 42
 
 ## $fx.preview()
 
-> A function which can be called to programmatically trigger the image capture of the iteration. This function only works if `programmatic trigger` is configured in the capture settings, when you mint your project. See [capture settings](/doc/artist/capture-settings) for more details.
+> A function which can be called to programmatically trigger the image capture of the iteration. This function only works if `programmatic trigger` is configured in the capture settings, when you mint your project. See [capture settings](/doc/artist/project-settings) for more details.
 
 ```js
 function draw() {
