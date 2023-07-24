@@ -94,7 +94,7 @@ export function MintWithTicketPageRoot({ token, ticketId, mode }: Props) {
       context: fxcontext,
       iteration: getRandomIteration(token.supply, token.balance),
       inputBytes,
-      snippetVersion: token.metadata.snippetVersion,
+      snippetVersion: token.metadata.snippetVersion || "3.2.0",
     },
     {
       autoRefresh: withAutoUpdate,
