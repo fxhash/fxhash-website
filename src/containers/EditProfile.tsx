@@ -78,7 +78,7 @@ export function EditProfile() {
     }
   }, [safeData])
 
-  const [avatarFile, setAvatarFile] = useState<File | null>(null)
+  const [avatarFile, setAvatarFile] = useState<File | "ipfs" | null>("ipfs")
   const [data, setData] = useState({
     name: user.name || "",
     description: user.description || "",
@@ -103,9 +103,9 @@ export function EditProfile() {
         validationSchema={Schema}
         onSubmit={(values) => {
           const f = new FormData()
-          if (avatarFile) {
+          if (avatarFile && avatarFile !== "ipfs") {
             f.append("avatarFile", avatarFile)
-          } else if (user.avatarUri) {
+          } else if (avatarFile === "ipfs" && user.avatarUri) {
             f.append("avatarIpfs", user.avatarUri)
           }
           f.append("description", values.description)
