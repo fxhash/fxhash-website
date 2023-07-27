@@ -1,6 +1,7 @@
 import { RedeemableUserActionInputAddress } from "components/Form/Redeemable/UserAction/InputAddress"
 import { RedeemableUserActionInputEmail } from "components/Form/Redeemable/UserAction/InputEmail"
 import { RedeemableUserActionInputList } from "components/Form/Redeemable/UserAction/InputList"
+import { RedeemableUserActionInputPhone } from "components/Form/Redeemable/UserAction/InputPhone"
 import { FunctionComponent, ReactNode } from "react"
 import {
   RedeemableUserActionInputType,
@@ -28,6 +29,9 @@ type RedeemableUserActionDefinition<T extends RedeemableUserActionType> = {
 type RedeemableUserActionDefinitions = {
   [T in RedeemableUserActionType]: RedeemableUserActionDefinition<T>
 }
+
+const phoneRegExp =
+  /^(\+?\d{0,4})?\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{4}\)?)?$/
 
 export const redeemableUserActionDefinitions: RedeemableUserActionDefinitions =
   {
@@ -59,6 +63,14 @@ export const redeemableUserActionDefinitions: RedeemableUserActionDefinitions =
       type: RedeemableUserActionType.INPUT_EMAIL,
       input: RedeemableUserActionInputEmail,
       validation: string().email("Invalid email").required("Required!"),
+      initialValue: () => "",
+    },
+    [RedeemableUserActionType.INPUT_PHONE]: {
+      type: RedeemableUserActionType.INPUT_PHONE,
+      input: RedeemableUserActionInputPhone,
+      validation: string()
+        .matches(phoneRegExp, "Phone number is not valid")
+        .required("Required!"),
       initialValue: () => "",
     },
     [RedeemableUserActionType.INPUT_LIST]: {

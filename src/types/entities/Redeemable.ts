@@ -28,6 +28,7 @@ export interface RedeemableOption {
 export enum RedeemableUserActionType {
   INPUT_ADDRESS = "INPUT_ADDRESS",
   INPUT_EMAIL = "INPUT_EMAIL",
+  INPUT_PHONE = "INPUT_PHONE",
   INPUT_LIST = "INPUT_LIST",
 }
 
@@ -72,6 +73,10 @@ export type RedeemableUserActionOptions = {
       label: string
       hint?: string
     }
+    [RedeemableUserActionType.INPUT_PHONE]: {
+      label: string
+      hint?: string
+    }
     [RedeemableUserActionType.INPUT_LIST]: {
       label: string
       hint?: string
@@ -86,6 +91,7 @@ export type RedeemableUserActionInputType = {
   [T in RedeemableUserActionType]: {
     [RedeemableUserActionType.INPUT_ADDRESS]: IAddress
     [RedeemableUserActionType.INPUT_EMAIL]: string
+    [RedeemableUserActionType.INPUT_PHONE]: string
     [RedeemableUserActionType.INPUT_LIST]: string
   }[T]
 }
