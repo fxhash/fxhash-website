@@ -12,23 +12,23 @@ const ControllerTypeSchema = z.enum([
 ])
 
 const FxParamOptions_bigintSchema = z.object({
-  min: z.number().or(z.bigint()).optional(),
-  max: z.number().or(z.bigint()).optional(),
+  min: z.coerce.number().or(z.bigint()).optional(),
+  max: z.coerce.number().or(z.bigint()).optional(),
 })
 
 const FxParamOptions_numberSchema = z.object({
-  min: z.number().gte(Number.MIN_SAFE_INTEGER).optional(),
-  max: z.number().lte(Number.MAX_SAFE_INTEGER).optional(),
-  step: z.number().optional(),
+  min: z.coerce.number().gte(Number.MIN_SAFE_INTEGER).optional(),
+  max: z.coerce.number().lte(Number.MAX_SAFE_INTEGER).optional(),
+  step: z.coerce.number().optional(),
 })
 
 const FxParamOptions_stringSchema = z.object({
-  minLength: z.number().gte(0).optional(),
-  maxLength: z.number().optional(),
+  minLength: z.coerce.number().gte(0).optional(),
+  maxLength: z.coerce.number().optional(),
 })
 
 const FxParamOptions_bytesSchema = z.object({
-  length: z.number().gt(0),
+  length: z.coerce.number().gt(0),
 })
 
 const FxParamOptions_selectSchema = z.object({
@@ -60,7 +60,7 @@ const BytesControllerSchema = BaseControllerDefinitionSchema.extend({
 const NumberControllerSchema = BaseControllerDefinitionSchema.extend({
   type: z.literal(ControllerTypeSchema.enum.number),
   options: FxParamOptions_numberSchema.optional(),
-  default: z
+  default: z.coerce
     .number()
     .gte(Number.MIN_SAFE_INTEGER)
     .lte(Number.MAX_SAFE_INTEGER)
