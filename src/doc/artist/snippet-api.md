@@ -221,7 +221,7 @@ You need to pass an object where keys are the feature names and their values the
 $fx.features({
   'A feature of type string': $fx.rand() > 0.5 ? 'Super cool' : 'Not cool !',
   'Feature number': Math.floor($fx.rand() * 100),
-  'A boolean feature': $fx.rand() > 0.8 > true : false,
+  'A boolean feature': $fx.rand() > 0.8 ? true : false,
   'A constant feature': 'constant value',
 })
 ```
