@@ -48,7 +48,7 @@ To facilitate the creation of fxhash projects, we have created a fully-featured 
 
 # How is a Generative Token structured
 
-> This section covers different aspect on the structure and specifications of Generative Tokens. If you are using the fxhash boilerplate, many of the requirements are supported out-of-the-box.
+> This section covers different aspects of the structure and specifications of Generative Tokens. If you are using the fxhash boilerplate, many of the requirements are supported out-of-the-box.
 
 ## Project structure
 
@@ -147,9 +147,9 @@ Testing often will also allow you to catch problems early that would become big 
 
 > Ensure your token looks the same in all resolutions and DPRs.
 
-It is ideal if your token produces the same artwork at different sizes. Make sure to test your token often at different resolutions and DPRs. One of the most common pitfalls that artists fall into is not doing so and having their tokens look different at different sizes - as well as different to the preview - as a result.
+It is ideal if your token produces the same artwork in different sizes. Make sure to test your token often at different resolutions and DPRs. One of the most common pitfalls that artists fall into is not doing so and having their tokens look different at different sizes - as well as different to the preview - as a result.
 
-There are a number of different ways of getting your token to work in a resolution independent manor. Jump into the creator-support channel if you'd like to ask any questions.
+There are a number of different ways of getting your token to work in a resolution independent manner. Jump into the creator-support channel if you'd like to ask any questions.
 
 ## WebGL
 
@@ -163,13 +163,13 @@ Some GPUs allow you to specify non power of two textures and framebuffers, howev
 
 WebGL is an emulation layer on top of different graphics APIs which talk to hardware, as such implementation of basic things like sine calculation and float precision can vary.
 
-One important thing to remember about WebGL is that you should be doing as muchof your calculation up-front, in javascript, and providing those values to WebGL as uniforms.
+One important thing to remember about WebGL is that you should be doing as much of your calculation up-front, in javascript, and providing those values to WebGL as uniforms.
 
 ### WebGL and previews
 
 As of right now the preview system doesn't have a GPU. As such, rendering your scene falls to the CPU, which will render WebGL but at an extremely low framerate.
 
-If your token is WebGL then you want to make sure that you're rendering an accepable preview in the first couple of frames.
+If your token is WebGL then you want to make sure that you're rendering an acceptable preview in the first couple of frames.
 
 ## Computational complexity and previews
 
