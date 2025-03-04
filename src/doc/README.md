@@ -61,7 +61,7 @@ An article is used to define an article object and point to the file where the c
 
 # How does it work
 
-Articles are written in **markdown** and can be found in the same directory as this `README.md` file. When the site is built, somes pages will be generated using the `doc.json` object. For each article, a page will be created.
+Articles are written in **markdown** and can be found in the same directory as this `README.md` file. When the site is built, some pages will be generated using the `doc.json` object. For each article, a page will be created.
 
 The `link` property in the category and article objects defines 2 things:
 * where the content of the article is located
