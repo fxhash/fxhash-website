@@ -46,7 +46,7 @@ You can find opened issues on the [https://github.com/fxhash/fxhash-website/issu
 * fork the **dev** branch of this repo
 * create a branch to implement a feature or fix a bug
 * when done, push the branch to your git repository fork
-* create a pull request againts the **dev** branch
+* create a pull request against the **dev** branch
 * the team will review it, and either request changes or merge it
 
 If you find a bug with the front end, you can create an issue.
@@ -63,7 +63,7 @@ If you find a bug with the front end, you can create an issue.
 * [typescript](https://www.typescriptlang.org/)
 * [css modules](https://github.com/css-modules/css-modules) (with sass)
 * [taquito](https://tezostaquito.io/) to interact with the blockchain
-* [ApolloClient](https://www.apollographql.com/docs/react/) to run graphQL queries (both durring SSR and on the client-side), and handle the store (client-side)
+* [ApolloClient](https://www.apollographql.com/docs/react/) to run graphQL queries (both during SSR and on the client-side), and handle the store (client-side)
 
 ### Project structure
 

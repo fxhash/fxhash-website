@@ -44,7 +44,7 @@ $fx.preview()
 | [`getFeatures()`](#fxgetfeatures)          | ()&nbsp;=>&nbsp;object                             | Return the features object (whole object defined through the `features()` function)                                                                                                              |
 | [`params()`](#fxparamsdefinition)          | (array)&nbsp;=>&nbsp;void                          | This function can be called with an array of parameter definitions as an input. This is how you can define the parameters collectors will modulate before minting their iteration of your piece. |
 | [`getParam()`](#fxgetparamid)              | (string)&nbsp;=>&nbsp;any                          | Given a param ID, returns its current value based on the param values passed to the iteration.                                                                                                   |
-| [`getParams()`](#fxgetparams)              | ()&nbsp;=>&nbsp;object                             | Return an map of param key value pairs, based on the provided params definition and the current values of all the parameters.                                                                    |
+| [`getParams()`](#fxgetparams)              | ()&nbsp;=>&nbsp;object                             | Return a map of param key value pairs, based on the provided params definition and the current values of all the parameters.                                                                     |
 | [`getRawParam()`](#fxgetrawparamid)        | (string)&nbsp;=>&nbsp;string                       | Returns the bytes string of a parameter as passed to the iteration.                                                                                                                              |
 | [`on()`](#fxoneventid-handler-ondone)      | (string, function, function)&nbsp;=>&nbsp;function | Adds an event listener to an event. returns a function to remove the event listener.                                                                                                             |
 | [`emit()`](#fxemiteventid-data)            | (string, any)&nbsp;=>&nbsp;void                    | Emit an event to the parent context. Can be used to update parameters from the code for instance.                                                                                                |
@@ -72,7 +72,7 @@ const r2 = fxrand() // same effect as above
 
 The fxhash snippet provides an implementation of SFC32 ([Standard Fast Counter 32](https://github.com/bryc/code/blob/master/jshash/PRNGs.md#sfc32)) as the PRNG.
 
-`$fx.rand()` is a pointer to the `fxrand()` function. You can use any of these in your code, although we recommend using the `$fx` syntax for consistency accross your code.
+`$fx.rand()` is a pointer to the `fxrand()` function. You can use any of these in your code, although we recommend using the `$fx` syntax for consistency across your code.
 
 ::infobox[It is not mandatory to use the `$fx.rand()` function as your source of randomness, you can implement the PRNG of your choice instead, as long as it uses the hash as the seed.]
 
@@ -115,7 +115,7 @@ const r2 = fxrandminter() // same effect as above
 
 The fxhash snippet provides an implementation of SFC32 ([Standard Fast Counter 32](https://github.com/bryc/code/blob/master/jshash/PRNGs.md#sfc32)) as the PRNG.
 
-`$fx.randminter()` is a pointer to the `fxrandminter()` function. You can use any of these in your code, although we recommend using the `$fx` syntax for consistency accross your code.
+`$fx.randminter()` is a pointer to the `fxrandminter()` function. You can use any of these in your code, although we recommend using the `$fx` syntax for consistency across your code.
 
 ::infobox[It is not mandatory to use the `$fx.randminter()` function as your source of randomness, you can implement the PRNG of your choice instead, as long as it uses the minter address as the seed.]
 
@@ -241,7 +241,7 @@ setTimeout(() => {
 }, 1000)
 ```
 
-Fxhash automatically computes the rarity of a particular feature by counting the number of occurences among all the tokens of the collection. Two feature values are considered the same if a [strict equality](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Strict_equality) between those returns true. If you want the rarity of a feature to be meaningful, you must define its values in a way that ensures multiple occurences to appear.
+Fxhash automatically computes the rarity of a particular feature by counting the number of occurrences among all the tokens of the collection. Two feature values are considered the same if a [strict equality](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Strict_equality) between those returns true. If you want the rarity of a feature to be meaningful, you must define its values in a way that ensures multiple occurrences to appear.
 
 For instance, this will not work well with the rarity module:
 

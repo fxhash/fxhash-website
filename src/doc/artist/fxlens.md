@@ -8,7 +8,7 @@ description: "A documentation about fx(lens), fxhash local development studio."
 
 # What is fx(lens) ?
 
-fx(lens) is a web page which can be executed locally, designed to load and interact with fxhash projects in your local environment. It provides various tools which can be accessed via a minimalistic UI, facilitating the exploration of fxhash projects as they are being developped.
+fx(lens) is a web page which can be executed locally, designed to load and interact with fxhash projects in your local environment. It provides various tools which can be accessed via a minimalistic UI, facilitating the exploration of fxhash projects as they are being developed.
 
 ![screenshot of fxlens](/images/doc/artist/lens/lens-1.png)
 
@@ -75,7 +75,7 @@ If everything went well, you should see the following page:
 
 ## How to work with the boilerplate
 
-At the root of your the boilerplate folder, there is a `project` folder. This is where any file related to your project should go. The boilerplates comes with the following project structure:
+At the root of your boilerplate folder, there is a `project` folder. This is where any file related to your project should go. The boilerplates comes with the following project structure:
 
 ```text
 ├── project
