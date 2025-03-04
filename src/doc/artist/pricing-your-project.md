@@ -8,7 +8,7 @@ description: "Some information on the different pricing strategies as well as so
 
 # Pricing strategies
 
-When publishing a project on fx, artists can chose to distribute their work with different pricing strategies. As of today, 2 strategies are available:
+When publishing a project on fx, artists can choose to distribute their work with different pricing strategies. As of today, 2 strategies are available:
 
 - fixed price
 - dutch auction
