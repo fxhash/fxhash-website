@@ -75,7 +75,7 @@ In future, a tagging system will be implemented that will allow artists to add l
 
 # Rescheduling
 
-The scheduling feature is provided as a means to refresh your project's settings and have it appear back at the top of the list. Resheduling can only be used under the following circumstances:
+The scheduling feature is provided as a means to refresh your project's settings and have it appear back at the top of the list. Rescheduling can only be used under the following circumstances:
 
 - Something has gone wrong with your launch - a mistake or issue with the drop that caused the launch to be broken; or
 - A significant change to the allow list; and
