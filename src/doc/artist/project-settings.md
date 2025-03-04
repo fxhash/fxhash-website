@@ -25,7 +25,7 @@ The trigger defines when the capture module will take the preview after loading 
 
 ## Target
 
-This option defines what will be targetted by the capture module.
+This option defines what will be targeted by the capture module.
 
 - **From \<canvas\>**: capture module will directly grab the data of the canvas selected in the document with the CSS selector you provide. The preview will have the same size as the canvas.
 - **Viewport capture**: the capture will be made on the whole viewport, set at the resolution you will provide.
@@ -45,7 +45,7 @@ If you don't use WebGL and only the regular canvas API, it's also possible that 
 
 ## Recommendations
 
-If your project is loading asynchronous requests from the project's folder, **always consider that one of those ressources may be slow to load**. In that regard, if you load resources please always use `fxpreview()` to trigger the capture.
+If your project is loading asynchronous requests from the project's folder, **always consider that one of those resources may be slow to load**. In that regard, if you load resources please always use `fxpreview()` to trigger the capture.
 
 # Explore variation settings
 
@@ -64,7 +64,7 @@ You can configure the following settings, for both **during the mint** period an
   - **infinite**: viewers can explore any amount of variations and so randomly
   - **limited set of hashes**: define a list of hashes the viewers will cycle through when clicking on the button
 
-These settings should give enough control to define a strategy during the lifetime of your token. You can for instance disabled infinite exploration after token is minted, so that the front end only display a finite number of states through the minted collection of the token. You decide.
+These settings should give enough control to define a strategy during the lifetime of your token. You can for instance disable infinite exploration after token is minted, so that the front end only displays a finite number of states through the minted collection of the token. You decide.
 
 ::infobox[Please note that the variation settings have no effect on the iterations which will be generated from your project.]
 
@@ -107,7 +107,7 @@ By having the ability to define multiple reserves, it gives you a fine control o
 
 ### Think about new users
 
-We would recommend to keep new users in mind. It's great to reward your previous collectors, but we wouldn't want the platform to become gated for new-comers because of this feature. We are trusting your jugement in that regard.
+We would recommend to keep new users in mind. It's great to reward your previous collectors, but we wouldn't want the platform to become gated for new-comers because of this feature. We are trusting your judgment in that regard.
 
 ### Limitations
 
@@ -142,11 +142,11 @@ tz1MGzgRu6qJ3RaBUErnpFDLarFVPgaApKrA;1
 
 ### Lock N editions for later
 
-By setting a reserve as an access list to a burn address (or to yourself if you're not planning on consuming it), you can lock acertain number of editions which can then be safely unlocked.
+By setting a reserve as an access list to a burn address (or to yourself if you're not planning on consuming it), you can lock a certain number of editions which can then be safely unlocked.
 
 ## Updating a reserve
 
-Reserves are static. When a user mints from a reserve, it updates the smart contract storage, which then has to be indexed to be displayed on the UI with the update. It means that what you see on the UI may not be completly up-to-date with onchain storage. And so, consider the following case:
+Reserves are static. When a user mints from a reserve, it updates the smart contract storage, which then has to be indexed to be displayed on the UI with the update. It means that what you see on the UI may not be completely up-to-date with onchain storage. And so, consider the following case:
 
 ![Race condition](/images/doc/artist/reserves/race.jpg)
 
