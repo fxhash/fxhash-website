@@ -4,7 +4,7 @@ date: "2022-04-16"
 description: "A full documentation on how to collaborate with other artists and publish together."
 ---
 
-> fxhash comes with built-in tools so that the work that is the fruit of a collaboration between many artists can be released in the best possible conditions. We provides a collaboration factory contract which can be used to originate collaboration contracts between any number of entities.
+> fxhash comes with built-in tools so that the work that is the fruit of a collaboration between many artists can be released in the best possible conditions. We provide a collaboration factory contract which can be used to originate collaboration contracts between any number of entities.
 
 # What's a collaboration contract ?
 
