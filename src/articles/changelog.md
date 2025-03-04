@@ -36,7 +36,7 @@ description: 'The fxhash changelog'
 # 17/01/2021
 
 * cycles are now directly pulled from the contracts and UI reflects cycles in contracts
-* added supported for any number of cycles layered (off days are now displayed properly)
+* added support for any number of cycles layered (off days are now displayed properly)
 * added cycle IDs to the schedule (easier for communication)
 * improved the guides to collect, and to publish Generative Tokens
 * added guides to the header of the home page
@@ -87,7 +87,7 @@ description: 'The fxhash changelog'
 
 # 04/01/2022
 
-This update was introduced to prevent scammers from making profits using fxhash, and to secure collectors at the contract level. The Issuer contract was swapper for a new contract and all the data from the old one was transferred to provide the best experience for the community. Old tokens will benefit from the new feature `burn_supply`.
+This update was introduced to prevent scammers from making profits using fxhash, and to secure collectors at the contract level. The Issuer contract was swapped for a new contract and all the data from the old one was transferred to provide the best experience for the community. Old tokens will benefit from the new feature `burn_supply`.
 
 * update of the user moderation contract
   - on-chain views to give other contracts the ability to use the flags set by moderators
@@ -98,7 +98,7 @@ This update was introduced to prevent scammers from making profits using fxhash,
   - more modular architecture
   - the data of the old contract was transferred into the new one so that it does not impact users at all
   - added `burn_supply` endpoint for artists to burn remaining supply
-  - intoducing a 1 hour delay for the publication of Generative Tokens to prevent duplicates
+  - introducing a 1 hour delay for the publication of Generative Tokens to prevent duplicates
   - no more batch minting
   - 1-hour lock for new generative tokens only published by un-verified artists (to fight against scammers)
   - tokens moderated cannot be minted anymore

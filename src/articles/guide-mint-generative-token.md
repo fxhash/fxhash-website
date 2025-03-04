@@ -16,7 +16,7 @@ GT on fxhash can only be written in **html/css/javascript**. Ultimately, GT are 
 
 # General overview
 
-*This section will give you a rough overview of the Generative Tokens on fxhash. Don't worry if some informations are missing for you to properly understand the process, it will be covered later in this document.*
+*This section will give you a rough overview of the Generative Tokens on fxhash. Don't worry if some information are missing for you to properly understand the process, it will be covered later in this document.*
 
 ## 1. Upload and mint a GT
 
@@ -128,7 +128,7 @@ setTimeout(() => {
 }, 1000)
 ```
 
-Each propery of the `$fxhashFeatures` object will define one feature of the Tokens.
+Each property of the `$fxhashFeatures` object will define one feature of the Tokens.
 
 Features should also be derived from the `fxhash` string and from the `fxhash` string only. They should match the visual characteristics of the Token (ie reflect the settings behind the generative process of the token).
 
@@ -290,7 +290,7 @@ Testing often will also allow you to catch problems early that would become big 
 
 It is ideal if your token produces the same artwork at different sizes. Make sure to test your token often at different resolutions and DPRs. One of the most common pitfalls that artists fall into is not doing so and having their tokens look different at different sizes - as well as different to the preview - as a result.
 
-There are a number of different ways of getting your token to work in a resolution independent manor. Jump into the creator-support channel if you'd like to ask any questions.
+There are a number of different ways of getting your token to work in a resolution independent manner. Jump into the creator-support channel if you'd like to ask any questions.
 
 ## WebGL
 
@@ -310,7 +310,7 @@ One important thing to remember about WebGL is that you should be doing as mucho
 
 As of right now the preview system doesn't have a GPU. As such, rendering your scene falls to the CPU, which will render WebGL but at an extremely low framerate.
 
-If your token is WebGL then you want to make sure that you're rendering an accepable preview in the first couple of frames.
+If your token is WebGL then you want to make sure that you're rendering an acceptable preview in the first couple of frames.
 
 ## Computational complexity and previews
 

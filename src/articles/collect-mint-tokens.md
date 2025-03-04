@@ -46,7 +46,7 @@ We are currently experimenting with the opening schedule. Maybe it will stay, ma
 You can find the opening schedule under [/community/opening-schedule](/community/opening-schedule)
 
 
-# Temple with fxhash RPC (optionnal)
+# Temple with fxhash RPC (optional)
 
 *This is not required, but can help you send request with more success to the tezos blockchain*
 
